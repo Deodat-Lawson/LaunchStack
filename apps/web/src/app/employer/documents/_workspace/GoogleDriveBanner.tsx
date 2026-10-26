@@ -185,11 +185,14 @@ export function GoogleDriveBanner({
     documentId,
     status,
     refresh,
+    onSynced,
     onHide,
 }: {
     documentId: number;
     status: DriveLinkStatus | null;
     refresh: () => Promise<void>;
+    /** A pull brought a new version — the viewer shows it. */
+    onSynced?: () => void;
     onHide: () => void;
 }) {
     const t = useTranslations("sources.googleDriveBanner");
@@ -240,6 +243,7 @@ export function GoogleDriveBanner({
             const kind = body.outcome?.kind;
             if (kind === "synced") {
                 setNotice(t("synced", { version: String(body.outcome?.versionNumber ?? "") }));
+                onSynced?.();
             } else if (kind === "noop") {
                 setNotice(t("upToDate"));
             } else if (kind) {
@@ -253,7 +257,7 @@ export function GoogleDriveBanner({
             setBusy(null);
             void refresh();
         }
-    }, [documentId, refresh, t]);
+    }, [documentId, onSynced, refresh, t]);
 
     const unlink = useCallback(async () => {
         setBusy("unlink");

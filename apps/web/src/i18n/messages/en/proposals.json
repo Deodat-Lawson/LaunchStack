@@ -439,5 +439,110 @@
       "copyMarkdown": "Copy as markdown",
       "hint": "Sections in order, then the checklist and the evidence the drafts cite."
     }
+  },
+  "server": {
+    "errors": {
+      "profileOrKeywords": "Build your organisation profile first, or give keywords to search for",
+      "funderNotFound": "Funder not found",
+      "applicationNotFound": "Application not found",
+      "sourceNotReadable": "That source has no readable text yet; wait for it to finish processing",
+      "unknownStatus": "Unknown status",
+      "requestRequired": "Paste the funder's request or give its URL first",
+      "sectionNotFound": "Section not found",
+      "allDrafted": "Every section already has a draft; redraft one from its own menu",
+      "nothingToRewrite": "Write or draft the answer first, then rewrite it",
+      "nothingWritten": "Nothing has been written yet",
+      "approveEmpty": "Write the answer before approving it",
+      "saveEmpty": "Write the answer before saving it",
+      "libraryItemNotFound": "Library item not found",
+      "runNotFound": "Run not found",
+      "notEnoughCredits": "Not enough credits to start this run",
+      "checkSections": "Check the sections and try again",
+      "checkChange": "Check the change and try again",
+      "checkTags": "Check the tags and try again",
+      "pickRewrite": "Pick a rewrite or say what to change",
+      "sectionNeedsQuestion": "A section needs a question",
+      "checkApplication": "Check the application and try again",
+      "titleOrRequest": "Give the application a title, or paste the funder's request",
+      "funderNeedsName": "A funder needs a title and a name",
+      "checkSearch": "Check the search and try again",
+      "answerNeedsBoth": "A saved answer needs a question and an answer"
+    },
+    "steps": {
+      "usingKeywords": "Using your keywords",
+      "planningSearch": "Planning the search",
+      "searching": "Searching Grants.gov and the web",
+      "scoring": "Scoring fit",
+      "savingFunders": "Saving funders",
+      "readingRequest": "Reading the request",
+      "extracting": "Extracting requirements",
+      "buildingChecklist": "Building the checklist",
+      "draftingSections": "Drafting sections",
+      "rewriting": "Rewriting",
+      "rewritingSection": "Rewriting: {section}",
+      "checkingChecklist": "Checking the checklist",
+      "reviewingDrafts": "Reviewing the drafts"
+    },
+    "stepDetails": {
+      "sources": "Grants.gov: {grants, select, off {off} failed {failed} other {{grants}}} · Web: {web, select, off {off} failed {failed} other {{web}}}",
+      "scored": "{count} scored",
+      "notScored": "not scored",
+      "funders": "{count} funders",
+      "characters": "{count} characters",
+      "sections": "{count} sections",
+      "items": "{count} items",
+      "citations": "{cites, plural, one {# citation} other {# citations}}{gaps, plural, =0 {} one { · # gap} other { · # gaps}}",
+      "words": "{before} → {after} words",
+      "checklistDone": "{done} of {total} done",
+      "findings": "{count} findings"
+    },
+    "headlines": {
+      "funders": "{found} funders found, {strong} strong fits",
+      "extract": "{sections} sections, {requirements} checklist items",
+      "drafted": "{count, plural, one {# section} other {# sections}} drafted",
+      "nothingToDraft": "Nothing to draft",
+      "rewritten": "Rewritten: {before} → {after} words",
+      "review": "Readiness {readiness}/100 · {findings} findings{blockers, plural, =0 {} one { · # blocker} other { · # blockers}}"
+    },
+    "runErrors": {
+      "runFailed": "The run failed",
+      "noApplication": "This run names no application",
+      "applicationNotFound": "Application not found",
+      "cannotFetch": "This deployment cannot fetch pages; paste the request instead.",
+      "noRequestText": "There is no request text to read. Paste the call or give its URL.",
+      "requestTooShort": "The request is too short to read anything from.",
+      "noSection": "This run names no section",
+      "sectionNotFound": "Section not found",
+      "noDraft": "There is no draft to rewrite yet.",
+      "profileOrKeywords": "Build the organisation profile first, or give keywords to search for."
+    },
+    "findings": {
+      "missing": "\"{question}\" has no answer yet.",
+      "missingSuggestion": "Draft it from your sources, or write it by hand.",
+      "overLimit": "{words} words against a limit of {limit}.",
+      "overLimitSuggestion": "Cut to the limit; funders often truncate or reject over-length answers.",
+      "unsupported": "This answer cites none of your sources.",
+      "unsupportedSuggestion": "Add the document that backs its claims, or approve it as written knowledge.",
+      "eligibility": "Eligibility not confirmed: {rule}",
+      "eligibilitySuggestion": "Tick it once you have checked it, or drop the application if it does not apply.",
+      "attachment": "Attachment still to gather: {item}",
+      "deadlinePassed": "The deadline passed {days, plural, one {# day} other {# days}} ago.",
+      "deadlinePassedSuggestion": "Ask the funder about the next cycle, or withdraw the application.",
+      "deadlineToday": "The deadline is today.",
+      "deadlineSoon": "{days, plural, one {# day} other {# days}} to the deadline."
+    },
+    "reviewSummary": {
+      "nothingWritten": "Nothing has been written yet."
+    },
+    "requirements": {
+      "submitBy": "Submit by {date}",
+      "budgetBetween": "Request between ${min} and ${max}",
+      "budgetMax": "Request at most ${max}",
+      "budgetMin": "Request at least ${min}",
+      "answer": "Answer: {question}",
+      "answerLimit": "Answer: {question} ({limit} words)",
+      "optional": "Optional: {question}",
+      "optionalLimit": "Optional: {question} ({limit} words)"
+    }
   }
 }

@@ -284,7 +284,8 @@ describe("test and list", () => {
         await expect(response.json()).resolves.toMatchObject({ ok: true });
         expect(mockProbe.test).toHaveBeenCalledWith(
             { baseUrl: "https://a.b/v1", apiKey: "sk-typed-1234" },
-            selection
+            selection,
+            "en"
         );
     });
 });
@@ -470,5 +471,68 @@ describe("Connect OpenRouter", () => {
             );
             expect(location(denied).origin).toBe(PUBLIC);
         });
+    });
+});
+
+describe("in the reader's language", () => {
+    function chinese(body: unknown, method = "POST") {
+        return new Request("http://localhost/api/settings/models/workspace", {
+            method,
+            headers: { "content-type": "application/json", cookie: "ls-locale=zh-CN.1" },
+            body: JSON.stringify(body),
+        });
+    }
+
+    it("words the address check, and keeps the English without the cookie", async () => {
+        const body = { provider: "custom", baseUrl: "not a url", models: selection };
+        const english = await PUT(json(body, "PUT"));
+        await expect(english.json()).resolves.toEqual({
+            error: "That isn't a web address. It should look like https://api.example.com/v1.",
+        });
+        const zh = await PUT(chinese(body, "PUT"));
+        expect(zh.status).toBe(400);
+        await expect(zh.json()).resolves.toEqual({
+            error: "这不是一个网址。它应该类似 https://api.example.com/v1。",
+        });
+    });
+
+    it("words a selection that can't work and a setup that isn't one", async () => {
+        const noVision = await PUT(
+            chinese(
+                {
+                    provider: "custom",
+                    baseUrl: "https://a.b/v1",
+                    models: { ...selection, vision: { id: "x", vision: false, reasoning: false } },
+                },
+                "PUT"
+            )
+        );
+        await expect(noVision.json()).resolves.toEqual({
+            error: "处理图片的模型必须能够读取图片。",
+        });
+        const invalid = await PUT(chinese({ nonsense: true }, "PUT"));
+        await expect(invalid.json()).resolves.toEqual({ error: "这不是有效的模型设置。" });
+    });
+
+    it("words each failed model in a test", async () => {
+        mockProbe.test.mockResolvedValue([
+            {
+                route: "default",
+                modelId: "acme/chat",
+                ok: false,
+                latencyMs: 3,
+                message: "The model answered with nothing. Check that it is a chat model.",
+            },
+        ]);
+        const res = await testModels(
+            chinese({
+                provider: "openai",
+                baseUrl: "https://a.b/v1",
+                apiKey: "k",
+                models: selection,
+            })
+        );
+        const body = (await res.json()) as { results: { message?: string }[] };
+        expect(body.results[0]?.message).toBe("模型没有返回任何内容。请确认它是一个对话模型。");
     });
 });

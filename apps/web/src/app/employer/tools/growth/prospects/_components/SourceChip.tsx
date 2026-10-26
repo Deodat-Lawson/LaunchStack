@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "~/components/ui/hover-card";
 import { cn } from "~/lib/utils";
 
+import { useCopyText } from "~/lib/tools/copyText";
 import { useGrowthFormat } from "../../_lib/format";
 import type { FoundVia, SourceKind } from "../api";
 
@@ -69,12 +70,19 @@ export function SourceChip({
 }
 
 export function FoundViaChips({ items, max = 3 }: { items: FoundVia[]; max?: number }) {
+    const word = useCopyText();
     const shown = items.slice(0, max);
     const rest = items.length - shown.length;
     return (
         <span className="inline-flex flex-wrap items-center gap-1">
             {shown.map(f => (
-                <SourceChip key={f.sourceId} label={f.label} kind={f.kind} url={f.url} at={f.at} />
+                <SourceChip
+                    key={f.sourceId}
+                    label={word(f.labelCopy, f.label)}
+                    kind={f.kind}
+                    url={f.url}
+                    at={f.at}
+                />
             ))}
             {rest > 0 && <span className="text-ink-3 text-[11px]">+{rest}</span>}
         </span>

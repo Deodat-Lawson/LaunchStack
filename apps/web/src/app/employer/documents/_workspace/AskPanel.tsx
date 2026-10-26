@@ -34,7 +34,6 @@ import {
     Lock,
     Users,
     Zap as IconBolt,
-    ChevronRight as IconChevronRight,
     Plus as IconPlus,
     Shield as IconShield,
     User as IconUser,
@@ -43,11 +42,10 @@ import {
 import { toast } from "sonner";
 import { ProfileAvatar } from "~/components/ProfileAvatar";
 import { Button } from "~/components/ui/button";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "~/components/ui/collapsible";
-import { cn } from "~/lib/utils";
 import { isChatPassage, QUOTED_CONTEXT_MARKER, type ChatPassage } from "~/lib/chat-passages";
 import { usePeople } from "~/lib/profile/use-people";
 import type { ChatSendResult } from "~/lib/chat-turns";
+import { stripStreamingSourceLabels } from "~/lib/source-labels";
 import { AgentAvatar } from "./collab/AgentAvatar";
 import { type ChatAgentOption } from "./collab/types";
 import { useContextTarget } from "~/components/context-menu";
@@ -76,6 +74,8 @@ import { Composer } from "./ChatComposer";
 import { ChatAttachmentChip as AttachmentChip } from "./ChatAttachmentChip";
 import { ChatMarkdown } from "./ChatMarkdown";
 import { PassageCard } from "./PassageCard";
+import { closeOpenMarkdown, useSmoothText } from "./smoothText";
+import { PendingTrace, ThinkingTrace } from "./ThinkingTrace";
 import { ProposedPlan } from "./ProposedPlan";
 import { messageAnchor, useChatTimeline } from "./useChatTimeline";
 import { WebSources } from "./WebSources";
@@ -470,6 +470,14 @@ const Message = React.memo(function Message({
     const format = useFormatter();
     const copyWithToast = useCopyWithToast();
     const isUser = msg.role === "user";
+    const live = !isUser && msg.status === "streaming";
+    // Source labels the model is still writing ([d12…) stay hidden until complete.
+    const reveal = useSmoothText(
+        isUser ? "" : live ? stripStreamingSourceLabels(msg.text) : msg.text,
+        live
+    );
+    // Sources and actions arrive with the finished answer, not ahead of its text.
+    const arriving = live || (msg.status === "complete" && reveal.revealing);
     const bodyRef = useRef<HTMLDivElement>(null);
     const [selectedPassage, setSelectedPassage] = useState("");
     const [quoteComment, setQuoteComment] = useState("");
@@ -593,6 +601,9 @@ const Message = React.memo(function Message({
         .map(id => sources.find(s => s.id === id))
         .filter((s): s is WorkspaceSource => Boolean(s));
     const cites = msg.citations ?? [];
+    // The model cites sources by id ("[d12]"); the finished answer arrives
+    // with them taken out, so hide them while it streams too.
+    const shownText = msg.status === "streaming" ? stripStreamingSourceLabels(msg.text) : msg.text;
     const ctxTarget = useContextTarget(
         isUser
             ? {
@@ -833,7 +844,7 @@ const Message = React.memo(function Message({
                     </span>
                 )}
             </div>
-            <MessageActivity msg={msg} />
+            <ThinkingTrace msg={msg} />
             {msg.status === "error" && !dismissedError && (
                 <div
                     role="alert"
@@ -864,17 +875,17 @@ const Message = React.memo(function Message({
                 ref={bodyRef}
                 onMouseUp={captureSelection}
                 onKeyUp={captureSelection}
-                style={{ fontSize: 14, lineHeight: 1.65, color: "var(--ink-2)" }}
+                className="text-ink"
             >
                 {isPlan ? (
                     <ProposedPlan
-                        text={msg.text}
+                        text={shownText}
                         onRefine={onEdit}
                         onImplement={onImplementPlan}
                         active={active}
                     />
                 ) : (
-                    <ChatMarkdown text={msg.text} />
+                    <AnswerProse msg={msg} shown={reveal.text} arriving={arriving} />
                 )}
             </div>
             {msg.createdSources && (
@@ -928,133 +939,50 @@ const Message = React.memo(function Message({
                     </button>
                 </div>
             )}
-            {cites.length > 0 && (
+            {cites.length > 0 && !arriving && (
                 <div
-                    style={{
-                        marginTop: 14,
-                        padding: "12px 14px",
-                        borderRadius: 10,
-                        background: "var(--line-2)",
-                        border: "1px solid var(--line)",
-                    }}
+                    className="mt-3 flex flex-wrap items-center gap-1.5"
+                    role="group"
+                    aria-label={t("sources")}
+                    data-testid="answer-sources"
                 >
-                    <div
-                        className="mono"
-                        style={{
-                            fontSize: 10,
-                            fontWeight: 600,
-                            letterSpacing: "0.08em",
-                            color: "var(--ink-3)",
-                            textTransform: "uppercase",
-                            marginBottom: 8,
-                        }}
-                    >
-                        {t("groundedIn", { count: cites.length })}
-                    </div>
+                    <span className="text-ink-3 mr-0.5 text-[12px]">{t("sources")}</span>
                     {cites.map((c, i) => {
                         const s = sources.find(x => x.id === c.sourceId);
                         if (!s) return null;
+                        // One chip per source; it opens the first passage cited from it.
+                        // No page is claimed: every chunk is indexed as page 1.
+                        if (cites.findIndex(other => other.sourceId === c.sourceId) !== i)
+                            return null;
                         const meta = SOURCE_META[s.type];
                         const Icon = meta.Icon;
                         return (
                             <CitationTarget
-                                key={i}
+                                key={c.sourceId}
                                 cite={c}
                                 source={s}
                                 inContext={selected.includes(s.id)}
                                 onOpen={onOpenCitation}
                                 onToggleContext={toggleContext}
                             >
-                                <button
+                                <Button
                                     type="button"
+                                    variant="outline"
+                                    size="sm"
                                     onClick={() => onOpenCitation?.(c)}
-                                    title={t("openCitation")}
-                                    style={{
-                                        display: "flex",
-                                        alignItems: "flex-start",
-                                        gap: 10,
-                                        width: "100%",
-                                        textAlign: "left",
-                                        padding: "8px 8px",
-                                        margin: "0 -8px",
-                                        borderRadius: 8,
-                                        borderTop: i > 0 ? "1px solid var(--line)" : "none",
-                                        background: "transparent",
-                                        cursor: onOpenCitation ? "pointer" : "default",
-                                        transition: "background 120ms",
-                                    }}
-                                    onMouseEnter={e => {
-                                        e.currentTarget.style.background = "var(--panel)";
-                                    }}
-                                    onMouseLeave={e => {
-                                        e.currentTarget.style.background = "transparent";
-                                    }}
+                                    aria-label={t("openSourceAtPassage", { title: s.title })}
+                                    title={c.snippet ? `“${c.snippet}”` : undefined}
+                                    className="text-ink-2 h-auto max-w-[260px] gap-1.5 rounded-full px-2 py-0.5 text-[12px] font-normal"
                                 >
-                                    <div
-                                        style={{
-                                            width: 22,
-                                            height: 22,
-                                            borderRadius: 5,
-                                            background: "var(--panel)",
-                                            border: "1px solid var(--line)",
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "center",
-                                            color: meta.color,
-                                            flexShrink: 0,
-                                            marginTop: 1,
-                                        }}
-                                    >
-                                        <Icon size={12} />
-                                    </div>
-                                    <div style={{ flex: 1, minWidth: 0 }}>
-                                        <div
-                                            style={{
-                                                display: "flex",
-                                                alignItems: "center",
-                                                gap: 6,
-                                                fontSize: 12,
-                                                fontWeight: 600,
-                                                color: "var(--ink)",
-                                            }}
-                                        >
-                                            <span
-                                                style={{
-                                                    overflow: "hidden",
-                                                    textOverflow: "ellipsis",
-                                                    whiteSpace: "nowrap",
-                                                }}
-                                            >
-                                                {s.title}
-                                            </span>
-                                        </div>
-                                        <div
-                                            style={{
-                                                fontSize: 12,
-                                                color: "var(--ink-3)",
-                                                marginTop: 2,
-                                                lineHeight: 1.5,
-                                            }}
-                                        >
-                                            {c.snippet}
-                                        </div>
-                                    </div>
-                                    <span
-                                        style={{
-                                            color: "var(--ink-3)",
-                                            flexShrink: 0,
-                                            alignSelf: "center",
-                                        }}
-                                    >
-                                        <IconChevronRight size={12} />
-                                    </span>
-                                </button>
+                                    <Icon size={12} className="text-ink-3 shrink-0" />
+                                    <span className="truncate">{s.title}</span>
+                                </Button>
                             </CitationTarget>
                         );
                     })}
                 </div>
             )}
-            {msg.webSources && <WebSources sources={msg.webSources} />}
+            {msg.webSources && !arriving && <WebSources sources={msg.webSources} />}
             {(msg.hiddenCitations ?? 0) > 0 && (
                 <p
                     className="text-ink-3 m-0 mt-2 flex items-center gap-1.5 text-[11px]"
@@ -1064,138 +992,38 @@ const Message = React.memo(function Message({
                     {t("hiddenCitations", { count: msg.hiddenCitations ?? 0 })}
                 </p>
             )}
-            {actions}
-            {(typeof msg.tokens === "number" || typeof msg.chunksAnalyzed === "number") && (
-                <div style={{ display: "flex", gap: 6, marginTop: 12 }}>
-                    <span style={{ marginLeft: "auto" }} className="mono">
-                        <span
-                            style={{ fontSize: 10, color: "var(--ink-3)" }}
-                            title={
-                                msg.tokenBreakdown
-                                    ? t("tokenBreakdown", {
-                                          input: msg.tokenBreakdown.inputTokens,
-                                          output: msg.tokenBreakdown.outputTokens,
-                                      })
-                                    : undefined
-                            }
-                        >
-                            {/* Two different numbers, told apart: tokens are what
-                                the model billed, chunks are what it read. */}
-                            {typeof msg.tokens === "number"
-                                ? t("tokens", { count: msg.tokens })
-                                : null}
-                            {typeof msg.tokens === "number" &&
-                            typeof msg.chunksAnalyzed === "number"
-                                ? " · "
-                                : null}
-                            {typeof msg.chunksAnalyzed === "number"
-                                ? t("chunks", { count: msg.chunksAnalyzed })
-                                : null}
-                        </span>
-                    </span>
-                </div>
-            )}
+            {!arriving && actions}
         </div>
     );
 });
 
-function MessageActivity({ msg }: { msg: ThreadMessage }) {
-    const t = useTranslations("chat.activity");
-    const [now, setNow] = useState(Date.now());
-    useEffect(() => {
-        if (msg.status !== "streaming") return;
-        const timer = setInterval(() => setNow(Date.now()), 1000);
-        return () => clearInterval(timer);
-    }, [msg.status]);
-    const start = msg.createdAt ? Date.parse(msg.createdAt) : NaN;
-    const elapsed =
-        msg.status === "streaming" && Number.isFinite(start)
-            ? Math.max(0, now - start)
-            : msg.elapsedMs;
-    return (
-        <>
-            {msg.status && (
-                <div role="status" className="text-ink-3 my-2 flex items-center gap-2 text-xs">
-                    <span>
-                        {msg.status === "streaming"
-                            ? msg.stage?.trim()
-                                ? msg.stage
-                                : t("working")
-                            : msg.status === "stopped"
-                              ? t("stopped")
-                              : msg.status === "error"
-                                ? t("failed")
-                                : t("completed")}
-                    </span>
-                    {elapsed !== undefined && (
-                        <span>
-                            {t("seconds", {
-                                seconds: (elapsed / 1000).toFixed(elapsed < 10000 ? 1 : 0),
-                            })}
-                        </span>
-                    )}
-                </div>
-            )}
-            {msg.reasoning && <MessageThoughts msg={msg} reasoning={msg.reasoning} />}
-        </>
-    );
-}
+/** One reading size for answers: larger and darker than the chrome around them. */
+const ANSWER_PROSE =
+    "text-[15px] leading-[1.7] [&_p]:my-3 [&_li]:my-1.5 [&_h1]:mt-6 [&_h1]:mb-3 [&_h2]:mt-5 [&_h2]:mb-2 [&_h3]:mt-4 [&_h3]:mb-2";
 
 /**
- * The model's thinking, shown as it thinks: open and following the newest
- * line until the answer starts, then folded to one line. A reader who opens
- * or closes it keeps that choice.
+ * The answer as it arrives: revealed at a steady pace even when the model
+ * sends it in one burst (`shown`, from useSmoothText), with a caret until it's
+ * done. A stopped or failed turn shows what it has at once.
  */
-function MessageThoughts({ msg, reasoning }: { msg: ThreadMessage; reasoning: string }) {
-    const t = useTranslations("chat.activity");
-    const thinking = msg.status === "streaming" && !msg.text;
-    const [chosen, setChosen] = useState<boolean | null>(null);
-    const open = chosen ?? thinking;
-    const bodyRef = useRef<HTMLDivElement>(null);
-    useEffect(() => {
-        const body = bodyRef.current;
-        if (thinking && body) body.scrollTop = body.scrollHeight;
-    }, [reasoning, thinking, open]);
-    const seconds =
-        msg.thoughtMs !== undefined ? Math.max(1, Math.round(msg.thoughtMs / 1000)) : undefined;
+function AnswerProse({
+    msg,
+    shown,
+    arriving,
+}: {
+    msg: ThreadMessage;
+    shown: string;
+    arriving: boolean;
+}) {
+    if (msg.status === "error" || msg.status === "stopped")
+        return <ChatMarkdown text={msg.text} className={ANSWER_PROSE} />;
+    if (!shown && arriving) return null;
     return (
-        <Collapsible open={open} onOpenChange={setChosen} className="my-2">
-            <CollapsibleTrigger asChild>
-                <Button
-                    type="button"
-                    variant="ghost"
-                    size="sm"
-                    className="text-ink-3 hover:text-ink-2 h-auto gap-1 px-1 py-0.5 text-xs font-semibold hover:bg-transparent"
-                >
-                    <IconChevronRight
-                        className={cn("size-3 transition-transform", open && "rotate-90")}
-                        aria-hidden
-                    />
-                    {/* The status line above already says "Thinking…" while it does. */}
-                    {!thinking && seconds !== undefined
-                        ? t("thoughtFor", { seconds })
-                        : t("thoughts")}
-                </Button>
-            </CollapsibleTrigger>
-            <CollapsibleContent>
-                <div
-                    ref={bodyRef}
-                    className="border-line text-ink-3 ml-2 mt-1 max-h-64 overflow-y-auto border-l-2 pl-3 text-xs"
-                >
-                    <ChatMarkdown text={reasoning} />
-                </div>
-            </CollapsibleContent>
-        </Collapsible>
-    );
-}
-
-function TypingIndicator() {
-    const t = useTranslations("chat.activity");
-    return (
-        <div role="status" className="mb-7 flex items-center gap-2 text-xs text-[var(--ink-3)]">
-            <IconBolt size={16} />
-            {t("working")}
-        </div>
+        <ChatMarkdown
+            text={arriving ? closeOpenMarkdown(shown) : shown}
+            streaming={arriving}
+            className={ANSWER_PROSE}
+        />
     );
 }
 
@@ -1936,7 +1764,7 @@ export function AskPanel({
                                     />
                                 );
                             })}
-                            {showTyping && <TypingIndicator />}
+                            {showTyping && <PendingTrace />}
                         </>
                     )}
                 </div>

@@ -222,11 +222,21 @@ const behaviorOverrideSchema = z
     })
     .strict();
 
+/** US dollars per million tokens. Read by the usage page, never sent to the endpoint. */
+const pricingSchema = z
+    .object({
+        input: z.number().nonnegative(),
+        output: z.number().nonnegative(),
+        cachedInput: z.number().nonnegative().optional(),
+    })
+    .strict();
+
 const modelSchema = z
     .object({
         id: z.string().min(1),
         preset: z.string().min(1).optional(),
         behavior: z.unknown().optional(),
+        pricing: pricingSchema.optional(),
     })
     .strict();
 
@@ -401,7 +411,12 @@ export function buildChatModelsConfig(input: BuildChatModelsConfigInput): ChatMo
     const models = new Map<string, ChatModelDefinition>();
     for (const [name, model] of Object.entries(file.models)) {
         const { behavior, preset } = resolveModelBehavior(name, model, label);
-        models.set(name, { id: model.id, behavior, ...(preset ? { preset } : {}) });
+        models.set(name, {
+            id: model.id,
+            behavior,
+            ...(preset ? { preset } : {}),
+            ...(model.pricing ? { pricing: model.pricing } : {}),
+        });
     }
 
     for (const route of ChatRoutes) {

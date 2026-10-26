@@ -23,23 +23,27 @@ import { scopedDocumentWhere } from "~/lib/authz/scope";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { db } from "~/server/db";
-import { DOCUMENT_EDIT_DENIED } from "~/server/services/folder-access";
 import { canEditDocument } from "~/server/workspace/item-access";
 
+/** Why there is nothing to retry, by status (`sources.server.retry`). */
 const NOTHING_TO_RETRY = {
-    not_failed: "This source isn't failed, so there is nothing to retry.",
-    already_running: "This source is already being processed.",
-    no_job: "This source has no processing to retry.",
+    not_failed: "notFailed",
+    already_running: "alreadyRunning",
+    no_job: "noJob",
 } as const;
 
 export async function POST(request: Request, context: { params: Promise<{ id: string }> }) {
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "sources.server.errors");
     return withRateLimit(request, RateLimitPresets.strict, async () => {
         try {
             const { id: rawId } = await context.params;
             const documentId = Number(rawId);
             if (!Number.isInteger(documentId) || documentId <= 0) {
-                return NextResponse.json({ error: "Invalid document id" }, { status: 400 });
+                return NextResponse.json({ error: t("invalidDocumentId") }, { status: 400 });
             }
 
             const ctx = await requireWorkspacePermission("documents.upload");
@@ -55,10 +59,13 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
                     )
                 );
             if (!doc) {
-                return NextResponse.json({ error: "Document not found" }, { status: 404 });
+                return NextResponse.json(
+                    { error: translatorFor(locale, "errors.api")("documentNotFound") },
+                    { status: 404 }
+                );
             }
             if (!(await canEditDocument(ctx.data, { id: doc.id, category: doc.category }))) {
-                return NextResponse.json({ error: DOCUMENT_EDIT_DENIED }, { status: 403 });
+                return NextResponse.json({ error: t("documentEditDenied") }, { status: 403 });
             }
 
             const result = await retrySourceProcessing({
@@ -79,16 +86,25 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
                         { status: 202 }
                     );
                 case "not_found":
-                    return NextResponse.json({ error: "Document not found" }, { status: 404 });
+                    return NextResponse.json(
+                        { error: translatorFor(locale, "errors.api")("documentNotFound") },
+                        { status: 404 }
+                    );
                 default:
                     return NextResponse.json(
-                        { error: NOTHING_TO_RETRY[result.status], status: result.status },
+                        {
+                            error: translatorFor(
+                                locale,
+                                "sources.server.retry"
+                            )(NOTHING_TO_RETRY[result.status]),
+                            status: result.status,
+                        },
                         { status: 409 }
                     );
             }
         } catch (error) {
             console.error("[documents/retry] retry failed:", error);
-            return NextResponse.json({ error: "Could not retry processing" }, { status: 500 });
+            return NextResponse.json({ error: t("retryFailed") }, { status: 500 });
         }
     });
 }

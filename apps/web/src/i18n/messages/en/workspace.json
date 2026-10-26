@@ -322,21 +322,17 @@
   "studioPanes": {
     "comingSoonTitle": "{title} (coming soon)",
     "comingSoon": "Coming soon",
-    "studioEyebrow": "Studio",
     "chat": {
-      "eyebrow": "Workspace",
       "title": "Chat",
       "body": "Ask grounded questions over your indexed sources. Pick sources on the left to scope your questions, or ask globally across the workspace.",
       "hint": "Select <strong>Chat</strong> in the sidebar to return to your conversation, or close Studio."
     },
     "knowledge": {
-      "eyebrow": "Knowledge",
       "title": "Your corpus",
       "body": "Everything the workspace can cite — uploads, pasted notes, and connected tools — with filters, collections, and indexing status.",
       "open": "Open Knowledge"
     },
     "predictive": {
-      "eyebrow": "Predictive gaps",
       "title": "What's missing from this document",
       "body": "Runs across a document and flags cross-references pointing to missing attachments, numeric inconsistencies, and missing schedules. Pick a document from the source rail, then run the analyzer.",
       "crossReferences": "Cross-references Schedules, Exhibits, Appendices against the actual corpus",
@@ -345,7 +341,6 @@
       "back": "Back to workspace"
     },
     "workflows": {
-      "eyebrow": "Automate",
       "title": "Workflows (coming soon)",
       "body": "Chain source-aware steps: ''Every Friday, summarize new customer interviews, draft a Slack update, queue it for review.'' Currently in design.",
       "scheduled": "Scheduled or event-triggered",
@@ -355,7 +350,6 @@
     "mindmap": {
       "linkTitle": "Mindmap",
       "linkBody": "Diagrams, mindmaps and flowcharts live in your library beside every other source. Start one from Add a source → Create.",
-      "eyebrow": "Mindmap",
       "title": "Sources you draw",
       "body": "Diagrams, mindmaps and flowcharts live in your library beside every other source. Open one from the rail to preview it, edit it in place, and make it citable when it is ready."
     },
@@ -576,5 +570,45 @@
   "chatRoutes": {
     "noImages": "The model serving the vision route does not accept images.",
     "alwaysReasons": "The model serving the reasoning route always reasons; there is nothing to toggle."
+  },
+  "server": {
+    "history": {
+      "trendSearch": "Trend search",
+      "prospectSearch": "Prospect search",
+      "clientProspector": "Client prospector",
+      "repository": "Repository",
+      "repoExplainer": "Repo explainer",
+      "distributionRun": "Distribution run",
+      "partnerDiscovery": "Partner discovery",
+      "emailCampaign": "Email campaign",
+      "weekOf": "Week of {date}",
+      "agendaWeekOf": "Agenda for the week of {date}",
+      "vantage": "Vantage",
+      "proposals": "Proposals",
+      "funderSearch": "Funder search",
+      "requirements": "Requirements",
+      "drafts": "Drafts",
+      "rewrite": "Rewrite",
+      "review": "Review"
+    },
+    "errors": {
+      "loadHistoryFailed": "Failed to load history",
+      "unknownHistoryKind": "Unknown history kind",
+      "deleteChatViaSessions": "Delete a chat through the sessions API",
+      "missingId": "Missing id",
+      "deleteItemFailed": "Failed to delete this item",
+      "loadSessionsFailed": "Failed to load sessions",
+      "saveChatFailed": "Failed to save this chat",
+      "loadChatFailed": "Failed to load this chat",
+      "updateChatFailed": "Failed to update this chat",
+      "deleteChatFailed": "Failed to delete this chat",
+      "reorderPinsFailed": "Failed to reorder pinned chats",
+      "forkFailed": "Failed to continue this chat",
+      "saveMessageFailed": "Failed to save this message",
+      "chatChangedElsewhere": "This chat changed in another tab. Reopen it before editing.",
+      "rewindFailed": "Failed to rewind this chat",
+      "loadQueueFailed": "Failed to load queued messages",
+      "updateQueueFailed": "Failed to update queued messages"
+    }
   }
 }

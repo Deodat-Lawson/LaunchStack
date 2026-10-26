@@ -21,7 +21,7 @@ jest.mock("~/server/ask-starters", () => ({ getAskStarters: jest.fn() }));
 // Records whose models the starters were generated under; runs the work as-is.
 const scopes: unknown[] = [];
 jest.mock("~/server/workspace-models/scope", () => ({
-    withWorkspaceChatModels: (companyId: unknown, fn: () => unknown) => {
+    withWorkspaceChatModels: (companyId: unknown, _feature: unknown, fn: () => unknown) => {
         scopes.push(companyId);
         return fn();
     },

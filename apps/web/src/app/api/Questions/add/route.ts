@@ -7,8 +7,12 @@ import { ChatHistory } from "~/server/db/schema";
 import { validateRequestBody, ChatHistoryAddSchema } from "~/lib/validation";
 import { forbiddenForPermission, requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 
 export async function POST(request: Request) {
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "chat.server");
     try {
         const validation = await validateRequestBody(request, ChatHistoryAddSchema);
         if (!validation.success) {
@@ -19,7 +23,8 @@ export async function POST(request: Request) {
 
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
-        if (!ctx.data.can("documents.read")) return forbiddenForPermission("documents.read");
+        if (!ctx.data.can("documents.read"))
+            return forbiddenForPermission("documents.read", locale);
 
         // History attaches to a document the caller can read; one outside
         // their scope reads as missing — 404, never 403.
@@ -34,7 +39,7 @@ export async function POST(request: Request) {
             return NextResponse.json(
                 {
                     success: false,
-                    message: "Document not found.",
+                    message: t("documentNotFound"),
                 },
                 { status: 404 }
             );
@@ -55,7 +60,7 @@ export async function POST(request: Request) {
         return NextResponse.json(
             {
                 success: false,
-                error: "Failed to save question",
+                error: t("history.saveFailed"),
             },
             { status: 500 }
         );

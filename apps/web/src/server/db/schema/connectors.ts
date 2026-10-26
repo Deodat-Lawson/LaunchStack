@@ -232,9 +232,10 @@ export const googleDriveSyncState = pgTable("google_drive_sync_state", {
 });
 
 /**
- * What an admin picked in the Google Picker or pasted as a link. Under the
- * drive.file scope these are the entire universe the knowledge sync can see;
- * with drive.readonly a picked folder brings everything inside it.
+ * What an admin picked in the Google Picker (Add source → Files or Folder)
+ * or pasted as a link. Under the drive.file scope these are the entire
+ * universe the knowledge sync can see; with drive.readonly a picked folder
+ * brings everything inside it.
  */
 export const googleDrivePickedItem = pgTable(
     "google_drive_picked_item",
@@ -259,6 +260,15 @@ export const googleDrivePickedItem = pgTable(
          * category table belongs to the engine schema.
          */
         folderCategoryId: bigint("folder_category_id", { mode: "number" }),
+        /**
+         * The folder picked in Add source's destination bar, as a path: a
+         * picked file lands in it, a picked folder is rebuilt inside it.
+         * Read once, when the pick's first files are placed — after that
+         * they stay wherever people move them. Null for picks made before
+         * Drive moved into Add source: files go to "Google Drive", folders
+         * become top-level folders.
+         */
+        destination: varchar("destination", { length: 256 }),
     },
     table => ({
         connectionFileUnique: uniqueIndex("gdrive_picked_conn_file_idx").on(

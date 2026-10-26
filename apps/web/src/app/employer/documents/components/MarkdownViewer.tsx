@@ -15,6 +15,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "~/comp
 import { citationNeedles, findTextRange, type ViewerHighlight } from "~/lib/find-text-range";
 import { escapeCurrencyDollars } from "~/lib/markdown-math";
 import { CodeViewer } from "./CodeViewer";
+import { ViewerNotice } from "./ViewerNotice";
 
 type MarkdownViewerProps = {
     title: string;
@@ -318,22 +319,17 @@ export function MarkdownViewer({ url, text, title, highlight = null }: MarkdownV
 
     if (error !== null) {
         return (
-            <div className="bg-panel-2/30 flex h-full flex-col items-center justify-center gap-4 p-8 text-center">
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50 dark:bg-red-900/20">
-                    <AlertTriangle className="h-7 w-7 text-red-500" />
-                </div>
-                <div>
-                    <p className="text-ink mb-1 text-sm font-medium">{t("loadFailed")}</p>
-                    <p className="text-ink-3 mb-4 text-xs">{error || t("loadFailedFallback")}</p>
-                    <button
-                        onClick={() => void fetchContent()}
-                        className="bg-brand hover:bg-brand-hi inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors"
-                    >
-                        <RotateCw className="h-4 w-4" />
+            <ViewerNotice
+                icon={<AlertTriangle />}
+                title={t("loadFailed")}
+                detail={error || t("loadFailedFallback")}
+                action={
+                    <Button onClick={() => void fetchContent()}>
+                        <RotateCw />
                         {tc("actions.retry")}
-                    </button>
-                </div>
-            </div>
+                    </Button>
+                }
+            />
         );
     }
 
@@ -652,10 +648,8 @@ export function MarkdownViewer({ url, text, title, highlight = null }: MarkdownV
                 }
                 .md-doc blockquote {
                     margin: 0 0 1em;
-                    padding: 10px 18px;
-                    border-left: 3px solid var(--accent);
-                    border-radius: 0 8px 8px 0;
-                    background: var(--panel-2);
+                    padding: 2px 0 2px 16px;
+                    border-left: 2px solid var(--line);
                     color: var(--ink-3);
                 }
                 .md-doc blockquote > :last-child {

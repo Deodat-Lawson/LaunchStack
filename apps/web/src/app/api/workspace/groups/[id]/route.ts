@@ -19,24 +19,24 @@ export async function PATCH(request: Request, { params }: Params) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
     const id = parseIdParam((await params).id);
-    if (id === null) return invalidIdResponse();
+    if (id === null) return invalidIdResponse(request);
     const body = await parseJsonBody(request, UpdateGroupSchema);
     if (!body.success) return body.response;
     try {
         return NextResponse.json({ group: await updateGroup(ctx.data, id, body.data) });
     } catch (error) {
-        return workspaceErrorResponse(error, "[workspace/groups PATCH]");
+        return workspaceErrorResponse(error, "[workspace/groups PATCH]", request);
     }
 }
 
-export async function DELETE(_request: Request, { params }: Params) {
+export async function DELETE(request: Request, { params }: Params) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
     const id = parseIdParam((await params).id);
-    if (id === null) return invalidIdResponse();
+    if (id === null) return invalidIdResponse(request);
     try {
         return NextResponse.json(await deleteGroup(ctx.data, id));
     } catch (error) {
-        return workspaceErrorResponse(error, "[workspace/groups DELETE]");
+        return workspaceErrorResponse(error, "[workspace/groups DELETE]", request);
     }
 }

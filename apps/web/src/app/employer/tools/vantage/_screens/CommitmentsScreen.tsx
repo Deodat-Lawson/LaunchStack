@@ -20,6 +20,7 @@ import {
 import { Input } from "~/components/ui/input";
 import { Switch } from "~/components/ui/switch";
 import { cn } from "~/lib/utils";
+import { useErrorText } from "~/lib/tools/errorText";
 
 import { vantageApi, type CommitmentDto, type TopicDto } from "../api";
 import { CheckInRow } from "../_components/CheckInRow";
@@ -162,7 +163,7 @@ export function CommitmentsScreen() {
                     }
                     aside={
                         view === "open" && late > 0 ? (
-                            <span className="text-warn">{t("lateCount", { count: late })}</span>
+                            <span className="text-warn-ink">{t("lateCount", { count: late })}</span>
                         ) : undefined
                     }
                 />
@@ -213,6 +214,7 @@ function AddCommitmentDialog({
     onOpenChange: (o: boolean) => void;
     onSaved: (c: CommitmentDto) => void;
 }) {
+    const errorText = useErrorText();
     const t = useTranslations("vantage.commitments");
     const tt = useTranslations("vantage.topicDialog");
     const td = useTranslations("vantage.decisionDialog");
@@ -248,7 +250,7 @@ function AddCommitmentDialog({
             onSaved(commitment);
             onOpenChange(false);
         } catch (e) {
-            setError(e instanceof Error ? e.message : tt("saveError"));
+            setError(errorText(e, tt("saveError")));
         } finally {
             setBusy(false);
         }

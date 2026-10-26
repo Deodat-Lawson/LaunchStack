@@ -25,7 +25,8 @@ describe("runRound", () => {
         });
         expect(summary.usage).toEqual({ calls: 4, inputTokens: 400, outputTokens: 80 });
         expect(next.posts[0]).toMatchObject({ id: "p1", likes: 4, comments: 4 });
-        expect(next.agents.find(a => a.persona.id === "a1")!.stance).toBe(-2);
+        // a1 asked for -2; the guard moves a stance one step a round.
+        expect(next.agents.find(a => a.persona.id === "a1")!.stance).toBe(-1);
         expect(next.agents.every(a => a.stanceHistory.length === 2)).toBe(true);
         const memory = next.agents[0]!.memory.map(m => m.text);
         expect(memory.some(t => t.startsWith("You saw @newswire"))).toBe(true);
@@ -115,12 +116,13 @@ describe("after a run", () => {
         expect(req.purpose).toBe("interview");
         expect(req.system).toContain("You are Person a1 (@person_a1)");
         expect(req.prompt).toContain('you posted [p2]: "a1 thinks prices matter"');
-        expect(req.prompt).toContain("undecided → strongly against");
+        expect(req.prompt).toContain("undecided → against");
+        expect(req.prompt).toContain("Whether you'd pay for it, as you last said: no.");
         expect(req.prompt).toContain("Q: Hi?\nA: Hello.");
         expect(req.schema).toBeDefined();
         expect(() => buildInterviewRequest(world, "a9", "?")).toThrow();
         expect(buildAnalystRequest(world, "Summary.", "Who moved?").prompt).toContain(
-            "@person_a1 (Operator at a small firm): undecided → strongly against"
+            '@person_a1 (Operator at a small firm): undecided → against; would pay: no; held back by: "Twenty percent more for the same invoices."'
         );
     });
 });

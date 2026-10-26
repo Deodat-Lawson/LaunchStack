@@ -17,7 +17,7 @@ interface UploadSettingsProps {
     onBatchSettingsChange: React.Dispatch<React.SetStateAction<BatchSettings>>;
     onApplyBatchSettings: () => void;
     processingMethods: { value: string; label: string; description: string }[];
-    /** Where uploads go; shown as a note, changed under Settings → Document defaults. */
+    /** Where uploads go; shown as a note. */
     currentStorageValue: string;
     onAddCategory?: (name: string) => Promise<void>;
     storageProvider?: "s3" | "database";

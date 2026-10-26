@@ -13,10 +13,10 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     const ctx = await requireWorkspacePermission("members.invite");
     if (!ctx.success) return ctx.response;
     const id = parseIdParam((await params).id);
-    if (id === null) return invalidIdResponse();
+    if (id === null) return invalidIdResponse(request);
     try {
         return NextResponse.json(await resendInvitation(ctx.data, id, requestOrigin(request)));
     } catch (error) {
-        return workspaceErrorResponse(error, "[workspace/invitations/resend POST]");
+        return workspaceErrorResponse(error, "[workspace/invitations/resend POST]", request);
     }
 }

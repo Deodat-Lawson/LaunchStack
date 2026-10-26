@@ -21,11 +21,14 @@ import {
 } from "~/server/mcp/access-keys";
 import { mcpAvailability } from "~/server/mcp/config";
 import { parseJsonBody } from "~/server/workspace/http";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor, wordEnglish } from "~/i18n/translate";
+import { V } from "~/i18n/validation";
 
 export const runtime = "nodejs";
 
 const CreateKeySchema = z.object({
-    name: z.string().trim().min(1, "Give the key a name").max(ACCESS_KEY_NAME_MAX),
+    name: z.string().trim().min(1, V.keyNameRequired).max(ACCESS_KEY_NAME_MAX),
     access: z.enum(["read", "read-write"]),
 });
 
@@ -36,14 +39,13 @@ export async function POST(request: Request) {
         const body = await parseJsonBody(request, CreateKeySchema);
         if (!body.success) return body.response;
 
+        const locale = localeOfRequest(request);
+        const t = translatorFor(locale, "settings.server.errors");
         if (body.data.access === "read-write" && !ctx.data.can("documents.upload")) {
-            return forbiddenForPermission("documents.upload");
+            return forbiddenForPermission("documents.upload", locale);
         }
         if (!mcpAvailability().enabled) {
-            return NextResponse.json(
-                { error: "The assistant server is off, so a key would not work." },
-                { status: 409 }
-            );
+            return NextResponse.json({ error: t("assistantServerOffKey") }, { status: 409 });
         }
 
         try {
@@ -56,10 +58,11 @@ export async function POST(request: Request) {
             return NextResponse.json({ key, secret }, { status: 201 });
         } catch (error) {
             if (error instanceof AccessKeyLimitError) {
-                return NextResponse.json({ error: error.message }, { status: 409 });
+                const words = wordEnglish(error.message, "settings.server.errors", locale);
+                return NextResponse.json({ error: words }, { status: 409 });
             }
             console.error("[assistants keys POST] failed:", error);
-            return NextResponse.json({ error: "Could not create the key." }, { status: 500 });
+            return NextResponse.json({ error: t("keyCreateFailed") }, { status: 500 });
         }
     });
 }

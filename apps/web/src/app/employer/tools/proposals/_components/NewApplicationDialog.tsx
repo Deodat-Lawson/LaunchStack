@@ -19,6 +19,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { Textarea } from "~/components/ui/textarea";
 import { useToolRouter } from "~/components/tool-app/nav";
 import { cn } from "~/lib/utils";
+import { useErrorText } from "~/lib/tools/errorText";
 
 import { useProposals } from "../_lib/context";
 import { proposalsApi, type FunderRow, type SourceOption } from "../api";
@@ -41,6 +42,7 @@ export function NewApplicationDialog({
     funder?: FunderRow | null;
 }) {
     const t = useTranslations("proposals.newApplication");
+    const errorText = useErrorText();
     const tp = useTranslations("proposals.common");
     const tc = useTranslations("common");
     const router = useToolRouter();
@@ -105,7 +107,7 @@ export function NewApplicationDialog({
             onOpenChange(false);
             router.push(href(`/write/${application.id}`));
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : t("startFailed"));
+            toast.error(errorText(e, t("startFailed")));
         } finally {
             setBusy(false);
         }

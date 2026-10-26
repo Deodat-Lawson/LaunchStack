@@ -242,7 +242,7 @@ export function OverviewScreen() {
                                     </span>
                                     <span className="truncate">{topic.title}</span>
                                     {topic.decision && (
-                                        <span className="text-success ml-auto shrink-0 text-[11.5px]">
+                                        <span className="text-success-ink ml-auto shrink-0 text-[11.5px]">
                                             {t("decided")}
                                         </span>
                                     )}

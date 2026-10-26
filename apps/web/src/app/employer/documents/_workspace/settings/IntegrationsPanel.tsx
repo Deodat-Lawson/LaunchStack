@@ -4,9 +4,11 @@
  * Integrations — workspace connections, Slack mirroring and the meeting hub.
  *
  * Body only; the header and any action live in the settings chrome. The
- * workspace-connections section is live per-tenant state (connect/disconnect
- * happens in Add source → Connect); the Slack/hub sections below it are a
- * readout of environment-variable configuration.
+ * workspace-connections section is live per-tenant state (connecting happens
+ * in Add source — Connect, or Files and Folder for Google Drive); the
+ * Slack/hub sections below it are a readout of environment-variable
+ * configuration. Google Drive's section also manages what syncs from Drive
+ * (DriveSyncPanel).
  */
 
 import React, { useCallback, useEffect, useState, type ReactNode } from "react";
@@ -21,6 +23,7 @@ import { Card, Section } from "~/components/layout/page-shell";
 import { useAgents } from "../collab/useMeetings";
 import { AssistantOAuthClients } from "./AssistantOAuthClients";
 import { usePublishedActions, type SettingsSectionProps } from "./contract";
+import { DriveSyncPanel } from "./DriveSyncPanel";
 import { Code, StatusNote, StatusRow } from "./ui";
 
 const PROVIDER_LABELS: Record<string, string> = {
@@ -209,6 +212,7 @@ function GoogleDriveSection() {
                     )}
                 </Card>
             </ContextTarget>
+            <DriveSyncPanel />
             <ConfirmDialog
                 open={confirmingDisconnect}
                 onOpenChange={setConfirmingDisconnect}
@@ -231,9 +235,9 @@ const SLACK_COMMANDS = [
     ["!help", "help"],
 ] as const;
 
-/** Which Add-source tab reconnects a provider — the same map the workspace uses. */
+/** Which Add-source tab reconnects a provider — the same map the workspace uses. Drive is picked from Files. */
 const RECONNECT_TAB: Record<string, string> = {
-    "google-drive": "drive",
+    "google-drive": "files",
     slack: "slack",
     github: "github",
     notion: "notion",

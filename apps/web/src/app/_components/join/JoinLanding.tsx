@@ -378,7 +378,9 @@ export function JoinLanding({
 
                     {(load.phase === "dead" || load.phase === "error") && (
                         <>
-                            <Eyebrow>{t("eyebrowInvitation")}</Eyebrow>
+                            <h1 className="display text-ink m-0 mb-3 text-[22px] leading-[1.15] tracking-tight">
+                                {t("eyebrowInvitation")}
+                            </h1>
                             <Card>
                                 <Notice tone={load.phase === "dead" ? "muted" : "danger"}>
                                     {problemText(load.problem)}
@@ -475,7 +477,6 @@ function Ready({
             <div className="bg-brand-soft text-brand mb-4 flex size-11 items-center justify-center rounded-xl text-lg font-bold">
                 {workspace.trim().charAt(0).toUpperCase() || "W"}
             </div>
-            <Eyebrow>{t("eyebrowInvited")}</Eyebrow>
             <h1 className="display text-ink m-0 mb-2 break-words text-[28px] leading-[1.1] tracking-tight sm:text-[32px]">
                 {t("title", { workspace })}
             </h1>
@@ -615,14 +616,6 @@ function Ready({
     );
 }
 
-function Eyebrow({ children }: { children: React.ReactNode }) {
-    return (
-        <div className="mono text-ink-3 mb-2.5 text-[10px] font-bold uppercase tracking-[0.12em]">
-            {children}
-        </div>
-    );
-}
-
 function Card({ children }: { children: React.ReactNode }) {
     return <div className="border-line bg-panel rounded-xl border p-5">{children}</div>;
 }
@@ -654,7 +647,7 @@ function Notice({
             role={tone === "danger" ? "alert" : "status"}
             className={cn(
                 "flex items-start gap-2 rounded-lg px-3 py-2.5 text-[13px] leading-relaxed",
-                tone === "ok" && "bg-success-soft text-success",
+                tone === "ok" && "bg-success-soft text-success-ink",
                 tone === "warn" && "bg-warn-soft text-ink-2",
                 tone === "danger" && "bg-danger-soft text-danger",
                 tone === "muted" && "bg-panel-2 text-ink-2"

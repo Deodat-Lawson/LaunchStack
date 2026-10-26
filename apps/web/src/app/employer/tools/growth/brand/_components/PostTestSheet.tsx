@@ -86,7 +86,7 @@ export function PostTestSheet({
                 <div className="flex flex-col gap-6 px-6 pb-8 pt-2">
                     {stale && (
                         <div className="border-warn/40 bg-warn-soft flex flex-wrap items-center justify-between gap-2 rounded-lg border px-3 py-2">
-                            <span className="text-warn text-xs">{t("stale")}</span>
+                            <span className="text-warn-ink text-xs">{t("stale")}</span>
                             <Button
                                 size="sm"
                                 variant="outline"

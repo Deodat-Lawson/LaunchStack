@@ -29,98 +29,78 @@
     "account": {
       "label": "账户",
       "blurb": "个人资料、头像、密码、会话",
-      "eyebrow": "账户",
       "title": "你是谁，以及你在哪里登录",
       "description": "你的个人资料和头像、你在此工作区中的显示方式、登录信息，以及当前保持登录会话的每个浏览器。"
     },
     "appearance": {
       "label": "外观",
       "blurb": "语言、主题、密度、动画、回答",
-      "eyebrow": "外观",
       "title": "应用的外观，以及它如何回答你",
       "description": "只有五项设置，而不是十一项：四项关于界面显示，一项关于助手的回答方式。思维导图中的配色属于导图本身，而不属于主题。"
     },
     "shortcuts": {
       "label": "快捷键",
       "blurb": "所有命令及其按键",
-      "eyebrow": "快捷键",
       "title": "键盘能做什么",
       "description": "所有命令、对应的按键，以及修改它们的地方。仅对你生效；打开思维导图时，思维导图编辑器使用自己的一套快捷键。"
     },
     "people": {
       "label": "成员与权限",
       "blurb": "成员、角色、文件夹",
-      "eyebrow": "成员",
       "title": "工作区里有谁，以及他们能看到什么",
       "description": "成员及其角色、邀请和加入链接、用户组、自定义角色，以及审计日志。谁能打开某个文件夹在文件夹本身上设置，其余一切由角色决定。"
     },
     "company": {
       "label": "公司档案",
       "blurb": "你的来源能证明什么",
-      "eyebrow": "公司",
       "title": "你的来源能证明什么",
       "description": "从你公司撰写或关于你公司的来源中提取，每条事实都附有证明它的片段。智能体引用它作为公司背景，“提案”也据此起草。关于其他公司的来源会被搁置，你可以推翻这一判断。"
     },
     "byok": {
       "label": "自带密钥",
       "blurb": "你的 API 密钥和嵌入密钥",
-      "eyebrow": "密钥",
       "title": "自带密钥",
       "description": "工作区的 AI 使用你自己的提供商账户，嵌入使用你自己的密钥。两者都是可选的：留空的部分会使用服务器的密钥。"
     },
     "models": {
       "label": "模型与路由",
       "blurb": "哪个模型回答什么",
-      "eyebrow": "模型",
       "title": "每类请求由哪个模型处理",
       "description": "服务器的默认模型和路由，在其配置文件中设置，这里只读显示。自带 API 密钥的工作区会改用自己的密钥运行。"
     },
     "agents": {
       "label": "智能体与自主程度",
       "blurb": "智能体名单及其权限",
-      "eyebrow": "智能体",
       "title": "谁参加会议，以及他们可以独立做多少事",
       "description": "每个智能体都是会议中的一个席位：有名字、角色、常设指令和自主程度。智能体可以在本应用中运行，也可以在你连接的其他机器上运行。"
-    },
-    "documents": {
-      "label": "文档默认设置",
-      "blurb": "存储、处理、存放位置",
-      "eyebrow": "文档",
-      "title": "新文档默认会得到什么",
-      "description": "上传文件存储在哪里、如何处理、放入哪个文件夹，以及“新建”是否打开 Google 文档。文件夹可以覆盖默认的处理方式。"
     },
     "integrations": {
       "label": "集成",
       "blurb": "连接、Slack、远程节点",
-      "eyebrow": "集成",
       "title": "此工作区连接了哪些服务",
       "description": "工作区与 Drive、Slack 和 GitHub 的连接；会议的 Slack 同步；以及远程智能体机器接入的中枢。全部可选，且彼此独立。"
     },
     "usage": {
       "label": "用量与费用",
-      "blurb": "余额、消耗、估算",
-      "eyebrow": "用量",
+      "blurb": "模型 token、费用、余额",
       "title": "工作区的支出情况",
-      "description": "token 余额、哪些功能在何时消耗了它，以及根据你设定的单价估算的费用。这些数字是为本页的两项设置提供参考。"
+      "description": "工作区的每一次 AI 模型调用及其费用，以及 token 余额和哪些功能在消耗它。这些数字是为本页的两项设置提供参考。"
     },
     "archive": {
       "label": "归档与保留",
       "blurb": "回收站、停用的智能体、清除",
-      "eyebrow": "归档",
       "title": "哪些内容已被收起，以及何时永久删除",
       "description": "已删除的思维导图和产物、停用的智能体和已归档的频道，可以恢复或永久删除。保留期决定回收站会自动清空哪些内容。"
     },
     "privacy": {
       "label": "数据与隐私",
       "blurb": "哪些数据会离开部署",
-      "eyebrow": "隐私",
       "title": "哪些数据会离开此部署，哪些会留下",
       "description": "哪些外部服务能看到文档正文，哪些只能看到元数据，保留了什么、保留多久。在把敏感内容交给本应用之前，请先阅读这部分。"
     },
     "labs": {
       "label": "实验室",
       "blurb": "未完成，需手动开启",
-      "eyebrow": "实验室",
       "title": "尚未完成的功能",
       "description": "每一项都如实说明了它目前能做什么。默认关闭；开启任意一项都会影响整个工作区。"
     }
@@ -220,44 +200,6 @@
         "label": "智能体的默认自主程度",
         "description": "未单独设置级别的智能体在无人值守时可以做多少事。每个智能体都可以在自己的卡片上调低或调高。",
         "consequence": "调低后，会议可能无法同步到 Slack，也无法自动进行，直到会议中的智能体级别重新调高。"
-      }
-    },
-    "documents": {
-      "uploadStorage": {
-        "label": "上传文件的存储位置",
-        "description": "接收新上传文件的存储。已有文件保持原位不动。",
-        "options": {
-          "cloud": {
-            "description": "需要在服务器上配置 UPLOADTHING_TOKEN。"
-          },
-          "database": {
-            "label": "Blob / 数据库",
-            "description": "服务器自带的存储。"
-          }
-        }
-      },
-      "defaultProcessingMethod": {
-        "label": "默认处理方式",
-        "description": "新上传的文件默认使用的处理方式，除非上传者另行选择。",
-        "options": {
-          "standard": {
-            "label": "标准",
-            "description": "不使用 OCR，适用于文本型 PDF。"
-          },
-          "auto": {
-            "label": "自动",
-            "description": "为每个文档选择最合适的方式。"
-          }
-        }
-      },
-      "defaultFolder": {
-        "label": "新上传文件的默认文件夹",
-        "description": "在上传对话框中预先选中。留空则放入“未归类”。",
-        "placeholder": "未归类"
-      },
-      "createNativeGoogleDoc": {
-        "label": "以 Google 文档形式新建文档",
-        "description": "开启 Drive 关联后，“添加来源”对话框默认打开 Google 文档，而不是本地文件。"
       }
     },
     "usage": {
@@ -572,25 +514,6 @@
       "revokeKeyLabel": "撤销密钥"
     }
   },
-  "documents": {
-    "listSeparator": "、",
-    "storage": {
-      "title": "存储",
-      "description": "新上传文件的存放位置。已有文档保持原位。",
-      "s3Note": "此服务器将上传文件存储在 S3 中；配置 S3 期间，下面的偏好设置不会生效。",
-      "s3Reason": "服务器已配置 S3。",
-      "noUploadThing": "服务器未设置 UPLOADTHING_TOKEN，因此只能使用内置存储。"
-    },
-    "processing": {
-      "title": "处理与存放位置",
-      "description": "在上传对话框中预先填好；上传者仍可按批次修改其中任意一项。文件夹可以为放入其中的文件覆盖处理方式。",
-      "existingFolders": "现有文件夹：{list}"
-    },
-    "creating": {
-      "title": "新建",
-      "description": "“新建”菜单默认打开的内容。"
-    }
-  },
   "integrations": {
     "checking": "正在检查配置…",
     "reconnectMenu": "重新连接…",
@@ -599,7 +522,7 @@
     "removing": "正在移除…",
     "listSeparator": "、",
     "drive": {
-      "description": "将 PDF 和 Word 文档关联到 Google Drive，以便使用专业工具编辑：Word 文件用 Google 文档，PDF 用任意 Drive 应用或 Drive 桌面版。编辑完成后会作为文档版本同步回来。",
+      "description": "在“添加来源”中从 Google Drive 选择的文件和文件夹会保持同步，同步的内容列在这里。关联功能还可以让你使用专业工具编辑 PDF 和 Word 文档：Word 文件用 Google 文档，PDF 用任意 Drive 应用或 Drive 桌面版。编辑完成后会作为文档版本同步回来。",
       "actions": "Google Drive 操作",
       "connectMenu": "连接 Google Drive…",
       "linking": "Drive 关联",
@@ -1568,6 +1491,54 @@
       "granted": "赠送",
       "purchased": "购买"
     },
+    "models": {
+      "title": "AI 模型用量",
+      "description": "此工作区各项功能对 AI 模型的每一次调用，按模型服务商自己的报告计数。与下方余额分开统计，余额只由部分功能扣除。",
+      "ownEndpoint": "其中 {calls} 次调用发往此工作区自带的模型端点，由其服务商自行计费。",
+      "tokens": "最近 {days} 天的模型 token",
+      "split": "输入 {input} · 输出 {output} · {calls} 次调用",
+      "cost": "模型费用",
+      "costPriced": "按每个模型设定的价格计算。",
+      "costFallback": "未设定价格的模型按每百万 {price} 计算。",
+      "costPartial": "{calls} 次调用中有 {priced} 次有模型价格，其余未计入。",
+      "costNone": "这些模型没有设定价格。在下方设置单价即可估算。",
+      "efficiency": "缓存与推理",
+      "cached": "来自缓存的输入",
+      "reasoning": "推理 token",
+      "nothing": "此时间段内没有模型调用。",
+      "feature": "功能",
+      "route": "模型路由",
+      "calls": "调用次数",
+      "input": "输入",
+      "output": "输出",
+      "costColumn": "费用",
+      "features": {
+        "ask": "提问",
+        "mcp": "助手（MCP）",
+        "notes": "笔记",
+        "documentWriter": "文档撰写",
+        "marketing": "营销流程",
+        "emailCampaigns": "邮件外联",
+        "prospects": "潜在客户",
+        "distribution": "分发调研",
+        "proposals": "提案",
+        "scenarios": "情景模拟",
+        "trends": "趋势搜索",
+        "predictiveAnalysis": "预测分析",
+        "repoExplainer": "代码库解读",
+        "meetings": "会议",
+        "vantage": "Vantage",
+        "companyProfile": "公司档案",
+        "ingestion": "文档处理"
+      },
+      "routes": {
+        "default": "标准",
+        "fast": "快速",
+        "reasoning": "推理",
+        "vision": "图像",
+        "auxiliary": "文档处理"
+      }
+    },
     "burn": {
       "title": "每日消耗",
       "description": "按消耗来源统计从余额中扣除的 token。将鼠标悬停在某一天上可查看明细；下表包含相同的数据。",
@@ -1581,12 +1552,6 @@
       "operations": "操作数",
       "share": "占比",
       "empty": "此时间段内没有记录。"
-    },
-    "byRoute": {
-      "title": "按对话路由",
-      "description": "只有对话扣费会记录路由，因此这里涵盖提问和会议，不包括嵌入或 OCR。",
-      "route": "路由",
-      "calls": "调用次数"
     },
     "pricing": {
       "title": "价格与提醒",
@@ -1736,6 +1701,106 @@
       "reasons": "逐步推理（推理模型）",
       "followsSchema": "遵循 JSON schema",
       "structuredHint": "结构化输出（response_format: json_schema）。大多数 OpenAI、Gemini 和 OpenRouter 模型默认开启；通过 Anthropic 兼容 API 使用的 Claude 默认关闭。关闭时，LaunchStack 会改为在提示词中要求输出 JSON。"
+    }
+  },
+  "server": {
+    "errors": {
+      "unknownSetting": "未知的设置“{key}”",
+      "folderScopeNeedsPath": "文件夹范围需要提供文件夹路径",
+      "scopeNotAllowed": "“{key}”不能在{scope, select, workspace {工作区} folder {文件夹} member {成员} other {“{scope}”}}范围设置",
+      "settingNeedsPermission": "更改“{label}”需要 {permission} 权限",
+      "ownPreferencesOnly": "你只能更改自己的偏好设置",
+      "invalidSettingValue": "“{label}”的值无效：{detail}",
+      "agentsCannotBeDeleted": "已停用的智能体不能删除：它们的名称出现在过去的对话记录中。",
+      "channelsKeepTranscript": "频道会保留其对话记录，最多只能归档。",
+      "noProfileYet": "还没有个人资料。",
+      "openWorkspaceFirst": "请先打开一个工作区。",
+      "uploadRaced": "另一次上传刚刚完成，请重试。",
+      "lookupTooMany": "一次最多只能查询 {max} 人。",
+      "photoScope": "scope 必须是 global 或 workspace",
+      "photoMultipart": "请以 multipart 表单数据的形式发送照片。",
+      "photoAttachFile": "请将照片作为 `file` 字段附上。",
+      "crossSiteRefused": "已拒绝跨站请求",
+      "signInAgainForPassword": "为了你的账户安全，请先退出并重新登录，然后再设置密码。",
+      "setPasswordFailed": "无法设置密码",
+      "companyNotFound": "找不到该公司。",
+      "fetchCompanyFailed": "无法获取公司信息",
+      "preferenceSaveFailed": "无法更新偏好设置",
+      "embeddingEndpointForKey": "请输入这个密钥所属的嵌入端点 URL，例如 https://api.openai.com/v1。密钥只会发送到保存时对应的地址。",
+      "embeddingKeyNeedsEndpoint": "已保存的嵌入密钥需要对应的端点 URL。请保留该地址，或者同时输入新的密钥和新的地址。",
+      "embeddingEndpointChanged": "嵌入端点已更改，请输入新地址对应的 API 密钥。已保存的密钥只会发送到输入时对应的地址。",
+      "embeddingValidationFailed": "嵌入凭据未通过验证。",
+      "reindexRunning": "这家公司已有一个重建索引任务在运行。请等它完成后再更改嵌入索引。",
+      "reindexLockContended": "无法获取重建索引锁，请几秒后重试。",
+      "reindexScheduleFailed": "无法安排重建索引任务，设置更改未生效。",
+      "credentialsStoreFailed": "无法保存嵌入凭据。",
+      "companyUpdateNotFound": "无法更新公司记录。",
+      "reindexScheduled": "已为 {count} 组文档分块安排重建索引。在重写完成之前，现有文档仍可通过之前的索引搜索。",
+      "companyUpdated": "公司设置已更新。",
+      "companyUpdateFailed": "无法更新公司设置。",
+      "assistantsLoadFailed": "无法加载助手。",
+      "oauthClientsLoadFailed": "无法加载 OAuth 客户端。",
+      "assistantServerOffSignIn": "助手服务器已关闭，因此无处可登录。",
+      "oauthClientCreateFailed": "无法创建 OAuth 客户端。",
+      "assistantServerOffKey": "助手服务器已关闭，因此密钥无法使用。",
+      "keyCreateFailed": "无法创建密钥。",
+      "clientNotFound": "找不到该客户端",
+      "oauthClientDeleteFailed": "无法删除 OAuth 客户端。",
+      "connectionNotFound": "找不到该连接",
+      "disconnectFailed": "无法断开助手的连接。",
+      "keyNotFound": "找不到该密钥",
+      "keyRevokeFailed": "无法撤销密钥。",
+      "accessKeyLimit": "你在一个工作区中最多只能持有 {max} 个访问密钥。",
+      "oauthClientLimit": "一个工作区最多只能有 {max} 个 OAuth 客户端。",
+      "chatModelsUnreadable": "无法读取对话模型配置，详情请查看服务器日志。"
+    },
+    "models": {
+      "enterAddress": "请输入你的模型端点地址。",
+      "notWebAddress": "这不是一个网址。它应该类似 https://api.example.com/v1。",
+      "needsHttps": "地址必须以 https:// 开头。",
+      "keyInAddress": "请把密钥填在 API 密钥字段中，不要放在地址里。",
+      "queryInAddress": "地址中不要带查询字符串；基础 URL 以路径结尾，例如 /v1。",
+      "privateAddress": "该地址指向私有网络，这台服务器不允许这样做。请使用服务商的公网地址。",
+      "unreachable": "无法访问该地址。请检查地址，或者自己输入模型 ID。",
+      "keyRejected": "端点拒绝了这个 API 密钥。",
+      "noModelList": "该端点不提供模型列表（HTTP {status}）。请自己输入模型 ID。",
+      "emptyAnswer": "模型没有返回任何内容。请确认它是一个对话模型。",
+      "modelError": "端点对这个模型返回了错误。请检查模型 ID，并确认该密钥可以使用它。",
+      "noSecretsKey": "这台服务器暂时无法保存 API 密钥：服务器的运维人员需要设置 EMBEDDING_SECRETS_KEY。",
+      "keyForNewAddress": "地址已更改，请输入新地址对应的 API 密钥。已保存的密钥只会发送到输入时对应的地址。",
+      "keyForThisAddress": "请输入这个地址对应的 API 密钥。已保存的密钥只会发送到保存时对应的地址。",
+      "notModelId": "“{id}”看起来不像模型 ID。请按服务商列出的原样复制。",
+      "visionModel": "处理图片的模型必须能够读取图片。",
+      "reasoningModel": "用于推理的模型必须具备推理能力。",
+      "invalidSetup": "这不是有效的模型设置。",
+      "saveFailed": "无法保存模型设置。",
+      "chooseModel": "请选择要测试的模型。",
+      "testFailed": "无法运行测试。",
+      "enterEndpointFirst": "请先输入端点地址。",
+      "listFailed": "无法列出模型。"
+    },
+    "photo": {
+      "empty": "这个文件是空的。",
+      "tooLarge": "照片最大为 {mb} MB。",
+      "unreadable": "无法读取这个图片文件。请使用 JPG、PNG、WebP、GIF 或 AVIF 格式。",
+      "heic": "不支持 HEIC 照片。请导出为 JPG 后重试。",
+      "tooSmall": "请使用至少 {min}×{min} 像素的图片。",
+      "processFailed": "无法处理这张图片，请换一个文件试试。"
+    },
+    "ledger": {
+      "grant": "{grantType, select, signup_bonus {注册赠送} monthly_refresh {每月发放} promotional {促销赠送} manual {手动发放} other {{grantType}}}：+{amount} token",
+      "serviceUsage": "{service} 用量",
+      "chatQuery": "对话提问（{route} 路由）",
+      "transcribe": "转录 {file}",
+      "ner": "为 {count} 个分块提取实体",
+      "embed": "为文档 {document} 嵌入 {count} 个分块",
+      "ocr": "OCR 识别 {count} 页",
+      "distribution": "分发调研：{name}",
+      "proposalsRewrite": "提案：改写",
+      "proposalsReview": "提案：审阅",
+      "scenarioInterview": "情景“{title}”：访谈",
+      "scenarioUnit": "情景“{title}”（{unit, select, brief {简报} cast {角色设定} report {报告} other {{unit}}}）",
+      "scenarioRound": "情景“{title}”（第 {round} 轮）"
     }
   }
 }

@@ -616,3 +616,54 @@ describe("legacy 8-character links", () => {
         expect(link.legacy).toBe(false);
     });
 });
+
+describe("in the reader's language", () => {
+    function chinese(url: string, method: string, body?: unknown): Request {
+        return new Request(`http://localhost${url}`, {
+            method,
+            headers: { "content-type": "application/json", cookie: "ls-locale=zh-CN.1" },
+            ...(body === undefined ? {} : { body: JSON.stringify(body) }),
+        });
+    }
+
+    it("says why a link can't be used, in English without the cookie", async () => {
+        fakeDb.onSelect(inviteCodes, [linkRow({ maxUses: 2, useCount: 2 })]);
+        const english = await ACCEPT(
+            jsonRequest("/api/workspace/join-links/accept", "POST", { code: CODE })
+        );
+        expect(english.status).toBe(410);
+        await expect(english.json()).resolves.toEqual({
+            error: "This join link has reached its use limit.",
+        });
+
+        fakeDb.onSelect(inviteCodes, [linkRow({ maxUses: 2, useCount: 2 })]);
+        const chineseReply = await ACCEPT(
+            chinese("/api/workspace/join-links/accept", "POST", { code: CODE })
+        );
+        expect(chineseReply.status).toBe(410);
+        await expect(chineseReply.json()).resolves.toEqual({
+            error: "这个加入链接已达到使用次数上限。",
+        });
+    });
+
+    it("refuses to change a revoked link in Chinese", async () => {
+        gate.mockImplementation(gateFor(makeWorkspaceContext({ role: "admin" })));
+        fakeDb.onSelect(inviteCodes, [linkRow({ isActive: false })]);
+        const res = await PATCH(
+            chinese("/api/workspace/join-links/3", "PATCH", { requiresApproval: false }),
+            params({ id: "3" })
+        );
+        expect(res.status).toBe(409);
+        await expect(res.json()).resolves.toEqual({ error: "这个加入链接已被撤销，请新建一个。" });
+    });
+
+    it("words an invalid id", async () => {
+        gate.mockImplementation(gateFor(makeWorkspaceContext({ role: "admin" })));
+        const res = await PATCH(
+            chinese("/api/workspace/join-links/x", "PATCH", { requiresApproval: false }),
+            params({ id: "x" })
+        );
+        expect(res.status).toBe(400);
+        await expect(res.json()).resolves.toEqual({ error: "ID 无效" });
+    });
+});

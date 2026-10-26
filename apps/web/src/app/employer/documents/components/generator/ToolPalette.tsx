@@ -307,7 +307,7 @@ export function ToolPalette({
                                                     className={cn(
                                                         "rounded-lg p-2 transition-colors",
                                                         isActive
-                                                            ? "bg-brand text-white"
+                                                            ? "bg-brand text-brand-fg"
                                                             : tool.bgColor
                                                     )}
                                                 >
@@ -349,7 +349,7 @@ export function ToolPalette({
                                     <div
                                         className={cn(
                                             "shrink-0 rounded-md p-1.5",
-                                            isActive ? "bg-brand text-white" : tool.bgColor
+                                            isActive ? "bg-brand text-brand-fg" : tool.bgColor
                                         )}
                                     >
                                         <span className={cn(!isActive && tool.color)}>

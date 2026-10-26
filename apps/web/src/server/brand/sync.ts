@@ -31,6 +31,8 @@ import {
     LinkedInApiError,
 } from "@launchstack/tools/social-publish/linkedin";
 
+import type { Locale } from "~/i18n/locales";
+import { translatorFor } from "~/i18n/translate";
 import { db } from "~/server/db";
 import { brandChannels, brandComments, type BrandChannelRow } from "~/server/db/schema/brand";
 
@@ -42,6 +44,7 @@ import {
     resolveChannelTarget,
 } from "./channels";
 import { linkedInApiOptions } from "./linkedin-options";
+import { brandReason } from "./words";
 
 const DAY = 86_400_000;
 const METRICS_WINDOW_DAYS = 90;
@@ -293,7 +296,8 @@ async function syncBlueskyAccount(
 /** Read one channel back; errors become one line in the summary, never a thrown sync. */
 async function syncChannel(
     channel: BrandChannelRow,
-    now: Date
+    now: Date,
+    locale: Locale
 ): Promise<{ posts: number; comments: number; error: string | null }> {
     if (!channel.capabilities.analytics && !channel.capabilities.comments) {
         return { posts: 0, comments: 0, error: null };
@@ -328,18 +332,30 @@ async function syncChannel(
             error instanceof ChannelUnavailableError || error instanceof Error
                 ? error.message
                 : String(error);
-        return { posts: 0, comments: 0, error: `${channel.name}: ${message}` };
+        return {
+            posts: 0,
+            comments: 0,
+            error:
+                locale === "en"
+                    ? `${channel.name}: ${message}`
+                    : translatorFor(locale, "growth.server.brand")("syncLine", {
+                          channel: channel.name,
+                          message: brandReason(message, locale),
+                      }),
+        };
     }
 }
 
 export async function syncBrandWorkspace(
     companyId: bigint,
-    now = new Date()
+    now = new Date(),
+    /** The reader's language for the summary's error lines (English for the worker). */
+    locale: Locale = "en"
 ): Promise<SyncSummary> {
     const channels = (await listChannelRows(companyId)).filter(c => c.status === "active");
     const summary: SyncSummary = { syncedAt: now, posts: 0, comments: 0, errors: [] };
     for (const channel of channels) {
-        const result = await syncChannel(channel, now);
+        const result = await syncChannel(channel, now, locale);
         summary.posts += result.posts;
         summary.comments += result.comments;
         if (result.error) summary.errors.push(result.error);

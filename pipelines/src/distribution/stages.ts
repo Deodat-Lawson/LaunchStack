@@ -49,6 +49,8 @@ export type StageRequirementCode = "owner_required" | "next_action_required" | "
 
 export interface StageRequirementError {
     code: StageRequirementCode;
+    /** The stage being entered; with `code`, what a reader's language words the message from. */
+    target: RelationshipStage;
     message: string;
 }
 
@@ -63,31 +65,48 @@ export function stageRequirements(
     if (rank >= ORDER.get("contacted")! && !context.ownerUserId) {
         errors.push({
             code: "owner_required",
+            target,
             message: `An owner is required from "contacted" onward (entering "${target}").`,
         });
     }
     if (rank >= ORDER.get("meeting")! && rank < ORDER.get("won")! && !context.nextAction) {
         errors.push({
             code: "next_action_required",
+            target,
             message: `A next action is required from "meeting" onward (entering "${target}").`,
         });
     }
     if (rank >= ORDER.get("won")! && !context.hasAgreement) {
         errors.push({
             code: "agreement_required",
+            target,
             message: `An agreement is required to enter "${target}".`,
         });
     }
     return errors;
 }
 
+/**
+ * What a refused move was, as values beside the English `message`, so the app
+ * can say it in the reader's language: the stages involved, the moves that
+ * were allowed, and every requirement the target stage is missing.
+ */
+export interface StageTransitionDetails {
+    from?: RelationshipStage;
+    to: string;
+    allowed?: readonly RelationshipStage[];
+    missing?: StageRequirementError[];
+}
+
 export class StageTransitionError extends Error {
     readonly code: string;
     readonly status = 409;
-    constructor(code: string, message: string) {
+    readonly details: StageTransitionDetails | null;
+    constructor(code: string, message: string, details: StageTransitionDetails | null = null) {
         super(message);
         this.name = "StageTransitionError";
         this.code = code;
+        this.details = details;
     }
 }
 
@@ -101,20 +120,28 @@ export interface TransitionRequest {
 export function assertTransition(request: TransitionRequest): void {
     const { from, to, context } = request;
     if (!RELATIONSHIP_STAGES.includes(to)) {
-        throw new StageTransitionError("unknown_stage", `Unknown stage "${to}".`);
+        throw new StageTransitionError("unknown_stage", `Unknown stage "${to}".`, { from, to });
     }
     if (from === to) {
-        throw new StageTransitionError("same_stage", `Relationship is already "${to}".`);
+        throw new StageTransitionError("same_stage", `Relationship is already "${to}".`, {
+            from,
+            to,
+        });
     }
     if (!ALLOWED_TRANSITIONS[from].includes(to)) {
         throw new StageTransitionError(
             "transition_not_allowed",
-            `Cannot move from "${from}" to "${to}". Allowed: ${ALLOWED_TRANSITIONS[from].join(", ")}.`
+            `Cannot move from "${from}" to "${to}". Allowed: ${ALLOWED_TRANSITIONS[from].join(", ")}.`,
+            { from, to, allowed: ALLOWED_TRANSITIONS[from] }
         );
     }
     const missing = stageRequirements(to, context);
     if (missing.length > 0) {
-        throw new StageTransitionError(missing[0]!.code, missing.map(m => m.message).join(" "));
+        throw new StageTransitionError(missing[0]!.code, missing.map(m => m.message).join(" "), {
+            from,
+            to,
+            missing,
+        });
     }
 }
 

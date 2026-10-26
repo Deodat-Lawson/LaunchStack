@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { and, desc, eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
@@ -9,14 +11,18 @@ import { requireWorkspaceContext } from "~/lib/require-workspace-context";
  * Notes that reference this document via `[[Document Title]]`. Filtered by
  * the requester's `userId` on the source note so we only show what they own.
  */
-export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
+    const locale = localeOfRequest(request);
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
         const { id: documentId } = await params;
         if (!documentId) {
-            return NextResponse.json({ error: "Invalid document id" }, { status: 400 });
+            return NextResponse.json(
+                { error: translatorFor(locale, "sources.server.errors")("invalidDocumentId") },
+                { status: 400 }
+            );
         }
 
         const rows = await db
@@ -47,7 +53,10 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
         return NextResponse.json({ incoming }, { status: 200 });
     } catch (err) {
         console.error("[/api/documents/:id/backlinks] failed:", err);
-        return NextResponse.json({ error: "Backlinks failed" }, { status: 500 });
+        return NextResponse.json(
+            { error: translatorFor(locale, "notes.server.errors")("backlinksFailed") },
+            { status: 500 }
+        );
     }
 }
 

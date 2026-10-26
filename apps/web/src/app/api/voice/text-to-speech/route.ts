@@ -7,6 +7,10 @@ import {
 } from "@launchstack/llm/types";
 import { validateRequestBody, TextToSpeechSchema } from "~/lib/validation";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
+
+type VoiceTranslator = ReturnType<typeof translatorFor<"chat.server.voice">>;
 
 /**
  * Speech generation, via Google Cloud Text-to-Speech.
@@ -32,7 +36,11 @@ interface CloudTtsResponse {
     error?: { message?: string; status?: string };
 }
 
-async function synthesize(body: TextToSpeechRequest, apiKey: string): Promise<NextResponse> {
+async function synthesize(
+    body: TextToSpeechRequest,
+    apiKey: string,
+    t: VoiceTranslator
+): Promise<NextResponse> {
     // A leading [tag] used to steer delivery on the previous provider. Chirp 3: HD
     // exposes no style field, so the tag is stripped rather than spoken — leaving
     // it in would have the voice read the word "excited" aloud.
@@ -43,9 +51,10 @@ async function synthesize(body: TextToSpeechRequest, apiKey: string): Promise<Ne
     if (bytes > CLOUD_TTS_MAX_INPUT_BYTES) {
         return NextResponse.json(
             {
-                error:
-                    `Text too long for speech generation (${bytes} bytes, limit ` +
-                    `${CLOUD_TTS_MAX_INPUT_BYTES}). Split it into shorter turns.`,
+                error: t("textTooLong", {
+                    bytes: String(bytes),
+                    limit: String(CLOUD_TTS_MAX_INPUT_BYTES),
+                }),
             },
             { status: 413 }
         );
@@ -79,7 +88,9 @@ async function synthesize(body: TextToSpeechRequest, apiKey: string): Promise<Ne
         console.error("❌ [TTS] Request failed:", response.status, payload.error);
         return NextResponse.json(
             {
-                error: payload.error?.message ?? `Speech generation failed (${response.status})`,
+                error:
+                    payload.error?.message ??
+                    t("speechFailedStatus", { status: String(response.status) }),
             },
             { status: response.status === 429 ? 429 : 502 }
         );
@@ -87,7 +98,7 @@ async function synthesize(body: TextToSpeechRequest, apiKey: string): Promise<Ne
 
     if (!payload.audioContent) {
         console.error("❌ [TTS] Response carried no audio payload");
-        return NextResponse.json({ error: "Speech generation returned no audio" }, { status: 502 });
+        return NextResponse.json({ error: t("noAudio") }, { status: 502 });
     }
 
     const mp3 = Buffer.from(payload.audioContent, "base64");
@@ -103,6 +114,7 @@ async function synthesize(body: TextToSpeechRequest, apiKey: string): Promise<Ne
 }
 
 export async function POST(request: Request) {
+    const t = translatorFor(localeOfRequest(request), "chat.server.voice");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
@@ -113,15 +125,12 @@ export async function POST(request: Request) {
 
         const apiKey = process.env.GOOGLE_AI_API_KEY?.trim();
         if (!apiKey) {
-            return NextResponse.json(
-                { error: "Speech generation is not configured. Set GOOGLE_AI_API_KEY." },
-                { status: 500 }
-            );
+            return NextResponse.json({ error: t("notConfigured") }, { status: 500 });
         }
 
-        return await synthesize(body, apiKey);
+        return await synthesize(body, apiKey, t);
     } catch (error) {
         console.error("Error in text-to-speech:", error);
-        return NextResponse.json({ error: "Failed to generate speech" }, { status: 500 });
+        return NextResponse.json({ error: t("speechFailed") }, { status: 500 });
     }
 }

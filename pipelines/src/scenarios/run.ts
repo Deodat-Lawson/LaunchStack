@@ -7,18 +7,23 @@
  * one Inngest `step.run` per unit.
  */
 import {
+    ALL_AGAINST,
     buildBriefRequest,
     buildCastRequest,
     buildReportRequest,
     CAST_BATCH_SIZE,
     createWorld,
+    fillSeats,
     injectEvent,
     mapLimit,
     parseBrief,
     parseCast,
     parseReport,
     postReception,
+    REALISTIC_MIX,
     runRound,
+    seatsToRecast,
+    skepticShortfall,
     stripCitations,
     turnSituation,
     totalUsage,
@@ -29,6 +34,7 @@ import {
     type Persona,
     type ScenarioReport,
     type SimulationModel,
+    type StartingMix,
     type Usage,
     type World,
 } from "@launchstack/simulation";
@@ -147,6 +153,19 @@ function audienceFor(run: ScenarioRunRecord): string {
     return "people who would plausibly hear about this situation and have a view on it: customers, prospects, people in the market, critics and bystanders";
 }
 
+/**
+ * The starting stances a cast aims for. A scenario puts a plan or a price in
+ * front of people who would pay for it, so most start wary. A post test's
+ * audience follows the brand and already chose to see its posts, so fewer
+ * start against; asking it for a third of critics would skew the reception
+ * that post tests are checked against.
+ */
+const POST_TEST_MIX: StartingMix = { against: 0.2, undecided: 0.45, inFavour: 0.35 };
+
+function mixFor(run: Pick<ScenarioRunRecord, "kind">): StartingMix {
+    return run.kind === "post_test" ? POST_TEST_MIX : REALISTIC_MIX;
+}
+
 async function buildCast(
     run: ScenarioRunRecord,
     ports: ScenarioRunPorts,
@@ -160,21 +179,26 @@ async function buildCast(
         batches.push(Math.min(CAST_BATCH_SIZE, left));
     const takenHandles = new Set<string>(["@newswire"]);
     if (run.draft) takenHandles.add(run.draft.brandHandle.toLowerCase());
+    const mix = mixFor(run);
+    const request = (
+        count: number,
+        overrides: { mix?: StartingMix; takenHandles?: string[] } = {}
+    ) =>
+        buildCastRequest({
+            subject: run.subject,
+            brief,
+            evidence,
+            count,
+            takenHandles: overrides.takenHandles ?? [],
+            audience: audienceFor(run),
+            maxInvented: evidence.length === 0 ? count : Math.max(1, Math.ceil(count * 0.2)),
+            mix: overrides.mix ?? mix,
+        });
     // Batches run in parallel but parse in order, so ids and handles are stable.
     const replies = await mapLimit(batches, Math.min(3, ports.concurrency ?? 6), async count =>
-        model.complete(
-            buildCastRequest({
-                subject: run.subject,
-                brief,
-                evidence,
-                count,
-                takenHandles: [],
-                audience: audienceFor(run),
-                maxInvented: evidence.length === 0 ? count : Math.max(1, Math.ceil(count * 0.2)),
-            })
-        )
+        model.complete(request(count))
     );
-    const personas: Persona[] = [];
+    let personas: Persona[] = [];
     replies.forEach((reply, i) => {
         const parsed = parseCast(reply.text, {
             evidenceIds,
@@ -184,6 +208,37 @@ async function buildCast(
         });
         personas.push(...parsed);
     });
+
+    // A cast that came back warmer than asked gets one more call for the
+    // missing skeptics, who take the seats `seatsToRecast` picks. If that call
+    // fails, the cast goes ahead as it is rather than failing the run.
+    const short = skepticShortfall(personas, mix);
+    if (short > 0) {
+        const seats = seatsToRecast(personas, short);
+        try {
+            const reply = await model.complete(
+                request(seats.length, { mix: ALL_AGAINST, takenHandles: [...takenHandles] })
+            );
+            const replacements = parseCast(reply.text, {
+                evidenceIds,
+                startIndex: personas.length + 1,
+                takenHandles,
+                limit: seats.length,
+            });
+            personas = fillSeats(personas, seats, replacements);
+            ports.log?.("scenario cast recast for skeptics", {
+                runId: run.id,
+                short,
+                filled: Math.min(seats.length, replacements.length),
+            });
+        } catch (error) {
+            ports.log?.("scenario cast recast failed; keeping the cast", {
+                runId: run.id,
+                short,
+                error: String(error),
+            });
+        }
+    }
     return personas;
 }
 

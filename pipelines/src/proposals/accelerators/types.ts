@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import type { DraftMeta, RunKind, RunStatus, RunStep, RunSummary } from "../types";
+import type { DraftMeta, RunKind, RunResult, RunStatus, RunStep, RunSummary } from "../types";
 
 export const FIELD_TYPES = [
     "long_text",
@@ -311,6 +311,8 @@ export interface RunView {
     status: RunStatus;
     steps: RunStep[];
     summary: RunSummary | null;
+    /** What the run hands back, e.g. a selected-text Suggestion; null for runs that only save records. */
+    result: RunResult | null;
     error: string | null;
     creditsUsed: number;
     createdAt: string;

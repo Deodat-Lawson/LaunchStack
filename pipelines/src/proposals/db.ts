@@ -45,6 +45,7 @@ import type {
     RunInput,
     RunKind,
     RunRecord,
+    RunResult,
     RunStep,
     RunSummary,
     SectionRecord,
@@ -164,6 +165,7 @@ function toRun(row: ProposalRunRow): RunRecord {
         input: row.input ?? {},
         steps: row.steps ?? [],
         summary: row.summary ?? null,
+        result: row.result ?? null,
         error: row.error ?? null,
         creditsUsed: row.creditsUsed,
         createdAt: row.createdAt,
@@ -1122,7 +1124,8 @@ export async function completeRun(
     companyId: bigint,
     id: string,
     summary: RunSummary,
-    debit: (executor: ProposalDebitExecutor) => Promise<number>
+    debit: (executor: ProposalDebitExecutor) => Promise<number>,
+    result: RunResult | null = null
 ): Promise<RunRecord | null> {
     return getDb().transaction(async tx => {
         const [row] = await tx
@@ -1155,6 +1158,7 @@ export async function completeRun(
             .set({
                 status: "completed",
                 summary,
+                result,
                 creditsUsed,
                 completedAt: new Date(),
                 updatedAt: new Date(),

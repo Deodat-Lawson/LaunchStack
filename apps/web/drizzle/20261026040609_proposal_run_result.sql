@@ -1,0 +1,1 @@
+ALTER TABLE "pdr_ai_v2_proposal_runs" ADD COLUMN "result" jsonb;

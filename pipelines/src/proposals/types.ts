@@ -10,7 +10,7 @@
  */
 import { z } from "zod";
 
-import type { EditSuggestion, FormField } from "./accelerators/types";
+import { EditSuggestionSchema, type FormField } from "./accelerators/types";
 // ─── Vocabulary ──────────────────────────────────────────────────────────────
 
 export const APPLICATION_STATUSES = [
@@ -310,9 +310,25 @@ export interface RunSummary {
     headline: string;
     counts?: Record<string, number>;
     durationMs?: number;
-    /** An `accel_edit` run's proposed replacement; it changes no answer until the user applies it. */
-    suggestion?: EditSuggestion & { applicationId: string; sectionId: string };
 }
+
+/**
+ * What a run hands back to the person who started it, kept apart from `summary` (history and
+ * status). Tagged by `kind` so another run kind can add its own member. Null on every run that
+ * only changes stored records.
+ */
+export const RunResultSchema = z.discriminatedUnion("kind", [
+    z
+        .object({
+            kind: z.literal("accel_edit"),
+            applicationId: z.string().min(1),
+            sectionId: z.string().min(1),
+            /** A proposal only: it changes no answer until the user applies it. */
+            suggestion: EditSuggestionSchema,
+        })
+        .strict(),
+]);
+export type RunResult = z.infer<typeof RunResultSchema>;
 
 /** The rewrites a person can ask for without typing; `custom` carries their own words. */
 export const REWRITE_PRESETS = ["tighten", "specific", "plainer", "stronger", "custom"] as const;
@@ -456,6 +472,7 @@ export interface RunRecord {
     input: RunInput;
     steps: RunStep[];
     summary: RunSummary | null;
+    result: RunResult | null;
     error: string | null;
     creditsUsed: number;
     createdAt: Date;

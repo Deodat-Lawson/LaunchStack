@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import { PROPOSAL_CREDITS } from "../ports";
 import { stepsFor } from "../run";
-import { RUN_KINDS, RunInputSchema } from "../types";
+import { RUN_KINDS, RunInputSchema, RunResultSchema, type RunSummary } from "../types";
 import { ApplyEditSchema, EditSuggestionRequestSchema } from "./types";
 
 const selection = {
@@ -88,5 +88,42 @@ describe("accel_edit run kind", () => {
         const steps = stepsFor("accel_edit", { acceleratorEdit: selection });
         expect(steps.map(step => step.id)).toEqual(["generate", "save"]);
         expect(steps.every(step => step.status === "waiting")).toBe(true);
+    });
+});
+
+describe("run result", () => {
+    const result = {
+        kind: "accel_edit",
+        applicationId: "app-1",
+        sectionId: "section-1",
+        suggestion: {
+            expectedRevision: 1,
+            start: 10,
+            end: 13,
+            original: "old",
+            replacement: "new",
+            gaps: [],
+        },
+    };
+
+    it("accepts a tagged edit Suggestion", () => {
+        expect(RunResultSchema.safeParse(result).success).toBe(true);
+    });
+
+    it("rejects an unknown kind, a missing Field, extra keys and an inconsistent Suggestion", () => {
+        expect(RunResultSchema.safeParse({ ...result, kind: "programs" }).success).toBe(false);
+        expect(RunResultSchema.safeParse({ ...result, sectionId: "" }).success).toBe(false);
+        expect(RunResultSchema.safeParse({ ...result, extra: 1 }).success).toBe(false);
+        expect(
+            RunResultSchema.safeParse({
+                ...result,
+                suggestion: { ...result.suggestion, original: "much longer than the range" },
+            }).success
+        ).toBe(false);
+    });
+
+    it("is separate from the run summary, which stays status only", () => {
+        const summary: RunSummary = { headline: "Edit suggested", counts: { edited: 1 } };
+        expect(summary).not.toHaveProperty("suggestion");
     });
 });

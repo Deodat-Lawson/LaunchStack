@@ -17,4 +17,5 @@ export * from "./render";
 export * from "./prompts";
 export * from "./ports";
 export * from "./stages";
+export * from "./accelerators/edit";
 export * from "./run";

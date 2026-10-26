@@ -267,6 +267,13 @@
       "when": 1792914264694,
       "tag": "20261025074424_accelerators_base",
       "breakpoints": true
+    },
+    {
+      "idx": 38,
+      "version": "7",
+      "when": 1792987570002,
+      "tag": "20261026040609_proposal_run_result",
+      "breakpoints": true
     }
   ]
 }

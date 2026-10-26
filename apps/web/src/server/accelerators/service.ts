@@ -1,6 +1,7 @@
 import {
     AcceleratorError,
     hashValue,
+    type EditSuggestionRequest,
     type HomeResponse,
     type ProgramView,
     type RunView,
@@ -12,7 +13,7 @@ import {
     listCatalogue,
     listCompanyMatches,
 } from "@launchstack/pipelines/accelerators/db";
-import { PROPOSAL_CREDITS, type RunRecord } from "@launchstack/pipelines/proposals";
+import { PROPOSAL_CREDITS, selectedText, type RunRecord } from "@launchstack/pipelines/proposals";
 import { findLiveRun, getRun, loadOrgProfile } from "@launchstack/pipelines/proposals/db";
 
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
@@ -31,6 +32,7 @@ export function toAcceleratorRunView(run: RunRecord): RunView {
         status: run.status,
         steps: run.steps,
         summary: run.summary,
+        result: run.result,
         error: run.error,
         creditsUsed: run.creditsUsed,
         createdAt: run.createdAt.toISOString(),
@@ -144,6 +146,53 @@ export async function draftAcceleratorField(
             userId: member.authUserId,
             kind: "accel_draft",
             input: { applicationId, acceleratorDraft: { sectionId, expectedRevision } },
+            sectionLabels: [section.field.question],
+        })
+    );
+}
+
+/** Start a metered run that proposes a replacement for a selection; it saves no answer. */
+export async function suggestAcceleratorEdit(
+    member: WorkspaceContext,
+    applicationId: string,
+    sectionId: string,
+    request: EditSuggestionRequest
+): Promise<RunView> {
+    const application = await getAcceleratorApplication(member.companyId, applicationId);
+    if (!application)
+        throw new AcceleratorError("Application not found", 404, "application_not_found");
+    const section = application.sections.find(candidate => candidate.id === sectionId);
+    if (!section) throw new AcceleratorError("Field not found", 404, "section_not_found");
+    if (section.revision !== request.expectedRevision) {
+        throw new AcceleratorError(
+            "The answer changed; select the text again",
+            409,
+            "answer_conflict"
+        );
+    }
+    if (section.field.fieldType !== "long_text" && section.field.fieldType !== "short_text") {
+        throw new AcceleratorError("This Field is not prose", 400, "prose_required");
+    }
+    selectedText(section.draft ?? "", request.start, request.end);
+    if (!(await getCatalogueProgram(application.programId))) {
+        throw new AcceleratorError("Program not found", 404, "program_not_found");
+    }
+    await assertNoLiveRun(member.companyId);
+    return toAcceleratorRunView(
+        await startProposalRun({
+            companyId: member.companyId,
+            userId: member.authUserId,
+            kind: "accel_edit",
+            input: {
+                applicationId,
+                acceleratorEdit: {
+                    sectionId,
+                    expectedRevision: request.expectedRevision,
+                    start: request.start,
+                    end: request.end,
+                    instruction: request.instruction,
+                },
+            },
             sectionLabels: [section.field.question],
         })
     );

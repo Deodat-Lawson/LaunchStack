@@ -45,14 +45,15 @@ import {
     MAX_REQUEST_CHARS,
 } from "./stages";
 import { wordCount } from "./text";
-import type {
-    LibraryItemRecord,
-    RunInput,
-    RunKind,
-    RunRecord,
-    RunStep,
-    RunSummary,
-    SectionRecord,
+import {
+    RunResultSchema,
+    type LibraryItemRecord,
+    type RunInput,
+    type RunKind,
+    type RunRecord,
+    type RunStep,
+    type RunSummary,
+    type SectionRecord,
 } from "./types";
 
 export interface ProposalRunContext {
@@ -261,29 +262,35 @@ export async function executeProposalRun(
                 break;
         }
         summary.durationMs = Date.now() - run.startedAt!.getTime();
-        const finished = await completeRun(ctx.companyId, ctx.runId, summary, async executor => {
-            if (prepared) {
-                // Gate the final write as well as generation, using current membership.
-                await ports.assertAcceleratorAccess!();
-                await prepared.commit(executor);
-                await executor
-                    .update(proposalRuns)
-                    .set({
-                        steps: run.steps.map(step => ({
-                            ...step,
-                            status: "done" as const,
-                            completedAt: new Date().toISOString(),
-                        })),
-                    })
-                    .where(
-                        and(
-                            eq(proposalRuns.id, ctx.runId),
-                            eq(proposalRuns.companyId, ctx.companyId)
-                        )
-                    );
-            }
-            return debit(ports, ctx, amount, description, executor);
-        });
+        const finished = await completeRun(
+            ctx.companyId,
+            ctx.runId,
+            summary,
+            async executor => {
+                if (prepared) {
+                    // Gate the final write as well as generation, using current membership.
+                    await ports.assertAcceleratorAccess!();
+                    await prepared.commit(executor);
+                    await executor
+                        .update(proposalRuns)
+                        .set({
+                            steps: run.steps.map(step => ({
+                                ...step,
+                                status: "done" as const,
+                                completedAt: new Date().toISOString(),
+                            })),
+                        })
+                        .where(
+                            and(
+                                eq(proposalRuns.id, ctx.runId),
+                                eq(proposalRuns.companyId, ctx.companyId)
+                            )
+                        );
+                }
+                return debit(ports, ctx, amount, description, executor);
+            },
+            prepared?.result ? RunResultSchema.parse(prepared.result) : null
+        );
         if (!finished) throw new Error("Run not found");
         return finished;
     } catch (error) {

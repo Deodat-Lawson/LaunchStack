@@ -176,6 +176,10 @@ CONVERTER_ALLOWED_FETCH_ORIGINS=http://app:3000,http://seaweedfs:8333,https://fi
 ADEU_ALLOWED_FETCH_ORIGINS=http://app:3000,http://seaweedfs:8333,https://files.$DOMAIN
 
 DEPLOYMENT_MODE=self-hosted
+
+# Optional: in-app bug reports and feature requests. Off until someone triages.
+# FEEDBACK_ADMIN_EMAILS=you@example.com
+# FEEDBACK_WEBHOOK_URL=https://hooks.slack.com/services/…   # one line per new report
 ```
 
 **Inngest runs on the VM.** The two Inngest keys above drive a self-hosted

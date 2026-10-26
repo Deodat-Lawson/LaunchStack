@@ -203,6 +203,10 @@ x-shared-env: &shared-env
   EMAIL_SENDING_ENABLED: ${EMAIL_SENDING_ENABLED:-}
   # Investor relations: the SEC rejects requests without "name email".
   SEC_EDGAR_USER_AGENT: ${SEC_EDGAR_USER_AGENT:-}
+  # In-app feedback: who triages (unset keeps it off) and the optional
+  # Slack/Discord webhook told about each new report.
+  FEEDBACK_ADMIN_EMAILS: ${FEEDBACK_ADMIN_EMAILS:-}
+  FEEDBACK_WEBHOOK_URL: ${FEEDBACK_WEBHOOK_URL:-}
   SERPER_API_KEY: ${SERPER_API_KEY:-}
 
 services:

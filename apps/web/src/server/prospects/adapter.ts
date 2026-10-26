@@ -8,6 +8,10 @@
  * the backend does not have: people are the dossier's public mailboxes,
  * sources are the three the gather stage really has, and figures the backend
  * cannot attribute are null rather than zero.
+ *
+ * Every sentence it writes goes out twice: the English field API readers
+ * have always had, and a `…Copy` (`growth.server.*`) the screens word in the
+ * reader's language.
  */
 import type { PartnerListItem } from "@launchstack/pipelines/distribution/db";
 import {
@@ -32,6 +36,7 @@ import {
 
 import type {
     Claim,
+    Copy,
     CompaniesSort,
     CompaniesView,
     CompanyDetail,
@@ -53,6 +58,7 @@ import type {
     StageMove,
     StepStatus,
 } from "~/app/employer/tools/growth/prospects/api";
+import { copy } from "~/i18n/copy";
 
 export const FIT_THRESHOLD = 70;
 const DAY = 86_400_000;
@@ -90,24 +96,52 @@ export const REQUIREMENT_WORDS: Record<string, string> = {
     stage_changed_concurrently: "Someone else moved this deal just now",
 };
 
-export function moveReason(
+/** A stage requirement in plain words, as a copy; null for a code without words. */
+export function requirementCopy(code: string): Copy | null {
+    switch (code) {
+        case "owner_required":
+            return copy("growth.server.requirements.ownerRequired");
+        case "next_action_required":
+            return copy("growth.server.requirements.nextActionRequired");
+        case "agreement_required":
+            return copy("growth.server.requirements.agreementRequired");
+        case "stage_changed_concurrently":
+            return copy("growth.server.requirements.changedConcurrently");
+        default:
+            return null;
+    }
+}
+
+/** Why a move is refused, in English and as a copy; null when it is allowed. */
+export function moveRefusal(
     rel: Pick<RelationshipRecord, "stage" | "ownerUserId" | "nextAction">,
     hasAgreement: boolean,
     to: SalesStage
-): string | null {
+): { reason: string; copy: Copy | null } | null {
     const current = rel.stage;
-    if (to === current) return "Current stage";
+    if (to === current)
+        return { reason: "Current stage", copy: copy("growth.server.moves.currentStage") };
     if (!ALLOWED_TRANSITIONS[current].includes(to)) {
-        if (current === "won") return "Won deals stay won";
+        if (current === "won")
+            return { reason: "Won deals stay won", copy: copy("growth.server.moves.wonStaysWon") };
         const rank = STAGE_ORDER.indexOf(current);
         if (rank >= 0 && STAGE_ORDER.includes(to) && STAGE_ORDER.indexOf(to) < rank)
-            return "Move back one stage at a time";
+            return {
+                reason: "Move back one stage at a time",
+                copy: copy("growth.server.moves.backOneStage"),
+            };
         const nextForward = ALLOWED_TRANSITIONS[current].find(
             s => STAGE_ORDER.indexOf(s) > rank && !TERMINAL_STAGES.has(s)
         );
         return nextForward
-            ? `Move to ${STAGE_WORD[nextForward]} first`
-            : `Not available from ${STAGE_WORD[current]}`;
+            ? {
+                  reason: `Move to ${STAGE_WORD[nextForward]} first`,
+                  copy: copy("growth.server.moves.moveFirst", { stage: nextForward }),
+              }
+            : {
+                  reason: `Not available from ${STAGE_WORD[current]}`,
+                  copy: copy("growth.server.moves.notAvailableFrom", { stage: current }),
+              };
     }
     const missing = stageRequirements(to, {
         ownerUserId: rel.ownerUserId,
@@ -115,14 +149,26 @@ export function moveReason(
         hasAgreement,
     });
     if (missing.length === 0) return null;
-    return REQUIREMENT_WORDS[missing[0]!.code] ?? missing[0]!.message;
+    const code = missing[0]!.code;
+    return { reason: REQUIREMENT_WORDS[code] ?? missing[0]!.message, copy: requirementCopy(code) };
+}
+
+export function moveReason(
+    rel: Pick<RelationshipRecord, "stage" | "ownerUserId" | "nextAction">,
+    hasAgreement: boolean,
+    to: SalesStage
+): string | null {
+    return moveRefusal(rel, hasAgreement, to)?.reason ?? null;
 }
 
 export function allowedMoves(
     rel: Pick<RelationshipRecord, "stage" | "ownerUserId" | "nextAction">,
     hasAgreement: boolean
 ): StageMove[] {
-    return SALES_STAGES.map(stage => ({ stage, reason: moveReason(rel, hasAgreement, stage) }));
+    return SALES_STAGES.map(stage => {
+        const refusal = moveRefusal(rel, hasAgreement, stage);
+        return { stage, reason: refusal?.reason ?? null, reasonCopy: refusal?.copy ?? null };
+    });
 }
 
 // ── Small helpers ─────────────────────────────────────────────────────────
@@ -211,48 +257,82 @@ export function profileClaims(
     const about: Claim[] = [];
     if (d) {
         about.push({ text: d.summary, cites: [] });
-        if (d.brandsCarried.length > 0)
+        if (d.brandsCarried.length > 0) {
+            const list = d.brandsCarried.map(b => b.brand).join(", ");
             about.push({
-                text: `Carries ${d.brandsCarried.map(b => b.brand).join(", ")}.`,
+                text: `Carries ${list}.`,
                 cites: cites(
                     d.brandsCarried.flatMap(b => b.evidenceIds),
                     numberOf
                 ),
+                copy: copy("growth.server.claims.carries", { list }),
             });
-        if (d.territories.length > 0)
+        }
+        if (d.territories.length > 0) {
+            const list = d.territories.map(t => t.territory).join(", ");
             about.push({
-                text: `Active in ${d.territories.map(t => t.territory).join(", ")}.`,
+                text: `Active in ${list}.`,
                 cites: cites(
                     d.territories.flatMap(t => t.evidenceIds),
                     numberOf
                 ),
+                copy: copy("growth.server.claims.activeIn", { list }),
             });
-        if (d.retailCoverage.length > 0)
+        }
+        if (d.retailCoverage.length > 0) {
+            const list = d.retailCoverage.map(r => r.account).join(", ");
             about.push({
-                text: `Sells into ${d.retailCoverage.map(r => r.account).join(", ")}.`,
+                text: `Sells into ${list}.`,
                 cites: cites(
                     d.retailCoverage.flatMap(r => r.evidenceIds),
                     numberOf
                 ),
+                copy: copy("growth.server.claims.sellsInto", { list }),
             });
-        if (d.certifications.length > 0)
+        }
+        if (d.certifications.length > 0) {
+            const list = d.certifications.map(c => c.certification).join(", ");
             about.push({
-                text: `Certified: ${d.certifications.map(c => c.certification).join(", ")}.`,
+                text: `Certified: ${list}.`,
                 cites: cites(
                     d.certifications.flatMap(c => c.evidenceIds),
                     numberOf
                 ),
+                copy: copy("growth.server.claims.certified", { list }),
             });
+        }
     }
     const whyFit: Claim[] = [];
     if (rel.fitRationale) whyFit.push({ text: rel.fitRationale, cites: [] });
-    for (const flag of rel.riskFlags) whyFit.push({ text: `Risk: ${flag}`, cites: [] });
-    if (rel.screening?.status === "flagged")
+    for (const flag of rel.riskFlags)
+        whyFit.push({ text: `Risk: ${flag}`, cites: [], copy: riskCopy(flag) });
+    if (rel.screening?.status === "flagged") {
+        const names = rel.screening.flags?.map(f => f.matchedName).join(", ");
         whyFit.push({
-            text: `Risk: compliance screening flagged ${rel.screening.flags?.map(f => f.matchedName).join(", ") ?? "a match"} (advisory).`,
+            text: `Risk: compliance screening flagged ${names ?? "a match"} (advisory).`,
             cites: [],
+            copy:
+                names === undefined
+                    ? copy("growth.server.claims.screeningFlaggedMatch")
+                    : copy("growth.server.claims.screeningFlagged", { names }),
         });
+    }
     return { about, whyFit, openQuestions: d?.openQuestions ?? [], evidence: items };
+}
+
+/**
+ * The scorer's fixed risk flags (`deriveRiskFlags` in the pipeline) in words;
+ * a flag the dossier wrote is quoted as it is.
+ */
+const RISK_COPY: Record<string, Copy> = {
+    "no evidence recorded": copy("growth.server.claims.riskNoEvidence"),
+    "thin evidence": copy("growth.server.claims.riskThinEvidence"),
+    "research budget exhausted": copy("growth.server.claims.riskBudget"),
+    "role not confirmed": copy("growth.server.claims.riskRole"),
+};
+
+function riskCopy(flag: string): Copy {
+    return RISK_COPY[flag] ?? copy("growth.server.claims.risk", { flag });
 }
 
 const SIGNAL_TYPES = new Set([
@@ -277,39 +357,75 @@ export function signalsFromEvents(events: RelationshipEventRecord[]): Signal[] {
                 month: "short",
                 day: "numeric",
             });
+            const at = e.occurredAt.toISOString();
             switch (e.type) {
-                case "researched":
+                case "researched": {
+                    const fit = scalar(p.fitScore);
+                    const evidence = scalar(p.evidence, "0");
                     return {
                         when,
-                        text: `Researched: fit ${scalar(p.fitScore)}, ${scalar(p.evidence, "0")} pieces of evidence`,
+                        at,
+                        text: `Researched: fit ${fit}, ${evidence} pieces of evidence`,
                         cites: [],
+                        copy: copy("growth.server.signals.researched", { fit, evidence }),
                     };
-                case "meeting":
+                }
+                case "meeting": {
+                    const summary = text(p.summary);
                     return {
                         when,
-                        text: `Meeting${text(p.summary) ? `: ${text(p.summary)}` : ""}`,
+                        at,
+                        text: `Meeting${summary ? `: ${summary}` : ""}`,
                         cites: [],
+                        copy: summary
+                            ? copy("growth.server.signals.meetingSummary", { summary })
+                            : copy("growth.server.signals.meeting"),
                     };
-                case "reply_logged":
+                }
+                case "reply_logged": {
+                    const summary = text(p.summary);
                     return {
                         when,
-                        text: `Reply received${text(p.summary) ? `: ${text(p.summary)}` : ""}`,
+                        at,
+                        text: `Reply received${summary ? `: ${summary}` : ""}`,
                         cites: [],
+                        copy: summary
+                            ? copy("growth.server.signals.replySummary", { summary })
+                            : copy("growth.server.signals.reply"),
                     };
-                case "document_shared":
+                }
+                case "document_shared": {
+                    const title = text(p.title);
                     return {
                         when,
-                        text: `Document shared${text(p.title) ? `: ${text(p.title)}` : ""}`,
+                        at,
+                        text: `Document shared${title ? `: ${title}` : ""}`,
                         cites: [],
+                        copy: title
+                            ? copy("growth.server.signals.documentTitle", { title })
+                            : copy("growth.server.signals.document"),
                     };
+                }
                 case "agreement_signed":
-                    return { when, text: "Agreement recorded", cites: [] };
-                default:
                     return {
                         when,
-                        text: `Imported at ${text(p.stage) ?? "an existing"} stage`,
+                        at,
+                        text: "Agreement recorded",
                         cites: [],
+                        copy: copy("growth.server.signals.agreement"),
                     };
+                default: {
+                    const stage = text(p.stage);
+                    return {
+                        when,
+                        at,
+                        text: `Imported at ${stage ?? "an existing"} stage`,
+                        cites: [],
+                        copy: stage
+                            ? copy("growth.server.signals.imported", { stage })
+                            : copy("growth.server.signals.importedExisting"),
+                    };
+                }
             }
         });
 }
@@ -331,7 +447,8 @@ export function fitBreakdownOf(rel: RelationshipRecord): FitBreakdown | null {
 export function contactPeople(
     rel: RelationshipRecord,
     org: PartnerOrgRecord,
-    blockedReason: string | null
+    blockedReason: string | null,
+    blockedReasonCopy: Copy | null = null
 ): PersonRow[] {
     const channels = rel.dossier?.contactChannels ?? [];
     return channels
@@ -341,7 +458,8 @@ export function contactPeople(
             const email = c.value.trim();
             const local = email.split("@")[0]!;
             const generic = GENERIC_LOCAL.test(local);
-            const name = generic ? `${local.toLowerCase()}@ inbox` : local.replace(/[._-]+/g, " ");
+            const inbox = local.toLowerCase();
+            const name = generic ? `${inbox}@ inbox` : local.replace(/[._-]+/g, " ");
             return {
                 id: `${rel.id}:${i}`,
                 companyId: rel.id,
@@ -355,6 +473,10 @@ export function contactPeople(
                 source: "Dossier",
                 sourceUrl: null,
                 blockedReason,
+                nameCopy: generic ? copy("growth.server.people.inbox", { local: inbox }) : null,
+                titleCopy: generic ? copy("growth.server.people.sharedInbox") : null,
+                sourceCopy: copy("growth.server.people.dossier"),
+                blockedReasonCopy: blockedReason ? blockedReasonCopy : null,
             } satisfies PersonRow;
         });
 }
@@ -362,10 +484,39 @@ export function contactPeople(
 // ── Companies ─────────────────────────────────────────────────────────────
 
 const FOUND_VIA: Record<RelationshipRecord["source"], Omit<FoundVia, "url" | "at">> = {
-    discovery: { sourceId: "discovery", label: "Discovery run", kind: "api" },
-    import: { sourceId: "import", label: "Imported", kind: "api" },
-    manual: { sourceId: "manual", label: "Added by you", kind: "api" },
+    discovery: {
+        sourceId: "discovery",
+        label: "Discovery run",
+        kind: "api",
+        labelCopy: copy("growth.server.companies.foundVia.discovery"),
+    },
+    import: {
+        sourceId: "import",
+        label: "Imported",
+        kind: "api",
+        labelCopy: copy("growth.server.companies.foundVia.import"),
+    },
+    manual: {
+        sourceId: "manual",
+        label: "Added by you",
+        kind: "api",
+        labelCopy: copy("growth.server.companies.foundVia.manual"),
+    },
 };
+
+/** Why a person cannot be contacted when their company is excluded. */
+export function excludedBlock(row: Pick<CompanyRow, "excluded" | "excludedReason">): {
+    reason: string;
+    copy: Copy;
+} | null {
+    if (!row.excluded) return null;
+    return row.excludedReason === null
+        ? { reason: "Company excluded: by you", copy: copy("growth.server.companies.blockedByYou") }
+        : {
+              reason: `Company excluded: ${row.excludedReason}`,
+              copy: copy("growth.server.companies.blockedExcludedFromRuns"),
+          };
+}
 
 export interface RowContext {
     latestRunId: string | null;
@@ -380,6 +531,15 @@ export function whyOf(item: PartnerListItem): string {
         return (first ?? summary).trim();
     }
     return item.org.description ?? item.relationship.fitRationale ?? "Not profiled yet";
+}
+
+/** Set only when `whyOf` had nothing of the company's own to say. */
+function whyCopyOf(item: PartnerListItem): Copy | null {
+    if (item.relationship.dossier?.summary) return null;
+    const fallback = item.org.description ?? item.relationship.fitRationale;
+    return fallback === null || fallback === undefined
+        ? copy("growth.server.companies.notProfiled")
+        : null;
 }
 
 export function toCompanyRow(item: PartnerListItem, ctx: RowContext): CompanyRow {
@@ -413,6 +573,8 @@ export function toCompanyRow(item: PartnerListItem, ctx: RowContext): CompanyRow
         isNew: ctx.latestRunId !== null && org.firstSeenRunId === ctx.latestRunId,
         excluded,
         excludedReason: excluded ? "Excluded from runs" : null,
+        whyCopy: whyCopyOf(item),
+        excludedReasonCopy: excluded ? copy("growth.server.companies.excludedFromRuns") : null,
     };
 }
 
@@ -426,7 +588,7 @@ export function toCompanyDetail(
 ): CompanyDetail {
     const row = toCompanyRow(item, ctx);
     const claims = profileClaims(item.relationship, evidence);
-    const blocked = row.excluded ? `Company excluded: ${row.excludedReason ?? "by you"}` : null;
+    const blocked = excludedBlock(row);
     return {
         ...row,
         about: claims.about,
@@ -434,7 +596,12 @@ export function toCompanyDetail(
         openQuestions: claims.openQuestions,
         signals: signalsFromEvents(events),
         evidence: claims.evidence,
-        people: contactPeople(item.relationship, item.org, blocked),
+        people: contactPeople(
+            item.relationship,
+            item.org,
+            blocked?.reason ?? null,
+            blocked?.copy ?? null
+        ),
         deal: toDeal(item, hasAgreement, viewerId, ctx.now),
         fitBreakdown: fitBreakdownOf(item.relationship),
         profileDocumentTitle: item.relationship.dossierDocumentId
@@ -457,6 +624,7 @@ export function toDeal(
         companyId: rel.id,
         stage: rel.stage,
         ownerName: owner,
+        ownerIsViewer: rel.ownerUserId !== null && rel.ownerUserId === viewerId,
         ownerInitials: owner ? (owner === "You" ? "ME" : initials(owner)) : null,
         nextStep: rel.nextAction,
         nextStepAt: iso(rel.nextActionAt),
@@ -524,6 +692,11 @@ export function segmentCounts(rows: CompanyRow[], sourcesOn: number): SegmentSum
     };
 }
 
+/** A partner kind as the plural buyer type ("Distributors"), as a copy. */
+export function kindCopy(kind: string): Copy {
+    return copy("growth.server.segment.kind", { kind });
+}
+
 export function toSegmentSummary(
     program: ProgramRecord,
     rows: CompanyRow[],
@@ -537,10 +710,16 @@ export function toSegmentSummary(
         headline: `${program.partnerKinds.map(k => KIND_WORD[k] ?? k).join(", ")} in ${joinNatural(countries)}`,
         status: program.status === "active" ? "confirmed" : "draft",
         counts: segmentCounts(rows, sourcesOn),
+        words: { kinds: program.partnerKinds.map(kindCopy), countries },
     };
 }
 
+const fieldLabel = (key: string) => copy(`growth.server.segment.fields.${key}` as Copy["key"]);
+const fieldSource = (key: string) =>
+    copy(`growth.server.segment.fieldSources.${key}` as Copy["key"]);
+
 export function segmentFields(program: ProgramRecord): SegmentField[] {
+    const excludedDomains = program.knownPartnerDomains.length;
     return [
         {
             key: "offering",
@@ -548,6 +727,8 @@ export function segmentFields(program: ProgramRecord): SegmentField[] {
             value: program.offering,
             sources: ["from the program"],
             editable: true,
+            labelCopy: fieldLabel("offering"),
+            sourcesCopy: [fieldSource("program")],
         },
         {
             key: "archetype",
@@ -555,6 +736,9 @@ export function segmentFields(program: ProgramRecord): SegmentField[] {
             value: program.partnerKinds.map(k => KIND_WORD[k] ?? k),
             sources: ["from the program · partner kinds"],
             editable: false,
+            labelCopy: fieldLabel("archetype"),
+            sourcesCopy: [fieldSource("partnerKinds")],
+            valueCopy: program.partnerKinds.map(kindCopy),
         },
         {
             key: "industries",
@@ -562,6 +746,8 @@ export function segmentFields(program: ProgramRecord): SegmentField[] {
             value: program.categories,
             sources: ["from the program · categories"],
             editable: true,
+            labelCopy: fieldLabel("industries"),
+            sourcesCopy: [fieldSource("categories")],
         },
         {
             key: "geographies",
@@ -571,6 +757,8 @@ export function segmentFields(program: ProgramRecord): SegmentField[] {
             ),
             sources: ["from the program · territories"],
             editable: true,
+            labelCopy: fieldLabel("geographies"),
+            sourcesCopy: [fieldSource("territories")],
         },
         {
             key: "disqualifiers",
@@ -578,16 +766,24 @@ export function segmentFields(program: ProgramRecord): SegmentField[] {
             value: program.constraints ?? "",
             sources: program.constraints ? ["from the program · constraints"] : [],
             editable: true,
+            labelCopy: fieldLabel("disqualifiers"),
+            sourcesCopy: program.constraints ? [fieldSource("constraints")] : [],
         },
         {
             key: "exclusions",
             label: "Already partners",
             value:
-                program.knownPartnerDomains.length > 0
-                    ? `${program.knownPartnerDomains.length} domains excluded from every run`
-                    : "None",
+                excludedDomains > 0 ? `${excludedDomains} domains excluded from every run` : "None",
             sources: ["from the program and imports"],
             editable: false,
+            labelCopy: fieldLabel("exclusions"),
+            sourcesCopy: [fieldSource("imports")],
+            valueCopy:
+                excludedDomains > 0
+                    ? copy("growth.server.segment.exclusionsCount", {
+                          count: String(excludedDomains),
+                      })
+                    : copy("growth.server.segment.exclusionsNone"),
         },
     ];
 }
@@ -647,6 +843,47 @@ export function sourceLabel(
           : SOURCE_LABEL[source];
 }
 
+export function sourceLabelCopy(
+    source: SourceCount["source"],
+    mode: RunRecord["options"]["mode"]
+): Copy {
+    const set = mode === "keyless" ? "keyless" : mode === "fixture" ? "fixture" : "live";
+    return copy(`growth.server.sources.labels.${set}.${source}` as Copy["key"]);
+}
+
+/**
+ * The gather stage's fixed source details (`gather` in the pipeline) in
+ * words. A provider's own error message has none and stays as it came.
+ */
+const SOURCE_DETAIL: Record<string, Copy> = {
+    "no web queries planned": copy("growth.server.sources.details.noWebQueries"),
+    "web search not configured": copy("growth.server.sources.details.webNotConfigured"),
+    "zero results": copy("growth.server.sources.details.zeroResults"),
+    "no place queries planned": copy("growth.server.sources.details.noPlaceQueries"),
+    "place search not configured": copy("growth.server.sources.details.placeNotConfigured"),
+    "trade data not configured": copy("growth.server.sources.details.tradeNotConfigured"),
+};
+
+export function sourceDetailCopy(detail: string | null | undefined): Copy | null {
+    if (!detail) return null;
+    const fixed = SOURCE_DETAIL[detail];
+    if (fixed) return fixed;
+    const failed = /^(\d+) (queries|territories) failed$/.exec(detail);
+    if (failed)
+        return copy(
+            failed[2] === "queries"
+                ? "growth.server.sources.details.queriesFailed"
+                : "growth.server.sources.details.territoriesFailed",
+            { count: failed[1]! }
+        );
+    return null;
+}
+
+const rowCopy = (id: string, field: "label" | "description") =>
+    copy(`growth.server.sources.rows.${id}.${field}` as Copy["key"]);
+const costCopy = (cost: "free" | "creditsPerRun" | "included" | "providerRates") =>
+    copy(`growth.server.sources.costs.${cost}`);
+
 export function sourceRows(avail: SourceAvailability, latest: RunRecord | null): SourceRow[] {
     const mode = latest?.options.mode ?? null;
     const yieldFor = (id: SourceCount["source"], forMode: RunRecord["options"]["mode"]) => {
@@ -657,9 +894,10 @@ export function sourceRows(avail: SourceAvailability, latest: RunRecord | null):
             newCompanies: 0,
             cost: "included",
             at: (latest.startedAt ?? latest.createdAt).toISOString(),
+            costCopy: costCopy("included"),
         };
     };
-    return [
+    const rows: SourceRow[] = [
         {
             id: "osm",
             label: "OpenStreetMap",
@@ -749,6 +987,18 @@ export function sourceRows(avail: SourceAvailability, latest: RunRecord | null):
             lastYield: null,
         },
     ];
+    const COST: Record<string, "free" | "creditsPerRun" | "included" | "providerRates"> = {
+        free: "free",
+        "credits per run": "creditsPerRun",
+        included: "included",
+        "provider rates": "providerRates",
+    };
+    return rows.map(row => ({
+        ...row,
+        labelCopy: rowCopy(row.id, "label"),
+        descriptionCopy: rowCopy(row.id, "description"),
+        costCopy: costCopy(COST[row.cost]!),
+    }));
 }
 
 export function toYield(s: SourceCount, mode: RunRecord["options"]["mode"] = "live"): SourceYield {
@@ -761,6 +1011,8 @@ export function toYield(s: SourceCount, mode: RunRecord["options"]["mode"] = "li
         inDeals: null,
         status: s.status,
         detail: s.detail ?? null,
+        labelCopy: sourceLabelCopy(s.source, mode),
+        detailCopy: sourceDetailCopy(s.detail),
     };
 }
 
@@ -805,18 +1057,38 @@ export function toRunDto(run: RunRecord, progress: RunProgress | null = null): R
                 ? "failed"
                 : "done",
         right: summary && s.status !== "skipped" ? `${s.results} found` : null,
+        labelCopy: sourceLabelCopy(s.source, run.options.mode),
+        detailCopy: sourceDetailCopy(s.detail),
+        rightCopy:
+            summary && s.status !== "skipped"
+                ? copy("growth.server.runs.found", { count: String(s.results) })
+                : null,
     }));
+    const n = (value: number) => String(value);
+    const stepLabel = (id: string) => copy(`growth.server.runs.steps.${id}` as Copy["key"]);
+    const sourcesOk = summary?.sources.filter(s => s.status === "ok").length ?? 0;
+    const sourcesRun = summary?.sources.filter(s => s.status !== "skipped").length ?? 0;
+    const profileTotal = run.candidateOrgIds?.length ?? run.options.maxCandidates;
     const steps: RunStep[] = [
-        { id: "segment", label: "Segment confirmed", detail: null, status: "done", right: null },
+        {
+            id: "segment",
+            label: "Segment confirmed",
+            detail: null,
+            status: "done",
+            right: null,
+            labelCopy: stepLabel("segment"),
+        },
         {
             id: "sources",
             label: "Sources",
-            detail: summary
-                ? `${summary.sources.filter(s => s.status === "ok").length} of ${summary.sources.filter(s => s.status !== "skipped").length} done`
-                : null,
+            detail: summary ? `${sourcesOk} of ${sourcesRun} done` : null,
             status: statusOf(run, "profiling", "resolving"),
             right: null,
             children: sourceChildren,
+            labelCopy: stepLabel("sources"),
+            detailCopy: summary
+                ? copy("growth.server.runs.sourcesDone", { ok: n(sourcesOk), total: n(sourcesRun) })
+                : null,
         },
         {
             id: "shortlist",
@@ -828,6 +1100,18 @@ export function toRunDto(run: RunRecord, progress: RunProgress | null = null): R
                   : null,
             status: statusOf(run, "resolving", "enriching"),
             right: summary?.excluded ? `${summary.excluded} excluded` : null,
+            labelCopy: stepLabel("shortlist"),
+            detailCopy: summary
+                ? copy("growth.server.runs.shortlistOf", {
+                      shortlisted: n(summary.shortlisted),
+                      resolved: n(summary.resolved),
+                  })
+                : run.candidateOrgIds
+                  ? copy("growth.server.runs.companies", { count: n(run.candidateOrgIds.length) })
+                  : null,
+            rightCopy: summary?.excluded
+                ? copy("growth.server.runs.excluded", { count: n(summary.excluded) })
+                : null,
         },
         {
             id: "profiles",
@@ -836,9 +1120,21 @@ export function toRunDto(run: RunRecord, progress: RunProgress | null = null): R
                 ? `${summary.enriched} of ${summary.shortlisted}`
                 : progress
                   ? `${progress.profiled} of ${progress.shortlisted}`
-                  : `0 of ${run.candidateOrgIds?.length ?? run.options.maxCandidates}`,
+                  : `0 of ${profileTotal}`,
             status: statusOf(run, "enriching", "completed"),
             right: summary?.gateRejections ? `${summary.gateRejections} failed grounding` : null,
+            labelCopy: stepLabel("profiles"),
+            detailCopy: copy(
+                "growth.server.runs.profilesOf",
+                summary
+                    ? { done: n(summary.enriched), total: n(summary.shortlisted) }
+                    : progress
+                      ? { done: n(progress.profiled), total: n(progress.shortlisted) }
+                      : { done: "0", total: n(profileTotal) }
+            ),
+            rightCopy: summary?.gateRejections
+                ? copy("growth.server.runs.failedGrounding", { count: n(summary.gateRejections) })
+                : null,
         },
         {
             id: "people",
@@ -846,6 +1142,8 @@ export function toRunDto(run: RunRecord, progress: RunProgress | null = null): R
             detail: "arrives with people lookup",
             status: "skipped",
             right: null,
+            labelCopy: stepLabel("people"),
+            detailCopy: copy("growth.server.runs.peopleLater"),
         },
     ];
     const startedAt = run.startedAt ?? run.createdAt;
@@ -870,6 +1168,14 @@ export function toRunDto(run: RunRecord, progress: RunProgress | null = null): R
         steps,
         spend: { usd: 0, usdCap: 0, credits: run.creditsUsed },
         caps: `${run.options.maxCandidates} candidates${run.options.mode === "fixture" ? " · sample data" : run.options.mode === "keyless" ? " · public sources, no keys" : ""}`,
+        capsCopy: copy(
+            run.options.mode === "fixture"
+                ? "growth.server.runs.capsSample"
+                : run.options.mode === "keyless"
+                  ? "growth.server.runs.capsKeyless"
+                  : "growth.server.runs.caps",
+            { count: String(run.options.maxCandidates) }
+        ),
         summary: summary
             ? {
                   found: summary.mentions,

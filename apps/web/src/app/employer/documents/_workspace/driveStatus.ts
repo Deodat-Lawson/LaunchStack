@@ -1,9 +1,9 @@
 /**
- * The Drive panel's reading of `/api/connectors/google-drive/status`: the
- * payload's shape, and the pure decisions the panel makes from it — which
- * folder-access notice to show, which picked folders came back empty, and
- * where each picked item's files are. Kept out of the component so they can
- * be tested without rendering it.
+ * The Drive status (`/api/connectors/google-drive/status`) as Add source's
+ * Drive buttons and Settings' DriveSyncPanel read it: the payload's shape,
+ * and the pure decisions made from it — which folder-access notice to show,
+ * which picked folders came back empty, and where each picked item's files
+ * are. Kept out of the components so they can be tested without rendering.
  */
 
 import type { useTranslations } from "next-intl";
@@ -18,7 +18,10 @@ export interface DrivePickedItem {
     readonly kind: string;
     readonly name: string;
     readonly mimeType: string | null;
-    /** A picked folder's LaunchStack folder; null until its first sync. */
+    /**
+     * A picked folder's LaunchStack folder (null until its first sync); for a
+     * file, the folder it was picked into from Add source.
+     */
     readonly folderPath?: string | null;
     /** Imported into a folder private to someone else, so its name isn't shown. */
     readonly folderHidden?: boolean;
@@ -83,7 +86,12 @@ export function pickedItemDestination(
     item: DrivePickedItem,
     access: FolderAccessState
 ): string {
-    if (item.kind !== "folder") return t("destination.inDrive");
+    if (item.kind !== "folder") {
+        if (item.folderPath) {
+            return t("destination.inFolder", { path: displayFolderPath(item.folderPath) });
+        }
+        return item.folderHidden ? t("destination.inPrivateFolder") : t("destination.inDrive");
+    }
     if (item.folderPath) {
         return t("destination.inFolder", { path: displayFolderPath(item.folderPath) });
     }

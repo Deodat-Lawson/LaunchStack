@@ -296,12 +296,28 @@ export interface ChatModelBehavior {
 }
 
 /** A named model in the operator's configuration. */
+/**
+ * What a model costs, in US dollars per million tokens, as the operator
+ * declared it in the model file. Optional: without it, usage is still
+ * counted, just not priced.
+ */
+export interface ChatModelPricing {
+    /** Per 1M input (prompt) tokens. */
+    input: number;
+    /** Per 1M output tokens, reasoning tokens included. */
+    output: number;
+    /** Per 1M input tokens served from the provider's prompt cache. Defaults to `input`. */
+    cachedInput?: number;
+}
+
 export interface ChatModelDefinition {
     /** Arbitrary model id, sent verbatim to the endpoint. */
     id: string;
     behavior: ChatModelBehavior;
     /** Preset the behavior started from, when one was referenced. */
     preset?: string;
+    /** Price per token, when the operator declared one. */
+    pricing?: ChatModelPricing;
 }
 
 // ---------------------------------------------------------------------------

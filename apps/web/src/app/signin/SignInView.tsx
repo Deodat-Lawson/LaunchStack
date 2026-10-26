@@ -82,9 +82,6 @@ export function SignInView({ socialProviders }: { socialProviders: SocialProvide
             <div className="flex min-h-0 flex-1 items-stretch">
                 <main className="flex min-w-0 flex-1 items-center justify-center px-6 py-12">
                     <div className="w-full max-w-[440px]">
-                        <div className="text-ink-3 mb-2.5 font-mono text-[10px] font-bold uppercase tracking-[0.12em]">
-                            {t("eyebrow")}
-                        </div>
                         <h1 className="display text-ink mb-2 text-[32px] leading-[1.1] tracking-[-0.02em]">
                             {t("title")}
                         </h1>
@@ -135,7 +132,6 @@ export function SignInView({ socialProviders }: { socialProviders: SocialProvide
                 */}
                 <div className="grid w-[46%] max-[960px]:hidden">
                     <AuthBrandPanel
-                        tagline={t("brandTagline")}
                         headline={t("brandHeadline")}
                         description={t("brandDescription")}
                     />
@@ -146,8 +142,12 @@ export function SignInView({ socialProviders }: { socialProviders: SocialProvide
 }
 
 const NOTICE_TONES = {
-    info: { Icon: Info, icon: "text-info", box: "bg-info-soft border-info/25" },
-    success: { Icon: CheckCircle2, icon: "text-success", box: "bg-success-soft border-success/25" },
+    info: { Icon: Info, icon: "text-info-ink", box: "bg-info-soft border-info/25" },
+    success: {
+        Icon: CheckCircle2,
+        icon: "text-success-ink",
+        box: "bg-success-soft border-success/25",
+    },
     danger: { Icon: AlertCircle, icon: "text-danger", box: "bg-danger-soft border-danger/25" },
 } as const;
 

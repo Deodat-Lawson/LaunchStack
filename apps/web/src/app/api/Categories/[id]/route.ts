@@ -2,36 +2,44 @@ import { NextResponse } from "next/server";
 import { and, eq } from "drizzle-orm";
 import { z } from "zod";
 
+import { localeOfRequest, requestTranslator } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
+import { V } from "~/i18n/validation";
 import { db } from "~/server/db";
 import { category } from "@launchstack/store/schema";
 import { validateRequestBody } from "~/lib/validation";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { FolderError } from "~/server/folders";
+import { folderErrorText } from "~/server/folders/words";
 import { renameFolderAs } from "~/server/workspace/folder-actions";
 
 const PatchCategorySchema = z.object({
-    name: z
-        .string()
-        .trim()
-        .min(1, "Name cannot be empty")
-        .max(256, "Name is too long (max 256 characters)"),
+    name: z.string().trim().min(1, V.nameCannotBeEmpty).max(256, V.nameTooLong),
 });
 
-function parseId(raw: string): { ok: true; id: number } | { ok: false; response: NextResponse } {
+function parseId(
+    raw: string,
+    request: Request
+): { ok: true; id: number } | { ok: false; response: NextResponse } {
     const id = Number(raw);
     if (!Number.isInteger(id) || id <= 0) {
         return {
             ok: false,
-            response: NextResponse.json({ error: "Invalid category id" }, { status: 400 }),
+            response: NextResponse.json(
+                { error: requestTranslator(request, "sources.server.errors")("invalidCategoryId") },
+                { status: 400 }
+            ),
         };
     }
     return { ok: true, id };
 }
 
 export async function PATCH(request: Request, context: { params: Promise<{ id: string }> }) {
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "sources.server.errors");
     try {
         const { id: rawId } = await context.params;
-        const parsed = parseId(rawId);
+        const parsed = parseId(rawId, request);
         if (!parsed.ok) return parsed.response;
 
         const ctx = await requireWorkspacePermission("documents.upload");
@@ -48,7 +56,7 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
             .from(category)
             .where(and(eq(category.id, parsed.id), eq(category.companyId, ctx.data.companyId)));
         if (!existing) {
-            return NextResponse.json({ error: "Category not found" }, { status: 404 });
+            return NextResponse.json({ error: t("categoryNotFound") }, { status: 404 });
         }
         if (existing.name === name) {
             return NextResponse.json({ success: true, id: parsed.id, name }, { status: 200 });
@@ -61,11 +69,16 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
     } catch (error) {
         if (error instanceof FolderError) {
             return NextResponse.json(
-                { error: error.status === 404 ? "Category not found" : error.message },
+                {
+                    error:
+                        error.status === 404
+                            ? t("categoryNotFound")
+                            : folderErrorText(error, locale),
+                },
                 { status: error.status }
             );
         }
         console.error("[Categories PATCH] failed:", error);
-        return NextResponse.json({ error: "Failed to rename category" }, { status: 500 });
+        return NextResponse.json({ error: t("renameCategoryFailed") }, { status: 500 });
     }
 }

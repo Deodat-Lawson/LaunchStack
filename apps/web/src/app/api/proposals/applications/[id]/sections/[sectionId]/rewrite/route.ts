@@ -13,6 +13,7 @@ import {
     json,
     proposalsContext,
     readBody,
+    say,
 } from "../../../../../_http";
 
 const Schema = z.object({
@@ -38,10 +39,10 @@ export async function POST(
             try {
                 const { id, sectionId } = await params;
                 const parsed = Schema.safeParse(await readBody(request));
-                if (!parsed.success) return error("Pick a rewrite or say what to change", 400);
+                if (!parsed.success) return error(say(request, "pickRewrite"), 400);
                 return json({ run: await rewriteRun(ctx, id, sectionId, parsed.data) }, 202);
             } catch (err) {
-                return handleProposalsError("POST rewrite", err);
+                return handleProposalsError("POST rewrite", err, request);
             }
         }
     );

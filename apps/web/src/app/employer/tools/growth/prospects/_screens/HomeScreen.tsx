@@ -11,7 +11,10 @@ import { Skeleton } from "~/components/ui/skeleton";
 import { cn } from "~/lib/utils";
 
 import { prospectsApi, type SourceYield, type TodoItem } from "../api";
+import { useCopyText } from "~/lib/tools/copyText";
+import { useSegmentText } from "../../_lib/copy";
 import { useGrowthFormat } from "../../_lib/format";
+import { useErrorText } from "~/lib/tools/errorText";
 import { useProspects } from "../_lib/context";
 import { SegmentSetup } from "../_components/SegmentSetup";
 import { useResource } from "~/lib/tools/useResource";
@@ -23,11 +26,14 @@ import { SkeletonRows } from "~/components/tools/SkeletonRows";
 
 function YieldRow({ y, max }: { y: SourceYield; max: number }) {
     const t = useTranslations("growth.prospects");
+    const word = useCopyText();
     const off = y.status === "off" || y.status === "skipped";
     const found = y.kind === "signal" ? t("common.signals", { count: y.found }) : String(y.found);
     return (
         <div className="border-line-2 grid grid-cols-[minmax(120px,150px)_1fr_64px_56px] items-center gap-3 border-t px-4 py-2 text-[13px] first:border-t-0">
-            <span className={cn("truncate", off ? "text-ink-3" : "text-ink")}>{y.label}</span>
+            <span className={cn("truncate", off ? "text-ink-3" : "text-ink")}>
+                {word(y.labelCopy, y.label)}
+            </span>
             <span className="bg-line-2 relative h-2 overflow-hidden rounded-full" aria-hidden>
                 {!off && (
                     <>
@@ -44,7 +50,9 @@ function YieldRow({ y, max }: { y: SourceYield; max: number }) {
             </span>
             <span className="text-ink-2 text-right tabular-nums">
                 {off ? (
-                    <span className="text-ink-3 text-xs">{y.detail ?? t("home.off")}</span>
+                    <span className="text-ink-3 text-xs">
+                        {y.detail ? word(y.detailCopy, y.detail) : t("home.off")}
+                    </span>
                 ) : (
                     found
                 )}
@@ -60,6 +68,9 @@ export function HomeScreen() {
     const t = useTranslations("growth.prospects");
     const tg = useTranslations("growth.common.counts");
     const { relativeTime } = useGrowthFormat();
+    const word = useCopyText();
+    const segmentText = useSegmentText();
+    const errorText = useErrorText();
     const { segmentId, href, startRun, activeRun, segments, segmentsLoading } = useProspects();
     const home = useResource(segmentId ? `home:${segmentId}` : null, () =>
         prospectsApi.home(segmentId!)
@@ -75,11 +86,11 @@ export function HomeScreen() {
         try {
             await startRun();
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : t("common.startFailed"));
+            toast.error(errorText(e, t("common.startFailed")));
         }
     };
 
-    const headline = d?.segment.headline ?? "";
+    const headline = d ? segmentText(d.segment).headline : "";
     const maxFound = d ? Math.max(1, ...d.yield.map(y => y.found)) : 1;
 
     // No segment yet: ask who you sell to, on the page, instead of a disabled
@@ -232,7 +243,7 @@ export function HomeScreen() {
                                             {c.name}
                                         </span>
                                         <span className="text-ink-2 block truncate text-xs">
-                                            {c.why}
+                                            {word(c.whyCopy, c.why)}
                                         </span>
                                     </span>
                                     <FitMeter value={c.fit} threshold={c.fitThreshold} />

@@ -2,7 +2,6 @@
   "view": {
     "refresh": "Refresh data",
     "refreshing": "Refreshing…",
-    "eyebrow": "Analytics",
     "title": "Analytics dashboard",
     "description": "Company-wide view of documents, employee activity, and query trends. Refresh to pull the latest.",
     "loadFailed": "Failed to load",
@@ -30,8 +29,8 @@
   "charts": {
     "employeesSeries": "Employees",
     "viewsSeries": "Views",
-    "employeeGrowth": "Employee Growth",
-    "documentViews": "Document Views"
+    "employeeGrowth": "Employee growth",
+    "documentViews": "Document views"
   },
   "time": {
     "never": "Never",
@@ -41,15 +40,15 @@
     "daysAgo": "{count, plural, one {# day} other {# days}} ago"
   },
   "documents": {
-    "title": "Document Statistics",
+    "title": "Document statistics",
     "hint": "Click a row to view details",
-    "searchPlaceholder": "Search documents...",
+    "searchPlaceholder": "Search documents…",
     "shown": "{shown} / {total}",
     "columns": {
       "document": "Document",
       "category": "Category",
       "views": "Views",
-      "lastViewed": "Last Viewed"
+      "lastViewed": "Last viewed"
     },
     "empty": "No documents found",
     "emptyHint": "Try adjusting your search"
@@ -85,25 +84,36 @@
     "hoursAgo": "{count}h ago",
     "daysAgo": "{count}d ago",
     "created": "Created {date}",
-    "viewDoc": "View Doc",
+    "viewDoc": "View document",
     "loadFailed": "Failed to load details: {error}",
     "loadFailedFallback": "Failed to fetch document details",
-    "loading": "Loading statistics...",
+    "loading": "Loading statistics…",
     "tiles": {
       "views": "Views",
       "allTime": "All time",
       "unique": "Unique",
       "viewers": "Viewers",
-      "thirtyDays": "30 Days",
+      "thirtyDays": "30 days",
       "recent": "Recent"
     },
-    "activity": "30 Day Activity",
-    "recentViewers": "Recent Viewers",
+    "activity": "30-day activity",
+    "recentViewers": "Recent viewers",
     "shown": "{count, number} shown",
     "columns": {
       "user": "User",
       "when": "When"
     },
     "noViews": "No views yet"
+  },
+  "server": {
+    "errors": {
+      "analyticsPermission": "Forbidden. The analytics.view permission is required.",
+      "dashboardFailed": "Unable to fetch analysis dashboard data",
+      "internal": "Internal Server Error"
+    },
+    "viewers": {
+      "unknownUser": "Unknown User",
+      "noEmail": "No Email"
+    }
   }
 }

@@ -619,5 +619,56 @@
     "whatPlaceholder": "路演日彩排",
     "when": "时间",
     "note": "备注"
+  },
+  "server": {
+    "errors": {
+      "evidenceNotHere": "找不到这条证据。",
+      "nameMetric": "请为指标命名。",
+      "metricKeyExists": "键为“{key}”的指标已存在。",
+      "metricNotHere": "找不到这个指标。",
+      "metricNotInWorkspace": "其中有指标不属于这个工作区。",
+      "numberNotHere": "找不到这个数字。",
+      "commitmentNotHere": "找不到这个承诺。",
+      "agendaNotHere": "找不到这个议程。",
+      "topicNotHere": "找不到这个议题。",
+      "deadlineNotHere": "找不到这个截止日期。",
+      "adminTriage": "只有工作区管理员可以查看各团队的求助情况。",
+      "adminAddDeadline": "只有工作区管理员可以添加项目截止日期。",
+      "adminRemoveDeadline": "只有工作区管理员可以移除项目截止日期。",
+      "checkForm": "请检查表单后重试。"
+    },
+    "validation": {
+      "isoDate": "必须是日期（YYYY-MM-DD）",
+      "giveTitle": "请填写标题",
+      "writeWhatHappened": "请写下发生了什么",
+      "nameMetric": "请为指标命名",
+      "sayWhatCounts": "请说明哪些算在内",
+      "periodOrder": "周期的结束日期早于开始日期",
+      "pasteCsv": "请粘贴或选择一个 CSV",
+      "topicTitle": "请为议题填写标题",
+      "writeDecision": "请写下决定",
+      "nameAction": "请写明行动",
+      "nameOwner": "请指定负责人",
+      "nameDeadline": "请为截止日期命名"
+    },
+    "csvProblems": {
+      "empty": "文件是空的。",
+      "header": "表头需要 `metric` 列和 `value` 列（以及 `period` 列，或 `period_start`/`period_end` 列）。",
+      "period": "每个数字都需要所属周期：添加 `period` 列（一个日期），或 `period_start` 和 `period_end` 列。",
+      "missingMetric": "缺少指标。",
+      "notANumber": "“{value}”不是数字。",
+      "periodFormat": "周期必须是 YYYY-MM-DD 格式（收到的是“{start}”到“{end}”）。",
+      "periodOrder": "周期的结束日期早于开始日期。"
+    },
+    "weeklyReview": {
+      "notFound": "找不到创始人每周回顾运行“{runId}”。",
+      "forbidden": "你在当前工作区的角色无法修改创始人每周回顾。",
+      "cannotRetry": "创始人每周回顾运行处于“{status}”状态，无法重试。",
+      "cannotEdit": "创始人每周回顾运行处于“{status}”状态，无法编辑。",
+      "cannotPublish": "创始人每周回顾运行处于“{status}”状态，无法发布。",
+      "retryConflict": "重试请求键“{requestKey}”属于运行“{runId}”的另一个失败周期。",
+      "periodMismatch": "证据快照的报告周期必须与运行的报告周期一致。",
+      "collectorUnavailable": "尚未配置创始人每周回顾的证据收集。"
+    }
   }
 }

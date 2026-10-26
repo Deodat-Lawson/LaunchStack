@@ -78,10 +78,11 @@ function signedIn(context = workspaceContext) {
     mockRequireWorkspaceContext.mockResolvedValue({ success: true, data: context });
 }
 
-function retry(id = "55") {
-    return POST(new Request(`https://app.example/api/documents/${id}/retry`, { method: "POST" }), {
-        params: Promise.resolve({ id }),
-    });
+function retry(id = "55", headers: Record<string, string> = {}) {
+    return POST(
+        new Request(`https://app.example/api/documents/${id}/retry`, { method: "POST", headers }),
+        { params: Promise.resolve({ id }) }
+    );
 }
 
 describe("POST /api/documents/[id]/retry", () => {
@@ -195,5 +196,56 @@ describe("POST /api/documents/[id]/retry", () => {
         expect(response.status).toBe(500);
         await expect(response.json()).resolves.toEqual({ error: "Could not retry processing" });
         spy.mockRestore();
+    });
+});
+
+describe("POST /api/documents/[id]/retry in the reader's language", () => {
+    const chinese = { cookie: "ls-locale=zh-CN.1" };
+
+    beforeEach(() => {
+        jest.clearAllMocks();
+        signedIn();
+        documentInScope();
+    });
+
+    it("refuses a view-only file in Chinese", async () => {
+        (canEditDocument as jest.Mock).mockResolvedValueOnce(false);
+
+        const response = await retry("55", chinese);
+
+        expect(response.status).toBe(403);
+        await expect(response.json()).resolves.toEqual({
+            error: "你可以查看此文件，但不能修改它。",
+        });
+    });
+
+    it("says why there is nothing to retry in Chinese, keeping the status code", async () => {
+        mockRetry.mockResolvedValueOnce({ status: "already_running" });
+
+        const response = await retry("55", chinese);
+
+        expect(response.status).toBe(409);
+        await expect(response.json()).resolves.toEqual({
+            error: "此来源正在处理中。",
+            status: "already_running",
+        });
+    });
+
+    it("keeps the English for a reader with no language chosen", async () => {
+        mockRetry.mockResolvedValueOnce({ status: "already_running" });
+
+        const response = await retry();
+
+        await expect(response.json()).resolves.toEqual({
+            error: "This source is already being processed.",
+            status: "already_running",
+        });
+    });
+
+    it("words a bad id in Chinese", async () => {
+        const response = await retry("abc", chinese);
+
+        expect(response.status).toBe(400);
+        await expect(response.json()).resolves.toEqual({ error: "文档 ID 无效" });
     });
 });

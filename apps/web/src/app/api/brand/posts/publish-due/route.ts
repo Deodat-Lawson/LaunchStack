@@ -10,8 +10,8 @@ import { publishForWorkspace } from "~/server/brand/publish";
 
 import { brandPublishContext, handleBrandError, json } from "../../_http";
 
-export async function POST() {
-    const auth = await brandPublishContext();
+export async function POST(request: Request) {
+    const auth = await brandPublishContext(request);
     if (!auth.ok) return auth.response;
     try {
         const result = await publishDueBrandPosts({
@@ -24,6 +24,6 @@ export async function POST() {
             skipped: result.skipped,
         });
     } catch (err) {
-        return handleBrandError("POST publish-due", err);
+        return handleBrandError("POST publish-due", err, request);
     }
 }

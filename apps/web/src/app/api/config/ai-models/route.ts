@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { describeChatResolutionFailure, getConfiguredPublicChatConfig } from "~/lib/models";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
+import { localeOfRequest } from "~/i18n/server";
 
 export const dynamic = "force-dynamic";
 
@@ -17,11 +18,11 @@ export const dynamic = "force-dynamic";
  * own models sees the routes those models serve. A signed-out caller gets the
  * deployment's, as before.
  */
-export async function GET() {
+export async function GET(request: Request) {
     try {
         const ctx = await requireWorkspaceContext();
         const companyId = ctx.success ? ctx.data.companyId : null;
-        return await withWorkspaceChatModels(companyId, () =>
+        return await withWorkspaceChatModels(companyId, "ask", () =>
             NextResponse.json(getConfiguredPublicChatConfig())
         );
     } catch (error) {
@@ -30,7 +31,7 @@ export async function GET() {
         // describeChatResolutionFailure logs the detail and keeps only words
         // fit for every user: the fixed reason for a broken server file, or
         // the workspace's own "fix it in Settings" when its endpoint is down.
-        const { message } = describeChatResolutionFailure(error);
+        const { message } = describeChatResolutionFailure(error, localeOfRequest(request));
         return NextResponse.json(
             {
                 routes: {

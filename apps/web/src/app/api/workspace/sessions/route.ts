@@ -12,6 +12,7 @@ import { NextResponse } from "next/server";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { CreateSessionSchema, serverError, validateRequestBody } from "~/lib/validation";
 import { createSession, listSessions } from "~/server/sessions/repository";
+import { requestTranslator } from "~/i18n/server";
 
 export const runtime = "nodejs";
 
@@ -28,7 +29,9 @@ export async function GET(request: Request) {
         return NextResponse.json({ sessions });
     } catch (error) {
         console.error("[workspace/sessions] list failed:", error);
-        return serverError("Failed to load sessions");
+        return serverError(
+            requestTranslator(request, "workspace.server.errors")("loadSessionsFailed")
+        );
     }
 }
 
@@ -47,6 +50,6 @@ export async function POST(request: Request) {
         return NextResponse.json({ session }, { status: 201 });
     } catch (error) {
         console.error("[workspace/sessions] create failed:", error);
-        return serverError("Failed to save this chat");
+        return serverError(requestTranslator(request, "workspace.server.errors")("saveChatFailed"));
     }
 }

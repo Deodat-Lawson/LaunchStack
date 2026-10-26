@@ -5,6 +5,8 @@ import { agentAiChatbotMessage, agentAiChatbotChat } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { validateRequestBody, CreateMessageSchema } from "~/lib/validation";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { assertChatOwnedByUser, assertMessageInChat } from "~/lib/ai-chat-ownership";
 
@@ -15,17 +17,24 @@ export const maxDuration = 300;
 export async function POST(request: NextRequest) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "chat.server.aiChat");
 
     try {
         const validation = await validateRequestBody(request, CreateMessageSchema);
         if (!validation.success) return validation.response;
         const { chatId, role, content, messageType, parentMessageId } = validation.data;
 
-        const owned = await assertChatOwnedByUser(chatId, ctx.data.authUserId);
+        const owned = await assertChatOwnedByUser(chatId, ctx.data.authUserId, locale);
         if (!owned.success) return owned.response;
 
         if (parentMessageId) {
-            const parent = await assertMessageInChat(parentMessageId, chatId, ctx.data.authUserId);
+            const parent = await assertMessageInChat(
+                parentMessageId,
+                chatId,
+                ctx.data.authUserId,
+                locale
+            );
             if (!parent.success) return parent.response;
         }
 
@@ -57,7 +66,7 @@ export async function POST(request: NextRequest) {
         });
     } catch (error) {
         console.error("Error creating message:", error);
-        return NextResponse.json({ error: "Failed to create message" }, { status: 500 });
+        return NextResponse.json({ error: t("createMessage") }, { status: 500 });
     }
 }
 
@@ -65,16 +74,19 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "chat.server.aiChat");
+    const tValidation = translatorFor(locale, "errors.validation");
 
     try {
         const { searchParams } = new URL(request.url);
         const chatId = searchParams.get("chatId");
 
         if (!chatId) {
-            return NextResponse.json({ error: "chatId is required" }, { status: 400 });
+            return NextResponse.json({ error: tValidation("chatIdRequired") }, { status: 400 });
         }
 
-        const owned = await assertChatOwnedByUser(chatId, ctx.data.authUserId);
+        const owned = await assertChatOwnedByUser(chatId, ctx.data.authUserId, locale);
         if (!owned.success) return owned.response;
 
         const messages = await db
@@ -89,6 +101,6 @@ export async function GET(request: NextRequest) {
         });
     } catch (error) {
         console.error("Error fetching messages:", error);
-        return NextResponse.json({ error: "Failed to fetch messages" }, { status: 500 });
+        return NextResponse.json({ error: t("fetchMessages") }, { status: 500 });
     }
 }

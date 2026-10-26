@@ -60,7 +60,7 @@ export function ConsentForm({
                         key={line}
                         className="text-ink flex items-start gap-2.5 text-[13.5px] leading-[1.5]"
                     >
-                        <Check className="text-success mt-0.5 size-4 shrink-0" aria-hidden />
+                        <Check className="text-success-ink mt-0.5 size-4 shrink-0" aria-hidden />
                         {line}
                     </li>
                 ))}

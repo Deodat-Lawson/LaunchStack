@@ -439,5 +439,110 @@
       "copyMarkdown": "复制为 Markdown",
       "hint": "按顺序列出各章节，然后是清单以及草稿引用的证据。"
     }
+  },
+  "server": {
+    "errors": {
+      "profileOrKeywords": "请先建立组织档案，或提供要搜索的关键词",
+      "funderNotFound": "找不到这个资助方",
+      "applicationNotFound": "找不到这个申请",
+      "sourceNotReadable": "这个来源还没有可读取的文本，请等它处理完成",
+      "unknownStatus": "未知状态",
+      "requestRequired": "请先粘贴资助方的征集要求，或提供它的 URL",
+      "sectionNotFound": "找不到这个章节",
+      "allDrafted": "每个章节都已有草稿；如需重新起草，请使用该章节自己的菜单",
+      "nothingToRewrite": "请先撰写或起草回答，再进行改写",
+      "nothingWritten": "还没有写任何内容",
+      "approveEmpty": "请先写好回答，再批准",
+      "saveEmpty": "请先写好回答，再保存",
+      "libraryItemNotFound": "答案库中找不到这个回答",
+      "runNotFound": "找不到这次运行",
+      "notEnoughCredits": "额度不足，无法开始这次运行",
+      "checkSections": "请检查所选章节后重试",
+      "checkChange": "请检查修改内容后重试",
+      "checkTags": "请检查标签后重试",
+      "pickRewrite": "请选择一种改写方式，或说明需要改动什么",
+      "sectionNeedsQuestion": "章节需要有一个问题",
+      "checkApplication": "请检查申请信息后重试",
+      "titleOrRequest": "请为申请填写标题，或粘贴资助方的征集要求",
+      "funderNeedsName": "资助方需要填写项目名称和资助方名称",
+      "checkSearch": "请检查搜索条件后重试",
+      "answerNeedsBoth": "保存的回答需要同时包含问题和回答"
+    },
+    "steps": {
+      "usingKeywords": "使用你的关键词",
+      "planningSearch": "规划搜索",
+      "searching": "搜索 Grants.gov 和网页",
+      "scoring": "评估契合度",
+      "savingFunders": "保存资助方",
+      "readingRequest": "读取征集要求",
+      "extracting": "提取要求",
+      "buildingChecklist": "生成清单",
+      "draftingSections": "起草章节",
+      "rewriting": "改写",
+      "rewritingSection": "改写：{section}",
+      "checkingChecklist": "核对清单",
+      "reviewingDrafts": "审阅草稿"
+    },
+    "stepDetails": {
+      "sources": "Grants.gov：{grants, select, off {未启用} failed {失败} other {{grants} 个}} · 网页：{web, select, off {未启用} failed {失败} other {{web} 个}}",
+      "scored": "已评分 {count} 个",
+      "notScored": "未评分",
+      "funders": "{count} 个资助方",
+      "characters": "{count} 个字符",
+      "sections": "{count} 个章节",
+      "items": "{count} 项",
+      "citations": "{cites, plural, other {# 处引用}}{gaps, plural, =0 {} other { · # 处缺口}}",
+      "words": "{before} → {after} 词",
+      "checklistDone": "已完成 {done}/{total}",
+      "findings": "{count} 条审阅意见"
+    },
+    "headlines": {
+      "funders": "找到 {found} 个资助方，其中 {strong} 个高度契合",
+      "extract": "{sections} 个章节，{requirements} 项清单",
+      "drafted": "{count, plural, other {已起草 # 个章节}}",
+      "nothingToDraft": "没有需要起草的章节",
+      "rewritten": "已改写：{before} → {after} 词",
+      "review": "就绪度 {readiness}/100 · {findings} 条审阅意见{blockers, plural, =0 {} other { · # 个阻断问题}}"
+    },
+    "runErrors": {
+      "runFailed": "运行失败",
+      "noApplication": "这次运行没有指定申请",
+      "applicationNotFound": "找不到这个申请",
+      "cannotFetch": "当前部署无法抓取网页，请改为粘贴征集要求。",
+      "noRequestText": "没有可读取的征集要求文本。请粘贴征集公告，或提供它的 URL。",
+      "requestTooShort": "征集要求太短，读不出任何内容。",
+      "noSection": "这次运行没有指定章节",
+      "sectionNotFound": "找不到这个章节",
+      "noDraft": "还没有可改写的草稿。",
+      "profileOrKeywords": "请先建立组织档案，或提供要搜索的关键词。"
+    },
+    "findings": {
+      "missing": "“{question}”还没有回答。",
+      "missingSuggestion": "根据你的来源起草，或手动撰写。",
+      "overLimit": "共 {words} 词，限制为 {limit} 词。",
+      "overLimitSuggestion": "删减到限制以内；资助方常会截断或拒收超长的回答。",
+      "unsupported": "这个回答没有引用任何来源。",
+      "unsupportedSuggestion": "添加能支撑其中说法的文件，或将其作为成文知识批准。",
+      "eligibility": "申请资格尚未确认：{rule}",
+      "eligibilitySuggestion": "核实后在清单中打勾；如果这一条不适用于你，就放弃这个申请。",
+      "attachment": "附件尚未准备：{item}",
+      "deadlinePassed": "{days, plural, other {截止日期已过去 # 天。}}",
+      "deadlinePassedSuggestion": "向资助方询问下一轮征集，或撤回这个申请。",
+      "deadlineToday": "今天就是截止日期。",
+      "deadlineSoon": "{days, plural, other {距截止日期还有 # 天。}}"
+    },
+    "reviewSummary": {
+      "nothingWritten": "还没有写任何内容。"
+    },
+    "requirements": {
+      "submitBy": "在 {date} 前提交",
+      "budgetBetween": "申请金额在 ${min} 至 ${max} 之间",
+      "budgetMax": "申请金额不超过 ${max}",
+      "budgetMin": "申请金额不少于 ${min}",
+      "answer": "回答：{question}",
+      "answerLimit": "回答：{question}（{limit} 词）",
+      "optional": "可选：{question}",
+      "optionalLimit": "可选：{question}（{limit} 词）"
+    }
   }
 }

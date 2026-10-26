@@ -13,6 +13,7 @@ import {
 } from "~/components/ui/dialog";
 
 import { prospectsApi, type NewSegmentInput } from "../api";
+import { useErrorText } from "~/lib/tools/errorText";
 import { useProspects } from "../_lib/context";
 import { SegmentForm } from "./SegmentForm";
 
@@ -29,6 +30,7 @@ export function NewSegmentDialog({
     onOpenChange: (open: boolean) => void;
 }) {
     const t = useTranslations("growth.prospects.newSegment");
+    const errorText = useErrorText();
     const { reloadSegments, setSegmentId } = useProspects();
     const [busy, setBusy] = useState(false);
 
@@ -41,7 +43,7 @@ export function NewSegmentDialog({
             toast.success(t("created", { name: segment.name }));
             onOpenChange(false);
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : t("createFailed"));
+            toast.error(errorText(e, t("createFailed")));
         } finally {
             setBusy(false);
         }

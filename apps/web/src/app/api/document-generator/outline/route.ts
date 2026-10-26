@@ -13,6 +13,8 @@ import { invokeStructured } from "@launchstack/llm";
 import { z } from "zod";
 import { resolveConfiguredChatModel } from "~/lib/models";
 import { validateDeprecatedChatSelection } from "~/server/chat-request-compat";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
@@ -160,17 +162,24 @@ const TEMPLATE_HINTS: Record<string, string> = {
 };
 
 export async function POST(request: Request) {
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "generator.server.errors");
+    const tApi = translatorFor(locale, "errors.api");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
-        return await withWorkspaceChatModels(ctx.data.companyId, async () => {
+        return await withWorkspaceChatModels(ctx.data.companyId, "documentWriter", async () => {
             const body = (await request.json()) as unknown;
             const validation = OutlineSchema.safeParse(body);
 
             if (!validation.success) {
                 return NextResponse.json(
-                    { success: false, message: "Invalid request", errors: validation.error.errors },
+                    {
+                        success: false,
+                        message: tApi("invalidRequest"),
+                        errors: validation.error.errors,
+                    },
                     { status: 400 }
                 );
             }
@@ -179,7 +188,10 @@ export async function POST(request: Request) {
             const startTime = Date.now();
 
             const resolved = resolveConfiguredChatModel({ route: "fast" });
-            const compatibility = validateDeprecatedChatSelection({ model: options?.model });
+            const compatibility = validateDeprecatedChatSelection(
+                { model: options?.model },
+                locale
+            );
             if (!compatibility.ok) {
                 return NextResponse.json(
                     { success: false, message: compatibility.message },
@@ -232,7 +244,7 @@ export async function POST(request: Request) {
 
                 default:
                     return NextResponse.json(
-                        { success: false, message: "Invalid action" },
+                        { success: false, message: t("invalidAction") },
                         { status: 400 }
                     );
             }
@@ -276,8 +288,8 @@ export async function POST(request: Request) {
         return NextResponse.json(
             {
                 success: false,
-                message: "Failed to generate outline",
-                error: "Failed to generate outline",
+                message: t("outlineFailed"),
+                error: t("outlineFailed"),
             },
             { status: 500 }
         );

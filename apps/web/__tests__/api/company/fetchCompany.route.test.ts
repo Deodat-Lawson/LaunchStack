@@ -98,7 +98,7 @@ describe("GET /api/fetchCompany", () => {
     it.each(["member", "viewer", "guest"])("refuses a %s before reading anything", async role => {
         signInAs(role);
 
-        const response = await GET();
+        const response = await GET(new Request("http://localhost/api/fetchCompany"));
 
         expect(response.status).toBe(403);
         expect(await response.json()).toEqual({
@@ -115,7 +115,7 @@ describe("GET /api/fetchCompany", () => {
             response: new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401 }),
         });
 
-        expect((await GET()).status).toBe(401);
+        expect((await GET(new Request("http://localhost/api/fetchCompany"))).status).toBe(401);
     });
 
     it.each(["owner", "admin"])(
@@ -123,7 +123,7 @@ describe("GET /api/fetchCompany", () => {
         async role => {
             signInAs(role);
 
-            const response = await GET();
+            const response = await GET(new Request("http://localhost/api/fetchCompany"));
 
             expect(response.status).toBe(200);
             const body = (await response.json()) as Record<string, unknown>;
@@ -159,7 +159,7 @@ describe("GET /api/fetchCompany", () => {
     it("resolves the model from the active index, which wins over the legacy column", async () => {
         signInAs("owner");
 
-        await GET();
+        await GET(new Request("http://localhost/api/fetchCompany"));
 
         expect(mockResolveEmbeddingIndex).toHaveBeenCalledWith(undefined, {
             embeddingIndexKey: "gemini-embedding-768",
@@ -172,7 +172,7 @@ describe("GET /api/fetchCompany", () => {
             throw new Error('Embedding index "ollama-768" is not registered or not enabled.');
         });
 
-        const response = await GET();
+        const response = await GET(new Request("http://localhost/api/fetchCompany"));
 
         expect(response.status).toBe(200);
         expect(await response.json()).toMatchObject({ embeddingModel: null });
@@ -188,6 +188,6 @@ describe("GET /api/fetchCompany", () => {
             }),
         });
 
-        expect((await GET()).status).toBe(200);
+        expect((await GET(new Request("http://localhost/api/fetchCompany"))).status).toBe(200);
     });
 });

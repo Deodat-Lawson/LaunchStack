@@ -12,6 +12,7 @@ import { cn } from "~/lib/utils";
 import { InlineError } from "~/components/tools/EmptyState";
 import { PageHeader } from "~/components/tools/PageHeader";
 import { SkeletonRows } from "~/components/tools/SkeletonRows";
+import { useErrorText } from "~/lib/tools/errorText";
 import { useGrowthPaths } from "../../_lib/paths";
 import { useResource } from "~/lib/tools/useResource";
 import { ChannelAvatar } from "../_components/ChannelAvatar";
@@ -36,33 +37,44 @@ import {
     weekRange,
     weekday,
 } from "../_lib/time";
-import { brandApi, type BrandPost } from "../api";
+import { brandApi, type BrandPost, type BrandPostStatus } from "../api";
 
 /**
  * A post on a day: time, the channel it goes out as, first words, an image
  * mark, and once it is out its numbers. The status is a colour only where
  * it is one.
  */
+/** The dot before a calendar post's time: its status at a glance. */
+const STATUS_DOT: Record<BrandPostStatus | "due", string> = {
+    draft: "bg-ink-4",
+    cancelled: "bg-ink-4",
+    scheduled: "bg-ink-3",
+    due: "bg-warn",
+    publishing: "bg-brand",
+    published: "bg-success",
+    failed: "bg-danger",
+};
+
 function DayPost({ post, onChange }: { post: BrandPost; onChange: () => void }) {
     const t = useTranslations("growth.brand.calendar");
+    const ts = useTranslations("growth.brand.status");
     const locale = useLocale();
     const at = postMoment(post);
     const quiet = post.status === "cancelled" || post.status === "draft";
+    const status = post.status === "scheduled" && isDue(post) ? "due" : post.status;
     return (
         <PostActions post={post} onChange={onChange}>
             <button
                 type="button"
-                className={cn(
-                    "focus-visible:ring-brand/50 hover:bg-panel-2 flex w-full flex-col gap-0.5 rounded-md border-l-2 py-1 pl-2 pr-1 text-left outline-none focus-visible:ring-[3px]",
-                    post.status === "scheduled" && !isDue(post) && "border-ink-3",
-                    post.status === "scheduled" && isDue(post) && "border-warn",
-                    post.status === "publishing" && "border-brand",
-                    post.status === "published" && "border-success",
-                    post.status === "failed" && "border-danger",
-                    quiet && "border-line"
-                )}
+                className="focus-visible:ring-brand/50 hover:bg-panel-2 flex w-full flex-col gap-0.5 rounded-md px-1.5 py-1 text-left outline-none focus-visible:ring-[3px]"
             >
                 <span className="flex min-w-0 items-center gap-1.5">
+                    <span
+                        aria-hidden
+                        title={ts(status)}
+                        className={cn("size-1.5 shrink-0 rounded-full", STATUS_DOT[status])}
+                    />
+                    <span className="sr-only">{ts(status)}</span>
                     {post.channel ? (
                         <ChannelAvatar
                             name={post.channel.name}
@@ -114,6 +126,7 @@ function DayPost({ post, onChange }: { post: BrandPost; onChange: () => void }) 
  */
 export function CalendarScreen() {
     const t = useTranslations("growth.brand");
+    const errorText = useErrorText();
     const locale = useLocale();
     const paths = useGrowthPaths();
     const [weekStart, setWeekStart] = useState(() => startOfWeek(new Date()));
@@ -144,7 +157,7 @@ export function CalendarScreen() {
             if (n === 0 && result.failed.length === 0) toast(t("calendar.nothingOverdue"));
             await res.reload();
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : t("calendar.publishFailed"));
+            toast.error(errorText(e, t("calendar.publishFailed")));
         }
     };
 

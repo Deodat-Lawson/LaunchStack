@@ -35,6 +35,7 @@ import { SourcesTab } from "../_components/SourcesTab";
 import { useScenarios } from "../_lib/context";
 import { runPath, type RunTab, type ScenariosScreen } from "../_lib/screens";
 import { isLive, progressLabel, progressValue, sizeLabel } from "~/lib/scenarios/words";
+import { useErrorText } from "~/lib/tools/errorText";
 
 type RunScreenProps = { screen: Extract<ScenariosScreen, { kind: "run" }> };
 
@@ -209,7 +210,7 @@ export function RunScreen({ screen }: RunScreenProps) {
                     />
                 </TabsContent>
                 <TabsContent value="sources">
-                    <SourcesTab run={run} focusSource={screen.source} />
+                    <SourcesTab run={run} focusSource={screen.source} onPerson={openPerson} />
                 </TabsContent>
             </Tabs>
 
@@ -235,6 +236,7 @@ function RunHeader({
     onChanged: () => void;
     onReloadList: () => Promise<void>;
 }) {
+    const errorText = useErrorText();
     const t = useTranslations("scenarios.run");
     const tw = useTranslations("scenarios.words");
     const tc = useTranslations("common");
@@ -263,7 +265,7 @@ function RunHeader({
             onChanged();
             void onReloadList();
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : t("renameError"));
+            toast.error(errorText(e, t("renameError")));
         } finally {
             setSaving(false);
         }
@@ -278,7 +280,7 @@ function RunHeader({
             void onReloadList();
         } catch (e) {
             setShared(!next);
-            toast.error(e instanceof Error ? e.message : t("sharingError"));
+            toast.error(errorText(e, t("sharingError")));
         }
     };
 
@@ -297,7 +299,7 @@ function RunHeader({
             }
             void onReloadList();
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : t("actionError"));
+            toast.error(errorText(e, t("actionError")));
         } finally {
             setBusy(false);
             setConfirm(null);
@@ -497,6 +499,7 @@ function SituationText({ lead, text }: { lead: string; text: string }) {
 }
 
 function EventBox({ run, onAdded }: { run: ScenarioDetail; onAdded: () => void }) {
+    const errorText = useErrorText();
     const t = useTranslations("scenarios.run");
     const [text, setText] = useState("");
     const [adding, setAdding] = useState(false);
@@ -512,7 +515,7 @@ function EventBox({ run, onAdded }: { run: ScenarioDetail; onAdded: () => void }
             setText("");
             onAdded();
         } catch (e) {
-            setError(e instanceof Error ? e.message : t("addEventError"));
+            setError(errorText(e, t("addEventError")));
         } finally {
             setAdding(false);
         }
@@ -564,7 +567,7 @@ function EventBox({ run, onAdded }: { run: ScenarioDetail; onAdded: () => void }
                             <span
                                 className={cn(
                                     "shrink-0 text-xs",
-                                    i.round === null ? "text-warn" : "text-ink-3"
+                                    i.round === null ? "text-warn-ink" : "text-ink-3"
                                 )}
                             >
                                 {i.round === null

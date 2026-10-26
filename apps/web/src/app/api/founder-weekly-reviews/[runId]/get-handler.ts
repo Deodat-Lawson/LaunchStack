@@ -6,7 +6,7 @@
 import { getServerSession } from "~/server/auth";
 import type { FounderWeeklyReviewUserService } from "@launchstack/pipelines/founder-weekly-review";
 import type { FounderWeeklyReviewActorResolver } from "~/server/founder-weekly-review/actor-resolver";
-import { fail, handleRouteError, ok, safeRun } from "~/server/founder-weekly-review/http";
+import { failIn, handleWeeklyReviewError, ok, safeRun } from "~/server/founder-weekly-review/http";
 
 export interface FounderWeeklyReviewGetRouteDependencies {
     actorResolver: Pick<FounderWeeklyReviewActorResolver, "resolve">;
@@ -18,19 +18,19 @@ export interface FounderWeeklyReviewGetRouteDependencies {
 
 export function createFounderWeeklyReviewGetHandler(deps: FounderWeeklyReviewGetRouteDependencies) {
     return async function GET(
-        _request: Request,
+        request: Request,
         { params }: { params: Promise<{ runId: string }> }
     ) {
         const session = await getServerSession();
         const userId = session?.user.id;
-        if (!userId) return fail("Unauthorized", 401);
+        if (!userId) return failIn(request, "unauthorized", 401);
         try {
             const actor = await deps.actorResolver.resolve(userId);
             const { runId } = await params;
             const run = await deps.getRun(actor, runId);
             return ok({ run: safeRun(run) });
         } catch (error) {
-            return handleRouteError("founder-weekly-review", error);
+            return handleWeeklyReviewError(error, request);
         }
     };
 }

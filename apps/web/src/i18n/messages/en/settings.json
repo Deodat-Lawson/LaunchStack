@@ -29,98 +29,78 @@
     "account": {
       "label": "Account",
       "blurb": "Profile, photo, password, sessions",
-      "eyebrow": "Account",
       "title": "Who you are, and where you are signed in",
       "description": "Your profile and photo, how you appear in this workspace, your sign-in details, and every browser that currently holds a session."
     },
     "appearance": {
       "label": "Appearance",
       "blurb": "Language, theme, density, motion, answers",
-      "eyebrow": "Appearance",
       "title": "How the app looks, and how it answers you",
       "description": "Five controls, not eleven: four for the screen, one for how the assistant answers. Board colours in a mindmap are part of the map, not the theme."
     },
     "shortcuts": {
       "label": "Shortcuts",
       "blurb": "Every command and its keys",
-      "eyebrow": "Shortcuts",
       "title": "What the keyboard does",
       "description": "Every command, its keys, and a place to change them. Yours alone; the mindmap editor keeps its own map while a map is open."
     },
     "people": {
       "label": "People and access",
       "blurb": "Members, roles, folders",
-      "eyebrow": "People",
       "title": "Who is in the workspace, and what they can see",
       "description": "Members and their roles, invitations and join links, groups, custom roles, and the audit log. Who can open a folder is set on the folder itself; roles decide everything else."
     },
     "company": {
       "label": "Company profile",
       "blurb": "What your sources prove",
-      "eyebrow": "Company",
       "title": "What your sources can prove",
       "description": "Read from the sources written by or about your company, each fact with the excerpt that proves it. Agents cite it for company context and Proposals drafts from it. Sources about someone else are set aside, and you can overrule that."
     },
     "byok": {
       "label": "Bring your own keys",
       "blurb": "Your API and embedding keys",
-      "eyebrow": "Keys",
       "title": "Bring your own keys",
       "description": "Your own provider account for the workspace's AI, and your own key for embeddings. Both are optional: anything left empty runs on the server's keys."
     },
     "models": {
       "label": "Models and routes",
       "blurb": "Which model answers what",
-      "eyebrow": "Models",
       "title": "Which model serves each kind of request",
       "description": "The server's default models and routes, set in its configuration file and shown here read-only. A workspace that brings its own API key runs on that instead."
     },
     "agents": {
       "label": "Agents and autonomy",
       "blurb": "The roster, and what it may do",
-      "eyebrow": "Agents",
       "title": "Who shows up to a meeting, and how much they may do alone",
       "description": "Each agent is a seat in a meeting: a name, a role, standing instructions, and a level of autonomy. Agents can run in this app or on another machine you connect."
-    },
-    "documents": {
-      "label": "Document defaults",
-      "blurb": "Storage, processing, destination",
-      "eyebrow": "Documents",
-      "title": "What a new document gets unless someone says otherwise",
-      "description": "Where uploads are stored, how they are processed, which folder they land in, and whether Create opens a Google Doc. Folders can override the processing default."
     },
     "integrations": {
       "label": "Integrations",
       "blurb": "Connections, Slack, remote nodes",
-      "eyebrow": "Integrations",
       "title": "What this workspace connects to",
       "description": "Workspace connections to Drive, Slack and GitHub; Slack mirroring for meetings; and the hub that remote agent machines dial into. All optional and independent."
     },
     "usage": {
       "label": "Usage and costs",
-      "blurb": "Balance, burn, estimate",
-      "eyebrow": "Usage",
+      "blurb": "Model tokens, cost, balance",
       "title": "What the workspace is spending",
-      "description": "The token balance, what has been drawing on it and when, and an estimate of cost from a price you set. The numbers exist to inform the two settings on this page."
+      "description": "Every AI model call the workspace made and what it cost, then the token balance and what has been drawing on it. The numbers exist to inform the two settings on this page."
     },
     "archive": {
       "label": "Archive and retention",
       "blurb": "Trash, retired agents, purge",
-      "eyebrow": "Archive",
       "title": "What has been put away, and when it goes for good",
       "description": "Trashed maps and artifacts, retired agents and archived channels, with restore and permanent delete. The retention window decides what the trash empties on its own."
     },
     "privacy": {
       "label": "Data and privacy",
       "blurb": "What leaves the deployment",
-      "eyebrow": "Privacy",
       "title": "What leaves this deployment, and what stays",
       "description": "Which outside services see document text, which see only metadata, what is kept and for how long. Read this before trusting the app with something sensitive."
     },
     "labs": {
       "label": "Labs",
       "blurb": "Unfinished, opt-in",
-      "eyebrow": "Labs",
       "title": "Features that are not finished",
       "description": "Each one says honestly what it does today. Off by default; turning one on affects the whole workspace."
     }
@@ -220,44 +200,6 @@
         "label": "Default autonomy for agents",
         "description": "How much an agent with no level of its own may do unattended. Each agent can be set lower or higher on its card.",
         "consequence": "Lowering this can stop meetings from mirroring to Slack or running on their own until the room's agents are raised again."
-      }
-    },
-    "documents": {
-      "uploadStorage": {
-        "label": "Where uploaded files are stored",
-        "description": "The storage that receives new uploads. Existing files stay where they are.",
-        "options": {
-          "cloud": {
-            "description": "Needs UPLOADTHING_TOKEN on the server."
-          },
-          "database": {
-            "label": "Blob / database",
-            "description": "The server's own storage."
-          }
-        }
-      },
-      "defaultProcessingMethod": {
-        "label": "Default processing method",
-        "description": "What a new upload is processed with unless the person uploading picks otherwise.",
-        "options": {
-          "standard": {
-            "label": "Standard",
-            "description": "No OCR. For text-based PDFs."
-          },
-          "auto": {
-            "label": "Auto",
-            "description": "Pick the best method per document."
-          }
-        }
-      },
-      "defaultFolder": {
-        "label": "Default folder for new uploads",
-        "description": "Pre-selected in the upload dialog. Leave blank for Unfiled.",
-        "placeholder": "Unfiled"
-      },
-      "createNativeGoogleDoc": {
-        "label": "Create new documents as Google Docs",
-        "description": "When Drive linking is on, the Add source dialog opens on Google Doc instead of a local file."
       }
     },
     "usage": {
@@ -572,25 +514,6 @@
       "revokeKeyLabel": "Revoke key"
     }
   },
-  "documents": {
-    "listSeparator": ", ",
-    "storage": {
-      "title": "Storage",
-      "description": "Where the bytes of a new upload go. Existing documents stay where they are.",
-      "s3Note": "This server stores uploads in S3; the preference below is ignored while that is configured.",
-      "s3Reason": "S3 is configured on the server.",
-      "noUploadThing": "UPLOADTHING_TOKEN is not set on the server, so only the built-in storage is available."
-    },
-    "processing": {
-      "title": "Processing and destination",
-      "description": "Pre-filled in the upload dialog; the person uploading can still change either per batch. Folders may override the processing method for what lands in them.",
-      "existingFolders": "Existing folders: {list}"
-    },
-    "creating": {
-      "title": "Creating",
-      "description": "What the Create menu opens on."
-    }
-  },
   "integrations": {
     "checking": "Checking configuration…",
     "reconnectMenu": "Reconnect…",
@@ -599,7 +522,7 @@
     "removing": "Removing…",
     "listSeparator": ", ",
     "drive": {
-      "description": "Link PDFs and Word documents to Google Drive so they can be edited with real tools — Google Docs for Word files, any Drive app or Drive for Desktop for PDFs. Settled edits sync back as document versions.",
+      "description": "Files and folders picked from Google Drive in Add source stay in sync; what syncs is listed here. Linking also lets PDFs and Word documents be edited with real tools — Google Docs for Word files, any Drive app or Drive for Desktop for PDFs — and settled edits sync back as document versions.",
       "actions": "Google Drive actions",
       "connectMenu": "Connect Google Drive…",
       "linking": "Drive linking",
@@ -1568,6 +1491,54 @@
       "granted": "Granted",
       "purchased": "Purchased"
     },
+    "models": {
+      "title": "AI model usage",
+      "description": "Every call this workspace made to an AI model, from every feature, counted from the provider's own report. Separate from the balance below, which only some features draw on.",
+      "ownEndpoint": "{calls} of these calls went to the model endpoint this workspace brought itself. Its own provider bills them.",
+      "tokens": "Model tokens in the last {days} days",
+      "split": "{input} in · {output} out · {calls} calls",
+      "cost": "Model cost",
+      "costPriced": "From the price set for each model.",
+      "costFallback": "Models without a set price are counted at {price} per 1M.",
+      "costPartial": "{priced} of {calls} calls have a model price; the rest aren't counted.",
+      "costNone": "No price is set for these models. Set a price below to estimate.",
+      "efficiency": "Cache and reasoning",
+      "cached": "Input from cache",
+      "reasoning": "Reasoning tokens",
+      "nothing": "No model calls in this window.",
+      "feature": "Feature",
+      "route": "Model route",
+      "calls": "Calls",
+      "input": "Input",
+      "output": "Output",
+      "costColumn": "Cost",
+      "features": {
+        "ask": "Ask",
+        "mcp": "Assistants (MCP)",
+        "notes": "Notes",
+        "documentWriter": "Document writer",
+        "marketing": "Marketing pipeline",
+        "emailCampaigns": "Email outreach",
+        "prospects": "Prospects",
+        "distribution": "Distribution research",
+        "proposals": "Proposals",
+        "scenarios": "Scenarios",
+        "trends": "Trend search",
+        "predictiveAnalysis": "Predictive analysis",
+        "repoExplainer": "Repo explainer",
+        "meetings": "Meetings",
+        "vantage": "Vantage",
+        "companyProfile": "Company profile",
+        "ingestion": "Document processing"
+      },
+      "routes": {
+        "default": "Standard",
+        "fast": "Fast",
+        "reasoning": "Reasoning",
+        "vision": "Images",
+        "auxiliary": "Document processing"
+      }
+    },
     "burn": {
       "title": "Burn by day",
       "description": "Tokens drawn from the balance, by what drew them. Hover a day for the breakdown; the table below carries the same numbers.",
@@ -1581,12 +1552,6 @@
       "operations": "Operations",
       "share": "Share",
       "empty": "Nothing in this window."
-    },
-    "byRoute": {
-      "title": "By chat route",
-      "description": "Only chat debits record a route, so this covers Ask and meetings, not embeddings or OCR.",
-      "route": "Route",
-      "calls": "Calls"
     },
     "pricing": {
       "title": "Pricing and warnings",
@@ -1736,6 +1701,106 @@
       "reasons": "Reasons step by step (reasoning model)",
       "followsSchema": "Follows a JSON schema",
       "structuredHint": "Structured output (response_format: json_schema). On for most OpenAI, Gemini and OpenRouter models; off for Claude through Anthropic’s compatible API. When it’s off, LaunchStack asks for JSON in the prompt instead."
+    }
+  },
+  "server": {
+    "errors": {
+      "unknownSetting": "Unknown setting \"{key}\"",
+      "folderScopeNeedsPath": "A folder scope needs a folder path",
+      "scopeNotAllowed": "\"{key}\" cannot be set at the {scope} scope",
+      "settingNeedsPermission": "Changing \"{label}\" needs {permission}",
+      "ownPreferencesOnly": "You can only change your own preferences",
+      "invalidSettingValue": "Invalid value for \"{label}\": {detail}",
+      "agentsCannotBeDeleted": "Retired agents cannot be deleted: their handles appear in past transcripts.",
+      "channelsKeepTranscript": "Channels keep their transcript; archive is as far as they go.",
+      "noProfileYet": "No profile yet.",
+      "openWorkspaceFirst": "Open a workspace first.",
+      "uploadRaced": "Another upload just finished. Try again.",
+      "lookupTooMany": "Ask for at most {max} people at once.",
+      "photoScope": "scope must be global or workspace",
+      "photoMultipart": "Send the photo as multipart form data.",
+      "photoAttachFile": "Attach the photo as `file`.",
+      "crossSiteRefused": "Cross-site request refused",
+      "signInAgainForPassword": "For your security, sign out and sign in again, then set your password.",
+      "setPasswordFailed": "Could not set a password",
+      "companyNotFound": "Company not found.",
+      "fetchCompanyFailed": "Unable to fetch company",
+      "preferenceSaveFailed": "Failed to update preference",
+      "embeddingEndpointForKey": "Enter the embeddings endpoint URL this key belongs to, such as https://api.openai.com/v1. A key is only ever sent to the address it was saved with.",
+      "embeddingKeyNeedsEndpoint": "The saved embeddings key needs its endpoint URL. Keep the address, or enter a new key together with a new address.",
+      "embeddingEndpointChanged": "The embeddings endpoint changed, so enter the API key for the new address. A saved key is only ever sent to the address it was entered for.",
+      "embeddingValidationFailed": "Embedding credentials failed validation.",
+      "reindexRunning": "A reindex is already running for this company. Wait for it to finish before changing the embedding index again.",
+      "reindexLockContended": "Could not acquire the reindex lock. Try again in a few seconds.",
+      "reindexScheduleFailed": "Could not schedule the reindex job. The settings change was not applied.",
+      "credentialsStoreFailed": "Unable to store embedding credentials.",
+      "companyUpdateNotFound": "Unable to update company record.",
+      "reindexScheduled": "Reindex scheduled for {count} document chunk set(s). Existing documents remain searchable under the previous index until the rewrite completes.",
+      "companyUpdated": "Company settings updated.",
+      "companyUpdateFailed": "Unable to update company settings.",
+      "assistantsLoadFailed": "Could not load assistants.",
+      "oauthClientsLoadFailed": "Could not load OAuth clients.",
+      "assistantServerOffSignIn": "The assistant server is off, so there is nothing to sign in to.",
+      "oauthClientCreateFailed": "Could not create the OAuth client.",
+      "assistantServerOffKey": "The assistant server is off, so a key would not work.",
+      "keyCreateFailed": "Could not create the key.",
+      "clientNotFound": "Client not found",
+      "oauthClientDeleteFailed": "Could not delete the OAuth client.",
+      "connectionNotFound": "Connection not found",
+      "disconnectFailed": "Could not disconnect the assistant.",
+      "keyNotFound": "Key not found",
+      "keyRevokeFailed": "Could not revoke the key.",
+      "accessKeyLimit": "You can hold at most {max} access keys in a workspace.",
+      "oauthClientLimit": "A workspace can hold at most {max} OAuth clients.",
+      "chatModelsUnreadable": "The chat model configuration could not be read. The server log has the details."
+    },
+    "models": {
+      "enterAddress": "Enter the address of your model endpoint.",
+      "notWebAddress": "That isn't a web address. It should look like https://api.example.com/v1.",
+      "needsHttps": "The address has to start with https://.",
+      "keyInAddress": "Put the key in the API key field, not in the address.",
+      "queryInAddress": "Leave the query string off the address; the base URL ends at the path, like /v1.",
+      "privateAddress": "That address points inside a private network, which this server doesn't allow. Use your provider's public address.",
+      "unreachable": "Couldn't reach that address. Check it, or type the model id yourself.",
+      "keyRejected": "The endpoint rejected the API key.",
+      "noModelList": "The endpoint doesn't list its models (HTTP {status}). Type the model id yourself.",
+      "emptyAnswer": "The model answered with nothing. Check that it is a chat model.",
+      "modelError": "The endpoint returned an error for this model. Check the model id and that the key can use it.",
+      "noSecretsKey": "This server can't store API keys yet: whoever runs it needs to set EMBEDDING_SECRETS_KEY.",
+      "keyForNewAddress": "The address changed, so enter the API key for the new address. A saved key is only ever sent to the address it was entered for.",
+      "keyForThisAddress": "Enter the API key for this address. A saved key is only sent to the address it was saved with.",
+      "notModelId": "\"{id}\" doesn't look like a model id. Copy it exactly as your provider lists it.",
+      "visionModel": "The model for images has to be one that reads images.",
+      "reasoningModel": "The model for reasoning has to be one that reasons.",
+      "invalidSetup": "That isn't a valid model setup.",
+      "saveFailed": "Couldn't save the model setup.",
+      "chooseModel": "Choose a model to test.",
+      "testFailed": "Couldn't run the test.",
+      "enterEndpointFirst": "Enter the endpoint address first.",
+      "listFailed": "Couldn't list the models."
+    },
+    "photo": {
+      "empty": "That file is empty.",
+      "tooLarge": "Photos can be up to {mb} MB.",
+      "unreadable": "That file isn't an image we can read. Use a JPG, PNG, WebP, GIF or AVIF.",
+      "heic": "HEIC photos aren't supported. Export it as a JPG and try again.",
+      "tooSmall": "Use an image at least {min}×{min} pixels.",
+      "processFailed": "That image couldn't be processed. Try a different file."
+    },
+    "ledger": {
+      "grant": "{grantType}: +{amount} tokens",
+      "serviceUsage": "{service} usage",
+      "chatQuery": "Chat query ({route} route)",
+      "transcribe": "Transcribe {file}",
+      "ner": "NER extraction for {count} chunks",
+      "embed": "Embed {count} chunks for document {document}",
+      "ocr": "OCR {count} pages",
+      "distribution": "Distribution research: {name}",
+      "proposalsRewrite": "Proposals: rewrite",
+      "proposalsReview": "Proposals: review",
+      "scenarioInterview": "Scenario \"{title}\": interview",
+      "scenarioUnit": "Scenario \"{title}\" ({unit})",
+      "scenarioRound": "Scenario \"{title}\" (round {round})"
     }
   }
 }

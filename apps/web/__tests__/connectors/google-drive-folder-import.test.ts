@@ -1,8 +1,9 @@
 /**
  * Shared-folder import, the pieces that need no database: reading a pasted
  * Drive link, the scope the connect flow asks for (and whether a stored grant
- * can read folders), where a synced file lands in the folder tree, the
- * Picker's three views, and the Drive client's shared-drive query. The link
+ * can read folders), where a synced file lands in the folder tree (and in the
+ * folder Add source picked it into), the Picker's three views, and the Drive
+ * client's shared-drive query. The link
  * resolver runs against the Google stand-in over a routed `fetch`.
  */
 
@@ -39,7 +40,9 @@ import {
 import { driveIdFromLink } from "~/lib/integrations/google-drive-link";
 import type { ConnectorConnection } from "~/server/db/schema";
 import {
+    createDriveDestinations,
     folderSegmentFor,
+    freeFolderPath,
     freeTopLevelPath,
     missingToMark,
     ownerForPick,
@@ -164,6 +167,72 @@ describe("where a synced file lands", () => {
         const long = "y".repeat(80);
         expect(freeTopLevelPath(long, new Set([long]))).toHaveLength(80);
     });
+
+    it("rebuilds a folder picked into a folder inside it, under a free name", () => {
+        expect(freeFolderPath("Deals", "Acme", new Set(["Deals"]))).toBe("Deals/Acme");
+        expect(freeFolderPath("Deals", "Acme", new Set(["Deals/Acme"]))).toBe("Deals/Acme (2)");
+        // The same name elsewhere is no clash.
+        expect(freeFolderPath("Deals", "Acme", new Set(["Acme"]))).toBe("Deals/Acme");
+    });
+
+    it("rebuilds it at the top from Unfiled, or where no folder fits inside", () => {
+        expect(freeFolderPath("Unfiled", "Acme", new Set())).toBe("Acme");
+        expect(freeFolderPath(null, "Acme", new Set())).toBe("Acme");
+        expect(freeFolderPath("a/b/c/d/e/f/g/h", "Acme", new Set())).toBe("Acme");
+        const full = Array.from({ length: 3 }, (_, i) => `${i}`.repeat(80)).join("/");
+        expect(freeFolderPath(full, "Acme", new Set())).toBe("Acme");
+    });
+
+    it("shortens a long name to fit inside the folder it was picked into", () => {
+        const parent = Array.from({ length: 3 }, (_, i) => `${i}`.repeat(70)).join("/");
+        const path = freeFolderPath(parent, "x".repeat(80), new Set());
+        expect(path.startsWith(`${parent}/`)).toBe(true);
+        expect(path.length).toBe(256);
+    });
+});
+
+describe("where a picked file lands", () => {
+    const ada = { companyId: 1n, userPk: 10n, authUserId: "auth_ada" };
+    const destinations = createDriveDestinations({
+        companyId: 1n,
+        connectionId: 1,
+        roots: [
+            {
+                id: 1n,
+                fileId: "deck",
+                kind: "file",
+                name: "Deck.pdf",
+                folderCategoryId: null,
+                destination: "Deals/Acme/",
+                owner: ada,
+            },
+            {
+                id: 2n,
+                fileId: "memo",
+                kind: "file",
+                name: "Memo.pdf",
+                folderCategoryId: null,
+                destination: null,
+                owner: ada,
+            },
+        ],
+    });
+
+    it("goes to the folder Add source picked it into, as the picker's upload", async () => {
+        await expect(
+            destinations.placeFor({ metadata: { pickedRootId: "deck" } })
+        ).resolves.toEqual({ category: "Deals/Acme", owner: ada });
+    });
+
+    it("goes to Google Drive as a workspace import when it was picked before that", async () => {
+        await expect(
+            destinations.placeFor({ metadata: { pickedRootId: "memo" } })
+        ).resolves.toEqual({ category: "Google Drive", owner: null });
+        await expect(destinations.placeFor({ metadata: {} })).resolves.toEqual({
+            category: "Google Drive",
+            owner: null,
+        });
+    });
 });
 
 describe("who owns what a pick brings in", () => {
@@ -208,7 +277,7 @@ describe("which missing files get flagged as removed from Drive", () => {
 });
 
 describe("Google Picker views", () => {
-    it("opens on everything, Shared with me, and Shared drives", () => {
+    function viewsFor(target: "files" | "folders"): string[][] {
         const calls: string[][] = [];
         class FakeView implements PickerView {
             readonly log: string[] = [];
@@ -223,6 +292,10 @@ describe("Google Picker views", () => {
                 this.log.push(`selectFolder:${v}`);
                 return this;
             }
+            setMimeTypes(v: string) {
+                this.log.push(`mime:${v}`);
+                return this;
+            }
             setOwnedByMe(v: boolean) {
                 this.log.push(`ownedByMe:${v}`);
                 return this;
@@ -232,12 +305,24 @@ describe("Google Picker views", () => {
                 return this;
             }
         }
-        const views = buildDriveViews({ DocsView: FakeView });
-        expect(views).toHaveLength(3);
-        expect(calls).toEqual([
-            ["folders:true", "selectFolder:true"],
-            ["folders:true", "selectFolder:true", "ownedByMe:false"],
-            ["folders:true", "selectFolder:true", "drives:true"],
+        expect(buildDriveViews({ DocsView: FakeView }, target)).toHaveLength(3);
+        return calls;
+    }
+
+    it("opens on everything, Shared with me, and Shared drives — files to pick, folders to open", () => {
+        expect(viewsFor("files")).toEqual([
+            ["folders:true", "selectFolder:false"],
+            ["folders:true", "selectFolder:false", "ownedByMe:false"],
+            ["folders:true", "selectFolder:false", "drives:true"],
+        ]);
+    });
+
+    it("lists only folders, and lets one be picked, from the Folder tab", () => {
+        const folder = "mime:application/vnd.google-apps.folder";
+        expect(viewsFor("folders")).toEqual([
+            ["folders:true", "selectFolder:true", folder],
+            ["folders:true", "selectFolder:true", folder, "ownedByMe:false"],
+            ["folders:true", "selectFolder:true", folder, "drives:true"],
         ]);
     });
 });

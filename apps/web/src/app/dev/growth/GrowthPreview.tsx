@@ -125,7 +125,7 @@ export function GrowthPreview({ slug }: { slug: string[] }) {
     if (!host) return null;
     return (
         <div data-preview="growth" className="flex h-dvh flex-col">
-            <div className="bg-warn-soft text-warn border-warn/40 shrink-0 border-b px-4 py-1.5 text-center text-xs">
+            <div className="bg-warn-soft text-warn-ink border-warn/40 shrink-0 border-b px-4 py-1.5 text-center text-xs">
                 Preview harness — no login, in-memory data. Find companies runs a simulated
                 20-second run; Brand posts publish in memory and Connect LinkedIn signs in as Dana
                 Okafor. Add <span className="font-mono">?reset=1</span> to start over,{" "}

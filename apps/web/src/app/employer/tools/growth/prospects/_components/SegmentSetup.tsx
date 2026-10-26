@@ -4,6 +4,8 @@ import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { toast } from "sonner";
 
+import { useErrorText } from "~/lib/tools/errorText";
+
 import { prospectsApi, type NewSegmentInput } from "../api";
 import { useProspects } from "../_lib/context";
 import { SegmentForm } from "./SegmentForm";
@@ -18,6 +20,7 @@ import { SegmentForm } from "./SegmentForm";
 export function SegmentSetup() {
     const t = useTranslations("growth.prospects.setup");
     const { reloadSegments, setSegmentId, startRun } = useProspects();
+    const errorText = useErrorText();
     const [busy, setBusy] = useState(false);
 
     const createAndFind = async (input: NewSegmentInput) => {
@@ -28,7 +31,7 @@ export function SegmentSetup() {
             setSegmentId(segment.id);
             await startRun({ segmentId: segment.id });
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : t("failed"));
+            toast.error(errorText(e, t("failed")));
         } finally {
             setBusy(false);
         }

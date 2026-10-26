@@ -23,6 +23,7 @@ import {
     MAX_ARTIFACT_BYTES,
     type ArtifactType,
 } from "~/lib/artifact-content";
+import { requestTranslator } from "~/i18n/server";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
@@ -77,6 +78,7 @@ async function fetchArtifactBody(url: string): Promise<string | null> {
 }
 
 export async function GET(request: Request) {
+    const t = requestTranslator(request, "viewers.server.artifacts");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
@@ -99,11 +101,12 @@ export async function GET(request: Request) {
         return NextResponse.json({ artifacts: items, folders }, { status: 200 });
     } catch (error) {
         console.error("[artifacts] list failed:", error);
-        return serverError("Failed to load artifacts");
+        return serverError(t("listFailed"));
     }
 }
 
 export async function POST(request: Request) {
+    const t = requestTranslator(request, "viewers.server.artifacts");
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
 
@@ -123,7 +126,7 @@ export async function POST(request: Request) {
                 if (isClaudeHostedUrl(sourceUrl)) {
                     return NextResponse.json(
                         {
-                            error: "claude.ai pages can't be fetched server-side — they render the artifact in the browser behind bot protection. Copy the artifact's code (or download it) in Claude and paste or upload it here; the link is kept as the source.",
+                            error: t("claudeShareLink"),
                             code: "claude_share_link",
                         },
                         { status: 422 }
@@ -142,10 +145,7 @@ export async function POST(request: Request) {
 
                 const fetched = await fetchArtifactBody(parsedUrl.href);
                 if (!fetched?.trim()) {
-                    return NextResponse.json(
-                        { error: "Couldn't fetch that URL, or it didn't return text content" },
-                        { status: 502 }
-                    );
+                    return NextResponse.json({ error: t("fetchFailed") }, { status: 502 });
                 }
                 content = fetched;
             } else {
@@ -178,11 +178,11 @@ export async function POST(request: Request) {
                 })
                 .returning();
 
-            if (!row) return serverError("Failed to import artifact");
+            if (!row) return serverError(t("importFailed"));
             return NextResponse.json({ artifact: toDetail(row) }, { status: 201 });
         } catch (error) {
             console.error("[artifacts] import failed:", error);
-            return serverError("Failed to import artifact");
+            return serverError(t("importFailed"));
         }
     });
 }

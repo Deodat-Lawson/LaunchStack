@@ -16,18 +16,16 @@
  */
 
 import { NextResponse } from "next/server";
+import { requestTranslator } from "~/i18n/server";
 import { and, eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import { mindmaps } from "~/server/db/schema";
-import { isUnfiledFolder, normalizeFolderPath, validateFolderPath } from "~/lib/folders/path";
+import { isUnfiledFolder, normalizeFolderPath } from "~/lib/folders/path";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { serverError, UpdateMindmapSchema, validateRequestBody } from "~/lib/validation";
+import { describeFolderPathProblem } from "~/server/folders/words";
 import {
-    DRAFT_DELETE_DENIED,
-    DRAFT_EDIT_DENIED,
-    DRAFT_MOVE_WIDENS,
-    DRAFT_UNFILED_DENIED,
     canEditDraftAt,
     draftAccess,
     draftAccessView,
@@ -41,7 +39,6 @@ import {
     writeRevision,
     type MindmapDetail,
 } from "~/server/mindmap/repository";
-import { FOLDER_EDIT_DENIED } from "~/server/services/folder-access";
 import { activeMemberPrincipals } from "~/server/workspace/grants";
 import { canDeleteAtLevel, canEditFolderPath } from "~/server/workspace/item-access";
 import { claimFolderPathForDraft } from "~/server/workspace/ownership";
@@ -51,12 +48,21 @@ function parseId(raw: string): number | null {
     return Number.isInteger(id) && id > 0 ? id : null;
 }
 
-function notFound() {
-    return NextResponse.json({ error: "Mindmap not found" }, { status: 404 });
+type Words = ReturnType<typeof requestTranslator<"mindmap.server.errors">>;
+
+function notFound(t: Words) {
+    return NextResponse.json({ error: t("notFound") }, { status: 404 });
 }
 
 function forbidden(error: string) {
     return NextResponse.json({ error }, { status: 403 });
+}
+
+function invalidId(request: Request) {
+    return NextResponse.json(
+        { error: requestTranslator(request, "errors.api")("invalidId") },
+        { status: 400 }
+    );
 }
 
 /** A move refused inside its transaction, so the folder it claimed is rolled back too. */
@@ -65,16 +71,17 @@ class MoveRefused extends Error {}
 /** What a move did to who can see the draft — the file move's vocabulary. */
 type DraftMoveAccess = "inherits_folder" | "made_private";
 
-export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(request: Request, { params }: { params: Promise<{ id: string }> }) {
+    const t = requestTranslator(request, "mindmap.server.errors");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
         const id = parseId((await params).id);
-        if (id === null) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+        if (id === null) return invalidId(request);
 
         const row = await getMindmap(id, await draftReader(ctx.data));
-        if (!row) return notFound();
+        if (!row) return notFound(t);
         const access = draftAccessView(await draftAccess(ctx.data, row), ctx.data);
 
         // Best-effort recency stamp for the "Recent" rail — a failure here must
@@ -88,26 +95,27 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
         return NextResponse.json({ mindmap: { ...toDetail(row), access } }, { status: 200 });
     } catch (error) {
         console.error("[mindmaps] fetch failed:", error);
-        return serverError("Failed to load mindmap");
+        return serverError(t("loadFailed"));
     }
 }
 
 export async function PATCH(request: Request, { params }: { params: Promise<{ id: string }> }) {
+    const t = requestTranslator(request, "mindmap.server.errors");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
         const id = parseId((await params).id);
-        if (id === null) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+        if (id === null) return invalidId(request);
 
         const validation = await validateRequestBody(request, UpdateMindmapSchema);
         if (!validation.success) return validation.response;
         const body = validation.data;
 
         const current = await getMindmap(id, await draftReader(ctx.data));
-        if (!current) return notFound();
+        if (!current) return notFound(t);
         const level = (await draftAccess(ctx.data, current)).level;
-        if (!canEditDraftAt(level)) return forbidden(DRAFT_EDIT_DENIED);
+        if (!canEditDraftAt(level)) return forbidden(t("editDenied"));
 
         const fromFolder = normalizeFolderPath(current.folder);
         const toFolder = body.folder === undefined ? fromFolder : normalizeFolderPath(body.folder);
@@ -115,13 +123,15 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
         if (moving) {
             if (isUnfiledFolder(toFolder)) {
                 if (current.createdByUserId !== ctx.data.authUserId) {
-                    return forbidden(DRAFT_UNFILED_DENIED);
+                    return forbidden(t("unfiledDenied"));
                 }
             } else {
-                const invalid = validateFolderPath(toFolder);
+                const invalid = describeFolderPathProblem(toFolder, request);
                 if (invalid) return NextResponse.json({ error: invalid }, { status: 400 });
                 if (!(await canEditFolderPath(ctx.data, toFolder))) {
-                    return forbidden(FOLDER_EDIT_DENIED);
+                    return forbidden(
+                        requestTranslator(request, "sources.server.errors")("folderEditDenied")
+                    );
                 }
             }
         }
@@ -135,8 +145,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
             return NextResponse.json(
                 {
                     error: "Conflict",
-                    message:
-                        "This mindmap was changed elsewhere. Reload to get the latest version.",
+                    message: t("changedElsewhere"),
                     mindmap: toDetail(current),
                 },
                 { status: 409 }
@@ -197,12 +206,12 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
             });
         } catch (error) {
             if (error instanceof MoveRefused) {
-                return NextResponse.json({ error: DRAFT_MOVE_WIDENS }, { status: 409 });
+                return NextResponse.json({ error: t("moveWidens") }, { status: 409 });
             }
             throw error;
         }
 
-        if (!row) return notFound();
+        if (!row) return notFound(t);
 
         if (savingDoc && stats && body.snapshot) {
             // Post-commit and non-fatal: the document is already saved, and a
@@ -244,7 +253,7 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
         );
     } catch (error) {
         console.error("[mindmaps] update failed:", error);
-        return serverError("Failed to save mindmap");
+        return serverError(t("saveFailed"));
     }
 }
 
@@ -258,18 +267,19 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
 }
 
 export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
+    const t = requestTranslator(request, "mindmap.server.errors");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
         const id = parseId((await params).id);
-        if (id === null) return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+        if (id === null) return invalidId(request);
 
         const current = await getMindmap(id, await draftReader(ctx.data));
-        if (!current) return notFound();
+        if (!current) return notFound(t);
         const level = (await draftAccess(ctx.data, current)).level;
-        if (!canEditDraftAt(level)) return forbidden(DRAFT_EDIT_DENIED);
-        if (!canDeleteAtLevel(level, ctx.data.permissions)) return forbidden(DRAFT_DELETE_DENIED);
+        if (!canEditDraftAt(level)) return forbidden(t("editDenied"));
+        if (!canDeleteAtLevel(level, ctx.data.permissions)) return forbidden(t("deleteDenied"));
 
         const scope = and(eq(mindmaps.id, id), eq(mindmaps.companyId, ctx.data.companyId));
         const purge = new URL(request.url).searchParams.get("purge") === "1";
@@ -277,7 +287,7 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
         if (purge) {
             // Revisions cascade with the row.
             const [row] = await db.delete(mindmaps).where(scope).returning({ id: mindmaps.id });
-            if (!row) return notFound();
+            if (!row) return notFound(t);
             return NextResponse.json({ deleted: true, purged: true }, { status: 200 });
         }
 
@@ -286,11 +296,11 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
             .set({ deletedAt: new Date(), updatedByUserId: ctx.data.authUserId })
             .where(scope)
             .returning({ id: mindmaps.id });
-        if (!row) return notFound();
+        if (!row) return notFound(t);
 
         return NextResponse.json({ deleted: true, purged: false }, { status: 200 });
     } catch (error) {
         console.error("[mindmaps] delete failed:", error);
-        return serverError("Failed to delete mindmap");
+        return serverError(t("deleteFailed"));
     }
 }

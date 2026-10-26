@@ -8,6 +8,7 @@
  *        best-effort, and the synced documents stay in the private folder.
  */
 
+import { requestTranslator } from "~/i18n/server";
 import { createSuccessResponse, handleApiError } from "~/lib/api-utils";
 import { recordAuditEvent } from "~/lib/authz/audit";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
@@ -78,7 +79,7 @@ export async function GET(request: Request) {
                 lastSyncReport: syncState?.lastSyncReport ?? null,
             });
         } catch (error) {
-            return handleApiError(error);
+            return handleApiError(error, request);
         }
     });
 }
@@ -114,12 +115,13 @@ export async function DELETE(request: Request) {
 
             return createSuccessResponse(
                 { deleted: true, providerRevoked: revoked },
-                revoked
-                    ? "Gmail disconnected. Synced emails were kept in your folder."
-                    : "Gmail disconnected. Synced emails were kept; if Google still lists LaunchStack under your account's connected apps, remove it there."
+                requestTranslator(
+                    request,
+                    "sources.server.gmail"
+                )(revoked ? "disconnected" : "disconnectedNotRevoked")
             );
         } catch (error) {
-            return handleApiError(error);
+            return handleApiError(error, request);
         }
     });
 }

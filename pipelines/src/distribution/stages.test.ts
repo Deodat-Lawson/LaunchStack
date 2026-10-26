@@ -1,7 +1,13 @@
 import { describe, expect, it } from "vitest";
 
-import { ALLOWED_TRANSITIONS, assertTransition, isInPipeline, stageRequirements } from "./stages";
-import { LEGACY_STAGE_MAP, RELATIONSHIP_STAGES } from "./types";
+import {
+    ALLOWED_TRANSITIONS,
+    assertTransition,
+    isInPipeline,
+    stageRequirements,
+    type StageTransitionError,
+} from "./stages";
+import { LEGACY_STAGE_MAP, RELATIONSHIP_STAGES, type RelationshipStage } from "./types";
 
 const full = { ownerUserId: "u1", nextAction: "call", hasAgreement: true };
 const empty = { ownerUserId: null, nextAction: null, hasAgreement: false };
@@ -120,6 +126,28 @@ describe("stage transition table", () => {
             assertTransition({ from: "won", to: "nurture", context: empty })
         ).not.toThrow();
         expect(() => assertTransition({ from: "lost", to: "lead", context: empty })).not.toThrow();
+    });
+
+    it("carries what a refusal was beside its English, for the app to word", () => {
+        const refusal = (from: RelationshipStage, to: RelationshipStage, context = empty) => {
+            try {
+                assertTransition({ from, to, context });
+            } catch (error) {
+                return error as StageTransitionError;
+            }
+            throw new Error("expected a refusal");
+        };
+        expect(refusal("lead", "meeting").details).toEqual({
+            from: "lead",
+            to: "meeting",
+            allowed: ["qualified", "contacted", "lost", "nurture"],
+        });
+        const missing = refusal("negotiating", "won").details?.missing;
+        expect(missing?.map(m => [m.code, m.target])).toEqual([
+            ["owner_required", "won"],
+            ["agreement_required", "won"],
+        ]);
+        expect(refusal("lead", "lead").details).toEqual({ from: "lead", to: "lead" });
     });
 
     it("knows what counts as in-pipeline", () => {

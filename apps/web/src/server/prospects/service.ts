@@ -68,10 +68,13 @@ import type {
 import { env } from "~/env";
 import { db } from "~/server/db";
 import { companyMetadata } from "~/server/db/schema";
+import { copy, isCopy, type Copy } from "~/i18n/copy";
+import { englishCopy } from "~/i18n/translate";
 
 import {
     FIT_THRESHOLD,
     contactPeople,
+    excludedBlock,
     inMotion,
     latestCompleted,
     searchMatches,
@@ -97,16 +100,26 @@ export interface ProspectsCtx {
     userPk: unknown;
 }
 
+/**
+ * An expected failure with the status the route answers with. The sentence
+ * is a `Copy` where a screen shows it: `message` is its English, and the
+ * route words `copy` (and any `Copy` in `extra`) in the reader's language.
+ */
 export class ProspectsError extends Error {
+    readonly copy: Copy | null;
     constructor(
-        message: string,
+        message: string | Copy,
         readonly status: number,
         readonly extra: Record<string, unknown> = {}
     ) {
-        super(message);
+        super(isCopy(message) ? englishCopy(message) : message);
         this.name = "ProspectsError";
+        this.copy = isCopy(message) ? message : null;
     }
 }
+
+const segmentNotFound = () => new ProspectsError(copy("growth.server.errors.segmentNotFound"), 404);
+const companyNotFound = () => new ProspectsError(copy("growth.server.errors.companyNotFound"), 404);
 
 // ── Availability ──────────────────────────────────────────────────────────
 
@@ -137,7 +150,7 @@ interface SegmentData {
 
 async function loadSegment(ctx: ProspectsCtx, programId: string): Promise<SegmentData> {
     const program = await getProgram(programId, ctx.companyId);
-    if (!program) throw new ProspectsError("Segment not found", 404);
+    if (!program) throw segmentNotFound();
     const [items, runs, exclusions] = await Promise.all([
         listPartners(ctx.companyId, { programId, limit: 500, orderBy: "fit" }),
         listRuns(ctx.companyId, { programId, limit: 50 }),
@@ -156,9 +169,9 @@ async function loadItem(
     relationshipId: string
 ): Promise<{ item: PartnerListItem; relationship: RelationshipRecord }> {
     const relationship = await getRelationship(relationshipId, ctx.companyId);
-    if (!relationship) throw new ProspectsError("Company not found", 404);
+    if (!relationship) throw companyNotFound();
     const org = await getOrg(relationship.orgId, ctx.companyId);
-    if (!org) throw new ProspectsError("Company not found", 404);
+    if (!org) throw companyNotFound();
     return {
         relationship,
         item: { relationship, org, evidenceCount: 0, stale: isStale(relationship) },
@@ -195,7 +208,7 @@ export async function createSegment(
         (t, i, all) => all.findIndex(o => o.country === t.country && o.region === t.region) === i
     );
     if (territories.length === 0)
-        throw new ProspectsError("Say where to look: a city, a state or a country.", 400);
+        throw new ProspectsError(copy("growth.server.errors.sayWhere"), 400);
     const programInput: ProgramInput = {
         name: input.name,
         offering: input.offering,
@@ -277,10 +290,7 @@ export async function patchSegment(
                     .map(parseTerritory)
                     .filter((t): t is Territory => t !== null);
                 if (territories.length === 0)
-                    throw new ProspectsError(
-                        "Use two-letter country codes, for example NL, DE, GB",
-                        400
-                    );
+                    throw new ProspectsError(copy("growth.server.errors.countryCodes"), 400);
                 patch.targetTerritories = territories;
                 break;
             }
@@ -292,7 +302,7 @@ export async function patchSegment(
         }
     }
     const program = await updateProgram(programId, ctx.companyId, patch);
-    if (!program) throw new ProspectsError("Segment not found", 404);
+    if (!program) throw segmentNotFound();
     const data = await loadSegment(ctx, programId);
     return toSegment(data.program, data.rows, sourcesOn(availability()));
 }
@@ -543,7 +553,7 @@ export async function patchDeal(
         if (nextActionAt !== undefined) fields.nextActionAt = nextActionAt;
         if (Object.keys(fields).length > 0) {
             const updated = await updateRelationship(relationshipId, ctx.companyId, fields);
-            if (!updated) throw new ProspectsError("Company not found", 404);
+            if (!updated) throw companyNotFound();
             relationship = updated;
             if (ownerUserId) {
                 await addEvent({
@@ -574,7 +584,7 @@ export async function patchDeal(
         getOrg(relationship.orgId, ctx.companyId),
         listAgreements(ctx.companyId, relationshipId),
     ]);
-    if (!org) throw new ProspectsError("Company not found", 404);
+    if (!org) throw companyNotFound();
     return toDeal(
         { relationship, org, evidenceCount: 0, stale: isStale(relationship) },
         agreements.length > 0,
@@ -615,11 +625,12 @@ export async function listPeople(
 ): Promise<PersonRow[]> {
     const data = await loadSegment(ctx, programId);
     let people = data.items.flatMap(item => {
-        const row = toCompanyRow(item, data.rowCtx);
+        const blocked = excludedBlock(toCompanyRow(item, data.rowCtx));
         return contactPeople(
             item.relationship,
             item.org,
-            row.excluded ? `Company excluded: ${row.excludedReason ?? "by you"}` : null
+            blocked?.reason ?? null,
+            blocked?.copy ?? null
         );
     });
     if (params.status) people = people.filter(p => p.emailStatus === params.status);
@@ -653,43 +664,46 @@ export async function draftOutreach(
             ...(input.personIds ?? []).map(id => id.split(":")[0]!),
         ]),
     ];
-    if (relationshipIds.length === 0) throw new ProspectsError("Nothing selected", 400);
+    if (relationshipIds.length === 0)
+        throw new ProspectsError(copy("growth.server.errors.nothingSelected"), 400);
 
     const recipients: Recipient[] = [];
     const included: string[] = [];
     const skipped: OutreachResult["skipped"] = [];
+    const skip = (personId: string, reasonCopy: Copy) =>
+        skipped.push({ personId, reason: englishCopy(reasonCopy), reasonCopy });
     let program: ProgramRecord | null = null;
     let excludedDomains = new Set<string>();
 
     for (const relationshipId of relationshipIds) {
         const relationship = await getRelationship(relationshipId, ctx.companyId);
         if (!relationship) {
-            skipped.push({ personId: relationshipId, reason: "Not found" });
+            skip(relationshipId, copy("growth.server.outreach.notFound"));
             continue;
         }
         if (!program) {
             program = await getProgram(relationship.programId, ctx.companyId);
-            if (!program) throw new ProspectsError("Segment not found", 404);
+            if (!program) throw segmentNotFound();
             excludedDomains = new Set((await listExclusions(ctx.companyId, program.id)).domains);
         }
         if (relationship.programId !== program.id) {
-            skipped.push({ personId: relationshipId, reason: "In another segment" });
+            skip(relationshipId, copy("growth.server.outreach.otherSegment"));
             continue;
         }
         if (relationship.stage === "won" || relationship.stage === "lost") {
-            skipped.push({
-                personId: relationshipId,
-                reason: `Deal is ${relationship.stage}`,
-            });
+            skip(
+                relationshipId,
+                copy("growth.server.outreach.dealIs", { stage: relationship.stage })
+            );
             continue;
         }
         const org = await getOrg(relationship.orgId, ctx.companyId);
         if (!org) {
-            skipped.push({ personId: relationshipId, reason: "Company missing" });
+            skip(relationshipId, copy("growth.server.outreach.companyMissing"));
             continue;
         }
         if (org.domain && excludedDomains.has(org.domain)) {
-            skipped.push({ personId: relationshipId, reason: `${org.name} is excluded` });
+            skip(relationshipId, copy("growth.server.outreach.excluded", { name: org.name }));
             continue;
         }
         const emails = (relationship.dossier?.contactChannels ?? [])
@@ -702,10 +716,7 @@ export async function draftOutreach(
                     /^(info|sales|hello|contact|office|purchasing|einkauf|import)@/i.test(v)
             );
         if (emails.length === 0) {
-            skipped.push({
-                personId: relationshipId,
-                reason: `${org.name}: no public mailbox in the profile`,
-            });
+            skip(relationshipId, copy("growth.server.outreach.noMailbox", { name: org.name }));
             continue;
         }
         recipients.push({
@@ -721,7 +732,7 @@ export async function draftOutreach(
         included.push(relationshipId);
     }
     if (!program || recipients.length === 0)
-        throw new ProspectsError("None of the selected companies can be contacted yet", 409, {
+        throw new ProspectsError(copy("growth.server.errors.noneContactable"), 409, {
             skipped,
         });
 

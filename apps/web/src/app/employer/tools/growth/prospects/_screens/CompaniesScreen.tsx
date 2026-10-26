@@ -35,8 +35,10 @@ import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 import { cn } from "~/lib/utils";
 
 import { prospectsApi, type CompaniesSort, type CompaniesView, type CompanyRow } from "../api";
+import { useCopyText } from "~/lib/tools/copyText";
 import { useGrowthFormat } from "../../_lib/format";
 import { useProspects } from "../_lib/context";
+import { useErrorText } from "~/lib/tools/errorText";
 import { rememberListOrder } from "../_lib/listOrder";
 import { useResource } from "~/lib/tools/useResource";
 import { BulkBar } from "../_components/BulkBar";
@@ -61,6 +63,7 @@ export function CompaniesScreen() {
     const t = useTranslations("growth.prospects");
     const tc = useTranslations("common.actions");
     const { joinList } = useGrowthFormat();
+    const errorText = useErrorText();
     const { segmentId, href, startRun, activeRun } = useProspects();
     const router = useToolRouter();
     const pathname = useToolPathname();
@@ -145,10 +148,10 @@ export function CompaniesScreen() {
                 const result = await prospectsApi.outreach({ companyIds: ids });
                 toast.success(t("companies.drafted", { count: result.people }));
             } catch (e) {
-                toast.error(e instanceof Error ? e.message : t("common.outreachFailed"));
+                toast.error(errorText(e, t("common.outreachFailed")));
             }
         },
-        [t]
+        [t, errorText]
     );
 
     // Tabs are hidden, not unmounted: only listen while this tab is the one
@@ -245,7 +248,7 @@ export function CompaniesScreen() {
             setSelected(new Set());
             await list.reload();
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : t("common.updateFailed"));
+            toast.error(errorText(e, t("common.updateFailed")));
         }
     };
 
@@ -266,9 +269,7 @@ export function CompaniesScreen() {
                         size="sm"
                         onClick={() =>
                             void startRun().catch((e: unknown) =>
-                                toast.error(
-                                    e instanceof Error ? e.message : t("common.startFailed")
-                                )
+                                toast.error(errorText(e, t("common.startFailed")))
                             )
                         }
                         disabled={!segmentId}
@@ -477,6 +478,7 @@ function CompanyTableRow({
 }) {
     const t = useTranslations("growth.prospects");
     const { relativeTime } = useGrowthFormat();
+    const word = useCopyText();
     return (
         <TableRow
             data-row-index={index}
@@ -519,9 +521,11 @@ function CompanyTableRow({
                 </span>
             </TableCell>
             <TableCell className="text-ink-2 min-w-[260px] max-w-[380px] whitespace-normal">
-                <span className="line-clamp-2 leading-snug">{c.why}</span>
+                <span className="line-clamp-2 leading-snug">{word(c.whyCopy, c.why)}</span>
                 {c.excluded && c.excludedReason && (
-                    <span className="text-ink-3 mt-0.5 block text-xs">{c.excludedReason}</span>
+                    <span className="text-ink-3 mt-0.5 block text-xs">
+                        {word(c.excludedReasonCopy, c.excludedReason)}
+                    </span>
                 )}
             </TableCell>
             <TableCell>

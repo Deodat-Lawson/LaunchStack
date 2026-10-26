@@ -17,6 +17,7 @@
 import { AsyncLocalStorage } from "node:async_hooks";
 import type { ChatModelsConfig } from "./chat-config";
 import { ChatConfigurationError } from "./types";
+import type { ChatUsageRecorder } from "./usage-meter";
 
 /**
  * A workspace brought its own endpoint and it can't be used right now. Unlike
@@ -50,6 +51,12 @@ export interface ChatModelsScope {
      * must never quietly go to someone else's.
      */
     error?: ChatScopeUnavailableError;
+    /**
+     * Hears about every model call made inside the scope, with the tokens the
+     * provider reported (see usage-meter.ts). The host sets it to attribute
+     * usage to a workspace and a feature; absent means nobody is counting.
+     */
+    usage?: ChatUsageRecorder;
 }
 
 /**

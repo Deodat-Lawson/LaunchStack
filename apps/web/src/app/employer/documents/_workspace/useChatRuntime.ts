@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { DEFAULT_PASSAGE_QUESTION, toPassagePayload } from "~/lib/chat-passages";
 import { chatStatusKeyword, chatStreamErrorKey } from "~/lib/chat-stream";
-import { conversationContext } from "~/lib/chat-turns";
+import { conversationContext, priorQuestions } from "~/lib/chat-turns";
 import { deriveSessionTitle, MAX_SESSION_APPEND } from "~/lib/workspace-history";
 import { useAIChat } from "../hooks/useAIChat";
 import type { AIChatResponse, AIChatStreamEvent } from "../hooks/useAIChat";
@@ -489,6 +489,9 @@ export function useChatRuntime(input: {
                         prior,
                         [context.continuation?.context, ...references].filter(Boolean).join("\n\n")
                     ),
+                    // The person's own earlier words, apart from the transcript: links
+                    // in them are the only ones a page read may follow from history.
+                    priorQuestions: priorQuestions(prior),
                     agentKey: send.agentKey,
                     modelRoute: send.modelRoute,
                     reasoningEffort: send.reasoningEffort,

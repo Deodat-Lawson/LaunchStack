@@ -65,12 +65,7 @@ import {
     documentToolsPrompt,
     noDocumentToolsPrompt,
 } from "~/server/chat-document-tools";
-import {
-    createWebTools,
-    personTurns,
-    webSearchAvailable,
-    webToolsPrompt,
-} from "~/server/chat-web-tools";
+import { createWebTools, webSearchAvailable, webToolsPrompt } from "~/server/chat-web-tools";
 import {
     FULL_READ_TOKEN_BUDGET,
     MAX_CITED_SOURCES,
@@ -170,6 +165,7 @@ interface RespondInput
                 | "documentId"
                 | "embeddingIndexKey"
                 | "conversationHistory"
+                | "priorQuestions"
                 | "aiPersona"
                 | "chatMode"
             >
@@ -662,6 +658,7 @@ export async function POST(request: Request) {
                 aiModel,
                 provider,
                 conversationHistory,
+                priorQuestions,
                 embeddingIndexKey,
                 thinkingMode: requestedThinking,
                 attachments: requestedAttachments,
@@ -948,6 +945,7 @@ export async function POST(request: Request) {
                 documentId,
                 embeddingIndexKey,
                 conversationHistory,
+                priorQuestions,
                 aiPersona,
                 chatMode,
                 userCompanyId,
@@ -1017,6 +1015,7 @@ export async function POST(request: Request) {
                 documentId,
                 embeddingIndexKey,
                 conversationHistory,
+                priorQuestions,
                 aiPersona,
                 chatMode,
                 userCompanyId,
@@ -1410,7 +1409,7 @@ export async function POST(request: Request) {
                           personText: [
                               question,
                               ...passages.map(passage => passage.text),
-                              ...personTurns(conversationHistory),
+                              ...(priorQuestions ?? []),
                           ],
                       })
                     : null;

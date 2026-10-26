@@ -113,6 +113,36 @@ export function conversationContext(
     return context ? context.slice(-maxChars) : undefined;
 }
 
+/** Earlier turns sent as `priorQuestions`; each is cut to this many characters. */
+export const PRIOR_QUESTION_LIMIT = 20;
+export const PRIOR_QUESTION_CHARS = 4_000;
+
+/**
+ * What the person themselves wrote earlier in this chat — their messages and
+ * the passages they selected — newest last. The route lets `fetch_page` read
+ * links from these and the current question only, never from the transcript,
+ * where an answer could have written a line that looks like the person's.
+ */
+export function priorQuestions(
+    messages: {
+        role: "user" | "assistant";
+        text: string;
+        status?: string;
+        send?: { origin?: string; passages?: ChatPassage[] };
+    }[]
+): string[] {
+    return messages
+        .filter(m => m.role === "user" && m.status !== "error")
+        .filter(m => !m.send?.origin || m.send.origin === "user")
+        .map(m => {
+            const passages = m.send?.passages ?? [];
+            const text = passages.length ? `${passagesAsText(passages)}\n\n${m.text}` : m.text;
+            return text.slice(0, PRIOR_QUESTION_CHARS);
+        })
+        .filter(text => text.trim().length > 0)
+        .slice(-PRIOR_QUESTION_LIMIT);
+}
+
 /** Recall only what the person typed, without stale machine context or synthetic sends. */
 export function deriveRecallPrompt(message: {
     role: "user" | "assistant";

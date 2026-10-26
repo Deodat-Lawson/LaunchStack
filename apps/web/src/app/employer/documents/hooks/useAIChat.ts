@@ -29,6 +29,8 @@ export interface AIChatRequest {
     style?: string;
     enableWebSearch?: boolean;
     conversationHistory?: string;
+    /** The person's own earlier messages in this chat (lib/chat-turns.ts priorQuestions). */
+    priorQuestions?: string[];
     aiPersona?:
         | "general"
         | "learning-coach"
@@ -167,6 +169,9 @@ export function useAIChat() {
                         style: params.style,
                         enableWebSearch: params.enableWebSearch,
                         conversationHistory: params.conversationHistory,
+                        priorQuestions: params.priorQuestions?.length
+                            ? params.priorQuestions
+                            : undefined,
                         aiPersona: params.aiPersona,
                         thinkingMode: params.thinkingMode,
                         modelRoute: params.modelRoute,

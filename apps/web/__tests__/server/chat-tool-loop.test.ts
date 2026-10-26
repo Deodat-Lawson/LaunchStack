@@ -12,12 +12,7 @@ import type { BaseChatModel } from "@langchain/core/language_models/chat_models"
 import type { WebSearchResponse } from "@launchstack/tools/web-research";
 
 import { OUT_OF_TOOL_ROUNDS, answerWithTools } from "~/server/chat-tool-loop";
-import {
-    createWebTools,
-    linksInPersonText,
-    personTurns,
-    webToolsPrompt,
-} from "~/server/chat-web-tools";
+import { createWebTools, linksInPersonText, webToolsPrompt } from "~/server/chat-web-tools";
 
 /** One scripted model turn: streamed chunks (one message when invoked), or a failed request. */
 type Turn = AIMessageChunk[] | Error;
@@ -578,18 +573,13 @@ describe("Ask reads a linked page with no search key", () => {
         expect(web.sources).toEqual([]);
     });
 
-    it("finds the links in the person's own turns, not the assistant's", () => {
-        const turns = personTurns(
-            "User: Look at https://acme.example/about\nand tell me more.\nAssistant: See https://planted.example/x for details.\nUser: and beta.example too"
-        );
-        expect(turns).toEqual([
-            "Look at https://acme.example/about\nand tell me more.\n",
+    it("collects whole links and named hosts from what the person wrote", () => {
+        const { links, hosts } = linksInPersonText([
+            "Look at https://acme.example/about, and tell me more.",
             "and beta.example too",
         ]);
-        const { links, hosts } = linksInPersonText(turns);
         expect([...links]).toEqual(["https://acme.example/about"]);
         expect(hosts.has("acme.example")).toBe(true);
         expect(hosts.has("beta.example")).toBe(true);
-        expect(hosts.has("planted.example")).toBe(false);
     });
 });

@@ -9,8 +9,9 @@
  * it decides the question needs the web (chat-tool-loop.ts).
  *
  * `fetch_page` reads only a link the person gave (in the question, a passage
- * they selected or an earlier message of theirs) or one `search_web` returned
- * this turn. Instructions planted in a document cannot send the model to a
+ * they selected or an earlier message of theirs — sent as structured turns,
+ * never parsed out of the transcript, where an answer could write a line that
+ * looks like the person's) or one `search_web` returned this turn. Instructions planted in a document cannot send the model to a
  * URL that carries workspace text out in its query.
  *
  * Every page the model is shown is numbered once per turn — `[Source 3]` is
@@ -133,15 +134,6 @@ export function linksInPersonText(texts: readonly string[]): {
             hosts.add(match.toLowerCase().replace(/^www\./, ""));
     }
     return { links, hosts };
-}
-
-/** The person's own turns in a `User: …\nAssistant: …` transcript (lib/chat-turns.ts). */
-export function personTurns(history: string | null | undefined): string[] {
-    if (!history) return [];
-    return history
-        .split(/^(?=(?:User|Assistant): )/m)
-        .filter(turn => turn.startsWith("User: "))
-        .map(turn => turn.slice("User: ".length));
 }
 
 function sourceKey(url: string): string {

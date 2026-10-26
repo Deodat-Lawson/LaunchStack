@@ -17,7 +17,9 @@ export async function GET(request: Request) {
     if (!ctx.success) return ctx.response;
     try {
         return NextResponse.json({
-            allowance: await loadAiAllowance(ctx.data.companyId, ctx.data.authUserId),
+            allowance: await loadAiAllowance(ctx.data.companyId, ctx.data.authUserId, {
+                fresh: true,
+            }),
         });
     } catch (error) {
         return workspaceErrorResponse(error, "[ai-allowance GET]", request);

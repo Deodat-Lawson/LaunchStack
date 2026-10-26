@@ -213,6 +213,8 @@ export interface AllowanceOptions {
      */
     serverCapApplies: boolean;
     at?: Date;
+    /** Read past the short cache: a readout right after an answer must include it. */
+    fresh?: boolean;
 }
 
 /** Every listed person's allowance in one workspace, in four queries. */
@@ -281,7 +283,9 @@ export async function getAiAllowance(
 ): Promise<AiAllowance> {
     const key = `${companyId}:${userId}:${options.serverCapApplies ? 1 : 0}`;
     const hit = cache().get(key);
-    if (!options.at && hit && Date.now() - hit.at < CACHE_TTL_MS) return hit.allowance;
+    if (!options.at && !options.fresh && hit && Date.now() - hit.at < CACHE_TTL_MS) {
+        return hit.allowance;
+    }
     const allowance = (await getAiAllowances(companyId, [userId], options)).get(userId)!;
     if (!options.at) cache().set(key, { at: Date.now(), allowance });
     return allowance;

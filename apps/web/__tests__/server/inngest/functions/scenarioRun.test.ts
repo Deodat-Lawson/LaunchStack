@@ -6,7 +6,7 @@
 type Outcome = { state: string; step?: number };
 type Step = { run: (name: string, op: () => Promise<Outcome>) => Promise<Outcome> };
 type Handler = (ctx: {
-    event: { data: { runId: number; companyId: string } };
+    event: { data: { runId: number; companyId: string; userId?: string } };
     step: Step;
 }) => Promise<unknown>;
 type Options = {

@@ -149,14 +149,19 @@ export interface WorkspaceModelsUse {
     enforce?: boolean;
 }
 
-/** `userId`'s AI allowance in a workspace, with the server cap applied only where it can. */
+/**
+ * `userId`'s AI allowance in a workspace, with the server cap applied only
+ * where it can. `fresh` skips the few-second cache (for a readout).
+ */
 export async function loadAiAllowance(
     companyId: bigint | number | string,
-    userId: string
+    userId: string,
+    options: { fresh?: boolean } = {}
 ): Promise<AiAllowance> {
     const scope = await loadWorkspaceChatModelsScope(companyId);
     return getAiAllowance(BigInt(companyId), userId, {
         serverCapApplies: scope.source === "deployment",
+        fresh: options.fresh,
     });
 }
 

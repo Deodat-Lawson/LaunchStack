@@ -58,6 +58,7 @@ export function FieldEditor({ applicationId, section }: FieldEditorProps) {
         activeRun,
         runBusy,
         pendingEdit,
+        restoringEdit,
         suggestEdit,
         applyEdit,
         dismissEdit,
@@ -136,7 +137,7 @@ export function FieldEditor({ applicationId, section }: FieldEditorProps) {
     const suggest = async () => {
         if (busy.current || !activeSelection || dirty || conflict) return;
         const request = instruction.trim();
-        if (!request || pendingEdit !== null || runBusy) return;
+        if (!request || pendingEdit !== null || restoringEdit || runBusy) return;
         busy.current = true;
         setPending("edit");
         setLastAction("edit");
@@ -494,7 +495,8 @@ export function FieldEditor({ applicationId, section }: FieldEditorProps) {
                                     instruction.trim() === "" ||
                                     pending !== null ||
                                     runBusy ||
-                                    pendingEdit !== null
+                                    pendingEdit !== null ||
+                                    restoringEdit
                                 }
                                 onClick={() => void suggest()}
                             >

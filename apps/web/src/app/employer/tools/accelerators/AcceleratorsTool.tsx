@@ -15,7 +15,7 @@ import { useErrorText } from "~/lib/tools/errorText";
 
 import { Notice } from "./_components/ProgramFacts";
 import { RunStatus } from "./_components/RunStatus";
-import { AcceleratorsProvider, runIsLive, useAccelerators } from "./_lib/context";
+import { AcceleratorsProvider, runIsLive, runLabel, useAccelerators } from "./_lib/context";
 import { ACCELERATORS_ROOTS, acceleratorsScreenFor } from "./_lib/screens";
 import { ApplicationScreen } from "./_screens/ApplicationScreen";
 import { ProgramScreen } from "./_screens/ProgramScreen";
@@ -63,7 +63,7 @@ function AcceleratorsFrame() {
                         className="text-brand inline-flex items-center gap-2 px-2 text-xs"
                     >
                         <Loader2 className="size-3.5 animate-spin motion-reduce:animate-none" />
-                        {t(activeRun?.kind === "programs" ? "run.programs" : "run.draft")}
+                        {t(`run.${runLabel(activeRun?.kind)}`)}
                     </span>
                 ) : undefined
             }

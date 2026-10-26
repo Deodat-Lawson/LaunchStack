@@ -296,6 +296,31 @@ describe("starting an edit", () => {
         ).not.toBeInTheDocument();
     });
 
+    it("offers no edit entry while a newer saved answer conflicts with local text", async () => {
+        api.save.mockRejectedValue(
+            new AcceleratorsApiError(
+                "This answer has changed; reload the latest revision",
+                409,
+                "revision_conflict"
+            )
+        );
+        api.application.mockResolvedValue({
+            application: application([section({ draft: "Someone else saved this", revision: 2 })]),
+        });
+        mount([section()]);
+        fireEvent.change(await textarea(), { target: { value: `${ANSWER}!` } });
+        fireEvent.click(screen.getByRole("button", { name: "Save answer" }));
+        expect(await screen.findByText("A newer answer was saved")).toBeVisible();
+        expect(
+            screen.queryByRole("button", { name: "Edit selected text with AI" })
+        ).not.toBeInTheDocument();
+
+        fireEvent.click(screen.getByRole("button", { name: "Use saved answer" }));
+        expect(
+            await screen.findByRole("button", { name: "Edit selected text with AI" })
+        ).toBeVisible();
+    });
+
     it("keeps the basic Draft action for an empty prose Field", async () => {
         api.draft.mockResolvedValue({ run: run({ kind: "accel_draft", result: null }) });
         mount([section({ draft: null, revision: 0 })]);
@@ -500,6 +525,35 @@ describe("after a reload", () => {
         expect(within(own).getByText("Suggested edit")).toBeVisible();
         expect(within(other).queryByText("Suggested edit")).not.toBeInTheDocument();
         expect(api.suggest).not.toHaveBeenCalled();
+    });
+
+    it("asks for no new Suggestion while a paid one is still being restored", async () => {
+        window.sessionStorage.setItem(EDIT_KEY, "run-9");
+        let restore: (value: { run: AcceleratorRunView }) => void = () => undefined;
+        api.run.mockReturnValue(new Promise(resolve => (restore = resolve)));
+        mount([section()]);
+        await openEditor();
+        await select(10, 13);
+        fireEvent.change(screen.getByLabelText("What should change?"), {
+            target: { value: "Make it clearer" },
+        });
+        expect(suggestButton()).toBeDisabled();
+        fireEvent.click(suggestButton());
+        expect(api.suggest).not.toHaveBeenCalled();
+
+        await act(async () => restore({ run: run({ id: "run-9" }) }));
+        expect(await screen.findByText("Suggested edit")).toBeVisible();
+        expect(window.sessionStorage.getItem(EDIT_KEY)).toBe("run-9");
+    });
+
+    it("allows a new Suggestion once a stored run turns out to hold none", async () => {
+        window.sessionStorage.setItem(EDIT_KEY, "run-9");
+        api.run.mockResolvedValue({ run: run({ id: "run-9", kind: "programs", result: null }) });
+        api.suggest.mockResolvedValue({ run: run() });
+        mount([section()]);
+        await waitFor(() => expect(window.sessionStorage.getItem(EDIT_KEY)).toBeNull());
+        await askForSuggestion();
+        expect(api.suggest).toHaveBeenCalledTimes(1);
     });
 
     it("shows a restored Suggestion for an old revision as stale, with no Apply", async () => {

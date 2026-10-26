@@ -7,7 +7,7 @@ import { Button } from "~/components/ui/button";
 import { useErrorText } from "~/lib/tools/errorText";
 import { cn } from "~/lib/utils";
 
-import { runIsLive, useAccelerators } from "../_lib/context";
+import { runIsLive, runLabel, useAccelerators } from "../_lib/context";
 
 export function RunStatus() {
     const t = useTranslations("accelerators.run");
@@ -31,15 +31,7 @@ export function RunStatus() {
                             ) : (
                                 <X className="text-danger size-4" />
                             )}
-                            <span>
-                                {t(
-                                    run.kind === "programs"
-                                        ? "programs"
-                                        : run.kind === "accel_edit"
-                                          ? "edit"
-                                          : "draft"
-                                )}
-                            </span>
+                            <span>{t(runLabel(run.kind))}</span>
                             <span className="text-ink-3 font-normal">{t(run.status)}</span>
                         </div>
                         {run.creditsUsed > 0 && (

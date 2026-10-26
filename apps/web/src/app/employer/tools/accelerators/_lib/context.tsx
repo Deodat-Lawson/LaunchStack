@@ -60,6 +60,8 @@ interface AcceleratorsContextValue {
         expectedRevision: number
     ) => Promise<void>;
     pendingEdit: PendingEdit | null;
+    /** A stored Suggestion is still being fetched after a reload. */
+    restoringEdit: boolean;
     suggestEdit: (
         applicationId: string,
         sectionId: string,
@@ -73,6 +75,13 @@ const Context = createContext<AcceleratorsContextValue | null>(null);
 
 export function runIsLive(run: AcceleratorRunView | null): boolean {
     return run?.status === "queued" || run?.status === "running";
+}
+
+/** The `accelerators.run` message that names a run. */
+export function runLabel(
+    kind: AcceleratorRunView["kind"] | undefined
+): "programs" | "edit" | "draft" {
+    return kind === "programs" ? "programs" : kind === "accel_edit" ? "edit" : "draft";
 }
 
 /** The Suggestion a completed edit run delivered, or null for any other run. */
@@ -139,6 +148,7 @@ export function AcceleratorsProvider({
     const [pendingEdit, setPendingEdit] = useState<PendingEdit | null>(null);
     const pendingEditRef = useRef<PendingEdit | null>(null);
     pendingEditRef.current = pendingEdit;
+    const [restoringEdit, setRestoringEdit] = useState(false);
     const dismissedEdits = useRef(new Set<string>());
 
     const guardError = useCallback((failure: unknown) => {
@@ -341,6 +351,7 @@ export function AcceleratorsProvider({
         }
         if (!id) return;
         let disposed = false;
+        setRestoringEdit(true);
         acceleratorsApi
             .run(id)
             .then(({ run }) => {
@@ -353,9 +364,13 @@ export function AcceleratorsProvider({
                 guardError(failure);
                 if (failure instanceof AcceleratorsApiError && failure.status === 404)
                     clearEditKey();
+            })
+            .finally(() => {
+                if (!disposed) setRestoringEdit(false);
             });
         return () => {
             disposed = true;
+            setRestoringEdit(false);
         };
     }, [editKey, adoptEdit, clearEditKey, guardError]);
 
@@ -583,6 +598,7 @@ export function AcceleratorsProvider({
                 saveAnswer,
                 draftAnswer,
                 pendingEdit,
+                restoringEdit,
                 suggestEdit,
                 applyEdit,
                 dismissEdit,

@@ -3,6 +3,19 @@
 import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
 
+import { Button } from "~/components/ui/button";
+import { Checkbox } from "~/components/ui/checkbox";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "~/components/ui/select";
+import { Textarea } from "~/components/ui/textarea";
+
 // Import from submodules, never the package barrel: the barrel re-exports
 // db.ts / generator.ts, which pull `getDb` and the LLM client into the client
 // bundle. Everything imported here is pure (no DB, no network, no LLM).
@@ -118,13 +131,9 @@ function IssueList({ issues }: { issues: ValidationIssue[] }) {
             {issues.map((issue, i) => (
                 <li
                     key={`${issue.code}-${i}`}
-                    className={
-                        issue.severity === "error"
-                            ? "text-red-700 dark:text-red-400"
-                            : "text-amber-700 dark:text-amber-400"
-                    }
+                    className={issue.severity === "error" ? "text-danger-ink" : "text-warn-ink"}
                 >
-                    <span className="font-mono text-xs uppercase tracking-wide opacity-70">
+                    <span className="text-xs font-semibold uppercase tracking-wide">
                         {issue.severity === "error" ? t("severity.error") : t("severity.warning")}
                     </span>{" "}
                     {issue.message}
@@ -144,9 +153,9 @@ function Section({
     children: React.ReactNode;
 }) {
     return (
-        <section className="rounded-lg border border-neutral-200 bg-white p-5 dark:border-neutral-800 dark:bg-neutral-900">
+        <section className="border-line bg-panel text-ink rounded-lg border p-5">
             <h2 className="mb-3 flex items-baseline gap-2 text-base font-semibold">
-                <span className="font-mono text-xs text-neutral-500">{step}</span>
+                <span className="text-ink-3 text-xs tabular-nums">{step}</span>
                 {title}
             </h2>
             {children}
@@ -392,15 +401,13 @@ export function EmailPipelineWorkspace() {
         <div className="mx-auto flex w-full max-w-4xl flex-col gap-5 p-6">
             <header>
                 <h1 className="text-xl font-semibold">{t("title")}</h1>
-                <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
-                    {t("subtitle")}
-                </p>
+                <p className="text-ink-2 mt-1 text-sm">{t("subtitle")}</p>
             </header>
 
             {error && (
                 <div
                     role="alert"
-                    className="rounded-md border border-red-300 bg-red-50 p-3 text-sm text-red-800 dark:border-red-800 dark:bg-red-950 dark:text-red-200"
+                    className="border-danger/40 bg-danger-soft text-danger-ink rounded-md border p-3 text-sm"
                 >
                     {error}
                 </div>
@@ -408,22 +415,22 @@ export function EmailPipelineWorkspace() {
 
             {/* 1 — recipients */}
             <Section step={1} title={t("recipients.title")}>
-                <label className="block text-sm font-medium" htmlFor="pasted">
-                    {t("recipients.paste")}
-                </label>
-                <textarea
+                <Label htmlFor="pasted">{t("recipients.paste")}</Label>
+                <Textarea
                     id="pasted"
                     value={pasted}
                     onChange={e => setPasted(e.target.value)}
                     rows={4}
                     placeholder={"Ada Lovelace <ada@example.com>\ngrace@example.com"}
-                    className="mt-1 w-full rounded-md border border-neutral-300 p-2 font-mono text-sm dark:border-neutral-700 dark:bg-neutral-950"
+                    className="mt-2 min-h-24 font-mono"
                 />
 
-                <label className="mt-4 block text-sm font-medium" htmlFor="csv">
-                    {t.rich("recipients.csv", { code: chunks => <code>{chunks}</code> })}
-                </label>
-                <textarea
+                <Label className="mt-4 block leading-normal" htmlFor="csv">
+                    {t.rich("recipients.csv", {
+                        code: chunks => <code>{chunks}</code>,
+                    })}
+                </Label>
+                <Textarea
                     id="csv"
                     value={csv}
                     onChange={e => setCsv(e.target.value)}
@@ -431,7 +438,7 @@ export function EmailPipelineWorkspace() {
                     placeholder={
                         "email,name,company,notes\nada@example.com,Ada,Engines,met at a conference"
                     }
-                    className="mt-1 w-full rounded-md border border-neutral-300 p-2 font-mono text-sm dark:border-neutral-700 dark:bg-neutral-950"
+                    className="mt-2 min-h-24 font-mono"
                 />
 
                 <p className="mt-3 text-sm">
@@ -440,13 +447,13 @@ export function EmailPipelineWorkspace() {
                         strong: chunks => <strong>{chunks}</strong>,
                     })}
                     {validation.rejected.length > 0 && (
-                        <span className="text-red-700 dark:text-red-400">
+                        <span className="text-danger-ink">
                             {" "}
                             {t("recipients.rejected", { count: validation.rejected.length })}
                         </span>
                     )}
                     {ingest.skipped.length > 0 && (
-                        <span className="text-amber-700 dark:text-amber-400">
+                        <span className="text-warn-ink">
                             {" "}
                             {t("recipients.unparsed", { count: ingest.skipped.length })}
                         </span>
@@ -454,7 +461,7 @@ export function EmailPipelineWorkspace() {
                 </p>
 
                 {ingest.skipped.length > 0 && (
-                    <ul className="mt-2 space-y-1 text-sm text-amber-700 dark:text-amber-400">
+                    <ul className="text-warn-ink mt-2 space-y-1 text-sm">
                         {ingest.skipped.slice(0, 5).map((s, i) => (
                             <li key={i}>
                                 {s.row > 0
@@ -476,39 +483,33 @@ export function EmailPipelineWorkspace() {
             {/* 2 — template */}
             <Section step={2} title={t("template.title")}>
                 <div className="flex flex-col gap-3 sm:flex-row">
-                    <input
+                    <Input
                         value={campaignName}
                         onChange={e => setCampaignName(e.target.value)}
                         placeholder={t("template.campaignName")}
                         aria-label={t("template.campaignName")}
-                        className="w-full rounded-md border border-neutral-300 p-2 text-sm sm:w-48 dark:border-neutral-700 dark:bg-neutral-950"
+                        className="sm:w-48 sm:shrink-0"
                     />
-                    <input
+                    <Input
                         value={goal}
                         onChange={e => setGoal(e.target.value)}
                         placeholder={t("template.goalPlaceholder")}
                         aria-label={t("template.goalAria")}
-                        className="w-full rounded-md border border-neutral-300 p-2 text-sm dark:border-neutral-700 dark:bg-neutral-950"
                     />
                 </div>
 
-                <input
+                <Input
                     value={senderIdentity}
                     onChange={e => setSenderIdentity(e.target.value)}
                     placeholder={t("template.senderPlaceholder", { example: senderExample })}
                     aria-label={t("template.senderAria")}
-                    className="mt-3 w-full rounded-md border border-neutral-300 p-2 text-sm dark:border-neutral-700 dark:bg-neutral-950"
+                    className="mt-3"
                 />
 
                 <div className="mt-3 flex flex-wrap gap-2">
-                    <button
-                        type="button"
-                        onClick={handleGenerate}
-                        disabled={busy}
-                        className="rounded-md bg-neutral-900 px-3 py-2 text-sm font-medium text-white disabled:opacity-50 dark:bg-white dark:text-neutral-900"
-                    >
+                    <Button type="button" onClick={handleGenerate} disabled={busy}>
                         {stage === "generating" ? t("template.generating") : t("template.generate")}
-                    </button>
+                    </Button>
                     {SEED_TEMPLATES.map(seed => {
                         const key = SEED_KEY[seed.id];
                         const name = key ? t(`template.seeds.${key}.name`) : seed.name;
@@ -516,19 +517,19 @@ export function EmailPipelineWorkspace() {
                             ? t(`template.seeds.${key}.description`)
                             : seed.description;
                         return (
-                            <button
+                            <Button
                                 key={seed.id}
                                 type="button"
+                                variant="outline"
                                 onClick={() => {
                                     setTemplate(seed.template);
                                     setReview(null);
                                 }}
                                 disabled={busy}
                                 title={description}
-                                className="rounded-md border border-neutral-300 px-3 py-2 text-sm disabled:opacity-50 dark:border-neutral-700"
                             >
                                 {t("template.useSeed", { name })}
-                            </button>
+                            </Button>
                         );
                     })}
                 </div>
@@ -536,10 +537,10 @@ export function EmailPipelineWorkspace() {
                 {template && (
                     <div className="mt-4">
                         <p className="text-sm">
-                            <span className="text-neutral-500">{t("template.subject")}</span>{" "}
+                            <span className="text-ink-3">{t("template.subject")}</span>{" "}
                             {template.subject}
                         </p>
-                        <pre className="mt-2 max-h-56 overflow-auto whitespace-pre-wrap rounded-md bg-neutral-50 p-3 text-sm dark:bg-neutral-950">
+                        <pre className="bg-surface-sunk text-ink mt-2 max-h-56 overflow-auto whitespace-pre-wrap rounded-md p-3 text-sm">
                             {template.body}
                         </pre>
                         <IssueList issues={templateIssues} />
@@ -547,26 +548,22 @@ export function EmailPipelineWorkspace() {
                 )}
 
                 {review && (
-                    <div className="mt-4 border-t border-neutral-200 pt-3 dark:border-neutral-800">
+                    <div className="border-line mt-4 border-t pt-3">
                         <p className="text-sm font-medium">
                             {t("template.verdictLabel")}{" "}
                             <span
                                 className={
-                                    review.verdict === "pass"
-                                        ? "text-green-700 dark:text-green-400"
-                                        : "text-amber-700 dark:text-amber-400"
+                                    review.verdict === "pass" ? "text-success-ink" : "text-warn-ink"
                                 }
                             >
                                 {verdictWord(t, review.verdict)}
                             </span>
                         </p>
-                        <p className="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
-                            {review.summary}
-                        </p>
+                        <p className="text-ink-2 mt-1 text-sm">{review.summary}</p>
                         <ul className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1 text-sm sm:grid-cols-3">
                             {review.scores.map(s => (
                                 <li key={s.criterion} className="flex justify-between gap-2">
-                                    <span className="text-neutral-500">
+                                    <span className="text-ink-3">
                                         {criterionWord(t, s.criterion)}
                                     </span>
                                     <span className="font-mono tabular-nums">{s.score}</span>
@@ -574,13 +571,13 @@ export function EmailPipelineWorkspace() {
                             ))}
                         </ul>
                         {review.issues.length > 0 && (
-                            <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-amber-700 dark:text-amber-400">
+                            <ul className="text-warn-ink mt-2 list-disc space-y-1 pl-5 text-sm">
                                 {review.issues.map((issue, i) => (
                                     <li key={i}>{issue}</li>
                                 ))}
                             </ul>
                         )}
-                        <p className="mt-2 text-xs text-neutral-500">{t("template.advisory")}</p>
+                        <p className="text-ink-3 mt-2 text-xs">{t("template.advisory")}</p>
                     </div>
                 )}
             </Section>
@@ -588,31 +585,38 @@ export function EmailPipelineWorkspace() {
             {/* 3 — preview */}
             <Section step={3} title={t("preview.title")}>
                 {!preview ? (
-                    <p className="text-sm text-neutral-500">{t("preview.empty")}</p>
+                    <p className="text-ink-3 text-sm">{t("preview.empty")}</p>
                 ) : (
                     <>
                         <div className="flex items-center gap-2">
-                            <label className="text-sm" htmlFor="preview-recipient">
+                            <Label className="font-normal" htmlFor="preview-recipient">
                                 {t("preview.showing")}
-                            </label>
-                            <select
-                                id="preview-recipient"
-                                value={Math.min(previewIndex, recipients.length - 1)}
-                                onChange={e => setPreviewIndex(Number(e.target.value))}
-                                className="rounded-md border border-neutral-300 p-1 text-sm dark:border-neutral-700 dark:bg-neutral-950"
+                            </Label>
+                            <Select
+                                value={String(Math.min(previewIndex, recipients.length - 1))}
+                                onValueChange={v => setPreviewIndex(Number(v))}
                             >
-                                {recipients.map((r, i) => (
-                                    <option key={r.email} value={i}>
-                                        {r.email}
-                                    </option>
-                                ))}
-                            </select>
+                                <SelectTrigger
+                                    id="preview-recipient"
+                                    size="sm"
+                                    className="w-auto max-w-full"
+                                >
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {recipients.map((r, i) => (
+                                        <SelectItem key={r.email} value={String(i)}>
+                                            {r.email}
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
                         </div>
                         <p className="mt-3 text-sm">
-                            <span className="text-neutral-500">{t("template.subject")}</span>{" "}
+                            <span className="text-ink-3">{t("template.subject")}</span>{" "}
                             {preview.rendered.subject}
                         </p>
-                        <pre className="mt-2 max-h-72 overflow-auto whitespace-pre-wrap rounded-md bg-neutral-50 p-3 text-sm dark:bg-neutral-950">
+                        <pre className="bg-surface-sunk text-ink mt-2 max-h-72 overflow-auto whitespace-pre-wrap rounded-md p-3 text-sm">
                             {preview.rendered.body}
                         </pre>
                         <IssueList issues={preview.issues} />
@@ -623,49 +627,46 @@ export function EmailPipelineWorkspace() {
             {/* 4 — dry run and send */}
             <Section step={4} title={t("send.title")}>
                 <div className="flex flex-wrap items-center gap-3">
-                    <button
-                        type="button"
-                        onClick={handleDryRun}
-                        disabled={busy || blocked}
-                        className="rounded-md bg-neutral-900 px-3 py-2 text-sm font-medium text-white disabled:opacity-50 dark:bg-white dark:text-neutral-900"
-                    >
+                    <Button type="button" onClick={handleDryRun} disabled={busy || blocked}>
                         {stage === "dry-running"
                             ? t("send.running")
                             : t("send.dryRun", { count: recipients.length })}
-                    </button>
+                    </Button>
 
-                    <label className="flex items-center gap-2 text-sm">
-                        <input
-                            type="checkbox"
+                    <div className="flex items-center gap-2">
+                        <Checkbox
+                            id="confirm-send"
                             checked={confirmSend}
-                            onChange={e => setConfirmSend(e.target.checked)}
+                            onCheckedChange={checked => setConfirmSend(checked === true)}
                             disabled={blocked}
                         />
-                        {t("send.confirmCheckbox")}
-                    </label>
+                        <Label className="font-normal" htmlFor="confirm-send">
+                            {t("send.confirmCheckbox")}
+                        </Label>
+                    </div>
 
-                    <button
+                    <Button
                         type="button"
+                        variant="destructive"
                         onClick={handlePrepareSend}
                         disabled={busy || blocked || !confirmSend || pendingSend !== null}
-                        className="rounded-md bg-red-700 px-3 py-2 text-sm font-medium text-white disabled:opacity-40"
                     >
                         {stage === "preparing"
                             ? t("send.preparing")
                             : t("send.sendTo", { count: recipients.length })}
-                    </button>
+                    </Button>
                 </div>
 
-                {blocked && <p className="mt-2 text-sm text-neutral-500">{t("send.blocked")}</p>}
+                {blocked && <p className="text-ink-3 mt-2 text-sm">{t("send.blocked")}</p>}
 
                 {pendingSend && (
-                    <div className="mt-4 rounded-md border border-amber-300 bg-amber-50 p-4 dark:border-amber-800 dark:bg-amber-950">
+                    <div className="border-warn/40 bg-warn-soft text-ink mt-4 rounded-md border p-4">
                         <p className="text-sm font-medium">{t("send.confirmTitle")}</p>
                         <p className="mt-2 text-sm">
-                            <span className="text-neutral-500">{t("template.subject")}</span>{" "}
+                            <span className="text-ink-2">{t("template.subject")}</span>{" "}
                             {pendingSend.template.subject}
                         </p>
-                        <pre className="mt-2 max-h-56 overflow-auto whitespace-pre-wrap rounded-md bg-white p-3 text-sm dark:bg-neutral-950">
+                        <pre className="bg-panel text-ink mt-2 max-h-56 overflow-auto whitespace-pre-wrap rounded-md p-3 text-sm">
                             {pendingSend.template.body}
                         </pre>
                         {pendingSend.review && (
@@ -674,8 +675,8 @@ export function EmailPipelineWorkspace() {
                                 <span
                                     className={
                                         pendingSend.review.verdict === "pass"
-                                            ? "text-green-700 dark:text-green-400"
-                                            : "text-amber-700 dark:text-amber-400"
+                                            ? "text-success-ink"
+                                            : "text-warn-ink"
                                     }
                                 >
                                     {verdictWord(t, pendingSend.review.verdict)}
@@ -684,26 +685,26 @@ export function EmailPipelineWorkspace() {
                             </p>
                         )}
                         <div className="mt-3 flex flex-wrap items-center gap-3">
-                            <button
+                            <Button
                                 type="button"
+                                variant="destructive"
                                 onClick={handleConfirmSend}
                                 disabled={busy}
-                                className="rounded-md bg-red-700 px-3 py-2 text-sm font-medium text-white disabled:opacity-40"
                             >
                                 {stage === "sending"
                                     ? t("send.sending")
                                     : t("send.confirmSendTo", {
                                           count: pendingSend.recipientCount,
                                       })}
-                            </button>
-                            <button
+                            </Button>
+                            <Button
                                 type="button"
+                                variant="outline"
                                 onClick={() => setPendingSend(null)}
                                 disabled={busy}
-                                className="rounded-md border border-neutral-300 px-3 py-2 text-sm disabled:opacity-50 dark:border-neutral-700"
                             >
                                 {tc("cancel")}
-                            </button>
+                            </Button>
                         </div>
                     </div>
                 )}
@@ -719,7 +720,7 @@ export function EmailPipelineWorkspace() {
                             {results.map(r => (
                                 <li key={r.recipientEmail} className="flex justify-between gap-3">
                                     <code>{r.recipientEmail}</code>
-                                    <span className="font-mono text-xs uppercase tracking-wide text-neutral-500">
+                                    <span className="text-ink-3 text-xs uppercase tracking-wide">
                                         {statusWord(t, r.status)}
                                         {r.error ? ` — ${r.error}` : ""}
                                     </span>
@@ -727,9 +728,7 @@ export function EmailPipelineWorkspace() {
                             ))}
                         </ul>
                         {sentMode !== "send" && (
-                            <p className="mt-2 text-xs text-neutral-500">
-                                {t("send.nothingDelivered")}
-                            </p>
+                            <p className="text-ink-3 mt-2 text-xs">{t("send.nothingDelivered")}</p>
                         )}
                     </div>
                 )}

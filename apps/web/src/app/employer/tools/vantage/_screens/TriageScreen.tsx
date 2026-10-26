@@ -21,6 +21,7 @@ import {
 import { Input } from "~/components/ui/input";
 import { usePermissions } from "~/lib/use-permissions";
 import { cn } from "~/lib/utils";
+import { useErrorText } from "~/lib/tools/errorText";
 
 import { vantageApi } from "../api";
 import { CommitmentStatus } from "../_components/CheckInRow";
@@ -41,6 +42,7 @@ import { vantagePath } from "../_lib/paths";
  * their way, and only the error when the first response failed.
  */
 export function TriageScreen() {
+    const errorText = useErrorText();
     const t = useTranslations("vantage.triage");
     const tf = useTranslations("vantage.frame");
     const tc = useTranslations("common");
@@ -82,7 +84,7 @@ export function TriageScreen() {
             await vantageApi.deleteDeadline(id);
             res.mutate(c => ({ ...c, deadlines: c.deadlines.filter(d => d.id !== id) }));
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : t("removeError"));
+            toast.error(errorText(e, t("removeError")));
         }
     };
 
@@ -301,6 +303,7 @@ function DeadlineDialog({
     onOpenChange: (o: boolean) => void;
     onSaved: () => void;
 }) {
+    const errorText = useErrorText();
     const t = useTranslations("vantage.triage");
     const tc = useTranslations("common");
     const [title, setTitle] = useState("");
@@ -324,7 +327,7 @@ function DeadlineDialog({
             onSaved();
             onOpenChange(false);
         } catch (e) {
-            setError(e instanceof Error ? e.message : t("saveError"));
+            setError(errorText(e, t("saveError")));
         } finally {
             setBusy(false);
         }

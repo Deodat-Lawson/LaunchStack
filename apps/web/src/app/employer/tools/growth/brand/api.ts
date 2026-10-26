@@ -12,6 +12,7 @@
  * (the member and each Page they administer).
  */
 
+import type { Copy } from "~/i18n/copy";
 import type {
     CreatePostTestInput,
     PostTestLink,
@@ -87,6 +88,9 @@ export interface BrandNetwork {
     /** One line on cost and access. */
     note: string;
     limit: number | null;
+    /** `setup` and `note` as copies, for the screen to word (`useCopyText`). */
+    setupCopy?: Copy[];
+    noteCopy?: Copy;
 }
 
 export interface BrandAccounts {
@@ -252,7 +256,13 @@ export class BrandApiError extends Error {
     constructor(
         message: string,
         readonly status: number,
-        readonly body: unknown
+        readonly body: unknown,
+        /**
+         * True when the message is this client's own "Request failed" rather
+         * than the server's sentence, so a screen can say it in the reader's
+         * language instead (`useErrorText` in ~/lib/tools/errorText).
+         */
+        readonly generated = false
     ) {
         super(message);
         this.name = "BrandApiError";
@@ -277,11 +287,16 @@ async function call<T>(url: string, init?: RequestInit): Promise<T> {
         }
     }
     if (!response.ok) {
-        const message =
+        const server =
             body && typeof body === "object" && "error" in body && typeof body.error === "string"
                 ? body.error
-                : `Request failed (${response.status})`;
-        throw new BrandApiError(message, response.status, body);
+                : null;
+        throw new BrandApiError(
+            server ?? `Request failed (${response.status})`,
+            response.status,
+            body,
+            server === null
+        );
     }
     return body as T;
 }

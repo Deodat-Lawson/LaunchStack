@@ -21,6 +21,10 @@ import {
     createSuccessResponse,
     handleApiError,
 } from "~/lib/api-utils";
+import type { Locale } from "~/i18n/locales";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor, wordEnglish } from "~/i18n/translate";
+import { zodIssueText } from "~/i18n/zod";
 import { requireConnectorAdmin } from "~/server/services/connectors/workspace-guard";
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
 import {
@@ -91,10 +95,27 @@ async function resolveCaller(): Promise<CallerResult> {
     };
 }
 
-function disabledResponse(): NextResponse {
-    return createForbiddenError(
-        "The agent-sessions connector is disabled. Set AGENT_SESSIONS_CONNECTOR_ENABLED=true on the server that hosts your Claude Code / Codex folders."
-    );
+/**
+ * The screen tells this refusal from a role refusal by the flag's name in the
+ * message (`agent-sessions/_sessions/lib/api.ts`), so every language names it.
+ */
+function disabledResponse(locale: Locale): NextResponse {
+    return createForbiddenError(translatorFor(locale, "agents.server.sessions")("disabled"));
+}
+
+/** `Invalid request data: path: message, …` in the reader's language. */
+function invalidRequestData(error: z.ZodError, locale: Locale): string {
+    const detail = error.errors
+        .map(
+            issue =>
+                `${issue.path.join(".")}: ${wordEnglish(
+                    zodIssueText(issue, locale),
+                    "agents.server.sessions.validation",
+                    locale
+                )}`
+        )
+        .join(locale === "en" ? ", " : "；");
+    return translatorFor(locale, "errors.api")("invalidRequestData", { detail });
 }
 
 /**
@@ -124,23 +145,25 @@ function parseListParam(value: string | null): string[] | undefined {
 
 export async function GET(request: Request) {
     return withRateLimit(request, RateLimitPresets.permissive, async () => {
+        const locale = localeOfRequest(request);
+        const t = translatorFor(locale, "agents.server");
         try {
             const enabled = isAgentSessionsConnectorEnabled(
                 env.server.AGENT_SESSIONS_CONNECTOR_ENABLED
             );
             const callerResult = await resolveCaller();
             if (!callerResult.ok) return callerResult.response;
-            if (!enabled) return disabledResponse();
+            if (!enabled) return disabledResponse(locale);
 
             const { searchParams } = new URL(request.url);
             const projects = parseListParam(searchParams.get("projects"));
             if (projects?.some(slug => !isValidProjectSlug(slug))) {
-                return createValidationError("Invalid project slug.");
+                return createValidationError(t("sessions.invalidProjectSlug"));
             }
             const maxSessionsRaw = searchParams.get("maxSessions");
             const maxSessions = maxSessionsRaw ? Number.parseInt(maxSessionsRaw, 10) : undefined;
             if (maxSessions !== undefined && (!Number.isFinite(maxSessions) || maxSessions < 1)) {
-                return createValidationError("Invalid maxSessions.");
+                return createValidationError(t("sessions.invalidMaxSessions"));
             }
 
             const preview = await previewAgentSessionsDetailed(
@@ -167,29 +190,27 @@ export async function GET(request: Request) {
                 skipped: preview.skipped,
             });
         } catch (error) {
-            return handleApiError(error);
+            return handleApiError(error, request);
         }
     });
 }
 
 export async function POST(request: Request) {
     return withRateLimit(request, RateLimitPresets.strict, async () => {
+        const locale = localeOfRequest(request);
+        const t = translatorFor(locale, "agents.server");
         try {
             const enabled = isAgentSessionsConnectorEnabled(
                 env.server.AGENT_SESSIONS_CONNECTOR_ENABLED
             );
             const callerResult = await resolveCaller();
             if (!callerResult.ok) return callerResult.response;
-            if (!enabled) return disabledResponse();
+            if (!enabled) return disabledResponse(locale);
 
             const parsed = await parseSyncBody(request);
-            if (!parsed) return createValidationError("Invalid JSON body.");
+            if (!parsed) return createValidationError(t("connectors.invalidJsonBody"));
             if (!parsed.success) {
-                return createValidationError(
-                    `Invalid request data: ${parsed.error.errors
-                        .map(issue => `${issue.path.join(".")}: ${issue.message}`)
-                        .join(", ")}`
-                );
+                return createValidationError(invalidRequestData(parsed.error, locale));
             }
 
             const body = parsed.data;
@@ -237,11 +258,14 @@ export async function POST(request: Request) {
                     failed: report.failed,
                     missing,
                 },
-                `Imported ${report.stored.length} of ${report.discovered} sessions.`,
+                t("sessions.imported", {
+                    stored: String(report.stored.length),
+                    discovered: String(report.discovered),
+                }),
                 202
             );
         } catch (error) {
-            return handleApiError(error);
+            return handleApiError(error, request);
         }
     });
 }

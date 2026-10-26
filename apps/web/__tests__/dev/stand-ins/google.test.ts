@@ -5,6 +5,8 @@
  * rules — a drive.file token sees only what was picked, and listing a picked
  * folder returns nothing that wasn't picked too; drive.readonly sees all.
  */
+import mammoth from "mammoth";
+
 import { handleGoogleRequest } from "~/app/dev/stand-ins/google/dispatch";
 import {
     DRIVE_FILE_SCOPE,
@@ -14,6 +16,7 @@ import {
 } from "~/app/dev/stand-ins/google/world";
 
 const ORIGIN = "http://127.0.0.1:3031";
+const DOCX_MIME = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 const BASE = `${ORIGIN}/dev/stand-ins/google`;
 const REDIRECT = `${ORIGIN}/api/connectors/google/oauth/callback`;
 
@@ -181,6 +184,16 @@ describe("Google stand-in Drive scopes", () => {
             access_token
         );
         expect(await doc.text()).toContain("# Read me first");
+        // The connector asks for Word: a real .docx, headings kept as styles.
+        const word = await get(
+            `/drive/v3/files/sa-readme/export?mimeType=${encodeURIComponent(DOCX_MIME)}`,
+            access_token
+        );
+        expect(word.headers.get("content-type")).toBe(DOCX_MIME);
+        const html = await mammoth.convertToHtml({
+            buffer: Buffer.from(await word.arrayBuffer()),
+        });
+        expect(html.value).toContain("<h1>Read me first</h1>");
         // Docs have no bytes of their own; Drive says to export them.
         expect((await get("/drive/v3/files/sa-readme?alt=media", access_token)).status).toBe(403);
         const csv = await get("/drive/v3/files/sa-captable?alt=media", access_token);

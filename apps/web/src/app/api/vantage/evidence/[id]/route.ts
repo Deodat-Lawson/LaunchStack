@@ -15,17 +15,17 @@ export async function PATCH(request: NextRequest, { params }: Params) {
     try {
         const { id } = await params;
         const parsed = EvidenceSchema.partial().safeParse(await readBody(request));
-        if (!parsed.success) return error(firstIssue(parsed.error.issues), 400);
+        if (!parsed.success) return error(firstIssue(parsed.error.issues, request), 400);
         const patch = { ...parsed.data };
         if (patch.sourceUrl === "") patch.sourceUrl = null;
         const item = await updateEvidence({ companyId: auth.ctx.companyId, id, patch });
         return json({ evidence: item });
     } catch (err) {
-        return handleVantageError("PATCH evidence", err);
+        return handleVantageError("PATCH evidence", err, request);
     }
 }
 
-export async function DELETE(_request: NextRequest, { params }: Params) {
+export async function DELETE(request: NextRequest, { params }: Params) {
     const auth = await vantageContext();
     if (!auth.ok) return auth.response;
     try {
@@ -33,6 +33,6 @@ export async function DELETE(_request: NextRequest, { params }: Params) {
         await deleteEvidence({ companyId: auth.ctx.companyId, id });
         return json({ ok: true });
     } catch (err) {
-        return handleVantageError("DELETE evidence", err);
+        return handleVantageError("DELETE evidence", err, request);
     }
 }

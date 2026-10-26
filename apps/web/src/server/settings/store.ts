@@ -20,7 +20,7 @@ import { and, eq, inArray, or } from "drizzle-orm";
 import { db } from "~/server/db";
 import { settingsValues } from "~/server/db/schema";
 import { recordAuditEvent } from "~/lib/authz/audit";
-import { folderAncestors, validateFolderPath } from "~/lib/folders/path";
+import { folderAncestors, folderIssueCopy, folderPathIssue } from "~/lib/folders/path";
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
 import { SETTINGS, getSetting, type SettingDefinition } from "~/lib/settings/registry";
 import {
@@ -32,6 +32,7 @@ import {
 } from "~/lib/settings/types";
 import { badRequest, forbidden, notFound } from "~/server/workspace/errors";
 import type { Executor } from "~/server/workspace/db-types";
+import { copy } from "~/i18n/copy";
 
 import { getSettingBinding } from "./bindings";
 import { resolveSetting, type StoredSettingRow } from "./resolve";
@@ -135,7 +136,7 @@ export async function readSettingValue<T>(
 ): Promise<T> {
     const payload = await loadSettings(ctx, { ...options, keys: [key] });
     const resolved = payload.settings[key];
-    if (!resolved) throw notFound(`Unknown setting "${key}"`);
+    if (!resolved) throw notFound(copy("settings.server.errors.unknownSetting", { key }));
     return resolved.value as T;
 }
 
@@ -150,7 +151,7 @@ export async function readWorkspaceSetting<T>(
     executor: Executor = db
 ): Promise<T> {
     const definition = getSetting(key);
-    if (!definition) throw notFound(`Unknown setting "${key}"`);
+    if (!definition) throw notFound(copy("settings.server.errors.unknownSetting", { key }));
     if (definition.bound) {
         const binding = getSettingBinding(key);
         return (binding ? await binding.read(executor, companyId) : definition.default) as T;
@@ -183,9 +184,9 @@ function scopeIdFor(
             return ctx.authUserId;
         case "folder": {
             const path = (request.scopeId ?? "").trim();
-            if (!path) throw badRequest("A folder scope needs a folder path");
-            const problem = validateFolderPath(path);
-            if (problem) throw badRequest(problem);
+            if (!path) throw badRequest(copy("settings.server.errors.folderScopeNeedsPath"));
+            const problem = folderPathIssue(path);
+            if (problem) throw badRequest(folderIssueCopy(problem));
             return path;
         }
     }
@@ -197,18 +198,30 @@ export async function writeSetting(
     request: SettingWriteRequest
 ): Promise<ResolvedSetting> {
     const definition = getSetting(request.key);
-    if (!definition) throw notFound(`Unknown setting "${request.key}"`);
+    if (!definition)
+        throw notFound(copy("settings.server.errors.unknownSetting", { key: request.key }));
     if (!isStoredScope(request.scope) || !definition.scopes.includes(request.scope)) {
-        throw badRequest(`"${definition.key}" cannot be set at the ${String(request.scope)} scope`);
+        throw badRequest(
+            copy("settings.server.errors.scopeNotAllowed", {
+                key: definition.key,
+                scope: String(request.scope),
+            })
+        );
     }
     const scope = request.scope;
     if (scope !== "member" && definition.permission !== null && !ctx.can(definition.permission)) {
-        throw forbidden(`Changing "${definition.label}" needs ${definition.permission}`, {
-            permission: definition.permission,
-        });
+        throw forbidden(
+            copy("settings.server.errors.settingNeedsPermission", {
+                label: definition.label,
+                permission: definition.permission,
+            }),
+            {
+                permission: definition.permission,
+            }
+        );
     }
     if (scope === "member" && request.scopeId && request.scopeId !== ctx.authUserId) {
-        throw forbidden("You can only change your own preferences");
+        throw forbidden(copy("settings.server.errors.ownPreferencesOnly"));
     }
     const scopeId = scopeIdFor(scope, request, ctx);
 
@@ -217,7 +230,12 @@ export async function writeSetting(
         const parsed = definition.schema.safeParse(request.value);
         if (!parsed.success) {
             const detail = parsed.error.issues.map(issue => issue.message).join("; ");
-            throw badRequest(`Invalid value for "${definition.label}": ${detail}`);
+            throw badRequest(
+                copy("settings.server.errors.invalidSettingValue", {
+                    label: definition.label,
+                    detail,
+                })
+            );
         }
         nextValue = parsed.data;
     }

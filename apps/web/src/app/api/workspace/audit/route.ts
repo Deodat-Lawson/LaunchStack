@@ -8,7 +8,7 @@ import { parseValue, queryObject, workspaceErrorResponse } from "~/server/worksp
 export async function GET(request: Request) {
     const ctx = await requireWorkspacePermission("audit.view");
     if (!ctx.success) return ctx.response;
-    const query = parseValue(queryObject(request), AuditQuerySchema);
+    const query = parseValue(queryObject(request), AuditQuerySchema, request);
     if (!query.success) return query.response;
     try {
         if (query.data.format === "csv") {
@@ -23,6 +23,6 @@ export async function GET(request: Request) {
         }
         return NextResponse.json(await listAuditEvents(ctx.data, query.data));
     } catch (error) {
-        return workspaceErrorResponse(error, "[workspace/audit GET]");
+        return workspaceErrorResponse(error, "[workspace/audit GET]", request);
     }
 }

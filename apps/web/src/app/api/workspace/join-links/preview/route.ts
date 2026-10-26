@@ -15,6 +15,6 @@ export async function GET(request: Request) {
     try {
         return NextResponse.json(await previewJoinLink(code));
     } catch (error) {
-        return workspaceErrorResponse(error, "[workspace/join-links/preview GET]");
+        return workspaceErrorResponse(error, "[workspace/join-links/preview GET]", request);
     }
 }

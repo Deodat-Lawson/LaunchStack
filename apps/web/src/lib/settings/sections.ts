@@ -105,11 +105,6 @@ export const SETTINGS_SECTION_ACCESS: Record<SettingsSectionId, SettingsSectionA
         edit: "settings.manage",
         aliases: ["agents", "nodes", "roster", "autonomy"],
     },
-    // Readable by all: where an upload goes, and how it is processed.
-    documents: {
-        edit: "settings.manage",
-        aliases: ["documents", "upload", "storage", "defaults", "ocr"],
-    },
     // Workspace connections. Someone's own Gmail is connected and removed
     // from Add knowledge, not here.
     integrations: {

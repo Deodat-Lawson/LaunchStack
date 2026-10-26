@@ -3,6 +3,11 @@
  * workspace connect (and what the operator still has to do), the sign-ins
  * the workspace made, and the channels they bring. Presence and identity
  * only — no token or app password ever leaves the server.
+ *
+ * A network's setup steps and note go out as English and as copies
+ * (`setupCopy`, `noteCopy`) the Accounts screen words; reasons a sign-in or a
+ * channel stopped working are worded here, in the `locale` the route passes
+ * (English for every other caller).
  */
 import { and, asc, eq, inArray } from "drizzle-orm";
 
@@ -11,6 +16,8 @@ import type { MarketingPlatform } from "@launchstack/tools/platform-profiles";
 import { describePublishConfig } from "@launchstack/tools/social-publish";
 
 import { env } from "~/env";
+import { copy, type Copy } from "~/i18n/copy";
+import type { Locale } from "~/i18n/locales";
 import { db } from "~/server/db";
 import { connectorConnections, type ConnectorConnection } from "~/server/db/schema/connectors";
 import { users } from "~/server/db/schema/identity";
@@ -22,6 +29,7 @@ import {
 } from "~/server/services/connectors/config";
 
 import { linkedInGrantFeatures } from "./capabilities";
+import { brandReasonOrNull } from "./words";
 import {
     NETWORK_LABELS,
     connectionProblem,
@@ -44,6 +52,9 @@ export interface BrandNetworkView {
     setup: string[];
     note: string;
     limit: number | null;
+    /** One per setup step, same order. */
+    setupCopy?: Copy[];
+    noteCopy?: Copy;
 }
 
 export interface BrandConnectionView {
@@ -75,6 +86,10 @@ function redirectUrl(): string {
     return `${base.replace(/\/+$/, "")}${connectorCallbackPath("linkedin")}`;
 }
 
+/** A setup step or note of `growth.server.brand.networks.<network>`. */
+const step = (key: string, values?: Copy["values"]) =>
+    copy(`growth.server.brand.networks.${key}` as Copy["key"], values);
+
 /**
  * `ownsDeploymentAccounts`: whether this workspace may post through the
  * operator's keys (see deployment-accounts.ts). On a shared server it is
@@ -88,6 +103,7 @@ export function listBrandNetworks(ownsDeploymentAccounts = true): BrandNetworkVi
         "This server hosts several workspaces and the operator's account is assigned to another one (BRAND_DEPLOYMENT_ACCOUNTS_COMPANY_ID).";
     const secretsKey = Boolean(env.server.EMBEDDING_SECRETS_KEY);
     const pages = linkedInGrantFeatures(linkedInRequestedScopes()).pages;
+    const redirect = redirectUrl();
     const networks: Record<MarketingPlatform, BrandNetworkView> = {
         linkedin: {
             platform: "linkedin",
@@ -98,15 +114,23 @@ export function listBrandNetworks(ownsDeploymentAccounts = true): BrandNetworkVi
             setup: [
                 "Create an app at developer.linkedin.com, associated with the company's LinkedIn Page",
                 "For Pages, analytics and comments: request the Community Management API on an app with no other products (registered company; a Page super admin verifies the app). For profiles only: add Share on LinkedIn and Sign In with LinkedIn using OpenID Connect",
-                `Add the redirect URL ${redirectUrl()} under the app's Auth tab`,
+                `Add the redirect URL ${redirect} under the app's Auth tab`,
                 "Set LINKEDIN_CLIENT_ID and LINKEDIN_CLIENT_SECRET, and LINKEDIN_OAUTH_SCOPES to the scopes the Auth tab lists",
                 ...(secretsKey
                     ? []
                     : ["Set EMBEDDING_SECRETS_KEY so sign-ins are stored encrypted"]),
             ],
+            setupCopy: [
+                step("linkedin.createApp"),
+                step("linkedin.products"),
+                step("linkedin.redirect", { url: redirect }),
+                step("linkedin.keys"),
+                ...(secretsKey ? [] : [step("linkedin.secretsKey")]),
+            ],
             note: pages
                 ? "Free to post. Pages, numbers and comments come with LinkedIn's Community Management API: 500 calls a day until LinkedIn's standard-tier review."
                 : "Free to post. This app covers members' own profiles; Pages need LinkedIn's Community Management API. Sign-ins last 60 days.",
+            noteCopy: step(pages ? "linkedin.notePages" : "linkedin.noteProfiles"),
             limit: platformLimit("linkedin"),
         },
         bluesky: {
@@ -118,7 +142,9 @@ export function listBrandNetworks(ownsDeploymentAccounts = true): BrandNetworkVi
             setup: secretsKey
                 ? []
                 : ["Set EMBEDDING_SECRETS_KEY so app passwords are stored encrypted"],
+            setupCopy: secretsKey ? [] : [step("bluesky.secretsKey")],
             note: "Free, no review. Each workspace signs in with its own app password.",
+            noteCopy: step("bluesky.note"),
             limit: platformLimit("bluesky"),
         },
         x: {
@@ -135,7 +161,13 @@ export function listBrandNetworks(ownsDeploymentAccounts = true): BrandNetworkVi
                       "An X developer account on pay-per-use",
                       "A token in TWITTER_BEARER_TOKEN, for one workspace (the only one, or BRAND_DEPLOYMENT_ACCOUNTS_COMPANY_ID)",
                   ],
+            setupCopy: config.x.configured
+                ? sharedOnly
+                    ? [step("shared.notYours")]
+                    : []
+                : [step("x.account"), step("x.token")],
             note: "Pay per post: about $0.015 each, $0.20 when the post carries a link. Set by the operator, for one workspace.",
+            noteCopy: step("x.note"),
             limit: platformLimit("x"),
         },
         reddit: {
@@ -152,13 +184,19 @@ export function listBrandNetworks(ownsDeploymentAccounts = true): BrandNetworkVi
                       "A Reddit script app (client id and secret)",
                       "REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET and REDDIT_USER_AGENT, for one workspace (the only one, or BRAND_DEPLOYMENT_ACCOUNTS_COMPANY_ID)",
                   ],
+            setupCopy: config.reddit.configured
+                ? sharedOnly
+                    ? [step("shared.notYours")]
+                    : []
+                : [step("reddit.app"), step("reddit.keys")],
             note: "Free for this volume. Posts go to the account's own profile. Set by the operator, for one workspace.",
+            noteCopy: step("reddit.note"),
             limit: platformLimit("reddit"),
         },
     };
     return ORDER.map(platform => {
         const network = networks[platform];
-        return { ...network, setup: network.available ? [] : network.setup };
+        return network.available ? { ...network, setup: [], setupCopy: [] } : network;
     });
 }
 
@@ -181,7 +219,9 @@ export async function listBrandConnections(companyId: bigint): Promise<Connector
  */
 export async function listBrandChannels(
     companyId: bigint,
-    connections?: ConnectorConnection[]
+    connections?: ConnectorConnection[],
+    /** The reader's language, for why a channel needs a reconnect. */
+    locale: Locale = "en"
 ): Promise<BrandChannelView[]> {
     const conns = connections ?? (await listBrandConnections(companyId));
     const byId = new Map(conns.map(c => [c.id, c]));
@@ -190,7 +230,9 @@ export async function listBrandChannels(
         toChannelView(
             row,
             byId.get(row.connectionId),
-            platformLimit(row.platform as MarketingPlatform)
+            platformLimit(row.platform as MarketingPlatform),
+            new Date(),
+            locale
         )
     );
     if (!(await mayUseDeploymentAccounts(companyId))) return own;
@@ -235,7 +277,9 @@ export async function defaultChannelFor(
 export async function listBrandAccounts(
     companyId: bigint,
     canManage: boolean,
-    canPublish = true
+    canPublish = true,
+    /** The reader's language, for why a sign-in or channel stopped working. */
+    locale: Locale = "en"
 ): Promise<BrandAccountsView> {
     const connections = await listBrandConnections(companyId);
     const grantors = connections
@@ -256,14 +300,14 @@ export async function listBrandAccounts(
             platform: c.provider as BrandConnectionProvider,
             accountName: c.providerAccountEmail ?? null,
             status: connectionProblem(c) ? "revoked" : "active",
-            error: connectionProblem(c),
+            error: brandReasonOrNull(connectionProblem(c), locale),
             connectedAt: c.createdAt.toISOString(),
             connectedBy: c.grantedByUserId ? (names.get(String(c.grantedByUserId)) ?? null) : null,
             expiresAt: c.accessTokenExpiresAt?.toISOString() ?? null,
             refreshable: Boolean(c.refreshTokenCiphertext),
             scopes: c.scopes.split(/\s+/).filter(Boolean),
         })),
-        channels: await listBrandChannels(companyId, connections),
+        channels: await listBrandChannels(companyId, connections, locale),
         canManage,
         canPublish,
     };

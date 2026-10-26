@@ -216,7 +216,7 @@ export function OverviewScreen() {
                                                 item.tone === "danger"
                                                     ? "text-danger text-sm font-medium"
                                                     : item.tone === "warn"
-                                                      ? "text-warn text-sm font-medium"
+                                                      ? "text-warn-ink text-sm font-medium"
                                                       : "text-ink text-sm font-medium"
                                             }
                                         >

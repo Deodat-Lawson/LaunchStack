@@ -15,6 +15,8 @@ import { resolveProfileCaller } from "~/server/profile/caller";
 import { normalizeProfilePhoto, ProfilePhotoError } from "~/server/profile/photo";
 import { removeProfilePhoto, replaceProfilePhoto } from "~/server/profile/store";
 import { workspaceErrorResponse } from "~/server/workspace/http";
+import { localeOfRequest, requestTranslator } from "~/i18n/server";
+import { wordCopy } from "~/i18n/translate";
 
 export const dynamic = "force-dynamic";
 
@@ -23,13 +25,16 @@ function scopeOf(request: Request): ProfileScope | null {
     return isProfileScope(raw) ? raw : null;
 }
 
-function badScope() {
-    return NextResponse.json({ error: "scope must be global or workspace" }, { status: 400 });
+function badScope(request: Request) {
+    return NextResponse.json(
+        { error: requestTranslator(request, "settings.server.errors")("photoScope") },
+        { status: 400 }
+    );
 }
 
 export async function PUT(request: Request) {
     const scope = scopeOf(request);
-    if (!scope) return badScope();
+    if (!scope) return badScope(request);
     const caller = await resolveProfileCaller();
     if (!caller.success) return caller.response;
 
@@ -38,12 +43,15 @@ export async function PUT(request: Request) {
         file = (await request.formData()).get("file");
     } catch {
         return NextResponse.json(
-            { error: "Send the photo as multipart form data." },
+            { error: requestTranslator(request, "settings.server.errors")("photoMultipart") },
             { status: 400 }
         );
     }
     if (!(file instanceof Blob)) {
-        return NextResponse.json({ error: "Attach the photo as `file`." }, { status: 400 });
+        return NextResponse.json(
+            { error: requestTranslator(request, "settings.server.errors")("photoAttachFile") },
+            { status: 400 }
+        );
     }
 
     try {
@@ -51,20 +59,23 @@ export async function PUT(request: Request) {
         return NextResponse.json(await replaceProfilePhoto(caller.data, scope, photo));
     } catch (error) {
         if (error instanceof ProfilePhotoError) {
-            return NextResponse.json({ error: error.message }, { status: 422 });
+            return NextResponse.json(
+                { error: wordCopy(error.copy, localeOfRequest(request)) },
+                { status: 422 }
+            );
         }
-        return workspaceErrorResponse(error, "[profile/photo PUT]");
+        return workspaceErrorResponse(error, "[profile/photo PUT]", request);
     }
 }
 
 export async function DELETE(request: Request) {
     const scope = scopeOf(request);
-    if (!scope) return badScope();
+    if (!scope) return badScope(request);
     const caller = await resolveProfileCaller();
     if (!caller.success) return caller.response;
     try {
         return NextResponse.json(await removeProfilePhoto(caller.data, scope));
     } catch (error) {
-        return workspaceErrorResponse(error, "[profile/photo DELETE]");
+        return workspaceErrorResponse(error, "[profile/photo DELETE]", request);
     }
 }

@@ -9,21 +9,25 @@ import {
     getRelationship,
     listAgreements,
 } from "@launchstack/pipelines/distribution/db";
+import { requestTranslator } from "~/i18n/server";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
-import { error, handleRouteError, json, readJsonBody } from "~/server/distribution/http";
+import { error, json, readJsonBody } from "~/server/distribution/http";
+import { distributionRouteError } from "~/server/distribution/stage-errors";
+
+const api = (request: Request) => requestTranslator(request, "errors.api");
 
 type Params = { params: Promise<{ id: string }> };
 
-export async function GET(_request: NextRequest, { params }: Params) {
+export async function GET(request: NextRequest, { params }: Params) {
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
         const { id } = await params;
         const relationship = await getRelationship(id, ctx.data.companyId);
-        if (!relationship) return error("Not found", 404);
+        if (!relationship) return error(api(request)("notFound"), 404);
         return json({ agreements: await listAgreements(ctx.data.companyId, id) });
     } catch (err) {
-        return handleRouteError("GET agreements", err);
+        return distributionRouteError("GET agreements", err, request);
     }
 }
 
@@ -33,10 +37,12 @@ export async function POST(request: NextRequest, { params }: Params) {
         if (!ctx.success) return ctx.response;
         const { id } = await params;
         const relationship = await getRelationship(id, ctx.data.companyId);
-        if (!relationship) return error("Not found", 404);
+        if (!relationship) return error(api(request)("notFound"), 404);
         const parsed = AgreementInputSchema.safeParse(await readJsonBody(request));
         if (!parsed.success)
-            return error("Validation failed", 400, { details: parsed.error.flatten() });
+            return error(api(request)("validationFailed"), 400, {
+                details: parsed.error.flatten(),
+            });
         const agreement = await createAgreement({
             companyId: ctx.data.companyId,
             relationshipId: id,
@@ -56,6 +62,6 @@ export async function POST(request: NextRequest, { params }: Params) {
         });
         return json({ agreement }, 201);
     } catch (err) {
-        return handleRouteError("POST agreements", err);
+        return distributionRouteError("POST agreements", err, request);
     }
 }

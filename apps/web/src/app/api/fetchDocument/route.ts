@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 // The second postgres pool (~/server/db/core) was removed — hot routes use
 // the engine's shared Drizzle client like everything else.
+import { requestTranslator } from "~/i18n/server";
 import { db } from "~/server/db";
 import { document, documentVersions, fileUploads } from "@launchstack/store/schema";
 import { documentSettings } from "~/server/db/schema";
@@ -89,7 +90,7 @@ function inferMimeFromName(name: string): string | undefined {
     return EXTENSION_TO_MIME[match[1].toLowerCase()] ?? mediaMimeFromName(name);
 }
 
-export async function POST(_request: Request) {
+export async function POST(request: Request) {
     try {
         const ctx = await requireWorkspacePermission("documents.read");
         if (!ctx.success) return ctx.response;
@@ -197,6 +198,9 @@ export async function POST(_request: Request) {
         return NextResponse.json(serializedDocs, { status: 200 });
     } catch (error: unknown) {
         console.error("Error fetching documents:", error);
-        return NextResponse.json({ error: "Unable to fetch documents" }, { status: 500 });
+        return NextResponse.json(
+            { error: requestTranslator(request, "sources.server.errors")("fetchDocumentsFailed") },
+            { status: 500 }
+        );
     }
 }

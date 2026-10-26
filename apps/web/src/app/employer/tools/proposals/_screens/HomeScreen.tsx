@@ -16,6 +16,7 @@ import { PageHeader, SectionHeading } from "~/components/tools/PageHeader";
 import { SkeletonRows } from "~/components/tools/SkeletonRows";
 import { useToolFormat } from "~/lib/tools/format";
 import { useResource } from "~/lib/tools/useResource";
+import { useErrorText } from "~/lib/tools/errorText";
 import { NewApplicationDialog } from "../_components/NewApplicationDialog";
 import { ApplicationStatusPill, ReadinessMeter } from "../_components/Pills";
 import { useProposals } from "../_lib/context";
@@ -55,7 +56,7 @@ function ApplicationLine({
                             {" · "}
                             <span
                                 className={cn(
-                                    tone === "warn" && "text-warn",
+                                    tone === "warn" && "text-warn-ink",
                                     tone === "lost" && "text-danger"
                                 )}
                             >
@@ -69,7 +70,7 @@ function ApplicationLine({
                 <span
                     className={cn(
                         "@max-md:hidden text-xs",
-                        tone === "warn" && "text-warn",
+                        tone === "warn" && "text-warn-ink",
                         tone === "lost" && "text-danger",
                         tone === "quiet" && "text-ink-3"
                     )}
@@ -94,6 +95,7 @@ function ApplicationLine({
  */
 export function HomeScreen() {
     const t = useTranslations("proposals.home");
+    const errorText = useErrorText();
     const tp = useTranslations("proposals.common");
     const tWords = useTranslations("proposals.words");
     const format = useToolFormat();
@@ -114,7 +116,7 @@ export function HomeScreen() {
             await companyProfileApi.rebuild();
             router.push(href("/profile"));
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : t("buildProfileFailed"));
+            toast.error(errorText(e, t("buildProfileFailed")));
         }
     };
 

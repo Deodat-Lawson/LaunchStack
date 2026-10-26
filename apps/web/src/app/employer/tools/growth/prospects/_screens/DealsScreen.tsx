@@ -11,6 +11,7 @@ import { cn } from "~/lib/utils";
 
 import { ProspectsApiError, prospectsApi, type DealRow, type SalesStage } from "../api";
 import { useGrowthFormat } from "../../_lib/format";
+import { useErrorText } from "~/lib/tools/errorText";
 import { useProspects } from "../_lib/context";
 import { EXIT_STAGES, FUNNEL_STAGES } from "../_lib/stages";
 import { useResource } from "~/lib/tools/useResource";
@@ -25,6 +26,8 @@ const BOARD: SalesStage[] = FUNNEL_STAGES.filter(s => s !== "lead");
 export function DealsScreen() {
     const t = useTranslations("growth.prospects");
     const { relativeTime, joinList } = useGrowthFormat();
+    const ts = useTranslations("growth.server");
+    const errorText = useErrorText();
     const { segmentId, href } = useProspects();
     const res = useResource(segmentId ? `deals:${segmentId}` : null, () =>
         prospectsApi.deals(segmentId!)
@@ -51,9 +54,7 @@ export function DealsScreen() {
                     typeof e.body === "object" &&
                     "reason" in e.body
                     ? String((e.body as { reason: unknown }).reason)
-                    : e instanceof Error
-                      ? e.message
-                      : t("deals.moveFailed")
+                    : errorText(e, t("deals.moveFailed"))
             );
         }
     };
@@ -154,7 +155,11 @@ export function DealsScreen() {
                                                     {d.ownerInitials && (
                                                         <Avatar
                                                             className="size-5"
-                                                            title={d.ownerName ?? undefined}
+                                                            title={
+                                                                d.ownerIsViewer
+                                                                    ? ts("you")
+                                                                    : (d.ownerName ?? undefined)
+                                                            }
                                                         >
                                                             <AvatarFallback className="text-[9px]">
                                                                 {d.ownerInitials}

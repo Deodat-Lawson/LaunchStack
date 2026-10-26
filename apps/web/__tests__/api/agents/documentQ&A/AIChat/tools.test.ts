@@ -105,19 +105,22 @@ describe("GET /api/agents/documentQ&A/AIChat/tools", () => {
             1,
             null,
             "task-owned",
-            "user-a"
+            "user-a",
+            "en"
         );
         expect(assertToolCallParentsOwnedByUser).toHaveBeenNthCalledWith(
             2,
             "message-owned",
             "task-owned",
-            "user-a"
+            "user-a",
+            "en"
         );
         expect(assertToolCallParentsOwnedByUser).toHaveBeenNthCalledWith(
             3,
             "message-foreign",
             "task-owned",
-            "user-a"
+            "user-a",
+            "en"
         );
     });
 

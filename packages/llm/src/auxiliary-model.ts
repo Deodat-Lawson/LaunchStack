@@ -103,6 +103,7 @@ export function resolveAuxiliaryModel(route: AuxiliaryRoute): AuxiliaryModelReso
                 behavior: definition.behavior,
                 timeoutMs: INGESTION_TIMEOUT_MS,
                 maxRetries: INGESTION_MAX_RETRIES,
+                usage: { route, modelId: definition.id, pricing: definition.pricing },
             }),
             modelId: definition.id,
             behavior: definition.behavior,

@@ -56,6 +56,8 @@ export function buildInterviewRequest(
         own.join("\n") || "- Nothing.",
         "",
         `How your view moved: ${stanceTrail}.`,
+        agent.wouldPay ? `Whether you'd pay for it, as you last said: ${agent.wouldPay}.` : "",
+        agent.objection ? `What held you back, as you last said: "${agent.objection}"` : "",
         agent.lastThought ? `Your last private thought: "${agent.lastThought}"` : "",
         "",
         ...history.flatMap(t => [`Q: ${t.question}`, `A: ${t.answer}`]),
@@ -89,7 +91,7 @@ export function buildAnalystRequest(
     const people = world.agents
         .map(
             a =>
-                `${a.persona.handle} (${a.persona.role}): ${stanceLabel(a.stanceHistory[0] ?? a.stance)} → ${stanceLabel(a.stance)}`
+                `${a.persona.handle} (${a.persona.role}): ${stanceLabel(a.stanceHistory[0] ?? a.stance)} → ${stanceLabel(a.stance)}${a.wouldPay ? `; would pay: ${a.wouldPay}` : ""}${a.objection ? `; held back by: "${clip(a.objection, 100)}"` : ""}`
         )
         .join("\n");
     const system = [

@@ -131,7 +131,13 @@ export class VantageApiError extends Error {
     constructor(
         message: string,
         readonly status: number,
-        readonly body: unknown
+        readonly body: unknown,
+        /**
+         * True when the message is this client's own "Request failed" rather
+         * than the server's sentence, so a screen can say it in the reader's
+         * language instead (`useErrorText` in ~/lib/tools/errorText).
+         */
+        readonly generated = false
     ) {
         super(message);
         this.name = "VantageApiError";
@@ -153,11 +159,16 @@ async function call<T>(url: string, init?: RequestInit): Promise<T> {
         }
     }
     if (!response.ok) {
-        const message =
+        const server =
             body && typeof body === "object" && "error" in body && typeof body.error === "string"
                 ? body.error
-                : `Request failed (${response.status})`;
-        throw new VantageApiError(message, response.status, body);
+                : null;
+        throw new VantageApiError(
+            server ?? `Request failed (${response.status})`,
+            response.status,
+            body,
+            server === null
+        );
     }
     return body as T;
 }

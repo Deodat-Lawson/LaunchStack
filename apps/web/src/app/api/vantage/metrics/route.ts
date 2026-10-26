@@ -11,7 +11,7 @@ import {
 import { error, firstIssue, handleVantageError, json, readBody, vantageContext } from "../_http";
 import { MetricDefinitionSchema } from "../_schemas";
 
-export async function GET() {
+export async function GET(request: Request) {
     const auth = await vantageContext();
     if (!auth.ok) return auth.response;
     try {
@@ -21,7 +21,7 @@ export async function GET() {
         ]);
         return json({ definitions, observations });
     } catch (err) {
-        return handleVantageError("GET metrics", err);
+        return handleVantageError("GET metrics", err, request);
     }
 }
 
@@ -30,13 +30,13 @@ export async function POST(request: NextRequest) {
     if (!auth.ok) return auth.response;
     try {
         const parsed = MetricDefinitionSchema.safeParse(await readBody(request));
-        if (!parsed.success) return error(firstIssue(parsed.error.issues), 400);
+        if (!parsed.success) return error(firstIssue(parsed.error.issues, request), 400);
         const definition = await createMetricDefinition({
             companyId: auth.ctx.companyId,
             input: parsed.data,
         });
         return json({ definition }, 201);
     } catch (err) {
-        return handleVantageError("POST metrics", err);
+        return handleVantageError("POST metrics", err, request);
     }
 }

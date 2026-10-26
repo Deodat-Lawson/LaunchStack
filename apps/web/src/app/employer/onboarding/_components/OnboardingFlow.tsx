@@ -18,6 +18,7 @@ import {
     SelectValue,
 } from "~/components/ui/select";
 import { Textarea } from "~/components/ui/textarea";
+import { factLabelText, failureText } from "~/components/company-profile/words";
 import { companyProfileApi } from "~/lib/company-profile/api";
 import type { CompanyProfileDto, ProfileSourceDto } from "~/lib/company-profile/dto";
 import { normalizeWebsite } from "~/lib/company-profile/website";
@@ -726,6 +727,7 @@ function UnderstoodStep({
 }) {
     const t = useTranslations("onboarding.flow");
     const tc = useTranslations("common");
+    const ts = useTranslations("companyProfile.server");
     const [profile, setProfile] = useState<CompanyProfileDto | null>(null);
     const started = useRef(Date.now());
 
@@ -815,7 +817,7 @@ function UnderstoodStep({
 
                 {profile?.status === "failed" && (
                     <p role="alert" className="text-danger text-sm">
-                        {failureLine(t, profile.error)}
+                        {failureLine(t, failureText(ts, profile))}
                     </p>
                 )}
 
@@ -849,7 +851,7 @@ function UnderstoodStep({
                                     className="grid grid-cols-[150px_minmax(0,1fr)] gap-3 px-3 py-2 max-sm:grid-cols-1 max-sm:gap-0.5"
                                 >
                                     <dt className="text-ink-3 text-xs">
-                                        {f.label}
+                                        {factLabelText(ts, f)}
                                         {f.source === "manual" && (
                                             <span> {t("understood.fromYou")}</span>
                                         )}

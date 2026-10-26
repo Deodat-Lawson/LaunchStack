@@ -338,6 +338,13 @@ export function resolveChatModel(options: ResolveChatModelOptions = {}): Resolve
             timeoutMs: options.timeoutMs,
             maxRetries: options.maxRetries,
             requestPatch: reasoning.requestPatch,
+            // Captured now, in the scope that chose this configuration, so the
+            // calls are counted against the same unit of work.
+            usage: {
+                route,
+                pricing: resolved.definition.pricing,
+                recorder: getChatModelsScope()?.usage,
+            },
         }),
         prepareMessages: messages => applyMessageBehavior(behavior, messages),
     };

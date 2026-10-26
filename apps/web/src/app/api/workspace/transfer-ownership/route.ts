@@ -13,6 +13,6 @@ export async function POST(request: Request) {
     try {
         return NextResponse.json(await transferOwnership(ctx.data, BigInt(body.data.userId)));
     } catch (error) {
-        return workspaceErrorResponse(error, "[workspace/transfer-ownership POST]");
+        return workspaceErrorResponse(error, "[workspace/transfer-ownership POST]", request);
     }
 }

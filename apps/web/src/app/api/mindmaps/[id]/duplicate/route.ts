@@ -9,6 +9,8 @@
 
 import { NextResponse } from "next/server";
 
+import { requestTranslator } from "~/i18n/server";
+
 import { db } from "~/server/db";
 import { mindmaps } from "~/server/db/schema";
 import { UNFILED_FOLDER, isUnfiledFolder, normalizeFolderPath } from "~/lib/folders/path";
@@ -18,18 +20,22 @@ import { describeDraftAccess, draftReader } from "~/server/mindmap/access";
 import { getMindmap, toDetail } from "~/server/mindmap/repository";
 import { canEditFolderPath } from "~/server/workspace/item-access";
 
-export async function POST(_request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
+    const t = requestTranslator(request, "mindmap.server.errors");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
         const id = Number.parseInt((await params).id, 10);
         if (!Number.isInteger(id) || id <= 0) {
-            return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+            return NextResponse.json(
+                { error: requestTranslator(request, "errors.api")("invalidId") },
+                { status: 400 }
+            );
         }
 
         const source = await getMindmap(id, await draftReader(ctx.data));
-        if (!source) return NextResponse.json({ error: "Mindmap not found" }, { status: 404 });
+        if (!source) return NextResponse.json({ error: t("notFound") }, { status: 404 });
         const sourceFolder = normalizeFolderPath(source.folder);
         const folder =
             isUnfiledFolder(sourceFolder) || (await canEditFolderPath(ctx.data, sourceFolder))
@@ -57,11 +63,11 @@ export async function POST(_request: Request, { params }: { params: Promise<{ id
             })
             .returning();
 
-        if (!row) return serverError("Failed to duplicate mindmap");
+        if (!row) return serverError(t("duplicateFailed"));
         const [access] = (await describeDraftAccess(ctx.data, [row])).values();
         return NextResponse.json({ mindmap: { ...toDetail(row), access } }, { status: 201 });
     } catch (error) {
         console.error("[mindmaps] duplicate failed:", error);
-        return serverError("Failed to duplicate mindmap");
+        return serverError(t("duplicateFailed"));
     }
 }

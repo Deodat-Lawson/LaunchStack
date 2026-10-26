@@ -10,7 +10,34 @@
 
 import type { FounderWeeklyReviewRunRecord } from "@launchstack/pipelines/founder-weekly-review";
 
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor, wordEnglish } from "~/i18n/translate";
+import { fail, handleRouteError, isStatusCarryingError } from "~/server/api/responses";
+
 export { fail, handleRouteError, ok, readJson } from "~/server/api/responses";
+
+/** The route's own sentences ("Unauthorized", "Invalid request") in the reader's language. */
+export function failIn(request: Request, key: "unauthorized" | "invalidRequest", status: number) {
+    return fail(translatorFor(localeOfRequest(request), "errors.api")(key), status);
+}
+
+/**
+ * A thrown error as a response, in the reader's language: the review
+ * pipeline's own status-carrying messages are English the catalogue knows
+ * (`vantage.server.weeklyReview`); anything else goes to the shared mapping,
+ * which words the generic 500. English readers get exactly what they did.
+ */
+export function handleWeeklyReviewError(error: unknown, request: Request) {
+    const locale = localeOfRequest(request);
+    if (locale !== "en" && isStatusCarryingError(error) && !error.copy && error.message) {
+        return fail(
+            wordEnglish(error.message, "vantage.server.weeklyReview", locale),
+            error.status,
+            { code: error.code }
+        );
+    }
+    return handleRouteError("founder-weekly-review", error, request);
+}
 
 /**
  * The client-facing projection of a run.

@@ -20,7 +20,7 @@ import { parseJsonBody, workspaceErrorResponse } from "~/server/workspace/http";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(request: Request) {
     const caller = await resolveProfileCaller();
     if (!caller.success) return caller.response;
     try {
@@ -29,7 +29,7 @@ export async function GET() {
         await importProviderPhotoOnce(caller.data.userPk);
         return NextResponse.json(await loadMyProfile(caller.data));
     } catch (error) {
-        return workspaceErrorResponse(error, "[profile GET]");
+        return workspaceErrorResponse(error, "[profile GET]", request);
     }
 }
 
@@ -41,6 +41,6 @@ export async function PATCH(request: Request) {
     try {
         return NextResponse.json(await updateProfile(caller.data, body.data));
     } catch (error) {
-        return workspaceErrorResponse(error, "[profile PATCH]");
+        return workspaceErrorResponse(error, "[profile PATCH]", request);
     }
 }

@@ -13,6 +13,7 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { cn } from "~/lib/utils";
 
+import { useCopyText } from "~/lib/tools/copyText";
 import type { SalesStage, StageMove } from "../api";
 import { EXIT_STAGES, stageTone } from "../_lib/stages";
 
@@ -43,7 +44,7 @@ export function StagePill({
             <span className={cn("size-[7px] shrink-0 rounded-full", DOT[stageTone(stage)])} />
             <span className="whitespace-nowrap">{t(`stages.${stage}`)}</span>
             {staleDays !== null && staleDays !== undefined && staleDays > 0 && (
-                <span className="text-warn whitespace-nowrap">
+                <span className="text-warn-ink whitespace-nowrap">
                     {t("stagePill.staleDays", { count: staleDays })}
                 </span>
             )}
@@ -113,6 +114,7 @@ function MoveItem({
     onMove: (stage: SalesStage) => void;
 }) {
     const t = useTranslations("growth.prospects.stagePill");
+    const word = useCopyText();
     const isCurrent = move.stage === current;
     const blocked = move.reason !== null;
     return (
@@ -126,7 +128,9 @@ function MoveItem({
                 {isCurrent && <span className="text-ink-3 text-[11px]">{t("current")}</span>}
             </span>
             {blocked && !isCurrent && (
-                <span className="text-ink-3 text-[11.5px] leading-snug">{move.reason}</span>
+                <span className="text-ink-3 text-[11.5px] leading-snug">
+                    {word(move.reasonCopy, move.reason ?? "")}
+                </span>
             )}
         </DropdownMenuItem>
     );

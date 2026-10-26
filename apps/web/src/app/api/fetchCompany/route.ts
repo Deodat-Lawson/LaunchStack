@@ -16,8 +16,10 @@ import { eq } from "drizzle-orm";
 
 import { getRedactedCredentials, resolveEmbeddingIndex } from "@launchstack/llm/embeddings";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
+import { requestTranslator } from "~/i18n/server";
 
-export async function GET() {
+export async function GET(request: Request) {
+    const t = requestTranslator(request, "settings.server.errors");
     try {
         const ctx = await requireWorkspacePermission("settings.manage");
         if (!ctx.success) return ctx.response;
@@ -41,7 +43,7 @@ export async function GET() {
             .where(eq(company.id, Number(companyId)));
 
         if (!companyRecord) {
-            return NextResponse.json({ error: "Company not found." }, { status: 404 });
+            return NextResponse.json({ error: t("companyNotFound") }, { status: 404 });
         }
 
         // Embedding provider credentials come from the encrypted table; the
@@ -87,6 +89,6 @@ export async function GET() {
         );
     } catch (error: unknown) {
         console.error("Error fetching company:", error);
-        return NextResponse.json({ error: "Unable to fetch company" }, { status: 500 });
+        return NextResponse.json({ error: t("fetchCompanyFailed") }, { status: 500 });
     }
 }

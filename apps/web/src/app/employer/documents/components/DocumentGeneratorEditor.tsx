@@ -827,7 +827,7 @@ export function DocumentGeneratorEditor({
                     <div className="flex shrink-0 items-center gap-2">
                         {lastSaved && !compact && (
                             <span className="text-ink-3 flex items-center gap-1 text-xs">
-                                <CheckCircle className="text-success h-3 w-3" />
+                                <CheckCircle className="text-success-ink h-3 w-3" />
                                 {t("savedAt", {
                                     time: format.dateTime(lastSaved, {
                                         hour: "numeric",
@@ -1216,7 +1216,7 @@ export function DocumentGeneratorEditor({
                         <Button
                             onClick={() => void handleAIRequest()}
                             disabled={!aiPrompt.trim() || isProcessing}
-                            className="bg-brand shadow-brand-glow hover:bg-brand-hi w-full rounded-xl text-white shadow-lg"
+                            className="bg-brand shadow-brand-glow hover:bg-brand-hi text-brand-fg w-full rounded-xl shadow-lg"
                             size="sm"
                         >
                             {isProcessing ? (

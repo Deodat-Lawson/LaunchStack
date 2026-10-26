@@ -229,7 +229,7 @@
     "tooBigMany": "{count} files are over the {max} MB limit",
     "tooBigOneDetail": "It's {size}. Split it or export it at a lower quality.",
     "tooBigItem": "{name} ({size})",
-    "ocrNote": "OCR runs automatically on scanned PDFs and images.",
+    "ocrNote": "PDFs and images are read with OCR when the server has an OCR service.",
     "transcribing": "Transcribing {name}… a long recording takes a few minutes; keep this open.",
     "uploadingProgress": "Uploading {current} / {total}…",
     "readyToUpload": "{count, plural, one {# file ready to upload} other {# files ready to upload}}",

@@ -734,7 +734,7 @@
       "voteIdsRequired": "messageId and chatId are required"
     },
     "askMyNotes": {
-      "notConfigured": "Notes search isn't configured — add an embedding API key to enable Ask My Notes.",
+      "notConfigured": "Notes search isn't configured on this server. Ask whoever runs it to set an embedding key to enable Ask My Notes.",
       "noNotes": "I couldn't find any relevant notes. Try a different phrasing, or capture some notes first.",
       "failed": "Ask My Notes failed"
     },

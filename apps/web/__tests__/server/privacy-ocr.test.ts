@@ -34,6 +34,8 @@ describe("Privacy › OCR", () => {
         expect(row.note).toMatch(/Azure Document Intelligence reads every page; Docling/);
         expect(row.note).toMatch(/text layer is the last resort/);
         expect(row.note).toMatch(/a scan none of them can read is retried, not indexed blank/);
+        // The page words the plan in the reader's language, not the English note.
+        expect(row.ocr).toEqual({ scope: "all", order: ["AZURE", "DOCLING"] });
     });
 
     it("says only scans reach OCR under OCR_PDF_STRATEGY=text-layer-first", () => {
@@ -48,6 +50,7 @@ describe("Privacy › OCR", () => {
             /^Images and scanned PDFs are read with OCR; a PDF with its own text layer is read from it/
         );
         expect(row.note).not.toMatch(/last resort/);
+        expect(row.ocr?.scope).toBe("scans");
     });
 
     it("keeps Docling local: nothing leaves the deployment", () => {
@@ -64,6 +67,7 @@ describe("Privacy › OCR", () => {
         expect(row.enabled).toBe(false);
         expect(row.note).toMatch(/No OCR service is configured/);
         expect(row.note).toMatch(/scanned pages come out blank/);
+        expect(row.ocr).toEqual({ scope: "none", order: [] });
     });
 
     it("no longer reads the removed OCR_ROUTER_URL/OCR_WORKER_URL as an OCR host", () => {

@@ -1304,8 +1304,24 @@
         "note": "仅在文档开启实体提取时运行。"
       },
       "ocr": {
-        "provider": "扫描页面会通过文档转换器发送给 {provider} 提供商。",
-        "native": "仅使用原生 PDF 提取，任何内容都不会离开服务器。"
+        "none": "未配置 OCR 服务：PDF 从自身的文本层读取，图片用 Tesseract 读取，都在本服务器上完成。任何内容都不会离开服务器，扫描页面会是空白。",
+        "scope": {
+          "all": "每个 PDF 和图片都会用 OCR 读取。",
+          "scans": "图片和扫描版 PDF 用 OCR 读取；自带文本层的 PDF 在本服务器上直接读取其文本层。",
+          "picked": "图片，以及有人为其指定了服务的 PDF，会用 OCR 读取；其他 PDF 在本服务器上读取自身的文本层。"
+        },
+        "engines": {
+          "azure": "Azure Document Intelligence",
+          "docling": "本部署上的 Docling（docling-serve 运行时）",
+          "landingAi": "Landing AI",
+          "datalab": "Datalab"
+        },
+        "chain": "{lead} 读取每一页。",
+        "chainWithFallback": "{lead} 读取每一页；失败时依次由 {rest} 接手。",
+        "listJoin": "、",
+        "lastResort": "PDF 自身的文本层是最后的手段；所有服务都读不了的扫描件会重试，而不是以空白内容编入索引。",
+        "retryOnly": "所有服务都读不了的扫描件会重试，而不是以空白内容编入索引。",
+        "note": "{scope}{chain}{end}"
       },
       "transcription": {
         "label": "转录",

@@ -25,7 +25,23 @@ export interface OutboundService {
     sends: Exposure;
     /** Whether the capability is configured at all. */
     enabled: boolean;
+    /** In English, for API callers; the page words `ocr` in the reader's language. */
     note: string;
+    /** OCR only: which PDFs are read with OCR, and the engines in the order tried. */
+    ocr?: OcrPlan;
+}
+
+export type OcrEngineId = (typeof OCR_SERVICES)[number]["id"];
+
+export interface OcrPlan {
+    /**
+     * Which PDFs reach OCR: `none` (no engine configured), `all` (the
+     * default), `scans` (OCR_PDF_STRATEGY=text-layer-first) or `picked`
+     * (OCR_DEFAULT_PROVIDER=NATIVE_PDF: only PDFs someone picks a provider for).
+     */
+    scope: "none" | "all" | "scans" | "picked";
+    /** Configured engines, an operator pin first. Docling runs on this deployment. */
+    order: OcrEngineId[];
 }
 
 export interface PrivacyOverview {
@@ -104,6 +120,7 @@ function ocrDisclosure(server: typeof env.server): {
     host: string | null;
     local: boolean;
     note: string;
+    plan: OcrPlan;
 } {
     const outside: Record<string, string | null> = {
         AZURE:
@@ -129,6 +146,7 @@ function ocrDisclosure(server: typeof env.server): {
         return {
             host: null,
             local: false,
+            plan: { scope: "none", order: [] },
             note: "No OCR service is configured: PDFs are read from their own text layer and images with Tesseract, both on this server. Nothing leaves it, and scanned pages come out blank.",
         };
     }
@@ -151,7 +169,11 @@ function ocrDisclosure(server: typeof env.server): {
     const last = textLayerFirst
         ? "a scan none of them can read is retried, not indexed blank."
         : "the PDF's own text layer is the last resort, and a scan none of them can read is retried, not indexed blank.";
-    return { host, local: !host, note: `${scope} ${chain}; ${last}` };
+    const plan: OcrPlan = {
+        scope: pin === "NATIVE_PDF" ? "picked" : textLayerFirst ? "scans" : "all",
+        order: ordered.map(service => service.id),
+    };
+    return { host, local: !host, note: `${scope} ${chain}; ${last}`, plan };
 }
 
 export function privacyOverview(): PrivacyOverview {
@@ -211,6 +233,7 @@ export function privacyOverview(): PrivacyOverview {
             sends: ocr.host ? "document-text" : "none",
             enabled: ocr.host !== null || ocr.local,
             note: ocr.note,
+            ocr: ocr.plan,
         },
         aiProvider({
             id: "transcription",

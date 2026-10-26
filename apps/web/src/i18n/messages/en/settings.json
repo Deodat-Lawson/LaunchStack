@@ -1304,8 +1304,24 @@
         "note": "Runs only when entity extraction is turned on for a document."
       },
       "ocr": {
-        "provider": "Scanned pages go to the {provider} provider through the document converter.",
-        "native": "Native PDF extraction only; nothing leaves the server."
+        "none": "No OCR service is configured: PDFs are read from their own text layer and images with Tesseract, both on this server. Nothing leaves it, and scanned pages come out blank.",
+        "scope": {
+          "all": "Every PDF and image is read with OCR.",
+          "scans": "Images and scanned PDFs are read with OCR; a PDF with its own text layer is read from it on this server.",
+          "picked": "Images, and PDFs someone picks a provider for, are read with OCR; other PDFs are read from their own text layer on this server."
+        },
+        "engines": {
+          "azure": "Azure Document Intelligence",
+          "docling": "Docling on this deployment (when docling-serve is running)",
+          "landingAi": "Landing AI",
+          "datalab": "Datalab"
+        },
+        "chain": "{lead} reads every page.",
+        "chainWithFallback": "{lead} reads every page; if it fails, {rest} take over in turn.",
+        "listJoin": ", then ",
+        "lastResort": "The PDF's own text layer is the last resort, and a scan none of them can read is retried rather than indexed blank.",
+        "retryOnly": "A scan none of them can read is retried rather than indexed blank.",
+        "note": "{scope} {chain} {end}"
       },
       "transcription": {
         "label": "Transcription",

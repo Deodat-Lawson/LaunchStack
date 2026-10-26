@@ -27,6 +27,14 @@ interface OutboundService {
     sends: "document-text" | "metadata" | "none";
     enabled: boolean;
     note: string;
+    /** OCR only: which PDFs are read with OCR, and the engines in the order tried. */
+    ocr?: OcrPlan;
+}
+
+/** Mirrors `OcrPlan` in server/settings/privacy.ts. */
+interface OcrPlan {
+    scope: "none" | "all" | "scans" | "picked";
+    order: string[];
 }
 
 interface PrivacyOverview {
@@ -66,8 +74,37 @@ const BRAND_SERVICES = new Set<ServiceKey>(["ocr", "slack", "drive", "notion"]);
 // reader's language can say them. Anything else is shown as it came.
 const AI_LOCAL = "Runs on this deployment's own servers.";
 const AI_THIRD_PARTY = "Sent to a third-party AI model provider.";
-const OCR_PROVIDER = /^Scanned pages go to the (.+) provider through the document converter\.$/;
-const OCR_NATIVE = "Native PDF extraction only; nothing leaves the server.";
+
+/** Catalogue keys for the OCR engines the server names in its plan. */
+const OCR_ENGINE_KEYS: Record<string, "azure" | "docling" | "landingAi" | "datalab"> = {
+    AZURE: "azure",
+    DOCLING: "docling",
+    LANDING_AI: "landingAi",
+    DATALAB: "datalab",
+};
+
+/**
+ * The OCR note in the reader's language, from the server's plan: which PDFs
+ * go to OCR, the engines in order, and what happens when none can read a
+ * page. The English the server also sends is for API callers.
+ */
+export function ocrNote(t: PrivacyT, plan: OcrPlan): string {
+    if (plan.scope === "none") return t("services.ocr.none");
+    const engines = plan.order.map(id => {
+        const key = OCR_ENGINE_KEYS[id];
+        return key ? t(`services.ocr.engines.${key}`) : id;
+    });
+    const [lead, ...rest] = engines;
+    const chain =
+        rest.length > 0
+            ? t("services.ocr.chainWithFallback", {
+                  lead: lead ?? "",
+                  rest: rest.join(t("services.ocr.listJoin")),
+              })
+            : t("services.ocr.chain", { lead: lead ?? "" });
+    const end = plan.scope === "all" ? t("services.ocr.lastResort") : t("services.ocr.retryOnly");
+    return t("services.ocr.note", { scope: t(`services.ocr.scope.${plan.scope}`), chain, end });
+}
 
 /** A service's name and note in the reader's language. */
 function serviceCopy(t: PrivacyT, service: OutboundService): { label: string; note: string } {
@@ -85,12 +122,7 @@ function serviceCopy(t: PrivacyT, service: OutboundService): { label: string; no
     }
     let shown: string;
     if (key === "ocr") {
-        const provider = OCR_PROVIDER.exec(note)?.[1];
-        shown = provider
-            ? t("services.ocr.provider", { provider })
-            : note === OCR_NATIVE
-              ? t("services.ocr.native")
-              : note;
+        shown = service.ocr ? ocrNote(t, service.ocr) : note;
     } else {
         shown = t(`services.${key}.note` as never);
     }

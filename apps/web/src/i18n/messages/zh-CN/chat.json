@@ -734,7 +734,7 @@
       "voteIdsRequired": "需要提供 messageId 和 chatId"
     },
     "askMyNotes": {
-      "notConfigured": "笔记搜索尚未配置——添加嵌入 API 密钥即可启用“问我的笔记”。",
+      "notConfigured": "本服务器尚未配置笔记搜索。请联系服务器的管理者设置嵌入密钥，以启用“问我的笔记”。",
       "noNotes": "我没有找到相关的笔记。换个说法试试，或者先记一些笔记。",
       "failed": "“问我的笔记”失败"
     },

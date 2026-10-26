@@ -229,7 +229,7 @@
     "tooBigMany": "{count} 个文件超过了 {max} MB 的上限",
     "tooBigOneDetail": "该文件大小为 {size}。请拆分文件，或以较低质量导出。",
     "tooBigItem": "{name}（{size}）",
-    "ocrNote": "扫描版 PDF 和图片会自动进行 OCR。",
+    "ocrNote": "服务器配置了 OCR 服务时，PDF 和图片都会用 OCR 读取。",
     "transcribing": "正在转录“{name}”…较长的录音需要几分钟，请不要关闭此窗口。",
     "uploadingProgress": "正在上传 {current} / {total}…",
     "readyToUpload": "{count, plural, other {# 个文件待上传}}",

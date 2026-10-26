@@ -34,7 +34,7 @@ import { contextSourceKeyV0, type ContextSourceRefV0 } from "../proposals/contex
 import type { GenerationResult } from "../contract-v1";
 import type { PackItem } from "../types";
 
-export const SOPHIA_EXPERIMENT_PROMPT_VERSION = "vantage/sophia-paired-context/v0.2";
+export const SOPHIA_EXPERIMENT_PROMPT_VERSION = "vantage/sophia-paired-context/v0.3";
 export const SOPHIA_EXPERIMENT_MAX_PROMPT_BYTES = 23500;
 /** Same instance is deliberate: the compound schema uses references rather than duplicating it. */
 export const SophiaCompoundOutputSchemaV0 = z
@@ -71,6 +71,11 @@ export interface SophiaExperimentDiagnosticsV0 {
     generationAttempts: number;
     promptBytes: number;
     promptBytesByAttempt: number[];
+    promptOmissionsByAttempt: {
+        previousSummary: boolean;
+        previousTopics: number;
+        previousContext: boolean;
+    }[];
     usage: ChatTokenUsage;
     contextFingerprint: string;
     sourceKeys: string[];
@@ -110,7 +115,9 @@ function nativePromptItems(messages: readonly BaseMessageLike[]): PackItem[] {
             /* Only the existing generator's actual JSON item payload is a source. */
         }
     }
-    throw new StructuredAttemptSetupError();
+    throw Object.assign(new StructuredAttemptSetupError(), {
+        diagnosticReason: "native-items-unavailable",
+    });
 }
 const instructions = `EXPERIMENTAL PAIRED OUTPUT ${SOPHIA_EXPERIMENT_PROMPT_VERSION}
 Return one object with native and experimental, each using the supplied weekly-report schema. Both drafts must be written in THIS response; no earlier generated report is a carrier.
@@ -156,7 +163,14 @@ function frozenPayload(envelope: ContextGenerationEnvelopeV0) {
 
 /** Genuine context-aware B: the existing model transport is called once per bounded attempt. */
 export function createSophiaContextGenerationExperimentV0(
-    invoke: typeof invokeStructuredAttempt = invokeStructuredAttempt
+    invoke: typeof invokeStructuredAttempt = invokeStructuredAttempt,
+    diagnostics: {
+        observeAttempt?: (record: {
+            attempt: number;
+            stage: string;
+            data: unknown;
+        }) => void | Promise<void>;
+    } = {}
 ) {
     return async (
         envelope: ContextGenerationEnvelopeV0,
@@ -171,6 +185,8 @@ export function createSophiaContextGenerationExperimentV0(
         let providerAttempts = 0;
         let usage: ChatTokenUsage = {};
         const promptBytesByAttempt: number[] = [];
+        const promptOmissionsByAttempt: SophiaExperimentDiagnosticsV0["promptOmissionsByAttempt"] =
+            [];
         let frozenIdentity: { contextFingerprint: string; sourceKeys: string[] } | null = null;
         const generate = createContextAwareGenerationAdapter(async safeEnvelope => {
             // Build only from the adapter's validated, immutable envelope, not caller aliases.
@@ -195,28 +211,112 @@ export function createSophiaContextGenerationExperimentV0(
             ) => {
                 accepted = null;
                 const actualSources = [...sources, ...nativePromptItems(messages)];
-                const supplied = [
-                    ...messages,
-                    new SystemMessage(instructions),
-                    new HumanMessage(JSON.stringify({ context })),
-                ];
-                const prepared = model.prepareMessages([
-                    ...systemMessageFor(
-                        model.behavior,
-                        structuredSchemaInstruction(SophiaCompoundOutputSchemaV0)
-                    ),
-                    ...supplied,
-                ]);
-                const promptBytes = Buffer.byteLength(
-                    JSON.stringify(prepared.map(message => message.content)),
-                    "utf8"
-                );
+                // The V1 generator still receives its original complete input and
+                // performs its unchanged selection/fallback/validation. Only the
+                // copied transport messages compete with the added V0 section.
+                const nativeMessages = [...messages];
+                let supplied: BaseMessageLike[] = [];
+                const measure = () => {
+                    supplied = [
+                        ...nativeMessages,
+                        new SystemMessage(instructions),
+                        new HumanMessage(JSON.stringify({ context })),
+                    ];
+                    const prepared = model.prepareMessages([
+                        ...systemMessageFor(
+                            model.behavior,
+                            structuredSchemaInstruction(SophiaCompoundOutputSchemaV0)
+                        ),
+                        ...supplied,
+                    ]);
+                    return Buffer.byteLength(
+                        JSON.stringify(prepared.map(message => message.content)),
+                        "utf8"
+                    );
+                };
+                let promptBytes = measure();
+                const omissions = {
+                    previousSummary: false,
+                    previousTopics: 0,
+                    previousContext: false,
+                };
+                if (promptBytes > SOPHIA_EXPERIMENT_MAX_PROMPT_BYTES) {
+                    for (let index = 0; index < nativeMessages.length; index++) {
+                        const message = coerceMessageLikeToMessage(nativeMessages[index]!);
+                        if (message.getType() !== "human" || typeof message.content !== "string")
+                            continue;
+                        let payload: {
+                            items?: unknown[];
+                            previousVantageContext?: {
+                                summary?: string | null;
+                                topics?: unknown[];
+                                omissions?: { summary?: boolean };
+                            } | null;
+                            omissions?: {
+                                previousVantageTopics?: number;
+                                previousVantageContext?: boolean;
+                            };
+                        };
+                        try {
+                            payload = JSON.parse(message.content) as typeof payload;
+                        } catch {
+                            continue;
+                        }
+                        if (!Array.isArray(payload.items) || !payload.previousVantageContext)
+                            continue;
+                        const rewrite = () => {
+                            nativeMessages[index] = new HumanMessage(JSON.stringify(payload));
+                            promptBytes = measure();
+                        };
+                        // Match V1's history priority while preserving all current
+                        // items, pending human questions and reviewed current topics.
+                        if (payload.previousVantageContext.summary) {
+                            payload.previousVantageContext.summary = null;
+                            payload.previousVantageContext.omissions = {
+                                ...payload.previousVantageContext.omissions,
+                                summary: true,
+                            };
+                            omissions.previousSummary = true;
+                            rewrite();
+                        }
+                        while (
+                            promptBytes > SOPHIA_EXPERIMENT_MAX_PROMPT_BYTES &&
+                            payload.previousVantageContext.topics?.length
+                        ) {
+                            payload.previousVantageContext.topics.pop();
+                            omissions.previousTopics++;
+                            payload.omissions = {
+                                ...payload.omissions,
+                                previousVantageTopics:
+                                    (payload.omissions?.previousVantageTopics ?? 0) + 1,
+                            };
+                            rewrite();
+                        }
+                        if (promptBytes > SOPHIA_EXPERIMENT_MAX_PROMPT_BYTES) {
+                            payload.previousVantageContext = null;
+                            payload.omissions = {
+                                ...payload.omissions,
+                                previousVantageContext: true,
+                            };
+                            omissions.previousContext = true;
+                            rewrite();
+                        }
+                        break;
+                    }
+                }
+                promptOmissionsByAttempt.push(omissions);
                 // This check includes the real compound-schema overhead and leaves the existing repair reserve.
                 if (
                     promptBytes > SOPHIA_EXPERIMENT_MAX_PROMPT_BYTES ||
                     Buffer.byteLength(contextText, "utf8") > SOPHIA_EXPERIMENT_MAX_PROMPT_BYTES
                 )
-                    throw new StructuredAttemptSetupError();
+                    throw Object.assign(new StructuredAttemptSetupError(), {
+                        diagnosticReason: "paired-prompt-budget",
+                        promptBytes,
+                        contextBytes: Buffer.byteLength(contextText, "utf8"),
+                        promptByteLimit: SOPHIA_EXPERIMENT_MAX_PROMPT_BYTES,
+                        promptOmissions: omissions,
+                    });
                 promptBytesByAttempt.push(promptBytes);
                 providerAttempts++;
                 const response = await invoke(model, SophiaCompoundOutputSchemaV0, supplied, {
@@ -224,8 +324,16 @@ export function createSophiaContextGenerationExperimentV0(
                     maxOutputTokens: Math.min(options.maxOutputTokens, 2400),
                 });
                 usage = addTokenUsage(usage, response.usage);
+                await diagnostics.observeAttempt?.({
+                    attempt: providerAttempts,
+                    stage: "parsed-provider-output",
+                    data: response.result,
+                });
+                let validationStage = "compound-schema";
+                let eventIssues: unknown[] = [];
                 try {
                     const pair = SophiaCompoundOutputSchemaV0.parse(response.result);
+                    validationStage = "paired-topic-and-enhancement-limits";
                     if (
                         pair.native.topics.length > 1 ||
                         pair.experimental.topics.length > 3 ||
@@ -233,9 +341,12 @@ export function createSophiaContextGenerationExperimentV0(
                         pair.experimental.enhancements.length
                     )
                         throw new InvalidStructuredAttemptError();
-                    const canonical = (ids: string[]) =>
-                        assertRegisteredCitations(safeEnvelope, ids).map(minimalRef);
+                    const canonical = (ids: string[]) => {
+                        validationStage = "exact-experimental-citations";
+                        return assertRegisteredCitations(safeEnvelope, ids).map(minimalRef);
+                    };
                     const topics: ExperimentalTopicV0[] = pair.experimental.topics.map(topic => {
+                        validationStage = "experimental-owner-due-help-fields";
                         if (
                             topic.proposedOwner !== null ||
                             topic.proposedDueInDays !== null ||
@@ -262,14 +373,13 @@ export function createSophiaContextGenerationExperimentV0(
                             rationale: topic.rationale,
                         };
                     });
-                    if (
-                        eventStateContradictions(
-                            pair.experimental,
-                            actualSources,
-                            safeEnvelope.v1Input.reportPeriod.weekStart.slice(0, 4)
-                        ).length
-                    )
-                        throw new InvalidStructuredAttemptError();
+                    validationStage = "experimental-event-state";
+                    eventIssues = eventStateContradictions(
+                        pair.experimental,
+                        actualSources,
+                        safeEnvelope.v1Input.reportPeriod.weekStart.slice(0, 4)
+                    );
+                    if (eventIssues.length) throw new InvalidStructuredAttemptError();
                     const refs = [
                         ...new Map(
                             topics
@@ -279,6 +389,7 @@ export function createSophiaContextGenerationExperimentV0(
                                 .map(ref => [contextSourceKeyV0(ref), ref])
                         ).values(),
                     ].sort((a, b) => contextSourceKeyV0(a).localeCompare(contextSourceKeyV0(b)));
+                    validationStage = "experimental-nonempty-citations";
                     if (!refs.length) throw new InvalidStructuredAttemptError();
                     accepted = {
                         report: {
@@ -289,13 +400,39 @@ export function createSophiaContextGenerationExperimentV0(
                         },
                         refs,
                     };
+                    await diagnostics.observeAttempt?.({
+                        attempt: providerAttempts,
+                        stage: "experimental-validation-accepted",
+                        data: {
+                            nativeEventStateIssues: eventStateContradictions(
+                                pair.native,
+                                nativePromptItems(messages),
+                                safeEnvelope.v1Input.reportPeriod.weekStart.slice(0, 4)
+                            ),
+                        },
+                    });
                     return { result: schema.parse(pair.native), usage: response.usage };
-                } catch {
+                } catch (error) {
                     accepted = null;
+                    await diagnostics.observeAttempt?.({
+                        attempt: providerAttempts,
+                        stage: "experimental-validation-rejected",
+                        data: {
+                            check: validationStage,
+                            eventIssues,
+                            issues: error instanceof z.ZodError ? error.issues : [],
+                            errorName: error instanceof Error ? error.name : "unknown",
+                        },
+                    });
                     throw new InvalidStructuredAttemptError();
                 }
             };
             const native = await createGenerationPort(customInvoke)(safeEnvelope.v1Input, runtime);
+            await diagnostics.observeAttempt?.({
+                attempt: providerAttempts,
+                stage: "native-normalized-result",
+                data: native,
+            });
             if (native.execution.mode !== "ai" || native.enhancements.length || !accepted)
                 throw new SophiaContextExperimentUnavailableErrorV0(native.execution);
             native.draft.modelMetadata = {
@@ -328,6 +465,7 @@ export function createSophiaContextGenerationExperimentV0(
                 generationAttempts: generated.v1Result.execution.attempts,
                 promptBytes: Math.max(0, ...promptBytesByAttempt),
                 promptBytesByAttempt,
+                promptOmissionsByAttempt,
                 usage,
                 contextFingerprint: finalIdentity.contextFingerprint,
                 sourceKeys: finalIdentity.sourceKeys,

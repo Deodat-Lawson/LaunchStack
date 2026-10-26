@@ -1,4 +1,5 @@
 import { createHash, randomUUID } from "node:crypto";
+import { generationModelMetadataV1 } from "./generation-metadata-v1";
 import { and, asc, desc, eq, gte, inArray, lt, lte, or, sql } from "drizzle-orm";
 import { getDb } from "@launchstack/store/client";
 import {
@@ -997,7 +998,10 @@ export async function saveGeneration(
             .set({
                 summary: result.draft.summary,
                 signals: result.signals as unknown as Record<string, unknown>,
-                modelMetadata: result.draft.modelMetadata,
+                modelMetadata: generationModelMetadataV1(
+                    result.draft.modelMetadata,
+                    current?.modelMetadata
+                ),
                 generatedAt: new Date(),
             })
             .where(and(eq(agendas.companyId, companyId), eq(agendas.id, agendaId)));

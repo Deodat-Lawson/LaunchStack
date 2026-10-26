@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { coerceMessageLikeToMessage } from "@langchain/core/messages";
+import { coerceMessageLikeToMessage, HumanMessage } from "@langchain/core/messages";
 import type { ResolvedChatModel } from "@launchstack/llm";
 import { structuredSchemaInstruction, StructuredAttemptSetupError } from "@launchstack/llm";
 import examples from "../../../../docs/design/examples/weekly-decision-agenda-v1.json";
@@ -9,7 +9,9 @@ import { runContextV0Pipeline } from "../context-v0/adapters";
 import type { ContextGenerationEnvelopeV0 } from "../context-v0/ports";
 import { contextSourceKeyV0 } from "../proposals/context-v0";
 import type { GenerationInput, GenerationRuntime } from "../contract-v1";
-import { GENERATION_BUDGETS, GenerationOutputSchema } from "../generation-v1";
+import { GENERATION_BUDGETS, GenerationOutputSchema, generationPrompt } from "../generation-v1";
+import { eligibleInput, computeGenerationSignals, selectGenerationEvidence } from "../evidence-v1";
+import { calendarAdd } from "../period-v1";
 import {
     createSophiaContextGenerationExperimentV0,
     type SophiaCompoundOutputSchemaV0,
@@ -130,6 +132,121 @@ const run = (invoke: ReturnType<typeof vi.fn>) =>
     createSophiaContextGenerationExperimentV0(invoke as Invoke);
 
 describe("opt-in paired Sophia context model experiment", () => {
+    it("makes room for paired context by trimming only copied historical prose while preserving full input and human pending questions", async () => {
+        const input = await envelope();
+        const previousWeek = calendarAdd(input.v1Input.reportPeriod.weekStart, -7);
+        input.v1Input.pendingHistoricalQuestions = {
+            contractVersion: "pending-historical-questions/v1",
+            trust: "historical-human-records",
+            snapshotVersion: "human-question-still-pending",
+            unavailableCount: 0,
+            questions: [
+                {
+                    questionId: "pending-original",
+                    originTopicId: "pending-original",
+                    originReportId: "prior-human-report",
+                    originWeekStart: previousWeek,
+                    originGeneratedAt: input.v1Input.reportPeriod.startInclusive,
+                    title: "Original human question",
+                    question: "Which identifiers should establish the pilot acceptance sample?",
+                    origin: "founder",
+                    humanReview: {
+                        kind: "authored-or-edited",
+                        contentVersion: 2,
+                        status: "kept",
+                        decision: "Obtain a source-backed comparison before deciding.",
+                        decidedAt: input.v1Input.reportPeriod.startInclusive,
+                    },
+                    suggestedDue: null,
+                    sourceRefs: [],
+                },
+            ],
+        };
+        const reviewed = structuredClone(
+            examples.internal.enrichmentInput.reviewedTopics[0]
+        ) as unknown as GenerationInput["reviewedTopics"][number];
+        // The fixture's authored topic is protected even when unrelated to this response.
+        if (reviewed) {
+            reviewed.topic.id = "protected-current-topic";
+            reviewed.topic.title = "Keep this current review";
+            reviewed.topic.facts = [];
+            reviewed.topic.conflicts = [];
+            reviewed.topic.decisionQuestion = "Keep this exact current review question?";
+            reviewed.topic.origin = "founder";
+            input.v1Input.reviewedTopics = [reviewed];
+        }
+        const baseline = await run(vi.fn().mockResolvedValue(response()))(input, runtime());
+        input.v1Input.previousVantageContext = {
+            contractVersion: "previous-vantage/v1",
+            trust: "untrusted-history",
+            reportId: "prior-ai-report",
+            weekStart: previousWeek,
+            generatedAt: input.v1Input.reportPeriod.startInclusive,
+            reportVersion: 1,
+            snapshotVersion: "old-ai-history",
+            summary: "Old unverified interpretation. ".repeat(35),
+            topics: Array.from({ length: 6 }, (_, index) => ({
+                topicId: `old-ai-${index}`,
+                contentVersion: 1,
+                origin: "ai",
+                status: "suggested",
+                title: `Historical AI suggestion ${index}`,
+                interpretation: "Unverified earlier inference. ".repeat(12),
+                question: "Does current evidence support this old interpretation?",
+                suggestedNextStep: "Unapproved old recommendation. ".repeat(8),
+                suggestedDue: previousWeek,
+                recordedDecision: null,
+                reportedActions: [],
+                originalRefs: [],
+            })),
+            unavailableSources: [],
+            omissions: { topics: 0, refs: 0, summary: false },
+            documentVerification: "unavailable",
+        };
+        const before = structuredClone(input);
+        const eligible = eligibleInput(input.v1Input),
+            selection = selectGenerationEvidence(eligible, computeGenerationSignals(eligible));
+        const expected = generationPrompt(eligible, selection.pack).payload;
+        const padding = Math.max(
+            0,
+            SOPHIA_EXPERIMENT_MAX_PROMPT_BYTES - baseline.diagnostics.promptBytes - 700
+        );
+        const paddedModel = {
+            ...model,
+            prepareMessages: (messages: Parameters<ResolvedChatModel["prepareMessages"]>[0]) => [
+                ...model.prepareMessages(messages),
+                new HumanMessage("p".repeat(padding)),
+            ],
+        } as ResolvedChatModel;
+        const invoke = vi.fn().mockResolvedValue(response());
+        const result = await run(invoke)(
+            input,
+            runtime(() => paddedModel)
+        );
+        const sent = (invoke.mock.calls[0]![2] as { content: string }[])
+            .map(message => {
+                try {
+                    return JSON.parse(message.content);
+                } catch {
+                    return null;
+                }
+            })
+            .find(payload => Array.isArray(payload?.items));
+        expect(
+            result.diagnostics.promptOmissionsByAttempt.some(
+                omission =>
+                    omission.previousSummary || omission.previousTopics || omission.previousContext
+            )
+        ).toBe(true);
+        expect(result.diagnostics.promptBytes).toBeLessThanOrEqual(23500);
+        expect(sent.pendingHistoricalQuestions).toEqual(expected.pendingHistoricalQuestions);
+        expect(sent.reviewedTopics).toEqual(expected.reviewedTopics);
+        expect(sent.items).toEqual(expected.items);
+        expect(sent.metricChanges).toEqual(expected.metricChanges);
+        expect(input).toEqual(before);
+        expect(result.generated.v1Result.inputVersion).toBe(input.v1Input.inputVersion);
+        expect(invoke).toHaveBeenCalledTimes(1);
+    });
     it("sends actual frozen context and produces both B reports in one invocation without fake v1 IDs", async () => {
         const input = await envelope(),
             before = structuredClone(input);

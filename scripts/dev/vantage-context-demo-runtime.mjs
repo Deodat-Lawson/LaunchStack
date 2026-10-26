@@ -15,14 +15,21 @@ import {
     parsePassword,
     CONTAINER,
     VOLUME,
+    DATABASE_PORT,
+    LOCAL_ENV,
+    main as prepareDatabase,
 } from "./vantage-integration-tl-test.mjs";
 
 export const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 export const RUNTIME_DIR = resolve(ROOT, "test-output/vantage-context-demo/runtime");
 export const FIXTURE_FILE = resolve(RUNTIME_DIR, "fixture.json");
 export const CREDENTIALS_FILE = resolve(RUNTIME_DIR, "credentials.json");
-export const APP_URL = "http://localhost:3104";
-export const DEMO_AS_OF = "2026-10-26T23:59:00.000Z";
+const requestedAppPort = process.env.VANTAGE_CONTEXT_DEMO_APP_PORT ?? "3104";
+if (!["3104", "3105"].includes(requestedAppPort))
+    throw new Error("Only demo app ports 3104 and 3105 are allowed.");
+export const APP_URL = `http://localhost:${requestedAppPort}`;
+// A new fixture records a real creation cutoff; retained fixtures keep their original cutoff.
+export const DEMO_AS_OF = new Date(new Date().setUTCHours(23, 59, 59, 999)).toISOString();
 export const APPROVED_MODELS_SHA256 =
     "2b5e377779313de1e13868b4c61f0633d15b63a3eb82e03d761f399768e02bb9";
 const WEB = resolve(ROOT, "apps/web");
@@ -42,7 +49,7 @@ export function assertDatabaseUrl(raw) {
     if (
         value.protocol !== "postgres:" ||
         value.hostname !== "127.0.0.1" ||
-        value.port !== "55437" ||
+        value.port !== String(DATABASE_PORT) ||
         value.pathname !== "/vantage_week2_tl_contract_v1" ||
         value.username !== "vantage_week2_tl" ||
         value.search ||
@@ -73,14 +80,19 @@ export function assertApprovedAzureEndpoint(raw) {
 }
 
 export function approvedProvider(inherited = process.env) {
-    const { CHAT_BASE_URL, CHAT_API_KEY, CHAT_MODELS_CONFIG } = inherited;
+    const { CHAT_BASE_URL, CHAT_API_KEY } = inherited;
+    const CHAT_MODELS_CONFIG =
+        inherited.CHAT_MODELS_CONFIG ??
+        resolve(ROOT, "apps/web/config/chat-models.vantage-demo.azure.yaml");
     if (!CHAT_BASE_URL || !CHAT_API_KEY || !CHAT_MODELS_CONFIG)
         throw new Error(
             "Set CHAT_BASE_URL, CHAT_API_KEY and absolute CHAT_MODELS_CONFIG for the approved synthetic Azure deployment."
         );
     assertApprovedAzureEndpoint(CHAT_BASE_URL);
     if (!isAbsolute(CHAT_MODELS_CONFIG)) throw new Error("Use the absolute verified model config.");
-    const hash = createHash("sha256").update(readFileSync(CHAT_MODELS_CONFIG)).digest("hex");
+    const hash = createHash("sha256")
+        .update(readFileSync(CHAT_MODELS_CONFIG, "utf8").replace(/\r\n/g, "\n"))
+        .digest("hex");
     if (hash !== APPROVED_MODELS_SHA256)
         throw new Error(
             "The model config differs from the verified synthetic gpt-6-luna configuration."
@@ -130,9 +142,7 @@ function credentials() {
 }
 
 function databaseEnvironment() {
-    const password = parsePassword(
-        readFileSync(resolve(ROOT, "scripts/dev/vantage-integration-tl.env.local"), "utf8")
-    );
+    const password = parsePassword(readFileSync(LOCAL_ENV, "utf8"));
     if (!password) throw new Error("The existing TL database local credential file is required.");
     const env = tlEnvironment(password);
     assertDatabaseUrl(env.DATABASE_URL);
@@ -153,7 +163,9 @@ export function demoEnvironment(base, secret, fixture, provider = {}) {
         VANTAGE_CONTEXT_DEMO_ENABLED: "true",
         VANTAGE_CONTEXT_DEMO_FIXTURE: FIXTURE_FILE,
         VANTAGE_CONTEXT_DEMO_CREDENTIALS: CREDENTIALS_FILE,
-        VANTAGE_CONTEXT_DEMO_AS_OF: DEMO_AS_OF,
+        VANTAGE_CONTEXT_DEMO_AS_OF: fixture?.weeks?.at(-1)?.asOf ?? DEMO_AS_OF,
+        VANTAGE_CONTEXT_DEMO_APP_PORT: requestedAppPort,
+        VANTAGE_CONTEXT_DEMO_GENERATION_MODE: "replay",
         VANTAGE_TEST_MODE: "true",
         VANTAGE_TEST_COMPANY_ID: fixture?.companyId ?? "0",
         VANTAGE_TEST_USER_IDS: fixture?.actorId ?? "",
@@ -223,7 +235,7 @@ async function prepare() {
         secret = credentials();
     diagnosticStage = "existing-owned-database-check";
     await verifyOwnedDatabase(base);
-    const env = demoEnvironment(base, secret, null);
+    const env = demoEnvironment(base, secret, existsSync(FIXTURE_FILE) ? readFixture() : null);
     diagnosticStage = "native-synthetic-seed";
     const result = await run(
         process.execPath,
@@ -282,34 +294,41 @@ async function enrichCompany() {
         );
 }
 
-async function serve() {
+async function serve(live = false) {
     diagnosticStage = "isolated-runtime-files";
     assertNoDotenv();
     const base = databaseEnvironment(),
         secret = credentials(),
         fixture = readFixture();
     diagnosticStage = "approved-model-configuration";
-    const provider = approvedProvider();
+    const provider = live ? approvedProvider() : {};
     diagnosticStage = "existing-owned-database-check";
     await verifyOwnedDatabase(base);
     diagnosticStage = "local-app-port";
     await new Promise((done, reject) => {
         const server = createServer();
         server.once("error", () =>
-            reject(new Error("Local port 3104 is occupied; no existing process was stopped."))
+            reject(
+                new Error(
+                    `Local port ${requestedAppPort} is occupied; no existing process was stopped.`
+                )
+            )
         );
-        server.listen(3104, "localhost", () => server.close(done));
+        server.listen(Number(requestedAppPort), "localhost", () => server.close(done));
     });
     diagnosticStage = "next-runtime-start";
     const requireWeb = createRequire(resolve(WEB, "package.json"));
     const next = requireWeb.resolve("next/dist/bin/next");
-    const env = demoEnvironment(base, secret, fixture, provider);
+    const env = {
+        ...demoEnvironment(base, secret, fixture, provider),
+        VANTAGE_CONTEXT_DEMO_GENERATION_MODE: live ? "live" : "replay",
+    };
     console.log(
-        `[context-demo] ${APP_URL}/dev/vantage-context — native authentication; synthetic data only; no worker.`
+        `[context-demo] ${APP_URL}/dev/vantage-context — ${live ? "live provider enabled" : "offline replay; no fresh model call"}; native authentication; synthetic data only; no worker.`
     );
     const child = spawn(
         process.execPath,
-        [next, "dev", "--turbo", "--hostname", "localhost", "--port", "3104"],
+        [next, "dev", "--turbo", "--hostname", "localhost", "--port", requestedAppPort],
         {
             cwd: WEB,
             env,
@@ -363,16 +382,31 @@ async function serve() {
 export async function main(args = process.argv.slice(2)) {
     if (
         args.length !== 1 ||
-        !["--prepare", "--serve", "--status", "--enrich-company"].includes(args[0])
+        ![
+            "--setup",
+            "--prepare",
+            "--serve",
+            "--serve-live",
+            "--status",
+            "--enrich-company",
+        ].includes(args[0])
     ) {
         console.log(
-            "node scripts/dev/vantage-context-demo-runtime.mjs --prepare | --serve | --status | --enrich-company"
+            "node scripts/dev/vantage-context-demo-runtime.mjs --setup | --prepare | --serve | --serve-live | --status | --enrich-company"
         );
         if (args[0] !== "--help") process.exitCode = 1;
         return;
     }
+    if (args[0] === "--setup") {
+        assertNoDotenv();
+        await prepareDatabase(["--prepare-only"]);
+        await prepare();
+        await enrichCompany();
+        return;
+    }
     if (args[0] === "--prepare") return prepare();
     if (args[0] === "--serve") return serve();
+    if (args[0] === "--serve-live") return serve(true);
     if (args[0] === "--enrich-company") return enrichCompany();
     const fixture = existsSync(FIXTURE_FILE) ? readFixture() : null;
     console.log(
@@ -382,7 +416,7 @@ export async function main(args = process.argv.slice(2)) {
                 prepared: !!fixture,
                 fixtureId: fixture?.fixtureId ?? null,
                 fixtureFile: FIXTURE_FILE,
-                model: "approved gpt-6-luna; only called by explicit interactive generation",
+                model: "offline replay by default; --serve-live enables approved gpt-6-luna",
                 weeks: fixture?.weeks ?? [],
                 credentialsFile: CREDENTIALS_FILE,
             },

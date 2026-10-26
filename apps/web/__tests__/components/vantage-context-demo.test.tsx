@@ -306,6 +306,71 @@ it("generates only after an explicit click and displays the returned saved repor
     expect(mockReview).not.toHaveBeenCalled();
 });
 
+function recordedReplay(): DemoReport {
+    const recorded = report();
+    recorded.execution = {
+        mode: "replay",
+        modelId: "gpt-6-luna",
+        promptVersion: "synthetic-context-test/v1",
+        attempts: 0,
+        durationMs: 0,
+        fallbackReason: null,
+        replay: {
+            fixtureId: "synthetic-recorded-report/v1",
+            recordedAt: "2026-10-26T19:12:55.000Z",
+            originalModelId: "gpt-6-luna-2026-09-22",
+        },
+    };
+    return recorded;
+}
+
+it("offers explicitly labeled offline replay before any contextual report exists", async () => {
+    mockLoad.mockResolvedValue(state({ report: null, generationMode: "replay" }));
+    const saved = state({ report: recordedReplay(), generationMode: "replay" });
+    mockGenerate.mockResolvedValue(saved);
+    render(<ContextDemoScreen />);
+    const buttons = await screen.findAllByRole("button", { name: "Replay recorded report" });
+    expect(buttons).toHaveLength(2);
+    expect(screen.queryByRole("button", { name: "Generate with context" })).not.toBeInTheDocument();
+    expect(screen.getByText(/No fresh AI call occurs/)).toBeVisible();
+    expect(screen.queryByText(/ready to call the configured model/)).not.toBeInTheDocument();
+    expect(mockGenerate).not.toHaveBeenCalled();
+    fireEvent.click(buttons[0]!);
+    expect(await screen.findByText(saved.report!.summary)).toBeVisible();
+    expect(screen.getByText("Recorded AI replay · no fresh model call")).toBeVisible();
+    expect(mockGenerate).toHaveBeenCalledWith(
+        "2026-10-12",
+        expect.objectContaining({ aborted: false })
+    );
+    expect(mockReview).not.toHaveBeenCalled();
+});
+
+it("shows recorded model provenance without presenting replay timing as a fresh provider attempt", async () => {
+    mockLoad.mockResolvedValue(state({ report: recordedReplay(), generationMode: "replay" }));
+    render(<ContextDemoScreen />);
+    expect(await screen.findByText("Recorded AI replay · no fresh model call")).toBeVisible();
+    expect(screen.getByText(/Original response: gpt-6-luna-2026-09-22/)).toHaveTextContent(
+        "2026-10-26T19:12:55.000Z"
+    );
+    fireEvent.click(screen.getByText(/Saved report details ·/));
+    expect(screen.getByText("Recorded replay · no model call")).toBeVisible();
+    expect(screen.queryByText(/AI · 0 attempts/)).not.toBeInTheDocument();
+    expect(screen.queryByText("Context-aware · AI")).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Inspect Company Architecture" })).toBeEnabled();
+    expect(screen.getByRole("region", { name: "Native pending queue" })).toBeVisible();
+    expect(mockGenerate).not.toHaveBeenCalled();
+});
+
+it("keeps a saved actual AI report distinct from a currently selected replay generation mode", async () => {
+    mockLoad.mockResolvedValue(state({ generationMode: "replay" }));
+    render(<ContextDemoScreen />);
+    expect(await screen.findByText(report().summary)).toBeVisible();
+    expect(screen.getByRole("button", { name: "Replay recorded report" })).toBeEnabled();
+    expect(screen.getByText("Context-aware · AI")).toBeVisible();
+    expect(screen.queryByText("Recorded AI replay · no fresh model call")).not.toBeInTheDocument();
+    expect(mockGenerate).not.toHaveBeenCalled();
+});
+
 it("opens a fact's exact canonical version instead of manufacturing a native evidence ID", async () => {
     render(<ContextDemoScreen />);
     const topic = await screen.findByRole("article", { name: "Compare the recorded sample" });

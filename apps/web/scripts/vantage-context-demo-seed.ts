@@ -32,7 +32,9 @@ const runtimeDir = resolve(root, "test-output/vantage-context-demo/runtime");
 const fixtureFile = resolve(runtimeDir, "fixture.json");
 const credentialsFile = resolve(runtimeDir, "credentials.json");
 const seedStateFile = resolve(runtimeDir, "seed-state.json");
-const asOf = "2026-10-26T23:59:00.000Z";
+const asOf = process.env.VANTAGE_CONTEXT_DEMO_AS_OF ?? "2026-10-26T23:59:00.000Z";
+if (!Number.isFinite(Date.parse(asOf)))
+    throw new Error("A real explicit fixture cutoff is required.");
 // Explicit demo catalog, not a production retrieval/ranking policy. All eleven
 // original synthetic documents remain untouched in PostgreSQL.
 const demoDocumentKeys = [
@@ -76,7 +78,8 @@ function databaseUrl(): string {
     if (
         target.protocol !== "postgres:" ||
         target.hostname !== "127.0.0.1" ||
-        target.port !== "55437" ||
+        !["55437", "55438"].includes(process.env.VANTAGE_CONTEXT_DEMO_DB_PORT ?? "55437") ||
+        target.port !== (process.env.VANTAGE_CONTEXT_DEMO_DB_PORT ?? "55437") ||
         target.pathname !== "/vantage_week2_tl_contract_v1" ||
         target.username !== "vantage_week2_tl" ||
         target.search ||
@@ -170,8 +173,7 @@ async function main() {
             .where(and(eq(users.userId, descriptor.actorId), eq(users.companyId, companyId)));
         if (
             owned?.name !== `${SOPHIA_SYNTHETIC_COMPANY_PREFIX}${descriptor.fixtureId}` ||
-            !actor ||
-            !actor.email ||
+            !actor?.email ||
             descriptor.roleContext.authenticatedPrincipalRef !== descriptor.actorId
         )
             throw new Error(
@@ -212,7 +214,7 @@ async function main() {
             await database.insert(authUser).values({
                 id: descriptor.actorId,
                 name: actor.name ?? "Synthetic Vantage evaluator",
-                email: actor.email!,
+                email: actor.email,
                 emailVerified: true,
                 createdAt: time,
                 updatedAt: time,

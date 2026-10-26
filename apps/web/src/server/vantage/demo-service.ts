@@ -35,6 +35,7 @@ import {
     type SophiaCompositionRequestV0,
 } from "./experiments/sophia-composition-v0";
 import { createSophiaContextGenerationExperimentV0 } from "../../../../../pipelines/src/vantage/experiments/sophia-generation-v0";
+import { bindDemoReplayReport, DEMO_REPLAY, replayContextDemo } from "./experiments/demo-replay";
 import type {
     DemoReport,
     DemoSource,
@@ -125,9 +126,14 @@ export function assertVantageContextDemoEnabled() {
     )
         fail("The isolated demonstration database is unavailable.", 503, "demo_unavailable");
     const target = new URL(raw);
+    const ownedPort = process.env.VANTAGE_CONTEXT_DEMO_DB_PORT ?? "55437";
     if (
         target.hostname !== "127.0.0.1" ||
-        target.port !== "55437" ||
+        !["postgres:", "postgresql:"].includes(target.protocol) ||
+        target.username !== "vantage_week2_tl" ||
+        Boolean(target.search || target.hash) ||
+        !["55437", "55438"].includes(ownedPort) ||
+        target.port !== ownedPort ||
         target.pathname !== "/vantage_week2_tl_contract_v1"
     )
         fail("The isolated demonstration database is unavailable.", 503, "demo_unavailable");
@@ -197,6 +203,8 @@ function sealPayload(payload: SavedPayload): CipherEnvelope {
 }
 export function createVantageContextDemoService(deps: Dependencies = {}) {
     const database = () => deps.database ?? getEngine().db;
+    const generationMode = (): "live" | "replay" =>
+        process.env.VANTAGE_CONTEXT_DEMO_GENERATION_MODE === "replay" ? "replay" : "live";
     const resolveDemoModel = () => {
         const model = (
             deps.resolveModel ??
@@ -383,6 +391,7 @@ export function createVantageContextDemoService(deps: Dependencies = {}) {
             selectedWeek,
             report: null,
             nativeAgendaId: row?.id ?? null,
+            generationMode: generationMode(),
         };
         try {
             const fresh = await prepare(descriptor, selectedWeek);
@@ -406,7 +415,7 @@ export function createVantageContextDemoService(deps: Dependencies = {}) {
         }
         return state;
     }
-    async function generateWeek(week: string): Promise<DemoState> {
+    async function generateWeek(week: string, mode?: "live" | "replay"): Promise<DemoState> {
         let stage = "authorization";
         try {
             const { descriptor, ctx } = await authorized();
@@ -420,11 +429,13 @@ export function createVantageContextDemoService(deps: Dependencies = {}) {
                 );
             stage = "context-assembly";
             const { service, prepared, envelope } = await prepare(descriptor, week);
+            const replay = (mode ?? generationMode()) === "replay";
             stage = "model-resolution";
             const controller = new AbortController();
-            const model = resolveDemoModel();
+            const model = replay ? null : resolveDemoModel();
             const base = process.env.CHAT_BASE_URL;
             if (
+                !replay &&
                 !deps.generate &&
                 (!base ||
                     !new URL(base).hostname.endsWith(".openai.azure.com") ||
@@ -435,9 +446,10 @@ export function createVantageContextDemoService(deps: Dependencies = {}) {
                     503,
                     "demo_model_unavailable"
                 );
-            const capture = deps.generate
-                ? undefined
-                : await captureDemoGeneration(envelope, model);
+            const capture =
+                !replay && !deps.generate && model
+                    ? await captureDemoGeneration(envelope, model)
+                    : undefined;
             if (capture)
                 console.info(`[vantage-demo] Synthetic attempt artifacts: ${capture.directory}`);
             const generate =
@@ -448,8 +460,8 @@ export function createVantageContextDemoService(deps: Dependencies = {}) {
             const timer = setTimeout(() => controller.abort(), 45000);
             let output: Generated;
             try {
-                stage = "model-generation";
-                output = await generate(envelope, {
+                stage = replay ? "authorized-replay" : "model-generation";
+                const runtime: GenerationRuntime = {
                     resolveModel: () => model,
                     signal: controller.signal,
                     budgets: {
@@ -458,14 +470,23 @@ export function createVantageContextDemoService(deps: Dependencies = {}) {
                         retryWaitMs: 1000,
                         totalMs: 45000,
                     },
-                });
+                };
+                output = replay
+                    ? await replayContextDemo(
+                          envelope,
+                          prepared.sourceRecords,
+                          descriptor.fixtureId,
+                          runtime
+                      )
+                    : await generate(envelope, runtime);
             } finally {
                 clearTimeout(timer);
                 controller.abort();
             }
             if (
-                output.generated.v1Result.execution.mode !== "ai" ||
-                output.generated.v1Result.execution.fallbackReason !== null
+                !replay &&
+                (output.generated.v1Result.execution.mode !== "ai" ||
+                    output.generated.v1Result.execution.fallbackReason !== null)
             )
                 fail(
                     "The model did not produce a validated context report; the saved report was retained.",
@@ -497,13 +518,14 @@ export function createVantageContextDemoService(deps: Dependencies = {}) {
                     status: "suggested",
                 })),
                 execution: {
-                    mode: "ai",
+                    mode: replay ? "replay" : "ai",
                     modelId: output.diagnostics.modelId,
                     promptVersion: output.diagnostics.promptVersion,
                     attempts: output.diagnostics.providerAttempts,
                     durationMs: output.diagnostics.durationMs,
                     fallbackReason: null,
-                    ...(model.reasoning?.requestPatch.reasoning_effort === "none"
+                    ...(replay ? { replay: DEMO_REPLAY } : {}),
+                    ...(model?.reasoning?.requestPatch.reasoning_effort === "none"
                         ? { reasoningEffort: "none" as const }
                         : {}),
                 },
@@ -685,9 +707,20 @@ export function createVantageContextDemoService(deps: Dependencies = {}) {
             throw failure;
         }
     }
-    async function preflight(week: string) {
+    async function preflight(week: string, mode?: "live" | "replay") {
         const { descriptor } = await authorized();
-        const { envelope } = await prepare(descriptor, week);
+        const { envelope, prepared } = await prepare(descriptor, week);
+        if ((mode ?? generationMode()) === "replay") {
+            bindDemoReplayReport(envelope, prepared.sourceRecords, descriptor.fixtureId);
+            return {
+                ready: true,
+                providerCalled: false,
+                persisted: false,
+                reason: "authorized-recorded-synthetic-replay",
+                promptBytes: 0,
+                promptByteLimit: 23500,
+            };
+        }
         const model = resolveDemoModel();
         let providerBoundaryReached = false;
         let promptBytes = 0;

@@ -87,6 +87,7 @@ function ContextDemoWeek({
     }, []);
     const data = state.data;
     const report = !withheld && !state.error ? data?.report : null;
+    const replayMode = data?.generationMode === "replay";
     const locked = busy !== null || refreshing;
     useEffect(() => {
         if (data) onSelectedWeek?.(data.selectedWeek);
@@ -202,7 +203,13 @@ function ContextDemoWeek({
                         ) : (
                             <Sparkles aria-hidden="true" />
                         )}
-                        {busy === "generate" ? "Generating…" : "Generate with context"}
+                        {busy === "generate"
+                            ? replayMode
+                                ? "Replaying…"
+                                : "Generating…"
+                            : replayMode
+                              ? "Replay recorded report"
+                              : "Generate with context"}
                     </Button>
                 }
             />
@@ -247,8 +254,10 @@ function ContextDemoWeek({
                 </ToolLink>
             </div>
             <p className="text-ink-3 -mt-3 text-xs leading-relaxed">
-                Generation explicitly calls the configured model and saves this contextual report
-                only after validation. Reviews record your choice; they do not create actions.
+                {replayMode
+                    ? "Offline replay uses a recorded synthetic model response, with current authorized source bindings and guarded storage. No fresh AI call occurs."
+                    : "Generation explicitly calls the configured model and saves this contextual report only after validation."}{" "}
+                Reviews record your choice; they do not create actions.
             </p>
             {data?.companyArchitecture && !withheld && !state.error && (
                 <section
@@ -313,7 +322,18 @@ function ContextDemoWeek({
                                     className="border-line from-brand-soft rounded-xl border bg-gradient-to-br to-transparent px-5 py-5"
                                 >
                                     <div className="mb-3 flex flex-wrap items-center gap-2">
-                                        <Badge variant="outline">Context-aware · AI</Badge>
+                                        <Badge variant="outline">
+                                            {report.execution.mode === "replay"
+                                                ? "Recorded AI replay · no fresh model call"
+                                                : "Context-aware · AI"}
+                                        </Badge>
+                                        {report.execution.replay && (
+                                            <span className="text-ink-3 text-xs">
+                                                Original response:{" "}
+                                                {report.execution.replay.originalModelId},{" "}
+                                                {report.execution.replay.recordedAt}
+                                            </span>
+                                        )}
                                         <span className="text-ink-3 text-xs">
                                             Saved {new Date(report.generatedAt).toLocaleString()}
                                         </span>
@@ -411,13 +431,19 @@ function ContextDemoWeek({
                                     withheld || state.error
                                         ? "Reload to verify the current evidence and access before reviewing this report."
                                         : data.unavailableReason
-                                          ? "Earlier contextual reports and human reviews remain stored. Generate a fresh report from the current authorized evidence."
-                                          : "Generate when you are ready to call the configured model. Your native weekly review and earlier human decisions remain available."
+                                          ? replayMode
+                                              ? "Earlier reports and human reviews remain stored. Replay is available only when its recorded evidence still matches the authorized fixture."
+                                              : "Earlier contextual reports and human reviews remain stored. Generate a fresh report from the current authorized evidence."
+                                          : replayMode
+                                            ? "Replay the recorded synthetic response without a fresh AI call. Your native weekly review and earlier human decisions remain available."
+                                            : "Generate when you are ready to call the configured model. Your native weekly review and earlier human decisions remain available."
                                 }
                                 action={
                                     <Button onClick={generate} disabled={locked}>
                                         <Sparkles aria-hidden="true" />
-                                        Generate with context
+                                        {replayMode
+                                            ? "Replay recorded report"
+                                            : "Generate with context"}
                                     </Button>
                                 }
                             />
@@ -657,9 +683,15 @@ function ExecutionDetails({
             <dl className="mt-3 grid grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-2">
                 <dt>Generation</dt>
                 <dd>
-                    AI · {report.execution.attempts}{" "}
-                    {report.execution.attempts === 1 ? "attempt" : "attempts"} ·{" "}
-                    {(report.execution.durationMs / 1000).toFixed(1)}s
+                    {report.execution.mode === "replay" ? (
+                        "Recorded replay · no model call"
+                    ) : (
+                        <>
+                            AI · {report.execution.attempts}{" "}
+                            {report.execution.attempts === 1 ? "attempt" : "attempts"} ·{" "}
+                            {(report.execution.durationMs / 1000).toFixed(1)}s
+                        </>
+                    )}
                 </dd>
                 <dt>Persistence</dt>
                 <dd>Saved contextual report · revision {report.version}</dd>

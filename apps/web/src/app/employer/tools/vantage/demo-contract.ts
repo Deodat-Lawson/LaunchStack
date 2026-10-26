@@ -30,13 +30,14 @@ export interface DemoReport {
     summary: string;
     topics: DemoTopic[];
     execution: {
-        mode: "ai";
+        mode: "ai" | "replay";
         modelId: string;
         promptVersion: string;
         attempts: number;
         durationMs: number;
         fallbackReason: null;
         reasoningEffort?: "none";
+        replay?: { fixtureId: string; recordedAt: string; originalModelId: string };
     };
     diagnostics: {
         sources: {
@@ -71,6 +72,8 @@ export interface DemoReport {
     };
 }
 export interface DemoState {
+    /** Explicitly local demo transport; replay never calls a model. */
+    generationMode?: "live" | "replay";
     weeks: { weekStart: string; label?: string }[];
     selectedWeek: string;
     report: DemoReport | null;

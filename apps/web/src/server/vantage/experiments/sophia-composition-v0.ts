@@ -130,7 +130,11 @@ function requireSyntheticEnvironment() {
     if (
         !["postgres:", "postgresql:"].includes(target.protocol) ||
         target.hostname !== "127.0.0.1" ||
-        target.port !== "55437" ||
+        !["55437", "55438"].includes(process.env.VANTAGE_CONTEXT_DEMO_DB_PORT ?? "55437") ||
+        target.port !== (process.env.VANTAGE_CONTEXT_DEMO_DB_PORT ?? "55437") ||
+        target.username !== "vantage_week2_tl" ||
+        target.search !== "" ||
+        target.hash !== "" ||
         target.pathname !== "/vantage_week2_tl_contract_v1"
     )
         fail("synthetic_only", 503);

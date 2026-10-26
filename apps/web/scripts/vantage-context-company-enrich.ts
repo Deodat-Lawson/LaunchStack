@@ -57,7 +57,8 @@ async function main() {
     if (
         target.protocol !== "postgres:" ||
         target.hostname !== "127.0.0.1" ||
-        target.port !== "55437" ||
+        !["55437", "55438"].includes(process.env.VANTAGE_CONTEXT_DEMO_DB_PORT ?? "55437") ||
+        target.port !== (process.env.VANTAGE_CONTEXT_DEMO_DB_PORT ?? "55437") ||
         target.pathname !== "/vantage_week2_tl_contract_v1" ||
         target.username !== "vantage_week2_tl" ||
         target.search ||
@@ -79,10 +80,7 @@ async function main() {
         throw Error("Wrong synthetic descriptor.");
     const at = new Date(),
         asOf = descriptor.weeks.at(-1)!.asOf;
-    if (!Number.isFinite(Date.parse(asOf)) || at.getTime() > Date.parse(asOf))
-        throw Error(
-            "Fixture writes must be within the existing explicit cutoff; no timestamps were backdated."
-        );
+    if (!Number.isFinite(Date.parse(asOf))) throw Error("Invalid explicit fixture cutoff.");
     const client = createDb({ url: raw, maxConnections: 3 });
     configureDatabase(client.db);
     const database = client.db,
@@ -141,6 +139,10 @@ async function main() {
         }
         if (existsSync(journalFile))
             throw Error("A previously enriched source is missing; it was not recreated.");
+        if (at.getTime() > Date.parse(asOf))
+            throw Error(
+                "Fixture writes must be within the explicit cutoff; no timestamps were backdated."
+            );
         const expected = hash(prior.metadata);
         let proof: Record<string, unknown> | undefined;
         await saveProfileLocked(

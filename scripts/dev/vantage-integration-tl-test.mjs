@@ -2,22 +2,32 @@
 /** Local TL environment only. Never starts the app or installs an AI adapter. */
 import { spawn } from "node:child_process";
 import { randomBytes } from "node:crypto";
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { createServer } from "node:net";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
-export const PROJECT = "launchstack-vantage-week2-tl-20261022";
+const requestedPort = process.env.VANTAGE_CONTEXT_DEMO_DB_PORT ?? "55437";
+if (!["55437", "55438"].includes(requestedPort))
+    throw new Error(
+        "Only the existing 55437 or explicitly isolated portable 55438 target is allowed."
+    );
+export const DATABASE_PORT = Number(requestedPort);
+export const PROJECT = `launchstack-vantage-week2-tl-20261022${DATABASE_PORT === 55438 ? "-portable" : ""}`;
 export const CONTAINER = `${PROJECT}-db`;
 export const VOLUME = `${PROJECT}-data`;
 export const DATABASE = "vantage_week2_tl_contract_v1";
 export const USER = "vantage_week2_tl";
-export const DATABASE_PORT = 55437;
 const MARKER = "io.launchstack.tl-test";
 const DATA_DIR = "/var/lib/postgresql/data";
 const COMPOSE = resolve(ROOT, "scripts/dev/vantage-integration-tl.compose.yml");
-const LOCAL_ENV = resolve(ROOT, "scripts/dev/vantage-integration-tl.env.local");
+export const LOCAL_ENV = resolve(
+    ROOT,
+    DATABASE_PORT === 55438
+        ? "test-output/vantage-context-demo/runtime/tl-test.env.local"
+        : "scripts/dev/vantage-integration-tl.env.local"
+);
 const EXAMPLE_ENV = resolve(ROOT, "scripts/dev/vantage-integration-tl.env.example");
 const VITEST = resolve(ROOT, "pipelines/node_modules/vitest/vitest.mjs");
 const JEST = resolve(ROOT, "apps/web/node_modules/jest/bin/jest.js");
@@ -81,6 +91,10 @@ export function childEnvironment(password, inherited = process.env) {
         COMPOSE_REMOVE_ORPHANS: "false",
         PROPOSALS_EXECUTOR: "inline",
         VANTAGE_TL_TEST_MODE: "true",
+        VANTAGE_CONTEXT_DEMO_DB_PORT: String(DATABASE_PORT),
+        VANTAGE_TL_DATABASE_PORT: String(DATABASE_PORT),
+        VANTAGE_TL_CONTAINER: CONTAINER,
+        VANTAGE_TL_VOLUME: VOLUME,
         EMAIL_SENDING_ENABLED: "false",
         GMAIL_CONNECTOR_ENABLED: "false",
         AGENT_KNOWLEDGE_CONNECTOR_ENABLED: "false",
@@ -232,6 +246,7 @@ function localPassword() {
     const password = parsePassword(readFileSync(exists ? LOCAL_ENV : EXAMPLE_ENV, "utf8"));
     if (password) return password;
     const generated = randomBytes(24).toString("hex");
+    mkdirSync(dirname(LOCAL_ENV), { recursive: true });
     writeFileSync(
         LOCAL_ENV,
         `# Generated local TL test credentials. Keep this file for reruns.\nVANTAGE_TL_TEST_PASSWORD=${generated}\n`,
@@ -285,12 +300,12 @@ export async function main(args = process.argv.slice(2)) {
     args = args.filter(arg => arg !== "--");
     if (args.includes("--help")) {
         console.log(
-            "pnpm exec node scripts/dev/vantage-integration-tl-test.mjs        Start this integration's isolated DB, migrate, and run TL tests.\npnpm exec node scripts/dev/vantage-integration-tl-test.mjs --stop Stop only this integration's TL container, preserving its volume."
+            "pnpm exec node scripts/dev/vantage-integration-tl-test.mjs        Start this integration's isolated DB, migrate, and run TL tests.\npnpm exec node scripts/dev/vantage-integration-tl-test.mjs --prepare-only Start and migrate only; no test suite or seed.\npnpm exec node scripts/dev/vantage-integration-tl-test.mjs --stop Stop only this integration's TL container, preserving its volume."
         );
         return;
     }
-    if (args.some(arg => arg !== "--stop") || args.length > 1)
-        throw new Error("Use this launcher with no arguments, --stop, or --help.");
+    if (args.some(arg => !["--stop", "--prepare-only"].includes(arg)) || args.length > 1)
+        throw new Error("Use this launcher with no arguments, --prepare-only, --stop, or --help.");
     if (Number(process.versions.node.split(".")[0]) < 20)
         throw new Error("Node.js 20 or later is required.");
     console.log("[TL] Checking the local Docker engine and dedicated test resources.");
@@ -365,6 +380,12 @@ export async function main(args = process.argv.slice(2)) {
             ["packages/store/scripts/migrate.mjs", `--set=${set}`, "--check"],
             { env }
         );
+    }
+    if (args.includes("--prepare-only")) {
+        console.log(
+            "[TL] Owned database migrated and checked. No test suite, seed or app was run."
+        );
+        return;
     }
     console.log(
         "[TL] Running the fixed pipeline suite, including real PostgreSQL persistence cases."

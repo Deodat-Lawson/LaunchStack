@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { spawnSync } from "node:child_process";
 import {
     APP_URL,
     FIXTURE_FILE,
@@ -42,6 +43,14 @@ test("requires explicit approved Azure settings without substituting a model", (
             /approved Azure/
         );
 });
+test("the tracked credential-free Azure configuration is the default for explicit live mode", () => {
+    const provider = approvedProvider({
+        CHAT_BASE_URL: "https://synthetic.openai.azure.com/openai/v1/",
+        CHAT_API_KEY: "synthetic-only",
+    });
+    assert.match(provider.CHAT_MODELS_CONFIG, /chat-models\.vantage-demo\.azure\.yaml$/);
+    assert.equal(provider.CHAT_API_KEY, "synthetic-only");
+});
 test("accepts the same Azure v1 resource path with or without a trailing slash", () => {
     for (const endpoint of [
         "https://synthetic.openai.azure.com/openai/v1",
@@ -76,6 +85,7 @@ test("binds native Vantage gate and real BetterAuth origin to the server-owned f
     assert.equal(env.VANTAGE_TEST_USER_IDS, fixture.actorId);
     assert.equal(env.VANTAGE_CONTEXT_DEMO_FIXTURE, FIXTURE_FILE);
     assert.equal(env.VANTAGE_CONTEXT_DEMO_CREDENTIALS, CREDENTIALS_FILE);
+    assert.equal(env.VANTAGE_CONTEXT_DEMO_GENERATION_MODE, "replay");
     assert.equal(env.VANTAGE_TL_TEST_MODE, "true");
     assert.equal(env.GMAIL_CONNECTOR_ENABLED, "false");
     assert.equal(env.GOOGLE_DOCS_EDITING_ENABLED, "false");
@@ -84,6 +94,49 @@ test("binds native Vantage gate and real BetterAuth origin to the server-owned f
     assert.equal(env.PRODUCTION_TOKEN, undefined);
     assert.equal(env.AUTH_GOOGLE_CLIENT_SECRET, undefined);
     assert.equal(Object.values(env).includes(secret.loginPassword), false);
+});
+test("retained fixtures keep their original reporting cutoff", () => {
+    const env = demoEnvironment(
+        childEnvironment("synthetic-test-password"),
+        {
+            authSecret: "synthetic-auth-secret",
+            embeddingSecretsKey: "synthetic-key",
+        },
+        { companyId: "123", actorId: "synthetic", weeks: [{ asOf: "2026-10-26T23:59:00.000Z" }] }
+    );
+    assert.equal(env.VANTAGE_CONTEXT_DEMO_AS_OF, "2026-10-26T23:59:00.000Z");
+});
+test("explicit portable verification uses separate owned resources and a separate app port", () => {
+    const moduleUrl = new URL("./vantage-context-demo-runtime.mjs", import.meta.url).href;
+    const tlUrl = new URL("./vantage-integration-tl-test.mjs", import.meta.url).href;
+    const result = spawnSync(
+        process.execPath,
+        [
+            "--input-type=module",
+            "-e",
+            `
+        import assert from 'node:assert/strict';
+        import {APP_URL, assertDatabaseUrl} from ${JSON.stringify(moduleUrl)};
+        import {PROJECT, DATABASE_PORT, LOCAL_ENV, childEnvironment} from ${JSON.stringify(tlUrl)};
+        assert.equal(APP_URL, 'http://localhost:3105');
+        assert.equal(DATABASE_PORT, 55438);
+        assert.equal(PROJECT, 'launchstack-vantage-week2-tl-20261022-portable');
+        assert.equal(LOCAL_ENV.includes('test-output') && LOCAL_ENV.endsWith('tl-test.env.local'), true);
+        assert.equal(assertDatabaseUrl(childEnvironment('synthetic-password').DATABASE_URL).port, '55438');
+        assert.throws(()=>assertDatabaseUrl(childEnvironment('synthetic-password').DATABASE_URL.replace(':55438/', ':55437/')));
+    `,
+        ],
+        {
+            env: {
+                ...process.env,
+                VANTAGE_CONTEXT_DEMO_DB_PORT: "55438",
+                VANTAGE_CONTEXT_DEMO_APP_PORT: "3105",
+            },
+            encoding: "utf8",
+            windowsHide: true,
+        }
+    );
+    assert.equal(result.status, 0, result.stderr);
 });
 test("runtime paths remain ignored and scoped to this checkout", () => {
     assert.equal(assertRuntimeFile(FIXTURE_FILE), FIXTURE_FILE);

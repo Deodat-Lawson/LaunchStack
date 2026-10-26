@@ -492,6 +492,8 @@ export function useChatRuntime(input: {
                     // The person's own earlier words, apart from the transcript: links
                     // in them are the only ones a page read may follow from history.
                     priorQuestions: priorQuestions(prior),
+                    // A question the app wrote (a plan to carry out) opens no links.
+                    questionOrigin: send.origin && send.origin !== "user" ? send.origin : undefined,
                     agentKey: send.agentKey,
                     modelRoute: send.modelRoute,
                     reasoningEffort: send.reasoningEffort,

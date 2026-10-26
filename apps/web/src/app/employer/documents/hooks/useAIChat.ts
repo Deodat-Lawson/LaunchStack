@@ -31,6 +31,8 @@ export interface AIChatRequest {
     conversationHistory?: string;
     /** The person's own earlier messages in this chat (lib/chat-turns.ts priorQuestions). */
     priorQuestions?: string[];
+    /** Who wrote `question` when not the person (an "Implement plan" send). */
+    questionOrigin?: "attachment" | "plan-implementation";
     aiPersona?:
         | "general"
         | "learning-coach"
@@ -172,6 +174,7 @@ export function useAIChat() {
                         priorQuestions: params.priorQuestions?.length
                             ? params.priorQuestions
                             : undefined,
+                        questionOrigin: params.questionOrigin,
                         aiPersona: params.aiPersona,
                         thinkingMode: params.thinkingMode,
                         modelRoute: params.modelRoute,

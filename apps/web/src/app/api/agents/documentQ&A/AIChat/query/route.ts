@@ -166,6 +166,7 @@ interface RespondInput
                 | "embeddingIndexKey"
                 | "conversationHistory"
                 | "priorQuestions"
+                | "questionOrigin"
                 | "aiPersona"
                 | "chatMode"
             >
@@ -659,6 +660,7 @@ export async function POST(request: Request) {
                 provider,
                 conversationHistory,
                 priorQuestions,
+                questionOrigin,
                 embeddingIndexKey,
                 thinkingMode: requestedThinking,
                 attachments: requestedAttachments,
@@ -946,6 +948,7 @@ export async function POST(request: Request) {
                 embeddingIndexKey,
                 conversationHistory,
                 priorQuestions,
+                questionOrigin,
                 aiPersona,
                 chatMode,
                 userCompanyId,
@@ -1016,6 +1019,7 @@ export async function POST(request: Request) {
                 embeddingIndexKey,
                 conversationHistory,
                 priorQuestions,
+                questionOrigin,
                 aiPersona,
                 chatMode,
                 userCompanyId,
@@ -1407,7 +1411,8 @@ export async function POST(request: Request) {
                     ? createWebTools({}, locale, {
                           search: webSearchAvailable(),
                           personText: [
-                              question,
+                              // A question the app wrote (a plan) is not the person's.
+                              ...(questionOrigin ? [] : [question]),
                               ...passages.map(passage => passage.text),
                               ...(priorQuestions ?? []),
                           ],

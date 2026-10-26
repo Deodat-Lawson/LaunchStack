@@ -212,6 +212,12 @@
         "label": "余额不足提醒",
         "description": "余额低于此值时，本页和余额标签会发出提醒。",
         "unit": "token"
+      },
+      "memberMonthlyTokenLimit": {
+        "label": "每人 AI 上限",
+        "description": "每个人每月在此工作区可使用的 AI token（输入加输出），除非你在下方为某人单独设置上限。每月 1 日（UTC）重置。0 表示不设上限。",
+        "consequence": "立即生效。已超过新上限的人在重置之前无法开始新的 AI 任务。",
+        "unit": "token / 月"
       }
     },
     "retention": {
@@ -333,6 +339,25 @@
       "signOutOthers": "让其他所有浏览器退出登录",
       "changing": "正在修改…",
       "changeSubmit": "修改密码"
+    },
+    "aiAllowance": {
+      "title": "你本月的 AI 额度",
+      "description": "自本月 1 日（UTC）起，你在此工作区使用的 AI token（输入加输出）。",
+      "loadFailed": "无法加载你的 AI 额度。",
+      "loadFailedStatus": "无法加载你的 AI 额度（{status}）。",
+      "usedOf": "已用 {used} / {limit} 个 token",
+      "percentUsed": "已用 {percent}%",
+      "progressLabel": "你的 AI 额度已用 {percent}%",
+      "resets": "将于 {date} 重置。",
+      "noLimit": "不设上限",
+      "noLimitBody": "你在此工作区没有使用上限。本月你已使用 {used} 个 token。",
+      "sourceDefault": "这是工作区为所有人设置的上限。工作区管理员可以在“设置 › 用量与费用”中修改。",
+      "sourceMember": "这是工作区管理员为你单独设置的上限。工作区管理员可以在“设置 › 用量与费用”中修改。",
+      "sourceServer": "这是服务器的上限，合计你所有的工作区。服务器的管理者可以修改它。",
+      "usedHere": "其中 {used} 个用于此工作区。",
+      "alsoServer": "服务器还限制你每月最多使用 {limit} 个 token（合计你所有的工作区，已用 {used}）。",
+      "alsoWorkspace": "此工作区还限制你每月最多使用 {limit} 个 token（已用 {used}）。",
+      "reached": "你已达到此上限。在重置或提高上限之前，新的 AI 请求会被拒绝。"
     }
   },
   "answerStyle": {
@@ -1564,6 +1589,48 @@
       "what": "内容",
       "amount": "数量",
       "balanceAfter": "变动后余额"
+    },
+    "members": {
+      "title": "每人 AI 上限",
+      "description": "每个人本月已使用的 AI 额度，按输入加输出的 token 计。上限每月 1 日（UTC）重置；服务器也设置了上限时，以更严格的为准。",
+      "serverCap": "这台服务器限制每人每月最多使用 {limit} 个 token（合计其所有工作区，仅限服务器自己的模型）。该上限由服务器的管理者设置，无法在这里修改。",
+      "serverCapNotHere": "这台服务器限制每人每月在其自有模型上最多使用 {limit} 个 token。此上限不适用于这里：此工作区使用自己的模型。",
+      "loadFailed": "无法加载每人 AI 上限。",
+      "loadFailedStatus": "无法加载每人 AI 上限（{status}）。",
+      "empty": "暂无可显示的成员。",
+      "person": "成员",
+      "used": "本月已用",
+      "limit": "每月上限",
+      "progress": "占上限",
+      "actions": "操作",
+      "you": "（你）",
+      "noLimit": "不设上限",
+      "exactTokens": "{value} 个 token",
+      "progressLabel": "{name}：已用上限的 {percent}%",
+      "source": {
+        "default": "工作区默认",
+        "member": "单独设置",
+        "server": "服务器上限 · 所有工作区合计已用 {used}"
+      },
+      "editLimit": "修改上限",
+      "editLimitFor": "修改 {name} 的 AI 上限",
+      "period": "自 {start} 起计算。上限将于 {date} 重置。",
+      "unattributed": "未归属到个人：本月 {tokens} 个 token，来自后台任务以及按人计量之前的用量。",
+      "dialog": {
+        "title": "{name} 的 AI 上限",
+        "description": "此人每月在此工作区可使用的 AI token（输入加输出）。每月 1 日（UTC）重置。",
+        "choiceLabel": "上限",
+        "default": "工作区默认（{limit} 个 token）",
+        "defaultNone": "工作区默认（不设上限）",
+        "none": "不设上限",
+        "custom": "自定义",
+        "customLabel": "每月 token 数",
+        "customInvalid": "请输入不小于 1 的整数 token 数。",
+        "serverStillApplies": "服务器每月 {limit} 个 token 的上限仍然适用。",
+        "saved": "已保存 {name} 的 AI 上限。",
+        "saveFailed": "无法保存上限。",
+        "saveFailedStatus": "无法保存上限（{status}）。"
+      }
     }
   },
   "workspaceModel": {

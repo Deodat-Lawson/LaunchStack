@@ -11,6 +11,7 @@ import { company } from "@launchstack/store/schema";
 import { validateRequestBody, UpdateUploadPreferenceSchema } from "~/lib/validation";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { recordAuditEvent } from "~/lib/authz/audit";
+import { requestTranslator } from "~/i18n/server";
 
 export async function POST(request: Request) {
     try {
@@ -32,7 +33,10 @@ export async function POST(request: Request) {
 
         if (!updateResult || updateResult.length === 0) {
             return NextResponse.json(
-                { success: false, message: "Company not found" },
+                {
+                    success: false,
+                    message: requestTranslator(request, "errors.api")("companyNotFound"),
+                },
                 { status: 404 }
             );
         }
@@ -53,7 +57,13 @@ export async function POST(request: Request) {
     } catch (error) {
         console.error("Error updating upload preference:", error);
         return NextResponse.json(
-            { success: false, message: "Failed to update preference" },
+            {
+                success: false,
+                message: requestTranslator(
+                    request,
+                    "settings.server.errors"
+                )("preferenceSaveFailed"),
+            },
             { status: 500 }
         );
     }

@@ -34,7 +34,14 @@ export {
     DECISION_SCHEMA,
     ACTION_TYPES,
 } from "./decide";
-export { runRound, selectActive, mapLimit, RoundFailedError, type RoundDeps } from "./round";
+export {
+    runRound,
+    selectActive,
+    guardStance,
+    mapLimit,
+    RoundFailedError,
+    type RoundDeps,
+} from "./round";
 export {
     summarizeRound,
     postReception,
@@ -43,6 +50,7 @@ export {
     factionOf,
     stanceShifts,
     stanceCounts,
+    wouldPayCounts,
     meanStance,
     engagementScore,
     totalUsage,
@@ -54,8 +62,15 @@ export {
     buildCastRequest,
     parseCast,
     formatEvidence,
+    mixCounts,
+    skepticShortfall,
+    seatsToRecast,
+    fillSeats,
     CAST_SCHEMA,
+    REALISTIC_MIX,
+    ALL_AGAINST,
     type CastRequestInput,
+    type StartingMix,
 } from "./cast";
 export {
     buildBriefRequest,

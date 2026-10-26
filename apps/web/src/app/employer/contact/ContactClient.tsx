@@ -83,7 +83,6 @@ export function ContactClient({
             <EmployerChrome pageLabel="Launchstack" pageTitle={t("crumb")} />
             <PageShell>
                 <PageHeader
-                    eyebrow={t("eyebrow")}
                     title={report ? t("titleReport") : t("title")}
                     description={support.email ? t("descriptionMail") : t("description")}
                 />

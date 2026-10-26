@@ -10,6 +10,8 @@
 
 import { NextResponse } from "next/server";
 
+import { requestTranslator } from "~/i18n/server";
+
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { draftReader } from "~/server/mindmap/access";
 import { getMindmap } from "~/server/mindmap/repository";
@@ -22,7 +24,10 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
 
     const id = Number.parseInt((await params).id, 10);
     if (!Number.isInteger(id) || id <= 0) {
-        return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+        return NextResponse.json(
+            { error: requestTranslator(request, "errors.api")("invalidId") },
+            { status: 400 }
+        );
     }
 
     const row = await getMindmap(id, await draftReader(ctx.data));

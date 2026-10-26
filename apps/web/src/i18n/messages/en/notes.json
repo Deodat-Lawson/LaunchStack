@@ -72,5 +72,32 @@
     "askAi": "✦ Ask AI",
     "askAiTitle": "Ask about this passage in the chat",
     "pinTitle": "Note {ordinal}"
+  },
+  "server": {
+    "errors": {
+      "invalidNoteId": "Invalid note ID",
+      "invalidNoteIdLower": "Invalid note id",
+      "noteNotFound": "Note not found",
+      "fetchNotesFailed": "Failed to fetch notes",
+      "createFailed": "Failed to create note",
+      "fetchFailed": "Failed to fetch note",
+      "updateFailed": "Failed to update note",
+      "deleteFailed": "Failed to delete note",
+      "resolveFailed": "Resolve failed",
+      "searchFailed": "Search failed",
+      "backlinksFailed": "Backlinks failed",
+      "selectionRequired": "Selection is required",
+      "invalidIntent": "Invalid intent",
+      "aiCaptureFailed": "AI capture failed",
+      "versionRequiresDocument": "versionId requires documentId",
+      "invalidDocumentIdField": "Invalid documentId",
+      "invalidVersionIdField": "Invalid versionId",
+      "versionNotFound": "Document version not found"
+    },
+    "captureTitles": {
+      "summary": "Summary",
+      "action": "Action item",
+      "decision": "Decision"
+    }
   }
 }

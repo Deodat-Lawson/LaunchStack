@@ -29,21 +29,24 @@ import {
     oauthEndpoints,
 } from "~/server/mcp/oauth-clients";
 import { parseJsonBody } from "~/server/workspace/http";
+import { localeOfRequest, requestTranslator } from "~/i18n/server";
+import { wordEnglish } from "~/i18n/translate";
+import { V } from "~/i18n/validation";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 const CreateClientSchema = z.object({
-    name: z.string().trim().min(1, "Give the client a name").max(OAUTH_CLIENT_NAME_MAX),
+    name: z.string().trim().min(1, V.clientNameRequired).max(OAUTH_CLIENT_NAME_MAX),
     redirectUris: z
         .array(
             z
                 .string()
                 .trim()
-                .url("Each redirect URI must be a full URL")
-                .refine(uri => uri.startsWith("https://"), "Redirect URIs must use https")
+                .url(V.redirectUriFullUrl)
+                .refine(uri => uri.startsWith("https://"), V.redirectUriHttps)
         )
-        .min(1, "Add the assistant's redirect URI")
+        .min(1, V.redirectUriRequired)
         .max(OAUTH_CLIENT_REDIRECTS_MAX),
     authMethod: z.enum(MANUAL_CLIENT_AUTH_METHODS).optional(),
 });
@@ -66,7 +69,15 @@ export async function GET(request: Request) {
             });
         } catch (error) {
             console.error("[assistants clients GET] failed:", error);
-            return NextResponse.json({ error: "Could not load OAuth clients." }, { status: 500 });
+            return NextResponse.json(
+                {
+                    error: requestTranslator(
+                        request,
+                        "settings.server.errors"
+                    )("oauthClientsLoadFailed"),
+                },
+                { status: 500 }
+            );
         }
     });
 }
@@ -78,12 +89,10 @@ export async function POST(request: Request) {
         const body = await parseJsonBody(request, CreateClientSchema);
         if (!body.success) return body.response;
 
+        const t = requestTranslator(request, "settings.server.errors");
         const availability = mcpAvailability();
         if (!availability.enabled) {
-            return NextResponse.json(
-                { error: "The assistant server is off, so there is nothing to sign in to." },
-                { status: 409 }
-            );
+            return NextResponse.json({ error: t("assistantServerOffSignIn") }, { status: 409 });
         }
 
         try {
@@ -108,13 +117,15 @@ export async function POST(request: Request) {
                 return NextResponse.json({ error: error.message }, { status: 400 });
             }
             if (error instanceof OAuthClientLimitError) {
-                return NextResponse.json({ error: error.message }, { status: 409 });
+                const words = wordEnglish(
+                    error.message,
+                    "settings.server.errors",
+                    localeOfRequest(request)
+                );
+                return NextResponse.json({ error: words }, { status: 409 });
             }
             console.error("[assistants clients POST] failed:", error);
-            return NextResponse.json(
-                { error: "Could not create the OAuth client." },
-                { status: 500 }
-            );
+            return NextResponse.json({ error: t("oauthClientCreateFailed") }, { status: 500 });
         }
     });
 }

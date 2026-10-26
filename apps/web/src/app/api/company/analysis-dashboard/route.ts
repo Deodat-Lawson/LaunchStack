@@ -6,6 +6,7 @@ import { eq, and, sql, gte, desc, count, inArray, max } from "drizzle-orm";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { normalizeRoleSlug } from "~/lib/authz/permissions";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
+import { requestTranslator } from "~/i18n/server";
 
 const shouldLogPerf =
     process.env.NODE_ENV === "development" &&
@@ -48,7 +49,7 @@ interface AnalysisDashboardResponse {
     };
 }
 
-export async function GET() {
+export async function GET(request: Request) {
     const requestStart = Date.now();
     let aggregateMs: number | null = null;
     let queryCountMs: number | null = null;
@@ -76,7 +77,10 @@ export async function GET() {
             return NextResponse.json(
                 {
                     success: false,
-                    error: "Forbidden. The analytics.view permission is required.",
+                    error: requestTranslator(
+                        request,
+                        "statistics.server.errors"
+                    )("analyticsPermission"),
                     permission: "analytics.view",
                 },
                 { status: 403 }
@@ -289,7 +293,10 @@ export async function GET() {
         outcome = "error";
         console.error("Error fetching analysis dashboard data:", error);
         return NextResponse.json(
-            { success: false, error: "Unable to fetch analysis dashboard data" },
+            {
+                success: false,
+                error: requestTranslator(request, "statistics.server.errors")("dashboardFailed"),
+            },
             { status: 500 }
         );
     } finally {

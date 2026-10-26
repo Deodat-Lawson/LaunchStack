@@ -13,6 +13,7 @@ import { z } from "zod";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { parseValue, readOptionalJson, workspaceErrorResponse } from "~/server/workspace/http";
 import { markNotificationsRead } from "~/server/workspace/notifications";
+import { requestTranslator } from "~/i18n/server";
 
 const MarkReadSchema = z.object({
     ids: z.array(z.number().int().positive()).max(500).optional(),
@@ -22,13 +23,18 @@ export async function POST(request: Request) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
     const raw = await readOptionalJson(request);
-    if (raw === null) return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
-    const body = parseValue(raw, MarkReadSchema);
+    if (raw === null) {
+        return NextResponse.json(
+            { error: requestTranslator(request, "errors.api")("invalidJsonBody") },
+            { status: 400 }
+        );
+    }
+    const body = parseValue(raw, MarkReadSchema, request);
     if (!body.success) return body.response;
     try {
         await markNotificationsRead(ctx.data, body.data.ids);
         return NextResponse.json({ success: true });
     } catch (error) {
-        return workspaceErrorResponse(error, "[workspace/notifications/read POST]");
+        return workspaceErrorResponse(error, "[workspace/notifications/read POST]", request);
     }
 }

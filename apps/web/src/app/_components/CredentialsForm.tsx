@@ -717,7 +717,7 @@ export function SignUpForm({
                     id={passwordHintId}
                     className={cn(
                         "m-0 flex items-center gap-1 text-[11.5px] transition-colors",
-                        longEnough ? "text-success" : "text-ink-3"
+                        longEnough ? "text-success-ink" : "text-ink-3"
                     )}
                 >
                     {longEnough && <Check className="size-3" aria-hidden />}

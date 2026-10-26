@@ -20,6 +20,8 @@ import {
     RenderingServiceError,
 } from "@launchstack/document-conversion-engine";
 import { document } from "@launchstack/store/schema";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { db } from "~/server/db";
 import { getGotenbergClient } from "~/server/rendering";
 import { fetchFile } from "~/lib/storage";
@@ -66,9 +68,12 @@ export async function GET(request: Request) {
     const url = new URL(request.url);
     const raw = url.searchParams.get("documentId");
     const documentId = Number(raw);
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "viewers.server.errors");
+    const sources = translatorFor(locale, "sources.server.errors");
 
     if (!raw || !Number.isInteger(documentId) || documentId <= 0) {
-        return fail(400, "invalid_request", "documentId is required");
+        return fail(400, "invalid_request", t("documentIdRequired"));
     }
 
     const ctx = await requireWorkspaceContext();
@@ -90,7 +95,7 @@ export async function GET(request: Request) {
         // Same response whether it does not exist, belongs to another company,
         // or sits in a folder the caller cannot see — the distinction would
         // leak which ids are real.
-        return fail(404, "not_found", "Document not found");
+        return fail(404, "not_found", translatorFor(locale, "errors.api")("documentNotFound"));
     }
 
     const extension = documentExtension(row.fileType, row.title);
@@ -98,20 +103,13 @@ export async function GET(request: Request) {
         return fail(
             415,
             "unsupported_type",
-            extension === "pdf"
-                ? "This document is already a PDF — download it directly."
-                : "PDF rendering handles Office documents (Word, Excel, PowerPoint, OpenDocument). This document is a different format."
+            extension === "pdf" ? t("alreadyPdf") : t("pdfOfficeOnly")
         );
     }
 
     const gotenberg = getGotenbergClient();
     if (!gotenberg) {
-        return fail(
-            503,
-            "service_not_configured",
-            "The PDF rendering service is not configured. Set GOTENBERG_SERVICE_URL (and its " +
-                "basic-auth pair), and make sure the gotenberg service is running."
-        );
+        return fail(503, "service_not_configured", t("pdfNotConfigured"));
     }
 
     let bytes: Buffer;
@@ -121,7 +119,7 @@ export async function GET(request: Request) {
             return fail(
                 502,
                 "fetch_failed",
-                `Could not read the document from storage (HTTP ${res.status}).`
+                sources("storageReadHttp", { status: String(res.status) })
             );
         }
         bytes = Buffer.from(await res.arrayBuffer());
@@ -129,7 +127,7 @@ export async function GET(request: Request) {
         return fail(
             502,
             "fetch_failed",
-            err instanceof Error ? err.message : "Could not read the document from storage."
+            err instanceof Error ? err.message : sources("storageRead")
         );
     }
 
@@ -162,6 +160,10 @@ export async function GET(request: Request) {
             const trace = err.trace ? ` (trace ${err.trace})` : "";
             return fail(status, "rendering_failed", `${err.detail}${trace}`);
         }
-        return fail(500, "internal_error", err instanceof Error ? err.message : "Unknown error");
+        return fail(
+            500,
+            "internal_error",
+            err instanceof Error ? err.message : translatorFor(locale, "errors.api")("unknownError")
+        );
     }
 }

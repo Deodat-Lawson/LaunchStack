@@ -49,13 +49,22 @@ type Provider = "google-drive" | "gmail";
 /**
  * Lands on the shared connector return leg (`?connector=&result=`) so the
  * workspace shell reopens the provider's panel and toasts the outcome — the
- * same path the Slack/GitHub callbacks take.
+ * same path the Slack/GitHub callbacks take. Drive has no panel of its own:
+ * it reopens Add source on Files, or on Folder (`tab`) after "Allow folder
+ * access", which is asked from there.
  */
-function redirectToWorkspace(request: Request, provider: Provider, flag: string): NextResponse {
+function redirectToWorkspace(
+    request: Request,
+    provider: Provider,
+    flag: string,
+    tab?: "folder"
+): NextResponse {
     const result = flag === "connected" ? "connected" : flag === "cancelled" ? "denied" : "error";
-    const response = NextResponse.redirect(
-        new URL(`/employer/documents?connector=${provider}&result=${result}`, publicOrigin(request))
-    );
+    const target = new URL("/employer/documents", publicOrigin(request));
+    target.searchParams.set("connector", provider);
+    target.searchParams.set("result", result);
+    if (tab) target.searchParams.set("tab", tab);
+    const response = NextResponse.redirect(target);
     response.cookies.delete(
         provider === "gmail" ? GMAIL_OAUTH_STATE_COOKIE : GOOGLE_OAUTH_STATE_COOKIE
     );
@@ -111,21 +120,25 @@ async function driveCallback(request: Request, url: URL, state: string | null) {
         return redirectToWorkspace(request, "google-drive", "forbidden");
     }
 
+    // "Allow folder access" prefixes its state; it picks the scopes to record
+    // should Google's token response leave `scope` out, and the tab to go
+    // back to.
+    const folderAccess = state?.startsWith(DRIVE_FOLDERS_STATE_PREFIX) ?? false;
+    const back = (flag: string) =>
+        redirectToWorkspace(request, "google-drive", flag, folderAccess ? "folder" : undefined);
+
     if (url.searchParams.get("error")) {
         // The user clicked "cancel" on the consent screen — not an error.
-        return redirectToWorkspace(request, "google-drive", "cancelled");
+        return back("cancelled");
     }
 
     const code = url.searchParams.get("code");
     const nonce = readCookie(request.headers.get("cookie") ?? "", GOOGLE_OAUTH_STATE_COOKIE);
-    // "Allow folder access" prefixes its state; it picks the scopes to record
-    // should Google's token response leave `scope` out.
-    const folderAccess = state?.startsWith(DRIVE_FOLDERS_STATE_PREFIX) ?? false;
     const expectedState = `${folderAccess ? DRIVE_FOLDERS_STATE_PREFIX : ""}${nonce}`;
 
     if (!code || !state || !nonce || state !== expectedState) {
         console.warn("[google-oauth] state mismatch or missing code — rejecting callback");
-        return redirectToWorkspace(request, "google-drive", "error");
+        return back("error");
     }
 
     try {
@@ -139,14 +152,14 @@ async function driveCallback(request: Request, url: URL, state: string | null) {
             // prompt=consent should always yield one; without it the link
             // would die within the hour, so refuse rather than half-connect.
             console.error("[google-oauth] token exchange returned no refresh_token");
-            return redirectToWorkspace(request, "google-drive", "error");
+            return back("error");
         }
 
         const claims = token.id_token ? decodeIdTokenClaims(token.id_token) : {};
         const accountId = claims.sub ?? claims.email;
         if (!accountId) {
             console.error("[google-oauth] no account identity in the token response");
-            return redirectToWorkspace(request, "google-drive", "error");
+            return back("error");
         }
 
         const connection = await upsertGoogleConnection({
@@ -169,10 +182,10 @@ async function driveCallback(request: Request, url: URL, state: string | null) {
 
         await resyncAfterReconnect(connection.id, ctx.data.companyId);
 
-        return redirectToWorkspace(request, "google-drive", "connected");
+        return back("connected");
     } catch (err) {
         console.error("[google-oauth] callback failed:", err);
-        return redirectToWorkspace(request, "google-drive", "error");
+        return back("error");
     }
 }
 

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { requestTranslator } from "~/i18n/server";
 import { searchNotes, type NoteSearchScope } from "~/server/notes/search";
 import { filterNotesByDocumentScope } from "~/server/notes/document-scope";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
@@ -45,6 +46,9 @@ export async function POST(request: Request) {
         return NextResponse.json({ hits }, { status: 200 });
     } catch (err) {
         console.error("[/api/notes/search] failed:", err);
-        return NextResponse.json({ error: "Search failed" }, { status: 500 });
+        return NextResponse.json(
+            { error: requestTranslator(request, "notes.server.errors")("searchFailed") },
+            { status: 500 }
+        );
     }
 }

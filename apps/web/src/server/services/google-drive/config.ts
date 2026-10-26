@@ -10,6 +10,8 @@ import { configureGoogleEndpoints, type GoogleOAuthApp } from "@launchstack/goog
 
 import { devRoutesEnabled } from "~/app/dev/enabled";
 import { env } from "~/env";
+import type { Copy } from "~/i18n/copy";
+import { englishCopy } from "~/i18n/translate";
 
 export const GOOGLE_DRIVE_PROVIDER = "google-drive";
 
@@ -110,10 +112,14 @@ export const MAX_LINKED_FILE_BYTES = 50 * 1024 * 1024;
 
 const DEFAULT_SETTLE_MINUTES = 10;
 
+/** The sentence may be a `Copy`: `message` is its English, `copy` what the route words. */
 export class GoogleDriveConfigError extends Error {
-    constructor(message: string) {
-        super(message);
+    readonly copy: Copy | null;
+
+    constructor(message: string | Copy) {
+        super(typeof message === "string" ? message : englishCopy(message));
         this.name = "GoogleDriveConfigError";
+        this.copy = typeof message === "string" ? null : message;
     }
 }
 
@@ -141,10 +147,7 @@ export function getGoogleOAuthApp(): GoogleOAuthApp {
     const clientId = env.server.GOOGLE_OAUTH_CLIENT_ID;
     const clientSecret = env.server.GOOGLE_OAUTH_CLIENT_SECRET;
     if (!clientId || !clientSecret) {
-        throw new GoogleDriveConfigError(
-            "Google Drive linking is not configured. Set GOOGLE_OAUTH_CLIENT_ID and " +
-                "GOOGLE_OAUTH_CLIENT_SECRET (and GOOGLE_DOCS_EDITING_ENABLED=true)."
-        );
+        throw new GoogleDriveConfigError({ key: "sources.server.drive.notConfigured" });
     }
     return { clientId, clientSecret };
 }

@@ -27,7 +27,7 @@ import { LEGACY_STAGE_MAP } from "@launchstack/pipelines/distribution/types";
 
 import { createFounderWeeklyReviewTestDatabase } from "../../founderWeeklyReview/testDb";
 
-const MIGRATION = "20261024171415_deal_stage_history";
+const MIGRATION = "20261026232205_deal_stage_history";
 const DAY = 86_400_000;
 
 const describeDb =

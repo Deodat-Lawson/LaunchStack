@@ -5,13 +5,13 @@ import { renderProposalMarkdown } from "~/server/proposals/service";
 
 import { handleProposalsError, json, proposalsContext } from "../../../_http";
 
-export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     const auth = await proposalsContext();
     if (!auth.ok) return auth.response;
     try {
         const { id } = await params;
         return json(await renderProposalMarkdown(auth.ctx, id));
     } catch (err) {
-        return handleProposalsError("GET markdown", err);
+        return handleProposalsError("GET markdown", err, request);
     }
 }

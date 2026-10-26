@@ -1,6 +1,6 @@
 "use client";
 
-import { Megaphone, Radio } from "lucide-react";
+import { TrendingDown, TrendingUp } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import type { ScenarioSummary, Stance } from "~/lib/scenarios/types";
@@ -8,7 +8,6 @@ import { cn } from "~/lib/utils";
 
 import {
     STANCE_BG,
-    initials,
     isLive,
     progressLabel,
     stanceLabel,
@@ -45,41 +44,6 @@ export function StatusPill({
                 )}
             />
             {progressLabel(t, run)}
-        </span>
-    );
-}
-
-/** A person's monogram; the narrator and the draft under test get a glyph. */
-export function Monogram({
-    name,
-    kind = "agent",
-    size = 32,
-    className,
-}: {
-    name: string;
-    kind?: "agent" | "narrator" | "brand";
-    size?: number;
-    className?: string;
-}) {
-    return (
-        <span
-            aria-hidden
-            className={cn(
-                "inline-flex shrink-0 items-center justify-center rounded-full font-medium",
-                kind === "agent" && "bg-panel-2 text-ink-2 border-line border",
-                kind === "narrator" && "bg-ink text-surface",
-                kind === "brand" && "bg-brand-soft text-brand-ink",
-                className
-            )}
-            style={{ width: size, height: size, fontSize: Math.round(size * 0.36) }}
-        >
-            {kind === "narrator" ? (
-                <Radio className="size-[45%]" />
-            ) : kind === "brand" ? (
-                <Megaphone className="size-[45%]" />
-            ) : (
-                initials(name)
-            )}
         </span>
     );
 }
@@ -168,6 +132,38 @@ function stanceFill(s: Stance): string {
         [1]: "fill-info/60",
         [2]: "fill-info",
     }[s];
+}
+
+/**
+ * A change of mind in a few words, with the arrow in the direction's colour:
+ * "Turned critical", "Softened to critical" (less critical than before),
+ * "Warmed to supportive", "Cooled to neutral".
+ */
+export function Shift({ from, to, className }: { from: Stance; to: Stance; className?: string }) {
+    const t = useTranslations("scenarios.words");
+    const warmer = to > from;
+    const key = warmer
+        ? to > 0
+            ? "shift.warmed"
+            : "shift.softened"
+        : to < 0
+          ? "shift.turned"
+          : "shift.cooled";
+    const Icon = warmer ? TrendingUp : TrendingDown;
+    return (
+        <span
+            className={cn(
+                "text-ink inline-flex items-center gap-1 whitespace-nowrap text-xs font-medium",
+                className
+            )}
+        >
+            <Icon
+                className={cn("size-3.5 shrink-0", warmer ? "text-info-ink" : "text-danger")}
+                aria-hidden
+            />
+            {t(key, { stance: stanceLabel(t, to).toLowerCase() })}
+        </span>
+    );
 }
 
 /** "Neutral → Critical", or one word when it did not move. */

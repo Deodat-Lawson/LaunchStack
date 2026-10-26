@@ -144,7 +144,7 @@ export async function driveRun(
         const limit = unitCount(run.roundCount) + 2;
         for (let i = 0; i < limit; i++) {
             // Each unit runs on the workspace's own models when it brings them.
-            const keepGoing = await withWorkspaceChatModels(run.companyId, () =>
+            const keepGoing = await withWorkspaceChatModels(run.companyId, "scenarios", () =>
                 advanceWithRetries(ports, runId)
             );
             if (!keepGoing) break;

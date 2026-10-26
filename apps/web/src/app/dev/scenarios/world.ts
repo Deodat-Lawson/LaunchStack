@@ -379,15 +379,41 @@ const PRICE_SOURCES: ScenarioSource[] = [
 const PRICE_BRIEF =
     "Ledgerline sells bookkeeping and invoicing to small businesses: Starter at $29 a month and Growth at $79 [E7]. Most paying workspaces are on Starter [E7]. Café and shop owners compare it with spreadsheets rather than other software, and some named $30 as their limit [E1]. Early cancellations rarely cite price; onboarding comes up far more [E3]. A competitor has just launched a $25 tier capped at 20 invoices a month [E8], and some customers are wary of per-invoice charges [E6].";
 
+/** What a person spends and would pay; a seed without one leaves it all null. */
+type Wallet = Pick<
+    ScenarioPerson,
+    | "currentSolution"
+    | "budget"
+    | "buyingRole"
+    | "switchingCost"
+    | "firstObjection"
+    | "wouldPay"
+    | "objection"
+>;
+
 type PersonSeed = Omit<
     ScenarioPerson,
-    "stance" | "startStance" | "posts" | "comments" | "activity" | "followers" | "following"
-> & { activity?: number };
+    | "stance"
+    | "startStance"
+    | "posts"
+    | "comments"
+    | "activity"
+    | "followers"
+    | "following"
+    | keyof Wallet
+> & { activity?: number } & Partial<Wallet>;
 
 function person(seed: PersonSeed, index: number): ScenarioPerson {
     const history = seed.stanceHistory;
     return {
         ...seed,
+        currentSolution: seed.currentSolution ?? null,
+        budget: seed.budget ?? null,
+        buyingRole: seed.buyingRole ?? null,
+        switchingCost: seed.switchingCost ?? null,
+        firstObjection: seed.firstObjection ?? null,
+        wouldPay: seed.wouldPay ?? null,
+        objection: seed.objection ?? null,
         startStance: history[0]!,
         stance: history[history.length - 1]!,
         activity: seed.activity ?? 0.4 + ((index * 7) % 5) / 10,
@@ -397,6 +423,118 @@ function person(seed: PersonSeed, index: number): ScenarioPerson {
         comments: 0,
     };
 }
+
+/** What each person in the price-rise run spends and would pay, after the last round. */
+const PRICE_WALLETS: Record<string, Wallet> = {
+    a1: {
+        currentSolution: "Ledgerline Growth for her own practice",
+        budget: "funded",
+        buyingRole: "influences",
+        switchingCost: "high",
+        firstObjection: "My clients will ask me why they're paying more for the same thing.",
+        wouldPay: "maybe",
+        objection: "I can't recommend Starter to clients who send ten invoices a month.",
+    },
+    a2: {
+        currentSolution: "Ledgerline Starter",
+        budget: "tight",
+        buyingRole: "decides",
+        switchingCost: "medium",
+        firstObjection: "Thirty dollars was my line.",
+        wouldPay: "maybe",
+        objection: "Thirty-five is over my line once the price hold ends.",
+    },
+    a3: {
+        currentSolution: "Ledgerline Growth across four startups",
+        budget: "funded",
+        buyingRole: "decides",
+        switchingCost: "high",
+        firstObjection: "Will the extra money go into the product?",
+        wouldPay: "yes",
+        objection: null,
+    },
+    a4: {
+        currentSolution: "Ledgerline Growth",
+        budget: "funded",
+        buyingRole: "decides",
+        switchingCost: "high",
+        firstObjection: "Is Growth next?",
+        wouldPay: "yes",
+        objection: null,
+    },
+    a5: {
+        currentSolution: "Ledgerline Starter, one workspace per store",
+        budget: "tight",
+        buyingRole: "influences",
+        switchingCost: "high",
+        firstObjection: "Paying more before multi-entity invoicing ships.",
+        wouldPay: "maybe",
+        objection: "Only worth it if multi-entity invoicing ships in spring.",
+    },
+    a6: {
+        currentSolution: "nothing",
+        budget: "none",
+        buyingRole: "uses",
+        switchingCost: "low",
+        firstObjection: "Is this a price rise or a push onto the capped plan?",
+        wouldPay: "no",
+        objection: null,
+    },
+    a7: {
+        currentSolution: "Recommends Ledgerline or a spreadsheet",
+        budget: "none",
+        buyingRole: "influences",
+        switchingCost: "low",
+        firstObjection: "New businesses watch every dollar.",
+        wouldPay: "maybe",
+        objection: null,
+    },
+    a8: {
+        currentSolution: "Tallybook",
+        budget: "tight",
+        buyingRole: "decides",
+        switchingCost: "medium",
+        firstObjection: "Why switch when the capped plan is cheaper?",
+        wouldPay: "no",
+        objection: "The capped plan covers everything I send.",
+    },
+    a9: {
+        currentSolution: "Ledgerline Growth",
+        budget: "funded",
+        buyingRole: "influences",
+        switchingCost: "medium",
+        firstObjection: "Price isn't why people leave.",
+        wouldPay: "maybe",
+        objection: "Fix onboarding before charging more.",
+    },
+    a10: {
+        currentSolution: "A spreadsheet and PDF invoices",
+        budget: "tight",
+        buyingRole: "decides",
+        switchingCost: "low",
+        firstObjection: "Ten dollars a month for six invoices?",
+        wouldPay: "no",
+        objection: "Ten dollars is ten dollars.",
+    },
+    a11: {
+        currentSolution: "Ledgerline, as a partner",
+        budget: "funded",
+        buyingRole: "uses",
+        switchingCost: "high",
+        firstObjection: "Will customers blame us for the increase?",
+        wouldPay: "yes",
+        objection: null,
+    },
+    a12: {
+        currentSolution: "nothing",
+        budget: "none",
+        buyingRole: "uses",
+        switchingCost: "low",
+        firstObjection: "Is there a story here?",
+        wouldPay: "no",
+        objection: null,
+    },
+};
 
 const PRICE_PEOPLE: ScenarioPerson[] = [
     {
@@ -548,7 +686,7 @@ const PRICE_PEOPLE: ScenarioPerson[] = [
         stanceHistory: [0, 0, 0, 0, 0, 0, 0, 0, 0],
         lastThought: "The first day looked like a revolt. It wasn't.",
     },
-].map((seed, i) => person(seed as PersonSeed, i));
+].map((seed, i) => person({ ...seed, ...PRICE_WALLETS[seed.id] } as PersonSeed, i));
 
 const byId = new Map(PRICE_PEOPLE.map(p => [p.id, p]));
 
@@ -1239,6 +1377,14 @@ export function generateScript(o: GenerateOptions): Script {
             posts: 0,
             comments: 0,
             lastThought: null,
+            // Set from the index and stance, not `rand`, so the rest of the script draws the same.
+            currentSolution: i % 4 === 0 ? "nothing" : "A spreadsheet",
+            budget: (["tight", "none", "funded"] as const)[i % 3]!,
+            buyingRole: (["decides", "influences", "uses"] as const)[i % 3]!,
+            switchingCost: (["medium", "low", "high"] as const)[i % 3]!,
+            firstObjection: null,
+            wouldPay: history[history.length - 1]! > 0 ? "maybe" : "no",
+            objection: null,
         });
     }
 

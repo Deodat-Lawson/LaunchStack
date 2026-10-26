@@ -4,21 +4,25 @@ import type { NextRequest } from "next/server";
 
 import { ProgramPatchSchema } from "@launchstack/pipelines/distribution/types";
 import { getProgram, updateProgram } from "@launchstack/pipelines/distribution/db";
+import { requestTranslator } from "~/i18n/server";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
-import { error, handleRouteError, json, readJsonBody } from "~/server/distribution/http";
+import { error, json, readJsonBody } from "~/server/distribution/http";
+import { distributionRouteError } from "~/server/distribution/stage-errors";
+
+const api = (request: Request) => requestTranslator(request, "errors.api");
 
 type Params = { params: Promise<{ id: string }> };
 
-export async function GET(_request: NextRequest, { params }: Params) {
+export async function GET(request: NextRequest, { params }: Params) {
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
         const { id } = await params;
         const program = await getProgram(id, ctx.data.companyId);
-        if (!program) return error("Not found", 404);
+        if (!program) return error(api(request)("notFound"), 404);
         return json({ program });
     } catch (err) {
-        return handleRouteError("GET program", err);
+        return distributionRouteError("GET program", err, request);
     }
 }
 
@@ -29,11 +33,13 @@ export async function PATCH(request: NextRequest, { params }: Params) {
         const { id } = await params;
         const parsed = ProgramPatchSchema.safeParse(await readJsonBody(request));
         if (!parsed.success)
-            return error("Validation failed", 400, { details: parsed.error.flatten() });
+            return error(api(request)("validationFailed"), 400, {
+                details: parsed.error.flatten(),
+            });
         const program = await updateProgram(id, ctx.data.companyId, parsed.data);
-        if (!program) return error("Not found", 404);
+        if (!program) return error(api(request)("notFound"), 404);
         return json({ program });
     } catch (err) {
-        return handleRouteError("PATCH program", err);
+        return distributionRouteError("PATCH program", err, request);
     }
 }

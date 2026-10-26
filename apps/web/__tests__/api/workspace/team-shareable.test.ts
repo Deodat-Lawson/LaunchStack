@@ -67,7 +67,7 @@ describe("GET /api/workspace/team/shareable", () => {
             allowedDocumentIds: [],
         });
 
-        const res = await GET();
+        const res = await GET(new Request("http://localhost/api/workspace/team/shareable"));
 
         expect(res.status).toBe(200);
         const body = (await res.json()) as { items: { type: string; name: string }[] };
@@ -82,7 +82,9 @@ describe("GET /api/workspace/team/shareable", () => {
     it("lets folders.manage manage workspace-wide folders but not someone else's private one", async () => {
         as("admin");
 
-        const body = (await (await GET()).json()) as { items: { type: string; name: string }[] };
+        const body = (await (
+            await GET(new Request("http://localhost/api/workspace/team/shareable"))
+        ).json()) as { items: { type: string; name: string }[] };
 
         expect(body.items.filter(i => i.type === "folder").map(i => i.name)).toEqual([
             "Open",

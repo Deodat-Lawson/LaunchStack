@@ -1,3 +1,6 @@
+import type { Locale } from "~/i18n/locales";
+import { translatorFor } from "~/i18n/translate";
+
 export interface DeprecatedChatSelection {
     /** Pre-PR per-request provider selector. No longer meaningful. */
     provider?: string;
@@ -21,23 +24,16 @@ export type DeprecatedChatSelectionResult =
  * picked something it did not get.
  */
 export function validateDeprecatedChatSelection(
-    requested: DeprecatedChatSelection
+    requested: DeprecatedChatSelection,
+    /** The reader's language for the refusal; English for API readers. */
+    locale: Locale = "en"
 ): DeprecatedChatSelectionResult {
+    const t = translatorFor(locale, "chat.server.compat");
     if (requested.provider) {
-        return {
-            ok: false,
-            status: 400,
-            message:
-                "Per-request provider selection is no longer supported; the deployment serves one chat endpoint configured by the operator",
-        };
+        return { ok: false, status: 400, message: t("provider") };
     }
     if (requested.model) {
-        return {
-            ok: false,
-            status: 400,
-            message:
-                "Per-request model overrides are disabled; the model serving each route is operator-configured",
-        };
+        return { ok: false, status: 400, message: t("model") };
     }
     return { ok: true };
 }

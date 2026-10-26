@@ -29,6 +29,7 @@ import { SCENARIO_LIMITS, type ScenarioEstimate } from "~/lib/scenarios/types";
 import { useToolFormat } from "~/lib/tools/format";
 import { useResource } from "~/lib/tools/useResource";
 import { cn } from "~/lib/utils";
+import { useErrorText } from "~/lib/tools/errorText";
 
 import { ScenariosApiError, scenariosApi } from "../api";
 import { FilePickerDialog } from "../_components/FilePickerDialog";
@@ -47,6 +48,7 @@ type NewTranslator = ReturnType<typeof useTranslations<"scenarios.new">>;
 
 /** The estimate for a size, asked for once the sliders settle. */
 function useEstimate(agents: number, rounds: number, fallbackError: string) {
+    const errorText = useErrorText();
     const [state, setState] = useState<{
         data: ScenarioEstimate | null;
         loading: boolean;
@@ -66,7 +68,7 @@ function useEstimate(agents: number, rounds: number, fallbackError: string) {
                         setState(s => ({
                             data: s.data,
                             loading: false,
-                            error: e instanceof Error ? e.message : fallbackError,
+                            error: errorText(e, fallbackError),
                         }));
                 });
         }, 350);
@@ -74,7 +76,7 @@ function useEstimate(agents: number, rounds: number, fallbackError: string) {
             cancelled = true;
             window.clearTimeout(timer);
         };
-    }, [agents, rounds, fallbackError]);
+    }, [agents, rounds, fallbackError, errorText]);
     return state;
 }
 
@@ -112,6 +114,7 @@ interface SourceSwitch {
  * action starts the run and opens it.
  */
 export function NewScreen() {
+    const errorText = useErrorText();
     const t = useTranslations("scenarios.new");
     const tw = useTranslations("scenarios.words");
     const locale = useLocale();
@@ -285,7 +288,7 @@ export function NewScreen() {
                 e instanceof ScenariosApiError &&
                 (e.status === 402 || e.code === "insufficient_credits");
             setProblem({
-                message: e instanceof Error ? e.message : t("startError"),
+                message: errorText(e, t("startError")),
                 credits,
             });
             setSubmitting(false);
@@ -508,7 +511,7 @@ export function NewScreen() {
                         />
                         <div className="border-line-2 flex flex-col gap-2 border-t p-4">
                             {!anySource && (
-                                <p className="border-warn/40 bg-warn-soft text-warn rounded-md border px-3 py-2 text-xs leading-relaxed">
+                                <p className="border-warn/40 bg-warn-soft text-warn-ink rounded-md border px-3 py-2 text-xs leading-relaxed">
                                     {t("noSources")}
                                 </p>
                             )}

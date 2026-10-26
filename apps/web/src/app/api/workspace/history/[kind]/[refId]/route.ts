@@ -17,31 +17,30 @@ import { isHistoryKind } from "~/lib/workspace-history";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { serverError } from "~/lib/validation";
 import { deleteHistoryEntry } from "~/server/history";
+import { requestTranslator } from "~/i18n/server";
 
 export const runtime = "nodejs";
 
 export async function DELETE(
-    _request: Request,
+    request: Request,
     { params }: { params: Promise<{ kind: string; refId: string }> }
 ) {
+    const t = requestTranslator(request, "workspace.server.errors");
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
 
     const { kind, refId } = await params;
     if (!isHistoryKind(kind)) {
-        return NextResponse.json({ error: "Unknown history kind" }, { status: 400 });
+        return NextResponse.json({ error: t("unknownHistoryKind") }, { status: 400 });
     }
     // Chat sessions are personal, not workspace-scoped, and have their own
     // delete. Routing them through here would apply the wrong ownership rule.
     if (kind === "chat") {
-        return NextResponse.json(
-            { error: "Delete a chat through the sessions API" },
-            { status: 400 }
-        );
+        return NextResponse.json({ error: t("deleteChatViaSessions") }, { status: 400 });
     }
 
     const decoded = decodeURIComponent(refId);
-    if (!decoded) return NextResponse.json({ error: "Missing id" }, { status: 400 });
+    if (!decoded) return NextResponse.json({ error: t("missingId") }, { status: 400 });
 
     try {
         const deleted = await deleteHistoryEntry({
@@ -52,10 +51,15 @@ export async function DELETE(
         });
         // Nothing matched: either it is gone already or it belongs to another
         // workspace. The client is told the same thing either way.
-        if (!deleted) return NextResponse.json({ error: "Not found" }, { status: 404 });
+        if (!deleted) {
+            return NextResponse.json(
+                { error: requestTranslator(request, "errors.api")("notFound") },
+                { status: 404 }
+            );
+        }
         return NextResponse.json({ success: true });
     } catch (error) {
         console.error("[workspace/history] delete failed:", error);
-        return serverError("Failed to delete this item");
+        return serverError(t("deleteItemFailed"));
     }
 }

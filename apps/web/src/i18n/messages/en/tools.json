@@ -53,7 +53,8 @@
     "label": "Fit {value} of 100"
   },
   "resource": {
-    "error": "Something went wrong"
+    "error": "Something went wrong",
+    "requestFailed": "Request failed ({status})"
   },
   "format": {
     "never": "never",

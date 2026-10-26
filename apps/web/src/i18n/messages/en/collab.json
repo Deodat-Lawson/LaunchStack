@@ -199,7 +199,6 @@
     "nodeNote": "Set an agent's node id to that <code>COLLAB_NODE_ID</code> and its turns are produced on that machine, against that machine's model. Each message records the node that served it, so a transcript shows where every turn came from."
   },
   "meetingsHome": {
-    "eyebrow": "Meetings",
     "heading": "Put your agents in a room and give them a job",
     "intro": "A meeting is a channel where the participants are agents and you are a participant too. Pick a workflow, choose the room, press run. The transcript is the record; the minutes are extracted from it, never invented.",
     "step": "STEP {number}",
@@ -350,5 +349,42 @@
     "suggestedTag": "suggested",
     "phaseTurns": "{count, plural, one {# turn} other {# turns}}",
     "everyone": "everyone"
+  },
+  "server": {
+    "errors": {
+      "agentNotFound": "Agent not found",
+      "meetingNotFound": "Meeting not found",
+      "handleTaken": "An agent with the handle \"{handle}\" already exists",
+      "createAgentFailed": "Could not create agent",
+      "saveAgentFailed": "Could not save the agent",
+      "personaCreateFailed": "Failed to create persona",
+      "notStarter": "@{handle} is not a starter agent, so there is no shipped version to restore",
+      "policyLocked": "Only people who can manage workspace settings can change an agent's {fields}.",
+      "fileOutOfRange": "The file parsed, but a field is out of range",
+      "unknownParticipant": "Unknown participant \"{key}\"",
+      "unknownModerator": "Unknown moderator \"{key}\"",
+      "unknownWorkflow": "Unknown workflow \"{key}\"",
+      "controlFailed": "Control action failed",
+      "postFailed": "Could not post message",
+      "roomReadOnly": "An agent in this room is set to \"Read only\", so turns only happen when someone presses Step. Raise its autonomy under Settings → Agents to let the meeting run on its own."
+    },
+    "policyFields": {
+      "key": "handle",
+      "autonomy": "autonomy",
+      "tools": "tools",
+      "route": "model route",
+      "nodeId": "node"
+    },
+    "phaseProblems": {
+      "needsTitle": "Phase {index} needs a title.",
+      "needsTurnUntitled": "Phase {index} needs at least one turn.",
+      "needsTurn": "\"{title}\" needs at least one turn.",
+      "speakersAbsentUntitled": "Phase {index} names speakers who are not in the room.",
+      "speakersAbsent": "\"{title}\" names speakers who are not in the room."
+    },
+    "engine": {
+      "meetingEnded": "Meeting has ended",
+      "unknownPersona": "Unknown persona \"{id}\""
+    }
   }
 }

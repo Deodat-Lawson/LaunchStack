@@ -14,6 +14,7 @@ import { findInvestors } from "@launchstack/tools/investor-search";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requestTranslator } from "~/i18n/server";
 
 export const dynamic = "force-dynamic";
 
@@ -46,7 +47,10 @@ export async function GET(request: NextRequest) {
         );
         if (!parsed.success) {
             return NextResponse.json(
-                { error: "Invalid search", details: parsed.error.flatten().fieldErrors },
+                {
+                    error: requestTranslator(request, "growth.server.research")("invalidSearch"),
+                    details: parsed.error.flatten().fieldErrors,
+                },
                 { status: 400 }
             );
         }
@@ -68,7 +72,7 @@ export async function GET(request: NextRequest) {
         } catch (err) {
             console.error("[investors] SEC search failed", err);
             return NextResponse.json(
-                { error: "SEC EDGAR did not answer. Try again in a moment." },
+                { error: requestTranslator(request, "growth.server.research")("secUnavailable") },
                 { status: 502 }
             );
         }

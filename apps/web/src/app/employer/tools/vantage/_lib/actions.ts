@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
+import { useErrorText } from "~/lib/tools/errorText";
+
 import {
     vantageApi,
     type AgendaDto,
@@ -42,14 +44,17 @@ export function undoToast(
     fmt: Pick<VantageFormat, "t">,
     message: string,
     undo: () => Promise<unknown>,
-    description?: string
+    description?: string,
+    /** `useErrorText()`, so a failed Undo says why in the reader's language. */
+    errorText: (error: unknown, fallback: string) => string = (e, fallback) =>
+        e instanceof Error ? e.message : fallback
 ) {
     const { t } = fmt;
     const run = () => {
         undo().then(
             () => window.dispatchEvent(new Event(CHANGED)),
             (e: unknown) =>
-                toast.error(e instanceof Error ? e.message : t("actions.undoFailed"), {
+                toast.error(errorText(e, t("actions.undoFailed")), {
                     description,
                     duration: 10000,
                     action: { label: t("actions.tryAgain"), onClick: run },
@@ -65,6 +70,7 @@ export function undoToast(
 
 export function useOneClick(refresh: () => Promise<unknown> | void) {
     const fmt = useVantageFormat();
+    const errorText = useErrorText();
     const [gone, setGone] = useState<ReadonlySet<string>>(() => new Set());
     // An Undo clicked after moving to another screen still shows up there.
     useEffect(() => {
@@ -96,7 +102,7 @@ export function useOneClick(refresh: () => Promise<unknown> | void) {
             } catch (e) {
                 running.current.delete(id);
                 restore(id);
-                toast.error(e instanceof Error ? e.message : fmt.t("actions.failed"));
+                toast.error(errorText(e, fmt.t("actions.failed")));
                 return;
             }
             // The card stays off the screen only until fresh data agrees; after
@@ -113,9 +119,9 @@ export function useOneClick(refresh: () => Promise<unknown> | void) {
                 return;
             }
             // The screen re-reads through the "changed" event once Undo lands.
-            undoToast(fmt, message, undo, description);
+            undoToast(fmt, message, undo, description, errorText);
         },
-        [refresh, restore, fmt]
+        [refresh, restore, fmt, errorText]
     );
     return { gone, act };
 }

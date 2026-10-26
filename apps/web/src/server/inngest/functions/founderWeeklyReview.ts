@@ -330,7 +330,7 @@ export const founderWeeklyReviewGenerationJob = inngest.createFunction(
             // A step body runs outside the handler's async context, so the
             // workspace's models are entered here rather than around the handler.
             const generated = await step.run("generate", () =>
-                withWorkspaceChatModels(context.companyId, () =>
+                withWorkspaceChatModels(context.companyId, "vantage", () =>
                     generateFounderWeeklyReview({
                         evidenceSnapshot,
                         generate: generateFounderWeeklyReviewStructured,

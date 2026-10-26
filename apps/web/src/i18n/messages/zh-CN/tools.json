@@ -53,7 +53,8 @@
     "label": "契合度 {value}/100"
   },
   "resource": {
-    "error": "出了点问题"
+    "error": "出了点问题",
+    "requestFailed": "请求失败（{status}）"
   },
   "format": {
     "never": "从未",

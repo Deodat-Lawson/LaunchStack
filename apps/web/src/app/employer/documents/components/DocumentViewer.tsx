@@ -64,6 +64,8 @@ import { XlsxViewer } from "./XlsxViewer";
 import { PptxViewer } from "./PptxViewer";
 import { ImageViewer } from "./ImageViewer";
 import { CodeViewer } from "./CodeViewer";
+import { ViewerNotice } from "./ViewerNotice";
+import { Button } from "~/components/ui/button";
 
 // Audio and video play in the browser beside their transcript; only media
 // sources pay for the player.
@@ -151,25 +153,23 @@ function IframeWithState({
                 </div>
             )}
             {error && (
-                <div className="bg-panel-2/30 absolute inset-0 z-10 flex flex-col items-center justify-center gap-4 p-8 text-center">
-                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50 dark:bg-red-900/20">
-                        <AlertTriangle className="h-7 w-7 text-red-500" />
-                    </div>
-                    <div>
-                        <p className="text-ink mb-1 text-sm font-medium">{t("loadFailed")}</p>
-                        <p className="text-ink-3 mb-4 text-xs">{t("loadFailedDetail")}</p>
-                        <button
+                <ViewerNotice
+                    overlay
+                    icon={<AlertTriangle />}
+                    title={t("loadFailed")}
+                    detail={t("loadFailedDetail")}
+                    action={
+                        <Button
                             onClick={() => {
                                 setLoading(true);
                                 setError(false);
                             }}
-                            className="bg-brand hover:bg-brand-hi inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors"
                         >
-                            <RotateCw className="h-4 w-4" />
+                            <RotateCw />
                             {tc("actions.retry")}
-                        </button>
-                    </div>
-                </div>
+                        </Button>
+                    }
+                />
             )}
             <iframe
                 key={iframeKey}

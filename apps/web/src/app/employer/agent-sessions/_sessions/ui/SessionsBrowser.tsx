@@ -105,7 +105,7 @@ function StatusBadge({ item }: { item: AgentSessionItem }) {
     const t = useTranslations("agents.sessions.status");
     if (item.active) {
         return (
-            <span className="text-warn inline-flex items-center gap-1 font-mono text-[10px] font-semibold uppercase tracking-wide">
+            <span className="text-warn-ink inline-flex items-center gap-1 font-mono text-[10px] font-semibold uppercase tracking-wide">
                 <CircleDot className="h-3 w-3 animate-pulse" />
                 {t("live")}
             </span>
@@ -113,14 +113,14 @@ function StatusBadge({ item }: { item: AgentSessionItem }) {
     }
     if (item.imported?.stale) {
         return (
-            <span className="bg-warn/10 text-warn rounded px-1.5 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wide">
+            <span className="bg-warn/10 text-warn-ink rounded px-1.5 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wide">
                 {t("updateAvailable")}
             </span>
         );
     }
     if (item.imported) {
         return (
-            <span className="bg-success/10 text-success rounded px-1.5 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wide">
+            <span className="bg-success/10 text-success-ink rounded px-1.5 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wide">
                 {t("imported")}
             </span>
         );

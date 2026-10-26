@@ -690,5 +690,34 @@
       "allRequired": "所有必填值均已提供",
       "placeholders": "源 HTML 中的字段占位符已保留"
     }
+  },
+  "server": {
+    "errors": {
+      "invalidRequestBody": "请求内容无效",
+      "bodyMustBeJson": "请求内容必须是有效的 JSON",
+      "invalidAction": "操作无效",
+      "invalidFormat": "格式无效",
+      "fetchDocuments": "无法获取文档列表",
+      "createDocument": "无法创建文档",
+      "updateDocument": "无法更新文档",
+      "deleteDocument": "无法删除文档",
+      "documentDeleted": "文档已删除",
+      "documentNotFound": "未找到该文档，或你无权访问",
+      "formatCitations": "无法格式化引用",
+      "exportFailed": "无法导出文档",
+      "pdfNotConfigured": "PDF 渲染尚未配置。请设置 GOTENBERG_SERVICE_URL（及其 basic-auth 用户名和密码），或改为导出 HTML。",
+      "generateFailed": "无法生成内容",
+      "grammarFailed": "无法检查语法",
+      "initializeFailed": "无法初始化文档",
+      "outlineFailed": "无法生成大纲",
+      "researchFailed": "无法完成研究",
+      "legalChatFailed": "无法处理法律对话",
+      "unknownTemplate": "未知的模板：{templateId}",
+      "templateNoDocument": "模板没有生成文档",
+      "legalPdfNotConfigured": "PDF 渲染尚未配置。请设置 GOTENBERG_SERVICE_URL（及其 basic-auth 用户名和密码），或改为下载 DOCX 文档。",
+      "legalGenerateFailed": "无法生成法律文档",
+      "trackChangesNotConfigured": "Adeu 修订服务尚未设置。请在 .env 文件中添加 ADEU_SERVICE_URL（例如 http://localhost:8000），并确保该服务正在运行。",
+      "trackChangesError": "修订服务出错"
+    }
   }
 }

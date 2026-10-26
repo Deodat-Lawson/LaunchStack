@@ -5,6 +5,8 @@ import { agentAiChatbotChat, agentAiChatbotDocument } from "~/server/db/schema";
 import { eq, desc } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { validateRequestBody, CreateChatSchema } from "~/lib/validation";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = "nodejs";
@@ -14,6 +16,8 @@ export const maxDuration = 300;
 export async function GET(request: NextRequest) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "chat.server.aiChat");
 
     try {
         const chats = await db
@@ -28,7 +32,7 @@ export async function GET(request: NextRequest) {
         });
     } catch (error) {
         console.error("Error fetching chats:", error);
-        return NextResponse.json({ error: "Failed to fetch chats" }, { status: 500 });
+        return NextResponse.json({ error: t("fetchChats") }, { status: 500 });
     }
 }
 
@@ -36,6 +40,8 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "chat.server.aiChat");
 
     try {
         const validation = await validateRequestBody(request, CreateChatSchema);
@@ -75,6 +81,6 @@ export async function POST(request: NextRequest) {
         });
     } catch (error) {
         console.error("Error creating chat:", error);
-        return NextResponse.json({ error: "Failed to create chat" }, { status: 500 });
+        return NextResponse.json({ error: t("createChat") }, { status: 500 });
     }
 }

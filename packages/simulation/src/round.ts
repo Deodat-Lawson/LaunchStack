@@ -5,6 +5,8 @@
  * 2. Rebuild every active agent's feed from the world as it stood before the round.
  * 3. Ask the model what each active agent does (in parallel, bounded).
  * 4. Apply the actions in a fixed agent order, update stances and memories.
+ *    A stance moves at most `maxStanceStep` per round, and a move toward the
+ *    subject applies only when the agent names the feed post behind it.
  *
  * The input world is never mutated; the caller persists the returned world.
  * Randomness is seeded per (run seed, round), so retrying a round after a
@@ -17,7 +19,17 @@ import { summarizeRound } from "./metrics";
 import { buildFeeds, type Similarity } from "./recommend";
 import { createRng, hashSeed } from "./rng";
 import { clip } from "./text";
-import type { AgentDecision, FeedItem, RoundSummary, SimulationModel, Usage, World } from "./types";
+import {
+    DEFAULT_CONFIG,
+    type AgentDecision,
+    type FeedItem,
+    type RoundSummary,
+    type SimulationConfig,
+    type SimulationModel,
+    type Stance,
+    type Usage,
+    type World,
+} from "./types";
 
 export interface RoundDeps {
     model: SimulationModel;
@@ -54,6 +66,24 @@ export async function mapLimit<T, R>(
     });
     await Promise.all(workers);
     return results;
+}
+
+/**
+ * The stance a turn may apply. Models drift agreeable and will swing a
+ * strong critic to a fan on one upbeat post, so the engine, not the prompt,
+ * holds the line: at most `maxStanceStep` per round, and no warming without
+ * the post that caused it. Cooling needs no reason.
+ */
+export function guardStance(
+    from: Stance,
+    decision: Pick<AgentDecision, "stance" | "convincedBy">,
+    config: Partial<Pick<SimulationConfig, "maxStanceStep" | "warmingNeedsReason">>
+): Stance {
+    const step = Math.max(0, config.maxStanceStep ?? DEFAULT_CONFIG.maxStanceStep);
+    const next = Math.max(from - step, Math.min(from + step, decision.stance));
+    const needsReason = config.warmingNeedsReason ?? DEFAULT_CONFIG.warmingNeedsReason;
+    if (next > from && needsReason && !decision.convincedBy) return from;
+    return next as Stance;
 }
 
 export function selectActive(world: World, round: number): string[] {
@@ -128,8 +158,10 @@ export async function runRound(
                 });
                 done.push(describeAction(world, action));
             }
-            agent.stance = turn.decision.stance;
+            agent.stance = guardStance(agent.stance, turn.decision, world.config);
             if (turn.decision.thought) agent.lastThought = turn.decision.thought;
+            if (turn.decision.wouldPay) agent.wouldPay = turn.decision.wouldPay;
+            if (turn.decision.objection) agent.objection = turn.decision.objection;
             remember(world, agent.persona.id, round, turn.feed, done);
         }
         agent.stanceHistory.push(agent.stance);

@@ -4,13 +4,14 @@ import { useEffect, useState } from "react";
 
 import { Toaster } from "~/components/ui/sonner";
 
-import { DriveConnectPanel } from "~/app/employer/documents/_workspace/DriveConnectPanel";
+import { DriveSyncPanel } from "~/app/employer/documents/_workspace/settings/DriveSyncPanel";
 import { GmailConnectPanel } from "~/app/employer/documents/_workspace/GmailConnectPanel";
 import { ADD_TABS, type AddSourceTab } from "~/app/employer/documents/_workspace/types";
 
 /**
  * Local harness for the Drive and Gmail panels' sync states. Mounts the real
- * panels with their session-guarded routes stubbed.
+ * panels (Drive's is the Settings card) with their session-guarded routes
+ * stubbed.
  *
  * Press "Sync now". By default the stubbed runner picks the job up after two
  * polls, runs it for two more, then reports a finished sync. `?runner=down`
@@ -150,9 +151,8 @@ export function ConnectorSyncPreview() {
     return (
         <main className="bg-surface text-ink min-h-screen p-6">
             <div className="mx-auto grid max-w-5xl gap-6 md:grid-cols-2">
-                <section className="border-line bg-panel rounded-xl border p-5">
-                    <h2 className="text-ink-3 mb-4 text-xs font-semibold">GOOGLE DRIVE</h2>
-                    <DriveConnectPanel tab={tab("drive")} />
+                <section>
+                    <DriveSyncPanel />
                 </section>
                 <section className="border-line bg-panel rounded-xl border p-5">
                     <h2 className="text-ink-3 mb-4 text-xs font-semibold">GMAIL</h2>

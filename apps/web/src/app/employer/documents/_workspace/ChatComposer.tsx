@@ -141,11 +141,19 @@ interface UploadRow {
     progress: number;
     error?: string;
 }
-const ROUTES: ChatRouteName[] = ["default", "fast", "reasoning", "vision"];
+const ROUTES = ["default", "fast"] as const satisfies readonly ChatRouteName[];
+type PickerRoute = (typeof ROUTES)[number];
+const isPickerRoute = (route: unknown): route is PickerRoute =>
+    ROUTES.some(option => option === route);
+/** Old drafts and preferences may name a route the picker no longer offers. */
+const pickerRoute = (route: unknown): PickerRoute => (isPickerRoute(route) ? route : "default");
 /*
  * What each route is called on screen is `chat.composer.routes.<route>`. The
  * picker chooses a route, never a model: which model serves it is the
- * operator's configuration and the screen does not name it.
+ * operator's configuration and the screen does not name it. It offers two
+ * tiers only. Images go to a route that reads them on their own, and how hard
+ * the model thinks is the reasoning effort, not a separate tier — so the
+ * `reasoning` and `vision` routes stay server-side and are never picked here.
  */
 function defaultSendKey(): ComposerPreferences["sendKey"] {
     return typeof window !== "undefined" &&
@@ -195,8 +203,8 @@ export function Composer({
     const tMenu = useTranslations("chat.contextMenu");
     const tAgents = useTranslations("agents");
     const format = useFormatter();
-    const routeLabel = (route: ChatRouteName) => t(`routes.${route}.label`);
-    const routeBlurb = (route: ChatRouteName) => t(`routes.${route}.blurb`);
+    const routeLabel = (route: PickerRoute) => t(`routes.${route}.label`);
+    const routeBlurb = (route: PickerRoute) => t(`routes.${route}.blurb`);
     // Capabilities are automatic; legacy draft flags no longer change them.
     const webSearch = true;
     const thinking = true;
@@ -214,8 +222,8 @@ export function Composer({
     const [attachError, setAttachError] = useState<string | null>(null);
     const [storageError, setStorageError] = useState(false);
     const [failedPromptAvailable, setFailedPromptAvailable] = useState(false);
-    const [modelRoute, setModelRoute] = useState<ChatRouteName>("default");
-    const [modelRoutes, setModelRoutes] = useState<ChatRouteName[]>([]);
+    const [modelRoute, setModelRoute] = useState<PickerRoute>("default");
+    const [modelRoutes, setModelRoutes] = useState<PickerRoute[]>([]);
     const [threadRefs, setThreadRefs] = useState<string[]>([]);
     const [passages, setPassages] = useState<ChatPassage[]>([]);
     const [inspectedThread, setInspectedThread] = useState<string | null>(null);
@@ -358,10 +366,10 @@ export function Composer({
         { webSearch, thinking, hasAttachments: attachments.length > 0 }
     );
     const routeInfo = chatRoutes.config.routes[modelRoute];
-    const effectiveRoute =
-        modelRoute === "default" &&
-        attachments.some(item => item.kind === "image") &&
-        !routeInfo?.vision?.supported
+    // Images are always on: a picked tier that can't read them hands the turn
+    // to the vision route rather than asking the reader to switch.
+    const effectiveRoute: ChatRouteName =
+        attachments.some(item => item.kind === "image") && !routeInfo?.vision?.supported
             ? "vision"
             : modelRoute;
     const effortInfo = chatRoutes.config.routes[effectiveRoute]?.reasoning;
@@ -537,8 +545,8 @@ export function Composer({
                     : null
             );
             updateAttachments(draft.attachments);
-            setModelRoute(ROUTES.includes(draft.modelRoute!) ? draft.modelRoute! : "default");
-            setModelRoutes((draft.modelRoutes ?? []).filter(route => ROUTES.includes(route)));
+            setModelRoute(pickerRoute(draft.modelRoute));
+            setModelRoutes((draft.modelRoutes ?? []).filter(isPickerRoute));
             setThreadRefs((draft.threadRefs ?? []).filter(id => typeof id === "string"));
             setPassages((draft.passages ?? []).filter(isChatPassage));
             setMissingFiles(draft.pendingFiles ?? []);
@@ -608,14 +616,12 @@ export function Composer({
                 : defaultSendKey()
         );
         setFavorites(
-            Array.isArray(preferences?.favorites)
-                ? preferences.favorites.filter(value => ROUTES.includes(value as ChatRouteName))
-                : []
+            Array.isArray(preferences?.favorites) ? preferences.favorites.filter(isPickerRoute) : []
         );
         setFollowUp(preferences?.followUp === "interrupt" ? "interrupt" : "queue");
         setEditorMode(preferences?.editorMode === "rich" ? "rich" : "plain");
         if (!isComposerDraft(stored)) {
-            if (ROUTES.includes(preferences.modelRoute!)) setModelRoute(preferences.modelRoute!);
+            if (isPickerRoute(preferences.modelRoute)) setModelRoute(preferences.modelRoute);
             if (typeof preferences?.reasoningEffort === "string")
                 setReasoningEffort(preferences.reasoningEffort);
         }
@@ -798,8 +804,8 @@ export function Composer({
             updateAttachments(seed.attachments);
         }
         if (seed.refs) callbacks.current.setSelected(seed.refs);
-        if (seed.modelRoute) setModelRoute(seed.modelRoute);
-        if (seed.modelRoutes) setModelRoutes(seed.modelRoutes);
+        if (seed.modelRoute) setModelRoute(pickerRoute(seed.modelRoute));
+        if (seed.modelRoutes) setModelRoutes(seed.modelRoutes.filter(isPickerRoute));
         if (seed.threadRefs) setThreadRefs(seed.threadRefs);
         if (seed.reasoningEffort) setReasoningEffort(seed.reasoningEffort);
         if (seed.chatMode) setChatMode(seed.chatMode);
@@ -1581,7 +1587,7 @@ export function Composer({
             {dragging && <p className="text-brand mb-2 text-sm">{t("dropHint")}</p>}
             {selected.length > 0 && (
                 <div className="border-line mb-2.5 flex flex-wrap items-center gap-1.5 border-b border-dashed pb-2.5">
-                    <span className="mono text-ink-3 text-[10px] uppercase">
+                    <span className="mono text-ink-3 text-[11px] uppercase">
                         {t("contextLabel")}
                     </span>
                     {selSources.map(source => (
@@ -2168,7 +2174,7 @@ export function Composer({
                             const number = Number(
                                 event.code?.startsWith("Digit") ? event.code.slice(5) : event.key
                             );
-                            if (event.altKey && number >= 1 && number <= 4) {
+                            if (event.altKey && number >= 1 && number <= ROUTES.length) {
                                 const route = ROUTES[number - 1]!;
                                 if (chatRoutes.config.routes[route]?.available) {
                                     event.preventDefault();
@@ -2288,7 +2294,7 @@ export function Composer({
                                     </label>
                                 )
                             )}
-                            <p className="text-ink-3 px-2 py-1 text-[10px]">{t("compareHint")}</p>
+                            <p className="text-ink-3 px-2 py-1 text-[11px]">{t("compareHint")}</p>
                         </fieldset>
                         {chatRoutes.loading && (
                             <p className="text-ink-3 px-2 text-xs">{t("loadingModels")}</p>
@@ -2332,7 +2338,7 @@ export function Composer({
                 >
                     <Paperclip className="size-4" />
                     {attachments.length + uploads.length > 0 && (
-                        <span className="bg-brand text-brand-fg absolute -right-0.5 -top-0.5 min-w-4 rounded-full px-1 text-[10px]">
+                        <span className="bg-brand text-brand-fg absolute -right-0.5 -top-0.5 min-w-4 rounded-full px-1 text-[11px] tabular-nums leading-4">
                             {attachments.length + uploads.length}
                         </span>
                     )}
@@ -2465,7 +2471,7 @@ export function Composer({
                         >
                             <Save className="size-3.5" />
                             {hasContent ? t("options.savePrompt") : t("options.restorePrompts")}
-                            <span className="text-ink-3 ml-auto text-[10px]">⌘/Ctrl+S</span>
+                            <span className="text-ink-3 ml-auto text-[11px]">⌘/Ctrl+S</span>
                         </Button>
                         <p className="text-ink mb-2 text-sm font-medium">{t("options.editor")}</p>
                         <div className="mb-3 flex gap-1">
@@ -2525,7 +2531,7 @@ export function Composer({
                     </PopoverContent>
                 </Popover>
                 <div className="ml-auto flex shrink-0 items-center gap-2">
-                    <span className="mono text-ink-3 @max-sm:hidden text-[10px]">
+                    <span className="mono text-ink-3 @max-sm:hidden text-[11px]">
                         {t("sendHint", {
                             key: sendKey === "enter" ? "↵" : "⌘/Ctrl+↵",
                             action: editingQueued ? "save" : active ? followUp : "send",
@@ -2611,7 +2617,7 @@ export function Composer({
                     <span className="text-ink-3">{t("earlierDraftSaved")}</span>
                 </div>
             )}
-            <div id="composer-hint" className="text-ink-3 mt-2 px-1 text-[10px]">
+            <div id="composer-hint" className="text-ink-3 mt-2 px-1 text-[11px]">
                 {overLimit ? (
                     <span role="alert" className="text-danger">
                         {t("overLimit", { length: text.length, max: COMPOSER_MAX_CHARACTERS })}
@@ -2771,7 +2777,7 @@ function AgentPicker({
                             <AgentAvatar agent={shown} size={18} />
                             <span className="truncate">{shown.displayName}</span>
                             {mentioned && (
-                                <span className="text-ink-3 text-[10px]">{t("thisTurn")}</span>
+                                <span className="text-ink-3 text-[11px]">{t("thisTurn")}</span>
                             )}
                         </>
                     ) : (
@@ -2815,7 +2821,7 @@ function AgentPicker({
                             <span className="min-w-0 flex-1 text-left">
                                 <span className="block font-medium">
                                     {option.displayName}{" "}
-                                    <span className="mono text-ink-3 text-[10px]">
+                                    <span className="mono text-ink-3 text-[11px]">
                                         @{option.id}
                                     </span>
                                 </span>

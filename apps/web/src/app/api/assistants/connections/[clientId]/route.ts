@@ -14,6 +14,7 @@ import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { revokeConnection } from "~/server/mcp/connections";
+import { requestTranslator } from "~/i18n/server";
 
 export const runtime = "nodejs";
 
@@ -37,9 +38,13 @@ export async function DELETE(
     return withRateLimit(request, RateLimitPresets.standard, async () => {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
+        const t = requestTranslator(request, "settings.server.errors");
         const clientId = decodeParam((await params).clientId).trim();
         if (!clientId || clientId.length > 2048) {
-            return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+            return NextResponse.json(
+                { error: requestTranslator(request, "errors.api")("invalidId") },
+                { status: 400 }
+            );
         }
 
         try {
@@ -49,15 +54,12 @@ export async function DELETE(
                 clientId,
             });
             if (!revoked) {
-                return NextResponse.json({ error: "Connection not found" }, { status: 404 });
+                return NextResponse.json({ error: t("connectionNotFound") }, { status: 404 });
             }
             return NextResponse.json({ revoked: true });
         } catch (error) {
             console.error("[assistants connections DELETE] failed:", error);
-            return NextResponse.json(
-                { error: "Could not disconnect the assistant." },
-                { status: 500 }
-            );
+            return NextResponse.json({ error: t("disconnectFailed") }, { status: 500 });
         }
     });
 }

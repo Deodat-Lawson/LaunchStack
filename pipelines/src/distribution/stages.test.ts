@@ -21,6 +21,18 @@ describe("stage transition table", () => {
         }
     });
 
+    it("lets a meeting enter proposal, and proposal advance or go back", () => {
+        expect(() =>
+            assertTransition({ from: "in_conversation", to: "proposal", context: full })
+        ).not.toThrow();
+        expect(() =>
+            assertTransition({ from: "proposal", to: "negotiating", context: full })
+        ).not.toThrow();
+        expect(() =>
+            assertTransition({ from: "proposal", to: "in_conversation", context: full })
+        ).not.toThrow();
+    });
+
     it("allows the forward path with the fields filled in", () => {
         const path = [
             "candidate",

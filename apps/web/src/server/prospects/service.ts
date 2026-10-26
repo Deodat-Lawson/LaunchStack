@@ -498,12 +498,7 @@ export async function patchDeal(
             throw new ProspectsError(
                 copy("growth.server.errors.cannotMoveTo", { stage: patch.stage }),
                 409,
-                {
-                    reason:
-                        patch.stage === "proposal"
-                            ? copy("growth.server.moves.notAStage")
-                            : copy("growth.server.moves.notAvailableHere"),
-                }
+                { reason: copy("growth.server.moves.notAvailableHere") }
             );
         relationship = await transitionStage({
             companyId: ctx.companyId,

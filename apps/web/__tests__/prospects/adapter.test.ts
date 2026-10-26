@@ -49,10 +49,11 @@ const rel = (over: Partial<RelationshipRecord> = {}): RelationshipRecord => ({
 });
 
 describe("stage mapping", () => {
-    it("folds ten relationship stages onto the funnel", () => {
+    it("folds relationship stages onto the funnel", () => {
         expect(SALES_OF.candidate).toBe("lead");
         expect(SALES_OF.researched).toBe("lead");
         expect(SALES_OF.in_conversation).toBe("meeting");
+        expect(SALES_OF.proposal).toBe("proposal");
         expect(SALES_OF.contracted).toBe("won");
         expect(SALES_OF.active).toBe("won");
         expect(SALES_OF.declined).toBe("lost");
@@ -63,7 +64,9 @@ describe("stage mapping", () => {
         expect(relationshipTarget("contacted", "lead")).toBe("researched");
         expect(relationshipTarget("declined", "lead")).toBe("researched");
         expect(relationshipTarget("candidate", "won")).toBe("contracted");
-        expect(relationshipTarget("candidate", "proposal")).toBeNull();
+        expect(relationshipTarget("in_conversation", "proposal")).toBe("proposal");
+        expect(relationshipTarget("proposal", "negotiating")).toBe("negotiating");
+        expect(relationshipTarget("proposal", "meeting")).toBe("in_conversation");
     });
 });
 
@@ -73,7 +76,7 @@ describe("moves and reasons", () => {
         expect(moveReason(lead, false, "lead")).toBe("Current stage");
         expect(moveReason(lead, false, "contacted")).toBe("Needs an owner");
         expect(moveReason(lead, false, "qualified")).toBe("Move to Contacted first");
-        expect(moveReason(lead, false, "proposal")).toBe("Not a stage in this workspace yet");
+        expect(moveReason(lead, false, "proposal")).toBe("Move to Contacted first");
         expect(moveReason(lead, false, "lost")).toBeNull();
         expect(moveReason(lead, false, "nurture")).toBeNull();
     });
@@ -83,6 +86,15 @@ describe("moves and reasons", () => {
         expect(moveReason(owned, false, "meeting")).toBe("Needs a next step");
         const planned = rel({ stage: "contacted", ownerUserId: "u1", nextAction: "Call" });
         expect(moveReason(planned, false, "meeting")).toBeNull();
+        const meeting = rel({
+            stage: "in_conversation",
+            ownerUserId: "u1",
+            nextAction: "Send the draft",
+        });
+        expect(moveReason(meeting, false, "proposal")).toBeNull();
+        const proposal = rel({ stage: "proposal", ownerUserId: "u1", nextAction: "Send the draft" });
+        expect(moveReason(proposal, false, "negotiating")).toBeNull();
+        expect(moveReason(proposal, false, "meeting")).toBeNull();
         const negotiating = rel({ stage: "negotiating", ownerUserId: "u1", nextAction: "Sign" });
         expect(moveReason(negotiating, false, "won")).toBe(
             "Needs an agreement recorded in Distribution"

@@ -69,13 +69,14 @@ export const SALES_STAGES: SalesStage[] = [
     "nurture",
 ];
 
-/** The pipeline's ten relationship stages folded onto the sales funnel. */
+/** The pipeline's relationship stages folded onto the sales funnel. */
 export const SALES_OF: Record<RelationshipStage, SalesStage> = {
     candidate: "lead",
     researched: "lead",
     qualified: "qualified",
     contacted: "contacted",
     in_conversation: "meeting",
+    proposal: "proposal",
     negotiating: "negotiating",
     contracted: "won",
     active: "won",
@@ -115,6 +116,8 @@ export function relationshipTarget(
             return "contacted";
         case "meeting":
             return "in_conversation";
+        case "proposal":
+            return "proposal";
         case "negotiating":
             return "negotiating";
         case "won":
@@ -123,8 +126,6 @@ export function relationshipTarget(
             return "declined";
         case "nurture":
             return "dormant";
-        case "proposal":
-            return null;
     }
 }
 
@@ -157,11 +158,6 @@ export function moveRefusal(
     const current = SALES_OF[rel.stage];
     if (to === current)
         return { reason: "Current stage", copy: copy("growth.server.moves.currentStage") };
-    if (to === "proposal")
-        return {
-            reason: "Not a stage in this workspace yet",
-            copy: copy("growth.server.moves.notAStage"),
-        };
     const target = relationshipTarget(rel.stage, to);
     if (!target || !ALLOWED_TRANSITIONS[rel.stage].includes(target)) {
         if (current === "won")

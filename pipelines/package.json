@@ -59,7 +59,9 @@
         "./vantage": "./src/vantage/index.ts",
         "./vantage/schema": "./src/vantage/schema.ts",
         "./vantage/generation-v1": "./src/vantage/generation-v1.ts",
-        "./vantage/context-v0": "./src/vantage/context-v0/index.ts"
+        "./vantage/context-v0": "./src/vantage/context-v0/index.ts",
+        "./vantage/role-context-v0": "./src/vantage/role-context-v0/index.ts",
+        "./vantage/role-context-v0/fixtures": "./src/vantage/role-context-v0/fixtures.ts"
     },
     "files": [
         "dist",
@@ -263,6 +265,14 @@
             "./vantage/context-v0": {
                 "types": "./dist/vantage/context-v0/index.d.ts",
                 "default": "./dist/vantage/context-v0/index.js"
+            },
+            "./vantage/role-context-v0": {
+                "types": "./dist/vantage/role-context-v0/index.d.ts",
+                "default": "./dist/vantage/role-context-v0/index.js"
+            },
+            "./vantage/role-context-v0/fixtures": {
+                "types": "./dist/vantage/role-context-v0/fixtures.d.ts",
+                "default": "./dist/vantage/role-context-v0/fixtures.js"
             }
         }
     },

@@ -1,7 +1,7 @@
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { z } from "zod";
 import { invokeStructured } from "@launchstack/llm";
-import { DuckDuckGoSearch } from "@langchain/community/tools/duckduckgo_search";
+import { configuredWebSearchProvider, searchWeb } from "@launchstack/tools/web-research";
 import type {
     PdfChunk,
     AnalysisSpecification,
@@ -196,22 +196,15 @@ function createAnalysisPrompt(content: string, specification: AnalysisSpecificat
 `;
 }
 
+/**
+ * Suggested links through the app's web search (Exa first, Serper as the
+ * fallback). No search key means no suggestions; a failed search too.
+ */
 async function performWebSearch(query: string, maxResults = 5): Promise<SearchResult[]> {
+    if (configuredWebSearchProvider() === null) return [];
     try {
-        const searchTool = new DuckDuckGoSearch({ maxResults });
-        const result = (await searchTool.invoke(query)) as SearchResult[];
-
-        let parsed: SearchResult[];
-        if (typeof result === "string") {
-            parsed = JSON.parse(result) as SearchResult[];
-        } else if (Array.isArray(result)) {
-            parsed = result;
-        } else {
-            console.warn("Unexpected search result format:", typeof result);
-            return [];
-        }
-
-        return parsed;
+        const { results } = await searchWeb(query, { maxResults, snippetChars: 300 });
+        return results.map(hit => ({ title: hit.title, url: hit.url, snippet: hit.snippet }));
     } catch (error) {
         console.error("Web search error:", sanitizeErrorMessage(error));
         return [];

@@ -1,0 +1,167 @@
+{
+  "schemaVersion": 2,
+  "id": "a16z-speedrun",
+  "name": "a16z speedrun",
+  "logo": {
+    "path": "/accelerators/logos/a16z-speedrun.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://speedrun.a16z.com/apply",
+  "applyUrl": "https://speedrun.a16z.com/apply",
+  "description": {
+    "text": "AI-written synthesis of the cited official pages, prepared by the collecting assistant: speedrun describes investing up to $1M in a startup, adding $10M+ in credits, and helping with capital, customers, and talent. The in-person portion is a twelve-week residency at its San Francisco office. The FAQ says residencies run twice a year in San Francisco, that SR008 starts in February 2027, and that SR009 starts in late July 2027 with Demo Day on October 5, 2027. The same FAQ says the SR008 residency runs February 1 to April 18, 2027, with a founder retreat on February 2 to 4 and Demo Day on April 13, 2027. The apply page instead says SR008 runs February 1 to April 16, 2027. Those end dates conflict, so this record does not pick one. The FAQ says SR008 applications are open October 12 through November 1, 2026 at 11:59 PM PT; the apply page states November 1, 2026 without a clock time. Both pages say an application after that window can still be reviewed for the following residency. The FAQ states a standard deal of up to $1M: $500K for 10% upfront on a SAFE, and up to an additional $500K in the next qualifying round ($2M+) within 18 months, without a board seat, and with pro rata rights and an option pool. It also says partner credit amounts and terms can change. The stored deadline uses 11:59:00 because the FAQ publishes the minute and does not publish seconds.",
+    "sourceIds": [
+      "sr-faq-overview",
+      "sr-apply-window",
+      "sr-faq-deadline",
+      "sr-faq-residency-dates",
+      "sr-faq-terms"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the cited official FAQ, prepared by the collecting assistant: speedrun says it invests very early, in an idea, a prototype, or an early product, with a team that is already building, and that traction is not required. It distinguishes the alpha fellowship, which it describes as up to $250K plus credits for students, recent grads, and dropouts still finding an idea, product, or team. Solo founders may apply, though the FAQ says teams with complementary skills are generally preferred. Prior capital does not by itself bar an application; incorporation is not required before applying. Students and people with a full-time job may apply, while the residency asks for about one day a week in person in San Francisco and expects founders to be building full-time outside those sessions. The FAQ says the founding team usually needs to be able to build the product itself. Founders outside the United States may apply; the FAQ says founders have joined from 20+ countries and that a visa will in most cases need to be planned. These are narrative expectations from the FAQ, not a closed stage category, a company-specific fit score, or a complete eligibility checklist. Minimum age is not stated; the FAQ tells that question to email the team.",
+    "sourceIds": [
+      "sr-faq-stage",
+      "sr-faq-solo",
+      "sr-faq-raised",
+      "sr-faq-student",
+      "sr-faq-technical",
+      "sr-faq-incorporation",
+      "sr-faq-international",
+      "sr-faq-selection"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://a16z.com/speedrun/",
+      "title": "a16z speedrun official page — speedrun wordmark",
+      "quote": "https://d1lamhf6l6yk6d.cloudfront.net/uploads/2026/01/sr-logo.svg",
+      "checkedAt": "2026-10-26T23:19:30.000Z"
+    },
+    {
+      "id": "sr-faq-overview",
+      "url": "https://speedrun.a16z.com/faq",
+      "title": "speedrun FAQ — What the Program is",
+      "quote": "What is speedrun?\n\nWe invest up to $1M in your startup, add $10M+ in credits, and help you with capital, customers, and talent as you build. The in-person part is the residency: twelve weeks of firesides, practitioner sessions, office hours, and events at our San Francisco office, alongside other founders building at the same stage.\n\nHow often do you run a residency?\n\nTwice a year, both in San Francisco. SR008 starts in February 2027. SR009 starts in late July 2027, with Demo Day on October 5, 2027.",
+      "checkedAt": "2026-10-26T23:19:30.000Z"
+    },
+    {
+      "id": "sr-apply-window",
+      "url": "https://speedrun.a16z.com/apply",
+      "title": "Apply to speedrun — SR008 window and a conflicting residency end date",
+      "quote": "Applications for SR008, our next residency, are open now through November 1, 2026. SR008 runs February 1 to April 16, 2027, in San Francisco. If you apply after November 1, we’ll consider you for the following residency. We review applications year-round, so whenever you’re ready, we’d love for you to apply.",
+      "checkedAt": "2026-10-26T23:19:30.000Z"
+    },
+    {
+      "id": "sr-faq-deadline",
+      "url": "https://speedrun.a16z.com/faq",
+      "title": "speedrun FAQ — SR008 application window and clock time",
+      "quote": "How do I apply, and when's the deadline?\n\nYou can apply at speedrun.a16z.com/apply. Applications for the SR008 residency are open October 12 through November 1, 2026 at 11:59 PM PT. If you miss the window, don't worry. You can still apply, and we'll review your application for the next residency.",
+      "checkedAt": "2026-10-26T23:19:30.000Z"
+    },
+    {
+      "id": "sr-faq-residency-dates",
+      "url": "https://speedrun.a16z.com/faq",
+      "title": "speedrun FAQ — SR008 residency dates that conflict with the apply page",
+      "quote": "How does the residency work?\n\nThe residency is twelve weeks of firesides, practitioner sessions, office hours, and events at our San Francisco office in North Beach. It opens with a founder retreat and closes with Demo Day. The SR008 residency runs February 1 to April 18, 2027, with the founder retreat February 2 to 4 and Demo Day on April 13. You'll also have desk access at the office for about six months around it.",
+      "checkedAt": "2026-10-26T23:19:30.000Z"
+    },
+    {
+      "id": "sr-faq-terms",
+      "url": "https://speedrun.a16z.com/faq",
+      "title": "speedrun FAQ — Published standard deal",
+      "quote": "What are the terms?\n\nOur standard deal is up to $1M: $500K for 10% upfront on a SAFE, and up to an additional $500K in your next qualifying round ($2M+) within 18 months. Our current standard deal does not include a board seat. We ask for pro rata rights in future rounds and for an option pool for your early hires. Your investing partner will walk you through every detail before you sign.\n\n[…]\n\nWhat do the credits cover?\n\nThrough the speedrun Marketplace, you get access to $10M+ in credits from 200+ partners: cloud providers, model providers, and the software you use every day. For many companies, that goes a long way toward early costs. Credits unlock once your investment is wired. Amounts and terms are set by each partner and can change.",
+      "checkedAt": "2026-10-26T23:19:30.000Z"
+    },
+    {
+      "id": "sr-faq-stage",
+      "url": "https://speedrun.a16z.com/faq",
+      "title": "speedrun FAQ — Stage, including the separate alpha fellowship",
+      "quote": "What's the difference between speedrun and alpha?\n\nThe alpha fellowship invests up to $250K plus credits in students, recent grads, and dropouts who are still finding their idea, product, or team. speedrun invests up to $1M in founders who are already building, or further along in their careers, with an idea, a product, and a team.\n\n[…]\n\nWhat stage do you invest in?\n\nVery early. An idea, a prototype, or an early product, with a team that's already building. We've backed founders before they left their jobs. If you're a student, recent grad, or dropout who's still finding your idea or your team, the alpha fellowship may be a great fit.",
+      "checkedAt": "2026-10-26T23:19:30.000Z"
+    },
+    {
+      "id": "sr-faq-solo",
+      "url": "https://speedrun.a16z.com/faq",
+      "title": "speedrun FAQ — Solo founders",
+      "quote": "Can I apply as a solo founder?\n\nAbsolutely. You can apply to speedrun as a solo founder. We value founders who show they can build from scratch and work through challenges on their own. That said, because scaling a startup is complex, we generally prefer teams with multiple founders who bring complementary skills. If you're a solo founder with a strong track record of execution, we strongly encourage you to apply.",
+      "checkedAt": "2026-10-26T23:19:30.000Z"
+    },
+    {
+      "id": "sr-faq-raised",
+      "url": "https://speedrun.a16z.com/faq",
+      "title": "speedrun FAQ — Applicants who have already raised",
+      "quote": "I've already raised money. Can I still apply?\n\nYes. We aim to be the first check into your company, but we also accept early-stage companies that have already raised capital.",
+      "checkedAt": "2026-10-26T23:19:30.000Z"
+    },
+    {
+      "id": "sr-faq-student",
+      "url": "https://speedrun.a16z.com/faq",
+      "title": "speedrun FAQ — Students and employed applicants",
+      "quote": "Can I apply as a student or while I have a full-time job?\n\nYes, you can apply. During the residency, we ask for about one day a week in person at our San Francisco office for sessions, office hours, and events. Outside of that, we expect you to be building your startup full-time. If you're a student who's still finding your idea or team, the alpha fellowship may be a better fit right now.",
+      "checkedAt": "2026-10-26T23:19:30.000Z"
+    },
+    {
+      "id": "sr-faq-technical",
+      "url": "https://speedrun.a16z.com/faq",
+      "title": "speedrun FAQ — Building the product",
+      "quote": "Do I need a technical cofounder?\n\nWe back teams that can build and iterate on their product themselves, which usually means having a technical cofounder or equivalent expertise on the founding team. If you're not technical, we'd encourage you to find a partner who can help bring your vision to life, then apply together.",
+      "checkedAt": "2026-10-26T23:19:30.000Z"
+    },
+    {
+      "id": "sr-faq-incorporation",
+      "url": "https://speedrun.a16z.com/faq",
+      "title": "speedrun FAQ — Incorporation is not required to apply",
+      "quote": "Can I apply if I'm not incorporated yet?\n\nYes, you can still apply. If we invest, we can help you set up your company. For questions about your specific situation, email us at sr-team@a16z.com.",
+      "checkedAt": "2026-10-26T23:19:30.000Z"
+    },
+    {
+      "id": "sr-faq-international",
+      "url": "https://speedrun.a16z.com/faq",
+      "title": "speedrun FAQ — Applicants outside the United States",
+      "quote": "Can I apply from outside the US?\n\nYes, and we'd love to meet you. Founders have joined speedrun from 20+ countries. If you're accepted, Build in America helps you get set up here, with immigration counsel, banking, housing, and a community of founders who've made the same move.\n\n[…]\n\nDo I need a visa for the residency?\n\nIn most cases, we'd recommend planning for one. Visa rules depend on your situation, and border policies change, so it's best to start early. If you're accepted, Build in America will connect you with immigration counsel to find the right option for you.",
+      "checkedAt": "2026-10-26T23:19:30.000Z"
+    },
+    {
+      "id": "sr-faq-selection",
+      "url": "https://speedrun.a16z.com/faq",
+      "title": "speedrun FAQ — What the team says it looks for, and rolling review",
+      "quote": "How do you pick companies?\n\nWe look for founders who go from zero to one without waiting for permission, move quickly, and have unique insight into their market. We care about complementary skills on the team and early signs that people want what you're building, though traction isn't required. We spend most of our time on the team and bio section, so tell us who you are.\n\n[…]\n\nHow does the review process work?\n\nWe review applications on a rolling basis, and every one is read by a person. If we’d like to learn more, we may invite you to send a short video pitch, join a 15-minute interview, or both.",
+      "checkedAt": "2026-10-26T23:19:30.000Z"
+    },
+    {
+      "id": "sr-form-markup",
+      "url": "https://speedrun.a16z.com/apply/form",
+      "title": "speedrun application — Anonymous public Form markup, not a submitted application",
+      "quote": "Founders are individuals with over 10% equity. If you’re part-time or not yet incorporated, enter ‘0’ and add all co-founders in the section below.\n\n[…]\n\nTell us who’s building this. Start with the CEO, then add any co-founders.\n\n[…]\n\nAdd co-founder\n\n[…]\n\nPitch Deck (PDF)\nOptional",
+      "checkedAt": "2026-10-26T23:19:30.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "sr008",
+      "label": "SR008",
+      "deadlineAt": "2026-11-01T23:59:00-08:00",
+      "deadlineTimezone": "America/Los_Angeles",
+      "rolling": true,
+      "sourceIds": ["sr-faq-deadline", "sr-apply-window", "sr-faq-selection"],
+      "form": {
+        "id": "speedrun-sr008-application",
+        "status": "checked",
+        "sourceUrl": "https://speedrun.a16z.com/apply/form",
+        "checkedAt": "2026-10-26T23:19:30.000Z",
+        "supported": false,
+        "limitations": [
+          "An anonymous GET of https://speedrun.a16z.com/apply/form on 2026-10-26 returned the application markup without an account. The apply landing page also asks for an email and says that clicking Get Started agrees to the Terms of Use. That button was not clicked, no account was created, and nothing was submitted. The timestamp is this markup review, not a completed portal submission.",
+          "The markup includes a repeated founder structure: a CEO block plus an Add co-founder control, with guidance to add co-founders below the full-time founder count. This editor cannot represent that repeated structure, so the Form was not flattened into an approximate field list. Fields are empty and Start Application stays blocked.",
+          "Many choice controls publish an empty value attribute, so their visible labels were not converted into options. A collapsed optional Pitch Deck (PDF) is a manual file requirement and was not treated as an upload. Observed maxlength attributes included 50, 100, 800, and 1000, but they are not stored as Field limits because no Fields were imported.",
+          "The FAQ states November 1, 2026 at 11:59 PM PT. The stored deadline is 2026-11-01T23:59:00-08:00 in America/Los_Angeles; the page does not publish seconds. November 1, 2026 is after the 2026 US daylight-saving rollback, so the offset used is Pacific Standard Time. The apply page names November 1, 2026 without a clock time and gives April 16, 2027 as the residency end, while the FAQ gives April 18, 2027. The end-date conflict is left unresolved. rolling is true because the FAQ says review is rolling and both pages still consider a later application for the next residency; the timestamp is the SR008 window, not a claim that applications stop forever."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

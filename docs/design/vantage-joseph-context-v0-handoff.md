@@ -28,6 +28,48 @@ and localStorage are **not** production PostgreSQL persistence. Durable producti
 storage is the outstanding Joseph follow-through after TL signs off on the
 concrete schema/API proposal below; final cross-branch wiring and acceptance are TL-owned.
 
+## Whiteboard flow alignment
+
+The user supplied a whiteboard photo (`IMG_9193.JPG`) as a design reference.
+The readable Joseph-related labels are API call, user profile, DB, `role.json`
+with role descriptions, “Add col / use existing,” and “User starred documents.”
+The lower destination appears to say “Snapshot”; the existing V0 contract makes
+that boundary precise. The chart is architectural context, not evidence of TL
+schema approval or an instruction to implement other team members' work.
+
+```mermaid
+flowchart TD
+    API[Authenticated application API] --> Profile[Existing user and workspace profile]
+    Profile --> DB[Existing PostgreSQL database]
+    Map[Versioned role-description JSON] --> Roles[Resolve multiple business roles]
+    DB --> Roles
+    DB --> Stars[Personal Vantage document stars]
+    Stars --> Checked[Check access and exact document versions]
+    Company[Canonical company context and mandatory documents] --> Checked
+    Roles --> Bundle[Joseph: RequiredContextBundle V0 handoff]
+    Checked --> Bundle
+    Bundle --> Snapshot[TL: ContextManifest and evidence snapshot]
+```
+
+This is the chart interpreted through the stated ownership boundaries in the
+Week 2 Plan; the company-context and permission checks come from that plan and
+shared V0 types. “API call” is treated as the application's authenticated API,
+not an instruction to add a separate AI call for role recognition. “Add sheet”
+is interpreted as a relational association for personal stars in the existing
+PostgreSQL database, not a spreadsheet or second database.
+
+| Diagram step                    | Implementation / remaining work                                                                                                  |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| API → user profile              | Existing profile fields audited; authenticated V0 API bindings remain proposed.                                                  |
+| Add column / use existing → DB  | Reuse canonical membership/profile/document records; additive role fields and personal-star relation await TL schema review.     |
+| `role.json`: role → description | Implemented as `role-map.json`, extended for multiple roles, aliases, responsibilities, priorities and explicit fallback.        |
+| User starred documents          | Implemented store interface, star/unstar logic, UI and scoped fixtures; real PostgreSQL persistence remains pending.             |
+| Snapshot handoff                | Required-context provider implemented and tested against TL's manifest assembler. TL owns final snapshot/generation integration. |
+
+The chart reinforces the existing proposal; it does not remove the outstanding
+production storage/API work. The preview still uses synthetic data and browser
+storage. No unrelated annotations in the photo are treated as new requirements.
+
 ## Repository audit and reuse decision
 
 | Existing surface                                                                                                                    | Finding                                                                                           | Reuse / decision                                                                                                                                                                                                   |

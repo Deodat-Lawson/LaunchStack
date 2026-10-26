@@ -1673,38 +1673,40 @@ export function AskPanel({
                 </button>
             </div>
 
-            {showError && (
-                <div
-                    role="alert"
-                    className="border-line bg-panel text-ink-2 flex flex-wrap items-center gap-2 border-b px-4 py-2 text-xs"
-                >
-                    <span className="min-w-0 flex-1">{latestError!.text}</span>
-                    {canRetry && latestError!.failureCode !== "ai_allowance_reached" && (
+            {/* At the limit the notice above the composer already says it. */}
+            {showError &&
+                !(allowanceBlocked && latestError!.failureCode === "ai_allowance_reached") && (
+                    <div
+                        role="alert"
+                        className="border-line bg-panel text-ink-2 flex flex-wrap items-center gap-2 border-b px-4 py-2 text-xs"
+                    >
+                        <span className="min-w-0 flex-1">{latestError!.text}</span>
+                        {canRetry && latestError!.failureCode !== "ai_allowance_reached" && (
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                disabled={isSending}
+                                onClick={() => canRetry(thread.indexOf(latestError!))}
+                            >
+                                {tc("actions.retry")}
+                            </Button>
+                        )}
                         <Button
                             variant="ghost"
-                            size="sm"
-                            disabled={isSending}
-                            onClick={() => canRetry(thread.indexOf(latestError!))}
+                            size="icon"
+                            className="size-7"
+                            aria-label={t("dismissError")}
+                            onClick={() =>
+                                setDismissedErrors(previous => ({
+                                    ...previous,
+                                    [draftKey]: errorIdentity,
+                                }))
+                            }
                         >
-                            {tc("actions.retry")}
+                            <IconX size={14} />
                         </Button>
-                    )}
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        className="size-7"
-                        aria-label={t("dismissError")}
-                        onClick={() =>
-                            setDismissedErrors(previous => ({
-                                ...previous,
-                                [draftKey]: errorIdentity,
-                            }))
-                        }
-                    >
-                        <IconX size={14} />
-                    </Button>
-                </div>
-            )}
+                    </div>
+                )}
             <div
                 ref={scrollRef}
                 aria-label={t("messagesLabel")}

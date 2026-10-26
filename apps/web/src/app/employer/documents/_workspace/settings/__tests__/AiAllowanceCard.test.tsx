@@ -52,6 +52,13 @@ describe("AiAllowanceCard", () => {
         expect(within(summary).getByRole("progressbar")).toHaveAttribute("data-tone", "normal");
     });
 
+    it("reads some use under 1% as <1%, not as unused", async () => {
+        answer(200, { allowance: allowance({ used: 9_290, percent: 0.9 }) });
+        render(<AiAllowanceCard />);
+        const summary = await screen.findByTestId("ai-allowance-summary");
+        expect(summary).toHaveTextContent("<1% used");
+    });
+
     it("says an admin set your own limit, warns from 80% and mentions the server's cap too", async () => {
         answer(200, {
             allowance: allowance({

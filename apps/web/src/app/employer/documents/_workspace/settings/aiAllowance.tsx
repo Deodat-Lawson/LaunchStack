@@ -180,10 +180,18 @@ export function useAllowanceFormat() {
             tokens: (n: number) => exact.format(n),
             /** 1.2M */
             compact: (n: number) => short.format(n),
-            /** A whole percentage, rounded down so 99.6 never reads as 100 before the limit. */
-            percent: (value: number) => exact.format(Math.floor(value)),
-            /** "84%" with the locale's own sign and spacing; rounded down like `percent`. */
-            share: (value: number) => share.format(Math.floor(value) / 100),
+            /**
+             * A whole percentage, rounded down so 99.6 never reads as 100 before
+             * the limit; "<1" for some use that rounds to nothing, so 9K of 2M
+             * doesn't read as unused.
+             */
+            percent: (value: number) =>
+                value > 0 && value < 1 ? `<${exact.format(1)}` : exact.format(Math.floor(value)),
+            /** "84%" with the locale's own sign and spacing; rounded like `percent`. */
+            share: (value: number) =>
+                value > 0 && value < 1
+                    ? `<${share.format(0.01)}`
+                    : share.format(Math.floor(value) / 100),
             /** Nov 1 */
             shortDate: (iso: string) => {
                 const at = when(iso);

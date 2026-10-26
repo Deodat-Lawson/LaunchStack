@@ -1,12 +1,12 @@
 /**
  * Settings that live in legacy columns.
  *
- * The audit retention window and the upload storage preference predate the
- * settings table and have readers of their own (the workspace settings API
- * in `server/workspace/settings.ts`, the upload bootstrap). Moving the bytes would mean
- * touching every reader for no gain, so the registry indexes them and these
- * bindings read and write the column. The panel, the API and the audit log
- * cannot tell the difference — which is the point.
+ * The audit retention window predates the settings table and has a reader of
+ * its own (the workspace settings API in `server/workspace/settings.ts`).
+ * Moving the bytes would mean touching every reader for no gain, so the
+ * registry indexes it and this binding reads and writes the column. The
+ * panel, the API and the audit log cannot tell the difference — which is the
+ * point.
  *
  * A bound setting is workspace-scoped only. Its value is reported with source
  * `workspace` when it differs from the registry default, `default` otherwise.
@@ -14,7 +14,6 @@
 
 import { eq } from "drizzle-orm";
 
-import { company } from "@launchstack/store/schema";
 import { workspaceSettings } from "~/server/db/schema";
 import type { Executor } from "~/server/workspace/db-types";
 
@@ -57,23 +56,6 @@ export const SETTING_BINDINGS: Readonly<Record<string, SettingBinding>> = {
         async write(executor, companyId, value) {
             const days = typeof value === "number" ? value : null;
             await upsertWorkspaceSettings(executor, companyId, { auditRetentionDays: days });
-        },
-    },
-    "documents.uploadStorage": {
-        async read(executor, companyId) {
-            const [row] = await executor
-                .select({ useUploadThing: company.useUploadThing })
-                .from(company)
-                .where(eq(company.id, Number(companyId)))
-                .limit(1);
-            return row?.useUploadThing === false ? "database" : "cloud";
-        },
-        async write(executor, companyId, value) {
-            const useUploadThing = value !== "database";
-            await executor
-                .update(company)
-                .set({ useUploadThing })
-                .where(eq(company.id, Number(companyId)));
         },
     },
 };

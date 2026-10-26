@@ -159,6 +159,16 @@ describe("create_document", () => {
         );
         expect(tool.describe({})).toBe("Writing a document");
     });
+
+    it("says it in the reader's language", () => {
+        const { tools } = createDocumentTools(
+            ctx,
+            { requestUrl: REQUEST_URL, locale: "zh-CN" },
+            { write: writes() }
+        );
+        expect(tools[0]!.describe({ title: "商业计划" })).toBe("正在撰写“商业计划”");
+        expect(tools[0]!.describe({})).toBe("正在撰写文档");
+    });
 });
 
 describe("writing to the workspace", () => {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useFormatter, useNow, useTranslations } from "next-intl";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 
 import { Button } from "~/components/ui/button";
 import { Spinner } from "~/components/ui/spinner";
@@ -12,6 +12,7 @@ import {
     type ScenarioInterview,
 } from "~/lib/scenarios/types";
 import { cn } from "~/lib/utils";
+import { useErrorText } from "~/lib/tools/errorText";
 
 import { ANALYST_ID } from "../api";
 
@@ -24,13 +25,15 @@ export function askBlockedReason(t: InterviewsT, run: ScenarioDetail): string | 
     return t("blockedWaiting");
 }
 
-/** Questions asked and their answers, oldest first. */
+/** Questions asked and their answers, oldest first; `answerer` puts a face beside each answer. */
 export function InterviewThread({
     interviews,
     answererName,
+    answerer,
 }: {
     interviews: ScenarioInterview[];
     answererName: (agentId: string) => string;
+    answerer?: (agentId: string) => ReactNode;
 }) {
     const t = useTranslations("scenarios.interviews");
     const format = useFormatter();
@@ -43,16 +46,19 @@ export function InterviewThread({
                     <div className="bg-panel-2 text-ink self-end rounded-lg px-3 py-2 text-[13px] leading-snug">
                         {item.question}
                     </div>
-                    <div className="max-w-[72ch]">
-                        <div className="text-ink-3 text-xs">
-                            {t("answeredBy", {
-                                name: answererName(item.agentId),
-                                when: format.relativeTime(new Date(item.createdAt), now),
-                            })}
+                    <div className="flex max-w-[72ch] items-start gap-2.5">
+                        {answerer?.(item.agentId)}
+                        <div className="min-w-0">
+                            <div className="text-ink-3 text-xs">
+                                {t("answeredBy", {
+                                    name: answererName(item.agentId),
+                                    when: format.relativeTime(new Date(item.createdAt), now),
+                                })}
+                            </div>
+                            <p className="text-ink-2 mt-0.5 whitespace-pre-wrap text-[13.5px] leading-relaxed">
+                                {item.answer}
+                            </p>
                         </div>
-                        <p className="text-ink-2 mt-0.5 whitespace-pre-wrap text-[13.5px] leading-relaxed">
-                            {item.answer}
-                        </p>
                     </div>
                 </li>
             ))}
@@ -72,6 +78,7 @@ export function AskBox({
     onAsk: (agentId: string, question: string) => Promise<void>;
     placeholder?: string;
 }) {
+    const errorText = useErrorText();
     const t = useTranslations("scenarios.interviews");
     const [question, setQuestion] = useState("");
     const [asking, setAsking] = useState(false);
@@ -84,7 +91,7 @@ export function AskBox({
             await onAsk(agentId, question.trim());
             setQuestion("");
         } catch (e) {
-            setError(e instanceof Error ? e.message : t("askError"));
+            setError(errorText(e, t("askError")));
         } finally {
             setAsking(false);
         }

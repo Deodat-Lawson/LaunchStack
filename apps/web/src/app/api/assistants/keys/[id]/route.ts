@@ -13,6 +13,7 @@ import { RateLimitPresets } from "~/lib/rate-limiter";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { revokeAccessKey } from "~/server/mcp/access-keys";
 import { invalidIdResponse, parseIdParam } from "~/server/workspace/http";
+import { requestTranslator } from "~/i18n/server";
 
 export const runtime = "nodejs";
 
@@ -21,7 +22,7 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
         const keyId = parseIdParam((await params).id);
-        if (keyId === null) return invalidIdResponse();
+        if (keyId === null) return invalidIdResponse(request);
 
         try {
             const revoked = await revokeAccessKey({
@@ -29,11 +30,19 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
                 userPk: ctx.data.userPk,
                 keyId,
             });
-            if (!revoked) return NextResponse.json({ error: "Key not found" }, { status: 404 });
+            if (!revoked) {
+                return NextResponse.json(
+                    { error: requestTranslator(request, "settings.server.errors")("keyNotFound") },
+                    { status: 404 }
+                );
+            }
             return NextResponse.json({ revoked: true });
         } catch (error) {
             console.error("[assistants keys DELETE] failed:", error);
-            return NextResponse.json({ error: "Could not revoke the key." }, { status: 500 });
+            return NextResponse.json(
+                { error: requestTranslator(request, "settings.server.errors")("keyRevokeFailed") },
+                { status: 500 }
+            );
         }
     });
 }

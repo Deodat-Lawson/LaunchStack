@@ -256,7 +256,7 @@ export function DocxEditor({ documentId, title, leading, className }: DocxEditor
                     <Button
                         size="sm"
                         variant="ghost"
-                        className="text-success hover:bg-success-soft hover:text-success h-8 text-xs"
+                        className="text-success-ink hover:bg-success-soft hover:text-success-ink h-8 text-xs"
                         disabled={!hasUnresolved || state.busy}
                         onClick={() => void resolveAll("accept")}
                     >
@@ -312,7 +312,7 @@ export function DocxEditor({ documentId, title, leading, className }: DocxEditor
                 {renderError && (
                     <div className="border-line bg-warn-soft text-ink-2 flex shrink-0 items-center gap-2 border-b px-3 py-2 text-xs">
                         <AlertTriangle
-                            className="text-warn h-3.5 w-3.5 shrink-0"
+                            className="text-warn-ink h-3.5 w-3.5 shrink-0"
                             aria-hidden="true"
                         />
                         <span className="flex-1">{t("partialRender", { error: renderError })}</span>

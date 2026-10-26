@@ -70,7 +70,9 @@ jest.mock("~/lib/credits", () => ({ getBalance: jest.fn(), debitTokens: jest.fn(
 jest.mock("~/server/deployment", () => ({ isMeteringEnforced: jest.fn(() => false) }));
 jest.mock("~/server/db", () => ({ db: {} }));
 jest.mock("~/server/workspace-models/scope", () => ({
-    withWorkspaceChatModels: jest.fn((_companyId: unknown, fn: () => unknown) => fn()),
+    withWorkspaceChatModels: jest.fn((_companyId: unknown, _feature: unknown, fn: () => unknown) =>
+        fn()
+    ),
 }));
 
 type Mocks<K extends string> = Record<K, jest.Mock>;
@@ -452,7 +454,7 @@ describe("interviews", () => {
         const { withWorkspaceChatModels } = jest.requireMock<{
             withWorkspaceChatModels: jest.Mock;
         }>("~/server/workspace-models/scope");
-        expect(withWorkspaceChatModels).toHaveBeenCalledWith(5n, expect.any(Function));
+        expect(withWorkspaceChatModels).toHaveBeenCalledWith(5n, "scenarios", expect.any(Function));
     });
 });
 

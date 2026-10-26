@@ -124,5 +124,84 @@
     "buildingNote": "Reading your sources now. Facts appear as soon as each source has been read; this page updates itself.",
     "summary": "Summary",
     "atAGlance": "At a glance"
+  },
+  "server": {
+    "errors": {
+      "adminsEditOnly": "Only workspace admins can edit the company profile",
+      "adminsSourcesOnly": "Only workspace admins can decide which sources count",
+      "sourceNotFound": "Source not found",
+      "editNeedsPathValue": "A fact edit needs a path and a value",
+      "overrideValues": "override must be about_us, set_aside or null",
+      "noProfileYet": "No company profile yet. Build it from Settings › Company."
+    },
+    "editErrors": {
+      "nothingToUndo": "There is no edit to undo there",
+      "unsupportedPath": "Unsupported path: {path}",
+      "notAYear": "Not a year",
+      "nothingToRemove": "Nothing to remove",
+      "factKeyFormat": "A fact key is lowercase letters, digits and _",
+      "newFactNeedsLabel": "A new fact needs a label",
+      "invalidIndex": "Invalid {section} index",
+      "nameFromSources": "A name comes from the sources; remove the entry instead"
+    },
+    "factLabels": {
+      "company": {
+        "name": "Name",
+        "description": "What it does",
+        "industry": "Industry",
+        "foundedYear": "Founded",
+        "headquarters": "Headquarters",
+        "website": "Website",
+        "size": "Team size"
+      },
+      "profile": {
+        "mission": "Mission",
+        "programs": "Programs",
+        "beneficiaries": "Who it serves",
+        "outcomes": "Outcomes",
+        "need": "Need addressed",
+        "legalStatus": "Legal status",
+        "annualBudget": "Annual budget",
+        "fundingSources": "Funding sources",
+        "fundingRaised": "Funding raised",
+        "customers": "Customers",
+        "traction": "Traction",
+        "businessModel": "Business model",
+        "pricing": "Pricing",
+        "leadership": "Leadership",
+        "board": "Board",
+        "partners": "Partners",
+        "awards": "Awards",
+        "theoryOfChange": "Theory of change",
+        "evaluation": "Evaluation",
+        "plans": "Plans",
+        "idea": "The idea"
+      }
+    },
+    "reasons": {
+      "noReadableText": "No readable text in this file.",
+      "sparseMindmap": "A mindmap with only a few words on it.",
+      "onlyNoise": "Only {noise} — nothing about the organisation to read.",
+      "tooLittleText": "Too little text to say anything about the organisation.",
+      "aboutUs": "Written by or about the organisation.",
+      "thirdParty": "Someone else's material, kept for reference.",
+      "nothingToRead": "Nothing to read.",
+      "stillProcessing": "Still being processed — it is read as soon as it is.",
+      "and": "{first} and {second}"
+    },
+    "dropWords": {
+      "references": "reference lists",
+      "table": "number tables",
+      "figure": "chart residue",
+      "boilerplate": "boilerplate",
+      "placeholder": "empty placeholders",
+      "tooShort": "fragments",
+      "duplicate": "repeated text"
+    },
+    "failures": {
+      "readingFailed": "Reading it failed",
+      "readingFactsFailed": "Reading facts from this source failed",
+      "buildFailed": "The last build failed"
+    }
   }
 }

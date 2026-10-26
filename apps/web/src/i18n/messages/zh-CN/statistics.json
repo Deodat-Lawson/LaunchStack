@@ -2,7 +2,6 @@
   "view": {
     "refresh": "刷新数据",
     "refreshing": "正在刷新…",
-    "eyebrow": "分析",
     "title": "分析仪表盘",
     "description": "全公司范围的文档、员工活动和提问趋势概览。刷新即可获取最新数据。",
     "loadFailed": "加载失败",
@@ -105,5 +104,16 @@
       "when": "时间"
     },
     "noViews": "还没有浏览记录"
+  },
+  "server": {
+    "errors": {
+      "analyticsPermission": "无权访问。需要 analytics.view 权限。",
+      "dashboardFailed": "无法获取分析看板数据",
+      "internal": "服务器内部错误"
+    },
+    "viewers": {
+      "unknownUser": "未知用户",
+      "noEmail": "无邮箱"
+    }
   }
 }

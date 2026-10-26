@@ -2,6 +2,7 @@ import Link from "next/link";
 import { LogIn, BookOpen } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { IconGithub } from "~/components/icons/brand";
+import { Button } from "~/components/ui/button";
 import type { Metadata } from "next";
 import { LaunchstackMark } from "./_components/LaunchstackLogo";
 import { LandingLogoLink } from "~/components/LandingLogoLink";
@@ -39,12 +40,12 @@ export default async function NotFound() {
                   else on this origin is behind it anyway.
                 */}
                 <div className="mb-12 flex flex-col justify-center gap-3 sm:flex-row">
-                    <Link href="/signin">
-                        <button className="bg-brand text-brand-fg hover:bg-brand-hi flex w-full cursor-pointer items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-colors sm:w-auto">
-                            <LogIn className="h-4 w-4" />
+                    <Button asChild size="lg" className="rounded-full">
+                        <Link href="/signin">
+                            <LogIn />
                             {t("signIn")}
-                        </button>
-                    </Link>
+                        </Link>
+                    </Button>
                 </div>
 
                 <div className="text-ink-3 flex flex-wrap justify-center gap-6 text-sm">

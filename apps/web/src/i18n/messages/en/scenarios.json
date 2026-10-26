@@ -39,6 +39,12 @@
     "list": {
       "separator": ", ",
       "last": "{rest} and {last}"
+    },
+    "shift": {
+      "warmed": "Warmed to {stance}",
+      "softened": "Softened to {stance}",
+      "cooled": "Cooled to {stance}",
+      "turned": "Turned {stance}"
     }
   },
   "tool": {
@@ -80,23 +86,27 @@
     "allRounds": "All rounds",
     "opening": "Opening",
     "round": "Round {round, number}",
-    "openingLower": "opening",
     "roundLower": "round {round, number}",
-    "roundStats": "{posts, plural, one {# post} other {# posts}} · {comments, plural, one {# comment} other {# comments}} · mood {mean} ({mood})",
     "showMore": "{count, plural, one {Show # more post} other {Show # more posts}}",
     "tag": {
       "draft": "The draft under test",
       "situation": "The situation",
-      "event": "Event added during the run",
-      "repost": "Reposted",
-      "quote": "Quoted"
+      "event": "Event added during the run"
     },
     "postAria": "{name}, {tag}",
     "likes": "{count, plural, one {# like} other {# likes}}",
     "dislikes": "{count, plural, one {# dislike} other {# dislikes}}",
     "shares": "{count, plural, one {# share} other {# shares}}",
     "comments": "{count, plural, one {# comment} other {# comments}}",
-    "commentsLabel": "Comments"
+    "commentsLabel": "Comments",
+    "reposted": "{name} reposted",
+    "moreReplies": "{count, plural, one {Show # more reply} other {Show # more replies}}",
+    "fewerReplies": "Show fewer replies",
+    "rounds": "Rounds",
+    "mostVocal": "Most vocal",
+    "roundMeta": "{posts, plural, one {# post} other {# posts}} · {comments, plural, one {# reply} other {# replies}}",
+    "quotedAria": "Go to the quoted post by {name}",
+    "openProfile": "Open {name}'s profile"
   },
   "people": {
     "grounded": "Grounded",
@@ -107,25 +117,62 @@
     "nobody": "Nobody was built for this scenario.",
     "summary": "{count, plural, one {# person} other {# people}} · {grounded, number} built from your records · {invented, number} invented to fill gaps",
     "filterLabel": "Show",
-    "activity": "{posts, plural, one {# post} other {# posts}} · {comments, plural, one {# comment} other {# comments}}"
+    "followers": "{count, plural, one {# follower} other {# followers}}",
+    "from": "From {label}",
+    "fromMore": "From {label} +{more, number}",
+    "hiddenFile": "a file you can't open",
+    "keptQuiet": "Never posted. On their mind:",
+    "readAlong": "Read along without posting."
   },
   "personSheet": {
     "caresAbout": "Cares about",
     "builtFrom": "Built from",
     "invented": "Nothing in your records: this person was invented to fill a gap.",
-    "sourceRedacted": "{id} · A file you don't have access to",
-    "source": "{id} · {label}",
-    "stance": "Stance",
-    "stanceAside": "started {from}, now {to}",
-    "lastThought": "Last private thought",
-    "posts": "Posts",
-    "postsAside": "{posts, plural, one {# post} other {# posts}} · {comments, plural, one {# comment} other {# comments}}",
     "readAlong": "Read along without posting.",
-    "postRound": "Round {round, number}",
-    "postRoundReposted": "Round {round, number} · reposted",
-    "postRoundQuoted": "Round {round, number} · quoted",
     "seeInFeed": "See in Feed",
-    "ask": "Ask {name}"
+    "ask": "Ask {name}",
+    "followers": "{count, plural, one {follower} other {followers}}",
+    "following": "following",
+    "postsCount": "{count, plural, one {post} other {posts}}",
+    "repliesCount": "{count, plural, one {reply} other {replies}}",
+    "onTheirMind": "On {name}'s mind now",
+    "redacted": "A file you don't have access to",
+    "journey": "How they moved",
+    "started": "Started {stance}",
+    "round": "Round {round, number}",
+    "repliedTo": "Replied to {handle}",
+    "reposted": "Reposted {handle}",
+    "quoted": "Quoted {handle}",
+    "wallet": {
+      "title": "Money and switching",
+      "usesToday": "Uses today",
+      "usesNothing": "Nothing like this",
+      "budget": "Budget",
+      "buyingRole": "In buying",
+      "switchingCost": "Switching",
+      "budgets": {
+        "none": "None set aside",
+        "tight": "Tight",
+        "funded": "Has budget"
+      },
+      "roles": {
+        "decides": "Decides",
+        "influences": "Has a say",
+        "uses": "Uses it, doesn't decide"
+      },
+      "switching": {
+        "low": "Easy",
+        "medium": "Real effort",
+        "high": "Costly"
+      },
+      "wouldPay": {
+        "yes": "Would pay",
+        "maybe": "Might pay",
+        "no": "Wouldn't pay"
+      },
+      "holdingBack": "What held them back last",
+      "firstDoubt": "Their first doubt"
+    }
   },
   "report": {
     "narrator": "the narrator",
@@ -191,8 +238,9 @@
     "sourceAria": "Source {id}",
     "title": "Sources",
     "builtFrom": "Built from {used}",
-    "kindCited": "{kind} · {count, plural, one {# person} other {# people}} built from it",
-    "redacted": "A file you don't have access to"
+    "redacted": "A file you don't have access to",
+    "openPerson": "Open {name}",
+    "peopleBuilt": "{count, plural, one {# person built from it} other {# people built from it}}"
   },
   "chart": {
     "start": "Start",
@@ -402,5 +450,63 @@
     "addEvent": "Add event",
     "injectionPending": "appears in the next round",
     "injectionRound": "round {round, number}"
+  },
+  "server": {
+    "errors": {
+      "notFound": "Scenario not found",
+      "notCreator": "Only the person who started this run can do that.",
+      "roleCantRun": "Your role can't run scenarios in this workspace.",
+      "notEnoughCredits": "Not enough credits to start this run.",
+      "describeSituation": "Describe the situation to simulate.",
+      "situationTooLong": "Keep the situation under {max} characters.",
+      "tooManyFiles": "Pick at most {max} files.",
+      "notesTooLong": "Keep pasted material under {max} characters.",
+      "titleEmpty": "A title can't be empty.",
+      "eventsClosed": "Events can only be added while the run is going.",
+      "lastRoundFinished": "The last round has finished; this event would never appear.",
+      "describeEvent": "Describe the event.",
+      "eventTooLong": "Keep events under {max} characters.",
+      "lastRoundStarted": "The last round has started; this event would never appear.",
+      "interviewsNotOpen": "Interviews open once the first round has finished.",
+      "noSuchPerson": "No such person in this run.",
+      "askQuestion": "Ask a question.",
+      "questionTooLong": "Keep questions under {max} characters.",
+      "noAnswer": "No answer came back; try again.",
+      "roleCantTestPosts": "Your role can read Brand but not test posts.",
+      "writePostFirst": "Write the post first.",
+      "postTooLong": "Posts over 3,000 characters can't be tested."
+    },
+    "leftWorkspace": "Someone who has left",
+    "sourceLabels": {
+      "document": {
+        "aFilePage": "A file, page {page}",
+        "aFile": "A file",
+        "page": "{title}, page {page}"
+      },
+      "search": {
+        "aFile": "A file"
+      },
+      "prospect": {
+        "prospect": "Prospect: {name}"
+      },
+      "brandComment": {
+        "comment": "Comment on your {platform} post"
+      },
+      "companyProfile": {
+        "fact": "Company profile: {subject}"
+      },
+      "notes": {
+        "part": "Pasted material, part {n}",
+        "whole": "Pasted material"
+      }
+    },
+    "runErrors": {
+      "outOfCredits": "The workspace ran out of credits during this run.",
+      "tooFewPeople": "Only {count} people could be built from the sources",
+      "noWorld": "Run has no world",
+      "reportUnreadable": "The report could not be read",
+      "runFailed": "The run failed",
+      "creatorGone": "The person who started this run is no longer an active member of the workspace."
+    }
   }
 }

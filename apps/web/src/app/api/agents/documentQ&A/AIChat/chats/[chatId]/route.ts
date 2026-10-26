@@ -9,6 +9,8 @@ import {
 } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
 import { validateRequestBody, UpdateChatSchema } from "~/lib/validation";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { assertChatOwnedByUser } from "~/lib/ai-chat-ownership";
 
@@ -22,11 +24,13 @@ export async function GET(
 ) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "chat.server.aiChat");
 
     try {
         const { chatId } = await params;
 
-        const owned = await assertChatOwnedByUser(chatId, ctx.data.authUserId);
+        const owned = await assertChatOwnedByUser(chatId, ctx.data.authUserId, locale);
         if (!owned.success) return owned.response;
 
         // Get chat details
@@ -36,7 +40,7 @@ export async function GET(
             .where(eq(agentAiChatbotChat.id, chatId));
 
         if (!chat) {
-            return NextResponse.json({ error: "Chat not found" }, { status: 404 });
+            return NextResponse.json({ error: t("chatNotFound") }, { status: 404 });
         }
 
         // Get messages for this chat
@@ -68,7 +72,7 @@ export async function GET(
         });
     } catch (error) {
         console.error("Error fetching chat:", error);
-        return NextResponse.json({ error: "Failed to fetch chat" }, { status: 500 });
+        return NextResponse.json({ error: t("fetchChat") }, { status: 500 });
     }
 }
 
@@ -79,11 +83,13 @@ export async function PATCH(
 ) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "chat.server.aiChat");
 
     try {
         const { chatId } = await params;
 
-        const owned = await assertChatOwnedByUser(chatId, ctx.data.authUserId);
+        const owned = await assertChatOwnedByUser(chatId, ctx.data.authUserId, locale);
         if (!owned.success) return owned.response;
 
         const validation = await validateRequestBody(request, UpdateChatSchema);
@@ -105,7 +111,7 @@ export async function PATCH(
             .returning();
 
         if (!updatedChat) {
-            return NextResponse.json({ error: "Chat not found" }, { status: 404 });
+            return NextResponse.json({ error: t("chatNotFound") }, { status: 404 });
         }
 
         return NextResponse.json({
@@ -114,7 +120,7 @@ export async function PATCH(
         });
     } catch (error) {
         console.error("Error updating chat:", error);
-        return NextResponse.json({ error: "Failed to update chat" }, { status: 500 });
+        return NextResponse.json({ error: t("updateChat") }, { status: 500 });
     }
 }
 
@@ -125,21 +131,23 @@ export async function DELETE(
 ) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "chat.server.aiChat");
 
     try {
         const { chatId } = await params;
 
-        const owned = await assertChatOwnedByUser(chatId, ctx.data.authUserId);
+        const owned = await assertChatOwnedByUser(chatId, ctx.data.authUserId, locale);
         if (!owned.success) return owned.response;
 
         await db.delete(agentAiChatbotChat).where(eq(agentAiChatbotChat.id, chatId));
 
         return NextResponse.json({
             success: true,
-            message: "Chat deleted successfully",
+            message: t("chatDeleted"),
         });
     } catch (error) {
         console.error("Error deleting chat:", error);
-        return NextResponse.json({ error: "Failed to delete chat" }, { status: 500 });
+        return NextResponse.json({ error: t("deleteChat") }, { status: 500 });
     }
 }

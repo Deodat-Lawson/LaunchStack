@@ -9,8 +9,9 @@ import { NextResponse } from "next/server";
 
 import { getJobById } from "@launchstack/pipelines/client-prospector/db";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requestTranslator } from "~/i18n/server";
 
-export async function GET(_request: Request, { params }: { params: Promise<{ jobId: string }> }) {
+export async function GET(request: Request, { params }: { params: Promise<{ jobId: string }> }) {
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
@@ -19,7 +20,10 @@ export async function GET(_request: Request, { params }: { params: Promise<{ job
         const job = await getJobById(jobId, ctx.data.companyId);
 
         if (!job) {
-            return NextResponse.json({ error: "Not found" }, { status: 404 });
+            return NextResponse.json(
+                { error: requestTranslator(request, "errors.api")("notFound") },
+                { status: 404 }
+            );
         }
 
         return NextResponse.json({
@@ -37,6 +41,9 @@ export async function GET(_request: Request, { params }: { params: Promise<{ job
         });
     } catch (error) {
         console.error("[client-prospector] GET /[jobId] error:", error);
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+        return NextResponse.json(
+            { error: requestTranslator(request, "errors.api")("internal") },
+            { status: 500 }
+        );
     }
 }

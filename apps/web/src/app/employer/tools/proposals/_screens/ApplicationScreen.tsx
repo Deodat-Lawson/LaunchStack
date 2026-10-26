@@ -51,6 +51,7 @@ import { EmptyState, InlineError } from "~/components/tools/EmptyState";
 import { SkeletonBlock } from "~/components/tools/SkeletonRows";
 import { useToolFormat } from "~/lib/tools/format";
 import { useResource } from "~/lib/tools/useResource";
+import { useErrorText } from "~/lib/tools/errorText";
 import {
     ApplicationStatusMenu,
     ReadinessMeter,
@@ -59,6 +60,7 @@ import {
     StatusWord,
 } from "../_components/Pills";
 import { runIsLive, useProposals } from "../_lib/context";
+import { useCopyText } from "~/lib/tools/copyText";
 import { SECTION_TONE, amountWords, deadlineTone, deadlineWords } from "../_lib/words";
 import {
     ProposalsApiError,
@@ -161,7 +163,7 @@ function Outline({
                                 <span
                                     className={cn(
                                         "font-mono text-[10.5px] tabular-nums",
-                                        over ? "text-warn" : "text-ink-3"
+                                        over ? "text-warn-ink" : "text-ink-3"
                                     )}
                                 >
                                     {s.words}
@@ -185,6 +187,7 @@ function AddSectionForm({
     onAdded: (section: SectionDto) => void;
 }) {
     const t = useTranslations("proposals.application.addSection");
+    const errorText = useErrorText();
     const tp = useTranslations("proposals.common");
     const tc = useTranslations("common");
     const [open, setOpen] = useState(false);
@@ -203,7 +206,7 @@ function AddSectionForm({
             setLimit("");
             setOpen(false);
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : t("failed"));
+            toast.error(errorText(e, t("failed")));
         } finally {
             setBusy(false);
         }
@@ -359,6 +362,7 @@ function SectionEditor({
     onStep: (delta: 1 | -1) => void;
 }) {
     const t = useTranslations("proposals.application.editor");
+    const errorText = useErrorText();
     const tp = useTranslations("proposals.common");
     const tPreset = useTranslations("proposals.rewritePreset");
     const format = useToolFormat();
@@ -386,7 +390,7 @@ function SectionEditor({
             setDirty(false);
             if (done) toast.success(done);
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : t("saveFailed"));
+            toast.error(errorText(e, t("saveFailed")));
         } finally {
             setSaving(false);
         }
@@ -407,7 +411,7 @@ function SectionEditor({
             await proposalsApi.saveToLibrary(app.id, section.id);
             toast.success(t("savedToLibrary"));
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : t("saveToLibraryFailed"));
+            toast.error(errorText(e, t("saveToLibraryFailed")));
         }
     };
     const hasDraft = draft.trim().length > 0;
@@ -490,7 +494,7 @@ function SectionEditor({
 
             <div className="text-ink-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
                 <WordMeter words={words} limit={section.wordLimit} />
-                <span className={cn("tabular-nums", over && "text-warn")}>
+                <span className={cn("tabular-nums", over && "text-warn-ink")}>
                     {section.wordLimit
                         ? t("wordsOfLimit", { words, limit: section.wordLimit })
                         : t("words", { words })}
@@ -647,8 +651,8 @@ function EvidenceRail({
             </section>
             {section.gaps.length > 0 && (
                 <section className="bg-warn-soft rounded-md px-3 py-2.5">
-                    <h3 className="text-warn mb-1 text-xs font-semibold">{t("gaps")}</h3>
-                    <ul className="text-warn list-disc pl-4 text-xs leading-relaxed">
+                    <h3 className="text-warn-ink mb-1 text-xs font-semibold">{t("gaps")}</h3>
+                    <ul className="text-warn-ink list-disc pl-4 text-xs leading-relaxed">
                         {section.gaps.map(g => (
                             <li key={g}>{g}</li>
                         ))}
@@ -698,6 +702,7 @@ function DetailsDialog({
     onSaved: (app: ApplicationDetail) => void;
 }) {
     const t = useTranslations("proposals.application");
+    const errorText = useErrorText();
     const tp = useTranslations("proposals.common");
     const tc = useTranslations("common");
     const [title, setTitle] = useState(app.title);
@@ -721,7 +726,7 @@ function DetailsDialog({
             onSaved(application);
             onOpenChange(false);
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : t("saveFailed"));
+            toast.error(errorText(e, t("saveFailed")));
         } finally {
             setBusy(false);
         }
@@ -882,6 +887,8 @@ function PreviewTab({
  */
 export function ApplicationScreen({ id }: { id: string }) {
     const t = useTranslations("proposals.application");
+    const say = useCopyText();
+    const errorText = useErrorText();
     const tp = useTranslations("proposals.common");
     const tWords = useTranslations("proposals.words");
     const tKind = useTranslations("proposals.requirementKind");
@@ -937,9 +944,7 @@ export function ApplicationScreen({ id }: { id: string }) {
             const message =
                 e instanceof ProposalsApiError && e.status === 402
                     ? t("noCredits")
-                    : e instanceof Error
-                      ? e.message
-                      : t(`startFailed.${what}`);
+                    : errorText(e, t(`startFailed.${what}`));
             toast.error(message);
         }
     };
@@ -952,7 +957,7 @@ export function ApplicationScreen({ id }: { id: string }) {
             setApp(application);
             if (done) toast.success(done);
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : t("saveFailed"));
+            toast.error(errorText(e, t("saveFailed")));
         }
     };
     const exportToSources = async () => {
@@ -961,7 +966,7 @@ export function ApplicationScreen({ id }: { id: string }) {
             setApp(application);
             toast.success(t("exported"));
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : t("exportFailed"));
+            toast.error(errorText(e, t("exportFailed")));
         }
     };
     const remove = async () => {
@@ -972,7 +977,7 @@ export function ApplicationScreen({ id }: { id: string }) {
             // proposal that no longer exists.
             router.replace(href("/write"));
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : t("deleteFailed"));
+            toast.error(errorText(e, t("deleteFailed")));
         } finally {
             setDeleting(false);
         }
@@ -989,7 +994,7 @@ export function ApplicationScreen({ id }: { id: string }) {
             }));
             toast(t("sectionRemoved"));
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : t("removeFailed"));
+            toast.error(errorText(e, t("removeFailed")));
         } finally {
             setRemoving(null);
         }
@@ -1051,7 +1056,7 @@ export function ApplicationScreen({ id }: { id: string }) {
                             <span>{app.funder ?? tp("funderNotSet")}</span>
                             <span
                                 className={cn(
-                                    tone === "warn" && "text-warn",
+                                    tone === "warn" && "text-warn-ink",
                                     tone === "lost" && "text-danger"
                                 )}
                             >
@@ -1320,7 +1325,7 @@ export function ApplicationScreen({ id }: { id: string }) {
                                                                 },
                                                             })
                                                         }
-                                                        aria-label={r.text}
+                                                        aria-label={say(r.textCopy, r.text)}
                                                     />
                                                     <span
                                                         className={cn(
@@ -1328,7 +1333,7 @@ export function ApplicationScreen({ id }: { id: string }) {
                                                             r.done && "text-ink-3"
                                                         )}
                                                     >
-                                                        {r.text}
+                                                        {say(r.textCopy, r.text)}
                                                     </span>
                                                     {section && (
                                                         <button
@@ -1400,7 +1405,7 @@ export function ApplicationScreen({ id }: { id: string }) {
                                         </Button>
                                     </div>
                                     <p className="text-ink mt-2 max-w-[70ch] text-[13.5px] leading-relaxed">
-                                        {app.review.summary}
+                                        {say(app.review.summaryCopy, app.review.summary)}
                                     </p>
                                 </div>
                                 {app.review.findings.length === 0 ? (
@@ -1415,11 +1420,11 @@ export function ApplicationScreen({ id }: { id: string }) {
                                                 <SeverityWord severity={f.severity} />
                                                 <div className="min-w-0">
                                                     <div className="text-ink text-[13.5px]">
-                                                        {f.message}
+                                                        {say(f.messageCopy, f.message)}
                                                     </div>
                                                     {f.suggestion && (
                                                         <div className="text-ink-3 mt-0.5 text-xs leading-relaxed">
-                                                            {f.suggestion}
+                                                            {say(f.suggestionCopy, f.suggestion)}
                                                         </div>
                                                     )}
                                                 </div>

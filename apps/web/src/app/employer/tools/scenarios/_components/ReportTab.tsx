@@ -9,6 +9,7 @@ import type { ScenarioDetail, ScenarioPost } from "~/lib/scenarios/types";
 import { cn } from "~/lib/utils";
 
 import { FACTION_BG, formatPercent, formatSigned, isLive, moodLabel } from "~/lib/scenarios/words";
+import { PersonHoverCard, Portrait } from "./Portrait";
 import { StanceChart } from "./StanceChart";
 
 /** A link to a post in the Feed: "@mayabooks, round 3". */
@@ -27,10 +28,17 @@ export function PostRef({
         <button
             type="button"
             onClick={() => onJump(post.id)}
-            className="border-line text-ink-2 hover:bg-panel-2 hover:text-ink focus-visible:ring-brand/50 inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11.5px] outline-none focus-visible:ring-2"
+            className={cn(
+                "border-line text-ink-2 hover:bg-panel-2 hover:text-ink focus-visible:ring-brand/50 inline-flex items-center gap-1 rounded-full border py-0.5 pr-2 text-[11.5px] outline-none focus-visible:ring-2",
+                post.authorKind === "agent" ? "pl-0.5" : "pl-2"
+            )}
             aria-label={t("postRefAria", { who, when })}
         >
-            <CornerDownRight className="size-3" aria-hidden />
+            {post.authorKind === "agent" ? (
+                <Portrait handle={post.authorHandle} size={18} />
+            ) : (
+                <CornerDownRight className="size-3" aria-hidden />
+            )}
             {t("postRef", { who, when })}
         </button>
     );
@@ -191,19 +199,21 @@ export function ReportTab({
                                     <p className="text-ink-2 text-[13px] leading-relaxed">
                                         {f.text}
                                     </p>
-                                    <div className="mt-1.5 flex flex-wrap gap-x-2 gap-y-1">
+                                    <div className="mt-2 flex flex-wrap gap-1.5">
                                         {f.agentIds.map(id => {
                                             const person = people.get(id);
                                             if (!person) return null;
                                             return (
-                                                <button
-                                                    key={id}
-                                                    type="button"
-                                                    onClick={() => onPerson(id)}
-                                                    className="text-ink-2 hover:text-ink focus-visible:ring-brand/50 decoration-line rounded-sm text-xs underline underline-offset-2 outline-none focus-visible:ring-2"
-                                                >
-                                                    {person.name}
-                                                </button>
+                                                <PersonHoverCard key={id} person={person}>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => onPerson(id)}
+                                                        className="border-line text-ink-2 hover:bg-panel-2 hover:text-ink focus-visible:ring-brand/50 inline-flex items-center gap-1.5 rounded-full border py-0.5 pl-0.5 pr-2.5 text-xs outline-none focus-visible:ring-2"
+                                                    >
+                                                        <Portrait handle={person.handle} size={20} />
+                                                        {person.name}
+                                                    </button>
+                                                </PersonHoverCard>
                                             );
                                         })}
                                     </div>

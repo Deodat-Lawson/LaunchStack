@@ -24,6 +24,8 @@ import type {
     TodoItem,
 } from "~/app/employer/tools/proposals/api";
 
+import { findingCopy, requirementCopy, reviewSummaryCopy, runCopy, stepCopy } from "./copy";
+
 export function sourceHref(documentId: number | null): string | null {
     return documentId === null ? null : `/employer/documents?source=d${documentId}`;
 }
@@ -113,14 +115,15 @@ export function toApplicationDetail(
         requestSummary: record.extracted?.summary ?? null,
         amountMin: record.extracted?.amountMin ?? null,
         amountMax: record.extracted?.amountMax ?? null,
-        requirements: record.requirements,
+        requirements: record.requirements.map(r => ({ ...r, textCopy: requirementCopy(r) })),
         sectionList: sections.map(toSectionDto),
         review: record.review
             ? {
                   readiness: record.review.readiness,
                   summary: record.review.summary,
-                  findings: record.review.findings,
+                  findings: record.review.findings.map(f => ({ ...f, ...findingCopy(f) })),
                   reviewedAt: record.review.reviewedAt,
+                  summaryCopy: reviewSummaryCopy(record.review.summary),
               }
             : null,
         notes: record.notes,
@@ -149,6 +152,7 @@ export function toLibraryItemDto(
 }
 
 export function toRunDto(record: RunRecord): RunDto {
+    const headline = record.summary?.headline ?? null;
     return {
         id: record.id,
         kind: record.kind,
@@ -161,10 +165,12 @@ export function toRunDto(record: RunRecord): RunDto {
             label: s.label,
             status: s.status,
             detail: s.detail,
+            ...stepCopy(s),
         })),
-        headline: record.summary?.headline ?? null,
+        headline,
         error: record.error,
         credits: record.creditsUsed,
+        ...runCopy({ headline, error: record.error }),
     };
 }
 

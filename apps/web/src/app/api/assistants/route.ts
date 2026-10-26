@@ -18,6 +18,7 @@ import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { listAccessKeys } from "~/server/mcp/access-keys";
 import { mcpAvailability } from "~/server/mcp/config";
 import { listConnections } from "~/server/mcp/connections";
+import { requestTranslator } from "~/i18n/server";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -45,7 +46,15 @@ export async function GET(request: Request) {
             });
         } catch (error) {
             console.error("[assistants GET] failed:", error);
-            return NextResponse.json({ error: "Could not load assistants." }, { status: 500 });
+            return NextResponse.json(
+                {
+                    error: requestTranslator(
+                        request,
+                        "settings.server.errors"
+                    )("assistantsLoadFailed"),
+                },
+                { status: 500 }
+            );
         }
     });
 }

@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
 
+import { useErrorText } from "~/lib/tools/errorText";
 import { useGrowthFormat } from "../../_lib/format";
 
 import { brandApi, type SyncResult } from "../api";
@@ -19,6 +20,7 @@ import { brandApi, type SyncResult } from "../api";
  */
 export function useBrandSync(onSynced: (result: SyncResult) => void | Promise<void>) {
     const t = useTranslations("growth.brand.sync");
+    const errorText = useErrorText();
     const [busy, setBusy] = useState(false);
     const [errors, setErrors] = useState<string[]>([]);
     const [failure, setFailure] = useState<string | null>(null);
@@ -39,11 +41,11 @@ export function useBrandSync(onSynced: (result: SyncResult) => void | Promise<vo
                 );
             else toast.success(t("done", { posts: result.posts, comments: result.comments }));
         } catch (e) {
-            setFailure(e instanceof Error ? e.message : t("unreachable"));
+            setFailure(errorText(e, t("unreachable")));
         } finally {
             setBusy(false);
         }
-    }, [onSynced, t]);
+    }, [onSynced, t, errorText]);
     return { run, busy, errors, failure };
 }
 

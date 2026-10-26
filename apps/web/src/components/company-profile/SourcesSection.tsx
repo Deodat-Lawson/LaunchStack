@@ -7,7 +7,7 @@ import { Button } from "~/components/ui/button";
 import { SourceLink } from "~/components/tools/Cite";
 import { SectionHeading } from "~/components/tools/PageHeader";
 import type { ProfileSourceDto, SourceOverride } from "~/lib/company-profile/dto";
-import { ROLE_KEY } from "./words";
+import { ROLE_KEY, failureText, sourceReasonText } from "./words";
 
 export type SetSource = (source: ProfileSourceDto, override: SourceOverride | null) => void;
 
@@ -151,7 +151,9 @@ function SourceRow({
 }) {
     const t = useTranslations("companyProfile.sources");
     const tf = useTranslations("companyProfile.facts");
+    const ts = useTranslations("companyProfile.server");
     const tc = useTranslations("common");
+    const reason = sourceReasonText(ts, source);
     const roleWord =
         source.role !== null
             ? t(`roles.${ROLE_KEY[source.role]}`)
@@ -168,8 +170,8 @@ function SourceRow({
         source.status === "pending"
             ? null
             : source.status === "failed"
-              ? t("row.failed", { error: source.error ?? t("row.readingFailed") })
-              : source.reason;
+              ? t("row.failed", { error: failureText(ts, source) ?? t("row.readingFailed") })
+              : reason;
 
     // What the reader decided, before any person's call.
     const readerCounts = source.role === "about_us";
@@ -204,9 +206,7 @@ function SourceRow({
                             {t("row.reading")}
                         </p>
                     ) : (
-                        <p className="text-ink-3 mt-0.5 text-xs">
-                            {source.reason ?? t("row.nextBuild")}
-                        </p>
+                        <p className="text-ink-3 mt-0.5 text-xs">{reason ?? t("row.nextBuild")}</p>
                     )
                 ) : (
                     note && (

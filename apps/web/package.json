@@ -38,6 +38,8 @@
         "@better-auth/cimd": "^1.7.10",
         "@better-auth/mcp": "^1.7.10",
         "@better-auth/oauth-provider": "^1.7.10",
+        "@dicebear/core": "9.4.3",
+        "@dicebear/notionists": "9.4.2",
         "@esbuild-kit/core-utils": "^3.3.2",
         "@esbuild-kit/esm-loader": "^2.6.5",
         "@huggingface/inference": "^4.13.15",

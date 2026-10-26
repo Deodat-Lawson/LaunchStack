@@ -494,5 +494,64 @@
       "removeImport": "Remove the import…",
       "busy": "An import is already running."
     }
+  },
+  "server": {
+    "chatAgent": {
+      "notFound": "No agent with the handle \"@{handle}\" in this workspace",
+      "primaryOnly": "@{handle} is a primary-only agent — pick it in the composer instead of mentioning it",
+      "subagentOnly": "@{handle} is a subagent — summon it with @{handle} in a message"
+    },
+    "connectors": {
+      "invalidJsonBody": "Invalid JSON body."
+    },
+    "sessions": {
+      "disabled": "The agent-sessions connector is disabled. Set AGENT_SESSIONS_CONNECTOR_ENABLED=true on the server that hosts your Claude Code / Codex folders.",
+      "invalidProjectSlug": "Invalid project slug.",
+      "invalidMaxSessions": "Invalid maxSessions.",
+      "imported": "Imported {stored} of {discovered} sessions.",
+      "validation": {
+        "notProjectDir": "Not a project directory name.",
+        "notSourceId": "Not an agent-sessions source id."
+      }
+    },
+    "knowledge": {
+      "disabled": "The agent-knowledge connector is disabled. Set AGENT_KNOWLEDGE_CONNECTOR_ENABLED=true on the server that hosts your Claude Code / Codex folders.",
+      "outsideRoots": "Project directories outside AGENT_KNOWLEDGE_PROJECT_ROOTS: {dirs}",
+      "synced": "Synced {stored} of {discovered} knowledge files."
+    },
+    "repoExplainer": {
+      "invalidUrl": "Invalid GitHub URL format. Please use: https://github.com/owner/repo or owner/repo",
+      "notFoundWithToken": "Repository ''{repo}'' not found or token does not have access.",
+      "notFoundPublic": "Repository ''{repo}'' not found or is private. Add a GitHub token with access for private repos.",
+      "forbiddenWithToken": "Access forbidden for ''{repo}''. Check token permissions and repo access.",
+      "forbiddenPublic": "Repository ''{repo}'' is private or access is forbidden. Add a GitHub token.",
+      "invalidToken": "Invalid GitHub token.",
+      "rateLimited": "Too many requests to GitHub. Please try again later.",
+      "accessError": "Error accessing repository ''{repo}'' (HTTP {status}).",
+      "validateFailed": "Could not validate repository on GitHub. Please try again.",
+      "managersOnlyRun": "Only management roles can run the repo explainer",
+      "jobNotFound": "Repo explainer job",
+      "workspaceNotFound": "Repository workspace",
+      "notReady": "Workspace is {status}. Wait for the first sync to complete.",
+      "neverSynced": "Workspace is {status} and has never synced. Wait for the first sync to complete.",
+      "onlyCompletedPublish": "Only completed explanations can be published",
+      "folderEditDenied": "You do not have edit access to this folder.",
+      "managersOnlyConnect": "Only management roles can connect repositories",
+      "managersOnlyDisconnect": "Only management roles can disconnect repositories",
+      "invalidRepoUrl": "Invalid GitHub URL — expected \"https://github.com/owner/repo\" or \"owner/repo\""
+    },
+    "analysis": {
+      "invalidDocumentId": "Invalid documentId. Must be a positive number.",
+      "invalidAnalysisType": "Invalid analysisType. Must be one of: {types}",
+      "invalidTimeout": "Invalid timeoutMs. Must be between {min} and {max}",
+      "documentNotFound": "Document not found.",
+      "noVersion": "No current document version found.",
+      "noChunks": "No chunks found for the given documentId.",
+      "noChunksStream": "No chunks found for document.",
+      "timedOut": "Analysis timed out. Results will be cached when complete.",
+      "failed": "Failed to perform predictive document analysis",
+      "tookTooLong": "The AI analysis took too long to complete. Please try again or reduce the document size.",
+      "externalLimited": "External service error. Analysis completed with limited functionality."
+    }
   }
 }

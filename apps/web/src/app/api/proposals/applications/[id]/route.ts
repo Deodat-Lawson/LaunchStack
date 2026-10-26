@@ -8,7 +8,7 @@ import { APPLICATION_STATUSES } from "@launchstack/pipelines/proposals/types";
 
 import { loadApplication, patchApplication, removeApplication } from "~/server/proposals/service";
 
-import { error, proposalsContext, handleProposalsError, json, readBody } from "../../_http";
+import { error, proposalsContext, handleProposalsError, json, readBody, say } from "../../_http";
 
 const PatchSchema = z.object({
     title: z.string().min(1).max(512).optional(),
@@ -27,14 +27,14 @@ const PatchSchema = z.object({
 
 type Params = { params: Promise<{ id: string }> };
 
-export async function GET(_request: NextRequest, { params }: Params) {
+export async function GET(request: NextRequest, { params }: Params) {
     const auth = await proposalsContext();
     if (!auth.ok) return auth.response;
     try {
         const { id } = await params;
         return json({ application: await loadApplication(auth.ctx, id) });
     } catch (err) {
-        return handleProposalsError("GET application", err);
+        return handleProposalsError("GET application", err, request);
     }
 }
 
@@ -44,14 +44,14 @@ export async function PATCH(request: NextRequest, { params }: Params) {
     try {
         const { id } = await params;
         const parsed = PatchSchema.safeParse(await readBody(request));
-        if (!parsed.success) return error("Check the change and try again", 400);
+        if (!parsed.success) return error(say(request, "checkChange"), 400);
         return json({ application: await patchApplication(auth.ctx, id, parsed.data) });
     } catch (err) {
-        return handleProposalsError("PATCH application", err);
+        return handleProposalsError("PATCH application", err, request);
     }
 }
 
-export async function DELETE(_request: NextRequest, { params }: Params) {
+export async function DELETE(request: NextRequest, { params }: Params) {
     const auth = await proposalsContext();
     if (!auth.ok) return auth.response;
     try {
@@ -59,6 +59,6 @@ export async function DELETE(_request: NextRequest, { params }: Params) {
         await removeApplication(auth.ctx, id);
         return json({ ok: true });
     } catch (err) {
-        return handleProposalsError("DELETE application", err);
+        return handleProposalsError("DELETE application", err, request);
     }
 }

@@ -7,6 +7,7 @@ import { useFormatter, useTranslations } from "next-intl";
 import { Button } from "~/components/ui/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "~/components/ui/tooltip";
 import { citationNeedles, findTextRange, type ViewerHighlight } from "~/lib/find-text-range";
+import { ViewerNotice } from "./ViewerNotice";
 
 interface CodeViewerProps {
     url: string;
@@ -175,22 +176,17 @@ export function CodeViewer({ url, title, mimeType: _mimeType, highlight = null }
 
     if (error !== null) {
         return (
-            <div className="bg-panel-2/30 flex h-full flex-col items-center justify-center gap-4 p-8 text-center">
-                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-red-50 dark:bg-red-900/20">
-                    <AlertTriangle className="h-7 w-7 text-red-500" />
-                </div>
-                <div>
-                    <p className="text-ink mb-1 text-sm font-medium">{t("loadFailed")}</p>
-                    <p className="text-ink-3 mb-4 text-xs">{error || t("loadFailedFallback")}</p>
-                    <button
-                        onClick={() => void fetchCode()}
-                        className="bg-brand hover:bg-brand-hi inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-white transition-colors"
-                    >
-                        <RotateCw className="h-4 w-4" />
+            <ViewerNotice
+                icon={<AlertTriangle />}
+                title={t("loadFailed")}
+                detail={error || t("loadFailedFallback")}
+                action={
+                    <Button onClick={() => void fetchCode()}>
+                        <RotateCw />
                         {tc("actions.retry")}
-                    </button>
-                </div>
-            </div>
+                    </Button>
+                }
+            />
         );
     }
 

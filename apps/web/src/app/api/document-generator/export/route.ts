@@ -16,6 +16,8 @@ import { NextResponse } from "next/server";
 import TurndownService from "turndown";
 import { PAPER_SIZES, RenderingServiceError } from "@launchstack/document-conversion-engine";
 import { getGotenbergClient } from "~/server/rendering";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 const turndown = new TurndownService({ headingStyle: "atx" });
@@ -237,6 +239,9 @@ function buildHtmlDocument(
 }
 
 export async function POST(request: Request) {
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "generator.server.errors");
+    const tApi = translatorFor(locale, "errors.api");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
@@ -246,7 +251,11 @@ export async function POST(request: Request) {
 
         if (!validation.success) {
             return NextResponse.json(
-                { success: false, message: "Invalid request", errors: validation.error.errors },
+                {
+                    success: false,
+                    message: tApi("invalidRequest"),
+                    errors: validation.error.errors,
+                },
                 { status: 400 }
             );
         }
@@ -270,9 +279,7 @@ export async function POST(request: Request) {
                         {
                             success: false,
                             error: "service_not_configured",
-                            message:
-                                "PDF rendering is not configured. Set GOTENBERG_SERVICE_URL " +
-                                "(and its basic-auth pair), or export as HTML instead.",
+                            message: t("pdfNotConfigured"),
                         },
                         { status: 503 }
                     );
@@ -345,7 +352,7 @@ export async function POST(request: Request) {
 
             default:
                 return NextResponse.json(
-                    { success: false, message: "Invalid format" },
+                    { success: false, message: t("invalidFormat") },
                     { status: 400 }
                 );
         }
@@ -378,8 +385,8 @@ export async function POST(request: Request) {
         return NextResponse.json(
             {
                 success: false,
-                message: "Failed to export document",
-                error: "Failed to export document",
+                message: t("exportFailed"),
+                error: t("exportFailed"),
             },
             { status: 500 }
         );

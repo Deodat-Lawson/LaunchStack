@@ -18,9 +18,9 @@ import {
 
 import { authorizeDriveRoute } from "../_shared";
 
-export async function GET(_request: Request, context: { params: Promise<{ id: string }> }) {
+export async function GET(request: Request, context: { params: Promise<{ id: string }> }) {
     const { id: rawId } = await context.params;
-    const auth = await authorizeDriveRoute(rawId, { requirePermission: false });
+    const auth = await authorizeDriveRoute(rawId, { requirePermission: false, request });
     if (!auth.ok) return auth.response;
 
     const [connection, link] = await Promise.all([
@@ -46,7 +46,8 @@ export async function GET(_request: Request, context: { params: Promise<{ id: st
         linkable: isDriveLinkableDocument(
             auth.data.doc.fileType,
             auth.data.doc.mimeType,
-            auth.data.doc.title
+            auth.data.doc.title,
+            auth.data.doc.ocrMetadata
         ),
         link:
             link && link.status !== "unlinked"

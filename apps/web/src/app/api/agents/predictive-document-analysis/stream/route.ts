@@ -8,6 +8,8 @@ import { validateRequestBody, PredictiveAnalysisSchema } from "~/lib/validation"
 import { CACHE_CONFIG, ERROR_TYPES, HTTP_STATUS, type AnalysisType } from "~/lib/constants";
 import { forbiddenForPermission, requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 
 export const runtime = "nodejs";
 export const maxDuration = 300;
@@ -25,7 +27,9 @@ export const maxDuration = 300;
 export async function POST(request: Request) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
-    if (!ctx.data.can("documents.read")) return forbiddenForPermission("documents.read");
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "agents.server.analysis");
+    if (!ctx.data.can("documents.read")) return forbiddenForPermission("documents.read", locale);
 
     const validation = await validateRequestBody(request, PredictiveAnalysisSchema);
     if (!validation.success) {
@@ -49,7 +53,7 @@ export async function POST(request: Request) {
 
     if (docCheck.length === 0) {
         return NextResponse.json(
-            { success: false, message: "Document not found.", errorType: ERROR_TYPES.VALIDATION },
+            { success: false, message: t("documentNotFound"), errorType: ERROR_TYPES.VALIDATION },
             { status: HTTP_STATUS.NOT_FOUND }
         );
     }
@@ -118,7 +122,7 @@ export async function POST(request: Request) {
         return NextResponse.json(
             {
                 success: false,
-                message: "No chunks found for document.",
+                message: t("noChunksStream"),
                 errorType: ERROR_TYPES.VALIDATION,
             },
             { status: HTTP_STATUS.NOT_FOUND }
@@ -221,7 +225,7 @@ export async function POST(request: Request) {
 
             if (!found) {
                 send("error", {
-                    message: "Analysis timed out. Results will be cached when complete.",
+                    message: t("timedOut"),
                 });
             }
 

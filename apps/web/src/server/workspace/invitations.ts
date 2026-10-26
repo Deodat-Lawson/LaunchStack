@@ -23,6 +23,7 @@ import type { WorkspaceContext } from "~/lib/require-workspace-context";
 import { recordAuditEvent } from "~/lib/authz/audit";
 import { normalizeRoleSlug, roleLabel } from "~/lib/authz/permissions";
 import { resolveRole } from "~/lib/authz/resolve";
+import { copy } from "~/i18n/copy";
 
 import { badRequest, conflict, forbidden, gone, notFound } from "./errors";
 import { customRoleNames, displayRoleName, requireAssignableRole } from "./roles";
@@ -148,7 +149,7 @@ async function loadInvitation(companyId: bigint, id: number): Promise<Invitation
         .from(workspaceInvitations)
         .where(and(eq(workspaceInvitations.companyId, companyId), eq(workspaceInvitations.id, id)))
         .limit(1);
-    if (!row) throw notFound("Invitation not found.");
+    if (!row) throw notFound(copy("team.server.errors.invitationNotFound"));
     return row;
 }
 
@@ -223,7 +224,8 @@ async function knownGroupIds(companyId: bigint, groupIds: readonly number[]): Pr
         .where(and(eq(workspaceGroups.companyId, companyId), inArray(workspaceGroups.id, unique)));
     const known = new Set(rows.map(r => Number(r.id)));
     const missing = unique.filter(id => !known.has(id));
-    if (missing.length > 0) throw badRequest(`Unknown group id ${missing[0]}.`);
+    if (missing.length > 0)
+        throw badRequest(copy("team.server.errors.unknownGroupId", { id: String(missing[0]) }));
     return unique;
 }
 
@@ -250,8 +252,8 @@ export async function createInvitation(
     if (existing[0]) {
         throw conflict(
             existing[0].status === "pending"
-                ? "That person already has a pending request to join this workspace."
-                : "That person is already a member of this workspace."
+                ? copy("team.server.errors.alreadyRequested")
+                : copy("team.server.errors.alreadyMember")
         );
     }
 
@@ -268,7 +270,7 @@ export async function createInvitation(
             )
         )
         .limit(1);
-    if (pending.length > 0) throw conflict("An invitation is already pending for that email.");
+    if (pending.length > 0) throw conflict(copy("team.server.errors.invitationAlreadyPending"));
 
     const groupIds = await knownGroupIds(ctx.companyId, input.groupIds ?? []);
     const token = newToken();
@@ -312,9 +314,8 @@ export async function resendInvitation(
 ): Promise<{ invitation: InvitationView; acceptUrl: string; emailSent: boolean }> {
     const row = await loadInvitation(ctx.companyId, id);
     const status = invitationStatus(row);
-    if (status === "accepted") throw conflict("This invitation was already accepted.");
-    if (status === "revoked")
-        throw conflict("This invitation was revoked. Send a new one instead.");
+    if (status === "accepted") throw conflict(copy("team.server.errors.invitationAlreadyAccepted"));
+    if (status === "revoked") throw conflict(copy("team.server.errors.invitationRevokedSendNew"));
 
     const token = newToken();
     const expiresAt = new Date(Date.now() + INVITATION_TTL_MS);
@@ -345,7 +346,7 @@ export async function revokeInvitation(
     id: number
 ): Promise<{ success: true }> {
     const row = await loadInvitation(ctx.companyId, id);
-    if (row.acceptedAt) throw conflict("This invitation was already accepted.");
+    if (row.acceptedAt) throw conflict(copy("team.server.errors.invitationAlreadyAccepted"));
     if (row.revokedAt) return { success: true };
 
     await db.transaction(async tx => {
@@ -386,7 +387,7 @@ export async function previewInvitation(token: string): Promise<InvitationPrevie
         .innerJoin(company, eq(company.id, workspaceInvitations.companyId))
         .where(eq(workspaceInvitations.tokenHash, hashInvitationToken(token)))
         .limit(1);
-    if (!row) throw notFound("This invitation does not exist.");
+    if (!row) throw notFound(copy("team.server.errors.invitationDoesNotExist"));
 
     const [resolved, looks] = await Promise.all([
         resolveRole(row.companyId, row.role),
@@ -423,17 +424,17 @@ export async function acceptInvitation(
             .where(eq(workspaceInvitations.id, input.invitationId))
             .limit(1);
     } else {
-        throw badRequest("Provide an invitation token.");
+        throw badRequest(copy("team.server.errors.invitationTokenNeeded"));
     }
     const row = rows[0];
-    if (!row) throw notFound("This invitation does not exist.");
+    if (!row) throw notFound(copy("team.server.errors.invitationDoesNotExist"));
 
     const status = invitationStatus(row);
-    if (status === "accepted") throw gone("This invitation has already been used.");
-    if (status === "revoked") throw gone("This invitation was revoked.");
-    if (status === "expired") throw gone("This invitation has expired. Ask for a new one.");
+    if (status === "accepted") throw gone(copy("team.server.errors.invitationUsed"));
+    if (status === "revoked") throw gone(copy("team.server.errors.invitationRevoked"));
+    if (status === "expired") throw gone(copy("team.server.errors.invitationExpired"));
     if (row.email.trim().toLowerCase() !== user.email) {
-        throw forbidden("This invitation was sent to a different email address.");
+        throw forbidden(copy("team.server.errors.invitationOtherEmail"));
     }
 
     const role = normalizeRoleSlug(row.role) === "owner" ? "admin" : normalizeRoleSlug(row.role);
@@ -464,7 +465,7 @@ export async function acceptInvitation(
                 status: "active",
             });
         } else if (membership.status === "suspended") {
-            throw conflict("Your membership in this workspace is suspended.");
+            throw conflict(copy("team.server.errors.membershipSuspended"));
         } else if (membership.status === "pending") {
             await tx
                 .update(userCompanyMemberships)

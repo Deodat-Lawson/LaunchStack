@@ -23,7 +23,7 @@ beforeEach(() => {
 
 describe("/api/workspace/settings", () => {
     it("returns defaults when the workspace has no row", async () => {
-        const res = await GET();
+        const res = await GET(new Request("http://localhost/api/workspace/settings"));
         await expect(res.json()).resolves.toEqual({ auditRetentionDays: null });
     });
 

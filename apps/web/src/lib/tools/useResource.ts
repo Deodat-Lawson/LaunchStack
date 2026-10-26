@@ -3,6 +3,8 @@
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import { useErrorText } from "./errorText";
+
 export interface Resource<T> {
     data: T | null;
     loading: boolean;
@@ -40,8 +42,9 @@ export function useResource<T>(
     const [error, setError] = useState<string | null>(null);
     const [errorStatus, setErrorStatus] = useState<number | null>(null);
     const t = useTranslations("tools.resource");
-    const fallbackError = useRef(t("error"));
-    fallbackError.current = t("error");
+    const errorText = useErrorText();
+    const describe = useRef((e: unknown) => errorText(e, t("error")));
+    describe.current = (e: unknown) => errorText(e, t("error"));
     const fetcherRef = useRef(fetcher);
     fetcherRef.current = fetcher;
     const keyRef = useRef(key);
@@ -60,7 +63,7 @@ export function useResource<T>(
             setErrorStatus(null);
         } catch (e) {
             if (mine !== seq.current) return;
-            setError(e instanceof Error ? e.message : fallbackError.current);
+            setError(describe.current(e));
             const status = (e as { status?: unknown } | null)?.status;
             setErrorStatus(typeof status === "number" ? status : null);
         } finally {

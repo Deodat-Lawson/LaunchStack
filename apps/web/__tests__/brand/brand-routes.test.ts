@@ -292,12 +292,12 @@ describe("GET accounts", () => {
             channels: [],
             canManage: false,
         });
-        const response = await getAccounts();
+        const response = await getAccounts(req("/api/brand/accounts", "GET"));
         expect(response.status).toBe(200);
-        expect(mockListBrandAccounts).toHaveBeenCalledWith(BigInt(5), false, true);
+        expect(mockListBrandAccounts).toHaveBeenCalledWith(BigInt(5), false, true, "en");
         as("viewer");
-        await getAccounts();
-        expect(mockListBrandAccounts).toHaveBeenLastCalledWith(BigInt(5), false, false);
+        await getAccounts(req("/api/brand/accounts", "GET"));
+        expect(mockListBrandAccounts).toHaveBeenLastCalledWith(BigInt(5), false, false, "en");
     });
 });
 
@@ -403,7 +403,7 @@ describe("speaking as the company needs social.publish (Viewers and Guests read 
             "POST posts/[id]/publish",
             () => publishPost(req("/api/brand/posts/p1/publish", "POST"), params({ id: "p1" })),
         ],
-        ["POST posts/publish-due", () => publishDue()],
+        ["POST posts/publish-due", () => publishDue(req("/api/brand/posts/publish-due", "POST"))],
         [
             "POST comments/[id]/reply",
             () =>
@@ -421,7 +421,7 @@ describe("speaking as the company needs social.publish (Viewers and Guests read 
                 ),
         ],
         ["POST media", () => uploadMedia(form())],
-        ["POST insights/sync", () => syncNow()],
+        ["POST insights/sync", () => syncNow(req("/api/brand/insights/sync", "POST"))],
         [
             "POST marketing-pipeline/publish (campaign)",
             () =>
@@ -633,5 +633,62 @@ describe("the claim gate: unbacked claims don't go out as the company unacknowle
         );
         expect(response.status).toBe(201);
         expect(mockClaimGate).not.toHaveBeenCalled();
+    });
+});
+
+describe("in the reader's language", () => {
+    function zh(path: string, method: string, body?: unknown) {
+        return new Request(`https://app.test${path}`, {
+            method,
+            headers: { "Content-Type": "application/json", cookie: "ls-locale=zh-CN.1" },
+            body: body === undefined ? undefined : JSON.stringify(body),
+        }) as unknown as Parameters<typeof compose>[0];
+    }
+
+    it("refuses a viewer in Chinese, keeping the code", async () => {
+        as("viewer");
+        const response = await compose(
+            zh("/api/brand/posts", "POST", { channels: ["ch-page"], body: "Hello" })
+        );
+        expect(response.status).toBe(403);
+        expect(await response.json()).toEqual({
+            error: "你的角色可以查看品牌，但不能以公司身份发帖或回复。",
+            code: "forbidden",
+        });
+    });
+
+    it("says a switched-off channel in Chinese, and in English without the cookie", async () => {
+        as("member");
+        mockListBrandChannels.mockResolvedValue([{ ...PAGE, enabled: false }]);
+        const body = { channels: ["ch-page"], body: "Hello" };
+        const chinese = await compose(zh("/api/brand/posts", "POST", body));
+        expect((await chinese.json()).error).toBe("LaunchStack 已在“账号”中关闭。");
+        const english = await compose(req("/api/brand/posts", "POST", body));
+        expect((await english.json()).error).toBe("LaunchStack is switched off under Accounts.");
+        expect(mockListBrandChannels).toHaveBeenLastCalledWith(BigInt(5), undefined, "en");
+    });
+
+    it("words a post error the marketing pipeline threw", async () => {
+        as("member");
+        const refused = Object.assign(new Error("Pick a time that is still ahead."), {
+            status: 400,
+            code: "schedule_past",
+        });
+        mockSpeaks.mockRejectedValue(refused);
+        const patch = { scheduledAt: "2020-01-01T00:00:00Z", status: "scheduled" };
+        const chinese = await patchPost(
+            zh("/api/brand/posts/p1", "PATCH", patch),
+            params({ id: "p1" })
+        );
+        expect(chinese.status).toBe(400);
+        expect(await chinese.json()).toEqual({
+            error: "请选择一个尚未到来的时间。",
+            code: "schedule_past",
+        });
+        const english = await patchPost(
+            req("/api/brand/posts/p1", "PATCH", patch),
+            params({ id: "p1" })
+        );
+        expect((await english.json()).error).toBe("Pick a time that is still ahead.");
     });
 });

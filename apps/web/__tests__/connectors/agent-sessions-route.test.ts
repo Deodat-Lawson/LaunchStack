@@ -4,6 +4,7 @@
  * regress.
  */
 
+import { wordCopy } from "~/i18n/translate";
 import type * as MockRequireWorkspaceContext from "../helpers/mock-require-workspace-context";
 
 const mockEnv = {
@@ -139,6 +140,23 @@ describe("POST /api/connectors/agent-sessions", () => {
         expect(mockSync).not.toHaveBeenCalled();
     });
 
+    it("names the flag in every language, since the screen looks for it", async () => {
+        mockEnv.server.AGENT_SESSIONS_CONNECTOR_ENABLED = undefined;
+
+        const response = await POST(
+            new Request("http://test/api/connectors/agent-sessions", {
+                method: "POST",
+                headers: { cookie: "ls-locale=zh-CN.1" },
+                body: "{}",
+            })
+        );
+
+        expect(response.status).toBe(403);
+        const { message } = await readBody(response);
+        expect(message).toContain("AGENT_SESSIONS_CONNECTOR_ENABLED");
+        expect(message).toMatch(/^会话连接器已关闭/);
+    });
+
     it("syncs with defaults when the body is empty", async () => {
         const response = await POST(postRequest());
 
@@ -204,7 +222,27 @@ describe("POST /api/connectors/agent-sessions", () => {
         const response = await POST(postRequest({ sourceIds: ["file:///etc/passwd"] }));
 
         expect(response.status).toBe(400);
+        expect((await readBody(response)).message).toBe(
+            "Invalid request data: sourceIds.0: Not an agent-sessions source id."
+        );
         expect(mockSync).not.toHaveBeenCalled();
+
+        const chinese = await POST(
+            new Request("http://test/api/connectors/agent-sessions", {
+                method: "POST",
+                headers: { cookie: "ls-locale=zh-CN.1" },
+                body: JSON.stringify({ sourceIds: ["file:///etc/passwd"] }),
+            })
+        );
+        expect((await readBody(chinese)).message).toBe(
+            wordCopy(
+                {
+                    key: "errors.api.invalidRequestData",
+                    values: { detail: "sourceIds.0: 不是会话连接器的来源 ID。" },
+                },
+                "zh-CN"
+            )
+        );
     });
 });
 

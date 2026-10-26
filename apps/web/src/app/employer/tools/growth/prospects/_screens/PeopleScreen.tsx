@@ -21,7 +21,9 @@ import {
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 
 import { prospectsApi, type EmailStatusKind } from "../api";
+import { useCopyText } from "~/lib/tools/copyText";
 import { useProspects } from "../_lib/context";
+import { useErrorText } from "~/lib/tools/errorText";
 import { useResource } from "~/lib/tools/useResource";
 import { BulkBar } from "../_components/BulkBar";
 import { EMAIL_STATUSES, EmailStatus, canOutreach } from "../_components/EmailStatus";
@@ -34,6 +36,8 @@ const STATUSES: ReadonlyArray<"all" | EmailStatusKind> = ["all", ...EMAIL_STATUS
 export function PeopleScreen() {
     const t = useTranslations("growth.prospects");
     const tc = useTranslations("common");
+    const word = useCopyText();
+    const errorText = useErrorText();
     const { segmentId, href } = useProspects();
     const [status, setStatus] = useState<"all" | EmailStatusKind>("all");
     const [q, setQ] = useState("");
@@ -68,7 +72,7 @@ export function PeopleScreen() {
             );
             setSelected(new Set());
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : t("common.outreachFailed"));
+            toast.error(errorText(e, t("common.outreachFailed")));
         }
     };
 
@@ -167,6 +171,8 @@ export function PeopleScreen() {
                         <TableBody>
                             {people.map(p => {
                                 const ok = canOutreach(p.emailStatus) && !p.blockedReason;
+                                const name = word(p.nameCopy, p.name);
+                                const source = word(p.sourceCopy, p.source);
                                 return (
                                     <TableRow
                                         key={p.id}
@@ -174,7 +180,7 @@ export function PeopleScreen() {
                                     >
                                         <TableCell className="pl-3">
                                             <Checkbox
-                                                aria-label={t("common.select", { name: p.name })}
+                                                aria-label={t("common.select", { name })}
                                                 checked={selected.has(p.id)}
                                                 disabled={!ok}
                                                 onCheckedChange={checked =>
@@ -194,10 +200,10 @@ export function PeopleScreen() {
                                                 </Avatar>
                                                 <span className="min-w-0">
                                                     <span className="text-ink block truncate font-medium">
-                                                        {p.name}
+                                                        {name}
                                                     </span>
                                                     <span className="text-ink-3 block truncate text-xs">
-                                                        {p.title} · {p.seniority}
+                                                        {word(p.titleCopy, p.title)} · {p.seniority}
                                                     </span>
                                                 </span>
                                             </span>
@@ -211,7 +217,7 @@ export function PeopleScreen() {
                                             </ToolLink>
                                             {p.blockedReason && (
                                                 <span className="text-ink-3 block text-xs">
-                                                    {p.blockedReason}
+                                                    {word(p.blockedReasonCopy, p.blockedReason)}
                                                 </span>
                                             )}
                                         </TableCell>
@@ -231,10 +237,10 @@ export function PeopleScreen() {
                                                     rel="noreferrer"
                                                     className="hover:text-brand-ink hover:underline"
                                                 >
-                                                    {p.source}
+                                                    {source}
                                                 </a>
                                             ) : (
-                                                p.source
+                                                source
                                             )}
                                         </TableCell>
                                     </TableRow>

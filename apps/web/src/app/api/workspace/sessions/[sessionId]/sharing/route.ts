@@ -28,13 +28,13 @@ export const runtime = "nodejs";
 
 type Params = { params: Promise<{ sessionId: string }> };
 
-export async function GET(_request: Request, { params }: Params) {
+export async function GET(request: Request, { params }: Params) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
     try {
         return NextResponse.json(await getChatSharing(ctx.data, (await params).sessionId));
     } catch (error) {
-        return workspaceErrorResponse(error, "[workspace/sessions/sharing GET]");
+        return workspaceErrorResponse(error, "[workspace/sessions/sharing GET]", request);
     }
 }
 
@@ -48,6 +48,6 @@ export async function PUT(request: Request, { params }: Params) {
             await setChatSharing(ctx.data, (await params).sessionId, body.data)
         );
     } catch (error) {
-        return workspaceErrorResponse(error, "[workspace/sessions/sharing PUT]");
+        return workspaceErrorResponse(error, "[workspace/sessions/sharing PUT]", request);
     }
 }

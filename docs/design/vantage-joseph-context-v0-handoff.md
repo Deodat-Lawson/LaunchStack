@@ -1,227 +1,144 @@
-# Joseph — Week 2 roles and personal context handoff
+# Joseph — roles, personal stars and context snapshots
 
-Date: 2026-10-26. Owner: Joseph. Status: independent implementation and synthetic
-acceptance; **production persistence/routes require TL review and integration**.
-
-Base: `Deodat-Lawson/LaunchStack`, `Junkun/vantage-week2-rebuild`, exact commit
+Date: 2026-10-26. Base: `Junkun/vantage-week2-rebuild` at
 `364a3c8bd3b1c5bb2ee45cf66c1ea608b3c44618`.
-Branch: `feat/joseph-vantage-context-v0`.
-Shared contracts: `@launchstack/pipelines/vantage/context-v0`, `v0-proposed` /
-`v0-assembly-1`. Role map: `joseph-roles-2026-10-26-v0`.
-Personal state DTO: `joseph-personal-context-v0`.
+Branch: `feat/joseph-vantage-context-v0`. PR: #561.
 
-## Assignment and delivery boundary
+## Implemented application flow
 
-The supplied Week 2 Plan, section C and interface handoffs, assigns Joseph the
-schema audit, multi-business-role identity/map, Vantage-personal stars, new UI,
-required-context provider and fixture tests. It explicitly says **“no migration
-before TL review”**. The Technical Design assigns existing v1 fixes, source/ACL
-adapters, generation integration and final acceptance to TL. This change adds no
-v1 wire fields, production API routes, migrations, live providers, or deployment.
-It does not alter PR #511, main, or the shared TL branch.
+The initial submission was a provider and synthetic preview. Following Joseph's
+explicit request to implement the whiteboard in LaunchStack, this branch now adds
+real PostgreSQL persistence, authenticated routes and a normal Vantage screen.
+It is no longer necessary to use the development preview to edit personal context.
 
-Implemented: deterministic role mapping, confirmation/correction, optional primary
-perspective, scoped revision-safe star/unstar store port, source revalidation,
-required-source diagnostics, reusable UI, a persistent browser-only synthetic
-preview, and tests against the actual TL validator/assembler. The fixture store
-and localStorage are **not** production PostgreSQL persistence. Durable production
-storage is the outstanding Joseph follow-through after TL signs off on the
-concrete schema/API proposal below; final cross-branch wiring and acceptance are TL-owned.
-
-## Whiteboard flow alignment
-
-The user supplied a whiteboard photo (`IMG_9193.JPG`) as a design reference.
-The readable Joseph-related labels are API call, user profile, DB, `role.json`
-with role descriptions, “Add col / use existing,” and “User starred documents.”
-The lower destination appears to say “Snapshot”; the existing V0 contract makes
-that boundary precise. The chart is architectural context, not evidence of TL
-schema approval or an instruction to implement other team members' work.
+Open **Documents → Vantage → My context**, or
+`/employer/documents?feature=vantage&at=%2Fcontext`.
 
 ```mermaid
 flowchart TD
-    API[Authenticated application API] --> Profile[Existing user and workspace profile]
-    Profile --> DB[Existing PostgreSQL database]
-    Map[Versioned role-description JSON] --> Roles[Resolve multiple business roles]
+    UI[LaunchStack: Vantage / My context] --> API[Authenticated personal-context API]
+    API --> Profile[Existing user and active workspace membership]
+    Profile --> DB[Existing PostgreSQL: business roles and personal stars]
+    Map[Versioned role-map.json] --> Roles[Multiple roles and optional primary perspective]
     DB --> Roles
-    DB --> Stars[Personal Vantage document stars]
-    Stars --> Checked[Check access and exact document versions]
-    Company[Canonical company context and mandatory documents] --> Checked
-    Roles --> Bundle[Joseph: RequiredContextBundle V0 handoff]
-    Checked --> Bundle
-    Bundle --> Snapshot[TL: ContextManifest and evidence snapshot]
+    DB --> Stars[All personal Vantage document selections]
+    Stars --> ACL[Recheck membership, document access and exact version]
+    ACL --> Text[Version-specific extracted document text]
+    Roles --> Snapshot[Personal context snapshot with revision and coverage]
+    Text --> Snapshot
+    Snapshot --> TL[Report pipeline: combine company context, retrieval and evidence]
 ```
 
-This is the chart interpreted through the stated ownership boundaries in the
-Week 2 Plan; the company-context and permission checks come from that plan and
-shared V0 types. “API call” is treated as the application's authenticated API,
-not an instruction to add a separate AI call for role recognition. “Add sheet”
-is interpreted as a relational association for personal stars in the existing
-PostgreSQL database, not a spreadsheet or second database.
+The readable whiteboard labels are API call, user profile, DB, role.json,
+add column / use existing, user starred documents, and apparently snapshot.
+"Add sheet" is implemented as a PostgreSQL relation. The other unclear notes are
+not treated as requirements. This implements Joseph's personal context flow; it
+is not a claim that the complete multi-owner weekly report pipeline is deployed.
 
-| Diagram step                    | Implementation / remaining work                                                                                                  |
-| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| API → user profile              | Existing profile fields audited; authenticated V0 API bindings remain proposed.                                                  |
-| Add column / use existing → DB  | Reuse canonical membership/profile/document records; additive role fields and personal-star relation await TL schema review.     |
-| `role.json`: role → description | Implemented as `role-map.json`, extended for multiple roles, aliases, responsibilities, priorities and explicit fallback.        |
-| User starred documents          | Implemented store interface, star/unstar logic, UI and scoped fixtures; real PostgreSQL persistence remains pending.             |
-| Snapshot handoff                | Required-context provider implemented and tested against TL's manifest assembler. TL owns final snapshot/generation integration. |
+## Reuse and storage
 
-The chart reinforces the existing proposal; it does not remove the outstanding
-production storage/API work. The preview still uses synthetic data and browser
-storage. No unrelated annotations in the photo are treated as new requirements.
+- `users.title` and membership `profileTitle` remain canonical profile hints.
+  Workspace title wins. Authorization roles are never used as business roles.
+- Nullable membership `business_context_v0` stores confirmed role IDs, optional
+  primary role, confirmation time and mapping version. Null means use title hints;
+  a confirmed empty selection remains empty.
+- Membership `vantage_context_revision` is the shared optimistic concurrency
+  counter for roles and stars. The transaction locks this membership before any
+  write. A stale revision receives 409 without overwriting another save.
+- `vantage_document_stars` is explicitly Vantage-only. Its primary key is
+  `(company_id, user_id, document_id)`, with a composite membership foreign key
+  and membership-deletion cascade. It stores canonical document/version IDs and
+  timestamps, never titles or excerpts. Other modules' stars and pins are untouched.
+- Document/version IDs are intentionally retained when a source is deleted, so a
+  deleted required selection blocks the snapshot until its owner removes it.
+  The relation has no document-deletion cascade. Additions and changed selections
+  validate document company, access and exact version in the same transaction.
+- Existing document/version tables and version-specific `documentSections` provide
+  the content. Unversioned chunks are not treated as proof of a particular version.
 
-## Repository audit and reuse decision
+Migration: `apps/web/drizzle/20261027000000_vantage_personal_context.sql`, registered
+in the existing product journal. Apply engine then product using the normal runner.
+The original Week 2 Plan required TL review before migration. Joseph subsequently
+explicitly requested the complete implementation and local application update;
+that does not establish TL approval for the shared or hosted deployment. The PR
+includes the concrete migration for maintainer review; never infer production
+approval from this document or from a successful local test.
 
-| Existing surface                                                                                                                    | Finding                                                                                           | Reuse / decision                                                                                                                                                                                                   |
-| ----------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `apps/web/src/server/db/schema/identity.ts`, `users`                                                                                | `title`, `bio`, display name; legacy role/status explicitly deprecated                            | Read title only as unconfirmed business-role hints. Never infer permissions.                                                                                                                                       |
-| Same file, `userCompanyMemberships`                                                                                                 | Unique user/company membership, active status, authorization `role`, nullable `profileTitle`      | Prefer workspace `profileTitle`, falling back to global `users.title`. Keep authorization role untouched. No existing structured multi-business-role field.                                                        |
-| `apps/web/src/server/profile/store.ts`; `/api/profile` and `/api/profile/workspace`                                                 | Existing self-profile and workspace override reads/writes                                         | Reuse caller resolution and profile ownership patterns; do not serialize business-role arrays into a display title or bio.                                                                                         |
-| `packages/store/src/db/schema/base.ts`, `company`                                                                                   | Canonical company identity                                                                        | Company ID is the workspace boundary for this slice. Server resolves the active company.                                                                                                                           |
-| Same file, `document`, `documentVersions`                                                                                           | Company-scoped canonical document ID, current version pointer, version ID/number and timestamps   | Store canonical IDs, read exact immutable versions. An ID/URL/title alone is not permission proof. Do not duplicate documents.                                                                                     |
-| `apps/web/src/server/workspace/document-access.ts`; `~/lib/authz/scope`                                                             | Document/folder/grant authorization, scoped document reads                                        | TL production source adapter must use the same ACL machinery before content and before returned listings.                                                                                                          |
-| `/api/documents/[id]/versions/[versionId]/content`                                                                                  | Authorized version-specific content path exists                                                   | Reuse version/content resolution through a server adapter; avoid capped recent listings and public URL requirements.                                                                                               |
-| `packages/tools/src/company-context/schema.ts`, `companyMetadata`, `companyProfileSources`; `apps/web/src/server/company-profile/*` | Existing company profile, facts/provenance, per-document source versions, permission-filtered DTO | Reuse this canonical profile. TL must define reviewed/unknowns-marked Architecture projection, exact version/fingerprint and mandatory source catalog. Do not create another master profile or auto-draft it here. |
-| `mindmap.ts` / `artifacts.ts` `starred`; workspace session `pinned` / `sourceIds`                                                   | Stars belong to other content types; pins belong to a session                                     | None satisfies canonical-document + user + company + Vantage uniqueness. Reusing these would change unrelated modules.                                                                                             |
+## API and UI
 
-The provider consumes trusted adapters rather than importing web routes into a
-pipeline. Existing profile/title, membership, document IDs and versions remain
-canonical. All fixture contents are synthetic; no business DB was queried.
+All routes resolve the authenticated user and active workspace server-side through
+`requireWorkspacePermission("documents.read")`. Request bodies cannot choose an
+actor, workspace, or authorization role. Personal context settings do not open the
+separately gated v1 pilot generation/sharing endpoints.
 
-## Role proposal and behavior
+| Route                                           | Behavior                                                                                                         |
+| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| GET `/api/vantage/context-v0/personal`          | Saved state, mapped roles, all readable document choices, coverage and optional personal snapshot.               |
+| PATCH `/api/vantage/context-v0/roles`           | `{roleIds, primaryRoleId?, expectedRevision}`; controlled roles and explicit confirmation.                       |
+| PUT `/api/vantage/context-v0/stars/:documentId` | `{starred, expectedRevision}`; add an authorized exact version or remove an own selection even after revocation. |
+| POST `/api/vantage/context-v0/snapshot`         | `{expectedRevision}`; recompute a consistent personal snapshot or return 409 and safe diagnostics.               |
 
-`pipelines/src/vantage/role-context-v0/role-map.json` defines Founder, Product,
-Engineering and Growth/Sales with stable IDs, exact aliases, descriptions,
-responsibilities and agenda priorities. It is an interim ontology, not an ACL.
+JSON mutations validate type, fields, numeric bounds and same-origin browser
+requests. Responses use private/no-store. Expected statuses are 400 invalid input,
+401 signed out, 403 unavailable membership/permission, 404 unreadable or absent
+source on add, 409 revision/version/coverage conflict, and 503 service unavailable.
+Driver errors and SQL parameters are not exposed in responses or logs.
 
-Exact title aliases separated by `+`, comma, semicolon or “and” provide unconfirmed
-suggestions. Unknown tokens produce explicit fallback; no substring guessing,
-model call, or Owner/Admin/Member inference. A user can save zero or multiple
-controlled roles and clear or set one primary role. Manual correction takes
-precedence over title suggestions. Empty confirmed selection remains intentionally
-empty. Multi-role order is primary first, then stable directory order; merged
-priorities preserve that order and remove duplicates. The shared TL manifest sorts
-role IDs independently; callers should retain BusinessRoleContext for primary-lens
-presentation. Map/profile versions must join TL's current-state freeze.
+`PersonalContextScreen` uses the real HTTP client. `PersonalContextPanel` supports
+multi-role confirmation, primary perspective, document search, star/unstar,
+version-specific source links, coverage, a snapshot summary, and safe reload after
+conflicts. All edits are personal to the current workspace. They persist in the
+database across browser reloads and new connections, not in localStorage.
+`/dev/vantage-context` remains an explicitly synthetic developer fixture.
 
-## Concrete storage / API proposal for TL review
+## Role mapping and snapshot semantics
 
-Do not run a migration from this PR. Recommended smallest additive change in the
-**existing PostgreSQL**:
+`role-map.json` defines Founder, Product, Engineering and Growth/Sales, their exact
+aliases, descriptions, responsibilities and priorities. Unknown titles produce an
+explicit fallback. Manual confirmation wins over title hints. Primary perspective
+changes priority order; it grants no permissions. Mapping version is
+`joseph-roles-2026-10-26-v0`.
 
-1. Nullable `business_context_v0 jsonb` on `user_company_memberships`, with a
-   validated object containing controlled `roleIds[]`, optional `primaryRoleId`,
-   `confirmedAt`, and the role-map version. Null means use title hints. Existing
-   membership uniqueness already provides user/workspace scope.
-2. `vantage_context_revision bigint NOT NULL DEFAULT 0` on that membership, used
-   by role and star changes. Backfill only the revision default; never infer or
-   confirm business roles during migration.
-3. Personal-document relation `vantage_document_stars`: `company_id`, `user_id`,
-   `module` constrained to `vantage`, `document_id`, last observed version ID,
-   `starred_at`, `updated_at`. Unique `(company_id,user_id,module,document_id)`;
-   FK to the membership's `(user_id,company_id)` and canonical document identity.
-   Enforce document company match in the same transaction. Keep only refs and
-   timestamps, never cached excerpts. Membership deletion cascades its personal
-   state. Document deletion semantics need TL signoff: proposed tombstone/retained
-   selection diagnostics, so deletion never silently removes a required star.
+`loadPersonalContext` reads a repeatable-read database transaction. Membership,
+current authorization-role permissions and document scope are re-evaluated in that
+transaction. Each starred document is resolved at the snapshot cutoff regardless
+of age. Exact version text is read in stable page/line/chunk order; offsets refer
+to that version's ordered extracted-text representation. No RAG top-k is involved.
+At most 100 selections and 64,000 total excerpt characters are supported. Missing,
+unreadable, unprocessed or over-budget selections produce coverage and **no usable
+snapshot**. Nothing is silently truncated into a complete result. Unavailable
+source titles and text are not returned. Role corrections and removal remain usable
+when a selected source is no longer readable.
 
-Proposed versioned routes (not registered):
+The returned `vantage-personal-snapshot-v0` contains a SHA-256 identity, timestamp,
+actor/ACL scope, personal revision, mapped roles and source entries. It is an
+on-demand personal-input snapshot, not a persisted agenda or the TL's complete
+`EvidenceSnapshotV0`. It carries no promise of future access: the consuming report
+pipeline must revalidate before using or committing it.
 
-| Route                                           | Contract                                                                                                                                                               |
-| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| GET `/api/vantage/context-v0/personal`          | Resolve current session + active membership; return versioned personal state, readable document choices, role context, and coverage. No client actor/company selector. |
-| PATCH `/api/vantage/context-v0/roles`           | `{roleIds, primaryRoleId?, expectedRevision}`; explicit confirmation, controlled IDs, optional primary must be selected.                                               |
-| PUT `/api/vantage/context-v0/stars/:documentId` | `{starred, expectedRevision}`; adding requires current document access; removing an existing own selection remains possible after revocation.                          |
+## Shared provider integration
 
-Normal reads 200, updates 200, malformed 400, unauthenticated 401, denied 403,
-missing/cross-company source 404 (no existence leak), stale revision 409, source
-adapter unavailable 503. Never return private error text or unauthorized titles.
-Store `compareAndSwap` must atomically check membership/access, lock the owning
-membership, compare revision, replace scoped stars/roles and increment revision
-in one transaction. Concurrent writes fail with 409; stale payloads are not retried
-automatically. Recheck source ACL in that transaction for additions. Fixtures test
-CAS behavior, **not** real SQL isolation.
+`createPostgresPersonalContextStoreV0` implements the existing shared store port.
+`createDatabasePersonalContextProviderV0` binds the existing Joseph role/required
+context provider to the authenticated membership, PostgreSQL store, profile title
+and exact-version document reader. The caller supplies the canonical company
+Architecture/mandatory-source inventory and company source resolver. No fixture or
+invented company record is installed as a production fallback.
 
-The implementing adapter must read current role/star selections without cached
-content, and enumerate every active star, with pagination internal to the adapter
-if needed. A source budget failure must not turn a partial star list into a complete
-result. Local preview persistence is intentionally not reused in production.
+The shared provider still checks every mandatory document and personal star,
+deduplicates exact required/star references, validates version/audience/cutoff,
+returns safe diagnostics and fails closed on incomplete context. Shared contracts
+remain `v0-proposed` / `v0-assembly-1`; frozen v1 wire fields are unchanged.
 
-## Provider integration
+## Remaining team integration and publication boundary
 
-Import `createPersonalContextProviderV0` from
-`@launchstack/pipelines/vantage/role-context-v0`. Inject:
+The real personal role/star database, API, UI and snapshot flow are implemented.
+The TL still owns combining the company Architecture projection, Sophia's retrieval,
+independent registry/current-state validation, report generation and guarded final
+commit. Those are not replaced by a personal snapshot or claimed complete here.
 
-- TL `resolveAuthenticatedActor`, checking the active server session/membership.
-- `PersonalContextStoreV0` with scoped atomic reads/CAS on the existing database.
-- `readProfileTitle` with workspace-title precedence.
-- `requiredSources` with canonical company Architecture and mandatory document refs.
-- `readSource` and `readDocument` with authoritative ACL and exact version/excerpt
-  reads. `readDocument` resolves the source at the report cutoff every time; the
-  star's last-known version is only an unavailable-source diagnostic, not a cache.
-- A server clock. Abort signals and bounded request timeouts are propagated.
-
-Assign the resulting object to `ContextPipelinePortsV0.roles`. It implements the
-unchanged `resolveBusinessRoles` and `resolveRequiredContext` interfaces.
-`prepareRequiredContext` additionally exposes source-by-source UI diagnostics.
-The UI accepts a `PersonalContextClientV0`; TL supplies the approved HTTP client
-when routes/storage are ready. Do not register this fixture client in Vantage v1.
-
-Every company-required source and personal star is checked regardless of age.
-Sources carry exact version, ACL/audience, source/check times, offsets, constraints
-and coverage. Missing company Architecture is distinct from a missing personal
-star. A company record with reviewed unknowns is allowed; an unreviewed record is
-not. If a doc is both mandatory and personally starred, include its content once
-as company-required and record the star check separately. The personal store
-remains authoritative for the entire star set; TL freshness must freeze it even
-when content is deduplicated across lanes. A version conflict is rejected by the
-shared assembler.
-
-No required source is pruned by recency/top-k or silently truncated. Any missing,
-revoked, invalid, inaccessible or over-budget context throws a typed error before
-returning a usable bundle. `RequiredContextErrorV0.diagnostics` contains coverage
-and safe reasons without excerpts. The existing V0 bundle requires a non-null
-company record and cannot represent all failures cleanly; throwing this typed
-boundary error avoids inventing a placeholder record or changing the TL contract.
-A hanging dependency returns 503. No source contents or role text are sent to a
-public service.
-
-TL still owns independent source registry/current-state reads, post-generation
-freshness and final same-transaction guarded persistence. The provider's own
-checks are not a replacement for that boundary. Unknown ACL digests supplied by a
-client are never sufficient: production adapters must read authoritative records.
-
-## Preview and acceptance
-
-```sh
-pnpm --filter @launchstack/pipelines exec vitest run src/vantage/role-context-v0 src/vantage/context-v0 src/vantage/proposals/context-v0.test.ts
-pnpm --filter @launchstack/web test --runInBand --testPathPatterns=vantage-personal-context
-pnpm --filter @launchstack/pipelines typecheck
-pnpm --filter @launchstack/web typecheck
-SKIP_ENV_VALIDATION=1 pnpm --filter @launchstack/web exec next dev --turbo --hostname 127.0.0.1 --port 3001
-```
-
-Open `http://127.0.0.1:3001/dev/vantage-context`. The existing dev-route gate
-protects this page in production. No login, real API, AI key or database is used.
-The page clearly labels synthetic data. Browser storage contains only synthetic
-role/star choices and is namespaced independently of the prior v1 preview.
-
-Try Founder + Engineering, choose Engineering as primary, Save roles, star the
-January engineering document, and reload. The exact version remains included.
-“Revoke engineering document” hides the document and blocks readiness; remove the
-unavailable star to recover. “Missing company context” reports the distinct
-mandatory failure. Reset only removes this preview's synthetic choices.
-
-Automated evidence and browser results are recorded in
-`docs/runbooks/vantage-joseph-context-v0-acceptance.md`.
-
-## Review decisions / remaining work
-
-TL review is needed for the proposed membership fields/relation/API; controlled
-role IDs and priority merge; canonical profile review/version projection; star
-retention/deletion; actor-only default; no silent required-source override; and
-budget behavior. After approval, implement the PostgreSQL adapter/forward
-migration and approved route bindings, then perform actual SQL/auth acceptance
-on an isolated synthetic workspace. Final v1 integration and release acceptance
-remain TL-owned. No production deployment, main merge, live model or connector
-acceptance is claimed by this handoff.
+The code is submitted through PR #561 against the team's designated integration
+branch. The connected GitHub account has no push/merge permission on
+`Deodat-Lawson/LaunchStack`. Public source review is separate from a hosted app
+release. A maintainer must review/merge and use the existing GHCR/Compose release
+process for the shared deployment. No Vercel deployment was created.

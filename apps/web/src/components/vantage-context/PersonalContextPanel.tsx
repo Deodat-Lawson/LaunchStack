@@ -2,24 +2,17 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Star, ShieldCheck, FileText } from "lucide-react";
-import type { BusinessRoleContextV0 } from "@launchstack/pipelines/vantage/context-v0";
 import {
     roleDirectoryV0,
     mergedRolePrioritiesV0,
-    type PersonalContextStateV0,
-    type RequiredContextDiagnosticsV0,
 } from "@launchstack/pipelines/vantage/role-context-v0";
 import { Button } from "~/components/ui/button";
 import { Checkbox } from "~/components/ui/checkbox";
+import { Input } from "~/components/ui/input";
+import type { PersonalContextViewV0 } from "~/lib/vantage/personal-context";
+export type { PersonalContextViewV0 } from "~/lib/vantage/personal-context";
 
-export interface PersonalContextViewV0 {
-    state: PersonalContextStateV0;
-    roles: BusinessRoleContextV0;
-    documents: { id: string; title: string; version: string; sourceDate: string }[];
-    diagnostics: RequiredContextDiagnosticsV0;
-    ready: boolean;
-}
-/** Caller supplies a server-backed client after TL approval; the dev page supplies fixtures. */
+/** The application uses authenticated HTTP; the development page supplies fixtures. */
 export interface PersonalContextClientV0 {
     load(): Promise<PersonalContextViewV0>;
     saveRoles(change: {
@@ -49,6 +42,7 @@ export function PersonalContextPanel({ client }: { client: PersonalContextClient
     const [error, setError] = useState<string | null>(null);
     const [message, setMessage] = useState<string | null>(null);
     const [needsReload, setNeedsReload] = useState(false);
+    const [documentSearch, setDocumentSearch] = useState("");
     const lock = useRef(false);
     const request = useRef(0);
     function apply(next: PersonalContextViewV0) {
@@ -117,6 +111,11 @@ export function PersonalContextPanel({ client }: { client: PersonalContextClient
     }
     const disabled = busy || needsReload;
     const starIds = new Set(view?.state.stars.map(star => star.documentId));
+    const personal = view?.scope === "personal";
+    const visibleDocuments =
+        view?.documents.filter(doc =>
+            doc.title.toLowerCase().includes(documentSearch.toLowerCase())
+        ) ?? [];
     return (
         <div className="text-ink mx-auto max-w-4xl space-y-6 p-4 sm:p-8" aria-busy={busy}>
             <header className="space-y-2">
@@ -149,9 +148,13 @@ export function PersonalContextPanel({ client }: { client: PersonalContextClient
                     {busy
                         ? "Checking context…"
                         : view?.ready
-                          ? "Required context is ready for handoff."
+                          ? personal
+                              ? "Your personal context snapshot is ready."
+                              : "Required context is ready for handoff."
                           : view
-                            ? "Required context needs attention before generation."
+                            ? personal
+                                ? "Your starred documents need attention before a snapshot can be prepared."
+                                : "Required context needs attention before generation."
                             : "Context has not loaded."}
                 </p>
                 <Button variant="outline" disabled={busy} onClick={() => void perform()}>
@@ -160,6 +163,33 @@ export function PersonalContextPanel({ client }: { client: PersonalContextClient
             </div>
             {view ? (
                 <>
+                    {personal ? (
+                        <section
+                            aria-labelledby="snapshot-heading"
+                            className="border-line bg-panel space-y-2 rounded-xl border p-5"
+                        >
+                            <h2 id="snapshot-heading" className="text-lg font-semibold">
+                                Context snapshot
+                            </h2>
+                            <p className="text-ink-2 text-sm">
+                                Your choices are saved to your LaunchStack account in this
+                                workspace. Reload checks the saved roles, document versions and
+                                permissions again.
+                            </p>
+                            {view.snapshot ? (
+                                <p className="text-sm">
+                                    Revision {view.snapshot.revision} ·{" "}
+                                    {view.snapshot.sources.length} starred sources · Checked{" "}
+                                    {new Date(view.snapshot.asOf).toLocaleString()}
+                                </p>
+                            ) : (
+                                <p className="text-warn text-sm">
+                                    No usable snapshot is returned until every starred source is
+                                    available.
+                                </p>
+                            )}
+                        </section>
+                    ) : null}
                     <section
                         aria-labelledby="roles-heading"
                         className="border-line bg-panel space-y-4 rounded-xl border p-5"
@@ -261,7 +291,18 @@ export function PersonalContextPanel({ client }: { client: PersonalContextClient
                                 No readable documents are available.
                             </p>
                         ) : null}
-                        {view.documents.map(doc => (
+                        <label className="block space-y-2 text-sm">
+                            <span>Find a document</span>
+                            <Input
+                                value={documentSearch}
+                                onChange={event => setDocumentSearch(event.target.value)}
+                                placeholder="Search your readable documents"
+                            />
+                        </label>
+                        {view.documents.length > 0 && visibleDocuments.length === 0 ? (
+                            <p className="text-ink-2 text-sm">No matching documents.</p>
+                        ) : null}
+                        {visibleDocuments.map(doc => (
                             <div
                                 key={doc.id}
                                 className="border-line flex items-start justify-between gap-3 rounded-lg border p-3"
@@ -275,6 +316,17 @@ export function PersonalContextPanel({ client }: { client: PersonalContextClient
                                         Version {doc.version} · Updated{" "}
                                         {doc.sourceDate.slice(0, 10)}
                                     </p>
+                                    {personal ? (
+                                        <Button variant="link" size="sm" asChild>
+                                            <a
+                                                href={`/api/documents/${doc.id}/versions/${doc.version}/content`}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                            >
+                                                View saved source version
+                                            </a>
+                                        </Button>
+                                    ) : null}
                                 </div>
                                 <Button
                                     variant="outline"
@@ -331,11 +383,12 @@ export function PersonalContextPanel({ client }: { client: PersonalContextClient
                     >
                         <div>
                             <h2 id="coverage-heading" className="text-lg font-semibold">
-                                Required source coverage
+                                {personal ? "Personal source coverage" : "Required source coverage"}
                             </h2>
                             <p className="text-ink-2 text-sm">
-                                Company context is mandatory and separate from your personal stars.
-                                Inclusion means prepared context, not proof that a model used it.
+                                {personal
+                                    ? "This snapshot contains your roles and personal stars. Company context and other required evidence are added separately by the report pipeline."
+                                    : "Company context is mandatory and separate from your personal stars. Inclusion means prepared context, not proof that a model used it."}
                             </p>
                         </div>
                         <ul className="space-y-3">

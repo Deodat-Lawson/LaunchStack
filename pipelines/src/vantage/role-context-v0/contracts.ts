@@ -14,7 +14,7 @@ export interface PersonalStarV0 {
     starredAt: string;
     updatedAt: string;
 }
-/** Proposed storage DTO. No schema/migration or production route is registered. */
+/** Versioned personal state shared by the PostgreSQL adapter and isolated fixtures. */
 export interface PersonalContextStateV0 {
     version: "joseph-personal-context-v0";
     companyId: string;

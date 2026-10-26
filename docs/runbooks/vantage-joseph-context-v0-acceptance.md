@@ -1,63 +1,88 @@
-# Joseph V0 acceptance — 2026-10-26
+# Joseph personal context acceptance — 2026-10-26
 
 Base: `Junkun/vantage-week2-rebuild` at
 `364a3c8bd3b1c5bb2ee45cf66c1ea608b3c44618`.
-Contract: `v0-proposed`; assembler: `v0-assembly-1`.
-See [audit, proposal and handoff](../design/vantage-joseph-context-v0-handoff.md).
+See [implementation and handoff](../design/vantage-joseph-context-v0-handoff.md).
 
 ## Executed checks
 
-| Check                                                                                                                          | Result                          | Boundary                                                                               |
-| ------------------------------------------------------------------------------------------------------------------------------ | ------------------------------- | -------------------------------------------------------------------------------------- |
-| Pipeline Vitest selection: `src/vantage/role-context-v0`, `src/vantage/context-v0`, `src/vantage/proposals/context-v0.test.ts` | 76 passed / 9 files             | 28 new Joseph provider/handoff tests plus 48 shared V0 regressions; synthetic adapters |
-| Web Jest: `--runInBand --testPathPatterns=vantage-personal-context`                                                            | 8 passed / 1 suite              | React interaction tests with fixture provider and synthetic localStorage               |
-| Pipeline TypeScript                                                                                                            | Passed                          | `pnpm --filter @launchstack/pipelines typecheck`                                       |
-| Web TypeScript                                                                                                                 | Passed                          | `pnpm --filter @launchstack/web typecheck`                                             |
-| Changed TypeScript/TSX ESLint                                                                                                  | Passed, no file warnings/errors | Root invocation prints existing React-detection/pages-directory configuration notices  |
-| Changed-file Prettier and `git diff --check`                                                                                   | Passed                          | Source, JSON and handoff docs                                                          |
+| Check                                                                     | Result               | Boundary                                                                           |
+| ------------------------------------------------------------------------- | -------------------- | ---------------------------------------------------------------------------------- |
+| Pipeline Vitest: role-context-v0, context-v0, proposals/context-v0        | 76 passed / 9 files  | Joseph provider and shared TL validator/assembler regressions                      |
+| Real PostgreSQL Jest: personal-context-postgres                           | 14 passed            | Forward migrations, actual transactions, fresh connections, ACL and scoped storage |
+| Web Jest: vantage-tool, personal-context-routes, vantage-personal-context | 38 passed / 3 suites | Navigation, authenticated route handling and React behavior                        |
+| Existing authorization Jest selection                                     | 49 passed            | Permission and document-scope regressions; 8 existing opt-in DB cases skipped      |
+| Web TypeScript                                                            | Passed               | Complete web typecheck                                                             |
+| Changed TypeScript/TSX ESLint                                             | Passed               | Existing root pages-directory notice only                                          |
 
-84 selected automated tests total. No whole-repository test/build claim.
+177 distinct selected tests passed. The separate opt-in authorization DB suite was
+not claimed as run. Joseph's new real PostgreSQL suite was run explicitly.
 
-## Observed browser flow
+## Real database test setup
 
-Local Next development server on `http://127.0.0.1:3001/dev/vantage-context`;
-real browser with **synthetic fixture client**, not authenticated production API.
+A separate local `pgvector/pgvector:pg16` container named
+`launchstack-joseph-context-test-20261026`, port 55439, database
+`joseph_context_test` was created. The normal engine/product forward migrations
+were applied from empty, including the new personal context migration. All test
+users, companies and documents were synthetic. The tests refuse a database URL
+outside that named loopback test instance.
 
-1. Founder and Engineering suggested from synthetic profile title.
-2. Engineering selected as primary; Save roles confirmed persistence and reordered
-   saved priorities. No permission state changed.
-3. January engineering document starred; source 101 version 7, exact character
-   range and included coverage appeared despite its age.
-4. Full reload retained the two roles, primary perspective and star.
-5. Revoked-document scenario hid its title/content, showed Access revoked and
-   blocked readiness.
-6. Removing the unavailable personal star restored readiness.
-7. Missing-company scenario showed a separate mandatory-company error.
-8. Restored normal state and starred the engineering document for review.
+Run after starting/migrating that isolated instance:
 
-Screenshot is saved with the local task outputs as
-`joseph-week2-context-preview.jpg` (synthetic content only). UI tests additionally
-cover double-submission prevention, acknowledged-save/failed-refresh reconciliation,
-failed mutation recovery, role confirmation/remount, and preview labeling.
+```sh
+JOSEPH_CONTEXT_TEST_DATABASE_URL='<isolated test database URL>' \
+  pnpm --filter @launchstack/web test --runInBand --testPathPatterns=personal-context-postgres
+```
 
-Provider tests cover unknown/partial roles, deterministic aliases and primary
-merging, manual correction, actor/workspace/module scoping, atomic stale revisions,
-zero stars, unchanged old sources, missing/revoked/cross-tenant/version/cutoff
-failures, duplicate required/star sources, bounded budgets, timeouts/cancellation,
-adapter outages and independent TL manifest assembly. The assembly test caught and
-corrected the fixture's report-end/asOf mismatch; its passing result uses the
-unchanged shared validator/assembler.
+The suite checks multi-role and primary persistence from a fresh connection,
+workspace-title precedence, confirmed empty selections, two competing revision-0
+writes, old stars, exact updated version text, revoked-title/content exclusion,
+explicit grants, deletion diagnostics, unversioned/oversized extraction rejection,
+cross-workspace denial, suspended memberships, transaction-time CAS validation,
+shared-provider binding, and membership-deletion cascade.
 
-## Explicitly not verified or shipped
+## Browser and database verification
 
-- No production PostgreSQL star/role persistence adapter or migration is installed.
-  The Week 2 Plan requires TL schema review first; the concrete proposal is in the
-  handoff. The fixture store demonstrates scope/CAS but cannot prove SQL isolation.
-- No real authenticated route/client wiring or source/current-state adapter.
-- No actual cross-branch Joseph/Sophia provider or guarded transaction integration.
-- No business data, live LLM, public research, external account connector, deployment
-  or main merge. Existing v1 E2E belongs to TL and was not rerun or claimed here.
+The full LaunchStack application was started against the isolated PostgreSQL DB.
+A synthetic account signed in through the normal sign-in form and opened
+`/employer/documents?feature=vantage&at=%2Fcontext`.
 
-After schema/API approval, Joseph's remaining persistence implementation can target
-`PersonalContextStoreV0`; TL owns final source/ACL/current-state wiring and rerunning
-isolated SQL/auth/browser acceptance. Do not label this prototype production-ready.
+1. My context rendered inside the real Vantage workspace tab.
+2. Founder and Engineering suggestions came from the database profile title.
+3. Saving Engineering as primary called the real authenticated role endpoint.
+4. Starring a January document called the real star endpoint and returned exact
+   version/character coverage and a personal snapshot.
+5. Reopening the screen retained both roles, primary perspective and star at
+   revision 2. A direct query of the isolated database confirmed the same stored
+   roles, mapping version, revision and one personal-star row.
+6. The normal narrow in-app viewport rendered the stacked form without a separate
+   demo banner. Local proof: `outputs/joseph-real-app-context.png` in the task
+   workspace (synthetic content only).
+
+## Release boundaries
+
+The original `/dev/vantage-context` fixture remains available for deliberate fault
+scenarios. It is not the new app entry point or evidence of database persistence.
+The 14 database tests and signed-in full-app exercise provide that evidence.
+
+No hosted/public app deployment or upstream merge is claimed by these tests.
+Personal snapshots do not substitute for the TL's company/retrieval/full report
+integration, live-model tests or guarded commit acceptance. Review the migration
+and deletion-retention choice before applying to a shared deployment.
+
+## Container build and local rollout preflight
+
+The full `apps/web/Dockerfile` production build passed, including Next compilation
+and type validation. The build required the public contract JSON fixture imported
+by the existing dev route and a configurable 4 GB Node build heap. An authenticated
+container test also exposed the internal/public-origin mismatch under port mapping;
+the personal-context routes now validate browser origins against `BETTER_AUTH_URL`,
+with a regression test.
+
+A read-only migration preflight against the original `localhost:3000` database
+refused rollout because it contains `20261011003324_per_link_join_approval`, which
+is absent from the assigned Week 2 branch. The guard was not bypassed: no migration,
+container replacement, database downgrade or data modification was made to that
+existing instance. Its code and the assigned integration branch need reconciliation
+before replacing it. The standalone image is being exercised on `localhost:3002`
+against the separate synthetic PostgreSQL database.

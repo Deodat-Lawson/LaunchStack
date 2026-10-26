@@ -48,16 +48,19 @@ COPY pipelines ./pipelines
 # directory explicitly makes it structural rather than a matter of ignore-file
 # hygiene. Matches apps/worker/Dockerfile, which copies its two apps by name.
 COPY apps/web ./apps/web
+# The development route is still compiled by Next and imports this public contract fixture.
+COPY docs/design/examples/weekly-decision-agenda-v1.json ./docs/design/examples/weekly-decision-agenda-v1.json
 
 ENV SKIP_ENV_VALIDATION=1
 ENV NEXT_TELEMETRY_DISABLED=1
 # Force standalone on Linux (the Next config already enables it on non-
 # Windows, but being explicit keeps the Docker path deterministic).
 ENV STANDALONE_BUILD=1
+ARG NODE_BUILD_MAX_OLD_SPACE_SIZE=4096
 
 
 RUN --mount=type=cache,id=nextjs-cache,target=/app/apps/web/.next/cache \
-    pnpm --filter @launchstack/web build
+    NODE_OPTIONS="--max-old-space-size=${NODE_BUILD_MAX_OLD_SPACE_SIZE}" pnpm --filter @launchstack/web build
 
 # ── Schema sync (migrate) ────────────────────────────────────────────
 # Applies the ordered SQL migrations in packages/store/drizzle — the same

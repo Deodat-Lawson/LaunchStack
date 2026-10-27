@@ -10,6 +10,7 @@ import type { z } from "zod";
 
 import { invokeStructured, resolveChatModel, type ResolveChatModelOptions } from "@launchstack/llm";
 import type { DocumentScope, RagSearchResult } from "@launchstack/retrieval";
+import type { DbClient } from "@launchstack/store/client";
 import { getCompanyIdentity, type CompanyIdentity } from "@launchstack/tools/company-context";
 import {
     findGrants,
@@ -47,6 +48,9 @@ export interface RetrieveArgs {
     scope?: DocumentScope;
 }
 
+/** The locked finalization transaction; metering SQL must not acquire another connection. */
+export type ProposalDebitExecutor = Pick<DbClient, "select" | "insert" | "update">;
+
 export interface ProposalPorts {
     identity(companyId: number): Promise<CompanyIdentity>;
     retrieve(args: RetrieveArgs): Promise<RagSearchResult[]>;
@@ -60,9 +64,12 @@ export interface ProposalPorts {
     searchGrants(query: GrantSearchQuery): Promise<GrantSearchResult>;
     /** A funder's page as readable text; null in hosts without egress. */
     fetchPage: ((url: string) => Promise<{ title: string | null; text: string }>) | null;
-    /** Host-owned metering; null records nothing. */
+    /** Host-owned metering in the supplied transaction; null records nothing. */
     debitCredits:
-        | ((args: { amount: number; description: string; referenceId: string }) => Promise<void>)
+        | ((
+              args: { amount: number; description: string; referenceId: string },
+              executor: ProposalDebitExecutor
+          ) => Promise<void>)
         | null;
     now(): Date;
 }

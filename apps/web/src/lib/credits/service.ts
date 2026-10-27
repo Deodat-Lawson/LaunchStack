@@ -4,6 +4,7 @@
  */
 
 import { eq, sql, and, gte, lte, desc } from "drizzle-orm";
+import type { DbClient } from "@launchstack/store/client";
 import { db } from "~/server/db";
 import { tokenAccounts, tokenTransactions, tokenUsageDaily, tokenGrants } from "~/server/db/schema";
 import type { TokenService } from "./costs";
@@ -11,10 +12,16 @@ import type { TokenService } from "./costs";
 // ensureTokenAccount can run before createEngine has populated that slot.
 import { isMeteringEnforced } from "~/server/deployment";
 
+/** Either the app client or the transaction that owns the metered operation. */
+export type CreditsExecutor = Pick<DbClient, "select" | "insert" | "update">;
+
 // ── Balance ─────────────────────────────────────────────────────────
 
-export async function getBalance(companyId: bigint): Promise<number> {
-    const [account] = await db
+export async function getBalance(
+    companyId: bigint,
+    executor: CreditsExecutor = db
+): Promise<number> {
+    const [account] = await executor
         .select({ balance: tokenAccounts.balanceTokens })
         .from(tokenAccounts)
         .where(eq(tokenAccounts.companyId, companyId));
@@ -30,12 +37,15 @@ export async function getBalance(companyId: bigint): Promise<number> {
  * notional grant would be theatre: nothing enforces the balance and nothing
  * can top it up.
  */
-export async function ensureTokenAccount(companyId: bigint): Promise<number> {
-    const balance = await getBalance(companyId);
+export async function ensureTokenAccount(
+    companyId: bigint,
+    executor: CreditsExecutor = db
+): Promise<number> {
+    const balance = await getBalance(companyId, executor);
     if (balance > 0) return balance;
 
     // Check if account exists with zero balance vs doesn't exist at all
-    const [account] = await db
+    const [account] = await executor
         .select({ id: tokenAccounts.id })
         .from(tokenAccounts)
         .where(eq(tokenAccounts.companyId, companyId));
@@ -48,7 +58,7 @@ export async function ensureTokenAccount(companyId: bigint): Promise<number> {
         // "signup_bonus: +0 tokens" transaction, which is ledger noise for a
         // grant that did not happen. onConflictDoNothing covers the race with
         // a concurrent debit doing the same thing.
-        await db
+        await executor
             .insert(tokenAccounts)
             .values({ companyId, balanceTokens: 0 })
             .onConflictDoNothing({ target: tokenAccounts.companyId });
@@ -56,7 +66,7 @@ export async function ensureTokenAccount(companyId: bigint): Promise<number> {
     }
 
     const { TOKEN_SIGNUP_BONUS } = await import("./costs");
-    const { balance: newBalance } = await initTokenAccount(companyId, TOKEN_SIGNUP_BONUS);
+    const { balance: newBalance } = await initTokenAccount(companyId, TOKEN_SIGNUP_BONUS, executor);
     console.log(
         `[Tokens] Auto-provisioned ${TOKEN_SIGNUP_BONUS.toLocaleString()} tokens for company ${companyId}`
     );
@@ -97,8 +107,11 @@ export interface DebitOptions {
  * Atomically debit tokens from a company's account.
  * Returns the new balance, or null if insufficient tokens.
  */
-export async function debitTokens(opts: DebitOptions): Promise<{ newBalance: number } | null> {
-    if (opts.amount <= 0) return { newBalance: await getBalance(opts.companyId) };
+export async function debitTokens(
+    opts: DebitOptions,
+    executor: CreditsExecutor = db
+): Promise<{ newBalance: number } | null> {
+    if (opts.amount <= 0) return { newBalance: await getBalance(opts.companyId, executor) };
 
     // Default to this deployment's policy. Every caller that merely wants to
     // record usage — the credits port, and the chat route, which debits
@@ -110,18 +123,16 @@ export async function debitTokens(opts: DebitOptions): Promise<{ newBalance: num
         lifetimeTokensUsed: sql`${tokenAccounts.lifetimeTokensUsed} + ${opts.amount}`,
     };
 
-    // The enforcing branch is kept byte-for-byte as it was: the `gte` conjunct
-    // is what makes the debit atomic against a concurrent one, and it is the
-    // only thing protecting a billed balance from being overdrawn. The two
-    // modes deliberately do not share a code path through `.where()`.
+    // Enforced balances keep the gte guard, so concurrent debits cannot
+    // overdraw. Recording deliberately uses a separate, unguarded branch.
     const runUpdate = () =>
         allowNegative
-            ? db
+            ? executor
                   .update(tokenAccounts)
                   .set(set)
                   .where(eq(tokenAccounts.companyId, opts.companyId))
                   .returning({ newBalance: tokenAccounts.balanceTokens })
-            : db
+            : executor
                   .update(tokenAccounts)
                   .set(set)
                   .where(
@@ -140,7 +151,7 @@ export async function debitTokens(opts: DebitOptions): Promise<{ newBalance: num
         // a workspace that predates the ledger, whose row `hasTokens` used to
         // create as a side effect of the balance check we no longer run.
         // Create it and retry once, or this workspace records nothing, ever.
-        await ensureTokenAccount(opts.companyId);
+        await ensureTokenAccount(opts.companyId, executor);
         result = await runUpdate();
     }
 
@@ -151,7 +162,7 @@ export async function debitTokens(opts: DebitOptions): Promise<{ newBalance: num
     const newBalance = result[0]!.newBalance;
 
     // Log transaction
-    await db.insert(tokenTransactions).values({
+    await executor.insert(tokenTransactions).values({
         companyId: opts.companyId,
         type: "debit",
         amount: -opts.amount,
@@ -164,7 +175,7 @@ export async function debitTokens(opts: DebitOptions): Promise<{ newBalance: num
 
     // Update daily aggregation (upsert)
     const today = new Date().toISOString().slice(0, 10);
-    await db
+    await executor
         .insert(tokenUsageDaily)
         .values({
             companyId: opts.companyId,
@@ -197,9 +208,12 @@ export interface GrantOptions {
 /**
  * Grant tokens to a company. Creates the token account if it doesn't exist.
  */
-export async function grantTokens(opts: GrantOptions): Promise<{ newBalance: number }> {
+export async function grantTokens(
+    opts: GrantOptions,
+    executor: CreditsExecutor = db
+): Promise<{ newBalance: number }> {
     // Upsert token account
-    const result = await db
+    const result = await executor
         .insert(tokenAccounts)
         .values({
             companyId: opts.companyId,
@@ -218,7 +232,7 @@ export async function grantTokens(opts: GrantOptions): Promise<{ newBalance: num
     const newBalance = result[0]!.newBalance;
 
     // Log grant record
-    await db.insert(tokenGrants).values({
+    await executor.insert(tokenGrants).values({
         companyId: opts.companyId,
         grantType: opts.grantType,
         amount: opts.amount,
@@ -227,7 +241,7 @@ export async function grantTokens(opts: GrantOptions): Promise<{ newBalance: num
     });
 
     // Log transaction
-    await db.insert(tokenTransactions).values({
+    await executor.insert(tokenTransactions).values({
         companyId: opts.companyId,
         type: "grant",
         amount: opts.amount,
@@ -284,13 +298,17 @@ export async function getTransactionHistory(companyId: bigint, limit = 50) {
  */
 export async function initTokenAccount(
     companyId: bigint,
-    signupBonus: number
+    signupBonus: number,
+    executor: CreditsExecutor = db
 ): Promise<{ balance: number }> {
-    const { newBalance } = await grantTokens({
-        companyId,
-        amount: signupBonus,
-        grantType: "signup_bonus",
-        grantedBy: "system",
-    });
+    const { newBalance } = await grantTokens(
+        {
+            companyId,
+            amount: signupBonus,
+            grantType: "signup_bonus",
+            grantedBy: "system",
+        },
+        executor
+    );
     return { balance: newBalance };
 }

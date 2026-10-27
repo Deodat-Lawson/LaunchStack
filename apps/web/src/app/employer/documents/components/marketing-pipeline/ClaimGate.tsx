@@ -25,12 +25,16 @@ export function isClaimGateBody(
     );
 }
 
-/** How each verdict looks: only "supported" is green, and nothing shows a score. */
+/**
+ * How each verdict looks: a coloured rule on a neutral row (only "supported"
+ * is green, nothing shows a score). Filled tiles in three colours made a
+ * list of five claims the loudest thing on the screen.
+ */
 export const SUPPORT_TONE: Record<ClaimSupportUI, string> = {
-    supported: "bg-success-soft",
-    contradicted: "bg-danger-soft",
-    unsupported: "bg-warn-soft",
-    unchecked: "bg-warn-soft",
+    supported: "border-l-success",
+    contradicted: "border-l-danger",
+    unsupported: "border-l-warn",
+    unchecked: "border-l-warn",
 };
 
 export function claimVerdict(

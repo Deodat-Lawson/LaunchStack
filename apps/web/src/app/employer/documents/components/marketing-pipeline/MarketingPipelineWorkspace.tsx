@@ -17,6 +17,7 @@ import {
     FileText,
     Gauge,
     Hash,
+    History,
     Loader2,
     Megaphone,
     MessageSquareText,
@@ -30,6 +31,7 @@ import {
 } from "lucide-react";
 import { cn } from "~/lib/utils";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "~/components/ui/sheet";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { RewriteWorkflow } from "~/app/employer/documents/components/generator/RewriteWorkflow";
 import styles from "~/styles/Employer/MarketingPipeline.module.css";
 import {
@@ -715,12 +717,15 @@ function PipelineStagesPanel({ stages }: { stages: PipelineStagesUI }) {
 function ClaimSourcesPanel({
     claims,
     unavailable,
+    defaultOpen = false,
 }: {
     claims: ClaimSourceUI[];
     unavailable?: boolean;
+    /** Open on its own tab, where the claims are the point; collapsed elsewhere. */
+    defaultOpen?: boolean;
 }) {
     const t = useTranslations("growth.marketingPipeline.claims");
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState(defaultOpen);
 
     if (unavailable) {
         return (
@@ -751,7 +756,7 @@ function ClaimSourcesPanel({
                         <div
                             key={i}
                             className={cn(
-                                "mb-2 rounded-md p-2 text-[0.8125rem]",
+                                "border-line-2 bg-panel-2 mb-2 rounded-md border border-l-[3px] px-3 py-2 text-[0.8125rem]",
                                 SUPPORT_TONE[claim.support]
                             )}
                         >
@@ -1226,6 +1231,9 @@ export function MarketingPipelineWorkspace({
     const tc = useTranslations("common.actions");
     const format = useFormatter();
     const [debugOpen, setDebugOpen] = useState(false);
+    // Which part of a finished run is showing. A new result opens on the draft.
+    const [resultTab, setResultTab] = useState("draft");
+    const [historyOpen, setHistoryOpen] = useState(false);
     const [confirmNewCampaign, setConfirmNewCampaign] = useState(false);
 
     const {
@@ -1284,6 +1292,10 @@ export function MarketingPipelineWorkspace({
         setContentType,
     } = useMarketingPipelineController({ debug });
 
+    useEffect(() => {
+        setResultTab("draft");
+    }, [result]);
+
     const hasSessions = sessions.length > 0;
     const platformLabel = result
         ? PLATFORM_OPTIONS.find(p => p.id === result.platform)?.label
@@ -1301,6 +1313,28 @@ export function MarketingPipelineWorkspace({
         setConfirmNewCampaign(false);
         handleStartNewSession();
     };
+
+    // What the run is doing (and did): the live progress while it runs, and the
+    // "Process" tab afterwards, so the steps stay one click away instead of
+    // pushing the draft down the page.
+    const progressView = (
+        <>
+            {thinkingLog.length > 0 && (
+                <ThinkingStream entries={thinkingLog} isGenerating={loading} />
+            )}
+            {pipelineSteps.length > 0 && (
+                <PipelineStepper
+                    steps={pipelineSteps}
+                    generationStartTime={generationStartTime}
+                    isComplete={!loading && pipelineSteps.some(s => s.status !== "pending")}
+                />
+            )}
+        </>
+    );
+    const claimsToReview = result
+        ? (result.claimSources ?? []).filter(c => c.support !== "supported").length +
+          (result.claimCheckUnavailable ? 1 : 0)
+        : 0;
 
     return (
         <div
@@ -1362,14 +1396,18 @@ export function MarketingPipelineWorkspace({
                 </section>
             ) : (
                 <section className={styles.mainContent}>
-                    <div
-                        className={
-                            hasSessions ? styles.workspaceLayout : styles.workspaceLayoutSingle
-                        }
-                    >
-                        {/* Fix 5: Only show sidebar when sessions exist */}
-                        {hasSessions && (
-                            <aside className={styles.sessionSidebar}>
+                    <div className={styles.workspaceLayoutSingle}>
+                        {/* Past campaigns live in a drawer opened from the header, not a
+                            permanent column: the column took 270px from the draft on every
+                            visit to help on the few where you go back to an old one. */}
+                        <Sheet open={historyOpen} onOpenChange={setHistoryOpen}>
+                            <SheetContent
+                                side="left"
+                                className="flex w-full flex-col gap-0 overflow-hidden p-0 sm:max-w-sm"
+                            >
+                                <SheetHeader className="sr-only">
+                                    <SheetTitle>{t("workspace.sessions")}</SheetTitle>
+                                </SheetHeader>
                                 <div className={styles.sessionPanel}>
                                     <div className={styles.sessionPanelHeader}>
                                         <h3 className={styles.sessionPanelTitle}>
@@ -1378,7 +1416,10 @@ export function MarketingPipelineWorkspace({
                                         <button
                                             type="button"
                                             className={styles.newSessionButton}
-                                            onClick={handleNewCampaignClick}
+                                            onClick={() => {
+                                                setHistoryOpen(false);
+                                                handleNewCampaignClick();
+                                            }}
                                         >
                                             <Plus size={12} />
                                             {t("workspace.new")}
@@ -1394,7 +1435,10 @@ export function MarketingPipelineWorkspace({
                                                         ? styles.sessionItemActive
                                                         : ""
                                                 }`}
-                                                onClick={() => handleSelectSession(session)}
+                                                onClick={() => {
+                                                    handleSelectSession(session);
+                                                    setHistoryOpen(false);
+                                                }}
                                             >
                                                 <span className={styles.sessionItemTitle}>
                                                     {session.prompt
@@ -1419,13 +1463,11 @@ export function MarketingPipelineWorkspace({
                                         ))}
                                     </div>
                                 </div>
-                            </aside>
-                        )}
+                            </SheetContent>
+                        </Sheet>
 
                         <section className={styles.workspaceShell}>
-                            <div
-                                className={`${styles.workspaceMain} ${styles.workspaceMainSingle}`}
-                            >
+                            <div className={styles.studio}>
                                 {!embedded && (
                                     <div className={styles.workspaceMainHeader}>
                                         <MessageSquareText
@@ -1437,7 +1479,7 @@ export function MarketingPipelineWorkspace({
                                         </h2>
                                     </div>
                                 )}
-                                <div className={styles.workspaceLeft}>
+                                <div className={styles.studioControls}>
                                     <header className={styles.workspaceLeftHeader}>
                                         <div className={styles.selectedPlatformPill}>
                                             {selectedPlatform && (
@@ -1451,15 +1493,30 @@ export function MarketingPipelineWorkspace({
                                                 {selectedPlatform?.label}
                                             </span>
                                         </div>
-                                        {/* Fix 7: Renamed to "New campaign" with confirmation */}
-                                        <button
-                                            type="button"
-                                            className={styles.changePlatformButton}
-                                            onClick={handleNewCampaignClick}
-                                        >
-                                            <Plus size={14} />
-                                            {t("workspace.newCampaign")}
-                                        </button>
+                                        <div className={styles.workspaceHeaderActions}>
+                                            {hasSessions && (
+                                                <button
+                                                    type="button"
+                                                    className={styles.changePlatformButton}
+                                                    onClick={() => setHistoryOpen(true)}
+                                                    aria-haspopup="dialog"
+                                                >
+                                                    <History size={14} />
+                                                    {t("workspace.history", {
+                                                        count: sessions.length,
+                                                    })}
+                                                </button>
+                                            )}
+                                            {/* Fix 7: Renamed to "New campaign" with confirmation */}
+                                            <button
+                                                type="button"
+                                                className={styles.changePlatformButton}
+                                                onClick={handleNewCampaignClick}
+                                            >
+                                                <Plus size={14} />
+                                                {t("workspace.newCampaign")}
+                                            </button>
+                                        </div>
                                     </header>
 
                                     {/* Fix 7: Confirmation dialog */}
@@ -1585,623 +1642,571 @@ export function MarketingPipelineWorkspace({
                                             )}
                                         </div>
                                     </div>
-                                    <div className={styles.assistantContent}>
-                                        {thinkingLog.length > 0 && (
-                                            <ThinkingStream
-                                                entries={thinkingLog}
-                                                isGenerating={loading}
-                                            />
-                                        )}
-                                        {pipelineSteps.length > 0 && (
-                                            <PipelineStepper
-                                                steps={pipelineSteps}
-                                                generationStartTime={generationStartTime}
-                                                isComplete={
-                                                    !loading &&
-                                                    pipelineSteps.some(s => s.status !== "pending")
-                                                }
-                                            />
-                                        )}
-
-                                        {result && !loading && (
-                                            <div className={styles.assistantResult}>
-                                                <div className={styles.assistantSectionHeader}>
-                                                    {t("workspace.draft")}
-                                                </div>
-                                                <div className={styles.platformPreviewCard}>
-                                                    <div className={styles.platformPreviewHeader}>
-                                                        <span
-                                                            className={`${styles.platformPreviewBadge} ${
-                                                                result.platform === "reddit"
-                                                                    ? styles.platformPreviewBadgeReddit
-                                                                    : result.platform === "x"
-                                                                      ? styles.platformPreviewBadgeX
-                                                                      : result.platform ===
-                                                                          "linkedin"
-                                                                        ? styles.platformPreviewBadgeLinkedin
-                                                                        : styles.platformPreviewBadgeBluesky
-                                                            }`}
-                                                        >
-                                                            <PreviewBadgeMark
-                                                                platform={result.platform}
-                                                            />
+                                </div>
+                                <div className={styles.studioOutput}>
+                                    {result && !loading ? (
+                                        <Tabs
+                                            value={resultTab}
+                                            onValueChange={setResultTab}
+                                            className={styles.resultTabs}
+                                        >
+                                            <div className={styles.resultTabBar}>
+                                                <TabsList className={styles.resultTabList}>
+                                                    <TabsTrigger value="draft">
+                                                        {t("workspace.tabs.draft")}
+                                                    </TabsTrigger>
+                                                    <TabsTrigger value="claims">
+                                                        {t("workspace.tabs.claims")}
+                                                        {claimsToReview > 0 && (
+                                                            <span className={styles.tabBadge}>
+                                                                {claimsToReview}
+                                                            </span>
+                                                        )}
+                                                    </TabsTrigger>
+                                                    <TabsTrigger value="strategy">
+                                                        {t("workspace.tabs.strategy")}
+                                                    </TabsTrigger>
+                                                    <TabsTrigger value="research">
+                                                        {t("workspace.tabs.research")}
+                                                        <span className={styles.tabCount}>
+                                                            {(result.research ?? []).length}
                                                         </span>
-                                                        <span
-                                                            className={styles.platformPreviewLabel}
-                                                        >
-                                                            {t("workspace.preview", {
-                                                                platform:
-                                                                    PLATFORM_OPTIONS.find(
-                                                                        p =>
-                                                                            p.id === result.platform
-                                                                    )?.label ?? result.platform,
-                                                            })}
-                                                        </span>
-                                                        <button
-                                                            type="button"
-                                                            className={styles.viewModeToggle}
-                                                            onClick={() =>
-                                                                setViewMode(m =>
-                                                                    m === "preview"
-                                                                        ? "edit"
-                                                                        : "preview"
-                                                                )
-                                                            }
-                                                            title={
-                                                                viewMode === "preview"
-                                                                    ? tc("edit")
-                                                                    : tc("preview")
-                                                            }
-                                                        >
-                                                            <Pencil size={14} />
-                                                        </button>
+                                                    </TabsTrigger>
+                                                    <TabsTrigger value="process">
+                                                        {t("workspace.tabs.process")}
+                                                    </TabsTrigger>
+                                                    {showDnaDebugSection && result.dnaDebug && (
+                                                        <TabsTrigger value="debug">
+                                                            {t("workspace.tabs.debug")}
+                                                        </TabsTrigger>
+                                                    )}
+                                                </TabsList>
+                                            </div>
+                                            <TabsContent
+                                                value="draft"
+                                                className={styles.resultPanel}
+                                            >
+                                                <div className={styles.assistantResult}>
+                                                    <div className={styles.assistantSectionHeader}>
+                                                        {t("workspace.draft")}
                                                     </div>
-                                                    <div className={styles.platformPreviewBody}>
-                                                        {viewMode === "preview" ? (
-                                                            <ReactMarkdown
-                                                                remarkPlugins={[remarkGfm]}
+                                                    <div className={styles.platformPreviewCard}>
+                                                        <div
+                                                            className={styles.platformPreviewHeader}
+                                                        >
+                                                            <span
+                                                                className={`${styles.platformPreviewBadge} ${
+                                                                    result.platform === "reddit"
+                                                                        ? styles.platformPreviewBadgeReddit
+                                                                        : result.platform === "x"
+                                                                          ? styles.platformPreviewBadgeX
+                                                                          : result.platform ===
+                                                                              "linkedin"
+                                                                            ? styles.platformPreviewBadgeLinkedin
+                                                                            : styles.platformPreviewBadgeBluesky
+                                                                }`}
                                                             >
-                                                                {editableMessage}
-                                                            </ReactMarkdown>
-                                                        ) : (
-                                                            <textarea
+                                                                <PreviewBadgeMark
+                                                                    platform={result.platform}
+                                                                />
+                                                            </span>
+                                                            <span
                                                                 className={
-                                                                    styles.editableMessageTextarea
+                                                                    styles.platformPreviewLabel
                                                                 }
-                                                                value={editableMessage}
-                                                                onChange={e =>
-                                                                    setEditableMessage(
-                                                                        e.target.value
+                                                            >
+                                                                {t("workspace.preview", {
+                                                                    platform:
+                                                                        PLATFORM_OPTIONS.find(
+                                                                            p =>
+                                                                                p.id ===
+                                                                                result.platform
+                                                                        )?.label ?? result.platform,
+                                                                })}
+                                                            </span>
+                                                            <button
+                                                                type="button"
+                                                                className={styles.viewModeToggle}
+                                                                onClick={() =>
+                                                                    setViewMode(m =>
+                                                                        m === "preview"
+                                                                            ? "edit"
+                                                                            : "preview"
                                                                     )
                                                                 }
-                                                                placeholder={t(
-                                                                    "workspace.messagePlaceholder"
-                                                                )}
-                                                            />
-                                                        )}
+                                                                title={
+                                                                    viewMode === "preview"
+                                                                        ? tc("edit")
+                                                                        : tc("preview")
+                                                                }
+                                                            >
+                                                                <Pencil size={14} />
+                                                            </button>
+                                                        </div>
+                                                        <div className={styles.platformPreviewBody}>
+                                                            {viewMode === "preview" ? (
+                                                                <ReactMarkdown
+                                                                    remarkPlugins={[remarkGfm]}
+                                                                >
+                                                                    {editableMessage}
+                                                                </ReactMarkdown>
+                                                            ) : (
+                                                                <textarea
+                                                                    className={
+                                                                        styles.editableMessageTextarea
+                                                                    }
+                                                                    value={editableMessage}
+                                                                    onChange={e =>
+                                                                        setEditableMessage(
+                                                                            e.target.value
+                                                                        )
+                                                                    }
+                                                                    placeholder={t(
+                                                                        "workspace.messagePlaceholder"
+                                                                    )}
+                                                                />
+                                                            )}
+                                                        </div>
                                                     </div>
-                                                </div>
 
-                                                {/* Fix 4: Button hierarchy -- tertiary / secondary / primary */}
-                                                <div className={styles.draftActions}>
-                                                    <button
-                                                        type="button"
-                                                        className={styles.actionTertiary}
-                                                        onClick={handlePushToRewriteDocument}
-                                                        disabled={!editableMessage.trim()}
-                                                        title={t("workspace.saveAsDocTitle")}
-                                                    >
-                                                        <FileText size={14} />
-                                                        {t("workspace.saveAsDoc")}
-                                                    </button>
-                                                    <button
-                                                        type="button"
-                                                        className={styles.actionSecondary}
-                                                        onClick={() =>
-                                                            setShowRewriteSheet(open => !open)
-                                                        }
-                                                        disabled={!editableMessage.trim()}
-                                                    >
-                                                        <Sparkles size={14} />
-                                                        {showRewriteSheet
-                                                            ? t("workspace.hideRewrite")
-                                                            : t("workspace.refine")}
-                                                    </button>
-                                                    <button
-                                                        type="button"
-                                                        className={styles.actionSecondary}
-                                                        onClick={handleCopy}
-                                                        disabled={!editableMessage.trim()}
-                                                    >
-                                                        <Copy size={14} />
-                                                        {copySuccess
-                                                            ? t("workspace.copied")
-                                                            : t("workspace.copyTo", {
-                                                                  platform:
-                                                                      platformLabel ??
-                                                                      t("workspace.platform"),
-                                                              })}
-                                                    </button>
-                                                    <button
-                                                        type="button"
-                                                        className={styles.actionSecondary}
-                                                        onClick={() => void evaluatePost()}
-                                                        disabled={
-                                                            !editableMessage.trim() || evaluating
-                                                        }
-                                                        title={t("workspace.evaluateTitle")}
-                                                    >
-                                                        {evaluating ? (
-                                                            <Loader2
-                                                                size={14}
-                                                                className={styles.spinIcon}
-                                                            />
-                                                        ) : (
-                                                            <Gauge size={14} />
-                                                        )}
-                                                        {evaluating
-                                                            ? t("workspace.scoring")
-                                                            : t("workspace.evaluate")}
-                                                    </button>
-                                                    {onSchedule && result.platform && (
+                                                    {/* Fix 4: Button hierarchy -- tertiary / secondary / primary */}
+                                                    <div className={styles.draftActions}>
+                                                        <button
+                                                            type="button"
+                                                            className={styles.actionTertiary}
+                                                            onClick={handlePushToRewriteDocument}
+                                                            disabled={!editableMessage.trim()}
+                                                            title={t("workspace.saveAsDocTitle")}
+                                                        >
+                                                            <FileText size={14} />
+                                                            {t("workspace.saveAsDoc")}
+                                                        </button>
                                                         <button
                                                             type="button"
                                                             className={styles.actionSecondary}
                                                             onClick={() =>
-                                                                onSchedule({
-                                                                    platform: result.platform,
-                                                                    message: editableMessage,
-                                                                })
+                                                                setShowRewriteSheet(open => !open)
                                                             }
                                                             disabled={!editableMessage.trim()}
-                                                            title={t("workspace.scheduleTitle")}
                                                         >
-                                                            <CalendarClock size={14} />
-                                                            {t("workspace.schedule")}
+                                                            <Sparkles size={14} />
+                                                            {showRewriteSheet
+                                                                ? t("workspace.hideRewrite")
+                                                                : t("workspace.refine")}
                                                         </button>
-                                                    )}
-                                                    <button
-                                                        type="button"
-                                                        className={styles.actionPrimary}
-                                                        onClick={() => void publishPost()}
-                                                        disabled={
-                                                            !editableMessage.trim() || publishing
-                                                        }
-                                                        title={t("workspace.publishTitle", {
-                                                            platform:
-                                                                platformLabel ??
-                                                                t("workspace.thePlatform"),
-                                                        })}
-                                                    >
-                                                        {publishing ? (
-                                                            <Loader2
-                                                                size={14}
-                                                                className={styles.spinIcon}
-                                                            />
-                                                        ) : (
-                                                            <Send size={14} />
+                                                        <button
+                                                            type="button"
+                                                            className={styles.actionSecondary}
+                                                            onClick={handleCopy}
+                                                            disabled={!editableMessage.trim()}
+                                                        >
+                                                            <Copy size={14} />
+                                                            {copySuccess
+                                                                ? t("workspace.copied")
+                                                                : t("workspace.copyTo", {
+                                                                      platform:
+                                                                          platformLabel ??
+                                                                          t("workspace.platform"),
+                                                                  })}
+                                                        </button>
+                                                        <button
+                                                            type="button"
+                                                            className={styles.actionSecondary}
+                                                            onClick={() => void evaluatePost()}
+                                                            disabled={
+                                                                !editableMessage.trim() ||
+                                                                evaluating
+                                                            }
+                                                            title={t("workspace.evaluateTitle")}
+                                                        >
+                                                            {evaluating ? (
+                                                                <Loader2
+                                                                    size={14}
+                                                                    className={styles.spinIcon}
+                                                                />
+                                                            ) : (
+                                                                <Gauge size={14} />
+                                                            )}
+                                                            {evaluating
+                                                                ? t("workspace.scoring")
+                                                                : t("workspace.evaluate")}
+                                                        </button>
+                                                        {onSchedule && result.platform && (
+                                                            <button
+                                                                type="button"
+                                                                className={styles.actionSecondary}
+                                                                onClick={() =>
+                                                                    onSchedule({
+                                                                        platform: result.platform,
+                                                                        message: editableMessage,
+                                                                    })
+                                                                }
+                                                                disabled={!editableMessage.trim()}
+                                                                title={t("workspace.scheduleTitle")}
+                                                            >
+                                                                <CalendarClock size={14} />
+                                                                {t("workspace.schedule")}
+                                                            </button>
                                                         )}
-                                                        {publishing
-                                                            ? t("workspace.publishing")
-                                                            : t("workspace.publishTo", {
-                                                                  platform:
-                                                                      platformLabel ??
-                                                                      t("workspace.platform"),
-                                                              })}
-                                                    </button>
-                                                </div>
-
-                                                {evalError && (
-                                                    <div
-                                                        role="status"
-                                                        style={{
-                                                            marginTop: 10,
-                                                            display: "flex",
-                                                            alignItems: "center",
-                                                            gap: 8,
-                                                            fontSize: 13,
-                                                            color: "var(--danger)",
-                                                        }}
-                                                    >
-                                                        <AlertCircle size={15} />
-                                                        <span>{evalError}</span>
+                                                        <button
+                                                            type="button"
+                                                            className={styles.actionPrimary}
+                                                            onClick={() => void publishPost()}
+                                                            disabled={
+                                                                !editableMessage.trim() ||
+                                                                publishing
+                                                            }
+                                                            title={t("workspace.publishTitle", {
+                                                                platform:
+                                                                    platformLabel ??
+                                                                    t("workspace.thePlatform"),
+                                                            })}
+                                                        >
+                                                            {publishing ? (
+                                                                <Loader2
+                                                                    size={14}
+                                                                    className={styles.spinIcon}
+                                                                />
+                                                            ) : (
+                                                                <Send size={14} />
+                                                            )}
+                                                            {publishing
+                                                                ? t("workspace.publishing")
+                                                                : t("workspace.publishTo", {
+                                                                      platform:
+                                                                          platformLabel ??
+                                                                          t("workspace.platform"),
+                                                                  })}
+                                                        </button>
                                                     </div>
-                                                )}
 
-                                                {evalResult && (
-                                                    <div
-                                                        style={{
-                                                            marginTop: 12,
-                                                            padding: 14,
-                                                            borderRadius: 10,
-                                                            border: "1px solid var(--line)",
-                                                            background: "var(--panel-2)",
-                                                        }}
-                                                    >
+                                                    {evalError && (
                                                         <div
+                                                            role="status"
                                                             style={{
+                                                                marginTop: 10,
                                                                 display: "flex",
-                                                                alignItems: "baseline",
-                                                                justifyContent: "space-between",
-                                                                marginBottom: 10,
+                                                                alignItems: "center",
+                                                                gap: 8,
+                                                                fontSize: 13,
+                                                                color: "var(--danger)",
                                                             }}
                                                         >
-                                                            <span
+                                                            <AlertCircle size={15} />
+                                                            <span>{evalError}</span>
+                                                        </div>
+                                                    )}
+
+                                                    {evalResult && (
+                                                        <div
+                                                            style={{
+                                                                marginTop: 12,
+                                                                padding: 14,
+                                                                borderRadius: 10,
+                                                                border: "1px solid var(--line)",
+                                                                background: "var(--panel-2)",
+                                                            }}
+                                                        >
+                                                            <div
                                                                 style={{
-                                                                    display: "inline-flex",
-                                                                    alignItems: "center",
-                                                                    gap: 8,
-                                                                    fontSize: 14,
-                                                                    fontWeight: 700,
+                                                                    display: "flex",
+                                                                    alignItems: "baseline",
+                                                                    justifyContent: "space-between",
+                                                                    marginBottom: 10,
                                                                 }}
                                                             >
-                                                                <Gauge size={16} />
-                                                                {t("workspace.qualityScore")}
-                                                            </span>
-                                                            <span
-                                                                style={{
-                                                                    fontSize: 22,
-                                                                    fontWeight: 800,
-                                                                    color: "var(--ink)",
-                                                                }}
-                                                            >
-                                                                {Math.round(evalResult.overall)}
                                                                 <span
                                                                     style={{
-                                                                        fontSize: 13,
-                                                                        fontWeight: 600,
-                                                                        color: "var(--ink-3)",
-                                                                    }}
-                                                                >
-                                                                    /100
-                                                                </span>
-                                                            </span>
-                                                        </div>
-                                                        <div
-                                                            style={{
-                                                                display: "grid",
-                                                                gap: 6,
-                                                                marginBottom: 10,
-                                                            }}
-                                                        >
-                                                            {evalResult.scores.map(s => (
-                                                                <div
-                                                                    key={s.criterion}
-                                                                    title={s.rationale}
-                                                                    style={{
-                                                                        display: "grid",
-                                                                        gridTemplateColumns:
-                                                                            "150px 1fr 34px",
+                                                                        display: "inline-flex",
                                                                         alignItems: "center",
                                                                         gap: 8,
-                                                                        fontSize: 12,
+                                                                        fontSize: 14,
+                                                                        fontWeight: 700,
                                                                     }}
                                                                 >
+                                                                    <Gauge size={16} />
+                                                                    {t("workspace.qualityScore")}
+                                                                </span>
+                                                                <span
+                                                                    style={{
+                                                                        fontSize: 22,
+                                                                        fontWeight: 800,
+                                                                        color: "var(--ink)",
+                                                                    }}
+                                                                >
+                                                                    {Math.round(evalResult.overall)}
                                                                     <span
                                                                         style={{
+                                                                            fontSize: 13,
+                                                                            fontWeight: 600,
                                                                             color: "var(--ink-3)",
                                                                         }}
                                                                     >
-                                                                        {s.criterion.replace(
-                                                                            /_/g,
-                                                                            " "
-                                                                        )}
+                                                                        /100
                                                                     </span>
-                                                                    <span
+                                                                </span>
+                                                            </div>
+                                                            <div
+                                                                style={{
+                                                                    display: "grid",
+                                                                    gap: 6,
+                                                                    marginBottom: 10,
+                                                                }}
+                                                            >
+                                                                {evalResult.scores.map(s => (
+                                                                    <div
+                                                                        key={s.criterion}
+                                                                        title={s.rationale}
                                                                         style={{
-                                                                            height: 6,
-                                                                            borderRadius: 3,
-                                                                            background:
-                                                                                "var(--line)",
-                                                                            position: "relative",
-                                                                            overflow: "hidden",
+                                                                            display: "grid",
+                                                                            gridTemplateColumns:
+                                                                                "150px 1fr 34px",
+                                                                            alignItems: "center",
+                                                                            gap: 8,
+                                                                            fontSize: 12,
                                                                         }}
                                                                     >
                                                                         <span
                                                                             style={{
-                                                                                position:
-                                                                                    "absolute",
-                                                                                inset: 0,
-                                                                                width: `${Math.max(0, Math.min(100, s.score))}%`,
-                                                                                background:
-                                                                                    "var(--accent)",
-                                                                                borderRadius: 3,
+                                                                                color: "var(--ink-3)",
                                                                             }}
-                                                                        />
-                                                                    </span>
-                                                                    <span
-                                                                        className="mono"
-                                                                        style={{
-                                                                            textAlign: "right",
-                                                                            fontSize: 11,
-                                                                            color: "var(--ink)",
-                                                                        }}
-                                                                    >
-                                                                        {Math.round(s.score)}
-                                                                    </span>
+                                                                        >
+                                                                            {s.criterion.replace(
+                                                                                /_/g,
+                                                                                " "
+                                                                            )}
+                                                                        </span>
+                                                                        <span
+                                                                            style={{
+                                                                                height: 6,
+                                                                                borderRadius: 3,
+                                                                                background:
+                                                                                    "var(--line)",
+                                                                                position:
+                                                                                    "relative",
+                                                                                overflow: "hidden",
+                                                                            }}
+                                                                        >
+                                                                            <span
+                                                                                style={{
+                                                                                    position:
+                                                                                        "absolute",
+                                                                                    inset: 0,
+                                                                                    width: `${Math.max(0, Math.min(100, s.score))}%`,
+                                                                                    background:
+                                                                                        "var(--accent)",
+                                                                                    borderRadius: 3,
+                                                                                }}
+                                                                            />
+                                                                        </span>
+                                                                        <span
+                                                                            className="mono"
+                                                                            style={{
+                                                                                textAlign: "right",
+                                                                                fontSize: 11,
+                                                                                color: "var(--ink)",
+                                                                            }}
+                                                                        >
+                                                                            {Math.round(s.score)}
+                                                                        </span>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                            {evalResult.summary && (
+                                                                <div
+                                                                    style={{
+                                                                        fontSize: 12.5,
+                                                                        color: "var(--ink-3)",
+                                                                        lineHeight: 1.5,
+                                                                        marginBottom: 6,
+                                                                    }}
+                                                                >
+                                                                    {evalResult.summary}
                                                                 </div>
-                                                            ))}
-                                                        </div>
-                                                        {evalResult.summary && (
+                                                            )}
                                                             <div
                                                                 style={{
-                                                                    fontSize: 12.5,
+                                                                    fontSize: 11,
                                                                     color: "var(--ink-3)",
-                                                                    lineHeight: 1.5,
-                                                                    marginBottom: 6,
                                                                 }}
                                                             >
-                                                                {evalResult.summary}
+                                                                {t("workspace.judge", {
+                                                                    model: evalResult.judgeModel,
+                                                                    version:
+                                                                        evalResult.rubricVersion,
+                                                                })}
                                                             </div>
-                                                        )}
+                                                        </div>
+                                                    )}
+
+                                                    {publishResult && (
                                                         <div
+                                                            role="status"
                                                             style={{
-                                                                fontSize: 11,
-                                                                color: "var(--ink-3)",
+                                                                marginTop: 10,
+                                                                display: "flex",
+                                                                alignItems: "center",
+                                                                gap: 8,
+                                                                fontSize: 13,
+                                                                color: publishResult.success
+                                                                    ? "var(--success)"
+                                                                    : "var(--danger)",
                                                             }}
                                                         >
-                                                            {t("workspace.judge", {
-                                                                model: evalResult.judgeModel,
-                                                                version: evalResult.rubricVersion,
-                                                            })}
+                                                            {publishResult.success ? (
+                                                                <>
+                                                                    <Check size={15} />
+                                                                    <span>
+                                                                        {publishResult.channel
+                                                                            ? t(
+                                                                                  "workspace.publishedToAs",
+                                                                                  {
+                                                                                      platform:
+                                                                                          platformLabel ??
+                                                                                          t(
+                                                                                              "workspace.thePlatform"
+                                                                                          ),
+                                                                                      channel:
+                                                                                          publishResult.channel,
+                                                                                  }
+                                                                              )
+                                                                            : t(
+                                                                                  "workspace.publishedTo",
+                                                                                  {
+                                                                                      platform:
+                                                                                          platformLabel ??
+                                                                                          t(
+                                                                                              "workspace.thePlatform"
+                                                                                          ),
+                                                                                  }
+                                                                              )}
+                                                                    </span>
+                                                                    {publishResult.postUrl && (
+                                                                        <a
+                                                                            href={
+                                                                                publishResult.postUrl
+                                                                            }
+                                                                            target="_blank"
+                                                                            rel="noopener noreferrer"
+                                                                            style={{
+                                                                                display:
+                                                                                    "inline-flex",
+                                                                                alignItems:
+                                                                                    "center",
+                                                                                gap: 4,
+                                                                                color: "inherit",
+                                                                                textDecoration:
+                                                                                    "underline",
+                                                                            }}
+                                                                        >
+                                                                            {t(
+                                                                                "workspace.viewPost"
+                                                                            )}{" "}
+                                                                            <ExternalLink
+                                                                                size={12}
+                                                                            />
+                                                                        </a>
+                                                                    )}
+                                                                </>
+                                                            ) : (
+                                                                <>
+                                                                    <AlertCircle size={15} />
+                                                                    <span>
+                                                                        {publishResult.error}
+                                                                    </span>
+                                                                </>
+                                                            )}
                                                         </div>
-                                                    </div>
-                                                )}
+                                                    )}
 
-                                                {publishResult && (
-                                                    <div
-                                                        role="status"
-                                                        style={{
-                                                            marginTop: 10,
-                                                            display: "flex",
-                                                            alignItems: "center",
-                                                            gap: 8,
-                                                            fontSize: 13,
-                                                            color: publishResult.success
-                                                                ? "var(--success)"
-                                                                : "var(--danger)",
-                                                        }}
+                                                    <Sheet
+                                                        open={showRewriteSheet}
+                                                        onOpenChange={setShowRewriteSheet}
                                                     >
-                                                        {publishResult.success ? (
-                                                            <>
-                                                                <Check size={15} />
-                                                                <span>
-                                                                    {publishResult.channel
-                                                                        ? t(
-                                                                              "workspace.publishedToAs",
-                                                                              {
-                                                                                  platform:
-                                                                                      platformLabel ??
-                                                                                      t(
-                                                                                          "workspace.thePlatform"
-                                                                                      ),
-                                                                                  channel:
-                                                                                      publishResult.channel,
-                                                                              }
-                                                                          )
-                                                                        : t(
-                                                                              "workspace.publishedTo",
-                                                                              {
-                                                                                  platform:
-                                                                                      platformLabel ??
-                                                                                      t(
-                                                                                          "workspace.thePlatform"
-                                                                                      ),
-                                                                              }
-                                                                          )}
-                                                                </span>
-                                                                {publishResult.postUrl && (
-                                                                    <a
-                                                                        href={publishResult.postUrl}
-                                                                        target="_blank"
-                                                                        rel="noopener noreferrer"
-                                                                        style={{
-                                                                            display: "inline-flex",
-                                                                            alignItems: "center",
-                                                                            gap: 4,
-                                                                            color: "inherit",
-                                                                            textDecoration:
-                                                                                "underline",
-                                                                        }}
-                                                                    >
-                                                                        {t("workspace.viewPost")}{" "}
-                                                                        <ExternalLink size={12} />
-                                                                    </a>
-                                                                )}
-                                                            </>
-                                                        ) : (
-                                                            <>
-                                                                <AlertCircle size={15} />
-                                                                <span>{publishResult.error}</span>
-                                                            </>
-                                                        )}
-                                                    </div>
-                                                )}
+                                                        <SheetContent
+                                                            forceMount
+                                                            side="right"
+                                                            className="flex w-full flex-col overflow-y-auto p-0 sm:max-w-2xl"
+                                                        >
+                                                            <SheetHeader className="shrink-0 border-b px-6 pt-6 pb-4">
+                                                                <SheetTitle className="text-lg font-semibold">
+                                                                    {t("workspace.refineTitle")}
+                                                                </SheetTitle>
+                                                                <p className="text-ink-3 text-sm">
+                                                                    {t("workspace.refineBody")}
+                                                                </p>
+                                                            </SheetHeader>
+                                                            <div className="flex-1 overflow-y-auto px-6 py-4">
+                                                                <RewriteWorkflow
+                                                                    rewrite={
+                                                                        refineWithCompanyContext
+                                                                    }
+                                                                    initialText={editableMessage}
+                                                                    persistedState={
+                                                                        activeSession?.rewriteWorkflowState
+                                                                    }
+                                                                    onStateChange={
+                                                                        handleRewriteWorkflowStateChange
+                                                                    }
+                                                                    onComplete={
+                                                                        handleRewriteComplete
+                                                                    }
+                                                                    onCancel={() =>
+                                                                        setShowRewriteSheet(false)
+                                                                    }
+                                                                />
+                                                            </div>
+                                                        </SheetContent>
+                                                    </Sheet>
 
-                                                <Sheet
-                                                    open={showRewriteSheet}
-                                                    onOpenChange={setShowRewriteSheet}
-                                                >
-                                                    <SheetContent
-                                                        forceMount
-                                                        side="right"
-                                                        className="flex w-full flex-col overflow-y-auto p-0 sm:max-w-2xl"
-                                                    >
-                                                        <SheetHeader className="shrink-0 border-b px-6 pt-6 pb-4">
-                                                            <SheetTitle className="text-lg font-semibold">
-                                                                {t("workspace.refineTitle")}
-                                                            </SheetTitle>
-                                                            <p className="text-ink-3 text-sm">
-                                                                {t("workspace.refineBody")}
-                                                            </p>
-                                                        </SheetHeader>
-                                                        <div className="flex-1 overflow-y-auto px-6 py-4">
-                                                            <RewriteWorkflow
-                                                                rewrite={refineWithCompanyContext}
-                                                                initialText={editableMessage}
-                                                                persistedState={
-                                                                    activeSession?.rewriteWorkflowState
-                                                                }
-                                                                onStateChange={
-                                                                    handleRewriteWorkflowStateChange
-                                                                }
-                                                                onComplete={handleRewriteComplete}
-                                                                onCancel={() =>
-                                                                    setShowRewriteSheet(false)
-                                                                }
-                                                            />
-                                                        </div>
-                                                    </SheetContent>
-                                                </Sheet>
-
-                                                <VariantStack
-                                                    variants={messageVariants}
-                                                    activeVariantId={activeVariantId}
-                                                    onSelect={selectVariant}
-                                                />
-
-                                                <StrategyInsights
-                                                    strategyUsed={result.strategyUsed}
-                                                    competitiveAngle={result.competitiveAngle}
-                                                />
-
-                                                {result.pipelineStages && (
-                                                    <PipelineStagesPanel
-                                                        stages={result.pipelineStages}
+                                                    <VariantStack
+                                                        variants={messageVariants}
+                                                        activeVariantId={activeVariantId}
+                                                        onSelect={selectVariant}
                                                     />
-                                                )}
-
+                                                </div>
+                                            </TabsContent>
+                                            <TabsContent
+                                                value="claims"
+                                                className={styles.resultPanel}
+                                            >
                                                 {(result.claimCheckUnavailable === true ||
                                                     (result.claimSources?.length ?? 0) > 0) && (
                                                     <ClaimSourcesPanel
                                                         claims={result.claimSources ?? []}
                                                         unavailable={result.claimCheckUnavailable}
+                                                        defaultOpen
                                                     />
                                                 )}
 
-                                                {showDnaDebugSection && result.dnaDebug && (
-                                                    <div
-                                                        style={{
-                                                            marginTop: "1rem",
-                                                            borderTop: "1px solid var(--line)",
-                                                            paddingTop: "0.75rem",
-                                                        }}
-                                                    >
-                                                        <button
-                                                            type="button"
-                                                            onClick={() =>
-                                                                setDebugOpen(prev => !prev)
-                                                            }
-                                                            style={{
-                                                                display: "flex",
-                                                                alignItems: "center",
-                                                                gap: "0.375rem",
-                                                                background: "none",
-                                                                border: "none",
-                                                                cursor: "pointer",
-                                                                padding: 0,
-                                                                fontSize: "0.75rem",
-                                                                fontWeight: 600,
-                                                                color: "var(--ink-3)",
-                                                            }}
-                                                        >
-                                                            {debugOpen ? (
-                                                                <ChevronDown size={14} />
-                                                            ) : (
-                                                                <ChevronRight size={14} />
-                                                            )}
-                                                            {t("workspace.debugDna")}
-                                                            <span
-                                                                style={{
-                                                                    marginLeft: "0.5rem",
-                                                                    padding: "0.125rem 0.5rem",
-                                                                    borderRadius: "9999px",
-                                                                    fontSize: "0.625rem",
-                                                                    fontWeight: 700,
-                                                                    textTransform: "uppercase",
-                                                                    letterSpacing: "0.05em",
-                                                                    background:
-                                                                        result.dnaDebug.source ===
-                                                                        "metadata"
-                                                                            ? "#dcfce7"
-                                                                            : "#fef3c7",
-                                                                    color:
-                                                                        result.dnaDebug.source ===
-                                                                        "metadata"
-                                                                            ? "#166534"
-                                                                            : "#92400e",
-                                                                }}
-                                                            >
-                                                                {result.dnaDebug.source}
-                                                            </span>
-                                                        </button>
+                                                {!result.claimCheckUnavailable &&
+                                                    (result.claimSources ?? []).length === 0 && (
+                                                        <p className={styles.resultEmptyInline}>
+                                                            {t("workspace.noClaims")}
+                                                        </p>
+                                                    )}
+                                            </TabsContent>
+                                            <TabsContent
+                                                value="strategy"
+                                                className={styles.resultPanel}
+                                            >
+                                                <div className={styles.assistantResult}>
+                                                    <StrategyInsights
+                                                        strategyUsed={result.strategyUsed}
+                                                        competitiveAngle={result.competitiveAngle}
+                                                    />
 
-                                                        {debugOpen && (
-                                                            <div
-                                                                style={{
-                                                                    marginTop: "0.5rem",
-                                                                    fontSize: "0.75rem",
-                                                                }}
-                                                            >
-                                                                <div
-                                                                    style={{
-                                                                        fontWeight: 600,
-                                                                        marginBottom: "0.25rem",
-                                                                        color: "var(--ink-3)",
-                                                                    }}
-                                                                >
-                                                                    CompanyDNA
-                                                                </div>
-                                                                <pre
-                                                                    style={{
-                                                                        background:
-                                                                            "var(--panel-2)",
-                                                                        padding: "0.5rem",
-                                                                        borderRadius: "0.375rem",
-                                                                        overflow: "auto",
-                                                                        maxHeight: "12rem",
-                                                                        fontSize: "0.6875rem",
-                                                                        lineHeight: 1.5,
-                                                                    }}
-                                                                >
-                                                                    {JSON.stringify(
-                                                                        result.dnaDebug.dna,
-                                                                        null,
-                                                                        2
-                                                                    )}
-                                                                </pre>
-
-                                                                <div
-                                                                    style={{
-                                                                        fontWeight: 600,
-                                                                        marginTop: "0.5rem",
-                                                                        marginBottom: "0.25rem",
-                                                                        color: "var(--ink-3)",
-                                                                    }}
-                                                                >
-                                                                    {t("workspace.rawContext")}
-                                                                </div>
-                                                                <pre
-                                                                    style={{
-                                                                        background:
-                                                                            "var(--panel-2)",
-                                                                        padding: "0.5rem",
-                                                                        borderRadius: "0.375rem",
-                                                                        overflow: "auto",
-                                                                        maxHeight: "16rem",
-                                                                        fontSize: "0.6875rem",
-                                                                        lineHeight: 1.5,
-                                                                        whiteSpace: "pre-wrap",
-                                                                        wordBreak: "break-word",
-                                                                    }}
-                                                                >
-                                                                    {result.dnaDebug.contextUsed}
-                                                                </pre>
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                )}
-
+                                                    {result.pipelineStages && (
+                                                        <PipelineStagesPanel
+                                                            stages={result.pipelineStages}
+                                                        />
+                                                    )}
+                                                </div>
+                                            </TabsContent>
+                                            <TabsContent
+                                                value="research"
+                                                className={styles.resultPanel}
+                                            >
                                                 <div className={styles.assistantSectionHeader}>
                                                     {t("workspace.trendRefs")}
                                                 </div>
@@ -2246,9 +2251,160 @@ export function MarketingPipelineWorkspace({
                                                         </p>
                                                     )}
                                                 </div>
-                                            </div>
-                                        )}
-                                    </div>
+                                            </TabsContent>
+                                            <TabsContent
+                                                value="process"
+                                                className={styles.resultPanel}
+                                            >
+                                                {progressView}
+                                            </TabsContent>
+                                            {showDnaDebugSection && result.dnaDebug && (
+                                                <TabsContent
+                                                    value="debug"
+                                                    className={styles.resultPanel}
+                                                >
+                                                    {showDnaDebugSection && result.dnaDebug && (
+                                                        <div
+                                                            style={{
+                                                                marginTop: "1rem",
+                                                                borderTop: "1px solid var(--line)",
+                                                                paddingTop: "0.75rem",
+                                                            }}
+                                                        >
+                                                            <button
+                                                                type="button"
+                                                                onClick={() =>
+                                                                    setDebugOpen(prev => !prev)
+                                                                }
+                                                                style={{
+                                                                    display: "flex",
+                                                                    alignItems: "center",
+                                                                    gap: "0.375rem",
+                                                                    background: "none",
+                                                                    border: "none",
+                                                                    cursor: "pointer",
+                                                                    padding: 0,
+                                                                    fontSize: "0.75rem",
+                                                                    fontWeight: 600,
+                                                                    color: "var(--ink-3)",
+                                                                }}
+                                                            >
+                                                                {debugOpen ? (
+                                                                    <ChevronDown size={14} />
+                                                                ) : (
+                                                                    <ChevronRight size={14} />
+                                                                )}
+                                                                {t("workspace.debugDna")}
+                                                                <span
+                                                                    style={{
+                                                                        marginLeft: "0.5rem",
+                                                                        padding: "0.125rem 0.5rem",
+                                                                        borderRadius: "9999px",
+                                                                        fontSize: "0.625rem",
+                                                                        fontWeight: 700,
+                                                                        textTransform: "uppercase",
+                                                                        letterSpacing: "0.05em",
+                                                                        background:
+                                                                            result.dnaDebug
+                                                                                .source ===
+                                                                            "metadata"
+                                                                                ? "#dcfce7"
+                                                                                : "#fef3c7",
+                                                                        color:
+                                                                            result.dnaDebug
+                                                                                .source ===
+                                                                            "metadata"
+                                                                                ? "#166534"
+                                                                                : "#92400e",
+                                                                    }}
+                                                                >
+                                                                    {result.dnaDebug.source}
+                                                                </span>
+                                                            </button>
+
+                                                            {debugOpen && (
+                                                                <div
+                                                                    style={{
+                                                                        marginTop: "0.5rem",
+                                                                        fontSize: "0.75rem",
+                                                                    }}
+                                                                >
+                                                                    <div
+                                                                        style={{
+                                                                            fontWeight: 600,
+                                                                            marginBottom: "0.25rem",
+                                                                            color: "var(--ink-3)",
+                                                                        }}
+                                                                    >
+                                                                        CompanyDNA
+                                                                    </div>
+                                                                    <pre
+                                                                        style={{
+                                                                            background:
+                                                                                "var(--panel-2)",
+                                                                            padding: "0.5rem",
+                                                                            borderRadius:
+                                                                                "0.375rem",
+                                                                            overflow: "auto",
+                                                                            maxHeight: "12rem",
+                                                                            fontSize: "0.6875rem",
+                                                                            lineHeight: 1.5,
+                                                                        }}
+                                                                    >
+                                                                        {JSON.stringify(
+                                                                            result.dnaDebug.dna,
+                                                                            null,
+                                                                            2
+                                                                        )}
+                                                                    </pre>
+
+                                                                    <div
+                                                                        style={{
+                                                                            fontWeight: 600,
+                                                                            marginTop: "0.5rem",
+                                                                            marginBottom: "0.25rem",
+                                                                            color: "var(--ink-3)",
+                                                                        }}
+                                                                    >
+                                                                        {t("workspace.rawContext")}
+                                                                    </div>
+                                                                    <pre
+                                                                        style={{
+                                                                            background:
+                                                                                "var(--panel-2)",
+                                                                            padding: "0.5rem",
+                                                                            borderRadius:
+                                                                                "0.375rem",
+                                                                            overflow: "auto",
+                                                                            maxHeight: "16rem",
+                                                                            fontSize: "0.6875rem",
+                                                                            lineHeight: 1.5,
+                                                                            whiteSpace: "pre-wrap",
+                                                                            wordBreak: "break-word",
+                                                                        }}
+                                                                    >
+                                                                        {
+                                                                            result.dnaDebug
+                                                                                .contextUsed
+                                                                        }
+                                                                    </pre>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    )}
+                                                </TabsContent>
+                                            )}
+                                        </Tabs>
+                                    ) : loading || pipelineSteps.length > 0 ? (
+                                        <div className={styles.assistantContent}>
+                                            {progressView}
+                                        </div>
+                                    ) : (
+                                        <div className={styles.resultEmpty}>
+                                            <MessageSquareText size={18} />
+                                            <p>{t("workspace.emptyResult")}</p>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </section>

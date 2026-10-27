@@ -22,7 +22,32 @@ import {
     type PipelineStepState,
     type PlatformMeta,
     type ThinkingEntry,
+    type ClaimGateClaimUI,
 } from "./shared";
+
+/** How often the screen asks a run for new progress. */
+const RUN_POLL_MS = 1000;
+
+/** What a run was started with (the route's MarketingPipelineInput). */
+interface RunInput {
+    platform: NonNullable<MarketingSession["platform"]>;
+    prompt: string;
+    platformMeta?: PlatformMeta;
+    toneOverride?: FormalityLevel;
+    targetAudience?: string;
+    contentType?: ContentType;
+}
+
+/** The poll's view of a run (server/marketing/run-view.ts). */
+interface MarketingRunView {
+    id: string;
+    status: "queued" | "running" | "completed" | "failed";
+    input: RunInput;
+    events: PipelineSSEEvent[];
+    eventCount: number;
+    result: PipelineData | null;
+    error: string | null;
+}
 
 function buildInitialSteps(): PipelineStepState[] {
     // The label is the server's, filled in by `step_start`; the screen names
@@ -87,6 +112,11 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
     const [contentType, setContentType] = useState<ContentType | undefined>(undefined);
     const [thinkingLog, setThinkingLog] = useState<ThinkingEntry[]>([]);
     const [publishing, setPublishing] = useState(false);
+    /** Claims the documents don't back, waiting on "Post anyway" (null: no question open). */
+    const [claimGate, setClaimGate] = useState<{
+        unavailable: boolean;
+        claims: ClaimGateClaimUI[];
+    } | null>(null);
     const [publishResult, setPublishResult] = useState<{
         success: boolean;
         postUrl?: string;
@@ -113,6 +143,7 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
         setEvalError(null);
         setPublishing(false);
         setPublishResult(null);
+        setClaimGate(null);
     }, []);
 
     const applySession = useCallback(
@@ -403,108 +434,50 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
                 );
                 break;
             case "step_thinking":
-                setThinkingLog(prev => [
-                    ...prev,
-                    { step: event.step, text: event.text, timestamp: Date.now() },
-                ]);
+                // A retried run replays the stages it restored; say each thing once.
+                setThinkingLog(prev =>
+                    prev.some(e => e.step === event.step && e.text === event.text)
+                        ? prev
+                        : [...prev, { step: event.step, text: event.text, timestamp: Date.now() }]
+                );
                 break;
         }
     }, []);
 
-    const runPipeline = useCallback(async () => {
-        setError(null);
-        setResult(null);
-        resetPostFeedback();
-
-        if (!platform) {
-            setError(t("errors.choosePlatform"));
-            return;
-        }
-
-        const normalizedPrompt = prompt.trim();
-        if (!normalizedPrompt) {
-            setError(t("errors.addDescription"));
-            return;
-        }
-
-        abortRef.current?.abort();
-        const controller = new AbortController();
-        abortRef.current = controller;
-
-        setLoading(true);
-        setPipelineSteps(buildInitialSteps());
-        setThinkingLog([]);
-        setGenerationStartTime(Date.now());
-
-        try {
-            const apiUrl = debug ? "/api/marketing-pipeline?debug=true" : "/api/marketing-pipeline";
-            const response = await fetch(apiUrl, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    platform,
-                    prompt: normalizedPrompt,
-                    platformMeta: Object.keys(platformMeta).length > 0 ? platformMeta : undefined,
-                    toneOverride: toneOverride ?? undefined,
-                    targetAudience: targetAudience.trim() || undefined,
-                    contentType: contentType ?? undefined,
-                }),
-                signal: controller.signal,
-            });
-
-            if (!response.ok || !response.body) {
-                const text = await response.text();
-                let message = t("errors.generateFailed");
-                try {
-                    const payload = JSON.parse(text) as { message?: string; error?: string };
-                    message = payload.message ?? message;
-                    if (payload.error) message += ` ${payload.error}`;
-                } catch {
-                    if (text) message = text.slice(0, 200);
-                }
-                setError(message);
-                return;
-            }
-
-            const reader = response.body.getReader();
-            const decoder = new TextDecoder();
-            let buffer = "";
+    /**
+     * Follow a queued run to its end: poll its progress events (the same
+     * events the stepper always consumed) after a cursor, then take its
+     * result. The run lives on the server, so closing the tab loses nothing;
+     * a reload finds it again (see the effect below) and replays its events.
+     */
+    const followRun = useCallback(
+        async (runId: string, input: RunInput, signal: AbortSignal) => {
+            let cursor = 0;
             let pipelineResult: PipelineData | null = null;
-
-            while (true) {
-                const { done, value } = await reader.read();
-                if (done) break;
-
-                buffer += decoder.decode(value, { stream: true });
-                const parts = buffer.split("\n\n");
-                buffer = parts.pop() ?? "";
-
-                for (const part of parts) {
-                    const trimmed = part.trim();
-                    if (!trimmed.startsWith("data: ")) continue;
-                    const json = trimmed.slice(6);
-                    try {
-                        const event = JSON.parse(json) as PipelineSSEEvent;
-
-                        if (
-                            event.type === "step_start" ||
-                            event.type === "step_complete" ||
-                            event.type === "step_data" ||
-                            event.type === "step_thinking"
-                        ) {
-                            handleSSEEvent(event);
-                        } else if (event.type === "result" && event.success) {
-                            pipelineResult = event.data;
-                        } else if (event.type === "error") {
-                            const detail = event.error ? ` ${event.error}` : "";
-                            setError((event.message ?? t("errors.pipelineFailed")) + detail);
-                            return;
-                        }
-                    } catch {
-                        // skip malformed SSE lines
-                    }
+            while (!signal.aborted) {
+                const response = await fetch(
+                    `/api/marketing-pipeline/runs/${encodeURIComponent(runId)}?after=${cursor}`,
+                    { signal, cache: "no-store" }
+                );
+                if (!response.ok) {
+                    setError(t("errors.generateFailed"));
+                    return;
                 }
+                const { data } = (await response.json()) as { data: { run: MarketingRunView } };
+                const run = data.run;
+                for (const event of run.events) handleSSEEvent(event);
+                cursor = run.eventCount;
+                if (run.status === "failed") {
+                    setError(run.error ?? t("errors.pipelineFailed"));
+                    return;
+                }
+                if (run.status === "completed") {
+                    pipelineResult = run.result;
+                    break;
+                }
+                await new Promise(resolve => setTimeout(resolve, RUN_POLL_MS));
             }
+            if (signal.aborted) return;
 
             if (!pipelineResult) {
                 setError(t("errors.incomplete"));
@@ -556,18 +529,18 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
                 id: sessionId,
                 createdAt: now,
                 updatedAt: now,
-                platform,
-                prompt: normalizedPrompt,
+                platform: input.platform,
+                prompt: input.prompt,
                 result: pipelineResult,
                 editableMessage: pipelineResult.message,
                 viewMode: "preview",
                 rewriteWorkflowState: undefined,
-                platformMeta: Object.keys(platformMeta).length > 0 ? platformMeta : undefined,
+                platformMeta: input.platformMeta,
                 messageVariants: initialVariants,
                 activeVariantId: initialActiveId,
-                toneOverride,
-                targetAudience: targetAudience.trim() || undefined,
-                contentType,
+                toneOverride: input.toneOverride,
+                targetAudience: input.targetAudience,
+                contentType: input.contentType,
             };
 
             setResult(pipelineResult);
@@ -590,21 +563,122 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
                 };
                 return updated;
             });
+        },
+        [activeSessionId, handleSSEEvent, t]
+    );
+
+    /** Watch a run from the start or, after a reload, from wherever it got to. */
+    const watchRun = useCallback(
+        async (runId: string, input: RunInput) => {
+            abortRef.current?.abort();
+            const controller = new AbortController();
+            abortRef.current = controller;
+            setLoading(true);
+            setPipelineSteps(buildInitialSteps());
+            setThinkingLog([]);
+            setGenerationStartTime(Date.now());
+            try {
+                await followRun(runId, input, controller.signal);
+            } catch (requestError) {
+                if (requestError instanceof DOMException && requestError.name === "AbortError")
+                    return;
+                console.error("[marketing-pipeline] request error:", requestError);
+                setError(t("errors.engine"));
+            } finally {
+                if (abortRef.current === controller) {
+                    setLoading(false);
+                    setGenerationStartTime(null);
+                }
+                // Pipeline steps are intentionally NOT cleared here so the stepper
+                // remains visible after generation completes (transparency).
+            }
+        },
+        [followRun, t]
+    );
+
+    // A run still going on the server (this tab was closed or reloaded mid-run):
+    // pick it up instead of leaving it orphaned.
+    useEffect(() => {
+        let cancelled = false;
+        void (async () => {
+            try {
+                const response = await fetch("/api/marketing-pipeline/runs", { cache: "no-store" });
+                if (!response.ok || cancelled) return;
+                const { data } = (await response.json()) as {
+                    data: { runs: MarketingRunView[] };
+                };
+                const active = data.runs[0];
+                if (!active || cancelled) return;
+                setPlatform(active.input.platform);
+                setPrompt(active.input.prompt ?? "");
+                void watchRun(active.id, active.input);
+            } catch {
+                // Nothing to resume.
+            }
+        })();
+        return () => {
+            cancelled = true;
+        };
+        // Once per mount: a later watchRun identity must not re-trigger the lookup.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    const runPipeline = useCallback(async () => {
+        setError(null);
+        setResult(null);
+        resetPostFeedback();
+
+        if (!platform) {
+            setError(t("errors.choosePlatform"));
+            return;
+        }
+
+        const normalizedPrompt = prompt.trim();
+        if (!normalizedPrompt) {
+            setError(t("errors.addDescription"));
+            return;
+        }
+
+        const input: RunInput = {
+            platform,
+            prompt: normalizedPrompt,
+            platformMeta: Object.keys(platformMeta).length > 0 ? platformMeta : undefined,
+            toneOverride: toneOverride ?? undefined,
+            targetAudience: targetAudience.trim() || undefined,
+            contentType: contentType ?? undefined,
+        };
+
+        try {
+            const apiUrl = debug
+                ? "/api/marketing-pipeline/runs?debug=true"
+                : "/api/marketing-pipeline/runs";
+            const response = await fetch(apiUrl, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(input),
+            });
+            if (!response.ok) {
+                const text = await response.text();
+                let message = t("errors.generateFailed");
+                try {
+                    const payload = JSON.parse(text) as { message?: string; error?: string };
+                    message = payload.message ?? message;
+                    if (payload.error) message += ` ${payload.error}`;
+                } catch {
+                    if (text) message = text.slice(0, 200);
+                }
+                setError(message);
+                return;
+            }
+            const { data } = (await response.json()) as { data: { run: MarketingRunView } };
+            await watchRun(data.run.id, input);
         } catch (requestError) {
-            if (requestError instanceof DOMException && requestError.name === "AbortError") return;
             console.error("[marketing-pipeline] request error:", requestError);
             setError(t("errors.engine"));
-        } finally {
-            setLoading(false);
-            setGenerationStartTime(null);
-            // Pipeline steps are intentionally NOT cleared here so the stepper
-            // remains visible after generation completes (transparency).
         }
     }, [
-        activeSessionId,
         contentType,
         debug,
-        handleSSEEvent,
         platform,
         platformMeta,
         prompt,
@@ -612,6 +686,7 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
         t,
         targetAudience,
         toneOverride,
+        watchRun,
     ]);
 
     const cancelPipeline = useCallback(() => {
@@ -622,55 +697,102 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
         setGenerationStartTime(null);
     }, []);
 
-    const publishPost = useCallback(async () => {
-        // Publish the currently-visible/edited post to its platform. Reddit posts
-        // default to the user's own profile (`u_me`) server-side; no subreddit is
-        // required here. Uses the existing /api/marketing-pipeline/publish route.
-        // Non-Reddit platforms don't render Markdown, so publish the same
-        // plain-text conversion the copy flow produces.
-        const targetPlatform = result?.platform ?? platform;
-        const message = toPlatformText(targetPlatform, editableMessage).trim();
-        if (!targetPlatform || !message) return;
+    const sendPublish = useCallback(
+        async (acknowledgeUnsupportedClaims: boolean) => {
+            // Publish the currently-visible/edited post to its platform. Reddit posts
+            // default to the user's own profile (`u_me`) server-side; no subreddit is
+            // required here. Uses the existing /api/marketing-pipeline/publish route.
+            // Non-Reddit platforms don't render Markdown, so publish the same
+            // plain-text conversion the copy flow produces.
+            const targetPlatform = result?.platform ?? platform;
+            const message = toPlatformText(targetPlatform, editableMessage).trim();
+            if (!targetPlatform || !message) return;
 
-        const epoch = postFeedbackEpochRef.current;
-        setPublishing(true);
-        setPublishResult(null);
-        try {
-            const response = await fetch("/api/marketing-pipeline/publish", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ platform: targetPlatform, message }),
-            });
-            // The route answers `{ success, data: { postUrl, channel } }`.
-            const payload = (await response.json()) as {
-                success: boolean;
-                data?: { postUrl?: string | null; channel?: string };
-                message?: string;
-                error?: string;
-            };
-            if (epoch !== postFeedbackEpochRef.current) return; // displayed post changed
-            if (response.ok && payload.success) {
-                setPublishResult({
-                    success: true,
-                    postUrl: payload.data?.postUrl ?? undefined,
-                    channel: payload.data?.channel,
+            const epoch = postFeedbackEpochRef.current;
+            setPublishing(true);
+            setPublishResult(null);
+            try {
+                const response = await fetch("/api/marketing-pipeline/publish", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        platform: targetPlatform,
+                        message,
+                        ...(acknowledgeUnsupportedClaims ? { acknowledgeUnsupportedClaims } : {}),
+                    }),
                 });
-            } else {
+                // The route answers `{ success, data: { postUrl, channel } }`, or a 409
+                // with the claims it would not post unacknowledged.
+                const payload = (await response.json()) as {
+                    success: boolean;
+                    data?: { postUrl?: string | null; channel?: string };
+                    message?: string;
+                    error?: string;
+                    code?: string;
+                    unavailable?: boolean;
+                    claims?: ClaimGateClaimUI[];
+                };
+                if (epoch !== postFeedbackEpochRef.current) return; // displayed post changed
+                if (response.status === 409 && payload.code === "unsupported_claims") {
+                    setClaimGate({
+                        unavailable: payload.unavailable === true,
+                        claims: payload.claims ?? [],
+                    });
+                    return;
+                }
+                if (response.ok && payload.success) {
+                    setPublishResult({
+                        success: true,
+                        postUrl: payload.data?.postUrl ?? undefined,
+                        channel: payload.data?.channel,
+                    });
+                } else {
+                    setPublishResult({
+                        success: false,
+                        error: payload.message ?? payload.error ?? t("errors.publishFailed"),
+                    });
+                }
+            } catch (err) {
+                if (epoch !== postFeedbackEpochRef.current) return;
                 setPublishResult({
                     success: false,
-                    error: payload.message ?? payload.error ?? t("errors.publishFailed"),
+                    error: err instanceof Error ? err.message : t("errors.publishNetwork"),
                 });
+            } finally {
+                if (epoch === postFeedbackEpochRef.current) setPublishing(false);
             }
-        } catch (err) {
-            if (epoch !== postFeedbackEpochRef.current) return;
-            setPublishResult({
-                success: false,
-                error: err instanceof Error ? err.message : t("errors.publishNetwork"),
+        },
+        [editableMessage, platform, result?.platform, t]
+    );
+
+    /**
+     * Publish, unless the generated post's claims need a person to look first:
+     * then ask (the gate dialog), and post only once they confirm. The server
+     * checks the final text too, so an edit that adds a claim is caught there.
+     */
+    const publishPost = useCallback(async () => {
+        const review = (result?.claimSources ?? []).filter(c => c.support !== "supported");
+        if (review.length > 0 || result?.claimCheckUnavailable) {
+            setClaimGate({
+                unavailable: result?.claimCheckUnavailable === true,
+                claims: review.map(c => ({
+                    claim: c.claim,
+                    support: c.support,
+                    reason: c.reason ?? null,
+                    sourceDoc: c.match?.sourceDoc ?? null,
+                })),
             });
-        } finally {
-            if (epoch === postFeedbackEpochRef.current) setPublishing(false);
+            return;
         }
-    }, [editableMessage, platform, result?.platform, t]);
+        await sendPublish(false);
+    }, [result?.claimCheckUnavailable, result?.claimSources, sendPublish]);
+
+    const confirmClaimGate = useCallback(async () => {
+        setClaimGate(null);
+        await sendPublish(true);
+    }, [sendPublish]);
+
+    const dismissClaimGate = useCallback(() => setClaimGate(null), []);
 
     const evaluatePost = useCallback(async () => {
         // Score the currently-visible/edited post with the LLM-as-judge pipeline
@@ -798,6 +920,9 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
         publishing,
         publishResult,
         publishPost,
+        claimGate,
+        confirmClaimGate,
+        dismissClaimGate,
         evaluating,
         evalResult,
         evalError,

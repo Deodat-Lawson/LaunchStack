@@ -225,7 +225,6 @@ describeDb("distribution persistence", () => {
             },
             riskFlags: [],
             screening: { status: "not_run" },
-            stage: "researched",
         });
 
         await expect(
@@ -246,7 +245,7 @@ describeDb("distribution persistence", () => {
         await transitionStage({
             companyId: companyA,
             relationshipId: rel!.id,
-            to: "in_conversation",
+            to: "meeting",
             actorUserId: "user-1",
             nextAction: "Send samples",
             nextActionAt: new Date(Date.now() + 2 * 86_400_000),
@@ -254,7 +253,7 @@ describeDb("distribution persistence", () => {
         await transitionStage({
             companyId: companyA,
             relationshipId: rel!.id,
-            to: "qualified",
+            to: "proposal",
             actorUserId: "user-1",
         });
         await transitionStage({
@@ -267,7 +266,7 @@ describeDb("distribution persistence", () => {
             transitionStage({
                 companyId: companyA,
                 relationshipId: rel!.id,
-                to: "contracted",
+                to: "won",
                 actorUserId: "user-1",
             })
         ).rejects.toMatchObject({ code: "agreement_required" });
@@ -286,7 +285,7 @@ describeDb("distribution persistence", () => {
         await transitionStage({
             companyId: companyA,
             relationshipId: rel!.id,
-            to: "contracted",
+            to: "won",
             actorUserId: "user-1",
         });
         await addEvent({
@@ -301,14 +300,14 @@ describeDb("distribution persistence", () => {
         const stageChanges = events.filter(e => e.type === "stage_changed").map(e => e.payload.to);
         expect(stageChanges.reverse()).toEqual([
             "contacted",
-            "in_conversation",
-            "qualified",
+            "meeting",
+            "proposal",
             "negotiating",
-            "contracted",
+            "won",
         ]);
 
         const dashboard = await getDashboard(companyA, program.id);
-        expect(dashboard.counts.contracted).toBe(1);
+        expect(dashboard.counts.won).toBe(1);
         expect(
             dashboard.coverage.find(c => c.country === "DE" && c.kind === "distributor")!.covered
         ).toBe(1);
@@ -323,7 +322,7 @@ describeDb("distribution persistence", () => {
         );
     });
 
-    it("imports existing partners as active and adds their domains to the exclusions", async () => {
+    it("imports existing partners as won and adds their domains to the exclusions", async () => {
         const program = await makeProgram(companyA);
         const result = await importPartners({
             companyId: companyA,
@@ -335,7 +334,7 @@ describeDb("distribution persistence", () => {
                     domain: "nordicfoods.no",
                     country: "NO",
                     kind: "distributor",
-                    stage: "active",
+                    stage: "won",
                     territoryCountry: "NO",
                     ownerUserId: null,
                 },
@@ -344,7 +343,7 @@ describeDb("distribution persistence", () => {
                     domain: "www.nordicfoods.no",
                     country: "NO",
                     kind: "distributor",
-                    stage: "active",
+                    stage: "won",
                     territoryCountry: null,
                     ownerUserId: null,
                 },
@@ -358,7 +357,7 @@ describeDb("distribution persistence", () => {
         );
         const partners = await listPartners(companyA, { programId: program.id });
         expect(partners).toHaveLength(1);
-        expect(partners[0]!.relationship.stage).toBe("active");
+        expect(partners[0]!.relationship.stage).toBe("won");
         expect(partners[0]!.relationship.source).toBe("import");
         // Discovery over a mention of the same partner resolves to nothing.
         expect(

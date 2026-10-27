@@ -188,6 +188,8 @@ export interface MarketingPipelineResult extends MarketingPipelineOutput {
     pipelineStages?: PipelineStages;
     /** Claim sources mapped back to KB documents. */
     claimSources?: CheckedClaim[];
+    /** True when the claim check could not run; the post's claims are unknown, not clean. */
+    claimCheckUnavailable?: boolean;
 }
 
 /* ──────────────────────────────────────────────────────────────

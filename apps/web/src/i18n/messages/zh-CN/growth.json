@@ -134,13 +134,6 @@
       "createFailed": "无法创建细分市场",
       "title": "新建细分市场",
       "description": "你想把产品卖给谁、卖到哪里。之后可以随时调整每一项。",
-      "namePlaceholder": "履约服务商 · 欧盟",
-      "offering": "你卖什么",
-      "offeringPlaceholder": "面向电商仓库的拣货机器人，按台按月租赁",
-      "industries": "行业 <hint>（用逗号分隔）</hint>",
-      "industriesPlaceholder": "电商履约、第三方物流、合同物流",
-      "countries": "国家/地区 <hint>（两位字母代码）</hint>",
-      "countriesPlaceholder": "NL, DE, GB",
       "create": "创建细分市场"
     },
     "runSheet": {
@@ -233,7 +226,7 @@
       "inDeal": "进入商机",
       "ok": "正常",
       "title": "运行记录",
-      "subKeyless": "目前共 {count} 次 · 未配置 API 密钥，因此运行时会读取公开目录和各公司的官网",
+      "subKeyless": "目前共 {count} 次 · 未配置搜索密钥，因此运行时会读取 OpenStreetMap 场所和各公司的官网",
       "subLive": "目前共 {count} 次 · 每次运行都会搜索该细分市场已启用的来源",
       "sampleAria": "使用示例数据",
       "sample": "示例数据",
@@ -363,6 +356,24 @@
       "draftFor": "为 {count} 人起草营销活动",
       "draftInbox": "起草发往公共邮箱的邮件",
       "drafted": "已在邮件中起草营销活动，共 {count, plural, other {# 位联系人}}。请在那里审批；这里不会发送任何邮件。"
+    },
+    "setup": {
+      "title": "你的客户是谁？",
+      "body": "回答三个问题，Growth 就开始查找。之后可以在“细分”里修改每一项。",
+      "buyers": "谁会购买你的产品",
+      "buyersPlaceholder": "餐厅、咖啡店、牙科诊所",
+      "buyersHint": "要查找的公司类型，用逗号分隔。完全不涉及这些内容的公司会被排除。",
+      "where": "地点",
+      "wherePlaceholder": "Baltimore, MD, USA; Netherlands",
+      "whereHint": "城市、州或国家。多个地点用“;”分隔。范围之外的公司会被排除。",
+      "whereFromProfile": "来自你的公司资料。如需在别处查找请修改。",
+      "offering": "你销售什么",
+      "offeringPlaceholder": "为独立餐厅提供记账和薪资服务",
+      "offeringHint": "用你自己的话写一两句即可。",
+      "offeringFromProfile": "根据你的公司资料起草。可按这群客户修改。",
+      "submit": "查找公司",
+      "failed": "无法开始查找",
+      "defaultName": "{buyers} · {where}"
     }
   },
   "brand": {
@@ -606,7 +617,7 @@
     },
     "campaigns": {
       "title": "营销活动",
-      "sub": "基于你的文档生成草稿：切入角度、品牌语气、目标画像，每条论断都可追溯到来源。可以直接在这里发布，也可以排到日历上。"
+      "sub": "基于你的文档生成草稿：切入角度、品牌语气、目标画像，每条论断在发出前都会对照你的文档核对。可以直接在这里发布，也可以排到日历上。"
     },
     "accounts": {
       "title": "账号",
@@ -772,7 +783,7 @@
       "checkingPerformance": "检查历史表现",
       "buildingStrategy": "制定传播策略",
       "generatingContent": "生成内容变体",
-      "verifyingClaims": "核验论断来源"
+      "verifyingClaims": "对照你的文档核对论断"
     },
     "stepper": {
       "completedIn": "用时 {seconds} 秒完成",
@@ -818,11 +829,18 @@
       "performance": "表现洞察"
     },
     "claims": {
-      "title": "论断来源（{sourced}/{total} 条有来源）",
-      "source": "来源：{doc}",
-      "relevance": "（相关度 {pct}%）",
-      "lookupFailed": "来源查找失败——请人工核查",
-      "noMatch": "知识库中未找到匹配的来源"
+      "title": "已对照你的文档核对论断（{supported}/{total} 条有依据）",
+      "explainer": "“有依据”表示你的文档中有段落明确陈述了该论断。文档未涉及的论断无从判断，请自行核实。",
+      "supported": "见于 {doc}",
+      "contradicted": "你的文档说法不同（{doc}）",
+      "unsupported": "你的文档中没有这样的陈述",
+      "unchecked": "无法核对——请自行检查",
+      "unavailable": "这篇帖子中的论断未能核对。发布前请自行检查。",
+      "gateTitle": "{count, plural, other {# 条论断}}没有文档依据",
+      "gateBody": "以公司名义发布之前，请核实：{claims}",
+      "gateBodyUnavailable": "论断核对未能运行，因此还没有人对照你的文档检查过这篇帖子中的论断。",
+      "gateConfirm": "仍然发布",
+      "gateCancel": "返回修改"
     },
     "tones": {
       "conversational": "口语化",
@@ -960,7 +978,18 @@
       "debugDna": "调试：DNA 来源",
       "rawContext": "发送给 LLM 的原始上下文",
       "trendRefs": "趋势参考",
-      "noTrends": "此营销活动没有可用的趋势参考。"
+      "noTrends": "此营销活动没有可用的趋势参考。",
+      "tabs": {
+        "draft": "草稿",
+        "claims": "论断",
+        "strategy": "思路",
+        "research": "调研",
+        "process": "过程",
+        "debug": "调试"
+      },
+      "emptyResult": "草稿会显示在这里。描述你想推广的内容，然后生成。",
+      "noClaims": "这篇帖子没有需要核对的事实论断。",
+      "history": "历史（{count}）"
     },
     "errors": {
       "choosePlatform": "请选择一个平台以继续。",
@@ -1080,6 +1109,7 @@
       "programNotFound": "未找到计划",
       "programArchived": "计划已归档",
       "countryCodes": "请使用两位字母的国家/地区代码，例如 NL、DE、GB",
+      "sayWhere": "请说明要在哪里寻找：城市、州/省或国家/地区。",
       "cannotMoveTo": "无法移至“{stage, select, lead {线索} qualified {已确认} contacted {已联系} meeting {会议} proposal {提案} negotiating {谈判中} won {赢单} lost {不合适} nurture {培育中} other {{stage}}}”",
       "nothingSelected": "未选择任何内容",
       "noneContactable": "所选公司目前都还无法联系",
@@ -1098,7 +1128,7 @@
       "notEnoughCredits": "额度不足，无法启动运行",
       "insufficientCredits": "额度不足",
       "deriveLater": "根据你的文档推导细分市场的功能将随流程重构一起推出",
-      "newSegmentRequired": "请填写名称、你卖什么，以及至少一个国家/地区",
+      "newSegmentRequired": "请填写名称、你卖什么，以及要在哪里寻找",
       "sourceSettingsLater": "来源设置将随来源注册表一起推出；目前由环境变量中的密钥决定"
     },
     "stageErrors": {
@@ -1106,14 +1136,15 @@
       "sameStage": "关系已处于“{to}”阶段。",
       "notAllowed": "无法从“{from}”移至“{to}”。允许的阶段：{allowed}。",
       "ownerRequired": "从“contacted”阶段起需要指定负责人（正在进入“{target}”）。",
-      "nextActionRequired": "从“in_conversation”阶段起需要设置下一步行动（正在进入“{target}”）。",
+      "nextActionRequired": "从“meeting”阶段起需要设置下一步行动（正在进入“{target}”）。",
       "agreementRequired": "进入“{target}”阶段需要先记录协议。",
       "pair": "{first}{second}"
     },
     "requirements": {
       "ownerRequired": "需要指定负责人",
       "nextActionRequired": "需要设置下一步",
-      "agreementRequired": "需要在分销中记录协议"
+      "agreementRequired": "需要在分销中记录协议",
+      "changedConcurrently": "刚刚有其他人移动了这笔交易"
     },
     "moves": {
       "currentStage": "当前阶段",
@@ -1121,7 +1152,8 @@
       "wonStaysWon": "已赢单的商机会保持赢单状态",
       "moveFirst": "请先移至“{stage, select, lead {线索} qualified {已确认} contacted {已联系} meeting {会议} proposal {提案} negotiating {谈判中} won {赢单} lost {不合适} nurture {培育中} other {{stage}}}”",
       "notAvailableFrom": "无法从“{stage, select, lead {线索} qualified {已确认} contacted {已联系} meeting {会议} proposal {提案} negotiating {谈判中} won {赢单} lost {不合适} nurture {培育中} other {{stage}}}”移至此阶段",
-      "notAvailableHere": "无法从当前阶段移至此阶段"
+      "notAvailableHere": "无法从当前阶段移至此阶段",
+      "backOneStage": "请一次只后退一个阶段"
     },
     "segment": {
       "subtitle": "{countries} · {kinds}",
@@ -1184,7 +1216,7 @@
       "document": "已共享文档",
       "documentTitle": "已共享文档：{title}",
       "agreement": "已记录协议",
-      "imported": "以“{stage, select, candidate {候选} researched {已研究} qualified {已确认} contacted {已联系} in_conversation {洽谈中} negotiating {谈判中} contracted {已签约} active {合作中} declined {已拒绝} dormant {休眠} other {{stage}}}”阶段导入",
+      "imported": "以“{stage, select, lead {线索} qualified {已确认} contacted {已联系} meeting {会议} proposal {提案} negotiating {谈判中} won {赢单} lost {不合适} nurture {培育中} other {{stage}}}”阶段导入",
       "importedExisting": "以现有阶段导入"
     },
     "sources": {
@@ -1195,7 +1227,7 @@
           "trade": "贸易数据"
         },
         "keyless": {
-          "web": "公开目录（YC）",
+          "web": "网页搜索",
           "place": "OpenStreetMap",
           "trade": "贸易数据"
         },
@@ -1208,11 +1240,7 @@
       "rows": {
         "osm": {
           "label": "OpenStreetMap",
-          "description": "按国家/地区或城市以及组织类型查找有网站的组织。免费，无需密钥；未配置搜索服务时使用。"
-        },
-        "yc": {
-          "label": "Y Combinator 目录",
-          "description": "细分市场所在国家/地区中，简介与其关键词匹配的活跃 YC 公司。免费，无需密钥。"
+          "description": "每个城市或国家中带网站的真实场所——商店、咖啡馆、工坊、办公室——按与你的客户最接近的类型查找。免费，无需密钥；未配置搜索服务时使用。"
         },
         "web": {
           "label": "网页搜索",
@@ -1286,7 +1314,7 @@
       "excluded": "{name} 已被排除",
       "noMailbox": "{name}：画像中没有公开邮箱",
       "notInProgram": "不在此计划中",
-      "stageIs": "阶段为“{stage, select, candidate {候选} researched {已研究} qualified {已确认} contacted {已联系} in_conversation {洽谈中} negotiating {谈判中} contracted {已签约} active {合作中} declined {已拒绝} dormant {休眠} other {{stage}}}”",
+      "stageIs": "阶段为“{stage, select, lead {线索} qualified {已确认} contacted {已联系} meeting {会议} proposal {提案} negotiating {谈判中} won {赢单} lost {不合适} nurture {培育中} other {{stage}}}”",
       "orgMissing": "组织缺失",
       "existingPartner": "现有合作伙伴（已排除）",
       "noDossierMailbox": "档案中没有公开邮箱"
@@ -1315,7 +1343,8 @@
         "needsReconnect": "{name} 需要重新连接。",
         "cannotPostAs": "此部署的 LinkedIn 应用无法以 {name} 的身份发帖。",
         "postTestNotFound": "未找到帖子测试",
-        "imageMissing": "其中一张图片缺失，请重新添加。"
+        "imageMissing": "其中一张图片缺失，请重新添加。",
+        "unbackedClaims": "这篇帖子中有些说法没有文档支持。请先查看，或确认后仍然发布。"
       },
       "reasons": {
         "refusedKeepPosting": "{network} 不再接受此登录。请重新连接以继续发帖。",
@@ -1376,13 +1405,16 @@
         },
         "x": {
           "account": "一个按用量付费的 X 开发者账号",
-          "token": "在 TWITTER_BEARER_TOKEN 中配置令牌，供所有工作区共用",
-          "note": "按帖付费：每篇约 $0.015，带链接的帖子为 $0.20。由运营方为整个部署配置。"
+          "token": "在 TWITTER_BEARER_TOKEN 中配置令牌，仅供一个工作区使用（唯一的工作区，或 BRAND_DEPLOYMENT_ACCOUNTS_COMPANY_ID 指定的工作区）",
+          "note": "按帖付费：每篇约 $0.015，带链接的帖子为 $0.20。由运营方为一个工作区配置。"
         },
         "reddit": {
           "app": "一个 Reddit script 应用（client id 和 secret）",
-          "keys": "REDDIT_CLIENT_ID、REDDIT_CLIENT_SECRET 和 REDDIT_USER_AGENT，供所有工作区共用",
-          "note": "在当前用量下免费。帖子会发布到该账号自己的个人资料。由运营方为整个部署配置。"
+          "keys": "REDDIT_CLIENT_ID、REDDIT_CLIENT_SECRET 和 REDDIT_USER_AGENT，仅供一个工作区使用（唯一的工作区，或 BRAND_DEPLOYMENT_ACCOUNTS_COMPANY_ID 指定的工作区）",
+          "note": "在当前用量下免费。帖子会发布到该账号自己的个人资料。由运营方为一个工作区配置。"
+        },
+        "shared": {
+          "notYours": "此服务器上有多个工作区，运营方的账号已分配给另一个工作区（BRAND_DEPLOYMENT_ACCOUNTS_COMPANY_ID）。"
         }
       }
     },
@@ -1395,7 +1427,11 @@
       "runFailedChat": "营销流程运行失败。请确认已设置 CHAT_BASE_URL（如需要，还有 CHAT_API_KEY），并且聊天模型配置文件有效。",
       "runFailedCompany": "营销流程运行失败。请确认你的用户拥有有效的公司档案。",
       "invalidCompanyId": "公司 ID 无效",
-      "messageRequired": "需要提供 message"
+      "messageRequired": "需要提供 message",
+      "runStartFailed": "无法启动营销流程",
+      "runListFailed": "无法列出营销流程运行记录",
+      "runNotFound": "未找到该运行记录",
+      "runReadFailed": "无法读取营销流程运行记录"
     },
     "email": {
       "invalidCampaignId": "营销活动 ID 无效",

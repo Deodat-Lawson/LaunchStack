@@ -259,11 +259,15 @@
     margin-top: 1rem;
 }
 
+/* Cards start at the top, and each text row reserves its lines, so every
+   card's logo, name, subtitle and limit sit on the same lines across the row
+   however long a subtitle runs. (Centred content put a two-line subtitle's
+   logo higher than its neighbours'.) */
 .platformCard {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 10px;
     border: 1px solid var(--line-2);
     border-radius: 16px;
@@ -296,13 +300,11 @@
 .platformLogo {
     width: 44px;
     height: 44px;
+    flex-shrink: 0;
     border-radius: 10px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-weight: 700;
-    font-size: 1.125rem;
-    letter-spacing: 0.02em;
     color: #ffffff;
     transition: transform 160ms ease;
     position: relative;
@@ -318,6 +320,8 @@
 }
 .platformLogoX {
     background: #000000;
+    /* X's tile is black: a hairline keeps it a tile on the dark theme. */
+    box-shadow: inset 0 0 0 1px var(--line);
 }
 .platformLogoLinkedin {
     background: #0a66c2;
@@ -326,9 +330,6 @@
     background: #0085ff;
 }
 
-.platformLogoImgContainer.platformLogoReddit {
-    background: transparent;
-}
 .platformLogoImgContainer {
     overflow: visible;
 }
@@ -365,6 +366,7 @@
     position: relative;
     z-index: 2;
     line-height: 1.4;
+    min-height: calc(2 * 1.4em);
 }
 
 /* ---------------- Workspace ---------------- */
@@ -691,10 +693,11 @@
 }
 
 .platformPreviewBadgeReddit {
-    background: transparent;
+    background: #ff4500;
 }
 .platformPreviewBadgeX {
     background: #000;
+    box-shadow: inset 0 0 0 1px var(--line);
 }
 .platformPreviewBadgeLinkedin {
     background: #0a66c2;
@@ -1832,9 +1835,11 @@
 
 .platformBestFor {
     font-size: 0.78rem;
+    line-height: 1.4;
     color: var(--ink-3);
     position: relative;
     z-index: 2;
+    min-height: calc(2 * 1.4em);
 }
 
 .platformCharLimit {
@@ -2707,4 +2712,186 @@
     letter-spacing: 0.06em;
     font-weight: 500;
     color: var(--ink-2);
+}
+
+/* ---------------- Studio layout (2026-10) ----------------
+   The workspace used to be one column that grew with every section a run
+   produced: prompt, thinking, steps, preview, actions, scores, variants,
+   strategy, stages, claims, research — the draft was pushed below the fold by
+   its own explanation. Now the controls sit on the left and the output on the
+   right, and the output is split into tabs (Draft, Claims, Why it works,
+   Research, Process), so a long run costs a click, not a scroll.
+
+   The two panes are a wrapping flex row rather than a media or container
+   query: the workspace is mounted in tabs of any width, beside a sessions
+   sidebar or not, so the panes sit side by side exactly when the output can
+   keep 440px, and otherwise stack with the page scrolling naturally. No pane
+   gets a fixed height. */
+
+.studio {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    align-items: flex-start;
+}
+
+.studio > .workspaceMainHeader {
+    flex-basis: 100%;
+}
+
+.studioControls {
+    flex: 1 1 340px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    min-width: 0;
+}
+
+.studioOutput {
+    flex: 999 1 440px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    min-width: 0;
+}
+
+.resultTabs {
+    gap: 0.75rem;
+}
+
+/* The tab bar stays in reach while a long tab (research, a long LinkedIn
+   draft) scrolls under it. */
+.resultTabBar {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    padding: 0.25rem 0 0.5rem;
+    background: var(--panel);
+    border-bottom: 1px solid var(--line-2);
+}
+
+.resultTabList {
+    width: 100%;
+    justify-content: flex-start;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.resultTabList::-webkit-scrollbar {
+    display: none;
+}
+
+.resultTabList > * {
+    flex: 0 0 auto;
+}
+
+.tabBadge {
+    min-width: 1.15rem;
+    height: 1.15rem;
+    padding: 0 0.3rem;
+    border-radius: 999px;
+    background: var(--warn-soft);
+    color: var(--warn);
+    font-size: 0.68rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tabCount {
+    color: var(--ink-3);
+    font-size: 0.72rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.resultPanel {
+    animation: studioTabIn 160ms ease-out;
+}
+
+@keyframes studioTabIn {
+    from {
+        opacity: 0;
+        transform: translateY(2px);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .resultPanel {
+        animation: none;
+    }
+}
+
+.resultEmpty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 2.5rem 1.5rem;
+    border: 1px dashed var(--line);
+    border-radius: 12px;
+    color: var(--ink-3);
+    font-size: 0.875rem;
+    text-align: center;
+}
+
+.resultEmptyInline {
+    color: var(--ink-3);
+    font-size: 0.85rem;
+    padding: 0.5rem 0;
+}
+
+/* Side by side (the row is at least 340 + 440 + gap = 804px), the controls
+   stop at a comfortable form width (420px); stacked, they take the whole line. The
+   multiplier turns "row narrower than 804px" into an unlimited max-width and
+   "wider" into a negative one, so max() picks 400px — a breakpoint keyed to
+   this row's own width, not the window's. */
+.studioControls {
+    max-width: max(420px, calc((804px - 100%) * 9999));
+}
+
+.workspaceHeaderActions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: flex-end;
+}
+
+/* The sessions list inside its drawer: the drawer is the panel. */
+[data-slot="sheet-content"] .sessionPanel {
+    height: 100%;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+[data-slot="sheet-content"] .sessionList {
+    flex: 1;
+    min-height: 0;
+    max-height: none;
+    overflow-y: auto;
+}
+
+/* In the narrower controls pane the header wraps instead of pushing its
+   buttons into the output pane. */
+.studioControls .workspaceLeftHeader {
+    flex-wrap: wrap;
+    row-gap: 0.5rem;
+}
+
+.studioControls .workspaceHeaderActions {
+    margin-left: auto;
+}
+
+/* Leave room for the drawer's own close button. */
+[data-slot="sheet-content"] .sessionPanelHeader {
+    padding-right: 2.25rem;
 }

@@ -22,22 +22,47 @@ export const PARTNER_KINDS = [
 export const PartnerKindSchema = z.enum(PARTNER_KINDS);
 export type PartnerKind = z.infer<typeof PartnerKindSchema>;
 
+/**
+ * A deal's stage, stored in the words the screens use. Until 2026-10 the
+ * table held an older partner vocabulary (candidate, researched,
+ * in_conversation, contracted, active, declined, dormant) and the Prospects
+ * adapter translated on every read; Proposal had no stored stage at all.
+ * Migration 20261024..._sales_stage_vocabulary rewrote existing rows; see
+ * LEGACY_STAGE_MAP for how each old value landed.
+ */
 export const RELATIONSHIP_STAGES = [
-    "candidate",
-    "researched",
-    "contacted",
-    "in_conversation",
+    "lead",
     "qualified",
+    "contacted",
+    "meeting",
+    "proposal",
     "negotiating",
-    "contracted",
-    "active",
-    "declined",
-    "dormant",
+    "won",
+    "lost",
+    "nurture",
 ] as const;
 export const RelationshipStageSchema = z.enum(RELATIONSHIP_STAGES);
 export type RelationshipStage = z.infer<typeof RelationshipStageSchema>;
 
-export const TERMINAL_STAGES: ReadonlySet<RelationshipStage> = new Set(["declined", "dormant"]);
+export const TERMINAL_STAGES: ReadonlySet<RelationshipStage> = new Set(["lost", "nurture"]);
+
+/**
+ * How the retired vocabulary maps onto the stored one — the same mapping the
+ * screens applied before, now applied once to the data by the migration.
+ * Kept for the migration's tests and for anyone reading old event payloads.
+ */
+export const LEGACY_STAGE_MAP: Readonly<Record<string, RelationshipStage>> = {
+    candidate: "lead",
+    researched: "lead",
+    contacted: "contacted",
+    in_conversation: "meeting",
+    qualified: "qualified",
+    negotiating: "negotiating",
+    contracted: "won",
+    active: "won",
+    declined: "lost",
+    dormant: "nurture",
+};
 
 export const RELATIONSHIP_EVENT_TYPES = [
     "stage_changed",
@@ -157,8 +182,8 @@ export const RunOptionsSchema = z.object({
      * pipeline end to end and for exploring the UI with realistic data.
      */
     /**
-     * `keyless` runs the same stages over public, free sources (OpenStreetMap,
-     * the YC directory) and reads each candidate's website with a page
+     * `keyless` runs the same stages over public, free places (OpenStreetMap)
+     * and reads each candidate's website with a page
      * profiler instead of a model: no API key of any kind.
      */
     mode: z.enum(["live", "fixture", "keyless"]).default("live"),
@@ -467,7 +492,7 @@ export const ImportPartnerRowSchema = z.object({
     country: z.string().max(64).optional().nullable(),
     kind: PartnerKindSchema,
     territoryCountry: z.string().length(2).optional().nullable(),
-    stage: RelationshipStageSchema.default("active"),
+    stage: RelationshipStageSchema.default("won"),
     ownerUserId: z.string().max(256).optional().nullable(),
 });
 export type ImportPartnerRow = z.infer<typeof ImportPartnerRowSchema>;

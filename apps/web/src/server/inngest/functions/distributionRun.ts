@@ -20,6 +20,7 @@ import {
 import { inngest } from "../client";
 import { uploadFile } from "~/lib/storage";
 import { debitTokens } from "~/lib/credits";
+import { prospectEmbedder } from "~/server/prospects/matching";
 import { processDocumentUpload } from "~/server/services/document-upload";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
@@ -88,9 +89,10 @@ export const distributionRunJob = inngest.createFunction(
         // calls a model enters the workspace's models itself.
         const inWorkspace = <T>(work: () => Promise<T>) =>
             withWorkspaceChatModels(companyId, "distribution", work);
-        const ports = () =>
+        const ports = async () =>
             createDefaultPorts({
                 publishDossier,
+                embed: await prospectEmbedder(companyId),
                 debitCredits: async ({ amount, description, referenceId }) => {
                     await debitTokens({
                         companyId,
@@ -105,14 +107,17 @@ export const distributionRunJob = inngest.createFunction(
         const startedAtIso = await step.run("start", async () => new Date().toISOString());
 
         const prepared = await step.run("prepare", () =>
-            inWorkspace(() => prepareRun(ctx, ports()))
+            inWorkspace(async () => prepareRun(ctx, await ports()))
         );
 
         const results: EnrichCandidateResult[] = [];
         for (const [index, relationshipId] of prepared.candidateRelationshipIds.entries()) {
             const result = await step.run(`enrich-${index}`, () =>
-                inWorkspace(() =>
-                    enrichCandidate(ctx, ports(), { relationshipId, profile: prepared.profile })
+                inWorkspace(async () =>
+                    enrichCandidate(ctx, await ports(), {
+                        relationshipId,
+                        profile: prepared.profile,
+                    })
                 )
             );
             results.push(result);

@@ -1,7 +1,7 @@
 /**
  * Drizzle schema for the distribution pipeline (design §4.3).
  *
- * Eight product tables, all company-scoped with cascade delete, prefixed
+ * Nine product tables, all company-scoped with cascade delete, prefixed
  * `pdr_ai_v2_` by the shared helper. Columns added by later migrations must
  * be declared LAST (the pg_dump parity gate compares column order).
  */
@@ -201,7 +201,7 @@ export const partnerRelationships = pgTable(
         territory: jsonb("territory").$type<Territory>(),
         stage: varchar("stage", { length: 32, enum: RELATIONSHIP_STAGES })
             .notNull()
-            .default("candidate"),
+            .default("lead"),
         fitScore: integer("fit_score"),
         fitRationale: text("fit_rationale"),
         fitBreakdown: jsonb("fit_breakdown").$type<FitBreakdown>(),
@@ -265,6 +265,46 @@ export const relationshipEvents = pgTable(
     })
 );
 export type RelationshipEventRow = InferSelectModel<typeof relationshipEvents>;
+
+// ─── Stage history ───────────────────────────────────────────────────────────
+
+/**
+ * One row per stint a deal spent in a stage: entered, and left (null while
+ * it is still there). Written in the same transaction as every stage change,
+ * so "how long do deals sit in Proposal?" is one query over this table —
+ * including the deals sitting there right now, which pairing stage_changed
+ * events could never count. At most one open stint per deal.
+ */
+export const dealStageHistory = pgTable(
+    "deal_stage_history",
+    {
+        id: bigserial("id", { mode: "number" }).primaryKey(),
+        companyId: bigint("company_id", { mode: "bigint" })
+            .notNull()
+            .references(() => company.id, { onDelete: "cascade" }),
+        relationshipId: varchar("relationship_id", { length: 256 })
+            .notNull()
+            .references(() => partnerRelationships.id, { onDelete: "cascade" }),
+        stage: varchar("stage", { length: 32, enum: RELATIONSHIP_STAGES }).notNull(),
+        enteredAt: timestamp("entered_at", { withTimezone: true }).notNull(),
+        exitedAt: timestamp("exited_at", { withTimezone: true }),
+        actorUserId: varchar("actor_user_id", { length: 256 }),
+    },
+    table => ({
+        relationshipIdx: index("deal_stage_history_relationship_idx").on(
+            table.relationshipId,
+            table.enteredAt
+        ),
+        companyStageIdx: index("deal_stage_history_company_stage_idx").on(
+            table.companyId,
+            table.stage
+        ),
+        oneOpenStint: uniqueIndex("deal_stage_history_one_open_unique")
+            .on(table.relationshipId)
+            .where(sql`${table.exitedAt} is null`),
+    })
+);
+export type DealStageHistoryRow = InferSelectModel<typeof dealStageHistory>;
 
 // ─── Agreements ──────────────────────────────────────────────────────────────
 

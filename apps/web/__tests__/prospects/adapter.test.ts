@@ -1,7 +1,7 @@
 /**
- * The adapter is how Prospects reads today's Distribution data. These tests
- * pin the parts a wrong mapping would silently break: which sales stage a
- * relationship shows as, which moves the stage menu offers and why the
+ * The adapter is how Prospects reads the pipeline's data. These tests pin
+ * the parts a wrong mapping would silently break: that a deal's stored stage
+ * is the stage it shows, which moves the stage menu offers and why the
  * others are disabled, how a run's status becomes the step list, and how a
  * dossier becomes cited claims.
  */
@@ -11,12 +11,11 @@ import type {
     RunRecord,
 } from "@launchstack/pipelines/distribution/types";
 import {
-    SALES_OF,
+    SALES_STAGES,
     allowedMoves,
     contactPeople,
     moveReason,
     profileClaims,
-    relationshipTarget,
     toRunDto,
     viewMatches,
 } from "~/server/prospects/adapter";
@@ -29,7 +28,7 @@ const rel = (over: Partial<RelationshipRecord> = {}): RelationshipRecord => ({
     orgId: "org-1",
     kind: "distributor",
     territory: { country: "NL" },
-    stage: "candidate",
+    stage: "lead",
     fitScore: 72,
     fitRationale: "Strong category overlap.",
     fitBreakdown: null,
@@ -48,22 +47,19 @@ const rel = (over: Partial<RelationshipRecord> = {}): RelationshipRecord => ({
     ...over,
 });
 
-describe("stage mapping", () => {
-    it("folds ten relationship stages onto the funnel", () => {
-        expect(SALES_OF.candidate).toBe("lead");
-        expect(SALES_OF.researched).toBe("lead");
-        expect(SALES_OF.in_conversation).toBe("meeting");
-        expect(SALES_OF.contracted).toBe("won");
-        expect(SALES_OF.active).toBe("won");
-        expect(SALES_OF.declined).toBe("lost");
-        expect(SALES_OF.dormant).toBe("nurture");
-    });
-
-    it("picks a legal relationship stage for a sales move", () => {
-        expect(relationshipTarget("contacted", "lead")).toBe("researched");
-        expect(relationshipTarget("declined", "lead")).toBe("researched");
-        expect(relationshipTarget("candidate", "won")).toBe("contracted");
-        expect(relationshipTarget("candidate", "proposal")).toBeNull();
+describe("stage vocabulary", () => {
+    it("stores the funnel's own stages, so there is nothing to translate", () => {
+        expect(SALES_STAGES).toEqual([
+            "lead",
+            "qualified",
+            "contacted",
+            "meeting",
+            "proposal",
+            "negotiating",
+            "won",
+            "lost",
+            "nurture",
+        ]);
     });
 });
 
@@ -71,11 +67,26 @@ describe("moves and reasons", () => {
     it("explains every disabled move in plain words", () => {
         const lead = rel();
         expect(moveReason(lead, false, "lead")).toBe("Current stage");
+        expect(moveReason(lead, false, "qualified")).toBeNull();
         expect(moveReason(lead, false, "contacted")).toBe("Needs an owner");
-        expect(moveReason(lead, false, "qualified")).toBe("Move to Contacted first");
-        expect(moveReason(lead, false, "proposal")).toBe("Not a stage in this workspace yet");
+        expect(moveReason(lead, false, "meeting")).toBe("Move to Qualified first");
         expect(moveReason(lead, false, "lost")).toBeNull();
         expect(moveReason(lead, false, "nurture")).toBeNull();
+        const proposal = rel({ stage: "proposal", ownerUserId: "u1", nextAction: "Send" });
+        expect(moveReason(proposal, false, "lead")).toBe("Move back one stage at a time");
+    });
+
+    it("Proposal is a real stage now: reachable from Meeting, with the usual gates", () => {
+        const meeting = rel({ stage: "meeting", ownerUserId: "u1", nextAction: "Send proposal" });
+        expect(moveReason(meeting, false, "proposal")).toBeNull();
+        expect(moveReason(rel({ stage: "meeting", ownerUserId: "u1" }), false, "proposal")).toBe(
+            "Needs a next step"
+        );
+        // Won is reached through Proposal, not straight from a meeting.
+        expect(moveReason(meeting, true, "won")).toBe("Move to Proposal first");
+        const proposal = rel({ stage: "proposal", ownerUserId: "u1", nextAction: "Sign" });
+        expect(moveReason(proposal, true, "won")).toBeNull();
+        expect(moveReason(proposal, false, "negotiating")).toBeNull();
     });
 
     it("lets an owned, planned deal move forward and keeps won deals won", () => {
@@ -88,7 +99,10 @@ describe("moves and reasons", () => {
             "Needs an agreement recorded in Distribution"
         );
         expect(moveReason(negotiating, true, "won")).toBeNull();
-        const won = rel({ stage: "contracted", ownerUserId: "u1" });
+        // Negotiating with nobody owning it is refused.
+        const unowned = rel({ stage: "proposal", nextAction: "Sign" });
+        expect(moveReason(unowned, false, "negotiating")).toBe("Needs an owner");
+        const won = rel({ stage: "won", ownerUserId: "u1" });
         expect(moveReason(won, true, "meeting")).toBe("Won deals stay won");
         expect(moveReason(won, true, "nurture")).toBeNull();
     });

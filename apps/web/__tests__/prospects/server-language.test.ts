@@ -42,7 +42,7 @@ const rel = (over: Partial<RelationshipRecord> = {}): RelationshipRecord => ({
     orgId: "org-1",
     kind: "distributor",
     territory: { country: "NL" },
-    stage: "candidate",
+    stage: "lead",
     fitScore: 72,
     fitRationale: null,
     fitBreakdown: null,
@@ -160,12 +160,13 @@ describe("adapter copies say their English field exactly", () => {
 
     it("for every stage move's reason", () => {
         for (const stage of [
-            "candidate",
+            "lead",
             "contacted",
+            "proposal",
             "negotiating",
-            "contracted",
-            "declined",
-            "dormant",
+            "won",
+            "lost",
+            "nurture",
         ] as const) {
             for (const hasAgreement of [true, false]) {
                 for (const move of allowedMoves(rel({ stage }), hasAgreement)) {
@@ -208,7 +209,7 @@ describe("adapter copies say their English field exactly", () => {
             { type: "reply_logged", payload: {} },
             { type: "document_shared", payload: { title: "Deck" } },
             { type: "agreement_signed", payload: {} },
-            { type: "imported", payload: { stage: "active" } },
+            { type: "imported", payload: { stage: "won" } },
             { type: "imported", payload: {} },
         ].map(
             (e, i) =>
@@ -269,7 +270,7 @@ describe("in Chinese", () => {
         expect(zh(sources.labelCopy)).toBe("来源");
         expect(zh(sources.detailCopy)).toBe("已完成 1/2");
         expect(sources.children!.map(c => zh(c.labelCopy))).toEqual([
-            "公开目录（YC）",
+            "网页搜索",
             "OpenStreetMap",
             "贸易数据",
         ]);
@@ -284,11 +285,11 @@ describe("in Chinese", () => {
 
     it("words why a stage move is refused", () => {
         const reasons = Object.fromEntries(
-            allowedMoves(rel({ stage: "candidate" }), false).map(m => [m.stage, zh(m.reasonCopy)])
+            allowedMoves(rel({ stage: "lead" }), false).map(m => [m.stage, zh(m.reasonCopy)])
         );
         expect(reasons.lead).toBe("当前阶段");
-        expect(reasons.proposal).toBe("此工作区暂未启用该阶段");
-        expect(reasons.qualified).toBe("请先移至“已联系”");
+        expect(reasons.proposal).toBe("请先移至“已确认”");
+        expect(reasons.qualified).toBeNull();
         expect(reasons.contacted).toBe("需要指定负责人");
         expect(reasons.lost).toBeNull();
     });
@@ -320,7 +321,7 @@ describe("route errors", () => {
         let refused: unknown;
         try {
             assertTransition({
-                from: "researched",
+                from: "lead",
                 to: "contacted",
                 context: { ownerUserId: null, nextAction: null, hasAgreement: false },
             });

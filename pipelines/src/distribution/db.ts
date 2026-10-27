@@ -5,7 +5,7 @@
  */
 import { randomUUID } from "node:crypto";
 
-import { and, asc, desc, eq, gte, inArray, isNotNull, lt, sql } from "drizzle-orm";
+import { and, asc, desc, eq, gte, inArray, isNotNull, isNull, lt, sql } from "drizzle-orm";
 import type { InferInsertModel } from "drizzle-orm";
 
 import { getDb } from "@launchstack/store/client";
@@ -14,6 +14,7 @@ import type { ResolvedOrg } from "@launchstack/tools/org-resolver";
 import { normalizeDomain, normalizeOrgName } from "@launchstack/tools/org-resolver";
 
 import {
+    dealStageHistory,
     distributionAgreements,
     distributionPrograms,
     distributionRuns,
@@ -29,7 +30,14 @@ import {
     type PartnerRelationshipRow,
     type RelationshipEventRow,
 } from "./schema";
-import { assertTransition, isPastCandidate, STALE_AFTER_DAYS, STAGE_ORDER } from "./stages";
+import {
+    assertTransition,
+    IN_MOTION_STAGES,
+    isPastCandidate,
+    STALE_AFTER_DAYS,
+    STAGE_ORDER,
+    StageTransitionError,
+} from "./stages";
 import type {
     AgreementInput,
     AgreementRecord,
@@ -642,7 +650,7 @@ export async function upsertCandidateRelationships(args: {
             });
             continue;
         }
-        const unengaged = rows.find(r => r.stage === "candidate" || r.stage === "researched");
+        const unengaged = rows.find(r => r.stage === "lead");
         if (unengaged && unengaged.kind !== item.kind && !rows.some(r => r.kind === item.kind)) {
             await db
                 .update(partnerRelationships)
@@ -650,8 +658,14 @@ export async function upsertCandidateRelationships(args: {
                 .where(eq(partnerRelationships.id, unengaged.id));
         }
     }
-    if (inserts.length > 0)
-        await db.insert(partnerRelationships).values(inserts).onConflictDoNothing();
+    if (inserts.length > 0) {
+        const created = await db
+            .insert(partnerRelationships)
+            .values(inserts)
+            .onConflictDoNothing()
+            .returning();
+        await openFirstStints(created);
+    }
     const rows = await db
         .select()
         .from(partnerRelationships)
@@ -822,7 +836,6 @@ export async function setResearchResult(
         fitBreakdown: FitBreakdown;
         riskFlags: string[];
         screening: ScreeningState;
-        stage: RelationshipStage;
     }
 ): Promise<RelationshipRecord | null> {
     const db = getDb();
@@ -835,8 +848,8 @@ export async function setResearchResult(
             fitBreakdown: result.fitBreakdown,
             riskFlags: result.riskFlags,
             screening: result.screening,
-            stage: result.stage,
-            stageChangedAt: new Date(),
+            // Research does not move the deal: it is still a lead, and its time
+            // in Lead keeps counting from when it was found.
             lastActivityAt: new Date(),
         })
         .where(and(eq(partnerRelationships.id, id), eq(partnerRelationships.companyId, companyId)))
@@ -870,7 +883,7 @@ export async function listExclusions(
         );
     for (const row of rows) {
         const engaged =
-            isPastCandidate(row.stage) || row.source === "import" || row.stage === "declined";
+            isPastCandidate(row.stage) || row.source === "import" || row.stage === "lost";
         if (!engaged) continue;
         if (row.domain) domains.add(row.domain);
         keys.add(row.resolveKey);
@@ -964,34 +977,148 @@ export async function transitionStage(args: {
     });
     const db = getDb();
     const now = new Date();
-    const [row] = await db
-        .update(partnerRelationships)
-        .set({
-            stage: args.to,
-            stageChangedAt: now,
-            lastActivityAt: now,
-            ownerUserId,
-            nextAction,
-            ...(args.nextActionAt !== undefined ? { nextActionAt: args.nextActionAt } : {}),
-        })
-        .where(
-            and(
-                eq(partnerRelationships.id, args.relationshipId),
-                eq(partnerRelationships.companyId, args.companyId)
+    // The stage, its history and its event land together or not at all: a
+    // stage without its stint would make time-in-stage lie.
+    const row = await db.transaction(async tx => {
+        const [updated] = await tx
+            .update(partnerRelationships)
+            .set({
+                stage: args.to,
+                stageChangedAt: now,
+                lastActivityAt: now,
+                ownerUserId,
+                nextAction,
+                ...(args.nextActionAt !== undefined ? { nextActionAt: args.nextActionAt } : {}),
+            })
+            .where(
+                and(
+                    eq(partnerRelationships.id, args.relationshipId),
+                    eq(partnerRelationships.companyId, args.companyId),
+                    // Nobody moved it since we read it; otherwise the history forks.
+                    eq(partnerRelationships.stage, current.stage)
+                )
             )
-        )
-        .returning();
-    if (!row) throw new Error("Relationship not found");
-    await addEvent({
-        companyId: args.companyId,
-        relationshipId: args.relationshipId,
-        type: "stage_changed",
-        payload: { from: current.stage, to: args.to },
-        actorUserId: args.actorUserId,
-        occurredAt: now,
-        touch: false,
+            .returning();
+        if (!updated)
+            throw new StageTransitionError(
+                "stage_changed_concurrently",
+                "Someone else moved this deal just now. Reload and try again."
+            );
+        const closed = await tx
+            .update(dealStageHistory)
+            .set({ exitedAt: now })
+            .where(
+                and(
+                    eq(dealStageHistory.relationshipId, args.relationshipId),
+                    isNull(dealStageHistory.exitedAt)
+                )
+            )
+            .returning({ id: dealStageHistory.id });
+        if (closed.length === 0) {
+            // A deal from before the history table that the migration did not
+            // see (none should exist): record what we know of its last stint.
+            await tx.insert(dealStageHistory).values({
+                companyId: args.companyId,
+                relationshipId: args.relationshipId,
+                stage: current.stage,
+                enteredAt: current.stageChangedAt,
+                exitedAt: now,
+            });
+        }
+        await tx.insert(dealStageHistory).values({
+            companyId: args.companyId,
+            relationshipId: args.relationshipId,
+            stage: args.to,
+            enteredAt: now,
+            actorUserId: args.actorUserId,
+        });
+        await tx.insert(relationshipEvents).values({
+            companyId: args.companyId,
+            relationshipId: args.relationshipId,
+            type: "stage_changed",
+            payload: { from: current.stage, to: args.to },
+            actorUserId: args.actorUserId,
+            occurredAt: now,
+        });
+        return updated;
     });
     return toRelationship(row);
+}
+
+/** The opening stint of newly created deals: in their first stage since creation. */
+async function openFirstStints(rows: readonly PartnerRelationshipRow[]): Promise<void> {
+    if (rows.length === 0) return;
+    await getDb()
+        .insert(dealStageHistory)
+        .values(
+            rows.map(r => ({
+                companyId: r.companyId,
+                relationshipId: r.id,
+                stage: r.stage,
+                enteredAt: r.createdAt,
+            }))
+        )
+        .onConflictDoNothing();
+}
+
+export interface StageDuration {
+    /** Median days of finished stints in this stage; null with none finished. */
+    medianDays: number | null;
+    /** Finished stints the median is over. */
+    completed: number;
+    /** Deals in this stage right now. */
+    open: number;
+    /** How long the deals there right now have been there (median days); null with none. */
+    openMedianDays: number | null;
+}
+
+/**
+ * How long deals sit in each stage, from the stage history: finished stints
+ * and the ones still running. Scoped to one segment (program).
+ */
+export async function stageDurations(
+    companyId: bigint,
+    programId: string,
+    now = new Date()
+): Promise<Partial<Record<RelationshipStage, StageDuration>>> {
+    const db = getDb();
+    const days = sql<number>`extract(epoch from (coalesce(${dealStageHistory.exitedAt}, ${now.toISOString()}::timestamptz) - ${dealStageHistory.enteredAt})) / 86400.0`;
+    const rows = await db
+        .select({
+            stage: dealStageHistory.stage,
+            completed: sql<number>`count(*) filter (where ${dealStageHistory.exitedAt} is not null)::int`,
+            open: sql<number>`count(*) filter (where ${dealStageHistory.exitedAt} is null)::int`,
+            medianDays: sql<
+                number | null
+            >`percentile_cont(0.5) within group (order by ${days}) filter (where ${dealStageHistory.exitedAt} is not null)`,
+            openMedianDays: sql<
+                number | null
+            >`percentile_cont(0.5) within group (order by ${days}) filter (where ${dealStageHistory.exitedAt} is null)`,
+        })
+        .from(dealStageHistory)
+        .innerJoin(
+            partnerRelationships,
+            eq(partnerRelationships.id, dealStageHistory.relationshipId)
+        )
+        .where(
+            and(
+                eq(dealStageHistory.companyId, companyId),
+                eq(partnerRelationships.programId, programId)
+            )
+        )
+        .groupBy(dealStageHistory.stage);
+    const round = (v: number | string | null) =>
+        v === null ? null : Math.round(Number(v) * 10) / 10;
+    const out: Partial<Record<RelationshipStage, StageDuration>> = {};
+    for (const row of rows) {
+        out[row.stage] = {
+            medianDays: round(row.medianDays),
+            completed: Number(row.completed),
+            open: Number(row.open),
+            openMedianDays: round(row.openMedianDays),
+        };
+    }
+    return out;
 }
 
 // ─── Import ──────────────────────────────────────────────────────────────────
@@ -1044,6 +1171,7 @@ export async function importPartners(args: {
             .returning();
         if (inserted) {
             created += 1;
+            await openFirstStints([inserted]);
             const record = toRelationship(inserted);
             out.push(record);
             await addEvent({
@@ -1170,15 +1298,11 @@ export interface DashboardData {
     coverage: CoverageCell[];
     coveredCells: number;
     targetedCells: number;
+    /** Median days of finished stints per stage (kept for the Distribution API). */
     medianDaysInStage: Partial<Record<RelationshipStage, number>>;
+    /** The full picture per stage, including deals sitting there now. */
+    stageDurations: Partial<Record<RelationshipStage, StageDuration>>;
     attention: PartnerListItem[];
-}
-
-function median(values: number[]): number | undefined {
-    if (values.length === 0) return undefined;
-    const sorted = [...values].sort((a, b) => a - b);
-    const mid = Math.floor(sorted.length / 2);
-    return sorted.length % 2 ? sorted[mid]! : (sorted[mid - 1]! + sorted[mid]!) / 2;
 }
 
 export async function getDashboard(companyId: bigint, programId: string): Promise<DashboardData> {
@@ -1187,20 +1311,12 @@ export async function getDashboard(companyId: bigint, programId: string): Promis
     const items = await listPartners(companyId, { programId, limit: 500, orderBy: "activity" });
 
     const counts = Object.fromEntries(
-        STAGE_ORDER.concat(["declined", "dormant"]).map(s => [s, 0])
+        STAGE_ORDER.concat(["lost", "nurture"]).map(s => [s, 0])
     ) as Record<RelationshipStage, number>;
     for (const item of items) counts[item.relationship.stage] += 1;
 
-    const funnelStages: RelationshipStage[] = [
-        "candidate",
-        "contacted",
-        "in_conversation",
-        "qualified",
-        "negotiating",
-        "contracted",
-        "active",
-    ];
-    // Cumulative funnel: a relationship at "qualified" has also passed "contacted".
+    const funnelStages: RelationshipStage[] = STAGE_ORDER;
+    // Cumulative funnel: a deal at "meeting" has also passed "contacted".
     const funnel = funnelStages.map((stage, index) => ({
         stage,
         count: items.filter(item => {
@@ -1211,9 +1327,7 @@ export async function getDashboard(companyId: bigint, programId: string): Promis
 
     const now = new Date();
     const weekAhead = new Date(now.getTime() + 7 * 86_400_000);
-    const inPipeline = items.filter(i =>
-        ["contacted", "in_conversation", "qualified", "negotiating"].includes(i.relationship.stage)
-    ).length;
+    const inPipeline = items.filter(i => IN_MOTION_STAGES.includes(i.relationship.stage)).length;
     const stale = items.filter(i => i.stale).length;
     const dueThisWeek = items.filter(
         i => i.relationship.nextActionAt && i.relationship.nextActionAt <= weekAhead
@@ -1267,10 +1381,9 @@ export async function getDashboard(companyId: bigint, programId: string): Promis
             cellMap.set(key, cell);
         }
         const stage = item.relationship.stage;
-        if (stage === "contracted" || stage === "active") cell.covered += 1;
-        else if (["contacted", "in_conversation", "qualified", "negotiating"].includes(stage))
-            cell.inPipeline += 1;
-        else if (stage === "candidate" || stage === "researched") cell.candidates += 1;
+        if (stage === "won") cell.covered += 1;
+        else if (IN_MOTION_STAGES.includes(stage)) cell.inPipeline += 1;
+        else if (stage === "lead" || stage === "qualified") cell.candidates += 1;
     }
     const coverage = [...cellMap.values()].sort(
         (a, b) => a.country.localeCompare(b.country) || a.kind.localeCompare(b.kind)
@@ -1278,41 +1391,11 @@ export async function getDashboard(companyId: bigint, programId: string): Promis
     const targetedCells = coverage.filter(c => c.targeted).length;
     const coveredCells = coverage.filter(c => c.targeted && c.covered > 0).length;
 
-    // Median days per stage, from stage_changed events (momentum, not inventory).
-    const relationshipIds = items.map(i => i.relationship.id);
+    // Time in stage, from the stage history (finished stints and running ones).
+    const durations = await stageDurations(companyId, programId, now);
     const medianDaysInStage: Partial<Record<RelationshipStage, number>> = {};
-    if (relationshipIds.length > 0) {
-        const events = await db
-            .select()
-            .from(relationshipEvents)
-            .where(
-                and(
-                    eq(relationshipEvents.companyId, companyId),
-                    eq(relationshipEvents.type, "stage_changed"),
-                    inArray(relationshipEvents.relationshipId, relationshipIds)
-                )
-            )
-            .orderBy(asc(relationshipEvents.relationshipId), asc(relationshipEvents.occurredAt));
-        const durations = new Map<RelationshipStage, number[]>();
-        let prev: RelationshipEventRow | null = null;
-        for (const event of events) {
-            if (prev && prev.relationshipId === event.relationshipId) {
-                const stage = (prev.payload as { to?: RelationshipStage }).to;
-                if (stage) {
-                    const days =
-                        (event.occurredAt.getTime() - prev.occurredAt.getTime()) / 86_400_000;
-                    const list = durations.get(stage) ?? [];
-                    list.push(days);
-                    durations.set(stage, list);
-                }
-            }
-            prev = event;
-        }
-        for (const [stage, list] of durations) {
-            const m = median(list);
-            if (m !== undefined) medianDaysInStage[stage] = Math.round(m * 10) / 10;
-        }
-    }
+    for (const [stage, d] of Object.entries(durations) as Array<[RelationshipStage, StageDuration]>)
+        if (d.medianDays !== null) medianDaysInStage[stage] = d.medianDays;
 
     const attention = items
         .filter(
@@ -1338,6 +1421,7 @@ export async function getDashboard(companyId: bigint, programId: string): Promis
         coveredCells,
         targetedCells,
         medianDaysInStage,
+        stageDurations: durations,
         attention,
     };
 }

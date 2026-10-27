@@ -22,6 +22,7 @@ import {
     type PipelineStepState,
     type PlatformMeta,
     type ThinkingEntry,
+    type ClaimGateClaimUI,
 } from "./shared";
 
 function buildInitialSteps(): PipelineStepState[] {
@@ -87,6 +88,11 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
     const [contentType, setContentType] = useState<ContentType | undefined>(undefined);
     const [thinkingLog, setThinkingLog] = useState<ThinkingEntry[]>([]);
     const [publishing, setPublishing] = useState(false);
+    /** Claims the documents don't back, waiting on "Post anyway" (null: no question open). */
+    const [claimGate, setClaimGate] = useState<{
+        unavailable: boolean;
+        claims: ClaimGateClaimUI[];
+    } | null>(null);
     const [publishResult, setPublishResult] = useState<{
         success: boolean;
         postUrl?: string;
@@ -113,6 +119,7 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
         setEvalError(null);
         setPublishing(false);
         setPublishResult(null);
+        setClaimGate(null);
     }, []);
 
     const applySession = useCallback(
@@ -622,55 +629,102 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
         setGenerationStartTime(null);
     }, []);
 
-    const publishPost = useCallback(async () => {
-        // Publish the currently-visible/edited post to its platform. Reddit posts
-        // default to the user's own profile (`u_me`) server-side; no subreddit is
-        // required here. Uses the existing /api/marketing-pipeline/publish route.
-        // Non-Reddit platforms don't render Markdown, so publish the same
-        // plain-text conversion the copy flow produces.
-        const targetPlatform = result?.platform ?? platform;
-        const message = toPlatformText(targetPlatform, editableMessage).trim();
-        if (!targetPlatform || !message) return;
+    const sendPublish = useCallback(
+        async (acknowledgeUnsupportedClaims: boolean) => {
+            // Publish the currently-visible/edited post to its platform. Reddit posts
+            // default to the user's own profile (`u_me`) server-side; no subreddit is
+            // required here. Uses the existing /api/marketing-pipeline/publish route.
+            // Non-Reddit platforms don't render Markdown, so publish the same
+            // plain-text conversion the copy flow produces.
+            const targetPlatform = result?.platform ?? platform;
+            const message = toPlatformText(targetPlatform, editableMessage).trim();
+            if (!targetPlatform || !message) return;
 
-        const epoch = postFeedbackEpochRef.current;
-        setPublishing(true);
-        setPublishResult(null);
-        try {
-            const response = await fetch("/api/marketing-pipeline/publish", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ platform: targetPlatform, message }),
-            });
-            // The route answers `{ success, data: { postUrl, channel } }`.
-            const payload = (await response.json()) as {
-                success: boolean;
-                data?: { postUrl?: string | null; channel?: string };
-                message?: string;
-                error?: string;
-            };
-            if (epoch !== postFeedbackEpochRef.current) return; // displayed post changed
-            if (response.ok && payload.success) {
-                setPublishResult({
-                    success: true,
-                    postUrl: payload.data?.postUrl ?? undefined,
-                    channel: payload.data?.channel,
+            const epoch = postFeedbackEpochRef.current;
+            setPublishing(true);
+            setPublishResult(null);
+            try {
+                const response = await fetch("/api/marketing-pipeline/publish", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        platform: targetPlatform,
+                        message,
+                        ...(acknowledgeUnsupportedClaims ? { acknowledgeUnsupportedClaims } : {}),
+                    }),
                 });
-            } else {
+                // The route answers `{ success, data: { postUrl, channel } }`, or a 409
+                // with the claims it would not post unacknowledged.
+                const payload = (await response.json()) as {
+                    success: boolean;
+                    data?: { postUrl?: string | null; channel?: string };
+                    message?: string;
+                    error?: string;
+                    code?: string;
+                    unavailable?: boolean;
+                    claims?: ClaimGateClaimUI[];
+                };
+                if (epoch !== postFeedbackEpochRef.current) return; // displayed post changed
+                if (response.status === 409 && payload.code === "unsupported_claims") {
+                    setClaimGate({
+                        unavailable: payload.unavailable === true,
+                        claims: payload.claims ?? [],
+                    });
+                    return;
+                }
+                if (response.ok && payload.success) {
+                    setPublishResult({
+                        success: true,
+                        postUrl: payload.data?.postUrl ?? undefined,
+                        channel: payload.data?.channel,
+                    });
+                } else {
+                    setPublishResult({
+                        success: false,
+                        error: payload.message ?? payload.error ?? t("errors.publishFailed"),
+                    });
+                }
+            } catch (err) {
+                if (epoch !== postFeedbackEpochRef.current) return;
                 setPublishResult({
                     success: false,
-                    error: payload.message ?? payload.error ?? t("errors.publishFailed"),
+                    error: err instanceof Error ? err.message : t("errors.publishNetwork"),
                 });
+            } finally {
+                if (epoch === postFeedbackEpochRef.current) setPublishing(false);
             }
-        } catch (err) {
-            if (epoch !== postFeedbackEpochRef.current) return;
-            setPublishResult({
-                success: false,
-                error: err instanceof Error ? err.message : t("errors.publishNetwork"),
+        },
+        [editableMessage, platform, result?.platform, t]
+    );
+
+    /**
+     * Publish, unless the generated post's claims need a person to look first:
+     * then ask (the gate dialog), and post only once they confirm. The server
+     * checks the final text too, so an edit that adds a claim is caught there.
+     */
+    const publishPost = useCallback(async () => {
+        const review = (result?.claimSources ?? []).filter(c => c.support !== "supported");
+        if (review.length > 0 || result?.claimCheckUnavailable) {
+            setClaimGate({
+                unavailable: result?.claimCheckUnavailable === true,
+                claims: review.map(c => ({
+                    claim: c.claim,
+                    support: c.support,
+                    reason: c.reason ?? null,
+                    sourceDoc: c.match?.sourceDoc ?? null,
+                })),
             });
-        } finally {
-            if (epoch === postFeedbackEpochRef.current) setPublishing(false);
+            return;
         }
-    }, [editableMessage, platform, result?.platform, t]);
+        await sendPublish(false);
+    }, [result?.claimCheckUnavailable, result?.claimSources, sendPublish]);
+
+    const confirmClaimGate = useCallback(async () => {
+        setClaimGate(null);
+        await sendPublish(true);
+    }, [sendPublish]);
+
+    const dismissClaimGate = useCallback(() => setClaimGate(null), []);
 
     const evaluatePost = useCallback(async () => {
         // Score the currently-visible/edited post with the LLM-as-judge pipeline
@@ -798,6 +852,9 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
         publishing,
         publishResult,
         publishPost,
+        claimGate,
+        confirmClaimGate,
+        dismissClaimGate,
         evaluating,
         evalResult,
         evalError,

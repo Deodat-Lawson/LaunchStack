@@ -28,6 +28,7 @@ import type { PostTestLink } from "~/lib/scenarios/types";
 import { listBrandChannels } from "~/server/brand/accounts";
 import { getBrandMediaRows, networkMediaProblem } from "~/server/brand/media";
 import { toPostViews } from "~/server/brand/post-views";
+import { claimGate } from "~/server/brand/claim-gate";
 import { publishForWorkspace } from "~/server/brand/publish";
 import { brandReason } from "~/server/brand/words";
 import { linkComposedPosts } from "~/server/scenarios/service";
@@ -67,6 +68,8 @@ const CreateSchema = z.object({
         .optional(),
     /** A finished "Test this post" run; linked when the body is the tested text. */
     postTestId: z.number().int().positive().optional(),
+    /** A campaign post: the member saw which claims aren't backed and posts anyway. */
+    acknowledgeUnsupportedClaims: z.boolean().optional(),
 });
 
 /** Link the composed posts to their post test. Never fails the compose. */
@@ -171,6 +174,13 @@ export async function POST(request: NextRequest) {
                     return error(t("cannotPostAs", { name: channel.name }), 400);
                 targets.push({ platform: channel.platform, channelId: channel.id });
             }
+        }
+
+        // A campaign draft is checked the way the generator's Publish is: its
+        // claims must be backed by the workspace's documents, or acknowledged.
+        if (input.source?.kind === "campaign" && !input.acknowledgeUnsupportedClaims) {
+            const blocked = await claimGate(auth.ctx.companyId, input.body);
+            if (blocked) return error(t("unbackedClaims"), 409, { ...blocked });
         }
 
         const media = input.media ?? [];

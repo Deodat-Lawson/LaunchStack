@@ -52,6 +52,8 @@ export interface FounderWeeklyReviewTestSession {
 export interface FounderWeeklyReviewTestDatabase {
     databaseName: string;
     db: DbClient;
+    /** Apply a migration held back with `holdBack` (a data migration's test seeds the old shape first). */
+    applyMigration(tag: string): Promise<void>;
     createSession(): Promise<FounderWeeklyReviewTestSession>;
     close(): Promise<void>;
 }
@@ -125,7 +127,9 @@ export function assertLocalTestServer(connectionString: string): void {
  * run in parallel, and the failure surfaces as a bare per-test timeout that
  * says nothing about the database.
  */
-export async function createFounderWeeklyReviewTestDatabase(): Promise<FounderWeeklyReviewTestDatabase> {
+export async function createFounderWeeklyReviewTestDatabase(
+    options: { holdBack?: readonly string[] } = {}
+): Promise<FounderWeeklyReviewTestDatabase> {
     const connectionString = process.env.LAUNCHSTACK_TEST_DATABASE_URL ?? process.env.DATABASE_URL;
 
     if (!connectionString) {
@@ -156,9 +160,15 @@ export async function createFounderWeeklyReviewTestDatabase(): Promise<FounderWe
     const testUrl = withDatabase(connectionString, databaseName);
     const admin = postgres(testUrl, { max: 1 });
 
+    const heldBack = new Map<string, string>();
     try {
         for (const dir of MIGRATION_SETS) {
             for (const file of await listMigrationFiles(dir)) {
+                const tag = file.slice(file.lastIndexOf("/") + 1, -".sql".length);
+                if (options.holdBack?.includes(tag)) {
+                    heldBack.set(tag, file);
+                    continue;
+                }
                 const body = await readFile(file, "utf8");
                 await admin.begin(async tx => {
                     await tx.unsafe(body);
@@ -177,6 +187,15 @@ export async function createFounderWeeklyReviewTestDatabase(): Promise<FounderWe
     return {
         databaseName,
         db: primary.db,
+        async applyMigration(tag: string) {
+            const file = heldBack.get(tag);
+            if (!file) throw new Error(`Migration ${tag} was not held back`);
+            const body = await readFile(file, "utf8");
+            await admin.begin(async tx => {
+                await tx.unsafe(body);
+            });
+            heldBack.delete(tag);
+        },
         createSession: () => createSession(testUrl),
         async close() {
             await primary.close();

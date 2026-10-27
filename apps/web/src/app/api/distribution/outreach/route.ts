@@ -81,7 +81,7 @@ export async function POST(request: NextRequest) {
                             skip(relationshipId, copy("growth.server.outreach.notInProgram"));
                             continue;
                         }
-                        if (["contracted", "active", "declined"].includes(relationship.stage)) {
+                        if (relationship.stage === "won" || relationship.stage === "lost") {
                             skip(
                                 relationshipId,
                                 copy("growth.server.outreach.stageIs", {

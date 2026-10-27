@@ -4,6 +4,8 @@
  * database lives here. Tenancy is by the `companyId` on the context, never a
  * value from the request body.
  */
+import { eq } from "drizzle-orm";
+
 import { prepareEmailCampaign, type Recipient } from "@launchstack/pipelines/email";
 import {
     addEvent,
@@ -37,6 +39,8 @@ import type {
     RunRecord,
     Territory,
 } from "@launchstack/pipelines/distribution/types";
+import { parsePlace, parsePlaces, placeLabel } from "@launchstack/pipelines/distribution/locate";
+import { getCompanyIdentity, readFact } from "@launchstack/tools/company-context";
 import { resolveComplianceProvider } from "@launchstack/tools/compliance-screen";
 import { isPlaceSearchConfigured } from "@launchstack/tools/place-search";
 import { isTradeDataConfigured } from "@launchstack/tools/trade-data";
@@ -56,11 +60,14 @@ import type {
     RunDto,
     SalesStage,
     SegmentDto,
+    SegmentSuggestion,
     SegmentSummary,
     SourceRow,
     TodoItem,
 } from "~/app/employer/tools/growth/prospects/api";
 import { env } from "~/env";
+import { db } from "~/server/db";
+import { companyMetadata } from "~/server/db/schema";
 import { copy, isCopy, type Copy } from "~/i18n/copy";
 import { englishCopy } from "~/i18n/translate";
 
@@ -193,12 +200,21 @@ export async function createSegment(
     ctx: ProspectsCtx,
     input: NewSegmentInput
 ): Promise<SegmentDto> {
+    const home = (await companyHeadquarters(ctx.companyId))?.country ?? null;
+    const territories: Territory[] = [
+        ...(input.countries ?? []).map((c): Territory => ({ country: c.toUpperCase() })),
+        ...(input.places ?? []).flatMap(p => parsePlaces(p, home)),
+    ].filter(
+        (t, i, all) => all.findIndex(o => o.country === t.country && o.region === t.region) === i
+    );
+    if (territories.length === 0)
+        throw new ProspectsError(copy("growth.server.errors.sayWhere"), 400);
     const programInput: ProgramInput = {
         name: input.name,
         offering: input.offering,
         categories: input.industries,
         hsCodes: [],
-        targetTerritories: input.countries.map(c => ({ country: c.toUpperCase() })),
+        targetTerritories: territories.slice(0, 20),
         // Until the pipeline reframe, discovery still searches by partner kind;
         // these three are the buyer-shaped ones.
         partnerKinds: ["distributor", "retailer", "wholesaler"],
@@ -211,6 +227,35 @@ export async function createSegment(
         input: programInput,
     });
     return toSegment(program, [], sourcesOn(availability()));
+}
+
+/** Where the company itself is, from its profile's headquarters fact; null when unknown. */
+async function companyHeadquarters(companyId: bigint): Promise<Territory | null> {
+    const [row] = await db
+        .select({ metadata: companyMetadata.metadata })
+        .from(companyMetadata)
+        .where(eq(companyMetadata.companyId, companyId))
+        .limit(1);
+    const hq = row ? readFact(row.metadata.company?.headquarters) : undefined;
+    return typeof hq === "string" && hq.trim() ? parsePlace(hq) : null;
+}
+
+/**
+ * A first segment drafted from the company's profile: what it sells (its
+ * description) and where it is (its headquarters). Who buys is left to the
+ * member — the seller's own industry says nothing about its customers'.
+ */
+export async function suggestSegment(ctx: ProspectsCtx): Promise<SegmentSuggestion> {
+    const [{ data: identity }, hq] = await Promise.all([
+        getCompanyIdentity({ companyId: Number(ctx.companyId) }),
+        companyHeadquarters(ctx.companyId),
+    ]);
+    const offering = identity.description.trim();
+    return {
+        offering,
+        place: hq ? placeLabel(hq) : null,
+        basis: { profile: offering.length > 0, headquarters: hq !== null },
+    };
 }
 
 function parseTerritory(value: string): Territory | null {

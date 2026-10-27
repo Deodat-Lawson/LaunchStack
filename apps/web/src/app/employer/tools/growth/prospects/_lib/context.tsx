@@ -25,7 +25,8 @@ export interface ProspectsContextValue {
     runSheetOpen: boolean;
     openRunSheet: (runId?: string) => void;
     closeRunSheet: () => void;
-    startRun: (options?: { sample?: boolean }) => Promise<void>;
+    /** Start a run on the selected segment, or on `segmentId` (a segment created a moment ago). */
+    startRun: (options?: { sample?: boolean; segmentId?: string }) => Promise<void>;
     noteRunFinished: () => void;
     /** Remembered per browser: run with sample data instead of live providers. */
     samplePreferred: boolean;
@@ -132,10 +133,11 @@ export function ProspectsProvider({
     }, []);
 
     const startRun = useCallback(
-        async (options?: { sample?: boolean }) => {
-            if (!segmentId) return;
+        async (options?: { sample?: boolean; segmentId?: string }) => {
+            const target = options?.segmentId ?? segmentId;
+            if (!target) return;
             const sample = options?.sample ?? samplePreferred;
-            const { run } = await prospectsApi.startRun(segmentId, sample ? { sample: true } : {});
+            const { run } = await prospectsApi.startRun(target, sample ? { sample: true } : {});
             setActiveRunId(run.id);
             setRunSheetOpen(true);
         },

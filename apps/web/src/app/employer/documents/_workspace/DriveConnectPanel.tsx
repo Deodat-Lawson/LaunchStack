@@ -89,8 +89,16 @@ function Notice({
 export function DriveConnectPanel({
     tab,
     onFolderAccess,
+    onImported,
 }: {
     tab: AddSourceTab;
+    /**
+     * Something was picked, a link pasted, or a sync started by hand — files
+     * are on their way in. The workspace closes the dialog and opens the
+     * Processing tab, which follows the sync and each file. A background
+     * sync (the 15-minute schedule) never calls this.
+     */
+    onImported?: () => void;
     /**
      * Whether a picked folder can import right now (null until known, or
      * while not connected): the modal's destination bar only promises a
@@ -155,12 +163,13 @@ export function DriveConnectPanel({
                         : `${docs.length} items added — syncing`
                 );
                 await syncAfterAdd();
+                onImported?.();
             } else {
                 toast.error(await errorMessage(res, "Could not save the selection"));
                 void refresh();
             }
         },
-        [refresh, syncAfterAdd]
+        [refresh, syncAfterAdd, onImported]
     );
 
     const addLink = useCallback(async () => {
@@ -185,10 +194,11 @@ export function DriveConnectPanel({
             toast.success(`${payload.message ?? "Added."} Syncing now.`);
             setLink("");
             await syncAfterAdd();
+            onImported?.();
         } finally {
             setAddingLink(false);
         }
-    }, [link, syncAfterAdd]);
+    }, [link, syncAfterAdd, onImported]);
 
     const choose = useCallback(async () => {
         if (!status?.picker.apiKey || !status.picker.appId) {
@@ -227,12 +237,14 @@ export function DriveConnectPanel({
     const syncNow = useCallback(async () => {
         setBusy(true);
         try {
-            if (await requestSync()) toast.success("Sync requested");
-            else toast.error("Could not start the sync");
+            if (await requestSync()) {
+                toast.success("Sync requested");
+                onImported?.();
+            } else toast.error("Could not start the sync");
         } finally {
             setBusy(false);
         }
-    }, [requestSync]);
+    }, [requestSync, onImported]);
 
     const removeItem = useCallback(
         async (fileId: string) => {

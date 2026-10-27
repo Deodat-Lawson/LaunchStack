@@ -11,6 +11,7 @@
 export const STUDIO_PANE_IDS = [
     "chat",
     "knowledge",
+    "processing",
     "meetings",
     "agents",
     "team",

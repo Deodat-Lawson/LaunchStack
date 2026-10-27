@@ -203,7 +203,8 @@ describe("DriveConnectPanel paste a folder link", () => {
 
     it("adds the folder, then starts a sync", async () => {
         status = connected();
-        render(<DriveConnectPanel tab={driveTab} />);
+        const onImported = jest.fn();
+        render(<DriveConnectPanel tab={driveTab} onImported={onImported} />);
         const user = userEvent.setup();
 
         await user.type(
@@ -220,11 +221,14 @@ describe("DriveConnectPanel paste a folder link", () => {
             link: "https://drive.google.com/drive/folders/sa-dataroom?usp=sharing",
         });
         expect(screen.getByLabelText("Paste a folder link")).toHaveValue("");
+        // Files are on their way: the workspace opens the Processing tab.
+        expect(onImported).toHaveBeenCalledTimes(1);
     });
 
     it("shows the server's reason when the account can't open the link", async () => {
         status = connected();
-        render(<DriveConnectPanel tab={driveTab} />);
+        const onImported = jest.fn();
+        render(<DriveConnectPanel tab={driveTab} onImported={onImported} />);
         const user = userEvent.setup();
 
         await user.type(
@@ -237,5 +241,6 @@ describe("DriveConnectPanel paste a folder link", () => {
             await screen.findByText(/Ask its owner to share it with alex.rivera@example.com/)
         ).toBeInTheDocument();
         expect(fetchMock.mock.calls.some(([url]) => String(url).endsWith("/sync"))).toBe(false);
+        expect(onImported).not.toHaveBeenCalled();
     });
 });

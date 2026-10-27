@@ -8,7 +8,6 @@ import {
     Zap as IconBolt,
     Check as IconCheck,
     Folder as IconFolder,
-    Loader2,
     X as IconX,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -16,12 +15,12 @@ import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
 import { cn } from "~/lib/utils";
 import { AddDestinationBar } from "./AddDestinationBar";
-import { destinationLabel, planFolderUpload, type AudienceSummary } from "./addDestination";
+import { planFolderUpload, type AudienceSummary } from "./addDestination";
 import { ADD_TABS, SOURCE_META, type AddSourceTab, type ItemAccessView } from "./types";
 import { DriveConnectPanel } from "./DriveConnectPanel";
 import type { FolderAccessState } from "./driveStatus";
 import { GmailConnectPanel } from "./GmailConnectPanel";
-import { registerDocument, uploadFileToStorage } from "./sourceUpload";
+import { startFileUploads, startLinkTask } from "./processing/uploadTasks";
 import { DOCUMENT_LIMITS } from "~/lib/constants";
 import { detectSourceType } from "@launchstack/conversion/types";
 import { ArtifactImportPanel } from "./ArtifactImportPanel";
@@ -108,6 +107,14 @@ export interface AddSourceModalProps {
     accessVersion?: number;
     /** Called after any successful ingest so the workspace can refresh its list. */
     onUploaded: () => void;
+    /**
+     * Something was handed to the Processing queue — files whose bytes are
+     * still going up, a link the server is fetching, a Drive or Gmail import.
+     * The dialog closes; the workspace opens the Processing tab, which shows
+     * each one's progress from here on. Not called for what is made rather
+     * than added (a mindmap, a new Google Doc).
+     */
+    onQueued?: () => void;
     /** Create a folder; may resolve to the path it really got ("Name (2)"). */
     onCreateFolder?: (name: string) => void | Promise<string | null | void>;
     /**
@@ -145,48 +152,11 @@ interface GoogleConnectionStatus {
     connectUrl?: string;
 }
 
-/** Which half of a file's trip is running: the bytes, or registering it (which transcribes a recording). */
-type UploadPhase = "uploading" | "processing";
-
-async function uploadAndRegisterAll(params: {
-    files: File[];
-    category: string;
-    onProgress?: (completed: number, total: number) => void;
-    onPhase?: (file: File, phase: UploadPhase) => void;
-}): Promise<{ successes: number; errors: string[] }> {
-    let successes = 0;
-    const errors: string[] = [];
-    for (let i = 0; i < params.files.length; i++) {
-        const file = params.files[i]!;
-        try {
-            params.onPhase?.(file, "uploading");
-            const up = await uploadFileToStorage(file);
-            params.onPhase?.(file, "processing");
-            await registerDocument({
-                file,
-                url: up.url,
-                provider: up.provider,
-                category: params.category,
-            });
-            successes++;
-        } catch (err) {
-            errors.push(err instanceof Error ? err.message : `Failed to upload ${file.name}`);
-        }
-        params.onProgress?.(i + 1, params.files.length);
-    }
-    return { successes, errors };
-}
-
 function formatSize(bytes: number): string {
     if (bytes < 1024) return `${bytes} B`;
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`;
     if (bytes < 1024 * 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
     return `${(bytes / (1024 * 1024 * 1024)).toFixed(2)} GB`;
-}
-
-/** " to Q4 planning / Pricing", or " (no folder)" — the end of a "done" toast. */
-function whereTo(category: string): string {
-    return isUnfiledFolder(category) ? " (no folder)" : ` to ${destinationLabel(category)}`;
 }
 
 function extOf(filename: string): string {
@@ -262,6 +232,7 @@ export function AddSourceModal({
     onShareFolder,
     accessVersion = 0,
     onUploaded,
+    onQueued,
     onCreateFolder,
     initialTab,
     initialUrl,
@@ -336,7 +307,14 @@ export function AddSourceModal({
     const allTabs: AddSourceTab[] = groups.flatMap(g => g.items);
     const active = allTabs.find(t => t.id === tab) ?? allTabs[0]!;
 
+    /** Added: it is on its way in, and the Processing tab follows it. */
     const handleUploaded = () => {
+        onUploaded();
+        onQueued?.();
+        onClose();
+    };
+    /** Made, not added: a new Google Doc opens as a source, not as a queue entry. */
+    const handleCreated = () => {
         onUploaded();
         onClose();
     };
@@ -345,7 +323,7 @@ export function AddSourceModal({
     if (tab === "mindmap") {
         panel = <MindmapPanel folder={folder} onCreated={onMindmapCreated} />;
     } else if (tab === "google-doc") {
-        panel = <GoogleDocPanel folder={folder} status={googleStatus} onCreated={handleUploaded} />;
+        panel = <GoogleDocPanel folder={folder} status={googleStatus} onCreated={handleCreated} />;
     } else if (tab === "files") {
         panel = (
             <FilesPanel
@@ -389,9 +367,15 @@ export function AddSourceModal({
     } else if (tab === "youtube") {
         panel = <YouTubePanel userId={userId} category={folder} onUploaded={handleUploaded} />;
     } else if (tab === "drive") {
-        panel = <DriveConnectPanel tab={active} onFolderAccess={setDriveFolderAccess} />;
+        panel = (
+            <DriveConnectPanel
+                tab={active}
+                onFolderAccess={setDriveFolderAccess}
+                onImported={handleUploaded}
+            />
+        );
     } else if (tab === "gmail") {
-        panel = <GmailConnectPanel tab={active} />;
+        panel = <GmailConnectPanel tab={active} onImported={handleUploaded} />;
     } else if (tab === "artifact") {
         panel = (
             <ArtifactImportPanel userId={userId} category={folder} onUploaded={handleUploaded} />
@@ -905,8 +889,6 @@ const KIND_COPY: Record<
 function FilesPanel({ kind, userId, category, onUploaded }: FilesPanelProps) {
     const [dragging, setDragging] = useState(false);
     const [staged, setStaged] = useState<File[]>([]);
-    const [progress, setProgress] = useState<{ done: number; total: number } | null>(null);
-    const [phase, setPhase] = useState<{ file: File; phase: UploadPhase } | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
     const copy = KIND_COPY[kind];
     const IconEl = copy.IconEl;
@@ -935,48 +917,22 @@ function FilesPanel({ kind, userId, category, onUploaded }: FilesPanelProps) {
 
     const removeStaged = (i: number) => setStaged(prev => prev.filter((_, idx) => idx !== i));
 
-    const submit = async () => {
+    // The bytes go up after the dialog has closed: the Processing tab shows
+    // each file's upload, then its processing, stage by stage.
+    const submit = () => {
         if (!userId) {
             toast.error("Sign in to upload files");
             return;
         }
         if (staged.length === 0) return;
-        setProgress({ done: 0, total: staged.length });
-        try {
-            const result = await uploadAndRegisterAll({
-                files: staged,
-                category,
-                onProgress: (done, total) => setProgress({ done, total }),
-                onPhase: (file, next) => setPhase({ file, phase: next }),
-            });
-            if (result.errors.length > 0) {
-                toast.error(
-                    `${result.errors.length} file${result.errors.length !== 1 ? "s" : ""} failed`,
-                    {
-                        description: result.errors.slice(0, 2).join(" · "),
-                    }
-                );
-            }
-            // Only clear the staged list (and close via onUploaded) when something
-            // actually made it up — if every file failed, keep the list so the user
-            // can retry without re-picking.
-            if (result.successes > 0) {
-                toast.success(
-                    `Uploaded ${result.successes} file${result.successes !== 1 ? "s" : ""}${whereTo(category)}`
-                );
-                setStaged([]);
-                onUploaded();
-            }
-        } finally {
-            setProgress(null);
-            setPhase(null);
-        }
+        startFileUploads(staged.map(file => ({ file, category })));
+        setStaged([]);
+        onUploaded();
     };
 
-    const busy = progress !== null;
-    const transcribing =
-        phase?.phase === "processing" &&
-        detectSourceType(phase.file.type || undefined, phase.file.name) === "audio";
+    const hasRecording = staged.some(
+        file => detectSourceType(file.type || undefined, file.name) === "audio"
+    );
 
     return (
         <div>
@@ -1022,7 +978,6 @@ function FilesPanel({ kind, userId, category, onUploaded }: FilesPanelProps) {
                 </div>
                 <button
                     onClick={() => inputRef.current?.click()}
-                    disabled={busy}
                     style={{
                         background: "var(--accent)",
                         color: "white",
@@ -1030,8 +985,7 @@ function FilesPanel({ kind, userId, category, onUploaded }: FilesPanelProps) {
                         borderRadius: 8,
                         fontSize: 13,
                         fontWeight: 600,
-                        opacity: busy ? 0.6 : 1,
-                        cursor: busy ? "not-allowed" : "pointer",
+                        cursor: "pointer",
                     }}
                 >
                     {copy.browse}
@@ -1126,7 +1080,6 @@ function FilesPanel({ kind, userId, category, onUploaded }: FilesPanelProps) {
                                     </div>
                                     <button
                                         onClick={() => removeStaged(i)}
-                                        disabled={busy}
                                         title="Remove"
                                         style={{
                                             color: "var(--ink-3)",
@@ -1143,20 +1096,16 @@ function FilesPanel({ kind, userId, category, onUploaded }: FilesPanelProps) {
                     </div>
                     <div className="mt-3 flex items-center justify-between gap-3">
                         <div className="text-ink-3 min-w-0 flex-1 text-[11px]" aria-live="polite">
-                            {busy && progress
-                                ? transcribing && phase
-                                    ? `Transcribing ${phase.file.name}… a long recording takes a few minutes; keep this open.`
-                                    : `Uploading ${Math.min(progress.done + 1, progress.total)} / ${progress.total}…`
-                                : `${staged.length} file${staged.length !== 1 ? "s" : ""} ready to upload`}
+                            {`${staged.length} file${staged.length !== 1 ? "s" : ""} ready to upload`}
+                            {hasRecording
+                                ? " — recordings are transcribed first; follow along in Processing"
+                                : " — follow along in Processing"}
                         </div>
                         <Button
                             className="shrink-0"
-                            onClick={() => {
-                                void submit();
-                            }}
-                            disabled={busy || staged.length === 0}
+                            onClick={submit}
+                            disabled={staged.length === 0}
                         >
-                            {busy && <Loader2 className="animate-spin" aria-hidden />}
                             Upload {staged.length} file{staged.length !== 1 ? "s" : ""}
                             {isUnfiledFolder(category) ? "" : ` to ${folderLeafName(category)}`}
                         </Button>
@@ -1195,8 +1144,6 @@ function FolderPanel({ userId, destination, onNameChange, onUploaded }: FolderPa
     const [picked, setPicked] = useState<PickedFolder | null>(null);
     const [name, setName] = useState("");
     const [excluded, setExcluded] = useState<Set<string>>(new Set());
-    const [busy, setBusy] = useState(false);
-    const [progress, setProgress] = useState<{ done: number; total: number } | null>(null);
     const inputRef = useRef<HTMLInputElement>(null);
 
     // The bar above shows "<destination> › <name>  New folder" while a folder is picked.
@@ -1234,53 +1181,17 @@ function FolderPanel({ userId, destination, onNameChange, onUploaded }: FolderPa
     const plan = planFolderUpload(destination, name, included.map(relativePathOf));
     const blocked = plan.problems.length > 0;
 
-    const submit = async () => {
+    const submit = () => {
         if (!userId) {
             toast.error("Sign in to upload files");
             return;
         }
         if (included.length === 0 || blocked) return;
-        setBusy(true);
-        setProgress({ done: 0, total: included.length });
-        let successes = 0;
-        const errors: string[] = [];
-        try {
-            for (let i = 0; i < included.length; i++) {
-                const file = included[i]!;
-                try {
-                    const up = await uploadFileToStorage(file);
-                    await registerDocument({
-                        file,
-                        url: up.url,
-                        provider: up.provider,
-                        category: plan.paths[i]!,
-                    });
-                    successes++;
-                } catch (err) {
-                    errors.push(
-                        err instanceof Error ? err.message : `Failed to upload ${file.name}`
-                    );
-                }
-                setProgress({ done: i + 1, total: included.length });
-            }
-            if (errors.length > 0) {
-                toast.error(`${errors.length} file${errors.length !== 1 ? "s" : ""} failed`, {
-                    description: errors.slice(0, 2).join(" · "),
-                });
-            }
-            // Same retry affordance as FilesPanel: keep the picked folder staged
-            // when nothing uploaded so the user can retry.
-            if (successes > 0) {
-                toast.success(
-                    `Uploaded ${successes} file${successes !== 1 ? "s" : ""}${whereTo(plan.root)}`
-                );
-                setPicked(null);
-                onUploaded();
-            }
-        } finally {
-            setBusy(false);
-            setProgress(null);
-        }
+        // Every file keeps the subfolder it had on disk; the Processing tab
+        // follows them up and through processing.
+        startFileUploads(included.map((file, i) => ({ file, category: plan.paths[i]! })));
+        setPicked(null);
+        onUploaded();
     };
 
     if (!picked) {
@@ -1323,13 +1234,7 @@ function FolderPanel({ userId, destination, onNameChange, onUploaded }: FolderPa
                         {plan.folderCount} folder{plan.folderCount !== 1 ? "s" : ""}
                     </div>
                 </div>
-                <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setPicked(null)}
-                    disabled={busy}
-                >
+                <Button type="button" variant="outline" size="sm" onClick={() => setPicked(null)}>
                     Change
                 </Button>
             </div>
@@ -1342,7 +1247,6 @@ function FolderPanel({ userId, destination, onNameChange, onUploaded }: FolderPa
                 <Input
                     value={name}
                     onChange={e => setName(e.target.value)}
-                    disabled={busy}
                     aria-invalid={blocked || undefined}
                     className="h-8 flex-1 text-[13px]"
                 />
@@ -1383,7 +1287,6 @@ function FolderPanel({ userId, destination, onNameChange, onUploaded }: FolderPa
                                 type="checkbox"
                                 checked={included_}
                                 onChange={() => toggle(key)}
-                                disabled={busy}
                                 style={{ accentColor: "var(--accent)" }}
                             />
                             <div
@@ -1423,18 +1326,8 @@ function FolderPanel({ userId, destination, onNameChange, onUploaded }: FolderPa
             </div>
 
             <div className="mt-3 flex items-center justify-between gap-3">
-                <div className="text-ink-3 text-[11px]">
-                    {busy && progress
-                        ? `Uploading ${progress.done} / ${progress.total}…`
-                        : "Hidden & system files excluded"}
-                </div>
-                <Button
-                    type="button"
-                    disabled={busy || included.length === 0 || blocked}
-                    onClick={() => {
-                        void submit();
-                    }}
-                >
+                <div className="text-ink-3 text-[11px]">Hidden &amp; system files excluded</div>
+                <Button type="button" disabled={included.length === 0 || blocked} onClick={submit}>
                     Add {included.length} file{included.length !== 1 ? "s" : ""}
                     {name.trim() ? ` to ${name.trim()}` : ""}
                 </Button>
@@ -1461,9 +1354,7 @@ function PastePanel({ userId, category, onUploaded, initialText }: TextPanelProp
     useEffect(() => {
         if (initialText) setText(initialText);
     }, [initialText]);
-    const [busy, setBusy] = useState(false);
-
-    const submit = async () => {
+    const submit = () => {
         if (!userId) {
             toast.error("Sign in to save notes");
             return;
@@ -1477,24 +1368,10 @@ function PastePanel({ userId, category, onUploaded, initialText }: TextPanelProp
             .slice(0, 100);
         const filename = `${sanitized || "note"}.md`;
         const file = new File([trimmed], filename, { type: "text/markdown" });
-        setBusy(true);
-        try {
-            const up = await uploadFileToStorage(file);
-            await registerDocument({
-                file,
-                url: up.url,
-                provider: up.provider,
-                category,
-            });
-            toast.success(`Added "${safeTitle}"${whereTo(category)}`);
-            setTitle("");
-            setText("");
-            onUploaded();
-        } catch (err) {
-            toast.error(err instanceof Error ? err.message : "Failed to save note");
-        } finally {
-            setBusy(false);
-        }
+        startFileUploads([{ file, category }]);
+        setTitle("");
+        setText("");
+        onUploaded();
     };
 
     return (
@@ -1503,7 +1380,6 @@ function PastePanel({ userId, category, onUploaded, initialText }: TextPanelProp
                 value={title}
                 onChange={e => setTitle(e.target.value)}
                 placeholder="Title (optional)"
-                disabled={busy}
                 style={{
                     width: "100%",
                     padding: "10px 14px",
@@ -1521,7 +1397,6 @@ function PastePanel({ userId, category, onUploaded, initialText }: TextPanelProp
             <textarea
                 value={text}
                 onChange={e => setText(e.target.value)}
-                disabled={busy}
                 placeholder="Paste notes, an email, a transcript, anything…"
                 style={{
                     width: "100%",
@@ -1551,21 +1426,19 @@ function PastePanel({ userId, category, onUploaded, initialText }: TextPanelProp
                     {text.length.toLocaleString()} chars
                 </div>
                 <button
-                    disabled={busy || !text.trim()}
-                    onClick={() => {
-                        void submit();
-                    }}
+                    disabled={!text.trim()}
+                    onClick={submit}
                     style={{
-                        background: busy || !text.trim() ? "var(--line)" : "var(--accent)",
-                        color: busy || !text.trim() ? "var(--ink-3)" : "white",
+                        background: !text.trim() ? "var(--line)" : "var(--accent)",
+                        color: !text.trim() ? "var(--ink-3)" : "white",
                         padding: "8px 16px",
                         borderRadius: 8,
                         fontSize: 13,
                         fontWeight: 600,
-                        cursor: busy || !text.trim() ? "not-allowed" : "pointer",
+                        cursor: !text.trim() ? "not-allowed" : "pointer",
                     }}
                 >
-                    {busy ? "Saving…" : "Add as note"}
+                    Add as note
                 </button>
             </div>
         </div>
@@ -1581,38 +1454,49 @@ function UrlPanel({ userId, category, onUploaded, initialUrl }: TextPanelProps) 
     useEffect(() => {
         if (initialUrl) setUrl(initialUrl);
     }, [initialUrl]);
-    const [busy, setBusy] = useState(false);
-
-    const submit = async () => {
+    // The page is fetched after the dialog closes; the Processing tab shows
+    // the fetch, then the page's processing. A crawl (`/**`) queues its
+    // pages as it finds them.
+    const submit = () => {
         if (!userId) {
             toast.error("Sign in to fetch pages");
             return;
         }
         const trimmed = url.trim();
         if (!trimmed) return;
-        setBusy(true);
-        try {
-            const res = await fetch("/api/upload/website", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ url: trimmed, category }),
+        if (!/^https?:\/\/\S+\.\S+/i.test(trimmed)) {
+            toast.error("That isn't a web address", {
+                description: "Paste a link that starts with https://",
             });
-            const data = (await res.json().catch(() => ({}))) as {
-                success?: boolean;
-                error?: string;
-                message?: string;
-            };
-            if (!res.ok) {
-                throw new Error(data.error ?? "Failed to index website");
-            }
-            toast.success(data.message ?? "Website queued for indexing");
-            setUrl("");
-            onUploaded();
-        } catch (err) {
-            toast.error(err instanceof Error ? err.message : "Failed to fetch URL");
-        } finally {
-            setBusy(false);
+            return;
         }
+        const crawl = trimmed.endsWith("/**");
+        startLinkTask({
+            name: trimmed,
+            category,
+            workLabel: crawl ? "Starting the crawl" : "Fetching the page",
+            run: async () => {
+                const res = await fetch("/api/upload/website", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ url: trimmed, category }),
+                });
+                const data = (await res.json().catch(() => ({}))) as {
+                    error?: string;
+                    message?: string;
+                    jobId?: string;
+                };
+                if (!res.ok) throw new Error(data.error ?? "The page couldn't be fetched");
+                return {
+                    jobIds: data.jobId ? [data.jobId] : [],
+                    note: data.jobId
+                        ? null
+                        : `${data.message ?? "Crawl started"} — pages appear here as they're found`,
+                };
+            },
+        });
+        setUrl("");
+        onUploaded();
     };
 
     return (
@@ -1625,7 +1509,6 @@ function UrlPanel({ userId, category, onUploaded, initialUrl }: TextPanelProps) 
                     value={url}
                     onChange={e => setUrl(e.target.value)}
                     placeholder="https://example.com/article"
-                    disabled={busy}
                     style={{
                         flex: 1,
                         padding: "10px 14px",
@@ -1640,21 +1523,19 @@ function UrlPanel({ userId, category, onUploaded, initialUrl }: TextPanelProps) 
                     onBlur={e => (e.target.style.borderColor = "var(--line)")}
                 />
                 <button
-                    disabled={busy || !url.trim()}
-                    onClick={() => {
-                        void submit();
-                    }}
+                    disabled={!url.trim()}
+                    onClick={submit}
                     style={{
-                        background: busy || !url.trim() ? "var(--line)" : "var(--accent)",
-                        color: busy || !url.trim() ? "var(--ink-3)" : "white",
+                        background: !url.trim() ? "var(--line)" : "var(--accent)",
+                        color: !url.trim() ? "var(--ink-3)" : "white",
                         padding: "10px 18px",
                         borderRadius: 8,
                         fontSize: 13,
                         fontWeight: 600,
-                        cursor: busy || !url.trim() ? "not-allowed" : "pointer",
+                        cursor: !url.trim() ? "not-allowed" : "pointer",
                     }}
                 >
-                    {busy ? "Fetching…" : "Fetch"}
+                    Fetch
                 </button>
             </div>
             <div
@@ -1684,42 +1565,52 @@ function UrlPanel({ userId, category, onUploaded, initialUrl }: TextPanelProps) 
 function YouTubePanel({ userId, category, onUploaded }: TextPanelProps) {
     const [videoUrl, setVideoUrl] = useState("");
     const [title, setTitle] = useState("");
-    const [busy, setBusy] = useState(false);
-
-    const submit = async () => {
+    // Downloading and transcribing happen after the dialog closes; the
+    // Processing tab shows them, then the transcript's processing.
+    const submit = () => {
         if (!userId) {
             toast.error("Sign in to transcribe videos");
             return;
         }
         const trimmed = videoUrl.trim();
         if (!trimmed) return;
-        setBusy(true);
-        try {
-            const res = await fetch("/api/upload/video-url", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    videoUrl: trimmed,
-                    category,
-                    title: title.trim() || undefined,
-                }),
+        if (!/^https?:\/\/\S+\.\S+/i.test(trimmed)) {
+            toast.error("That isn't a video link", {
+                description: "Paste a link that starts with https://",
             });
-            const data = (await res.json().catch(() => ({}))) as {
-                details?: string;
-                document?: { title?: string };
-            };
-            if (!res.ok) {
-                throw new Error(data.details ?? "Failed to process video");
-            }
-            toast.success(`Video transcribed: "${data.document?.title ?? "Video"}"`);
-            setVideoUrl("");
-            setTitle("");
-            onUploaded();
-        } catch (err) {
-            toast.error(err instanceof Error ? err.message : "Failed to process video");
-        } finally {
-            setBusy(false);
+            return;
         }
+        const name = title.trim() || trimmed;
+        startLinkTask({
+            name,
+            category,
+            workLabel: "Downloading and transcribing the video",
+            run: async () => {
+                const res = await fetch("/api/upload/video-url", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        videoUrl: trimmed,
+                        category,
+                        title: title.trim() || undefined,
+                    }),
+                });
+                const data = (await res.json().catch(() => ({}))) as {
+                    error?: string;
+                    details?: string;
+                    jobId?: string;
+                };
+                if (!res.ok) {
+                    throw new Error(
+                        data.details ?? data.error ?? "The video couldn't be processed"
+                    );
+                }
+                return { jobIds: data.jobId ? [data.jobId] : [] };
+            },
+        });
+        setVideoUrl("");
+        setTitle("");
+        onUploaded();
     };
 
     return (
@@ -1732,7 +1623,6 @@ function YouTubePanel({ userId, category, onUploaded }: TextPanelProps) {
                     value={videoUrl}
                     onChange={e => setVideoUrl(e.target.value)}
                     placeholder="https://youtube.com/watch?v=…"
-                    disabled={busy}
                     style={{
                         flex: 1,
                         padding: "10px 14px",
@@ -1751,7 +1641,6 @@ function YouTubePanel({ userId, category, onUploaded }: TextPanelProps) {
                 value={title}
                 onChange={e => setTitle(e.target.value)}
                 placeholder="Custom title (optional)"
-                disabled={busy}
                 style={{
                     width: "100%",
                     padding: "10px 14px",
@@ -1768,21 +1657,19 @@ function YouTubePanel({ userId, category, onUploaded }: TextPanelProps) {
             />
             <div style={{ display: "flex", justifyContent: "flex-end" }}>
                 <button
-                    disabled={busy || !videoUrl.trim()}
-                    onClick={() => {
-                        void submit();
-                    }}
+                    disabled={!videoUrl.trim()}
+                    onClick={submit}
                     style={{
-                        background: busy || !videoUrl.trim() ? "var(--line)" : "var(--accent)",
-                        color: busy || !videoUrl.trim() ? "var(--ink-3)" : "white",
+                        background: !videoUrl.trim() ? "var(--line)" : "var(--accent)",
+                        color: !videoUrl.trim() ? "var(--ink-3)" : "white",
                         padding: "10px 18px",
                         borderRadius: 8,
                         fontSize: 13,
                         fontWeight: 600,
-                        cursor: busy || !videoUrl.trim() ? "not-allowed" : "pointer",
+                        cursor: !videoUrl.trim() ? "not-allowed" : "pointer",
                     }}
                 >
-                    {busy ? "Transcribing…" : "Transcribe"}
+                    Transcribe
                 </button>
             </div>
         </div>

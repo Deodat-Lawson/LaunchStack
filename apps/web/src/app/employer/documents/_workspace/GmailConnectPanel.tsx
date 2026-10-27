@@ -93,7 +93,14 @@ const buttonStyle = (variant: "primary" | "quiet" | "danger", disabled: boolean)
         color: disabled ? "var(--ink-3)" : variant === "quiet" ? "var(--ink-2)" : "white",
     }) as const;
 
-export function GmailConnectPanel({ tab }: { tab: AddSourceTab }) {
+export function GmailConnectPanel({
+    tab,
+    onImported,
+}: {
+    tab: AddSourceTab;
+    /** A label or search was added, or a sync started by hand: the Processing tab takes over. */
+    onImported?: () => void;
+}) {
     const Icon = tab.Icon;
     const [status, setStatus] = useState<GmailStatus | null>(null);
     const [loading, setLoading] = useState(true);
@@ -148,12 +155,14 @@ export function GmailConnectPanel({ tab }: { tab: AddSourceTab }) {
             setSelectedLabelIds(new Set());
             setPickingLabels(false);
             await refresh();
-            if (await startSync()) toast.success(`${items.length} label(s) added — syncing`);
-            else toast.error(`${items.length} label(s) added, but the sync could not start`);
+            if (await startSync()) {
+                toast.success(`${items.length} label(s) added — syncing`);
+                onImported?.();
+            } else toast.error(`${items.length} label(s) added, but the sync could not start`);
         } finally {
             setBusy(false);
         }
-    }, [labels, selectedLabelIds, refresh, startSync]);
+    }, [labels, selectedLabelIds, refresh, startSync, onImported]);
 
     const addQuery = useCallback(async () => {
         const value = query.trim();
@@ -169,12 +178,14 @@ export function GmailConnectPanel({ tab }: { tab: AddSourceTab }) {
             }
             setQuery("");
             await refresh();
-            if (await startSync()) toast.success("Search added — syncing");
-            else toast.error("Search added, but the sync could not start");
+            if (await startSync()) {
+                toast.success("Search added — syncing");
+                onImported?.();
+            } else toast.error("Search added, but the sync could not start");
         } finally {
             setBusy(false);
         }
-    }, [query, refresh, startSync]);
+    }, [query, refresh, startSync, onImported]);
 
     const removeItem = useCallback(
         async (id: string) => {
@@ -187,12 +198,14 @@ export function GmailConnectPanel({ tab }: { tab: AddSourceTab }) {
     const syncNow = useCallback(async () => {
         setBusy(true);
         try {
-            if (await startSync()) toast.success("Sync requested");
-            else toast.error("Could not start the sync");
+            if (await startSync()) {
+                toast.success("Sync requested");
+                onImported?.();
+            } else toast.error("Could not start the sync");
         } finally {
             setBusy(false);
         }
-    }, [startSync]);
+    }, [startSync, onImported]);
 
     const disconnect = useCallback(async () => {
         setBusy(true);

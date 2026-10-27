@@ -16,6 +16,7 @@ import {
     Folder as IconFolder,
     Globe as IconGlobe,
     HandCoins as IconInvestors,
+    Layers as IconProcessing,
     PenLine as IconProposals,
     Link as IconLink,
     Megaphone as IconMegaphone,
@@ -350,6 +351,13 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         href: "/employer/documents?feature=knowledge",
     },
     {
+        id: "processing",
+        label: "Processing queue",
+        Icon: IconProcessing,
+        desc: "Files being read and indexed, stage by stage",
+        href: "/employer/documents?feature=processing",
+    },
+    {
         id: "meetings",
         label: "Meetings",
         Icon: IconUsers,
@@ -570,6 +578,16 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 label: "Knowledge",
                 Icon: IconFolder,
                 desc: "Browse, filter, and grow everything the workspace can cite",
+            },
+            {
+                // Where each file you add is on its way in: uploading,
+                // waiting for a worker, reading the text, splitting,
+                // indexing. Opens by itself when you add something.
+                id: "processing",
+                label: "Processing",
+                Icon: IconProcessing,
+                desc: "Watch files being read and indexed — what is running, what is waiting, and what needs a retry",
+                href: "/employer/documents?feature=processing",
             },
             {
                 id: "meetings",

@@ -1107,6 +1107,8 @@ interface EmptyStateProps {
     disabled: boolean;
     onAsk: (starter: AskStarter, refs: string[]) => void;
     onOpenProfile: () => void;
+    /** The Processing queue tab: where each processing or failed source is. */
+    onOpenProcessing: () => void;
 }
 
 function EmptyState({
@@ -1116,6 +1118,7 @@ function EmptyState({
     disabled,
     onAsk,
     onOpenProfile,
+    onOpenProcessing,
 }: EmptyStateProps) {
     let sourceCount = 0;
     let processingCount = 0;
@@ -1133,9 +1136,26 @@ function EmptyState({
                 </div>
                 <div className="text-ink-3 text-sm">
                     {sourceCount} source{sourceCount !== 1 ? "s" : ""} indexed
-                    {processingCount > 0 && ` · ${processingCount} processing`}
-                    {failedCount > 0 && ` · ${failedCount} failed`}
-                    {processingCount === 0 && failedCount === 0 && " · ready to query"}
+                    {processingCount > 0 || failedCount > 0 ? (
+                        <>
+                            {" · "}
+                            {/* Where each of those is, stage by stage. */}
+                            <button
+                                type="button"
+                                className="hover:text-brand-ink underline decoration-dotted underline-offset-2"
+                                onClick={onOpenProcessing}
+                            >
+                                {[
+                                    processingCount > 0 ? `${processingCount} processing` : null,
+                                    failedCount > 0 ? `${failedCount} failed` : null,
+                                ]
+                                    .filter(Boolean)
+                                    .join(" · ")}
+                            </button>
+                        </>
+                    ) : (
+                        " · ready to query"
+                    )}
                 </div>
             </div>
             <AskStarters
@@ -1773,6 +1793,9 @@ export function AskPanel({
                             disabled={isSending}
                             onAsk={handleAskStarter}
                             onOpenProfile={() => onStudioNavigate("/employer/settings#company")}
+                            onOpenProcessing={() =>
+                                onStudioNavigate("/employer/documents?feature=processing")
+                            }
                         />
                     ) : (
                         <>

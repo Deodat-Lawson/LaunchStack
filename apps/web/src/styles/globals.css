@@ -185,6 +185,16 @@ textarea {
         transform: rotate(360deg);
     }
 }
+/* A stage that is running but can't say how far along it is: a short bar
+   that sweeps across its segment (Processing queue). */
+@keyframes lsw-sweep {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(250%);
+    }
+}
 
 /* Long-press opens our menu on touch; the OS callout would fight it. */
 [data-ctx] {

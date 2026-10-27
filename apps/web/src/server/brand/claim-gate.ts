@@ -39,7 +39,7 @@ export interface ClaimGateBlock {
 export async function claimGate(companyId: bigint, body: string): Promise<ClaimGateBlock | null> {
     let result;
     try {
-        result = await withWorkspaceChatModels(companyId, () =>
+        result = await withWorkspaceChatModels(companyId, "marketing", () =>
             checkClaimSources({ companyId: Number(companyId), message: body })
         );
     } catch (error) {

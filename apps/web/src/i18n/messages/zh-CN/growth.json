@@ -1427,7 +1427,11 @@
       "runFailedChat": "营销流程运行失败。请确认已设置 CHAT_BASE_URL（如需要，还有 CHAT_API_KEY），并且聊天模型配置文件有效。",
       "runFailedCompany": "营销流程运行失败。请确认你的用户拥有有效的公司档案。",
       "invalidCompanyId": "公司 ID 无效",
-      "messageRequired": "需要提供 message"
+      "messageRequired": "需要提供 message",
+      "runStartFailed": "无法启动营销流程",
+      "runListFailed": "无法列出营销流程运行记录",
+      "runNotFound": "未找到该运行记录",
+      "runReadFailed": "无法读取营销流程运行记录"
     },
     "email": {
       "invalidCampaignId": "营销活动 ID 无效",

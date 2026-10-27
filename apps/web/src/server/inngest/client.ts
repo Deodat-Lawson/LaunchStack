@@ -119,6 +119,15 @@ export type ScenarioRunEvent = {
     };
 };
 
+export type MarketingRunEvent = {
+    name: "marketing/run.requested";
+    data: {
+        runId: string;
+        /** Serialized bigint — event payloads must be JSON. */
+        companyId: string;
+    };
+};
+
 export type GoogleDriveSyncEvent = {
     name: "google-drive/sync.requested";
     data: {
@@ -165,7 +174,8 @@ export type Events =
     | NotionSyncEvent
     | DistributionRunEvent
     | ProposalsRunEvent
-    | ScenarioRunEvent;
+    | ScenarioRunEvent
+    | MarketingRunEvent;
 
 /**
  * Create the Inngest client.

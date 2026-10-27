@@ -33,6 +33,7 @@
         "./marketing": "./src/marketing/index.ts",
         "./marketing/benchmark": "./src/marketing/benchmark/index.ts",
         "./marketing/posts": "./src/marketing/posts.ts",
+        "./marketing/runs": "./src/marketing/runs.ts",
         "./email": "./src/email/index.ts",
         "./email/types": "./src/email/types.ts",
         "./email/merge": "./src/email/merge.ts",
@@ -175,6 +176,10 @@
             "./marketing/posts": {
                 "types": "./dist/marketing/posts.d.ts",
                 "default": "./dist/marketing/posts.js"
+            },
+            "./marketing/runs": {
+                "types": "./dist/marketing/runs.d.ts",
+                "default": "./dist/marketing/runs.js"
             },
             "./email": {
                 "types": "./dist/email/index.d.ts",

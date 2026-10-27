@@ -53,6 +53,7 @@ import {
     type ChatStreamEvent,
 } from "~/lib/chat-stream";
 import { answerWithTools, type ChatTool } from "~/server/chat-tool-loop";
+import { loadChatCompanyProfile } from "~/server/chat-company-profile";
 import {
     citedPassages,
     createSourceTools,
@@ -1479,12 +1480,16 @@ export async function POST(request: Request) {
                 conversationContext = `\n\nPrevious conversation context:\n${conversationHistory}\n\nPlease continue the conversation naturally, referencing previous exchanges when relevant.`;
             }
 
-            // Build comprehensive prompts. The agent's standing instructions go
-            // above the style prompt: who is speaking first, then how.
+            // Operating rules precede presentation preferences; a named
+            // agent supplies the role and more specific output contract.
             const stylePrompt = getSystemPrompt(selectedStyle, aiPersona);
             let systemPrompt = agent
-                ? `${agentSystemPromptBlock(agent.persona)}\n\n## Answer format\n${stylePrompt}`
+                ? `${stylePrompt}\n\n## Agent instructions\n${agentSystemPromptBlock(agent.persona)}`
                 : stylePrompt;
+            const companyProfile = sourcesAllowed
+                ? await loadChatCompanyProfile(ctx.data, scope)
+                : "";
+            if (companyProfile) systemPrompt += `\n\n${companyProfile}`;
             if (scopeFiles.length > 0) {
                 systemPrompt += `\n\n${attachedFilesPrompt(scopeFiles, coverage, Boolean(sourceTools))}`;
             }
@@ -1620,6 +1625,11 @@ export async function POST(request: Request) {
                     // Checking every file can take a listing, a fan-out and a
                     // second page of it before the answer.
                     maxToolRounds: sourceTools ? 6 : 3,
+                    hasInitialEvidence:
+                        documents.length > 0 ||
+                        passages.length > 0 ||
+                        attachmentTextBlock.length > 0 ||
+                        imageAttachmentUrls.length > 0,
                     signal,
                     stream: emit && {
                         onText: delta => {

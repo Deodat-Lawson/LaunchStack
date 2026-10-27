@@ -1376,13 +1376,16 @@
         },
         "x": {
           "account": "一个按用量付费的 X 开发者账号",
-          "token": "在 TWITTER_BEARER_TOKEN 中配置令牌，供所有工作区共用",
-          "note": "按帖付费：每篇约 $0.015，带链接的帖子为 $0.20。由运营方为整个部署配置。"
+          "token": "在 TWITTER_BEARER_TOKEN 中配置令牌，仅供一个工作区使用（唯一的工作区，或 BRAND_DEPLOYMENT_ACCOUNTS_COMPANY_ID 指定的工作区）",
+          "note": "按帖付费：每篇约 $0.015，带链接的帖子为 $0.20。由运营方为一个工作区配置。"
         },
         "reddit": {
           "app": "一个 Reddit script 应用（client id 和 secret）",
-          "keys": "REDDIT_CLIENT_ID、REDDIT_CLIENT_SECRET 和 REDDIT_USER_AGENT，供所有工作区共用",
-          "note": "在当前用量下免费。帖子会发布到该账号自己的个人资料。由运营方为整个部署配置。"
+          "keys": "REDDIT_CLIENT_ID、REDDIT_CLIENT_SECRET 和 REDDIT_USER_AGENT，仅供一个工作区使用（唯一的工作区，或 BRAND_DEPLOYMENT_ACCOUNTS_COMPANY_ID 指定的工作区）",
+          "note": "在当前用量下免费。帖子会发布到该账号自己的个人资料。由运营方为一个工作区配置。"
+        },
+        "shared": {
+          "notYours": "此服务器上有多个工作区，运营方的账号已分配给另一个工作区（BRAND_DEPLOYMENT_ACCOUNTS_COMPANY_ID）。"
         }
       }
     },

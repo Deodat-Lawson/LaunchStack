@@ -1376,13 +1376,16 @@
         },
         "x": {
           "account": "An X developer account on pay-per-use",
-          "token": "A token in TWITTER_BEARER_TOKEN, shared by every workspace",
-          "note": "Pay per post: about $0.015 each, $0.20 when the post carries a link. Set by the operator for the whole deployment."
+          "token": "A token in TWITTER_BEARER_TOKEN, for one workspace (the only one, or BRAND_DEPLOYMENT_ACCOUNTS_COMPANY_ID)",
+          "note": "Pay per post: about $0.015 each, $0.20 when the post carries a link. Set by the operator, for one workspace."
         },
         "reddit": {
           "app": "A Reddit script app (client id and secret)",
-          "keys": "REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET and REDDIT_USER_AGENT, shared by every workspace",
-          "note": "Free for this volume. Posts go to the account's own profile. Set by the operator for the whole deployment."
+          "keys": "REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET and REDDIT_USER_AGENT, for one workspace (the only one, or BRAND_DEPLOYMENT_ACCOUNTS_COMPANY_ID)",
+          "note": "Free for this volume. Posts go to the account's own profile. Set by the operator, for one workspace."
+        },
+        "shared": {
+          "notYours": "This server hosts several workspaces and the operator's account is assigned to another one (BRAND_DEPLOYMENT_ACCOUNTS_COMPANY_ID)."
         }
       }
     },

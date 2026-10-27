@@ -226,7 +226,7 @@
       "inDeal": "In a deal",
       "ok": "ok",
       "title": "Runs",
-      "subKeyless": "{count} so far · no API keys are configured, so runs read public directories and each company's own website",
+      "subKeyless": "{count} so far · no search keys are configured, so runs read OpenStreetMap places and each company's own website",
       "subLive": "{count} so far · each run searches the sources this segment has on",
       "sampleAria": "Use sample data",
       "sample": "Sample data",
@@ -1209,7 +1209,7 @@
           "trade": "Trade data"
         },
         "keyless": {
-          "web": "Public directories (YC)",
+          "web": "Web search",
           "place": "OpenStreetMap",
           "trade": "Trade data"
         },
@@ -1222,11 +1222,7 @@
       "rows": {
         "osm": {
           "label": "OpenStreetMap",
-          "description": "Organisations with a website, by country or city and by what they are. Free, no key; used whenever no search provider is configured."
-        },
-        "yc": {
-          "label": "Y Combinator directory",
-          "description": "Active YC companies in the segment's countries whose blurb matches its words. Free, no key."
+          "description": "Real places with a website — shops, cafés, workshops, offices — in each city or country, of the kinds closest in meaning to who you sell to. Free, no key; used whenever no search provider is configured."
         },
         "web": {
           "label": "Web search",

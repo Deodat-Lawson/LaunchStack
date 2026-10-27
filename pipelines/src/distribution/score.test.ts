@@ -1,12 +1,7 @@
 import { describe, expect, it } from "vitest";
 
-import {
-    IRRELEVANT_CEILING,
-    computeFit,
-    deriveRiskFlags,
-    templateRationale,
-    topicRelevance,
-} from "./score";
+import { computeFit, deriveRiskFlags, templateRationale } from "./score";
+import { lexicalRelevance } from "./semantic";
 import type { Dossier, PartnerOrgRecord, ProgramRecord } from "./types";
 
 const program: ProgramRecord = {
@@ -240,7 +235,7 @@ describe("computeFit", () => {
     });
 });
 
-describe("relevance gates the score", () => {
+describe("relevance scales the score", () => {
     // A readable website in the right country with fresh evidence used to
     // reach ~40-45 with zero topic overlap and sit among real prospects.
     const offTopic = org({
@@ -251,7 +246,7 @@ describe("relevance gates the score", () => {
         description: "AI meeting notes for remote teams",
     });
 
-    it("caps a company with nothing in common with the segment well below the threshold", () => {
+    it("gives a company unrelated to the segment nothing for its website alone", () => {
         const fit = computeFit({
             program,
             org: offTopic,
@@ -265,7 +260,7 @@ describe("relevance gates the score", () => {
             now,
         });
         expect(fit.categoryOverlap).toBe(0);
-        expect(fit.total).toBeLessThanOrEqual(IRRELEVANT_CEILING);
+        expect(fit.total).toBe(0);
         expect(
             deriveRiskFlags({
                 dossier: null,
@@ -276,7 +271,7 @@ describe("relevance gates the score", () => {
         ).toContain("nothing in common with what you sell");
     });
 
-    it("leaves relevant companies uncapped", () => {
+    it("counts territory, evidence and the rest in full for a relevant company", () => {
         const fit = computeFit({
             program,
             org: org(),
@@ -289,12 +284,39 @@ describe("relevance gates the score", () => {
             sellerName: "Kōhī Roasters",
             now,
         });
-        expect(fit.total).toBeGreaterThan(IRRELEVANT_CEILING);
+        expect(fit.total).toBeGreaterThan(40);
     });
 
-    it("measures relevance from the company's own words", () => {
-        expect(topicRelevance(program, ["Mango", "AI meeting notes"])).toBe(0);
-        expect(topicRelevance(program, ["Specialty coffee importer"])).toBeGreaterThan(0);
+    it("takes relevance by meaning when it is given, over shared words", () => {
+        const base = {
+            program,
+            kind: "importer" as const,
+            territory: { country: "DE" },
+            dossier: null,
+            evidenceCount: 12,
+            newestEvidenceAt: new Date("2026-09-01T00:00:00Z"),
+            knownEntity: false,
+            sellerName: "Kōhī Roasters",
+            now,
+        };
+        // No shared word with the segment, but a real buyer by meaning.
+        const cafe = org({
+            name: "Café Lisboa",
+            categories: ["amenity=cafe"],
+            description: "Espresso bar",
+        });
+        expect(computeFit({ ...base, org: cafe }).categoryOverlap).toBe(0);
+        const byMeaning = computeFit({ ...base, org: cafe, relevance: 1 });
+        expect(byMeaning.categoryOverlap).toBe(25);
+        expect(byMeaning.total).toBeGreaterThan(40);
+        // Half a real buyer's relevance already counts the rest in full.
+        const half = computeFit({ ...base, org: cafe, relevance: 0.5 });
+        expect(half.total - half.categoryOverlap).toBe(byMeaning.total - byMeaning.categoryOverlap);
+    });
+
+    it("falls back to the company's own words without an embedder", () => {
+        expect(lexicalRelevance(program, ["Mango", "AI meeting notes"])).toBe(0);
+        expect(lexicalRelevance(program, ["Specialty coffee importer"])).toBeGreaterThan(0);
     });
 });
 

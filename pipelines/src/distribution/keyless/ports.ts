@@ -1,21 +1,27 @@
 /**
  * Keyless ports: the whole pipeline with no API key and no model.
  *
- * Discovery reads OpenStreetMap (Overpass) and the Y Combinator directory,
- * both public and free; every candidate's own website is then read by the
- * page profiler, which records evidence and assembles the dossier the
- * research agent would. Persistence, exclusions, scoring, stages and
- * publishing are the real code, exactly as in live and fixture modes.
+ * Discovery reads OpenStreetMap (Photon, Overpass, Nominatim): real places —
+ * shops, cafés, workshops, offices — in the segment's area, with their own
+ * addresses and websites. Which kinds of place a segment wants is chosen by
+ * meaning from OpenStreetMap's own categories when an embedder is given.
+ * Every candidate's own website is then read by the page profiler, which
+ * records evidence and assembles the dossier the research agent would.
+ * Persistence, exclusions, scoring, stages and publishing are the real code,
+ * exactly as in live and fixture modes.
+ *
+ * There is no startup directory: a directory of venture-backed startups
+ * answered every segment with software companies, whatever it sold.
  *
  * What it cannot do without a model is written into every dossier's open
  * questions: brands carried, decision makers, and any reasoning beyond what
  * a page literally says.
  */
-import { placeWords } from "../locate";
 import type { AgentModelPort } from "@launchstack/llm";
 import { fetchReadable } from "@launchstack/tools/web-research";
 
 import type { DistributionPorts, PublishDossierInput } from "../run";
+import type { EmbedTexts, JudgeFit } from "../semantic";
 import { nativeTermsFor, overpassAreas } from "./geo";
 import { searchNominatim } from "./nominatim";
 import {
@@ -29,7 +35,6 @@ import {
 import { searchPhoton } from "./photon";
 import { buildKeylessPlan, KEYLESS_MODEL_ID, KEYLESS_PLAYBOOK_HASH, keywordsFor } from "./plan";
 import { profileFromPages } from "./profile";
-import { searchYc } from "./yc";
 
 export interface KeylessPortsOptions {
     publishDossier?: ((input: PublishDossierInput) => Promise<{ documentId: number }>) | null;
@@ -38,8 +43,10 @@ export interface KeylessPortsOptions {
     fetchImpl?: typeof fetch;
     /** Places per territory from OpenStreetMap (default 40). */
     placesPerTerritory?: number;
-    /** Directory hits per territory (default 20). */
-    directoryPerTerritory?: number;
+    /** Embedder for choosing place categories and matching companies by meaning. */
+    embed?: EmbedTexts | null;
+    /** Chat-model check of the shortlist (a workspace with a model and no search keys). */
+    judgeFit?: JudgeFit | null;
     /** Pages read per candidate (default 4). */
     pagesPerCandidate?: number;
 }
@@ -62,42 +69,9 @@ export function createKeylessPorts(options: KeylessPortsOptions = {}): Distribut
                 fetchImpl,
                 userAgent: KEYLESS_USER_AGENT,
             }),
-        searchWeb: async queries => {
-            const out = [];
-            const seen = new Set<string>();
-            for (const q of queries) {
-                const country = /country:([A-Za-z]{2})/.exec(q.searchQuery)?.[1];
-                if (!country) continue;
-                const region = /region:\{([^}]+)\}/.exec(q.searchQuery)?.[1] ?? null;
-                // Topic words only: the planner appends the place ("Baltimore,
-                // United States") for search engines, and the directory filter
-                // matches place words against the location field instead.
-                const places = placeWords({
-                    country: country.toUpperCase(),
-                    region: region ?? undefined,
-                });
-                const keywords = q.searchQuery
-                    .replace(/country:[A-Za-z]{2}/g, "")
-                    .replace(/region:\{[^}]+\}/g, "")
-                    .split(/[\s,]+/)
-                    .filter(w => w && !places.has(w.toLowerCase()));
-                const hits = await searchYc(
-                    {
-                        country,
-                        region,
-                        keywords,
-                        limit: options.directoryPerTerritory ?? 20,
-                    },
-                    { fetchImpl }
-                );
-                for (const hit of hits) {
-                    if (seen.has(hit.url)) continue;
-                    seen.add(hit.url);
-                    out.push(hit);
-                }
-            }
-            return out;
-        },
+        // Web search needs a key; the startup directory that stood in for it
+        // returned software companies for every segment.
+        searchWeb: null,
         searchPlaces: async ({ query, categoryIds, territory }) => {
             const keywords = query.split(/\s+/).filter(Boolean);
             const limit = options.placesPerTerritory ?? 40;
@@ -187,8 +161,10 @@ export function createKeylessPorts(options: KeylessPortsOptions = {}): Distribut
         debitCredits: options.debitCredits ?? null,
         writeRationale: null,
         creditsPerCandidate: 0,
+        embed: options.embed ?? null,
+        judgeFit: options.judgeFit ?? null,
         plan: async input => ({
-            plan: buildKeylessPlan(input),
+            plan: await buildKeylessPlan(input, { embed: options.embed ?? null }),
             modelId: KEYLESS_MODEL_ID,
             playbookHash: KEYLESS_PLAYBOOK_HASH,
         }),

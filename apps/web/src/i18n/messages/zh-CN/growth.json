@@ -226,7 +226,7 @@
       "inDeal": "进入商机",
       "ok": "正常",
       "title": "运行记录",
-      "subKeyless": "目前共 {count} 次 · 未配置 API 密钥，因此运行时会读取公开目录和各公司的官网",
+      "subKeyless": "目前共 {count} 次 · 未配置搜索密钥，因此运行时会读取 OpenStreetMap 场所和各公司的官网",
       "subLive": "目前共 {count} 次 · 每次运行都会搜索该细分市场已启用的来源",
       "sampleAria": "使用示例数据",
       "sample": "示例数据",
@@ -1209,7 +1209,7 @@
           "trade": "贸易数据"
         },
         "keyless": {
-          "web": "公开目录（YC）",
+          "web": "网页搜索",
           "place": "OpenStreetMap",
           "trade": "贸易数据"
         },
@@ -1222,11 +1222,7 @@
       "rows": {
         "osm": {
           "label": "OpenStreetMap",
-          "description": "按国家/地区或城市以及组织类型查找有网站的组织。免费，无需密钥；未配置搜索服务时使用。"
-        },
-        "yc": {
-          "label": "Y Combinator 目录",
-          "description": "细分市场所在国家/地区中，简介与其关键词匹配的活跃 YC 公司。免费，无需密钥。"
+          "description": "每个城市或国家中带网站的真实场所——商店、咖啡馆、工坊、办公室——按与你的客户最接近的类型查找。免费，无需密钥；未配置搜索服务时使用。"
         },
         "web": {
           "label": "网页搜索",

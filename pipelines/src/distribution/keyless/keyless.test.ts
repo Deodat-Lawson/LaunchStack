@@ -1,6 +1,6 @@
 /**
  * Keyless mode has to hold up with no key and no model: the plan is built
- * from the program alone, the two public sources map cleanly onto the
+ * from the program alone, OpenStreetMap maps cleanly onto the
  * gather stage's shapes, and the page profiler produces a dossier that
  * passes the same grounding gate as the agent's. Network is stubbed.
  */
@@ -16,15 +16,17 @@ import {
     mapOverpassElements,
     nameRegexFor,
     rolesForOsmCategories,
+    chooseOsmCategories,
+    resetOsmCategoryVectors,
     searchOverpass,
     tagSelectorsFor,
 } from "./osm";
+import { fakeEmbed } from "../semantic.fixture";
 import { searchNominatim } from "./nominatim";
 import { locateCity, photonAreas, photonTagsFor, searchPhoton } from "./photon";
 import { buildKeylessPlan, keywordsFor } from "./plan";
 import { createKeylessPorts } from "./ports";
 import { extractFacts, firstDescription, profileFromPages } from "./profile";
-import { filterYc, resetYcCache, ycInTerritory, type YcCompany } from "./yc";
 
 const urlOf = (input: RequestInfo | URL): string =>
     typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
@@ -62,21 +64,30 @@ describe("keyless plan", () => {
         ).toEqual(["picking", "robots", "commerce", "warehouses"]);
     });
 
-    it("plans one OpenStreetMap and one directory query per territory, with tag selectors", () => {
-        const plan = buildKeylessPlan(planInput);
-        expect(plan.queries).toHaveLength(4);
-        const place = plan.queries.filter(q => q.kind === "place");
+    it("plans one OpenStreetMap query per territory and no startup directory", async () => {
+        const plan = await buildKeylessPlan(planInput);
+        expect(plan.queries).toHaveLength(2);
+        expect(plan.queries.every(q => q.kind === "place")).toBe(true);
+        const place = plan.queries;
         expect(place.map(q => q.territory.country)).toEqual(["NL", "DE"]);
         expect(place[0]!.categoryIds).toContain('["shop"="coffee"]');
         // The segment's own tags fill the budget; partner-kind tags don't crowd them out.
         expect(place[0]!.categoryIds).not.toContain('["shop"="wholesale"]');
-        const web = plan.queries.filter(q => q.kind === "web");
-        expect(web[1]!.query).toContain("Hamburg, Germany country:DE region:{Hamburg}");
-        expect(plan.strategy).toMatch(/No model/);
+        expect(plan.strategy).toMatch(/No paid provider/);
+        expect(plan.strategy).toMatch(/shared words/);
     });
 
-    it("falls back to partner-kind tags only when the topic maps to none", () => {
-        const plan = buildKeylessPlan({
+    it("picks place categories by meaning when an embedder is given", async () => {
+        resetOsmCategoryVectors();
+        const plan = await buildKeylessPlan(planInput, { embed: fakeEmbed });
+        expect(plan.queries[0]!.categoryIds).toEqual(
+            expect.arrayContaining(['["shop"="coffee"]', '["craft"="coffee_roaster"]'])
+        );
+        expect(plan.strategy).toMatch(/closest in meaning/);
+    });
+
+    it("falls back to partner-kind tags only when the topic maps to none", async () => {
+        const plan = await buildKeylessPlan({
             ...planInput,
             program: { ...planInput.program, categories: ["quantum widgets"] },
         });
@@ -92,6 +103,17 @@ describe("OpenStreetMap adapter", () => {
         );
         expect(tagSelectorsFor(["quantum flux capacitors"])).toEqual([]);
         expect(nameRegexFor(["specialty coffee", "roaster"])).toBe("specialty|coffee|roaster");
+    });
+
+    it("chooses categories by meaning from OpenStreetMap's own vocabulary", async () => {
+        resetOsmCategoryVectors();
+        const hardware = await chooseOsmCategories(
+            fakeEmbed,
+            "Retailers and shops that would buy, stock or resell this: power tools and building supplies"
+        );
+        expect(hardware).toContain('["shop"="hardware"]');
+        expect(hardware).not.toContain('["shop"="coffee"]');
+        expect(hardware.length).toBeLessThanOrEqual(4);
     });
 
     it("reads a role from a directory tag only when the tag states one", () => {
@@ -470,125 +492,6 @@ describe("Photon + OSM API", () => {
     });
 });
 
-describe("YC directory", () => {
-    const companies: YcCompany[] = [
-        {
-            id: 1,
-            name: "Beanly",
-            slug: "beanly",
-            website: "https://beanly.example",
-            all_locations: "Amsterdam, Netherlands",
-            one_liner: "Subscription coffee for offices",
-            industries: ["Consumer", "Food and Beverage"],
-            status: "Active",
-        },
-        {
-            id: 2,
-            name: "Oldco",
-            slug: "oldco",
-            website: null,
-            all_locations: "Amsterdam, Netherlands",
-            one_liner: "Coffee",
-            industries: [],
-            status: "Inactive",
-        },
-        {
-            id: 3,
-            name: "Berlinbot",
-            slug: "berlinbot",
-            website: "https://berlinbot.example",
-            all_locations: "Berlin, Germany",
-            one_liner: "Coffee robots",
-            industries: ["Hardware"],
-            status: "Active",
-        },
-        {
-            id: 4,
-            name: "Fintechly",
-            slug: "fintechly",
-            website: "https://fintechly.example",
-            all_locations: "Rotterdam, Netherlands",
-            one_liner: "Payments for SMEs",
-            industries: ["Fintech"],
-            status: "Active",
-        },
-    ];
-
-    it("keeps active companies in the country whose blurb matches", () => {
-        resetYcCache();
-        const hits = filterYc(companies, { country: "NL", keywords: ["specialty coffee"] });
-        expect(hits.map(h => h.name)).toEqual(["Beanly"]);
-        // No topic words means nothing relevant, not "every company in the country".
-        expect(filterYc(companies, { country: "NL", keywords: [] })).toEqual([]);
-    });
-
-    const us: YcCompany[] = [
-        {
-            id: 10,
-            name: "Mango",
-            slug: "mango",
-            website: "https://trymango.example",
-            all_locations: "San Francisco, CA, USA",
-            one_liner: "AI meeting notes for teams across the United States",
-            industries: ["B2B", "Productivity"],
-            status: "Active",
-        },
-        {
-            id: 11,
-            name: "Charm City Roasters",
-            slug: "charm",
-            website: "https://charmroast.example",
-            all_locations: "Baltimore, MD, USA",
-            one_liner: "Specialty coffee roaster supplying cafés",
-            industries: ["Food and Beverage"],
-            status: "Active",
-        },
-        {
-            id: 12,
-            name: "Brusselsco",
-            slug: "brusselsco",
-            website: "https://brussels.example",
-            all_locations: "Brussels, Belgium",
-            one_liner: "Coffee logistics",
-            industries: ["Logistics"],
-            status: "Active",
-        },
-    ];
-
-    it("does not match companies on the place words in the query", () => {
-        // The planner's web query embeds "Baltimore, United States": those words
-        // used to match any blurb that said "United States".
-        const hits = filterYc(us, {
-            country: "US",
-            keywords: ["specialty coffee", "Baltimore,", "United", "States"],
-        });
-        expect(hits.map(h => h.name)).toEqual(["Charm City Roasters"]);
-    });
-
-    it("keeps the region when one is asked for", () => {
-        const sf = {
-            ...us[1]!,
-            id: 13,
-            name: "Bay Beans",
-            all_locations: "San Francisco, CA, USA",
-        };
-        const hits = filterYc([...us, sf], {
-            country: "US",
-            region: "Baltimore",
-            keywords: ["coffee"],
-        });
-        expect(hits.map(h => h.name)).toEqual(["Charm City Roasters"]);
-    });
-
-    it("matches the country as a whole word ('us' is not in Brussels)", () => {
-        expect(ycInTerritory("Brussels, Belgium", "US")).toBe(false);
-        expect(ycInTerritory("Houston, TX", "US")).toBe(false);
-        expect(ycInTerritory("Austin, TX, USA; Remote", "US")).toBe(true);
-        expect(ycInTerritory("Austin, TX, USA", "US", "Austin")).toBe(true);
-        expect(ycInTerritory("Austin, TX, USA", "US", "Baltimore")).toBe(false);
-    });
-});
-
 describe("page profiler", () => {
     const page = (url: string, title: string, text: string): ReadablePage => ({
         url,
@@ -808,24 +711,8 @@ describe("keyless ports", () => {
             if (u.includes("photon")) return new Response(JSON.stringify({ features: [] }));
             if (u.includes("openstreetmap.org/api"))
                 return new Response(JSON.stringify({ elements: [] }));
-            if (u.includes("yc-oss"))
-                return new Response(
-                    JSON.stringify([
-                        {
-                            id: 1,
-                            name: "Beanly",
-                            slug: "beanly",
-                            website: "https://beanly.example",
-                            all_locations: "Amsterdam, Netherlands",
-                            one_liner: "Coffee subscriptions",
-                            industries: ["Food"],
-                            status: "Active",
-                        },
-                    ])
-                );
             return new Response("not found", { status: 404 });
         };
-        resetYcCache();
         const ports = createKeylessPorts({ fetchImpl });
         expect(ports.creditsPerCandidate).toBe(0);
         expect(ports.compliance).toBeNull();
@@ -848,17 +735,7 @@ describe("keyless ports", () => {
                 roles: ["retailer"],
             }),
         ]);
-        const web = await ports.searchWeb!([
-            {
-                searchQuery: "coffee Netherlands country:NL",
-                category: "directories",
-                rationale: "",
-            },
-        ]);
-        expect(web.map(r => r.title)).toEqual(["Beanly | Food"]);
-        // The entry's own location travels with it; the query's country is not stamped on.
-        expect(web[0]!.content).toContain("Located in Amsterdam, Netherlands");
-        expect(web[0]!.content).not.toContain("country:");
+        expect(ports.searchWeb).toBeNull();
         const { plan } = await ports.plan!(planInput);
         expect(plan.queries.filter(q => q.kind === "place")).toHaveLength(2);
     });

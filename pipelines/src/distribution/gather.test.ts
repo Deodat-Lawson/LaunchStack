@@ -43,7 +43,8 @@ describe("mentionFromWebResult", () => {
         );
         expect(m.name).toBe("Acme Import GmbH");
         expect(m.roles).toEqual(expect.arrayContaining(["importer", "distributor"]));
-        expect(m.country).toBe("DE");
+        // The text names no country and a domain ending is not evidence: unknown, not "in".
+        expect(m.country).toBeNull();
         expect(m.source).toBe("web:directory");
     });
 });

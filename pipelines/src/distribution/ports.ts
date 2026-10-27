@@ -15,7 +15,9 @@ import { resolveTradeDataProvider } from "@launchstack/tools/trade-data";
 import { executeSearch, fetchReadable } from "@launchstack/tools/web-research";
 
 import { loadPlaybook } from "./skills";
+import { createFitJudge } from "./judge";
 import type { DistributionPorts, PublishDossierInput } from "./run";
+import type { EmbedTexts } from "./semantic";
 
 export const DEFAULT_CREDITS_PER_CANDIDATE = 2_000;
 
@@ -26,6 +28,10 @@ export interface CreateDefaultPortsOptions {
     /** Set false to disable a source regardless of configuration. */
     enableWeb?: boolean;
     enablePlaces?: boolean;
+    /** The workspace's embedder: companies are matched to the segment by meaning. */
+    embed?: EmbedTexts | null;
+    /** Set false to skip the chat-model fit check of the shortlist. */
+    enableFitCheck?: boolean;
 }
 
 function hasWebSearch(): boolean {
@@ -79,5 +85,7 @@ export function createDefaultPorts(options: CreateDefaultPortsOptions = {}): Dis
             return modelContentToText(response.content);
         },
         creditsPerCandidate: options.creditsPerCandidate ?? DEFAULT_CREDITS_PER_CANDIDATE,
+        embed: options.embed ?? null,
+        judgeFit: options.enableFitCheck === false ? null : createFitJudge(),
     };
 }

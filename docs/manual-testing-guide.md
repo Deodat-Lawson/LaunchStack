@@ -264,8 +264,10 @@ their switches are locked.
 
 - **Keyless** (no chat model or no search key configured, which is every fresh
   dev setup): OpenStreetMap (Photon category search plus the OSM API, then
-  Overpass, then Nominatim by native-language names) and the Y Combinator
-  directory find organisations with a website in each territory; each site is read by the page profiler
+  Overpass, then Nominatim by native-language names) finds real places with a
+  website in each territory — of the OpenStreetMap kinds closest in meaning to
+  who the segment sells to, chosen with the workspace's embedding model; each
+  site is read by the page profiler
   (home plus about/contact/careers pages) which records what the pages
   literally say as evidence — description, headcount, roles, countries,
   certifications, public mailboxes — and assembles the dossier. It runs in
@@ -283,11 +285,19 @@ Profiles are published into Sources only when `FILE_ACCESS_TOKEN_SECRET` is
 set (the ingestion pipeline needs it); without it every row is kept and the
 document is skipped, with one warning in the server log.
 
+**Matching.** In every mode, companies are matched to the segment by meaning:
+the brief ("retailers that would buy, stock or resell …") and each company's
+own words are embedded, and a company must read more like that buyer than
+like business in general. With a chat model configured, the closest
+companies are then checked ("would this business buy this?") and a no takes
+them off the shortlist. The run's warnings say how many were left out for
+area, for meaning and by the fit check. Without an embedding model the run
+matches by shared words and says so.
+
 The run's `caps` line and the Sources yield labels say which mode produced
-it ("OpenStreetMap" and "Public directories (YC)" for keyless; "Sample …" for
-fixtures). Segments that name concrete, physical buyer types (cafés,
-roasters, bakeries, warehouses, clinics) get the most from OpenStreetMap;
-abstract software categories mostly reach the YC directory.
+it ("OpenStreetMap" for keyless; "Sample …" for fixtures). There is no
+startup directory any more: it answered every segment with software
+companies, whatever the segment sold.
 
 1. Open Prospects with no program: the rail says "No segment"; New segment
    (segment switcher → New segment) asks for a name, what you sell,

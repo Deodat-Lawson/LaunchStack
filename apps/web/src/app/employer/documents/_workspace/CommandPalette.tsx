@@ -5,7 +5,8 @@ import { useRouter } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { useChangeLocale } from "~/i18n/client";
 import { LOCALES } from "~/i18n/locales";
-import { canSeeSettingsSection, settingsSectionFromHash } from "~/lib/settings/sections";
+import { canSeeSettingsSection } from "~/lib/settings/sections";
+import { isPersonalSection, settingsSectionOfHref } from "~/lib/settings/surfaces";
 import { useSettingCopier, useSettingsSearch, useSettingValue } from "~/lib/settings/useSettings";
 import { Command as CommandIcon, Languages, Settings, Search as IconSearch } from "lucide-react";
 import { ACTION_MENU_ICONS, type ActionMenuItem } from "~/components/ui/action-menu";
@@ -20,7 +21,6 @@ import {
     demotedFeatureDescription,
     demotedFeatureLabel,
     resolveStudioFeature,
-    settingsSectionOf,
     sourceTypeLabel,
     useStudioText,
     type WorkspaceSource,
@@ -199,15 +199,15 @@ export function CommandPalette({
         }
         DEMOTED_FEATURES.filter(f => f.id !== "audit" || predictiveGaps)
             // A row for an app the person may not open (Team, for a Guest)
-            // would do nothing when picked. Anyone may open Settings, so a
-            // row for one of its sections ("Self-host / BYOK") carries that
-            // section's gate instead: picked without it, the row would land
-            // on a section that only says it isn't theirs.
+            // would do nothing when picked. Anyone may open Settings and the
+            // Workspace tab, so a row for one of their screens ("Agents &
+            // nodes") carries that screen's gate instead: picked without it,
+            // the row would land on a screen that only says it isn't theirs.
             .filter(f => {
+                if (!can(f.requires)) return false;
                 const app = resolveStudioFeature(f.id);
                 if (app) return can(app.requires);
-                const hash = settingsSectionOf(f.href);
-                const section = hash ? settingsSectionFromHash(hash) : null;
+                const section = settingsSectionOfHref(f.href);
                 return section ? canSeeSettingsSection(section, can) : true;
             })
             .forEach(f =>
@@ -216,8 +216,9 @@ export function CommandPalette({
                     id: f.id,
                     label: demotedFeatureLabel(studio, f),
                     sub: demotedFeatureDescription(studio, f),
-                    // The English name still finds it in any language.
-                    keywords: `${f.label} ${f.desc}`,
+                    // The English name still finds it in any language, and so
+                    // does its id ("byok").
+                    keywords: `${f.id} ${f.label} ${f.desc}`,
                     Icon: f.Icon,
                     onRun: () => {
                         if (onPickFeature) onPickFeature(f.id);
@@ -314,7 +315,13 @@ export function CommandPalette({
                 kind: "setting",
                 id: definition.key,
                 label: copy.label,
-                sub: t("settingSub", { description: copy.description }),
+                // Where picking it goes: Settings, or the Workspace tab.
+                sub: t(
+                    isPersonalSection(definition.section) ? "settingSub" : "workspaceSettingSub",
+                    {
+                        description: copy.description,
+                    }
+                ),
                 Icon: Settings,
                 onRun: () => {
                     if (onPickSetting) onPickSetting(definition.key);

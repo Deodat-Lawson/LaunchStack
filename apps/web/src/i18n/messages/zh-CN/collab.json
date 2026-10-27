@@ -77,7 +77,7 @@
     "modelRoute": "模型路由",
     "modelRouteHint": "由哪条已配置的路由处理这个智能体的发言。",
     "autonomy": "自主程度",
-    "autonomyInherits": "沿用工作区默认值（设置 → 智能体）。",
+    "autonomyInherits": "沿用工作区默认值（工作区 › 智能体）。",
     "workspaceDefault": "工作区默认",
     "temperature": "温度",
     "temperatureHint": "0 最确定，2 最发散。留空则使用模型默认值。",
@@ -172,7 +172,7 @@
     "autonomyTitle": "自主程度",
     "autonomyDescription": "智能体在无人参与时可以做多少事。会议能做什么，由其中自主程度最低的智能体决定；超出范围的操作会被 API 拒绝。",
     "defaultAssistantTitle": "默认助手",
-    "defaultAssistantDescription": "未选择智能体时 Launchstack 在对话中的回答方式，适用于所有没有在“外观”中设置自己风格的成员。每个智能体都有自己的风格，所以只有这里的风格是对话设置，而不是智能体设置。",
+    "defaultAssistantDescription": "未选择智能体时 Launchstack 在对话中的回答方式，适用于所有没有在“设置 › 外观”中设置自己风格的成员。每个智能体都有自己的风格，所以只有这里的风格是对话设置，而不是智能体设置。",
     "rosterTitle": "名册",
     "rosterDescription": "同一批智能体参加会议，在对话中被选中或被 @ 提及时作答，也可以在“智能体”应用中试用。编辑某个智能体只会改变它之后的表现，不会改变它之前说过的话。",
     "tryNote": "在<b>工作台 → 智能体</b>中，可以先试用智能体再让它参加会议，或从定义文件导入智能体。",
@@ -366,7 +366,7 @@
       "unknownWorkflow": "未知的工作流“{key}”",
       "controlFailed": "会议控制操作失败",
       "postFailed": "无法发送消息",
-      "roomReadOnly": "这个会议中有智能体设为“只读”，因此只有有人点击“进行一轮”时才会发言。请在“设置 → 智能体”中提高它的自主程度，让会议自行运行。"
+      "roomReadOnly": "这个会议中有智能体设为“只读”，因此只有有人点击“进行一轮”时才会发言。请在“工作区 › 智能体”中提高它的自主程度，让会议自行运行。"
     },
     "policyFields": {
       "key": "标识名",

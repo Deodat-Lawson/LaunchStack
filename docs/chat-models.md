@@ -58,7 +58,7 @@ unrelated `OPENAI_API_KEY` in the environment.
 
 Everything above is the **server default**. A workspace admin (anyone with
 `settings.manage`) can instead point their whole workspace at their own
-OpenAI-compatible endpoint in **Settings › Bring your own keys › API key**:
+OpenAI-compatible endpoint in **Workspace › Bring your own keys**:
 
 - **API key.** Pick a provider (OpenAI, Anthropic, Google Gemini, OpenRouter,
   or "Other OpenAI-compatible"). Picking one only fills in the address, which
@@ -131,8 +131,9 @@ API key from Google AI Studio.
 Not covered yet: OCR itself (the document converter and the Azure, Landing AI
 or Datalab providers it routes to), image generation, transcription (and
 transcript translation, which runs on the transcription endpoint) and
-reranking keep the server's settings. Embeddings have their own per-workspace
-key and endpoint in Settings › Bring your own keys › Embedding key.
+reranking keep the server's settings. Embeddings use the server's `EMBEDDING_*`
+settings; the per-workspace embedding screen was removed (the stored
+credentials, if any, still apply and are set through `/api/updateCompany`).
 
 ## Routes
 
@@ -258,7 +259,7 @@ off entirely is a startup error telling you to declare it.
 Every chat completion the app makes for a workspace is counted from the
 provider's own usage report (input, output, reasoning and cached tokens) as it
 passes the shared transport, whichever feature made it, and lands in
-`ai_usage_daily`. Settings › Usage shows it by feature and by route. To turn
+`ai_usage_daily`. Workspace › Usage shows it by feature and by route. To turn
 those counts into dollars, declare what each model costs, in US dollars per
 million tokens:
 
@@ -278,7 +279,7 @@ still counted, just not priced; the usage page then falls back to the
 workspace's own "price per 1M tokens" setting for those calls, or shows no
 cost. The price is applied when the call is recorded, so changing it (or
 switching models) does not reprice past days. A workspace's own model
-(Settings › Bring your own keys) carries no price: its provider bills the
+(Workspace › Bring your own keys) carries no price: its provider bills the
 workspace directly, and the page says how many calls went there.
 
 Like the rest of the file, a price change takes effect on restart of the app

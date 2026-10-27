@@ -77,7 +77,7 @@
     "modelRoute": "Model route",
     "modelRouteHint": "Which configured route serves this agent's turns.",
     "autonomy": "Autonomy",
-    "autonomyInherits": "Inherits the workspace default (Settings → Agents).",
+    "autonomyInherits": "Inherits the workspace default (Workspace › Agents).",
     "workspaceDefault": "Workspace default",
     "temperature": "Temperature",
     "temperatureHint": "0 is deterministic, 2 is wild. Blank uses the model's default.",
@@ -172,7 +172,7 @@
     "autonomyTitle": "Autonomy",
     "autonomyDescription": "How much an agent may do without a person in the loop. The room's least autonomous agent decides what a meeting may do; the API refuses the rest.",
     "defaultAssistantTitle": "The default assistant",
-    "defaultAssistantDescription": "How Launchstack answers in chat when no agent is picked, for everyone who hasn't chosen their own style under Appearance. Each agent carries its own style, so this is the one place a style is a chat setting rather than an agent setting.",
+    "defaultAssistantDescription": "How Launchstack answers in chat when no agent is picked, for everyone who hasn't chosen their own style under Settings › Appearance. Each agent carries its own style, so this is the one place a style is a chat setting rather than an agent setting.",
     "rosterTitle": "Roster",
     "rosterDescription": "The same agents sit in meetings, answer in chat when picked or @mentioned, and can be tried out on the Agents app. Editing one changes what it does next time — never what it said last time.",
     "tryNote": "Try an agent before putting it in a room, or import one from a definition file, in <b>Studio → Agents</b>.",
@@ -366,7 +366,7 @@
       "unknownWorkflow": "Unknown workflow \"{key}\"",
       "controlFailed": "Control action failed",
       "postFailed": "Could not post message",
-      "roomReadOnly": "An agent in this room is set to \"Read only\", so turns only happen when someone presses Step. Raise its autonomy under Settings → Agents to let the meeting run on its own."
+      "roomReadOnly": "An agent in this room is set to \"Read only\", so turns only happen when someone presses Step. Raise its autonomy under Workspace › Agents to let the meeting run on its own."
     },
     "policyFields": {
       "key": "handle",

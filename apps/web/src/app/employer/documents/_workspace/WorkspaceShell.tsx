@@ -111,6 +111,7 @@ import {
     type WorkspaceTranslator,
 } from "./types";
 import { TOOL_ALIASES, toolTargetFromHref } from "~/lib/tool-app/locations";
+import { WORKSPACE_TOOL_ID, settingsDestination, workspaceHref } from "~/lib/settings/surfaces";
 import { useWorkspaceData } from "./useWorkspaceData";
 import type {
     PassageSelection,
@@ -144,9 +145,9 @@ const LEGACY_VIEW_REDIRECTS: Record<string, string> = {
     upload: "/employer/documents?add=1",
     dashboard: "/employer/home",
     analytics: "/employer/documents?feature=analytics",
-    employees: "/employer/settings#people",
+    employees: workspaceHref("people"),
     settings: "/employer/settings",
-    metadata: "/employer/documents?feature=metadata",
+    metadata: workspaceHref("company"),
     "marketing-pipeline": "/employer/documents?feature=growth&at=%2Fbrand%2Fcampaigns",
     "repo-explainer": "/employer/tools/repo-explainer",
     distribution: "/employer/documents?feature=growth&at=%2Fprospects",
@@ -169,6 +170,7 @@ const LAUNCHER_APPS = ["chat", "knowledge", "meetings"] as const;
  * nobody is looking at. Once shown, a tool stays mounted like any tab.
  */
 const MOUNT_ON_FIRST_SHOW = new Set([
+    "workspace",
     "growth",
     "proposals",
     "vantage",
@@ -199,10 +201,12 @@ const RETIRED_FEATURE_HREFS: Record<string, string> = {
 };
 
 /**
- * Points the Settings hub at a section. The hub follows the hash, mounted or
- * not. Setting the hash it already has fires no `hashchange`, so announce it
- * instead: picking a section again, after moving to another inside the hub,
- * would otherwise leave the hub where it was.
+ * Points the Settings hub at one of its sections. The hub follows the hash,
+ * mounted or not. Setting the hash it already has fires no `hashchange`, so
+ * announce it instead: picking a section again, after moving to another
+ * inside the hub, would otherwise leave the hub where it was. (A hash that
+ * belongs to the Workspace tab never comes through here; see
+ * `openSettingsPlace`.)
  */
 function showSettingsSection(section: string) {
     if (!section) return;
@@ -1629,6 +1633,30 @@ export function WorkspaceShell() {
     const openFeature = useCallback(() => setStudioOpen(true), []);
 
     /**
+     * Where a `/employer/settings#<hash>` link goes inside the workspace:
+     * Settings on one of its own sections, the Workspace tab on the screen a
+     * workspace section moved to (with the row or People tab the hash named
+     * as its `focus`), or Analytics. Never a page leave.
+     */
+    const openSettingsPlace = useCallback(
+        (hash: string) => {
+            const destination = settingsDestination(hash);
+            if (destination?.kind === "workspace") {
+                requestToolLocation(WORKSPACE_TOOL_ID, destination.at);
+                expandFeatureRef.current(WORKSPACE_TOOL_ID);
+                return;
+            }
+            if (destination?.kind === "app") {
+                expandFeatureRef.current(destination.featureId);
+                return;
+            }
+            showSettingsSection(destination?.kind === "settings" ? destination.hash : hash);
+            expandFeatureRef.current("settings");
+        },
+        [requestToolLocation]
+    );
+
+    /**
      * Every way of picking an app ends here: the picker, the Studio menu, the
      * command palette, a keyboard shortcut and `?feature=`. The app opens in
      * a tab — every Studio app does, tools with screens of their own
@@ -1648,11 +1676,10 @@ export function WorkspaceShell() {
                 if (!href) return;
                 const section = settingsSectionOf(href);
                 if (section !== undefined) {
-                    // "Agents & nodes", "Workspace" and the like are sections
-                    // of Settings, which is a tab here. Following the link
+                    // A link into Settings opens a tab here — Settings, or the
+                    // Workspace tab for what moved there. Following the link
                     // would leave the workspace and close every open tab.
-                    showSettingsSection(section);
-                    expandFeatureRef.current("settings");
+                    openSettingsPlace(section);
                     return;
                 }
                 setStudioOpen(false);
@@ -1685,6 +1712,7 @@ export function WorkspaceShell() {
             router,
             setActiveFeatureId,
             requestToolLocation,
+            openSettingsPlace,
             t,
             studio,
         ]
@@ -1736,17 +1764,15 @@ export function WorkspaceShell() {
      * if the permission does.
      */
     /**
-     * Where the chat panel's own chrome sends people. Settings is a Studio app
-     * now, so following the link would leave the workspace and close every
-     * open tab to reach something that is one tab away. The hash is how the
-     * settings panel picks its section, mounted or not.
+     * Where the chat panel's own chrome sends people. Settings and Workspace
+     * are Studio apps now, so following the link would leave the workspace
+     * and close every open tab to reach something that is one tab away.
      */
     const navigateStudio = useCallback(
         (href: string) => {
             const section = settingsSectionOf(href);
             if (section !== undefined) {
-                showSettingsSection(section);
-                expandFeature("settings");
+                openSettingsPlace(section);
                 return;
             }
             // A tool's screen — its old `/employer/tools/…` URL included —
@@ -1758,7 +1784,7 @@ export function WorkspaceShell() {
             }
             router.push(href);
         },
-        [expandFeature, openTool, router]
+        [openSettingsPlace, openTool, router]
     );
 
     /**
@@ -1889,7 +1915,13 @@ export function WorkspaceShell() {
             router.replace(RETIRED_FEATURE_HREFS[featureParam]);
             return;
         }
-        if (featureParam) {
+        if (featureParam === "settings" && !atParam) {
+            // `?feature=settings#models` and the old OpenRouter return leg
+            // (`?feature=settings&openrouter=…`) name what is the Workspace
+            // tab now; the hash goes with the cleanup below, so read it first.
+            const hash = window.location.hash;
+            openSettingsPlace(searchParams.has("openrouter") && !hash ? "byok" : hash);
+        } else if (featureParam) {
             const feature = resolveStudioFeature(featureParam);
             // A gated app must not be dropped just because permissions have
             // not landed. Wait for them — the effect re-runs — but only for
@@ -1969,6 +2001,7 @@ export function WorkspaceShell() {
         legacyRedirect,
         permissionsLoaded,
         expandFeature,
+        openSettingsPlace,
         requestToolLocation,
         startContinuation,
         seedComposer,
@@ -3006,10 +3039,9 @@ export function WorkspaceShell() {
                 }}
                 onPickSetting={key => {
                     setPalOpen(false);
-                    // The hub reads the hash on mount and on change; the row
-                    // scrolls itself into view.
-                    showSettingsSection(key);
-                    setTimeout(() => expandFeature("settings"), 100);
+                    // Settings or the Workspace tab, on the row's section;
+                    // the row scrolls itself into view.
+                    setTimeout(() => openSettingsPlace(key), 100);
                 }}
             />
 

@@ -101,11 +101,14 @@ export interface ModelTestResult {
 }
 
 /**
- * The admin is already in Settings, so "fix it in Settings" is noise on a test
- * result — in English, and in the words `chat.server.endpoint` gives it.
+ * The admin is already on Bring your own keys, so "fix it in … › Bring your
+ * own keys" is noise on a test result — in English, and in the words
+ * `chat.server.endpoint` gives it. Either surface's name: the sentence comes
+ * from `@launchstack/llm`, which names Workspace now and named Settings in
+ * older builds; both are stripped.
  */
 const SETTINGS_HINT =
-    /\s*(?:A workspace admin can fix it in Settings › Bring your own keys\.|工作区管理员可以在“设置 › 自带密钥”中修复。)$/;
+    /\s*(?:A workspace admin can fix it in (?:Settings|Workspace) › Bring your own keys\.|工作区管理员可以在“(?:设置|工作区) › 自带密钥”中修复。)$/;
 
 /**
  * Send each distinct chosen model "Reply with OK." and report per route.
@@ -175,7 +178,7 @@ export async function testEndpoint(
                 modelId,
                 ok: false,
                 latencyMs: Date.now() - started,
-                // The admin is already in Settings; "fix it in Settings" is noise here.
+                // The admin is already on Bring your own keys; "fix it there" is noise.
                 message: described
                     ? wordEnglish(described.message, "chat.server.endpoint", locale).replace(
                           SETTINGS_HINT,

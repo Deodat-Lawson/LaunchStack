@@ -1,5 +1,5 @@
 /**
- * Settings › Bring your own keys › API key. What must not regress: only
+ * Workspace › Bring your own keys. What must not regress: only
  * `settings.manage` reaches any of it, the key goes in and never comes back
  * out, a stored key is never re-aimed at a new address, and the OpenRouter
  * return leg refuses anything but the flow it started.
@@ -318,9 +318,56 @@ describe("Connect OpenRouter", () => {
             const target = new URL(response.headers.get("location")!);
             expect(target.origin).toBe("http://localhost:3000");
             expect(target.searchParams.get("openrouter")).toBe("unavailable");
+            expect(target.searchParams.get("feature")).toBe("workspace");
+            expect(target.searchParams.get("at")).toBe("/byok");
         } finally {
             mockServerEnv.EMBEDDING_SECRETS_KEY = "sealed";
         }
+    });
+
+    describe("behind the proxy", () => {
+        // The standalone server sees its bind address as `request.url`; the
+        // browser must be sent to the address people reach the app at.
+        const BEHIND_PROXY = "https://0.0.0.0:3000";
+        const saved = { auth: process.env.BETTER_AUTH_URL, app: process.env.APP_PUBLIC_URL };
+        beforeEach(() => {
+            process.env.BETTER_AUTH_URL = "https://launchstack.example";
+            // The services' own address: never where a browser is sent.
+            process.env.APP_PUBLIC_URL = "http://app:3000";
+        });
+        afterEach(() => {
+            // Assigning undefined to process.env stores the string "undefined".
+            for (const [name, value] of [
+                ["BETTER_AUTH_URL", saved.auth],
+                ["APP_PUBLIC_URL", saved.app],
+            ] as const) {
+                if (value === undefined) delete process.env[name];
+                else process.env[name] = value;
+            }
+        });
+
+        it("asks OpenRouter to come back to the public origin", async () => {
+            const response = await startOpenRouter(new Request(`${BEHIND_PROXY}/api/x`));
+            const target = new URL(response.headers.get("location")!);
+            expect(target.searchParams.get("callback_url")).toBe(
+                "https://launchstack.example/api/settings/models/workspace/openrouter/callback"
+            );
+            expect(response.cookies.get(OPENROUTER_COOKIE)!.secure).toBe(true);
+        });
+
+        it("lands the return leg on Workspace › Bring your own keys at the public origin", async () => {
+            const response = await openRouterCallback(
+                new Request(
+                    `${BEHIND_PROXY}/api/settings/models/workspace/openrouter/callback?state=s`
+                )
+            );
+            const target = new URL(response.headers.get("location")!);
+            expect(target.origin).toBe("https://launchstack.example");
+            expect(target.pathname).toBe("/employer/documents");
+            expect(target.searchParams.get("feature")).toBe("workspace");
+            expect(target.searchParams.get("at")).toBe("/byok");
+            expect(target.searchParams.get("openrouter")).toBe("denied");
+        });
     });
 
     function callback(query: string, flow?: { v: string; s: string; c: string }) {
@@ -365,7 +412,9 @@ describe("Connect OpenRouter", () => {
         );
 
         expect(outcome(response)).toBe("connected");
-        expect(new URL(response.headers.get("location")!).hash).toBe("#byok");
+        const back = new URL(response.headers.get("location")!);
+        expect(back.searchParams.get("feature")).toBe("workspace");
+        expect(back.searchParams.get("at")).toBe("/byok");
         const [url, init] = fetchSpy.mock.calls[0]!;
         expect(url).toBe("https://openrouter.ai/api/v1/auth/keys");
         expect(JSON.parse(init?.body as string)).toEqual({

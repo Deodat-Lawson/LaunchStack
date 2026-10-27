@@ -92,6 +92,9 @@ const ProcessingQueuePane = dynamic(
     () => import("./processing/ProcessingQueuePane").then(m => m.ProcessingQueuePane),
     { loading: () => <LoadingPage variant="pane" /> }
 );
+const FeedbackTool = dynamic(() => import("./feedback/FeedbackTool").then(m => m.FeedbackTool), {
+    loading: () => <LoadingPage variant="pane" />,
+});
 
 // Tools with screens of their own. Each is a tab with a rail inside it and
 // its own history; none of them is a page you navigate to any more.
@@ -527,6 +530,8 @@ export function renderStudioPane(
                     onSettled={context?.processing?.onSettled}
                 />
             );
+        case "feedback":
+            return <FeedbackTool host={context?.tool} />;
         case "draft":
             return <DraftPane onClose={onClose} context={context} />;
         case "rewrite":

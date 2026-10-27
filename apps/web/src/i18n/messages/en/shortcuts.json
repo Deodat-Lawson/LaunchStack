@@ -63,6 +63,10 @@
     "paneClose": {
       "label": "Close this app",
       "description": "Close the tab the focused pane is showing."
+    },
+    "feedbackReport": {
+      "label": "Report a bug",
+      "description": "Open the feedback dialog, with this page and its recent errors attached."
     }
   }
 }

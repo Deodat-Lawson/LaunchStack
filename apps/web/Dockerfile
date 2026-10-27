@@ -128,4 +128,11 @@ EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
+# The commit this image was built from, for /api/health's `version` and the
+# app version stamped on feedback reports. CI passes `github.sha`; a local
+# build without it says "unknown", as the health route always has. Declared
+# last so a new commit invalidates no earlier layer.
+ARG GIT_COMMIT_SHA=unknown
+ENV GIT_COMMIT_SHA=$GIT_COMMIT_SHA
+
 CMD ["node", "server.js"]

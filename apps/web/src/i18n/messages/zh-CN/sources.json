@@ -720,7 +720,8 @@
     "contactUs": "就此错误联系我们",
     "details": "详细信息",
     "jobId": "任务 ID",
-    "retryAria": "重新处理“{title}”"
+    "retryAria": "重新处理“{title}”",
+    "reportProblem": "报告此问题"
   },
   "folderIssues": {
     "required": "请输入文件夹名称。",

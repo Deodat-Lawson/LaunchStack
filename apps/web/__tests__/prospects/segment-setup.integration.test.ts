@@ -11,6 +11,22 @@ import { getProgram } from "@launchstack/pipelines/distribution/db";
 import { createFounderWeeklyReviewTestDatabase } from "../founderWeeklyReview/testDb";
 
 jest.mock("~/env", () => ({ env: { server: {}, client: {} } }));
+// OpenStreetMap's geocoder, answering the way it does for these places.
+const mockGeocoded: string[] = [];
+jest.mock("@launchstack/pipelines/distribution/geocode", () => ({
+    geocodePlace: async (text: string, options: { homeCountry?: string | null } = {}) => {
+        mockGeocoded.push(text);
+        const known: Record<string, { country: string; region?: string }> = {
+            "Baltimore, Maryland, United States": { country: "US", region: "Baltimore" },
+            "Baltimore, MD, USA": { country: "US", region: "Baltimore" },
+            Netherlands: { country: "NL" },
+            "Wilmington, DE": { country: "US", region: "Wilmington" },
+        };
+        if (text === "Austin")
+            return options.homeCountry ? { country: options.homeCountry, region: "Austin" } : null;
+        return known[text] ?? null;
+    },
+}));
 let mockDb: DbClient | null = null;
 jest.mock("~/server/db", () => ({
     get db() {
@@ -106,8 +122,23 @@ describeDb("segment setup", () => {
             { country: "NL" },
             { country: "US", region: "Baltimore" },
         ]);
+        expect(mockGeocoded).toEqual(
+            expect.arrayContaining(["Austin", "Netherlands", "Baltimore, MD, USA"])
+        );
         // "Who buys" is what discovery and relevance search for.
         expect(program?.categories).toEqual(["restaurant"]);
+    });
+
+    it("reads a state code the way the geocoder does, not as a country", async () => {
+        const segment = await createSegment(ctx(withProfile), {
+            name: "Delaware",
+            offering: "Bookkeeping for restaurants",
+            industries: ["restaurant"],
+            places: ["Wilmington, DE"],
+        });
+        const program = await getProgram(segment.id, withProfile);
+        // Offline, "DE" would read as Germany.
+        expect(program?.targetTerritories).toEqual([{ country: "US", region: "Wilmington" }]);
     });
 
     it("refuses a segment with nowhere to look", async () => {

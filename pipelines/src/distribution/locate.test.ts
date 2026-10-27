@@ -86,12 +86,10 @@ describe("parsePlace", () => {
         expect(parsePlace("London, UK")).toEqual({ country: "GB", region: "London" });
     });
 
-    it("reads a US state code after a city as the US", () => {
-        expect(parsePlace("Austin, TX")).toEqual({ country: "US", region: "Austin" });
-        expect(parsePlace("San Francisco, CA", "US")).toEqual({
-            country: "US",
-            region: "San Francisco",
-        });
+    it("offline, knows no state codes: a code that is not a country falls to the company's", () => {
+        // The geocoder resolves "Austin, TX"; this fallback only reads countries.
+        expect(parsePlace("Austin, TX", "US")).toEqual({ country: "US", region: "Austin" });
+        expect(parsePlace("Austin, TX")).toBeNull();
     });
 
     it("gives a bare city the company's own country, and nothing without one", () => {

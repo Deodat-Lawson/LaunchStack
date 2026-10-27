@@ -8,7 +8,7 @@
  * showed that as its HQ. Here a location is only what the result's own text
  * or domain says; otherwise it is unknown, and unknown is not "in".
  */
-import { countriesMentioned, countryAliases, countryName } from "./keyless/geo";
+import { countriesMentioned, countryName } from "./keyless/geo";
 import type { Territory } from "./types";
 
 function escapeRegExp(s: string): string {
@@ -80,20 +80,6 @@ export function bestTerritoryFit(
     return territories.length === 0 ? "unknown" : best;
 }
 
-/** Words that name a place in the territory — to keep them out of topic keywords. */
-export function placeWords(territory: Territory): Set<string> {
-    const words = [...countryAliases(territory.country), territory.region ?? ""]
-        .flatMap(s => s.toLowerCase().split(/[^\p{L}\p{N}]+/u))
-        .filter(Boolean);
-    return new Set(words);
-}
-
-const US_STATES = new Set(
-    "AL AK AZ AR CA CO CT DE DC FL GA HI ID IL IN IA KS KY LA ME MD MA MI MN MS MO MT NE NV NH NJ NM NY NC ND OH OK OR PA RI SC SD TN TX UT VT VA WA WV WI WY".split(
-        " "
-    )
-);
-
 /** A two-letter code we know, upper-cased; null otherwise. */
 function knownCode(token: string): string | null {
     const code = token.trim().toUpperCase();
@@ -103,8 +89,10 @@ function knownCode(token: string): string | null {
 }
 
 /**
- * One place as people write it — "Baltimore, MD, USA", "Amsterdam,
- * Netherlands", "NL", "Germany" — as a territory. The last part that names
+ * One place as people write it — "Baltimore, USA", "Amsterdam,
+ * Netherlands", "NL", "Germany" — as a territory, read offline. The
+ * geocoder (keyless/nominatim's geocodePlace) is what places are resolved
+ * with; this is its fallback when it cannot be reached. The last part that names
  * a country is the country; the first part, when it isn't the country, is
  * the city or region. A bare city ("Austin") takes `defaultCountry` (the
  * company's own, say). Null when no country can be told.
@@ -119,15 +107,6 @@ export function parsePlace(text: string, defaultCountry?: string | null): Territ
     let countryAt = -1;
     const home = defaultCountry?.toUpperCase() ?? null;
     for (let i = parts.length - 1; i >= 0; i--) {
-        const token = parts[i]!.toUpperCase();
-        // "Austin, TX": a US state code after a city is the US — when the
-        // company is in the US, even for codes that are also countries
-        // (CA, DE, IN), since that is how Americans write addresses.
-        if (i > 0 && US_STATES.has(token) && (home === "US" || !knownCode(token))) {
-            country = "US";
-            countryAt = i;
-            break;
-        }
         const code = knownCode(parts[i]!) ?? countriesMentioned(parts[i]!)[0] ?? null;
         if (code) {
             country = code;

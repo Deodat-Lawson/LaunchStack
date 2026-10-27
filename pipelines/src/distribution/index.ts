@@ -12,6 +12,7 @@ export * from "./plan";
 export * from "./gather";
 export * from "./score";
 export * from "./semantic";
+export * from "./geocode";
 export * from "./judge";
 export * from "./render";
 export * from "./dossier-agent";

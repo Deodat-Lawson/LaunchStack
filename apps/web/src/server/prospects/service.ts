@@ -39,6 +39,7 @@ import type {
     RunRecord,
     Territory,
 } from "@launchstack/pipelines/distribution/types";
+import { geocodePlace } from "@launchstack/pipelines/distribution/geocode";
 import { parsePlace, parsePlaces, placeLabel } from "@launchstack/pipelines/distribution/locate";
 import { getCompanyIdentity, readFact } from "@launchstack/tools/company-context";
 import { resolveComplianceProvider } from "@launchstack/tools/compliance-screen";
@@ -203,7 +204,7 @@ export async function createSegment(
     const home = (await companyHeadquarters(ctx.companyId))?.country ?? null;
     const territories: Territory[] = [
         ...(input.countries ?? []).map((c): Territory => ({ country: c.toUpperCase() })),
-        ...(input.places ?? []).flatMap(p => parsePlaces(p, home)),
+        ...(await resolvePlaces(input.places ?? [], home)),
     ].filter(
         (t, i, all) => all.findIndex(o => o.country === t.country && o.region === t.region) === i
     );
@@ -237,7 +238,35 @@ async function companyHeadquarters(companyId: bigint): Promise<Territory | null>
         .where(eq(companyMetadata.companyId, companyId))
         .limit(1);
     const hq = row ? readFact(row.metadata.company?.headquarters) : undefined;
-    return typeof hq === "string" && hq.trim() ? parsePlace(hq) : null;
+    if (typeof hq !== "string" || !hq.trim()) return null;
+    return (await geocodePlace(hq)) ?? parsePlace(hq);
+}
+
+/** Nominatim's usage policy: at most one request a second. */
+const GEOCODE_PAUSE_MS = 1_100;
+
+/**
+ * Places as the member typed them, one per line or ";" ("Baltimore, MD",
+ * "Wilmington, DE", "Netherlands"), resolved by OpenStreetMap's geocoder;
+ * an entry it cannot resolve (or a geocoder that cannot be reached) is read
+ * offline instead.
+ */
+async function resolvePlaces(
+    entries: readonly string[],
+    home: string | null
+): Promise<Territory[]> {
+    const out: Territory[] = [];
+    const places = entries
+        .flatMap(e => e.split(/[;\n]+/))
+        .map(e => e.trim())
+        .filter(Boolean);
+    for (const [i, place] of places.entries()) {
+        if (i > 0) await new Promise(resolve => setTimeout(resolve, GEOCODE_PAUSE_MS));
+        const found =
+            (await geocodePlace(place, { homeCountry: home })) ?? parsePlaces(place, home)[0];
+        if (found) out.push(found);
+    }
+    return out;
 }
 
 /**

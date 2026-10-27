@@ -55,6 +55,7 @@
         "./distribution/schema": "./src/distribution/schema.ts",
         "./distribution/types": "./src/distribution/types.ts",
         "./distribution/stages": "./src/distribution/stages.ts",
+        "./distribution/locate": "./src/distribution/locate.ts",
         "./proposals": "./src/proposals/index.ts",
         "./proposals/db": "./src/proposals/db.ts",
         "./proposals/schema": "./src/proposals/schema.ts",
@@ -243,6 +244,10 @@
             "./distribution/schema": {
                 "types": "./dist/distribution/schema.d.ts",
                 "default": "./dist/distribution/schema.js"
+            },
+            "./distribution/locate": {
+                "types": "./dist/distribution/locate.d.ts",
+                "default": "./dist/distribution/locate.js"
             },
             "./distribution/types": {
                 "types": "./dist/distribution/types.d.ts",

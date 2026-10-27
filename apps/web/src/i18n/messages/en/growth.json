@@ -134,13 +134,6 @@
       "createFailed": "Could not create the segment",
       "title": "New segment",
       "description": "Who you want to sell to, and where. You can refine every field afterwards.",
-      "namePlaceholder": "Fulfilment operators · EU",
-      "offering": "What you sell",
-      "offeringPlaceholder": "Picking robots for e-commerce warehouses, leased per robot per month",
-      "industries": "Industries <hint>(comma separated)</hint>",
-      "industriesPlaceholder": "E-commerce fulfilment, 3PL, contract logistics",
-      "countries": "Countries <hint>(two-letter codes)</hint>",
-      "countriesPlaceholder": "NL, DE, GB",
       "create": "Create segment"
     },
     "runSheet": {
@@ -363,6 +356,24 @@
       "draftFor": "Draft campaign for {count}",
       "draftInbox": "Draft to the public inbox",
       "drafted": "Campaign drafted in Email with {count, plural, one {# person} other {# people}}. Approve it there; nothing is sent from here."
+    },
+    "setup": {
+      "title": "Who do you sell to?",
+      "body": "Three answers and Growth goes looking. You can refine every one of them afterwards under Segment.",
+      "buyers": "Who buys from you",
+      "buyersPlaceholder": "Restaurants, coffee shops, dental clinics",
+      "buyersHint": "The kinds of companies to find, separated by commas. Companies that don't mention any of these are left out.",
+      "where": "Where",
+      "wherePlaceholder": "Baltimore, MD, USA; Netherlands",
+      "whereHint": "A city, a state or a country. Separate several with “;”. Companies outside it are left out.",
+      "whereFromProfile": "From your company profile. Change it to look somewhere else.",
+      "offering": "What you sell",
+      "offeringPlaceholder": "Bookkeeping and payroll for independent restaurants",
+      "offeringHint": "One or two sentences, in your own words.",
+      "offeringFromProfile": "Drafted from your company profile. Edit it to fit this group of customers.",
+      "submit": "Find companies",
+      "failed": "Could not start the search",
+      "defaultName": "{buyers} · {where}"
     }
   },
   "brand": {
@@ -1080,6 +1091,7 @@
       "programNotFound": "Program not found",
       "programArchived": "Program is archived",
       "countryCodes": "Use two-letter country codes, for example NL, DE, GB",
+      "sayWhere": "Say where to look: a city, a state or a country.",
       "cannotMoveTo": "Cannot move to {stage}",
       "nothingSelected": "Nothing selected",
       "noneContactable": "None of the selected companies can be contacted yet",
@@ -1098,7 +1110,7 @@
       "notEnoughCredits": "Not enough credits to start a run",
       "insufficientCredits": "Insufficient credits",
       "deriveLater": "Deriving a segment from your documents arrives with the pipeline reframe",
-      "newSegmentRequired": "Name, what you sell and at least one country are required",
+      "newSegmentRequired": "Name, what you sell and where to look are required",
       "sourceSettingsLater": "Source settings arrive with the source registry; keys in the environment decide for now"
     },
     "stageErrors": {

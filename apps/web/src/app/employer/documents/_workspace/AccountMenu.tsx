@@ -8,11 +8,13 @@ import {
     BookOpen,
     ChevronsUpDown,
     LogOut,
+    MessageSquareText,
     Moon,
     Settings,
     Sun,
 } from "lucide-react";
 
+import { useFeedback } from "~/components/feedback/FeedbackProvider";
 import { LanguageSubmenu } from "~/components/i18n/LanguageMenu";
 import { ProfileAvatar } from "~/components/ProfileAvatar";
 import {
@@ -48,7 +50,7 @@ export interface AccountMenuProps {
 
 /**
  * Who is signed in, and what they can do about it: theme, language,
- * settings, switch workspace, sign out.
+ * settings, switch workspace, send feedback, sign out.
  *
  * It lives at the foot of the sidebar, where Claude, ChatGPT, Slack and VS
  * Code all keep the account. It used to sit at the end of the first column's
@@ -70,6 +72,7 @@ export function AccountMenu({
     const { resolvedTheme, setTheme } = useTheme();
     const isDark = resolvedTheme === "dark";
     const workspace = useEmployerWorkspaceSwitcher();
+    const feedback = useFeedback();
     const name = userName ?? t("fallbackName");
 
     const subtitle = userTitle ?? userEmail;
@@ -168,6 +171,15 @@ export function AccountMenu({
                         <span className="text-ink-3 text-[10px]">↗</span>
                     </a>
                 </DropdownMenuItem>
+                {feedback.enabled && (
+                    <DropdownMenuItem
+                        onSelect={() => feedback.open()}
+                        data-testid="account-menu-feedback"
+                    >
+                        <MessageSquareText />
+                        {t("feedback")}
+                    </DropdownMenuItem>
+                )}
                 {onSignOut && (
                     <>
                         <DropdownMenuSeparator />

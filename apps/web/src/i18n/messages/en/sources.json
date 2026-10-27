@@ -712,7 +712,8 @@
     "contactUs": "Contact us about this error",
     "details": "Details",
     "jobId": "Job ID",
-    "retryAria": "Retry processing {title}"
+    "retryAria": "Retry processing {title}",
+    "reportProblem": "Report this problem"
   },
   "folderIssues": {
     "required": "Folder name is required.",

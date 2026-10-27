@@ -203,6 +203,8 @@ being picked up.
 | `NEXT_PUBLIC_APP_URL` | Optional | Origin this app is served from; where the public site's sign-in links point |
 | `EMAIL_UNSUBSCRIBE_SECRET` | Conditional | HMAC key for unsubscribe links; required to send email campaigns, min 16 chars |
 | `SUPPORT_CONTACT_EMAIL` | Optional | Address the in-app contact form composes to. Unset hides the form |
+| `FEEDBACK_ADMIN_EMAILS` | Optional | Turns on in-app bug reports and feature requests and names who triages them: account emails, comma/space/semicolon separated, case-insensitive. Unset keeps the feature off. Accounts are not email-verified, so create the operator's account before listing it |
+| `FEEDBACK_WEBHOOK_URL` | Optional | Slack or Discord incoming webhook told about each new report — one line with the kind, severity, title and a Triage link; never the body, context or screenshots |
 
 ## Post-deployment Checklist
 

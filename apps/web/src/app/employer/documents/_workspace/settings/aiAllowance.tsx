@@ -2,7 +2,7 @@
 
 /**
  * A person's monthly AI allowance, for the three places that show one:
- * Settings › Usage (everyone's, for admins), Settings › Account (your own)
+ * Workspace › Usage (everyone's, for admins), Settings › Account (your own)
  * and the Ask composer (a notice as you near the limit, and a stop at it).
  *
  * The shapes are the server's own (~/server/ai-usage), imported as types
@@ -27,7 +27,7 @@ export type MemberAllowancesResponse = MemberAllowances & { canEdit: boolean };
 /** The `code` of a request refused at an AI limit (HTTP 429). */
 export const AI_ALLOWANCE_REACHED: AiAllowanceRefusal["code"] = "ai_allowance_reached";
 
-/** The workspace default's registry key; its row is drawn by hand in Settings › Usage. */
+/** The workspace default's registry key; its row is drawn by hand in Workspace › Usage. */
 export const MEMBER_LIMIT_SETTING_KEY = "usage.memberMonthlyTokenLimit";
 
 /** From this share of the binding limit the bar turns amber and the chat says so. */

@@ -1,5 +1,5 @@
 /**
- * The per-person half of Settings › Usage: what each member used this month,
+ * The per-person half of Workspace › Usage: what each member used this month,
  * the limit that applies to them, and an admin's way to change it.
  */
 

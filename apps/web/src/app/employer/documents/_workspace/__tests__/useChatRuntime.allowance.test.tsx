@@ -26,7 +26,7 @@ jest.mock("../sessionApi", () => ({
 jest.mock("sonner", () => ({ toast: { error: jest.fn() } }));
 
 const REFUSAL =
-    "You've reached your AI limit in this workspace for this month (1,000,400 of 1,000,000 tokens). It resets on November 1, 2026. A workspace admin can raise it in Settings › Usage and costs.";
+    "You've reached your AI limit in this workspace for this month (1,000,400 of 1,000,000 tokens). It resets on November 1, 2026. A workspace admin can raise it in Workspace › Usage and costs.";
 
 const fetchMock = jest.fn();
 

@@ -1,7 +1,7 @@
 /** @jest-environment jsdom */
 
 /**
- * Settings › Usage › AI limits per person: one row per member with what they
+ * Workspace › Usage › AI limits per person: one row per member with what they
  * used, the limit that binds them and where it comes from; the server's cap
  * read-only; and, for an admin, a dialog that sets one person's limit and
  * sends exactly the choice made.

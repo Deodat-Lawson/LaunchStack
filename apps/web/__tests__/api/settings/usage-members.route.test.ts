@@ -1,5 +1,5 @@
 /**
- * Settings › Usage › AI limits per person, the routes: an admin's choice for
+ * Workspace › Usage › AI limits per person, the routes: an admin's choice for
  * one person is validated before it reaches the store, an unknown person is a
  * 404, and the list says whether the viewer may edit. The 403s for members
  * live in permission-gates.test.ts.

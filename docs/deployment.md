@@ -214,7 +214,7 @@ being picked up.
 ## AI allowances per person
 
 Two limits can apply to a person; the tighter one binds. Both count AI tokens
-in plus out, as Settings › Usage and costs reports them, by calendar month in
+in plus out, as Workspace › Usage and costs reports them, by calendar month in
 UTC, and reset on the 1st.
 
 - **The server's** — `AI_MONTHLY_TOKEN_LIMIT_PER_USER`. It protects your model
@@ -224,7 +224,7 @@ UTC, and reset on the 1st.
   while that workspace runs on its own models. People listed in
   `AI_TOKEN_LIMIT_EXEMPT_EMAILS` are never capped. Because anyone who creates a
   workspace owns it, this is the only limit an individual can't lift themselves.
-- **The workspace's** — set in Settings › Usage and costs › AI limits per person
+- **The workspace's** — set in Workspace › Usage and costs › AI limits per person
   by anyone with *settings.manage*: a default for everyone, and an override per
   person (no limit, or a number of tokens). It counts all of the person's calls
   in that workspace, whoever's endpoint served them.

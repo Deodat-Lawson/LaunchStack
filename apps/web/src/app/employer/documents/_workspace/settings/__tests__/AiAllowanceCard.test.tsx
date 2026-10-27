@@ -47,7 +47,7 @@ describe("AiAllowanceCard", () => {
         expect(summary).toHaveTextContent("25% used");
         expect(summary).toHaveTextContent("Resets on November 1, 2026.");
         expect(summary).toHaveTextContent(
-            "This is the workspace's limit for everyone. Workspace admins can change it in Settings › Usage and costs."
+            "This is the workspace's limit for everyone. Workspace admins can change it in Workspace › Usage and costs."
         );
         expect(within(summary).getByRole("progressbar")).toHaveAttribute("data-tone", "normal");
     });

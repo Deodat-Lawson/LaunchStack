@@ -1,6 +1,6 @@
 /**
  * Each member's AI use this month and the limit that applies to them, for
- * Settings › Usage. Gated like the rest of that page, on `analytics.view`:
+ * Workspace › Usage. Gated like the rest of that page, on `analytics.view`:
  * who used how much is the same kind of workspace fact as what it spent.
  */
 

@@ -260,6 +260,13 @@ const COVERAGE: Record<string, Coverage> = Object.fromEntries<Coverage>([
         { scopedBy: [CLIENT_PROSPECTOR_JOB], note: "run-pipeline step" },
     ],
     [
+        "pipelines/src/distribution/judge.ts",
+        {
+            scopedBy: [DISTRIBUTION_JOB, "apps/web/src/server/prospects/keyless-run.ts"],
+            note: "the shortlist's fit check, inside the prepare step or the keyless run's scope",
+        },
+    ],
+    [
         "pipelines/src/distribution/plan.ts",
         { scopedBy: [DISTRIBUTION_JOB], note: "prepareRun in the prepare step" },
     ],

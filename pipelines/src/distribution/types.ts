@@ -182,8 +182,8 @@ export const RunOptionsSchema = z.object({
      * pipeline end to end and for exploring the UI with realistic data.
      */
     /**
-     * `keyless` runs the same stages over public, free sources (OpenStreetMap,
-     * the YC directory) and reads each candidate's website with a page
+     * `keyless` runs the same stages over public, free places (OpenStreetMap)
+     * and reads each candidate's website with a page
      * profiler instead of a model: no API key of any kind.
      */
     mode: z.enum(["live", "fixture", "keyless"]).default("live"),

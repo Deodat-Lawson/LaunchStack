@@ -8,6 +8,7 @@ import type { OrgMention } from "@launchstack/tools/org-resolver";
 import type { TradeDataProvider } from "@launchstack/tools/trade-data";
 import type { RawSearchResult } from "@launchstack/tools/web-research";
 
+import { locateFromEvidence } from "./locate";
 import type { PartnerKind, PlannedSourceQuery, SourceCount, Territory } from "./types";
 
 export interface GatherPorts {
@@ -88,12 +89,17 @@ export function mentionFromWebResult(
     const trimmedTitle = result.title?.trim();
     const title = trimmedTitle?.length ? trimmedTitle : (host ?? result.url);
     const roles = guessRolesFromText(`${result.title} ${result.content.slice(0, 400)}`);
+    // Where the result says it is, not where we searched: a query for
+    // Baltimore can return a company in San Francisco, and it must not come
+    // back labelled Baltimore.
+    const seen = locateFromEvidence(`${result.title} ${result.content}`, query.territory);
     return {
         name: firstSegment(title),
         url: result.url,
-        country: query.territory.country,
-        region: query.territory.region ?? null,
-        roles: roles.length > 0 ? roles : [query.partnerKind],
+        country: seen.country,
+        region: seen.region,
+        // Only roles the text states; the query's kind is not evidence.
+        roles,
         categories: [],
         description: result.content.slice(0, 280),
         source: `web:${query.label}`,
@@ -206,7 +212,9 @@ export async function gather(
                             country: query.territory.country,
                             region: query.territory.region ?? null,
                             city: query.territory.region ?? null,
-                            roles: place.roles?.length ? place.roles : [query.partnerKind],
+                            // A place search is bounded to the territory, so its area is
+                            // real; its role is only what the directory's tags say.
+                            roles: place.roles ?? [],
                             categories: place.categories.map(c => c.name),
                             description: place.formattedAddress,
                             source: `place:${place.fsqId}`,

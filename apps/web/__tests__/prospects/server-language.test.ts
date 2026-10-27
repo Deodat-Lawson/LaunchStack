@@ -270,7 +270,7 @@ describe("in Chinese", () => {
         expect(zh(sources.labelCopy)).toBe("来源");
         expect(zh(sources.detailCopy)).toBe("已完成 1/2");
         expect(sources.children!.map(c => zh(c.labelCopy))).toEqual([
-            "公开目录（YC）",
+            "网页搜索",
             "OpenStreetMap",
             "贸易数据",
         ]);

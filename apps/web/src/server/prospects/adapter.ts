@@ -822,7 +822,7 @@ const SOURCE_LABEL: Record<SourceCount["source"], string> = {
     trade: "Trade data",
 };
 const KEYLESS_LABEL: Record<SourceCount["source"], string> = {
-    web: "Public directories (YC)",
+    web: "Web search",
     place: "OpenStreetMap",
     trade: "Trade data",
 };
@@ -903,26 +903,13 @@ export function sourceRows(avail: SourceAvailability, latest: RunRecord | null):
             label: "OpenStreetMap",
             kind: "api",
             description:
-                "Organisations with a website, by country or city and by what they are. Free, no key; used whenever no search provider is configured.",
+                "Real places with a website — shops, cafés, workshops, offices — in each city or country, of the kinds closest in meaning to who you sell to. Free, no key; used whenever no search provider is configured.",
             enabled: true,
             available: true,
             requires: null,
             cost: "free",
             locked: true,
             lastYield: yieldFor("place", "keyless"),
-        },
-        {
-            id: "yc",
-            label: "Y Combinator directory",
-            kind: "api",
-            description:
-                "Active YC companies in the segment's countries whose blurb matches its words. Free, no key.",
-            enabled: true,
-            available: true,
-            requires: null,
-            cost: "free",
-            locked: true,
-            lastYield: yieldFor("web", "keyless"),
         },
         {
             id: "web",

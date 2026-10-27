@@ -24,6 +24,11 @@ export interface ScoreInput {
     newestEvidenceAt: Date | null;
     /** Organisation is known from the tenant's own documents. */
     knownEntity: boolean;
+    /**
+     * How relevant the organisation is to the segment, as a share in [0, 1]
+     * (./semantic's relevanceShare). Absent: word overlap decides.
+     */
+    relevance?: number | null;
     /** The seller's own name and known competitor names (lowercased). */
     sellerName: string;
     competitorNames?: string[];
@@ -150,15 +155,9 @@ export function categoryCoverage(
     return sum / phrases.length;
 }
 
-/**
- * How much an organisation's own words (name, categories, description)
- * cover what the segment is about, in [0, 1] — the shortlist's relevance.
- */
-export function topicRelevance(
-    program: Pick<ProgramRecord, "categories" | "offering">,
-    texts: readonly string[]
-): number {
-    return categoryCoverage(program, tokens(texts));
+/** The words of several texts, for word-overlap relevance (see ./semantic). */
+export function textTerms(values: readonly string[]): Set<string> {
+    return tokens(values);
 }
 
 export function computeFit(input: ScoreInput): FitBreakdown {
@@ -191,9 +190,8 @@ export function computeFit(input: ScoreInput): FitBreakdown {
         ...(input.dossier?.brandsCarried.map(b => b.brand) ?? []),
         input.dossier?.summary ?? "",
     ]);
-    const categoryOverlap = Math.round(
-        WEIGHTS.categoryOverlap * Math.min(1, categoryCoverage(input.program, orgTerms) * 1.5)
-    );
+    const share = input.relevance ?? Math.min(1, categoryCoverage(input.program, orgTerms) * 1.5);
+    const categoryOverlap = Math.round(WEIGHTS.categoryOverlap * share);
 
     // Territory: org country equals the relationship territory (or any program territory).
     const targetCountries = new Set(input.program.targetTerritories.map(t => t.country));
@@ -243,24 +241,14 @@ export function computeFit(input: ScoreInput): FitBreakdown {
 
     const knownSignal = input.knownEntity ? WEIGHTS.knownSignal : 0;
 
-    // Relevance gates the rest: territory, freshness, size and evidence depth
-    // reward any company with a readable website, so one that shares nothing
-    // with what the segment is about used to reach 40-45 on those alone and
-    // sit among the real prospects. Without topic overlap it stays low.
-    const ceiling = categoryOverlap === 0 ? IRRELEVANT_CEILING : 100;
-    const total = Math.max(
-        0,
-        Math.min(
-            ceiling,
-            categoryOverlap +
-                territoryMatch +
-                roleMatch +
-                evidenceDepth +
-                freshness +
-                sizeFit +
-                knownSignal
-        )
-    );
+    // Relevance scales the rest: territory, freshness, size and evidence depth
+    // reward any company with a readable website, so one unrelated to what the
+    // segment sells used to reach 40-45 on those alone and sit among the real
+    // prospects. They count in full from half a real buyer's relevance up, and
+    // fade to nothing for a company that reads like business in general.
+    const topicFactor = Math.min(1, share * 2);
+    const rest = territoryMatch + roleMatch + evidenceDepth + freshness + sizeFit + knownSignal;
+    const total = Math.max(0, Math.min(100, Math.round(categoryOverlap + rest * topicFactor)));
     return {
         categoryOverlap,
         territoryMatch,
@@ -272,9 +260,6 @@ export function computeFit(input: ScoreInput): FitBreakdown {
         total,
     };
 }
-
-/** The most a company with no topic overlap can score (well under FIT_THRESHOLD). */
-export const IRRELEVANT_CEILING = 20;
 
 /** Risk flags derived from the dossier and the rubric — deterministic strings the UI can render. */
 export function deriveRiskFlags(input: {

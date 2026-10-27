@@ -36,13 +36,15 @@ import { gather, type GatherPorts } from "./gather";
 import { planDiscovery, type PlanInput, type SellerProfile } from "./plan";
 import { makeDossierCreationKey, makeDossierFilename, renderDossierMarkdown } from "./render";
 import { bestTerritoryFit } from "./locate";
+import { buildRationaleInput, computeFit, deriveRiskFlags, templateRationale } from "./score";
 import {
-    buildRationaleInput,
-    computeFit,
-    deriveRiskFlags,
-    templateRationale,
-    topicRelevance,
-} from "./score";
+    buyerBrief,
+    companyText,
+    relevanceOf,
+    relevanceShare,
+    type EmbedTexts,
+    type JudgeFit,
+} from "./semantic";
 import type {
     DiscoveryPlan,
     PartnerKind,
@@ -129,7 +131,17 @@ export interface DistributionPorts {
      * the result passes the same grounding gate before it is stored.
      */
     profile?: (ports: DossierAgentPorts, input: DossierAgentInput) => Promise<DossierAgentResult>;
+    /**
+     * Text embedder for matching companies to the segment by meaning; null or
+     * absent → word overlap (the run warns).
+     */
+    embed?: EmbedTexts | null;
+    /** Chat-model check of the closest companies; null or absent → none. */
+    judgeFit?: JudgeFit | null;
 }
+
+/** Companies the model checks per shortlist place: enough to fill it after its no's. */
+const JUDGE_POOL_FACTOR = 2;
 
 export interface RunContext {
     runId: string;
@@ -335,34 +347,69 @@ export async function prepareRun(
             orgs = orgs.filter(org => normalizeOrgName(org.name) !== sellerKey);
             const excluded = before - orgs.length;
 
-            // Two gates before anyone spends a research turn on a company:
+            // Gates before anyone spends a research turn on a company:
             // - where it is: out only on evidence (a known country or city
             //   elsewhere); unknown stays, and is ranked below confirmed;
-            // - what it is: its own words must share something with what the
-            //   segment is about. A company that only matched on the place
-            //   name, or on nothing, is not a prospect.
+            // - what it is, by meaning: it must read more like the segment's
+            //   buyer than like business in general (./semantic);
+            // - and, with a chat model, the closest ones are asked "would this
+            //   business buy this?"; a no takes a company off the list.
             const fitOf = new Map(orgs.map(o => [o.resolveKey, bestTerritoryFit(o, territories)]));
-            const relevanceOf = new Map(
-                orgs.map(o => [
-                    o.resolveKey,
-                    topicRelevance(program, [o.name, ...o.categories, o.description ?? ""]),
-                ])
-            );
             const outOfArea = orgs.filter(o => fitOf.get(o.resolveKey) === "out").length;
             orgs = orgs.filter(o => fitOf.get(o.resolveKey) !== "out");
-            const offTopic = orgs.filter(o => (relevanceOf.get(o.resolveKey) ?? 0) === 0).length;
-            orgs = orgs.filter(o => (relevanceOf.get(o.resolveKey) ?? 0) > 0);
-            if (outOfArea + offTopic > 0)
+
+            const relevance = await relevanceOf(ports.embed, program, partnerKinds, orgs);
+            const scoreOf = new Map(orgs.map((o, i) => [o.resolveKey, relevance.scores[i] ?? 0]));
+            if (relevance.method === "lexical")
                 warnings.push(
-                    `Left out ${outOfArea} compan${outOfArea === 1 ? "y" : "ies"} outside the segment's area and ${offTopic} with nothing in common with what you sell.`
+                    "No embedding model is configured, so companies were matched by shared words rather than by meaning."
+                );
+            const offTopic = orgs.filter(o => (scoreOf.get(o.resolveKey) ?? 0) <= 0).length;
+            orgs = orgs.filter(o => (scoreOf.get(o.resolveKey) ?? 0) > 0);
+
+            let notBuyers = 0;
+            // Companies the fit check saw; past them the shortlist does not reach.
+            let checked: Set<string> | null = null;
+            if (ports.judgeFit && orgs.length > 0) {
+                const pool = [...orgs]
+                    .sort(
+                        (a, b) =>
+                            (scoreOf.get(b.resolveKey) ?? 0) - (scoreOf.get(a.resolveKey) ?? 0)
+                    )
+                    .slice(0, options.maxCandidates * JUDGE_POOL_FACTOR);
+                try {
+                    const verdicts = await ports.judgeFit({
+                        brief: buyerBrief(program, partnerKinds),
+                        candidates: pool.map(o => ({
+                            id: o.resolveKey,
+                            name: o.name,
+                            text: companyText(o),
+                        })),
+                    });
+                    const rejected = new Set(
+                        [...verdicts].filter(([, v]) => !v.fit).map(([key]) => key)
+                    );
+                    notBuyers = rejected.size;
+                    orgs = orgs.filter(o => !rejected.has(o.resolveKey));
+                    checked = new Set(pool.map(o => o.resolveKey));
+                } catch (error) {
+                    console.warn(`${LOG_PREFIX} fit check failed; keeping the ranking:`, error);
+                    warnings.push(
+                        "The fit check could not run; the list is ranked by meaning only."
+                    );
+                }
+            }
+            if (outOfArea + offTopic + notBuyers > 0)
+                warnings.push(
+                    `Left out ${outOfArea} compan${outOfArea === 1 ? "y" : "ies"} outside the segment's area, ${offTopic} unrelated to what you sell${ports.judgeFit ? ` and ${notBuyers} the fit check judged would not buy it` : ""}.`
                 );
 
             // Shortlist: most relevant first; then confirmed inside the area,
             // a wanted role the text states, a real domain, and mentions.
             const wanted = new Set<string>(partnerKinds);
             const ranked = [...orgs].sort((a, b) => {
-                const relA = relevanceOf.get(a.resolveKey) ?? 0;
-                const relB = relevanceOf.get(b.resolveKey) ?? 0;
+                const relA = scoreOf.get(a.resolveKey) ?? 0;
+                const relB = scoreOf.get(b.resolveKey) ?? 0;
                 if (relA !== relB) return relB - relA;
                 const inA = fitOf.get(a.resolveKey) === "in" ? 1 : 0;
                 const inB = fitOf.get(b.resolveKey) === "in" ? 1 : 0;
@@ -375,7 +422,9 @@ export async function prepareRun(
                 if (domA !== domB) return domB - domA;
                 return b.mentionCount - a.mentionCount;
             });
-            const shortlist = ranked.slice(0, options.maxCandidates);
+            const shortlist = ranked
+                .filter(o => !checked || checked.has(o.resolveKey))
+                .slice(0, options.maxCandidates);
             const saved = await db.upsertOrgs({
                 companyId: ctx.companyId,
                 runId: ctx.runId,
@@ -556,7 +605,30 @@ export async function enrichCandidate(
         null
     );
     const dossier = agentResult.outcome.status === "ok" ? agentResult.outcome.dossier : null;
+    // Relevance by meaning, now with what research found (summary, brands).
+    let relevance: number | null = null;
+    if (ports.embed) {
+        const measured = await relevanceOf(
+            ports.embed,
+            program,
+            [relationship.kind],
+            [
+                {
+                    name: org.name,
+                    categories: org.categories,
+                    description: org.description,
+                    extra: [
+                        dossier?.summary ?? "",
+                        ...(dossier?.brandsCarried.map(b => b.brand) ?? []),
+                    ],
+                },
+            ]
+        );
+        if (measured.method === "semantic")
+            relevance = relevanceShare(measured.scores[0] ?? 0, "semantic");
+    }
     const breakdown = computeFit({
+        relevance,
         program,
         org,
         kind: relationship.kind,

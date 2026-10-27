@@ -92,7 +92,7 @@ export function mentionFromWebResult(
     // Where the result says it is, not where we searched: a query for
     // Baltimore can return a company in San Francisco, and it must not come
     // back labelled Baltimore.
-    const seen = locateFromEvidence(`${result.title} ${result.content}`, host, query.territory);
+    const seen = locateFromEvidence(`${result.title} ${result.content}`, query.territory);
     return {
         name: firstSegment(title),
         url: result.url,

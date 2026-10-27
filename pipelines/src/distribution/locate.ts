@@ -11,42 +11,6 @@
 import { countriesMentioned, countryAliases } from "./keyless/geo";
 import type { Territory } from "./types";
 
-/** Country-code top-level domains we can map with confidence (generic ones say nothing). */
-const CC_TLD: Readonly<Record<string, string>> = {
-    de: "DE",
-    nl: "NL",
-    uk: "GB",
-    fr: "FR",
-    es: "ES",
-    it: "IT",
-    se: "SE",
-    no: "NO",
-    fi: "FI",
-    dk: "DK",
-    pl: "PL",
-    cz: "CZ",
-    at: "AT",
-    ch: "CH",
-    be: "BE",
-    ie: "IE",
-    pt: "PT",
-    ca: "CA",
-    au: "AU",
-    nz: "NZ",
-    jp: "JP",
-    sg: "SG",
-    in: "IN",
-    br: "BR",
-    mx: "MX",
-};
-
-/** The country a host's TLD names (`acme.co.uk` → GB); null for .com, .io, .ai and the like. */
-export function countryFromHost(host: string | null | undefined): string | null {
-    if (!host) return null;
-    const tld = host.toLowerCase().replace(/\.$/, "").split(".").pop() ?? "";
-    return CC_TLD[tld] ?? null;
-}
-
 function escapeRegExp(s: string): string {
     return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
@@ -66,19 +30,13 @@ export interface SeenLocation {
 }
 
 /**
- * The location a result's own words (or domain) give. The wanted territory
+ * The location a result's own words give. The wanted territory
  * only breaks ties: when the text names several countries and one is the
  * wanted one, that one; the wanted region counts only when the text names it.
  */
-export function locateFromEvidence(
-    text: string,
-    host: string | null | undefined,
-    wanted: Territory
-): SeenLocation {
+export function locateFromEvidence(text: string, wanted: Territory): SeenLocation {
     const countries = countriesMentioned(text);
-    const country = countries.includes(wanted.country)
-        ? wanted.country
-        : (countries[0] ?? countryFromHost(host));
+    const country = countries.includes(wanted.country) ? wanted.country : (countries[0] ?? null);
     const region =
         wanted.region && country === wanted.country && mentionsPlace(text, wanted.region)
             ? wanted.region

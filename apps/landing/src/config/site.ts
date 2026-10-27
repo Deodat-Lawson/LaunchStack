@@ -42,5 +42,8 @@ export const SIGN_UP_URL = `${APP_URL}/signup`;
 /** Where privacy, data and account-deletion requests go. Shown on /privacy and /terms. */
 export const PRIVACY_EMAIL = "privacy@launchstack-internal.com";
 
-/** The date the current Privacy Policy and Terms took effect. */
-export const LEGAL_UPDATED = "October 16, 2026";
+/** The date the current Privacy Policy took effect. Bump it with every change to the policy. */
+export const PRIVACY_UPDATED = "October 17, 2026";
+
+/** The date the current Terms of Service took effect. */
+export const TERMS_UPDATED = "October 16, 2026";

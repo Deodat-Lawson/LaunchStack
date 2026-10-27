@@ -124,7 +124,7 @@ describe("startFileUploads", () => {
         });
         expect(result.current[0]).toMatchObject({
             phase: "working",
-            workLabel: "Transcribing the recording",
+            work: "transcribing",
         });
         await act(async () => {
             register.resolve({ jobId: "job-r", documentId: 3 });
@@ -134,8 +134,9 @@ describe("startFileUploads", () => {
     });
 
     it("keeps a failed upload with its reason, retries it, and can dismiss it", async () => {
+        const tooLarge = new Error("deck.pdf: upload failed (HTTP 413)");
         mockUpload
-            .mockRejectedValueOnce(new Error("deck.pdf: upload failed (HTTP 413)"))
+            .mockRejectedValueOnce(tooLarge)
             .mockResolvedValueOnce({ url: "s3://d", provider: "s3" });
         mockRegister.mockResolvedValue({ jobId: "job-d", documentId: 4 });
         const { result } = renderHook(() => useLocalTasks());
@@ -143,10 +144,8 @@ describe("startFileUploads", () => {
             startFileUploads([{ file: file("deck.pdf"), category: "" }]);
             await flush();
         });
-        expect(result.current[0]).toMatchObject({
-            phase: "failed",
-            error: "deck.pdf: upload failed (HTTP 413)",
-        });
+        // The error itself is kept; the tab words it in the reader's language.
+        expect(result.current[0]).toMatchObject({ phase: "failed", failure: tooLarge });
 
         await act(async () => {
             retryLocalTask(result.current[0]!.id);
@@ -167,14 +166,14 @@ describe("startLinkTask", () => {
             startLinkTask({
                 name: "https://example.com",
                 category: "Research",
-                workLabel: "Fetching the page",
+                work: "fetchingPage",
                 run: () => answer.promise,
             });
         });
         expect(result.current[0]).toMatchObject({
             kind: "link",
             phase: "working",
-            workLabel: "Fetching the page",
+            work: "fetchingPage",
         });
         await act(async () => {
             answer.resolve({ jobIds: ["job-page"] });
@@ -189,14 +188,14 @@ describe("startLinkTask", () => {
             startLinkTask({
                 name: "https://example.com",
                 category: "",
-                workLabel: "Fetching the page",
+                work: "fetchingPage",
                 run: () => Promise.reject(new Error("There is no text on example.com we can read")),
             });
             await flush();
         });
-        expect(result.current[0]).toMatchObject({
-            phase: "failed",
-            error: "There is no text on example.com we can read",
-        });
+        expect(result.current[0]!.phase).toBe("failed");
+        expect((result.current[0]!.failure as Error).message).toBe(
+            "There is no text on example.com we can read"
+        );
     });
 });

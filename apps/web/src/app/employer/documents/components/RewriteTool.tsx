@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { Clock, Plus, Sparkles } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import {
     ToolFrame,
@@ -60,7 +61,6 @@ export function RewriteTool({ host }: { host?: ToolHost }) {
 
 const DOCUMENTS_URL = "/api/document-generator/documents";
 const LIST_URL = `${DOCUMENTS_URL}?templateId=rewrite`;
-const DEFAULT_TITLE = "Untitled (Rewrite)";
 const PENDING_REWRITE_STORAGE_KEY = "pdr.pendingRewriteDraft";
 
 interface APIDocument {
@@ -87,26 +87,13 @@ interface UnsavedRewrite {
     content: string;
 }
 
-function formatRelativeTime(dateString: string): string {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffMs = now.getTime() - date.getTime();
-    const diffMins = Math.floor(diffMs / 60000);
-    const diffHours = Math.floor(diffMins / 60);
-    const diffDays = Math.floor(diffHours / 24);
-
-    if (diffMins < 1) return "Just now";
-    if (diffMins < 60) return `${diffMins} min${diffMins > 1 ? "s" : ""} ago`;
-    if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? "s" : ""} ago`;
-    if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? "s" : ""} ago`;
-    return date.toLocaleDateString();
-}
+type RewriteT = ReturnType<typeof useTranslations<"viewers.rewrite">>;
 
 function toRewriteDocument(doc: APIDocument): RewriteDocument {
     return {
         id: doc.id.toString(),
         title: doc.title,
-        lastEdited: formatRelativeTime(doc.updatedAt ?? doc.createdAt),
+        lastEditedAt: doc.updatedAt ?? doc.createdAt,
         content: doc.content,
         citations: doc.citations,
     };
@@ -121,20 +108,16 @@ function upsertDocument(list: RewriteDocument[], doc: RewriteDocument): RewriteD
     return next;
 }
 
-async function readImportedFile(file: File): Promise<string> {
+async function readImportedFile(file: File, t: RewriteT): Promise<string> {
     const fileType = file.name.split(".").pop()?.toLowerCase();
     switch (fileType) {
         case "txt":
         case "md":
             return file.text();
         case "pdf":
-            throw new Error(
-                "PDF import not yet supported. Please copy and paste the text manually."
-            );
+            throw new Error(t("importUnsupported", { format: "PDF" }));
         case "docx":
-            throw new Error(
-                "DOCX import not yet supported. Please copy and paste the text manually."
-            );
+            throw new Error(t("importUnsupported", { format: "DOCX" }));
         default:
             return file.text();
     }
@@ -144,7 +127,7 @@ async function readImportedFile(file: File): Promise<string> {
  * Text another tool handed over (Growth's "push to rewrite document"), read
  * once and removed.
  */
-function takePendingRewrite(): { title: string; content: string } | null {
+function takePendingRewrite(fallbackTitle: string): { title: string; content: string } | null {
     let raw: string | null = null;
     try {
         raw = sessionStorage.getItem(PENDING_REWRITE_STORAGE_KEY);
@@ -158,7 +141,7 @@ function takePendingRewrite(): { title: string; content: string } | null {
         const title =
             typeof parsed.title === "string" && parsed.title.trim().length > 0
                 ? parsed.title.trim()
-                : "Rewritten Text";
+                : fallbackTitle;
         return { title, content };
     } catch {
         if (raw) {
@@ -180,6 +163,10 @@ interface SaveResponse {
 
 /** Rewrite's frame and state. Renders inside `RewriteTool`'s provider. */
 function RewriteFrame() {
+    const t = useTranslations("viewers.rewrite");
+    // Callbacks read the words through this, so they keep one identity too.
+    const tRef = useRef(t);
+    tRef.current = t;
     const nav = useToolNav();
     // Callbacks read the latest navigation through this, so they keep one
     // identity and effects that use them do not re-run on every move.
@@ -277,7 +264,7 @@ function RewriteFrame() {
             setWorkflowText("");
             // The workflow's progress ends here, so the editor takes its place
             // in the history: Back from the editor skips the finished workflow.
-            openUnsaved("Rewritten Text", rewrittenText, { replace: true });
+            openUnsaved(tRef.current("rewrittenTitle"), rewrittenText, { replace: true });
         },
         [openUnsaved]
     );
@@ -292,9 +279,11 @@ function RewriteFrame() {
             setIsImporting(true);
             setImportError(null);
             try {
-                startWorkflow(await readImportedFile(file));
+                startWorkflow(await readImportedFile(file, tRef.current));
             } catch (error) {
-                setImportError(error instanceof Error ? error.message : "Failed to import file");
+                setImportError(
+                    error instanceof Error ? error.message : tRef.current("importFailed")
+                );
             } finally {
                 setIsImporting(false);
             }
@@ -309,7 +298,7 @@ function RewriteFrame() {
                 if (text.trim()) startWorkflow(text);
             })
             .catch(() => {
-                setImportError("Failed to read from clipboard");
+                setImportError(tRef.current("clipboardFailed"));
             });
     }, [startWorkflow]);
 
@@ -319,7 +308,7 @@ function RewriteFrame() {
     const active = nav.active;
     useEffect(() => {
         if (!active) return;
-        const pending = takePendingRewrite();
+        const pending = takePendingRewrite(tRef.current("rewrittenTitle"));
         if (pending) openUnsaved(pending.title, pending.content);
     }, [active, openUnsaved]);
 
@@ -355,7 +344,7 @@ function RewriteFrame() {
             setSaveError(null);
             const fail = (message: string) => setSaveError({ editorKey: forEditor, message });
             const trimmedTitle = title.trim();
-            const docTitle = trimmedTitle.length > 0 ? trimmedTitle : DEFAULT_TITLE;
+            const docTitle = trimmedTitle.length > 0 ? trimmedTitle : tRef.current("untitled");
             try {
                 const response = await fetch(DOCUMENTS_URL, {
                     method: target ? "PUT" : "POST",
@@ -384,24 +373,27 @@ function RewriteFrame() {
                 } catch {
                     fail(
                         response.ok
-                            ? "Invalid response from server"
-                            : `Failed to save (${response.status}). ${text.slice(0, 100)}`
+                            ? tRef.current("invalidResponse")
+                            : tRef.current("saveFailedStatus", {
+                                  status: response.status,
+                                  body: text.slice(0, 100),
+                              })
                     );
                     return;
                 }
                 if (!data.success) {
-                    fail(data.message ?? "Failed to save document");
+                    fail(data.message ?? tRef.current("saveFailed"));
                     return;
                 }
                 const saved = { title: docTitle, content, citations: citations ?? [] };
                 if (target) {
-                    recordSaved({ ...target, ...saved, lastEdited: "Just now" });
+                    recordSaved({ ...target, ...saved, lastEditedAt: new Date().toISOString() });
                     return;
                 }
                 if (!data.document?.id) return;
                 const id = data.document.id.toString();
                 setEditorKeyOf(prev => ({ ...prev, [id]: forEditor }));
-                recordSaved({ id, ...saved, lastEdited: "Just now" });
+                recordSaved({ id, ...saved, lastEditedAt: new Date().toISOString() });
                 // Still on this rewrite? It has a path of its own now. (Someone
                 // who moved on while it saved stays where they went.)
                 if (editorKeyRef.current === forEditor) {
@@ -409,7 +401,7 @@ function RewriteFrame() {
                 }
             } catch (err) {
                 console.error("Save to documents failed:", err);
-                fail("Failed to save document");
+                fail(tRef.current("saveFailed"));
             }
         },
         [recordSaved]
@@ -498,7 +490,7 @@ function RewriteFrame() {
         default:
             body = (
                 <div className="@max-md:px-4 @max-md:pt-4 w-full px-8 pb-12 pt-6">
-                    <ToolNotFound home={NEW_REWRITE_PATH} homeLabel="New rewrite" />
+                    <ToolNotFound home={NEW_REWRITE_PATH} homeLabel={t("newRewrite")} />
                 </div>
             );
     }
@@ -507,10 +499,10 @@ function RewriteFrame() {
         {
             id: "rewrite",
             items: [
-                { to: NEW_REWRITE_PATH, label: "New rewrite", icon: Plus, exact: true },
+                { to: NEW_REWRITE_PATH, label: t("newRewrite"), icon: Plus, exact: true },
                 {
                     to: MY_REWRITES_PATH,
-                    label: "My rewrites",
+                    label: t("myRewrites"),
                     icon: Clock,
                     count: listReady ? documents.length : null,
                 },
@@ -519,7 +511,7 @@ function RewriteFrame() {
     ];
 
     return (
-        <ToolFrame title="Rewrite" mark={<ToolMark icon={Sparkles} />} groups={groups} fill>
+        <ToolFrame title={t("title")} mark={<ToolMark icon={Sparkles} />} groups={groups} fill>
             {/* The selection colour the old theme wrapper gave these screens. */}
             <div
                 data-testid="rewrite-tool"

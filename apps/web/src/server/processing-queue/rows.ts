@@ -1,14 +1,13 @@
 /**
- * The lean reads behind the Processing queue: job rows joined to the
- * documents the caller may see (ADR-014), and the stage rows and outbox rows
- * for a set of jobs. Shared by the list and by Retry, so both see a job the
- * same way. `ocr_jobs.ocr_result` (every page's text) and the outbox payloads
- * are never selected.
+ * The lean reads behind the Processing queue: job rows (with the progress the
+ * stages record) joined to the documents the caller may see (ADR-014), and
+ * the outbox rows for a set of jobs. `ocr_jobs.ocr_result` (every page's
+ * text) and the outbox payloads are never selected.
  */
 
 import { and, asc, desc, eq, inArray, or, sql, type SQL } from "drizzle-orm";
 
-import { document, eventOutbox, ocrJobs, ocrProcessingSteps } from "@launchstack/store/schema";
+import { document, eventOutbox, ocrJobs } from "@launchstack/store/schema";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import type { DocumentScope } from "~/lib/authz/scope-types";
 import {
@@ -16,13 +15,12 @@ import {
     type QueueDocumentRow,
     type QueueEventRow,
     type QueueJobRow,
-    type QueueStepRow,
 } from "~/lib/processing-queue/stages";
 import { db } from "~/server/db";
 import type { Executor } from "~/server/workspace/db-types";
 
 export interface QueueJobWithDocument {
-    job: QueueJobRow & { versionId: bigint | null };
+    job: QueueJobRow;
     document: QueueDocumentRow;
 }
 
@@ -35,6 +33,8 @@ const jobColumns = {
     documentName: ocrJobs.documentName,
     pageCount: ocrJobs.pageCount,
     actualProvider: ocrJobs.actualProvider,
+    progress: ocrJobs.progress,
+    retryCount: ocrJobs.retryCount,
     startedAt: ocrJobs.startedAt,
     completedAt: ocrJobs.completedAt,
     errorMessage: ocrJobs.errorMessage,
@@ -44,6 +44,7 @@ const jobColumns = {
     docTitle: document.title,
     docCategory: document.category,
     docMimeType: document.mimeType,
+    docCurrentVersionId: document.currentVersionId,
 };
 
 /**
@@ -74,6 +75,8 @@ async function selectVisibleJobs(
             documentName: row.documentName,
             pageCount: row.pageCount,
             actualProvider: row.actualProvider,
+            progress: row.progress ?? null,
+            retryCount: row.retryCount,
             startedAt: row.startedAt,
             completedAt: row.completedAt,
             errorMessage: row.errorMessage,
@@ -85,6 +88,7 @@ async function selectVisibleJobs(
             title: row.docTitle,
             category: row.docCategory,
             mimeType: row.docMimeType,
+            currentVersionId: row.docCurrentVersionId,
         },
     }));
 }
@@ -110,47 +114,6 @@ export function selectQueueJobs(
         ),
         { limit }
     );
-}
-
-/** One job, when the caller can see its document. */
-export async function selectVisibleJob(
-    companyId: bigint,
-    scope: DocumentScope,
-    jobId: string,
-    executor?: Executor
-): Promise<QueueJobWithDocument | null> {
-    const [row] = await selectVisibleJobs(companyId, scope, eq(ocrJobs.id, jobId), {
-        limit: 1,
-        executor,
-    });
-    return row ?? null;
-}
-
-/** Stage rows for these jobs, grouped by job id. */
-export async function selectSteps(
-    jobIds: readonly string[],
-    executor: Executor = db
-): Promise<Map<string, QueueStepRow[]>> {
-    const out = new Map<string, QueueStepRow[]>();
-    if (jobIds.length === 0) return out;
-    const rows = await executor
-        .select({
-            jobId: ocrProcessingSteps.jobId,
-            stepType: ocrProcessingSteps.stepType,
-            status: ocrProcessingSteps.status,
-            output: ocrProcessingSteps.output,
-            errorMessage: ocrProcessingSteps.errorMessage,
-            durationMs: ocrProcessingSteps.durationMs,
-            createdAt: ocrProcessingSteps.createdAt,
-        })
-        .from(ocrProcessingSteps)
-        .where(inArray(ocrProcessingSteps.jobId, [...jobIds]));
-    for (const { jobId, ...step } of rows) {
-        const list = out.get(jobId);
-        if (list) list.push(step);
-        else out.set(jobId, [step]);
-    }
-    return out;
 }
 
 /** The extraction and indexing outbox rows for these jobs, grouped by job id. */

@@ -1,0 +1,480 @@
+{
+  "roles": {
+    "owner": {
+      "label": "Owner",
+      "description": "Everything, including billing and ownership."
+    },
+    "admin": {
+      "label": "Admin",
+      "description": "Runs the workspace: people, folders, settings, connectors."
+    },
+    "member": {
+      "label": "Member",
+      "description": "Works on documents (upload, edit, search, ask) and posts as the social accounts."
+    },
+    "viewer": {
+      "label": "Viewer",
+      "description": "Reads and searches, never changes."
+    },
+    "guest": {
+      "label": "Guest",
+      "description": "Sees only the folders they have been added to."
+    }
+  },
+  "permissions": {
+    "documents": {
+      "read": "Open, search, ask about, and download documents in folders they can see",
+      "upload": "Add documents and new versions into folders they can edit",
+      "edit": "Rename, move, edit, and revert documents in folders they can edit; change what an agent says",
+      "delete": "Delete documents and versions"
+    },
+    "folders": {
+      "manage": "Create, rename, and delete folders; change who can see any folder"
+    },
+    "members": {
+      "view": "See who is in the workspace",
+      "invite": "Send invitations and create join links",
+      "manage": "Approve, change roles, suspend, and remove members"
+    },
+    "groups": {
+      "manage": "Create groups and change their membership"
+    },
+    "roles": {
+      "manage": "Create and edit custom roles"
+    },
+    "settings": {
+      "manage": "Workspace settings, processing, company profile, and the agent roster (adding, retiring, autonomy, tools, nodes)"
+    },
+    "connectors": {
+      "manage": "Connect and disconnect Google Drive, Slack, GitHub, and agent connectors"
+    },
+    "analytics": {
+      "view": "The statistics dashboard and per-document stats"
+    },
+    "audit": {
+      "view": "Read the audit log"
+    },
+    "campaigns": {
+      "send": "Approve and send email campaigns"
+    },
+    "social": {
+      "publish": "Publish, schedule and reply as the workspace's connected social accounts (LinkedIn Pages, Bluesky)"
+    },
+    "billing": {
+      "manage": "Credits, plan, and keys that cost money"
+    },
+    "workspace": {
+      "transfer": "Transfer ownership or delete the workspace"
+    }
+  },
+  "levels": {
+    "view": "Can view",
+    "edit": "Can edit",
+    "manage": "Can manage"
+  },
+  "you": " (you)",
+  "nameYou": "{name} (you)",
+  "someone": "Someone",
+  "format": {
+    "ago": {
+      "now": "now",
+      "minutes": "{count}m",
+      "hours": "{count}h",
+      "days": "{count}d"
+    },
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "names": {
+      "separator": ", ",
+      "pair": "{first} and {last}",
+      "others": "{names} and {count, plural, one {# other} other {# others}}"
+    },
+    "activity": {
+      "added": "<person>{actor}</person> added <target>{name}</target>",
+      "createdFolder": "<person>{actor}</person> created the folder <target>{name}</target>",
+      "createdGroup": "<person>{actor}</person> created the group <target>{name}</target>",
+      "renamed": "<person>{actor}</person> renamed <target>{name}</target>",
+      "renamedFrom": "<person>{actor}</person> renamed {from} to <target>{name}</target>",
+      "movedTo": "<person>{actor}</person> moved <target>{name}</target> to {folder}",
+      "movedToTop": "<person>{actor}</person> moved <target>{name}</target> to the top level",
+      "deleted": "<person>{actor}</person> deleted <target>{name}</target>",
+      "shared": "<person>{actor}</person> shared <target>{name}</target>",
+      "sharedWith": "<person>{actor}</person> shared <target>{name}</target> with {names}",
+      "sharedWithEveryone": "<person>{actor}</person> shared <target>{name}</target> with everyone",
+      "limited": "<person>{actor}</person> limited who can see <target>{name}</target>",
+      "removedFrom": "<person>{actor}</person> removed {names} from <target>{name}</target>",
+      "changedAudience": "<person>{actor}</person> changed who can see <target>{name}</target>",
+      "forked": "<person>{actor}</person> continued <target>{name}</target> in a new chat",
+      "other": "<person>{actor}</person> {verb} <target>{name}</target>"
+    },
+    "inbox": {
+      "sharedWithYou": "{actor} shared “{name}” with you",
+      "sharedWithGroup": "{actor} shared “{name}” with {group}"
+    }
+  },
+  "activityList": {
+    "loadError": "Couldn't load activity.",
+    "loadMoreError": "Couldn't load more activity.",
+    "noMatch": "Nothing loaded here matches “{query}”.",
+    "showOlder": "Show older"
+  },
+  "inboxBell": {
+    "title": "Inbox",
+    "labelUnread": "Inbox, {count} unread",
+    "loadError": "Couldn't load your inbox.",
+    "markAllRead": "Mark all read",
+    "empty": "Nothing new. When someone shares a folder, file or chat with you, it shows up here.",
+    "unread": "Unread"
+  },
+  "groupsView": {
+    "title": "Groups",
+    "sub": "Share a folder, file or chat with several people in one step.",
+    "subFiltered": "{shown} of {count, plural, one {# group} other {# groups}}",
+    "filterPlaceholder": "Filter groups",
+    "newGroup": "New group",
+    "empty": "No groups yet. A group lets you share with several people in one step.",
+    "noMatch": "No group matches “{query}”.",
+    "members": "{count, plural, one {# member} other {# members}}",
+    "madeByYou": "Made by you"
+  },
+  "peopleView": {
+    "title": "People",
+    "sub": "{count, plural, one {# person} other {# people}} in the workspace. Open someone to see what you share with each other.",
+    "subFiltered": "{shown} of {count, plural, one {# person} other {# people}}",
+    "filterPlaceholder": "Filter people",
+    "invite": "Invite people",
+    "noMatch": "Nobody matches “{query}”.",
+    "empty": "Nobody else is here yet."
+  },
+  "groupPage": {
+    "back": "Groups",
+    "members": "{count, plural, one {# member} other {# members}}",
+    "madeBy": "made by {name}",
+    "madeByYou": "made by you",
+    "actionsFor": "Actions for {name}",
+    "deleteGroup": "Delete group",
+    "emptyManage": "Nobody is in this group yet. Add people, then share with the group in one step.",
+    "empty": "Nobody is in this group yet.",
+    "removeLabel": "Remove {name} from {group}",
+    "removed": "{name} removed from {group}",
+    "removeError": "Couldn't remove them from the group.",
+    "added": "{name} added to {group}",
+    "addError": "Couldn't add them to the group.",
+    "deleted": "{name} deleted",
+    "deleteError": "The group wasn't deleted.",
+    "confirmTitle": "Delete {name}?",
+    "confirmBody": "Folders, files and chats shared with this group stop reaching its {count, plural, one {# member} other {# members}}. Nobody leaves the workspace.",
+    "addPeople": "Add people",
+    "findPlaceholder": "Find a person",
+    "findLabel": "Find a person to add",
+    "noMatch": "Nobody else matches “{query}”.",
+    "allIn": "Everyone is already in this group."
+  },
+  "personPage": {
+    "back": "People",
+    "loadError": "Couldn't load what you share.",
+    "yourActivity": "Your activity",
+    "activity": "Activity",
+    "emptySelf": "Nothing yet. What you add, share and move shows up here.",
+    "emptyOther": "Nothing from {name} that you can see yet.",
+    "sharedWithYou": "Shared with you by {name}",
+    "youShared": "You shared with {name}",
+    "nothingShared": "Nothing {name} has shared reaches you yet.",
+    "nothingYouShared": "You haven't shared anything with {name} yet.",
+    "via": "via {group}"
+  },
+  "sharePicker": {
+    "sections": {
+      "folder": "Folders",
+      "document": "Files",
+      "chat": "Chats"
+    },
+    "loadError": "Couldn't load what you can share.",
+    "label": "Share something with {name}",
+    "button": "Share something…",
+    "findPlaceholder": "Find a folder, file or chat",
+    "findLabel": "Find something to share",
+    "emptyNone": "You don't manage anything you could share yet. Folders and files you add are yours to share.",
+    "noMatch": "Nothing matches “{query}”."
+  },
+  "inviteDialog": {
+    "invalidEmail": "Enter a full email address, like ada@example.com.",
+    "sentToast": "Invitation sent to {email}",
+    "sendError": "The invitation wasn't sent.",
+    "sentTitle": "Invitation sent",
+    "sentBody": "{email} was emailed a link. If mail isn't set up here, send them this link yourself.",
+    "linkLabel": "Invitation link",
+    "copyLink": "Copy link",
+    "inviteAnother": "Invite someone else",
+    "title": "Invite people",
+    "description": "They get an email with a link to join with the role you pick.",
+    "chooseRole": "Choose a role",
+    "sending": "Sending…",
+    "send": "Send invitation"
+  },
+  "tool": {
+    "title": "Team",
+    "about": "Who is in the workspace, the groups you share with, and what everyone has been doing. Roles, invitations, join links and the audit log are in Workspace › People and access.",
+    "nav": {
+      "people": "People",
+      "groups": "Groups",
+      "activity": "Activity"
+    },
+    "loadError": "Couldn't load the team.",
+    "manageAccess": "Manage access",
+    "manageAccessTitle": "Roles, invitations, join links and the audit log",
+    "noAccessTitle": "The team list isn't part of your role",
+    "noAccessBody": "You see only what is shared with you. New shares arrive in the inbox bell at the top of the sidebar.",
+    "personGoneTitle": "This person is no longer here",
+    "personGoneBody": "They may have left the workspace, or the link is from somewhere else.",
+    "groupGoneTitle": "This group is no longer here",
+    "groupGoneBody": "It may have been deleted, or the link is from somewhere else."
+  },
+  "activityScreen": {
+    "title": "Activity",
+    "sub": "Who added, shared, moved, renamed or deleted what. Only what you can open shows here.",
+    "filterPlaceholder": "Filter activity",
+    "whose": "Whose activity",
+    "everyone": "Everyone",
+    "kindLabel": "What kind of activity",
+    "allKinds": "All activity",
+    "kinds": {
+      "added": "Added",
+      "shared": "Sharing",
+      "moved": "Moves and renames",
+      "deleted": "Deletions"
+    },
+    "emptyFiltered": "Nothing matches these filters yet.",
+    "empty": "Nothing yet. Adding, sharing and moving files shows up here."
+  },
+  "access": {
+    "counts": {
+      "people": "{count, plural, one {# person} other {# people}}",
+      "groups": "{count, plural, one {# group} other {# groups}}",
+      "roles": "{count, plural, one {# role} other {# roles}}"
+    },
+    "list": {
+      "separator": ", ",
+      "pair": "{first} and {last}",
+      "series": "{rest}, and {last}"
+    },
+    "audience": {
+      "namedRole": "the {name} role",
+      "noOne": "no one yet",
+      "everyone": "Visible to everyone in the workspace",
+      "everyoneCounted": "Visible to everyone in the workspace ({count, plural, one {# person} other {# people}})",
+      "pending": "Will be visible to {who}, plus workspace admins — save to apply",
+      "adminsOnly": "Visible only to workspace owners and admins",
+      "counted": "Visible to {count, plural, one {# person} other {# people}}"
+    },
+    "share": {
+      "open": {
+        "everyoneAt": "Everyone at {workspace}",
+        "sameAs": "Same as {folder}",
+        "hintOpen": "Anyone in {workspace} can open it.",
+        "hintRead": "Anyone in {workspace} can read it.",
+        "hintInherit": "Whoever can open {folder} can open this.",
+        "hintFolderOpen": "Everyone at {workspace} can open {folder}."
+      },
+      "summary": {
+        "withCount": "{text} ({count, plural, one {# person} other {# people}})",
+        "plus": "Whoever can open {folder}, plus {who}, can open this.",
+        "onlyYou": "Only you can open it.",
+        "youAnd": "You and {who} can open it.",
+        "listed": "{who} can open it."
+      },
+      "types": {
+        "user": "Person",
+        "group": "Group",
+        "role": "Role"
+      },
+      "loadError": "Could not load who has access.",
+      "groupCreatedWith": "Created “{name}” with {count, plural, one {# person} other {# people}}",
+      "groupCreatedEmpty": "Created “{name}” — add people in Team › Groups",
+      "groupError": "The group wasn't created.",
+      "savedOpen": "“{name}” — {access}",
+      "saved": "Sharing for “{name}” updated",
+      "saveError": "The change wasn't saved.",
+      "title": "Share “{name}”",
+      "descriptionFolder": "Everything inside follows the folder unless it has its own sharing.",
+      "descriptionChat": "People you add can read this chat and continue it as their own.",
+      "descriptionDocument": "Who can open this file.",
+      "loading": "Loading who has access…",
+      "readOnly": "You can see who has access but not change it. Ask someone who can manage it.",
+      "makeGroup": "Make a group of these {count} people…",
+      "newGroup": "New group…",
+      "groupPlaceholder": "Group name, e.g. Sales team",
+      "groupLabel": "New group name",
+      "creating": "Creating…",
+      "peopleWithAccess": "People with access",
+      "owner": "Owner",
+      "levelFor": "Access level for {name}",
+      "remove": "Remove {name}",
+      "noOne": "No one added yet.",
+      "general": "General access",
+      "restrictedOption": "Only people with access",
+      "addedBy": "Added by {name}"
+    },
+    "picker": {
+      "searchError": "Search didn't work.",
+      "people": "People",
+      "groups": "Groups",
+      "roles": "Roles",
+      "placeholder": "Add people, groups, or roles…",
+      "label": "Add a person, group, or role",
+      "matches": "Matches",
+      "searching": "Searching…",
+      "noMatch": "No one matches.",
+      "hint": "Type a name, group, or role."
+    }
+  },
+  "investors": {
+    "title": "Investor relations",
+    "within": {
+      "d30": "Last 30 days",
+      "d90": "Last 90 days",
+      "d180": "Last 6 months",
+      "d365": "Last 12 months"
+    },
+    "raise": {
+      "raisingNothing": "Raising {target} · nothing closed yet",
+      "raisingClosed": "Raising {target} · {sold} closed",
+      "unstatedNothing": "Size not stated · nothing closed yet",
+      "unstatedClosed": "Size not stated · {sold} closed"
+    },
+    "summary": {
+      "funds": "{count, plural, one {# fund} other {# funds}}",
+      "filings": "{count, number} filings in the window",
+      "filingsMany": "{count, number}+ filings in the window",
+      "hidden": "{count, plural, one {# single-deal vehicle hidden} other {# single-deal vehicles hidden}}"
+    },
+    "starters": {
+      "onePager": {
+        "title": "Investor one-pager",
+        "desc": "Problem, solution, market, traction, model, team, the raise"
+      },
+      "deck": {
+        "title": "Pitch deck outline",
+        "desc": "Ten to twelve slides, each with its headline and proof"
+      },
+      "hardQuestions": {
+        "title": "Hard questions",
+        "desc": "What a sceptical partner will ask, and our best answers"
+      },
+      "metrics": {
+        "title": "Traction summary",
+        "desc": "The numbers that matter, with where each comes from"
+      },
+      "update": {
+        "title": "Investor update",
+        "desc": "A monthly update for the investors you already have"
+      },
+      "dataRoom": {
+        "title": "Data-room checklist",
+        "desc": "What diligence will ask for, and what we already have"
+      }
+    },
+    "searchFailedStatus": "Search failed ({status})",
+    "searchFailed": "Search failed",
+    "copiedIntro": "Intro to {fund} prompt copied — paste it into chat",
+    "copiedStarter": "{title} prompt copied — paste it into chat",
+    "copyFailed": "Couldn't copy",
+    "find": {
+      "title": "Find investors",
+      "sub": "The venture funds raising a new fund right now — a fund that has just raised is about to invest.",
+      "focusPlaceholder": "Focus — climate, health, fintech…",
+      "focusLabel": "Focus: words in the fund's name",
+      "stateLabel": "Fund's state",
+      "anywhere": "Anywhere",
+      "withinLabel": "Filed within",
+      "spvs": "Include single-deal SPVs and syndicates",
+      "sourceNote": "From SEC Form D filings — public, no account."
+    },
+    "draftIntro": "Draft intro",
+    "copyIntro": "Copy intro prompt",
+    "pitch": {
+      "title": "Pitch starters",
+      "sub": "Each one drafts in chat from your sources, cites them, and lists what is missing. Add your deck, financials and metrics as sources first and the drafts get specific.",
+      "draftInChat": "Draft in chat",
+      "copyPrompt": "Copy prompt"
+    },
+    "searching": "Searching SEC filings",
+    "empty": "No venture funds filed with these words in this window. Try fewer words, another state, or a longer window.",
+    "sortLabel": "Sort funds",
+    "newest": "Newest",
+    "largest": "Largest",
+    "saveAsSource": "Save list as a source",
+    "amended": "Amended",
+    "detailsUnavailable": "Details unavailable — open the filing",
+    "filed": "Filed {date}",
+    "more": "+{count} more",
+    "via": "via {name}",
+    "filing": "Filing",
+    "website": "Website"
+  },
+  "server": {
+    "errors": {
+      "joinLinkNotFound": "Join link not found.",
+      "joinLinkRevokedCreateNew": "This join link was revoked. Create a new one instead.",
+      "joinLinkLegacy": "This is an old short link that could be guessed, so it can't let people straight in. Reset it to get a new link that can.",
+      "joinLinkAlreadyRevoked": "This join link was already revoked.",
+      "joinLinkInvalid": "This join link is not valid.",
+      "joinLinkExpired": "This join link has expired.",
+      "joinLinkExhausted": "This join link has reached its use limit.",
+      "joinLinkRevoked": "This join link was revoked.",
+      "membershipSuspended": "Your membership in this workspace is suspended.",
+      "invitationNotFound": "Invitation not found.",
+      "unknownGroupId": "Unknown group id {id}.",
+      "alreadyRequested": "That person already has a pending request to join this workspace.",
+      "alreadyMember": "That person is already a member of this workspace.",
+      "invitationAlreadyPending": "An invitation is already pending for that email.",
+      "invitationAlreadyAccepted": "This invitation was already accepted.",
+      "invitationRevokedSendNew": "This invitation was revoked. Send a new one instead.",
+      "invitationDoesNotExist": "This invitation does not exist.",
+      "invitationTokenNeeded": "Provide an invitation token.",
+      "invitationTokenRequired": "Invitation token is required",
+      "invitationUsed": "This invitation has already been used.",
+      "invitationRevoked": "This invitation was revoked.",
+      "invitationExpired": "This invitation has expired. Ask for a new one.",
+      "invitationOtherEmail": "This invitation was sent to a different email address.",
+      "groupCreatorOrAdmin": "Only the person who created this group, or an admin, can change it.",
+      "groupNotFound": "Group not found.",
+      "cannotCreateGroups": "Your role can't create groups.",
+      "userNotActiveMember": "User {id} is not an active member of this workspace.",
+      "invalidPrincipalId": "Invalid {type} id \"{id}\".",
+      "groupDoesNotExist": "Group {id} does not exist in this workspace.",
+      "roleDoesNotExist": "Role \"{id}\" does not exist in this workspace.",
+      "memberNotFound": "Member not found.",
+      "keepOneOwner": "A workspace must keep at least one owner. Transfer ownership first.",
+      "nothingToChange": "Nothing to change.",
+      "cannotChangeOwnMembership": "You cannot change your own membership.",
+      "cannotChangeMember": "You cannot change this member's membership.",
+      "ownershipNotAssigned": "Ownership is transferred, never assigned.",
+      "cannotAssignBeyondOwn": "You cannot assign a role with permissions you do not hold.",
+      "useLeaveWorkspace": "Use “leave workspace” to remove yourself.",
+      "cannotRemoveMember": "You cannot remove this member.",
+      "onlyOwnerLeaving": "You are the only owner. Transfer ownership before leaving.",
+      "onlyOwnerTransfers": "Only an owner can transfer ownership.",
+      "alreadyOwner": "You already own this workspace.",
+      "ownershipToActiveMember": "Ownership can only go to an active member.",
+      "documentNotFound": "Document not found.",
+      "cannotChangeDocumentAccess": "You cannot change who can see this document.",
+      "keepManageGrant": "Keep a manage-level grant for yourself, or you will lose access.",
+      "folderNotFound": "Folder not found.",
+      "notFolderManager": "You do not manage this folder.",
+      "folderPathRequired": "A folder path is required.",
+      "unknownRole": "Unknown role \"{slug}\".",
+      "cannotAssignBuiltinRole": "You cannot assign the {role, select, owner {Owner} admin {Admin} member {Member} viewer {Viewer} guest {Guest} other {{role}}} role.",
+      "cannotAssignRole": "You cannot assign the {role} role.",
+      "roleNotFound": "Role not found.",
+      "permissionsNotInCatalogue": "One or more permissions are not in the catalogue.",
+      "roleBeyondOwnPermissions": "A role may only hold permissions you hold yourself.",
+      "roleNameNeedsLetters": "Choose a name with letters or numbers.",
+      "builtinRoleName": "\"{name}\" is a built-in role name.",
+      "roleNameTaken": "A role with that name already exists.",
+      "roleHoldsPermissionsYouLack": "This role holds permissions you do not have.",
+      "roleStillHeld": "{count, plural, one {# member} other {# members}} still hold this role. Choose a role to move them to.",
+      "chooseDifferentRole": "Choose a different role to move members to."
+    }
+  }
+}

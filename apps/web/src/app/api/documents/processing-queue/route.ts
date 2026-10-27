@@ -11,6 +11,8 @@
 
 import { NextResponse } from "next/server";
 
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { listProcessingQueue } from "~/server/processing-queue/list";
@@ -21,6 +23,7 @@ export const runtime = "nodejs";
 const QUEUE_POLL_LIMIT = { maxRequests: 1800, windowMs: 15 * 60 * 1000 };
 
 export async function GET(request: Request) {
+    const t = translatorFor(localeOfRequest(request), "sources.server.errors");
     return withRateLimit(request, QUEUE_POLL_LIMIT, async () => {
         try {
             const ctx = await requireWorkspacePermission("documents.read");
@@ -31,7 +34,7 @@ export async function GET(request: Request) {
         } catch (error) {
             console.error("[processing-queue] list failed:", error);
             return NextResponse.json(
-                { error: "Unable to load the processing queue" },
+                { error: t("processingStatusFailed") },
                 { status: 500, headers: { "Cache-Control": "no-store" } }
             );
         }

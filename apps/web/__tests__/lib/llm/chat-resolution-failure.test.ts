@@ -17,6 +17,7 @@ jest.mock("~/env", () => ({ env: { server: {} } }));
 import {
     ChatConfigurationError,
     ChatRouteUnavailableError,
+    ChatScopeUnavailableError,
     InvalidReasoningControlError,
 } from "@launchstack/llm";
 import { describeChatResolutionFailure } from "~/lib/models";
@@ -64,5 +65,35 @@ describe("describeChatResolutionFailure", () => {
     it("still answers when something that is not an Error is thrown", () => {
         quietly();
         expect(describeChatResolutionFailure("kaboom")).toEqual({ status: 500, message: FIXED });
+    });
+
+    it("answers in the reader's language", () => {
+        const route = new ChatRouteUnavailableError({
+            route: "vision",
+            reason: "missing-capability",
+            missingCapabilities: ["vision"],
+            message:
+                'The model serving the "vision" route does not support: vision. Assign a capable model to that route in the chat model configuration.',
+        });
+        expect(describeChatResolutionFailure(route, "zh-CN").message).toBe(
+            "为“vision”路由提供服务的模型不支持：vision。请在对话模型配置中为该路由指定一个支持这些能力的模型。"
+        );
+        // A workspace's own endpoint: the frame and the check's reason inside it.
+        const unusable = new ChatScopeUnavailableError(
+            "Your workspace's own model can't be used: The address has to start with https://. A workspace admin can fix it in Workspace › Bring your own keys."
+        );
+        expect(describeChatResolutionFailure(unusable, "zh-CN")).toEqual({
+            status: 503,
+            message: expect.stringMatching(
+                /^无法使用你工作区自有的模型：.*https:\/\/.*“工作区 › 自带密钥”/
+            ),
+        });
+        expect(describeChatResolutionFailure(unusable, "zh-CN").message).not.toContain(
+            "The address"
+        );
+        quietly();
+        expect(describeChatResolutionFailure("kaboom", "zh-CN").message).toBe(
+            "对话模型配置有误，需要管理员检查服务器上的对话模型文件。"
+        );
     });
 });

@@ -23,12 +23,23 @@ export type LocalTaskPhase =
     | "waiting"
     /** Bytes going up; `loaded` / `total` say how far. */
     | "uploading"
-    /** The server is working on the request (`workLabel` says what). */
+    /** The server is working on the request (`work` says what). */
     | "working"
-    /** It never reached the queue; `error` says why. */
+    /** It never reached the queue; `failure` says why. */
     | "failed"
     /** The server took it: `jobIds` are what the queue follows from here. */
     | "handed-off";
+
+/**
+ * What the server is doing with a request before any job exists — a key the
+ * Processing tab words (`processing.work.<kind>`).
+ */
+export type LocalWork =
+    | "transcribing"
+    | "starting"
+    | "fetchingPage"
+    | "startingCrawl"
+    | "downloadingVideo";
 
 export interface LocalTask {
     id: string;
@@ -43,11 +54,16 @@ export interface LocalTask {
     /** Bytes in all, for a file (its size). */
     total: number;
     /** What the server is doing with it, while `working`. */
-    workLabel: string | null;
-    error: string | null;
+    work: LocalWork | null;
+    /**
+     * Why it failed: a `SourceUploadError` for a file (worded in the reader's
+     * language by `sourceUploadErrorMessage`), or an Error carrying the
+     * server's own sentence for a link.
+     */
+    failure: unknown;
     /** Ingestion jobs the server started for it. Empty while in the browser. */
     jobIds: string[];
-    /** A request that queued work without naming a job (a site crawl): what was said. */
+    /** A request that queued work without naming a job (a site crawl): the server's sentence. */
     note: string | null;
     createdAt: number;
     /** When it left the browser (handed off or failed). */
@@ -95,11 +111,6 @@ function nextId(): string {
     return `local-${Date.now().toString(36)}-${seq}`;
 }
 
-function errorText(err: unknown, fallback: string): string {
-    if (err instanceof Error && err.message) return err.message;
-    return fallback;
-}
-
 function pump() {
     while (running < UPLOAD_CONCURRENCY && pending.length > 0) {
         const id = pending.shift()!;
@@ -118,17 +129,17 @@ function handOff(id: string, result: LinkTaskResult) {
         phase: "handed-off",
         jobIds: result.jobIds ?? [],
         note: result.note ?? null,
-        workLabel: null,
+        work: null,
         finishedAt: Date.now(),
     });
     if (done) for (const listener of registeredListeners) listener(done);
 }
 
-function fail(id: string, err: unknown, fallback: string) {
+function fail(id: string, err: unknown) {
     update(id, {
         phase: "failed",
-        error: errorText(err, fallback),
-        workLabel: null,
+        failure: err ?? new Error("failed"),
+        work: null,
         finishedAt: Date.now(),
     });
 }
@@ -161,8 +172,8 @@ export function startFileUploads(uploads: FileUpload[]): string[] {
         phase: "waiting",
         loaded: 0,
         total: file.size,
-        workLabel: null,
-        error: null,
+        work: null,
+        failure: null,
         jobIds: [],
         note: null,
         createdAt: Date.now(),
@@ -174,7 +185,7 @@ export function startFileUploads(uploads: FileUpload[]): string[] {
             update(task.id, {
                 phase: "uploading",
                 loaded: 0,
-                error: null,
+                failure: null,
                 finishedAt: null,
             });
             try {
@@ -184,9 +195,7 @@ export function startFileUploads(uploads: FileUpload[]): string[] {
                 update(task.id, {
                     phase: "working",
                     loaded: task.total,
-                    workLabel: isRecording(file)
-                        ? "Transcribing the recording"
-                        : "Starting processing",
+                    work: isRecording(file) ? "transcribing" : "starting",
                 });
                 const registered: RegisteredDocument = await registerDocument({
                     file,
@@ -197,7 +206,7 @@ export function startFileUploads(uploads: FileUpload[]): string[] {
                 });
                 handOff(task.id, { jobIds: registered?.jobId ? [registered.jobId] : [] });
             } catch (err) {
-                fail(task.id, err, `${file.name} couldn't be uploaded`);
+                fail(task.id, err);
             }
         });
         pending.push(task.id);
@@ -210,12 +219,12 @@ export function startFileUploads(uploads: FileUpload[]): string[] {
 
 /**
  * A request the server does in one go — fetch a page, download and transcribe
- * a video. Shown as "working" with `workLabel` until it answers.
+ * a video. Shown as "working" with `work` until it answers.
  */
 export function startLinkTask(params: {
     name: string;
     category: string;
-    workLabel: string;
+    work: LocalWork;
     run: () => Promise<LinkTaskResult>;
 }): string {
     const task: LocalTask = {
@@ -227,8 +236,8 @@ export function startLinkTask(params: {
         phase: "working",
         loaded: 0,
         total: 0,
-        workLabel: params.workLabel,
-        error: null,
+        work: params.work,
+        failure: null,
         jobIds: [],
         note: null,
         createdAt: Date.now(),
@@ -237,14 +246,14 @@ export function startLinkTask(params: {
     const run = async () => {
         update(task.id, {
             phase: "working",
-            workLabel: params.workLabel,
-            error: null,
+            work: params.work,
+            failure: null,
             finishedAt: null,
         });
         try {
             handOff(task.id, await params.run());
         } catch (err) {
-            fail(task.id, err, `${params.name} couldn't be added`);
+            fail(task.id, err);
         }
     };
     runners.set(task.id, run);
@@ -260,7 +269,7 @@ export function retryLocalTask(id: string): void {
     const run = runners.get(id);
     if (!task || task.phase !== "failed" || !run) return;
     if (task.kind === "file") {
-        update(id, { phase: "waiting", error: null, finishedAt: null, loaded: 0 });
+        update(id, { phase: "waiting", failure: null, finishedAt: null, loaded: 0 });
         pending.push(id);
         pump();
     } else {

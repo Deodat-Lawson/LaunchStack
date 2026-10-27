@@ -1,39 +1,35 @@
 /**
  * What the Processing tab draws, worked out from the server's queue and the
  * adds still in the browser. Pure: no React, no fetch — tested on its own.
+ * Every word comes from the `processing` catalogue through `ProcessingText`.
  */
 
+import type { useTranslations } from "next-intl";
+
+import { displayFolderPath, isUnfiledFolder } from "~/lib/folders/path";
 import {
     QUEUE_STAGE_IDS,
     type ProcessingQueueItem,
-    type QueueItemError,
     type QueueItemState,
     type QueueStage,
     type QueueStageId,
 } from "~/lib/processing-queue/types";
+import type { SourceFailure } from "~/lib/source-failure";
 
-import { displayFolderPath, isUnfiledFolder } from "~/lib/folders/path";
-
+import { sourceUploadErrorMessage, type SourceUploadTranslator } from "../sourceUpload";
 import type { LocalTask } from "./uploadTasks";
 
-export const STAGE_LABEL: Record<QueueStageId, string> = {
-    added: "Added",
-    waiting: "Waiting",
-    reading: "Reading",
-    splitting: "Splitting",
-    indexing: "Indexing",
-    ready: "Ready",
-};
+/** `useTranslations("processing")`. */
+export type ProcessingTranslator = ReturnType<typeof useTranslations<"processing">>;
 
-/** What each stage does, for a tooltip or a screen reader. */
-export const STAGE_ABOUT: Record<QueueStageId, string> = {
-    added: "The file reaches storage",
-    waiting: "In line for a free worker",
-    reading: "Reading the text, with OCR for scans and images",
-    splitting: "Splitting the text into sections",
-    indexing: "Indexing each section for search",
-    ready: "Finishing up, then it can be cited",
-};
+/** The words the view model needs, in the reader's language. */
+export interface ProcessingText {
+    t: ProcessingTranslator;
+    /** `useTranslations("sources.sourceUpload")` — why an upload failed. */
+    tu: SourceUploadTranslator;
+    /** `useSourceFailureCopy().describe` — a worker's raw error, in words. */
+    describeFailure: (raw: string | null | undefined) => SourceFailure;
+}
 
 export type RowSection = "attention" | "running" | "waiting" | "done";
 
@@ -53,7 +49,12 @@ export interface QueueRow {
     headline: string;
     /** Supporting facts: provider, pages, attempt, bytes. */
     detail: string | null;
-    error: QueueItemError | null;
+    /** Why it stopped or is being retried, in one sentence; null when nothing went wrong. */
+    errorMessage: string | null;
+    /** The raw error, for "Copy details". */
+    errorDetail: string | null;
+    /** A server failure, categorised — whether a retry can help, what to tell support. */
+    failure: SourceFailure | null;
     attempt: number;
     maxAttempts: number;
     nextAttemptAt: string | null;
@@ -64,8 +65,7 @@ export interface QueueRow {
     jobId: string | null;
     localId: string | null;
     canRetry: boolean;
-    pageCount: number | null;
-    provider: string | null;
+    retryCount: number;
     /** Stages done, with the active one's fraction: 0…6. */
     progress: number;
 }
@@ -74,37 +74,31 @@ const DAY = 24 * 60 * 60_000;
 /** A handed-off add with no job to follow (a site crawl) stays this long. */
 export const NOTE_TTL_MS = 60_000;
 
-export function formatBytes(bytes: number): string {
-    if (bytes < 1024) return `${bytes} B`;
-    if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} KB`;
-    if (bytes < 1024 * 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-    return `${(bytes / (1024 * 1024 * 1024)).toFixed(2)} GB`;
+export function formatBytes(bytes: number, t: ProcessingTranslator): string {
+    const fixed = (value: number, digits: number) => value.toFixed(digits);
+    if (bytes < 1024) return t("size.bytes", { size: fixed(bytes, 0) });
+    if (bytes < 1024 * 1024) return t("size.kb", { size: fixed(bytes / 1024, 0) });
+    if (bytes < 1024 * 1024 * 1024) return t("size.mb", { size: fixed(bytes / (1024 * 1024), 1) });
+    return t("size.gb", { size: fixed(bytes / (1024 * 1024 * 1024), 2) });
 }
 
 /** "4 s", "3 min", "1 h 5 min". */
-export function formatDuration(ms: number): string {
+export function formatDuration(ms: number, t: ProcessingTranslator): string {
     const s = Math.max(0, Math.round(ms / 1000));
-    if (s < 60) return `${s} s`;
+    if (s < 60) return t("time.seconds", { count: s });
     const m = Math.floor(s / 60);
-    if (m < 60) return `${m} min`;
-    const h = Math.floor(m / 60);
-    const rest = m % 60;
-    return rest ? `${h} h ${rest} min` : `${h} h`;
+    if (m < 60) return t("time.minutes", { count: m });
+    const hours = Math.floor(m / 60);
+    const minutes = m % 60;
+    return minutes ? t("time.hoursMinutes", { hours, minutes }) : t("time.hours", { hours });
 }
 
 /** "just now", "3 min ago", "2 h ago", "yesterday". */
-export function formatAgo(iso: string, now: number): string {
+export function formatAgo(iso: string, now: number, t: ProcessingTranslator): string {
     const ms = now - Date.parse(iso);
-    if (!Number.isFinite(ms) || ms < 45_000) return "just now";
-    if (ms < DAY) return `${formatDuration(ms)} ago`;
-    return "yesterday";
-}
-
-/** "in 40 s", "in 3 min", "any moment now". */
-export function formatIn(iso: string, now: number): string {
-    const ms = Date.parse(iso) - now;
-    if (!Number.isFinite(ms) || ms < 5_000) return "any moment now";
-    return `in ${formatDuration(ms)}`;
+    if (!Number.isFinite(ms) || ms < 45_000) return t("time.justNow");
+    if (ms < DAY) return t("time.ago", { duration: formatDuration(ms, t) });
+    return t("time.yesterday");
 }
 
 function percent(done: number | undefined, total: number | undefined): number | null {
@@ -138,66 +132,81 @@ function pendingStages(): QueueStage[] {
     }));
 }
 
-function plural(n: number, one: string, many = `${one}s`): string {
-    return `${n.toLocaleString()} ${n === 1 ? one : many}`;
+/** "Docling", "Native PDF"; an unknown reader's code, title-cased. */
+export function providerLabel(code: string, t: ProcessingTranslator): string {
+    const key = `providers.${code.toUpperCase()}`;
+    if (t.has(key as never)) return t(key as never);
+    return code
+        .toLowerCase()
+        .split(/[_\s-]+/)
+        .filter(Boolean)
+        .map(word => word[0]!.toUpperCase() + word.slice(1))
+        .join(" ");
 }
 
-function serverHeadline(item: ProcessingQueueItem, now: number): string {
+function serverHeadline(item: ProcessingQueueItem, now: number, t: ProcessingTranslator): string {
     const active = item.stages.find(stage => stage.id === item.stage);
     switch (item.state) {
         case "done":
-            return "Ready to search";
+            return t("headline.ready");
         case "failed":
-            return `Stopped while ${STAGE_LABEL[item.stage].toLowerCase()}`;
-        case "retrying":
-            return item.nextAttemptAt
-                ? `Trying again ${formatIn(item.nextAttemptAt, now)}`
-                : "Trying again soon";
+            return t(`headline.stopped.${item.stage}`);
+        case "retrying": {
+            if (!item.nextAttemptAt) return t("headline.retrySoon");
+            const ms = Date.parse(item.nextAttemptAt) - now;
+            return !Number.isFinite(ms) || ms < 5_000
+                ? t("headline.retryNow")
+                : t("headline.retryIn", { duration: formatDuration(ms, t) });
+        }
         case "waiting":
-            if (item.stage === "waiting" || item.stage === "added") return "Waiting its turn";
-            return `Waiting to start ${STAGE_LABEL[item.stage].toLowerCase()}`;
+            if (item.stage === "waiting" || item.stage === "added") {
+                return t("headline.waitingTurn");
+            }
+            return t(`headline.waitingFor.${item.stage}`);
         case "running":
             switch (item.stage) {
                 case "reading":
-                    return "Reading the text";
+                    return t("headline.reading");
                 case "splitting":
-                    return "Splitting into sections";
+                    return t("headline.splitting");
                 case "indexing": {
                     const share = percent(active?.done, active?.total);
                     return share === null
-                        ? "Indexing for search"
-                        : `Indexing for search · ${Math.round(share * 100)}%`;
+                        ? t("headline.indexing")
+                        : t("headline.indexingPercent", { percent: Math.round(share * 100) });
                 }
                 case "ready":
-                    return "Finishing up";
+                    return t("headline.finishing");
                 default:
-                    return "Starting";
+                    return t("headline.starting");
             }
     }
 }
 
-function serverDetail(item: ProcessingQueueItem): string | null {
+function serverDetail(item: ProcessingQueueItem, t: ProcessingTranslator): string | null {
     const parts: string[] = [];
     const indexing = item.stages.find(stage => stage.id === "indexing");
     if (item.state === "retrying" || (item.state === "running" && item.attempt > 1)) {
-        parts.push(`Attempt ${item.attempt} of ${item.maxAttempts}`);
+        parts.push(t("detail.attempt", { attempt: item.attempt, max: item.maxAttempts }));
     }
     if (item.state === "running" && item.stage === "indexing" && indexing?.total) {
-        parts.push(
-            `${(indexing.done ?? 0).toLocaleString()} of ${plural(indexing.total, "section")}`
-        );
+        parts.push(t("detail.sections", { done: indexing.done ?? 0, total: indexing.total }));
     }
-    if (item.provider) parts.push(item.provider);
-    if (item.pageCount) parts.push(plural(item.pageCount, "page"));
+    if (item.provider) parts.push(providerLabel(item.provider, t));
+    if (item.pageCount) parts.push(t("detail.pages", { count: item.pageCount }));
     if (item.state === "done" && item.startedAt && item.completedAt) {
-        parts.push(
-            `took ${formatDuration(Date.parse(item.completedAt) - Date.parse(item.startedAt))}`
-        );
+        const took = Date.parse(item.completedAt) - Date.parse(item.startedAt);
+        parts.push(t("detail.took", { duration: formatDuration(took, t) }));
     }
-    return parts.length ? parts.join(" · ") : null;
+    return parts.length ? parts.join(t("detail.separator")) : null;
 }
 
-export function rowFromServer(item: ProcessingQueueItem, now: number): QueueRow {
+export function rowFromServer(
+    item: ProcessingQueueItem,
+    now: number,
+    text: ProcessingText
+): QueueRow {
+    const failure = item.error !== null ? text.describeFailure(item.error) : null;
     return {
         key: `job:${item.jobId}`,
         origin: "server",
@@ -210,9 +219,11 @@ export function rowFromServer(item: ProcessingQueueItem, now: number): QueueRow 
         section: sectionOf(item.state),
         stage: item.stage,
         stages: item.stages,
-        headline: serverHeadline(item, now),
-        detail: serverDetail(item),
-        error: item.error,
+        headline: serverHeadline(item, now, text.t),
+        detail: serverDetail(item, text.t),
+        errorMessage: failure?.message ?? null,
+        errorDetail: failure?.detail ?? null,
+        failure,
         attempt: item.attempt,
         maxAttempts: item.maxAttempts,
         nextAttemptAt: item.nextAttemptAt,
@@ -222,14 +233,33 @@ export function rowFromServer(item: ProcessingQueueItem, now: number): QueueRow 
         documentId: item.documentId,
         jobId: item.jobId,
         localId: null,
-        canRetry: item.canRetry,
-        pageCount: item.pageCount,
-        provider: item.provider,
+        canRetry: item.canRetry && (failure?.retryable ?? true),
+        retryCount: item.retryCount,
         progress: stageProgress(item.stages),
     };
 }
 
-export function rowFromLocal(task: LocalTask, viewerId: string | null): QueueRow {
+/** Why a browser task failed, in the reader's words. */
+function localFailureMessage(task: LocalTask, text: ProcessingText): string {
+    if (task.kind === "file") {
+        return sourceUploadErrorMessage(
+            task.failure,
+            text.tu,
+            text.t("local.uploadFailed", { name: task.name })
+        );
+    }
+    // A link's error is the server's own sentence.
+    return task.failure instanceof Error && task.failure.message
+        ? task.failure.message
+        : text.t("local.linkFailed", { name: task.name });
+}
+
+export function rowFromLocal(
+    task: LocalTask,
+    viewerId: string | null,
+    text: ProcessingText
+): QueueRow {
+    const { t } = text;
     const stages = pendingStages();
     const added = stages[0]!;
     const waiting = stages[1]!;
@@ -239,12 +269,13 @@ export function rowFromLocal(task: LocalTask, viewerId: string | null): QueueRow
     let headline: string;
     let detail: string | null = null;
     let stage: QueueStageId = "added";
+    let errorMessage: string | null = null;
 
     switch (task.phase) {
         case "waiting":
             state = "waiting";
-            headline = "Waiting to upload";
-            detail = task.total ? formatBytes(task.total) : null;
+            headline = t("local.waitingUpload");
+            detail = task.total ? formatBytes(task.total, t) : null;
             break;
         case "uploading": {
             added.status = "active";
@@ -252,27 +283,28 @@ export function rowFromLocal(task: LocalTask, viewerId: string | null): QueueRow
             added.done = task.loaded;
             added.total = task.total;
             const share = percent(task.loaded, task.total) ?? 0;
-            headline = `Uploading · ${Math.round(share * 100)}%`;
+            headline = t("local.uploading", { percent: Math.round(share * 100) });
             detail = task.total
-                ? `${formatBytes(task.loaded)} of ${formatBytes(task.total)}`
+                ? t("local.uploadedOf", {
+                      loaded: formatBytes(task.loaded, t),
+                      total: formatBytes(task.total, t),
+                  })
                 : null;
             break;
         }
         case "working":
             added.status = "active";
             added.startedAt = started;
-            headline = task.workLabel ?? "Working on it";
-            detail =
-                task.kind === "file"
-                    ? "Done before processing starts — keep this page open"
-                    : "The server is fetching it";
+            headline = task.work ? t(`work.${task.work}`) : t("headline.starting");
+            detail = task.kind === "file" ? t("local.keepOpen") : t("local.serverFetching");
             break;
         case "failed":
             state = "failed";
             added.status = "failed";
             added.startedAt = started;
             added.endedAt = finished;
-            headline = task.kind === "file" ? "Upload failed" : "Couldn't add it";
+            headline = task.kind === "file" ? t("local.failedFile") : t("local.failedLink");
+            errorMessage = localFailureMessage(task, text);
             break;
         case "handed-off":
             state = "waiting";
@@ -282,7 +314,9 @@ export function rowFromLocal(task: LocalTask, viewerId: string | null): QueueRow
             waiting.status = "active";
             waiting.startedAt = finished;
             stage = "waiting";
-            headline = task.note ?? "Waiting its turn";
+            headline = task.note
+                ? t("local.crawlNote", { message: task.note })
+                : t("headline.waitingTurn");
             break;
     }
 
@@ -300,7 +334,9 @@ export function rowFromLocal(task: LocalTask, viewerId: string | null): QueueRow
         stages,
         headline,
         detail,
-        error: task.error ? { message: task.error, detail: null } : null,
+        errorMessage,
+        errorDetail: null,
+        failure: null,
         attempt: 0,
         maxAttempts: 0,
         nextAttemptAt: null,
@@ -311,8 +347,7 @@ export function rowFromLocal(task: LocalTask, viewerId: string | null): QueueRow
         jobId: task.jobIds[0] ?? null,
         localId: task.id,
         canRetry: task.phase === "failed",
-        pageCount: null,
-        provider: null,
+        retryCount: 0,
         progress: stageProgress(stages),
     };
 }
@@ -325,6 +360,7 @@ export interface BuildRowsInput {
     cleared: ReadonlySet<string>;
     mineOnly: boolean;
     now: number;
+    text: ProcessingText;
 }
 
 /**
@@ -345,11 +381,11 @@ export function buildRows(input: BuildRowsInput): QueueRow[] {
                 continue;
             }
         }
-        rows.push(rowFromLocal(task, input.viewerId));
+        rows.push(rowFromLocal(task, input.viewerId, input.text));
     }
     for (const item of input.items) {
         if (item.state === "done" && input.cleared.has(item.jobId)) continue;
-        rows.push(rowFromServer(item, input.now));
+        rows.push(rowFromServer(item, input.now, input.text));
     }
     const visible = input.mineOnly ? rows.filter(row => row.mine) : rows;
     return visible.sort(compareRows);
@@ -382,21 +418,19 @@ export function groupRows(rows: QueueRow[]): RowGroups {
 }
 
 /** The header's one sentence. */
-export function summarySentence(groups: RowGroups): string {
+export function summarySentence(groups: RowGroups, t: ProcessingTranslator): string {
     const parts: string[] = [];
-    if (groups.running.length) parts.push(`${groups.running.length} running`);
-    if (groups.waiting.length) parts.push(`${groups.waiting.length} waiting`);
+    if (groups.running.length) parts.push(t("summary.running", { count: groups.running.length }));
+    if (groups.waiting.length) parts.push(t("summary.waiting", { count: groups.waiting.length }));
     if (groups.attention.length) {
-        parts.push(
-            `${groups.attention.length} need${groups.attention.length === 1 ? "s" : ""} attention`
-        );
+        parts.push(t("summary.attention", { count: groups.attention.length }));
     }
     if (parts.length === 0) {
         return groups.done.length
-            ? `All caught up — ${plural(groups.done.length, "file")} ready in the last 24 hours`
-            : "Nothing is processing";
+            ? t("summary.allCaughtUp", { count: groups.done.length })
+            : t("summary.nothing");
     }
-    return parts.join(" · ");
+    return parts.join(t("summary.separator"));
 }
 
 /**
@@ -413,19 +447,34 @@ export function overallProgress(groups: RowGroups): { share: number; count: numb
     return { share: done / total, count: moving.length };
 }
 
-/** The count beside the tab's name: what is still moving, and whether anything failed. */
-export function tabBadge(rows: QueueRow[]): { count: number; tone: "active" | "danger" } | null {
-    const failed = rows.filter(row => row.state === "failed").length;
-    const moving = rows.filter(
-        row => row.section === "running" || row.section === "waiting" || row.state === "retrying"
-    ).length;
+/**
+ * The count beside the tab's name: files still moving, and whether anything
+ * failed. Counts the same rows the tab shows (finished ones aside), without
+ * wording them.
+ */
+export function queueBadge(
+    items: readonly ProcessingQueueItem[],
+    local: readonly LocalTask[]
+): { count: number; tone: "active" | "danger" } | null {
+    const serverJobs = new Set(items.map(item => item.jobId));
+    let failed = 0;
+    let moving = 0;
+    for (const task of local) {
+        if (task.phase === "failed") failed += 1;
+        else if (task.phase !== "handed-off") moving += 1;
+        else if (task.jobIds.some(id => !serverJobs.has(id))) moving += 1;
+    }
+    for (const item of items) {
+        if (item.state === "failed") failed += 1;
+        else if (item.state !== "done") moving += 1;
+    }
     if (failed) return { count: failed + moving, tone: "danger" };
     if (moving) return { count: moving, tone: "active" };
     return null;
 }
 
 /** Where the file lives, as the sidebar names it; "No folder" for a loose one. */
-export function folderLabel(folder: string): string {
-    if (!folder || isUnfiledFolder(folder)) return "No folder";
+export function folderLabel(folder: string, t: ProcessingTranslator): string {
+    if (!folder || isUnfiledFolder(folder)) return t("noFolder");
     return displayFolderPath(folder);
 }

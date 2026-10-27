@@ -3,9 +3,10 @@
 import React, { Suspense, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { useAuth, useUser } from "~/lib/auth-client";
 import { SignUpForm } from "~/app/_components/CredentialsForm";
-import { AlertCircle, ArrowRight, ChevronDown, Rocket, Ticket, Users } from "lucide-react";
+import { AlertCircle, ArrowRight, Rocket, Ticket, Users } from "lucide-react";
 import { AuthBrandPanel } from "~/app/_components/AuthBrandPanel";
 import { AuthChrome } from "~/app/_components/AuthChrome";
 import { AuthLegalLinks } from "~/app/_components/AuthLegalLinks";
@@ -25,8 +26,11 @@ import { inviteDestination } from "~/lib/invite-link";
  *      the user's name. No form to fill out.
  *   2. I have an invite — paste the link (or its code) and go to the join
  *      page, which handles joining for everyone, signed in or not.
- *   3. Advanced / team setup — expanded form with company name, staff count,
- *      and optional BYOK embedding keys for self-host users.
+ *   3. Team setup — a form with the workspace's name and staff count.
+ *
+ * New workspaces index on the deployment's default embedding index. The
+ * picker and the embedding keys that were under "Advanced" are gone from
+ * every screen for now; the API still accepts them.
  *
  * The team-oriented copy ("Create Your Company", "Approximate Number of
  * Staff", "Enterprise Security") from the old design is gone. This product is
@@ -37,14 +41,11 @@ import { inviteDestination } from "~/lib/invite-link";
 
 type Mode = "solo" | "invite" | "team";
 
-interface EmbeddingIndexOption {
-    indexKey: string;
-    label: string;
-}
-
 // ────────────────────────── Page ──────────────────────────
 
 const SignupPage: React.FC = () => {
+    const t = useTranslations("auth.signUp");
+    const tc = useTranslations("common");
     const router = useRouter();
     const searchParams = useSearchParams();
     const { userId, isLoaded: isAuthLoaded } = useAuth();
@@ -55,8 +56,6 @@ const SignupPage: React.FC = () => {
     const next = safeNextPath(searchParams.get("next"), "");
 
     const [mode, setMode] = useState<Mode>("solo");
-    const [embeddingIndexOptions, setEmbeddingIndexOptions] = useState<EmbeddingIndexOption[]>([]);
-    const [defaultIndexKey, setDefaultIndexKey] = useState("");
 
     // ── Solo flow ──
     const [isCreatingSolo, setIsCreatingSolo] = useState(false);
@@ -75,37 +74,6 @@ const SignupPage: React.FC = () => {
     const [teamSize, setTeamSize] = useState("");
     const [teamError, setTeamError] = useState<string | null>(null);
     const [isCreatingTeam, setIsCreatingTeam] = useState(false);
-    const [showAdvanced, setShowAdvanced] = useState(false);
-    const [openaiKey, setOpenaiKey] = useState("");
-    const [openaiBaseUrl, setOpenaiBaseUrl] = useState("");
-    const [hfKey, setHfKey] = useState("");
-    const [ollamaUrl, setOllamaUrl] = useState("");
-    const [ollamaModel, setOllamaModel] = useState("");
-
-    // Load embedding indexes (used by solo + team flow as a default)
-    useEffect(() => {
-        if (!userId) return;
-        let cancelled = false;
-        void (async () => {
-            try {
-                const res = await fetch("/api/embedding-indexes");
-                if (!res.ok) return;
-                const json = (await res.json()) as {
-                    indexes: EmbeddingIndexOption[];
-                };
-                if (cancelled) return;
-                setEmbeddingIndexOptions(json.indexes ?? []);
-                if (json.indexes?.[0]) {
-                    setDefaultIndexKey(json.indexes[0].indexKey);
-                }
-            } catch (err) {
-                console.error("Failed to load embedding indexes:", err);
-            }
-        })();
-        return () => {
-            cancelled = true;
-        };
-    }, [userId]);
 
     // ── Suggest a workspace name that is actually available ──
     useEffect(() => {
@@ -122,7 +90,9 @@ const SignupPage: React.FC = () => {
                 // local guess and let the server reject it if it is taken.
                 if (!cancelled) {
                     const first = (user?.name ?? "").trim().split(/\s+/)[0];
-                    setSoloWorkspaceName(first ? `${first}'s workspace` : "My workspace");
+                    setSoloWorkspaceName(
+                        first ? t("solo.namedDefault", { name: first }) : t("solo.defaultName")
+                    );
                 }
             } finally {
                 if (!cancelled) setIsSuggestingName(false);
@@ -131,6 +101,8 @@ const SignupPage: React.FC = () => {
         return () => {
             cancelled = true;
         };
+        // `t` changes identity with the language; a suggestion already made stays.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isAuthLoaded, userId, user]);
 
     // ── Hand an invited person back to the invitation once signed in ──
@@ -144,7 +116,7 @@ const SignupPage: React.FC = () => {
         if (!userId || !user) return;
         const workspaceName = soloWorkspaceName.trim();
         if (!workspaceName) {
-            setSoloError("Give your workspace a name.");
+            setSoloError(t("solo.nameRequired"));
             return;
         }
         setSoloError(null);
@@ -158,7 +130,6 @@ const SignupPage: React.FC = () => {
                     email: user.email,
                     companyName: workspaceName,
                     numberOfEmployees: "1",
-                    embeddingIndexKey: defaultIndexKey,
                 }),
             });
             if (!response.ok) {
@@ -166,7 +137,7 @@ const SignupPage: React.FC = () => {
                 const msg =
                     typeof raw === "object" && raw !== null && "error" in raw
                         ? (raw as { error: string }).error
-                        : "We couldn't set up your workspace. Please try again.";
+                        : t("solo.failed");
                 setSoloError(msg);
                 setIsCreatingSolo(false);
                 return;
@@ -174,7 +145,7 @@ const SignupPage: React.FC = () => {
             router.push("/employer/onboarding");
         } catch (err) {
             console.error("Solo signup failed:", err);
-            setSoloError("We couldn't reach the server. Check your connection and try again.");
+            setSoloError(t("unreachable"));
             setIsCreatingSolo(false);
         }
     };
@@ -184,7 +155,7 @@ const SignupPage: React.FC = () => {
         e.preventDefault();
         setTeamError(null);
         if (!teamName.trim()) {
-            setTeamError("Please name your team workspace.");
+            setTeamError(t("team.nameRequired"));
             return;
         }
         if (!userId || !user) return;
@@ -198,12 +169,6 @@ const SignupPage: React.FC = () => {
                     email: user.email,
                     companyName: teamName.trim(),
                     numberOfEmployees: teamSize || "2",
-                    embeddingIndexKey: defaultIndexKey,
-                    embeddingOpenAIApiKey: openaiKey || null,
-                    embeddingOpenAIBaseUrl: openaiBaseUrl || null,
-                    embeddingHuggingFaceApiKey: hfKey || null,
-                    embeddingOllamaBaseUrl: ollamaUrl || null,
-                    embeddingOllamaModel: ollamaModel || null,
                 }),
             });
             if (!response.ok) {
@@ -211,7 +176,7 @@ const SignupPage: React.FC = () => {
                 const msg =
                     typeof raw === "object" && raw !== null && "error" in raw
                         ? (raw as { error: string }).error
-                        : "Something went wrong. Please try again.";
+                        : tc("errors.tryAgain");
                 setTeamError(msg);
                 setIsCreatingTeam(false);
                 return;
@@ -219,7 +184,7 @@ const SignupPage: React.FC = () => {
             router.push("/employer/onboarding");
         } catch (err) {
             console.error("Team signup failed:", err);
-            setTeamError("We couldn't reach the server. Check your connection and try again.");
+            setTeamError(t("unreachable"));
             setIsCreatingTeam(false);
         }
     };
@@ -229,9 +194,7 @@ const SignupPage: React.FC = () => {
         e.preventDefault();
         const destination = inviteDestination(inviteLink);
         if (!destination) {
-            setInviteError(
-                "That doesn't look like an invite link. Paste the whole link you were sent."
-            );
+            setInviteError(t("invite.invalid"));
             return;
         }
         router.push(destination);
@@ -242,9 +205,9 @@ const SignupPage: React.FC = () => {
     const renderBrandPanel = () => (
         <div style={{ width: "46%", display: "flex" }} className="auth-brand-col">
             <AuthBrandPanel
-                tagline="Free · open source"
-                headline="Your workspace, set up in under a minute."
-                description="Built for solo founders, indie developers, and students. Start alone — invite people later if you ever need to."
+                headline={t("brandHeadline")}
+                description={t("brandDescription")}
+                note={t("brandTagline")}
             />
         </div>
     );
@@ -258,18 +221,17 @@ const SignupPage: React.FC = () => {
             <Shell>
                 <div style={formPanelStyle}>
                     <div style={{ width: "100%", maxWidth: 440 }}>
-                        <Eyebrow>Get started</Eyebrow>
-                        <Headline>Create your Launchstack account.</Headline>
-                        <SubHeadline>
-                            One account covers your solo workspace — and any team you might create
-                            down the road.
-                        </SubHeadline>
+                        <Headline>{t("title")}</Headline>
+                        <SubHeadline>{t("subtitle")}</SubHeadline>
                         <SignUpForm signInHref={withNext("/signin", next)} />
                         <div style={bottomLinkStyle}>
-                            Already have an account?{" "}
-                            <Link href={withNext("/signin", next)} style={linkStyle}>
-                                Sign in →
-                            </Link>
+                            {t.rich("haveAccount", {
+                                link: chunks => (
+                                    <Link href={withNext("/signin", next)} style={linkStyle}>
+                                        {chunks}
+                                    </Link>
+                                ),
+                            })}
                         </div>
                     </div>
                 </div>
@@ -283,7 +245,7 @@ const SignupPage: React.FC = () => {
         return (
             <Shell>
                 <div style={formPanelStyle}>
-                    <LoadingState label="Loading…" />
+                    <LoadingState label={tc("status.loading")} />
                 </div>
                 {renderBrandPanel()}
             </Shell>
@@ -295,12 +257,10 @@ const SignupPage: React.FC = () => {
         <Shell>
             <div style={formPanelStyle}>
                 <div style={{ width: "100%", maxWidth: 520 }}>
-                    <Eyebrow>You&apos;re signed in</Eyebrow>
-                    <Headline>{soloName ? `Hey, ${soloName}.` : "Let's set you up."}</Headline>
-                    <SubHeadline>
-                        One more step — pick how you want to use Launchstack. You can always invite
-                        teammates later.
-                    </SubHeadline>
+                    <Headline>
+                        {soloName ? t("greeting", { name: soloName }) : t("greetingNoName")}
+                    </Headline>
+                    <SubHeadline>{t("pickPath")}</SubHeadline>
 
                     <ModeSelect mode={mode} setMode={setMode} />
 
@@ -336,20 +296,6 @@ const SignupPage: React.FC = () => {
                             onSubmit={e => void createTeam(e)}
                             isCreating={isCreatingTeam}
                             error={teamError}
-                            showAdvanced={showAdvanced}
-                            setShowAdvanced={setShowAdvanced}
-                            openaiKey={openaiKey}
-                            setOpenaiKey={setOpenaiKey}
-                            openaiBaseUrl={openaiBaseUrl}
-                            setOpenaiBaseUrl={setOpenaiBaseUrl}
-                            hfKey={hfKey}
-                            setHfKey={setHfKey}
-                            ollamaUrl={ollamaUrl}
-                            setOllamaUrl={setOllamaUrl}
-                            ollamaModel={ollamaModel}
-                            setOllamaModel={setOllamaModel}
-                            defaultIndexKey={defaultIndexKey}
-                            indexOptions={embeddingIndexOptions}
                         />
                     )}
                 </div>
@@ -411,24 +357,6 @@ function Shell({ children }: { children: React.ReactNode }) {
                     .auth-brand-col { display: none !important; }
                 }
             `}</style>
-        </div>
-    );
-}
-
-function Eyebrow({ children }: { children: React.ReactNode }) {
-    return (
-        <div
-            className="mono"
-            style={{
-                fontSize: 10,
-                fontWeight: 700,
-                letterSpacing: "0.12em",
-                color: "var(--ink-3)",
-                textTransform: "uppercase",
-                marginBottom: 10,
-            }}
-        >
-            {children}
         </div>
     );
 }
@@ -496,37 +424,21 @@ function LoadingState({ label }: { label: string }) {
 
 // ────────────────────────── Mode selector ──────────────────────────
 
-function ModeSelect({ mode, setMode }: { mode: Mode; setMode: (m: Mode) => void }) {
-    const options: {
-        key: Mode;
-        label: string;
-        sub: string;
-        Icon: React.ComponentType<{ style?: React.CSSProperties }>;
-    }[] = [
-        {
-            key: "solo",
-            label: "Start solo",
-            sub: "Just you — recommended",
-            Icon: Rocket,
-        },
-        {
-            key: "invite",
-            label: "I have an invite",
-            sub: "Join an existing workspace",
-            Icon: Ticket,
-        },
-        {
-            key: "team",
-            label: "Set up a team",
-            sub: "Bring others in from day one",
-            Icon: Users,
-        },
-    ];
+const MODE_OPTIONS: {
+    key: Mode;
+    Icon: React.ComponentType<{ style?: React.CSSProperties }>;
+}[] = [
+    { key: "solo", Icon: Rocket },
+    { key: "invite", Icon: Ticket },
+    { key: "team", Icon: Users },
+];
 
+function ModeSelect({ mode, setMode }: { mode: Mode; setMode: (m: Mode) => void }) {
+    const t = useTranslations("auth.signUp.modes");
     return (
         <div
             role="tablist"
-            aria-label="How will you use Launchstack?"
+            aria-label={t("label")}
             style={{
                 display: "grid",
                 gridTemplateColumns: "1fr 1fr 1fr",
@@ -534,7 +446,7 @@ function ModeSelect({ mode, setMode }: { mode: Mode; setMode: (m: Mode) => void 
                 marginBottom: 20,
             }}
         >
-            {options.map(opt => {
+            {MODE_OPTIONS.map(opt => {
                 const active = mode === opt.key;
                 return (
                     <button
@@ -576,7 +488,7 @@ function ModeSelect({ mode, setMode }: { mode: Mode; setMode: (m: Mode) => void 
                                     color: "var(--ink)",
                                 }}
                             >
-                                {opt.label}
+                                {t(`${opt.key}.label`)}
                             </span>
                         </div>
                         <span
@@ -586,7 +498,7 @@ function ModeSelect({ mode, setMode }: { mode: Mode; setMode: (m: Mode) => void 
                                 lineHeight: 1.45,
                             }}
                         >
-                            {opt.sub}
+                            {t(`${opt.key}.sub`)}
                         </span>
                     </button>
                 );
@@ -612,6 +524,7 @@ function SoloCard({
     isCreating: boolean;
     error: string | null;
 }) {
+    const t = useTranslations("auth.signUp.solo");
     return (
         <div style={cardStyle}>
             <div
@@ -636,7 +549,7 @@ function SoloCard({
                 >
                     <Rocket style={{ width: 14, height: 14 }} />
                 </div>
-                <div style={{ fontSize: 14, fontWeight: 700 }}>Your personal workspace</div>
+                <div style={{ fontSize: 14, fontWeight: 700 }}>{t("title")}</div>
             </div>
             <div
                 style={{
@@ -646,8 +559,7 @@ function SoloCard({
                     marginBottom: 14,
                 }}
             >
-                No billing, no team setup — just you, your sources, and an AI that knows them. Name
-                it whatever you like; you can change it later.
+                {t("body")}
             </div>
             <label
                 htmlFor="solo-workspace-name"
@@ -659,14 +571,14 @@ function SoloCard({
                     marginBottom: 6,
                 }}
             >
-                Workspace name
+                {t("nameLabel")}
             </label>
             <input
                 id="solo-workspace-name"
                 value={workspaceName}
                 onChange={e => onWorkspaceNameChange(e.target.value)}
                 disabled={isSuggesting || isCreating}
-                placeholder={isSuggesting ? "Finding an available name…" : "My workspace"}
+                placeholder={isSuggesting ? t("findingName") : t("defaultName")}
                 maxLength={256}
                 style={{ ...inputStyle, marginBottom: 14 }}
             />
@@ -680,11 +592,11 @@ function SoloCard({
             >
                 {isCreating ? (
                     <>
-                        <Spinner /> Setting things up…
+                        <Spinner /> {t("settingUp")}
                     </>
                 ) : (
                     <>
-                        Start my workspace
+                        {t("start")}
                         <ArrowRight style={{ width: 14, height: 14 }} />
                     </>
                 )}
@@ -706,6 +618,8 @@ function InviteCard({
     onSubmit: (e: React.FormEvent) => void;
     error: string | null;
 }) {
+    const t = useTranslations("auth.signUp.invite");
+    const tc = useTranslations("common.actions");
     const empty = value.trim().length === 0;
     return (
         <form
@@ -717,12 +631,10 @@ function InviteCard({
                     <Ticket className="size-3.5" aria-hidden />
                 </div>
                 <FieldLabel htmlFor="invite-link" className="text-ink text-sm font-bold">
-                    Paste your invite link
+                    {t("title")}
                 </FieldLabel>
             </div>
-            <p className="text-ink-3 m-0 text-[12.5px] leading-relaxed">
-                Open the link someone sent you, or paste it here. The code on its own works too.
-            </p>
+            <p className="text-ink-3 m-0 text-[12.5px] leading-relaxed">{t("body")}</p>
             <Input
                 id="invite-link"
                 value={value}
@@ -737,7 +649,7 @@ function InviteCard({
             />
             {error && <ErrorBanner>{error}</ErrorBanner>}
             <Button type="submit" disabled={empty} className="w-full">
-                Continue
+                {tc("continue")}
                 <ArrowRight aria-hidden />
             </Button>
         </form>
@@ -754,20 +666,6 @@ function TeamCard({
     onSubmit,
     isCreating,
     error,
-    showAdvanced,
-    setShowAdvanced,
-    openaiKey,
-    setOpenaiKey,
-    openaiBaseUrl,
-    setOpenaiBaseUrl,
-    hfKey,
-    setHfKey,
-    ollamaUrl,
-    setOllamaUrl,
-    ollamaModel,
-    setOllamaModel,
-    defaultIndexKey,
-    indexOptions,
 }: {
     name: string;
     setName: (v: string) => void;
@@ -776,24 +674,8 @@ function TeamCard({
     onSubmit: (e: React.FormEvent) => void;
     isCreating: boolean;
     error: string | null;
-    showAdvanced: boolean;
-    setShowAdvanced: (v: boolean) => void;
-    openaiKey: string;
-    setOpenaiKey: (v: string) => void;
-    openaiBaseUrl: string;
-    setOpenaiBaseUrl: (v: string) => void;
-    hfKey: string;
-    setHfKey: (v: string) => void;
-    ollamaUrl: string;
-    setOllamaUrl: (v: string) => void;
-    ollamaModel: string;
-    setOllamaModel: (v: string) => void;
-    defaultIndexKey: string;
-    indexOptions: EmbeddingIndexOption[];
 }) {
-    const selectedLabel =
-        indexOptions.find(i => i.indexKey === defaultIndexKey)?.label ??
-        (indexOptions.length === 0 ? "loading…" : defaultIndexKey);
+    const t = useTranslations("auth.signUp.team");
 
     return (
         <form onSubmit={onSubmit} style={cardStyle}>
@@ -819,7 +701,7 @@ function TeamCard({
                 >
                     <Users style={{ width: 14, height: 14 }} />
                 </div>
-                <div style={{ fontSize: 14, fontWeight: 700 }}>Team workspace</div>
+                <div style={{ fontSize: 14, fontWeight: 700 }}>{t("title")}</div>
             </div>
             <div
                 style={{
@@ -829,18 +711,18 @@ function TeamCard({
                     lineHeight: 1.55,
                 }}
             >
-                Pick a name everyone will recognize. You can invite teammates right after setup.
+                {t("body")}
             </div>
 
-            <Label>Workspace name</Label>
+            <Label>{t("nameLabel")}</Label>
             <input
                 value={name}
                 onChange={e => setName(e.target.value)}
-                placeholder="Acme, Research Lab, YC W26 Team…"
+                placeholder={t("namePlaceholder")}
                 style={{ ...inputStyle, marginBottom: 12 }}
             />
 
-            <Label>How many people (approx)</Label>
+            <Label>{t("sizeLabel")}</Label>
             <input
                 type="number"
                 min={1}
@@ -850,127 +732,15 @@ function TeamCard({
                 style={{ ...inputStyle, marginBottom: 14 }}
             />
 
-            <button
-                type="button"
-                onClick={() => setShowAdvanced(!showAdvanced)}
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 6,
-                    fontSize: 12,
-                    color: "var(--ink-3)",
-                    marginBottom: 12,
-                    padding: "2px 0",
-                }}
-            >
-                <ChevronDown
-                    style={{
-                        width: 12,
-                        height: 12,
-                        transform: showAdvanced ? "rotate(0deg)" : "rotate(-90deg)",
-                        transition: "transform 140ms",
-                    }}
-                />
-                Advanced (BYOK &amp; self-host)
-            </button>
-
-            {showAdvanced && (
-                <div
-                    style={{
-                        padding: 14,
-                        borderRadius: 10,
-                        background: "var(--panel-2)",
-                        border: "1px solid var(--line)",
-                        marginBottom: 14,
-                    }}
-                >
-                    <div
-                        style={{
-                            fontSize: 11.5,
-                            color: "var(--ink-3)",
-                            lineHeight: 1.55,
-                            marginBottom: 12,
-                        }}
-                    >
-                        Bring your own keys. Leave empty to use the shared defaults. Embedding
-                        index:{" "}
-                        <span
-                            className="mono"
-                            style={{
-                                color: "var(--ink-2)",
-                            }}
-                        >
-                            {selectedLabel}
-                        </span>
-                        .
-                    </div>
-                    <Label>OpenAI-compatible API key</Label>
-                    <input
-                        type="password"
-                        value={openaiKey}
-                        onChange={e => setOpenaiKey(e.target.value)}
-                        placeholder="<your-api-key>"
-                        autoComplete="off"
-                        style={{ ...inputStyle, marginBottom: 10 }}
-                    />
-                    <Label>Embeddings endpoint URL</Label>
-                    <input
-                        type="url"
-                        value={openaiBaseUrl}
-                        onChange={e => setOpenaiBaseUrl(e.target.value)}
-                        placeholder="https://api.openai.com/v1"
-                        autoComplete="off"
-                        style={{ ...inputStyle, marginBottom: 10 }}
-                    />
-                    <Label>Hugging Face token</Label>
-                    <input
-                        type="password"
-                        value={hfKey}
-                        onChange={e => setHfKey(e.target.value)}
-                        placeholder="hf_…"
-                        autoComplete="off"
-                        style={{ ...inputStyle, marginBottom: 10 }}
-                    />
-                    <div
-                        style={{
-                            display: "grid",
-                            gridTemplateColumns: "1fr 1fr",
-                            gap: 10,
-                        }}
-                    >
-                        <div>
-                            <Label>Ollama URL</Label>
-                            <input
-                                value={ollamaUrl}
-                                onChange={e => setOllamaUrl(e.target.value)}
-                                placeholder="http://localhost:11434"
-                                autoComplete="off"
-                                style={inputStyle}
-                            />
-                        </div>
-                        <div>
-                            <Label>Ollama model</Label>
-                            <input
-                                value={ollamaModel}
-                                onChange={e => setOllamaModel(e.target.value)}
-                                placeholder="nomic-embed-text"
-                                autoComplete="off"
-                                style={inputStyle}
-                            />
-                        </div>
-                    </div>
-                </div>
-            )}
-
             {error && <ErrorBanner>{error}</ErrorBanner>}
             <button type="submit" disabled={isCreating} style={primaryButtonStyle(isCreating)}>
                 {isCreating ? (
                     <>
-                        <Spinner /> Creating…
+                        <Spinner /> {t("creating")}
                     </>
                 ) : (
                     <>
-                        Create team workspace
+                        {t("create")}
                         <ArrowRight style={{ width: 14, height: 14 }} />
                     </>
                 )}

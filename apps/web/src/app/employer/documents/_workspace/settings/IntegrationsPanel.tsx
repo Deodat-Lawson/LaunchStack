@@ -4,13 +4,16 @@
  * Integrations — workspace connections, Slack mirroring and the meeting hub.
  *
  * Body only; the header and any action live in the settings chrome. The
- * workspace-connections section is live per-tenant state (connect/disconnect
- * happens in Add source → Connect); the Slack/hub sections below it are a
- * readout of environment-variable configuration.
+ * workspace-connections section is live per-tenant state (connecting happens
+ * in Add source — Connect, or Files and Folder for Google Drive); the
+ * Slack/hub sections below it are a readout of environment-variable
+ * configuration. Google Drive's section also manages what syncs from Drive
+ * (DriveSyncPanel).
  */
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, type ReactNode } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { ContextTarget } from "~/components/context-menu";
 
@@ -20,6 +23,7 @@ import { Card, Section } from "~/components/layout/page-shell";
 import { useAgents } from "../collab/useMeetings";
 import { AssistantOAuthClients } from "./AssistantOAuthClients";
 import { usePublishedActions, type SettingsSectionProps } from "./contract";
+import { DriveSyncPanel } from "./DriveSyncPanel";
 import { Code, StatusNote, StatusRow } from "./ui";
 
 const PROVIDER_LABELS: Record<string, string> = {
@@ -27,6 +31,7 @@ const PROVIDER_LABELS: Record<string, string> = {
     slack: "Slack",
     github: "GitHub",
     gmail: "Gmail",
+    notion: "Notion",
     linkedin: "LinkedIn",
     bluesky: "Bluesky",
 };
@@ -78,7 +83,12 @@ interface GoogleConnectionStatus {
     connectUrl?: string;
 }
 
+/** `<code>` inside a message, drawn as the settings `Code` token. */
+const code = (chunks: ReactNode) => <Code>{chunks}</Code>;
+
 function GoogleDriveSection() {
+    const t = useTranslations("settings.integrations");
+    const tc = useTranslations("common");
     const [status, setStatus] = useState<GoogleConnectionStatus | null>(null);
     const [busy, setBusy] = useState(false);
     /** Whether a Disconnect from the menu is waiting on the confirm dialog. */
@@ -108,14 +118,11 @@ function GoogleDriveSection() {
     }, [refresh]);
 
     return (
-        <Section
-            title="Google Drive"
-            description="Link PDFs and Word documents to Google Drive so they can be edited with real tools — Google Docs for Word files, any Drive app or Drive for Desktop for PDFs. Settled edits sync back as document versions."
-        >
+        <Section title="Google Drive" description={t("drive.description")}>
             <ContextTarget
                 target={{
                     kind: "drive-connection",
-                    label: "Google Drive actions",
+                    label: t("drive.actions"),
                     items: () =>
                         !status?.enabled
                             ? []
@@ -124,8 +131,8 @@ function GoogleDriveSection() {
                                       type: "item" as const,
                                       id: "connect",
                                       label: status.connected
-                                          ? "Reconnect…"
-                                          : "Connect Google Drive…",
+                                          ? t("reconnectMenu")
+                                          : t("drive.connectMenu"),
                                       icon: "refresh" as const,
                                       onSelect: () => {
                                           window.location.href =
@@ -139,7 +146,7 @@ function GoogleDriveSection() {
                                             {
                                                 type: "item" as const,
                                                 id: "disconnect",
-                                                label: "Disconnect…",
+                                                label: t("disconnectMenu"),
                                                 icon: "disconnect" as const,
                                                 danger: true,
                                                 disabled: busy,
@@ -152,35 +159,25 @@ function GoogleDriveSection() {
             >
                 <Card>
                     {!status ? (
-                        <StatusNote tone="muted">Checking configuration…</StatusNote>
+                        <StatusNote tone="muted">{t("checking")}</StatusNote>
                     ) : !status.enabled ? (
                         <StatusRow
-                            label="Drive linking"
+                            label={t("drive.linking")}
                             ok={false}
-                            detail={
-                                <>
-                                    Set <Code>GOOGLE_DOCS_EDITING_ENABLED=true</Code>,{" "}
-                                    <Code>GOOGLE_OAUTH_CLIENT_ID</Code> and{" "}
-                                    <Code>GOOGLE_OAUTH_CLIENT_SECRET</Code> (a GCP OAuth client with
-                                    the <Code>drive.file</Code> scope) to enable this feature.
-                                </>
-                            }
+                            detail={t.rich("drive.setup", { code })}
                         />
                     ) : (
                         <>
                             <StatusRow
-                                label="Workspace account"
+                                label={t("drive.account")}
                                 ok={status.connected}
                                 detail={
-                                    status.connected ? (
-                                        <>
-                                            Connected as{" "}
-                                            <Code>{status.accountEmail ?? "unknown"}</Code>. Linked
-                                            files live in this account&apos;s My Drive.
-                                        </>
-                                    ) : (
-                                        "No Google account is connected for this workspace yet."
-                                    )
+                                    status.connected
+                                        ? t.rich("drive.connectedAs", {
+                                              email: status.accountEmail ?? t("drive.unknown"),
+                                              code,
+                                          })
+                                        : t("drive.notConnected")
                                 }
                             />
                             <div style={{ display: "flex", gap: 8, paddingTop: 10 }}>
@@ -195,7 +192,9 @@ function GoogleDriveSection() {
                                             "/api/connectors/google/oauth/start"
                                         }
                                     >
-                                        {status.connected ? "Reconnect" : "Connect Google Drive"}
+                                        {status.connected
+                                            ? t("drive.reconnect")
+                                            : t("drive.connect")}
                                     </a>
                                 </Button>
                                 {status.connected && (
@@ -205,7 +204,7 @@ function GoogleDriveSection() {
                                         onClick={() => void disconnect()}
                                         disabled={busy}
                                     >
-                                        {busy ? "Disconnecting…" : "Disconnect"}
+                                        {busy ? t("disconnecting") : tc("actions.disconnect")}
                                     </Button>
                                 )}
                             </div>
@@ -213,32 +212,35 @@ function GoogleDriveSection() {
                     )}
                 </Card>
             </ContextTarget>
+            <DriveSyncPanel />
             <ConfirmDialog
                 open={confirmingDisconnect}
                 onOpenChange={setConfirmingDisconnect}
-                title="Disconnect Google Drive from this workspace?"
-                description="Its Google account is unlinked. You can connect it again from this page."
-                confirmLabel="Disconnect"
+                title={t("drive.confirmTitle")}
+                description={t("drive.confirmBody")}
+                confirmLabel={tc("actions.disconnect")}
                 onConfirm={() => void disconnect()}
             />
         </Section>
     );
 }
 
-const SLACK_COMMANDS: Array<[string, string]> = [
-    ["!takeover [@agent]", "Pause the agents and take the floor, optionally in an agent's seat"],
-    ["!release", "Hand control back to the agents"],
-    ["!pause / !resume", "Stop or restart agent turns"],
-    ["!run 3", "Let the agents take up to three more turns"],
-    ["!end", "Close the meeting and produce minutes"],
-    ["!help", "Post the command reference into the channel"],
-];
+/** The commands, and where each is described in `settings.integrations.slackCommands`. */
+const SLACK_COMMANDS = [
+    ["!takeover [@agent]", "takeover"],
+    ["!release", "release"],
+    ["!pause / !resume", "pause"],
+    ["!run 3", "run"],
+    ["!end", "end"],
+    ["!help", "help"],
+] as const;
 
-/** Which Add-source tab reconnects a provider — the same map the workspace uses. */
+/** Which Add-source tab reconnects a provider — the same map the workspace uses. Drive is picked from Files. */
 const RECONNECT_TAB: Record<string, string> = {
-    "google-drive": "drive",
+    "google-drive": "files",
     slack: "slack",
     github: "github",
+    notion: "notion",
 };
 
 /** Social accounts are connected from Growth › Brand › Accounts, not Add source. */
@@ -251,6 +253,8 @@ function reconnectHref(provider: string): string | null {
 }
 
 export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
+    const t = useTranslations("settings.integrations");
+    const tc = useTranslations("common");
     const router = useRouter();
     const { data, loading, refresh } = useAgents();
     const connectors = useConnectorsOverview();
@@ -272,12 +276,12 @@ export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
     usePublishedActions(
         onActions,
         {
-            primaryLabel: "Recheck",
-            primaryBusyLabel: "Checking…",
+            primaryLabel: t("recheck"),
+            primaryBusyLabel: t("rechecking"),
             onPrimary: refreshAll,
             busy: loading || connectors.loading,
         },
-        [refreshAll, loading, connectors.loading]
+        [refreshAll, loading, connectors.loading, t]
     );
 
     const disconnect = async (connectionId: string, label: string, personal = false) => {
@@ -290,10 +294,10 @@ export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
                 { method: "DELETE" }
             );
             if (res.ok) {
-                toast.success(`${label} disconnected`);
+                toast.success(t("disconnectedToast", { label }));
                 await refreshConnectors();
             } else {
-                toast.error(`Could not disconnect ${label}`);
+                toast.error(t("disconnectFailedToast", { label }));
             }
         } finally {
             setDisconnecting(null);
@@ -301,7 +305,7 @@ export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
     };
 
     if (loading && !data) {
-        return <StatusNote tone="muted">Checking configuration…</StatusNote>;
+        return <StatusNote tone="muted">{t("checking")}</StatusNote>;
     }
 
     const configuredProviders = Object.entries(connectors.data?.providers ?? {}).filter(
@@ -312,31 +316,19 @@ export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
         <>
             <GoogleDriveSection />
 
-            <Section
-                title="Workspace connections"
-                description="Accounts this workspace has connected. Connecting happens in the documents workspace under Add source → Connect; tokens are encrypted at rest and never leave the server."
-            >
+            <Section title={t("connections.title")} description={t("connections.description")}>
                 <Card>
                     {connectors.loading && !connectors.data ? (
-                        <StatusNote tone="muted">Checking connections…</StatusNote>
+                        <StatusNote tone="muted">{t("connections.checking")}</StatusNote>
                     ) : (connectors.data?.connections.length ?? 0) === 0 ? (
                         <StatusNote tone="muted">
-                            {configuredProviders.length > 0 ? (
-                                <>
-                                    Nothing connected yet. Available on this server:{" "}
-                                    {configuredProviders
-                                        .map(([key]) => PROVIDER_LABELS[key] ?? key)
-                                        .join(", ")}
-                                    .
-                                </>
-                            ) : (
-                                <>
-                                    No provider OAuth clients are configured. Set the client-id /
-                                    client-secret pairs described in <Code>.env.example</Code>{" "}
-                                    (Workspace connections block) plus{" "}
-                                    <Code>EMBEDDING_SECRETS_KEY</Code>.
-                                </>
-                            )}
+                            {configuredProviders.length > 0
+                                ? t("connections.noneAvailable", {
+                                      list: configuredProviders
+                                          .map(([key]) => PROVIDER_LABELS[key] ?? key)
+                                          .join(t("listSeparator")),
+                                  })
+                                : t.rich("connections.noClients", { code })}
                         </StatusNote>
                     ) : (
                         connectors.data?.connections.map(row => {
@@ -348,7 +340,7 @@ export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
                                     target={{
                                         kind: "connection",
                                         id: row.id,
-                                        label: `Actions for ${label}`,
+                                        label: t("connections.actionsFor", { label }),
                                         data: row,
                                         items: () => [
                                             ...(reconnectTo
@@ -356,7 +348,7 @@ export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
                                                       {
                                                           type: "item" as const,
                                                           id: "reconnect",
-                                                          label: "Reconnect…",
+                                                          label: t("reconnectMenu"),
                                                           icon: "refresh" as const,
                                                           onSelect: () => router.push(reconnectTo),
                                                       },
@@ -366,7 +358,7 @@ export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
                                             {
                                                 type: "item" as const,
                                                 id: "disconnect",
-                                                label: "Disconnect…",
+                                                label: t("disconnectMenu"),
                                                 icon: "disconnect" as const,
                                                 danger: true,
                                                 disabled: disconnecting === row.id,
@@ -385,11 +377,11 @@ export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
                                         ok={row.status === "active"}
                                         detail={
                                             <>
-                                                {row.displayName ?? "connected"}
+                                                {row.displayName ?? t("connections.connected")}
                                                 {row.personal
-                                                    ? " · your mailbox, private to you"
+                                                    ? ` · ${t("connections.personal")}`
                                                     : row.grantedBy
-                                                      ? ` · connected by ${row.grantedBy}`
+                                                      ? ` · ${t("connections.connectedBy", { who: row.grantedBy })}`
                                                       : ""}
                                                 {row.status !== "active"
                                                     ? ` · ${row.status}${row.statusDetail ? ` — ${row.statusDetail}` : ""}`
@@ -413,8 +405,8 @@ export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
                                                     }}
                                                 >
                                                     {disconnecting === row.id
-                                                        ? "Removing…"
-                                                        : "Disconnect"}
+                                                        ? t("removing")
+                                                        : tc("actions.disconnect")}
                                                 </button>
                                             </>
                                         }
@@ -429,9 +421,9 @@ export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
                     onOpenChange={next => {
                         if (!next) setPendingDisconnect(null);
                     }}
-                    title={`Disconnect ${pendingDisconnect?.label ?? ""} from this workspace?`}
-                    description="The connection is removed and its access revoked. To connect again, use Add source → Connect."
-                    confirmLabel="Disconnect"
+                    title={t("connections.confirmTitle", { label: pendingDisconnect?.label ?? "" })}
+                    description={t("connections.confirmBody")}
+                    confirmLabel={tc("actions.disconnect")}
                     onConfirm={() => {
                         const target = pendingDisconnect;
                         setPendingDisconnect(null);
@@ -442,46 +434,30 @@ export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
 
             <AssistantOAuthClients />
 
-            <Section
-                title="Slack"
-                description="Hold a meeting in a real Slack channel. Agent turns are posted there, and anything a person writes back lands in the same transcript."
-            >
+            <Section title="Slack" description={t("slack.description")}>
                 <Card>
                     <StatusRow
-                        label="Post to Slack"
+                        label={t("slack.post")}
                         ok={data?.slack.canPost ?? false}
                         detail={
-                            data?.slack.canPost ? (
-                                "Meeting turns are mirrored into the linked channel."
-                            ) : (
-                                <>
-                                    Set <Code>SLACK_BOT_TOKEN</Code> with <Code>chat:write</Code> on
-                                    a Slack app installed to your workspace.
-                                </>
-                            )
+                            data?.slack.canPost
+                                ? t("slack.postOn")
+                                : t.rich("slack.postOff", { code })
                         }
                     />
                     <StatusRow
-                        label="Receive from Slack"
+                        label={t("slack.receive")}
                         ok={data?.slack.canReceive ?? false}
                         detail={
-                            data?.slack.canReceive ? (
-                                "Messages people write in Slack are added to the meeting, including the controls below."
-                            ) : (
-                                <>
-                                    Set <Code>SLACK_SIGNING_SECRET</Code> so inbound Events API
-                                    deliveries can be verified.
-                                </>
-                            )
+                            data?.slack.canReceive
+                                ? t("slack.receiveOn")
+                                : t.rich("slack.receiveOff", { code })
                         }
                     />
                 </Card>
             </Section>
 
-            <Section
-                title="Slack app setup"
-                description="Two things to configure on the Slack side, once per workspace."
-            >
+            <Section title={t("setup.title")} description={t("setup.description")}>
                 <Card>
                     <ol
                         style={{
@@ -493,28 +469,22 @@ export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
                         }}
                     >
                         <li>
-                            Point <strong>Event Subscriptions</strong> at{" "}
-                            <Code>{origin}/api/collab/slack/events</Code>.
+                            {t.rich("setup.step1", {
+                                url: `${origin}/api/collab/slack/events`,
+                                strong: chunks => <strong>{chunks}</strong>,
+                                code,
+                            })}
                         </li>
-                        <li>
-                            Subscribe to <Code>message.channels</Code>, plus{" "}
-                            <Code>message.groups</Code> for private channels.
-                        </li>
-                        <li>
-                            Invite the bot to the channel, then paste that channel id when starting
-                            a meeting.
-                        </li>
+                        <li>{t.rich("setup.step2", { code })}</li>
+                        <li>{t("setup.step3")}</li>
                     </ol>
                 </Card>
             </Section>
 
-            <Section
-                title="In-channel controls"
-                description="What someone can type in Slack to steer a running meeting. Prefixed with ! rather than / so no extra Slack app configuration is needed."
-            >
+            <Section title={t("controls.title")} description={t("controls.description")}>
                 <Card padding={0}>
                     <dl style={{ margin: 0 }}>
-                        {SLACK_COMMANDS.map(([command, description], index) => (
+                        {SLACK_COMMANDS.map(([command, key], index) => (
                             <div
                                 key={command}
                                 style={{
@@ -546,7 +516,7 @@ export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
                                         flex: 1,
                                     }}
                                 >
-                                    {description}
+                                    {t(`slackCommands.${key}`)}
                                 </dd>
                             </div>
                         ))}
@@ -554,26 +524,19 @@ export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
                 </Card>
             </Section>
 
-            <Section
-                title="Meeting hub"
-                description="The endpoint agent worker machines dial into. Which machines are attached, and how to connect one, lives under Agents & nodes."
-            >
+            <Section title={t("hub.title")} description={t("hub.description")}>
                 <Card>
                     <StatusRow
-                        label="Accept remote agent nodes"
+                        label={t("hub.accept")}
                         ok={data?.network.enabled ?? false}
                         detail={
-                            data?.network.enabled ? (
-                                <>
-                                    Hub <Code>{data.network.hubId}</Code> is listening at{" "}
-                                    <Code>{origin}/api/collab/hub</Code>.
-                                </>
-                            ) : (
-                                <>
-                                    Set <Code>COLLAB_HUB_SECRET</Code> to let worker machines
-                                    register. Without it, every agent runs in this process.
-                                </>
-                            )
+                            data?.network.enabled
+                                ? t.rich("hub.listening", {
+                                      hubId: data.network.hubId ?? "",
+                                      url: `${origin}/api/collab/hub`,
+                                      code,
+                                  })
+                                : t.rich("hub.off", { code })
                         }
                     />
                 </Card>

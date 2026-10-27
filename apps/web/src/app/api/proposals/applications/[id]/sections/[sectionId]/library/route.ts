@@ -10,6 +10,7 @@ import {
     handleProposalsError,
     json,
     readBody,
+    say,
 } from "../../../../../_http";
 
 const Schema = z.object({ tags: z.array(z.string().min(1).max(40)).max(10).default([]) });
@@ -23,12 +24,12 @@ export async function POST(
     try {
         const { id, sectionId } = await params;
         const parsed = Schema.safeParse(await readBody(request));
-        if (!parsed.success) return error("Check the tags and try again", 400);
+        if (!parsed.success) return error(say(request, "checkTags"), 400);
         return json(
             { item: await saveSectionToLibrary(auth.ctx, id, sectionId, parsed.data.tags) },
             201
         );
     } catch (err) {
-        return handleProposalsError("POST section/library", err);
+        return handleProposalsError("POST section/library", err, request);
     }
 }

@@ -3,21 +3,30 @@
 // DELETE /api/scenarios/[id] — creator only
 import type { NextRequest } from "next/server";
 
+import { localeOfRequest } from "~/i18n/server";
+
 import { deleteScenario, getScenarioDetail, updateScenario } from "~/server/scenarios/service";
 
-import { error, handleScenarioError, json, readBody, runIdFrom, scenarioContext } from "../_http";
+import {
+    handleScenarioError,
+    json,
+    readBody,
+    runIdFrom,
+    scenarioContext,
+    scenarioNotFound,
+} from "../_http";
 
 type Params = { params: Promise<{ id: string }> };
 
-export async function GET(_request: NextRequest, { params }: Params) {
+export async function GET(request: NextRequest, { params }: Params) {
     const auth = await scenarioContext();
     if (!auth.ok) return auth.response;
     try {
         const id = await runIdFrom(params);
-        if (id === null) return error("Scenario not found", 404);
-        return json({ run: await getScenarioDetail(auth.ctx, id) });
+        if (id === null) return scenarioNotFound(request);
+        return json({ run: await getScenarioDetail(auth.ctx, id, localeOfRequest(request)) });
     } catch (err) {
-        return handleScenarioError("GET run", err);
+        return handleScenarioError("GET run", err, request);
     }
 }
 
@@ -26,25 +35,30 @@ export async function PATCH(request: NextRequest, { params }: Params) {
     if (!auth.ok) return auth.response;
     try {
         const id = await runIdFrom(params);
-        if (id === null) return error("Scenario not found", 404);
+        if (id === null) return scenarioNotFound(request);
         const body = await readBody(request);
         return json({
-            run: await updateScenario(auth.ctx, id, { title: body.title, shared: body.shared }),
+            run: await updateScenario(
+                auth.ctx,
+                id,
+                { title: body.title, shared: body.shared },
+                localeOfRequest(request)
+            ),
         });
     } catch (err) {
-        return handleScenarioError("PATCH run", err);
+        return handleScenarioError("PATCH run", err, request);
     }
 }
 
-export async function DELETE(_request: NextRequest, { params }: Params) {
+export async function DELETE(request: NextRequest, { params }: Params) {
     const auth = await scenarioContext();
     if (!auth.ok) return auth.response;
     try {
         const id = await runIdFrom(params);
-        if (id === null) return error("Scenario not found", 404);
+        if (id === null) return scenarioNotFound(request);
         await deleteScenario(auth.ctx, id);
         return json({ ok: true });
     } catch (err) {
-        return handleScenarioError("DELETE run", err);
+        return handleScenarioError("DELETE run", err, request);
     }
 }

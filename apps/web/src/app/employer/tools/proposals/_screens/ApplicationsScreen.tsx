@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
 
 import { Button } from "~/components/ui/button";
@@ -10,7 +11,7 @@ import { cn } from "~/lib/utils";
 import { EmptyState, InlineError } from "~/components/tools/EmptyState";
 import { PageHeader } from "~/components/tools/PageHeader";
 import { SkeletonRows } from "~/components/tools/SkeletonRows";
-import { plural, relativeTime } from "~/lib/tools/format";
+import { useToolFormat } from "~/lib/tools/format";
 import { useResource } from "~/lib/tools/useResource";
 import { NewApplicationDialog } from "../_components/NewApplicationDialog";
 import { ApplicationStatusPill, ReadinessMeter } from "../_components/Pills";
@@ -30,6 +31,10 @@ function byUrgency(a: ApplicationRow, b: ApplicationRow): number {
 
 /** Every application, nearest deadline first; closed ones by when they last moved. */
 export function ApplicationsScreen() {
+    const t = useTranslations("proposals.applications");
+    const tp = useTranslations("proposals.common");
+    const tWords = useTranslations("proposals.words");
+    const format = useToolFormat();
     const { href, finishedTick } = useProposals();
     const res = useResource("proposals:applications", () => proposalsApi.applications());
     const reload = res.reload;
@@ -52,16 +57,16 @@ export function ApplicationsScreen() {
     return (
         <div className="mx-auto flex max-w-[1100px] flex-col gap-6">
             <PageHeader
-                title="Applications"
-                accent="in flight"
+                title={t("title")}
+                accent={t("accent")}
                 sub={
                     res.data
-                        ? `${plural(openCount, "application")} open · ${all.length - openCount} closed`
+                        ? t("sub", { open: openCount, closed: all.length - openCount })
                         : undefined
                 }
                 actions={
                     <Button size="sm" onClick={() => setCreating(true)}>
-                        New application
+                        {tp("newApplication")}
                     </Button>
                 }
             />
@@ -75,25 +80,21 @@ export function ApplicationsScreen() {
                 variant="outline"
                 className="self-start"
             >
-                <ToggleGroupItem value="open">Open</ToggleGroupItem>
-                <ToggleGroupItem value="closed">Closed</ToggleGroupItem>
-                <ToggleGroupItem value="all">All</ToggleGroupItem>
+                <ToggleGroupItem value="open">{t("views.open")}</ToggleGroupItem>
+                <ToggleGroupItem value="closed">{t("views.closed")}</ToggleGroupItem>
+                <ToggleGroupItem value="all">{t("views.all")}</ToggleGroupItem>
             </ToggleGroup>
 
             {res.loading ? (
                 <SkeletonRows rows={5} height={52} />
             ) : rows.length === 0 ? (
                 <EmptyState
-                    title={all.length === 0 ? "No applications yet" : "Nothing in this view"}
-                    body={
-                        all.length === 0
-                            ? "Start one from a funder you found, or paste a call you already have. Its requirements become a checklist and every section can be drafted from your sources."
-                            : "Change the view to see the rest."
-                    }
+                    title={all.length === 0 ? t("emptyTitle") : tp("nothingInView")}
+                    body={all.length === 0 ? t("emptyBody") : t("emptyViewBody")}
                     action={
                         all.length === 0 ? (
                             <Button size="sm" onClick={() => setCreating(true)}>
-                                New application
+                                {tp("newApplication")}
                             </Button>
                         ) : undefined
                     }
@@ -101,11 +102,11 @@ export function ApplicationsScreen() {
             ) : (
                 <div className="border-line bg-panel overflow-hidden rounded-lg border">
                     <div className="text-ink-3 border-line-2 @max-lg:grid-cols-[minmax(0,1fr)_130px_120px_100px] @max-md:hidden grid grid-cols-[minmax(0,1fr)_150px_120px_120px_100px] gap-4 border-b px-4 py-2 text-xs">
-                        <span>Application</span>
-                        <span>Deadline</span>
-                        <span>Status</span>
-                        <span className="@max-lg:hidden">Sections</span>
-                        <span>Ready</span>
+                        <span>{t("columns.application")}</span>
+                        <span>{t("columns.deadline")}</span>
+                        <span>{t("columns.status")}</span>
+                        <span className="@max-lg:hidden">{t("columns.sections")}</span>
+                        <span>{t("columns.ready")}</span>
                     </div>
                     {rows.map(app => {
                         const tone = deadlineTone(app.daysLeft);
@@ -120,20 +121,22 @@ export function ApplicationsScreen() {
                                         {app.title}
                                     </span>
                                     <span className="text-ink-3 block truncate text-xs">
-                                        {app.funder ?? "Funder not set"} · moved{" "}
-                                        {relativeTime(app.updatedAt)}
+                                        {t("moved", {
+                                            funder: app.funder ?? tp("funderNotSet"),
+                                            time: format.relativeTime(app.updatedAt),
+                                        })}
                                     </span>
                                 </span>
                                 <span
                                     className={cn(
                                         "@max-md:hidden text-xs",
-                                        tone === "warn" && "text-warn",
+                                        tone === "warn" && "text-warn-ink",
                                         tone === "lost" && "text-danger",
                                         tone === "quiet" && "text-ink-3"
                                     )}
                                 >
                                     {OPEN.has(app.status)
-                                        ? deadlineWords(app.deadline, app.daysLeft)
+                                        ? deadlineWords(tWords, app.deadline, app.daysLeft)
                                         : (app.deadline ?? "—")}
                                 </span>
                                 <span className="@max-md:hidden">
@@ -141,8 +144,11 @@ export function ApplicationsScreen() {
                                 </span>
                                 <span className="text-ink-2 @max-lg:hidden text-xs tabular-nums">
                                     {app.sections.total === 0
-                                        ? "none yet"
-                                        : `${app.sections.written} of ${app.sections.total} written`}
+                                        ? t("noSections")
+                                        : t("sectionsWritten", {
+                                              written: app.sections.written,
+                                              total: app.sections.total,
+                                          })}
                                 </span>
                                 <ReadinessMeter value={app.readiness} />
                             </ToolLink>

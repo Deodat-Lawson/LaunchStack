@@ -15,6 +15,18 @@
         color: var(--ink);
         font-family: var(--font-sans);
         -webkit-font-smoothing: antialiased;
+        caret-color: var(--accent);
+    }
+    /* Preflight paints placeholders gray-400, 2.2:1 on the rail's sunk
+       fields. ink-3 is the smallest tier that still reads. A caller's
+       placeholder: utility still wins. */
+    input::placeholder,
+    textarea::placeholder {
+        color: var(--ink-3);
+        opacity: 1;
+    }
+    ::selection {
+        background: oklch(from var(--accent) l c h / 0.22);
     }
 }
 
@@ -193,6 +205,64 @@ textarea {
     }
     to {
         transform: translateX(250%);
+    }
+}
+
+/* Chat: the label of the step an answer is working on sweeps while it works. */
+@keyframes lsw-text-sweep {
+    from {
+        background-position: 100% 0;
+    }
+    to {
+        background-position: -100% 0;
+    }
+}
+.lsw-thinking-label {
+    background-image: linear-gradient(
+        90deg,
+        var(--ink-3) 0%,
+        var(--ink-3) 35%,
+        var(--ink) 50%,
+        var(--ink-3) 65%,
+        var(--ink-3) 100%
+    );
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: lsw-text-sweep 1.8s linear infinite;
+}
+
+/* Chat: a soft caret after the last block while an answer is still arriving. */
+@keyframes lsw-caret {
+    0%,
+    100% {
+        opacity: 0.25;
+    }
+    50% {
+        opacity: 0.8;
+    }
+}
+.chat-markdown[data-streaming="true"]
+    > :is(p, h1, h2, h3, h4, h5, h6, blockquote):last-child::after,
+.chat-markdown[data-streaming="true"] > :is(ul, ol):last-child > li:last-child::after {
+    content: "";
+    display: inline-block;
+    width: 0.5em;
+    height: 0.5em;
+    margin-left: 0.3em;
+    border-radius: 999px;
+    background: var(--ink-3);
+    animation: lsw-caret 1s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+    .lsw-thinking-label {
+        animation: none;
+        background: none;
+        color: var(--ink-2);
+    }
+    .chat-markdown[data-streaming="true"] > *:last-child::after {
+        animation: none;
     }
 }
 

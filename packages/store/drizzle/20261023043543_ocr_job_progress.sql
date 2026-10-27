@@ -1,0 +1,1 @@
+ALTER TABLE "pdr_ai_v2_ocr_jobs" ADD COLUMN "progress" jsonb;

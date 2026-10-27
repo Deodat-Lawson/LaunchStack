@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -19,6 +20,7 @@ import {
 import { Input } from "~/components/ui/input";
 import { Switch } from "~/components/ui/switch";
 import { cn } from "~/lib/utils";
+import { useErrorText } from "~/lib/tools/errorText";
 
 import { vantageApi, type CommitmentDto, type TopicDto } from "../api";
 import { CheckInRow } from "../_components/CheckInRow";
@@ -26,7 +28,7 @@ import { Field, FormError } from "../_components/Primitives";
 import { DecisionDialog } from "../_components/TopicDialogs";
 import { WeekSuggestions } from "../_components/WeekSuggestions";
 import { useOneClick } from "../_lib/actions";
-import { addDaysIso, plural, todayIso } from "../_lib/format";
+import { addDaysIso, todayIso } from "../_lib/format";
 import { useHiddenSuggestions } from "../_lib/hidden";
 import { weekSuggestions } from "../_lib/suggestions";
 
@@ -40,6 +42,8 @@ type View = "open" | "resolved" | "all";
  * commit to — answered with one click.
  */
 export function CommitmentsScreen() {
+    const t = useTranslations("vantage.commitments");
+    const tc = useTranslations("common");
     const res = useResource("vantage:commitments", () => vantageApi.commitments());
     const overview = useResource("vantage:overview", () => vantageApi.overview());
     const hidden = useHiddenSuggestions();
@@ -85,16 +89,20 @@ export function CommitmentsScreen() {
     return (
         <div className="mx-auto flex max-w-[1100px] flex-col gap-7">
             <PageHeader
-                title="What was promised,"
-                accent="and what came of it"
+                title={t("title")}
+                accent={t("accent")}
                 sub={
                     res.data
-                        ? `${plural(open.length, "open commitment")}${late ? `, ${late} late` : ""} · ${resolved.length} resolved`
+                        ? t(late ? "subLate" : "sub", {
+                              count: open.length,
+                              late,
+                              resolved: resolved.length,
+                          })
                         : undefined
                 }
                 actions={
                     <Button size="sm" onClick={() => setAdding(true)}>
-                        Add a commitment
+                        {t("add")}
                     </Button>
                 }
             />
@@ -110,12 +118,20 @@ export function CommitmentsScreen() {
                 />
             )}
 
-            <div className="flex flex-wrap gap-1" role="tablist" aria-label="View">
+            <div className="flex flex-wrap gap-1" role="tablist" aria-label={t("viewLabel")}>
                 {(
                     [
-                        ["open", `Open${open.length ? ` ${open.length}` : ""}`],
-                        ["resolved", `Resolved${resolved.length ? ` ${resolved.length}` : ""}`],
-                        ["all", "All"],
+                        [
+                            "open",
+                            open.length ? t("tabOpenCount", { count: open.length }) : t("open"),
+                        ],
+                        [
+                            "resolved",
+                            resolved.length
+                                ? t("tabResolvedCount", { count: resolved.length })
+                                : t("resolved"),
+                        ],
+                        ["all", tc("status.all")],
                     ] as [View, string][]
                 ).map(([v, label]) => (
                     <button
@@ -139,11 +155,15 @@ export function CommitmentsScreen() {
             <section>
                 <SectionHeading
                     title={
-                        view === "open" ? "Open" : view === "resolved" ? "Resolved" : "Everything"
+                        view === "open"
+                            ? t("open")
+                            : view === "resolved"
+                              ? t("resolved")
+                              : t("everything")
                     }
                     aside={
                         view === "open" && late > 0 ? (
-                            <span className="text-warn">{plural(late, "commitment")} late</span>
+                            <span className="text-warn-ink">{t("lateCount", { count: late })}</span>
                         ) : undefined
                     }
                 />
@@ -151,16 +171,16 @@ export function CommitmentsScreen() {
                     <SkeletonRows rows={5} height={52} />
                 ) : all.length === 0 ? (
                     <EmptyState
-                        title="No commitments yet"
-                        body="A commitment is made when a decision is recorded on an agenda topic: an action, an owner, a date, and the test that would settle it. Next week's agenda checks whether it happened."
+                        title={t("emptyTitle")}
+                        body={t("emptyBody")}
                         action={
                             <Button size="sm" variant="outline" onClick={() => setAdding(true)}>
-                                Add one by hand
+                                {t("addByHand")}
                             </Button>
                         }
                     />
                 ) : shown.length === 0 ? (
-                    <p className="text-ink-3 text-[13px]">Nothing in this view.</p>
+                    <p className="text-ink-3 text-[13px]">{t("emptyView")}</p>
                 ) : (
                     <div className="border-line bg-panel rounded-lg border">
                         {shown.map(c => (
@@ -194,6 +214,11 @@ function AddCommitmentDialog({
     onOpenChange: (o: boolean) => void;
     onSaved: (c: CommitmentDto) => void;
 }) {
+    const errorText = useErrorText();
+    const t = useTranslations("vantage.commitments");
+    const tt = useTranslations("vantage.topicDialog");
+    const td = useTranslations("vantage.decisionDialog");
+    const tc = useTranslations("common");
     const [title, setTitle] = useState("");
     const [owner, setOwner] = useState("");
     const [dueOn, setDueOn] = useState(addDaysIso(todayIso(), 7));
@@ -221,11 +246,11 @@ function AddCommitmentDialog({
                 test: test || null,
                 shared,
             });
-            toast("Commitment added");
+            toast(t("added"));
             onSaved(commitment);
             onOpenChange(false);
         } catch (e) {
-            setError(e instanceof Error ? e.message : "That did not save");
+            setError(errorText(e, tt("saveError")));
         } finally {
             setBusy(false);
         }
@@ -234,31 +259,29 @@ function AddCommitmentDialog({
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-[520px]">
                 <DialogHeader>
-                    <DialogTitle>Add a commitment</DialogTitle>
-                    <DialogDescription>
-                        Something promised outside a meeting, so it is still checked next week.
-                    </DialogDescription>
+                    <DialogTitle>{t("add")}</DialogTitle>
+                    <DialogDescription>{t("addDescription")}</DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-3.5">
-                    <Field label="Action" htmlFor="c-title">
+                    <Field label={td("action")} htmlFor="c-title">
                         <Input
                             id="c-title"
                             value={title}
                             onChange={e => setTitle(e.target.value)}
                             autoFocus
-                            placeholder="Ship the shorter onboarding"
+                            placeholder={t("actionPlaceholder")}
                         />
                     </Field>
                     <div className="grid gap-3.5 sm:grid-cols-2">
-                        <Field label="Owner" htmlFor="c-owner">
+                        <Field label={tt("owner")} htmlFor="c-owner">
                             <Input
                                 id="c-owner"
                                 value={owner}
                                 onChange={e => setOwner(e.target.value)}
-                                placeholder="Dana"
+                                placeholder={tt("ownerPlaceholder")}
                             />
                         </Field>
-                        <Field label="Due" htmlFor="c-due">
+                        <Field label={tt("due")} htmlFor="c-due">
                             <Input
                                 id="c-due"
                                 type="date"
@@ -267,29 +290,33 @@ function AddCommitmentDialog({
                             />
                         </Field>
                     </div>
-                    <Field label="The test" htmlFor="c-test" hint="What result would settle it">
+                    <Field label={td("test")} htmlFor="c-test" hint={t("testHint")}>
                         <Input
                             id="c-test"
                             value={test}
                             onChange={e => setTest(e.target.value)}
-                            placeholder="Activation above 30% for the week"
+                            placeholder={td("testPlaceholder")}
                         />
                     </Field>
                     <div className="flex items-center justify-between gap-3">
-                        <div className="text-ink-2 text-[12.5px]">Visible to the program</div>
-                        <Switch checked={shared} onCheckedChange={setShared} aria-label="Shared" />
+                        <div className="text-ink-2 text-[12.5px]">{td("visible")}</div>
+                        <Switch
+                            checked={shared}
+                            onCheckedChange={setShared}
+                            aria-label={tt("sharedAria")}
+                        />
                     </div>
                     <FormError message={error} />
                 </div>
                 <DialogFooter>
                     <Button variant="outline" onClick={() => onOpenChange(false)} disabled={busy}>
-                        Cancel
+                        {tc("actions.cancel")}
                     </Button>
                     <Button
                         onClick={() => void save()}
                         disabled={busy || !title.trim() || !owner.trim() || !dueOn}
                     >
-                        Add
+                        {tc("actions.add")}
                     </Button>
                 </DialogFooter>
             </DialogContent>

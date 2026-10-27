@@ -85,11 +85,9 @@ export async function createGoogleDocDocument(
     params: CreateGoogleDocParams
 ): Promise<CreateGoogleDocResult> {
     if (!isDriveLinkingEnabled()) {
-        throw new DriveLinkError(
-            404,
-            "feature_disabled",
-            "Google Drive linking is not enabled on this deployment."
-        );
+        throw new DriveLinkError(404, "feature_disabled", {
+            key: "sources.server.drive.notEnabled",
+        });
     }
 
     const title = params.title.trim().slice(0, MAX_TITLE_LENGTH) || DEFAULT_GOOGLE_DOC_TITLE;

@@ -1,3 +1,5 @@
+import type { useTranslations } from "next-intl";
+
 import type { ArtifactType } from "~/lib/artifact-content";
 
 /**
@@ -6,6 +8,55 @@ import type { ArtifactType } from "~/lib/artifact-content";
  * which starts ingestion. Paste text, Files, Folder and Claude artifact all
  * go through here.
  */
+
+/**
+ * A file that did not make it in. `message` reads "<file>: <why>" in the
+ * server's words, or English; `sourceUploadErrorMessage` says it in the
+ * reader's language.
+ */
+export class SourceUploadError extends Error {
+    constructor(
+        readonly fileName: string,
+        /** Storing the bytes, or registering the document. */
+        readonly step: "upload" | "register",
+        readonly status: number,
+        /** The route's own sentence, shown as is; null when it gave none. */
+        readonly serverMessage: string | null
+    ) {
+        super(
+            `${fileName}: ${
+                serverMessage ??
+                (step === "upload"
+                    ? `upload failed (HTTP ${status})`
+                    : `couldn't be added (HTTP ${status})`)
+            }`
+        );
+        this.name = "SourceUploadError";
+    }
+}
+
+/** `useTranslations("sources.sourceUpload")`. */
+export type SourceUploadTranslator = ReturnType<typeof useTranslations<"sources.sourceUpload">>;
+
+/** What to show for an error from this module; `otherwise` for anything else thrown. */
+export function sourceUploadErrorMessage(
+    error: unknown,
+    t: SourceUploadTranslator,
+    otherwise: string
+): string {
+    if (error instanceof SourceUploadError) {
+        // No answer at all: the connection dropped while the bytes went up.
+        if (error.status === 0) return t("connectionLost", { name: error.fileName });
+        if (error.serverMessage !== null) {
+            return t("withReason", { name: error.fileName, reason: error.serverMessage });
+        }
+        return t(error.step === "upload" ? "uploadFailed" : "registerFailed", {
+            name: error.fileName,
+            status: error.status,
+        });
+    }
+    return error instanceof Error ? error.message : otherwise;
+}
 
 export interface UploadResult {
     url: string;
@@ -21,20 +72,24 @@ export interface UploadResult {
 // first stage of the file's bar. Without it, a plain fetch.
 export async function uploadFileToStorage(
     file: File,
-    options: { onProgress?: (loaded: number, total: number) => void; signal?: AbortSignal } = {}
+    options: { onProgress?: (loaded: number, total: number) => void } = {}
 ): Promise<UploadResult> {
     const form = new FormData();
     form.append("file", file);
     const { status, text } = options.onProgress
-        ? await postWithProgress("/api/upload-local", form, options.onProgress, options.signal)
-        : await fetch("/api/upload-local", {
-              method: "POST",
-              body: form,
-              signal: options.signal,
-          }).then(async res => ({ status: res.status, text: await res.text().catch(() => "") }));
-    const data = parseJson(text) as { url?: string; provider?: "s3" | "database"; error?: string };
-    if (status < 200 || status >= 300 || !data.url) {
-        throw new Error(`${file.name}: ${data.error ?? `upload failed (HTTP ${status})`}`);
+        ? await postWithProgress("/api/upload-local", form, options.onProgress, file.name)
+        : await fetch("/api/upload-local", { method: "POST", body: form }).then(async res => ({
+              status: res.status,
+              text: await res.text().catch(() => ""),
+          }));
+    const data = parseJson(text) as { url?: unknown; provider?: unknown; error?: unknown };
+    if (status < 200 || status >= 300 || typeof data.url !== "string") {
+        throw new SourceUploadError(
+            file.name,
+            "upload",
+            status,
+            typeof data.error === "string" ? data.error : null
+        );
     }
     return {
         url: data.url,
@@ -51,11 +106,12 @@ function parseJson(text: string): Record<string, unknown> {
     }
 }
 
+/** POST with upload progress; a dropped connection is a SourceUploadError with status 0. */
 function postWithProgress(
     url: string,
     body: FormData,
     onProgress: (loaded: number, total: number) => void,
-    signal?: AbortSignal
+    fileName: string
 ): Promise<{ status: number; text: string }> {
     return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
@@ -64,17 +120,15 @@ function postWithProgress(
             if (event.lengthComputable) onProgress(event.loaded, event.total);
         };
         xhr.onload = () => resolve({ status: xhr.status, text: xhr.responseText });
-        xhr.onerror = () => reject(new Error("The connection dropped during the upload"));
-        xhr.onabort = () => reject(new DOMException("The upload was cancelled", "AbortError"));
-        signal?.addEventListener("abort", () => xhr.abort(), { once: true });
+        xhr.onerror = () => reject(new SourceUploadError(fileName, "upload", 0, null));
         xhr.send(body);
     });
 }
 
-/** What registering a document started: the ingestion job the Processing queue follows. */
+/** The document the upload created, and the ingestion job the Processing queue follows; null when an older server did not say. */
 export interface RegisteredDocument {
-    jobId: string | null;
     documentId: number | null;
+    jobId: string | null;
 }
 
 export async function registerDocument(params: {
@@ -116,18 +170,16 @@ export async function registerDocument(params: {
         } catch {
             // not JSON: keep the text
         }
-        throw new Error(
-            `${params.file.name}: ${message || `couldn't be added (HTTP ${res.status})`}`
-        );
+        throw new SourceUploadError(params.file.name, "register", res.status, message || null);
     }
-    // 202 { jobId, document: { id } } — the job the queue follows.
-    const data = (await res.json().catch(() => ({}))) as {
+    // 202 { jobId, document: { id } }.
+    const data = (await res.json().catch(() => null)) as {
         jobId?: unknown;
-        document?: { id?: unknown } | null;
-    };
-    const documentId = Number(data.document?.id);
+        document?: { id?: unknown };
+    } | null;
+    const id = data?.document?.id;
     return {
-        jobId: typeof data.jobId === "string" && data.jobId ? data.jobId : null,
-        documentId: Number.isFinite(documentId) && documentId > 0 ? documentId : null,
+        documentId: typeof id === "number" ? id : null,
+        jobId: typeof data?.jobId === "string" && data.jobId ? data.jobId : null,
     };
 }

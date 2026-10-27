@@ -5,7 +5,9 @@
  * background job, a meeting turn — in {@link withWorkspaceChatModels}. Inside
  * it, every chat resolution (including those deep in feature packages and
  * pipelines that never see a workspace id) uses the workspace's endpoint when
- * it brought one, and the deployment's otherwise.
+ * it brought one, and the deployment's otherwise. Every model call inside is
+ * also counted against the workspace and the feature the caller names
+ * (~/server/ai-usage/record), which is what the usage page reads.
  *
  * Fails closed. A workspace that chose its own endpoint but whose key cannot
  * be decrypted, or whose address the deployment now refuses, gets an error on
@@ -20,6 +22,9 @@ import {
     type ChatModelsScope,
 } from "@launchstack/llm";
 import { createSlot } from "@launchstack/runtime";
+
+import type { AiFeature } from "~/lib/ai-usage";
+import { aiUsageRecorder } from "~/server/ai-usage/record";
 
 import { buildWorkspaceChatModelsConfig } from "./config";
 import { WorkspaceEndpointUrlError, assertEndpointUrlAllowed } from "./endpoint-url";
@@ -60,7 +65,7 @@ function unusable(reason: string): ChatModelsScope {
     return {
         source: "workspace",
         error: new ChatScopeUnavailableError(
-            `Your workspace's own model can't be used: ${reason} A workspace admin can fix it in Settings › Models.`
+            `Your workspace's own model can't be used: ${reason} A workspace admin can fix it in Workspace › Bring your own keys.`
         ),
     };
 }
@@ -128,13 +133,16 @@ export async function loadWorkspaceChatModelsScope(
 
 /**
  * Run `fn` with chat resolving against the workspace's own endpoint, if it
- * brought one. A missing workspace id pins the deployment's models, so work
+ * brought one, and with every model call counted as `feature`'s. A missing
+ * workspace id pins the deployment's models and counts nothing, so work
  * nested inside another workspace's scope can't inherit it by accident.
  */
 export async function withWorkspaceChatModels<T>(
     companyId: bigint | number | string | null | undefined,
+    feature: AiFeature,
     fn: () => T | Promise<T>
 ): Promise<T> {
     const scope = await loadWorkspaceChatModelsScope(companyId);
-    return await runWithChatModelsScope(scope, fn);
+    const usage = aiUsageRecorder(companyId, feature);
+    return await runWithChatModelsScope(usage ? { ...scope, usage } : scope, fn);
 }

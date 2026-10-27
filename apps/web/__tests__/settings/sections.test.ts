@@ -1,10 +1,10 @@
 /**
- * Who sees which Settings section, per built-in role.
+ * Who sees which settings section, per built-in role.
  *
- * Settings is open to everyone; each section carries its own gate. The table
- * below is the contract a reviewer reads: You is everyone's, a section whose
- * data is refused to a role is left out for it, and a section a role may only
- * read is shown read-only.
+ * Settings (yours alone) and the Workspace tab are open to everyone; each
+ * section carries its own gate. The table below is the contract a reviewer
+ * reads: You is everyone's, a section whose data is refused to a role is
+ * left out for it, and a section a role may only read is shown read-only.
  */
 
 import {
@@ -57,13 +57,13 @@ describe("SETTINGS_SECTION_ACCESS", () => {
                 "account",
                 "appearance",
                 "shortcuts",
+                "general",
                 "people",
                 "company",
-                "documents",
                 "privacy",
                 "labs",
             ]);
-            expect(readOnlyFor(role)).toEqual(["company", "documents", "labs"]);
+            expect(readOnlyFor(role)).toEqual(["general", "company", "labs"]);
         }
     });
 
@@ -72,17 +72,24 @@ describe("SETTINGS_SECTION_ACCESS", () => {
             "account",
             "appearance",
             "shortcuts",
+            "general",
             "company",
-            "documents",
             "privacy",
             "labs",
         ]);
+    });
+
+    it("lets everyone read the workspace's own details, and only settings.manage change them", () => {
+        // The same gate as PATCH /api/workspace/details.
+        expect(SETTINGS_SECTION_ACCESS.general.view).toBeUndefined();
+        expect(SETTINGS_SECTION_ACCESS.general.edit).toBe("settings.manage");
     });
 
     it("leaves out every section whose own read the server refuses", () => {
         // The API gates behind each section's mount-time GET. A section is
         // never shown to someone its data would answer 403.
         const refusedReads: Partial<Record<SettingsSectionId, Permission>> = {
+            byok: "settings.manage", // GET /api/settings/models/workspace
             models: "settings.manage", // GET /api/settings/models
             usage: "analytics.view", // GET /api/settings/usage
             archive: "settings.manage", // GET /api/settings/archive
@@ -137,9 +144,16 @@ describe("SETTINGS_SECTION_ACCESS", () => {
 
 describe("settingsSectionFromHash", () => {
     it("lands old deep links and registry keys where the hub did", () => {
-        expect(settingsSectionFromHash("#byok")).toBe("processing");
+        expect(settingsSectionFromHash("#byok")).toBe("byok");
+        expect(settingsSectionFromHash("#processing")).toBe("byok");
+        // The embedding key that lived here is gone; its old links still land.
+        expect(settingsSectionFromHash("#embedding")).toBe("byok");
+        expect(settingsSectionFromHash("#openrouter")).toBe("byok");
         expect(settingsSectionFromHash("#profile")).toBe("company");
-        expect(settingsSectionFromHash("#keys")).toBe("processing");
+        expect(settingsSectionFromHash("#keys")).toBe("byok");
+        expect(settingsSectionFromHash("#models")).toBe("models");
+        // Document defaults is gone, with no section of its own to land on.
+        expect(settingsSectionFromHash("#documents")).toBeNull();
         expect(settingsSectionFromHash("#appearance.theme")).toBe("appearance");
         // Hashes arrive lower-cased; the personal row is the one everyone reaches.
         expect(settingsSectionFromHash("#chat.responseStyle")).toBe("appearance");

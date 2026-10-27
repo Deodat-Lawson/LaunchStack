@@ -10,7 +10,7 @@
  * following through comes first.
  */
 import type { AgendaDto, CommitmentDto, OverviewDto, TopicDto, VantageEvidenceRef } from "../api";
-import { agoWords, daysUntil } from "./format";
+import { daysUntil, type VantageFormat } from "./format";
 
 /** A check-in is suggested when the promise is late or due within this many days. */
 export const CHECK_IN_DAYS = 2;
@@ -153,14 +153,22 @@ export function topicReason(topic: TopicDto): string {
 }
 
 /** Who made a suggestion, in words that stay true whether or not a model ran. */
-export function originWords(origin: TopicDto["origin"]): string {
-    return origin === "ai" ? "AI draft" : origin === "rules" ? "From your records" : "Yours";
+export function originWords(fmt: Pick<VantageFormat, "t">, origin: TopicDto["origin"]): string {
+    return fmt.t(`suggestions.origin.${origin}`);
 }
 
 /** "drafted by AI yesterday" — who made an agenda's draft and when, from its metadata. */
-export function draftedWords(agenda: AgendaDto, now = new Date()): string | null {
+export function draftedWords(
+    fmt: VantageFormat,
+    agenda: AgendaDto,
+    now = new Date()
+): string | null {
     if (!agenda.generatedAt) return null;
     const mode = agenda.modelMetadata?.mode as string | undefined;
-    const by = mode === "ai" ? " by AI" : mode === "rules" ? " from your records" : "";
-    return `drafted${by} ${agoWords(agenda.generatedAt, now)}`;
+    const ago = fmt.ago(agenda.generatedAt, now);
+    return mode === "ai"
+        ? fmt.t("suggestions.drafted.ai", { ago })
+        : mode === "rules"
+          ? fmt.t("suggestions.drafted.rules", { ago })
+          : fmt.t("suggestions.drafted.other", { ago });
 }

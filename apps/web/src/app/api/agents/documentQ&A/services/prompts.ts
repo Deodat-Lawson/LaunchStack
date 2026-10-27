@@ -1,12 +1,12 @@
 /**
- * Shared system prompts for AI responses
- * Used by both AIQuery and AIChat endpoints
+ * Shared system prompts for AI responses, used by the AIChat endpoint
  */
 
 import { RESPONSE_STYLES, type ResponseStyleId, DEFAULT_STYLE } from "~/lib/ai/styles";
 
 // Re-export for backward compatibility or direct usage
 export const SYSTEM_PROMPTS = {
+    balanced: RESPONSE_STYLES.balanced.systemPrompt,
     concise: RESPONSE_STYLES.concise.systemPrompt,
     detailed: RESPONSE_STYLES.detailed.systemPrompt,
     academic: RESPONSE_STYLES.academic.systemPrompt,
@@ -100,49 +100,4 @@ Remember: Your goal is not just to provide information, but to facilitate deep u
     }
 
     return prompt;
-}
-
-/**
- * Generate web search instruction prompt
- */
-export function getWebSearchInstruction(
-    enableWebSearch: boolean,
-    webSearchResults: Array<{
-        title: string;
-        url: string;
-        snippet: string;
-        relevanceScore?: number;
-    }>,
-    refinedQuery?: string,
-    reasoning?: string
-): string {
-    if (!enableWebSearch) {
-        return "";
-    }
-
-    if (webSearchResults.length > 0) {
-        return `\n\n=== WEB SEARCH INTEGRATION INSTRUCTIONS ===
-The user has enabled intelligent web search. You have access to both document content and curated web search results.
-
-Guidelines for using web search results:
-1. PRIORITIZE document content - it is the primary source of truth for the user's specific documents
-2. Use web search results to:
-   - Provide additional context or background information not in the documents
-   - Clarify technical terms, concepts, or industry standards
-   - Supplement with recent information, updates, or broader perspectives
-   - Fill gaps when document content is incomplete or unclear
-3. Citation format: Always cite web sources using [Source X] format (e.g., "According to [Source 1], the industry standard is...")
-4. Quality assessment: The web results have been intelligently filtered for relevance. Relevance scores indicate how well each source addresses the query.
-5. Synthesis: Integrate information seamlessly - don't just list sources, but synthesize insights from both document and web sources
-6. Transparency: If information conflicts between documents and web sources, acknowledge this and explain the difference
-7. Completeness: Use web sources to provide comprehensive answers when document content alone is insufficient
-
-The refined search query used was: "${refinedQuery ?? "N/A"}"
-${reasoning ? `Agent reasoning: ${reasoning}` : ""}
-
-Remember: Your goal is to provide the most helpful, accurate, and comprehensive answer by intelligently combining document insights with relevant web information.`;
-    } else {
-        return `\n\n=== WEB SEARCH STATUS ===
-The user enabled web search, but no relevant results were found for this query. Base your answer entirely on the provided document content. If the document content is insufficient to fully answer the question, acknowledge this limitation and provide the best answer possible based on available document information.`;
-    }
 }

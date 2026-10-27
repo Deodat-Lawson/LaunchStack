@@ -7,9 +7,13 @@
 #   - app + worker run the GHCR images published by .github/workflows/docker.yml
 #     (only `migrate` still builds locally — its target is the light deps stage).
 #   - No self-hosted Whisper and no Docling: transcription resolves to the
-#     cloud provider (packages/llm registry default) and OCR routes to the
-#     provider named by OCR_DEFAULT_PROVIDER (AZURE in the lean setup). Both
-#     containers move behind opt-in profiles.
+#     cloud provider (packages/llm registry default) and Azure Document
+#     Intelligence reads every PDF and image (provider-first, the default);
+#     with no docling-serve running, a failed Azure read falls back to the
+#     PDF's text layer, except that a scan keeps the error and is retried
+#     (Docling as the fallback needs --profile ocr). Both containers move
+#     behind opt-in profiles, and the document converter is told there is no
+#     Docling (DOCLING_SERVE_URL empty) unless you opt in.
 #   - Inngest is self-hosted: the `inngest` service runs `inngest start` (the
 #     production server, not the dev server) with its history in an `inngest`
 #     database on the shared Postgres and its queue in `inngest-redis`. app and
@@ -90,6 +94,15 @@ services:
 
   document-converter:
     ports: !reset []
+    environment:
+      # The base stack points this at docling-serve, which the lean stack does
+      # not run (it is behind `--profile ocr`). Left set, every Office file the
+      # converter is asked to convert fails against it (OCR routing already
+      # skips a docling-serve that does not answer its health check). Empty
+      # means "no Docling": scans go to the OCR provider and the worker
+      # converts Office files itself (mammoth/SheetJS). With `--profile ocr`,
+      # set DOCLING_SERVE_URL=http://docling-serve:5001.
+      DOCLING_SERVE_URL: ${DOCLING_SERVE_URL:-}
 
   # Added to the base stack by ADR-009; same rule as the others.
   gotenberg:
@@ -189,6 +202,11 @@ services:
       INNGEST_SIGNING_KEY: ${INNGEST_SIGNING_KEY:?set INNGEST_SIGNING_KEY (openssl rand -hex 32), see docs/runbooks/azure-lean-deploy.md}
       INNGEST_POSTGRES_URI: postgresql://postgres:${POSTGRES_PASSWORD:-password}@db:5432/inngest?sslmode=disable
       INNGEST_REDIS_URI: redis://inngest-redis:6379
+      # Without this the CLI posts usage events to Inngest's cloud event API
+      # (`cli/command.executed` at every start, `cli/dev_ui.loaded` on each
+      # dashboard load; pkg/api/tel). The privacy policy lists no Inngest
+      # processing, so keep it set.
+      DO_NOT_TRACK: "1"
     # Dashboard + API, loopback only: it has no login. Reach it with
     # `ssh -N -L 8288:127.0.0.1:8288 <admin>@<vm>`.
     ports:

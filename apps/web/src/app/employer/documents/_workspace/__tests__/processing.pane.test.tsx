@@ -12,6 +12,8 @@ import {
     type QueueStage,
 } from "~/lib/processing-queue/types";
 
+import { translatorFor } from "~/i18n/translate";
+
 import { ProcessingQueuePane } from "../processing/ProcessingQueuePane";
 import { resetProcessingQueueForTests } from "../processing/queueStore";
 import { resetLocalTasksForTests } from "../processing/uploadTasks";
@@ -60,7 +62,7 @@ function item(overrides: Partial<ProcessingQueueItem>): ProcessingQueueItem {
         startedAt: iso(-30_000),
         completedAt: null,
         canRetry: false,
-        stageSource: "recorded",
+        retryCount: 0,
         ...overrides,
     };
 }
@@ -90,10 +92,8 @@ beforeEach(() => {
                 stage: "reading",
                 stages: stages("reading", "failed"),
                 completedAt: iso(-60_000),
-                error: {
-                    message: "The converter couldn't open this file.",
-                    detail: "pipeline dead after max attempts: Document converter /convert failed: 400",
-                },
+                documentId: 77,
+                error: "pipeline dead after max attempts: Document converter /convert failed: 503",
                 canRetry: true,
                 addedById: "them",
                 mine: false,
@@ -140,7 +140,7 @@ beforeEach(() => {
                 },
             });
         }
-        if (url === "/api/documents/processing-queue/failed/retry" && init?.method === "POST") {
+        if (url === "/api/documents/77/retry" && init?.method === "POST") {
             const requeued = item({
                 jobId: "failed",
                 name: "Vendor contract.docx",
@@ -155,7 +155,7 @@ beforeEach(() => {
                 ...queue,
                 items: queue.items.map(i => (i.jobId === "failed" ? requeued : i)),
             };
-            return respond({ ok: true, item: requeued });
+            return respond({ status: "retrying", stage: "extraction", retryCount: 1 }, 202);
         }
         if (url === "/api/documents/processing-queue") return respond(queue);
         return respond({}, 404);
@@ -199,9 +199,13 @@ describe("ProcessingQueuePane", () => {
         mount();
         const failedRow = (await screen.findByText("Vendor contract.docx")).closest("li")!;
         expect(within(failedRow).getByText("Stopped while reading")).toBeInTheDocument();
+        // Worded like the Sources rail words it, never the raw error.
         expect(
-            within(failedRow).getByText("The converter couldn't open this file.")
+            within(failedRow).getByText(
+                translatorFor("en", "sources.failure")("categories.ocr_unavailable.message")
+            )
         ).toBeInTheDocument();
+        expect(within(failedRow).queryByText(/convert failed/)).not.toBeInTheDocument();
         await waitFor(() =>
             expect(within(failedRow).getByText("Added by Priya Natarajan")).toBeInTheDocument()
         );
@@ -209,7 +213,7 @@ describe("ProcessingQueuePane", () => {
         await user.click(within(failedRow).getByRole("button", { name: /Retry/ }));
         await waitFor(() =>
             expect(fetchMock).toHaveBeenCalledWith(
-                "/api/documents/processing-queue/failed/retry",
+                "/api/documents/77/retry",
                 expect.objectContaining({ method: "POST" })
             )
         );

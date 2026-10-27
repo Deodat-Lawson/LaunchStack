@@ -3,21 +3,25 @@
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
+import { useTranslations } from "next-intl";
 import { useAuth } from "~/lib/auth-client";
 import { EmployerChrome } from "~/app/employer/_components/EmployerChrome";
 import LoadingPage from "~/app/_components/loading";
 import type { DocumentType } from "../types";
 
+/** The page's loading state, worded in the reader's language. */
+function LoadingDocument() {
+    const t = useTranslations("workspace.viewerPage");
+    return <LoadingPage variant="pane" label={t("loading")} className="min-h-[60vh]" />;
+}
+
 const DocumentViewer = dynamic(
     () => import("~/app/employer/documents/components/DocumentViewer").then(m => m.DocumentViewer),
-    {
-        loading: () => (
-            <LoadingPage variant="pane" label="Loading document…" className="min-h-[60vh]" />
-        ),
-    }
+    { loading: () => <LoadingDocument /> }
 );
 
 function ViewerInner() {
+    const t = useTranslations("workspace.viewerPage");
     const { userId, isLoaded, isSignedIn } = useAuth();
     const searchParams = useSearchParams();
     const router = useRouter();
@@ -57,8 +61,7 @@ function ViewerInner() {
         void fetchDocument();
     }, [fetchDocument]);
 
-    if (loading)
-        return <LoadingPage variant="pane" label="Loading document…" className="min-h-[60vh]" />;
+    if (loading) return <LoadingDocument />;
 
     if (!document) {
         return (
@@ -70,7 +73,7 @@ function ViewerInner() {
                     fontSize: 14,
                 }}
             >
-                <div style={{ marginBottom: 12 }}>Document not found.</div>
+                <div style={{ marginBottom: 12 }}>{t("notFound")}</div>
                 <button
                     onClick={() => router.push("/employer/documents")}
                     style={{
@@ -84,7 +87,7 @@ function ViewerInner() {
                         cursor: "pointer",
                     }}
                 >
-                    Back to workspace
+                    {t("backToWorkspace")}
                 </button>
             </div>
         );
@@ -102,18 +105,11 @@ function ViewerInner() {
 }
 
 export default function DocumentViewerPage() {
+    const t = useTranslations("workspace.viewerPage");
     return (
         <div style={{ minHeight: "100vh", background: "var(--bg)", color: "var(--ink)" }}>
-            <EmployerChrome pageLabel="Launchstack" pageTitle="Document" />
-            <Suspense
-                fallback={
-                    <LoadingPage
-                        variant="pane"
-                        label="Loading document…"
-                        className="min-h-[60vh]"
-                    />
-                }
-            >
+            <EmployerChrome pageLabel="Launchstack" pageTitle={t("pageTitle")} />
+            <Suspense fallback={<LoadingDocument />}>
                 <ViewerInner />
             </Suspense>
         </div>

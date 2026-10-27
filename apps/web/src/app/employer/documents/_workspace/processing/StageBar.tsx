@@ -9,6 +9,8 @@
  * tooltip says what the stage does and how long it took.
  */
 
+import { useTranslations } from "next-intl";
+
 import {
     QUEUE_STAGE_IDS,
     type QueueItemState,
@@ -17,19 +19,25 @@ import {
 import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip";
 import { cn } from "~/lib/utils";
 
-import { STAGE_ABOUT, STAGE_LABEL, formatDuration } from "./viewModel";
+import { formatDuration, type ProcessingTranslator } from "./viewModel";
 
 function stageShare(stage: QueueStage): number | null {
     if (!stage.total || stage.total <= 0 || stage.done === undefined) return null;
     return Math.max(0, Math.min(1, stage.done / stage.total));
 }
 
-function stageTiming(stage: QueueStage, now: number): string | null {
+function stageTiming(stage: QueueStage, now: number, t: ProcessingTranslator): string | null {
     if (!stage.startedAt) return null;
     const start = Date.parse(stage.startedAt);
     if (!Number.isFinite(start)) return null;
-    if (stage.endedAt) return `took ${formatDuration(Date.parse(stage.endedAt) - start)}`;
-    if (stage.status === "active") return `${formatDuration(now - start)} so far`;
+    if (stage.endedAt) {
+        return t("stageTiming.took", {
+            duration: formatDuration(Date.parse(stage.endedAt) - start, t),
+        });
+    }
+    if (stage.status === "active") {
+        return t("stageTiming.soFar", { duration: formatDuration(now - start, t) });
+    }
     return null;
 }
 
@@ -51,6 +59,7 @@ export function StageBar({
     /** No captions under the segments (a narrow tab shows the headline only). */
     compact?: boolean;
 }) {
+    const t = useTranslations("processing");
     const ordered = QUEUE_STAGE_IDS.map(
         id =>
             stages.find(stage => stage.id === id) ?? {
@@ -68,11 +77,15 @@ export function StageBar({
     return (
         <div
             role="progressbar"
-            aria-label={`${name}: processing`}
+            aria-label={t("progressbar.label", { name })}
             aria-valuemin={0}
             aria-valuemax={ordered.length}
             aria-valuenow={doneCount}
-            aria-valuetext={`${headline} — step ${Math.min((current >= 0 ? current : doneCount) + 1, ordered.length)} of ${ordered.length}`}
+            aria-valuetext={t("progressbar.value", {
+                headline,
+                step: Math.min((current >= 0 ? current : doneCount) + 1, ordered.length),
+                total: ordered.length,
+            })}
             data-testid="stage-bar"
             data-state={state}
         >
@@ -80,7 +93,7 @@ export function StageBar({
                 {ordered.map(stage => {
                     const share = stageShare(stage);
                     const retrying = state === "retrying" && stage.status === "active";
-                    const timing = stageTiming(stage, now);
+                    const timing = stageTiming(stage, now, t);
                     return (
                         <Tooltip key={stage.id}>
                             <TooltipTrigger asChild>
@@ -121,14 +134,11 @@ export function StageBar({
                                 </span>
                             </TooltipTrigger>
                             <TooltipContent side="top" className="max-w-[240px]">
-                                <span className="font-semibold">{STAGE_LABEL[stage.id]}</span>
-                                {" — "}
-                                {STAGE_ABOUT[stage.id]}
-                                {timing || stage.detail ? (
-                                    <span className="block opacity-80">
-                                        {[stage.detail, timing].filter(Boolean).join(" · ")}
-                                    </span>
-                                ) : null}
+                                <span className="block font-semibold">
+                                    {t(`stages.${stage.id}.label`)}
+                                </span>
+                                {t(`stages.${stage.id}.about`)}
+                                {timing ? <span className="block opacity-80">{timing}</span> : null}
                             </TooltipContent>
                         </Tooltip>
                     );
@@ -152,7 +162,7 @@ export function StageBar({
                                     stage.status === "pending" && "text-ink-4"
                                 )}
                             >
-                                {STAGE_LABEL[stage.id]}
+                                {t(`stages.${stage.id}.label`)}
                             </span>
                         ))}
                     </div>

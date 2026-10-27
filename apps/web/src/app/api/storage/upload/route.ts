@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
 
+import { requestTranslator } from "~/i18n/server";
+
 import {
     putObject,
     getS3BucketName,
@@ -17,22 +19,20 @@ function sanitizeFilename(filename: string): string {
 }
 
 export async function POST(request: Request) {
+    const t = requestTranslator(request, "upload.server.errors");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
         if (!isS3Storage()) {
-            return NextResponse.json(
-                { error: "S3 upload is not applicable: no S3 endpoint configured" },
-                { status: 400 }
-            );
+            return NextResponse.json({ error: t("s3UploadNoS3") }, { status: 400 });
         }
 
         const formData = await request.formData();
         const file = formData.get("file") as File | null;
 
         if (!file) {
-            return NextResponse.json({ error: "file is required" }, { status: 400 });
+            return NextResponse.json({ error: t("fileFieldRequired") }, { status: 400 });
         }
         if (
             formData.get("purpose") === "chat" &&
@@ -40,10 +40,7 @@ export async function POST(request: Request) {
                 file.size > 50 * 1024 * 1024 ||
                 (file.type.startsWith("image/") && file.size > 10 * 1024 * 1024))
         ) {
-            return NextResponse.json(
-                { error: "Attach a nonempty file up to 50 MiB, or an image up to 10 MiB." },
-                { status: 413 }
-            );
+            return NextResponse.json({ error: t("chatAttachmentSize") }, { status: 413 });
         }
 
         const safeName = sanitizeFilename(file.name);
@@ -74,8 +71,11 @@ export async function POST(request: Request) {
         console.error("[StorageUpload] Failed to upload file:", error);
         return NextResponse.json(
             {
-                error: "Failed to upload file to storage",
-                details: error instanceof Error ? error.message : "Unknown error",
+                error: t("storageUploadFailed"),
+                details:
+                    error instanceof Error
+                        ? error.message
+                        : requestTranslator(request, "errors.api")("unknownError"),
             },
             { status: 500 }
         );

@@ -1,0 +1,637 @@
+{
+  "accountMenu": {
+    "fallbackName": "Your account",
+    "triggerLabel": "Account: {name}",
+    "switchWorkspace": "Switch workspace",
+    "switch": "Switch",
+    "lightTheme": "Switch to light theme",
+    "darkTheme": "Switch to dark theme",
+    "settings": "Settings",
+    "documentation": "Documentation",
+    "logOut": "Log out"
+  },
+  "common": {
+    "actionsFor": "Actions for {name}",
+    "openInANewTab": "Open in a new tab",
+    "opening": "Opening…",
+    "indexingReason": "This source is still being indexed.",
+    "viewOnly": "You can view this file but not change it.",
+    "everyPaneTaken": "Every pane is taken.",
+    "notSplit": "The workspace is not split.",
+    "splitRight": "Split right",
+    "splitDown": "Split down",
+    "restorePanes": "Restore the other panes",
+    "maximizePane": "Maximize this pane",
+    "closePane": "Close this pane",
+    "newMindmap": "New mindmap",
+    "linkCopied": "Link copied"
+  },
+  "page": {
+    "documentsCrumb": "Documents"
+  },
+  "viewerPage": {
+    "loading": "Loading document…",
+    "notFound": "Document not found.",
+    "backToWorkspace": "Back to workspace",
+    "pageTitle": "Document"
+  },
+  "relativeTime": {
+    "justNow": "just now",
+    "hoursAgo": "{count}h ago",
+    "yesterday": "Yesterday",
+    "daysAgo": "{count} days ago",
+    "lastWeek": "Last week",
+    "weeksAgo": "{count} weeks ago"
+  },
+  "sourceRows": {
+    "shapes": "{count, plural, one {# shape} other {# shapes}}",
+    "fetchFailed": "Failed to fetch documents ({status})",
+    "fetchFailedGeneric": "Failed to fetch documents"
+  },
+  "studioGroups": {
+    "workspace": "Workspace",
+    "tools": "Tools",
+    "management": "Management"
+  },
+  "studioApps": {
+    "chat": {
+      "label": "Chat",
+      "description": "Ask grounded questions over your knowledge"
+    },
+    "knowledge": {
+      "label": "Knowledge",
+      "description": "Browse, filter, and grow everything the workspace can cite"
+    },
+    "processing": {
+      "label": "Processing",
+      "description": "Watch files being read and indexed — what is running, what is waiting, and what needs a retry"
+    },
+    "meetings": {
+      "label": "Meetings",
+      "description": "Agents work an objective in a channel — step in whenever you want"
+    },
+    "agents": {
+      "label": "Agents",
+      "description": "Who your agents are: try them, edit their instructions, import a definition file"
+    },
+    "team": {
+      "label": "Team",
+      "description": "People and what you share with each, groups to share with in one step, and who added, shared or moved what"
+    },
+    "investors": {
+      "label": "Investor relations",
+      "description": "Find venture funds raising now from their SEC filings, and draft the one-pager, deck and intro emails from your sources"
+    },
+    "draft": {
+      "label": "Templated Drafts",
+      "description": "Generate new docs from templates tuned to your sources"
+    },
+    "rewrite": {
+      "label": "Rewrite",
+      "description": "Improve existing prose with a diff-first rewrite"
+    },
+    "settings": {
+      "label": "Settings",
+      "description": "Your account, appearance, shortcuts and privacy"
+    },
+    "analytics": {
+      "label": "Analytics",
+      "description": "Documents, queries, and activity across the workspace"
+    },
+    "mindmap": {
+      "label": "Mindmap",
+      "description": "Diagrams, mindmaps and flowcharts — sources you draw"
+    },
+    "workflows": {
+      "label": "Workflows",
+      "description": "Automate recurring tasks across your sources"
+    },
+    "workspace": {
+      "label": "Workspace",
+      "description": "The workspace's name and details, its people and access, company profile, your own keys, models, agents, integrations, usage and archive"
+    }
+  },
+  "studioDeniedNotes": {
+    "team": "Your role sees only what is shared with you, so there is no team list. New shares arrive in the bell at the top of the sidebar."
+  },
+  "paletteLinks": {
+    "knowledge": {
+      "label": "Knowledge",
+      "description": "Browse and grow everything the workspace can cite"
+    },
+    "processing": {
+      "label": "Processing queue",
+      "description": "Files being read and indexed, stage by stage"
+    },
+    "meetings": {
+      "label": "Meetings",
+      "description": "Agents work an objective in a channel you can join"
+    },
+    "agents": {
+      "label": "Agents",
+      "description": "The roster: try an agent, edit its instructions, import one"
+    },
+    "team": {
+      "label": "Team",
+      "description": "People, groups, and who did what across the workspace"
+    },
+    "draft": {
+      "label": "Draft",
+      "description": "Generate a new document with AI"
+    },
+    "rewrite": {
+      "label": "Rewrite",
+      "description": "Improve existing content"
+    },
+    "workflows": {
+      "label": "Workflows",
+      "description": "Automate recurring tasks across your sources"
+    },
+    "mindmap": {
+      "label": "New mindmap",
+      "description": "Diagrams, mindmaps and flowcharts you can cite"
+    },
+    "artifacts": {
+      "label": "Import a Claude artifact",
+      "description": "Pages, diagrams and components built in Claude, as sources"
+    },
+    "agentSessions": {
+      "label": "Import coding sessions",
+      "description": "Claude Code and Codex conversations, as sources"
+    },
+    "growth": {
+      "description": "Brand and Prospects in one app: schedule and publish posts, find the companies that would buy, run the deals"
+    },
+    "brand": {
+      "label": "Brand",
+      "description": "Compose once for every network, schedule it, see the calendar, generate campaigns from your documents"
+    },
+    "prospects": {
+      "label": "Prospects",
+      "description": "Find the companies that would buy what you sell, profile them with evidence, and run the deal"
+    },
+    "vantage": {
+      "description": "Prepare next week's meeting from evidence: cited agenda, decisions, commitments checked the week after"
+    },
+    "scenarios": {
+      "description": "Simulate how people built from your records react to a situation"
+    },
+    "proposals": {
+      "description": "Write grant and funding proposals from what your sources prove: find the funders, turn the call into a checklist, draft every answer with citations"
+    },
+    "investors": {
+      "label": "Investor relations",
+      "description": "Find venture funds raising now, and draft the pitch from your sources"
+    },
+    "audit": {
+      "label": "Predictive gaps",
+      "description": "Missing exhibits, schedules, and compliance gaps"
+    },
+    "analytics": {
+      "label": "Analytics",
+      "description": "Documents, queries, and activity"
+    },
+    "peopleAccess": {
+      "label": "People and access",
+      "description": "Roles, invitations, join links, audit"
+    },
+    "profile": {
+      "label": "Company profile",
+      "description": "AI-extracted company intel"
+    },
+    "agentsNodes": {
+      "label": "Agents & nodes",
+      "description": "The meeting roster, and the machines that run it"
+    },
+    "workspace": {
+      "label": "Workspace",
+      "description": "Its name and URL, people and access, your own keys, models, agents, integrations and usage"
+    },
+    "workspaceGeneral": {
+      "label": "Rename the workspace",
+      "description": "Name, URL, description, industry, team size and colour"
+    },
+    "settings": {
+      "label": "Settings",
+      "description": "Yours alone: account, appearance, shortcuts and privacy"
+    },
+    "byok": {
+      "label": "Bring your own keys",
+      "description": "Your own API key or OpenRouter account for the workspace's AI"
+    }
+  },
+  "history": {
+    "kinds": {
+      "chat": "Chat",
+      "trendSearch": "Trend search",
+      "prospector": "Prospector",
+      "repoExplainer": "Repo explainer",
+      "distribution": "Distribution",
+      "email": "Email campaign",
+      "weeklyReview": "Weekly review",
+      "vantage": "Vantage agenda",
+      "proposals": "Proposals"
+    },
+    "status": {
+      "queued": "Queued",
+      "running": "Running",
+      "done": "Done",
+      "failed": "Failed"
+    },
+    "groups": {
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "week": "Previous 7 days",
+      "month": "Previous 30 days",
+      "older": "Older"
+    },
+    "relative": {
+      "now": "now",
+      "minutes": "{count}m",
+      "hours": "{count}h",
+      "days": "{count}d"
+    }
+  },
+  "commandPalette": {
+    "placeholder": "Jump to anything — sources, features, settings…",
+    "groups": {
+      "action": "Actions",
+      "feature": "Features",
+      "agent": "Agents",
+      "source": "Sources",
+      "history": "History",
+      "setting": "Settings"
+    },
+    "action": "Action",
+    "actionWithShortcut": "Action · {shortcut}",
+    "submenuItem": "{menu}: {item}",
+    "askAgent": "Ask {name}",
+    "openAgent": "Open {name} in Agents",
+    "openAgentSub": "Edit, try, export · @{handle}",
+    "sharedBy": "Shared by {name} · {time}",
+    "aTeammate": "a teammate",
+    "settingSub": "Settings · {description}",
+    "language": "Language: {language}",
+    "languageCurrent": "Current language",
+    "languageSwitch": "Switch the interface language",
+    "noMatches": "No matches for <mono>“{query}”</mono>",
+    "navigate": "navigate",
+    "open": "open",
+    "results": "{count} results",
+    "workspaceSettingSub": "Workspace · {description}"
+  },
+  "contextMenu": {
+    "openLinkInNewTab": "Open link in new tab",
+    "copyLinkAddress": "Copy link address",
+    "copyPageLink": "Copy link to this page",
+    "theme": "Theme",
+    "themes": {
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    },
+    "selection": "Selection"
+  },
+  "studioDrawer": {
+    "title": "Studio apps",
+    "description": "Open a workspace app — ⌘-click to open it beside what is showing. Your access decides which apps are listed.",
+    "openBeside": "Open beside",
+    "comingSoon": "Coming soon",
+    "comingSoonReason": "Coming soon.",
+    "soon": "SOON"
+  },
+  "paneLauncher": {
+    "allApps": "All apps"
+  },
+  "studioTabs": {
+    "moved": "{label} moved to position {position} of {total}",
+    "inPane": "{label}, pane {index} of {count}",
+    "openSomethingFirst": "Open something here first.",
+    "paneActions": "Pane actions",
+    "closePaneAndTabs": "Close this pane and its {count} tabs",
+    "openApps": "Open apps",
+    "alreadyOnlyTab": "It is already the only tab here.",
+    "closeOthers": "Close the others",
+    "closeToRight": "Close everything to the right",
+    "nothingElseOpen": "Nothing else is open here.",
+    "nothingToRight": "Nothing is to the right.",
+    "tabTitle": "{label} — {description}",
+    "closeTab": "Close {label}",
+    "openStudioApp": "Open a Studio app",
+    "paneMenuTitle": "Split, maximize or close this pane",
+    "countActive": "{count, plural, one {# file in progress} other {# files in progress}}",
+    "countAttention": "{count, plural, one {# file, needs attention} other {# files, some need attention}}"
+  },
+  "splitView": {
+    "tooNarrow": "Too narrow to split side by side.",
+    "tooShort": "Too short to split top and bottom.",
+    "resizeRow": "Resize the panes either side",
+    "resizeColumn": "Resize the panes above and below",
+    "dividerTitle": "Drag to resize · double-click to even out",
+    "zones": {
+      "center": "Open here",
+      "left": "Split left",
+      "right": "Split right",
+      "up": "Split up",
+      "down": "Split down"
+    },
+    "rootZones": {
+      "left": "Full height, on the left",
+      "right": "Full height, on the right",
+      "up": "Full width, along the top",
+      "down": "Full width, along the bottom"
+    }
+  },
+  "studioPanes": {
+    "comingSoonTitle": "{title} (coming soon)",
+    "comingSoon": "Coming soon",
+    "chat": {
+      "title": "Chat",
+      "body": "Ask grounded questions over your indexed sources. Pick sources on the left to scope your questions, or ask globally across the workspace.",
+      "hint": "Select <strong>Chat</strong> in the sidebar to return to your conversation, or close Studio."
+    },
+    "knowledge": {
+      "title": "Your corpus",
+      "body": "Everything the workspace can cite — uploads, pasted notes, and connected tools — with filters, collections, and indexing status.",
+      "open": "Open Knowledge"
+    },
+    "predictive": {
+      "title": "What's missing from this document",
+      "body": "Runs across a document and flags cross-references pointing to missing attachments, numeric inconsistencies, and missing schedules. Pick a document from the source rail, then run the analyzer.",
+      "crossReferences": "Cross-references Schedules, Exhibits, Appendices against the actual corpus",
+      "domainAware": "Domain-aware: Contract / Financial / Compliance / Research / HR / Educational",
+      "findingsLink": "Findings link back to the source span that triggered them",
+      "back": "Back to workspace"
+    },
+    "workflows": {
+      "title": "Workflows (coming soon)",
+      "body": "Chain source-aware steps: ''Every Friday, summarize new customer interviews, draft a Slack update, queue it for review.'' Currently in design.",
+      "scheduled": "Scheduled or event-triggered",
+      "composable": "Composable actions: query, draft, rewrite, export, notify",
+      "dryRun": "Dry-run preview before first run"
+    },
+    "mindmap": {
+      "linkTitle": "Mindmap",
+      "linkBody": "Diagrams, mindmaps and flowcharts live in your library beside every other source. Start one from Add a source → Create.",
+      "title": "Sources you draw",
+      "body": "Diagrams, mindmaps and flowcharts live in your library beside every other source. Open one from the rail to preview it, edit it in place, and make it citable when it is ready."
+    },
+    "unknown": "{label} is not available in this version of the app."
+  },
+  "confirmDialog": {
+    "working": "Working…"
+  },
+  "mindmapHost": {
+    "couldNotOpen": "We couldn't open that mindmap."
+  },
+  "documentViewerHeader": {
+    "backToLibrary": "Back to Library",
+    "library": "Library",
+    "hideDetails": "Hide versions and notes",
+    "showDetails": "Show versions and notes"
+  },
+  "documentViewer": {
+    "versionActions": "Actions for version {number}",
+    "addedBy": "Added by {name}",
+    "addedByWithTime": "Added by {name} · {time}",
+    "you": "you",
+    "failedStatus": "Failed ({status})",
+    "loadPreviewFailed": "Failed to load preview",
+    "openMindmapFailed": "Couldn't open this mindmap",
+    "loadVersionsFailed": "Failed to load versions",
+    "publishFailed": "Couldn't publish this mindmap",
+    "publishedNew": "Added to your sources — it will finish indexing shortly",
+    "publishedUpdate": "Citable copy updated — it will finish indexing shortly",
+    "upload": {
+      "typeMismatch": "File type must match the current version ({expected}). Got {actual}.",
+      "unknownType": "unknown",
+      "signIn": "Please sign in and try again.",
+      "storageFailed": "Storage upload failed (HTTP {status}).",
+      "invalidStorage": "Invalid storage response.",
+      "noUrl": "Storage did not return a URL.",
+      "versionFailed": "Version upload failed",
+      "timedOut": "Upload timed out.",
+      "unavailable": "Storage service unavailable."
+    },
+    "restoreFailed": "Failed to restore version",
+    "saveFailed": "Save failed",
+    "unsaved": "Unsaved",
+    "publishing": "Publishing…",
+    "updateCitable": "Update citable copy",
+    "makeCitable": "Make citable",
+    "staleHint": "The citable copy is older than this map",
+    "indexHint": "Index this map so answers can cite it",
+    "askAbout": "Ask about this",
+    "shareHint": "Share · {audience}",
+    "deleteDocument": "Delete document",
+    "previewingBanner": "Previewing v{number}. Search still uses the current version.",
+    "mindmapError": "Couldn't open this mindmap: {error}",
+    "processing": "This source is still processing — content will appear once indexing finishes.",
+    "previewError": "Couldn't load preview: {error}",
+    "openStandalone": "Open standalone viewer",
+    "loadingPreview": "Loading preview…",
+    "versionsTab": "Versions",
+    "notesTab": "Notes",
+    "versionHistory": "Version history",
+    "uploadedRevisions": "Uploaded revisions of this source.",
+    "uploadingPercent": "Uploading {percent}%…",
+    "indexingVersion": "Indexing new version…",
+    "uploadNewVersion": "Upload new version",
+    "mustMatch": "Must match: {mime}",
+    "noVersions": "No version history available for this source.",
+    "versionLabel": "v{number}",
+    "versionCurrent": "v{number} (current)",
+    "previewingShort": "Previewing v{number}.",
+    "restoring": "Restoring…",
+    "restoreThis": "Restore this version",
+    "details": "Details",
+    "metaAdded": "Added",
+    "metaSize": "Size",
+    "metaFolder": "Folder",
+    "unfiled": "Unfiled",
+    "metaIndexed": "Indexed",
+    "readyToQuery": "✓ ready to query",
+    "metaEdited": "Edited",
+    "metaCitable": "Citable",
+    "citableYes": "✓ answers can cite it",
+    "citableStale": "changes not yet citable",
+    "citableNo": "not yet",
+    "mindmapHistoryHint": "Snapshots saved from the editor. Restore one from its History panel.",
+    "noSnapshots": "No snapshots yet — ⌘S in the editor writes one.",
+    "revisionLabel": "r{number}",
+    "revisionLatest": "r{number} (latest)",
+    "confirmRestoreTitle": "Restore this version?",
+    "confirmTrashTitle": "Move “{title}” to the trash?",
+    "confirmDeleteTitle": "Delete “{title}”?",
+    "confirmRestoreBody": "It becomes the current version, and answers cite it from now on. The other versions stay in the history.",
+    "confirmTrashBody": "You can undo it right after.",
+    "confirmDeleteBody": "This cannot be undone.",
+    "moveToTrash": "Move to trash"
+  },
+  "documentMenu": {
+    "askMindmap": "Ask about this mindmap",
+    "askDocument": "Ask about this document",
+    "makeCitableFirst": "Make this map citable first.",
+    "rename": "Rename…",
+    "downloadOriginal": "Download original",
+    "originalLoading": "The original is still loading.",
+    "copyLink": "Copy link",
+    "revisionHistory": "Revision history",
+    "versionHistory": "Version history",
+    "notes": "Notes",
+    "share": "Share…",
+    "moveToTrash": "Move to trash…",
+    "delete": "Delete…",
+    "previewVersion": "Preview this version",
+    "isCurrent": "This is the current version.",
+    "downloadVersion": "Download this version",
+    "restoreVersion": "Restore this version…",
+    "restoreRunning": "A restore is already running."
+  },
+  "shell": {
+    "loading": "Opening your workspace…",
+    "sources": "Sources",
+    "splitEmptyPane": "This pane is empty: open something in it first.",
+    "chatGone": "That chat is no longer available",
+    "chatReopenFailed": "Couldn't reopen that chat",
+    "chatRenameFailed": "Couldn't rename that chat",
+    "chatDeleteFailed": "Couldn't delete that chat",
+    "chatContinued": "Continued in a new chat",
+    "chatContinuedDescription": "This copy is yours and private. The original is unchanged.",
+    "chatContinueFailed": "Couldn't continue that chat",
+    "chatNoLongerShared": "That chat is no longer shared with you",
+    "runDeleted": "Deleted",
+    "runDeleteFailed": "Couldn't delete that",
+    "continuationMessage": "Continuing **{title}** — the imported transcript is pinned as a source and I have the tail of that conversation in context. Pick up wherever you left off.",
+    "continuationFailed": "Couldn't load the imported session to continue it",
+    "queuedEditGone": "That queued message was already sent or removed. Your edits remain in the composer.",
+    "forkSaved": "Fork saved as a new chat",
+    "forkSavedDescription": "The turns up to here come along; the original chat is untouched.",
+    "recoveryRetryFailed": "Couldn't save prompt recovery. Free browser storage before retrying; the original conversation is intact.",
+    "retryFailed": "Couldn't retry this response",
+    "recoveryEditFailed": "Couldn't save prompt recovery. Free browser storage before editing; the original conversation is intact.",
+    "editedSaved": "The edited question is saved with prompts in its original conversation.",
+    "editFailed": "Couldn't edit this message",
+    "noteDefaultTitle": "Chat answer",
+    "noteSaved": "Saved to your notebook",
+    "noteSaveFailed": "Couldn't save that note",
+    "movedToTrash": "Moved to trash",
+    "restoreMindmapFailed": "Couldn't restore that mindmap",
+    "deleteSourceFailed": "Failed to delete source",
+    "clipboardRefused": "Clipboard access was refused — paste with ⌘V instead",
+    "clipboardEmpty": "The clipboard is empty",
+    "retrying": "Retrying",
+    "retryProcessingFailed": "Couldn't retry processing",
+    "movedTo": "Moved to {folder}",
+    "movedToTop": "Moved {name} to the top level",
+    "moveFailed": "Couldn't move that",
+    "requestFailed": "Request failed ({status})",
+    "requestFailedGeneric": "Request failed",
+    "folderCreated": "Created “{name}”",
+    "folderCreatedDescription": "This workspace already has a folder called “{name}”.",
+    "deniedApp": "{app} isn't part of your role",
+    "connectorConnected": "{name} connected",
+    "connectorNoChannels": "{name} connected, but the sign-in gave no permission to post. Check the scopes under Accounts.",
+    "connectorPartial": "{name} connected, but its Pages could not be read. Use Refresh Pages under Accounts.",
+    "connectorCancelled": "{name} connection was cancelled",
+    "connectorFailed": "{name} connection failed — try again",
+    "agentWillAnswer": "{name} will answer your next message",
+    "thisChat": "This chat",
+    "sourceGone": "This source is no longer in the library.",
+    "appUnavailable": "This app is not available.",
+    "longSelection": "Long selection: the first {count, number} characters were kept.",
+    "thisConversation": "This conversation",
+    "launcher": {
+      "titleSplit": "Open something here",
+      "titleEmpty": "Your workspace, ready when you are",
+      "hintSplit": "Pick an app, or drag a tab or a source from the sidebar here.",
+      "hintEmpty": "Open an app to get started. Later, drag a tab or a source to any edge to split, or ⌘-click one to open it beside."
+    },
+    "actions": {
+      "newChat": "New chat",
+      "addKnowledge": "Add knowledge",
+      "pasteSource": "Paste to create a source",
+      "palette": "Command palette",
+      "focusNext": "Focus the next pane",
+      "hideSidebar": "Hide sidebar",
+      "showSidebar": "Show sidebar",
+      "askAgain": "Ask again",
+      "waitForAnswer": "Wait for the current answer.",
+      "branch": "Branch a new chat from here",
+      "saveNote": "Save answer as a note",
+      "saveSource": "Save answer as a source",
+      "saveTranscript": "Save transcript as a source",
+      "nothingToSave": "Nothing to save yet.",
+      "askAboutThis": "Ask about this",
+      "explain": "Explain this",
+      "summarise": "Summarise this",
+      "copyCited": "Copy with citation",
+      "copiedCited": "Copied with citation",
+      "addNote": "Add a note with this"
+    },
+    "questions": {
+      "explain": "Explain this passage.",
+      "summarise": "Summarise this passage."
+    },
+    "deleteDialog": {
+      "mindmapTitle": "Move this mindmap to the trash?",
+      "mindmapBody": "“{title}” will leave the library. You can undo this right after.",
+      "sourceTitle": "Delete this source?",
+      "sourceBody": "“{title}” will be removed from this workspace. This cannot be undone.",
+      "manyTitle": "Delete {count} sources?",
+      "manyBodyDocuments": "{documents, plural, one {# document will be removed from this workspace — this cannot be undone} other {# documents will be removed from this workspace — this cannot be undone}}.",
+      "manyBodyMindmaps": "{mindmaps, plural, one {# mindmap goes to the trash, where you can undo} other {# mindmaps go to the trash, where you can undo}}.",
+      "manyBodyBoth": "{documents, plural, one {# document will be removed from this workspace — this cannot be undone} other {# documents will be removed from this workspace — this cannot be undone}}; {mindmaps, plural, one {# mindmap goes to the trash, where you can undo} other {# mindmaps go to the trash, where you can undo}}."
+    }
+  },
+  "aiChat": {
+    "requestFailed": "Request failed with status {status}",
+    "noResponse": "Failed to get AI response",
+    "stopped": "Response stopped",
+    "sendFailed": "Failed to send query"
+  },
+  "chatRoutes": {
+    "noImages": "The model serving the vision route does not accept images.",
+    "alwaysReasons": "The model serving the reasoning route always reasons; there is nothing to toggle."
+  },
+  "server": {
+    "history": {
+      "trendSearch": "Trend search",
+      "prospectSearch": "Prospect search",
+      "clientProspector": "Client prospector",
+      "repository": "Repository",
+      "repoExplainer": "Repo explainer",
+      "distributionRun": "Distribution run",
+      "partnerDiscovery": "Partner discovery",
+      "emailCampaign": "Email campaign",
+      "weekOf": "Week of {date}",
+      "agendaWeekOf": "Agenda for the week of {date}",
+      "vantage": "Vantage",
+      "proposals": "Proposals",
+      "funderSearch": "Funder search",
+      "requirements": "Requirements",
+      "drafts": "Drafts",
+      "rewrite": "Rewrite",
+      "review": "Review"
+    },
+    "errors": {
+      "loadHistoryFailed": "Failed to load history",
+      "unknownHistoryKind": "Unknown history kind",
+      "deleteChatViaSessions": "Delete a chat through the sessions API",
+      "missingId": "Missing id",
+      "deleteItemFailed": "Failed to delete this item",
+      "loadSessionsFailed": "Failed to load sessions",
+      "saveChatFailed": "Failed to save this chat",
+      "loadChatFailed": "Failed to load this chat",
+      "updateChatFailed": "Failed to update this chat",
+      "deleteChatFailed": "Failed to delete this chat",
+      "reorderPinsFailed": "Failed to reorder pinned chats",
+      "forkFailed": "Failed to continue this chat",
+      "saveMessageFailed": "Failed to save this message",
+      "chatChangedElsewhere": "This chat changed in another tab. Reopen it before editing.",
+      "rewindFailed": "Failed to rewind this chat",
+      "loadQueueFailed": "Failed to load queued messages",
+      "updateQueueFailed": "Failed to update queued messages"
+    }
+  }
+}

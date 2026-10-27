@@ -129,27 +129,36 @@ export async function workspaceName(companyId: string): Promise<string | null> {
 }
 
 /** Plain-language lines for the consent screen, one per thing granted. */
+/** What a connection may do, one line each, in the order the consent screen lists them. */
+export type ScopeLine = "read" | "write" | "identity" | "offline";
+
+export function scopeLines(
+    scopes: string[],
+    access: { canRead: boolean; canSave: boolean }
+): ScopeLine[] {
+    const lines: ScopeLine[] = [];
+    // A scope the person's role cannot use is never offered by the server
+    // (tools/list filters by permission), so it is not promised here either.
+    if (scopes.includes(MCP_SCOPE_READ) && access.canRead) lines.push("read");
+    if (scopes.includes(MCP_SCOPE_WRITE) && access.canSave) lines.push("write");
+    if (scopes.some(s => s === "openid" || s === "profile" || s === "email")) {
+        lines.push("identity");
+    }
+    if (scopes.includes("offline_access")) lines.push("offline");
+    return lines;
+}
+
+/** The lines in English; the consent screen words them with `auth.oauth.scopes`. */
 export function describeScopes(
     scopes: string[],
     workspace: string,
     access: { canRead: boolean; canSave: boolean }
 ): string[] {
-    const lines: string[] = [];
-    // A scope the person's role cannot use is never offered by the server
-    // (tools/list filters by permission), so it is not promised here either.
-    if (scopes.includes(MCP_SCOPE_READ) && access.canRead) {
-        lines.push(`Search and read the files you can open in ${workspace}`);
-    }
-    if (scopes.includes(MCP_SCOPE_WRITE) && access.canSave) {
-        lines.push(
-            `Save conversations to ${workspace}, visible only to you, with a follow-up note LaunchStack writes`
-        );
-    }
-    if (scopes.some(s => s === "openid" || s === "profile" || s === "email")) {
-        lines.push("See your name and email address");
-    }
-    if (scopes.includes("offline_access")) {
-        lines.push("Stay connected until you disconnect it in Settings");
-    }
-    return lines;
+    const english: Record<ScopeLine, string> = {
+        read: `Search and read the files you can open in ${workspace}`,
+        write: `Save conversations to ${workspace}, visible only to you, with a follow-up note LaunchStack writes`,
+        identity: "See your name and email address",
+        offline: "Stay connected until you disconnect it in Settings",
+    };
+    return scopeLines(scopes, access).map(line => english[line]);
 }

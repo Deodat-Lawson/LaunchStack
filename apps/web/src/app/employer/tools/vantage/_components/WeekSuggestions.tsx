@@ -1,6 +1,7 @@
 "use client";
 
 import { Check, Clock, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { SectionHeading } from "~/components/tools/PageHeader";
 import { Button } from "~/components/ui/button";
@@ -18,7 +19,7 @@ import {
     SET_ASIDE_DAYS,
     type Outcome,
 } from "../_lib/actions";
-import { dueWords, fmtDate, plural, weekRange } from "../_lib/format";
+import { useVantageFormat } from "../_lib/format";
 import type { SuggestionGroup, WeekSuggestion } from "../_lib/suggestions";
 import { SuggestionCard, SuggestionNudge } from "./Suggestion";
 import { TopicDetails, TopicSuggestion } from "./TopicCard";
@@ -53,20 +54,36 @@ export function WeekSuggestions({
     onOpenTopic?: (topic: TopicDto) => void;
     className?: string;
 }) {
+    const t = useTranslations("vantage.weekSuggestions");
+    const fmt = useVantageFormat();
     const shown = groups
         .map(g => ({ ...g, items: g.items.filter(s => !gone.has(s.id)) }))
         .filter(g => g.items.length > 0);
+    const aside = (g: SuggestionGroup) => {
+        switch (g.id) {
+            case "meeting": {
+                const n = g.items.filter(s => s.kind === "topic").length;
+                return n > 0 ? t("aside.topics", { count: n }) : t("aside.ready");
+            }
+            case "follow-through":
+                return t("aside.toSettle", { count: g.items.length });
+            case "record":
+                return t("aside.record");
+        }
+    };
     return (
         <div className={cn("flex flex-col gap-6", className)}>
             {shown.map(g => (
-                <section key={g.id} aria-label={GROUP_TITLE[g.id]}>
+                <section key={g.id} aria-label={t(`group.${GROUP_KEY[g.id]}`)}>
                     <SectionHeading
                         title={
                             g.id === "meeting" && meetingWeek
-                                ? `For the meeting · ${weekRange(meetingWeek.start, meetingWeek.end)}`
-                                : GROUP_TITLE[g.id]
+                                ? t("meetingWithWeek", {
+                                      range: fmt.weekRange(meetingWeek.start, meetingWeek.end),
+                                  })
+                                : t(`group.${GROUP_KEY[g.id]}`)
                         }
-                        aside={GROUP_ASIDE[g.id](g.items)}
+                        aside={aside(g)}
                     />
                     <div className="flex flex-col gap-2.5">
                         {g.items.map(s => (
@@ -87,19 +104,10 @@ export function WeekSuggestions({
     );
 }
 
-const GROUP_TITLE: Record<SuggestionGroup["id"], string> = {
-    meeting: "For the meeting",
-    "follow-through": "Follow through",
-    record: "Keep the record current",
-};
-
-const GROUP_ASIDE: Record<SuggestionGroup["id"], (items: WeekSuggestion[]) => string> = {
-    meeting: items => {
-        const n = items.filter(s => s.kind === "topic").length;
-        return n > 0 ? `${plural(n, "topic")} to review` : "ready to go";
-    },
-    "follow-through": items => `${items.length} to settle`,
-    record: () => "so the next draft has more to go on",
+const GROUP_KEY: Record<SuggestionGroup["id"], "meeting" | "followThrough" | "record"> = {
+    meeting: "meeting",
+    "follow-through": "followThrough",
+    record: "record",
 };
 
 function Suggestion({
@@ -117,51 +125,43 @@ function Suggestion({
     onRecordNumbers?: () => void;
     onOpenTopic?: (topic: TopicDto) => void;
 }) {
+    const t = useTranslations("vantage.weekSuggestions");
+    const fmt = useVantageFormat();
     switch (s.kind) {
         case "topic":
             return (
                 <TopicSuggestion
                     topic={s.topic}
-                    kicker="Suggested for the agenda"
-                    onKeep={() => void act(s.id, () => keepTopic(s.topic))}
-                    onIgnore={() => void act(s.id, () => ignoreTopic(s.topic))}
+                    kicker={t("suggestedForAgenda")}
+                    onKeep={() => void act(s.id, () => keepTopic(fmt, s.topic))}
+                    onIgnore={() => void act(s.id, () => ignoreTopic(fmt, s.topic))}
                     onEdit={onOpenTopic ? () => onOpenTopic(s.topic) : undefined}
                 />
             );
         case "mark-ready":
             return (
                 <SuggestionNudge
-                    label="Mark the agenda ready"
-                    title={
-                        <>
-                            Every suggestion is answered and{" "}
-                            {plural(s.kept, "topic is", "topics are")} on the agenda. Mark it ready
-                            for the meeting?
-                        </>
-                    }
+                    label={t("markReadyLabel")}
+                    title={t("markReadyTitle", { count: s.kept })}
                     actions={
                         <>
                             <Button
                                 size="sm"
-                                onClick={() => void act(s.id, () => markReady(s.agenda))}
+                                onClick={() => void act(s.id, () => markReady(fmt, s.agenda))}
                             >
                                 <Check aria-hidden="true" />
-                                Mark ready
+                                {t("markReady")}
                             </Button>
                             <Button
                                 size="sm"
                                 variant="ghost"
                                 onClick={() =>
                                     void act(s.id, () =>
-                                        setAside(
-                                            s.id,
-                                            SET_ASIDE_DAYS.snooze,
-                                            "Hidden until tomorrow"
-                                        )
+                                        setAside(s.id, SET_ASIDE_DAYS.snooze, t("hiddenTomorrow"))
                                     )
                                 }
                             >
-                                Not yet
+                                {t("notYet")}
                             </Button>
                         </>
                     }
@@ -185,32 +185,31 @@ function Suggestion({
             const names = s.metrics.map(m => m.name);
             const listed =
                 names.length <= 2
-                    ? names.join(" and ")
-                    : `${names.slice(0, 2).join(", ")} and ${names.length - 2} more`;
+                    ? fmt.list(names)
+                    : t("namesMore", {
+                          names: names.slice(0, 2).join(fmt.t("format.list.separator")),
+                          count: names.length - 2,
+                      });
             return (
                 <SuggestionNudge
-                    label="Record this week's numbers"
-                    title={<>No numbers yet this week for {listed}.</>}
+                    label={t("recordNumbersLabel")}
+                    title={t("noNumbers", { names: listed })}
                     actions={
                         <>
                             <Button size="sm" onClick={() => onRecordNumbers?.()}>
-                                Enter numbers
+                                {t("enterNumbers")}
                             </Button>
                             <Button
                                 size="sm"
                                 variant="ghost"
                                 onClick={() =>
                                     void act(s.id, () =>
-                                        setAside(
-                                            s.id,
-                                            SET_ASIDE_DAYS.nudge,
-                                            "Hidden for the rest of the week"
-                                        )
+                                        setAside(s.id, SET_ASIDE_DAYS.nudge, t("hiddenWeek"))
                                     )
                                 }
                             >
                                 <X aria-hidden="true" />
-                                Ignore
+                                {t("ignore")}
                             </Button>
                         </>
                     }
@@ -220,40 +219,28 @@ function Suggestion({
         case "log-evidence":
             return (
                 <SuggestionNudge
-                    label="Log a conversation"
+                    label={t("logConversation")}
                     title={
-                        s.days === null ? (
-                            <>
-                                Nothing is logged yet. A conversation or a link gives the draft its
-                                first source.
-                            </>
-                        ) : (
-                            <>
-                                Nothing logged for {plural(s.days, "day")}. Two minutes now makes
-                                the next draft worth reading.
-                            </>
-                        )
+                        s.days === null
+                            ? t("nothingLogged")
+                            : t("nothingLoggedFor", { count: s.days })
                     }
                     actions={
                         <>
                             <Button size="sm" onClick={() => onLogEvidence?.()}>
-                                Log a conversation
+                                {t("logConversation")}
                             </Button>
                             <Button
                                 size="sm"
                                 variant="ghost"
                                 onClick={() =>
                                     void act(s.id, () =>
-                                        setAside(
-                                            s.id,
-                                            SET_ASIDE_DAYS.nudge,
-                                            "Hidden for the rest of the week"
-                                        )
+                                        setAside(s.id, SET_ASIDE_DAYS.nudge, t("hiddenWeek"))
                                     )
                                 }
                             >
                                 <X aria-hidden="true" />
-                                Ignore
+                                {t("ignore")}
                             </Button>
                         </>
                     }
@@ -274,18 +261,23 @@ export function CheckInSuggestion({
     late: boolean;
     act: (id: string, work: () => Promise<Outcome>) => Promise<void>;
 }) {
+    const t = useTranslations("vantage.weekSuggestions");
+    const fmt = useVantageFormat();
     return (
         <SuggestionCard
-            label={`Check in: ${commitment.title}`}
-            kicker="Check in"
-            meta={<span className={cn(late && "text-warn")}>{dueWords(commitment.dueOn)}</span>}
-            title={<>Did &ldquo;{commitment.title}&rdquo; happen?</>}
+            label={t("checkInLabel", { title: commitment.title })}
+            kicker={t("checkIn")}
+            meta={<span className={cn(late && "text-warn-ink")}>{fmt.due(commitment.dueOn)}</span>}
+            title={t("didItHappen", { title: commitment.title })}
             reason={
                 <>
-                    {commitment.owner}
-                    {commitment.topicTitle ? ` · from “${commitment.topicTitle}”` : ""}
+                    {commitment.topicTitle
+                        ? t("ownerFrom", { owner: commitment.owner, topic: commitment.topicTitle })
+                        : commitment.owner}
                     {commitment.test && (
-                        <span className="text-ink-3 block">Settled by: {commitment.test}</span>
+                        <span className="text-ink-3 block">
+                            {t("settledBy", { test: commitment.test })}
+                        </span>
                     )}
                 </>
             }
@@ -293,29 +285,33 @@ export function CheckInSuggestion({
                 <>
                     <Button
                         size="sm"
-                        onClick={() => void act(id, () => resolveCommitment(commitment, "done"))}
+                        onClick={() =>
+                            void act(id, () => resolveCommitment(fmt, commitment, "done"))
+                        }
                     >
                         <Check aria-hidden="true" />
-                        Done
+                        {t("done")}
                     </Button>
                     <Button
                         size="sm"
                         variant="outline"
-                        onClick={() => void act(id, () => resolveCommitment(commitment, "missed"))}
+                        onClick={() =>
+                            void act(id, () => resolveCommitment(fmt, commitment, "missed"))
+                        }
                     >
-                        Missed
+                        {t("missed")}
                     </Button>
                     <Button
                         size="sm"
                         variant="ghost"
                         onClick={() =>
                             void act(id, () =>
-                                setAside(id, SET_ASIDE_DAYS.snooze, "Asking again tomorrow")
+                                setAside(id, SET_ASIDE_DAYS.snooze, t("askingTomorrow"))
                             )
                         }
                     >
                         <Clock aria-hidden="true" />
-                        Not yet
+                        {t("notYet")}
                     </Button>
                 </>
             }
@@ -337,26 +333,32 @@ export function CommitSuggestion({
     act: (id: string, work: () => Promise<Outcome>) => Promise<void>;
     onDecide: (topic: TopicDto) => void;
 }) {
+    const t = useTranslations("vantage.weekSuggestions");
+    const tt = useTranslations("vantage.topicCard");
+    const fmt = useVantageFormat();
     const oneClick = canCommitInOneClick(topic);
+    const owner = topic.proposedOwner ?? tt("noOwner");
     return (
         <SuggestionCard
-            label={`Commit: ${topic.proposedNextStep}`}
-            kicker="Suggested next step"
-            meta={`From the meeting · week of ${fmtDate(weekStart)}`}
+            label={t("commitLabel", { step: topic.proposedNextStep })}
+            kicker={tt("suggestedNextStep")}
+            meta={t("fromMeeting", { date: fmt.date(weekStart) })}
             title={topic.proposedNextStep}
             reason={
-                <>
-                    {topic.proposedOwner ?? "No owner proposed"}
-                    {topic.proposedDue ? ` · by ${fmtDate(topic.proposedDue)}` : ""} · on &ldquo;
-                    {topic.title}&rdquo;
-                </>
+                topic.proposedDue
+                    ? t("commitReasonDue", {
+                          owner,
+                          date: fmt.date(topic.proposedDue),
+                          title: topic.title,
+                      })
+                    : t("commitReason", { owner, title: topic.title })
             }
             details={
                 <div className="flex flex-col gap-3">
                     <TopicDetails topic={topic} />
                     <div>
                         <Button size="sm" variant="outline" onClick={() => onDecide(topic)}>
-                            Decide something else…
+                            {tt("decideElse")}
                         </Button>
                     </div>
                 </div>
@@ -366,27 +368,25 @@ export function CommitSuggestion({
                     <Button
                         size="sm"
                         onClick={() =>
-                            oneClick ? void act(id, () => commitToNextStep(topic)) : onDecide(topic)
+                            oneClick
+                                ? void act(id, () => commitToNextStep(fmt, topic))
+                                : onDecide(topic)
                         }
                     >
                         <Check aria-hidden="true" />
-                        {oneClick ? "Commit" : "Commit…"}
+                        {oneClick ? tt("commit") : tt("commitAsk")}
                     </Button>
                     <Button
                         size="sm"
                         variant="ghost"
                         onClick={() =>
                             void act(id, () =>
-                                setAside(
-                                    id,
-                                    SET_ASIDE_DAYS.nextStep,
-                                    "Ignored — it stays on the agenda"
-                                )
+                                setAside(id, SET_ASIDE_DAYS.nextStep, t("ignoredStays"))
                             )
                         }
                     >
                         <X aria-hidden="true" />
-                        Ignore
+                        {t("ignore")}
                     </Button>
                 </>
             }

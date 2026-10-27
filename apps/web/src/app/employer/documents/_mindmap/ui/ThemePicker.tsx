@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslations } from "next-intl";
 import { Check, MoonStar, Sun } from "lucide-react";
 
 import { cn } from "~/lib/utils";
@@ -14,6 +15,7 @@ import {
     type DocTheme,
     type ThemeMode,
 } from "../model/palette";
+import { themeName } from "./EditorContext";
 import { useAppThemeMode } from "./useAppThemeMode";
 
 /**
@@ -37,9 +39,10 @@ export interface ThemePickerProps {
 }
 
 export function ThemePicker({ activeId, onPick }: ThemePickerProps) {
+    const t = useTranslations("mindmap.themePicker");
     const groups: { mode: ThemeMode; label: string; themes: DocTheme[] }[] = [
-        { mode: "light", label: "Light", themes: THEMES.filter(t => t.mode === "light") },
-        { mode: "dark", label: "Dark", themes: THEMES.filter(t => t.mode === "dark") },
+        { mode: "light", label: t("light"), themes: THEMES.filter(th => th.mode === "light") },
+        { mode: "dark", label: t("dark"), themes: THEMES.filter(th => th.mode === "dark") },
     ];
 
     return (
@@ -75,6 +78,8 @@ function ThemeTile({
     active: boolean;
     onPick: () => void;
 }) {
+    const t = useTranslations("mindmap");
+    const name = themeName(t, theme);
     // The tile is the theme in miniature: its solid centre, then the first
     // two branch hues as the tinted boxes they become, on its own paper.
     const root = swatchFor(theme.root, theme.mode);
@@ -85,7 +90,11 @@ function ThemeTile({
             type="button"
             onClick={onPick}
             aria-pressed={active}
-            title={`${theme.name} — ${theme.mode} board`}
+            title={
+                theme.mode === "dark"
+                    ? t("themePicker.darkBoard", { theme: name })
+                    : t("themePicker.lightBoard", { theme: name })
+            }
             className={cn(
                 "group flex flex-col gap-1 rounded-md border p-1 text-left transition-colors",
                 active
@@ -123,7 +132,7 @@ function ThemeTile({
                         active ? "text-brand-ink font-medium" : "text-ink-2"
                     )}
                 >
-                    {theme.name}
+                    {name}
                 </span>
                 {active && <Check className="text-brand ml-auto size-3 shrink-0" />}
             </span>
@@ -140,6 +149,7 @@ function ThemeTile({
  * knowing that Midnight is the dark twin of Launchstack.
  */
 function MatchAppThemeHint({ activeId, onPick }: ThemePickerProps) {
+    const t = useTranslations("mindmap");
     const appMode = useAppThemeMode();
     if (!activeId) return null;
     const boardMode = themeMode(activeId);
@@ -158,8 +168,13 @@ function MatchAppThemeHint({ activeId, onPick }: ThemePickerProps) {
         >
             <Icon className="text-ink-3 size-3.5 shrink-0" />
             <span>
-                This board is {boardMode}. Switch it to{" "}
-                <span className="text-ink font-medium">{targetTheme.name}</span> to match the app.
+                {t.rich(
+                    boardMode === "dark" ? "themePicker.boardIsDark" : "themePicker.boardIsLight",
+                    {
+                        name: themeName(t, targetTheme),
+                        theme: chunks => <span className="text-ink font-medium">{chunks}</span>,
+                    }
+                )}
             </span>
         </button>
     );

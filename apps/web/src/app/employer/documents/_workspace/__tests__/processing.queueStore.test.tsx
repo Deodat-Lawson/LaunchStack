@@ -150,7 +150,10 @@ describe("useProcessingQueue", () => {
             jest.advanceTimersByTime(2_000);
         });
         await settle();
-        expect(result.current.error).toBe("The queue is unavailable.");
+        expect(result.current.error).toEqual({
+            kind: "server",
+            message: "The queue is unavailable.",
+        });
         expect(result.current.data?.summary.running).toBe(1);
         unmount();
     });

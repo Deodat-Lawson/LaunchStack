@@ -11,6 +11,7 @@
  */
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
@@ -22,6 +23,8 @@ import {
     formatKeys,
     keysFromEvent,
     resolveBindings,
+    shortcutDescription,
+    shortcutLabel,
     type ShortcutBindings,
 } from "~/lib/shortcuts/commands";
 import { useSetting } from "~/lib/settings/useSettings";
@@ -31,6 +34,8 @@ import { usePublishedActions, type SettingsSectionProps } from "./contract";
 import { StatusNote } from "./ui";
 
 export function ShortcutsSection({ onActions }: SettingsSectionProps) {
+    const t = useTranslations("settings.shortcuts");
+    const ts = useTranslations("shortcuts");
     const setting = useSetting<ShortcutBindings>("shortcuts.bindings");
     const storedOverrides = setting.value;
     const overrides = useMemo<ShortcutBindings>(() => storedOverrides ?? {}, [storedOverrides]);
@@ -49,13 +54,13 @@ export function ShortcutsSection({ onActions }: SettingsSectionProps) {
     usePublishedActions(
         onActions,
         {
-            primaryLabel: "Reset all to defaults",
-            primaryBusyLabel: "Resetting…",
+            primaryLabel: t("resetAll"),
+            primaryBusyLabel: t("resetting"),
             onPrimary: () => setting.reset("member"),
             busy: setting.saving,
             disabled: customised === 0,
         },
-        [customised, setting.saving, setting.reset]
+        [customised, setting.saving, setting.reset, t]
     );
 
     // While recording, the next chord becomes the binding. Escape cancels;
@@ -91,24 +96,17 @@ export function ShortcutsSection({ onActions }: SettingsSectionProps) {
         <>
             {setting.saveError && <StatusNote tone="danger">{setting.saveError}</StatusNote>}
             {conflicts.size > 0 && (
-                <StatusNote tone="warn">
-                    {conflicts.size === 1
-                        ? "One binding is shared"
-                        : `${conflicts.size} bindings are shared`}{" "}
-                    by more than one command. The command lower in the list wins.
-                </StatusNote>
+                <StatusNote tone="warn">{t("conflicts", { count: conflicts.size })}</StatusNote>
             )}
 
-            <Section
-                title="Commands"
-                description="Click a shortcut to change it, then press the new keys. Backspace removes it. ⌘ on a Mac is Ctrl elsewhere."
-            >
+            <Section title={t("commands.title")} description={t("commands.description")}>
                 <Card padding={0}>
                     {SHORTCUT_COMMANDS.map((command, index) => {
                         const keys = bindings.get(command.id) ?? null;
                         const isRecording = recording === command.id;
                         const isCustom = command.id in overrides;
                         const conflict = keys ? conflicts.get(keys) : undefined;
+                        const label = shortcutLabel(ts, command);
                         return (
                             <div
                                 key={command.id}
@@ -119,34 +117,39 @@ export function ShortcutsSection({ onActions }: SettingsSectionProps) {
                             >
                                 <div className="min-w-0 flex-1">
                                     <div className="text-ink text-[13px] font-semibold">
-                                        {command.label}
+                                        {label}
                                     </div>
                                     <div className="text-ink-3 text-[12px]">
-                                        {command.description}
+                                        {shortcutDescription(ts, command)}
                                     </div>
                                     {conflict && conflict.length > 1 && (
                                         <div className="text-ink-2 mt-0.5 text-[11.5px]">
-                                            Shared with{" "}
-                                            {conflict
-                                                .filter(id => id !== command.id)
-                                                .map(
-                                                    id =>
-                                                        SHORTCUT_COMMANDS.find(c => c.id === id)
-                                                            ?.label ?? id
-                                                )
-                                                .join(", ")}
-                                            .
+                                            {t("sharedWith", {
+                                                list: conflict
+                                                    .filter(id => id !== command.id)
+                                                    .map(id => {
+                                                        const other = SHORTCUT_COMMANDS.find(
+                                                            c => c.id === id
+                                                        );
+                                                        return other
+                                                            ? shortcutLabel(ts, other)
+                                                            : id;
+                                                    })
+                                                    .join(t("listSeparator")),
+                                            })}
                                         </div>
                                     )}
                                 </div>
-                                {isCustom && <Badge variant="secondary">Custom</Badge>}
+                                {isCustom && <Badge variant="secondary">{t("custom")}</Badge>}
                                 {command.when === "outside-input" && (
-                                    <span className="text-ink-3 text-[11px]">not while typing</span>
+                                    <span className="text-ink-3 text-[11px]">
+                                        {t("notWhileTyping")}
+                                    </span>
                                 )}
                                 <button
                                     type="button"
                                     onClick={() => setRecording(isRecording ? null : command.id)}
-                                    aria-label={`Change shortcut for ${command.label}`}
+                                    aria-label={t("changeFor", { command: label })}
                                     className={cn(
                                         "mono min-w-[96px] rounded-md border px-2.5 py-1.5 text-center text-[12px]",
                                         isRecording
@@ -155,10 +158,10 @@ export function ShortcutsSection({ onActions }: SettingsSectionProps) {
                                     )}
                                 >
                                     {isRecording
-                                        ? "Press keys…"
+                                        ? t("pressKeys")
                                         : keys
                                           ? formatKeys(keys)
-                                          : "Unbound"}
+                                          : t("unbound")}
                                 </button>
                                 {isCustom && !isRecording && (
                                     <Button
@@ -170,7 +173,7 @@ export function ShortcutsSection({ onActions }: SettingsSectionProps) {
                                             save(next);
                                         }}
                                     >
-                                        Default
+                                        {t("default")}
                                     </Button>
                                 )}
                             </div>
@@ -179,14 +182,10 @@ export function ShortcutsSection({ onActions }: SettingsSectionProps) {
                 </Card>
             </Section>
 
-            <Section
-                title="Elsewhere"
-                description="Some surfaces bring their own keys and are not remapped here."
-            >
+            <Section title={t("elsewhere.title")} description={t("elsewhere.description")}>
                 <Card>
                     <div className="text-ink-2 text-[13px] leading-relaxed">
-                        The mindmap editor binds single letters for its tools (V, R, E, T…) and ⌘Z /
-                        ⌘⇧Z for undo while a map is open. The command palette itself uses ↑ ↓ and ↵.
+                        {t("elsewhere.body")}
                     </div>
                 </Card>
             </Section>

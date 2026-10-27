@@ -1,0 +1,1883 @@
+{
+  "page": {
+    "title": "Settings"
+  },
+  "hub": {
+    "navLabel": "Settings sections",
+    "railTitle": "Settings",
+    "pickerLabel": "Settings section",
+    "readOnly": "Read-only",
+    "readOnlyTitle": "You can see this; changing it isn't part of your role.",
+    "withheld": "{label} isn't part of your role. Ask an admin if you need it.",
+    "withheldWithRole": "{label} isn't part of your role ({role}). Ask an admin if you need it.",
+    "workspacePointer": {
+      "label": "Workspace settings",
+      "blurb": "Name, people, your own keys, models, agents, integrations and usage"
+    }
+  },
+  "groups": {
+    "you": {
+      "label": "You",
+      "blurb": "Yours alone; changes affect nobody else."
+    },
+    "workspace": {
+      "label": "Workspace",
+      "blurb": "Policy for everyone in the workspace."
+    }
+  },
+  "sections": {
+    "account": {
+      "label": "Account",
+      "blurb": "Profile, photo, password, sessions",
+      "title": "Who you are, and where you are signed in",
+      "description": "Your profile and photo, how you appear in this workspace, your sign-in details, and every browser that currently holds a session."
+    },
+    "appearance": {
+      "label": "Appearance",
+      "blurb": "Language, theme, density, motion, answers",
+      "title": "How the app looks, and how it answers you",
+      "description": "Five controls, not eleven: four for the screen, one for how the assistant answers. Board colours in a mindmap are part of the map, not the theme."
+    },
+    "shortcuts": {
+      "label": "Shortcuts",
+      "blurb": "Every command and its keys",
+      "title": "What the keyboard does",
+      "description": "Every command, its keys, and a place to change them. Yours alone; the mindmap editor keeps its own map while a map is open."
+    },
+    "people": {
+      "label": "People and access",
+      "blurb": "Members, roles, folders",
+      "title": "Who is in the workspace, and what they can see",
+      "description": "Members and their roles, invitations and join links, groups, custom roles, and the audit log. Who can open a folder is set on the folder itself; roles decide everything else."
+    },
+    "company": {
+      "label": "Company profile",
+      "blurb": "What your sources prove",
+      "title": "What your sources can prove",
+      "description": "Read from the sources written by or about your company, each fact with the excerpt that proves it. Agents cite it for company context and Proposals drafts from it. Sources about someone else are set aside, and you can overrule that."
+    },
+    "byok": {
+      "label": "Bring your own keys",
+      "blurb": "Your own API key for the workspace's AI",
+      "title": "Bring your own keys",
+      "description": "Your own provider account for the workspace's AI: chat, drafting, meetings and background work. Optional: left empty, the workspace runs on the server's keys."
+    },
+    "models": {
+      "label": "Models and routes",
+      "blurb": "Which model answers what",
+      "title": "Which model serves each kind of request",
+      "description": "The server's default models and routes, set in its configuration file and shown here read-only. A workspace that brings its own API key runs on that instead."
+    },
+    "agents": {
+      "label": "Agents and autonomy",
+      "blurb": "The roster, and what it may do",
+      "title": "Who shows up to a meeting, and how much they may do alone",
+      "description": "Each agent is a seat in a meeting: a name, a role, standing instructions, and a level of autonomy. Agents can run in this app or on another machine you connect."
+    },
+    "integrations": {
+      "label": "Integrations",
+      "blurb": "Connections, Slack, remote nodes",
+      "title": "What this workspace connects to",
+      "description": "Workspace connections to Drive, Slack and GitHub; Slack mirroring for meetings; and the hub that remote agent machines dial into. All optional and independent."
+    },
+    "usage": {
+      "label": "Usage and costs",
+      "blurb": "Model tokens, cost, balance",
+      "title": "What the workspace is spending",
+      "description": "Every AI model call the workspace made and what it cost, then the token balance and what has been drawing on it. The numbers exist to inform the two settings on this page."
+    },
+    "archive": {
+      "label": "Archive and retention",
+      "blurb": "Trash, retired agents, purge",
+      "title": "What has been put away, and when it goes for good",
+      "description": "Trashed maps and artifacts, retired agents and archived channels, with restore and permanent delete. The retention window decides what the trash empties on its own."
+    },
+    "privacy": {
+      "label": "Data and privacy",
+      "blurb": "What leaves the deployment",
+      "title": "What leaves this deployment, and what stays",
+      "description": "Which outside services see document text, which see only metadata, what is kept and for how long. Read this before trusting the app with something sensitive."
+    },
+    "labs": {
+      "label": "Labs",
+      "blurb": "Unfinished, opt-in",
+      "title": "Features that are not finished",
+      "description": "Each one says honestly what it does today. Off by default; turning one on affects the whole workspace."
+    },
+    "general": {
+      "label": "General",
+      "blurb": "Name, URL, description, colour",
+      "title": "What the workspace is called, and how it is known",
+      "description": "Its name, the URL it is listed under, a line on what it does, and the colour of its mark. Everyone in the workspace sees these; admins change them."
+    }
+  },
+  "registry": {
+    "appearance": {
+      "theme": {
+        "label": "Theme",
+        "description": "Light, dark, or whatever your system is using.",
+        "options": {
+          "system": {
+            "label": "System",
+            "description": "Follows your OS setting."
+          },
+          "light": {
+            "label": "Light"
+          },
+          "dark": {
+            "label": "Dark"
+          }
+        }
+      },
+      "density": {
+        "label": "Density",
+        "description": "How much fits on screen. Compact tightens spacing and type in lists.",
+        "options": {
+          "comfortable": {
+            "label": "Comfortable"
+          },
+          "compact": {
+            "label": "Compact"
+          }
+        }
+      },
+      "reducedMotion": {
+        "label": "Motion",
+        "description": "Animations and transitions across the app.",
+        "options": {
+          "system": {
+            "label": "Follow system",
+            "description": "Honours your OS reduce-motion setting."
+          },
+          "reduce": {
+            "label": "Reduce",
+            "description": "Turns animations off."
+          },
+          "allow": {
+            "label": "Allow"
+          }
+        }
+      }
+    },
+    "chat": {
+      "responseStyle": {
+        "label": "Answer style of the default assistant",
+        "description": "How Launchstack answers when no agent is picked in the composer. An agent brings its own style, so this never applies to one."
+      }
+    },
+    "shortcuts": {
+      "bindings": {
+        "label": "Keyboard shortcuts",
+        "description": "Which keys run which commands. Yours alone; other members keep their own."
+      }
+    },
+    "privacy": {
+      "productAnalytics": {
+        "label": "Product analytics",
+        "description": "Whether page views from your browser count toward the hosted product's usage analytics. Off the hosted service nothing is sent regardless."
+      }
+    },
+    "workspace": {
+      "auditRetentionDays": {
+        "label": "Keep audit events for",
+        "description": "How long the audit log is kept.",
+        "consequence": "Older events are deleted. Export a CSV first if you need a permanent copy.",
+        "options": {
+          "forever": {
+            "label": "Keep forever"
+          },
+          "days30": {
+            "label": "30 days"
+          },
+          "days90": {
+            "label": "90 days"
+          },
+          "days180": {
+            "label": "180 days"
+          },
+          "days365": {
+            "label": "One year"
+          }
+        }
+      }
+    },
+    "agents": {
+      "defaultAutonomy": {
+        "label": "Default autonomy for agents",
+        "description": "How much an agent with no level of its own may do unattended. Each agent can be set lower or higher on its card.",
+        "consequence": "Lowering this can stop meetings from mirroring to Slack or running on their own until the room's agents are raised again."
+      }
+    },
+    "usage": {
+      "pricePerMillionTokens": {
+        "label": "Price per million tokens",
+        "description": "What a million ledger tokens cost you, in your currency. Used only to estimate spend on this page; leave 0 to show tokens alone.",
+        "unit": "per 1M tokens"
+      },
+      "lowBalanceThreshold": {
+        "label": "Low balance warning",
+        "description": "The balance below which this page and the balance chip warn.",
+        "unit": "tokens"
+      }
+    },
+    "retention": {
+      "trashDays": {
+        "label": "Empty the trash after",
+        "description": "Trashed maps and artifacts older than this are removed for good.",
+        "consequence": "Applied the next time the archive is opened. A removed item cannot be restored.",
+        "options": {
+          "untilDeleted": {
+            "label": "Keep until deleted by hand"
+          },
+          "days7": {
+            "label": "7 days"
+          },
+          "days30": {
+            "label": "30 days"
+          },
+          "days90": {
+            "label": "90 days"
+          }
+        }
+      }
+    },
+    "labs": {
+      "predictiveGaps": {
+        "label": "Predictive gaps",
+        "description": "Lists missing exhibits, schedules and compliance gaps across your documents. The analysis exists; the screen that shows it does not yet, so this only surfaces the entry in the palette."
+      }
+    }
+  },
+  "row": {
+    "permissionReason": "Changing this takes a role with “{permission}”.",
+    "notEditable": "Not editable at this scope.",
+    "readOnly": "Read-only",
+    "setByYou": "Set {when} by you",
+    "setBy": "Set {when} by {who}",
+    "setByLeft": "Set {when} by someone who has left",
+    "setAt": "Set {when}",
+    "loading": "Loading…",
+    "reset": "Reset",
+    "resetToWorkspace": "Reset to the workspace",
+    "resetToDefault": "Reset to the default",
+    "setOnFolder": "Set on this folder",
+    "setAtFolderLevel": "Set at this folder level",
+    "setAtWorkspaceLevel": "Set at workspace level",
+    "yourChoice": "Your choice",
+    "defaultNothingSet": "Default · nothing set",
+    "inheritedFromFolder": "Inherited from folder “{folder}”",
+    "inheritedFromThisFolder": "Inherited from this folder",
+    "inheritedFromWorkspace": "Inherited from workspace",
+    "inheritedFromYou": "Inherited from you",
+    "choose": "Choose…"
+  },
+  "ui": {
+    "notConfigured": "Not configured"
+  },
+  "store": {
+    "signedOut": "You are signed out.",
+    "loadFailedStatus": "Could not load settings ({status}).",
+    "loadFailed": "Could not load settings.",
+    "unexpectedShape": "The settings answer was not in the expected shape.",
+    "saveFailedStatus": "Could not save the setting ({status}).",
+    "saveFailed": "Could not save the setting."
+  },
+  "account": {
+    "providers": {
+      "credential": "Email and password"
+    },
+    "agent": {
+      "unknown": "Unknown browser",
+      "desktopApp": "Desktop app",
+      "browser": "Browser",
+      "on": "{browser} on {os}"
+    },
+    "couldNotListSessions": "Could not list sessions.",
+    "couldNotLoad": "Could not load your account.",
+    "connected": "{provider} connected",
+    "accountFallback": "Account",
+    "couldNotConnect": "Could not connect {provider}.",
+    "couldNotEndSession": "Could not end that session.",
+    "sessionEnded": "Session ended",
+    "couldNotEndOthers": "Could not end the other sessions.",
+    "othersEnded": "Every other session ended",
+    "signIn": {
+      "title": "Sign-in",
+      "description": "How you get in, and any accounts linked to yours.",
+      "loadFailed": "Couldn't load how you sign in. Reload the page to try again.",
+      "linked": "Linked {when}",
+      "couldNotUnlink": "Could not unlink.",
+      "unlinked": "Account unlinked",
+      "unlink": "Unlink",
+      "connecting": "Connecting…"
+    },
+    "sessions": {
+      "title": "Sessions",
+      "description": "Every browser that currently holds a session for you. Ending one signs that browser out on its next request.",
+      "thisBrowser": "This browser",
+      "meta": "last active {active} · expires {expires}",
+      "metaWithIp": "{ip} · last active {active} · expires {expires}",
+      "ending": "Ending…",
+      "end": "End session",
+      "endOthers": "End the other {count, plural, one {session} other {# sessions}}"
+    },
+    "password": {
+      "couldNotSet": "Could not set a password.",
+      "passwordSet": "Password set. You can now sign in with your email and password.",
+      "setTitle": "Set a password",
+      "setBody": "Sign in with your email and a password as well as the accounts above.",
+      "newPassword": "New password",
+      "hint": "At least 8 characters.",
+      "repeat": "Repeat it",
+      "mismatch": "Does not match.",
+      "setting": "Setting…",
+      "setSubmit": "Set password",
+      "couldNotChange": "Could not change your password.",
+      "changed": "Password changed",
+      "changeTitle": "Change password",
+      "current": "Current password",
+      "signOutOthers": "Sign out every other browser",
+      "changing": "Changing…",
+      "changeSubmit": "Change password"
+    }
+  },
+  "answerStyle": {
+    "personalNote": "Everyone who hasn't picked their own gets the workspace default, {label}. <link>Change it under Workspace › Agents</link>.",
+    "workspaceDefault": "The workspace default is {label}.",
+    "ownChoice": "Your own choice, {label}, still applies to your chats. <link>Change it under Settings › Appearance</link>."
+  },
+  "appearance": {
+    "display": {
+      "title": "Display",
+      "description": "Applied to this browser as soon as you change it, and remembered for you everywhere you sign in."
+    },
+    "answers": {
+      "title": "Answers",
+      "description": "How Launchstack answers you in chat when no agent is picked. Yours alone: nobody else's answers change."
+    }
+  },
+  "archive": {
+    "kinds": {
+      "mindmap": "Mindmap",
+      "artifact": "Artifact",
+      "agent": "Retired agent",
+      "channel": "Archived channel"
+    },
+    "groupHeader": {
+      "mindmap": "{count, plural, one {Mindmap} other {Mindmaps}} · {count}",
+      "artifact": "{count, plural, one {Artifact} other {Artifacts}} · {count}",
+      "agent": "{count, plural, one {Retired agent} other {Retired agents}} · {count}",
+      "channel": "{count, plural, one {Archived channel} other {Archived channels}} · {count}"
+    },
+    "loadFailedStatus": "Could not load the archive ({status}).",
+    "loadFailed": "Could not load the archive.",
+    "refreshing": "Refreshing…",
+    "requestFailed": "Request failed ({status}).",
+    "restored": "Restored {count, plural, one {# item} other {# items}}",
+    "deleted": "Deleted {count, plural, one {# item} other {# items}} for good",
+    "failed": "That did not work.",
+    "purged": "The retention window removed {count, plural, one {# item} other {# items}} older than {days} days when this page loaded.",
+    "retention": {
+      "title": "Retention",
+      "description": "What the trash empties on its own. Retired agents and archived channels are never removed automatically."
+    },
+    "putAway": {
+      "title": "Put away",
+      "description": "{count, plural, one {# item} other {# items}}. Restore puts a thing back where it was; delete is for good."
+    },
+    "search": "Search the archive",
+    "selected": "{count} selected",
+    "deleteForGood": "Delete for good",
+    "needsDelete": "Deleting for good needs documents.delete.",
+    "notDeletable": "Agents and channels cannot be deleted for good.",
+    "loading": "Loading the archive…",
+    "noMatch": "Nothing matches.",
+    "empty": "Nothing is put away.",
+    "select": "Select {title}",
+    "keepsHistory": "Keeps its history",
+    "deleting": "Deleting…",
+    "restoring": "Restoring…",
+    "confirm": {
+      "deleteOne": "Delete “{title}” for good?",
+      "deleteMany": "Delete {count} items for good?",
+      "restoreOne": "Restore “{title}”?",
+      "restoreMany": "Restore {count} items?",
+      "deleteBody": "This removes the item and everything attached to it. There is no undo.",
+      "restoreBody": "Each item goes back to where it was."
+    }
+  },
+  "assistants": {
+    "offReasons": {
+      "disabled": "The assistant server is turned off on this LaunchStack server. Ask whoever runs it to turn it on (MCP_SERVER_ENABLED).",
+      "noBaseUrl": "This LaunchStack server doesn't know its own web address, so assistants can't sign in. Ask whoever runs it to set BETTER_AUTH_URL.",
+      "insecureBaseUrl": "Assistants can only sign in to a LaunchStack server reached over HTTPS. This one's address is plain HTTP; ask whoever runs it to serve it over HTTPS."
+    },
+    "access": {
+      "read": "Search and read",
+      "readWrite": "Search, read and save conversations"
+    },
+    "copy": "Copy {label}",
+    "copyFailed": "Couldn't copy. Select the text and copy it yourself.",
+    "badge": {
+      "write": "Read and save",
+      "read": "Read only"
+    },
+    "tabs": {
+      "api": "Scripts and APIs"
+    },
+    "assistantTabs": "Assistant",
+    "accessKey": "access key",
+    "copyLabels": {
+      "command": "command",
+      "signInCommand": "sign-in command",
+      "header": "header",
+      "serverUrl": "server URL"
+    },
+    "signInPick": "Sign in to LaunchStack and pick this workspace.",
+    "claude": {
+      "step1": "In Claude (claude.ai or the desktop app), open <menu>Customize › Connectors › Add custom connector</menu> and paste the server URL.",
+      "step2": "Choose <menu>Sign in now</menu>, and for the OAuth client pick <menu>Use Claude''s published identity</menu> (<menu>Register automatically</menu> also works).",
+      "note1": "Free plans can add one custom connector. On Team and Enterprise, an Owner first adds it under <menu>Organization settings › Connectors › Add › Custom</menu>; then each member connects from Customize › Connectors.",
+      "note2": "For a script or a shared setup, choose No sign-in and add the request header <code>{header}</code> instead. Claude still marks that option beta for some organizations."
+    },
+    "chatgpt": {
+      "step1": "In ChatGPT, open <menu>Settings › Apps & Connectors › Advanced settings</menu> and turn on <menu>Developer mode</menu>.",
+      "step2": "Create a connector named LaunchStack with the server URL, and choose OAuth for authentication.",
+      "note": "Which plans get developer mode, and whether a workspace admin has to turn it on and publish the connector, is set by OpenAI and changes; check OpenAI’s developer-mode help page for your plan."
+    },
+    "gemini": {
+      "step1Admin": "Create an OAuth client in Workspace › Integrations, under OAuth clients for assistants. It gives you a client ID and secret, and the URLs and scopes to paste.",
+      "step1Member": "A LaunchStack admin creates an OAuth client in Workspace › Integrations. It gives them a client ID and secret, and the URLs and scopes to paste.",
+      "step2": "A Google Cloud admin opens <menu>Gemini Enterprise › Data stores › Create data store › Custom MCP Server</menu>, chooses OAuth 2.0, pastes the server URL, authorization URL, token URL, client ID, client secret and scopes, and ticks <menu>Enable PKCE Support</menu>. Without PKCE, LaunchStack refuses the sign-in.",
+      "step3": "Each person then signs in to LaunchStack from Gemini and picks this workspace.",
+      "note": "Google blocks custom MCP data stores by default: an organization policy admin has to override that policy and allow LaunchStack’s domain as an egress destination. Whoever creates the data store needs the Discovery Engine Editor role."
+    },
+    "claudeCode": {
+      "note": "Then run <code>/mcp</code> in Claude Code, choose launchstack and sign in."
+    },
+    "codex": {
+      "note": "The second command opens your browser to sign in."
+    },
+    "geminiCli": {
+      "note": "Then run <code>/mcp auth launchstack</code> in Gemini CLI to sign in."
+    },
+    "api": {
+      "intro": "Create an access key below and send it with every request to the server URL:",
+      "note": "The server speaks MCP over streamable HTTP. Keys never expire; revoke them here."
+    },
+    "createKeyFailed": "Could not create the key.",
+    "keyCreated": {
+      "title": "Copy your key now",
+      "description": "You won't see it again. If you lose it, revoke it and create another."
+    },
+    "createKey": {
+      "title": "Create an access key",
+      "description": "The key acts as you, in this workspace only. Anyone who has it can do what you choose here.",
+      "nameHint": "So you can tell your keys apart, e.g. “Nightly export script”.",
+      "whatItCan": "What it can do",
+      "whatKeyCan": "What the key can do",
+      "readDetail": "Search the workspace and open the documents you can see.",
+      "writeDetail": "Also save an assistant's conversation into the workspace as a document.",
+      "noSave": "Saving conversations needs permission to add documents, which your role doesn't include.",
+      "submit": "Create key"
+    },
+    "creating": "Creating…",
+    "loadFailed": "Could not load assistants.",
+    "revokeFailed": "Could not revoke it.",
+    "revokedKey": "Revoked “{name}”",
+    "disconnectedAssistant": "Disconnected {name}",
+    "section": {
+      "title": "Assistants (MCP)",
+      "description": "Let Claude, ChatGPT and Gemini search this workspace and save conversations into it. Each connection acts as you, in this workspace only, and sees only what you can."
+    },
+    "serverUrl": "Server URL",
+    "pasteIt": "Paste it into the assistant. It sends you here to sign in and asks which workspace to use.",
+    "connectTitle": "Connect an assistant",
+    "connected": {
+      "title": "Connected assistants",
+      "description": "Assistants you have signed in to this workspace. Revoking one cuts it off at its next request; what it already saved stays.",
+      "none": "No assistants connected yet.",
+      "connectedAt": "Connected {when}",
+      "connected": "Connected",
+      "lastActive": "last active {when}"
+    },
+    "revoking": "Revoking…",
+    "keys": {
+      "title": "Access keys",
+      "description": "For scripts, API calls and command-line tools that can't sign in through a browser. A key acts as you, in this workspace only.",
+      "create": "Create access key",
+      "none": "No access keys yet.",
+      "created": "created {when}",
+      "lastUsed": "last used {when}",
+      "neverUsed": "never used"
+    },
+    "confirm": {
+      "revokeKey": "Revoke “{name}”?",
+      "disconnect": "Disconnect {name}?",
+      "thisAssistant": "this assistant",
+      "keyBody": "Anything using this key stops working at its next request. This can't be undone.",
+      "connectionBody": "It loses access to this workspace at its next request. Conversations it already saved stay. You can connect it again any time.",
+      "revokeKeyLabel": "Revoke key"
+    }
+  },
+  "integrations": {
+    "checking": "Checking configuration…",
+    "reconnectMenu": "Reconnect…",
+    "disconnectMenu": "Disconnect…",
+    "disconnecting": "Disconnecting…",
+    "removing": "Removing…",
+    "listSeparator": ", ",
+    "drive": {
+      "description": "Files and folders picked from Google Drive in Add source stay in sync; what syncs is listed here. Linking also lets PDFs and Word documents be edited with real tools — Google Docs for Word files, any Drive app or Drive for Desktop for PDFs — and settled edits sync back as document versions.",
+      "actions": "Google Drive actions",
+      "connectMenu": "Connect Google Drive…",
+      "linking": "Drive linking",
+      "setup": "Set <code>GOOGLE_DOCS_EDITING_ENABLED=true</code>, <code>GOOGLE_OAUTH_CLIENT_ID</code> and <code>GOOGLE_OAUTH_CLIENT_SECRET</code> (a GCP OAuth client with the <code>drive.file</code> scope) to enable this feature.",
+      "account": "Workspace account",
+      "connectedAs": "Connected as <code>{email}</code>. Linked files live in this account''s My Drive.",
+      "unknown": "unknown",
+      "notConnected": "No Google account is connected for this workspace yet.",
+      "reconnect": "Reconnect",
+      "connect": "Connect Google Drive",
+      "confirmTitle": "Disconnect Google Drive from this workspace?",
+      "confirmBody": "Its Google account is unlinked. You can connect it again from this page."
+    },
+    "slackCommands": {
+      "takeover": "Pause the agents and take the floor, optionally in an agent's seat",
+      "release": "Hand control back to the agents",
+      "pause": "Stop or restart agent turns",
+      "run": "Let the agents take up to three more turns",
+      "end": "Close the meeting and produce minutes",
+      "help": "Post the command reference into the channel"
+    },
+    "recheck": "Recheck",
+    "rechecking": "Checking…",
+    "disconnectedToast": "{label} disconnected",
+    "disconnectFailedToast": "Could not disconnect {label}",
+    "connections": {
+      "title": "Workspace connections",
+      "description": "Accounts this workspace has connected. Connecting happens in the documents workspace under Add source → Connect; tokens are encrypted at rest and never leave the server.",
+      "checking": "Checking connections…",
+      "noneAvailable": "Nothing connected yet. Available on this server: {list}.",
+      "noClients": "No provider OAuth clients are configured. Set the client-id / client-secret pairs described in <code>.env.example</code> (Workspace connections block) plus <code>EMBEDDING_SECRETS_KEY</code>.",
+      "actionsFor": "Actions for {label}",
+      "connected": "connected",
+      "personal": "your mailbox, private to you",
+      "connectedBy": "connected by {who}",
+      "confirmTitle": "Disconnect {label} from this workspace?",
+      "confirmBody": "The connection is removed and its access revoked. To connect again, use Add source → Connect."
+    },
+    "slack": {
+      "description": "Hold a meeting in a real Slack channel. Agent turns are posted there, and anything a person writes back lands in the same transcript.",
+      "post": "Post to Slack",
+      "postOn": "Meeting turns are mirrored into the linked channel.",
+      "postOff": "Set <code>SLACK_BOT_TOKEN</code> with <code>chat:write</code> on a Slack app installed to your workspace.",
+      "receive": "Receive from Slack",
+      "receiveOn": "Messages people write in Slack are added to the meeting, including the controls below.",
+      "receiveOff": "Set <code>SLACK_SIGNING_SECRET</code> so inbound Events API deliveries can be verified."
+    },
+    "setup": {
+      "title": "Slack app setup",
+      "description": "Two things to configure on the Slack side, once per workspace.",
+      "step1": "Point <strong>Event Subscriptions</strong> at <code>{url}</code>.",
+      "step2": "Subscribe to <code>message.channels</code>, plus <code>message.groups</code> for private channels.",
+      "step3": "Invite the bot to the channel, then paste that channel id when starting a meeting."
+    },
+    "controls": {
+      "title": "In-channel controls",
+      "description": "What someone can type in Slack to steer a running meeting. Prefixed with ! rather than / so no extra Slack app configuration is needed."
+    },
+    "hub": {
+      "title": "Meeting hub",
+      "description": "The endpoint agent worker machines dial into. Which machines are attached, and how to connect one, lives under Agents & nodes.",
+      "accept": "Accept remote agent nodes",
+      "listening": "Hub <code>{hubId}</code> is listening at <code>{url}</code>.",
+      "off": "Set <code>COLLAB_HUB_SECRET</code> to let worker machines register. Without it, every agent runs in this process."
+    }
+  },
+  "keys": {
+    "openRouter": {
+      "connectedActive": "OpenRouter is connected, and this workspace uses it.",
+      "connected": "OpenRouter is connected. Choose a model to switch your workspace over.",
+      "denied": "OpenRouter sign-in was cancelled. Nothing changed.",
+      "expired": "That sign-in expired, try again.",
+      "unavailable": "This server can't store API keys yet: whoever runs it needs to set EMBEDDING_SECRETS_KEY.",
+      "error": "Couldn't connect OpenRouter. Try again, or use an API key instead."
+    },
+    "endpointFailedStatus": "Couldn't read your model setup ({status}).",
+    "endpointFailed": "Couldn't read your model setup."
+  },
+  "labs": {
+    "title": "Experiments",
+    "description": "Off by default. On for everyone in the workspace once an admin turns one on."
+  },
+  "models": {
+    "routeBlurb": {
+      "default": "Everything not routed elsewhere: Ask, meetings, drafts.",
+      "fast": "Small structured calls: metadata extraction, starters, classification.",
+      "reasoning": "Requests that ask for a reasoning effort.",
+      "vision": "Requests that carry an image."
+    },
+    "readFailedStatus": "Could not read the configuration ({status}).",
+    "readFailed": "Could not read the configuration.",
+    "reread": "Re-read",
+    "reading": "Reading…",
+    "server": {
+      "title": "Server default",
+      "description": "The models this server runs any workspace on that hasn't brought its own. One AI endpoint serves every route; its address and credential stay on the server.",
+      "usesOwn": "This workspace runs on its own model, set up in Bring your own keys, so the server default below isn’t used.",
+      "ownNoModel": "This workspace’s own API key has no model chosen yet, so it still runs on the server default. Choose one in Bring your own keys.",
+      "fixFile": "{error} Fix the file named by <code>CHAT_MODELS_CONFIG</code> and re-read.",
+      "readingConfig": "Reading the configuration…",
+      "fileNote": "Models are set in the server’s chat model file, named by <code>CHAT_MODELS_CONFIG</code>. Edit that file and restart to change a model; nothing here writes to it."
+    },
+    "routes": {
+      "title": "Routes",
+      "description": "A route is a capability the app asks for. A route with no explicit model inherits default when default can serve it.",
+      "route": "Route",
+      "model": "Model",
+      "assignment": "Assignment",
+      "unavailable": "Unavailable",
+      "inherits": "Inherits default",
+      "explicit": "Explicit"
+    },
+    "declared": {
+      "title": "Declared models",
+      "description": "What each configured model is declared to do. A preset is a verified catalog entry; an override is the operator's own word, taken as given.",
+      "behaviourFrom": "Behaviour from",
+      "preset": "a verified preset",
+      "override": "the configuration file (operator override)",
+      "input": "Input",
+      "reasoning": "Reasoning",
+      "none": "none",
+      "structured": "Structured output",
+      "promptedJson": "prompted JSON",
+      "limits": "Limits",
+      "context": "{count} context",
+      "output": "{count} output"
+    }
+  },
+  "oauthClients": {
+    "authMethods": {
+      "post": {
+        "title": "In the request body",
+        "detail": "client_secret_post. Try this first."
+      },
+      "basic": {
+        "title": "In an HTTP Basic header",
+        "detail": "client_secret_basic. Use it if signing in fails with “invalid_client”."
+      }
+    },
+    "endpoints": {
+      "serverUrl": "Server URL",
+      "authorizationUrl": "Authorization URL",
+      "tokenUrl": "Token URL",
+      "scopes": "Scopes",
+      "pkce": "Turn on PKCE in the assistant (Gemini Enterprise: tick Enable PKCE Support). LaunchStack requires it to stay signed in."
+    },
+    "createFailed": "Could not create the client.",
+    "created": {
+      "title": "Copy the client secret now",
+      "description": "You won't see the secret again. If it's lost, delete this client and create another. Paste these into the assistant's OAuth settings."
+    },
+    "clientId": "Client ID",
+    "clientSecret": "Client secret",
+    "create": {
+      "title": "Create an OAuth client",
+      "description": "For an assistant that asks for a client ID and secret instead of registering itself, such as Gemini Enterprise.",
+      "redirectUri": "Redirect URI",
+      "redirectHint": "Filled in with Gemini Enterprise's. Another assistant shows its own in its OAuth settings; it must start with https://.",
+      "sendsSecret": "How the assistant sends the secret",
+      "creating": "Creating…",
+      "submit": "Create client"
+    },
+    "loadFailed": "Could not load OAuth clients.",
+    "deleteFailed": "Could not delete the client.",
+    "deleted": "Deleted “{name}”",
+    "section": {
+      "title": "OAuth clients for assistants",
+      "description": "For assistants that ask an admin for a client ID and secret instead of registering themselves, such as Gemini Enterprise. Everyone in the workspace can then connect through the client, each signing in as themselves. Claude, ChatGPT and the command-line tools don't need one."
+    },
+    "createButton": "Create OAuth client",
+    "none": "No OAuth clients yet.",
+    "returnsTo": "Returns to {uris}",
+    "createdAt": "created {when}",
+    "deleting": "Deleting…",
+    "asksFor": "What the assistant asks for",
+    "discovery": "Discovery document, if it asks for one:",
+    "confirm": {
+      "title": "Delete “{name}”?",
+      "thisClient": "this client",
+      "description": "Everyone connected through it is disconnected, and the assistant can't sign in again until you give it a new client ID and secret. This can't be undone.",
+      "confirmLabel": "Delete client"
+    }
+  },
+  "people": {
+    "audit": {
+      "someone": "Someone",
+      "someoneLower": "someone",
+      "possessive": "{endsWithS, select, yes {{name}’} other {{name}’s}}",
+      "levels": {
+        "view": "view",
+        "edit": "edit",
+        "manage": "manage",
+        "access": "access",
+        "different": "a different level"
+      },
+      "anotherRole": "another role",
+      "valueOff": "off",
+      "valueNew": "a new value",
+      "roleChanged": "{actor} changed {targetPossessive} role from {from} to {to}",
+      "madeOwner": "{actor} made {target} the Owner",
+      "madeA": "{actor} made {target} a {to}",
+      "madeAn": "{actor} made {target} an {to}",
+      "roleChangedBare": "{actor} changed {targetPossessive} role",
+      "approved": "{actor} approved {target} to join",
+      "suspended": "{actor} suspended {targetPossessive} access",
+      "reinstated": "{actor} reinstated {targetPossessive} access",
+      "removed": "{actor} removed {target} from the workspace",
+      "left": "{actor} left the workspace",
+      "joined": "{actor} joined the workspace",
+      "transferred": "{actor} transferred ownership to {target}",
+      "invited": "{actor} invited {target}",
+      "invitedAs": "{actor} invited {target} as {role}",
+      "resent": "{actor} resent the invitation to {target}",
+      "invitationRevoked": "{actor} revoked the invitation to {target}",
+      "invitationAccepted": "{actor} accepted an invitation to join",
+      "joinLinkCreated": "{actor} created a join link",
+      "joinLinkCreatedFor": "{actor} created a join link for {role}s",
+      "joinLinkRequiresApproval": "{actor} made a join link require approval",
+      "joinLinkOpen": "{actor} let a join link admit people straight in",
+      "joinLinkChanged": "{actor} changed a join link",
+      "joinLinkChangedTo": "{actor} changed a join link to {role}s",
+      "joinLinkReset": "{actor} reset a join link",
+      "joinLinkRevoked": "{actor} revoked a join link",
+      "joinLinkUsed": "{actor} joined with a link",
+      "groupCreated": "{actor} created the group {target}",
+      "groupRenamed": "{actor} renamed a group to {target}",
+      "groupDeleted": "{actor} deleted the group {target}",
+      "groupDeletedGrants": "{actor} deleted the group {target} ({count, plural, one {# access grant} other {# access grants}} removed)",
+      "groupAddedWho": "{actor} added {who} to {target}",
+      "groupAddedCount": "{actor} added {count, plural, one {# person} other {# people}} to {target}",
+      "groupAddedSome": "{actor} added people to {target}",
+      "groupRemovedWho": "{actor} removed {who} from {target}",
+      "groupRemovedCount": "{actor} removed {count, plural, one {# person} other {# people}} from {target}",
+      "groupRemovedSome": "{actor} removed people from {target}",
+      "roleCreated": "{actor} created the role {target}",
+      "roleUpdated": "{actor} changed the role {target}",
+      "roleDeleted": "{actor} deleted the role {target}",
+      "roleDeletedMoved": "{actor} deleted the role {target} and moved {count, plural, one {# member} other {# members}} to {to}",
+      "folderOpened": "{actor} opened the folder {target} to the workspace",
+      "folderRestricted": "{actor} restricted the folder {target}",
+      "folderAccessChanged": "{actor} changed who can see the folder {target}",
+      "documentRestricted": "{actor} restricted the document {target}",
+      "restrictionLifted": "{actor} lifted the restriction on {target}",
+      "documentAccessChanged": "{actor} changed who can see the document {target}",
+      "folderCreated": "{actor} created the folder {target}",
+      "folderRenamedFrom": "{actor} renamed the folder {from} to {target}",
+      "folderRenamed": "{actor} renamed the folder {target}",
+      "folderDeleted": "{actor} deleted the folder {target}",
+      "grantAdded": "{actor} gave {who} {level} on the {kind, select, folder {folder} other {document}} {target}",
+      "grantChanged": "{actor} changed {who} to {level} on the {kind, select, folder {folder} other {document}} {target}",
+      "grantRemoved": "{actor} removed {who}''s access to the {kind, select, folder {folder} other {document}} {target}",
+      "documentDeleted": "{actor} deleted the document {target}",
+      "connectorConnected": "{actor} connected {provider}",
+      "connectorDisconnected": "{actor} disconnected {provider}",
+      "settingReset": "{actor} reset “{label}” to inherit",
+      "settingResetFolder": "{actor} reset “{label}” for folder “{folder}” to inherit",
+      "settingSet": "{actor} set “{label}” to {value}",
+      "settingSetFolder": "{actor} set “{label}” for folder “{folder}” to {value}",
+      "joinPolicyOpen": "{actor} let anyone with a link join immediately",
+      "joinPolicyApproval": "{actor} required approval for new members",
+      "workspaceSettingsChanged": "{actor} changed workspace settings",
+      "fallback": "{actor} {verb} {what}",
+      "fallbackChanged": "{actor} changed {what}",
+      "actions": {
+        "member": {
+          "invited": "Member · invited",
+          "joined": "Member · joined",
+          "approved": "Member · approved",
+          "roleChanged": "Member · role changed",
+          "suspended": "Member · suspended",
+          "reinstated": "Member · reinstated",
+          "removed": "Member · removed",
+          "left": "Member · left"
+        },
+        "ownership": {
+          "transferred": "Ownership · transferred"
+        },
+        "invitation": {
+          "resent": "Invitation · resent",
+          "revoked": "Invitation · revoked"
+        },
+        "joinLink": {
+          "created": "Join link · created",
+          "updated": "Join link · updated",
+          "revoked": "Join link · revoked"
+        },
+        "group": {
+          "created": "Group · created",
+          "updated": "Group · updated",
+          "deleted": "Group · deleted",
+          "memberAdded": "Group · member added",
+          "memberRemoved": "Group · member removed"
+        },
+        "role": {
+          "created": "Role · created",
+          "updated": "Role · updated",
+          "deleted": "Role · deleted"
+        },
+        "folder": {
+          "created": "Folder · created",
+          "renamed": "Folder · renamed",
+          "deleted": "Folder · deleted",
+          "visibilityChanged": "Folder · visibility changed",
+          "grantAdded": "Folder · grant added",
+          "grantChanged": "Folder · grant changed",
+          "grantRemoved": "Folder · grant removed"
+        },
+        "document": {
+          "restricted": "Document · restricted",
+          "unrestricted": "Document · unrestricted",
+          "grantAdded": "Document · grant added",
+          "grantChanged": "Document · grant changed",
+          "grantRemoved": "Document · grant removed",
+          "deleted": "Document · deleted"
+        },
+        "connector": {
+          "connected": "Connector · connected",
+          "disconnected": "Connector · disconnected"
+        },
+        "settings": {
+          "changed": "Settings · changed"
+        },
+        "archive": {
+          "restored": "Archive · restored",
+          "deleted": "Archive · deleted"
+        }
+      },
+      "workspaceRenamed": "{actor} renamed the workspace to “{name}”",
+      "workspaceRenamedAndChanged": "{actor} renamed the workspace to “{name}” and changed its {fields}",
+      "workspaceChanged": "{actor} changed the workspace's {fields}",
+      "workspaceFields": {
+        "name": "name",
+        "slug": "URL",
+        "description": "description",
+        "industry": "industry",
+        "teamSize": "team size",
+        "swatch": "colour",
+        "auditRetentionDays": "audit log retention",
+        "separator": ", ",
+        "list": "{rest} and {last}"
+      }
+    },
+    "auditTab": {
+      "loadFailed": "Could not load the audit log.",
+      "title": "Audit log",
+      "notAllowed": {
+        "title": "The audit log is not part of your role",
+        "body": "Ask an admin for the “Read the audit log” permission if you need it."
+      },
+      "description": "Who changed what, newest first: roles, memberships, invitations, groups, and folder access. Filter by action or date, or export the current view.",
+      "exportCsv": "Export CSV",
+      "action": "Action",
+      "allActions": "All actions",
+      "from": "From",
+      "to": "To",
+      "apply": "Apply filters",
+      "loading": "Loading the audit log…",
+      "empty": {
+        "filteredTitle": "Nothing matches these filters",
+        "filteredBody": "Widen the date range or pick a different action.",
+        "title": "Nothing recorded yet",
+        "body": "Changes to people, roles, groups, and folder access will show up here."
+      },
+      "system": "System",
+      "details": "Details",
+      "loadMore": "Load more"
+    },
+    "errors": {
+      "requestFailed": "Request failed ({status})."
+    },
+    "format": {
+      "never": "Never",
+      "unknown": "Unknown",
+      "justNow": "just now",
+      "minutesAgo": "{count} min ago",
+      "hoursAgo": "{count} h ago",
+      "yesterday": "yesterday",
+      "daysAgo": "{count} days ago",
+      "expired": "expired {when}",
+      "inMinutes": "in {count} min",
+      "inHours": "in {count} h",
+      "inDays": "in {count, plural, one {# day} other {# days}}"
+    },
+    "groups": {
+      "loadFailed": "Could not load groups.",
+      "deletedWithGrants": "{name} deleted. {count, plural, one {# access grant} other {# access grants}} removed.",
+      "deleted": "{name} deleted.",
+      "deleteFailed": "The group wasn't deleted.",
+      "intro": {
+        "title": "Groups",
+        "description": "A group is a named set of people you can share a folder with in one step. Membership here changes what those folders show; it never changes anyone's role."
+      },
+      "newGroup": "New group",
+      "loading": "Loading groups…",
+      "empty": {
+        "title": "No groups yet",
+        "bodyCreate": "Create one when several people need access to the same restricted folders.",
+        "bodyView": "An admin can create groups to share folders with several people at once."
+      },
+      "confirm": {
+        "title": "Delete {name}?",
+        "thisGroup": "this group",
+        "body": "Deleting this group removes access it grants. {count, plural, one {# person} other {# people}} may lose access to folders shared with it. Their membership in the workspace is not affected.",
+        "confirm": "Delete group"
+      },
+      "row": {
+        "added": "{name} added to {group}",
+        "memberFallback": "Member",
+        "addFailed": "Couldn't add them to the group.",
+        "removed": "{name} removed from {group}",
+        "removeFailed": "Couldn't remove them from the group.",
+        "members": "{count, plural, one {# member} other {# members}}",
+        "empty": "Nobody is in this group yet.",
+        "removeFrom": "Remove {name} from {group}",
+        "addTo": "Add a member to {group}",
+        "everyoneIn": "Everyone is already in this group",
+        "addPlaceholder": "Add a member…",
+        "addButton": "Add to group"
+      },
+      "dialog": {
+        "nameRequired": "Give the group a name people will recognise.",
+        "createdToast": "Group {name} created",
+        "renamedToast": "Group renamed to {name}",
+        "saveFailed": "The group wasn't saved.",
+        "newTitle": "New group",
+        "renameTitle": "Rename group",
+        "newDescription": "A name, and optionally a line on who belongs in it. Add people after creating it.",
+        "renameDescription": "Folders shared with this group keep their access under the new name.",
+        "namePlaceholder": "Finance",
+        "description": "Description <optional>(optional)</optional>",
+        "descriptionPlaceholder": "Everyone who reviews board papers",
+        "create": "Create group",
+        "saveName": "Save name"
+      }
+    },
+    "invitations": {
+      "actionsFor": "Actions for the invitation to {email}",
+      "emailCopied": "Email copied",
+      "loadFailed": "Could not load invitations.",
+      "notAllowed": {
+        "title": "Inviting is not part of your role",
+        "body": "Ask an admin to invite people or to give your role the “Send invitations” permission."
+      },
+      "intro": {
+        "title": "Invitations",
+        "description": "Share one invite link to bring people in, or invite someone by email. Both hand out a role you choose. Invitations expire; links can be reset or turned off."
+      },
+      "loading": "Loading invitations…",
+      "form": {
+        "invalidEmail": "Enter a full email address, like ada@example.com.",
+        "chooseRole": "Choose the role this person should have.",
+        "emailedToast": "Invitation emailed to {email}",
+        "createdToast": "Invitation created — copy the link to send it",
+        "failed": "The invitation wasn't sent.",
+        "title": "Invite by email",
+        "roleLabel": "Role for the invited person",
+        "addToGroups": "Add to groups <optional>(optional)</optional>",
+        "sending": "Sending…",
+        "send": "Send invitation",
+        "createLink": "Create invitation link"
+      },
+      "sent": {
+        "expires": "It expires {when}.",
+        "expiresRenewed": "It expires {when}. The earlier link no longer works.",
+        "emailed": "Invitation emailed to {email}.",
+        "notSent": "Email isn't set up on this server, so nothing was sent.",
+        "shareToo": "You can also share the link yourself. {expiry}",
+        "copyAndSend": "Copy this link and send it to {email} yourself. {expiry}",
+        "linkFor": "Invitation link for {email}"
+      },
+      "list": {
+        "resentToast": "Invitation resent to {email}",
+        "newLinkToast": "New invitation link ready — copy it to send it",
+        "resendFailed": "The invitation wasn't resent.",
+        "withdrawnToast": "Invitation to {email} withdrawn",
+        "withdrawFailed": "The invitation wasn't withdrawn.",
+        "empty": {
+          "title": "No invitations yet",
+          "body": "Send one above. It lands here until it is accepted or expires."
+        },
+        "columns": {
+          "invitedBy": "Invited by",
+          "expires": "Expires",
+          "actions": "Actions"
+        },
+        "resending": "Resending…",
+        "resend": "Resend",
+        "makingLink": "Making a new link…",
+        "newLink": "New link",
+        "confirm": {
+          "title": "Withdraw the invitation to {email}?",
+          "body": "The link stops working right away. You can send a new invitation any time.",
+          "confirm": "Revoke invitation"
+        }
+      },
+      "status": {
+        "pending": "Pending",
+        "accepted": "Accepted",
+        "revoked": "Revoked",
+        "expired": "Expired"
+      },
+      "more": {
+        "invalidDays": "Expiry must be a whole number of days, or blank for no expiry.",
+        "invalidUses": "Max uses must be a whole number, or blank for unlimited.",
+        "chooseRole": "Choose the role the link should hand out.",
+        "createdTop": "Link created — it's the invite link at the top now",
+        "created": "Link created",
+        "resetToast": "Link reset — the old one no longer works",
+        "revokedToast": "Join link revoked",
+        "revokeFailed": "The link wasn't revoked.",
+        "title": "More links",
+        "description": "Extra links with their own role, expiry or use cap. Each link decides whether people join straight in or wait for approval.",
+        "roleLabel": "Role the link hands out",
+        "expiresIn": "Expires in (days)",
+        "never": "Never",
+        "maxUses": "Max uses",
+        "unlimited": "Unlimited",
+        "requireApproval": "Require approval",
+        "createLink": "Create link",
+        "loading": "Loading links…",
+        "empty": {
+          "title": "No other links",
+          "body": "The invite link above is the only one. Create another here when a group needs its own role, an expiry or a cap."
+        },
+        "needsApproval": "Needs approval",
+        "confirmResetTitle": "Reset this link?",
+        "confirmRevokeTitle": "Revoke this link?",
+        "resetBody": "The current link stops working right away and a new one with the same terms replaces it. People who already joined keep their access.",
+        "revokeBody": "Anyone who has the link can no longer use it. People who already joined keep their access.",
+        "revokeLink": "Revoke link",
+        "revoking": "Revoking…"
+      }
+    },
+    "links": {
+      "terms": {
+        "usesOf": "{used} of {max} uses",
+        "uses": "{count, plural, one {# use} other {# uses}}",
+        "neverExpires": "never expires",
+        "expires": "expires {when}",
+        "joined": "{uses} · {expiry}"
+      },
+      "termsSentence": "{terms}.",
+      "noRole": "There is no role a link can hand out yet.",
+      "createdToast": "Invite link created — copy it and share it",
+      "createFailed": "The link wasn't created.",
+      "nowHandsOut": "The link now hands out {role}",
+      "nowApproval": "New joiners now wait for approval",
+      "nowStraightIn": "New joiners now land straight in",
+      "changeFailed": "The link wasn't changed.",
+      "resetToast": "Invite link reset — share the new one",
+      "offToast": "Invite link turned off",
+      "resetFailed": "The link wasn't reset.",
+      "offFailed": "The link wasn't turned off.",
+      "title": "Invite link",
+      "loading": "Loading the invite link…",
+      "emptyBody": "Share one link to bring people in. They create an account and land in the workspace.",
+      "creating": "Creating…",
+      "create": "Create invite link",
+      "expired": "Expired",
+      "usedUp": "Used up",
+      "legacy": "Old short link",
+      "copyLink": "Copy link",
+      "approvalNote": "People who open it wait on the Pending list until an admin approves them.",
+      "openNote": "Anyone with this link can create an account and land straight in the workspace as {role}.",
+      "noLongerWorks": "It no longer works ({terms}) — reset it for a fresh one.",
+      "legacyNote": "This is an old short link that could be guessed, so it always waits for approval. Reset it to get a secure link that can let people straight in.",
+      "joinsAs": "Joins as",
+      "roleLabel": "Role the invite link hands out",
+      "chooseRole": "Choose a role",
+      "requireAdminApproval": "Require admin approval",
+      "resetLink": "Reset link",
+      "turnOff": "Turn off",
+      "confirmOffTitle": "Turn off the invite link?",
+      "confirmResetTitle": "Reset the invite link?",
+      "confirmOffBody": "The link stops working right away. People who already joined keep their access.",
+      "confirmResetBody": "The current link stops working right away and you get a new one to share. People who already joined keep their access.",
+      "turnOffLink": "Turn off link",
+      "turningOff": "Turning off…",
+      "resetting": "Resetting…"
+    },
+    "members": {
+      "actionsFor": "Actions for {name}",
+      "loadFailed": "Could not load the member list.",
+      "changeFailed": "That change didn't go through.",
+      "nowRole": "{name} is now {role}",
+      "removedToast": "{name} was removed from the workspace",
+      "suspendedToast": "{name}''s access is suspended",
+      "transferredToast": "{name} now owns this workspace",
+      "pendingFailed": "That didn't go through.",
+      "confirm": {
+        "remove": {
+          "title": "Remove {name}?",
+          "body": "{name} loses access to this workspace immediately. Documents they added stay. You can invite them again later.",
+          "confirm": "Remove from workspace"
+        },
+        "suspend": {
+          "title": "Suspend {name}''s access?",
+          "body": "{name} stays listed as a member but can''t open anything until you reinstate them.",
+          "confirm": "Suspend access"
+        },
+        "transfer": {
+          "title": "Transfer ownership to {name}?",
+          "body": "{name} becomes the Owner — billing, ownership, and everything else. You become an Admin. Only the new owner can transfer it back.",
+          "confirm": "Transfer ownership"
+        },
+        "leave": {
+          "title": "Leave this workspace?",
+          "body": "You lose access immediately. Documents you added stay. An admin can invite you back.",
+          "confirm": "Leave workspace"
+        }
+      },
+      "intro": {
+        "title": "Members",
+        "description": "Everyone in the workspace, with the role that decides what they can do. Approve people who joined with a link, change roles, or suspend access without removing anyone."
+      },
+      "counts": {
+        "label": "Member counts",
+        "active": "{count} active",
+        "pending": "{count} pending",
+        "suspended": "{count} suspended"
+      },
+      "loading": "Loading members…",
+      "empty": {
+        "title": "No members yet",
+        "body": "Invite someone from the Invitations tab, or share a join link."
+      },
+      "columns": {
+        "groups": "Groups",
+        "lastActive": "Last active",
+        "actions": "Actions"
+      },
+      "emailCopied": "Email copied",
+      "approvedToast": "{name} can now open the workspace",
+      "reinstatedToast": "{name}''s access is back",
+      "you": "You",
+      "changeRoleFor": "Change {name}''s role",
+      "leaveNote": "Leaving removes your access to this workspace. Documents you added stay.",
+      "ownerCantLeave": "As the owner you can't leave. Transfer ownership to someone first."
+    },
+    "menu": {
+      "stillSaving": "A change is still saving.",
+      "changeRole": "Change role",
+      "copyEmail": "Copy email",
+      "approve": "Approve",
+      "suspend": "Suspend access…",
+      "reinstate": "Reinstate access",
+      "transfer": "Transfer ownership…",
+      "remove": "Remove from workspace…",
+      "resend": "Resend the invitation",
+      "stillResending": "Still resending.",
+      "revoke": "Revoke…"
+    },
+    "roles": {
+      "loadFailed": "Could not load roles.",
+      "deletedMoved": "{name} deleted. {count, plural, one {# member} other {# members}} moved to another role.",
+      "deleted": "{name} deleted.",
+      "deleteFailed": "The role wasn't deleted.",
+      "intro": {
+        "title": "Roles",
+        "description": "A role is a named set of permissions. The built-in ones cover most workspaces; add a custom role when a job needs a different mix — reviewers who can read and upload but never delete, say."
+      },
+      "newRole": "New role",
+      "loading": "Loading roles…",
+      "builtinRoles": "Built-in roles",
+      "customRoles": "Custom roles",
+      "empty": {
+        "title": "No custom roles",
+        "bodyManage": "Create one when none of the built-in roles fits a job exactly.",
+        "bodyView": "An admin can create a role when none of the built-in ones fits."
+      },
+      "confirmDelete": {
+        "title": "Delete the {name} role?",
+        "bodyHas": "{count, plural, one {# member currently has} other {# members currently have}} this role. You''ll be asked which role to move them to.",
+        "bodyNone": "Nobody has this role right now, so removing it changes no one''s access.",
+        "confirm": "Delete role"
+      },
+      "reassign": {
+        "title": "Move {count, plural, one {# member} other {# members}} to another role",
+        "body": "{name} is still assigned. Pick the role those people should have once it is gone.",
+        "thisRole": "This role",
+        "confirm": "Move members and delete",
+        "newRole": "New role",
+        "chooseRole": "Choose a role"
+      },
+      "card": {
+        "builtin": "Built-in",
+        "members": "{count, plural, one {# member} other {# members}}",
+        "noPermissions": "No permissions.",
+        "showFewer": "Show fewer",
+        "showAll": "Show all {count} permissions"
+      },
+      "dialog": {
+        "nameRequired": "Give the role a name people will recognise.",
+        "pickPermission": "Pick at least one permission — a role that allows nothing can't be used.",
+        "createdToast": "Role {name} created",
+        "savedToast": "Role {name} saved",
+        "saveFailed": "The role wasn't saved.",
+        "newTitle": "New role",
+        "editTitle": "Edit {name}",
+        "roleFallback": "role",
+        "description": "Tick what people with this role may do. You can only hand out permissions you hold yourself; owner-only ones stay with the Owner.",
+        "namePlaceholder": "Legal reviewer",
+        "descriptionLabel": "Description <optional>(optional)</optional>",
+        "descriptionPlaceholder": "Reads and comments, never deletes",
+        "permissions": "Permissions",
+        "ownerOnly": "Owner only",
+        "notYours": "Not yours to give",
+        "create": "Create role",
+        "save": "Save role"
+      }
+    },
+    "section": {
+      "invite": "Invite people",
+      "notInRole": "Seeing who is in the workspace isn't part of your role. Ask an admin if you need it.",
+      "tabsLabel": "People and access",
+      "tabs": {
+        "members": "Members",
+        "invitations": "Invitations",
+        "groups": "Groups",
+        "roles": "Roles",
+        "audit": "Audit"
+      }
+    },
+    "settingsCard": {
+      "title": "Workspace settings",
+      "description": "Policy that applies to everyone in this workspace."
+    },
+    "ui": {
+      "statusActive": "Active",
+      "statusPending": "Pending approval",
+      "statusSuspended": "Suspended"
+    }
+  },
+  "permissionsStore": {
+    "signedOut": "You are signed out.",
+    "loadFailedStatus": "Could not load your permissions ({status}).",
+    "loadFailed": "Could not load your permissions."
+  },
+  "privacy": {
+    "sends": {
+      "documentText": "Document text",
+      "metadata": "Metadata only",
+      "none": "Nothing"
+    },
+    "loadFailedStatus": "Could not load the privacy overview ({status}).",
+    "loadFailed": "Could not load.",
+    "outside": {
+      "title": "Outside services",
+      "description": "Computed from this deployment's configuration. No credential is read to build this list.",
+      "checking": "Checking configuration…",
+      "deploymentAnalyticsOn": "This is a <strong>{mode, select, cloud {hosted} other {self-hosted}}</strong> deployment. Page views count toward the hosted product's usage analytics unless you opt out below.",
+      "deploymentAnalyticsOff": "This is a <strong>{mode, select, cloud {hosted} other {self-hosted}}</strong> deployment. Nothing phones home: there is no product analytics script on this instance.",
+      "talksTo": "Talks to <code>{host}</code>. {note}"
+    },
+    "services": {
+      "aiLocal": "Runs on this deployment's own servers.",
+      "aiThirdParty": "Sent to a third-party AI model provider.",
+      "withPrefix": "{prefix} {note}",
+      "chat": {
+        "label": "Chat and generation",
+        "note": "Every question, the passages retrieved to answer it, and every generated document go here."
+      },
+      "embedding": {
+        "label": "Embeddings",
+        "note": "Every chunk of every indexed document is sent to be embedded. A workspace that saved its own embedding key or endpoint earlier keeps using it instead."
+      },
+      "rerank": {
+        "label": "Reranking",
+        "note": "Candidate passages for a question are sent to be reordered."
+      },
+      "ner": {
+        "label": "Entity extraction",
+        "note": "Runs only when entity extraction is turned on for a document."
+      },
+      "ocr": {
+        "none": "No OCR service is configured: PDFs are read from their own text layer and images with Tesseract, both on this server. Nothing leaves it, and scanned pages come out blank.",
+        "scope": {
+          "all": "Every PDF and image is read with OCR.",
+          "scans": "Images and scanned PDFs are read with OCR; a PDF with its own text layer is read from it on this server.",
+          "picked": "Images, and PDFs someone picks a provider for, are read with OCR; other PDFs are read from their own text layer on this server."
+        },
+        "engines": {
+          "azure": "Azure Document Intelligence",
+          "docling": "Docling on this deployment (when docling-serve is running)",
+          "landingAi": "Landing AI",
+          "datalab": "Datalab"
+        },
+        "chain": "{lead} reads every page.",
+        "chainWithFallback": "{lead} reads every page; if it fails, it hands off to {rest}, in that order.",
+        "listJoin": ", then ",
+        "lastResort": "The PDF's own text layer is the last resort, and a scan none of them can read is retried rather than indexed blank.",
+        "retryOnly": "A scan none of them can read is retried rather than indexed blank.",
+        "note": "{scope} {chain} {end}"
+      },
+      "transcription": {
+        "label": "Transcription",
+        "note": "Uploaded audio and video are transcribed here."
+      },
+      "email": {
+        "label": "Outbound email",
+        "note": "Invitations, password resets and approved campaigns. Never document text."
+      },
+      "slack": {
+        "note": "Only meetings that mirror to a channel; the agents' turns are posted there."
+      },
+      "drive": {
+        "note": "Only files someone links or creates in Drive; synced back as versions."
+      },
+      "notion": {
+        "note": "Reads only the pages picked on Notion's consent screen. Nothing is written to Notion."
+      },
+      "secEdgar": {
+        "label": "Investor search",
+        "note": "Only the words and state typed into Find investors. Never document text."
+      }
+    },
+    "kept": {
+      "title": "What is kept",
+      "description": "Retention windows live where they are set; this is the summary.",
+      "audit": {
+        "label": "Audit log",
+        "keptForever": "Kept forever",
+        "days": "{days} days",
+        "detail": "Set under Workspace › People and access. <link>Change it</link>."
+      },
+      "trash": {
+        "label": "Trash",
+        "keptUntilDeleted": "Kept until deleted by hand",
+        "emptiedAfter": "Emptied after {days} days",
+        "detail": "Trashed maps and artifacts. Set under Workspace › Archive. <link>Change it</link>."
+      },
+      "credentials": {
+        "label": "Stored credentials",
+        "okLabel": "Encrypted at rest",
+        "detail": "API keys, connector tokens and app passwords a workspace saves are encrypted with EMBEDDING_SECRETS_KEY and never shown in full. Where document text goes for embedding is under Outside services."
+      }
+    },
+    "choices": {
+      "title": "Your choices",
+      "description": "Yours alone.",
+      "noEffect": "No effect here",
+      "noEffectBody": "This instance sends no analytics, so the switch changes nothing until it runs on the hosted service."
+    }
+  },
+  "profile": {
+    "couldNotSaveName": "Could not save your name.",
+    "saved": "Profile saved",
+    "saveFailed": "Could not save your profile.",
+    "loadFailed": "Could not load your profile.",
+    "savePrimary": "Save profile",
+    "tooLarge": "Photos can be up to {mb} MB.",
+    "photoUpdatedIn": "Photo for {workspace} updated",
+    "photoUpdated": "Photo updated",
+    "photoRemoved": "Photo removed",
+    "removeFailed": "Could not remove the photo.",
+    "usingProfile": "Using your profile in this workspace",
+    "resetFailed": "Could not reset.",
+    "section": {
+      "title": "Profile",
+      "loadingDescription": "How you appear to the people you work with.",
+      "description": "Yours in every workspace you belong to. A workspace can show a different photo, name or title — see below."
+    },
+    "changePhoto": "Change photo",
+    "uploadPhoto": "Upload photo",
+    "photoHint": "JPG, PNG, WebP, GIF or AVIF, up to {mb} MB. You can crop it next.",
+    "fullName": "Full name",
+    "fullNameHint": "Used for sign-in, invitations and the audit trail.",
+    "nameEmpty": "Your name can't be empty.",
+    "displayName": "Display name",
+    "displayNameHint": "What people see in lists and chat. Blank uses your full name.",
+    "title": "Title",
+    "titlePlaceholder": "e.g. Head of Growth",
+    "pronouns": "Pronouns",
+    "pronounsPlaceholder": "e.g. they/them",
+    "timeZone": "Time zone",
+    "localTimeHint": "Others see your local time: {time}.",
+    "timeZoneHint": "Lets others see your local time before they message you.",
+    "notSet": "Not set",
+    "useZone": "Use {zone}",
+    "about": "About",
+    "aboutPlaceholder": "A line about what you work on.",
+    "emailHint": "Sign-in email. Ask an admin to re-invite you to change it.",
+    "verified": "Verified",
+    "unverified": "Unverified",
+    "previewIn": "How {workspace} sees you",
+    "previewOthers": "How others see you",
+    "workspaceSection": {
+      "title": "In {workspace}",
+      "description": "Show up differently in this workspace only — a client's logo, the name they know you by, your title there. Blank fields use your profile. Other workspaces never see these."
+    },
+    "changePhotoHere": "Change photo here",
+    "usePhotoHere": "Use a different photo here",
+    "useProfilePhoto": "Use my profile photo",
+    "onlyWorkspaceSees": "Only {workspace} sees this photo.",
+    "showingProfilePhoto": "Showing your profile photo.",
+    "displayNameHere": "Display name here",
+    "titleHere": "Title here",
+    "titleHerePlaceholder": "e.g. Advisor",
+    "resetToProfile": "Reset to my profile",
+    "photoDialog": {
+      "titleIn": "Photo for {workspace}",
+      "titleProfile": "Profile photo",
+      "descriptionIn": "Only people in {workspace} will see it.",
+      "descriptionProfile": "Drag to position, zoom to fit. Everyone in your workspaces sees this unless you set one for a workspace."
+    },
+    "localTime": "{time} local time"
+  },
+  "profilePhoto": {
+    "prepareFailed": "Your browser couldn't prepare the photo.",
+    "saveFailed": "Could not save the photo.",
+    "position": "Photo position. Drag or use the arrow keys to move it, plus and minus to zoom.",
+    "cantOpen": "Your browser can't open that file. Try a JPG, PNG, WebP, GIF or AVIF.",
+    "zoom": "Zoom",
+    "savePhoto": "Save photo"
+  },
+  "shortcuts": {
+    "resetAll": "Reset all to defaults",
+    "resetting": "Resetting…",
+    "conflicts": "{count, plural, one {One binding is shared} other {# bindings are shared}} by more than one command. The command lower in the list wins.",
+    "commands": {
+      "title": "Commands",
+      "description": "Click a shortcut to change it, then press the new keys. Backspace removes it. ⌘ on a Mac is Ctrl elsewhere."
+    },
+    "listSeparator": ", ",
+    "sharedWith": "Shared with {list}.",
+    "custom": "Custom",
+    "notWhileTyping": "not while typing",
+    "changeFor": "Change shortcut for {command}",
+    "pressKeys": "Press keys…",
+    "unbound": "Unbound",
+    "default": "Default",
+    "elsewhere": {
+      "title": "Elsewhere",
+      "description": "Some surfaces bring their own keys and are not remapped here.",
+      "body": "The mindmap editor binds single letters for its tools (V, R, E, T…) and ⌘Z / ⌘⇧Z for undo while a map is open. The command palette itself uses ↑ ↓ and ↵."
+    }
+  },
+  "usage": {
+    "services": {
+      "llmChat": "Chat",
+      "embedding": "Embeddings",
+      "ocr": "OCR",
+      "transcription": "Transcription",
+      "rerank": "Reranking",
+      "ner": "Entity extraction",
+      "distributionResearch": "Distribution research",
+      "scenarioSimulation": "Scenarios",
+      "other": "Other"
+    },
+    "types": {
+      "grant": "grant",
+      "purchase": "purchase",
+      "debit": "debit",
+      "refund": "refund",
+      "adjustment": "adjustment"
+    },
+    "loadFailedStatus": "Could not load usage ({status}).",
+    "loadFailed": "Could not load usage.",
+    "refreshing": "Refreshing…",
+    "lowBalance": "The balance is below the low-balance warning of {threshold} tokens.",
+    "tokens": "Tokens",
+    "balance": {
+      "title": "Balance",
+      "remaining": "Tokens remaining",
+      "exactly": "{value} exactly",
+      "usedInLast": "Used in the last {days} days",
+      "estimate": "≈ {cost} at {price} per 1M",
+      "setPrice": "Set a price below to estimate spend.",
+      "lifetime": "Lifetime",
+      "used": "Used",
+      "granted": "Granted",
+      "purchased": "Purchased"
+    },
+    "models": {
+      "title": "AI model usage",
+      "description": "Every call this workspace made to an AI model, from every feature, counted from the provider's own report. Separate from the balance below, which only some features draw on.",
+      "ownEndpoint": "{calls} of these calls went to the model endpoint this workspace brought itself. Its own provider bills them.",
+      "tokens": "Model tokens in the last {days} days",
+      "split": "{input} in · {output} out · {calls} calls",
+      "cost": "Model cost",
+      "costPriced": "From the price set for each model.",
+      "costFallback": "Models without a set price are counted at {price} per 1M.",
+      "costPartial": "{priced} of {calls} calls have a model price; the rest aren't counted.",
+      "costNone": "No price is set for these models. Set a price below to estimate.",
+      "efficiency": "Cache and reasoning",
+      "cached": "Input from cache",
+      "reasoning": "Reasoning tokens",
+      "nothing": "No model calls in this window.",
+      "feature": "Feature",
+      "route": "Model route",
+      "calls": "Calls",
+      "input": "Input",
+      "output": "Output",
+      "costColumn": "Cost",
+      "features": {
+        "ask": "Ask",
+        "mcp": "Assistants (MCP)",
+        "notes": "Notes",
+        "documentWriter": "Document writer",
+        "marketing": "Marketing pipeline",
+        "emailCampaigns": "Email outreach",
+        "prospects": "Prospects",
+        "distribution": "Distribution research",
+        "proposals": "Proposals",
+        "scenarios": "Scenarios",
+        "trends": "Trend search",
+        "predictiveAnalysis": "Predictive analysis",
+        "repoExplainer": "Repo explainer",
+        "meetings": "Meetings",
+        "vantage": "Vantage",
+        "companyProfile": "Company profile",
+        "ingestion": "Document processing"
+      },
+      "routes": {
+        "default": "Standard",
+        "fast": "Fast",
+        "reasoning": "Reasoning",
+        "vision": "Images",
+        "auxiliary": "Document processing"
+      }
+    },
+    "burn": {
+      "title": "Burn by day",
+      "description": "Tokens drawn from the balance, by what drew them. Hover a day for the breakdown; the table below carries the same numbers.",
+      "lastDays": "Last {days} days",
+      "nothing": "Nothing drew on the balance in this window."
+    },
+    "byService": {
+      "title": "By service",
+      "description": "Same window, totalled.",
+      "service": "Service",
+      "operations": "Operations",
+      "share": "Share",
+      "empty": "Nothing in this window."
+    },
+    "pricing": {
+      "title": "Pricing and warnings",
+      "description": "The numbers above exist to inform these two."
+    },
+    "recent": {
+      "title": "Recent ledger entries",
+      "description": "The last forty movements on the balance.",
+      "when": "When",
+      "what": "What",
+      "amount": "Amount",
+      "balanceAfter": "Balance after"
+    }
+  },
+  "workspaceModel": {
+    "routes": {
+      "default": {
+        "label": "Main model",
+        "short": "Main",
+        "hint": "Answers everything not routed elsewhere: Ask, meetings, drafts, background work."
+      },
+      "fast": {
+        "label": "Fast",
+        "short": "Fast",
+        "hint": "Small structured calls: metadata extraction, starters, classification."
+      },
+      "reasoning": {
+        "label": "Reasoning",
+        "short": "Reasoning",
+        "hint": "Requests that ask for a reasoning effort. Has to be a reasoning model."
+      },
+      "vision": {
+        "label": "Images",
+        "short": "Images",
+        "hint": "Requests that carry an image. Has to be a model that reads images."
+      }
+    },
+    "providers": {
+      "anthropic": {
+        "note": "Uses Anthropic's OpenAI-compatible API. A Claude Pro or Max plan can't be used here; it needs an API key."
+      },
+      "openrouter": {
+        "note": "One account, hundreds of models, billed to your OpenRouter credits."
+      },
+      "custom": {
+        "label": "Other OpenAI-compatible",
+        "note": "Any server that speaks the OpenAI chat-completions protocol, including one you host."
+      }
+    },
+    "serverAnswered": "The server answered {status}.",
+    "testFailed": "Couldn't run the test.",
+    "testing": "Testing {count, plural, one {the model} other {# models}}… each can take up to 45 seconds.",
+    "allAnswered": "Every model answered.",
+    "notAllAnswered": "Not every model answered.",
+    "testResults": "Test results",
+    "passed": "Passed:",
+    "failed": "Failed:",
+    "answeredIn": "Answered in {latency}",
+    "noAnswer": "No answer.",
+    "savedActive": "Saved. This workspace's AI now runs on your model.",
+    "savedChoose": "Saved. Choose a main model to switch the workspace over.",
+    "disconnected": "Disconnected. This workspace is back on the server's default models, and the saved key is deleted.",
+    "disconnectFailed": "Couldn't disconnect.",
+    "section": {
+      "title": "API key",
+      "description": "Optional. Run this workspace's AI on your own provider account: chat, drafting, meetings and background work use it, and your provider bills you directly instead of using LaunchStack credits. Without one, the workspace runs on the server's default models."
+    },
+    "checking": "Checking for a model of your own…",
+    "connectOpenRouter": "Connect OpenRouter",
+    "useApiKey": "Use an API key",
+    "intro": "OpenRouter asks you to approve a key, then brings you back here to pick a model. An API key works with any provider that offers an OpenAI-compatible API, including a server you host.",
+    "confirm": {
+      "title": "Disconnect your own model?",
+      "description": "This workspace goes back to the server's default models and the saved key is deleted."
+    },
+    "listSeparator": ", ",
+    "capabilities": {
+      "readsImages": "reads images",
+      "reasons": "reasons",
+      "jsonSchema": "JSON schema"
+    },
+    "summary": {
+      "keyEnding": "Key ending {last4}",
+      "keySaved": "Key saved",
+      "noKey": "No key",
+      "active": "Active",
+      "chooseModel": "Choose a model",
+      "notChosenNote": "Connected, but no model is chosen yet, so this workspace still runs on the server default. Choose one under Edit.",
+      "address": "Address",
+      "key": "Key",
+      "notChosen": "Not chosen",
+      "mainModel": "Main model",
+      "offNoImages": "Off: the main model doesn't read images",
+      "offNoReason": "Off: the main model doesn't reason",
+      "lastChangedBy": "Last changed by {who}, {when}",
+      "lastChanged": "Last changed {when}",
+      "chooseFirst": "Choose a model first."
+    },
+    "testingShort": "Testing…",
+    "test": "Test",
+    "disconnecting": "Disconnecting…",
+    "problems": {
+      "badId": "That doesn't look like a model id. Copy it exactly as your provider lists it, with no spaces.",
+      "needsReasoning": "Only a reasoning model can take this work. Tick “Reasons step by step”, or leave it empty.",
+      "needsVision": "Only a model that reads images can take this work. Tick “Reads images”, or leave it empty."
+    },
+    "blockers": {
+      "address": "the address",
+      "apiKey": "an API key",
+      "mainModel": "a main model",
+      "and": " and ",
+      "toSave": "To save, add {list}."
+    },
+    "listFailed": "Couldn't list the models.",
+    "saveFailed": "Couldn't save the model setup.",
+    "editor": {
+      "keepEnding": "Leave blank to keep the key ending {last4}",
+      "keepSaved": "Leave blank to keep the saved key",
+      "paste": "Paste your API key",
+      "pasteOptional": "Paste the key, if your server needs one",
+      "keyHintChanged": "The address changed, so enter the key for the new address. A saved key is only sent to the address it was saved with.",
+      "keyHintStored": "Stored encrypted and never shown again.",
+      "connection": "Connection",
+      "provider": "Provider",
+      "getKey": "Get a key",
+      "opensNewTab": "(opens in a new tab)",
+      "baseUrl": "Base URL",
+      "baseUrlHint": "The address of your provider’s OpenAI-compatible API, ending at the path, like /v1.",
+      "apiKey": "API key",
+      "keyless": "This endpoint takes no key",
+      "noKeyYet": "No key yet?",
+      "connectInstead": "Connect OpenRouter instead",
+      "models": "Models",
+      "loadModels": "Load models",
+      "listedNone": "The server listed no models. Type the id instead.",
+      "listed": "{count} models listed. Pick one as you type, or type any id.",
+      "listFailedSuffix": "{message} You can still type a model id.",
+      "listOptional": "Optional: list what your account can reach. Some servers don’t list their models; you can always type an id.",
+      "moreModels": "Use different models for some work",
+      "moreHint": "Leave one empty and that work uses the main model.",
+      "testConnection": "Test connection",
+      "testHint": "Sends each model one short message. Nothing is saved.",
+      "optional": "(optional)",
+      "modelIdPlaceholder": "Model id, exactly as your provider lists it",
+      "emptyUsesMain": "Empty uses the main model",
+      "readsImages": "Reads images",
+      "reasons": "Reasons step by step (reasoning model)",
+      "followsSchema": "Follows a JSON schema",
+      "structuredHint": "Structured output (response_format: json_schema). On for most OpenAI, Gemini and OpenRouter models; off for Claude through Anthropic’s compatible API. When it’s off, LaunchStack asks for JSON in the prompt instead."
+    }
+  },
+  "server": {
+    "errors": {
+      "unknownSetting": "Unknown setting \"{key}\"",
+      "folderScopeNeedsPath": "A folder scope needs a folder path",
+      "scopeNotAllowed": "\"{key}\" cannot be set at the {scope} scope",
+      "settingNeedsPermission": "Changing \"{label}\" needs {permission}",
+      "ownPreferencesOnly": "You can only change your own preferences",
+      "invalidSettingValue": "Invalid value for \"{label}\": {detail}",
+      "agentsCannotBeDeleted": "Retired agents cannot be deleted: their handles appear in past transcripts.",
+      "channelsKeepTranscript": "Channels keep their transcript; archive is as far as they go.",
+      "noProfileYet": "No profile yet.",
+      "openWorkspaceFirst": "Open a workspace first.",
+      "uploadRaced": "Another upload just finished. Try again.",
+      "lookupTooMany": "Ask for at most {max} people at once.",
+      "photoScope": "scope must be global or workspace",
+      "photoMultipart": "Send the photo as multipart form data.",
+      "photoAttachFile": "Attach the photo as `file`.",
+      "crossSiteRefused": "Cross-site request refused",
+      "signInAgainForPassword": "For your security, sign out and sign in again, then set your password.",
+      "setPasswordFailed": "Could not set a password",
+      "companyNotFound": "Company not found.",
+      "fetchCompanyFailed": "Unable to fetch company",
+      "preferenceSaveFailed": "Failed to update preference",
+      "embeddingEndpointForKey": "Enter the embeddings endpoint URL this key belongs to, such as https://api.openai.com/v1. A key is only ever sent to the address it was saved with.",
+      "embeddingKeyNeedsEndpoint": "The saved embeddings key needs its endpoint URL. Keep the address, or enter a new key together with a new address.",
+      "embeddingEndpointChanged": "The embeddings endpoint changed, so enter the API key for the new address. A saved key is only ever sent to the address it was entered for.",
+      "embeddingValidationFailed": "Embedding credentials failed validation.",
+      "reindexRunning": "A reindex is already running for this company. Wait for it to finish before changing the embedding index again.",
+      "reindexLockContended": "Could not acquire the reindex lock. Try again in a few seconds.",
+      "reindexScheduleFailed": "Could not schedule the reindex job. The settings change was not applied.",
+      "credentialsStoreFailed": "Unable to store embedding credentials.",
+      "companyUpdateNotFound": "Unable to update company record.",
+      "reindexScheduled": "Reindex scheduled for {count} document chunk set(s). Existing documents remain searchable under the previous index until the rewrite completes.",
+      "companyUpdated": "Company settings updated.",
+      "companyUpdateFailed": "Unable to update company settings.",
+      "assistantsLoadFailed": "Could not load assistants.",
+      "oauthClientsLoadFailed": "Could not load OAuth clients.",
+      "assistantServerOffSignIn": "The assistant server is off, so there is nothing to sign in to.",
+      "oauthClientCreateFailed": "Could not create the OAuth client.",
+      "assistantServerOffKey": "The assistant server is off, so a key would not work.",
+      "keyCreateFailed": "Could not create the key.",
+      "clientNotFound": "Client not found",
+      "oauthClientDeleteFailed": "Could not delete the OAuth client.",
+      "connectionNotFound": "Connection not found",
+      "disconnectFailed": "Could not disconnect the assistant.",
+      "keyNotFound": "Key not found",
+      "keyRevokeFailed": "Could not revoke the key.",
+      "accessKeyLimit": "You can hold at most {max} access keys in a workspace.",
+      "oauthClientLimit": "A workspace can hold at most {max} OAuth clients.",
+      "chatModelsUnreadable": "The chat model configuration could not be read. The server log has the details."
+    },
+    "models": {
+      "enterAddress": "Enter the address of your model endpoint.",
+      "notWebAddress": "That isn't a web address. It should look like https://api.example.com/v1.",
+      "needsHttps": "The address has to start with https://.",
+      "keyInAddress": "Put the key in the API key field, not in the address.",
+      "queryInAddress": "Leave the query string off the address; the base URL ends at the path, like /v1.",
+      "privateAddress": "That address points inside a private network, which this server doesn't allow. Use your provider's public address.",
+      "unreachable": "Couldn't reach that address. Check it, or type the model id yourself.",
+      "keyRejected": "The endpoint rejected the API key.",
+      "noModelList": "The endpoint doesn't list its models (HTTP {status}). Type the model id yourself.",
+      "emptyAnswer": "The model answered with nothing. Check that it is a chat model.",
+      "modelError": "The endpoint returned an error for this model. Check the model id and that the key can use it.",
+      "noSecretsKey": "This server can't store API keys yet: whoever runs it needs to set EMBEDDING_SECRETS_KEY.",
+      "keyForNewAddress": "The address changed, so enter the API key for the new address. A saved key is only ever sent to the address it was entered for.",
+      "keyForThisAddress": "Enter the API key for this address. A saved key is only sent to the address it was saved with.",
+      "notModelId": "\"{id}\" doesn't look like a model id. Copy it exactly as your provider lists it.",
+      "visionModel": "The model for images has to be one that reads images.",
+      "reasoningModel": "The model for reasoning has to be one that reasons.",
+      "invalidSetup": "That isn't a valid model setup.",
+      "saveFailed": "Couldn't save the model setup.",
+      "chooseModel": "Choose a model to test.",
+      "testFailed": "Couldn't run the test.",
+      "enterEndpointFirst": "Enter the endpoint address first.",
+      "listFailed": "Couldn't list the models."
+    },
+    "photo": {
+      "empty": "That file is empty.",
+      "tooLarge": "Photos can be up to {mb} MB.",
+      "unreadable": "That file isn't an image we can read. Use a JPG, PNG, WebP, GIF or AVIF.",
+      "heic": "HEIC photos aren't supported. Export it as a JPG and try again.",
+      "tooSmall": "Use an image at least {min}×{min} pixels.",
+      "processFailed": "That image couldn't be processed. Try a different file."
+    },
+    "ledger": {
+      "grant": "{grantType}: +{amount} tokens",
+      "serviceUsage": "{service} usage",
+      "chatQuery": "Chat query ({route} route)",
+      "transcribe": "Transcribe {file}",
+      "ner": "NER extraction for {count} chunks",
+      "embed": "Embed {count} chunks for document {document}",
+      "ocr": "OCR {count} pages",
+      "distribution": "Distribution research: {name}",
+      "proposalsRewrite": "Proposals: rewrite",
+      "proposalsReview": "Proposals: review",
+      "scenarioInterview": "Scenario \"{title}\": interview",
+      "scenarioUnit": "Scenario \"{title}\" ({unit})",
+      "scenarioRound": "Scenario \"{title}\" (round {round})"
+    },
+    "workspaceDetails": {
+      "notFound": "This workspace no longer exists.",
+      "urlTaken": "Another workspace already uses that URL. Try a different one."
+    }
+  },
+  "workspaceTab": {
+    "title": "Workspace",
+    "about": "Everything about this workspace: what it is called, who is in it and what they can see, its own keys, the models and agents it runs, what it connects to and what it spends. Your own account, theme and shortcuts are in Settings.",
+    "groups": {
+      "basics": "Basics",
+      "setup": "Setup",
+      "data": "Data"
+    },
+    "screens": {
+      "general": "General",
+      "people": "People and access",
+      "company": "Company profile",
+      "byok": "Bring your own keys",
+      "models": "Models",
+      "agents": "Agents",
+      "integrations": "Integrations",
+      "usage": "Usage",
+      "archive": "Archive",
+      "labs": "Labs"
+    }
+  },
+  "general": {
+    "readOnly": "Changing these takes a role that manages the workspace's settings.",
+    "loadFailedStatus": "Couldn't load the workspace's details ({status}).",
+    "offline": "Couldn't reach the server. Check your connection and try again.",
+    "saveFailedStatus": "Couldn't save ({status}).",
+    "saveOffline": "Couldn't reach the server. Nothing was saved.",
+    "saved": "Workspace details saved",
+    "name": {
+      "label": "Name",
+      "description": "What everyone in the workspace sees: the sidebar, the workspace picker, invitations.",
+      "missing": "Give the workspace a name."
+    },
+    "slug": {
+      "label": "URL",
+      "description": "How the workspace is listed when you switch between workspaces. It must be unique on this server; nothing else links to it.",
+      "checking": "Checking…",
+      "invalid": "At least two characters: lowercase letters, numbers and dashes.",
+      "available": "Available",
+      "taken": "Taken — try a different URL."
+    },
+    "description": {
+      "label": "Description",
+      "description": "One sentence on what the company does. Optional; it helps the assistant.",
+      "placeholder": "We turn scattered context into a knowledge graph for AI workflows."
+    },
+    "industry": {
+      "label": "Industry",
+      "description": "The field the company works in. Optional.",
+      "placeholder": "e.g. Logistics software"
+    },
+    "teamSize": {
+      "label": "Team size",
+      "description": "Roughly how many people work here.",
+      "count": "{count, plural, one {Just one person} other {About # people}}"
+    },
+    "colour": {
+      "label": "Colour",
+      "description": "The workspace's mark in the sidebar and the workspace picker.",
+      "swatch": "Colour {n}"
+    }
+  }
+}

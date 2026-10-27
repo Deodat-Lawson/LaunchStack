@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Search } from "lucide-react";
 
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "~/components/ui/dialog";
@@ -23,6 +24,7 @@ import {
 } from "../model/commands";
 import { THEMES } from "../model/palette";
 import type { EditorStore } from "../model/store";
+import { themeName, type MindmapT } from "./EditorContext";
 
 /**
  * ⌘K command palette.
@@ -50,182 +52,227 @@ export interface PaletteHost {
     onFit: () => void;
 }
 
-export function buildCommands(store: EditorStore, host: PaletteHost): Command[] {
+/**
+ * Every command, labelled in the reader's language — `t` is
+ * `useTranslations("mindmap")` from the component that opens the palette.
+ */
+export function buildCommands(store: EditorStore, host: PaletteHost, t: MindmapT): Command[] {
+    const group = {
+        file: t("commands.groups.file"),
+        edit: t("commands.groups.edit"),
+        arrange: t("commands.groups.arrange"),
+        connectors: t("commands.groups.connectors"),
+        layout: t("commands.groups.layout"),
+        theme: t("commands.groups.theme"),
+        view: t("commands.groups.view"),
+    };
     const layouts: Command[] = [
         {
             id: "layout-mindmap",
-            label: "Auto-layout: mindmap",
+            label: t("commands.layoutMindmap"),
             run: () => runLayout(store, { kind: "mindmap" }),
         },
         {
             id: "layout-tree",
-            label: "Auto-layout: tree (left to right)",
+            label: t("commands.layoutTree"),
             run: () => runLayout(store, { kind: "tree", direction: "right" }),
         },
         {
             id: "layout-tree-down",
-            label: "Auto-layout: tree (top down)",
+            label: t("commands.layoutTreeDown"),
             run: () => runLayout(store, { kind: "tree", direction: "down" }),
         },
         {
             id: "layout-org",
-            label: "Auto-layout: org chart",
+            label: t("commands.layoutOrg"),
             run: () => runLayout(store, { kind: "org" }),
         },
         {
             id: "layout-radial",
-            label: "Auto-layout: radial",
+            label: t("commands.layoutRadial"),
             run: () => runLayout(store, { kind: "radial" }),
         },
         {
             id: "layout-grid",
-            label: "Auto-layout: grid",
+            label: t("commands.layoutGrid"),
             run: () => runLayout(store, { kind: "grid" }),
         },
-    ].map(c => ({ ...c, group: "Layout" }));
+    ].map(c => ({ ...c, group: group.layout }));
 
     const themes: Command[] = THEMES.map(theme => ({
         id: `theme-${theme.id}`,
-        group: "Theme",
-        label: `Theme: ${theme.name}`,
+        group: group.theme,
+        label: t("commands.theme", { name: themeName(t, theme) }),
         run: () => applyTheme(store, theme.id),
     }));
 
     return [
-        { id: "save", group: "File", label: "Save now", hint: "⌘S", run: host.onSave },
-        { id: "export", group: "File", label: "Export…", hint: "⌘E", run: host.onExport },
-        { id: "import", group: "File", label: "Import…", run: host.onImport },
-        { id: "publish", group: "File", label: "Add to sources", run: host.onPublish },
-        { id: "present", group: "File", label: "Present", run: host.onPresent },
-        { id: "page-new", group: "File", label: "New page", run: () => addPage(store) },
+        { id: "save", group: group.file, label: t("commands.save"), hint: "⌘S", run: host.onSave },
+        {
+            id: "export",
+            group: group.file,
+            label: t("commands.export"),
+            hint: "⌘E",
+            run: host.onExport,
+        },
+        { id: "import", group: group.file, label: t("commands.import"), run: host.onImport },
+        { id: "publish", group: group.file, label: t("commands.publish"), run: host.onPublish },
+        { id: "present", group: group.file, label: t("commands.present"), run: host.onPresent },
+        {
+            id: "page-new",
+            group: group.file,
+            label: t("commands.newPage"),
+            run: () =>
+                addPage(
+                    store,
+                    t("pages.numbered", { number: store.getState().doc.pages.length + 1 })
+                ),
+        },
 
-        { id: "undo", group: "Edit", label: "Undo", hint: "⌘Z", run: () => store.undo() },
-        { id: "redo", group: "Edit", label: "Redo", hint: "⇧⌘Z", run: () => store.redo() },
+        {
+            id: "undo",
+            group: group.edit,
+            label: t("commands.undo"),
+            hint: "⌘Z",
+            run: () => store.undo(),
+        },
+        {
+            id: "redo",
+            group: group.edit,
+            label: t("commands.redo"),
+            hint: "⇧⌘Z",
+            run: () => store.redo(),
+        },
         {
             id: "select-all",
-            group: "Edit",
-            label: "Select all",
+            group: group.edit,
+            label: t("commands.selectAll"),
             hint: "⌘A",
             run: () => selectAll(store),
         },
         {
             id: "duplicate",
-            group: "Edit",
-            label: "Duplicate selection",
+            group: group.edit,
+            label: t("commands.duplicate"),
             hint: "⌘D",
             run: () => duplicateSelection(store),
         },
         {
             id: "group",
-            group: "Edit",
-            label: "Group",
+            group: group.edit,
+            label: t("commands.group"),
             hint: "⌘G",
             run: () => groupSelection(store),
         },
         {
             id: "ungroup",
-            group: "Edit",
-            label: "Ungroup",
+            group: group.edit,
+            label: t("commands.ungroup"),
             hint: "⇧⌘G",
             run: () => ungroupSelection(store),
         },
         {
             id: "lock",
-            group: "Edit",
-            label: "Lock / unlock",
+            group: group.edit,
+            label: t("commands.lock"),
             hint: "⌘L",
             run: () => toggleLock(store),
         },
         {
             id: "expand-all",
-            group: "Edit",
-            label: "Expand all branches",
+            group: group.edit,
+            label: t("commands.expandAll"),
             run: () => expandAll(store),
         },
 
         {
             id: "align-left",
-            group: "Arrange",
-            label: "Align left",
+            group: group.arrange,
+            label: t("inspector.alignLeft"),
             run: () => alignSelection(store, "left"),
         },
         {
             id: "align-center",
-            group: "Arrange",
-            label: "Align centre",
+            group: group.arrange,
+            label: t("inspector.alignCentre"),
             run: () => alignSelection(store, "hcenter"),
         },
         {
             id: "align-right",
-            group: "Arrange",
-            label: "Align right",
+            group: group.arrange,
+            label: t("inspector.alignRight"),
             run: () => alignSelection(store, "right"),
         },
         {
             id: "align-top",
-            group: "Arrange",
-            label: "Align top",
+            group: group.arrange,
+            label: t("inspector.alignTop"),
             run: () => alignSelection(store, "top"),
         },
         {
             id: "align-middle",
-            group: "Arrange",
-            label: "Align middle",
+            group: group.arrange,
+            label: t("inspector.alignMiddle"),
             run: () => alignSelection(store, "vcenter"),
         },
         {
             id: "align-bottom",
-            group: "Arrange",
-            label: "Align bottom",
+            group: group.arrange,
+            label: t("inspector.alignBottom"),
             run: () => alignSelection(store, "bottom"),
         },
         {
             id: "distribute-h",
-            group: "Arrange",
-            label: "Distribute horizontally",
+            group: group.arrange,
+            label: t("inspector.distributeH"),
             run: () => distributeSelection(store, "h"),
         },
         {
             id: "distribute-v",
-            group: "Arrange",
-            label: "Distribute vertically",
+            group: group.arrange,
+            label: t("inspector.distributeV"),
             run: () => distributeSelection(store, "v"),
         },
         {
             id: "front",
-            group: "Arrange",
-            label: "Bring to front",
+            group: group.arrange,
+            label: t("inspector.front"),
             run: () => reorder(store, "front"),
         },
-        { id: "back", group: "Arrange", label: "Send to back", run: () => reorder(store, "back") },
+        {
+            id: "back",
+            group: group.arrange,
+            label: t("inspector.back"),
+            run: () => reorder(store, "back"),
+        },
 
         {
             id: "edge-straight",
-            group: "Connectors",
-            label: "Connector style: straight",
+            group: group.connectors,
+            label: t("commands.edgeStraight"),
             run: () => setEdgeKind(store, "straight"),
         },
         {
             id: "edge-elbow",
-            group: "Connectors",
-            label: "Connector style: elbow",
+            group: group.connectors,
+            label: t("commands.edgeElbow"),
             run: () => setEdgeKind(store, "elbow"),
         },
         {
             id: "edge-curved",
-            group: "Connectors",
-            label: "Connector style: curved",
+            group: group.connectors,
+            label: t("commands.edgeCurved"),
             run: () => setEdgeKind(store, "curved"),
         },
 
         ...layouts,
         ...themes,
 
-        { id: "fit", group: "View", label: "Fit to screen", hint: "⌘1", run: host.onFit },
+        { id: "fit", group: group.view, label: t("zoom.fit"), hint: "⌘1", run: host.onFit },
         {
             id: "shortcuts",
-            group: "View",
-            label: "Keyboard shortcuts",
+            group: group.view,
+            label: t("topBar.shortcuts"),
             hint: "?",
             run: host.onShortcuts,
         },
@@ -255,6 +302,7 @@ export function CommandPalette({
     onOpenChange: (open: boolean) => void;
     commands: Command[];
 }) {
+    const t = useTranslations("mindmap");
     const [query, setQuery] = useState("");
     const [active, setActive] = useState(0);
     const listRef = useRef<HTMLDivElement | null>(null);
@@ -289,9 +337,9 @@ export function CommandPalette({
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="gap-0 overflow-hidden p-0 sm:max-w-[540px]">
-                <DialogTitle className="sr-only">Command palette</DialogTitle>
+                <DialogTitle className="sr-only">{t("topBar.commandPalette")}</DialogTitle>
                 <DialogDescription className="sr-only">
-                    Search for an action by name
+                    {t("commands.description")}
                 </DialogDescription>
                 <div className="border-line flex items-center gap-2 border-b px-3 py-2.5">
                     <Search className="text-ink-3 size-4" />
@@ -314,14 +362,14 @@ export function CommandPalette({
                                 run(filtered[active]);
                             }
                         }}
-                        placeholder="Type a command…"
+                        placeholder={t("commands.placeholder")}
                         className="text-ink placeholder:text-ink-4 flex-1 bg-transparent text-[14px] outline-none"
                     />
                 </div>
                 <div ref={listRef} className="max-h-[380px] overflow-y-auto p-1.5">
                     {filtered.length === 0 && (
                         <p className="text-ink-3 px-3 py-6 text-center text-[13px]">
-                            No commands match “{query}”.
+                            {t("commands.noMatch", { query })}
                         </p>
                     )}
                     {filtered.map((command, i) => (

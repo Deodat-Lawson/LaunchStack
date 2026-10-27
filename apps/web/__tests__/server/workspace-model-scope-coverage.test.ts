@@ -67,11 +67,6 @@ type Coverage =
 const API = "apps/web/src/app/api";
 const JOBS = "apps/web/src/server/inngest/functions";
 
-const QA_ROUTES = [
-    `${API}/agents/documentQ&A/AIChat/query/route.ts`,
-    `${API}/agents/documentQ&A/AIQuery/route.ts`,
-    `${API}/agents/documentQ&A/AIQueryRLM/route.ts`,
-];
 const MARKETING_RUN = `${API}/marketing-pipeline/route.ts`;
 const MARKETING_EVALUATE = `${API}/marketing-pipeline/evaluate/route.ts`;
 const MARKETING_REFINE = `${API}/marketing-pipeline/refine/route.ts`;
@@ -100,17 +95,18 @@ const COVERAGE: Record<string, Coverage> = Object.fromEntries<Coverage>([
         `${API}/agents/documentQ&A/AIChat/query/route.ts`,
         "POST: answer() runs in the caller's workspace scope, the streamed body included"
     ),
-    self(`${API}/agents/documentQ&A/AIQuery/route.ts`, "POST body after auth"),
-    self(`${API}/agents/documentQ&A/AIQueryRLM/route.ts`, "POST body after auth"),
     self(`${API}/agents/documentQ&A/AskMyNotes/route.ts`, "POST body after auth"),
-    [
-        "apps/web/src/app/api/agents/documentQ&A/services/webSearchAgent.ts",
-        { scopedBy: QA_ROUTES, note: "performWebSearch from the Q&A routes" },
-    ],
     self(
         `${API}/config/ai-models/route.ts`,
         "GET: the picker's routes for the caller's workspace; signed out gets the deployment's"
     ),
+    [
+        "apps/web/src/server/chat-source-data.ts",
+        {
+            scopedBy: [`${API}/agents/documentQ&A/AIChat/query/route.ts`],
+            note: "ask_each's per-source reads, resolved during the answer's tool loop",
+        },
+    ],
     [
         "apps/web/src/server/ask-starters/index.ts",
         { scopedBy: [`${API}/ask/starters/route.ts`], note: "GET /api/ask/starters" },
@@ -321,7 +317,7 @@ const COVERAGE: Record<string, Coverage> = Object.fromEntries<Coverage>([
     // --- Deliberately unscoped ----------------------------------------------
     [
         "apps/web/src/server/settings/models.ts",
-        { unscoped: "Settings › Models shows the deployment's default models" },
+        { unscoped: "Workspace › Models shows the deployment's default models" },
     ],
     [
         "apps/web/src/server/workspace-models/probe.ts",

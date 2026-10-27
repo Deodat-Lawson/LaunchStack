@@ -2,6 +2,7 @@
 
 import React, { useCallback, useState } from "react";
 import { ChevronDown, ChevronUp, Lock, Plus, Settings } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface BatchSettings {
     category: string;
@@ -16,7 +17,7 @@ interface UploadSettingsProps {
     onBatchSettingsChange: React.Dispatch<React.SetStateAction<BatchSettings>>;
     onApplyBatchSettings: () => void;
     processingMethods: { value: string; label: string; description: string }[];
-    /** Where uploads go; shown as a note, changed under Settings → Document defaults. */
+    /** Where uploads go; shown as a note. */
     currentStorageValue: string;
     onAddCategory?: (name: string) => Promise<void>;
     storageProvider?: "s3" | "database";
@@ -52,6 +53,8 @@ export function UploadSettings({
     onAddCategory,
     storageProvider,
 }: UploadSettingsProps) {
+    const t = useTranslations("upload.settings");
+    const tc = useTranslations("common");
     const [expanded, setExpanded] = useState(false);
     const [isAddingCategory, setIsAddingCategory] = useState(false);
     const [newCategoryName, setNewCategoryName] = useState("");
@@ -116,7 +119,7 @@ export function UploadSettings({
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                     <Settings size={14} color="var(--ink-3)" />
                     <span style={{ fontSize: 14, fontWeight: 600, color: "var(--ink)" }}>
-                        Settings
+                        {t("title")}
                     </span>
                     {categoryLabel && (
                         <span
@@ -155,7 +158,7 @@ export function UploadSettings({
                     {/* Category */}
                     <div>
                         <label style={labelStyle} htmlFor="batch-category">
-                            Category
+                            {t("category")}
                         </label>
                         {!isAddingCategory ? (
                             <div style={{ display: "flex", gap: 8 }}>
@@ -175,14 +178,16 @@ export function UploadSettings({
                                     }}
                                     style={inputStyle}
                                 >
-                                    <option value="">Select a category (optional)</option>
+                                    <option value="">{t("categoryPlaceholder")}</option>
                                     {categories.map(c => (
                                         <option key={c.id} value={c.name}>
                                             {c.name}
                                         </option>
                                     ))}
                                     {onAddCategory && (
-                                        <option value="__add_new__">+ Add new category…</option>
+                                        <option value="__add_new__">
+                                            {t("addCategoryOption")}
+                                        </option>
                                     )}
                                 </select>
                             </div>
@@ -191,7 +196,7 @@ export function UploadSettings({
                                 <input
                                     value={newCategoryName}
                                     onChange={e => setNewCategoryName(e.target.value)}
-                                    placeholder="Enter category name"
+                                    placeholder={t("categoryNamePlaceholder")}
                                     onKeyDown={e => {
                                         if (e.key === "Enter") {
                                             e.preventDefault();
@@ -228,7 +233,7 @@ export function UploadSettings({
                                                 : "pointer",
                                     }}
                                 >
-                                    {isSavingCategory ? "…" : "Add"}
+                                    {isSavingCategory ? "…" : tc("actions.add")}
                                 </button>
                                 <button
                                     onClick={() => {
@@ -246,7 +251,7 @@ export function UploadSettings({
                                         cursor: "pointer",
                                     }}
                                 >
-                                    Cancel
+                                    {tc("actions.cancel")}
                                 </button>
                             </div>
                         )}
@@ -263,9 +268,7 @@ export function UploadSettings({
                                 }}
                             >
                                 {selectedRestricted && <Lock size={11} />}
-                                {selectedRestricted
-                                    ? "Restricted folder — visible only to people with access"
-                                    : "Visible to everyone in the workspace"}
+                                {selectedRestricted ? t("restricted") : t("visibleToAll")}
                             </div>
                         )}
                     </div>
@@ -274,7 +277,7 @@ export function UploadSettings({
                     {processingMethods.length > 1 && (
                         <div>
                             <label style={{ ...labelStyle, marginBottom: 10 }}>
-                                Processing method
+                                {t("processingMethod")}
                             </label>
                             <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                                 {processingMethods.map(method => {
@@ -347,7 +350,7 @@ export function UploadSettings({
                     {/* Upload date */}
                     <div>
                         <label style={labelStyle} htmlFor="uploadDate">
-                            Upload date
+                            {t("uploadDate")}
                         </label>
                         <input
                             id="uploadDate"
@@ -362,18 +365,19 @@ export function UploadSettings({
                             style={inputStyle}
                         />
                         <div style={{ fontSize: 11.5, color: "var(--ink-3)", marginTop: 4 }}>
-                            Optional: override the upload date for all documents
+                            {t("uploadDateHint")}
                         </div>
                     </div>
 
                     <div style={{ fontSize: 11.5, color: "var(--ink-3)" }}>
-                        Uploads are stored{" "}
-                        {storageProvider === "s3"
-                            ? "in S3"
-                            : currentStorageValue === "cloud"
-                              ? "with UploadThing"
-                              : "in the built-in storage"}
-                        . Change that under Settings → Document defaults.
+                        {t("storageNote", {
+                            where:
+                                storageProvider === "s3"
+                                    ? "s3"
+                                    : currentStorageValue === "cloud"
+                                      ? "cloud"
+                                      : "builtin",
+                        })}
                     </div>
 
                     <div>
@@ -394,7 +398,7 @@ export function UploadSettings({
                             }}
                         >
                             <Plus size={13} />
-                            Apply to all
+                            {t("applyAll")}
                         </button>
                     </div>
                 </div>

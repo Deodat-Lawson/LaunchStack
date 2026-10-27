@@ -1,3 +1,4 @@
+import type { useTranslations } from "next-intl";
 import { isChatPassage, passageLabel } from "~/lib/chat-passages";
 import type { ThreadMessage, ThreadReference, WorkspaceSource } from "./types";
 
@@ -32,14 +33,50 @@ export function citationOfReference(
     return citationWithSource(cite.snippet, source);
 }
 
+/** The headings a transcript is written with, in the reader's language (`chat.transcript`). */
+export interface TranscriptLabels {
+    title: string;
+    you: string;
+    askedOver: (sources: string) => string;
+    groundedIn: string;
+    webSources: string;
+}
+
+/** The English, for callers that have no translator. */
+const ENGLISH_TRANSCRIPT: TranscriptLabels = {
+    title: "Chat transcript",
+    you: "You",
+    askedOver: sources => `Asked over: ${sources}`,
+    groundedIn: "Grounded in",
+    webSources: "Web sources",
+};
+
+/** `useTranslations("chat.transcript")`. */
+export type TranscriptTranslator = ReturnType<typeof useTranslations<"chat.transcript">>;
+
+/** The headings from a `chat.transcript` translator. */
+export function transcriptLabels(t: TranscriptTranslator): TranscriptLabels {
+    return {
+        title: t("title"),
+        you: t("you"),
+        askedOver: sources => t("askedOver", { sources }),
+        groundedIn: t("groundedIn"),
+        webSources: t("webSources"),
+    };
+}
+
 /** The whole conversation as Markdown, citations included. */
-export function transcriptMarkdown(thread: ThreadMessage[], sources: WorkspaceSource[]): string {
+export function transcriptMarkdown(
+    thread: ThreadMessage[],
+    sources: WorkspaceSource[],
+    labels: TranscriptLabels = ENGLISH_TRANSCRIPT
+): string {
     const titleOf = (id: string) => sources.find(s => s.id === id)?.title ?? id;
     const blocks = thread.map(msg => {
         if (msg.role === "user") {
             const refs = (msg.refs ?? []).map(titleOf);
-            const scope = refs.length ? `\n\n_Asked over: ${refs.join(", ")}_` : "";
-            return `## You\n\n${passagesMarkdown(msg)}${msg.text}${scope}`;
+            const scope = refs.length ? `\n\n_${labels.askedOver(refs.join(", "))}_` : "";
+            return `## ${labels.you}\n\n${passagesMarkdown(msg)}${msg.text}${scope}`;
         }
         const cites = (msg.citations ?? [])
             .map(c => {
@@ -47,10 +84,14 @@ export function transcriptMarkdown(thread: ThreadMessage[], sources: WorkspaceSo
                 return source ? `- ${citationOfReference(c, source)}` : null;
             })
             .filter((line): line is string => Boolean(line));
-        const grounded = cites.length ? `\n\n**Grounded in**\n\n${cites.join("\n")}` : "";
-        return `## Launchstack\n\n${msg.text}${grounded}`;
+        const grounded = cites.length ? `\n\n**${labels.groundedIn}**\n\n${cites.join("\n")}` : "";
+        const web = (msg.webSources ?? []).map(
+            (source, index) => `${index + 1}. [${source.title}](${source.url})`
+        );
+        const webBlock = web.length ? `\n\n**${labels.webSources}**\n\n${web.join("\n")}` : "";
+        return `## Launchstack\n\n${msg.text}${grounded}${webBlock}`;
     });
-    return `# Chat transcript\n\n${blocks.join("\n\n---\n\n")}\n`;
+    return `# ${labels.title}\n\n${blocks.join("\n\n---\n\n")}\n`;
 }
 
 /** A passage as a Markdown blockquote, ready to type under. */

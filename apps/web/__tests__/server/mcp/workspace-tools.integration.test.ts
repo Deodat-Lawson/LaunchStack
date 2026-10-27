@@ -2,7 +2,9 @@
  * The MCP read tools against a real Postgres: two people in one workspace,
  * one of whom has a private document. The other must not find it through
  * search, read it through fetch (and must get the same answer as for an id
- * that does not exist), or see it counted in list_sources.
+ * that does not exist), or see it counted in list_sources. Ask's source
+ * tools share the same queries and are held to the same rules, with files
+ * imported from Google Drive among them.
  *
  * Scope is a SQL predicate, so only a real database tests it. Gated like the
  * other integration suites: runs when LAUNCHSTACK_TEST_DATABASE_URL (or
@@ -35,6 +37,9 @@ import { fetchTool } from "~/server/mcp/tools/fetch";
 import { listSourcesTool } from "~/server/mcp/tools/list-sources";
 import { searchTool } from "~/server/mcp/tools/search";
 import { documentNotFound } from "~/server/mcp/tools/shared";
+import { createSourceTools, loadSourcesOverview } from "~/server/chat-source-tools";
+import { connectorConnections, googleDriveSyncState } from "~/server/db/schema/connectors";
+import { findSourcesByTitle, summarizeReadableSources } from "~/server/workspace-sources";
 
 import { createFounderWeeklyReviewTestDatabase } from "../../founderWeeklyReview/testDb";
 
@@ -111,10 +116,21 @@ describeDb("MCP read tools respect the person's document scope (integration)", (
         return outcome.structured;
     }
 
-    async function addDocument(title: string, folder: string, chunks: string[]): Promise<number> {
+    async function addDocument(
+        title: string,
+        folder: string,
+        chunks: string[],
+        connector?: string
+    ): Promise<number> {
         const [doc] = await test.db
             .insert(document)
-            .values({ companyId, url: `local://${title}`, category: folder, title })
+            .values({
+                companyId,
+                url: `local://${title}`,
+                category: folder,
+                title,
+                ...(connector ? { ocrMetadata: { connector, sourceId: title } } : {}),
+            })
             .returning({ id: document.id });
         const [version] = await test.db
             .insert(documentVersions)
@@ -179,23 +195,27 @@ describeDb("MCP read tools respect the person's document scope (integration)", (
             "We are hiring two engineers this quarter.",
         ]);
 
-        // Ada's diary is private to her: restricted, with a grant to her alone.
-        // Owners do not read past a restriction by role (ADR-014).
+        await makePrivateToAda(ids.diary);
+    });
+
+    // Private to Ada: restricted, with a grant to her alone. Owners do not
+    // read past a restriction by role (ADR-014).
+    async function makePrivateToAda(documentId: number) {
         await test.db.insert(documentSettings).values({
-            documentId: BigInt(ids.diary),
+            documentId: BigInt(documentId),
             companyId,
             restricted: true,
             updatedBy: "auth_ada",
         });
         await test.db.insert(documentGrants).values({
             companyId,
-            documentId: BigInt(ids.diary),
+            documentId: BigInt(documentId),
             principalType: "user",
             principalId: pk.ada.toString(),
             level: "manage",
             grantedBy: "auth_ada",
         });
-    });
+    }
 
     afterAll(async () => {
         mockActiveDb = null;
@@ -306,6 +326,157 @@ describeDb("MCP read tools respect the person's document scope (integration)", (
             const team = ok(await call(listSourcesTool, "bea", { folder: "Team" })) as Listing;
             expect(team.folders).toEqual([{ path: "Team", documentCount: 1 }]);
             expect(team.documents.map(d => d.id)).toEqual([String(ids.plan)]);
+        });
+    });
+
+    // Last, so its Drive files don't change what the MCP cases above count.
+    describe("Ask's source tools", () => {
+        const drive = { resume: 0, salaries: 0 };
+        const signal = new AbortController().signal;
+
+        function toolsFor(name: Person) {
+            const session = createSourceTools(principal(name).ctx);
+            const byName = Object.fromEntries(session.tools.map(tool => [tool.name, tool]));
+            return { session, ...byName } as typeof byName & { session: typeof session };
+        }
+
+        beforeAll(async () => {
+            drive.resume = await addDocument(
+                "Jane Doe resume",
+                "Interest form/Resumes",
+                ["Jane Doe. Software engineer: Python, distributed systems."],
+                "google-drive"
+            );
+            drive.salaries = await addDocument(
+                "Salary bands",
+                "Interest form/Resumes",
+                ["Confidential salary bands for the zebra team."],
+                "google-drive"
+            );
+            await makePrivateToAda(drive.salaries);
+
+            const [conn] = await test.db
+                .insert(connectorConnections)
+                .values({
+                    companyId,
+                    provider: "google-drive",
+                    providerAccountId: "sub-ada",
+                    providerAccountEmail: "ada@acme.test",
+                    grantedByUserId: pk.ada,
+                    scopes: "https://www.googleapis.com/auth/drive.readonly",
+                })
+                .returning({ id: connectorConnections.id });
+            await test.db.insert(googleDriveSyncState).values({
+                connectionId: conn!.id,
+                lastSyncAt: new Date("2026-10-17T23:48:32Z"),
+                lastSyncStatus: "ok",
+            });
+            // Ada's mailbox is hers alone.
+            await test.db.insert(connectorConnections).values({
+                companyId,
+                provider: "gmail",
+                providerAccountId: "sub-ada-mail",
+                providerAccountEmail: "ada@acme.test",
+                grantedByUserId: pk.ada,
+                ownerUserId: pk.ada,
+                scopes: "https://www.googleapis.com/auth/gmail.readonly",
+            });
+        });
+
+        it("lists what came from Google Drive, and only what the person can open", async () => {
+            const bea = await toolsFor("bea").list_sources!.run({ from: "google-drive" }, signal);
+            expect(bea).toContain("1 source in 1 folder.");
+            expect(bea).toContain(
+                `"Jane Doe resume" (d${drive.resume}) — in Interest form/Resumes, from Google Drive`
+            );
+            expect(bea).not.toContain("Salary");
+
+            const ada = await toolsFor("ada").list_sources!.run({ from: "google-drive" }, signal);
+            expect(ada).toContain("2 sources in 1 folder.");
+            expect(ada).toContain("Salary bands");
+
+            const here = await toolsFor("bea").list_sources!.run({ from: "added-here" }, signal);
+            expect(here).toContain("Zebra launch plan");
+            expect(here).not.toContain("Jane Doe");
+        });
+
+        it("counts sources by origin from the readable set", async () => {
+            expect(await summarizeReadableSources(principal("bea").ctx)).toEqual({
+                total: 3,
+                byOrigin: [
+                    { from: null, count: 2 },
+                    { from: "google-drive", count: 1 },
+                ],
+            });
+            expect((await summarizeReadableSources(principal("ada").ctx)).total).toBe(5);
+        });
+
+        it("tells each person about the connections they may see", async () => {
+            const bea = await loadSourcesOverview(principal("bea").ctx);
+            expect(bea.connected).toEqual([
+                {
+                    provider: "google-drive",
+                    status: "active",
+                    lastSyncAt: new Date("2026-10-17T23:48:32Z"),
+                },
+            ]);
+            const ada = await loadSourcesOverview(principal("ada").ctx);
+            expect(ada.connected.map(app => app.provider)).toEqual(["google-drive", "gmail"]);
+        });
+
+        it("never searches or reads a private Drive file for a colleague", async () => {
+            const bea = toolsFor("bea");
+            const found = await bea.search_sources!.run({ query: "salary bands zebra" }, signal);
+            expect(found).not.toContain("Confidential");
+            expect(bea.session.passages.map(p => p.metadata?.documentId)).not.toContain(
+                drive.salaries
+            );
+            await expect(
+                bea.read_source!.run({ id: `d${drive.salaries}` }, signal)
+            ).rejects.toThrow(
+                `No source "d${drive.salaries}" is among the sources the person can open.`
+            );
+
+            const ada = toolsFor("ada");
+            expect(await ada.read_source!.run({ id: `d${drive.salaries}` }, signal)).toContain(
+                "Confidential salary bands"
+            );
+        });
+
+        it("finds a source by the words of its title, and never a private one for a colleague", async () => {
+            const bea = await findSourcesByTitle(
+                principal("bea").ctx,
+                "what's in Jane Doe's resume?"
+            );
+            expect(bea.map(doc => doc.id)).toEqual([drive.resume]);
+            expect(bea[0]).toMatchObject({ title: "Jane Doe resume", from: "google-drive" });
+
+            expect(await findSourcesByTitle(principal("bea").ctx, "salary bands")).toEqual([]);
+            expect(
+                (await findSourcesByTitle(principal("ada").ctx, "salary bands")).map(doc => doc.id)
+            ).toEqual([drive.salaries]);
+            // One shared word is not enough when the query has more; wildcards are literal.
+            expect(await findSourcesByTitle(principal("ada").ctx, "zebra budget")).toEqual([]);
+            expect(await findSourcesByTitle(principal("ada").ctx, "% _")).toEqual([]);
+            // A one-word query needs one.
+            expect(
+                (await findSourcesByTitle(principal("ada").ctx, "zebra"))
+                    .map(doc => doc.title)
+                    .sort()
+            ).toEqual(["Ada's zebra diary", "Zebra launch plan"]);
+        });
+
+        it("finds a Drive file's text and keeps the passage for citations", async () => {
+            const bea = toolsFor("bea");
+            const found = await bea.search_sources!.run({ query: "Python engineer" }, signal);
+            expect(found).toContain(`"Jane Doe resume" (d${drive.resume})`);
+            expect(found).toContain("Software engineer: Python");
+            expect(bea.session.passages.map(p => p.metadata)).toContainEqual(
+                expect.objectContaining({
+                    documentId: drive.resume,
+                    documentTitle: "Jane Doe resume",
+                })
+            );
         });
     });
 });

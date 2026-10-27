@@ -45,6 +45,8 @@ import { VantageError } from "@launchstack/pipelines/vantage";
 
 import { GET } from "~/app/api/vantage/triage/route";
 
+const TRIAGE_URL = "http://localhost/api/vantage/triage";
+
 const triage = {
     today: "2026-10-03",
     helpRequests: [],
@@ -78,7 +80,7 @@ describe("GET /api/vantage/triage", () => {
         signInAs(role);
         expect(makeWorkspaceContext({ role }).can("settings.manage")).toBe(false);
 
-        const response = await GET();
+        const response = await GET(new Request(TRIAGE_URL));
 
         expect(response.status).toBe(403);
         expect(await response.json()).toEqual({
@@ -91,7 +93,7 @@ describe("GET /api/vantage/triage", () => {
     it.each(["admin", "owner"])("returns the workspace's triage to an %s", async role => {
         signInAs(role);
 
-        const response = await GET();
+        const response = await GET(new Request(TRIAGE_URL));
 
         expect(response.status).toBe(200);
         expect(await response.json()).toEqual(triage);
@@ -101,7 +103,7 @@ describe("GET /api/vantage/triage", () => {
     it("gates on the permission, not the role name", async () => {
         signInAs("program-lead", ["settings.manage"]);
 
-        const response = await GET();
+        const response = await GET(new Request(TRIAGE_URL));
 
         expect(response.status).toBe(200);
         expect(mockLoadTriage).toHaveBeenCalledTimes(1);
@@ -115,7 +117,7 @@ describe("GET /api/vantage/triage", () => {
                 .NextResponse.json({ error: "Unauthorized" }, { status: 401 }),
         });
 
-        const response = await GET();
+        const response = await GET(new Request(TRIAGE_URL));
 
         expect(response.status).toBe(401);
         expect(mockLoadTriage).not.toHaveBeenCalled();
@@ -125,7 +127,7 @@ describe("GET /api/vantage/triage", () => {
         signInAs("admin");
         mockLoadTriage.mockRejectedValue(new VantageError("Gone", 404, "not_found"));
 
-        const response = await GET();
+        const response = await GET(new Request(TRIAGE_URL));
 
         expect(response.status).toBe(404);
         expect(await response.json()).toEqual({ error: "Gone", code: "not_found" });

@@ -19,7 +19,7 @@
  * Everything else — creation-key hashing, conflict convergence, version
  * adoption, job repair — is behavior-identical to the web original.
  */
-import { and, eq, isNull, sql } from "drizzle-orm";
+import { and, eq, inArray, isNull, sql, type AnyColumn } from "drizzle-orm";
 import { createHash, randomUUID } from "node:crypto";
 
 import {
@@ -33,6 +33,7 @@ import {
 } from "@launchstack/store/schema";
 import { getDb, type DbClient } from "@launchstack/store/client";
 import {
+    eventIds,
     parseOcrProvider,
     pipelineEventSchema,
     type OcrProvider,
@@ -230,7 +231,8 @@ interface DispatchDecision {
     job: OcrJob;
     documentRow: Document;
     version: DocumentVersion;
-    rawCreationKey: string;
+    /** Absent on a retry, which has only the hashed key; persisted options carry it. */
+    rawCreationKey?: string;
     fallbackOptions: DispatchRoutingOptions;
     userId: string;
     traceId?: string;
@@ -251,6 +253,13 @@ async function dispatchInTx(tx: Tx, decision: DispatchDecision): Promise<OcrJob>
         job = requeued ?? job;
     }
 
+    await enqueueJobEventInTx(tx, { ...decision, job });
+    return job;
+}
+
+/** Build the job's `source.version.created` event and upsert its outbox row. */
+async function enqueueJobEventInTx(tx: Tx, decision: DispatchDecision): Promise<void> {
+    const job = decision.job;
     const persisted = job.dispatchOptions as DispatchRoutingOptions | null;
     // Legacy jobs (rows predating persisted dispatch options) must route by
     // the STORED version's mimeType — the version row is what a replay
@@ -289,7 +298,6 @@ async function dispatchInTx(tx: Tx, decision: DispatchDecision): Promise<OcrJob>
         embeddingIndexKey: routingOptions.embeddingIndexKey,
     });
     await enqueueSourceEventInTx(tx, event);
-    return job;
 }
 
 type TransactionLifecycle = {
@@ -876,4 +884,178 @@ export async function createDocumentVersionLifecycle(
         jobId: job.id,
         eventIds: [],
     };
+}
+
+/** The job-bearing stages, in pipeline order. */
+const STAGE_EVENT_IDS = [
+    eventIds.sourceVersionCreated,
+    eventIds.evidenceVersionExtracted,
+    eventIds.evidenceVersionIndexed,
+] as const;
+
+export interface RetrySourceProcessingParams {
+    companyId: bigint;
+    documentId: number;
+    /** Who asked, for the extraction event when it has to be rebuilt. */
+    userId: string;
+}
+
+export type RetrySourceProcessingResult =
+    | {
+          status: "retrying";
+          jobId: string;
+          /** The event type of the stage that runs first. */
+          stage: string;
+          /** Manual retries of this job so far, this one included. */
+          retryCount: number;
+      }
+    /** The document is not in this workspace. */
+    | { status: "not_found" }
+    /** The current version has no processing job (a stored recording, say). */
+    | { status: "no_job" }
+    /** The job is queued, running, or done — there is nothing to retry. */
+    | { status: "not_failed"; jobStatus: OcrJob["status"] }
+    /** A stage is still pending or running: the pipeline is already at it. */
+    | { status: "already_running" };
+
+/** Drop the dead-event handler's keys and keep the provenance a row carries. */
+function withoutFailureStamp(column: AnyColumn) {
+    return sql`CASE WHEN jsonb_typeof(${column}) = 'object'
+        THEN ${column} - 'error' - 'errorMessage' - 'failedAt' ELSE ${column} END`;
+}
+
+/**
+ * Retry a source whose processing failed: the product's version of the
+ * outbox runbook's replay (docs/runbooks/outbox.md).
+ *
+ * The pipeline is one outbox row per stage. When a stage exhausts its
+ * attempts its row goes `dead` and the dead-event handler marks the job and
+ * the current version failed. A retry revives the EARLIEST dead stage — a
+ * book whose embedding hit a quota re-runs indexing, not OCR — and, the
+ * handlers being idempotent, each completed stage revives the next. When no
+ * stage is dead (the job failed some other way), the extraction event is
+ * re-enqueued as a re-upload would.
+ *
+ * One transaction under the document row lock: two clicks converge on one
+ * replay, and a version uploaded meanwhile is never touched.
+ */
+export async function retrySourceProcessing(
+    params: RetrySourceProcessingParams
+): Promise<RetrySourceProcessingResult> {
+    return getDb().transaction(async (tx): Promise<RetrySourceProcessingResult> => {
+        const [doc] = await tx
+            .select()
+            .from(document)
+            .where(
+                and(eq(document.id, params.documentId), eq(document.companyId, params.companyId))
+            )
+            .for("update")
+            .limit(1);
+        if (!doc) return { status: "not_found" };
+
+        let version: DocumentVersion | undefined;
+        if (doc.currentVersionId !== null) {
+            [version] = await tx
+                .select()
+                .from(documentVersions)
+                .where(
+                    and(
+                        eq(documentVersions.id, Number(doc.currentVersionId)),
+                        eq(documentVersions.documentId, BigInt(doc.id))
+                    )
+                )
+                .limit(1);
+        }
+
+        // The current version's job, or a legacy unversioned row's own —
+        // never an older version's.
+        const jobId = version ? version.ocrJobId : doc.ocrJobId;
+        if (!jobId) return { status: "no_job" };
+        const [job] = await tx
+            .select()
+            .from(ocrJobs)
+            .where(
+                and(
+                    eq(ocrJobs.id, jobId),
+                    eq(ocrJobs.documentId, BigInt(doc.id)),
+                    version ? eq(ocrJobs.versionId, BigInt(version.id)) : undefined
+                )
+            )
+            .limit(1);
+        if (!job) return { status: "no_job" };
+        if (job.status !== "failed") return { status: "not_failed", jobStatus: job.status };
+
+        const stageIds = STAGE_EVENT_IDS.map(stageId => stageId(job.id));
+        const rows = await tx
+            .select({ eventId: eventOutbox.eventId, status: eventOutbox.status })
+            .from(eventOutbox)
+            .where(inArray(eventOutbox.eventId, stageIds));
+        const statusOf = new Map(rows.map(row => [row.eventId, row.status] as const));
+        if (rows.some(row => row.status === "pending" || row.status === "processing")) {
+            return { status: "already_running" };
+        }
+
+        const deadId = stageIds.find(id => statusOf.get(id) === "dead");
+        let stage: string;
+        if (deadId) {
+            await tx
+                .update(eventOutbox)
+                .set({
+                    status: "pending",
+                    availableAt: sql`CURRENT_TIMESTAMP`,
+                    attemptCount: 0,
+                    claimedAt: null,
+                    lastError: null,
+                    updatedAt: new Date(),
+                })
+                .where(and(eq(eventOutbox.eventId, deadId), eq(eventOutbox.status, "dead")));
+            stage = deadId.slice(0, deadId.indexOf(":"));
+        } else {
+            if (!version) return { status: "no_job" };
+            await enqueueJobEventInTx(tx, {
+                job,
+                documentRow: doc,
+                version,
+                fallbackOptions: createDispatchRoutingOptions({ mimeType: version.mimeType }),
+                userId: params.userId,
+            });
+            stage = "source.version.created";
+        }
+
+        const [requeued] = await tx
+            .update(ocrJobs)
+            .set({
+                status: "queued",
+                errorMessage: null,
+                completedAt: null,
+                progress: null,
+                retryCount: sql`COALESCE(${ocrJobs.retryCount}, 0) + 1`,
+            })
+            .where(and(eq(ocrJobs.id, job.id), eq(ocrJobs.status, "failed")))
+            .returning({ retryCount: ocrJobs.retryCount });
+
+        // Lift the failure stamp so the source reads as processing again.
+        await tx
+            .update(document)
+            .set({ ocrMetadata: withoutFailureStamp(document.ocrMetadata) })
+            .where(
+                and(
+                    eq(document.id, doc.id),
+                    version ? eq(document.currentVersionId, BigInt(version.id)) : undefined
+                )
+            );
+        if (version) {
+            await tx
+                .update(documentVersions)
+                .set({ ocrMetadata: withoutFailureStamp(documentVersions.ocrMetadata) })
+                .where(eq(documentVersions.id, version.id));
+        }
+
+        return {
+            status: "retrying",
+            jobId: job.id,
+            stage,
+            retryCount: requeued?.retryCount ?? (job.retryCount ?? 0) + 1,
+        };
+    });
 }

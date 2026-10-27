@@ -54,11 +54,26 @@ export interface MindmapDetail extends MindmapSummary {
     docVersion: number;
 }
 
+/**
+ * A failed call. `serverMessage` is the API's own words, shown as they are;
+ * without one the screen says "request failed" in the reader's language
+ * (`mindmap.errors.requestFailed`) — `message` is the English for logs.
+ */
+export class MindmapRequestError extends Error {
+    constructor(
+        readonly status: number,
+        readonly serverMessage: string | undefined
+    ) {
+        super(serverMessage ?? `Request failed (HTTP ${status})`);
+        this.name = "MindmapRequestError";
+    }
+}
+
 async function request<T>(input: string, init?: RequestInit): Promise<T> {
     const res = await fetch(input, init);
     if (!res.ok) {
         const body = (await res.json().catch(() => ({}))) as { error?: string; message?: string };
-        throw new Error(body.message ?? body.error ?? `Request failed (HTTP ${res.status})`);
+        throw new MindmapRequestError(res.status, body.message ?? body.error);
     }
     return (await res.json()) as T;
 }

@@ -15,7 +15,7 @@ export function StandInBanner({ network }: { network: string }) {
     return (
         <div
             role="note"
-            className="border-warn/40 bg-warn-soft text-warn flex items-center justify-center gap-2 border-b px-4 py-1.5 text-xs font-medium"
+            className="border-warn/40 bg-warn-soft text-warn-ink flex items-center justify-center gap-2 border-b px-4 py-1.5 text-xs font-medium"
         >
             <TriangleAlert className="size-3.5" aria-hidden />
             Development stand-in — not {network}. Nothing here leaves this machine.
@@ -162,7 +162,7 @@ export function CallLog({
                     <span
                         className={cn(
                             "w-8 shrink-0 font-mono tabular-nums",
-                            c.status >= 400 ? "text-danger" : "text-success"
+                            c.status >= 400 ? "text-danger" : "text-success-ink"
                         )}
                     >
                         {c.status}

@@ -68,7 +68,7 @@ function seed(): SimJob[] {
             plan: [1_500, 9_000, 2_500, 14_000, 1_500],
             sections: 186,
             pages: 42,
-            provider: "Docling",
+            provider: "DOCLING",
         },
         {
             jobId: "job-scan",
@@ -80,7 +80,7 @@ function seed(): SimJob[] {
             plan: [6_000, 12_000, 2_000, 9_000, 1_500],
             sections: 64,
             pages: 18,
-            provider: "Azure",
+            provider: "AZURE",
         },
         {
             jobId: "job-notes",
@@ -92,7 +92,7 @@ function seed(): SimJob[] {
             plan: [12_000, 1_500, 1_000, 3_000, 800],
             sections: 12,
             pages: 1,
-            provider: "Text",
+            provider: "INGESTION",
         },
         {
             jobId: "job-retrying",
@@ -104,7 +104,7 @@ function seed(): SimJob[] {
             plan: [0, 0, 0, 0, 0],
             sections: 0,
             pages: 0,
-            provider: "Docling",
+            provider: "DOCLING",
             fixed: "retrying",
         },
         {
@@ -117,7 +117,7 @@ function seed(): SimJob[] {
             plan: [0, 0, 0, 0, 0],
             sections: 0,
             pages: 0,
-            provider: "Docling",
+            provider: "DOCLING",
             fixed: "failed",
         },
         {
@@ -130,7 +130,7 @@ function seed(): SimJob[] {
             plan: [0, 0, 0, 0, 0],
             sections: 30,
             pages: 6,
-            provider: "Native PDF",
+            provider: "NATIVE_PDF",
             fixed: "done",
         },
     ];
@@ -162,7 +162,7 @@ function itemFor(job: SimJob, at: number): ProcessingQueueItem {
         maxAttempts: 8,
         createdAt: iso(job.createdAt),
         canRetry: false,
-        stageSource: "recorded" as const,
+        retryCount: 0,
     };
 
     if (job.fixed === "done") {
@@ -202,15 +202,8 @@ function itemFor(job: SimJob, at: number): ProcessingQueueItem {
             nextAttemptAt: job.fixed === "retrying" ? iso(at + 3 * 60_000 + 20_000) : null,
             error:
                 job.fixed === "failed"
-                    ? {
-                          message: "The converter couldn't open this file.",
-                          detail: 'pipeline dead after max attempts: Document converter /convert failed: 400 Bad Request — {"error":{"code":"unsupported-file"}}',
-                      }
-                    : {
-                          message:
-                              "The AI provider is out of credit or rate-limited — try again later.",
-                          detail: "429 Too Many Requests",
-                      },
+                    ? 'pipeline dead after max attempts: Document converter /convert failed: 400 Bad Request — {"error":{"code":"unsupported-file"}}'
+                    : "429 Too Many Requests: RESOURCE_EXHAUSTED",
             pageCount: null,
             provider: job.provider,
             startedAt: iso(job.createdAt + 2_000),
@@ -261,7 +254,6 @@ function itemFor(job: SimJob, at: number): ProcessingQueueItem {
         indexing.total = job.sections;
         indexing.done = Math.floor((elapsed / job.plan[3]) * job.sections);
     }
-    if (index >= 2) stages[2]!.detail = `${job.provider} · ${job.pages} pages`;
     return {
         ...base,
         state: index === 0 ? "waiting" : "running",
@@ -377,16 +369,16 @@ export function ProcessingQueuePreview() {
                 if (failQueue) return json({ error: "The queue is unavailable." }, 503);
                 return json(respond(jobs, driveStarted));
             }
-            const retry = /^\/api\/documents\/processing-queue\/([^/]+)\/retry$/.exec(path);
+            const retry = /^\/api\/documents\/(\d+)\/retry$/.exec(path);
             if (retry && init?.method === "POST") {
-                const job = jobs.find(j => j.jobId === decodeURIComponent(retry[1]!));
+                const job = jobs.find(j => 9000 + j.jobId.length === Number(retry[1]));
                 if (!job) return json({ error: "Not found" }, 404);
                 job.fixed = undefined;
                 job.createdAt = now();
                 job.plan = [1_000, 6_000, 1_500, 6_000, 1_000];
                 job.sections = 48;
                 job.pages = 9;
-                return json({ ok: true, item: itemFor(job, now()) });
+                return json({ status: "retrying", stage: "extraction", retryCount: 1 }, 202);
             }
             if (path === "/api/uploadDocument" && init?.method === "POST") {
                 uploads += 1;
@@ -405,7 +397,7 @@ export function ProcessingQueuePreview() {
                     plan: [1_500, 6_000, 1_500, 8_000, 1_000],
                     sections: 72,
                     pages: 14,
-                    provider: "Docling",
+                    provider: "DOCLING",
                 });
                 return json({ success: true, jobId, document: { id: 9100 + uploads } }, 202);
             }

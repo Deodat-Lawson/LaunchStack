@@ -26,6 +26,7 @@ import {
     Copy,
     ExternalLink,
     FileAudio,
+    LifeBuoy,
     FileCode,
     FileImage,
     FileSpreadsheet,
@@ -39,11 +40,13 @@ import {
     RotateCw,
     X,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { IconDrive, IconGmail } from "~/components/icons/brand";
 import { ProfileAvatar } from "~/components/ProfileAvatar";
 import { ToolFrame, ToolMark } from "~/components/tool-app/ToolFrame";
+import { ToolLink } from "~/components/tool-app/ToolLink";
 import { ToolNavProvider, type ToolHost } from "~/components/tool-app/nav";
 import { EmptyState } from "~/components/tools/EmptyState";
 import { PageHeader } from "~/components/tools/PageHeader";
@@ -51,21 +54,13 @@ import { SkeletonRows } from "~/components/tools/SkeletonRows";
 import { Button } from "~/components/ui/button";
 import { Progress } from "~/components/ui/progress";
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
-import type {
-    ConnectorSyncSummary,
-    ProcessingQueueResponse,
-    ProcessingRetryResponse,
-} from "~/lib/processing-queue/types";
+import type { ConnectorSyncSummary } from "~/lib/processing-queue/types";
 import { usePeople } from "~/lib/profile/use-people";
+import { sourceFailureContactHref, useSourceFailureCopy } from "~/lib/source-failure";
 import { cn } from "~/lib/utils";
 
 import { StageBar } from "./StageBar";
-import {
-    QUEUE_ENDPOINT,
-    patchProcessingQueue,
-    refreshProcessingQueue,
-    useProcessingQueue,
-} from "./queueStore";
+import { refreshProcessingQueue, useProcessingQueue, type QueueLoadError } from "./queueStore";
 import { dismissLocalTask, retryLocalTask, useLocalTasks } from "./uploadTasks";
 import {
     buildRows,
@@ -75,6 +70,8 @@ import {
     groupRows,
     overallProgress,
     summarySentence,
+    type ProcessingText,
+    type ProcessingTranslator,
     type QueueRow,
 } from "./viewModel";
 
@@ -100,9 +97,6 @@ export function ProcessingQueuePane({ host, ...props }: ProcessingQueuePaneProps
         </ToolNavProvider>
     );
 }
-
-const ABOUT =
-    "Every file on its way into the workspace and the stage it is at: uploading, waiting for a worker, reading the text (OCR for scans and images), splitting into sections, indexing for search. Opens by itself when you add something.";
 
 const MAX_CLEARED = 500;
 
@@ -142,6 +136,13 @@ function ProcessingQueueFrame({
     onAddSource,
     onSettled,
 }: Omit<ProcessingQueuePaneProps, "host">) {
+    const t = useTranslations("processing");
+    const tu = useTranslations("sources.sourceUpload");
+    const failureCopy = useSourceFailureCopy();
+    const text = useMemo<ProcessingText>(
+        () => ({ t, tu, describeFailure: failureCopy.describe }),
+        [t, tu, failureCopy]
+    );
     const queue = useProcessingQueue();
     const local = useLocalTasks();
     const mineKey = storageScope ? `processing.mine.v1:${storageScope}` : null;
@@ -177,8 +178,9 @@ function ProcessingQueueFrame({
                 cleared: clearedSet,
                 mineOnly,
                 now,
+                text,
             }),
-        [items, local, viewerId, clearedSet, mineOnly, now]
+        [items, local, viewerId, clearedSet, mineOnly, now, text]
     );
     const groups = useMemo(() => groupRows(rows), [rows]);
     const overall = overallProgress(groups);
@@ -192,7 +194,7 @@ function ProcessingQueueFrame({
         )
     );
 
-    const announce = useSettledAnnouncements(rows, onSettled);
+    const announce = useSettledAnnouncements(rows, t, onSettled);
 
     const setMine = (value: boolean) => {
         setMineOnly(value);
@@ -206,15 +208,17 @@ function ProcessingQueueFrame({
         writeStored(clearedKey, next);
     };
 
-    const retry = useRetry();
+    const retry = useRetry(t, onSettled);
 
     const header = (
         <PageHeader
-            title="Processing"
-            accent="queue"
+            title={t("header.title")}
+            accent={t("header.accent")}
             sub={
                 <span data-testid="processing-summary" aria-live="polite">
-                    {queue.loading && !queue.data ? "Checking…" : summarySentence(groups)}
+                    {queue.loading && !queue.data
+                        ? t("header.checking")
+                        : summarySentence(groups, t)}
                 </span>
             }
             actions={
@@ -225,30 +229,30 @@ function ProcessingQueueFrame({
                         size="sm"
                         value={mineOnly ? "mine" : "everyone"}
                         onValueChange={value => value && setMine(value === "mine")}
-                        aria-label="Whose files"
+                        aria-label={t("filter.label")}
                     >
                         <ToggleGroupItem
                             value="everyone"
                             className="data-[state=on]:bg-brand-soft data-[state=on]:text-brand-ink shrink-0 px-3 text-xs"
                         >
-                            Everyone
+                            {t("filter.everyone")}
                         </ToggleGroupItem>
                         <ToggleGroupItem
                             value="mine"
                             className="data-[state=on]:bg-brand-soft data-[state=on]:text-brand-ink shrink-0 px-3 text-xs"
                         >
-                            Mine
+                            {t("filter.mine")}
                         </ToggleGroupItem>
                     </ToggleGroup>
                     {groups.done.length > 0 && (
                         <Button variant="outline" size="sm" onClick={clearFinished}>
-                            Clear finished
+                            {t("actions.clearFinished")}
                         </Button>
                     )}
                     {onAddSource && (
                         <Button size="sm" onClick={onAddSource}>
                             <Plus className="size-3.5" />
-                            Add a source
+                            {t("actions.addSource")}
                         </Button>
                     )}
                 </>
@@ -261,9 +265,9 @@ function ProcessingQueueFrame({
 
     return (
         <ToolFrame
-            title="Processing queue"
+            title={t("frame.title")}
             mark={<ToolMark icon={Layers} />}
-            about={ABOUT}
+            about={t("frame.about")}
             contentClassName="mx-auto w-full max-w-[1000px]"
         >
             <div className="flex flex-col gap-6" data-testid="processing-queue">
@@ -276,15 +280,17 @@ function ProcessingQueueFrame({
                     >
                         <div className="mb-2 flex items-baseline justify-between gap-3 text-xs">
                             <span className="text-ink-2">
-                                {overall.count} file{overall.count === 1 ? "" : "s"} on the way
+                                {t("overall.onTheWay", { count: overall.count })}
                             </span>
                             <span className="text-ink-3 tabular-nums">
-                                {Math.round(overall.share * 100)}% of all steps done
+                                {t("overall.stepsDone", {
+                                    percent: Math.round(overall.share * 100),
+                                })}
                             </span>
                         </div>
                         <Progress
                             value={overall.share * 100}
-                            aria-label="All files in progress"
+                            aria-label={t("overall.label")}
                             className="h-1.5"
                         />
                     </div>
@@ -295,6 +301,7 @@ function ProcessingQueueFrame({
                         key={`${connector.provider}:${connector.account ?? i}`}
                         connector={connector}
                         now={now}
+                        t={t}
                     />
                 ))}
 
@@ -305,10 +312,10 @@ function ProcessingQueueFrame({
                     >
                         <AlertTriangle className="text-warn size-3.5 shrink-0" />
                         <span className="min-w-0 flex-1">
-                            {queue.error} What you see may be a little behind.
+                            {loadErrorText(queue.error, t)} {t("loadError.behind")}
                         </span>
                         <Button variant="ghost" size="sm" onClick={queue.refresh}>
-                            Try now
+                            {t("loadError.tryNow")}
                         </Button>
                     </div>
                 )}
@@ -317,13 +324,13 @@ function ProcessingQueueFrame({
                     <SkeletonRows rows={3} height={92} />
                 ) : empty ? (
                     <EmptyState
-                        title="Files you add show up here"
-                        body="Uploads, folders, links and Google Drive imports appear while their text is read and indexed, with each stage as it happens. This tab opens by itself when you add something."
+                        title={t("empty.title")}
+                        body={t("empty.body")}
                         action={
                             onAddSource ? (
                                 <Button size="sm" onClick={onAddSource}>
                                     <Plus className="size-3.5" />
-                                    Add a source
+                                    {t("actions.addSource")}
                                 </Button>
                             ) : undefined
                         }
@@ -332,58 +339,62 @@ function ProcessingQueueFrame({
                     <>
                         <QueueSection
                             id="attention"
-                            title="Needs attention"
+                            title={t("sections.attention.title")}
                             rows={groups.attention}
-                            aside="Stopped, or about to be tried again"
+                            aside={t("sections.attention.aside")}
                             people={people}
                             viewerId={viewerId}
                             now={now}
+                            t={t}
                             onOpenDocument={onOpenDocument}
                             onRetry={retry}
                         />
                         <QueueSection
                             id="running"
-                            title="Running now"
+                            title={t("sections.running.title")}
                             rows={groups.running}
-                            aside="Several files are worked on at the same time"
+                            aside={t("sections.running.aside")}
                             people={people}
                             viewerId={viewerId}
                             now={now}
+                            t={t}
                             onOpenDocument={onOpenDocument}
                             onRetry={retry}
                         />
                         <QueueSection
                             id="waiting"
-                            title="Waiting"
+                            title={t("sections.waiting.title")}
                             rows={groups.waiting}
-                            aside="Each starts as soon as a worker is free"
+                            aside={t("sections.waiting.aside")}
                             people={people}
                             viewerId={viewerId}
                             now={now}
+                            t={t}
                             onOpenDocument={onOpenDocument}
                             onRetry={retry}
                         />
                         <QueueSection
                             id="done"
-                            title="Finished"
+                            title={t("sections.done.title")}
                             rows={groups.done}
-                            aside="Last 24 hours"
+                            aside={t("sections.done.aside")}
                             people={people}
                             viewerId={viewerId}
                             now={now}
+                            t={t}
                             onOpenDocument={onOpenDocument}
                             onRetry={retry}
                             collapsible
                         />
                         {mineOnly && rows.length === 0 && (
                             <p className="text-ink-3 text-sm">
-                                Nothing of yours is processing.{" "}
+                                {t("mineEmpty.text")}{" "}
                                 <button
                                     type="button"
                                     className="text-brand-ink underline underline-offset-2"
                                     onClick={() => setMine(false)}
                                 >
-                                    Show everyone&apos;s
+                                    {t("mineEmpty.showEveryone")}
                                 </button>
                             </p>
                         )}
@@ -402,7 +413,11 @@ function ProcessingQueueFrame({
  * tells the workspace so the sidebar's badges follow without waiting for
  * their own, slower poll.
  */
-function useSettledAnnouncements(rows: QueueRow[], onSettled?: () => void): string {
+function useSettledAnnouncements(
+    rows: QueueRow[],
+    t: ProcessingTranslator,
+    onSettled?: () => void
+): string {
     const seen = useRef<Map<string, QueueRow["state"]> | null>(null);
     const [message, setMessage] = useState("");
     const settledRef = useRef(onSettled);
@@ -423,48 +438,69 @@ function useSettledAnnouncements(rows: QueueRow[], onSettled?: () => void): stri
         }
         if (finished.length === 0 && failed.length === 0) return;
         const parts: string[] = [];
-        if (finished.length)
-            parts.push(`${finished.join(", ")} ${finished.length === 1 ? "is" : "are"} ready`);
-        if (failed.length) parts.push(`${failed.join(", ")} stopped with an error`);
-        setMessage(`${parts.join(". ")}.`);
+        if (finished.length) {
+            parts.push(t("announce.ready", { count: finished.length, names: finished.join(", ") }));
+        }
+        if (failed.length) {
+            parts.push(t("announce.failed", { count: failed.length, names: failed.join(", ") }));
+        }
+        setMessage(parts.join(" "));
         settledRef.current?.();
-    }, [rows]);
+    }, [rows, t]);
 
     return message;
 }
 
-function useRetry() {
-    return useCallback(async (row: QueueRow) => {
-        if (row.origin === "local") {
-            if (row.localId) retryLocalTask(row.localId);
-            return;
-        }
-        if (!row.jobId) return;
-        try {
-            const res = await fetch(`${QUEUE_ENDPOINT}/${encodeURIComponent(row.jobId)}/retry`, {
-                method: "POST",
-            });
-            const body = (await res
-                .json()
-                .catch(() => ({}))) as Partial<ProcessingRetryResponse> & {
-                error?: string;
-            };
-            if (!res.ok || !body.item) {
-                throw new Error(body.error ?? `Retry didn't start (HTTP ${res.status})`);
+/** Why the queue didn't load, in words. */
+function loadErrorText(error: QueueLoadError, t: ProcessingTranslator): string {
+    switch (error.kind) {
+        case "rateLimited":
+            return t("loadError.rateLimited");
+        case "server":
+            return error.message;
+        case "http":
+            return t("loadError.http", { status: error.status });
+        case "network":
+            return t("loadError.network");
+    }
+}
+
+/**
+ * Retry: a browser upload starts over from its bytes; a file the worker gave
+ * up on runs again through `POST /api/documents/[id]/retry` — the same route
+ * as the Sources rail's Retry, which restarts the stage that died.
+ */
+function useRetry(t: ProcessingTranslator, onSettled?: () => void) {
+    return useCallback(
+        async (row: QueueRow) => {
+            if (row.origin === "local") {
+                if (row.localId) retryLocalTask(row.localId);
+                return;
             }
-            const item = body.item;
-            patchProcessingQueue((data: ProcessingQueueResponse) => ({
-                ...data,
-                items: data.items.map(existing =>
-                    existing.jobId === item.jobId ? item : existing
-                ),
-            }));
-            toast.success(`Trying ${row.name} again`);
-            void refreshProcessingQueue();
-        } catch (err) {
-            toast.error(err instanceof Error ? err.message : "Retry didn't start");
-        }
-    }, []);
+            if (row.documentId === null) return;
+            try {
+                const res = await fetch(`/api/documents/${row.documentId}/retry`, {
+                    method: "POST",
+                });
+                if (!res.ok) {
+                    const body = (await res.json().catch(() => ({}))) as { error?: unknown };
+                    toast.error(
+                        typeof body.error === "string" && body.error
+                            ? body.error
+                            : t("row.retryFailed")
+                    );
+                    return;
+                }
+                toast.success(t("row.retryStarted", { name: row.name }));
+            } catch {
+                toast.error(t("row.retryFailed"));
+                return;
+            }
+            onSettled?.();
+            await refreshProcessingQueue();
+        },
+        [t, onSettled]
+    );
 }
 
 type People = ReturnType<typeof usePeople>;
@@ -487,8 +523,10 @@ function QueueSection({
     now: number;
     onOpenDocument?: (documentId: number) => void;
     onRetry: (row: QueueRow) => Promise<void> | void;
+    t: ProcessingTranslator;
 }) {
     const [expanded, setExpanded] = useState(false);
+    const { t } = rowProps;
     if (rows.length === 0) return null;
     const LIMIT = 6;
     const shown = collapsible && !expanded ? rows.slice(0, LIMIT) : rows;
@@ -517,7 +555,9 @@ function QueueSection({
                     onClick={() => setExpanded(value => !value)}
                     aria-expanded={expanded}
                 >
-                    {expanded ? "Show fewer" : `Show all ${rows.length}`}
+                    {expanded
+                        ? t("sections.showFewer")
+                        : t("sections.showAll", { count: rows.length })}
                 </Button>
             )}
         </section>
@@ -553,20 +593,21 @@ function fileIcon(name: string, mimeType: string | null) {
     return FileText;
 }
 
-function rowTiming(row: QueueRow, now: number): string {
+function rowTiming(row: QueueRow, now: number, t: ProcessingTranslator): string {
     switch (row.state) {
         case "done":
-            return row.completedAt ? formatAgo(row.completedAt, now) : "";
         case "failed":
-            return row.completedAt ? formatAgo(row.completedAt, now) : "";
+            return row.completedAt ? formatAgo(row.completedAt, now, t) : "";
         case "waiting": {
             // Since it joined the line — a retried file waits from the retry.
             const since = row.stages.find(stage => stage.id === "waiting")?.startedAt;
-            return `waiting ${formatDuration(now - Date.parse(since ?? row.createdAt))}`;
+            return t("time.waiting", {
+                duration: formatDuration(now - Date.parse(since ?? row.createdAt), t),
+            });
         }
         default: {
             const since = row.startedAt ?? row.createdAt;
-            return formatDuration(now - Date.parse(since));
+            return formatDuration(now - Date.parse(since), t);
         }
     }
 }
@@ -578,6 +619,7 @@ function QueueRowView({
     now,
     onOpenDocument,
     onRetry,
+    t,
 }: {
     row: QueueRow;
     people: People;
@@ -585,11 +627,18 @@ function QueueRowView({
     now: number;
     onOpenDocument?: (documentId: number) => void;
     onRetry: (row: QueueRow) => Promise<void> | void;
+    t: ProcessingTranslator;
 }) {
     const Icon = fileIcon(row.name, row.mimeType);
     const [retrying, setRetrying] = useState(false);
     const person = row.addedById ? people[row.addedById] : undefined;
-    const who = row.addedById && row.addedById === viewerId ? "you" : (person?.displayName ?? null);
+    const isYou = row.addedById !== null && row.addedById === viewerId;
+    const who = isYou ? null : (person?.displayName ?? null);
+    // Support is the way forward when a retry can't help, or one already didn't.
+    const offerContact =
+        row.state === "failed" &&
+        row.failure !== null &&
+        (!row.failure.retryable || row.retryCount > 0);
     const failed = row.state === "failed";
     const retryingSoon = row.state === "retrying";
     const canOpen = row.documentId !== null && onOpenDocument;
@@ -604,12 +653,12 @@ function QueueRowView({
     };
 
     const copyDetails = async () => {
-        const text = row.error?.detail ?? row.error?.message ?? "";
+        const detail = row.errorDetail ?? row.errorMessage ?? "";
         try {
-            await navigator.clipboard.writeText(`${row.name}\n${text}`);
-            toast.success("Error details copied");
+            await navigator.clipboard.writeText(`${row.name}\n${detail}`);
+            toast.success(t("row.copied"));
         } catch {
-            toast.error("Couldn't copy — select the text instead");
+            toast.error(t("row.copyFailed"));
         }
     };
 
@@ -651,7 +700,7 @@ function QueueRowView({
                                     type="button"
                                     className="hover:text-brand-ink max-w-full truncate text-left hover:underline hover:underline-offset-2"
                                     onClick={() => onOpenDocument(row.documentId!)}
-                                    title={`Open ${row.name}`}
+                                    title={t("row.openFile", { name: row.name })}
                                 >
                                     {row.name}
                                 </button>
@@ -660,7 +709,7 @@ function QueueRowView({
                             )}
                         </div>
                         <span className="text-ink-3 shrink-0 text-xs tabular-nums">
-                            {rowTiming(row, now)}
+                            {rowTiming(row, now, t)}
                         </span>
                     </div>
                     <div
@@ -682,7 +731,12 @@ function QueueRowView({
                             headline instead of being cut off on a phone. */}
                         <p className="min-w-0">
                             <span className="font-medium">{row.headline}</span>
-                            {row.detail && <span className="text-ink-3"> · {row.detail}</span>}
+                            {row.detail && (
+                                <span className="text-ink-3">
+                                    {t("detail.separator")}
+                                    {row.detail}
+                                </span>
+                            )}
                         </p>
                     </div>
 
@@ -702,7 +756,7 @@ function QueueRowView({
                         </div>
                     )}
 
-                    {(failed || retryingSoon) && row.error && (
+                    {(failed || retryingSoon) && row.errorMessage && (
                         <div
                             className={cn(
                                 "mt-3 rounded-md border px-3 py-2 text-xs",
@@ -712,13 +766,18 @@ function QueueRowView({
                             )}
                         >
                             <p className="text-ink">
-                                {retryingSoon ? "Last try: " : ""}
-                                {row.error.message}
+                                {retryingSoon
+                                    ? t("row.lastTry", { message: row.errorMessage })
+                                    : row.errorMessage}
                             </p>
                             {retryingSoon && (
                                 <p className="text-ink-3 mt-0.5">
-                                    It keeps trying on its own, up to {row.maxAttempts} times; you
-                                    don&apos;t need to do anything.
+                                    {t("row.keepsTrying", { max: row.maxAttempts })}
+                                </p>
+                            )}
+                            {failed && row.retryCount > 0 && (
+                                <p className="text-ink-3 mt-0.5">
+                                    {t("row.retriedBefore", { count: row.retryCount })}
                                 </p>
                             )}
                         </div>
@@ -730,16 +789,20 @@ function QueueRowView({
                             row.state === "done" ? "mt-1.5" : "mt-2.5"
                         )}
                     >
-                        <span className="min-w-0 truncate">{folderLabel(row.folder)}</span>
-                        {who && (
+                        <span className="min-w-0 truncate">{folderLabel(row.folder, t)}</span>
+                        {(isYou || who) && (
                             <span className="inline-flex min-w-0 items-center gap-1.5">
                                 <ProfileAvatar
-                                    name={who === "you" ? null : who}
-                                    src={who === "you" ? null : person?.avatarUrl}
+                                    name={who}
+                                    src={isYou ? null : person?.avatarUrl}
                                     className="size-4"
                                     fallbackClassName="text-[8px]"
                                 />
-                                <span className="truncate">Added by {who}</span>
+                                <span className="truncate">
+                                    {isYou
+                                        ? t("row.addedByYou")
+                                        : t("row.addedBy", { name: who ?? "" })}
+                                </span>
                             </span>
                         )}
                         <span className="ml-auto flex shrink-0 items-center gap-1.5">
@@ -756,10 +819,25 @@ function QueueRowView({
                                     ) : (
                                         <RotateCw className="size-3.5" />
                                     )}
-                                    Retry
+                                    {t("row.retry")}
                                 </Button>
                             )}
-                            {failed && row.error?.detail && (
+                            {offerContact && (
+                                <Button asChild size="sm" variant="ghost" className="h-7">
+                                    <ToolLink
+                                        href={sourceFailureContactHref({
+                                            document: row.name,
+                                            documentId: row.documentId ?? undefined,
+                                            category: row.failure!.category,
+                                            jobId: row.jobId ?? undefined,
+                                        })}
+                                    >
+                                        <LifeBuoy className="size-3.5" />
+                                        {t("row.contactUs")}
+                                    </ToolLink>
+                                </Button>
+                            )}
+                            {failed && row.errorDetail && (
                                 <Button
                                     size="sm"
                                     variant="ghost"
@@ -767,7 +845,7 @@ function QueueRowView({
                                     onClick={() => void copyDetails()}
                                 >
                                     <Copy className="size-3.5" />
-                                    Copy details
+                                    {t("row.copyDetails")}
                                 </Button>
                             )}
                             {failed && row.origin === "local" && row.localId && (
@@ -776,10 +854,10 @@ function QueueRowView({
                                     variant="ghost"
                                     className="h-7"
                                     onClick={() => dismissLocalTask(row.localId!)}
-                                    aria-label={`Dismiss ${row.name}`}
+                                    aria-label={t("row.dismissFile", { name: row.name })}
                                 >
                                     <X className="size-3.5" />
-                                    Dismiss
+                                    {t("row.dismiss")}
                                 </Button>
                             )}
                             {row.state === "done" && canOpen && (
@@ -790,7 +868,7 @@ function QueueRowView({
                                     onClick={() => onOpenDocument(row.documentId!)}
                                 >
                                     <ExternalLink className="size-3.5" />
-                                    Open
+                                    {t("row.open")}
                                 </Button>
                             )}
                         </span>
@@ -801,30 +879,44 @@ function QueueRowView({
     );
 }
 
+/** Connector names are brand names; they stay as they are in every language. */
 const CONNECTOR_META: Record<
     ConnectorSyncSummary["provider"],
-    { label: string; Icon: React.ComponentType<{ size?: number; className?: string }> }
+    { name: string; Icon: React.ComponentType<{ size?: number; className?: string }> }
 > = {
-    "google-drive": { label: "Google Drive", Icon: IconDrive },
-    gmail: { label: "Gmail", Icon: IconGmail },
+    "google-drive": { name: "Google Drive", Icon: IconDrive },
+    gmail: { name: "Gmail", Icon: IconGmail },
 };
 
-function ConnectorCard({ connector, now }: { connector: ConnectorSyncSummary; now: number }) {
+function ConnectorCard({
+    connector,
+    now,
+    t,
+}: {
+    connector: ConnectorSyncSummary;
+    now: number;
+    t: ProcessingTranslator;
+}) {
     const meta = CONNECTOR_META[connector.provider];
     const report = connector.report;
     let line: string;
     if (connector.status === "running") {
-        line =
-            "Syncing — looking for new and changed files. Each one shows up below as it's queued.";
+        line = t("connector.syncing");
     } else if (connector.status === "error") {
-        line = connector.error ?? "The last sync stopped with an error.";
+        line = t("connector.error");
     } else if (report) {
-        const parts = [`${report.stored} queued`, `${report.unchanged} unchanged`];
-        if (report.skipped) parts.push(`${report.skipped} skipped`);
-        if (report.failed) parts.push(`${report.failed} failed`);
-        line = `Last sync ${connector.lastSyncAt ? formatAgo(connector.lastSyncAt, now) : ""}: ${parts.join(", ")}.`;
+        const parts = [
+            t("connector.queued", { count: report.stored }),
+            t("connector.unchanged", { count: report.unchanged }),
+        ];
+        if (report.skipped) parts.push(t("connector.skipped", { count: report.skipped }));
+        if (report.failed) parts.push(t("connector.failed", { count: report.failed }));
+        line = t("connector.lastSync", {
+            when: connector.lastSyncAt ? formatAgo(connector.lastSyncAt, now, t) : "",
+            parts: parts.join(t("connector.separator")),
+        });
     } else {
-        line = "Synced.";
+        line = t("connector.synced");
     }
     return (
         <div
@@ -840,7 +932,7 @@ function ConnectorCard({ connector, now }: { connector: ConnectorSyncSummary; no
             </span>
             <div className="min-w-0 flex-1">
                 <div className="text-ink flex min-w-0 flex-wrap items-baseline gap-x-2 text-[13px] font-medium">
-                    <span className="shrink-0 whitespace-nowrap">{meta.label}</span>
+                    <span className="shrink-0 whitespace-nowrap">{meta.name}</span>
                     {connector.account && (
                         <span className="text-ink-3 min-w-0 truncate text-xs font-normal">
                             {connector.account}
@@ -852,12 +944,18 @@ function ConnectorCard({ connector, now }: { connector: ConnectorSyncSummary; no
                         "mt-0.5 text-xs",
                         connector.status === "error" ? "text-danger" : "text-ink-2"
                     )}
+                    title={
+                        connector.status === "error" ? (connector.error ?? undefined) : undefined
+                    }
                 >
                     {line}
                 </div>
             </div>
             {connector.status === "running" && (
-                <Loader2 className="text-brand size-4 shrink-0 animate-spin" aria-label="Syncing" />
+                <Loader2
+                    className="text-brand size-4 shrink-0 animate-spin"
+                    aria-label={t("connector.syncingLabel")}
+                />
             )}
         </div>
     );

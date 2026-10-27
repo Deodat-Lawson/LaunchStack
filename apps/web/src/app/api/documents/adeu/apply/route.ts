@@ -29,6 +29,8 @@ import {
 import { eq } from "drizzle-orm";
 
 import { document } from "@launchstack/store/schema";
+import { requestTranslator } from "~/i18n/server";
+import { V } from "~/i18n/validation";
 import { db } from "~/server/db";
 import { uploadFile } from "~/lib/storage";
 import { validateRequestBody } from "~/lib/validation";
@@ -63,7 +65,7 @@ const ApplySchema = z
         resolveAll: z.enum(["accept", "reject"]).optional(),
     })
     .refine(v => Boolean(v.resolveAll) || Boolean(v.edits?.length) || Boolean(v.actions?.length), {
-        message: "Provide at least one edit, action, or resolveAll",
+        message: V.editRequired,
     });
 
 export async function POST(request: Request) {
@@ -77,7 +79,7 @@ export async function POST(request: Request) {
     const authorName = validation.data.authorName ?? "LaunchStack Review";
     const partial = validation.data.partial ?? false;
 
-    const loaded = await loadDocument(documentId);
+    const loaded = await loadDocument(documentId, { request });
     if (!loaded.ok) return loaded.response;
 
     // Phase 1 of Drive-linked files: while a document lives in Google Drive,
@@ -89,9 +91,7 @@ export async function POST(request: Request) {
             {
                 success: false,
                 error: "linked_to_google_drive",
-                message:
-                    "This document is linked to Google Drive and edited there. " +
-                    "Sync or unlink it before editing in-app.",
+                message: requestTranslator(request, "sources.server.drive")("linkedEdit"),
                 driveUrl: driveLink.driveWebViewLink,
             },
             { status: 409 }
@@ -133,6 +133,8 @@ export async function POST(request: Request) {
             data: modified,
             contentType: DOCX_MIME,
             userId: loaded.userId,
+            // Stamps the workspace, so a member opening the source can read the file.
+            companyId: loaded.data.companyId,
         });
 
         await db
@@ -148,6 +150,6 @@ export async function POST(request: Request) {
         });
     } catch (err) {
         console.error("[adeu/apply] failed", err);
-        return adeuErrorResponse(err);
+        return adeuErrorResponse(err, request);
     }
 }

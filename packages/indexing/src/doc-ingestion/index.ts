@@ -37,7 +37,7 @@ import {
     ocrProviderToTokenKey,
 } from "@launchstack/store/credits";
 
-import { createStageProgress, noStageProgress, type StageProgress } from "./progress";
+import { recordJobProgress } from "./progress";
 import { createStepRunner } from "./step-runner";
 import type { DocIngestionToolInput, DocIngestionToolResult } from "./types";
 
@@ -53,6 +53,7 @@ interface NormalizeSummary {
     provider: NormalizationResult["provider"];
     processingTimeMs: number;
     confidenceScore?: number;
+    ocrRouting?: NormalizationResult["ocrRouting"];
 }
 
 /**
@@ -162,8 +163,8 @@ async function vectorizeWithIndex(
     structure: DocumentStructureMap,
     versionId: number,
     runStep: <T>(stepName: string, fn: () => Promise<T>) => Promise<T>,
-    /** Called after each batch with parent chunks embedded+stored so far, of all. */
-    onBatchStored?: (done: number, total: number) => Promise<void>
+    /** Told how many of the texts are embedded and stored, before the first batch and after each. */
+    onProgress: (done: number, total: number) => Promise<void>
 ): Promise<{ totalStored: number; storedSections: StoredSection[] }> {
     if (chunks.length === 0) return { totalStored: 0, storedSections: [] };
 
@@ -175,7 +176,7 @@ async function vectorizeWithIndex(
     const batches = splitIntoBatches(chunks, batchSize);
     let totalStored = 0;
     let stringOffset = 0;
-    let parentsDone = 0;
+    await onProgress(0, contentStrings.length);
 
     for (let i = 0; i < batches.length; i++) {
         const batch = batches[i];
@@ -213,8 +214,9 @@ async function vectorizeWithIndex(
         );
 
         totalStored += result.stored;
-        parentsDone += batch.length;
-        await onBatchStored?.(parentsDone, chunks.length);
+        // Outside the step, so a durable host replaying memoized batches
+        // still reports where it really is.
+        await onProgress(stringOffset, contentStrings.length);
     }
 
     const versionBigInt = BigInt(versionId);
@@ -365,33 +367,8 @@ export interface ExtractionStageSummary {
     pageCount: number;
     processingTimeMs: number;
     confidenceScore?: number;
+    ocrRouting?: NormalizationResult["ocrRouting"];
     usedFastTextPath: boolean;
-}
-
-/**
- * The stage recorder for one stage run. Inngest hosts get none — see
- * `noStageProgress`.
- */
-function stageProgressFor(input: DocIngestionToolInput): StageProgress {
-    return input.runtime?.runStep ? noStageProgress : createStageProgress(input.jobId);
-}
-
-/**
- * Runs a stage body, marking the stage step that was running as failed when
- * it throws. The error is rethrown unchanged — retry semantics are the
- * outbox's, and recording never alters them.
- */
-async function withStageProgress<T>(
-    input: DocIngestionToolInput,
-    body: (progress: StageProgress) => Promise<T>
-): Promise<T> {
-    const progress = stageProgressFor(input);
-    try {
-        return await body(progress);
-    } catch (error) {
-        await progress.failRunning(error);
-        throw error;
-    }
 }
 
 /**
@@ -399,18 +376,9 @@ async function withStageProgress<T>(
  * normalized pages and this summary into pipeline state. Idempotent —
  * re-running overwrites the same state keys with converged content.
  * Consumed by the worker's `source.version.created` handler.
- *
- * Records the `route` (PDFs the router sees) and `read` steps.
  */
 export async function runExtractionStage(
     input: DocIngestionToolInput
-): Promise<ExtractionStageSummary> {
-    return withStageProgress(input, progress => extractionStage(input, progress));
-}
-
-async function extractionStage(
-    input: DocIngestionToolInput,
-    progress: StageProgress
 ): Promise<ExtractionStageSummary> {
     const {
         jobId,
@@ -429,30 +397,19 @@ async function extractionStage(
     const fastTextPath = runtime?.fastTextPath ?? false;
 
     await maybeMarkProcessing(jobId, updateJobStatus);
+    await recordJobProgress(jobId, { stage: "reading" });
 
     const isPdf = !fastTextPath && shouldUsePdfPipeline(mimeType, routingFilename);
 
     let normSummary: NormalizeSummary;
-    const routed = isPdf && isAzureSupportedFile(documentUrl, routingFilename);
 
-    // A new extraction attempt (first run, outbox retry, stale-claim reclaim)
-    // re-derives everything after it, so the later stages' rows describe an
-    // attempt that no longer counts — drop them. The first step's own start
-    // then restarts its row. Only the router's files have a `route` row.
-    await progress.resetAfter(routed ? "route" : "read");
-
-    if (routed) {
-        await progress.start("route");
+    if (isPdf && isAzureSupportedFile(documentUrl, routingFilename)) {
         const routerDecision = await runStep(
             "step-a-router",
-            async (): Promise<RouterDecisionResult> => routeDocument(documentUrl, options)
+            async (): Promise<RouterDecisionResult> =>
+                routeDocument(documentUrl, { ...options, mimeType, filename: routingFilename })
         );
-        await progress.complete("route", {
-            provider: routerDecision.selectedProvider,
-            pages: routerDecision.pageCount,
-        });
 
-        await progress.start("read");
         if (isInngest) {
             normSummary = await runStep("step-b-normalize", async (): Promise<NormalizeSummary> => {
                 const result = await normalizeDocument(documentUrl, routerDecision);
@@ -463,6 +420,7 @@ async function extractionStage(
                     provider: result.provider,
                     processingTimeMs: result.processingTimeMs,
                     confidenceScore: result.confidenceScore,
+                    ocrRouting: result.ocrRouting,
                 };
             });
         } else {
@@ -477,11 +435,11 @@ async function extractionStage(
                 provider: result.provider,
                 processingTimeMs: result.processingTimeMs,
                 confidenceScore: result.confidenceScore,
+                ocrRouting: result.ocrRouting,
             };
             await savePipelineState(jobId, "pages", result.pages);
         }
     } else {
-        await progress.start("read");
         if (isInngest) {
             normSummary = await runStep("step-ab-ingest", async (): Promise<NormalizeSummary> => {
                 const { ingestToNormalized } = await import("@launchstack/conversion");
@@ -535,10 +493,10 @@ async function extractionStage(
         pageCount: normSummary.pageCount,
         processingTimeMs: normSummary.processingTimeMs,
         confidenceScore: normSummary.confidenceScore,
+        ocrRouting: normSummary.ocrRouting,
         usedFastTextPath: fastTextPath,
     };
     await savePipelineState(jobId, "extraction", summary);
-    await progress.complete("read", { provider: summary.provider, pages: summary.pageCount });
     return summary;
 }
 
@@ -558,18 +516,8 @@ export interface IndexingStageCounts {
  * store, finalize metadata, and run optional graph extraction/sync.
  * Requires `runExtractionStage` to have persisted pipeline state for the
  * job. Idempotent via content-hash dedup and per-version upserts.
- *
- * Records the `chunk`, `embed` and `finalize` steps; graph steps F/G are
- * enrichment after the job is complete and stay unrecorded.
  */
 export async function runIndexingStage(input: DocIngestionToolInput): Promise<IndexingStageCounts> {
-    return withStageProgress(input, progress => indexingStage(input, progress));
-}
-
-async function indexingStage(
-    input: DocIngestionToolInput,
-    progress: StageProgress
-): Promise<IndexingStageCounts> {
     const {
         jobId,
         documentId,
@@ -584,13 +532,6 @@ async function indexingStage(
     const routingFilename = originalFilename ?? documentName;
     const runStep = createStepRunner(runtime);
     const isInngest = !!runtime?.runStep;
-
-    // A retried indexing attempt redoes embed and finalize; their rows from
-    // the previous attempt are stale (same reasoning as extraction's reset).
-    // Loading the embedding config and pipeline state counts as chunking.
-    await progress.resetAfter("chunk");
-    await progress.start("chunk");
-
     const embeddingBatchSize = runtime?.sidecarBatchSize ?? DEFAULT_EMBEDDING_BATCH_SIZE;
     const { getCompanyEmbeddingConfig } = await import("@launchstack/llm/embeddings");
     const companyEmbeddingConfig = await getCompanyEmbeddingConfig(companyId);
@@ -600,6 +541,8 @@ async function indexingStage(
     );
 
     const normSummary = await loadPipelineState<ExtractionStageSummary>(jobId, "extraction");
+    const pageCount = normSummary.pageCount;
+    await recordJobProgress(jobId, { stage: "chunking", pages: pageCount });
 
     // -----------------------------------------------------------------------
     // Step C: Chunking
@@ -638,7 +581,6 @@ async function indexingStage(
                 })
         );
     }
-    await progress.complete("chunk", { chunks: chunks.length });
 
     // -----------------------------------------------------------------------
     // Step D: Setup root structure + Embed & Store per batch
@@ -646,7 +588,6 @@ async function indexingStage(
     let storedSections: StoredSection[] = [];
     let totalStored = 0;
 
-    await progress.start("embed", { done: 0, total: chunks.length });
     if (chunks.length > 0) {
         // The document's real hierarchy, one node per distinct section, so a
         // chunk can name the part of the document it came from.
@@ -663,12 +604,17 @@ async function indexingStage(
             structure,
             versionId,
             runStep,
-            (done, total) => progress.progress("embed", done, total)
+            (done, total) =>
+                recordJobProgress(jobId, {
+                    stage: "embedding",
+                    done,
+                    total,
+                    pages: pageCount,
+                })
         );
         storedSections = result.storedSections;
         totalStored = result.totalStored;
     }
-    await progress.complete("embed", { done: chunks.length, total: chunks.length });
 
     // -----------------------------------------------------------------------
     // Credit debits. No mode check needed: creditsDebitSafe already no-ops
@@ -711,7 +657,7 @@ async function indexingStage(
     // -----------------------------------------------------------------------
     // Step E: Finalize (metadata + job status)
     // -----------------------------------------------------------------------
-    await progress.start("finalize");
+    await recordJobProgress(jobId, { stage: "finishing", pages: pageCount });
     await runStep("step-e-finalize", async (): Promise<{ ok: true }> => {
         const summaryText = chunks.map(c => c.content).join("\n\n");
         await finalizeStorage(
@@ -725,13 +671,13 @@ async function indexingStage(
                 processingTimeMs: normSummary.processingTimeMs,
                 confidenceScore: normSummary.confidenceScore,
                 embeddingIndexKey: embeddingIndex.indexKey,
+                ocrRouting: normSummary.ocrRouting,
             },
             pipelineStartTime,
             versionId
         );
         return { ok: true };
     });
-    await progress.complete("finalize");
 
     // -----------------------------------------------------------------------
     // Steps F+G: Graph RAG (optional) + Neo4j sync

@@ -3,10 +3,11 @@
  * file the caller may see (ADR-014), active or finished in the last day,
  * with its six stages worked out, plus the connector syncs feeding the queue.
  *
- * Three lean reads for the jobs — the jobs joined to visible documents, their
- * stage rows, their outbox rows — and the stage logic runs in memory
- * (`~/lib/processing-queue/stages`). Whether a failed job may be retried is
- * read in bulk, only when something failed.
+ * Two lean reads for the jobs — the jobs (with the progress their stages
+ * record) joined to visible documents, and their outbox rows — and the stage
+ * logic runs in memory (`~/lib/processing-queue/stages`). Whether the caller
+ * may edit a failed job's file (and so Retry it) is read in bulk, only when
+ * something failed.
  */
 
 import { and, eq } from "drizzle-orm";
@@ -33,7 +34,7 @@ import {
     loadFolderAccessFacts,
 } from "~/server/workspace/source-access";
 
-import { selectEvents, selectQueueJobs, selectSteps, type QueueJobWithDocument } from "./rows";
+import { selectEvents, selectQueueJobs, type QueueJobWithDocument } from "./rows";
 
 /** Finished and failed jobs stay on the tab this long. */
 export const FINISHED_WINDOW_MS = 24 * 60 * 60 * 1000;
@@ -47,11 +48,12 @@ export type QueueActor = Pick<
 >;
 
 /**
- * Which of these failed jobs the caller may retry: `documents.upload` plus
- * edit access to the file, by exactly the rules the write paths use
- * (`documentAccessFrom`), read once for the whole list.
+ * Which of these failed jobs' files the caller may Retry: `documents.upload`
+ * plus edit access to the file — the gate of `POST /api/documents/[id]/retry`
+ * — by exactly the rules the write paths use (`documentAccessFrom`), read
+ * once for the whole list.
  */
-export async function retryableJobIds(
+export async function editableFailedJobIds(
     actor: QueueActor,
     rows: readonly QueueJobWithDocument[]
 ): Promise<Set<string>> {
@@ -75,27 +77,24 @@ export async function retryableJobIds(
     return out;
 }
 
-/** Build the items for these rows: one read for stage rows, one for outbox rows. */
+/** Build the items for these rows: one read for their outbox rows. */
 export async function buildItems(
     actor: QueueActor,
     rows: readonly QueueJobWithDocument[],
-    now: Date,
-    retryable?: ReadonlySet<string>
+    now: Date
 ): Promise<ProcessingQueueItem[]> {
     const jobIds = rows.map(r => r.job.id);
-    const [steps, events, canRetry] = await Promise.all([
-        selectSteps(jobIds),
+    const [events, editable] = await Promise.all([
         selectEvents(actor.companyId, jobIds),
-        retryable ? Promise.resolve(retryable) : retryableJobIds(actor, rows),
+        editableFailedJobIds(actor, rows),
     ]);
     return rows.map(row =>
         buildQueueItem({
             job: row.job,
             document: row.document,
-            steps: steps.get(row.job.id) ?? [],
             events: events.get(row.job.id) ?? [],
             viewerUserId: actor.authUserId,
-            canRetry: canRetry.has(row.job.id),
+            canEdit: editable.has(row.job.id),
             maxAttempts: DEFAULT_RETRY_POLICY.maxAttempts,
             now,
         })

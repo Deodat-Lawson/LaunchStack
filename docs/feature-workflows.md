@@ -12,10 +12,17 @@ Launchstack follows this loop:
    (`pdr_ai_v2_event_outbox`) in one transaction ([ADR-003](./architecture/ADR-003-transactional-outbox-and-worker.md))
 3. **Worker** (`apps/worker`) claims the outbox event and drives every
    subsequent stage
-4. **Convert / OCR** — `services/document-converter` routes and parses PDFs,
-   Office docs, and scans (docling-backed; Azure Document Intelligence,
-   Datalab, or Landing.AI as configured); audio/video goes through
-   `services/transcription`
+4. **Convert / OCR** — every PDF and image is read with OCR whenever an engine
+   can run (`OCR_PDF_STRATEGY=provider-first`, the default): Azure Document
+   Intelligence when it is configured, Docling (via
+   `services/document-converter` and docling-serve) while docling-serve
+   answers, then Landing AI or Datalab if configured. An engine that fails
+   hands the document to the next; the PDF's own text layer is the last
+   resort, except that a scan (or a PDF with scanned pages) keeps the error
+   and is retried instead of being indexed blank. With no engine at all, PDFs
+   are read from their text layer; `text-layer-first` sends only scans to OCR.
+   Office docs go through Docling or the built-in parsers; audio/video goes
+   through `services/transcription`
 5. **Chunk** — split content into sections
 6. **Embed** — generate embeddings via the configured embedding provider
    (OpenAI-compatible endpoint, Ollama, or HuggingFace)

@@ -19,6 +19,11 @@ import { beginReindex, getCompanyReindexState } from "@launchstack/llm/embedding
 import { inngest } from "~/server/inngest/client";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { recordAuditEvent } from "~/lib/authz/audit";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor, wordEnglish } from "~/i18n/translate";
+import { wordModels } from "~/server/workspace-models/words";
+
+type SettingsErrorsT = ReturnType<typeof translatorFor<"settings.server.errors">>;
 
 async function readCurrentIndexKey(companyId: number): Promise<string | null> {
     const [row] = await db
@@ -40,7 +45,8 @@ async function readCurrentIndexKey(companyId: number): Promise<string | null> {
 function openAIPairProblem(
     requestedKey: string | null | undefined,
     requestedUrl: string | null | undefined,
-    existing: CompanyCredentialsPlaintext | null
+    existing: CompanyCredentialsPlaintext | null,
+    t: SettingsErrorsT
 ): { code: string; message: string } | null {
     const storedUrl = existing?.openAIBaseUrl ?? null;
     const nextUrl = requestedUrl !== undefined ? requestedUrl : storedUrl;
@@ -49,8 +55,7 @@ function openAIPairProblem(
         if (nextUrl) return null;
         return {
             code: "EMBEDDING_ENDPOINT_REQUIRED",
-            message:
-                "Enter the embeddings endpoint URL this key belongs to, such as https://api.openai.com/v1. A key is only ever sent to the address it was saved with.",
+            message: t("embeddingEndpointForKey"),
         };
     }
 
@@ -60,18 +65,18 @@ function openAIPairProblem(
     if (requestedUrl === null) {
         return {
             code: "EMBEDDING_ENDPOINT_REQUIRED",
-            message:
-                "The saved embeddings key needs its endpoint URL. Keep the address, or enter a new key together with a new address.",
+            message: t("embeddingKeyNeedsEndpoint"),
         };
     }
     return {
         code: "EMBEDDING_KEY_REQUIRED",
-        message:
-            "The embeddings endpoint changed, so enter the API key for the new address. A saved key is only ever sent to the address it was entered for.",
+        message: t("embeddingEndpointChanged"),
     };
 }
 
 export async function POST(request: Request) {
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "settings.server.errors");
     try {
         const ctx = await requireWorkspacePermission("settings.manage");
         if (!ctx.success) return ctx.response;
@@ -112,7 +117,7 @@ export async function POST(request: Request) {
                         {
                             success: false,
                             code: "INVALID_EMBEDDING_ENDPOINT",
-                            message: urlErr.message,
+                            message: wordModels(urlErr.message, locale),
                         },
                         { status: 400 }
                     );
@@ -158,7 +163,8 @@ export async function POST(request: Request) {
             const problem = openAIPairProblem(
                 credentialsInput.openAIApiKey,
                 credentialsInput.openAIBaseUrl,
-                existing
+                existing,
+                t
             );
             if (problem) {
                 return NextResponse.json({ success: false, ...problem }, { status: 400 });
@@ -187,7 +193,9 @@ export async function POST(request: Request) {
                     {
                         success: false,
                         code: "CREDENTIAL_VALIDATION_FAILED",
-                        message: result.error ?? "Embedding credentials failed validation.",
+                        message: result.error
+                            ? wordEnglish(result.error, "errors.validation", locale)
+                            : t("embeddingValidationFailed"),
                     },
                     { status: 400 }
                 );
@@ -216,8 +224,7 @@ export async function POST(request: Request) {
                     {
                         success: false,
                         code: "REINDEX_IN_PROGRESS",
-                        message:
-                            "A reindex is already running for this company. Wait for it to finish before changing the embedding index again.",
+                        message: t("reindexRunning"),
                         activeIndexKey: state.activeIndexKey,
                         pendingIndexKey: state.pendingIndexKey,
                     },
@@ -252,8 +259,7 @@ export async function POST(request: Request) {
                             {
                                 success: false,
                                 code: "REINDEX_LOCK_CONTENDED",
-                                message:
-                                    "Could not acquire the reindex lock. Try again in a few seconds.",
+                                message: t("reindexLockContended"),
                             },
                             { status: 409 }
                         );
@@ -273,8 +279,7 @@ export async function POST(request: Request) {
                         return NextResponse.json(
                             {
                                 success: false,
-                                message:
-                                    "Could not schedule the reindex job. The settings change was not applied.",
+                                message: t("reindexScheduleFailed"),
                             },
                             { status: 500 }
                         );
@@ -301,11 +306,14 @@ export async function POST(request: Request) {
             employeepasskey: string;
             numberOfEmployees: string;
             useUploadThing: boolean;
-        }> = {
-            name,
-            numberOfEmployees,
-        };
+        }> = {};
 
+        if (name !== undefined) {
+            updateData.name = name;
+        }
+        if (numberOfEmployees !== undefined) {
+            updateData.numberOfEmployees = numberOfEmployees;
+        }
         if (description !== undefined) {
             updateData.description = description?.trim() ?? null;
         }
@@ -345,24 +353,28 @@ export async function POST(request: Request) {
                         message:
                             credErr instanceof Error
                                 ? credErr.message
-                                : "Unable to store embedding credentials.",
+                                : t("credentialsStoreFailed"),
                     },
                     { status: 500 }
                 );
             }
         }
 
-        const updateResult = await db
-            .update(company)
-            .set(updateData)
-            .where(eq(company.id, companyIdNum))
-            .returning({ id: company.id });
+        // A credentials-only save (Bring your own keys) leaves the row alone.
+        const updateResult =
+            Object.keys(updateData).length > 0
+                ? await db
+                      .update(company)
+                      .set(updateData)
+                      .where(eq(company.id, companyIdNum))
+                      .returning({ id: company.id })
+                : [{ id: companyIdNum }];
 
         if (!updateResult || updateResult.length === 0) {
             return NextResponse.json(
                 {
                     success: false,
-                    message: "Unable to update company record.",
+                    message: t("companyUpdateNotFound"),
                 },
                 { status: 404 }
             );
@@ -390,7 +402,9 @@ export async function POST(request: Request) {
                 {
                     success: true,
                     code: "REINDEX_SCHEDULED",
-                    message: `Reindex scheduled for ${reindexResponse.documentCount ?? 0} document chunk set(s). Existing documents remain searchable under the previous index until the rewrite completes.`,
+                    message: t("reindexScheduled", {
+                        count: String(reindexResponse.documentCount ?? 0),
+                    }),
                     jobEventId: reindexResponse.jobEventId,
                     documentCount: reindexResponse.documentCount,
                 },
@@ -401,7 +415,7 @@ export async function POST(request: Request) {
         return NextResponse.json(
             {
                 success: true,
-                message: "Company settings updated.",
+                message: t("companyUpdated"),
             },
             { status: 200 }
         );
@@ -410,7 +424,7 @@ export async function POST(request: Request) {
         return NextResponse.json(
             {
                 success: false,
-                message: "Unable to update company settings.",
+                message: t("companyUpdateFailed"),
             },
             { status: 500 }
         );

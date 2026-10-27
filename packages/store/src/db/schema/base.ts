@@ -327,6 +327,10 @@ export const ocrJobs = pgTable(
             onDelete: "set null",
         }),
         dispatchOptions: jsonb("dispatch_options").$type<Record<string, unknown>>(),
+        // Where the pipeline is, for the UI's progress bar. Small and kept
+        // apart from `ocr_result` (which holds every page and chunk) so the
+        // documents list can read it on every poll.
+        progress: jsonb("progress").$type<OcrJobProgress>(),
     },
     table => ({
         companyIdIdx: index("ocr_jobs_company_id_idx").on(table.companyId),
@@ -343,14 +347,6 @@ export const ocrJobs = pgTable(
 // OCR Processing Steps
 // ============================================================================
 
-/**
- * The ingestion stages the worker records as it runs a job, in order — what
- * the Processing queue tab draws. One row per (job, stage), id
- * `<jobId>:<stage>`; a retried stage overwrites its row.
- */
-export const ocrProcessingStepTypes = ["route", "read", "chunk", "embed", "finalize"] as const;
-export type OcrProcessingStepType = (typeof ocrProcessingStepTypes)[number];
-
 export const ocrProcessingSteps = pgTable(
     "ocr_processing_steps",
     {
@@ -361,7 +357,14 @@ export const ocrProcessingSteps = pgTable(
         stepNumber: integer("step_number").notNull(),
         stepType: varchar("step_type", {
             length: 50,
-            enum: ocrProcessingStepTypes,
+            enum: [
+                "pre_assessment",
+                "ocr_execution",
+                "validation",
+                "embedding",
+                "storage",
+                "webhook",
+            ],
         }).notNull(),
         status: varchar("status", {
             length: 20,
@@ -609,6 +612,20 @@ export type PdfChunk = InferSelectModel<typeof pdfChunks>;
 export type FileUpload = InferSelectModel<typeof fileUploads>;
 
 export type OcrJob = InferSelectModel<typeof ocrJobs>;
+
+/**
+ * The step an OCR job is on, written by the ingestion stages as they go.
+ * `done`/`total` count units of the current step when it has them (texts
+ * embedded); `pages` is known once the file has been read.
+ */
+export interface OcrJobProgress {
+    stage: "reading" | "chunking" | "embedding" | "finishing";
+    done?: number;
+    total?: number;
+    pages?: number;
+    /** ISO time of this write. */
+    updatedAt: string;
+}
 
 export type OcrProcessingStep = InferSelectModel<typeof ocrProcessingSteps>;
 

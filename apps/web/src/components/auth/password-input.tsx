@@ -2,6 +2,7 @@
 
 import React, { useEffect, useId, useRef, useState } from "react";
 import { ArrowBigUp, Eye, EyeOff } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -22,6 +23,7 @@ export const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputPro
         { className, onKeyDown, onKeyUp, onBlur, "aria-describedby": describedBy, ...props },
         forwardedRef
     ) {
+        const t = useTranslations("auth.password");
         const [visible, setVisible] = useState(false);
         const [capsLock, setCapsLock] = useState(false);
         const inputRef = useRef<HTMLInputElement | null>(null);
@@ -81,7 +83,7 @@ export const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputPro
                         variant="ghost"
                         size="icon"
                         className="text-ink-3 hover:text-ink absolute inset-y-0 right-0 h-9 w-9 hover:bg-transparent"
-                        aria-label={visible ? "Hide password" : "Show password"}
+                        aria-label={visible ? t("hide") : t("show")}
                         aria-pressed={visible}
                         aria-controls={props.id}
                         disabled={props.disabled}
@@ -93,10 +95,10 @@ export const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputPro
                 {capsLock && (
                     <p
                         id={capsId}
-                        className="text-warn m-0 flex items-center gap-1 text-[11.5px] font-medium"
+                        className="text-warn-ink m-0 flex items-center gap-1 text-[11.5px] font-medium"
                     >
                         <ArrowBigUp className="size-3.5" aria-hidden />
-                        Caps Lock is on
+                        {t("capsLock")}
                     </p>
                 )}
             </div>

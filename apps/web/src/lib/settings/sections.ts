@@ -1,11 +1,12 @@
 /**
- * Who may see each Settings section, and who may change it.
+ * Who may see each settings section, and who may change it.
  *
- * Settings is open to everyone in a workspace: Account, Appearance and
- * Shortcuts are theirs, whatever their role. Each workspace section carries
- * its own gate instead of the whole hub carrying one: the Settings app used
- * to require `settings.manage`, so a Member who picked "Settings" got
- * nothing at all.
+ * Settings (Account, Appearance, Shortcuts, Data and privacy) is everyone's,
+ * whatever their role. The Workspace tab is open to everyone too, and each of
+ * its screens carries its own gate instead of the whole tab carrying one: the
+ * Settings app used to require `settings.manage`, so a Member who picked
+ * "Settings" got nothing at all. Which surface draws which section is
+ * `./surfaces`.
  *
  * Two gates per section, both optional:
  *
@@ -17,7 +18,8 @@
  *   read-only: shown, and labelled so, never hidden.
  *
  * Also the one map from a URL hash (`#byok`, `#appearance.theme`) to a
- * section, so a link into Settings and a palette row agree on where it goes.
+ * section, so a link into Settings or the Workspace tab and a palette row
+ * agree on where it goes.
  *
  * Dependency-free apart from the registry, so the hub, the command palette
  * and their tests share it without the palette loading the hub.
@@ -55,7 +57,13 @@ export const SETTINGS_SECTION_ACCESS: Record<SettingsSectionId, SettingsSectionA
         ],
     },
     appearance: { aliases: ["appearance", "theme", "dark", "light"] },
-    shortcuts: { aliases: ["shortcuts", "keys", "keybindings", "hotkeys"] },
+    shortcuts: { aliases: ["shortcuts", "keybindings", "hotkeys"] },
+    // The workspace's own details: name, URL, description, industry, team
+    // size, colour. Everyone reads them; admins change them.
+    general: {
+        edit: "settings.manage",
+        aliases: ["general", "workspace", "details", "name", "rename", "slug", "url", "swatch"],
+    },
     // Each tab gates its own controls (invite, roles, audit); the member list
     // is the floor. A Guest sees only what is shared with them.
     people: {
@@ -74,29 +82,30 @@ export const SETTINGS_SECTION_ACCESS: Record<SettingsSectionId, SettingsSectionA
     // Everyone reads the profile (agents cite it to everyone) and may rebuild
     // it; the body says so, and withholds the curation actions.
     company: { edit: "settings.manage", aliases: ["company", "metadata", "profile"] },
-    // Keys and endpoints. The form would take edits it can never save.
-    processing: {
-        view: "settings.manage",
-        edit: "settings.manage",
-        aliases: ["processing", "byok", "embedding", "keys"],
-    },
-    // Its read is refused outright. Also where a workspace brings its own
-    // model: an endpoint and API key, or OpenRouter.
-    models: {
+    // The workspace's own model: an endpoint and API key, or OpenRouter. The
+    // form would take edits it can never save. `processing` was this
+    // section's name once, and `embedding` the key it also held; both hashes
+    // still land here so old links keep working.
+    byok: {
         view: "settings.manage",
         edit: "settings.manage",
         aliases: [
-            "models",
-            "routes",
-            "llm",
-            "chat model",
-            "gemini",
-            "openai",
-            "own model",
+            "byok",
+            "keys",
             "api key",
+            "own model",
             "openrouter",
             "endpoint",
+            "embedding",
+            "embeddings",
+            "processing",
         ],
+    },
+    // Its read is refused outright.
+    models: {
+        view: "settings.manage",
+        edit: "settings.manage",
+        aliases: ["models", "routes", "llm", "chat model", "gemini", "openai"],
     },
     // The roster's buttons and the autonomy policy are the admins'. Anyone
     // tries an agent in the Agents app, and anyone who edits documents may
@@ -105,11 +114,6 @@ export const SETTINGS_SECTION_ACCESS: Record<SettingsSectionId, SettingsSectionA
         view: "settings.manage",
         edit: "settings.manage",
         aliases: ["agents", "nodes", "roster", "autonomy"],
-    },
-    // Readable by all: where an upload goes, and how it is processed.
-    documents: {
-        edit: "settings.manage",
-        aliases: ["documents", "upload", "storage", "defaults", "ocr"],
     },
     // Workspace connections. Someone's own Gmail is connected and removed
     // from Add knowledge, not here.

@@ -10,6 +10,7 @@ import React, {
     useRef,
     useState,
 } from "react";
+import { useFormatter, useTranslations } from "next-intl";
 import { useEmployerWorkspaceSwitcher } from "../../_chrome/EmployerWorkspaceSwitcherContext";
 import {
     SOURCE_META,
@@ -33,7 +34,6 @@ import {
     Lock,
     Users,
     Zap as IconBolt,
-    ChevronRight as IconChevronRight,
     Plus as IconPlus,
     Shield as IconShield,
     User as IconUser,
@@ -44,7 +44,9 @@ import { ProfileAvatar } from "~/components/ProfileAvatar";
 import { Button } from "~/components/ui/button";
 import { isChatPassage, QUOTED_CONTEXT_MARKER, type ChatPassage } from "~/lib/chat-passages";
 import { usePeople } from "~/lib/profile/use-people";
+import { workspaceHref } from "~/lib/settings/surfaces";
 import type { ChatSendResult } from "~/lib/chat-turns";
+import { stripStreamingSourceLabels } from "~/lib/source-labels";
 import { AgentAvatar } from "./collab/AgentAvatar";
 import { type ChatAgentOption } from "./collab/types";
 import { useContextTarget } from "~/components/context-menu";
@@ -62,6 +64,7 @@ import {
     passagesMarkdown,
     quoteBlock,
     transcriptFilename,
+    transcriptLabels,
     transcriptMarkdown,
     plainTextOfAnswer,
 } from "./transcript";
@@ -72,8 +75,12 @@ import { Composer } from "./ChatComposer";
 import { ChatAttachmentChip as AttachmentChip } from "./ChatAttachmentChip";
 import { ChatMarkdown } from "./ChatMarkdown";
 import { PassageCard } from "./PassageCard";
+import { closeOpenMarkdown, useSmoothText } from "./smoothText";
+import { PendingTrace, ThinkingTrace } from "./ThinkingTrace";
 import { ProposedPlan } from "./ProposedPlan";
 import { messageAnchor, useChatTimeline } from "./useChatTimeline";
+import { WebSources } from "./WebSources";
+import { CreatedSources } from "./CreatedSources";
 
 /** Chat transcript column and composer share this width. */
 const CHAT_COLUMN_MAX_PX = 760;
@@ -121,9 +128,17 @@ export interface ComposerSeed {
     chatMode?: ComposerSend["chatMode"];
 }
 
-async function copyWithToast(text: string, what = "Copied"): Promise<void> {
-    if (await copyText(text)) toast.success(what);
-    else toast.error("Couldn't copy");
+/** Copy to the clipboard and say how it went. */
+function useCopyWithToast(): (text: string) => Promise<void> {
+    const t = useTranslations("chat.askPanel");
+    const tc = useTranslations("common");
+    return useCallback(
+        async (text: string) => {
+            if (await copyText(text)) toast.success(tc("actions.copied"));
+            else toast.error(t("copyFailed"));
+        },
+        [t, tc]
+    );
 }
 
 /** A passage as a citation, so showing it in its document reuses the citation jump. */
@@ -139,6 +154,8 @@ interface SourceChipProps {
 }
 
 export function SourceChip({ source, onRemove, onOpen, size = "md" }: SourceChipProps) {
+    const t = useTranslations("chat.sourceChip");
+    const tMenu = useTranslations("chat.contextMenu");
     const meta = SOURCE_META[source.type] ?? SOURCE_META.doc;
     const Icon = meta.Icon;
     const small = size === "sm";
@@ -147,9 +164,9 @@ export function SourceChip({ source, onRemove, onOpen, size = "md" }: SourceChip
             ? {
                   kind: "context-chip",
                   id: source.id,
-                  label: `Actions for ${source.title}`,
+                  label: t("actionsFor", { title: source.title }),
                   data: source,
-                  items: () => buildContextChipMenuItems(source, { onOpen, onRemove }),
+                  items: () => buildContextChipMenuItems(source, { onOpen, onRemove }, tMenu),
               }
             : null
     );
@@ -176,7 +193,7 @@ export function SourceChip({ source, onRemove, onOpen, size = "md" }: SourceChip
             {onOpen ? (
                 <button
                     type="button"
-                    aria-label={`Open ${source.title}`}
+                    aria-label={t("open", { title: source.title })}
                     onClick={onOpen}
                     style={{
                         whiteSpace: "nowrap",
@@ -197,7 +214,7 @@ export function SourceChip({ source, onRemove, onOpen, size = "md" }: SourceChip
             {onRemove && (
                 <button
                     type="button"
-                    aria-label={`Remove ${source.title} from context`}
+                    aria-label={t("remove", { title: source.title })}
                     onClick={onRemove}
                     style={{ color: "var(--ink-3)", display: "flex", alignItems: "center" }}
                 >
@@ -227,18 +244,26 @@ function CitationTarget({
     onToggleContext: (source: WorkspaceSource) => void;
     children: React.ReactNode;
 }) {
+    const t = useTranslations("chat.message");
+    const tMenu = useTranslations("chat.contextMenu");
+    const copyWithToast = useCopyWithToast();
     const ctxTarget = useContextTarget({
         kind: "citation",
         id: `${source.id}:${cite.page ?? ""}`,
-        label: `Citation from ${source.title}`,
+        label: t("citationMenu", { title: source.title }),
         data: { cite, source },
         items: () =>
-            buildCitationMenuItems(cite, source, {
-                onOpen,
-                onCopy: text => void copyWithToast(text),
-                inContext,
-                onToggleContext,
-            }),
+            buildCitationMenuItems(
+                cite,
+                source,
+                {
+                    onOpen,
+                    onCopy: text => void copyWithToast(text),
+                    inContext,
+                    onToggleContext,
+                },
+                tMenu
+            ),
     });
     return (
         <div {...ctxTarget} style={{ display: "contents" }}>
@@ -287,6 +312,7 @@ interface MessageProps {
  * are, and `pre-wrap` keeps the line breaks in either.
  */
 function QuestionProse({ text }: { text: string }) {
+    const t = useTranslations("chat.message");
     const parts = text.split(
         /(\[Source message\]\(#chat-message-[\w-]+\)|\[(?:Source|Conversation|Folder): (?:\\.|[^\]\\\n]){1,300}\]\(#launchstack-(?:source|thread|folder)-[^)\s]+\))/g
     );
@@ -297,7 +323,7 @@ function QuestionProse({ text }: { text: string }) {
                 if (source)
                     return (
                         <a key={i} href={source[1]} className="text-[var(--accent)] underline">
-                            Source message
+                            {t("sourceMessage")}
                         </a>
                     );
                 // The rich editor writes its context chips into the message
@@ -319,6 +345,8 @@ function QuestionProse({ text }: { text: string }) {
 }
 
 function QuestionBody({ text: raw }: { text: string }) {
+    const t = useTranslations("chat.message");
+    const tc = useTranslations("common");
     const [expanded, setExpanded] = useState(false);
     // Older turns pasted a passage in as a quote followed by a machine link
     // that only marked where it came from; the link is never shown.
@@ -356,7 +384,7 @@ function QuestionBody({ text: raw }: { text: string }) {
                         aria-expanded={expanded}
                         onClick={() => setExpanded(v => !v)}
                     >
-                        {expanded ? "Show less" : "Show full message"}
+                        {expanded ? tc("actions.showLess") : t("showFull")}
                     </button>
                 )}
             </div>
@@ -408,7 +436,7 @@ function QuestionBody({ text: raw }: { text: string }) {
                     aria-expanded={expanded}
                     onClick={() => setExpanded(v => !v)}
                 >
-                    {expanded ? "Show less" : "Show full message"}
+                    {expanded ? tc("actions.showLess") : t("showFull")}
                 </button>
             )}
         </div>
@@ -437,7 +465,20 @@ const Message = React.memo(function Message({
     readOnly = false,
     asker,
 }: MessageProps) {
+    const t = useTranslations("chat.message");
+    const tc = useTranslations("common");
+    const tMenu = useTranslations("chat.contextMenu");
+    const format = useFormatter();
+    const copyWithToast = useCopyWithToast();
     const isUser = msg.role === "user";
+    const live = !isUser && msg.status === "streaming";
+    // Source labels the model is still writing ([d12…) stay hidden until complete.
+    const reveal = useSmoothText(
+        isUser ? "" : live ? stripStreamingSourceLabels(msg.text) : msg.text,
+        live
+    );
+    // Sources and actions arrive with the finished answer, not ahead of its text.
+    const arriving = live || (msg.status === "complete" && reveal.revealing);
     const bodyRef = useRef<HTMLDivElement>(null);
     const [selectedPassage, setSelectedPassage] = useState("");
     const [quoteComment, setQuoteComment] = useState("");
@@ -448,10 +489,10 @@ const Message = React.memo(function Message({
         created && Number.isFinite(created.getTime()) ? (
             <time
                 dateTime={created.toISOString()}
-                title={created.toLocaleString()}
+                title={format.dateTime(created, { dateStyle: "medium", timeStyle: "medium" })}
                 className="ml-auto shrink-0 text-[10px] font-normal text-[var(--ink-3)]"
             >
-                {created.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" })}
+                {format.dateTime(created, { hour: "numeric", minute: "2-digit" })}
             </time>
         ) : null;
     const captureSelection = () => {
@@ -468,13 +509,13 @@ const Message = React.memo(function Message({
     const actions = (
         <div
             role="toolbar"
-            aria-label={isUser ? "Question actions" : "Answer actions"}
+            aria-label={isUser ? t("questionActions") : t("answerActions")}
             className="mt-3 flex flex-wrap items-center gap-1 text-[var(--ink-3)]"
         >
             <button
                 type="button"
-                title="Copy message"
-                aria-label="Copy message"
+                title={t("copy")}
+                aria-label={t("copy")}
                 className="rounded p-1.5 hover:bg-[var(--line-2)] focus-visible:outline"
                 onClick={() => void copyWithToast(`${passagesMarkdown(msg)}${msg.text}`)}
             >
@@ -483,8 +524,8 @@ const Message = React.memo(function Message({
             {!readOnly && (
                 <button
                     type="button"
-                    title="Quote in reply"
-                    aria-label="Quote in reply"
+                    title={t("quote")}
+                    aria-label={t("quote")}
                     className="rounded p-1.5 hover:bg-[var(--line-2)] focus-visible:outline"
                     onClick={() => onQuote(isUser ? msg.text : plainTextOfAnswer(msg.text))}
                 >
@@ -494,8 +535,8 @@ const Message = React.memo(function Message({
             {isUser && !readOnly && (
                 <button
                     type="button"
-                    title={onEditMessage ? "Edit from here" : "Edit and ask again"}
-                    aria-label={onEditMessage ? "Edit from here" : "Edit and ask again"}
+                    title={onEditMessage ? t("editFromHere") : t("editAndAskAgain")}
+                    aria-label={onEditMessage ? t("editFromHere") : t("editAndAskAgain")}
                     disabled={active}
                     className="rounded p-1.5 hover:bg-[var(--line-2)] focus-visible:outline disabled:opacity-50"
                     onClick={() => (onEditMessage ? onEditMessage(index) : onEdit(msg.text))}
@@ -506,8 +547,8 @@ const Message = React.memo(function Message({
             {!isUser && onRetryMessage && (
                 <button
                     type="button"
-                    title="Retry answer"
-                    aria-label="Retry answer"
+                    title={t("retry")}
+                    aria-label={t("retry")}
                     disabled={active}
                     className="rounded p-1.5 hover:bg-[var(--line-2)] focus-visible:outline disabled:opacity-50"
                     onClick={() => onRetryMessage(index)}
@@ -518,8 +559,8 @@ const Message = React.memo(function Message({
             {onForkMessage && (
                 <button
                     type="button"
-                    title="Fork new chat from here"
-                    aria-label="Fork new chat from here"
+                    title={t("fork")}
+                    aria-label={t("fork")}
                     disabled={active}
                     className="rounded p-1.5 hover:bg-[var(--line-2)] focus-visible:outline disabled:opacity-50"
                     onClick={() => onForkMessage(index)}
@@ -530,8 +571,8 @@ const Message = React.memo(function Message({
             {!isUser && onSaveMessage && (
                 <button
                     type="button"
-                    title="Save answer as a note"
-                    aria-label="Save answer as a note"
+                    title={t("saveAsNote")}
+                    aria-label={t("saveAsNote")}
                     className="rounded p-1.5 hover:bg-[var(--line-2)] focus-visible:outline"
                     onClick={() => onSaveMessage(index)}
                 >
@@ -561,32 +602,43 @@ const Message = React.memo(function Message({
         .map(id => sources.find(s => s.id === id))
         .filter((s): s is WorkspaceSource => Boolean(s));
     const cites = msg.citations ?? [];
+    // The model cites sources by id ("[d12]"); the finished answer arrives
+    // with them taken out, so hide them while it streams too.
+    const shownText = msg.status === "streaming" ? stripStreamingSourceLabels(msg.text) : msg.text;
     const ctxTarget = useContextTarget(
         isUser
             ? {
                   kind: "chat-user-message",
                   id: String(index),
-                  label: "Question actions",
+                  label: t("questionActions"),
                   data: { msg, index },
                   items: () =>
-                      buildQuestionMenuItems(msg, {
-                          onCopy: text => void copyWithToast(text),
-                          onQuote,
-                          // Refills the composer and changes nothing in the
-                          // chat; the passages come back with the text.
-                          onEdit: text => onEdit(text, passages),
-                      }),
+                      buildQuestionMenuItems(
+                          msg,
+                          {
+                              onCopy: text => void copyWithToast(text),
+                              onQuote,
+                              // Refills the composer and changes nothing in the
+                              // chat; the passages come back with the text.
+                              onEdit: text => onEdit(text, passages),
+                          },
+                          tMenu
+                      ),
               }
             : {
                   kind: "chat-message",
                   id: String(index),
-                  label: "Answer actions",
+                  label: t("answerActions"),
                   data: { msg, index },
                   items: () =>
-                      buildAnswerMenuItems(msg, {
-                          onCopy: text => void copyWithToast(text),
-                          onQuote,
-                      }),
+                      buildAnswerMenuItems(
+                          msg,
+                          {
+                              onCopy: text => void copyWithToast(text),
+                              onQuote,
+                          },
+                          tMenu
+                      ),
               }
     );
     const toggleContext = (source: WorkspaceSource) =>
@@ -640,25 +692,32 @@ const Message = React.memo(function Message({
                             <IconUser size={12} />
                         </div>
                     )}
-                    <span className="text-[13px] font-semibold">{asker?.name ?? "You"}</span>
+                    <span className="text-[13px] font-semibold">{asker?.name ?? t("you")}</span>
                     {msg.intent && (
                         <span className="border-line bg-panel text-ink-3 rounded border px-1.5 py-0.5 text-[10px] font-normal">
-                            {msg.intent === "interrupt" ? "Immediate follow-up" : "Queued"}
+                            {msg.intent === "interrupt" ? t("intentInterrupt") : t("intentQueued")}
                         </span>
                     )}
                     {timestamp}
                     {agent && (
                         <span
-                            title={`Asked ${agent.displayName}${agent.role ? ` (${agent.role})` : ""}`}
+                            title={
+                                agent.role
+                                    ? t("askedAgentWithRole", {
+                                          name: agent.displayName,
+                                          role: agent.role,
+                                      })
+                                    : t("askedAgent", { name: agent.displayName })
+                            }
                             className="mono"
                             style={{ fontSize: 10, color: "var(--ink-3)" }}
                         >
-                            · to @{agent.key}
+                            {t("toAgent", { handle: agent.key })}
                         </span>
                     )}
                     {refs.length > 0 && (
                         <span className="mono" style={{ fontSize: 10, color: "var(--ink-3)" }}>
-                            · asking over {refs.length} source{refs.length !== 1 ? "s" : ""}
+                            {t("askingOver", { count: refs.length })}
                         </span>
                     )}
                 </div>
@@ -755,7 +814,7 @@ const Message = React.memo(function Message({
                     </div>
                 )}
                 <span style={{ fontSize: 13, fontWeight: 600 }}>
-                    {agent ? agent.displayName : "Launchstack"}
+                    {agent ? agent.displayName : tc("brand.name")}
                 </span>
                 {timestamp}
                 {agent?.role && (
@@ -763,7 +822,7 @@ const Message = React.memo(function Message({
                 )}
                 {msg.gapCheck && (
                     <span
-                        title={`Predictive gap analysis ran across ${msg.gapCheck.domain} docs`}
+                        title={t("gapCheckTitle", { domain: msg.gapCheck.domain })}
                         style={{
                             display: "inline-flex",
                             alignItems: "center",
@@ -779,19 +838,20 @@ const Message = React.memo(function Message({
                         }}
                     >
                         <IconShield size={9} />
-                        {msg.gapCheck.missing} missing · {msg.gapCheck.conflicts} conflict
+                        {t("gapCheck", {
+                            missing: msg.gapCheck.missing,
+                            conflicts: msg.gapCheck.conflicts,
+                        })}
                     </span>
                 )}
             </div>
-            <MessageActivity msg={msg} />
+            <ThinkingTrace msg={msg} />
             {msg.status === "error" && !dismissedError && (
                 <div
                     role="alert"
                     className="mb-3 flex flex-wrap items-center gap-2 rounded-lg border border-[var(--danger)] bg-[var(--danger-soft)] p-3 text-xs text-[var(--danger)]"
                 >
-                    <span>
-                        This answer could not finish. Your prompt and attachments are retained.
-                    </span>
+                    <span>{t("answerFailed")}</span>
                     {onRetryMessage && (
                         <button
                             type="button"
@@ -799,12 +859,12 @@ const Message = React.memo(function Message({
                             className="font-semibold underline"
                             onClick={() => onRetryMessage(index)}
                         >
-                            Retry
+                            {tc("actions.retry")}
                         </button>
                     )}
                     <button
                         type="button"
-                        aria-label="Dismiss answer error"
+                        aria-label={t("dismissError")}
                         className="ml-auto p-1"
                         onClick={() => setDismissedError(true)}
                     >
@@ -816,33 +876,40 @@ const Message = React.memo(function Message({
                 ref={bodyRef}
                 onMouseUp={captureSelection}
                 onKeyUp={captureSelection}
-                style={{ fontSize: 14, lineHeight: 1.65, color: "var(--ink-2)" }}
+                className="text-ink"
             >
                 {isPlan ? (
                     <ProposedPlan
-                        text={msg.text}
+                        text={shownText}
                         onRefine={onEdit}
                         onImplement={onImplementPlan}
                         active={active}
                     />
                 ) : (
-                    <ChatMarkdown text={msg.text} />
+                    <AnswerProse msg={msg} shown={reveal.text} arriving={arriving} />
                 )}
             </div>
+            {msg.createdSources && (
+                <CreatedSources
+                    created={msg.createdSources}
+                    sources={sources}
+                    onOpen={onOpenSource}
+                />
+            )}
             {selectedPassage && (
                 <div
                     role="group"
-                    aria-label="Selected passage citation"
+                    aria-label={t("selectedPassage")}
                     className="my-3 rounded-lg border border-[var(--line)] bg-[var(--panel)] p-3 text-xs"
                 >
                     <div className="mb-2 flex items-center gap-2">
-                        <span className="font-semibold">Cite selected passage</span>
+                        <span className="font-semibold">{t("citeSelected")}</span>
                         <a href={`#${anchor}`} className="text-[var(--accent)] underline">
-                            Source message
+                            {t("sourceMessage")}
                         </a>
                         <button
                             type="button"
-                            aria-label="Dismiss selected passage"
+                            aria-label={t("dismissSelected")}
                             className="ml-auto p-1"
                             onClick={() => setSelectedPassage("")}
                         >
@@ -850,9 +917,9 @@ const Message = React.memo(function Message({
                         </button>
                     </div>
                     <label className="block">
-                        Comment (optional)
+                        {t("commentOptional")}
                         <input
-                            aria-label="Citation comment"
+                            aria-label={t("commentLabel")}
                             value={quoteComment}
                             onChange={e => setQuoteComment(e.target.value)}
                             className="mt-1 block w-full rounded border border-[var(--line)] bg-[var(--bg)] p-2"
@@ -869,230 +936,95 @@ const Message = React.memo(function Message({
                             setQuoteComment("");
                         }}
                     >
-                        Cite in composer
+                        {t("citeInComposer")}
                     </button>
                 </div>
             )}
-            {cites.length > 0 && (
+            {cites.length > 0 && !arriving && (
                 <div
-                    style={{
-                        marginTop: 14,
-                        padding: "12px 14px",
-                        borderRadius: 10,
-                        background: "var(--line-2)",
-                        border: "1px solid var(--line)",
-                    }}
+                    className="mt-3 flex flex-wrap items-center gap-1.5"
+                    role="group"
+                    aria-label={t("sources")}
+                    data-testid="answer-sources"
                 >
-                    <div
-                        className="mono"
-                        style={{
-                            fontSize: 10,
-                            fontWeight: 600,
-                            letterSpacing: "0.08em",
-                            color: "var(--ink-3)",
-                            textTransform: "uppercase",
-                            marginBottom: 8,
-                        }}
-                    >
-                        Grounded in {cites.length} source{cites.length !== 1 ? "s" : ""}
-                    </div>
+                    <span className="text-ink-3 mr-0.5 text-[12px]">{t("sources")}</span>
                     {cites.map((c, i) => {
                         const s = sources.find(x => x.id === c.sourceId);
                         if (!s) return null;
+                        // One chip per source; it opens the first passage cited from it.
+                        // No page is claimed: every chunk is indexed as page 1.
+                        if (cites.findIndex(other => other.sourceId === c.sourceId) !== i)
+                            return null;
                         const meta = SOURCE_META[s.type];
                         const Icon = meta.Icon;
                         return (
                             <CitationTarget
-                                key={i}
+                                key={c.sourceId}
                                 cite={c}
                                 source={s}
                                 inContext={selected.includes(s.id)}
                                 onOpen={onOpenCitation}
                                 onToggleContext={toggleContext}
                             >
-                                <button
+                                <Button
                                     type="button"
+                                    variant="outline"
+                                    size="sm"
                                     onClick={() => onOpenCitation?.(c)}
-                                    title="Open the source at this passage"
-                                    style={{
-                                        display: "flex",
-                                        alignItems: "flex-start",
-                                        gap: 10,
-                                        width: "100%",
-                                        textAlign: "left",
-                                        padding: "8px 8px",
-                                        margin: "0 -8px",
-                                        borderRadius: 8,
-                                        borderTop: i > 0 ? "1px solid var(--line)" : "none",
-                                        background: "transparent",
-                                        cursor: onOpenCitation ? "pointer" : "default",
-                                        transition: "background 120ms",
-                                    }}
-                                    onMouseEnter={e => {
-                                        e.currentTarget.style.background = "var(--panel)";
-                                    }}
-                                    onMouseLeave={e => {
-                                        e.currentTarget.style.background = "transparent";
-                                    }}
+                                    aria-label={t("openSourceAtPassage", { title: s.title })}
+                                    title={c.snippet ? `“${c.snippet}”` : undefined}
+                                    className="text-ink-2 h-auto max-w-[260px] gap-1.5 rounded-full px-2 py-0.5 text-[12px] font-normal"
                                 >
-                                    <div
-                                        style={{
-                                            width: 22,
-                                            height: 22,
-                                            borderRadius: 5,
-                                            background: "var(--panel)",
-                                            border: "1px solid var(--line)",
-                                            display: "flex",
-                                            alignItems: "center",
-                                            justifyContent: "center",
-                                            color: meta.color,
-                                            flexShrink: 0,
-                                            marginTop: 1,
-                                        }}
-                                    >
-                                        <Icon size={12} />
-                                    </div>
-                                    <div style={{ flex: 1, minWidth: 0 }}>
-                                        <div
-                                            style={{
-                                                display: "flex",
-                                                alignItems: "center",
-                                                gap: 6,
-                                                fontSize: 12,
-                                                fontWeight: 600,
-                                                color: "var(--ink)",
-                                            }}
-                                        >
-                                            <span
-                                                style={{
-                                                    overflow: "hidden",
-                                                    textOverflow: "ellipsis",
-                                                    whiteSpace: "nowrap",
-                                                }}
-                                            >
-                                                {s.title}
-                                            </span>
-                                        </div>
-                                        <div
-                                            style={{
-                                                fontSize: 12,
-                                                color: "var(--ink-3)",
-                                                marginTop: 2,
-                                                lineHeight: 1.5,
-                                            }}
-                                        >
-                                            {c.snippet}
-                                        </div>
-                                    </div>
-                                    <span
-                                        style={{
-                                            color: "var(--ink-3)",
-                                            flexShrink: 0,
-                                            alignSelf: "center",
-                                        }}
-                                    >
-                                        <IconChevronRight size={12} />
-                                    </span>
-                                </button>
+                                    <Icon size={12} className="text-ink-3 shrink-0" />
+                                    <span className="truncate">{s.title}</span>
+                                </Button>
                             </CitationTarget>
                         );
                     })}
                 </div>
             )}
+            {msg.webSources && !arriving && <WebSources sources={msg.webSources} />}
             {(msg.hiddenCitations ?? 0) > 0 && (
                 <p
                     className="text-ink-3 m-0 mt-2 flex items-center gap-1.5 text-[11px]"
                     data-testid="hidden-citations"
                 >
                     <Lock className="size-3 shrink-0" aria-hidden />
-                    {msg.hiddenCitations === 1
-                        ? "1 source you can’t open is hidden."
-                        : `${msg.hiddenCitations} sources you can’t open are hidden.`}
+                    {t("hiddenCitations", { count: msg.hiddenCitations ?? 0 })}
                 </p>
             )}
-            {actions}
-            {(typeof msg.tokens === "number" || typeof msg.chunksAnalyzed === "number") && (
-                <div style={{ display: "flex", gap: 6, marginTop: 12 }}>
-                    <span style={{ marginLeft: "auto" }} className="mono">
-                        <span
-                            style={{ fontSize: 10, color: "var(--ink-3)" }}
-                            title={
-                                msg.tokenBreakdown
-                                    ? `${msg.tokenBreakdown.inputTokens.toLocaleString()} prompt + ${msg.tokenBreakdown.outputTokens.toLocaleString()} completion`
-                                    : undefined
-                            }
-                        >
-                            {/* Two different numbers, told apart: tokens are what
-                                the model billed, chunks are what it read. */}
-                            {typeof msg.tokens === "number"
-                                ? `${msg.tokens.toLocaleString()} tokens`
-                                : null}
-                            {typeof msg.tokens === "number" &&
-                            typeof msg.chunksAnalyzed === "number"
-                                ? " · "
-                                : null}
-                            {typeof msg.chunksAnalyzed === "number"
-                                ? `${msg.chunksAnalyzed} ${msg.chunksAnalyzed === 1 ? "chunk" : "chunks"}`
-                                : null}
-                        </span>
-                    </span>
-                </div>
-            )}
+            {!arriving && actions}
         </div>
     );
 });
 
-function MessageActivity({ msg }: { msg: ThreadMessage }) {
-    const [now, setNow] = useState(Date.now());
-    useEffect(() => {
-        if (msg.status !== "streaming") return;
-        const timer = setInterval(() => setNow(Date.now()), 1000);
-        return () => clearInterval(timer);
-    }, [msg.status]);
-    const start = msg.createdAt ? Date.parse(msg.createdAt) : NaN;
-    const elapsed =
-        msg.status === "streaming" && Number.isFinite(start)
-            ? Math.max(0, now - start)
-            : msg.elapsedMs;
-    return (
-        <>
-            {msg.status && (
-                <div
-                    role="status"
-                    className="my-2 flex items-center gap-2 text-xs text-[var(--ink-3)]"
-                >
-                    <span>
-                        {msg.status === "streaming"
-                            ? msg.stage?.trim()
-                                ? msg.stage
-                                : "Working…"
-                            : msg.status === "stopped"
-                              ? "Stopped"
-                              : msg.status === "error"
-                                ? "Failed"
-                                : "Completed"}
-                    </span>
-                    {elapsed !== undefined && (
-                        <span>{(elapsed / 1000).toFixed(elapsed < 10000 ? 1 : 0)}s</span>
-                    )}
-                </div>
-            )}
-            {msg.reasoning && (
-                <details className="my-2 rounded-lg border border-[var(--line)] p-3 text-xs text-[var(--ink-3)]">
-                    <summary className="cursor-pointer font-semibold">Reasoning</summary>
-                    <ChatMarkdown text={msg.reasoning} />
-                </details>
-            )}
-        </>
-    );
-}
+/** One reading size for answers: larger and darker than the chrome around them. */
+const ANSWER_PROSE =
+    "text-[15px] leading-[1.7] [&_p]:my-3 [&_li]:my-1.5 [&_h1]:mt-6 [&_h1]:mb-3 [&_h2]:mt-5 [&_h2]:mb-2 [&_h3]:mt-4 [&_h3]:mb-2";
 
-function TypingIndicator() {
+/**
+ * The answer as it arrives: revealed at a steady pace even when the model
+ * sends it in one burst (`shown`, from useSmoothText), with a caret until it's
+ * done. A stopped or failed turn shows what it has at once.
+ */
+function AnswerProse({
+    msg,
+    shown,
+    arriving,
+}: {
+    msg: ThreadMessage;
+    shown: string;
+    arriving: boolean;
+}) {
+    if (msg.status === "error" || msg.status === "stopped")
+        return <ChatMarkdown text={msg.text} className={ANSWER_PROSE} />;
+    if (!shown && arriving) return null;
     return (
-        <div role="status" className="mb-7 flex items-center gap-2 text-xs text-[var(--ink-3)]">
-            <IconBolt size={16} />
-            Working…
-        </div>
+        <ChatMarkdown
+            text={arriving ? closeOpenMarkdown(shown) : shown}
+            streaming={arriving}
+            className={ANSWER_PROSE}
+        />
     );
 }
 
@@ -1120,6 +1052,7 @@ function EmptyState({
     onOpenProfile,
     onOpenProcessing,
 }: EmptyStateProps) {
+    const t = useTranslations("chat.emptyState");
     let sourceCount = 0;
     let processingCount = 0;
     let failedCount = 0;
@@ -1132,10 +1065,12 @@ function EmptyState({
         <div className="pt-10" style={{ animation: "lsw-fadeIn 300ms" }}>
             <div className="mb-10 text-center">
                 <div className="display text-ink @max-md:text-[34px] @max-sm:text-[28px] mb-2.5 text-[42px] leading-[1.15] tracking-[-0.02em]">
-                    What do you want to <em className="text-brand">ask</em> yourself?
+                    {t.rich("title", {
+                        em: chunks => <em className="text-brand">{chunks}</em>,
+                    })}
                 </div>
                 <div className="text-ink-3 text-sm">
-                    {sourceCount} source{sourceCount !== 1 ? "s" : ""} indexed
+                    {t("indexed", { count: sourceCount })}
                     {processingCount > 0 || failedCount > 0 ? (
                         <>
                             {" · "}
@@ -1146,15 +1081,17 @@ function EmptyState({
                                 onClick={onOpenProcessing}
                             >
                                 {[
-                                    processingCount > 0 ? `${processingCount} processing` : null,
-                                    failedCount > 0 ? `${failedCount} failed` : null,
-                                ]
-                                    .filter(Boolean)
-                                    .join(" · ")}
+                                    ...(processingCount > 0
+                                        ? [t("processing", { count: processingCount })]
+                                        : []),
+                                    ...(failedCount > 0
+                                        ? [t("failed", { count: failedCount })]
+                                        : []),
+                                ].join(" · ")}
                             </button>
                         </>
                     ) : (
-                        " · ready to query"
+                        ` · ${t("ready")}`
                     )}
                 </div>
             </div>
@@ -1166,7 +1103,7 @@ function EmptyState({
                 onOpenProfile={onOpenProfile}
             />
             <div className="bg-line-2 border-line text-ink-3 flex items-center justify-center gap-2.5 rounded-xl border border-dashed px-[18px] py-3.5 text-[13px]">
-                <span>Need something new?</span>
+                <span>{t("needNew")}</span>
                 <Button
                     type="button"
                     variant="link"
@@ -1174,7 +1111,7 @@ function EmptyState({
                     className="text-brand h-auto gap-1.5 p-0 text-[13px] font-semibold"
                     onClick={onOpenAdd}
                 >
-                    <Plus className="size-3" aria-hidden /> Add a source
+                    <Plus className="size-3" aria-hidden /> {t("addSource")}
                 </Button>
             </div>
         </div>
@@ -1248,6 +1185,7 @@ export interface AskPanelProps {
 
 /** The composer's place when you're reading someone else's chat. */
 function ReadOnlyBar({ onContinue }: { onContinue: () => Promise<unknown> | void }) {
+    const t = useTranslations("chat.askPanel.readOnly");
     const [continuing, setContinuing] = useState(false);
     return (
         <div
@@ -1256,8 +1194,8 @@ function ReadOnlyBar({ onContinue }: { onContinue: () => Promise<unknown> | void
             style={{ maxWidth: CHAT_COLUMN_MAX_PX }}
         >
             <span className="text-ink-2 min-w-0 flex-1 text-[13px]">
-                You can read this chat.
-                <span className="text-ink-3"> Continue it to ask your own follow-ups.</span>
+                {t("canRead")}
+                <span className="text-ink-3"> {t("continueHint")}</span>
             </span>
             <Button
                 size="sm"
@@ -1268,7 +1206,7 @@ function ReadOnlyBar({ onContinue }: { onContinue: () => Promise<unknown> | void
                 }}
             >
                 <GitBranch className="size-3.5" />
-                {continuing ? "Continuing…" : "Continue in a new chat"}
+                {continuing ? t("continuing") : t("continue")}
             </Button>
         </div>
     );
@@ -1276,6 +1214,7 @@ function ReadOnlyBar({ onContinue }: { onContinue: () => Promise<unknown> | void
 
 /** "Shared by Ada" under the title of a chat shared with you. */
 function SharedByLine({ ownerAuthUserId }: { ownerAuthUserId: string }) {
+    const t = useTranslations("chat.askPanel");
     const people = usePeople([ownerAuthUserId]);
     const owner = people[ownerAuthUserId];
     return (
@@ -1287,7 +1226,11 @@ function SharedByLine({ ownerAuthUserId }: { ownerAuthUserId: string }) {
                 className="size-4"
                 fallbackClassName="text-[8px]"
             />
-            <span className="truncate">Shared by {owner?.displayName ?? "a teammate"}</span>
+            <span className="truncate">
+                {owner?.displayName
+                    ? t("sharedBy", { name: owner.displayName })
+                    : t("sharedByTeammate")}
+            </span>
         </span>
     );
 }
@@ -1335,6 +1278,11 @@ export function AskPanel({
     readOnly,
     onShare,
 }: AskPanelProps) {
+    const t = useTranslations("chat.askPanel");
+    const tMessage = useTranslations("chat.message");
+    const tc = useTranslations("common");
+    const tMenu = useTranslations("chat.contextMenu");
+    const tTranscript = useTranslations("chat.transcript");
     const draftKey = suppliedDraftKey ?? "new-chat";
     const { scrollRef, contentRef, following, currentIndex, onScroll, latest, navigate } =
         useChatTimeline(thread, draftKey, isSending);
@@ -1398,12 +1346,12 @@ export function AskPanel({
         () =>
             ownerId
                 ? {
-                      name: ownerLook?.displayName ?? "Teammate",
+                      name: ownerLook?.displayName ?? t("teammate"),
                       email: ownerLook?.email,
                       avatarUrl: ownerLook?.avatarUrl ?? null,
                   }
                 : undefined,
-        [ownerId, ownerLook]
+        [ownerId, ownerLook, t]
     );
     // In a chat you continued from someone else's, their questions keep
     // their name ("Continue in a new chat" stamps `askedBy`).
@@ -1417,20 +1365,20 @@ export function AskPanel({
             if (!m.askedBy) return asker;
             const look = carriedLooks[m.askedBy];
             return {
-                name: look?.displayName ?? "Teammate",
+                name: look?.displayName ?? t("teammate"),
                 email: look?.email,
                 avatarUrl: look?.avatarUrl ?? null,
             };
         },
-        [asker, carriedLooks]
+        [asker, carriedLooks, t]
     );
     const readOnlyRef = useRef(Boolean(readOnly));
     readOnlyRef.current = Boolean(readOnly);
     const noComposer = useCallback(() => {
         if (!readOnlyRef.current) return false;
-        toast.info("Continue this chat in a new one to reply.");
+        toast.info(t("readOnlyReply"));
         return true;
-    }, []);
+    }, [t]);
     const cite = useCallback(
         (text: string) => {
             if (noComposer()) return;
@@ -1519,21 +1467,24 @@ export function AskPanel({
 
     const paneTarget = useContextTarget({
         kind: "chat",
-        label: "Chat actions",
+        label: t("chatActions"),
         data: { thread, sources },
         items: () =>
-            buildChatPaneMenuItems({
-                isEmpty,
-                hasContext: selected.length > 0,
-                onNewChat,
-                onClearContext: () => setSelected([]),
-                onExportMarkdown: () =>
-                    downloadTextFile(
-                        transcriptFilename(thread),
-                        transcriptMarkdown(thread, sources)
-                    ),
-                onOpenPalette: openPalette,
-            }),
+            buildChatPaneMenuItems(
+                {
+                    isEmpty,
+                    hasContext: selected.length > 0,
+                    onNewChat,
+                    onClearContext: () => setSelected([]),
+                    onExportMarkdown: () =>
+                        downloadTextFile(
+                            transcriptFilename(thread),
+                            transcriptMarkdown(thread, sources, transcriptLabels(tTranscript))
+                        ),
+                    onOpenPalette: openPalette,
+                },
+                tMenu
+            ),
     });
 
     const [dismissedErrors, setDismissedErrors] = useState<Record<string, string>>({});
@@ -1545,14 +1496,12 @@ export function AskPanel({
     const latestRole = thread.at(-1)?.role;
     const showTyping = isSending && latestRole === "user";
 
-    const titleText = title?.trim()
-        ? title
-        : isEmpty
-          ? "New conversation"
-          : "Ask over your sources";
+    const titleText = title?.trim() ? title : isEmpty ? t("newConversation") : t("defaultTitle");
     const subText = isEmpty
-        ? "Ask anything, or add sources for grounded answers."
-        : `${thread.length} message${thread.length !== 1 ? "s" : ""}${isSending ? " · working" : ""}`;
+        ? t("emptySubtitle")
+        : isSending
+          ? t("messageCountWorking", { count: thread.length })
+          : t("messageCount", { count: thread.length });
 
     const handleSend = useCallback((send: ComposerSend) => sendMessage(send), [sendMessage]);
 
@@ -1597,7 +1546,7 @@ export function AskPanel({
                     {renaming ? (
                         <input
                             autoFocus
-                            aria-label="Conversation title"
+                            aria-label={t("titleInput")}
                             value={renameValue}
                             maxLength={200}
                             onChange={e => setRenameValue(e.target.value)}
@@ -1628,8 +1577,8 @@ export function AskPanel({
                             {onRename && (
                                 <button
                                     type="button"
-                                    aria-label="Rename conversation"
-                                    title="Rename conversation"
+                                    aria-label={t("rename")}
+                                    title={t("rename")}
                                     className="shrink-0 rounded p-1 text-[var(--ink-3)]"
                                     onClick={() => {
                                         setRenameValue(titleText);
@@ -1647,11 +1596,8 @@ export function AskPanel({
                                 <SharedByLine ownerAuthUserId={readOnly.ownerAuthUserId} />
                                 <span className="shrink-0">· {subText}</span>
                                 {(readOnly.hiddenCitations ?? 0) > 0 && (
-                                    <span
-                                        className="shrink-0"
-                                        title="Citations to sources you can't open are hidden."
-                                    >
-                                        · {readOnly.hiddenCitations} hidden
+                                    <span className="shrink-0" title={t("hiddenTitle")}>
+                                        {t("hiddenCount", { count: readOnly.hiddenCitations ?? 0 })}
                                     </span>
                                 )}
                             </>
@@ -1666,29 +1612,29 @@ export function AskPanel({
                         variant="outline"
                         size="sm"
                         className="h-[30px] gap-1.5 px-2.5 text-xs"
-                        title="Share this chat"
+                        title={t("shareTitle")}
                         onClick={onShare}
                         data-testid="chat-share"
                     >
                         <Users className="size-3.5" />
-                        <span className="hidden sm:inline">Share</span>
+                        <span className="hidden sm:inline">{tc("actions.share")}</span>
                     </Button>
                 )}
                 {onOpenParentChat && (
                     <Button
                         variant="ghost"
                         size="sm"
-                        aria-label="Open original conversation"
-                        title="Forked conversation · open original"
+                        aria-label={t("openOriginal")}
+                        title={t("openOriginalTitle")}
                         onClick={onOpenParentChat}
                     >
                         <GitBranch size={14} />
-                        <span className="hidden sm:inline">Original chat</span>
+                        <span className="hidden sm:inline">{t("originalChat")}</span>
                     </Button>
                 )}
                 <button
                     onClick={onNewChat}
-                    title="New chat"
+                    title={t("newChat")}
                     disabled={isEmpty}
                     style={{
                         display: "flex",
@@ -1716,7 +1662,7 @@ export function AskPanel({
                     }}
                 >
                     <IconPlus size={12} />
-                    New chat
+                    {t("newChat")}
                 </button>
             </div>
 
@@ -1733,14 +1679,14 @@ export function AskPanel({
                             disabled={isSending}
                             onClick={() => onRetryMessage(thread.indexOf(latestError!))}
                         >
-                            Retry
+                            {tc("actions.retry")}
                         </Button>
                     )}
                     <Button
                         variant="ghost"
                         size="icon"
                         className="size-7"
-                        aria-label="Dismiss conversation error"
+                        aria-label={t("dismissError")}
                         onClick={() =>
                             setDismissedErrors(previous => ({
                                 ...previous,
@@ -1754,7 +1700,7 @@ export function AskPanel({
             )}
             <div
                 ref={scrollRef}
-                aria-label="Conversation messages"
+                aria-label={t("messagesLabel")}
                 tabIndex={0}
                 onScroll={onScroll}
                 onClickCapture={event => {
@@ -1769,9 +1715,8 @@ export function AskPanel({
                         event.preventDefault();
                         if (index >= 0) goToMessage(index);
                         else
-                            toast.info("Source message is unavailable in this conversation.", {
-                                description:
-                                    "The saved quoted passage is preserved so you can still reply.",
+                            toast.info(t("sourceUnavailable"), {
+                                description: t("sourceUnavailableHint"),
                             });
                     }
                 }}
@@ -1792,7 +1737,7 @@ export function AskPanel({
                             startersRevisionKey={startersRevisionKey}
                             disabled={isSending}
                             onAsk={handleAskStarter}
-                            onOpenProfile={() => onStudioNavigate("/employer/settings#company")}
+                            onOpenProfile={() => onStudioNavigate(workspaceHref("company"))}
                             onOpenProcessing={() =>
                                 onStudioNavigate("/employer/documents?feature=processing")
                             }
@@ -1805,8 +1750,10 @@ export function AskPanel({
                                     className="mb-5 w-full rounded-lg border border-[var(--line)] py-2 text-xs text-[var(--ink-3)]"
                                     onClick={() => setVisibleCount(n => n + 100)}
                                 >
-                                    Show {Math.min(100, firstVisible)} earlier messages (
-                                    {firstVisible} earlier)
+                                    {t("showEarlier", {
+                                        count: Math.min(100, firstVisible),
+                                        total: firstVisible,
+                                    })}
                                 </button>
                             )}
                             {thread.slice(firstVisible).map((m, visibleIndex) => {
@@ -1839,7 +1786,7 @@ export function AskPanel({
                                     />
                                 );
                             })}
-                            {showTyping && <TypingIndicator />}
+                            {showTyping && <PendingTrace />}
                         </>
                     )}
                 </div>
@@ -1849,7 +1796,7 @@ export function AskPanel({
                 <div className="flex items-center gap-2 border-t border-[var(--line)] px-4 py-1.5 text-[var(--ink-3)]">
                     <button
                         type="button"
-                        aria-label="Previous message"
+                        aria-label={t("previousMessage")}
                         disabled={currentIndex <= 0}
                         className="rounded p-1 disabled:opacity-30"
                         onClick={() => {
@@ -1860,7 +1807,7 @@ export function AskPanel({
                         <ChevronUp size={14} />
                     </button>
                     <nav
-                        aria-label="Conversation minimap"
+                        aria-label={t("minimap")}
                         className="flex min-w-0 flex-1 gap-1 overflow-x-auto"
                         onKeyDown={e => {
                             const keys = ["ArrowUp", "ArrowDown", "Home", "End"];
@@ -1885,7 +1832,14 @@ export function AskPanel({
                             <button
                                 type="button"
                                 key={msg.id ?? i}
-                                aria-label={`Message ${i + 1}: ${msg.role === "user" ? (askerFor(msg)?.name ?? "You") : "Assistant"} — ${msg.text.slice(0, 80)}`}
+                                aria-label={t("minimapItem", {
+                                    number: i + 1,
+                                    who:
+                                        msg.role === "user"
+                                            ? (askerFor(msg)?.name ?? tMessage("you"))
+                                            : t("assistant"),
+                                    text: msg.text.slice(0, 80),
+                                })}
                                 aria-current={i === currentIndex ? "true" : undefined}
                                 title={msg.text.slice(0, 160)}
                                 className="my-1 h-2 min-w-2 rounded-full focus-visible:outline"
@@ -1905,7 +1859,7 @@ export function AskPanel({
                     </nav>
                     <button
                         type="button"
-                        aria-label="Next message"
+                        aria-label={t("nextMessage")}
                         disabled={currentIndex >= thread.length - 1}
                         className="rounded p-1 disabled:opacity-30"
                         onClick={() => goToMessage(Math.min(thread.length - 1, currentIndex + 1))}
@@ -1919,7 +1873,7 @@ export function AskPanel({
                             onClick={latest}
                         >
                             <ArrowDown size={12} />
-                            Jump to latest
+                            {t("jumpToLatest")}
                         </button>
                     )}
                 </div>
@@ -1984,10 +1938,12 @@ export function AskPanel({
                             }}
                         >
                             {agentKey && agents.find(a => a.id === agentKey)
-                                ? `Answering as ${agents.find(a => a.id === agentKey)!.displayName} — grounded in your sources, cited.`
+                                ? t("answeringAs", {
+                                      name: agents.find(a => a.id === agentKey)!.displayName,
+                                  })
                                 : selected.length
-                                  ? "Answers use your selected sources and cite what they rely on."
-                                  : "General chat · add sources to ground your answers."}
+                                  ? t("footerSelected")
+                                  : t("footerEmpty")}
                         </div>
                     </>
                 )}

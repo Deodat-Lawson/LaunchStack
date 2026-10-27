@@ -31,10 +31,18 @@ export const QUEUE_POLL = {
 
 export const QUEUE_ENDPOINT = "/api/documents/processing-queue";
 
+/** Why the last request failed — the tab words it. */
+export type QueueLoadError =
+    | { kind: "rateLimited" }
+    /** The server's own sentence (already in the reader's language). */
+    | { kind: "server"; message: string }
+    | { kind: "http"; status: number }
+    | { kind: "network" };
+
 export interface QueueSnapshot {
     data: ProcessingQueueResponse | null;
-    /** The last request's failure, in words; cleared by the next success. */
-    error: string | null;
+    /** The last request's failure; cleared by the next success. */
+    error: QueueLoadError | null;
     /** True until the first answer (or failure). */
     loading: boolean;
 }
@@ -83,6 +91,10 @@ function set(next: QueueSnapshot) {
     for (const listener of listeners) listener();
 }
 
+function isLoadError(value: unknown): value is QueueLoadError {
+    return typeof value === "object" && value !== null && "kind" in value;
+}
+
 function hidden(): boolean {
     return typeof document !== "undefined" && document.visibilityState === "hidden";
 }
@@ -95,30 +107,41 @@ function schedule() {
     timer = setTimeout(() => void poll(), nextQueuePollDelay({ active, idleTicks, errorTicks }));
 }
 
+/** One request: the answer, or why there is none. */
+async function request(): Promise<ProcessingQueueResponse | QueueLoadError> {
+    let res: Response;
+    try {
+        res = await fetch(QUEUE_ENDPOINT, { cache: "no-store" });
+    } catch {
+        return { kind: "network" };
+    }
+    if (!res.ok) {
+        if (res.status === 429) return { kind: "rateLimited" };
+        const body = (await res.json().catch(() => ({}))) as { error?: unknown };
+        return typeof body.error === "string" && body.error
+            ? { kind: "server", message: body.error }
+            : { kind: "http", status: res.status };
+    }
+    try {
+        return (await res.json()) as ProcessingQueueResponse;
+    } catch {
+        return { kind: "http", status: res.status };
+    }
+}
+
 async function poll(): Promise<void> {
     if (inFlight) return inFlight;
     inFlight = (async () => {
         try {
-            const res = await fetch(QUEUE_ENDPOINT, { cache: "no-store" });
-            if (!res.ok) {
-                const body = (await res.json().catch(() => ({}))) as { error?: string };
-                throw new Error(
-                    res.status === 429
-                        ? "Checking too often — slowing down."
-                        : (body.error ?? `The queue didn't load (HTTP ${res.status}).`)
-                );
+            const answer = await request();
+            if (isLoadError(answer)) {
+                errorTicks += 1;
+                set({ ...snapshot, loading: false, error: answer });
+                return;
             }
-            const data = (await res.json()) as ProcessingQueueResponse;
             errorTicks = 0;
-            idleTicks = queueIsActive(data) ? 0 : idleTicks + 1;
-            set({ data, error: null, loading: false });
-        } catch (err) {
-            errorTicks += 1;
-            set({
-                ...snapshot,
-                loading: false,
-                error: err instanceof Error ? err.message : "The queue didn't load.",
-            });
+            idleTicks = queueIsActive(answer) ? 0 : idleTicks + 1;
+            set({ data: answer, error: null, loading: false });
         } finally {
             inFlight = null;
             schedule();

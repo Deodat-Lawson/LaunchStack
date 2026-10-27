@@ -37,8 +37,6 @@ export interface QueueStage {
     done?: number;
     /** Units in all — chunks to embed while indexing. */
     total?: number;
-    /** A short fact about the stage: "Docling", "12 pages", "attempt 2". */
-    detail?: string;
 }
 
 /**
@@ -50,13 +48,6 @@ export interface QueueStage {
  * - `done`: ready to search.
  */
 export type QueueItemState = "waiting" | "running" | "retrying" | "failed" | "done";
-
-export interface QueueItemError {
-    /** One plain sentence for people ("Couldn't read the file from storage."). */
-    message: string;
-    /** The raw error, for "Copy details". Null when there is none. */
-    detail: string | null;
-}
 
 export interface ProcessingQueueItem {
     jobId: string;
@@ -80,21 +71,26 @@ export interface ProcessingQueueItem {
     maxAttempts: number;
     /** When the worker tries again (state `retrying`). */
     nextAttemptAt: string | null;
-    error: QueueItemError | null;
+    /**
+     * The raw error — of the attempt that will be retried, or the one that
+     * gave up. The client words it (`describeSourceFailure`) and keeps the raw
+     * text behind "Copy details".
+     */
+    error: string | null;
     pageCount: number | null;
-    /** Who read the text ("Docling", "Native PDF", "Azure"), when known. */
+    /** The reader's code ("DOCLING", "NATIVE_PDF", "AZURE"), when known. */
     provider: string | null;
+    /** Times someone pressed Retry on this job. */
+    retryCount: number;
     createdAt: string;
     startedAt: string | null;
     completedAt: string | null;
-    /** Whether the viewer may press Retry (state `failed` and edit access). */
-    canRetry: boolean;
     /**
-     * `recorded` when the worker wrote per-stage rows (ocr_processing_steps);
-     * `inferred` when the stages were worked out from the job and its outbox
-     * events (a worker that predates stage recording).
+     * Whether the viewer may press Retry: the job failed, it is the file's
+     * current version (Retry runs `POST /api/documents/[id]/retry`, which
+     * restarts the current version), and the viewer may edit the file.
      */
-    stageSource: "recorded" | "inferred";
+    canRetry: boolean;
 }
 
 export type ConnectorSyncProvider = "google-drive" | "gmail";
@@ -132,9 +128,4 @@ export interface ProcessingQueueResponse {
     summary: ProcessingQueueSummary;
     /** The server's clock, so relative times don't drift with the browser's. */
     serverTime: string;
-}
-
-export interface ProcessingRetryResponse {
-    ok: true;
-    item: ProcessingQueueItem;
 }

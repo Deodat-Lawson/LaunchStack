@@ -1,7 +1,7 @@
 /**
  * The Processing queue routes against a real Postgres: who sees which job
  * (ADR-014 — the access predicate is SQL, so a fake database cannot test it),
- * who may Retry, and what a Retry writes.
+ * and who may Retry a failed one (Retry itself is POST /api/documents/[id]/retry).
  *
  * Gated like the other integration suites: runs on a throwaway database
  * migrated with both ledgers when LAUNCHSTACK_TEST_DATABASE_URL (or
@@ -9,7 +9,7 @@
  */
 
 import type { NextResponse } from "next/server";
-import { eq, inArray } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 
 import {
     category,
@@ -18,17 +18,12 @@ import {
     documentVersions,
     eventOutbox,
     ocrJobs,
-    ocrProcessingSteps,
 } from "@launchstack/store/schema";
 import type { DbClient } from "@launchstack/store/client";
 import { builtinRolePermissions } from "~/lib/authz/permissions";
 import { resolveDocumentScope } from "~/lib/authz/scope";
 import type { DocumentScope } from "~/lib/authz/scope-types";
-import type {
-    ProcessingQueueItem,
-    ProcessingQueueResponse,
-    ProcessingRetryResponse,
-} from "~/lib/processing-queue/types";
+import type { ProcessingQueueItem, ProcessingQueueResponse } from "~/lib/processing-queue/types";
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
 import {
     connectorConnections,
@@ -41,7 +36,6 @@ import {
 } from "~/server/db/schema";
 import { applyDocumentCreationDefaults } from "~/server/workspace/ownership";
 import { GET as queueRoute } from "~/app/api/documents/processing-queue/route";
-import { POST as retryRoute } from "~/app/api/documents/processing-queue/[jobId]/retry/route";
 
 import { createFounderWeeklyReviewTestDatabase } from "../../founderWeeklyReview/testDb";
 
@@ -112,20 +106,6 @@ describeDb("processing queue routes (integration)", () => {
         expect(res.status).toBe(200);
         expect(res.headers.get("Cache-Control")).toBe("no-store");
         return (await res.json()) as ProcessingQueueResponse;
-    }
-
-    async function retry(name: Person, jobId: string) {
-        as(name);
-        const res = await retryRoute(
-            new Request(`http://localhost/api/documents/processing-queue/${jobId}/retry`, {
-                method: "POST",
-            }),
-            { params: Promise.resolve({ jobId }) }
-        );
-        return {
-            status: res.status,
-            body: (await res.json()) as Partial<ProcessingRetryResponse> & { error?: string },
-        };
     }
 
     const minutesAgo = (m: number) => new Date(Date.now() - m * 60_000);
@@ -212,23 +192,6 @@ describeDb("processing queue routes (integration)", () => {
         });
     }
 
-    async function addStep(
-        jobId: string,
-        stepType: "route" | "read" | "chunk" | "embed" | "finalize",
-        status: "in_progress" | "completed" | "failed",
-        output: Record<string, unknown> | null = null
-    ): Promise<void> {
-        const order = ["route", "read", "chunk", "embed", "finalize"];
-        await test.db.insert(ocrProcessingSteps).values({
-            id: `${jobId}:${stepType}`,
-            jobId,
-            stepNumber: order.indexOf(stepType) + 1,
-            stepType,
-            status,
-            output,
-        });
-    }
-
     const jobIds = (q: ProcessingQueueResponse) => q.items.map(i => i.jobId);
     const item = (q: ProcessingQueueResponse, jobId: string): ProcessingQueueItem =>
         q.items.find(i => i.jobId === jobId)!;
@@ -309,7 +272,6 @@ describeDb("processing queue routes (integration)", () => {
             attemptCount: 8,
             lastError: "[s3] fetch failed",
         });
-        await addStep(ADA_PRIVATE, "read", "failed");
 
         teamDoc = await addDocument("Team plan", "Team", "bea", {
             ...FAILURE_MARKER,
@@ -319,6 +281,13 @@ describeDb("processing queue routes (integration)", () => {
             status: "failed",
             errorMessage: "pipeline event dead: 402 Insufficient credits",
             completedAt: minutesAgo(10),
+            // What the stages recorded before embedding gave up.
+            progress: {
+                stage: "embedding",
+                done: 2,
+                total: 7,
+                updatedAt: minutesAgo(11).toISOString(),
+            },
         });
         await addEvent("source.version.created", TEAM_FAILED, {
             status: "processed",
@@ -330,9 +299,6 @@ describeDb("processing queue routes (integration)", () => {
             lastError: "402 Insufficient credits",
             claimedAt: minutesAgo(11),
         });
-        await addStep(TEAM_FAILED, "read", "completed", { provider: "NATIVE_PDF", pages: 3 });
-        await addStep(TEAM_FAILED, "chunk", "completed", { chunks: 7 });
-        await addStep(TEAM_FAILED, "embed", "failed", { done: 2, total: 7 });
 
         const dealDoc = await addDocument("Term sheet", "Deal room", "ada");
         await addJob(DEAL_FAILED, dealDoc, "ada", { status: "failed", completedAt: minutesAgo(5) });
@@ -444,18 +410,14 @@ describeDb("processing queue routes (integration)", () => {
                 folder: "Team",
                 mine: true,
                 canRetry: true,
-                stageSource: "recorded",
-                error: {
-                    message: "The AI provider is out of credit or rate-limited — try again later.",
-                },
+                error: "pipeline event dead: 402 Insufficient credits",
             });
             expect(item(bea, RUNNING)).toMatchObject({
                 state: "retrying",
                 stage: "reading",
                 attempt: 2,
-                stageSource: "inferred",
-                error: { message: "Processing took too long and timed out." },
             });
+            expect(item(bea, RUNNING).error).toMatch(/timed out|timeout/i);
             expect(item(bea, RUNNING).nextAttemptAt).not.toBeNull();
             expect(item(bea, RECENT_DONE).state).toBe("done");
             // She can see the Deal room's file but only view it.
@@ -508,145 +470,6 @@ describeDb("processing queue routes (integration)", () => {
                     report: { discovered: 4, stored: 2, unchanged: 2, skipped: 0, failed: 0 },
                 }),
             ]);
-        });
-    });
-
-    describe("POST /api/documents/processing-queue/[jobId]/retry", () => {
-        it("answers 404 for a job on a file the caller can't see", async () => {
-            const res = await retry("bea", ADA_PRIVATE);
-            expect(res.status).toBe(404);
-            const [row] = await test.db
-                .select({ status: ocrJobs.status })
-                .from(ocrJobs)
-                .where(eq(ocrJobs.id, ADA_PRIVATE));
-            expect(row?.status).toBe("failed");
-        });
-
-        it("answers 403 without documents.upload, or without edit access to the file", async () => {
-            expect((await retry("vic", TEAM_FAILED)).status).toBe(403);
-            const viewOnly = await retry("bea", DEAL_FAILED);
-            expect(viewOnly.status).toBe(403);
-            expect(viewOnly.body.error).toBe("You can view this file but not change it.");
-        });
-
-        it("answers 409 for a job that hasn't failed, or has no dead step to restart", async () => {
-            const running = await retry("bea", RUNNING);
-            expect(running.status).toBe(409);
-            const orphan = await retry("bea", NO_EVENTS);
-            expect(orphan.status).toBe(409);
-            expect(orphan.body.error).toMatch(/upload it again/);
-            const [row] = await test.db
-                .select({ status: ocrJobs.status })
-                .from(ocrJobs)
-                .where(eq(ocrJobs.id, NO_EVENTS));
-            expect(row?.status).toBe("failed");
-        });
-
-        it("restarts indexing — not extraction — when only indexing died", async () => {
-            const res = await retry("bea", TEAM_FAILED);
-            expect(res.status).toBe(200);
-            expect(res.body.ok).toBe(true);
-            expect(res.body.item).toMatchObject({
-                jobId: TEAM_FAILED,
-                state: "waiting",
-                stage: "splitting",
-                error: null,
-                canRetry: false,
-            });
-
-            const [job] = await test.db
-                .select({
-                    status: ocrJobs.status,
-                    errorMessage: ocrJobs.errorMessage,
-                    completedAt: ocrJobs.completedAt,
-                    retryCount: ocrJobs.retryCount,
-                })
-                .from(ocrJobs)
-                .where(eq(ocrJobs.id, TEAM_FAILED));
-            expect(job).toEqual({
-                status: "queued",
-                errorMessage: null,
-                completedAt: null,
-                retryCount: 1,
-            });
-
-            const events = await test.db
-                .select({
-                    eventId: eventOutbox.eventId,
-                    status: eventOutbox.status,
-                    attemptCount: eventOutbox.attemptCount,
-                    lastError: eventOutbox.lastError,
-                    claimedAt: eventOutbox.claimedAt,
-                })
-                .from(eventOutbox)
-                .where(
-                    inArray(eventOutbox.eventId, [
-                        `source.version.created:${TEAM_FAILED}`,
-                        `evidence.version.extracted:${TEAM_FAILED}`,
-                    ])
-                );
-            expect(events).toEqual(
-                expect.arrayContaining([
-                    expect.objectContaining({
-                        eventId: `source.version.created:${TEAM_FAILED}`,
-                        status: "processed",
-                    }),
-                    {
-                        eventId: `evidence.version.extracted:${TEAM_FAILED}`,
-                        status: "pending",
-                        attemptCount: 0,
-                        lastError: null,
-                        claimedAt: null,
-                    },
-                ])
-            );
-
-            // The indexing half's rows start over; extraction's stay.
-            const steps = await test.db
-                .select({ stepType: ocrProcessingSteps.stepType })
-                .from(ocrProcessingSteps)
-                .where(eq(ocrProcessingSteps.jobId, TEAM_FAILED));
-            expect(steps.map(s => s.stepType)).toEqual(["read"]);
-
-            // The sidebar's "failed" marker is gone; the rest of the metadata stays.
-            const [doc] = await test.db
-                .select({ ocrMetadata: document.ocrMetadata })
-                .from(document)
-                .where(eq(document.id, teamDoc.id));
-            const [version] = await test.db
-                .select({ ocrMetadata: documentVersions.ocrMetadata })
-                .from(documentVersions)
-                .where(eq(documentVersions.id, teamDoc.versionId));
-            expect(doc?.ocrMetadata).toEqual({ totalPages: 3 });
-            expect(version?.ocrMetadata).toEqual({ totalPages: 3 });
-
-            // A second press finds it queued.
-            expect((await retry("bea", TEAM_FAILED)).status).toBe(409);
-        });
-
-        it("restarts extraction when reading died, clearing every stage row", async () => {
-            const res = await retry("ada", ADA_PRIVATE);
-            expect(res.status).toBe(200);
-            expect(res.body.item).toMatchObject({ state: "waiting", stage: "waiting" });
-
-            const [event] = await test.db
-                .select({ status: eventOutbox.status, attemptCount: eventOutbox.attemptCount })
-                .from(eventOutbox)
-                .where(eq(eventOutbox.eventId, `source.version.created:${ADA_PRIVATE}`));
-            expect(event).toEqual({ status: "pending", attemptCount: 0 });
-            const steps = await test.db
-                .select({ id: ocrProcessingSteps.id })
-                .from(ocrProcessingSteps)
-                .where(eq(ocrProcessingSteps.jobId, ADA_PRIVATE));
-            expect(steps).toEqual([]);
-            const [doc] = await test.db
-                .select({ ocrMetadata: document.ocrMetadata })
-                .from(document)
-                .where(eq(document.id, adaDoc.id));
-            expect(doc?.ocrMetadata).toBeNull();
-
-            const ada = await queue("ada");
-            expect(item(ada, ADA_PRIVATE)).toMatchObject({ state: "waiting", canRetry: false });
         });
     });
 });

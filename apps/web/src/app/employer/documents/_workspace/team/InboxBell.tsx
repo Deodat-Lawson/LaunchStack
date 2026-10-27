@@ -212,7 +212,11 @@ export function InboxBell({
                         <ul className="m-0 list-none p-0">
                             {entries.map(entry => {
                                 const actor = people[entry.actorUserId];
-                                const actorName = actor?.displayName ?? tTeam("someone");
+                                // A triager is an operator, often not a member of
+                                // this workspace, so there may be nobody to look up.
+                                const actorName =
+                                    actor?.displayName ??
+                                    (isFeedbackEntry(entry) ? tFeedback("team") : tTeam("someone"));
                                 const Icon = TYPE_ICON[entry.targetType] ?? FileText;
                                 const level = entry.detail?.level;
                                 return (

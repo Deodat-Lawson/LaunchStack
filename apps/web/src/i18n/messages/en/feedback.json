@@ -204,7 +204,8 @@
     "workspace": "Workspace",
     "votesLabel": "Votes",
     "version": "App version",
-    "privateNote": "Who asked, and the page they were on, stay between them and the team."
+    "privateNote": "Who asked, and the page they were on, stay between them and the team.",
+    "rateLimited": "You've sent several replies in a short time. Try again in a few minutes."
   },
   "tool": {
     "title": "Feedback",
@@ -222,7 +223,8 @@
   },
   "inbox": {
     "reply": "{actor} replied to your report “{name}”",
-    "status": "{actor} marked your report “{name}” as {status}"
+    "status": "{actor} marked your report “{name}” as {status}",
+    "team": "The team"
   },
   "contact": {
     "title": "Found a bug, or missing something?",

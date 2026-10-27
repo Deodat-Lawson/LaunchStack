@@ -215,7 +215,11 @@ function Thread({ report, onReplied }: { report: FeedbackDetail; onReplied: () =
             onReplied();
         } catch (err) {
             setError(
-                err instanceof FeedbackApiError && err.message ? err.message : t("replyFailed")
+                err instanceof FeedbackApiError && err.status === 429
+                    ? t("rateLimited")
+                    : err instanceof FeedbackApiError && err.message
+                      ? err.message
+                      : t("replyFailed")
             );
         } finally {
             setBusy(false);

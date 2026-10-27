@@ -204,7 +204,8 @@
     "workspace": "工作区",
     "votesLabel": "票数",
     "version": "应用版本",
-    "privateNote": "提出者是谁、当时在哪个页面，只有他们和团队知道。"
+    "privateNote": "提出者是谁、当时在哪个页面，只有他们和团队知道。",
+    "rateLimited": "你在短时间内发送了多条回复，请几分钟后再试。"
   },
   "tool": {
     "title": "反馈",
@@ -222,7 +223,8 @@
   },
   "inbox": {
     "reply": "{actor} 回复了你的反馈“{name}”",
-    "status": "{actor} 将你的反馈“{name}”标记为{status}"
+    "status": "{actor} 将你的反馈“{name}”标记为{status}",
+    "team": "团队"
   },
   "contact": {
     "title": "发现问题，或缺少什么功能？",

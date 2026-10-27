@@ -28,6 +28,9 @@ export class FeedbackApiError extends Error {
 
 async function read<T>(res: Response): Promise<T> {
     if (res.ok) return (await res.json()) as T;
+    // The shared rate limiter answers in English whatever the reader's
+    // language; screens say it themselves from the status.
+    if (res.status === 429) throw new FeedbackApiError("", 429);
     let message = "";
     try {
         const body = (await res.json()) as { error?: unknown; message?: unknown };

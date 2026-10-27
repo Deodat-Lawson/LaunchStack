@@ -6,12 +6,13 @@ import { configureOcr } from "./config";
 import { normalizeDocument, routeDocument, type RouterDecisionResult } from "./processor";
 
 /**
- * OCR_PDF_STRATEGY=provider-first: every PDF goes to the OCR provider, even
- * one with a perfectly good text layer, and that text layer is read only
- * when the provider fails. A scan has no text layer to fall back on, so its
- * provider error must stand (and the outbox retries the provider). Neither
- * may a mixed PDF's scanned pages be indexed empty while the provider could
- * still read them.
+ * Provider-first (the default OCR_PDF_STRATEGY): every PDF goes to the OCR
+ * provider, even one with a perfectly good text layer, and that text layer is
+ * read only when the provider fails. A scan has no text layer to fall back
+ * on, so its provider error must stand (and the outbox retries the
+ * provider). Neither may a mixed PDF's scanned pages be indexed empty while
+ * the provider could still read them. OCR_PDF_STRATEGY=text-layer-first opts
+ * out.
  */
 
 const BOOK_URL = "https://files.test/book.pdf";
@@ -31,9 +32,13 @@ const PIXEL_PNG = Buffer.from(
     "base64"
 );
 const SCANNED = { scanned: true } as const;
+/** A scanned page with a page-number stamp in its text layer. */
+const stamped = (stamp: string) => ({ scanned: true, stamp }) as const;
 
-/** One entry per page: its text, "" for a blank page, or SCANNED. */
-async function makePdf(pageSpecs: Array<string | typeof SCANNED>): Promise<Uint8Array> {
+/** One entry per page: its text, "" for a blank page, or a scan (SCANNED / stamped). */
+async function makePdf(
+    pageSpecs: Array<string | { scanned: true; stamp?: string }>
+): Promise<Uint8Array> {
     const doc = await PDFDocument.create();
     const font = await doc.embedFont(StandardFonts.Helvetica);
     const pixel = await doc.embedPng(PIXEL_PNG);
@@ -41,6 +46,7 @@ async function makePdf(pageSpecs: Array<string | typeof SCANNED>): Promise<Uint8
         const page = doc.addPage();
         if (typeof spec !== "string") {
             page.drawImage(pixel, { x: 0, y: 0, width: 600, height: 800 });
+            if (spec.stamp) page.drawText(spec.stamp, { x: 50, y: 20, size: 9, font });
         } else if (spec) {
             page.drawText(spec, { x: 50, y: 700, size: 12, font });
         }
@@ -126,8 +132,26 @@ describe("routeDocument", () => {
         expect(decision.nativeFallback).toBeUndefined();
     });
 
-    it("leaves routing alone when no strategy is set", async () => {
-        configureOcr({ defaultProvider: "AZURE", azure: AZURE });
+    it("is provider-first when no strategy is set", async () => {
+        configureOcr({ azure: AZURE, converter: { url: "http://converter.test", apiKey: "k" } });
+        serve(await makePdf(["Chapter one", "Chapter two"]));
+        const fetchMock = vi.fn();
+        vi.stubGlobal("fetch", fetchMock);
+
+        const decision = await routeDocument(BOOK_URL);
+
+        expect(decision).toMatchObject({
+            isNativePDF: false,
+            selectedProvider: "AZURE",
+            reason: "provider-first",
+            nativeFallback: true,
+            pageCount: 2,
+        });
+        expect(fetchMock).not.toHaveBeenCalled();
+    });
+
+    it("leaves routing to the text layer first under text-layer-first", async () => {
+        configureOcr({ defaultProvider: "AZURE", pdfStrategy: "text-layer-first", azure: AZURE });
         serve(await makePdf(["Chapter one"]));
 
         const decision = await routeDocument(BOOK_URL);
@@ -149,8 +173,8 @@ describe("routeDocument", () => {
         });
     });
 
-    it("gives a pinned provider no fallback when no strategy is set", async () => {
-        configureOcr({ defaultProvider: "AZURE", azure: AZURE });
+    it("gives a pinned provider no fallback under text-layer-first", async () => {
+        configureOcr({ defaultProvider: "AZURE", pdfStrategy: "text-layer-first", azure: AZURE });
         serve(await makePdf(["Chapter one"]));
 
         const decision = await routeDocument(BOOK_URL, { preferredProvider: "AZURE" });
@@ -191,7 +215,7 @@ describe("normalizeDocument", () => {
             )
         );
 
-        const pending = normalizeDocument(BOOK_URL, providerFirstDecision);
+        const pending = normalizeDocument(BOOK_URL, { ...providerFirstDecision, pageCount: 1 });
         await vi.advanceTimersByTimeAsync(2000);
         const result = await pending;
 
@@ -228,6 +252,31 @@ describe("normalizeDocument", () => {
         await expect(normalizeDocument(BOOK_URL, providerFirstDecision)).rejects.toThrow(
             "fetch failed"
         );
+    });
+
+    it("retries Azure rather than index a scan by its page-number stamps", async () => {
+        serve(
+            await makePdf([stamped("Page 1 of 3"), stamped("Page 2 of 3"), stamped("Page 3 of 3")])
+        );
+        azureUnreachable();
+
+        await expect(normalizeDocument(BOOK_URL, providerFirstDecision)).rejects.toThrow(
+            "fetch failed"
+        );
+    });
+
+    it("still reads a page that has real text over an image", async () => {
+        serve(
+            await makePdf([
+                "Chapter one begins with the founding of the company in 2019.",
+                stamped("Figure 1: revenue by region, 2019 to 2026, in thousands"),
+            ])
+        );
+        azureUnreachable();
+
+        const result = await normalizeDocument(BOOK_URL, providerFirstDecision);
+
+        expect(result.provider).toBe("NATIVE_PDF");
     });
 
     it("indexes a mixed PDF's text layer once Azure refuses the file outright", async () => {

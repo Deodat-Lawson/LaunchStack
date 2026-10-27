@@ -41,7 +41,7 @@ const Schema = z.object({
 });
 const RUN_MINIMUM_CREDITS = 3_000;
 
-/** Whether the workspace's own model (Settings › Bring your own keys) can serve a live run. */
+/** Whether the workspace's own model (Workspace › Bring your own keys) can serve a live run. */
 async function workspaceHasOwnModel(companyId: bigint | number): Promise<boolean> {
     const scope = await loadWorkspaceChatModelsScope(companyId);
     return scope.source === "workspace" && Boolean(scope.config);

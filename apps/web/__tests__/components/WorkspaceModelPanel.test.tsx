@@ -1,7 +1,7 @@
 /** @jest-environment jsdom */
 
 /**
- * Settings › Bring your own keys › API key.
+ * Workspace › Bring your own keys › API key.
  *
  * What a workspace admin sees and sends when bringing their own model: the
  * two ways in, the editor's request body (a blank key keeps the saved one
@@ -14,19 +14,17 @@ import { act, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 
-// For the hub test at the end: an owner, with no router or account body.
+// For the Workspace tab test at the end: an owner, with no router.
 jest.mock("next/navigation", () => ({
-    useRouter: () => ({ replace: jest.fn(), push: jest.fn() }),
+    useRouter: () => ({ replace: jest.fn(), push: jest.fn(), refresh: jest.fn() }),
     usePathname: () => "/employer/documents",
 }));
 jest.mock("~/lib/use-permissions", () => ({
     usePermissions: () => ({ loaded: true, error: null, roleName: "Owner", can: () => true }),
-}));
-jest.mock("~/app/employer/documents/_workspace/settings/AccountSection", () => ({
-    AccountSection: () => <div data-testid="body-account">account body</div>,
+    setWorkspaceNameLocally: jest.fn(),
 }));
 
-import { SettingsHub } from "~/app/employer/documents/_workspace/SettingsHub";
+import { WorkspaceTool } from "~/app/employer/documents/_workspace/WorkspaceTool";
 import { KeysSection } from "~/app/employer/documents/_workspace/settings/KeysSection";
 import { ModelsSection } from "~/app/employer/documents/_workspace/settings/ModelsSection";
 import type { SettingsSectionActions } from "~/app/employer/documents/_workspace/settings/contract";
@@ -95,13 +93,6 @@ function serve() {
         const method = init?.method ?? "GET";
         const body = init?.body ? (JSON.parse(init.body as string) as Body) : {};
         if (url === "/api/settings/models") return respond(OVERVIEW);
-        // The embedding half of Bring your own keys, untouched here.
-        if (url === "/api/fetchCompany")
-            return respond({
-                embeddingOpenAIApiKey: { hasKey: false, last4: null },
-                embeddingOpenAIBaseUrl: null,
-                embeddingModel: null,
-            });
         if (url === "/api/settings/models/workspace") {
             if (method === "GET") return respond({ endpoint: stored });
             if (method === "DELETE") {
@@ -168,7 +159,7 @@ const mainModel = () =>
     // An input with suggestions (`list`) is a combobox.
     screen.getByRole("combobox", { name: "Main model" });
 
-describe("Settings › Bring your own keys › API key", () => {
+describe("Workspace › Bring your own keys › API key", () => {
     beforeAll(() => {
         // Radix Select reaches for layout APIs jsdom lacks.
         Element.prototype.scrollIntoView = jest.fn();
@@ -196,9 +187,10 @@ describe("Settings › Bring your own keys › API key", () => {
         expect(await screen.findByRole("button", { name: "Connect OpenRouter" })).toBeVisible();
         expect(screen.getByRole("button", { name: "Use an API key" })).toBeVisible();
         expect(screen.getByRole("heading", { name: "API key" })).toBeInTheDocument();
-        expect(screen.getByRole("heading", { name: "Embedding key" })).toBeInTheDocument();
-        // With the editor closed, the section's action is the embedding form's.
-        await waitFor(() => expect(actions?.primaryLabel).toBe("Save changes"));
+        // The embedding key that once sat below it is gone.
+        expect(screen.queryByRole("heading", { name: "Embedding key" })).not.toBeInTheDocument();
+        // With the editor closed, the section has no action of its own.
+        await waitFor(() => expect(actions?.primaryLabel).toBeUndefined());
     });
 
     it("fills the base URL from the provider an admin picks", async () => {
@@ -280,9 +272,9 @@ describe("Settings › Bring your own keys › API key", () => {
         });
         expect(puts[0]).not.toHaveProperty("apiKey");
 
-        // Back on the summary, with the embedding form's Save as the action again.
+        // Back on the summary, where the section has no action of its own.
         expect(await screen.findByText("main-2")).toBeInTheDocument();
-        await waitFor(() => expect(actions?.primaryLabel).toBe("Save changes"));
+        await waitFor(() => expect(actions?.primaryLabel).toBeUndefined());
     });
 
     it("asks for the key again when the address changes", async () => {
@@ -450,12 +442,13 @@ describe("Settings › Bring your own keys › API key", () => {
         expect(window.location.hash).toBe("#byok");
     });
 
-    it("lands the OpenRouter return on Bring your own keys even after the shell dropped the hash", async () => {
-        // The workspace shell strips `?feature=settings` with a router.replace
-        // that loses the hash, usually before the lazy hub mounts.
+    it("lands the OpenRouter return on Workspace › Bring your own keys with its outcome", async () => {
+        // The callback sends `?feature=workspace&at=/byok&openrouter=…`; the
+        // shell opens the tab on Bring your own keys and strips `feature` and
+        // `at`, leaving the outcome for the section to read.
         window.history.replaceState(null, "", "/employer/documents?openrouter=connected");
         stored = OPENROUTER_FRESH;
-        render(<SettingsHub embedded />);
+        render(<WorkspaceTool host={{ active: true, request: { at: "/byok", nonce: 1 } }} />);
 
         await waitFor(() =>
             expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
@@ -471,7 +464,7 @@ describe("Settings › Bring your own keys › API key", () => {
     });
 });
 
-describe("Settings › Models", () => {
+describe("Workspace › Models", () => {
     beforeEach(() => {
         stored = null;
         serve();

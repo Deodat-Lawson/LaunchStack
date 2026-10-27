@@ -9,7 +9,11 @@
     "readOnly": "只读",
     "readOnlyTitle": "你可以查看此部分，但你的角色无权更改。",
     "withheld": "你的角色无权访问“{label}”。如有需要，请联系管理员。",
-    "withheldWithRole": "你的角色（{role}）无权访问“{label}”。如有需要，请联系管理员。"
+    "withheldWithRole": "你的角色（{role}）无权访问“{label}”。如有需要，请联系管理员。",
+    "workspacePointer": {
+      "label": "工作区设置",
+      "blurb": "名称、成员、自带密钥、模型、智能体、集成和用量"
+    }
   },
   "groups": {
     "you": {
@@ -19,10 +23,6 @@
     "workspace": {
       "label": "工作区",
       "blurb": "适用于工作区所有人的策略。"
-    },
-    "data": {
-      "label": "工作区数据",
-      "blurb": "涉及费用和不可撤销的操作。"
     }
   },
   "sections": {
@@ -58,9 +58,9 @@
     },
     "byok": {
       "label": "自带密钥",
-      "blurb": "你的 API 密钥和嵌入密钥",
+      "blurb": "工作区 AI 使用你自己的 API 密钥",
       "title": "自带密钥",
-      "description": "工作区的 AI 使用你自己的提供商账户，嵌入使用你自己的密钥。两者都是可选的：留空的部分会使用服务器的密钥。"
+      "description": "工作区的 AI（对话、起草、会议和后台任务）使用你自己的提供商账户。可选：留空则使用服务器的密钥。"
     },
     "models": {
       "label": "模型与路由",
@@ -103,6 +103,12 @@
       "blurb": "未完成，需手动开启",
       "title": "尚未完成的功能",
       "description": "每一项都如实说明了它目前能做什么。默认关闭；开启任意一项都会影响整个工作区。"
+    },
+    "general": {
+      "label": "常规",
+      "blurb": "名称、网址、描述、颜色",
+      "title": "工作区叫什么，以及别人如何认出它",
+      "description": "它的名称、列出时使用的网址、一句话介绍它做什么，以及它标志的颜色。工作区里的每个人都能看到这些信息，由管理员修改。"
     }
   },
   "registry": {
@@ -361,9 +367,9 @@
     }
   },
   "answerStyle": {
-    "personalNote": "未自行选择的人会使用工作区默认风格“{label}”。<link>在“智能体与自主程度”中更改</link>。",
+    "personalNote": "未自行选择的人会使用工作区默认风格“{label}”。<link>在“工作区 › 智能体”中更改</link>。",
     "workspaceDefault": "工作区默认风格为“{label}”。",
-    "ownChoice": "你自己选择的“{label}”仍适用于你的对话。<link>在“外观”中更改</link>。"
+    "ownChoice": "你自己选择的“{label}”仍适用于你的对话。<link>在“设置 › 外观”中更改</link>。"
   },
   "appearance": {
     "display": {
@@ -465,8 +471,8 @@
       "note": "哪些套餐可以使用开发者模式，以及是否需要工作区管理员开启并发布连接器，均由 OpenAI 决定且会变化；请查看 OpenAI 关于开发者模式的帮助页面，了解你的套餐情况。"
     },
     "gemini": {
-      "step1Admin": "在“设置 › 集成”的“助手的 OAuth 客户端”中创建一个 OAuth 客户端。它会给你客户端 ID 和密钥，以及需要粘贴的 URL 和权限范围。",
-      "step1Member": "由 LaunchStack 管理员在“设置 › 集成”中创建 OAuth 客户端。它会提供客户端 ID 和密钥，以及需要粘贴的 URL 和权限范围。",
+      "step1Admin": "在“工作区 › 集成”的“助手的 OAuth 客户端”中创建一个 OAuth 客户端。它会给你客户端 ID 和密钥，以及需要粘贴的 URL 和权限范围。",
+      "step1Member": "由 LaunchStack 管理员在“工作区 › 集成”中创建 OAuth 客户端。它会提供客户端 ID 和密钥，以及需要粘贴的 URL 和权限范围。",
       "step2": "Google Cloud 管理员打开 <menu>Gemini Enterprise › Data stores › Create data store › Custom MCP Server</menu>，选择 OAuth 2.0，粘贴服务器 URL、授权 URL、令牌 URL、客户端 ID、客户端密钥和权限范围，并勾选 <menu>Enable PKCE Support</menu>。没有 PKCE，LaunchStack 会拒绝登录。",
       "step3": "之后，每个人从 Gemini 登录 LaunchStack 并选择此工作区。",
       "note": "Google 默认阻止自定义 MCP 数据存储：组织政策管理员需要覆盖该政策，并允许 LaunchStack 的域名作为出站目标。创建数据存储的人需要拥有 Discovery Engine Editor 角色。"
@@ -624,32 +630,7 @@
       "error": "无法连接 OpenRouter。请重试，或改用 API 密钥。"
     },
     "endpointFailedStatus": "无法读取你的模型设置（{status}）。",
-    "endpointFailed": "无法读取你的模型设置。",
-    "embedding": {
-      "title": "嵌入密钥",
-      "description": "可选。用于语义搜索向量的 OpenAI 兼容密钥，只会发送到它对应的端点。如果不设置，嵌入会使用服务器的密钥。",
-      "loadFailed": "加载嵌入密钥时出错。",
-      "saveFailed": "无法保存嵌入密钥。",
-      "saved": "嵌入密钥已保存。",
-      "removeFailed": "无法移除嵌入密钥。",
-      "removed": "已移除。嵌入将重新使用服务器的密钥。",
-      "loading": "正在加载嵌入密钥…",
-      "keyEnding": "末尾为 <mono>{last4}</mono> 的密钥",
-      "usingServerKey": "正在使用服务器的密钥。",
-      "yourKey": "你的密钥",
-      "notSet": "未设置",
-      "indexOtherProvider": "此工作区的索引使用 {provider} 上的 <mono>{model}</mono> 生成嵌入，它不使用 OpenAI 兼容密钥。",
-      "indexModel": "此工作区的索引使用 <mono>{model}</mono>（{dimension} 维）生成嵌入，因此端点必须提供该模型。",
-      "noEndpoint": "已保存的密钥没有端点 URL，在设置之前使用它生成嵌入会失败。请同时输入端点 URL 和密钥，然后保存。",
-      "keyLabel": "嵌入 API 密钥",
-      "keepHint": "留空则保留已保存的密钥。",
-      "serverHint": "留空则使用服务器的密钥。",
-      "keepPlaceholder": "留空则保留末尾为 {last4} 的密钥",
-      "endpointLabel": "嵌入端点 URL",
-      "endpointHint": "此密钥对应的 OpenAI 兼容嵌入端点。密钥只会发送到这里；更改地址需要重新输入密钥。",
-      "confirmTitle": "移除嵌入密钥？",
-      "confirmDescription": "已保存的密钥及其端点将被删除，嵌入会重新使用服务器的密钥。已索引的文档仍可搜索。"
-    }
+    "endpointFailed": "无法读取你的模型设置。"
   },
   "labs": {
     "title": "实验功能",
@@ -899,6 +880,20 @@
           "restored": "归档 · 已恢复",
           "deleted": "归档 · 已删除"
         }
+      },
+      "workspaceRenamed": "{actor} 将工作区重命名为“{name}”",
+      "workspaceRenamedAndChanged": "{actor} 将工作区重命名为“{name}”，并修改了它的{fields}",
+      "workspaceChanged": "{actor} 修改了工作区的{fields}",
+      "workspaceFields": {
+        "name": "名称",
+        "slug": "网址",
+        "description": "描述",
+        "industry": "行业",
+        "teamSize": "团队规模",
+        "swatch": "颜色",
+        "auditRetentionDays": "审计日志保留期",
+        "separator": "、",
+        "list": "{rest}和{last}"
       }
     },
     "auditTab": {
@@ -1323,7 +1318,7 @@
       },
       "embedding": {
         "label": "嵌入",
-        "note": "每个已索引文档的每个分块都会被发送去生成嵌入。拥有自己密钥或 Ollama 端点的公司可以按工作区覆盖此设置。"
+        "note": "每个已索引文档的每个分块都会被发送去生成嵌入。之前保存过自己的嵌入密钥或端点的工作区会继续使用它。"
       },
       "rerank": {
         "label": "重排序",
@@ -1334,8 +1329,24 @@
         "note": "仅在文档开启实体提取时运行。"
       },
       "ocr": {
-        "provider": "扫描页面会通过文档转换器发送给 {provider} 提供商。",
-        "native": "仅使用原生 PDF 提取，任何内容都不会离开服务器。"
+        "none": "未配置 OCR 服务：PDF 从自身的文本层读取，图片用 Tesseract 读取，都在本服务器上完成。任何内容都不会离开服务器，扫描页面会是空白。",
+        "scope": {
+          "all": "每个 PDF 和图片都会用 OCR 读取。",
+          "scans": "图片和扫描版 PDF 用 OCR 读取；自带文本层的 PDF 在本服务器上直接读取其文本层。",
+          "picked": "图片，以及有人为其指定了服务的 PDF，会用 OCR 读取；其他 PDF 在本服务器上读取自身的文本层。"
+        },
+        "engines": {
+          "azure": "Azure Document Intelligence",
+          "docling": "本部署上的 Docling（docling-serve 运行时）",
+          "landingAi": "Landing AI",
+          "datalab": "Datalab"
+        },
+        "chain": "{lead} 读取每一页。",
+        "chainWithFallback": "{lead} 读取每一页；失败时依次由 {rest} 接手。",
+        "listJoin": "、",
+        "lastResort": "PDF 自身的文本层是最后的手段；所有服务都读不了的扫描件会重试，而不是以空白内容编入索引。",
+        "retryOnly": "所有服务都读不了的扫描件会重试，而不是以空白内容编入索引。",
+        "note": "{scope}{chain}{end}"
       },
       "transcription": {
         "label": "转录",
@@ -1366,18 +1377,18 @@
         "label": "审计日志",
         "keptForever": "永久保留",
         "days": "{days} 天",
-        "detail": "在“成员与权限”中设置。<link>去更改</link>。"
+        "detail": "在“工作区 › 成员与权限”中设置。<link>去更改</link>。"
       },
       "trash": {
         "label": "回收站",
         "keptUntilDeleted": "保留到手动删除",
         "emptiedAfter": "{days} 天后清空",
-        "detail": "已删除的思维导图和产物。在“归档与保留”中设置。<link>去更改</link>。"
+        "detail": "已删除的思维导图和产物。在“工作区 › 归档”中设置。<link>去更改</link>。"
       },
       "credentials": {
-        "label": "嵌入服务凭据",
+        "label": "已存储的凭据",
         "okLabel": "静态加密",
-        "detail": "每个工作区的密钥都使用 EMBEDDING_SECRETS_KEY 加密，且只显示最后四位字符。"
+        "detail": "工作区保存的 API 密钥、连接器令牌和应用专用密码都使用 EMBEDDING_SECRETS_KEY 加密，且从不完整显示。文档正文会发送到哪里生成嵌入，请见“外部服务”。"
       }
     },
     "choices": {
@@ -1868,6 +1879,72 @@
       "scenarioInterview": "情景“{title}”：访谈",
       "scenarioUnit": "情景“{title}”（{unit, select, brief {简报} cast {角色设定} report {报告} other {{unit}}}）",
       "scenarioRound": "情景“{title}”（第 {round} 轮）"
+    },
+    "workspaceDetails": {
+      "notFound": "此工作区已不存在。",
+      "urlTaken": "另一个工作区已在使用该网址，请换一个。"
+    }
+  },
+  "workspaceTab": {
+    "title": "工作区",
+    "about": "关于此工作区的一切：它叫什么、里面有谁以及他们能看到什么、它自带的密钥、它运行的模型和智能体、它连接了哪些服务，以及它的支出。你自己的账户、主题和快捷键在“设置”中。",
+    "groups": {
+      "basics": "基本信息",
+      "setup": "配置",
+      "data": "数据"
+    },
+    "screens": {
+      "general": "常规",
+      "people": "成员与权限",
+      "company": "公司档案",
+      "byok": "自带密钥",
+      "models": "模型",
+      "agents": "智能体",
+      "integrations": "集成",
+      "usage": "用量",
+      "archive": "归档",
+      "labs": "实验室"
+    }
+  },
+  "general": {
+    "readOnly": "更改这些信息需要具备管理工作区设置权限的角色。",
+    "loadFailedStatus": "无法加载工作区详情（{status}）。",
+    "offline": "无法连接服务器。请检查网络连接后重试。",
+    "saveFailedStatus": "无法保存（{status}）。",
+    "saveOffline": "无法连接服务器，未保存任何内容。",
+    "saved": "工作区详情已保存",
+    "name": {
+      "label": "名称",
+      "description": "工作区里每个人看到的名称：显示在侧边栏、工作区选择器和邀请中。",
+      "missing": "请为工作区命名。"
+    },
+    "slug": {
+      "label": "网址",
+      "description": "在工作区之间切换时显示的网址。它在此服务器上必须唯一；没有其他内容链接到它。",
+      "checking": "正在检查…",
+      "invalid": "至少两个字符：小写字母、数字和短横线。",
+      "available": "可用",
+      "taken": "已被占用——换一个网址试试。"
+    },
+    "description": {
+      "label": "描述",
+      "description": "用一句话说明公司做什么。可选；有助于助手理解。",
+      "placeholder": "我们把分散的信息整理成知识图谱，供 AI 工作流使用。"
+    },
+    "industry": {
+      "label": "行业",
+      "description": "公司所在的领域。可选。",
+      "placeholder": "例如：物流软件"
+    },
+    "teamSize": {
+      "label": "团队规模",
+      "description": "大约有多少人在这里工作。",
+      "count": "{count, plural, =1 {只有一个人} other {大约 # 人}}"
+    },
+    "colour": {
+      "label": "颜色",
+      "description": "工作区在侧边栏和工作区选择器中的标志颜色。",
+      "swatch": "颜色 {n}"
     }
   }
 }

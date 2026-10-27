@@ -5,10 +5,11 @@
 export type OcrProviderName = "DOCLING" | "NATIVE_PDF" | "AZURE" | "LANDING_AI" | "DATALAB";
 
 /**
- * How a PDF is read. "text-layer-first" (the default) uses the PDF's own text
- * when it has one and sends only scans to OCR. "provider-first" sends every
- * PDF to `defaultProvider` and reads the text layer only when that provider
- * fails.
+ * How a PDF is read. "provider-first" (the default whenever an OCR engine can
+ * run) sends every PDF to OCR — `defaultProvider` first, then the rest of the
+ * engine order — and reads the text layer only when they all fail.
+ * "text-layer-first" uses the PDF's own text when it has one and sends only
+ * scans to OCR.
  */
 export type OcrPdfStrategy = "text-layer-first" | "provider-first";
 
@@ -22,7 +23,7 @@ export type AzureDocumentModel = "prebuilt-layout" | "prebuilt-read";
 export interface OcrConfig {
     /** Local-fallback provider pin; the converter honors its own OCR_DEFAULT_PROVIDER. */
     defaultProvider?: OcrProviderName;
-    /** OCR_PDF_STRATEGY; unset means "text-layer-first". */
+    /** OCR_PDF_STRATEGY; unset means "provider-first" when an OCR engine can run. */
     pdfStrategy?: OcrPdfStrategy;
     /** Absolute origin of the app — needed by the converter to fetch /api/files/ URLs. */
     appPublicUrl?: string;

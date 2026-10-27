@@ -5,6 +5,9 @@
  *   GET  /health        open (Docker healthcheck)
  *   GET  /readyz        auth; 200 only when docling-serve answered its
  *                       health check recently OR none is configured
+ *   GET  /capabilities  auth; which OCR engines can run here, in the order
+ *                       they are tried (Docling only when docling-serve
+ *                       answers, not just because DOCLING_SERVE_URL is set)
  *   POST /route         auth; RouteRequest -> RouteResponse
  *   POST /render-pages  auth; RenderPagesRequest -> RenderPagesResponse
  *   POST /convert       auth; ConvertRequest -> EvidenceDocument
@@ -41,6 +44,7 @@ import { ServiceError, errorEnvelope, errorMessage } from "./errors.js";
 import { markdownToEvidenceDocument } from "./evidence.js";
 import { assertAllowedUrl, fetchDocument, type FetchLike } from "./fetch.js";
 import { log } from "./logger.js";
+import { createDoclingProbe, ocrProviderOrder, type DoclingState } from "./providers.js";
 import { renderPdfPages, type PageRenderer } from "./render.js";
 import { determineRouting, type RoutingDeps } from "./routing.js";
 import { createVisionClassifier, type VisionClassifier } from "./vision.js";
@@ -53,30 +57,14 @@ export interface AppDeps {
     doclingHealth?: DoclingHealth;
 }
 
-const READY_TTL_MS = 10_000;
-
-function createReadinessTracker(config: Config, doclingHealth: DoclingHealth) {
-    let lastOkAt = 0;
-    return async (): Promise<{
-        ready: boolean;
-        docling: "ok" | "not-configured" | "unreachable";
-    }> => {
-        if (!config.doclingServeUrl) {
-            return { ready: true, docling: "not-configured" };
-        }
-        if (Date.now() - lastOkAt < READY_TTL_MS) {
-            return { ready: true, docling: "ok" };
-        }
-        try {
-            if (await doclingHealth(config)) {
-                lastOkAt = Date.now();
-                return { ready: true, docling: "ok" };
-            }
-        } catch {
-            // fall through — unreachable
-        }
-        return { ready: false, docling: "unreachable" };
-    };
+/** Answer of GET /capabilities — read by the app to decide what it may fall back to. */
+export interface CapabilitiesResponse {
+    schemaVersion: 1;
+    docling: DoclingState;
+    /** OCR engines that can run, in the order routing tries them. */
+    ocrOrder: string[];
+    /** The operator pin, when OCR_DEFAULT_PROVIDER is set. */
+    defaultProvider: string | null;
 }
 
 function parseBody<S extends z.ZodType<unknown>>(schema: S, body: unknown): z.infer<S> {
@@ -142,13 +130,26 @@ export function createApp(config: Config, deps: AppDeps = {}): Express {
     // Bounded body size, as before (PDF buffers arrive base64-in-JSON).
     app.use(express.json({ limit: "100mb" }));
 
-    const readiness = createReadinessTracker(config, doclingHealth);
+    // One cached docling-serve probe for readiness, capabilities and routing.
+    const docling = createDoclingProbe(config, doclingHealth);
     app.get("/readyz", async (_req, res) => {
-        const state = await readiness();
-        res.status(state.ready ? 200 : 503).json({
-            status: state.ready ? "ready" : "unready",
-            docling: state.docling,
+        const state = await docling();
+        const ready = state !== "unreachable";
+        res.status(ready ? 200 : 503).json({
+            status: ready ? "ready" : "unready",
+            docling: state,
         });
+    });
+
+    app.get("/capabilities", async (_req, res) => {
+        const state = await docling();
+        const response: CapabilitiesResponse = {
+            schemaVersion: 1,
+            docling: state,
+            ocrOrder: ocrProviderOrder(config, state === "ok"),
+            defaultProvider: config.defaultProvider ?? null,
+        };
+        res.json(response);
     });
 
     app.post("/route", async (req, res) => {
@@ -161,6 +162,7 @@ export function createApp(config: Config, deps: AppDeps = {}): Express {
             fetchDocument: url => fetchDocument(config, fetchImpl, url, "documentUrl"),
             renderPages,
             classify,
+            doclingReachable: async () => (await docling()) === "ok",
         };
         const routeResponse = await determineRouting(config, routingDeps, body);
         res.json(routeResponse);

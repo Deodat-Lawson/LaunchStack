@@ -346,7 +346,10 @@ describe("AskPanel starter questions", () => {
 
         await user.click(await screen.findByRole("button", { name: /add company profile/i }));
 
-        expect(onStudioNavigate).toHaveBeenCalledWith("/employer/settings#company");
+        // Workspace › Company profile, a tab away.
+        expect(onStudioNavigate).toHaveBeenCalledWith(
+            "/employer/documents?feature=workspace&at=%2Fcompany"
+        );
         await waitFor(() =>
             expect(
                 screen.getByText("Suggested from 2 sources in Acme Robotics")

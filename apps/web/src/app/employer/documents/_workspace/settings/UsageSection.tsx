@@ -9,7 +9,9 @@
  * the workspace made, from every feature, with the provider's own input,
  * output and cached counts and a cost from the price the operator declared
  * per model (or the workspace's own price, for models without one). Routes
- * are shown, never model ids. Then the two settings the numbers inform.
+ * are shown, never model ids. After the models, each person's AI use this
+ * month against the limit that binds them (MemberAllowancesBlock). Then the
+ * two settings the numbers inform.
  *
  * Series colours are design tokens; dark mode uses darker steps of the same
  * hues, validated against the dark surface rather than flipped.
@@ -42,6 +44,7 @@ import { isAiFeature, isAiUsageRoute } from "~/lib/ai-usage";
 import { cn } from "~/lib/utils";
 
 import { usePublishedActions, type SettingsSectionProps } from "./contract";
+import { MemberAllowancesBlock } from "./MemberAllowancesBlock";
 import { useTimeFormat } from "./people/format";
 import { SectionRows } from "./SettingRow";
 import { StatusNote } from "./ui";
@@ -245,6 +248,8 @@ export function UsageSection({ onActions }: SettingsSectionProps) {
     const [overview, setOverview] = useState<UsageOverview | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    // The per-person block loads on its own; the Refresh action reloads it too.
+    const [membersRefresh, setMembersRefresh] = useState(0);
 
     const refresh = useCallback(async () => {
         setLoading(true);
@@ -271,7 +276,10 @@ export function UsageSection({ onActions }: SettingsSectionProps) {
         {
             primaryLabel: tc("actions.refresh"),
             primaryBusyLabel: t("refreshing"),
-            onPrimary: refresh,
+            onPrimary: () => {
+                setMembersRefresh(n => n + 1);
+                return refresh();
+            },
             busy: loading,
         },
         [refresh, loading, t, tc]
@@ -613,6 +621,8 @@ export function UsageSection({ onActions }: SettingsSectionProps) {
                     </Card>
                 )}
             </Section>
+
+            <MemberAllowancesBlock refreshToken={membersRefresh} />
 
             <Section title={t("burn.title")} description={t("burn.description")}>
                 <Card>

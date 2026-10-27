@@ -11,4 +11,6 @@ export type TeamTarget =
 /** What the sidebar's inbox bell needs: somewhere to open what was shared. */
 export interface InboxRailProps {
     onOpenTarget: (target: TeamTarget) => void;
+    /** A reply to, or a status change on, a report of yours: open it in the Feedback tab. */
+    onOpenFeedback?: (reportId: number) => void;
 }

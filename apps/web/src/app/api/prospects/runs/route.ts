@@ -29,6 +29,8 @@ import {
     prospectsT,
     readBody,
 } from "../_http";
+import { localeOfRequest } from "~/i18n/server";
+import { refuseAtAiAllowance } from "~/server/ai-usage/refusal";
 
 const Schema = z.object({
     segmentId: z.string().min(1),
@@ -39,7 +41,7 @@ const Schema = z.object({
 });
 const RUN_MINIMUM_CREDITS = 3_000;
 
-/** Whether the workspace's own model (Settings › Bring your own keys) can serve a live run. */
+/** Whether the workspace's own model (Workspace › Bring your own keys) can serve a live run. */
 async function workspaceHasOwnModel(companyId: bigint | number): Promise<boolean> {
     const scope = await loadWorkspaceChatModelsScope(companyId);
     return scope.source === "workspace" && Boolean(scope.config);
@@ -67,6 +69,12 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
     const auth = await prospectsContext();
     if (!auth.ok) return auth.response;
+    const refused = await refuseAtAiAllowance(
+        auth.ctx.companyId,
+        auth.ctx.userId,
+        localeOfRequest(request)
+    );
+    if (refused) return refused;
     const { ctx } = auth;
     return withRateLimit(
         request,

@@ -1438,7 +1438,9 @@ export function SourceRail({
                         {logoLabel}
                     </span>
                 </LandingLogoLink>
-                {inbox && <InboxBell onOpenTarget={inboxOpen} />}
+                {inbox && (
+                    <InboxBell onOpenTarget={inboxOpen} onOpenFeedback={inbox.onOpenFeedback} />
+                )}
                 {onClose && (
                     <button
                         onClick={onClose}

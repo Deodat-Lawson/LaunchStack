@@ -132,7 +132,7 @@ describe("GET /api/config/ai-models", () => {
 
     it("shows the workspace's own reason when its endpoint can't be used", async () => {
         const reason =
-            "Your workspace's own model can't be used: its saved API key can't be read on this server, so enter it again. A workspace admin can fix it in Settings › Bring your own keys.";
+            "Your workspace's own model can't be used: its saved API key can't be read on this server, so enter it again. A workspace admin can fix it in Workspace › Bring your own keys.";
         mockPublicChatConfig.mockImplementation(() => {
             throw new ChatScopeUnavailableError(reason);
         });

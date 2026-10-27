@@ -11,6 +11,7 @@
 export const STUDIO_PANE_IDS = [
     "chat",
     "knowledge",
+    "processing",
     "meetings",
     "agents",
     "team",
@@ -21,11 +22,12 @@ export const STUDIO_PANE_IDS = [
     "scenarios",
     "draft",
     "rewrite",
+    "workspace",
     "settings",
     "analytics",
     "mindmap",
     "workflows",
-    "metadata",
+    "feedback",
 ] as const;
 
 export type StudioPaneId = (typeof STUDIO_PANE_IDS)[number];

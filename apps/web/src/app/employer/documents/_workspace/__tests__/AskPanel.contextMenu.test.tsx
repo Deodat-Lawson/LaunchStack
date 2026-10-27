@@ -169,18 +169,18 @@ describe("AskPanel context menus", () => {
         const user = userEvent.setup();
         const onOpenCitation = jest.fn();
         render(<Harness onOpenCitation={onOpenCitation} />);
-        fireEvent.contextMenu(screen.getByText(CITATION.snippet));
+        fireEvent.contextMenu(screen.getByRole("button", { name: /at the cited passage/ }));
         expect(screen.getByTestId("context-menu-item-context")).toHaveTextContent(
             "Add source to context"
         );
         await user.click(screen.getByTestId("context-menu-item-open"));
         expect(onOpenCitation).toHaveBeenCalledWith(CITATION);
 
-        fireEvent.contextMenu(screen.getByText(CITATION.snippet));
+        fireEvent.contextMenu(screen.getByRole("button", { name: /at the cited passage/ }));
         await user.click(screen.getByTestId("context-menu-item-context"));
         // The source is pinned now: it shows as a chip and the verb flips.
         expect(await screen.findByText("Context")).toBeInTheDocument();
-        fireEvent.contextMenu(screen.getByText(CITATION.snippet));
+        fireEvent.contextMenu(screen.getByRole("button", { name: /at the cited passage/ }));
         expect(screen.getByTestId("context-menu-item-context")).toHaveTextContent(
             "Leave out of the next answer"
         );

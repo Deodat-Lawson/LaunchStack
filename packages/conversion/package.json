@@ -27,6 +27,7 @@
         "./ocr/config": "./src/ocr-processing/config.ts",
         "./ocr/trigger": "./src/ocr-processing/trigger.ts",
         "./ocr/complexity": "./src/ocr-processing/complexity.ts",
+        "./ocr/provider-order": "./src/ocr-processing/provider-order.ts",
         "./ocr/enrichment": "./src/ocr-processing/enrichment.ts",
         "./ocr/adapters/azureAdapter": "./src/ocr-processing/adapters/azureAdapter.ts",
         "./ocr/adapters/datalabAdapter": "./src/ocr-processing/adapters/datalabAdapter.ts",
@@ -124,6 +125,10 @@
             "./ocr/complexity": {
                 "types": "./dist/ocr-processing/complexity.d.ts",
                 "default": "./dist/ocr-processing/complexity.js"
+            },
+            "./ocr/provider-order": {
+                "types": "./dist/ocr-processing/provider-order.d.ts",
+                "default": "./dist/ocr-processing/provider-order.js"
             },
             "./ocr/enrichment": {
                 "types": "./dist/ocr-processing/enrichment.d.ts",

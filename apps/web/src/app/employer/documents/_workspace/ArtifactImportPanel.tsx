@@ -134,7 +134,7 @@ async function moveLegacyArtifact(
         sourceUrl: detail.sourceUrl,
         category,
     });
-    // Soft delete: the old copy goes to Settings → Archive, where it can be
+    // Soft delete: the old copy goes to Workspace › Archive, where it can be
     // restored, rather than being destroyed the moment its source exists.
     const removed = await fetch(`/api/artifacts/${artifact.id}`, { method: "DELETE" });
     if (!removed.ok) throw new Error(t("archiveFailed", { title: artifact.title }));

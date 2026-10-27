@@ -329,8 +329,14 @@ export const founderWeeklyReviewGenerationJob = inngest.createFunction(
                 throw new Error("Evidence snapshot is required before generation.");
             // A step body runs outside the handler's async context, so the
             // workspace's models are entered here rather than around the handler.
+            // Counted against whoever requested the review, never stopped midway.
+            const aiUse = {
+                feature: "vantage",
+                userId: claimed.createdByActorId?.replace(/^user:/, "") ?? null,
+                enforce: false,
+            } as const;
             const generated = await step.run("generate", () =>
-                withWorkspaceChatModels(context.companyId, "vantage", () =>
+                withWorkspaceChatModels(context.companyId, aiUse, () =>
                     generateFounderWeeklyReview({
                         evidenceSnapshot,
                         generate: generateFounderWeeklyReviewStructured,

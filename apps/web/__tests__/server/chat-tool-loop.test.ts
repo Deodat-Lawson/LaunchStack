@@ -508,24 +508,25 @@ describe("conditional evidence review", () => {
         }
     );
 
-    it.each(["list_sources", "search_sources", "read_source", "search_web", "fetch_page"])(
-        "reviews the results of %s with the same citation and format rules",
-        async name => {
-            const { chat, calls } = scriptedChat([
-                [toolCall(name, {})],
-                [text("Supported result.")],
-            ]);
-            await answerWithTools({
-                chat,
-                messages: [],
-                tools: [fixtureTool(name)],
-                signal: new AbortController().signal,
-            });
-            expect(calls.map(reviewCount)).toEqual([0, 1]);
-            expect(calls[1]!.messages.at(-1)?.content).toBe(EVIDENCE_REVIEW_REMINDER);
-            expect(calls[1]!.messages.some(message => message instanceof ToolMessage)).toBe(true);
-        }
-    );
+    it.each([
+        "list_sources",
+        "search_sources",
+        "read_source",
+        "ask_each",
+        "search_web",
+        "fetch_page",
+    ])("reviews the results of %s with the same citation and format rules", async name => {
+        const { chat, calls } = scriptedChat([[toolCall(name, {})], [text("Supported result.")]]);
+        await answerWithTools({
+            chat,
+            messages: [],
+            tools: [fixtureTool(name)],
+            signal: new AbortController().signal,
+        });
+        expect(calls.map(reviewCount)).toEqual([0, 1]);
+        expect(calls[1]!.messages.at(-1)?.content).toBe(EVIDENCE_REVIEW_REMINDER);
+        expect(calls[1]!.messages.some(message => message instanceof ToolMessage)).toBe(true);
+    });
 
     it("keeps one fresh reminder through reads and writing and preserves the final budget instruction", async () => {
         const { chat, calls } = scriptedChat([

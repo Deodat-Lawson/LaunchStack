@@ -262,7 +262,7 @@
       "rederive": "Re-derive",
       "confirmedButton": "Confirmed",
       "confirm": "Confirm segment",
-      "noProfile": "There is no company profile yet, so this draft leans on documents alone. Add one under Settings to sharpen it."
+      "noProfile": "There is no company profile yet, so this draft leans on documents alone. Add one under Workspace › Company profile to sharpen it."
     },
     "people": {
       "drafted": "Campaign drafted in Email with {count, plural, one {# person} other {# people}}.",

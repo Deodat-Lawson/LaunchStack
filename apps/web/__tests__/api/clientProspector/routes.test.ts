@@ -28,6 +28,12 @@ import { NextRequest } from "next/server";
 // Mock the centralized auth+tenant resolver — we control the workspace
 // context (or the failure response) per test.
 const mockRequireWorkspaceContext = jest.fn();
+// The AI-allowance gate reads the meter; these tests don't model limits.
+jest.mock("~/server/ai-usage/refusal", () => ({
+    refuseAtAiAllowance: jest.fn(async () => null),
+    assertWithinAiAllowance: jest.fn(async () => undefined),
+}));
+
 jest.mock("~/lib/require-workspace-context", () =>
     jest
         .requireActual<

@@ -24,6 +24,7 @@ import { validateNoteTarget } from "~/server/notes/validate-note-target";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { refuseAtAiAllowance } from "~/server/ai-usage/refusal";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
 export const runtime = "nodejs";
@@ -49,7 +50,14 @@ export async function POST(request: Request) {
             const ctx = await requireWorkspaceContext();
             if (!ctx.success) return ctx.response;
 
-            return await withWorkspaceChatModels(ctx.data.companyId, "notes", async () => {
+            const aiUse = { feature: "notes", userId: ctx.data.authUserId } as const;
+            const refused = await refuseAtAiAllowance(
+                ctx.data.companyId,
+                aiUse.userId,
+                localeOfRequest(request)
+            );
+            if (refused) return refused;
+            return await withWorkspaceChatModels(ctx.data.companyId, aiUse, async () => {
                 const body = (await request.json().catch(() => ({}))) as Body;
                 const selection = (body.selection ?? "").trim();
                 const intent = body.intent ?? "summary";

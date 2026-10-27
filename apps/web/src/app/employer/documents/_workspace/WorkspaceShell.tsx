@@ -18,6 +18,8 @@ import { useMyProfile } from "~/lib/profile/use-my-profile";
 import { Button } from "~/components/ui/button";
 import { Sheet, SheetContent, SheetTitle } from "~/components/ui/sheet";
 import { useRegisterActions } from "~/components/context-menu";
+import { useFeedback } from "~/components/feedback/FeedbackProvider";
+import { feedbackReportHref } from "~/lib/feedback/contract";
 import {
     APP_TARGET_KIND,
     SELECTION_TARGET_KIND,
@@ -109,7 +111,15 @@ import {
     type WorkspaceTranslator,
 } from "./types";
 import { TOOL_ALIASES, toolTargetFromHref } from "~/lib/tool-app/locations";
+import { WORKSPACE_TOOL_ID, settingsDestination, workspaceHref } from "~/lib/settings/surfaces";
 import { useWorkspaceData } from "./useWorkspaceData";
+import { refreshProcessingQueue, useProcessingQueue } from "./processing/queueStore";
+import {
+    hasUnfinishedLocalTasks,
+    onLocalTaskHandedOff,
+    useLocalTasks,
+} from "./processing/uploadTasks";
+import { queueBadge } from "./processing/viewModel";
 import type {
     PassageSelection,
     CitationHighlight,
@@ -142,9 +152,9 @@ const LEGACY_VIEW_REDIRECTS: Record<string, string> = {
     upload: "/employer/documents?add=1",
     dashboard: "/employer/home",
     analytics: "/employer/documents?feature=analytics",
-    employees: "/employer/settings#people",
+    employees: workspaceHref("people"),
     settings: "/employer/settings",
-    metadata: "/employer/documents?feature=metadata",
+    metadata: workspaceHref("company"),
     "marketing-pipeline": "/employer/documents?feature=growth&at=%2Fbrand%2Fcampaigns",
     "repo-explainer": "/employer/tools/repo-explainer",
     distribution: "/employer/documents?feature=growth&at=%2Fprospects",
@@ -167,6 +177,7 @@ const LAUNCHER_APPS = ["chat", "knowledge", "meetings"] as const;
  * nobody is looking at. Once shown, a tool stays mounted like any tab.
  */
 const MOUNT_ON_FIRST_SHOW = new Set([
+    "workspace",
     "growth",
     "proposals",
     "vantage",
@@ -197,10 +208,12 @@ const RETIRED_FEATURE_HREFS: Record<string, string> = {
 };
 
 /**
- * Points the Settings hub at a section. The hub follows the hash, mounted or
- * not. Setting the hash it already has fires no `hashchange`, so announce it
- * instead: picking a section again, after moving to another inside the hub,
- * would otherwise leave the hub where it was.
+ * Points the Settings hub at one of its sections. The hub follows the hash,
+ * mounted or not. Setting the hash it already has fires no `hashchange`, so
+ * announce it instead: picking a section again, after moving to another
+ * inside the hub, would otherwise leave the hub where it was. (A hash that
+ * belongs to the Workspace tab never comes through here; see
+ * `openSettingsPlace`.)
  */
 function showSettingsSection(section: string) {
     if (!section) return;
@@ -1430,8 +1443,12 @@ export function WorkspaceShell() {
 
     /** The sidebar's inbox bell; the rail itself shows where the item lives. */
     const inboxRail = useMemo(
-        () => ({ onOpenTarget: (target: TeamTarget) => void openTeamTarget(target) }),
-        [openTeamTarget]
+        () => ({
+            onOpenTarget: (target: TeamTarget) => void openTeamTarget(target),
+            // Through the URL, like any tool link: the `?feature=` effect opens the tab there.
+            onOpenFeedback: (reportId: number) => router.push(feedbackReportHref(reportId, "mine")),
+        }),
+        [openTeamTarget, router]
     );
 
     /**
@@ -1623,6 +1640,30 @@ export function WorkspaceShell() {
     const openFeature = useCallback(() => setStudioOpen(true), []);
 
     /**
+     * Where a `/employer/settings#<hash>` link goes inside the workspace:
+     * Settings on one of its own sections, the Workspace tab on the screen a
+     * workspace section moved to (with the row or People tab the hash named
+     * as its `focus`), or Analytics. Never a page leave.
+     */
+    const openSettingsPlace = useCallback(
+        (hash: string) => {
+            const destination = settingsDestination(hash);
+            if (destination?.kind === "workspace") {
+                requestToolLocation(WORKSPACE_TOOL_ID, destination.at);
+                expandFeatureRef.current(WORKSPACE_TOOL_ID);
+                return;
+            }
+            if (destination?.kind === "app") {
+                expandFeatureRef.current(destination.featureId);
+                return;
+            }
+            showSettingsSection(destination?.kind === "settings" ? destination.hash : hash);
+            expandFeatureRef.current("settings");
+        },
+        [requestToolLocation]
+    );
+
+    /**
      * Every way of picking an app ends here: the picker, the Studio menu, the
      * command palette, a keyboard shortcut and `?feature=`. The app opens in
      * a tab — every Studio app does, tools with screens of their own
@@ -1642,11 +1683,10 @@ export function WorkspaceShell() {
                 if (!href) return;
                 const section = settingsSectionOf(href);
                 if (section !== undefined) {
-                    // "Agents & nodes", "Workspace" and the like are sections
-                    // of Settings, which is a tab here. Following the link
+                    // A link into Settings opens a tab here — Settings, or the
+                    // Workspace tab for what moved there. Following the link
                     // would leave the workspace and close every open tab.
-                    showSettingsSection(section);
-                    expandFeatureRef.current("settings");
+                    openSettingsPlace(section);
                     return;
                 }
                 setStudioOpen(false);
@@ -1679,11 +1719,50 @@ export function WorkspaceShell() {
             router,
             setActiveFeatureId,
             requestToolLocation,
+            openSettingsPlace,
             t,
             studio,
         ]
     );
     expandFeatureRef.current = expandFeature;
+
+    /**
+     * Something was added (an upload, a folder, a link, a Drive or Gmail
+     * import): show the Processing tab, which follows it from its first byte
+     * to "ready". Asks the queue at once so the file is there when the tab is.
+     */
+    const openProcessing = useCallback(() => {
+        expandFeature("processing");
+        void refreshProcessingQueue();
+    }, [expandFeature]);
+
+    // An upload the dialog handed off reached the server: the library gains
+    // its row now, and the queue picks up its job.
+    useEffect(
+        () =>
+            onLocalTaskHandedOff(() => {
+                void refresh();
+                void refreshProcessingQueue();
+            }),
+        [refresh]
+    );
+
+    // Adding something opens the Processing tab: fetch its code while the
+    // dialog is up, so the tab draws the moment the dialog hands over.
+    useEffect(() => {
+        if (addOpen) void import("./processing/ProcessingQueuePane");
+    }, [addOpen]);
+
+    // Leaving the page drops a file whose bytes are still going up.
+    useEffect(() => {
+        const warn = (event: BeforeUnloadEvent) => {
+            if (!hasUnfinishedLocalTasks()) return;
+            event.preventDefault();
+            event.returnValue = "";
+        };
+        window.addEventListener("beforeunload", warn);
+        return () => window.removeEventListener("beforeunload", warn);
+    }, []);
 
     /** A tool's tab, at a place inside it: "/prospects/companies/12". */
     const openTool = useCallback(
@@ -1730,17 +1809,15 @@ export function WorkspaceShell() {
      * if the permission does.
      */
     /**
-     * Where the chat panel's own chrome sends people. Settings is a Studio app
-     * now, so following the link would leave the workspace and close every
-     * open tab to reach something that is one tab away. The hash is how the
-     * settings panel picks its section, mounted or not.
+     * Where the chat panel's own chrome sends people. Settings and Workspace
+     * are Studio apps now, so following the link would leave the workspace
+     * and close every open tab to reach something that is one tab away.
      */
     const navigateStudio = useCallback(
         (href: string) => {
             const section = settingsSectionOf(href);
             if (section !== undefined) {
-                showSettingsSection(section);
-                expandFeature("settings");
+                openSettingsPlace(section);
                 return;
             }
             // A tool's screen — its old `/employer/tools/…` URL included —
@@ -1752,7 +1829,17 @@ export function WorkspaceShell() {
             }
             router.push(href);
         },
-        [expandFeature, openTool, router]
+        [openSettingsPlace, openTool, router]
+    );
+
+    // The Processing tab says how many files are still moving beside its
+    // name — polled only while that tab is open somewhere.
+    const processingOpen = layout.groups.some(group => group.tabIds.includes("processing"));
+    const processingQueue = useProcessingQueue(processingOpen);
+    const localTasks = useLocalTasks();
+    const processingBadge = useMemo(
+        () => (processingOpen ? queueBadge(processingQueue.data?.items ?? [], localTasks) : null),
+        [processingOpen, processingQueue.data, localTasks]
     );
 
     /**
@@ -1776,11 +1863,18 @@ export function WorkspaceShell() {
                 };
             }
             const feature = resolveStudioFeature(id);
-            return feature && can(feature.requires)
-                ? localizedStudioFeature(studio, feature)
-                : undefined;
+            if (!feature || !can(feature.requires)) return undefined;
+            const localized = localizedStudioFeature(studio, feature);
+            if (id === "processing" && processingBadge) {
+                return {
+                    ...localized,
+                    count: processingBadge.count,
+                    countTone: processingBadge.tone,
+                };
+            }
+            return localized;
         },
-        [sources, can, studio, tSourceTypes]
+        [sources, can, studio, tSourceTypes, processingBadge]
     );
 
     /**
@@ -1883,7 +1977,13 @@ export function WorkspaceShell() {
             router.replace(RETIRED_FEATURE_HREFS[featureParam]);
             return;
         }
-        if (featureParam) {
+        if (featureParam === "settings" && !atParam) {
+            // `?feature=settings#models` and the old OpenRouter return leg
+            // (`?feature=settings&openrouter=…`) name what is the Workspace
+            // tab now; the hash goes with the cleanup below, so read it first.
+            const hash = window.location.hash;
+            openSettingsPlace(searchParams.has("openrouter") && !hash ? "byok" : hash);
+        } else if (featureParam) {
             const feature = resolveStudioFeature(featureParam);
             // A gated app must not be dropped just because permissions have
             // not landed. Wait for them — the effect re-runs — but only for
@@ -1963,6 +2063,7 @@ export function WorkspaceShell() {
         legacyRedirect,
         permissionsLoaded,
         expandFeature,
+        openSettingsPlace,
         requestToolLocation,
         startContinuation,
         seedComposer,
@@ -2209,6 +2310,9 @@ export function WorkspaceShell() {
     const shortcutOverrides = useSettingValue<ShortcutBindings>("shortcuts.bindings");
     const bindings = useMemo(() => resolveBindings(shortcutOverrides), [shortcutOverrides]);
     const bindingsRef = useRef(bindings);
+    const feedback = useFeedback();
+    const feedbackRef = useRef(feedback);
+    feedbackRef.current = feedback;
     bindingsRef.current = bindings;
     /** The member's keys, formatted for the controls that show them. */
     const shortcutHints = useMemo<ShortcutHints>(() => {
@@ -2291,6 +2395,9 @@ export function WorkspaceShell() {
                     break;
                 case "pane.close":
                     paneVerbsRef.current.close();
+                    break;
+                case "feedback.report":
+                    feedbackRef.current.open({ kind: "bug" });
                     break;
                 default:
                     if (command.id.startsWith("feature.")) {
@@ -2672,7 +2779,7 @@ export function WorkspaceShell() {
                             editingQueued={Boolean(editingQueued)}
                             queuedEditUnavailable={Boolean(
                                 editingQueued &&
-                                    !chatRuntime.queue.items.some(item => item.id === editingQueued)
+                                !chatRuntime.queue.items.some(item => item.id === editingQueued)
                             )}
                             onCancelQueueEdit={() => setEditingQueued(null)}
                             onQueueSendOldest={() => {
@@ -2878,6 +2985,20 @@ export function WorkspaceShell() {
                                     openAgentRequest,
                                 },
                                 team: teamTab,
+                                processing: {
+                                    viewerId: userId ?? null,
+                                    storageScope: layoutScope ?? undefined,
+                                    onOpenDocument: documentId => {
+                                        const id = `d${documentId}`;
+                                        if (sources.some(source => source.id === id)) {
+                                            openSource(id);
+                                        } else {
+                                            void refresh().then(() => openSource(id));
+                                        }
+                                    },
+                                    onAddSource: () => openAdd(),
+                                    onSettled: () => void refresh(),
+                                },
                                 investors: {
                                     onDraftInChat: prompt => seedComposer(prompt, "replace"),
                                     onSaveAsSource: markdown => {
@@ -2948,6 +3069,7 @@ export function WorkspaceShell() {
                 onUploaded={() => {
                     void refresh();
                 }}
+                onQueued={openProcessing}
                 sessions={{
                     onImported: refresh,
                     onOpenDocument: id => openSource(`d${id}`),
@@ -2994,10 +3116,9 @@ export function WorkspaceShell() {
                 }}
                 onPickSetting={key => {
                     setPalOpen(false);
-                    // The hub reads the hash on mount and on change; the row
-                    // scrolls itself into view.
-                    showSettingsSection(key);
-                    setTimeout(() => expandFeature("settings"), 100);
+                    // Settings or the Workspace tab, on the row's section;
+                    // the row scrolls itself into view.
+                    setTimeout(() => openSettingsPlace(key), 100);
                 }}
             />
 

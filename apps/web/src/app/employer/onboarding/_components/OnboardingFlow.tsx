@@ -22,6 +22,7 @@ import { factLabelText, failureText } from "~/components/company-profile/words";
 import { companyProfileApi } from "~/lib/company-profile/api";
 import type { CompanyProfileDto, ProfileSourceDto } from "~/lib/company-profile/dto";
 import { normalizeWebsite } from "~/lib/company-profile/website";
+import { workspaceHref } from "~/lib/settings/surfaces";
 import { cn } from "~/lib/utils";
 import {
     registerDocument,
@@ -30,6 +31,9 @@ import {
 
 /** Where onboarding puts what it imports; the source sorter reads the folder name as a hint. */
 const FOLDER = "Company";
+
+/** Where the profile is reviewed and changed afterwards: Workspace › Company profile. */
+const COMPANY_PROFILE_HREF = workspaceHref("company");
 
 /** `value` is what the profile stores (English, whatever language it was picked in); `key` names it on screen. */
 const INDUSTRIES = [
@@ -862,7 +866,7 @@ function UnderstoodStep({
                         </dl>
                         {more > 0 && (
                             <Link
-                                href="/employer/settings#company"
+                                href={COMPANY_PROFILE_HREF}
                                 className="text-brand-ink self-start text-xs hover:underline"
                             >
                                 {t("understood.moreInProfile", { count: more })}
@@ -939,7 +943,7 @@ function UnderstoodStep({
                 </Button>
                 <div className="flex-1 max-sm:hidden" />
                 <Button asChild variant="outline">
-                    <Link href="/employer/settings#company">{t("understood.review")}</Link>
+                    <Link href={COMPANY_PROFILE_HREF}>{t("understood.review")}</Link>
                 </Button>
                 <Button type="button" onClick={onFinish}>
                     {t("understood.open")}
@@ -985,7 +989,7 @@ function ReadOnly({ companyName, onLeave }: { companyName: string; onLeave: () =
                 <div className="h-6" />
                 <StepFooter>
                     <Button asChild variant="outline">
-                        <Link href="/employer/settings#company">{t("readOnly.see")}</Link>
+                        <Link href={COMPANY_PROFILE_HREF}>{t("readOnly.see")}</Link>
                     </Button>
                     <div className="flex-1 max-sm:hidden" />
                     <Button type="button" onClick={onLeave}>

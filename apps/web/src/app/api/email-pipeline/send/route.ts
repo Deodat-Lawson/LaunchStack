@@ -4,10 +4,11 @@ import { z } from "zod";
 import { runEmailCampaign, RecipientSchema } from "@launchstack/pipelines/email";
 
 import { publicOrigin } from "~/server/public-origin";
+import { refuseAtAiAllowance } from "~/server/ai-usage/refusal";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
 import { resolveActor } from "../../email-campaigns/_lib/context";
-import { requestTranslator } from "~/i18n/server";
+import { localeOfRequest, requestTranslator } from "~/i18n/server";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -40,9 +41,16 @@ export async function POST(request: Request) {
         if (!actorResult.ok) return actorResult.response;
         const { actor } = actorResult;
 
+        const aiUse = { feature: "emailCampaigns", userId: actor.externalUserId } as const;
+        const refused = await refuseAtAiAllowance(
+            actor.companyId,
+            aiUse.userId,
+            localeOfRequest(request)
+        );
+        if (refused) return refused;
         // The preview generates and reviews a template: the workspace's own
         // models when it brought them.
-        return await withWorkspaceChatModels(actor.companyId, "emailCampaigns", async () => {
+        return await withWorkspaceChatModels(actor.companyId, aiUse, async () => {
             let json: unknown;
             try {
                 json = await request.json();

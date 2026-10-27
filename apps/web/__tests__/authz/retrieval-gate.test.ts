@@ -20,6 +20,12 @@ jest.mock("~/server/chat-company-profile", () => ({
 }));
 
 // Runs the work as-is: which workspace's models it gets is not this test's concern.
+// The AI-allowance gate reads the meter; these tests don't model limits.
+jest.mock("~/server/ai-usage/refusal", () => ({
+    refuseAtAiAllowance: jest.fn(async () => null),
+    assertWithinAiAllowance: jest.fn(async () => undefined),
+}));
+
 jest.mock("~/server/workspace-models/scope", () => ({
     withWorkspaceChatModels: (_companyId: unknown, _feature: unknown, fn: () => unknown) => fn(),
 }));
@@ -155,6 +161,12 @@ jest.mock("~/server/chat-source-tools", () => ({
     },
     sourceToolsPrompt: () => "",
     noSourceToolsPrompt: () => "",
+}));
+// The attached-file list reads the database too; these tests script only the
+// retrieval reads, so the list is empty and the prompt is the plain one.
+jest.mock("~/server/chat-source-data", () => ({
+    loadScopeFiles: async () => [],
+    readWholeFiles: async () => new Map(),
 }));
 
 jest.mock("~/server/chat-request-compat", () => ({

@@ -21,6 +21,7 @@ import type { WorkspacePassage } from "~/server/mcp/workspace-search";
 import { listConnectionsForCompany } from "~/server/services/connectors/connection-store";
 import { getSyncState } from "~/server/services/connectors/google-drive/store";
 import {
+    encodeListCursor,
     summarizeReadableSources,
     type ListedSource,
     type SourceListing,
@@ -337,6 +338,226 @@ describe("citations", () => {
     });
 });
 
+describe("ask_each", () => {
+    const resume = (id: number, overrides: Partial<SourceText> = {}): SourceText => ({
+        id,
+        title: `Resume ${id}.pdf`,
+        folder: RESUMES,
+        from: "google-drive",
+        mimeType: "application/pdf",
+        createdAt: new Date("2026-10-17T23:48:25Z"),
+        updatedAt: new Date("2026-10-17T23:48:25Z"),
+        text: `Person ${id}\nSoftware engineer`,
+        characters: 30,
+        truncated: false,
+        indexed: true,
+        ...overrides,
+    });
+    /** 37 attached resumes, d100–d136. */
+    const ATTACHED = Array.from({ length: 37 }, (_, i) => ({
+        id: 100 + i,
+        title: `Resume ${100 + i}.pdf`,
+    }));
+
+    function askWith(
+        ports: Parameters<typeof createSourceTools>[1] = {},
+        attached: { id: number; title: string }[] = ATTACHED
+    ) {
+        const askFile = jest.fn(async ({ text }: { text: string }) => ({
+            answer: `It is ${text.split("\n")[0]}.`,
+            quote: text.split("\n")[0]!,
+            usage: { inputTokens: 100, outputTokens: 5, totalTokens: 105 },
+        }));
+        const read = jest.fn(async (_ctx: unknown, id: number) => resume(id));
+        const session = createSourceTools(ctx, { read, askFile: () => askFile, ...ports }, "en", {
+            attached,
+        });
+        const tool = session.tools.find(t => t.name === "ask_each")!;
+        return { session, tool, askFile, read };
+    }
+
+    it("asks every attached file the question, in parallel, and answers one row per file", async () => {
+        const { session, tool, askFile, read } = askWith();
+        const progress = jest.fn();
+
+        const text = await tool.run({ question: "Whose resume is this?" }, signal, progress);
+
+        expect(read).toHaveBeenCalledTimes(37);
+        expect(read).toHaveBeenCalledWith(ctx, 100, 24_000);
+        expect(askFile).toHaveBeenCalledWith(
+            expect.objectContaining({
+                question: "Whose resume is this?",
+                title: "Resume 100.pdf",
+                text: "Person 100\nSoftware engineer",
+                partial: false,
+            })
+        );
+        const rows = text.split("\n").filter(line => line.startsWith("- "));
+        expect(rows).toHaveLength(37);
+        expect(rows[0]).toBe('- "Resume 100.pdf" (d100): It is Person 100. — “Person 100”');
+        expect(text).toContain("Asked 37 sources: 37 answered, 0 had no answer.");
+        expect(text).toContain("That covers all 37 in the set.");
+        expect(progress).toHaveBeenLastCalledWith("Reading 37 sources… 37 done");
+        expect(session.usage()).toEqual({
+            inputTokens: 3_700,
+            outputTokens: 185,
+            totalTokens: 3_885,
+        });
+        // Each answer's quote is kept for the source list.
+        expect(session.passages).toHaveLength(37);
+        expect(session.passages[0]).toEqual({
+            pageContent: "Person 100",
+            metadata: {
+                documentId: 100,
+                documentTitle: "Resume 100.pdf",
+                source: "ask_each",
+                searchScope: "multi-document",
+            },
+        });
+        expect(session.texts).toEqual([text]);
+    });
+
+    it("words its status line in the interface language", async () => {
+        const askFile = jest.fn(async () => ({ answer: "", quote: "", usage: {} }));
+        const read = jest.fn(async (_ctx: unknown, id: number) => resume(id));
+        const tool = createSourceTools(ctx, { read, askFile: () => askFile }, "zh-CN", {
+            attached: ATTACHED.slice(0, 2),
+        }).tools.find(t => t.name === "ask_each")!;
+        const progress = jest.fn();
+
+        expect(tool.describe({ question: "Who?" })).toBe("正在阅读 2 个来源");
+        await tool.run({ question: "Who?" }, signal, progress);
+        expect(progress).toHaveBeenLastCalledWith("正在阅读 2 个来源…已完成 2 个");
+        expect(
+            createSourceTools(ctx, {}, "en", { attached: ATTACHED }).tools.at(-1)!.describe({})
+        ).toBe("Reading 37 sources");
+    });
+
+    it("reads at most eight sources at once", async () => {
+        let open = 0;
+        let most = 0;
+        const read = jest.fn(async (_ctx: unknown, id: number) => {
+            open += 1;
+            most = Math.max(most, open);
+            await new Promise(resolve => setTimeout(resolve, 1));
+            open -= 1;
+            return resume(id);
+        });
+        const { tool } = askWith({ read });
+
+        await tool.run({ question: "Whose resume is this?" }, signal);
+
+        expect(most).toBe(8);
+    });
+
+    it("says which sources had no answer, were not readable, or failed, and never drops one", async () => {
+        const read = jest.fn(async (_ctx: unknown, id: number) =>
+            id === 101 ? null : id === 102 ? resume(id, { indexed: false, text: "" }) : resume(id)
+        );
+        const askFile = jest.fn(async ({ title }: { title: string }) => {
+            if (title === "Resume 103.pdf") throw new Error("model down");
+            if (title === "Resume 104.pdf") return { answer: "", quote: "", usage: {} };
+            return { answer: "Someone.", quote: "", usage: {} };
+        });
+        jest.spyOn(console, "warn").mockImplementation(() => undefined);
+        const { tool, session } = askWith({ read, askFile: () => askFile }, ATTACHED.slice(0, 5));
+
+        const text = await tool.run({ question: "Whose resume is this?" }, signal);
+
+        expect(text).toContain('- "Resume 100.pdf" (d100): Someone.');
+        expect(text).toContain(
+            '- "Resume 101.pdf" (d101): (not among the sources the person can open)'
+        );
+        expect(text).toContain('- "Resume 102.pdf" (d102): (its text is not available yet)');
+        expect(text).toContain('- "Resume 103.pdf" (d103): (couldn\'t be read this time)');
+        expect(text).toContain('- "Resume 104.pdf" (d104): (no answer in this source)');
+        expect(text).toContain("Asked 5 sources: 1 answered, 1 had no answer, 3 couldn't be read.");
+        // An answer without a quote is cited by the source's opening.
+        expect(session.passages).toEqual([
+            expect.objectContaining({ pageContent: "Person 100 Software engineer" }),
+        ]);
+    });
+
+    it("asks only the sources named by id, and refuses what is not an id", async () => {
+        const { tool, read } = askWith();
+
+        await tool.run({ question: "Who?", ids: ["d105", "D106", 107, "d105"] }, signal);
+        expect(read.mock.calls.map(call => call[1])).toEqual([105, 106, 107]);
+
+        await expect(tool.run({ question: "Who?", ids: ["d1", "Rafael"] }, signal)).rejects.toThrow(
+            "Not source ids: Rafael. Use ids like d12."
+        );
+    });
+
+    it("with nothing attached, asks every source the person can open, page by page", async () => {
+        const list = jest
+            .fn()
+            .mockResolvedValueOnce({
+                folders: [],
+                documents: [source(9, "A.pdf"), source(8, "B.pdf")],
+                nextCursor: encodeListCursor({ at: "2026-10-17 23:48:30.123456+00", id: 8 }),
+            })
+            .mockResolvedValueOnce({ folders: [], documents: [source(7, "C.pdf")] });
+        const { tool, read } = askWith({ list }, []);
+
+        const text = await tool.run({ question: "Who?", from: "google-drive" }, signal);
+
+        expect(list).toHaveBeenCalledTimes(2);
+        expect(list).toHaveBeenNthCalledWith(1, ctx, {
+            folder: undefined,
+            from: "google-drive",
+            limit: 100,
+            cursor: null,
+        });
+        expect(read.mock.calls.map(call => call[1])).toEqual([9, 8, 7]);
+        expect(text).toContain("That covers all 3 in the set.");
+    });
+
+    it("never passes a page it could not follow for the whole set", async () => {
+        const list = jest.fn(async () => ({
+            folders: [],
+            documents: [source(9, "A.pdf")],
+            nextCursor: "not-a-cursor",
+        }));
+        const { tool, read } = askWith({ list }, []);
+
+        await expect(tool.run({ question: "Who?" }, signal)).rejects.toThrow(
+            "Could not page through the sources."
+        );
+        expect(read).not.toHaveBeenCalled();
+    });
+
+    it("refuses a set too large to ask in one answer", async () => {
+        let page = 0;
+        const list = jest.fn(async () => ({
+            folders: [],
+            documents: Array.from({ length: 100 }, (_, i) => source(page * 100 + i + 1, "x")),
+            nextCursor: encodeListCursor({ at: "2026-10-17 23:48:30.123456+00", id: ++page }),
+        }));
+        const { tool, read } = askWith({ list }, []);
+
+        await expect(tool.run({ question: "Who?" }, signal)).rejects.toThrow(
+            "More than 300 sources match. Narrow it with folder or from, or name the ids to ask."
+        );
+        expect(read).not.toHaveBeenCalled();
+    });
+
+    it("asks 100 sources per call and says where to continue", async () => {
+        const many = Array.from({ length: 150 }, (_, i) => ({ id: i + 1, title: `R${i + 1}` }));
+        const { tool, read } = askWith({}, many);
+
+        const first = await tool.run({ question: "Who?" }, signal);
+        expect(read).toHaveBeenCalledTimes(100);
+        expect(first).toContain(
+            "Covered 1–100 of 150. Call ask_each again with the same question and offset=100."
+        );
+
+        const second = await tool.run({ question: "Who?", offset: 100 }, signal);
+        expect(read).toHaveBeenCalledTimes(150);
+        expect(second).toContain("That covers all 150 in the set.");
+    });
+});
+
 describe("what the model is told", () => {
     const DRIVE: SourcesOverview = {
         inventory: { total: 37, byOrigin: [{ from: "google-drive", count: 37 }] },
@@ -394,6 +615,10 @@ describe("what the model is told", () => {
         expect(sourceToolsPrompt(DRIVE, true)).toContain(
             "The person attached sources to this message"
         );
+        // Search is a sample; a question about every source goes to ask_each.
+        expect(prompt).toContain("`ask_each` (one question asked of every source in a set");
+        expect(prompt).toContain("Search returns only the best matches, never everything");
+        expect(prompt).toContain('like "Rafael Chen [d12]"');
     });
 
     it("uses standing identity directly and retrieves evidence for company details", () => {

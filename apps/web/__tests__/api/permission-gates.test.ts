@@ -277,6 +277,8 @@ import {
     PATCH as editAgent,
 } from "~/app/api/collab/agents/[personaId]/route";
 import { POST as resetAgent } from "~/app/api/collab/agents/[personaId]/reset/route";
+import { GET as memberAllowances } from "~/app/api/settings/usage/members/route";
+import { PUT as setMemberLimit } from "~/app/api/settings/usage/members/[userId]/route";
 
 // ---------------------------------------------------------------------------
 // Table
@@ -325,6 +327,16 @@ const GATES: readonly Gate[] = [
             renameCategory(json("/api/Categories/1", "PATCH", { name: "Y" }), params({ id: "1" })),
     },
     // settings.manage
+    {
+        route: "PUT /api/settings/usage/members/[userId] (one person's AI limit)",
+        permission: "settings.manage",
+        deniedRole: "member",
+        call: () =>
+            setMemberLimit(
+                json("/api/settings/usage/members/u-1", "PUT", { mode: "none" }),
+                params({ userId: "u-1" })
+            ),
+    },
     {
         route: "POST /api/updateUploadPreference",
         permission: "settings.manage",
@@ -642,6 +654,12 @@ const GATES: readonly Gate[] = [
         call: () => syncAgentSessions(json("/api/connectors/agent-sessions", "POST", {})),
     },
     // analytics.view
+    {
+        route: "GET /api/settings/usage/members (who used how much AI)",
+        permission: "analytics.view",
+        deniedRole: "member",
+        call: () => memberAllowances(new Request("http://localhost/api/settings/usage/members")),
+    },
     {
         route: "GET /api/company/analysis-dashboard",
         permission: "analytics.view",

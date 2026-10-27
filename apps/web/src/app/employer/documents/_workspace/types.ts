@@ -263,6 +263,12 @@ export interface ThreadMessage {
     id?: string;
     createdAt?: string;
     status?: "streaming" | "complete" | "stopped" | "error";
+    /**
+     * Why a failed answer was refused, when the server said: at an AI limit
+     * (`ai_allowance_reached`) a retry cannot succeed, so none is offered.
+     * Kept in memory only; the session store does not carry it.
+     */
+    failureCode?: "ai_allowance_reached";
     stage?: string;
     reasoning?: string;
     elapsedMs?: number;

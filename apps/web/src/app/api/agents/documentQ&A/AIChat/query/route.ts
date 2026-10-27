@@ -112,6 +112,7 @@ import {
     resolveChatAgent,
     type ChatAgentResolution,
 } from "~/server/collab/chat-agent";
+import { refuseAtAiAllowance } from "~/server/ai-usage/refusal";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 import { copy, type Copy } from "~/i18n/copy";
 import type { Locale } from "~/i18n/locales";
@@ -608,10 +609,13 @@ export async function POST(request: Request) {
                 return forbiddenForPermission("documents.read", locale);
             }
 
+            const aiUse = { feature: "ask", userId: ctx.data.authUserId } as const;
+            const refused = await refuseAtAiAllowance(ctx.data.companyId, aiUse.userId, locale);
+            if (refused) return refused;
             // Everything the answer runs (route resolution, web search, the model
             // call, a streamed body) resolves against the workspace's own models
             // when it brought them.
-            return await withWorkspaceChatModels(ctx.data.companyId, "ask", () => answer(ctx));
+            return await withWorkspaceChatModels(ctx.data.companyId, aiUse, () => answer(ctx));
         } catch (error) {
             if (request.signal.aborted) {
                 recordResult("error");

@@ -4,6 +4,7 @@ import {
 } from "@launchstack/pipelines/marketing";
 import type { PipelineSSEEvent } from "@launchstack/pipelines/marketing";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { refuseAtAiAllowance } from "~/server/ai-usage/refusal";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 import { localeOfRequest } from "~/i18n/server";
 import { translatorFor } from "~/i18n/translate";
@@ -32,7 +33,10 @@ export async function POST(request: Request) {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
-        return await withWorkspaceChatModels(ctx.data.companyId, "marketing", async () => {
+        const aiUse = { feature: "marketing", userId: ctx.data.authUserId } as const;
+        const refused = await refuseAtAiAllowance(ctx.data.companyId, aiUse.userId, locale);
+        if (refused) return refused;
+        return await withWorkspaceChatModels(ctx.data.companyId, aiUse, async () => {
             const validation = MarketingPipelineInputSchema.safeParse(await readJson(request));
             if (!validation.success) {
                 return fail(translatorFor(locale, "errors.api")("invalidInput"), 400, {

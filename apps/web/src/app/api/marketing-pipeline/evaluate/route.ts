@@ -5,8 +5,9 @@ import { REFERENCE_POSTS } from "@launchstack/tools/platform-profiles";
 import { buildCompanyKnowledgeContext } from "@launchstack/pipelines/marketing";
 import { scorePost, type ReferencePlatform } from "@launchstack/pipelines/marketing/benchmark";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { refuseAtAiAllowance } from "~/server/ai-usage/refusal";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
-import { requestTranslator } from "~/i18n/server";
+import { localeOfRequest, requestTranslator } from "~/i18n/server";
 import { fail, handleRouteError, ok, readJson } from "~/server/api/responses";
 
 export const runtime = "nodejs";
@@ -55,7 +56,14 @@ export async function POST(request: Request) {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
-        return await withWorkspaceChatModels(ctx.data.companyId, "marketing", async () => {
+        const aiUse = { feature: "marketing", userId: ctx.data.authUserId } as const;
+        const refused = await refuseAtAiAllowance(
+            ctx.data.companyId,
+            aiUse.userId,
+            localeOfRequest(request)
+        );
+        if (refused) return refused;
+        return await withWorkspaceChatModels(ctx.data.companyId, aiUse, async () => {
             const parsed = EvaluateBodySchema.safeParse(await readJson(request));
             if (!parsed.success) {
                 return fail(requestTranslator(request, "errors.api")("invalidInput"), 400, {

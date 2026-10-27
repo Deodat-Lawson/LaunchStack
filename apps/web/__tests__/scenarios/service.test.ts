@@ -16,6 +16,10 @@ import { SCENARIO_LIMITS } from "~/lib/scenarios/types";
 import { makeWorkspaceContext } from "../helpers/workspace-context";
 
 const mockRequireWorkspaceContext = jest.fn<Promise<WorkspaceContextResult>, []>();
+// The AI-allowance gate reads the meter; these tests don't model limits.
+jest.mock("~/server/ai-usage/refusal", () => ({
+    assertWithinAiAllowance: jest.fn(async () => undefined),
+}));
 jest.mock("~/lib/require-workspace-context", () =>
     jest
         .requireActual<
@@ -454,7 +458,11 @@ describe("interviews", () => {
         const { withWorkspaceChatModels } = jest.requireMock<{
             withWorkspaceChatModels: jest.Mock;
         }>("~/server/workspace-models/scope");
-        expect(withWorkspaceChatModels).toHaveBeenCalledWith(5n, "scenarios", expect.any(Function));
+        expect(withWorkspaceChatModels).toHaveBeenCalledWith(
+            5n,
+            { feature: "scenarios", userId: "creator" },
+            expect.any(Function)
+        );
     });
 });
 

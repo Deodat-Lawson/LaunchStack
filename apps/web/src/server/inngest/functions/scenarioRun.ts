@@ -46,12 +46,18 @@ export const scenarioRunJob = inngest.createFunction(
     { event: "scenarios/run.requested" },
     async ({ event, step }) => {
         const runId = Number(event.data.runId);
+        // Units count against whoever started the run; a run under way is never stopped.
+        const aiUse = {
+            feature: "scenarios",
+            userId: event.data.userId ?? null,
+            enforce: false,
+        } as const;
         let last = "skipped";
         for (let i = 0; i < MAX_UNITS; i++) {
             // A step body doesn't inherit the handler's async context: enter the
             // workspace's model scope inside the step.
             const outcome = await step.run(`unit-${i}`, () =>
-                withWorkspaceChatModels(BigInt(event.data.companyId), "scenarios", () =>
+                withWorkspaceChatModels(BigInt(event.data.companyId), aiUse, () =>
                     advanceRun(createScenarioPorts(), runId)
                 )
             );

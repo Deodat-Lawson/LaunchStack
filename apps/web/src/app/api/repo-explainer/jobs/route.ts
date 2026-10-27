@@ -26,6 +26,7 @@ import {
 } from "~/lib/api-utils";
 import { localeOfRequest } from "~/i18n/server";
 import { translatorFor } from "~/i18n/translate";
+import { refuseAtAiAllowance } from "~/server/ai-usage/refusal";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
@@ -41,6 +42,12 @@ export async function POST(request: Request) {
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
+        const refused = await refuseAtAiAllowance(
+            ctx.data.companyId,
+            ctx.data.authUserId,
+            localeOfRequest(request)
+        );
+        if (refused) return refused;
         if (!ctx.data.can("settings.manage")) {
             return createForbiddenError(t("managersOnlyRun"));
         }
@@ -68,7 +75,12 @@ export async function POST(request: Request) {
         });
         await inngest.send({
             name: "repo-explainer/job.requested",
-            data: { jobId: job.id, workspaceId, companyId: companyId.toString() },
+            data: {
+                jobId: job.id,
+                workspaceId,
+                companyId: companyId.toString(),
+                userId: ctx.data.authUserId,
+            },
         });
 
         return createSuccessResponse({ job: serializeExplainerJob(job) }, undefined, 202);

@@ -10,6 +10,7 @@ import { forbiddenForPermission, requireWorkspaceContext } from "~/lib/require-w
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import { localeOfRequest } from "~/i18n/server";
 import { translatorFor } from "~/i18n/translate";
+import { refuseAtAiAllowance } from "~/server/ai-usage/refusal";
 
 export const runtime = "nodejs";
 export const maxDuration = 300;
@@ -28,6 +29,8 @@ export async function POST(request: Request) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
     const locale = localeOfRequest(request);
+    const refused = await refuseAtAiAllowance(ctx.data.companyId, ctx.data.authUserId, locale);
+    if (refused) return refused;
     const t = translatorFor(locale, "agents.server.analysis");
     if (!ctx.data.can("documents.read")) return forbiddenForPermission("documents.read", locale);
 
@@ -154,6 +157,7 @@ export async function POST(request: Request) {
             includeRelatedDocs: typedIncludeRelatedDocs,
             timeoutMs,
             jobId,
+            userId: ctx.data.authUserId,
         },
     });
 

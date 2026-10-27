@@ -81,6 +81,8 @@ import { ProposedPlan } from "./ProposedPlan";
 import { messageAnchor, useChatTimeline } from "./useChatTimeline";
 import { WebSources } from "./WebSources";
 import { CreatedSources } from "./CreatedSources";
+import { ChatAllowanceNotice } from "./ChatAllowanceNotice";
+import { useAiAllowance } from "./settings/aiAllowance";
 
 /** Chat transcript column and composer share this width. */
 const CHAT_COLUMN_MAX_PX = 760;
@@ -468,10 +470,14 @@ const Message = React.memo(function Message({
     const t = useTranslations("chat.message");
     const tc = useTranslations("common");
     const tMenu = useTranslations("chat.contextMenu");
+    const tAllowance = useTranslations("chat.aiAllowance");
     const format = useFormatter();
     const copyWithToast = useCopyWithToast();
     const isUser = msg.role === "user";
     const live = !isUser && msg.status === "streaming";
+    // Refused at an AI limit: asking again cannot succeed until it is raised or resets.
+    const atAllowance = msg.failureCode === "ai_allowance_reached";
+    const onRetry = atAllowance ? undefined : onRetryMessage;
     // Source labels the model is still writing ([d12…) stay hidden until complete.
     const reveal = useSmoothText(
         isUser ? "" : live ? stripStreamingSourceLabels(msg.text) : msg.text,
@@ -544,14 +550,14 @@ const Message = React.memo(function Message({
                     <Pencil size={14} />
                 </button>
             )}
-            {!isUser && onRetryMessage && (
+            {!isUser && onRetry && (
                 <button
                     type="button"
                     title={t("retry")}
                     aria-label={t("retry")}
                     disabled={active}
                     className="rounded p-1.5 hover:bg-[var(--line-2)] focus-visible:outline disabled:opacity-50"
-                    onClick={() => onRetryMessage(index)}
+                    onClick={() => onRetry(index)}
                 >
                     <RotateCcw size={14} />
                 </button>
@@ -849,15 +855,16 @@ const Message = React.memo(function Message({
             {msg.status === "error" && !dismissedError && (
                 <div
                     role="alert"
-                    className="mb-3 flex flex-wrap items-center gap-2 rounded-lg border border-[var(--danger)] bg-[var(--danger-soft)] p-3 text-xs text-[var(--danger)]"
+                    data-failure={msg.failureCode}
+                    className="border-danger bg-danger-soft text-danger-ink mb-3 flex flex-wrap items-center gap-2 rounded-lg border p-3 text-xs"
                 >
-                    <span>{t("answerFailed")}</span>
-                    {onRetryMessage && (
+                    <span>{atAllowance ? tAllowance("answerBlocked") : t("answerFailed")}</span>
+                    {onRetry && (
                         <button
                             type="button"
                             disabled={active}
                             className="font-semibold underline"
-                            onClick={() => onRetryMessage(index)}
+                            onClick={() => onRetry(index)}
                         >
                             {tc("actions.retry")}
                         </button>
@@ -1496,6 +1503,25 @@ export function AskPanel({
     const latestRole = thread.at(-1)?.role;
     const showTyping = isSending && latestRole === "user";
 
+    // Your AI allowance: read on mount and again after each answer, so the
+    // notice above the composer keeps up, and sending stops at the limit.
+    const { allowance, refresh: refreshAllowance } = useAiAllowance();
+    const wasSending = useRef(isSending);
+    useEffect(() => {
+        if (wasSending.current && !isSending) void refreshAllowance();
+        wasSending.current = isSending;
+    }, [isSending, refreshAllowance]);
+    const allowanceBlocked = allowance?.blocked === true;
+    // An admin may raise the limit meanwhile: look again on coming back to the tab.
+    useEffect(() => {
+        if (!allowanceBlocked) return;
+        const onFocus = () => void refreshAllowance();
+        window.addEventListener("focus", onFocus);
+        return () => window.removeEventListener("focus", onFocus);
+    }, [allowanceBlocked, refreshAllowance]);
+    // At the limit no answer can run, so nothing offers to ask again.
+    const canRetry = allowanceBlocked ? undefined : onRetryMessage;
+
     const titleText = title?.trim() ? title : isEmpty ? t("newConversation") : t("defaultTitle");
     const subText = isEmpty
         ? t("emptySubtitle")
@@ -1666,38 +1692,40 @@ export function AskPanel({
                 </button>
             </div>
 
-            {showError && (
-                <div
-                    role="alert"
-                    className="border-line bg-panel text-ink-2 flex flex-wrap items-center gap-2 border-b px-4 py-2 text-xs"
-                >
-                    <span className="min-w-0 flex-1">{latestError!.text}</span>
-                    {onRetryMessage && (
+            {/* At the limit the notice above the composer already says it. */}
+            {showError &&
+                !(allowanceBlocked && latestError!.failureCode === "ai_allowance_reached") && (
+                    <div
+                        role="alert"
+                        className="border-line bg-panel text-ink-2 flex flex-wrap items-center gap-2 border-b px-4 py-2 text-xs"
+                    >
+                        <span className="min-w-0 flex-1">{latestError!.text}</span>
+                        {canRetry && latestError!.failureCode !== "ai_allowance_reached" && (
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                disabled={isSending}
+                                onClick={() => canRetry(thread.indexOf(latestError!))}
+                            >
+                                {tc("actions.retry")}
+                            </Button>
+                        )}
                         <Button
                             variant="ghost"
-                            size="sm"
-                            disabled={isSending}
-                            onClick={() => onRetryMessage(thread.indexOf(latestError!))}
+                            size="icon"
+                            className="size-7"
+                            aria-label={t("dismissError")}
+                            onClick={() =>
+                                setDismissedErrors(previous => ({
+                                    ...previous,
+                                    [draftKey]: errorIdentity,
+                                }))
+                            }
                         >
-                            {tc("actions.retry")}
+                            <IconX size={14} />
                         </Button>
-                    )}
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        className="size-7"
-                        aria-label={t("dismissError")}
-                        onClick={() =>
-                            setDismissedErrors(previous => ({
-                                ...previous,
-                                [draftKey]: errorIdentity,
-                            }))
-                        }
-                    >
-                        <IconX size={14} />
-                    </Button>
-                </div>
-            )}
+                    </div>
+                )}
             <div
                 ref={scrollRef}
                 aria-label={t("messagesLabel")}
@@ -1772,7 +1800,7 @@ export function AskPanel({
                                         onEdit={edit}
                                         onCite={cite}
                                         onEditMessage={onEditMessage ? editMessage : undefined}
-                                        onRetryMessage={onRetryMessage ? retryMessage : undefined}
+                                        onRetryMessage={canRetry ? retryMessage : undefined}
                                         onForkMessage={onForkMessage ? forkMessage : undefined}
                                         onSaveMessage={onSaveMessage ? saveMessage : undefined}
                                         onImplementPlan={
@@ -1892,6 +1920,12 @@ export function AskPanel({
                     <ReadOnlyBar onContinue={readOnly.onContinue} />
                 ) : (
                     <>
+                        <ChatAllowanceNotice
+                            allowance={allowance}
+                            onOpenDetails={() => onStudioNavigate("/employer/settings#account")}
+                            className="mx-auto mb-2"
+                            style={{ maxWidth: CHAT_COLUMN_MAX_PX }}
+                        />
                         {queueContent && (
                             <div className="mx-auto mb-2" style={{ maxWidth: CHAT_COLUMN_MAX_PX }}>
                                 {queueContent}
@@ -1902,7 +1936,7 @@ export function AskPanel({
                             selected={selected}
                             setSelected={setSelected}
                             onSend={handleSend}
-                            disabled={disabled}
+                            disabled={disabled || allowanceBlocked}
                             draftKey={suppliedDraftKey}
                             promptHistory={promptHistory}
                             active={isSending}

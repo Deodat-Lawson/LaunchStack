@@ -30,6 +30,12 @@ import { readChatStream, type ChatStep } from "~/lib/chat-stream";
 
 import { makeWorkspaceContext } from "../../../../helpers/workspace-context";
 
+// The AI-allowance gate reads the meter; these tests don't model limits.
+jest.mock("~/server/ai-usage/refusal", () => ({
+    refuseAtAiAllowance: jest.fn(async () => null),
+    assertWithinAiAllowance: jest.fn(async () => undefined),
+}));
+
 jest.mock("~/lib/require-workspace-context", () => {
     const actual = jest.requireActual("~/lib/require-workspace-context");
     return { ...actual, requireWorkspaceContext: jest.fn() };

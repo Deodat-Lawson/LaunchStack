@@ -321,6 +321,24 @@ export const SETTINGS: readonly SettingDefinition[] = [
         control: { kind: "number", min: 0, step: 10_000, unit: "tokens" },
     },
     {
+        // Read by ~/server/ai-usage/quota. Drawn by hand in the Usage
+        // section's per-person block, next to the overrides it is the default for.
+        key: "usage.memberMonthlyTokenLimit",
+        section: "usage",
+        label: "AI limit per person",
+        description:
+            "The AI tokens (in and out) each person may use in this workspace a month, unless you set their own limit below. Resets on the 1st (UTC). 0 means no limit.",
+        consequence:
+            "Applies at once. Someone already past the new limit can't start AI work until it resets.",
+        aliases: ["quota", "limit", "allowance", "per user", "per member", "cap", "budget"],
+        scopes: ["workspace"],
+        permission: "settings.manage",
+        schema: z.number().int().min(0).max(1_000_000_000_000),
+        default: 0,
+        control: { kind: "number", min: 0, step: 100_000, unit: "tokens a month" },
+        custom: true,
+    },
+    {
         key: "retention.trashDays",
         section: "archive",
         label: "Empty the trash after",

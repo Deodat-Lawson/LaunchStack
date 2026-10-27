@@ -343,6 +343,14 @@ export const ocrJobs = pgTable(
 // OCR Processing Steps
 // ============================================================================
 
+/**
+ * The ingestion stages the worker records as it runs a job, in order — what
+ * the Processing queue tab draws. One row per (job, stage), id
+ * `<jobId>:<stage>`; a retried stage overwrites its row.
+ */
+export const ocrProcessingStepTypes = ["route", "read", "chunk", "embed", "finalize"] as const;
+export type OcrProcessingStepType = (typeof ocrProcessingStepTypes)[number];
+
 export const ocrProcessingSteps = pgTable(
     "ocr_processing_steps",
     {
@@ -353,14 +361,7 @@ export const ocrProcessingSteps = pgTable(
         stepNumber: integer("step_number").notNull(),
         stepType: varchar("step_type", {
             length: 50,
-            enum: [
-                "pre_assessment",
-                "ocr_execution",
-                "validation",
-                "embedding",
-                "storage",
-                "webhook",
-            ],
+            enum: ocrProcessingStepTypes,
         }).notNull(),
         status: varchar("status", {
             length: 20,

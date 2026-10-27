@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useAuth, useUser } from "~/lib/auth-client";
 import { SignUpForm } from "~/app/_components/CredentialsForm";
-import { AlertCircle, ArrowRight, ChevronDown, Rocket, Ticket, Users } from "lucide-react";
+import { AlertCircle, ArrowRight, Rocket, Ticket, Users } from "lucide-react";
 import { AuthBrandPanel } from "~/app/_components/AuthBrandPanel";
 import { AuthChrome } from "~/app/_components/AuthChrome";
 import { AuthLegalLinks } from "~/app/_components/AuthLegalLinks";
@@ -26,8 +26,11 @@ import { inviteDestination } from "~/lib/invite-link";
  *      the user's name. No form to fill out.
  *   2. I have an invite — paste the link (or its code) and go to the join
  *      page, which handles joining for everyone, signed in or not.
- *   3. Advanced / team setup — expanded form with company name, staff count,
- *      and optional BYOK embedding keys for self-host users.
+ *   3. Team setup — a form with the workspace's name and staff count.
+ *
+ * New workspaces index on the deployment's default embedding index. The
+ * picker and the embedding keys that were under "Advanced" are gone from
+ * every screen for now; the API still accepts them.
  *
  * The team-oriented copy ("Create Your Company", "Approximate Number of
  * Staff", "Enterprise Security") from the old design is gone. This product is
@@ -37,11 +40,6 @@ import { inviteDestination } from "~/lib/invite-link";
 // ────────────────────────── Types ──────────────────────────
 
 type Mode = "solo" | "invite" | "team";
-
-interface EmbeddingIndexOption {
-    indexKey: string;
-    label: string;
-}
 
 // ────────────────────────── Page ──────────────────────────
 
@@ -58,8 +56,6 @@ const SignupPage: React.FC = () => {
     const next = safeNextPath(searchParams.get("next"), "");
 
     const [mode, setMode] = useState<Mode>("solo");
-    const [embeddingIndexOptions, setEmbeddingIndexOptions] = useState<EmbeddingIndexOption[]>([]);
-    const [defaultIndexKey, setDefaultIndexKey] = useState("");
 
     // ── Solo flow ──
     const [isCreatingSolo, setIsCreatingSolo] = useState(false);
@@ -78,37 +74,6 @@ const SignupPage: React.FC = () => {
     const [teamSize, setTeamSize] = useState("");
     const [teamError, setTeamError] = useState<string | null>(null);
     const [isCreatingTeam, setIsCreatingTeam] = useState(false);
-    const [showAdvanced, setShowAdvanced] = useState(false);
-    const [openaiKey, setOpenaiKey] = useState("");
-    const [openaiBaseUrl, setOpenaiBaseUrl] = useState("");
-    const [hfKey, setHfKey] = useState("");
-    const [ollamaUrl, setOllamaUrl] = useState("");
-    const [ollamaModel, setOllamaModel] = useState("");
-
-    // Load embedding indexes (used by solo + team flow as a default)
-    useEffect(() => {
-        if (!userId) return;
-        let cancelled = false;
-        void (async () => {
-            try {
-                const res = await fetch("/api/embedding-indexes");
-                if (!res.ok) return;
-                const json = (await res.json()) as {
-                    indexes: EmbeddingIndexOption[];
-                };
-                if (cancelled) return;
-                setEmbeddingIndexOptions(json.indexes ?? []);
-                if (json.indexes?.[0]) {
-                    setDefaultIndexKey(json.indexes[0].indexKey);
-                }
-            } catch (err) {
-                console.error("Failed to load embedding indexes:", err);
-            }
-        })();
-        return () => {
-            cancelled = true;
-        };
-    }, [userId]);
 
     // ── Suggest a workspace name that is actually available ──
     useEffect(() => {
@@ -165,7 +130,6 @@ const SignupPage: React.FC = () => {
                     email: user.email,
                     companyName: workspaceName,
                     numberOfEmployees: "1",
-                    embeddingIndexKey: defaultIndexKey,
                 }),
             });
             if (!response.ok) {
@@ -205,12 +169,6 @@ const SignupPage: React.FC = () => {
                     email: user.email,
                     companyName: teamName.trim(),
                     numberOfEmployees: teamSize || "2",
-                    embeddingIndexKey: defaultIndexKey,
-                    embeddingOpenAIApiKey: openaiKey || null,
-                    embeddingOpenAIBaseUrl: openaiBaseUrl || null,
-                    embeddingHuggingFaceApiKey: hfKey || null,
-                    embeddingOllamaBaseUrl: ollamaUrl || null,
-                    embeddingOllamaModel: ollamaModel || null,
                 }),
             });
             if (!response.ok) {
@@ -338,20 +296,6 @@ const SignupPage: React.FC = () => {
                             onSubmit={e => void createTeam(e)}
                             isCreating={isCreatingTeam}
                             error={teamError}
-                            showAdvanced={showAdvanced}
-                            setShowAdvanced={setShowAdvanced}
-                            openaiKey={openaiKey}
-                            setOpenaiKey={setOpenaiKey}
-                            openaiBaseUrl={openaiBaseUrl}
-                            setOpenaiBaseUrl={setOpenaiBaseUrl}
-                            hfKey={hfKey}
-                            setHfKey={setHfKey}
-                            ollamaUrl={ollamaUrl}
-                            setOllamaUrl={setOllamaUrl}
-                            ollamaModel={ollamaModel}
-                            setOllamaModel={setOllamaModel}
-                            defaultIndexKey={defaultIndexKey}
-                            indexOptions={embeddingIndexOptions}
                         />
                     )}
                 </div>
@@ -722,20 +666,6 @@ function TeamCard({
     onSubmit,
     isCreating,
     error,
-    showAdvanced,
-    setShowAdvanced,
-    openaiKey,
-    setOpenaiKey,
-    openaiBaseUrl,
-    setOpenaiBaseUrl,
-    hfKey,
-    setHfKey,
-    ollamaUrl,
-    setOllamaUrl,
-    ollamaModel,
-    setOllamaModel,
-    defaultIndexKey,
-    indexOptions,
 }: {
     name: string;
     setName: (v: string) => void;
@@ -744,25 +674,8 @@ function TeamCard({
     onSubmit: (e: React.FormEvent) => void;
     isCreating: boolean;
     error: string | null;
-    showAdvanced: boolean;
-    setShowAdvanced: (v: boolean) => void;
-    openaiKey: string;
-    setOpenaiKey: (v: string) => void;
-    openaiBaseUrl: string;
-    setOpenaiBaseUrl: (v: string) => void;
-    hfKey: string;
-    setHfKey: (v: string) => void;
-    ollamaUrl: string;
-    setOllamaUrl: (v: string) => void;
-    ollamaModel: string;
-    setOllamaModel: (v: string) => void;
-    defaultIndexKey: string;
-    indexOptions: EmbeddingIndexOption[];
 }) {
     const t = useTranslations("auth.signUp.team");
-    const selectedLabel =
-        indexOptions.find(i => i.indexKey === defaultIndexKey)?.label ??
-        (indexOptions.length === 0 ? t("indexLoading") : defaultIndexKey);
 
     return (
         <form onSubmit={onSubmit} style={cardStyle}>
@@ -818,115 +731,6 @@ function TeamCard({
                 placeholder="2"
                 style={{ ...inputStyle, marginBottom: 14 }}
             />
-
-            <button
-                type="button"
-                onClick={() => setShowAdvanced(!showAdvanced)}
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 6,
-                    fontSize: 12,
-                    color: "var(--ink-3)",
-                    marginBottom: 12,
-                    padding: "2px 0",
-                }}
-            >
-                <ChevronDown
-                    style={{
-                        width: 12,
-                        height: 12,
-                        transform: showAdvanced ? "rotate(0deg)" : "rotate(-90deg)",
-                        transition: "transform 140ms",
-                    }}
-                />
-                {t("advanced")}
-            </button>
-
-            {showAdvanced && (
-                <div
-                    style={{
-                        padding: 14,
-                        borderRadius: 10,
-                        background: "var(--panel-2)",
-                        border: "1px solid var(--line)",
-                        marginBottom: 14,
-                    }}
-                >
-                    <div
-                        style={{
-                            fontSize: 11.5,
-                            color: "var(--ink-3)",
-                            lineHeight: 1.55,
-                            marginBottom: 12,
-                        }}
-                    >
-                        {t.rich("advancedIntro", {
-                            index: selectedLabel,
-                            mono: chunks => (
-                                <span className="mono" style={{ color: "var(--ink-2)" }}>
-                                    {chunks}
-                                </span>
-                            ),
-                        })}
-                    </div>
-                    <Label>{t("openaiKey")}</Label>
-                    <input
-                        type="password"
-                        value={openaiKey}
-                        onChange={e => setOpenaiKey(e.target.value)}
-                        placeholder="<your-api-key>"
-                        autoComplete="off"
-                        style={{ ...inputStyle, marginBottom: 10 }}
-                    />
-                    <Label>{t("embeddingsUrl")}</Label>
-                    <input
-                        type="url"
-                        value={openaiBaseUrl}
-                        onChange={e => setOpenaiBaseUrl(e.target.value)}
-                        placeholder="https://api.openai.com/v1"
-                        autoComplete="off"
-                        style={{ ...inputStyle, marginBottom: 10 }}
-                    />
-                    <Label>{t("hfToken")}</Label>
-                    <input
-                        type="password"
-                        value={hfKey}
-                        onChange={e => setHfKey(e.target.value)}
-                        placeholder="hf_…"
-                        autoComplete="off"
-                        style={{ ...inputStyle, marginBottom: 10 }}
-                    />
-                    <div
-                        style={{
-                            display: "grid",
-                            gridTemplateColumns: "1fr 1fr",
-                            gap: 10,
-                        }}
-                    >
-                        <div>
-                            <Label>{t("ollamaUrl")}</Label>
-                            <input
-                                value={ollamaUrl}
-                                onChange={e => setOllamaUrl(e.target.value)}
-                                placeholder="http://localhost:11434"
-                                autoComplete="off"
-                                style={inputStyle}
-                            />
-                        </div>
-                        <div>
-                            <Label>{t("ollamaModel")}</Label>
-                            <input
-                                value={ollamaModel}
-                                onChange={e => setOllamaModel(e.target.value)}
-                                placeholder="nomic-embed-text"
-                                autoComplete="off"
-                                style={inputStyle}
-                            />
-                        </div>
-                    </div>
-                </div>
-            )}
 
             {error && <ErrorBanner>{error}</ErrorBanner>}
             <button type="submit" disabled={isCreating} style={primaryButtonStyle(isCreating)}>

@@ -1,15 +1,16 @@
 "use client";
 
 /**
- * Settings › Models.
+ * Workspace › Models.
  *
  * Body only: the server default — what the server resolved from its chat
  * configuration file, a table of routes, then a card per configured model
  * saying what it can do. It never names the vendor, the endpoint, or the model
  * id — the server doesn't send them (see `~/server/settings/models`).
  *
- * A workspace that brings its own model sets it up in Settings › Bring your own
- * keys; this section only reads whether it has, to say the default is unused.
+ * A workspace that brings its own model sets it up in Workspace › Bring your
+ * own keys; this section only reads whether it has, to say the default is
+ * unused.
  */
 
 import React, { useCallback, useEffect, useState } from "react";

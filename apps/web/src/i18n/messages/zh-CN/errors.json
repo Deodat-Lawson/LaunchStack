@@ -145,7 +145,10 @@
     "filenameRequired": "缺少文件名",
     "fileEntryRequired": "至少需要一个文件条目",
     "storageUrlRequired": "缺少 storageUrl",
-    "fileRegistrationRequired": "至少需要登记一个文件"
+    "fileRegistrationRequired": "至少需要登记一个文件",
+    "workspaceNameRequired": "请为工作区命名。",
+    "workspaceUrlTooShort": "网址至少需要两个字符。",
+    "workspaceUrlCharacters": "请使用小写字母、数字和短横线。"
   },
   "zod": {
     "required": "必填",
@@ -174,8 +177,25 @@
     "capabilityMissing": "为“{route}”路由提供服务的模型不支持：{missing}。请在对话模型配置中为该路由指定一个支持这些能力的模型。",
     "effortNotOffered": "所选模型不提供“{level}”推理强度。可用的强度：{levels}。",
     "budgetOutOfRange": "推理预算 {budget} 超出了所选模型接受的范围（{min}–{max}）。",
-    "workspaceModelUnusable": "无法使用你工作区自有的模型：{reason} 工作区管理员可以在“设置 › 自带密钥”中修复。",
-    "workspaceKeyUnreadable": "无法使用你工作区自有的模型：这台服务器读不出已保存的 API 密钥，请重新输入。工作区管理员可以在“设置 › 自带密钥”中修复。",
-    "workspaceSetupInvalid": "无法使用你工作区自有的模型：已保存的模型设置无效，请打开并重新保存。工作区管理员可以在“设置 › 自带密钥”中修复。"
+    "workspaceModelUnusable": "无法使用你工作区自有的模型：{reason} 工作区管理员可以在“工作区 › 自带密钥”中修复。",
+    "workspaceKeyUnreadable": "无法使用你工作区自有的模型：这台服务器读不出已保存的 API 密钥，请重新输入。工作区管理员可以在“工作区 › 自带密钥”中修复。",
+    "workspaceSetupInvalid": "无法使用你工作区自有的模型：已保存的模型设置无效，请打开并重新保存。工作区管理员可以在“工作区 › 自带密钥”中修复。"
+  },
+  "feedback": {
+    "disabled": "此实例未开启反馈：还没有指定处理反馈的人员。",
+    "triagersOnly": "只有负责处理反馈的人员可以执行此操作。",
+    "cannotReply": "只有提交者本人和团队可以回复。",
+    "votesIdeasOnly": "只有功能建议可以投票。",
+    "severityBugsOnly": "只有问题报告才有严重程度。",
+    "multipartRequired": "请以 multipart 表单数据的形式提交反馈。",
+    "payloadMissing": "反馈缺少 payload 字段。",
+    "payloadInvalid": "反馈的 payload 字段不是有效的 JSON。",
+    "requestTooLarge": "反馈内容过大，无法发送：最多附加 {max} 张图片，每张不超过 {mb} MB。",
+    "tooManyImages": "最多只能附加 {max} 张图片。",
+    "imageEmpty": "有一张图片是空的。",
+    "imageTooLarge": "每张图片不能超过 {mb} MB。",
+    "imageType": "请附加 PNG、JPEG、WebP 或 GIF 图片。",
+    "imageUnreadable": "有一张图片无法读取，请改用 PNG 或 JPEG。",
+    "imageProcessFailed": "有一张图片无法处理，请换一张图片。"
   }
 }

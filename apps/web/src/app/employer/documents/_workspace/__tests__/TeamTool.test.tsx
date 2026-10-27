@@ -281,7 +281,7 @@ describe("TeamTool", () => {
         expect(await screen.findByTestId("team-invite")).toHaveTextContent("Invite people");
     });
 
-    it("sends admins to Settings for roles, invitations and the audit log; members don't see it", async () => {
+    it("sends admins to Workspace › People and access for roles, invitations and the audit log; members don't see it", async () => {
         const { unmount } = setup();
         await screen.findByTestId("team-people");
         expect(screen.queryByTestId("team-manage-access")).not.toBeInTheDocument();
@@ -291,9 +291,12 @@ describe("TeamTool", () => {
         const { host } = setup();
         const link = await screen.findByTestId("team-manage-access");
         expect(link).toHaveTextContent("Manage access");
+        expect(MANAGE_ACCESS_HREF).toBe("/employer/documents?feature=workspace&at=%2Fpeople");
+        expect(link).toHaveAttribute("href", MANAGE_ACCESS_HREF);
         fireEvent.click(link);
-        expect(host.openHref).toHaveBeenCalledWith(MANAGE_ACCESS_HREF);
-        expect(MANAGE_ACCESS_HREF).toBe("/employer/settings#people");
+        // Another tool's tab, opened in place: no page leave.
+        expect(host.openTool).toHaveBeenCalledWith("workspace", "/people");
+        expect(host.openHref).not.toHaveBeenCalled();
     });
 
     it("opens a person's page with what you share, and goes back with ‹ People", async () => {

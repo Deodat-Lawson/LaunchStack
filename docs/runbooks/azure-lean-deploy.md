@@ -31,7 +31,7 @@ below use these names.
 | SSH | `ssh <ADMIN_USER>@<PUBLIC_IP>` |
 | Open ports | 22, 80, 443 (Azure NSG) — nothing else is reachable from outside |
 | Stack location | `/home/<ADMIN_USER>/LaunchStack` |
-| OCR | `<DOCINTEL_NAME>` — Azure Document Intelligence, S0 (pay per page), see [OCR](#ocr-azure-document-intelligence) |
+| OCR | `<DOCINTEL_NAME>` — Azure Document Intelligence, S0 (pay per page). It reads every PDF and image; there is no docling-serve on this VM, so the fallback is the PDF's own text layer — see [OCR](#ocr-azure-document-intelligence) |
 | Secrets | Key Vault `<VAULT_NAME>` |
 | Backups | Storage account `<BACKUP_ACCOUNT>`, container `db-backups`, 30-day retention |
 
@@ -94,10 +94,13 @@ az vm list-skus -l eastus2 --resource-type virtualMachines --query \
   "[?!restrictions[0]].name" -o tsv | sort -u
 ```
 
-Then provision OCR (S0) and the backup storage account. Use S0, not the free
-F0 tier: F0 analyzes only the **first two pages** of each document, so a
-scanned book (or, with `OCR_PDF_STRATEGY=provider-first`, any book) would be
-indexed as two pages.
+Then provision OCR (S0) and the backup storage account. Use **S0**, not the
+free F0 tier: Azure reads every PDF and image, and F0 analyzes only the
+**first two pages of each document** (and 500 pages a month) — it looks like it
+works on a short test file and silently truncates everything real. The worker
+falls back to a PDF's own text layer when that holds more, but a scanned book
+is indexed as two pages. The production resource was moved F0 → S0 on
+2026-10-17.
 
 ```bash
 az provider register --namespace Microsoft.CognitiveServices   # once per subscription
@@ -163,11 +166,16 @@ three):
 **Lean-stack specifics:**
 
 ```bash
-OCR_DEFAULT_PROVIDER=AZURE
+# OCR: with the endpoint and key set, every PDF and image is read by Azure
+# first (provider-first, the default; Docling next, then the text layer).
+# Pinning OCR_DEFAULT_PROVIDER=AZURE is optional and changes nothing here. The
+# VM runs no docling-serve, so a failed Azure read falls back to the PDF's text
+# layer — a scan keeps the error and is retried; Docling as the fallback needs
+# `--profile ocr` (see "Scaling up later").
 AZURE_DOC_INTELLIGENCE_ENDPOINT=https://<name>.cognitiveservices.azure.com/
 AZURE_DOC_INTELLIGENCE_KEY=<key>          # az cognitiveservices account keys list
 # Optional, see "OCR: Azure Document Intelligence" below:
-# OCR_PDF_STRATEGY=provider-first           # every PDF through Azure (default: text layer first)
+# OCR_PDF_STRATEGY=text-layer-first         # only scans through Azure (default: every PDF)
 # AZURE_DOC_INTELLIGENCE_MODEL=prebuilt-read  # text-only, ~1/7 the price (default: prebuilt-layout)
 
 # SSRF allowlists must include the public files origin, or the document
@@ -176,6 +184,10 @@ CONVERTER_ALLOWED_FETCH_ORIGINS=http://app:3000,http://seaweedfs:8333,https://fi
 ADEU_ALLOWED_FETCH_ORIGINS=http://app:3000,http://seaweedfs:8333,https://files.$DOMAIN
 
 DEPLOYMENT_MODE=self-hosted
+
+# Optional: in-app bug reports and feature requests. Off until someone triages.
+# FEEDBACK_ADMIN_EMAILS=you@example.com
+# FEEDBACK_WEBHOOK_URL=https://hooks.slack.com/services/…   # one line per new report
 ```
 
 **Inngest runs on the VM.** The two Inngest keys above drive a self-hosted
@@ -330,29 +342,36 @@ dashes, so the reverse mapping is unambiguous.
 
 ## OCR: Azure Document Intelligence
 
-Three settings decide how documents are read. All three are plain `.env`
-values (stored in Key Vault like the rest, see
-[Secrets](#secrets-azure-key-vault)); none is a default baked into the
-repository, so a self-hosted install keeps the free text-layer path unless
-its operator opts in.
+OCR is on whenever an engine can run: the Azure endpoint and key alone make
+Azure read every PDF and image. Three optional settings change that. All
+three are plain `.env` values (stored in Key Vault like the rest, see
+[Secrets](#secrets-azure-key-vault)). With no OCR engine configured at all,
+PDFs are read from their own text layer, free, and scanned pages come out
+blank.
 
 | Variable | Values | Effect |
 |---|---|---|
-| `OCR_DEFAULT_PROVIDER` | `AZURE` (lean stack), `DOCLING`, `LANDING_AI`, `DATALAB`, `NATIVE_PDF` | Which OCR service reads documents that need OCR. |
-| `OCR_PDF_STRATEGY` | `text-layer-first` (default), `provider-first` | `text-layer-first` reads a PDF's own text when it has one, free and in seconds, and sends only scans to OCR. `provider-first` sends **every** PDF to the provider. |
+| `OCR_DEFAULT_PROVIDER` | unset (lean stack), `AZURE`, `DOCLING`, `LANDING_AI`, `DATALAB`, `NATIVE_PDF` | Unset, documents go to the first engine that can run, in the order Azure → Docling (only while docling-serve answers) → Landing AI → Datalab. A pinned engine goes first when it can run. `NATIVE_PDF` keeps PDFs on their text layer unless someone picks a provider. |
+| `OCR_PDF_STRATEGY` | `provider-first` (default), `text-layer-first` | `provider-first` sends **every** PDF to that engine, so tables, multi-column layouts, and scanned pages inside otherwise digital PDFs are read properly. `text-layer-first` opts out: a PDF's own text is read when it has one, free and in seconds, and only scans go to OCR. |
 | `AZURE_DOC_INTELLIGENCE_MODEL` | `prebuilt-layout` (default), `prebuilt-read` | Layout adds tables and reading order. Read is text only and costs about a seventh as much. |
 
-Choose `provider-first` when documents carry tables or multi-column layouts,
-or scanned pages inside otherwise digital PDFs, that a text layer reads
-poorly. Each PDF then costs Azure pages and takes a minute or two instead of
+Choose `text-layer-first` when cost or speed matters more than layout: under
+the default each PDF costs Azure pages and takes a minute or two instead of
 seconds.
 
-**Fallback (`provider-first`).** If Azure fails, the worker reads the PDF's own text layer
-instead (`NATIVE_PDF`), so the document still indexes. A scanned PDF has no
-text layer, so for a scan the Azure error stands and the outbox retries it
-(see [`docs/runbooks/outbox.md`](./outbox.md)). The worker logs
-`[Normalize] AZURE failed, reading the PDF's text layer instead: …` whenever it
-falls back.
+**Fallback.** If Azure fails, the worker tries the next engine that can run
+(Docling, once `--profile ocr` runs docling-serve and it answers), then reads
+the PDF's own text layer (`NATIVE_PDF`), so the document still indexes. A
+scanned PDF has no text layer, so for a scan the error stands and the outbox
+retries it (see [`docs/runbooks/outbox.md`](./outbox.md)). A PDF with some
+scanned pages (an image, no text) is retried too, unless every engine refused
+the file outright (Azure: 400, 413, 415); then its text layer is indexed
+without those pages. Under `text-layer-first` a PDF reaches OCR only because
+its text layer was not enough, so there is no text-layer fallback: the error
+stands. The worker logs `[Normalize] AZURE failed: …` for each engine that
+fails and `… reading the PDF's text layer instead: …` when it falls back, and
+the document's `ocr_metadata.ocrRouting` records the provider routing chose,
+the one that read it, and every attempt with its error.
 
 **Before falling back, the adapter retries.** A 429 or 5xx on submit is retried
 up to four times, waiting as long as Azure's `Retry-After` asks (otherwise 2, 5,
@@ -393,6 +412,13 @@ New uploads use it; documents already indexed keep the text they were read
 with until they are re-uploaded.
 
 ```bash
+# Documents a different provider read than the one routing chose, and why
+docker exec pdr_ai_v2-postgres psql -U postgres -d pdr_ai_v2 -c \
+  "SELECT id, ocr_provider, ocr_metadata->'ocrRouting'->>'requestedProvider' AS requested,
+          ocr_metadata->'ocrRouting'->'attempts' AS attempts
+   FROM pdr_ai_v2_document WHERE ocr_metadata->'ocrRouting'->>'fellBack' = 'true'
+   ORDER BY id DESC LIMIT 20"
+
 # Which provider read recent documents (NATIVE_PDF = text layer, AZURE = OCR)
 docker exec pdr_ai_v2-postgres psql -U postgres -d pdr_ai_v2 -c \
   "SELECT created_at::date, payload->'payload'->>'provider' AS provider, count(*),
@@ -808,17 +834,20 @@ alive, or rewrite `document_versions.url` if you migrate before real traffic.
 
 - **Whisper back on-box:** `--profile whisper` plus
   `TRANSCRIPTION_PROVIDER=sidecar`. Budget ~1.5 GB.
-- **Docling back on-box:** `--profile ocr` plus `OCR_DEFAULT_PROVIDER=DOCLING`
-  and `DOCLING_SERVE_URL=http://docling-serve:5001`. Budget ~1.2 GB. Without
-  Docling (the lean default, `DOCLING_SERVE_URL` empty), complex PDFs go to the
-  OCR provider and the worker converts Word, PowerPoint, and Excel files itself
-  with mammoth/SheetJS. Before this was the default, the converter pointed at a
-  `docling-serve` that was not running, and every Office upload failed with
-  `docling-serve request failed: fetch failed`.
+- **Docling back on-box:** `--profile ocr` plus
+  `DOCLING_SERVE_URL=http://docling-serve:5001`. Once docling-serve answers
+  its health check the converter offers it as Azure's fallback automatically;
+  set `OCR_DEFAULT_PROVIDER=DOCLING` only to make it read first. Budget
+  ~1.2 GB. Without Docling (the lean default, `DOCLING_SERVE_URL` empty),
+  scans go to Azure alone and the worker converts Word, PowerPoint, and Excel
+  files itself with mammoth/SheetJS. Before this was the default, the
+  converter pointed at a `docling-serve` that was not running, and every
+  Office upload failed with `docling-serve request failed: fetch failed`.
 - Either one needs a bigger VM first: stop it, `az vm resize -g <RESOURCE_GROUP>
   -n <VM_NAME> --size Standard_D4as_v7` (16 GB), start it.
 - **Document Intelligence** on F0 (only an older install would still be on it)
-  analyzes two pages per document. Upgrade in place:
+  analyzes two pages per document and caps at 500 pages/month. Upgrade in
+  place (done for production on 2026-10-17):
   `az cognitiveservices account update -n <DOCINTEL_NAME> -g <RESOURCE_GROUP> --sku S0`.
   On S0, a sustained burst of 429s means the 15-per-second submit limit; raise
   it with a support request ("Quota or usage validation").
@@ -889,7 +918,7 @@ to that error at call time.
 | Managed disk (64 GB StandardSSD) | ~$5 |
 | Static public IP | ~$4 |
 | Backup storage (Cool, small) | ~$1 |
-| Document Intelligence S0 | per page OCR'd: $10 per 1,000 (layout) or $1.50 per 1,000 (read) |
+| Document Intelligence S0 | per page OCR'd: $10 per 1,000 (layout) or $1.50 per 1,000 (read) — every PDF and image is read by default, so it scales with pages ingested |
 | **Total** | **~$72 + OCR pages** |
 
 After a month of stable running, a 1-year reservation or savings plan takes the

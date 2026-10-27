@@ -8,7 +8,8 @@
     "darkTheme": "Switch to dark theme",
     "settings": "Settings",
     "documentation": "Documentation",
-    "logOut": "Log out"
+    "logOut": "Log out",
+    "feedback": "Send feedback"
   },
   "common": {
     "actionsFor": "Actions for {name}",
@@ -88,7 +89,7 @@
     },
     "settings": {
       "label": "Settings",
-      "description": "Your account, appearance and shortcuts; the workspace's people, processing, agents and integrations"
+      "description": "Your account, appearance, shortcuts and privacy"
     },
     "analytics": {
       "label": "Analytics",
@@ -102,9 +103,13 @@
       "label": "Workflows",
       "description": "Automate recurring tasks across your sources"
     },
-    "metadata": {
-      "label": "Company profile",
-      "description": "What the workspace knows about your company"
+    "workspace": {
+      "label": "Workspace",
+      "description": "The workspace's name and details, its people and access, company profile, your own keys, models, agents, integrations, usage and archive"
+    },
+    "feedback": {
+      "label": "Feedback",
+      "description": "Bugs you reported, the shared board of feature requests, and the team's replies"
     }
   },
   "studioDeniedNotes": {
@@ -195,9 +200,21 @@
       "label": "Agents & nodes",
       "description": "The meeting roster, and the machines that run it"
     },
-    "deploy": {
-      "label": "Self-host / BYOK",
-      "description": "Vercel, Docker, your own keys"
+    "workspace": {
+      "label": "Workspace",
+      "description": "Its name and URL, people and access, your own keys, models, agents, integrations and usage"
+    },
+    "workspaceGeneral": {
+      "label": "Rename the workspace",
+      "description": "Name, URL, description, industry, team size and colour"
+    },
+    "settings": {
+      "label": "Settings",
+      "description": "Yours alone: account, appearance, shortcuts and privacy"
+    },
+    "byok": {
+      "label": "Bring your own keys",
+      "description": "Your own API key or OpenRouter account for the workspace's AI"
     }
   },
   "history": {
@@ -257,7 +274,8 @@
     "noMatches": "No matches for <mono>“{query}”</mono>",
     "navigate": "navigate",
     "open": "open",
-    "results": "{count} results"
+    "results": "{count} results",
+    "workspaceSettingSub": "Workspace · {description}"
   },
   "contextMenu": {
     "openLinkInNewTab": "Open link in new tab",

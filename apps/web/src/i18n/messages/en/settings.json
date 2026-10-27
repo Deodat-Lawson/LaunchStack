@@ -9,7 +9,11 @@
     "readOnly": "Read-only",
     "readOnlyTitle": "You can see this; changing it isn't part of your role.",
     "withheld": "{label} isn't part of your role. Ask an admin if you need it.",
-    "withheldWithRole": "{label} isn't part of your role ({role}). Ask an admin if you need it."
+    "withheldWithRole": "{label} isn't part of your role ({role}). Ask an admin if you need it.",
+    "workspacePointer": {
+      "label": "Workspace settings",
+      "blurb": "Name, people, your own keys, models, agents, integrations and usage"
+    }
   },
   "groups": {
     "you": {
@@ -19,10 +23,6 @@
     "workspace": {
       "label": "Workspace",
       "blurb": "Policy for everyone in the workspace."
-    },
-    "data": {
-      "label": "Workspace data",
-      "blurb": "The expensive and the irreversible."
     }
   },
   "sections": {
@@ -58,9 +58,9 @@
     },
     "byok": {
       "label": "Bring your own keys",
-      "blurb": "Your API and embedding keys",
+      "blurb": "Your own API key for the workspace's AI",
       "title": "Bring your own keys",
-      "description": "Your own provider account for the workspace's AI, and your own key for embeddings. Both are optional: anything left empty runs on the server's keys."
+      "description": "Your own provider account for the workspace's AI: chat, drafting, meetings and background work. Optional: left empty, the workspace runs on the server's keys."
     },
     "models": {
       "label": "Models and routes",
@@ -103,6 +103,12 @@
       "blurb": "Unfinished, opt-in",
       "title": "Features that are not finished",
       "description": "Each one says honestly what it does today. Off by default; turning one on affects the whole workspace."
+    },
+    "general": {
+      "label": "General",
+      "blurb": "Name, URL, description, colour",
+      "title": "What the workspace is called, and how it is known",
+      "description": "Its name, the URL it is listed under, a line on what it does, and the colour of its mark. Everyone in the workspace sees these; admins change them."
     }
   },
   "registry": {
@@ -336,9 +342,9 @@
     }
   },
   "answerStyle": {
-    "personalNote": "Everyone who hasn't picked their own gets the workspace default, {label}. <link>Change it under Agents and autonomy</link>.",
+    "personalNote": "Everyone who hasn't picked their own gets the workspace default, {label}. <link>Change it under Workspace › Agents</link>.",
     "workspaceDefault": "The workspace default is {label}.",
-    "ownChoice": "Your own choice, {label}, still applies to your chats. <link>Change it under Appearance</link>."
+    "ownChoice": "Your own choice, {label}, still applies to your chats. <link>Change it under Settings › Appearance</link>."
   },
   "appearance": {
     "display": {
@@ -440,8 +446,8 @@
       "note": "Which plans get developer mode, and whether a workspace admin has to turn it on and publish the connector, is set by OpenAI and changes; check OpenAI’s developer-mode help page for your plan."
     },
     "gemini": {
-      "step1Admin": "Create an OAuth client in Settings › Integrations, under OAuth clients for assistants. It gives you a client ID and secret, and the URLs and scopes to paste.",
-      "step1Member": "A LaunchStack admin creates an OAuth client in Settings › Integrations. It gives them a client ID and secret, and the URLs and scopes to paste.",
+      "step1Admin": "Create an OAuth client in Workspace › Integrations, under OAuth clients for assistants. It gives you a client ID and secret, and the URLs and scopes to paste.",
+      "step1Member": "A LaunchStack admin creates an OAuth client in Workspace › Integrations. It gives them a client ID and secret, and the URLs and scopes to paste.",
       "step2": "A Google Cloud admin opens <menu>Gemini Enterprise › Data stores › Create data store › Custom MCP Server</menu>, chooses OAuth 2.0, pastes the server URL, authorization URL, token URL, client ID, client secret and scopes, and ticks <menu>Enable PKCE Support</menu>. Without PKCE, LaunchStack refuses the sign-in.",
       "step3": "Each person then signs in to LaunchStack from Gemini and picks this workspace.",
       "note": "Google blocks custom MCP data stores by default: an organization policy admin has to override that policy and allow LaunchStack’s domain as an egress destination. Whoever creates the data store needs the Discovery Engine Editor role."
@@ -599,32 +605,7 @@
       "error": "Couldn't connect OpenRouter. Try again, or use an API key instead."
     },
     "endpointFailedStatus": "Couldn't read your model setup ({status}).",
-    "endpointFailed": "Couldn't read your model setup.",
-    "embedding": {
-      "title": "Embedding key",
-      "description": "Optional. An OpenAI-compatible key for the vectors behind semantic search, sent only to the endpoint it belongs to. Without one, embeddings run on the server's key.",
-      "loadFailed": "Something went wrong loading the embedding key.",
-      "saveFailed": "Couldn't save the embedding key.",
-      "saved": "Embedding key saved.",
-      "removeFailed": "Couldn't remove the embedding key.",
-      "removed": "Removed. Embeddings run on the server's key again.",
-      "loading": "Loading the embedding key…",
-      "keyEnding": "Key ending <mono>{last4}</mono>",
-      "usingServerKey": "Using the server’s key.",
-      "yourKey": "Your key",
-      "notSet": "Not set",
-      "indexOtherProvider": "This workspace’s index embeds with <mono>{model}</mono> on {provider}, which doesn’t use an OpenAI-compatible key.",
-      "indexModel": "This workspace’s index embeds with <mono>{model}</mono> ({dimension} dimensions), so the endpoint has to serve that model.",
-      "noEndpoint": "The saved key has no endpoint URL, so embedding with it will fail until one is set. Enter the endpoint URL and the key together, then save.",
-      "keyLabel": "Embedding API key",
-      "keepHint": "Leave blank to keep the saved key.",
-      "serverHint": "Leave blank to use the server's key.",
-      "keepPlaceholder": "Leave blank to keep the key ending {last4}",
-      "endpointLabel": "Embeddings endpoint URL",
-      "endpointHint": "The OpenAI-compatible embeddings endpoint this key belongs to. The key is only sent here; changing the address means entering the key again.",
-      "confirmTitle": "Remove the embedding key?",
-      "confirmDescription": "The saved key and its endpoint are deleted, and embeddings run on the server's key again. Documents already indexed stay searchable."
-    }
+    "endpointFailed": "Couldn't read your model setup."
   },
   "labs": {
     "title": "Experiments",
@@ -874,6 +855,20 @@
           "restored": "Archive · restored",
           "deleted": "Archive · deleted"
         }
+      },
+      "workspaceRenamed": "{actor} renamed the workspace to “{name}”",
+      "workspaceRenamedAndChanged": "{actor} renamed the workspace to “{name}” and changed its {fields}",
+      "workspaceChanged": "{actor} changed the workspace's {fields}",
+      "workspaceFields": {
+        "name": "name",
+        "slug": "URL",
+        "description": "description",
+        "industry": "industry",
+        "teamSize": "team size",
+        "swatch": "colour",
+        "auditRetentionDays": "audit log retention",
+        "separator": ", ",
+        "list": "{rest} and {last}"
       }
     },
     "auditTab": {
@@ -1298,7 +1293,7 @@
       },
       "embedding": {
         "label": "Embeddings",
-        "note": "Every chunk of every indexed document is sent to be embedded. Companies with their own key or an Ollama endpoint override this per workspace."
+        "note": "Every chunk of every indexed document is sent to be embedded. A workspace that saved its own embedding key or endpoint earlier keeps using it instead."
       },
       "rerank": {
         "label": "Reranking",
@@ -1309,8 +1304,24 @@
         "note": "Runs only when entity extraction is turned on for a document."
       },
       "ocr": {
-        "provider": "Scanned pages go to the {provider} provider through the document converter.",
-        "native": "Native PDF extraction only; nothing leaves the server."
+        "none": "No OCR service is configured: PDFs are read from their own text layer and images with Tesseract, both on this server. Nothing leaves it, and scanned pages come out blank.",
+        "scope": {
+          "all": "Every PDF and image is read with OCR.",
+          "scans": "Images and scanned PDFs are read with OCR; a PDF with its own text layer is read from it on this server.",
+          "picked": "Images, and PDFs someone picks a provider for, are read with OCR; other PDFs are read from their own text layer on this server."
+        },
+        "engines": {
+          "azure": "Azure Document Intelligence",
+          "docling": "Docling on this deployment (when docling-serve is running)",
+          "landingAi": "Landing AI",
+          "datalab": "Datalab"
+        },
+        "chain": "{lead} reads every page.",
+        "chainWithFallback": "{lead} reads every page; if it fails, it hands off to {rest}, in that order.",
+        "listJoin": ", then ",
+        "lastResort": "The PDF's own text layer is the last resort, and a scan none of them can read is retried rather than indexed blank.",
+        "retryOnly": "A scan none of them can read is retried rather than indexed blank.",
+        "note": "{scope} {chain} {end}"
       },
       "transcription": {
         "label": "Transcription",
@@ -1341,18 +1352,18 @@
         "label": "Audit log",
         "keptForever": "Kept forever",
         "days": "{days} days",
-        "detail": "Set under People and access. <link>Change it</link>."
+        "detail": "Set under Workspace › People and access. <link>Change it</link>."
       },
       "trash": {
         "label": "Trash",
         "keptUntilDeleted": "Kept until deleted by hand",
         "emptiedAfter": "Emptied after {days} days",
-        "detail": "Trashed maps and artifacts. Set under Archive and retention. <link>Change it</link>."
+        "detail": "Trashed maps and artifacts. Set under Workspace › Archive. <link>Change it</link>."
       },
       "credentials": {
-        "label": "Embedding credentials",
+        "label": "Stored credentials",
         "okLabel": "Encrypted at rest",
-        "detail": "Per-workspace keys are encrypted with EMBEDDING_SECRETS_KEY and only ever shown as their last four characters."
+        "detail": "API keys, connector tokens and app passwords a workspace saves are encrypted with EMBEDDING_SECRETS_KEY and never shown in full. Where document text goes for embedding is under Outside services."
       }
     },
     "choices": {
@@ -1801,6 +1812,72 @@
       "scenarioInterview": "Scenario \"{title}\": interview",
       "scenarioUnit": "Scenario \"{title}\" ({unit})",
       "scenarioRound": "Scenario \"{title}\" (round {round})"
+    },
+    "workspaceDetails": {
+      "notFound": "This workspace no longer exists.",
+      "urlTaken": "Another workspace already uses that URL. Try a different one."
+    }
+  },
+  "workspaceTab": {
+    "title": "Workspace",
+    "about": "Everything about this workspace: what it is called, who is in it and what they can see, its own keys, the models and agents it runs, what it connects to and what it spends. Your own account, theme and shortcuts are in Settings.",
+    "groups": {
+      "basics": "Basics",
+      "setup": "Setup",
+      "data": "Data"
+    },
+    "screens": {
+      "general": "General",
+      "people": "People and access",
+      "company": "Company profile",
+      "byok": "Bring your own keys",
+      "models": "Models",
+      "agents": "Agents",
+      "integrations": "Integrations",
+      "usage": "Usage",
+      "archive": "Archive",
+      "labs": "Labs"
+    }
+  },
+  "general": {
+    "readOnly": "Changing these takes a role that manages the workspace's settings.",
+    "loadFailedStatus": "Couldn't load the workspace's details ({status}).",
+    "offline": "Couldn't reach the server. Check your connection and try again.",
+    "saveFailedStatus": "Couldn't save ({status}).",
+    "saveOffline": "Couldn't reach the server. Nothing was saved.",
+    "saved": "Workspace details saved",
+    "name": {
+      "label": "Name",
+      "description": "What everyone in the workspace sees: the sidebar, the workspace picker, invitations.",
+      "missing": "Give the workspace a name."
+    },
+    "slug": {
+      "label": "URL",
+      "description": "How the workspace is listed when you switch between workspaces. It must be unique on this server; nothing else links to it.",
+      "checking": "Checking…",
+      "invalid": "At least two characters: lowercase letters, numbers and dashes.",
+      "available": "Available",
+      "taken": "Taken — try a different URL."
+    },
+    "description": {
+      "label": "Description",
+      "description": "One sentence on what the company does. Optional; it helps the assistant.",
+      "placeholder": "We turn scattered context into a knowledge graph for AI workflows."
+    },
+    "industry": {
+      "label": "Industry",
+      "description": "The field the company works in. Optional.",
+      "placeholder": "e.g. Logistics software"
+    },
+    "teamSize": {
+      "label": "Team size",
+      "description": "Roughly how many people work here.",
+      "count": "{count, plural, one {Just one person} other {About # people}}"
+    },
+    "colour": {
+      "label": "Colour",
+      "description": "The workspace's mark in the sidebar and the workspace picker.",
+      "swatch": "Colour {n}"
     }
   }
 }

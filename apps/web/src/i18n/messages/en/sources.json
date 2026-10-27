@@ -229,7 +229,7 @@
     "tooBigMany": "{count} files are over the {max} MB limit",
     "tooBigOneDetail": "It's {size}. Split it or export it at a lower quality.",
     "tooBigItem": "{name} ({size})",
-    "ocrNote": "OCR runs automatically on scanned PDFs and images.",
+    "ocrNote": "PDFs and images are read with OCR when the server has an OCR service.",
     "transcribing": "Transcribing {name}… a long recording takes a few minutes; keep this open.",
     "uploadingProgress": "Uploading {current} / {total}…",
     "readyToUpload": "{count, plural, one {# file ready to upload} other {# files ready to upload}}",
@@ -519,7 +519,7 @@
     "readFailed": "Couldn't read \"{title}\" (HTTP {status})",
     "archiveFailed": "Added \"{title}\", but couldn't archive the old copy",
     "itemFailed": "\"{title}\" failed",
-    "movedToast": "{count, plural, one {# artifact added to \"{folder}\". The old copies are in Settings → Archive.} other {# artifacts added to \"{folder}\". The old copies are in Settings → Archive.}}",
+    "movedToast": "{count, plural, one {# artifact added to \"{folder}\". The old copies are in Workspace › Archive.} other {# artifacts added to \"{folder}\". The old copies are in Workspace › Archive.}}",
     "modeAria": "How to bring the artifact in",
     "pasteCode": "Paste code",
     "uploadFile": "Upload a file",
@@ -535,7 +535,7 @@
     "tooBig": "Over 10 MB — too large for one artifact",
     "chars": "{count} chars",
     "addAsSource": "Add as source",
-    "legacy": "<b>{count, plural, one {# artifact from before} other {# artifacts from before}}</b> they were sources. Add them to “{folder}” to search and cite them; the old copies move to Settings → Archive.",
+    "legacy": "<b>{count, plural, one {# artifact from before} other {# artifacts from before}}</b> they were sources. Add them to “{folder}” to search and cite them; the old copies move to Workspace › Archive.",
     "movingProgress": "{done} of {total}",
     "addIt": "Add it as a source",
     "addAll": "Add all {count} as sources"
@@ -712,7 +712,8 @@
     "contactUs": "Contact us about this error",
     "details": "Details",
     "jobId": "Job ID",
-    "retryAria": "Retry processing {title}"
+    "retryAria": "Retry processing {title}",
+    "reportProblem": "Report this problem"
   },
   "folderIssues": {
     "required": "Folder name is required.",

@@ -12,6 +12,13 @@ import { createAzureAdapter } from "./adapters/azureAdapter";
 import { createLandingAIAdapter } from "./adapters/landingAdapter";
 import { createDatalabAdapter } from "./adapters/datalabAdapter";
 import { createDoclingAdapter } from "./adapters/ossAdapter";
+import {
+    availableOcrEngines,
+    firstAvailableOcrEngine,
+    isOcrEngine,
+    ocrFallbackChain,
+    type OcrEngine,
+} from "./provider-order";
 import { chunkDocument, mergeWithEmbeddings, prepareForEmbedding } from "./chunker";
 import { createEmbeddingModel } from "@launchstack/llm/embeddings";
 import {
@@ -113,10 +120,35 @@ export interface RouterDecisionResult {
     visionLabel?: string;
     visionScore?: number;
     /**
-     * When the selected provider fails, read the PDF's own text layer instead
-     * of failing the stage. Set by OCR_PDF_STRATEGY=provider-first.
+     * When every OCR engine fails, read the PDF's own text layer instead of
+     * failing the stage (see fallBackToTextLayer for when it still fails).
+     * Set by provider-first routing, the default OCR_PDF_STRATEGY.
      */
     nativeFallback?: boolean;
+}
+
+/** One provider normalizeDocument tried, and how it went. */
+export interface ProviderAttempt {
+    provider: OCRProvider;
+    ok: boolean;
+    /** Why it did not produce the text: the error, shortened, URL query strings removed. */
+    error?: string;
+    durationMs: number;
+}
+
+/**
+ * How a document's text was produced — written into ocr metadata so "which
+ * OCR read this, and why not the one it was meant to" has an answer.
+ */
+export interface OcrRoutingRecord {
+    /** What routing chose: a person's pick, the operator pin, or the order. */
+    requestedProvider: OCRProvider;
+    /** What produced the text. */
+    provider: OCRProvider;
+    /** True when `provider` is not `requestedProvider`. */
+    fellBack: boolean;
+    routingReason: string;
+    attempts: ProviderAttempt[];
 }
 
 /**
@@ -124,9 +156,11 @@ export interface RouterDecisionResult {
  */
 export interface NormalizationResult {
     pages: PageContent[];
+    /** The provider that actually produced the text. */
     provider: OCRProvider;
     processingTimeMs: number;
     confidenceScore?: number;
+    ocrRouting?: OcrRoutingRecord;
 }
 
 /** Office extensions that must go through the ingestion layer (not Azure OCR). */
@@ -151,52 +185,64 @@ function isValidOCRProvider(p: string): p is (typeof OCR_ONLY_PROVIDERS)[number]
     return OCR_ONLY_PROVIDERS.includes(p as (typeof OCR_ONLY_PROVIDERS)[number]);
 }
 
-/** True when the provider's credentials (or, for Docling, the converter) are configured. */
-function isOcrProviderConfigured(provider: (typeof OCR_ONLY_PROVIDERS)[number]): boolean {
-    const cfg = getOcrConfig();
-    switch (provider) {
-        case "AZURE":
-            return Boolean(cfg.azure?.endpoint && cfg.azure.key);
-        case "LANDING_AI":
-            return Boolean(cfg.landingAi?.apiKey);
-        case "DATALAB":
-            return Boolean(cfg.datalabApiKey);
-        case "DOCLING":
-            return Boolean(cfg.converter?.url);
-    }
+export interface RouteDocumentOptions {
+    forceOCR?: boolean;
+    preferredProvider?: OCRProvider;
+    mimeType?: string;
+    filename?: string;
+}
+
+/** Provider-first is the default; OCR_PDF_STRATEGY=text-layer-first opts out. */
+function isProviderFirst(): boolean {
+    return getOcrConfig().pdfStrategy !== "text-layer-first";
 }
 
 /**
- * The provider every PDF goes to under OCR_PDF_STRATEGY=provider-first, or
- * undefined when the strategy is text-layer-first or the default provider
- * cannot run (then the converter's text-layer-first routing applies).
+ * The engine every PDF goes to under provider-first (the default):
+ * OCR_DEFAULT_PROVIDER when it can run here, else the first engine in the
+ * shared order (./provider-order.ts) — Docling only while the converter
+ * reports it answering.
+ *
+ * Undefined, so the converter's text-layer-first routing applies, when the
+ * operator opted out (text-layer-first), pinned the text layer
+ * (OCR_DEFAULT_PROVIDER=NATIVE_PDF, unless OCR is forced), or no engine can
+ * run — a PDF with a text layer is then read from it, free.
  */
-function getProviderFirstOcrProvider(): OCRProvider | undefined {
-    const cfg = getOcrConfig();
-    if (cfg.pdfStrategy !== "provider-first") return undefined;
+async function getProviderFirstOcrProvider(forceOCR?: boolean): Promise<OCRProvider | undefined> {
+    if (!isProviderFirst()) return undefined;
+    const pin = getOcrConfig().defaultProvider;
+    if (pin === "NATIVE_PDF" && !forceOCR) return undefined;
 
-    const provider = cfg.defaultProvider;
-    if (!provider || !isValidOCRProvider(provider)) {
+    const engine = await firstAvailableOcrEngine();
+    if (isOcrEngine(pin) && engine !== pin) {
         console.warn(
-            `[Router] OCR_PDF_STRATEGY=provider-first needs OCR_DEFAULT_PROVIDER set to an OCR provider (got ${provider ?? "nothing"}); reading the text layer first`
+            `[Router] OCR_DEFAULT_PROVIDER=${pin} cannot run here; ${
+                engine
+                    ? `sending PDFs to ${engine}`
+                    : "no OCR engine can, so reading the text layer"
+            }`
         );
-        return undefined;
+    } else if (!engine) {
+        console.log("[Router] No OCR engine can run; reading the text layer");
     }
-    if (!isOcrProviderConfigured(provider)) {
-        console.warn(
-            `[Router] OCR_PDF_STRATEGY=provider-first but ${provider} is not configured; reading the text layer first`
-        );
-        return undefined;
-    }
-    return provider;
+    return engine;
 }
 
 /**
- * Determine how to route the document for processing
+ * Determine how to route the document for processing.
+ *
+ * An explicit provider wins. Otherwise every PDF goes to the first OCR
+ * engine that can run (provider-first, the default). Under
+ * OCR_PDF_STRATEGY=text-layer-first — or when no engine can run — the
+ * converter decides: a PDF's own text layer when it has one, an engine in the
+ * shared order for a scan. This process calls the engines, so its own view of
+ * what can run is the one that counts: when the converter sends a scan to the
+ * text layer because its environment has no engine but one is configured
+ * here, that engine reads it.
  */
 export async function routeDocument(
     documentUrl: string,
-    options?: { forceOCR?: boolean; preferredProvider?: OCRProvider }
+    options?: RouteDocumentOptions
 ): Promise<RouterDecisionResult> {
     const preferred = options?.preferredProvider;
 
@@ -208,18 +254,16 @@ export async function routeDocument(
             pageCount,
             selectedProvider: preferred,
             reason: "preferred-provider",
-            // A pinned provider keeps provider-first's text-layer fallback, so
-            // an upload that names its provider fails no more often than one
-            // that leaves it to OCR_DEFAULT_PROVIDER.
-            ...(preferred !== "NATIVE_PDF" && getOcrConfig().pdfStrategy === "provider-first"
-                ? { nativeFallback: true }
-                : {}),
+            // A pinned provider keeps provider-first's fallbacks, so an
+            // upload that names its provider fails no more often than one
+            // that leaves it to the order.
+            ...(preferred !== "NATIVE_PDF" && isProviderFirst() ? { nativeFallback: true } : {}),
         };
     }
 
     // No converter round trip: the text-layer check it runs is exactly what
-    // this strategy skips. The text layer is read only if the provider fails.
-    const providerFirst = getProviderFirstOcrProvider();
+    // this strategy skips. The text layer is read only if every engine fails.
+    const providerFirst = await getProviderFirstOcrProvider(options?.forceOCR);
     if (providerFirst) {
         return {
             isNativePDF: false,
@@ -231,31 +275,34 @@ export async function routeDocument(
     }
 
     const { determineDocumentRouting } = await import("./complexity");
-    const decision: RoutingDecision = await determineDocumentRouting(documentUrl);
+    const decision: RoutingDecision = await determineDocumentRouting(documentUrl, {
+        forceOCR: options?.forceOCR,
+        mimeType: options?.mimeType,
+        filename: options?.filename,
+    });
 
-    const isNativePDF = decision.provider === "NATIVE_PDF";
-
-    if (options?.forceOCR === true && isNativePDF) {
-        const isComplex = decision.signals.visionLabel
-            ? ["handwritten", "complex", "blurry", "messy"].some(k =>
-                  decision.signals.visionLabel?.includes(k)
-              )
-            : false;
-
-        const ocrProvider: OCRProvider = isComplex ? "LANDING_AI" : "AZURE";
-
-        return {
-            isNativePDF: false,
-            pageCount: decision.pageCount,
-            selectedProvider: ocrProvider,
-            reason: `Force OCR enabled (Original: ${decision.provider}), switching to ${ocrProvider}`,
-            visionLabel: decision.signals.visionLabel,
-            visionScore: decision.signals.visionScore,
-        };
+    // The converter read a text layer (or a form) natively: that is what
+    // text-layer-first means. Anything else it sent to NATIVE_PDF needed OCR
+    // and found no engine in the converter's environment.
+    const textLayerRead =
+        decision.reason === "native-text-layer" || decision.reason === "interactive-form";
+    const textLayerPinned = getOcrConfig().defaultProvider === "NATIVE_PDF" && !options?.forceOCR;
+    if (decision.provider === "NATIVE_PDF" && !textLayerRead && !textLayerPinned) {
+        const engine = await firstAvailableOcrEngine();
+        if (engine) {
+            return {
+                isNativePDF: false,
+                pageCount: decision.pageCount,
+                selectedProvider: engine,
+                reason: `${decision.reason}; the converter offered no OCR engine, ${engine} is configured here`,
+                visionLabel: decision.signals.visionLabel,
+                visionScore: decision.signals.visionScore,
+            };
+        }
     }
 
     return {
-        isNativePDF,
+        isNativePDF: decision.provider === "NATIVE_PDF",
         pageCount: decision.pageCount,
         selectedProvider: decision.provider,
         reason: decision.reason,
@@ -281,30 +328,198 @@ async function getPageCount(documentUrl: string): Promise<number> {
 // Step B: Normalize - Run OCR or native extraction
 // ============================================================================
 
+/** An error as a short, loggable line — URL query strings (signed tokens) removed. */
+function describeProviderError(error: unknown): string {
+    const message = error instanceof Error ? error.message : String(error);
+    return message.replace(/(https?:\/\/[^\s?"']+)\?[^\s"']*/g, "$1?…").slice(0, 300);
+}
+
+function textLength(doc: NormalizedDocument): number {
+    return doc.pages.reduce(
+        (sum, page) =>
+            sum +
+            page.textBlocks.join("").length +
+            page.tables.reduce((t, table) => t + table.markdown.length, 0),
+        0
+    );
+}
+
 /**
- * Normalize document content using the appropriate provider
+ * What every failed engine adds up to. One engine: its own error, unchanged.
+ * Several: one error naming each, which counts as the file being refused
+ * (see providerRejectedFile) only when every engine refused it — any other
+ * failure may pass, so the outbox retries.
+ */
+function chainError(failures: Array<{ provider: OCRProvider; error: unknown }>): unknown {
+    if (failures.length === 1) return failures[0]?.error;
+    const summary = failures.map(f => `${f.provider}: ${describeProviderError(f.error)}`);
+    const error = new Error(`Every OCR provider failed (${summary.join("; ")})`) as Error & {
+        cause?: unknown;
+        fileRejected?: boolean;
+    };
+    error.cause = failures[0]?.error;
+    if (failures.every(f => providerRejectedFile(f.error))) error.fileRejected = true;
+    return error;
+}
+
+/**
+ * Reads the PDF with `first`, then — only if it fails — with every other
+ * engine that can run, in the shared order (./provider-order.ts; Docling only
+ * while the converter reports it answering). When they all fail, the PDF's
+ * own text layer is read if routing asked for that (`nativeFallback`), under
+ * fallBackToTextLayer's rules; otherwise the engines' error stands.
+ *
+ * Azure returning fewer pages than the PDF has is a partial read (a free F0
+ * resource reads only the first two pages): the next engines are tried, and
+ * the partial read is kept only if nothing reads more.
+ */
+async function readWithOcrEngines(
+    documentUrl: string,
+    routerDecision: RouterDecisionResult,
+    first: OcrEngine,
+    attempts: ProviderAttempt[]
+): Promise<NormalizedDocument> {
+    const failures: Array<{ provider: OCRProvider; error: unknown }> = [];
+    let partial: { doc: NormalizedDocument; attempt: ProviderAttempt } | undefined;
+
+    /** One engine's attempt: its pages when it read the whole PDF, else undefined. */
+    const tryEngine = async (provider: OCRProvider): Promise<NormalizedDocument | undefined> => {
+        const started = Date.now();
+        try {
+            const doc = await processWithProvider(documentUrl, provider);
+            const expected = routerDecision.pageCount;
+            if (provider === "AZURE" && expected > 0 && doc.pages.length < expected) {
+                const attempt: ProviderAttempt = {
+                    provider,
+                    ok: false,
+                    error: `returned ${doc.pages.length} of ${expected} pages (a free F0 Document Intelligence resource reads only the first two)`,
+                    durationMs: Date.now() - started,
+                };
+                attempts.push(attempt);
+                console.warn(`[Normalize] ${provider} ${attempt.error}; trying the next provider`);
+                partial ??= { doc, attempt };
+                return undefined;
+            }
+            attempts.push({ provider, ok: true, durationMs: Date.now() - started });
+            return doc;
+        } catch (error) {
+            const described = describeProviderError(error);
+            failures.push({ provider, error });
+            attempts.push({
+                provider,
+                ok: false,
+                error: described,
+                durationMs: Date.now() - started,
+            });
+            console.warn(`[Normalize] ${provider} failed: ${described}`);
+            return undefined;
+        }
+    };
+
+    const read = await tryEngine(first);
+    if (read) return read;
+    // The fallbacks are looked up only once `first` has failed, so a
+    // document the first engine reads never waits on the converter.
+    const [, ...fallbacks] = ocrFallbackChain(first, await availableOcrEngines(), { isPdf: false });
+    for (const provider of fallbacks) {
+        const fallbackRead = await tryEngine(provider);
+        if (fallbackRead) return fallbackRead;
+    }
+
+    if (partial) {
+        // A partial read beats a text layer holding less (a scan's), and
+        // loses to one holding more (a long PDF that has its own text).
+        if (routerDecision.nativeFallback) {
+            const started = Date.now();
+            try {
+                const textLayer = await processNativePDF(documentUrl);
+                if (textLength(textLayer) > textLength(partial.doc)) {
+                    attempts.push({
+                        provider: "NATIVE_PDF",
+                        ok: true,
+                        durationMs: Date.now() - started,
+                    });
+                    return textLayer;
+                }
+                attempts.push({
+                    provider: "NATIVE_PDF",
+                    ok: false,
+                    error: `read less text than ${partial.attempt.provider}'s partial result`,
+                    durationMs: Date.now() - started,
+                });
+            } catch (error) {
+                attempts.push({
+                    provider: "NATIVE_PDF",
+                    ok: false,
+                    error: describeProviderError(error),
+                    durationMs: Date.now() - started,
+                });
+            }
+        }
+        partial.attempt.ok = true;
+        return partial.doc;
+    }
+
+    const error = chainError(failures);
+    if (!routerDecision.nativeFallback) throw error;
+
+    const started = Date.now();
+    const document = await fallBackToTextLayer(
+        documentUrl,
+        failures.map(f => f.provider).join(", "),
+        error
+    );
+    attempts.push({ provider: "NATIVE_PDF", ok: true, durationMs: Date.now() - started });
+    return document;
+}
+
+/**
+ * Normalize document content with the provider routing chose. An OCR engine
+ * that fails hands the document to the next one that can run, then (when
+ * routing asked) to the PDF's own text layer; the text layer as the choice —
+ * the text-only method, an operator pin, or no engine at all — stays exactly
+ * that. The result names the provider that produced the text and carries
+ * every attempt, so a fallback is on the record.
  */
 export async function normalizeDocument(
     documentUrl: string,
     routerDecision: RouterDecisionResult
 ): Promise<NormalizationResult> {
-    console.log(`[Normalize] Processing with provider: ${routerDecision.selectedProvider}`);
+    const requested: OCRProvider = routerDecision.isNativePDF
+        ? "NATIVE_PDF"
+        : routerDecision.selectedProvider;
+    console.log(`[Normalize] Processing with provider: ${requested}`);
 
+    const attempts: ProviderAttempt[] = [];
     let normalizedDoc: NormalizedDocument;
 
-    if (routerDecision.isNativePDF) {
-        normalizedDoc = await processNativePDF(documentUrl);
+    if (isOcrEngine(requested)) {
+        normalizedDoc = await readWithOcrEngines(documentUrl, routerDecision, requested, attempts);
     } else {
-        try {
-            normalizedDoc = await processWithProvider(documentUrl, routerDecision.selectedProvider);
-        } catch (error) {
-            if (!routerDecision.nativeFallback) throw error;
-            normalizedDoc = await fallBackToTextLayer(
-                documentUrl,
-                routerDecision.selectedProvider,
-                error
-            );
-        }
+        const started = Date.now();
+        normalizedDoc = await processWithProvider(documentUrl, requested);
+        attempts.push({
+            provider: normalizedDoc.metadata.provider,
+            ok: true,
+            durationMs: Date.now() - started,
+        });
+    }
+
+    const ocrRouting: OcrRoutingRecord = {
+        requestedProvider: requested,
+        provider: normalizedDoc.metadata.provider,
+        fellBack: normalizedDoc.metadata.provider !== requested,
+        routingReason: routerDecision.reason,
+        attempts,
+    };
+    if (ocrRouting.fellBack) {
+        console.warn(
+            `[Normalize] Fell back from ${requested} to ${ocrRouting.provider}: ` +
+                attempts
+                    .filter(a => !a.ok)
+                    .map(a => `${a.provider} (${a.error})`)
+                    .join(", ")
+        );
     }
 
     // --- VLM Enrichment Step ---
@@ -380,6 +595,7 @@ export async function normalizeDocument(
         provider: normalizedDoc.metadata.provider,
         processingTimeMs: normalizedDoc.metadata.processingTimeMs,
         confidenceScore: normalizedDoc.metadata.confidenceScore,
+        ocrRouting,
     };
 }
 
@@ -878,6 +1094,8 @@ export async function finalizeStorage(
         processingTimeMs: number;
         confidenceScore?: number;
         embeddingIndexKey?: string;
+        /** Which provider was meant to read the document, which did, and why. */
+        ocrRouting?: OcrRoutingRecord;
     },
     pipelineStartTime: number,
     versionId: number
@@ -948,6 +1166,7 @@ export async function finalizeStorage(
             totalChunks,
             processingTimeMs: meta.processingTimeMs,
             embeddingIndexKey: meta.embeddingIndexKey,
+            ...(meta.ocrRouting ? { ocrRouting: meta.ocrRouting } : {}),
             processedAt: new Date().toISOString(),
         };
 
@@ -994,6 +1213,7 @@ export async function finalizeStorage(
                 errorMessage: null,
                 processingDurationMs: Date.now() - pipelineStartTime,
                 pageCount: meta.totalPages,
+                ...(meta.ocrRouting ? { primaryProvider: meta.ocrRouting.requestedProvider } : {}),
                 actualProvider: meta.provider,
                 confidenceScore: toStoredConfidencePercent(meta.confidenceScore),
             })
@@ -1251,10 +1471,17 @@ const IMAGE_PAINT_OPS = [
 ] as const;
 
 /**
+ * A page that paints an image and carries fewer non-space characters than
+ * this in its text layer is a scan: a page or Bates stamp is not a reading of
+ * the page, so a scan stamped "Page 3 of 40" is not indexed as its stamp.
+ */
+const SCANNED_PAGE_MAX_TEXT_CHARS = 20;
+
+/**
  * Reads a PDF's own text layer, page by page. With `findImageOnlyPages`, it
- * also reports the pages that have no text but paint an image — most likely
- * scanned, so the text layer reads them as empty. A blank page paints
- * nothing and is not reported.
+ * also reports the pages that paint an image and have no text, or no more
+ * than a stamp's worth — most likely scanned, so the text layer cannot read
+ * them. A blank page paints nothing and is not reported.
  */
 async function readTextLayer(
     documentUrl: string,
@@ -1296,7 +1523,7 @@ async function readTextLayer(
             tables: [],
         });
 
-        if (findImageOnlyPages && text.length === 0) {
+        if (findImageOnlyPages && text.replace(/\s+/g, "").length < SCANNED_PAGE_MAX_TEXT_CHARS) {
             const { fnArray } = await page.getOperatorList();
             if (fnArray.some(op => imagePaintOps.has(op))) imageOnlyPages.push(i);
         }
@@ -1389,16 +1616,17 @@ function providerRejectedFile(error: unknown): boolean {
 }
 
 /**
- * OCR_PDF_STRATEGY=provider-first: the provider failed, so read the PDF's own
- * text layer instead — but never index a document with holes the provider
- * could still fill. A scan has no text layer at all, so its provider error
- * stands and the outbox retries the provider. A mixed PDF with some scanned
- * pages (no text, an image) is retried too, unless the provider refused the
- * file outright; then the text layer is all there will ever be.
+ * Provider-first's last step: every OCR engine failed, so read the PDF's own
+ * text layer instead — but never index a document with holes an engine
+ * could still fill. A scan has no text layer at all, so the engines' error
+ * stands and the outbox retries them. A mixed PDF with some scanned pages
+ * (no text, an image) is retried too, unless every engine refused the file
+ * outright; then the text layer is all there will ever be.
  */
 async function fallBackToTextLayer(
     documentUrl: string,
-    provider: OCRProvider,
+    /** The engines that failed, for the log. */
+    provider: string,
     providerError: unknown
 ): Promise<NormalizedDocument> {
     const reason = providerError instanceof Error ? providerError.message : "unknown error";
@@ -1423,12 +1651,12 @@ async function fallBackToTextLayer(
         const pageList = imageOnlyPages.join(", ");
         if (!providerRejectedFile(providerError)) {
             console.warn(
-                `[Normalize] Text layer cannot read page(s) ${pageList} (image, no text); keeping the provider error so ${provider} is retried`
+                `[Normalize] Text layer cannot read page(s) ${pageList} (an image with little or no text); keeping the provider error so ${provider} is retried`
             );
             throw providerError;
         }
         console.warn(
-            `[Normalize] ${provider} refused this file; indexing the text layer without page(s) ${pageList} (image, no text)`
+            `[Normalize] ${provider} refused this file; indexing the text layer without page(s) ${pageList} (an image with little or no text)`
         );
     }
     return document;

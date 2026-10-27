@@ -269,21 +269,29 @@ const serverSchema = z.object({
     OCR_WORKER_URL: optionalString(),
     // Model for OCR vision classification (default: gemini-3.8-flash). Any OpenAI-compatible vision model.
     OCR_VISION_MODEL: optionalString(),
+    // Optional pin on the OCR order (Azure → Docling → Landing AI → Datalab →
+    // text layer). Empty means unpinned — Compose passes "" when it is unset.
     // The Marker provider was removed by ADR-004 (it always aliased Docling),
     // so it is deliberately absent here and rejected with an actionable error.
-    OCR_DEFAULT_PROVIDER: z
-        .enum(["DOCLING", "NATIVE_PDF", "AZURE", "LANDING_AI", "DATALAB"], {
-            errorMap: () => ({
-                message:
-                    "OCR_DEFAULT_PROVIDER must be one of DOCLING, NATIVE_PDF, AZURE, LANDING_AI, DATALAB. " +
-                    "The Marker provider was removed (ADR-004): it never had a real implementation and " +
-                    "silently aliased Docling — set OCR_DEFAULT_PROVIDER=DOCLING instead.",
-            }),
-        })
-        .optional(),
-    // How PDFs are read. text-layer-first (the default) uses a PDF's own text
-    // when it has one and sends only scans to OCR. provider-first sends every
-    // PDF to OCR_DEFAULT_PROVIDER and reads the text layer only if that fails.
+    OCR_DEFAULT_PROVIDER: z.preprocess(
+        normalize,
+        z
+            .enum(["DOCLING", "NATIVE_PDF", "AZURE", "LANDING_AI", "DATALAB"], {
+                errorMap: () => ({
+                    message:
+                        "OCR_DEFAULT_PROVIDER must be one of DOCLING, NATIVE_PDF, AZURE, LANDING_AI, DATALAB. " +
+                        "The Marker provider was removed (ADR-004): it never had a real implementation and " +
+                        "silently aliased Docling — set OCR_DEFAULT_PROVIDER=DOCLING instead.",
+                }),
+            })
+            .optional()
+    ),
+    // How PDFs are read. provider-first (the default) sends every PDF to the
+    // first OCR engine that can run — OCR_DEFAULT_PROVIDER when it can, else
+    // the order above — then the next engines, and reads the text layer only
+    // when they all fail; with no engine at all it reads the text layer.
+    // text-layer-first uses a PDF's own text when it has one and sends only
+    // scans to OCR. Empty means unset.
     OCR_PDF_STRATEGY: z.preprocess(
         normalize,
         z.enum(["text-layer-first", "provider-first"]).optional()
@@ -437,6 +445,14 @@ const serverSchema = z.object({
     // stand-in `next dev` serves under /dev/stand-ins/google. Ignored when
     // the /dev routes are off.
     GOOGLE_STAND_IN_URL: optionalString(),
+    // In-app feedback (bug reports + feature requests). The triagers' emails,
+    // comma/space/semicolon separated; unset keeps the feature off. Read per
+    // call by ~/server/feedback/access.
+    FEEDBACK_ADMIN_EMAILS: optionalString(),
+    // Optional Slack or Discord incoming webhook told about each new report
+    // (one line: kind, title, link — never the body or screenshots). Checked
+    // at send time, so a malformed value disables it rather than the boot.
+    FEEDBACK_WEBHOOK_URL: optionalString(),
     // CORS
     CORS_ALLOWED_ORIGINS: optionalString(),
     // Logging
@@ -672,6 +688,8 @@ function parseServerEnv() {
         S3_ACCESS_KEY: process.env.S3_ACCESS_KEY,
         S3_SECRET_KEY: process.env.S3_SECRET_KEY,
         S3_BUCKET_NAME: process.env.S3_BUCKET_NAME,
+        FEEDBACK_ADMIN_EMAILS: process.env.FEEDBACK_ADMIN_EMAILS,
+        FEEDBACK_WEBHOOK_URL: process.env.FEEDBACK_WEBHOOK_URL,
     };
 
     let server: z.infer<typeof serverSchemaRefined>;

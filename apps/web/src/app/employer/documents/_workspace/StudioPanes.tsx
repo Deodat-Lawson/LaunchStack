@@ -9,7 +9,7 @@ import { Button } from "~/components/ui/button";
 import type { ToolHost } from "~/components/tool-app/nav";
 import { cn } from "~/lib/utils";
 import type { KnowledgePaneProps } from "./KnowledgePane";
-import type { SettingsSectionId } from "./SettingsHub";
+import type { PersonalSectionId } from "./SettingsHub";
 import { isStudioPaneId } from "./studioPaneIds";
 import type { TeamToolProps } from "./team/TeamTool";
 import {
@@ -82,6 +82,10 @@ const TeamTool = dynamic(() => import("./team/TeamTool").then(m => m.TeamTool), 
     loading: () => <LoadingPage variant="pane" />,
 });
 
+const FeedbackTool = dynamic(() => import("./feedback/FeedbackTool").then(m => m.FeedbackTool), {
+    loading: () => <LoadingPage variant="pane" />,
+});
+
 // Tools with screens of their own. Each is a tab with a rail inside it and
 // its own history; none of them is a page you navigate to any more.
 const GrowthTool = dynamic(
@@ -105,6 +109,11 @@ const ScenariosTool = dynamic(
 );
 
 const SettingsHub = dynamic(() => import("./SettingsHub").then(m => m.SettingsHub), {
+    loading: () => <LoadingPage variant="pane" />,
+});
+
+// The workspace's own settings, with its screens across the top.
+const WorkspaceTool = dynamic(() => import("./WorkspaceTool").then(m => m.WorkspaceTool), {
     loading: () => <LoadingPage variant="pane" />,
 });
 
@@ -275,7 +284,7 @@ export function RewritePane({ context }: PaneProps & { context?: StudioPaneConte
 
 export function CompanySettingsPane({
     initialSection,
-}: PaneProps & { initialSection?: SettingsSectionId }) {
+}: PaneProps & { initialSection?: PersonalSectionId }) {
     return (
         <div style={{ height: "100%", display: "flex", flexDirection: "column", minHeight: 0 }}>
             <SettingsHub embedded initialSection={initialSection} />
@@ -500,6 +509,8 @@ export function renderStudioPane(
                     onShare={context?.team?.onShare}
                 />
             );
+        case "feedback":
+            return <FeedbackTool host={context?.tool} />;
         case "draft":
             return <DraftPane onClose={onClose} context={context} />;
         case "rewrite":
@@ -522,14 +533,15 @@ export function renderStudioPane(
             return <VantageTool host={context?.tool} />;
         case "scenarios":
             return <ScenariosTool host={context?.tool} />;
-        // Company metadata is a section of Settings now. Its id survives so old
-        // deep links open the right section rather than 404ing.
-        case "metadata":
-            return <CompanySettingsPane onClose={onClose} initialSection="company" />;
         case "analytics":
             return <AnalyticsPane onClose={onClose} />;
+        // Yours alone: account, appearance, shortcuts, privacy.
         case "settings":
             return <CompanySettingsPane onClose={onClose} />;
+        // Everything about the workspace. `?feature=metadata`, the company
+        // profile's old pane, is a place inside it (`TOOL_ALIASES`).
+        case "workspace":
+            return <WorkspaceTool host={context?.tool} />;
         default: {
             const unhandled: never = id;
             return <UnknownPane feature={{ id: String(unhandled), label: String(unhandled) }} />;

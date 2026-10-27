@@ -214,7 +214,7 @@
   },
   "tool": {
     "title": "Team",
-    "about": "Who is in the workspace, the groups you share with, and what everyone has been doing. Roles, invitations, join links and the audit log are in Settings › People and access.",
+    "about": "Who is in the workspace, the groups you share with, and what everyone has been doing. Roles, invitations, join links and the audit log are in Workspace › People and access.",
     "nav": {
       "people": "People",
       "groups": "Groups",

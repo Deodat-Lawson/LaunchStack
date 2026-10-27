@@ -19,8 +19,9 @@ import {
     settingsSectionOf,
 } from "~/app/employer/documents/_workspace/types";
 import { BUILTIN_ROLE_PERMISSIONS, type Permission } from "~/lib/authz/permissions";
-import { canSeeSettingsSection, settingsSectionFromHash } from "~/lib/settings/sections";
-import { toolTargetFromHref } from "~/lib/tool-app/locations";
+import { canSeeSettingsSection } from "~/lib/settings/sections";
+import { settingsSectionOfHref } from "~/lib/settings/surfaces";
+import { TOOL_ALIASES, toolTargetFromHref } from "~/lib/tool-app/locations";
 
 const APP_ROOT = join(process.cwd(), "src", "app");
 
@@ -58,14 +59,15 @@ describe("studio registry", () => {
         expect(repeated).toEqual([]);
     });
 
-    it("opens Agents as the app and Agents & nodes as its section of Settings", () => {
+    it("opens Agents as the app and Agents & nodes as its screen of the Workspace tab", () => {
         expect(DEMOTED_FEATURES.find(f => f.id === "agents")?.label).toBe("Agents");
         expect(resolveStudioFeature("agents")?.label).toBe("Agents");
         const nodes = DEMOTED_FEATURES.find(f => f.label === "Agents & nodes")!;
-        // Not a Studio app of its own: the shell follows its href, which is
-        // a Settings section and so opens the Settings tab on it.
+        // Not a Studio app of its own: picking it opens the Workspace tab on
+        // Agents, through TOOL_ALIASES, and its link says the same.
         expect(resolveStudioFeature(nodes.id)).toBeUndefined();
-        expect(settingsSectionOf(demotedFeatureHref(nodes.id)!)).toBe("agents");
+        expect(TOOL_ALIASES[nodes.id]).toEqual({ toolId: "workspace", at: "/agents" });
+        expect(toolTargetFromHref(nodes.href)).toEqual({ toolId: "workspace", at: "/agents" });
     });
 
     it("points every palette quick link at a page that exists", () => {
@@ -101,8 +103,8 @@ describe("studio registry", () => {
         expect(STUDIO_GROUPS.find(g => g.id === "workspace")!.features.map(f => f.id)).toContain(
             "team"
         );
-        // ⌘K's "team" row opens the tab; Settings' people section keeps a row
-        // of its own under another id.
+        // ⌘K's "team" row opens the tab; Workspace › People and access keeps
+        // a row of its own under another id.
         expect(DEMOTED_FEATURES.find(f => f.id === "team")?.href).toBe(
             "/employer/documents?feature=team"
         );
@@ -110,7 +112,7 @@ describe("studio registry", () => {
         const access = DEMOTED_FEATURES.find(f => f.id === "people-access")!;
         expect(access.label).toBe("People and access");
         expect(resolveStudioFeature(access.id)).toBeUndefined();
-        expect(settingsSectionOf(demotedFeatureHref(access.id)!)).toBe("people");
+        expect(TOOL_ALIASES[access.id]).toEqual({ toolId: "workspace", at: "/people" });
     });
 
     it("no longer lists Marketing, Distribution or Prospects as Studio entries of their own", () => {
@@ -194,16 +196,20 @@ describe("studio registry", () => {
     });
 
     it("can name every app the workspace is able to open in a tab", () => {
-        // A tab needs a label and an icon. These two have a working pane and
-        // a live way in — a shortcut, a palette row, an old bookmark — but no
-        // tile in the picker, so the registry has to be able to name them.
-        for (const id of ["workflows", "metadata"]) {
+        // A tab needs a label and an icon. These have a working pane and a
+        // live way in — a shortcut, a palette row — but no tile in the
+        // picker, so the registry has to be able to name them.
+        for (const id of ["workflows", "mindmap"]) {
             expect(STUDIO_FEATURES_BY_ID[id]).toBeUndefined();
             const feature = resolveStudioFeature(id);
             expect(feature).toBeDefined();
             expect(feature!.label).toBeTruthy();
             expect(feature!.Icon).toBeTruthy();
         }
+        // The company profile's old pane is a screen of the Workspace tab
+        // now: no tab of its own, an alias into that one.
+        expect(resolveStudioFeature("metadata")).toBeUndefined();
+        expect(TOOL_ALIASES.metadata).toEqual({ toolId: "workspace", at: "/company" });
     });
 
     it("lists Analytics as its own Management app, gated like its API", () => {
@@ -215,10 +221,11 @@ describe("studio registry", () => {
     });
 
     it("sends a palette row with nowhere of its own to its real destination", () => {
-        // Brand is a place in Growth's tab, opened through TOOL_ALIASES, so
-        // it has no destination beyond this page.
+        // Brand and People and access are places in a tool's tab, opened
+        // through TOOL_ALIASES, so they have no destination beyond this page.
         expect(demotedFeatureHref("brand")).toBeUndefined();
-        expect(demotedFeatureHref("people-access")).toBe("/employer/settings#people");
+        expect(demotedFeatureHref("people-access")).toBeUndefined();
+        expect(demotedFeatureHref("mindmap")).toBe("/employer/documents?add=1&tab=mindmap");
         // Its href points back at this page, so following it would loop.
         expect(demotedFeatureHref("rewrite")).toBeUndefined();
         expect(demotedFeatureHref("nonsense")).toBeUndefined();
@@ -234,22 +241,37 @@ describe("studio registry", () => {
         expect(settings).toBeDefined();
         expect(settings!.requires).toBeUndefined();
         expect(settings!.desc).toMatch(/your account/i);
+        expect(settings!.desc).not.toMatch(/people|processing|integrations/i);
     });
 
-    it("points every palette row into Settings at a section someone may see", () => {
+    it("lists Workspace in Management before Settings, open to every role", () => {
+        const management = STUDIO_GROUPS.find(g => g.id === "management")!.features.map(f => f.id);
+        expect(management.indexOf("workspace")).toBeGreaterThanOrEqual(0);
+        expect(management.indexOf("workspace")).toBeLessThan(management.indexOf("settings"));
+        const workspace = STUDIO_FEATURES_BY_ID.workspace!;
+        expect(workspace.label).toBe("Workspace");
+        expect(workspace.requires).toBeUndefined();
+        expect(workspace.href).toBe("/employer/documents?feature=workspace");
+    });
+
+    it("points every palette row into the settings at a screen someone may see", () => {
         const intoSettings = DEMOTED_FEATURES.filter(
-            f => !resolveStudioFeature(f.id) && settingsSectionOf(f.href) !== undefined
+            f => !resolveStudioFeature(f.id) && settingsSectionOfHref(f.href) !== null
         );
         expect(intoSettings.map(f => f.id).sort()).toEqual(
-            ["agents-nodes", "deploy", "people-access", "profile"].sort()
+            ["agents-nodes", "byok", "people-access", "profile", "workspace-general"].sort()
         );
+        // The old "Self-host / BYOK" row (Vercel, Docker, your own keys) is
+        // Bring your own keys now, and says nothing about embeddings.
+        expect(DEMOTED_FEATURES.some(f => f.id === "deploy" || /vercel/i.test(f.desc))).toBe(false);
+        expect(DEMOTED_FEATURES.some(f => /embedding/i.test(`${f.label} ${f.desc}`))).toBe(false);
         const owner = (p: Permission | undefined) =>
             p === undefined || BUILTIN_ROLE_PERMISSIONS.owner.has(p);
         for (const row of intoSettings) {
-            const section = settingsSectionFromHash(settingsSectionOf(row.href)!);
-            expect(section).not.toBeNull();
-            expect(canSeeSettingsSection(section!, owner)).toBe(true);
+            expect(canSeeSettingsSection(settingsSectionOfHref(row.href)!, owner)).toBe(true);
         }
+        // Nothing in the palette links the old Settings page any more.
+        expect(DEMOTED_FEATURES.filter(f => settingsSectionOf(f.href) !== undefined)).toEqual([]);
     });
 
     it("reads the section out of a link into Settings, and nothing out of any other link", () => {

@@ -9,14 +9,15 @@
  *
  * Responses carry an enumerated `reason` plus `signals` holding real
  * measurements only; there is no fabricated confidence anywhere on this path.
- * Falls back to a local default-provider decision when the converter is
- * unreachable.
+ * Falls back to a local decision in the shared provider order
+ * (./provider-order.ts) when the converter is unreachable.
  */
 
 import { z } from "zod";
 
 import { getOcrConfig } from "./config";
 import { toConverterReachableUrl } from "./converter-url";
+import { configuredOcrAvailability, defaultOcrProvider } from "./provider-order";
 import type { OCRProvider } from "./types";
 
 /** Wire schemaVersion of the frozen converter contract (packages/protocol). */
@@ -159,28 +160,17 @@ export async function renderPagesToImages(
 }
 
 /**
- * Local fallback provider when the converter cannot be reached. Mirrors the
- * converter's own priority: operator pin > Docling (self-hosted via the
- * converter) > Azure > LandingAI > Datalab > Docling.
+ * Decision when the converter cannot be reached: the first engine in the
+ * shared order that can run without it — Docling goes through the converter,
+ * so it is out — else the text layer. The honest reason, and NO fabricated
+ * confidence or signals.
  */
-function getDefaultOCRProvider(): OCRProvider {
-    const cfg = getOcrConfig();
-    if (cfg.defaultProvider) return cfg.defaultProvider;
-    if (cfg.converter?.url) return "DOCLING";
-    if (cfg.azure?.key && cfg.azure.endpoint) return "AZURE";
-    if (cfg.landingAi?.apiKey) return "LANDING_AI";
-    if (cfg.datalabApiKey) return "DATALAB";
-    return "DOCLING";
-}
-
-/**
- * Fallback decision when the converter is unreachable: the configured default
- * provider, with the honest reason and NO fabricated confidence or signals.
- */
-function localFallbackDecision(): RoutingDecision {
+function localFallbackDecision(options?: RoutingRequestOptions): RoutingDecision {
     return {
-        provider: getDefaultOCRProvider(),
-        reason: "vision-unavailable",
+        provider: defaultOcrProvider(configuredOcrAvailability(getOcrConfig(), false), {
+            forceOCR: options?.forceOCR,
+        }),
+        reason: options?.forceOCR ? "force-ocr" : "vision-unavailable",
         pageCount: 0,
         signals: {},
     };
@@ -209,7 +199,7 @@ export async function determineDocumentRouting(
         console.warn(
             "Document converter not configured (set DOCUMENT_CONVERTER_URL); using default provider"
         );
-        return localFallbackDecision();
+        return localFallbackDecision(options);
     }
 
     try {
@@ -251,6 +241,6 @@ export async function determineDocumentRouting(
     } catch (error) {
         const message = error instanceof Error ? error.message : String(error);
         console.warn(`Document converter unavailable, using default provider: ${message}`);
-        return localFallbackDecision();
+        return localFallbackDecision(options);
     }
 }

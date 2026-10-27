@@ -317,7 +317,7 @@ const COVERAGE: Record<string, Coverage> = Object.fromEntries<Coverage>([
     // --- Deliberately unscoped ----------------------------------------------
     [
         "apps/web/src/server/settings/models.ts",
-        { unscoped: "Settings › Models shows the deployment's default models" },
+        { unscoped: "Workspace › Models shows the deployment's default models" },
     ],
     [
         "apps/web/src/server/workspace-models/probe.ts",

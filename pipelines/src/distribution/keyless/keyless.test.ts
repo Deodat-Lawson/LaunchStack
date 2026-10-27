@@ -48,6 +48,32 @@ const program: ProgramRecord = {
     updatedAt: null,
 };
 
+/** A few of OpenStreetMap's tags with their wiki descriptions, as taginfo serves them. */
+const VOCABULARY = [
+    {
+        selector: '["shop"="coffee"]',
+        description: "A shop that sells coffee beans, ground coffee and coffee accessories",
+    },
+    {
+        selector: '["craft"="coffee_roaster"]',
+        description: "A coffee roaster: a place where green coffee beans are roasted",
+    },
+    {
+        selector: '["amenity"="cafe"]',
+        description: "A cafe: a place serving coffee, tea and light meals",
+    },
+    {
+        selector: '["shop"="hardware"]',
+        description: "A shop that sells hardware: tools, building supplies and paint",
+    },
+    {
+        selector: '["shop"="wholesale"]',
+        description: "A wholesaler selling goods in bulk to other businesses",
+    },
+    { selector: '["shop"="clothes"]', description: "A shop that primarily sells clothing" },
+];
+const vocabulary = async () => VOCABULARY;
+
 const planInput: PlanInput = {
     program,
     profile: { companyName: "Acme Roasters", industry: "Food", identity: "", knowledgeContext: "" },
@@ -65,7 +91,7 @@ describe("keyless plan", () => {
     });
 
     it("plans one OpenStreetMap query per territory and no startup directory", async () => {
-        const plan = await buildKeylessPlan(planInput);
+        const plan = await buildKeylessPlan(planInput, { vocabulary });
         expect(plan.queries).toHaveLength(2);
         expect(plan.queries.every(q => q.kind === "place")).toBe(true);
         const place = plan.queries;
@@ -79,7 +105,7 @@ describe("keyless plan", () => {
 
     it("picks place categories by meaning when an embedder is given", async () => {
         resetOsmCategoryVectors();
-        const plan = await buildKeylessPlan(planInput, { embed: fakeEmbed });
+        const plan = await buildKeylessPlan(planInput, { embed: fakeEmbed, vocabulary });
         expect(plan.queries[0]!.categoryIds).toEqual(
             expect.arrayContaining(['["shop"="coffee"]', '["craft"="coffee_roaster"]'])
         );
@@ -87,10 +113,13 @@ describe("keyless plan", () => {
     });
 
     it("falls back to partner-kind tags only when the topic maps to none", async () => {
-        const plan = await buildKeylessPlan({
-            ...planInput,
-            program: { ...planInput.program, categories: ["quantum widgets"] },
-        });
+        const plan = await buildKeylessPlan(
+            {
+                ...planInput,
+                program: { ...planInput.program, categories: ["quantum widgets"] },
+            },
+            { vocabulary }
+        );
         const place = plan.queries.find(q => q.kind === "place")!;
         expect(place.categoryIds).toContain('["shop"="wholesale"]');
     });
@@ -98,10 +127,11 @@ describe("keyless plan", () => {
 
 describe("OpenStreetMap adapter", () => {
     it("derives selectors and a name regex from the segment's words", () => {
-        expect(tagSelectorsFor(["specialty coffee"])).toEqual(
+        expect(tagSelectorsFor(["specialty coffee"], VOCABULARY)).toEqual(
             expect.arrayContaining(['["shop"="coffee"]', '["craft"="coffee_roaster"]'])
         );
-        expect(tagSelectorsFor(["quantum flux capacitors"])).toEqual([]);
+        expect(tagSelectorsFor(["quantum flux capacitors"], VOCABULARY)).toEqual([]);
+        expect(tagSelectorsFor(["specialty coffee"], [])).toEqual([]);
         expect(nameRegexFor(["specialty coffee", "roaster"])).toBe("specialty|coffee|roaster");
     });
 
@@ -109,7 +139,8 @@ describe("OpenStreetMap adapter", () => {
         resetOsmCategoryVectors();
         const hardware = await chooseOsmCategories(
             fakeEmbed,
-            "Retailers and shops that would buy, stock or resell this: power tools and building supplies"
+            "Retailers and shops that would buy, stock or resell this: power tools and building supplies",
+            VOCABULARY
         );
         expect(hardware).toContain('["shop"="hardware"]');
         expect(hardware).not.toContain('["shop"="coffee"]');
@@ -140,7 +171,7 @@ describe("OpenStreetMap adapter", () => {
     it("builds a query that requires a website and honours the city scope", () => {
         const q = buildOverpassQuery(
             { country: "DE", city: "Hamburg" },
-            { country: "DE", keywords: ["coffee"] }
+            { country: "DE", keywords: ["coffee"], selectors: ['["shop"="coffee"]'] }
         );
         expect(q).toContain('area["ISO3166-1"="DE"]');
         expect(q).toContain('area["name"="Hamburg"]');
@@ -707,6 +738,14 @@ describe("keyless ports", () => {
                         ],
                     })
                 );
+            if (u.includes("taginfo"))
+                return new Response(
+                    JSON.stringify({
+                        data: [
+                            { value: "coffee", in_wiki: true, description: "Sells coffee beans" },
+                        ],
+                    })
+                );
             if (u.includes("nominatim")) return new Response(JSON.stringify([]));
             if (u.includes("photon")) return new Response(JSON.stringify({ features: [] }));
             if (u.includes("openstreetmap.org/api"))
@@ -738,5 +777,6 @@ describe("keyless ports", () => {
         expect(ports.searchWeb).toBeNull();
         const { plan } = await ports.plan!(planInput);
         expect(plan.queries.filter(q => q.kind === "place")).toHaveLength(2);
-    });
+        // Three stubbed sources in turn, with the profiler's polite pauses.
+    }, 20_000);
 });

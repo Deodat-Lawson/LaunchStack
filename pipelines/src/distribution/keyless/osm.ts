@@ -7,6 +7,7 @@
  */
 import type { PartnerKind } from "../types";
 import { cosine, type EmbedTexts } from "../semantic";
+import type { OsmCategory } from "./taginfo";
 import { escapeRegExp, overpassAreas } from "./geo";
 
 export const OVERPASS_URL = "https://overpass-api.de/api/interpreter";
@@ -18,158 +19,6 @@ export const OVERPASS_MIRRORS = [
 ];
 export const KEYLESS_USER_AGENT =
     "LaunchStack-Prospects/0.1 (+https://github.com/Deodat-Lawson/LaunchStack)";
-
-/**
- * What OpenStreetMap can be searched for: its own shop, craft, amenity and
- * office tags, each with the plain description its wiki gives. This is the
- * source's vocabulary, not a rule about any segment — which entries a segment
- * wants is decided by meaning (see chooseOsmCategories), so a "specialty
- * coffee for cafés" segment reaches cafés and roasters without anyone
- * writing "coffee → shop=coffee".
- */
-export const OSM_CATEGORIES: ReadonlyArray<{ selector: string; description: string }> = [
-    {
-        selector: '["shop"="coffee"]',
-        description: "Coffee shop selling coffee beans and ground coffee",
-    },
-    {
-        selector: '["craft"="coffee_roaster"]',
-        description: "Coffee roaster roasting green coffee beans",
-    },
-    {
-        selector: '["amenity"="cafe"]',
-        description: "Café serving coffee, tea, drinks and light meals",
-    },
-    { selector: '["shop"="tea"]', description: "Tea shop selling loose-leaf and packaged tea" },
-    { selector: '["shop"="bakery"]', description: "Bakery selling bread, cakes and pastries" },
-    { selector: '["shop"="pastry"]', description: "Pastry shop and patisserie" },
-    { selector: '["shop"="confectionery"]', description: "Confectionery and sweet shop" },
-    { selector: '["shop"="chocolate"]', description: "Chocolate shop and chocolatier" },
-    { selector: '["shop"="deli"]', description: "Delicatessen selling fine and specialty foods" },
-    { selector: '["shop"="cheese"]', description: "Cheese shop" },
-    { selector: '["shop"="butcher"]', description: "Butcher selling meat" },
-    { selector: '["shop"="seafood"]', description: "Fishmonger selling fish and seafood" },
-    { selector: '["shop"="greengrocer"]', description: "Greengrocer selling fruit and vegetables" },
-    {
-        selector: '["shop"="health_food"]',
-        description: "Health food store selling organic and natural products",
-    },
-    { selector: '["shop"="organic"]', description: "Organic food shop" },
-    { selector: '["shop"="farm"]', description: "Farm shop selling local produce" },
-    { selector: '["shop"="supermarket"]', description: "Supermarket and grocery store" },
-    { selector: '["shop"="convenience"]', description: "Convenience store and corner shop" },
-    { selector: '["shop"="spices"]', description: "Spice shop" },
-    { selector: '["shop"="wine"]', description: "Wine shop and wine merchant" },
-    { selector: '["shop"="alcohol"]', description: "Liquor store selling beer, wine and spirits" },
-    {
-        selector: '["shop"="beverages"]',
-        description: "Beverage store selling soft drinks and bottled drinks",
-    },
-    { selector: '["craft"="brewery"]', description: "Brewery making beer" },
-    { selector: '["craft"="winery"]', description: "Winery making wine" },
-    { selector: '["craft"="distillery"]', description: "Distillery making spirits" },
-    { selector: '["amenity"="restaurant"]', description: "Restaurant serving meals" },
-    { selector: '["amenity"="bar"]', description: "Bar serving alcoholic drinks" },
-    { selector: '["amenity"="pub"]', description: "Pub" },
-    { selector: '["amenity"="fast_food"]', description: "Fast food restaurant" },
-    { selector: '["amenity"="ice_cream"]', description: "Ice cream parlour" },
-    { selector: '["tourism"="hotel"]', description: "Hotel offering accommodation" },
-    { selector: '["tourism"="guest_house"]', description: "Guest house and bed and breakfast" },
-    { selector: '["shop"="cosmetics"]', description: "Cosmetics shop selling makeup and skincare" },
-    { selector: '["shop"="beauty"]', description: "Beauty salon offering beauty treatments" },
-    { selector: '["shop"="hairdresser"]', description: "Hairdresser and barber" },
-    { selector: '["shop"="perfumery"]', description: "Perfume shop" },
-    {
-        selector: '["shop"="chemist"]',
-        description: "Drugstore selling toiletries and household chemicals",
-    },
-    { selector: '["amenity"="pharmacy"]', description: "Pharmacy dispensing medicines" },
-    { selector: '["shop"="clothes"]', description: "Clothing store selling apparel" },
-    { selector: '["shop"="boutique"]', description: "Fashion boutique" },
-    { selector: '["shop"="shoes"]', description: "Shoe store" },
-    { selector: '["shop"="jewelry"]', description: "Jewellery shop" },
-    { selector: '["shop"="bag"]', description: "Bags and luggage shop" },
-    { selector: '["shop"="furniture"]', description: "Furniture store" },
-    {
-        selector: '["shop"="interior_decoration"]',
-        description: "Interior decoration and home decor shop",
-    },
-    { selector: '["shop"="houseware"]', description: "Houseware and kitchenware shop" },
-    { selector: '["shop"="bed"]', description: "Bedding and mattress shop" },
-    {
-        selector: '["shop"="hardware"]',
-        description: "Hardware store selling tools and building supplies",
-    },
-    { selector: '["shop"="doityourself"]', description: "DIY and home improvement store" },
-    {
-        selector: '["shop"="garden_centre"]',
-        description: "Garden centre selling plants and garden supplies",
-    },
-    { selector: '["shop"="florist"]', description: "Florist selling flowers" },
-    { selector: '["shop"="sports"]', description: "Sports shop selling sporting goods" },
-    { selector: '["shop"="outdoor"]', description: "Outdoor and camping equipment shop" },
-    { selector: '["shop"="bicycle"]', description: "Bicycle shop" },
-    { selector: '["shop"="pet"]', description: "Pet shop selling pet food and supplies" },
-    { selector: '["shop"="electronics"]', description: "Consumer electronics store" },
-    { selector: '["shop"="computer"]', description: "Computer shop" },
-    { selector: '["shop"="mobile_phone"]', description: "Mobile phone shop" },
-    { selector: '["shop"="books"]', description: "Bookshop" },
-    { selector: '["shop"="stationery"]', description: "Stationery and office supplies shop" },
-    { selector: '["shop"="toys"]', description: "Toy shop" },
-    { selector: '["shop"="gift"]', description: "Gift shop and souvenir store" },
-    { selector: '["shop"="art"]', description: "Art shop and gallery selling artworks" },
-    { selector: '["shop"="craft"]', description: "Arts and crafts supplies shop" },
-    { selector: '["shop"="music"]', description: "Music and record shop" },
-    { selector: '["shop"="musical_instrument"]', description: "Musical instrument shop" },
-    { selector: '["shop"="baby_goods"]', description: "Baby goods shop" },
-    { selector: '["shop"="optician"]', description: "Optician selling eyewear" },
-    { selector: '["shop"="medical_supply"]', description: "Medical supply shop" },
-    { selector: '["shop"="car"]', description: "Car dealership" },
-    { selector: '["shop"="car_repair"]', description: "Car repair garage" },
-    { selector: '["shop"="car_parts"]', description: "Car parts and accessories shop" },
-    { selector: '["shop"="department_store"]', description: "Department store" },
-    { selector: '["shop"="variety_store"]', description: "Variety and discount store" },
-    { selector: '["shop"="wholesale"]', description: "Wholesaler selling to businesses in bulk" },
-    {
-        selector: '["shop"="trade"]',
-        description: "Trade supplier selling to contractors and businesses",
-    },
-    { selector: '["office"="company"]', description: "Company office" },
-    { selector: '["office"="logistics"]', description: "Logistics company" },
-    { selector: '["office"="courier"]', description: "Courier and parcel service" },
-    { selector: '["industrial"="warehouse"]', description: "Warehouse and storage facility" },
-    { selector: '["industrial"="factory"]', description: "Factory" },
-    { selector: '["man_made"="works"]', description: "Manufacturing works and production plant" },
-    { selector: '["office"="it"]', description: "IT and software company office" },
-    {
-        selector: '["office"="advertising_agency"]',
-        description: "Advertising and marketing agency",
-    },
-    { selector: '["office"="consulting"]', description: "Consulting firm" },
-    { selector: '["office"="engineer"]', description: "Engineering firm" },
-    { selector: '["office"="construction_company"]', description: "Construction company" },
-    { selector: '["office"="architect"]', description: "Architecture firm" },
-    { selector: '["craft"="electrician"]', description: "Electrician" },
-    { selector: '["craft"="plumber"]', description: "Plumber" },
-    {
-        selector: '["craft"="hvac"]',
-        description: "Heating, ventilation and air conditioning installer",
-    },
-    { selector: '["office"="lawyer"]', description: "Law firm" },
-    { selector: '["office"="accountant"]', description: "Accountant and bookkeeping firm" },
-    { selector: '["office"="financial"]', description: "Financial services office" },
-    { selector: '["office"="insurance"]', description: "Insurance office" },
-    { selector: '["office"="estate_agent"]', description: "Real estate agency" },
-    { selector: '["amenity"="school"]', description: "School" },
-    { selector: '["amenity"="university"]', description: "University" },
-    { selector: '["amenity"="college"]', description: "College" },
-    { selector: '["leisure"="fitness_centre"]', description: "Gym and fitness centre" },
-    { selector: '["leisure"="sports_centre"]', description: "Sports centre" },
-    { selector: '["shop"="massage"]', description: "Massage and spa" },
-    { selector: '["amenity"="clinic"]', description: "Medical clinic" },
-    { selector: '["amenity"="dentist"]', description: "Dentist" },
-    { selector: '["amenity"="veterinary"]', description: "Veterinary clinic" },
-];
 
 // A plain key filter; a regex over keys is what makes a country-wide query time out.
 const WEBSITE_FILTER = '["website"]';
@@ -186,19 +35,23 @@ let categoryVectors: { key: string; vectors: number[][] } | null = null;
 export async function chooseOsmCategories(
     embed: EmbedTexts,
     brief: string,
+    vocabulary: readonly OsmCategory[],
     max = MAX_SELECTORS
 ): Promise<string[]> {
-    const descriptions = OSM_CATEGORIES.map(c => c.description);
+    if (vocabulary.length === 0) return [];
+    const descriptions = vocabulary.map(c => c.description);
     const key = descriptions.join("|");
     if (categoryVectors?.key !== key) {
         categoryVectors = { key, vectors: await embed(descriptions) };
     }
     const [query] = await embed([brief]);
     if (!query) return [];
-    const scored = OSM_CATEGORIES.map((c, i) => ({
-        selector: c.selector,
-        score: cosine(query, categoryVectors!.vectors[i] ?? []),
-    })).sort((a, b) => b.score - a.score);
+    const scored = vocabulary
+        .map((c, i) => ({
+            selector: c.selector,
+            score: cosine(query, categoryVectors!.vectors[i] ?? []),
+        }))
+        .sort((a, b) => b.score - a.score);
     const best = scored[0]?.score ?? 0;
     const spread = best - (scored[Math.min(scored.length - 1, 20)]?.score ?? 0);
     // Within half the spread between the best and the 20th: the categories that
@@ -219,7 +72,10 @@ export function resetOsmCategoryVectors(): void {
  * the segment's. A plain fallback over the same vocabulary — no hand-written
  * rules — used only when no embedding model is configured.
  */
-export function tagSelectorsFor(keywords: readonly string[]): string[] {
+export function tagSelectorsFor(
+    keywords: readonly string[],
+    vocabulary: readonly OsmCategory[]
+): string[] {
     const words = new Set(
         keywords
             .flatMap(k => k.toLowerCase().split(/[^\p{L}\p{N}]+/u))
@@ -227,13 +83,14 @@ export function tagSelectorsFor(keywords: readonly string[]): string[] {
             .map(w => w.replace(/(ies|es|s)$/, ""))
     );
     if (words.size === 0) return [];
-    const scored = OSM_CATEGORIES.map(c => {
-        const own = c.description
-            .toLowerCase()
-            .split(/[^\p{L}\p{N}]+/u)
-            .map(w => w.replace(/(ies|es|s)$/, ""));
-        return { selector: c.selector, hits: own.filter(w => words.has(w)).length };
-    })
+    const scored = vocabulary
+        .map(c => {
+            const own = c.description
+                .toLowerCase()
+                .split(/[^\p{L}\p{N}]+/u)
+                .map(w => w.replace(/(ies|es|s)$/, ""));
+            return { selector: c.selector, hits: own.filter(w => words.has(w)).length };
+        })
         .filter(c => c.hits > 0)
         .sort((a, b) => b.hits - a.hits);
     return scored.slice(0, MAX_SELECTORS).map(c => c.selector);
@@ -257,7 +114,7 @@ export interface OverpassRequest {
     /** City or region name; null for the whole country (or the top cities of a large one). */
     region?: string | null;
     keywords: readonly string[];
-    /** Pre-computed selectors; defaults to tagSelectorsFor(keywords). */
+    /** Tag selectors chosen for the segment; none → match names only. */
     selectors?: readonly string[];
     limit?: number;
     timeoutSeconds?: number;
@@ -267,9 +124,7 @@ export function buildOverpassQuery(
     area: { country: string; city: string | null },
     req: OverpassRequest
 ): string {
-    const selectors = (
-        req.selectors?.length ? [...req.selectors] : tagSelectorsFor(req.keywords)
-    ).slice(0, MAX_SELECTORS);
+    const selectors = [...(req.selectors ?? [])].slice(0, MAX_SELECTORS);
     const nameRegex = nameRegexFor(req.keywords);
     const timeout = req.timeoutSeconds ?? 20;
     const limit = req.limit ?? 40;

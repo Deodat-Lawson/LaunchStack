@@ -8,6 +8,7 @@ import type { DiscoveryPlan, PlannedSourceQuery, ProgramRecord } from "../types"
 import { countryName } from "./geo";
 import { buyerBrief, type EmbedTexts } from "../semantic";
 import { chooseOsmCategories, tagSelectorsFor } from "./osm";
+import { osmVocabulary, type OsmCategory } from "./taginfo";
 
 export const KEYLESS_PLAYBOOK_HASH = "keyless-plan/v2";
 export const KEYLESS_MODEL_ID = "keyless/deterministic-planner";
@@ -54,6 +55,8 @@ export function keywordsFor(program: Pick<ProgramRecord, "categories" | "offerin
 export interface KeylessPlanOptions {
     /** Embedder for picking OpenStreetMap categories by meaning; null → shared words. */
     embed?: EmbedTexts | null;
+    /** OpenStreetMap's vocabulary; defaults to taginfo's (loaded once). */
+    vocabulary?: () => Promise<OsmCategory[]>;
 }
 
 /** OpenStreetMap categories for the segment: by meaning when an embedder answers. */
@@ -61,11 +64,13 @@ export async function placeCategoriesFor(
     input: Pick<PlanInput, "program" | "partnerKinds">,
     options: KeylessPlanOptions = {}
 ): Promise<{ selectors: string[]; method: "semantic" | "lexical" }> {
+    const vocabulary = await (options.vocabulary ?? osmVocabulary)();
     if (options.embed) {
         try {
             const selectors = await chooseOsmCategories(
                 options.embed,
-                buyerBrief(input.program, input.partnerKinds)
+                buyerBrief(input.program, input.partnerKinds),
+                vocabulary
             );
             if (selectors.length > 0) return { selectors, method: "semantic" };
         } catch (error) {
@@ -73,10 +78,12 @@ export async function placeCategoriesFor(
         }
     }
     const keywords = keywordsFor(input.program);
-    const topical = tagSelectorsFor(keywords);
+    const topical = tagSelectorsFor(keywords, vocabulary);
     return {
         selectors:
-            topical.length > 0 ? topical : tagSelectorsFor([...keywords, ...input.partnerKinds]),
+            topical.length > 0
+                ? topical
+                : tagSelectorsFor([...keywords, ...input.partnerKinds], vocabulary),
         method: "lexical",
     };
 }

@@ -35,6 +35,7 @@ import {
 import { searchPhoton } from "./photon";
 import { buildKeylessPlan, KEYLESS_MODEL_ID, KEYLESS_PLAYBOOK_HASH, keywordsFor } from "./plan";
 import { profileFromPages } from "./profile";
+import { osmVocabulary } from "./taginfo";
 
 export interface KeylessPortsOptions {
     publishDossier?: ((input: PublishDossierInput) => Promise<{ documentId: number }>) | null;
@@ -164,7 +165,10 @@ export function createKeylessPorts(options: KeylessPortsOptions = {}): Distribut
         embed: options.embed ?? null,
         judgeFit: options.judgeFit ?? null,
         plan: async input => ({
-            plan: await buildKeylessPlan(input, { embed: options.embed ?? null }),
+            plan: await buildKeylessPlan(input, {
+                embed: options.embed ?? null,
+                vocabulary: () => osmVocabulary({ fetchImpl }),
+            }),
             modelId: KEYLESS_MODEL_ID,
             playbookHash: KEYLESS_PLAYBOOK_HASH,
         }),

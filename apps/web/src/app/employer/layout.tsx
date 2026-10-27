@@ -5,6 +5,7 @@ import { EmployerWorkspaceSwitcherProvider } from "./_chrome/EmployerWorkspaceSw
 import { getWorkspaceSwitcherPayload } from "./_chrome/getWorkspaceSwitcherPayload";
 import { JoinWelcome } from "./_chrome/JoinWelcome";
 import { SignInNotice } from "~/components/auth/SignInNotice";
+import { FeedbackProvider } from "~/components/feedback/FeedbackProvider";
 import { Toaster } from "~/components/ui/sonner";
 
 export default async function EmployerLayout({ children }: { children: ReactNode }) {
@@ -18,10 +19,13 @@ export default async function EmployerLayout({ children }: { children: ReactNode
             }}
         >
             <EmployerWorkspaceSwitcherProvider value={workspaceSwitcher}>
-                <PreferenceSync />
-                <DriftShell>{children}</DriftShell>
-                <JoinWelcome />
-                <SignInNotice />
+                {/* Every signed-in page can report a bug or ask for a feature. */}
+                <FeedbackProvider>
+                    <PreferenceSync />
+                    <DriftShell>{children}</DriftShell>
+                    <JoinWelcome />
+                    <SignInNotice />
+                </FeedbackProvider>
             </EmployerWorkspaceSwitcherProvider>
             <Toaster richColors position="top-right" />
         </div>

@@ -3,13 +3,24 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "~/lib/auth-client";
 import { useRouter } from "next/navigation";
-import { Bug, CircleAlert, Copy, Mail, MessageSquare, Phone, Send } from "lucide-react";
+import {
+    Bug,
+    CircleAlert,
+    Copy,
+    Lightbulb,
+    Mail,
+    MessageSquare,
+    MessageSquareText,
+    Phone,
+    Send,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import type { SupportChannels } from "~/server/support";
 import { useSourceFailureCopy, type SourceFailureReport } from "~/lib/source-failure";
 
 import LoadingPage from "~/app/_components/loading";
+import { useFeedback } from "~/components/feedback/FeedbackProvider";
 import { EmployerChrome } from "~/app/employer/_components/EmployerChrome";
 import { Button } from "~/components/ui/button";
 import { Card, PageHeader, PageShell, Section } from "~/components/layout/page-shell";
@@ -26,6 +37,7 @@ export function ContactClient({
     const t = useTranslations("onboarding.contact");
     const tc = useTranslations("common");
     const failureCopy = useSourceFailureCopy();
+    const feedback = useFeedback();
     const router = useRouter();
     const { isLoaded, userId } = useAuth();
     const [loading, setLoading] = useState(true);
@@ -86,6 +98,8 @@ export function ContactClient({
                     title={report ? t("titleReport") : t("title")}
                     description={support.email ? t("descriptionMail") : t("description")}
                 />
+
+                {feedback.enabled && <InAppReporter onOpen={kind => feedback.open({ kind })} />}
 
                 {report && reportText && (
                     <FailureReportCard
@@ -245,6 +259,38 @@ export function ContactClient({
                 </div>
             </PageShell>
         </>
+    );
+}
+
+/**
+ * While the instance takes in-app reports, they are the better way to say
+ * something is broken: stored, answered where the person will see it, with
+ * the page and a screenshot attached. Mail stays for everything else.
+ */
+function InAppReporter({ onOpen }: { onOpen: (kind: "bug" | "idea") => void }) {
+    const t = useTranslations("feedback.contact");
+    const tEntry = useTranslations("feedback.entry");
+    return (
+        <div
+            className="border-line bg-panel mb-5 flex flex-wrap items-center gap-3 rounded-[10px] border px-4 py-3.5"
+            data-testid="contact-feedback"
+        >
+            <MessageSquareText className="text-brand size-4 shrink-0" aria-hidden />
+            <div className="min-w-0 flex-1">
+                <div className="text-ink text-[13.5px] font-semibold">{t("title")}</div>
+                <p className="text-ink-3 m-0 mt-0.5 text-[12.5px]">{t("body")}</p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+                <Button variant="outline" size="sm" onClick={() => onOpen("idea")}>
+                    <Lightbulb aria-hidden />
+                    {tEntry("requestFeature")}
+                </Button>
+                <Button size="sm" onClick={() => onOpen("bug")}>
+                    <Bug aria-hidden />
+                    {tEntry("reportBug")}
+                </Button>
+            </div>
+        </div>
     );
 }
 

@@ -438,6 +438,18 @@ export const SYSTEM_SERVICES: readonly ServiceDefinition[] = [
             "profile is the `workspace` service's `profile` routes.",
     },
     {
+        id: "feedback",
+        tier: "system",
+        summary:
+            "In-app bug reports and feature requests, triaged by the instance's operators (FEEDBACK_ADMIN_EMAILS).",
+        scope: "unscoped",
+        routes: ["feedback"],
+        unscopedRoutes: {
+            "feedback/*":
+                "Instance-wide: filed from anywhere, the workspace picker included; triagers are operators, not a workspace role. The reporter's active workspace is recorded when there is one.",
+        },
+    },
+    {
         id: "platform-ops",
         tier: "system",
         summary:

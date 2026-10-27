@@ -82,6 +82,10 @@ const TeamTool = dynamic(() => import("./team/TeamTool").then(m => m.TeamTool), 
     loading: () => <LoadingPage variant="pane" />,
 });
 
+const FeedbackTool = dynamic(() => import("./feedback/FeedbackTool").then(m => m.FeedbackTool), {
+    loading: () => <LoadingPage variant="pane" />,
+});
+
 // Tools with screens of their own. Each is a tab with a rail inside it and
 // its own history; none of them is a page you navigate to any more.
 const GrowthTool = dynamic(
@@ -505,6 +509,8 @@ export function renderStudioPane(
                     onShare={context?.team?.onShare}
                 />
             );
+        case "feedback":
+            return <FeedbackTool host={context?.tool} />;
         case "draft":
             return <DraftPane onClose={onClose} context={context} />;
         case "rewrite":

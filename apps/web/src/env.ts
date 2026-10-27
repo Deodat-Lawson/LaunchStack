@@ -452,6 +452,14 @@ const serverSchema = z.object({
     // stand-in `next dev` serves under /dev/stand-ins/google. Ignored when
     // the /dev routes are off.
     GOOGLE_STAND_IN_URL: optionalString(),
+    // In-app feedback (bug reports + feature requests). The triagers' emails,
+    // comma/space/semicolon separated; unset keeps the feature off. Read per
+    // call by ~/server/feedback/access.
+    FEEDBACK_ADMIN_EMAILS: optionalString(),
+    // Optional Slack or Discord incoming webhook told about each new report
+    // (one line: kind, title, link — never the body or screenshots). Checked
+    // at send time, so a malformed value disables it rather than the boot.
+    FEEDBACK_WEBHOOK_URL: optionalString(),
     // CORS
     CORS_ALLOWED_ORIGINS: optionalString(),
     // Logging
@@ -689,6 +697,8 @@ function parseServerEnv() {
         S3_ACCESS_KEY: process.env.S3_ACCESS_KEY,
         S3_SECRET_KEY: process.env.S3_SECRET_KEY,
         S3_BUCKET_NAME: process.env.S3_BUCKET_NAME,
+        FEEDBACK_ADMIN_EMAILS: process.env.FEEDBACK_ADMIN_EMAILS,
+        FEEDBACK_WEBHOOK_URL: process.env.FEEDBACK_WEBHOOK_URL,
     };
 
     let server: z.infer<typeof serverSchemaRefined>;

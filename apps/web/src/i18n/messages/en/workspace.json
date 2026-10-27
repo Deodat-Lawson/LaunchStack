@@ -8,7 +8,8 @@
     "darkTheme": "Switch to dark theme",
     "settings": "Settings",
     "documentation": "Documentation",
-    "logOut": "Log out"
+    "logOut": "Log out",
+    "feedback": "Send feedback"
   },
   "common": {
     "actionsFor": "Actions for {name}",
@@ -105,6 +106,10 @@
     "workspace": {
       "label": "Workspace",
       "description": "The workspace's name and details, its people and access, company profile, your own keys, models, agents, integrations, usage and archive"
+    },
+    "feedback": {
+      "label": "Feedback",
+      "description": "Bugs you reported, the shared board of feature requests, and the team's replies"
     }
   },
   "studioDeniedNotes": {

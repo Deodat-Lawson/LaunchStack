@@ -24,6 +24,7 @@ import {
     PenLine as IconProposals,
     Link as IconLink,
     Megaphone as IconMegaphone,
+    MessageSquareText as IconFeedback,
     ClipboardList as IconPaste,
     Pen as IconPen,
     Settings as IconSettings,
@@ -797,6 +798,17 @@ const LINK_ONLY_FEATURES: Record<string, StudioFeature> = {
         Icon: IconWorkflow,
         desc: "Automate recurring tasks across your sources",
     },
+    // Bug reports and feature requests while the product is in testing. Not
+    // a picker tile: whether an instance takes reports at all is the
+    // operator's setting (`FEEDBACK_ADMIN_EMAILS`), not a permission, so it
+    // is reached from the Feedback button, the account menu and ⌘K instead.
+    feedback: {
+        id: "feedback",
+        label: "Feedback",
+        Icon: IconFeedback,
+        desc: "Bugs you reported, the shared board of feature requests, and the team's replies",
+        href: "/employer/documents?feature=feedback",
+    },
 };
 
 /**
@@ -1001,6 +1013,7 @@ const STUDIO_APP_MESSAGE_KEYS = {
     analytics: "analytics",
     mindmap: "mindmap",
     workflows: "workflows",
+    feedback: "feedback",
 } as const;
 
 const STUDIO_DENIED_NOTE_KEYS = { team: "team" } as const;

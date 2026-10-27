@@ -967,7 +967,18 @@
       "debugDna": "Debug: DNA Source",
       "rawContext": "Raw context sent to LLM",
       "trendRefs": "Trend references",
-      "noTrends": "No trend references available for this campaign."
+      "noTrends": "No trend references available for this campaign.",
+      "tabs": {
+        "draft": "Draft",
+        "claims": "Claims",
+        "strategy": "Why it works",
+        "research": "Research",
+        "process": "Process",
+        "debug": "Debug"
+      },
+      "emptyResult": "Your draft appears here. Describe what to promote and generate.",
+      "noClaims": "This post makes no factual claims to check.",
+      "history": "History ({count})"
     },
     "errors": {
       "choosePlatform": "Choose a platform to continue.",

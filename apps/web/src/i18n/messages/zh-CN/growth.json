@@ -967,7 +967,18 @@
       "debugDna": "调试：DNA 来源",
       "rawContext": "发送给 LLM 的原始上下文",
       "trendRefs": "趋势参考",
-      "noTrends": "此营销活动没有可用的趋势参考。"
+      "noTrends": "此营销活动没有可用的趋势参考。",
+      "tabs": {
+        "draft": "草稿",
+        "claims": "论断",
+        "strategy": "思路",
+        "research": "调研",
+        "process": "过程",
+        "debug": "调试"
+      },
+      "emptyResult": "草稿会显示在这里。描述你想推广的内容，然后生成。",
+      "noClaims": "这篇帖子没有需要核对的事实论断。",
+      "history": "历史（{count}）"
     },
     "errors": {
       "choosePlatform": "请选择一个平台以继续。",

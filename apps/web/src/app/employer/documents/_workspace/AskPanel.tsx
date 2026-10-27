@@ -1039,6 +1039,8 @@ interface EmptyStateProps {
     disabled: boolean;
     onAsk: (starter: AskStarter, refs: string[]) => void;
     onOpenProfile: () => void;
+    /** The Processing queue tab: where each processing or failed source is. */
+    onOpenProcessing: () => void;
 }
 
 function EmptyState({
@@ -1048,6 +1050,7 @@ function EmptyState({
     disabled,
     onAsk,
     onOpenProfile,
+    onOpenProcessing,
 }: EmptyStateProps) {
     const t = useTranslations("chat.emptyState");
     let sourceCount = 0;
@@ -1067,14 +1070,29 @@ function EmptyState({
                     })}
                 </div>
                 <div className="text-ink-3 text-sm">
-                    {[
-                        t("indexed", { count: sourceCount }),
-                        ...(processingCount > 0
-                            ? [t("processing", { count: processingCount })]
-                            : []),
-                        ...(failedCount > 0 ? [t("failed", { count: failedCount })] : []),
-                        ...(processingCount === 0 && failedCount === 0 ? [t("ready")] : []),
-                    ].join(" · ")}
+                    {t("indexed", { count: sourceCount })}
+                    {processingCount > 0 || failedCount > 0 ? (
+                        <>
+                            {" · "}
+                            {/* Where each of those is, stage by stage. */}
+                            <button
+                                type="button"
+                                className="hover:text-brand-ink underline decoration-dotted underline-offset-2"
+                                onClick={onOpenProcessing}
+                            >
+                                {[
+                                    ...(processingCount > 0
+                                        ? [t("processing", { count: processingCount })]
+                                        : []),
+                                    ...(failedCount > 0
+                                        ? [t("failed", { count: failedCount })]
+                                        : []),
+                                ].join(" · ")}
+                            </button>
+                        </>
+                    ) : (
+                        ` · ${t("ready")}`
+                    )}
                 </div>
             </div>
             <AskStarters
@@ -1720,6 +1738,9 @@ export function AskPanel({
                             disabled={isSending}
                             onAsk={handleAskStarter}
                             onOpenProfile={() => onStudioNavigate(workspaceHref("company"))}
+                            onOpenProcessing={() =>
+                                onStudioNavigate("/employer/documents?feature=processing")
+                            }
                         />
                     ) : (
                         <>

@@ -263,7 +263,9 @@
       "intro": "粘贴任意网址，我们会抓取正文内容并去除页面框架。",
       "fetching": "正在抓取…",
       "fetch": "抓取",
-      "tip": "提示：在网址末尾加上 <code>/**</code> 即可递归抓取整个子目录。"
+      "tip": "提示：在网址末尾加上 <code>/**</code> 即可递归抓取整个子目录。",
+      "notAWebAddress": "这不是网址",
+      "notAWebAddressHint": "请粘贴以 https:// 开头的链接"
     },
     "youtube": {
       "signIn": "登录后才能转录视频",
@@ -273,7 +275,9 @@
       "intro": "粘贴 YouTube 网址，我们会提取转录文本和时间戳。",
       "titlePlaceholder": "自定义标题（可选）",
       "transcribing": "正在转录…",
-      "transcribe": "转录"
+      "transcribe": "转录",
+      "notAVideoLink": "这不是视频链接",
+      "notAVideoLinkHint": "请粘贴以 https:// 开头的链接"
     },
     "connect": {
       "title": "连接 {name}",
@@ -304,6 +308,10 @@
         "dropboxAllTypes": "索引所有文件类型",
         "dropboxShared": "支持共享文件夹"
       }
+    },
+    "handoff": {
+      "followAlong": "可在“处理队列”中查看进度",
+      "followAlongRecording": "录音会先转写；可在“处理队列”中查看进度"
     }
   },
   "addDestinationBar": {
@@ -820,7 +828,8 @@
   "sourceUpload": {
     "withReason": "{name}：{reason}",
     "uploadFailed": "{name}：上传失败（HTTP {status}）",
-    "registerFailed": "{name}：无法添加（HTTP {status}）"
+    "registerFailed": "{name}：无法添加（HTTP {status}）",
+    "connectionLost": "{name}：上传时连接中断"
   },
   "sourceTypes": {
     "doc": "文件",

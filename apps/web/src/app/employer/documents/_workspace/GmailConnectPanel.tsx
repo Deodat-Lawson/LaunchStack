@@ -94,7 +94,14 @@ const buttonStyle = (variant: "primary" | "quiet" | "danger", disabled: boolean)
         color: disabled ? "var(--ink-3)" : variant === "quiet" ? "var(--ink-2)" : "white",
     }) as const;
 
-export function GmailConnectPanel({ tab }: { tab: AddSourceTab }) {
+export function GmailConnectPanel({
+    tab,
+    onImported,
+}: {
+    tab: AddSourceTab;
+    /** A label or search was added, or a sync started by hand: the Processing tab takes over. */
+    onImported?: () => void;
+}) {
     const t = useTranslations("sources.gmailConnect");
     const tc = useTranslations("common");
     const syncStatusLabel = useSyncStatusLabel();
@@ -152,12 +159,14 @@ export function GmailConnectPanel({ tab }: { tab: AddSourceTab }) {
             setSelectedLabelIds(new Set());
             setPickingLabels(false);
             await refresh();
-            if (await startSync()) toast.success(t("labelsAdded", { count: items.length }));
-            else toast.error(t("labelsAddedNoSync", { count: items.length }));
+            if (await startSync()) {
+                toast.success(t("labelsAdded", { count: items.length }));
+                onImported?.();
+            } else toast.error(t("labelsAddedNoSync", { count: items.length }));
         } finally {
             setBusy(false);
         }
-    }, [labels, selectedLabelIds, refresh, startSync, t]);
+    }, [labels, selectedLabelIds, refresh, startSync, t, onImported]);
 
     const addQuery = useCallback(async () => {
         const value = query.trim();
@@ -173,12 +182,14 @@ export function GmailConnectPanel({ tab }: { tab: AddSourceTab }) {
             }
             setQuery("");
             await refresh();
-            if (await startSync()) toast.success(t("searchAdded"));
-            else toast.error(t("searchAddedNoSync"));
+            if (await startSync()) {
+                toast.success(t("searchAdded"));
+                onImported?.();
+            } else toast.error(t("searchAddedNoSync"));
         } finally {
             setBusy(false);
         }
-    }, [query, refresh, startSync, t]);
+    }, [query, refresh, startSync, t, onImported]);
 
     const removeItem = useCallback(
         async (id: string) => {
@@ -191,12 +202,14 @@ export function GmailConnectPanel({ tab }: { tab: AddSourceTab }) {
     const syncNow = useCallback(async () => {
         setBusy(true);
         try {
-            if (await startSync()) toast.success(t("syncRequested"));
-            else toast.error(t("syncStartFailed"));
+            if (await startSync()) {
+                toast.success(t("syncRequested"));
+                onImported?.();
+            } else toast.error(t("syncStartFailed"));
         } finally {
             setBusy(false);
         }
-    }, [startSync, t]);
+    }, [startSync, t, onImported]);
 
     const disconnect = useCallback(async () => {
         setBusy(true);

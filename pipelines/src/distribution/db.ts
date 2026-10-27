@@ -1298,10 +1298,8 @@ export interface DashboardData {
     coverage: CoverageCell[];
     coveredCells: number;
     targetedCells: number;
-    /** Median days of finished stints per stage (kept for the Distribution API). */
+    /** Median days of finished stints per stage, from the stage history. */
     medianDaysInStage: Partial<Record<RelationshipStage, number>>;
-    /** The full picture per stage, including deals sitting there now. */
-    stageDurations: Partial<Record<RelationshipStage, StageDuration>>;
     attention: PartnerListItem[];
 }
 
@@ -1421,7 +1419,6 @@ export async function getDashboard(companyId: bigint, programId: string): Promis
         coveredCells,
         targetedCells,
         medianDaysInStage,
-        stageDurations: durations,
         attention,
     };
 }

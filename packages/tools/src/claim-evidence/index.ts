@@ -38,8 +38,6 @@ import type { ResolveChatModelOptions } from "@launchstack/llm";
 import { retrieveCompanySnippets, SNIPPET_POLICIES } from "../grounded-retrieval";
 import { invokeToolStructured } from "../llm";
 
-export const CLAIM_EVIDENCE_PROMPT_VERSION = "2026-10-24.1";
-
 export const CLAIM_EVIDENCE_MODELS = {
     extraction: { route: "fast" },
     judgment: { route: "fast" },

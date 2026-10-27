@@ -15,9 +15,9 @@
  * It used to be a third tab of the sidebar. The sidebar makes, files and
  * shares sources; who is on the team and what they have been doing is a
  * place of its own. Roles, invitations, join links and the audit log stay
- * in Settings › People and access — "Manage access" goes there for those who
- * may open Settings. Guests (no `members.view`) get one line saying why there
- * is no list.
+ * in Workspace › People and access — "Manage access" opens that tab for
+ * those who may change them. Guests (no `members.view`) get one line saying
+ * why there is no list.
  */
 
 import React, { useCallback, useMemo, useState } from "react";
@@ -47,6 +47,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "~/components/ui/select";
+import { workspaceHref } from "~/lib/settings/surfaces";
 import { usePermissions } from "~/lib/use-permissions";
 import {
     ACTIVITY_KIND_IDS,
@@ -85,8 +86,8 @@ export function TeamTool({ host, ...props }: TeamToolProps) {
     );
 }
 
-/** Where "Manage access" goes: the Settings section with roles, invitations and the audit log. */
-export const MANAGE_ACCESS_HREF = "/employer/settings#people";
+/** Where "Manage access" goes: the Workspace tab's screen with roles, invitations and the audit log. */
+export const MANAGE_ACCESS_HREF = workspaceHref("people");
 
 const noop = () => undefined;
 

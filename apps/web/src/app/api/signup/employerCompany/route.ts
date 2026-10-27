@@ -58,7 +58,7 @@ export async function POST(request: Request) {
             return createValidationError(t("embeddingEndpointForKey"));
         }
 
-        // Same address policy as Settings › Bring your own keys, checked before the
+        // Same address policy as Workspace › Bring your own keys, checked before the
         // company row exists so a bad address doesn't leave one behind.
         let openAIBaseUrl: string | undefined;
         if (embeddingOpenAIBaseUrl?.trim()) {

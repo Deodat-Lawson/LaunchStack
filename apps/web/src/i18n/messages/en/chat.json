@@ -671,17 +671,17 @@
       "model": "Per-request model overrides are disabled; the model serving each route is operator-configured"
     },
     "endpoint": {
-      "workspaceQuota": "Your workspace's AI provider account has run out of credit or quota. A workspace admin can fix it in Settings › Bring your own keys.",
+      "workspaceQuota": "Your workspace's AI provider account has run out of credit or quota. A workspace admin can fix it in Workspace › Bring your own keys.",
       "serviceQuota": "The AI service has reached its usage limit and can't answer right now. An administrator needs to restore it.",
       "workspaceRateLimited": "Your workspace's AI provider is rate-limiting requests. Try again in a moment.",
       "serviceBusy": "The AI service is busy right now. Try again in a moment.",
-      "workspaceKeyRejected": "Your workspace's AI provider rejected its API key. A workspace admin can fix it in Settings › Bring your own keys.",
-      "workspaceKeyMissing": "Your workspace's AI provider needs an API key. A workspace admin can fix it in Settings › Bring your own keys.",
+      "workspaceKeyRejected": "Your workspace's AI provider rejected its API key. A workspace admin can fix it in Workspace › Bring your own keys.",
+      "workspaceKeyMissing": "Your workspace's AI provider needs an API key. A workspace admin can fix it in Workspace › Bring your own keys.",
       "keyRejected": "The chat endpoint rejected CHAT_API_KEY. Check the credential configured for CHAT_BASE_URL.",
       "keyMissing": "The chat endpoint requires a credential. Set CHAT_API_KEY for CHAT_BASE_URL.",
-      "workspaceUnreachable": "Couldn't reach your workspace's AI provider. A workspace admin can fix it in Settings › Bring your own keys.",
+      "workspaceUnreachable": "Couldn't reach your workspace's AI provider. A workspace admin can fix it in Workspace › Bring your own keys.",
       "unreachable": "Unable to reach the chat endpoint. Confirm the server is running and CHAT_BASE_URL is correct.",
-      "workspaceModelMissing": "Your workspace's AI provider doesn't serve the chosen model. A workspace admin can fix it in Settings › Bring your own keys.",
+      "workspaceModelMissing": "Your workspace's AI provider doesn't serve the chosen model. A workspace admin can fix it in Workspace › Bring your own keys.",
       "modelMissing": "The chat endpoint does not serve the configured model. Update the model id in the chat model configuration."
     },
     "toolStatus": {
@@ -734,7 +734,7 @@
       "voteIdsRequired": "messageId and chatId are required"
     },
     "askMyNotes": {
-      "notConfigured": "Notes search isn't configured — add an embedding API key to enable Ask My Notes.",
+      "notConfigured": "Notes search isn't configured on this server. Ask whoever runs it to set an embedding key to enable Ask My Notes.",
       "noNotes": "I couldn't find any relevant notes. Try a different phrasing, or capture some notes first.",
       "failed": "Ask My Notes failed"
     },

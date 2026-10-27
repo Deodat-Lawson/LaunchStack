@@ -125,14 +125,33 @@ Each `runStep` becomes an Inngest `step.run` (memoized on retry).
 | --------------------- | ---------------------------------------------------------- | --------------------------------------------------------------------------------------- |
 | Upload / lifecycle    | Intake Adapter + Document Creation Module                  | `document`, `document_versions` (v1 or next), `currentVersionId`, linked `ocr_jobs`     |
 | Dispatch              | Post-commit Job Dispatcher Interface                       | `document/process.requested` with stable `jobId`, event ID(s), and required `versionId` |
-| **A** Route           | Pick OCR path (SigLIP optional)                            | —                                                                                       |
-| **B** Normalize / OCR | Azure / Landing.AI / Datalab / OSS / pdfjs; VLM enrichment | pages → `ocr_jobs.ocrResult`                                                            |
+| **A** Route           | Pick the OCR provider (one order; vision label for VLM)    | —                                                                                       |
+| **B** Normalize / OCR | Chosen provider, falling back down the order; VLM enrich   | pages → `ocr_jobs.ocrResult`; `ocrRouting` → `document.ocr_metadata`                    |
 | **C** Chunk           | Parent/child text units                                    | chunks → `ocr_jobs.ocrResult`                                                           |
 | **D** Embed / store   | OpenAI 1536-dim **or** sidecar `/embed`                    | `document_structure`, `document_context_chunks`, `document_retrieval_chunks`            |
 | **E** Finalize        | Mark success                                               | `document_metadata`; `ocrProcessed=true`; `ocr_jobs.status=completed`                   |
 | **F** GraphRAG        | Entities + relationships; needs `ENABLE_ENTITY_EXTRACTION` | Postgres `kg_*`                                                                         |
 | **G** Neo4j sync      | Mirror from `kg_*`                                         | `:Entity` / `:Section` + edges                                                          |
 | Downstream            | Separate Inngest fns                                       | `company_metadata`; version-scoped note-anchor rehydrate                                |
+
+**OCR order (steps A and B).** By default (`OCR_PDF_STRATEGY=provider-first`)
+every PDF and image is read with OCR whenever an engine can run — text layer or
+not, form or not — and step A picks the engine without asking the converter.
+One order everywhere (`packages/conversion/src/ocr-processing/provider-order.ts`,
+mirrored for `/route` in `services/document-converter/src/providers.ts`):
+`OCR_DEFAULT_PROVIDER` when an operator pinned one and it can run → **Azure**
+Document Intelligence → **Docling** (only while the converter's health probe
+says docling-serve answers) → Landing AI → Datalab → the PDF's own text layer
+(pdfjs) or Tesseract for images, last. An upload can name its provider (or the
+text-only method); with none named, the order decides. Step B tries the chosen
+engine and, on any error, the next one, then the text layer, and records in
+`ocrRouting` which provider produced the text and why the others did not. The
+text layer does not stand in for pages it cannot read: a scan with no text
+layer, or a PDF with image-only pages, keeps the engines' error (the outbox
+retries it) unless every engine refused the file outright. With no engine at
+all, or under `text-layer-first`, step A asks the converter's `/route`, which
+reads text-layer and AcroForm PDFs natively and sends only scans to the first
+engine; a scan routed there that fails keeps its error.
 
 Every processing event and `runDocIngestionTool` call supplies a required
 `versionId`. Stage C/D writes carry that version; downstream document work
@@ -219,13 +238,14 @@ Dispatcher Adapter (Inngest today), object storage, an embedding producer
 (OpenAI **or** sidecar `/embed` — dims must match `vector(1536)`), plus an OCR
 path for non-text files.
 
-**Optional:** Neo4j, ML sidecar NER, cloud OCR providers (local can use pdfjs / OSS), VLM
+**Optional:** Neo4j, ML sidecar NER, OCR providers (Azure by default, Docling
+as the fallback; with none reachable PDFs are read from their text layer), VLM
 enrichment.
 
-| Kind          | Stages                         | Effect                                                                                                            |
-| ------------- | ------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
-| **Fail-hard** | OCR, embedding, DB storage     | Runner retries 5× → failure handler marks the linked job `failed`; retry reuses its document/version/job identity |
-| **Fail-soft** | VLM enrichment, Step F, Step G | Doc still marked `completed`                                                                                      |
+| Kind          | Stages                                                                                                                                                          | Effect                                                                                                                                                                                               |
+| ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Fail-hard** | embedding, DB storage; OCR once every engine in the order has failed and the text layer cannot stand in (a scan, image-only pages, or text-layer-first routing) | Outbox retries up to 8× (backoff 30 s → 32 min, about an hour; the job reads "processing" meanwhile) → failure handler marks the linked job `failed`; retry reuses its document/version/job identity |
+| **Fail-soft** | VLM enrichment, Step F, Step G                                                                                                                                  | Doc still marked `completed`                                                                                                                                                                         |
 
 **“Sidecar” naming trap:** the historical `SIDECAR_URL` setting referred to an
 **external** ML worker (`/embed`, `/extract-entities`, `/rerank`). The former

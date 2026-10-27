@@ -4,18 +4,22 @@
  * The default assistant's answer style, drawn twice: once per scope.
  *
  * `chat.responseStyle` is a workspace default with a personal override. The
- * personal row sits under Appearance, where every role can reach it; the
- * workspace row sits under Agents and autonomy, which only admins see. Each
- * row is pinned to its scope (a plain row would write the member value for
- * everyone, admins included) and says what the other scope holds, because
- * the two disagree in exactly the case that confuses people: an admin who
- * changes the default and still gets their own style back.
+ * personal row sits under Settings › Appearance, where every role can reach
+ * it; the workspace row sits under Workspace › Agents, which only admins see.
+ * Each row is pinned to its scope (a plain row would write the member value
+ * for everyone, admins included) and says what the other scope holds,
+ * because the two disagree in exactly the case that confuses people: an
+ * admin who changes the default and still gets their own style back.
  */
 
-import React, { type MouseEvent, type ReactNode } from "react";
+import React, { type ReactNode } from "react";
+import Link from "next/link";
 import { useTranslations } from "next-intl";
 
+import { ToolLink } from "~/components/tool-app/ToolLink";
+import { useOptionalToolNav } from "~/components/tool-app/nav";
 import type { SettingDefinition } from "~/lib/settings/registry";
+import { SETTINGS_PATH, workspaceHref } from "~/lib/settings/surfaces";
 import {
     settingAtScope,
     useSetting,
@@ -35,19 +39,22 @@ function styleLabel(definition: SettingDefinition, copy: SettingCopy, value: unk
 }
 
 /**
- * A link to another place in Settings. The hub follows the hash; following
- * the one already in the address bar fires no event, so re-announce it.
+ * A link from one tab's row to the other's: Settings and the Workspace tab
+ * are tabs of the workspace, so inside a tool's tab the link is handed to the
+ * workspace (`ToolLink`), and from Settings it is an ordinary link the shell
+ * opens in place.
  */
-function SettingsHashLink({ hash, children }: { hash: string; children: ReactNode }) {
-    const onClick = (event: MouseEvent<HTMLAnchorElement>) => {
-        if (window.location.hash.replace(/^#/, "") !== hash) return;
-        event.preventDefault();
-        window.dispatchEvent(new HashChangeEvent("hashchange"));
-    };
-    return (
-        <a href={`#${hash}`} onClick={onClick} className="text-brand-ink underline">
+function OtherTabLink({ href, children }: { href: string; children: ReactNode }) {
+    const inTool = useOptionalToolNav() !== null;
+    const className = "text-brand-ink underline";
+    return inTool ? (
+        <ToolLink href={href} className={className}>
             {children}
-        </a>
+        </ToolLink>
+    ) : (
+        <Link href={href} className={className}>
+            {children}
+        </Link>
     );
 }
 
@@ -55,7 +62,7 @@ function Note({ children }: { children: ReactNode }) {
     return <p className="text-ink-3 m-0 mt-2 text-[12px] leading-normal">{children}</p>;
 }
 
-/** Appearance: this person's own style. Everyone may set it. */
+/** Settings › Appearance: this person's own style. Everyone may set it. */
 export function PersonalAnswerStyleRow() {
     const t = useTranslations("settings.answerStyle");
     const { definition, resolved } = useSetting(KEY);
@@ -68,7 +75,7 @@ export function PersonalAnswerStyleRow() {
     if (resolved?.canEdit.workspace) {
         note = t.rich("personalNote", {
             label,
-            link: chunks => <SettingsHashLink hash="agents">{chunks}</SettingsHashLink>,
+            link: chunks => <OtherTabLink href={workspaceHref("agents")}>{chunks}</OtherTabLink>,
         });
     } else if (ownChoice) {
         note = t("workspaceDefault", { label });
@@ -81,7 +88,7 @@ export function PersonalAnswerStyleRow() {
     );
 }
 
-/** Agents and autonomy: what everyone gets until they pick their own. */
+/** Workspace › Agents: what everyone gets until they pick their own. */
 export function WorkspaceAnswerStyleRow() {
     const t = useTranslations("settings.answerStyle");
     const { definition, resolved } = useSetting(KEY);
@@ -94,7 +101,9 @@ export function WorkspaceAnswerStyleRow() {
                 <Note>
                     {t.rich("ownChoice", {
                         label: styleLabel(definition, copy, own),
-                        link: chunks => <SettingsHashLink hash={KEY}>{chunks}</SettingsHashLink>,
+                        link: chunks => (
+                            <OtherTabLink href={`${SETTINGS_PATH}#${KEY}`}>{chunks}</OtherTabLink>
+                        ),
                     })}
                 </Note>
             )}

@@ -88,7 +88,7 @@
     },
     "settings": {
       "label": "设置",
-      "description": "你的账户、外观和快捷键；工作区的成员、处理、智能体和集成"
+      "description": "你的账户、外观、快捷键和隐私"
     },
     "analytics": {
       "label": "分析",
@@ -102,9 +102,9 @@
       "label": "工作流",
       "description": "在你的来源之间自动执行重复任务"
     },
-    "metadata": {
-      "label": "公司档案",
-      "description": "工作区对你公司的了解"
+    "workspace": {
+      "label": "工作区",
+      "description": "工作区的名称和详情、成员与权限、公司档案、自带密钥、模型、智能体、集成、用量和归档"
     }
   },
   "studioDeniedNotes": {
@@ -195,9 +195,21 @@
       "label": "智能体与节点",
       "description": "会议名册，以及运行它的机器"
     },
-    "deploy": {
-      "label": "自托管 / 自带密钥",
-      "description": "Vercel、Docker、你自己的密钥"
+    "workspace": {
+      "label": "工作区",
+      "description": "名称和网址、成员与权限、自带密钥、模型、智能体、集成和用量"
+    },
+    "workspaceGeneral": {
+      "label": "重命名工作区",
+      "description": "名称、网址、描述、行业、团队规模和颜色"
+    },
+    "settings": {
+      "label": "设置",
+      "description": "仅属于你：账户、外观、快捷键和隐私"
+    },
+    "byok": {
+      "label": "自带密钥",
+      "description": "工作区 AI 使用你自己的 API 密钥或 OpenRouter 账户"
     }
   },
   "history": {
@@ -257,7 +269,8 @@
     "noMatches": "没有与<mono>“{query}”</mono>匹配的结果",
     "navigate": "导航",
     "open": "打开",
-    "results": "{count} 个结果"
+    "results": "{count} 个结果",
+    "workspaceSettingSub": "工作区 · {description}"
   },
   "contextMenu": {
     "openLinkInNewTab": "在新标签页中打开链接",

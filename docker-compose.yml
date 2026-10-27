@@ -124,8 +124,12 @@ x-shared-env: &shared-env
   ADEU_SERVICE_API_KEY: ${ADEU_SERVICE_API_KEY:-pdr_local_adeu_key}
   DOCUMENT_CONVERTER_URL: http://document-converter:8002
   DOCUMENT_CONVERTER_API_KEY: ${DOCUMENT_CONVERTER_API_KEY:-pdr_local_converter_key}
-  OCR_DEFAULT_PROVIDER: ${OCR_DEFAULT_PROVIDER:-DOCLING}
-  # text-layer-first (unset) | provider-first — see .env.example.
+  # OCR order: Azure (when its key is set) → Docling (only while docling-serve
+  # answers; `--profile ocr`) → Landing AI → Datalab → the PDF's text layer.
+  # Empty = that automatic order; set a provider to try it first.
+  OCR_DEFAULT_PROVIDER: ${OCR_DEFAULT_PROVIDER:-}
+  # provider-first (unset: every PDF to the first engine above) |
+  # text-layer-first (only scans go to OCR) — see .env.example.
   OCR_PDF_STRATEGY: ${OCR_PDF_STRATEGY:-}
   # Gotenberg PDF rendering (ADR-009). Basic auth instead of X-API-Key —
   # that is the auth Gotenberg ships — but the same fail-closed local-default
@@ -353,8 +357,9 @@ services:
       start_period: 30s
 
   # Optional: Docling parse engine for PDFs/Office docs (DOCX, PPTX, XLSX,
-  # EPUB). Adds ~800MB RAM. Without --profile ocr the converter's /convert
-  # returns a typed 503; routing and text-file ingestion keep working.
+  # EPUB), and the OCR fallback after Azure. Adds ~800MB RAM. Without
+  # --profile ocr the converter's /convert returns a typed 503 and routing
+  # leaves Docling out of the OCR order; text-file ingestion keeps working.
   docling-serve:
     image: ghcr.io/docling-project/docling-serve
     container_name: pdr_ai_v2-docling-serve
@@ -422,8 +427,10 @@ services:
       CONVERTER_API_KEY: ${DOCUMENT_CONVERTER_API_KEY:-pdr_local_converter_key}
       # Only object references from these origins may be fetched (SSRF guard).
       ALLOWED_FETCH_ORIGINS: ${CONVERTER_ALLOWED_FETCH_ORIGINS:-http://app:3000,http://seaweedfs:8333}
+      # Set even without the `ocr` profile: the converter probes docling-serve's
+      # health and offers Docling only while it answers.
       DOCLING_SERVE_URL: ${DOCLING_SERVE_URL:-http://docling-serve:5001}
-      OCR_DEFAULT_PROVIDER: ${OCR_DEFAULT_PROVIDER:-DOCLING}
+      OCR_DEFAULT_PROVIDER: ${OCR_DEFAULT_PROVIDER:-}
       GOOGLE_AI_API_KEY: ${GOOGLE_AI_API_KEY:-}
       OPENAI_API_KEY: ${OPENAI_API_KEY:-}
       AI_API_KEY: ${AI_API_KEY:-}

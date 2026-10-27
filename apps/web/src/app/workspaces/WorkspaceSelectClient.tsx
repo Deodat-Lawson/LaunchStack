@@ -14,6 +14,7 @@ import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
 import { LandingLogoLink } from "~/components/LandingLogoLink";
 import { useInstanceHost } from "~/lib/instance-host";
 import { isBuiltinRole, normalizeRoleSlug, roleLabel } from "~/lib/authz/permissions";
+import { WORKSPACE_TEAM_SIZES } from "~/lib/workspace-details";
 
 import styles from "./workspace-select.module.css";
 
@@ -100,13 +101,6 @@ function relativeTime(t: RelativeT, justNow: string, iso: string): string {
 }
 
 /** What the "Who's joining you?" choices send: the server keeps the English as the team size. */
-const TEAM_SIZES = [
-    { key: "solo", value: "Just me — I'm a solo founder" },
-    { key: "small", value: "2–5 people" },
-    { key: "medium", value: "6–20 people" },
-    { key: "large", value: "20+ people" },
-] as const;
-
 function gradientClass(swatch: number): string {
     const cls: Record<number, string> = {
         1: styles.gradient1!,
@@ -172,7 +166,7 @@ export function WorkspaceSelectClient({
     const [slugValue, setSlugValue] = useState("");
     const [slugEdited, setSlugEdited] = useState(false);
     const [swatch, setSwatch] = useState(1);
-    const [teamSize, setTeamSize] = useState<string>(TEAM_SIZES[0].value);
+    const [teamSize, setTeamSize] = useState<string>(WORKSPACE_TEAM_SIZES[0].value);
     const [description, setDescription] = useState("");
     const [submitting, setSubmitting] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -840,7 +834,8 @@ export function WorkspaceSelectClient({
                                     value={teamSize}
                                     onChange={e => setTeamSize(e.target.value)}
                                 >
-                                    {TEAM_SIZES.map(size => (
+                                    {/* The same options Workspace › General offers afterwards. */}
+                                    {WORKSPACE_TEAM_SIZES.map(size => (
                                         <option key={size.key} value={size.value}>
                                             {t(`editor.teamSizes.${size.key}`)}
                                         </option>

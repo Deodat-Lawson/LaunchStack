@@ -80,12 +80,12 @@ describe("describeChatResolutionFailure", () => {
         );
         // A workspace's own endpoint: the frame and the check's reason inside it.
         const unusable = new ChatScopeUnavailableError(
-            "Your workspace's own model can't be used: The address has to start with https://. A workspace admin can fix it in Settings › Bring your own keys."
+            "Your workspace's own model can't be used: The address has to start with https://. A workspace admin can fix it in Workspace › Bring your own keys."
         );
         expect(describeChatResolutionFailure(unusable, "zh-CN")).toEqual({
             status: 503,
             message: expect.stringMatching(
-                /^无法使用你工作区自有的模型：.*https:\/\/.*“设置 › 自带密钥”/
+                /^无法使用你工作区自有的模型：.*https:\/\/.*“工作区 › 自带密钥”/
             ),
         });
         expect(describeChatResolutionFailure(unusable, "zh-CN").message).not.toContain(

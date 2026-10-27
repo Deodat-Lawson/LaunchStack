@@ -196,10 +196,10 @@ export function describeChatEndpointError(
         typeof sdkStatus === "number"
             ? sdkStatus
             : Number(/(?:^|\s)([45]\d\d)(?=\s|$|:)/.exec(message)?.[1] ?? NaN);
-    // A workspace's own endpoint is fixed by its admins in Settings, not by
+    // A workspace's own endpoint is fixed by its admins in the Workspace tab, not by
     // whoever runs the server, so its failures say so.
     const ownedByWorkspace = endpoint.owner === "workspace";
-    const fixInSettings = "A workspace admin can fix it in Settings › Bring your own keys.";
+    const fixInSettings = "A workspace admin can fix it in Workspace › Bring your own keys.";
 
     if (
         status === 402 ||

@@ -145,7 +145,10 @@
     "filenameRequired": "缺少文件名",
     "fileEntryRequired": "至少需要一个文件条目",
     "storageUrlRequired": "缺少 storageUrl",
-    "fileRegistrationRequired": "至少需要登记一个文件"
+    "fileRegistrationRequired": "至少需要登记一个文件",
+    "workspaceNameRequired": "请为工作区命名。",
+    "workspaceUrlTooShort": "网址至少需要两个字符。",
+    "workspaceUrlCharacters": "请使用小写字母、数字和短横线。"
   },
   "zod": {
     "required": "必填",
@@ -174,8 +177,8 @@
     "capabilityMissing": "为“{route}”路由提供服务的模型不支持：{missing}。请在对话模型配置中为该路由指定一个支持这些能力的模型。",
     "effortNotOffered": "所选模型不提供“{level}”推理强度。可用的强度：{levels}。",
     "budgetOutOfRange": "推理预算 {budget} 超出了所选模型接受的范围（{min}–{max}）。",
-    "workspaceModelUnusable": "无法使用你工作区自有的模型：{reason} 工作区管理员可以在“设置 › 自带密钥”中修复。",
-    "workspaceKeyUnreadable": "无法使用你工作区自有的模型：这台服务器读不出已保存的 API 密钥，请重新输入。工作区管理员可以在“设置 › 自带密钥”中修复。",
-    "workspaceSetupInvalid": "无法使用你工作区自有的模型：已保存的模型设置无效，请打开并重新保存。工作区管理员可以在“设置 › 自带密钥”中修复。"
+    "workspaceModelUnusable": "无法使用你工作区自有的模型：{reason} 工作区管理员可以在“工作区 › 自带密钥”中修复。",
+    "workspaceKeyUnreadable": "无法使用你工作区自有的模型：这台服务器读不出已保存的 API 密钥，请重新输入。工作区管理员可以在“工作区 › 自带密钥”中修复。",
+    "workspaceSetupInvalid": "无法使用你工作区自有的模型：已保存的模型设置无效，请打开并重新保存。工作区管理员可以在“工作区 › 自带密钥”中修复。"
   }
 }

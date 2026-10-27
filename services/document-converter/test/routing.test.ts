@@ -70,6 +70,15 @@ async function makeEmptyPdf(pages = 2): Promise<Uint8Array> {
     return doc.save();
 }
 
+const AZURE = { azureEndpoint: "https://azure.test", azureKey: "azure-key" } as const;
+const DOCLING = { doclingServeUrl: "http://docling.test:5001" } as const;
+const doclingUp: Pick<AppDeps, "doclingHealth"> = { doclingHealth: async () => true };
+const doclingDown: Pick<AppDeps, "doclingHealth"> = {
+    doclingHealth: async () => {
+        throw new Error("getaddrinfo ENOTFOUND docling-serve");
+    },
+};
+
 describe("POST /route", () => {
     it("honors preferredProvider without fetching the document", async () => {
         const calls: string[] = [];
@@ -87,18 +96,18 @@ describe("POST /route", () => {
         expect(calls).toEqual([]);
     });
 
-    it("forceOCR picks the default provider without fetching", async () => {
+    it("forceOCR picks the first OCR engine without fetching", async () => {
         const body = await route(
-            testConfig({ doclingServeUrl: "http://docling.test:5001" }),
-            { fetchImpl: forbiddenFetch() },
+            testConfig({ ...AZURE, ...DOCLING }),
+            { fetchImpl: forbiddenFetch(), ...doclingUp },
             { forceOCR: true }
         );
-        expect(body.provider).toBe("DOCLING");
+        expect(body.provider).toBe("AZURE");
         expect(body.reason).toBe("force-ocr");
         expect(body.signals).toEqual({});
     });
 
-    it("forceOCR never yields NATIVE_PDF (remapped via the complex chain)", async () => {
+    it("forceOCR gets past a NATIVE_PDF pin when an engine can run", async () => {
         const body = await route(
             testConfig({
                 defaultProvider: "NATIVE_PDF",
@@ -111,7 +120,26 @@ describe("POST /route", () => {
         expect(body.reason).toBe("force-ocr");
     });
 
-    it("routes AcroForm PDFs to NATIVE_PDF with a real signal", async () => {
+    it("forceOCR answers NATIVE_PDF when no OCR engine can run, instead of naming one that will fail", async () => {
+        const body = await route(
+            testConfig(DOCLING),
+            { fetchImpl: forbiddenFetch(), ...doclingDown },
+            { forceOCR: true }
+        );
+        expect(body.provider).toBe("NATIVE_PDF");
+        expect(body.reason).toBe("force-ocr");
+    });
+
+    it("reads AcroForm PDFs natively even when Azure is configured (text layer first)", async () => {
+        const pdf = await makeAcroFormPdf();
+        const body = await route(testConfig(AZURE), { fetchImpl: bytesFetch(pdf) }, {});
+        expect(body.provider).toBe("NATIVE_PDF");
+        expect(body.reason).toBe("interactive-form");
+        expect(body.signals.hasInteractiveForm).toBe(true);
+        expect(body.pageCount).toBe(1);
+    });
+
+    it("routes AcroForm PDFs to NATIVE_PDF with no OCR engine either", async () => {
         const pdf = await makeAcroFormPdf();
         const body = await route(testConfig(), { fetchImpl: bytesFetch(pdf) }, {});
         expect(body.provider).toBe("NATIVE_PDF");
@@ -122,7 +150,35 @@ describe("POST /route", () => {
         expect(body).not.toHaveProperty("confidence");
     });
 
-    it("routes text-layer PDFs to NATIVE_PDF with measured sample length", async () => {
+    it("reads text-layer PDFs natively even when Azure and Docling can run (text layer first)", async () => {
+        const pdf = await makeTextPdf();
+        const calls: number[][] = [];
+        let doclingProbes = 0;
+        const body = await route(
+            testConfig({ ...AZURE, ...DOCLING }),
+            {
+                fetchImpl: bytesFetch(pdf),
+                doclingHealth: async () => {
+                    doclingProbes += 1;
+                    return true;
+                },
+                renderPages: async (_buffer, pages) => {
+                    calls.push(pages);
+                    return [];
+                },
+            },
+            {}
+        );
+        expect(body.provider).toBe("NATIVE_PDF");
+        expect(body.reason).toBe("native-text-layer");
+        expect(body.signals.textSampleChars).toBeGreaterThan(50);
+        // A real text layer never pays for page rendering + vision, nor
+        // waits on the docling-serve probe.
+        expect(calls).toEqual([]);
+        expect(doclingProbes).toBe(0);
+    });
+
+    it("routes text-layer PDFs to NATIVE_PDF with no OCR engine either", async () => {
         const pdf = await makeTextPdf();
         const body = await route(testConfig(), { fetchImpl: bytesFetch(pdf) }, {});
         expect(body.provider).toBe("NATIVE_PDF");
@@ -133,23 +189,19 @@ describe("POST /route", () => {
         expect(body).not.toHaveProperty("confidence");
     });
 
-    it("routes complex vision results to the complex-doc provider", async () => {
+    it("complex scans use the same order as everything else (Azure before Landing AI)", async () => {
         const pdf = await makeEmptyPdf();
         const body = await route(
-            testConfig({
-                landingAiApiKey: "landing-key",
-                azureEndpoint: "https://azure.test",
-                azureKey: "azure-key",
-            }),
+            testConfig({ landingAiApiKey: "landing-key", ...AZURE, ...DOCLING }),
             {
                 fetchImpl: bytesFetch(pdf),
+                ...doclingUp,
                 renderPages: async () => [new Uint8Array([1, 2, 3])],
                 classify: async () => ({ label: "handwritten notes", score: 0.91 }),
             },
             {}
         );
-        // Complex chain ranks LandingAI above Azure (preserved priority).
-        expect(body.provider).toBe("LANDING_AI");
+        expect(body.provider).toBe("AZURE");
         expect(body.reason).toBe("vision-complex");
         expect(body.signals.visionLabel).toBe("handwritten notes");
         expect(body.signals.visionScore).toBeCloseTo(0.91);
@@ -177,14 +229,10 @@ describe("POST /route", () => {
         expect(body.reason).toBe("vision-complex");
     });
 
-    it("routes simple vision results to the default provider", async () => {
+    it("simple scans go to the first engine too", async () => {
         const pdf = await makeEmptyPdf();
         const body = await route(
-            testConfig({
-                landingAiApiKey: "landing-key",
-                azureEndpoint: "https://azure.test",
-                azureKey: "azure-key",
-            }),
+            testConfig({ landingAiApiKey: "landing-key", ...AZURE }),
             {
                 fetchImpl: bytesFetch(pdf),
                 renderPages: async () => [new Uint8Array([1, 2, 3])],
@@ -192,13 +240,12 @@ describe("POST /route", () => {
             },
             {}
         );
-        // Default chain ranks Azure above LandingAI (preserved priority).
         expect(body.provider).toBe("AZURE");
         expect(body.reason).toBe("vision-simple");
         expect(body.signals.visionLabel).toBe("digital text document");
     });
 
-    it("a complex label below the routing threshold stays with the default provider", async () => {
+    it("a complex label below the routing threshold reads as simple", async () => {
         const pdf = await makeEmptyPdf();
         const body = await route(
             testConfig({ datalabApiKey: "datalab-key" }),
@@ -217,8 +264,8 @@ describe("POST /route", () => {
     it("reports vision-unavailable when no pages could be rendered — no fabricated 0.5", async () => {
         const pdf = await makeEmptyPdf();
         const body = await route(
-            testConfig({ doclingServeUrl: "http://docling.test:5001" }),
-            { fetchImpl: bytesFetch(pdf), renderPages: async () => [] },
+            testConfig(DOCLING),
+            { fetchImpl: bytesFetch(pdf), ...doclingUp, renderPages: async () => [] },
             {}
         );
         expect(body.provider).toBe("DOCLING");
@@ -227,10 +274,38 @@ describe("POST /route", () => {
         expect(body).not.toHaveProperty("confidence");
     });
 
+    it("never routes to a docling-serve that is not answering, even though DOCLING_SERVE_URL is set", async () => {
+        // Compose sets DOCLING_SERVE_URL whether or not the `ocr` profile runs
+        // docling-serve; routing a scan there was a 503 and a failed job.
+        const pdf = await makeEmptyPdf();
+        const body = await route(
+            testConfig(DOCLING),
+            {
+                fetchImpl: bytesFetch(pdf),
+                ...doclingDown,
+                renderPages: async () => [new Uint8Array([1])],
+                classify: async () => ({ label: "messy scanned document", score: 0.9 }),
+            },
+            {}
+        );
+        expect(body.provider).toBe("NATIVE_PDF");
+        expect(body.reason).toBe("vision-complex");
+    });
+
+    it("an unreachable docling-serve falls through to the next engine", async () => {
+        const pdf = await makeEmptyPdf();
+        const body = await route(
+            testConfig({ ...DOCLING, defaultProvider: "DOCLING", landingAiApiKey: "landing-key" }),
+            { fetchImpl: bytesFetch(pdf), ...doclingDown, renderPages: async () => [] },
+            {}
+        );
+        expect(body.provider).toBe("LANDING_AI");
+    });
+
     it("reports vision-unavailable when the classifier throws", async () => {
         const pdf = await makeEmptyPdf();
         const body = await route(
-            testConfig(),
+            testConfig(AZURE),
             {
                 fetchImpl: bytesFetch(pdf),
                 renderPages: async () => [new Uint8Array([1])],
@@ -240,14 +315,14 @@ describe("POST /route", () => {
             },
             {}
         );
-        expect(body.provider).toBe("DOCLING");
+        expect(body.provider).toBe("AZURE");
         expect(body.reason).toBe("vision-unavailable");
     });
 
     it("labels non-PDF bytes not-a-pdf", async () => {
         const body = await route(
-            testConfig({ doclingServeUrl: "http://docling.test:5001" }),
-            { fetchImpl: bytesFetch(new TextEncoder().encode("hello, world")) },
+            testConfig(DOCLING),
+            { fetchImpl: bytesFetch(new TextEncoder().encode("hello, world")), ...doclingUp },
             {}
         );
         expect(body.provider).toBe("DOCLING");
@@ -255,16 +330,23 @@ describe("POST /route", () => {
         expect(body.pageCount).toBeUndefined();
     });
 
-    it("honors the operator default provider on the default chain", async () => {
+    it("puts the operator's pin ahead of Azure when the pinned engine can run", async () => {
         const body = await route(
-            testConfig({
-                defaultProvider: "DATALAB",
-                doclingServeUrl: "http://docling.test:5001",
-            }),
+            testConfig({ defaultProvider: "DATALAB", datalabApiKey: "datalab-key", ...AZURE }),
             { fetchImpl: bytesFetch(new TextEncoder().encode("not a pdf")) },
             {}
         );
         expect(body.provider).toBe("DATALAB");
+    });
+
+    it("an operator NATIVE_PDF pin keeps unforced PDFs on the text layer", async () => {
+        const pdf = await makeEmptyPdf();
+        const body = await route(
+            testConfig({ defaultProvider: "NATIVE_PDF", ...AZURE }),
+            { fetchImpl: bytesFetch(pdf), renderPages: async () => [] },
+            {}
+        );
+        expect(body.provider).toBe("NATIVE_PDF");
     });
 
     it("maps a failing document fetch to a typed fetch-failed error", async () => {

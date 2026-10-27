@@ -671,17 +671,17 @@
       "model": "已禁用按请求覆盖模型；每条路由使用的模型由运维人员配置"
     },
     "endpoint": {
-      "workspaceQuota": "你工作区的 AI 服务商账户额度或配额已用完。工作区管理员可以在“设置 › 自带密钥”中修复。",
+      "workspaceQuota": "你工作区的 AI 服务商账户额度或配额已用完。工作区管理员可以在“工作区 › 自带密钥”中修复。",
       "serviceQuota": "AI 服务已达到使用上限，暂时无法回答。需要管理员恢复。",
       "workspaceRateLimited": "你工作区的 AI 服务商正在限制请求频率。请稍后重试。",
       "serviceBusy": "AI 服务当前繁忙。请稍后重试。",
-      "workspaceKeyRejected": "你工作区的 AI 服务商拒绝了它的 API 密钥。工作区管理员可以在“设置 › 自带密钥”中修复。",
-      "workspaceKeyMissing": "你工作区的 AI 服务商需要 API 密钥。工作区管理员可以在“设置 › 自带密钥”中修复。",
+      "workspaceKeyRejected": "你工作区的 AI 服务商拒绝了它的 API 密钥。工作区管理员可以在“工作区 › 自带密钥”中修复。",
+      "workspaceKeyMissing": "你工作区的 AI 服务商需要 API 密钥。工作区管理员可以在“工作区 › 自带密钥”中修复。",
       "keyRejected": "对话端点拒绝了 CHAT_API_KEY。请检查为 CHAT_BASE_URL 配置的凭据。",
       "keyMissing": "对话端点需要凭据。请为 CHAT_BASE_URL 设置 CHAT_API_KEY。",
-      "workspaceUnreachable": "无法连接你工作区的 AI 服务商。工作区管理员可以在“设置 › 自带密钥”中修复。",
+      "workspaceUnreachable": "无法连接你工作区的 AI 服务商。工作区管理员可以在“工作区 › 自带密钥”中修复。",
       "unreachable": "无法连接对话端点。请确认服务器正在运行，且 CHAT_BASE_URL 正确。",
-      "workspaceModelMissing": "你工作区的 AI 服务商不提供所选的模型。工作区管理员可以在“设置 › 自带密钥”中修复。",
+      "workspaceModelMissing": "你工作区的 AI 服务商不提供所选的模型。工作区管理员可以在“工作区 › 自带密钥”中修复。",
       "modelMissing": "对话端点不提供所配置的模型。请在对话模型配置中更新模型 ID。"
     },
     "toolStatus": {
@@ -734,7 +734,7 @@
       "voteIdsRequired": "需要提供 messageId 和 chatId"
     },
     "askMyNotes": {
-      "notConfigured": "笔记搜索尚未配置——添加嵌入 API 密钥即可启用“问我的笔记”。",
+      "notConfigured": "本服务器尚未配置笔记搜索。请联系服务器的管理者设置嵌入密钥，以启用“问我的笔记”。",
       "noNotes": "我没有找到相关的笔记。换个说法试试，或者先记一些笔记。",
       "failed": "“问我的笔记”失败"
     },

@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * Settings › Bring your own keys › API key.
+ * Workspace › Bring your own keys › API key.
  *
  * A workspace admin points the workspace's AI — chat, drafting, meetings,
  * background work — at their own provider account: OpenRouter in one click,

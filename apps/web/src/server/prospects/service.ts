@@ -125,9 +125,9 @@ export function availability(): SourceAvailability {
     };
 }
 
-/** Keyless sources (OpenStreetMap, YC) and sample data are always on; keyed ones when configured. */
+/** Keyless sources (OpenStreetMap) and sample data are always on; keyed ones when configured. */
 function sourcesOn(avail: SourceAvailability): number {
-    return [avail.web, avail.place, avail.trade, avail.screening].filter(Boolean).length + 3;
+    return [avail.web, avail.place, avail.trade, avail.screening].filter(Boolean).length + 2;
 }
 
 // ── Loading ───────────────────────────────────────────────────────────────

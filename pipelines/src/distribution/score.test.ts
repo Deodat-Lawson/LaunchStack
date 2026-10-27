@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { computeFit, deriveRiskFlags, templateRationale } from "./score";
+import { lexicalRelevance } from "./semantic";
 import type { Dossier, PartnerOrgRecord, ProgramRecord } from "./types";
 
 const program: ProgramRecord = {
@@ -231,6 +232,91 @@ describe("computeFit", () => {
         });
         expect(fit.total).toBeLessThanOrEqual(100);
         expect(fit.total).toBeGreaterThanOrEqual(0);
+    });
+});
+
+describe("relevance scales the score", () => {
+    // A readable website in the right country with fresh evidence used to
+    // reach ~40-45 with zero topic overlap and sit among real prospects.
+    const offTopic = org({
+        name: "Mango",
+        domain: "trymango.example",
+        roles: [],
+        categories: ["B2B", "Productivity"],
+        description: "AI meeting notes for remote teams",
+    });
+
+    it("gives a company unrelated to the segment nothing for its website alone", () => {
+        const fit = computeFit({
+            program,
+            org: offTopic,
+            kind: "importer",
+            territory: { country: "DE" },
+            dossier: null,
+            evidenceCount: 12,
+            newestEvidenceAt: new Date("2026-09-01T00:00:00Z"),
+            knownEntity: false,
+            sellerName: "Kōhī Roasters",
+            now,
+        });
+        expect(fit.categoryOverlap).toBe(0);
+        expect(fit.total).toBe(0);
+        expect(
+            deriveRiskFlags({
+                dossier: null,
+                breakdown: fit,
+                evidenceCount: 12,
+                budgetExhausted: false,
+            })
+        ).toContain("nothing in common with what you sell");
+    });
+
+    it("counts territory, evidence and the rest in full for a relevant company", () => {
+        const fit = computeFit({
+            program,
+            org: org(),
+            kind: "importer",
+            territory: { country: "DE" },
+            dossier,
+            evidenceCount: 12,
+            newestEvidenceAt: new Date("2026-09-01T00:00:00Z"),
+            knownEntity: false,
+            sellerName: "Kōhī Roasters",
+            now,
+        });
+        expect(fit.total).toBeGreaterThan(40);
+    });
+
+    it("takes relevance by meaning when it is given, over shared words", () => {
+        const base = {
+            program,
+            kind: "importer" as const,
+            territory: { country: "DE" },
+            dossier: null,
+            evidenceCount: 12,
+            newestEvidenceAt: new Date("2026-09-01T00:00:00Z"),
+            knownEntity: false,
+            sellerName: "Kōhī Roasters",
+            now,
+        };
+        // No shared word with the segment, but a real buyer by meaning.
+        const cafe = org({
+            name: "Café Lisboa",
+            categories: ["amenity=cafe"],
+            description: "Espresso bar",
+        });
+        expect(computeFit({ ...base, org: cafe }).categoryOverlap).toBe(0);
+        const byMeaning = computeFit({ ...base, org: cafe, relevance: 1 });
+        expect(byMeaning.categoryOverlap).toBe(25);
+        expect(byMeaning.total).toBeGreaterThan(40);
+        // Half a real buyer's relevance already counts the rest in full.
+        const half = computeFit({ ...base, org: cafe, relevance: 0.5 });
+        expect(half.total - half.categoryOverlap).toBe(byMeaning.total - byMeaning.categoryOverlap);
+    });
+
+    it("falls back to the company's own words without an embedder", () => {
+        expect(lexicalRelevance(program, ["Mango", "AI meeting notes"])).toBe(0);
+        expect(lexicalRelevance(program, ["Specialty coffee importer"])).toBeGreaterThan(0);
     });
 });
 

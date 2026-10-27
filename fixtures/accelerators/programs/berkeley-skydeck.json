@@ -1,0 +1,86 @@
+{
+  "id": "berkeley-skydeck",
+  "name": "Berkeley SkyDeck",
+  "logo": {
+    "path": "/accelerators/logos/berkeley-skydeck.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://skydeck.berkeley.edu/",
+  "applyUrl": "https://skydeck.berkeley.edu/apply/",
+  "description": {
+    "text": "AI-written synthesis of the cited official pages, prepared by the collecting assistant: the homepage says SkyDeck Batch 24 applications open in January and does not give a year. The program page says SkyDeck supports startups founded by UC Berkeley students, alumni, and faculty, and that startups from all over the world are eligible. It says historically about two thirds of the startups were founded outside the US. It says roughly twenty cohort startups are selected every six months to receive a $210,000 investment from the Berkeley SkyDeck Fund, that the program helps them get ready for a first institutional seed check, and that cohort startups go through a six-month BAM program and present at a Demo Day. Batch 23's timeline says applications were open July 2026 through August 21, 2026, with interviews September 8, 2026 through October 5, 2026, orientation Monday, November 2, 2026, and start and end dates November 2, 2026 through April 15, 2027. August 21, 2026 is stored as a date-only end of that Batch 23 window because the page gives no clock. Batch 24 is a separate cycle with no stored deadline.",
+    "sourceIds": ["homepage", "program"],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the program page, prepared by the collecting assistant: the page says it supports UC Berkeley students, alumni, and faculty commercializing research, and that startups from anywhere are eligible and encouraged to apply. It says cohort companies are often close to a first institutional round, and that while SkyDeck is the first investor in many of them, roughly half have already raised some angel, grant, or pre-seed capital. Those are the page's descriptions, not a rule that bars other applicants.",
+    "sourceIds": ["program"],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://skydeck.berkeley.edu/",
+      "title": "Berkeley SkyDeck homepage — Black logo",
+      "quote": "https://skydeck.berkeley.edu/wp-content/themes/bridge/img/logo_black.png",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://skydeck.berkeley.edu/",
+      "title": "Berkeley SkyDeck homepage — Batch 24",
+      "quote": "SkyDeck Batch 24 Applications open in January!",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    },
+    {
+      "id": "program",
+      "url": "https://skydeck.berkeley.edu/program/",
+      "title": "Berkeley SkyDeck program page — Investment and Batch 23 window",
+      "quote": "We support startups founded by UC Berkeley students, alumni, and faculty who are seeking to bring their scientific and technical discoveries to market, and commercialize groundbreaking UC Berkeley research. Startups from all over the world are eligible and encouraged to apply. Historically, about 2/3 of the startups were founded outside the US.\n\nRoughly twenty Cohort startups are selected every six months to receive a $210,000 investment from the Berkeley SkyDeck Fund.\n\nCohort startups are paired with Key Advisors, go through the six-month BAM Program, attend weekly required events, and receive guided access to the SkyDeck community.\n\nBatch 23 Program Timeline\nApplications Open July 2026 – August 21, 2026\nInterviews September 8, 2026 – October 5, 2026\nOrientation Monday, November 2, 2026\nStart & End Dates November 2, 2026 – April 15, 2027\nCohort Demo Day April, 2027",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "batch-23",
+      "label": "Batch 23",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": ["program"],
+      "form": {
+        "id": "skydeck-batch-23-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://skydeck.berkeley.edu/apply/",
+        "checkedAt": "2026-10-27T00:25:00.000Z",
+        "supported": false,
+        "limitations": [
+          "The apply page was retrieved. Its visible text did not include the application questions. Nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "Batch 23's application window is published as July 2026 through August 21, 2026, with no clock or timezone. dateOnly is that end date. It is not an exact instant."
+        ],
+        "fields": []
+      },
+      "dateOnly": "2026-08-21"
+    },
+    {
+      "id": "batch-24",
+      "label": "Batch 24",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": ["homepage"],
+      "form": {
+        "id": "skydeck-batch-24-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://skydeck.berkeley.edu/apply/",
+        "checkedAt": "2026-10-27T00:25:00.000Z",
+        "supported": false,
+        "limitations": [
+          "The homepage says Batch 24 applications open in January and does not give a year, a day, a clock, or a timezone. deadlineAt and dateOnly stay empty for this cycle. The apply page did not show the questions."
+        ],
+        "fields": []
+      }
+    }
+  ],
+  "schemaVersion": 2
+}

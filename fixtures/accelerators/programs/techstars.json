@@ -1,0 +1,59 @@
+{
+  "id": "techstars",
+  "name": "Techstars",
+  "logo": {
+    "path": "/accelerators/logos/techstars.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.techstars.com/",
+  "applyUrl": "https://apply.techstars.com/",
+  "description": {
+    "text": "AI-written synthesis of the Techstars homepage, prepared by the collecting assistant: the page calls Techstars the early-stage accelerator and investor, says it finds and funds ambitious founders, and says it has been backing founders since 2006. It says Techstars is the accelerator and investor for founders who do more faster, and that today every company gets $220K in capital, three months of hands-on mentorship, and a network of investors, operators, and corporate partners. A button says \"Review $220K Investment Terms\"; the terms page behind that button was not opened, so the instrument is not restated beyond the homepage sentence. The homepage lists many city and partner accelerators. Techstars London is already a separate catalogue record. This record is the network page, not a claim that every city page matches this sentence. No single network deadline was published here.",
+    "sourceIds": ["homepage"],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the homepage, prepared by the collecting assistant: the page says it looks for the world's most ambitious early-stage founders. It does not, on this page, limit that to one city, one industry, or one company stage beyond \"early-stage.\" City programs have their own pages and were not re-checked for this record.",
+    "sourceIds": ["homepage"],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.techstars.com/",
+      "title": "Techstars homepage — Primary black wordmark",
+      "quote": "https://cdn.bfldr.com/70W92OEX/as/6wprrjqn5745c5kcfc4wtm86/Techstars_Logo_Primary_Black?format=png",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.techstars.com/",
+      "title": "Techstars homepage — Network description and $220K",
+      "quote": "Techstars: the early-stage accelerator and investor\nWe find and fund the world's most ambitious founders.\nReview $220K Investment Terms\n\nBacking Ambitious Founders Since 2006\nTechstars is the accelerator and investor for founders who do more faster. Since 2006, we've backed the world's most promising early-stage startups, and today every company gets $220K in capital, three months of relentless hands-on mentorship, and a network of investors, operators, and corporate partners.",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "network",
+      "label": "Network",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": ["homepage"],
+      "form": {
+        "id": "techstars-network-unconfirmed",
+        "status": "unconfirmed",
+        "sourceUrl": "https://apply.techstars.com/",
+        "checkedAt": "2026-10-27T00:25:00.000Z",
+        "supported": false,
+        "limitations": [
+          "apply.techstars.com was retrieved and did not include the application questions in the public HTML. No account was created and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "The homepage states $220K and three months for every company. The linked investment-terms page was not opened, and city accelerator pages were not re-checked. Techstars London remains a separate record. No single network deadline is stored."
+        ],
+        "fields": []
+      }
+    }
+  ],
+  "schemaVersion": 2
+}

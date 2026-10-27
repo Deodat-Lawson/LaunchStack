@@ -1,0 +1,60 @@
+{
+  "id": "entrepreneurs-roundtable-accelerator",
+  "name": "Entrepreneurs Roundtable Accelerator",
+  "logo": {
+    "path": "/accelerators/logos/entrepreneurs-roundtable-accelerator.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.eranyc.com/",
+  "applyUrl": "https://www.eranyc.com/apply/",
+  "description": {
+    "text": "AI-written synthesis of the apply page, prepared by the collecting assistant: Entrepreneurs Roundtable Accelerator says it is NYC's leading tech accelerator and that applications for the Winter 2027 cohort are open. It says ERA invests $150,000 on a post-money SAFE for 6% of each company, and that companies selected for the four-month program receive an initial investment of $150K on a 6% post-money SAFE plus the potential for follow-on funding. It says that since 2011 alumni have raised more than $2.5 billion and collectively exceed $10 billion in market capitalization. The page labels the application deadline as November 2, 2026 and the program start as January 11, 2027. No clock or timezone is published, so the deadline is stored as a date only.",
+    "sourceIds": ["apply"],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the apply page, prepared by the collecting assistant: the page describes a tech accelerator in New York and a four-month Winter 2027 cohort. It does not publish a sector list, a revenue test, or a residency rule in the text that was kept. The alumni capital totals are the page's history, not terms of admission.",
+    "sourceIds": ["apply"],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.eranyc.com/",
+      "title": "ERA homepage — Light-mode wordmark",
+      "quote": "https://www.eranyc.com/wp-content/uploads/2024/06/Text_Logo_Light-Mode.png",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    },
+    {
+      "id": "apply",
+      "url": "https://www.eranyc.com/apply/",
+      "title": "ERA apply page — Winter 2027 terms and dates",
+      "quote": "Applications for our Winter 2027 Cohort are Open ERA invests $150,000 on a post-money SAFE in return for 6% of each company.\n\nThe companies selected to participate in the four-month program will receive an initial investment of $150K on a 6% post-money SAFE and the potential for follow-on funding.\n\nSince its founding in 2011, ERA alumni companies have raised more than $2.5 billion in investor capital and collectively exceed $10 billion in market capitalization.\n\nApplication Deadline→ November 2, 2026\nProgram Start→ January 11, 2027",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "winter-2027",
+      "label": "Winter 2027",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": ["apply"],
+      "form": {
+        "id": "era-winter-2027-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.eranyc.com/apply/",
+        "checkedAt": "2026-10-27T00:25:00.000Z",
+        "supported": false,
+        "limitations": [
+          "The apply page states the deadline and the investment and then links onward with Apply Now. That next step was not opened, so the questions, options, and limits were not seen. Fields stay empty and Start Application stays blocked.",
+          "November 2, 2026 is published as the application deadline with no clock or timezone. dateOnly stores that calendar date. January 11, 2027 is the program start, not a second deadline."
+        ],
+        "fields": []
+      },
+      "dateOnly": "2026-11-02"
+    }
+  ],
+  "schemaVersion": 2
+}

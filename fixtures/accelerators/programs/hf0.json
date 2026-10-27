@@ -1,0 +1,66 @@
+{
+  "id": "hf0",
+  "name": "HF0",
+  "logo": {
+    "path": "/accelerators/logos/hf0.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.hf0.com/",
+  "applyUrl": "https://www.hf0.com/apply",
+  "description": {
+    "text": "AI-written synthesis of the homepage and the first apply step, prepared by the collecting assistant: the homepage calls HF0 \"The residency for repeat founders.\" It shows \"Batch Starts: September 13\" and also \"Batch Starts: January 4\", and it shows \"Demo Day: December 4\" and \"Demo Day: Dec 1\". None of those dates includes a year, and the two start dates and two demo dates disagree, so nothing is stored as a deadline. The apply URL shows a first step with Your Name, Email, and Phone Number, then Next. That step was not submitted, and the rest of the questions were not shown.",
+    "sourceIds": ["homepage", "apply"],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the homepage, prepared by the collecting assistant: the page says the residency is for repeat founders. It does not define how many prior companies count as repeat, and it does not publish a sector or location test in the text that was kept.",
+    "sourceIds": ["homepage"],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.hf0.com/",
+      "title": "HF0 homepage — App icon",
+      "quote": "https://cdn.prod.website-files.com/63909f6fc71535ed58405374/6724f694e7977d7664d033e4_android-chrome-256x256.png",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.hf0.com/",
+      "title": "HF0 homepage — Residency and conflicting dates",
+      "quote": "HF0 Residency The residency for repeat founders.\nBatch Starts: September 13\nBatch Starts: January 4\nDemo Day: December 4\nDemo Day: Dec 1",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    },
+    {
+      "id": "apply",
+      "url": "https://www.hf0.com/apply",
+      "title": "HF0 apply page — First step only",
+      "quote": "Your Name Email Phone Number Next",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "residency",
+      "label": "Residency",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": ["homepage", "apply"],
+      "form": {
+        "id": "hf0-residency-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.hf0.com/apply",
+        "checkedAt": "2026-10-27T00:25:00.000Z",
+        "supported": false,
+        "limitations": [
+          "The apply page shows a first step for name, email, and phone, then Next. Next was not clicked, no details were entered, and the rest of the Form was not seen. The first step was not saved as a partial checked Form. Fields stay empty and Start Application stays blocked.",
+          "The homepage shows two batch start dates and two demo dates, none with a year. deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ],
+  "schemaVersion": 2
+}

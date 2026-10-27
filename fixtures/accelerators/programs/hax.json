@@ -1,0 +1,59 @@
+{
+  "id": "hax",
+  "name": "HAX",
+  "logo": {
+    "path": "/accelerators/logos/hax.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://hax.co/",
+  "applyUrl": "https://sosv.com/apply/hax/",
+  "description": {
+    "text": "AI-written synthesis of the HAX program page, prepared by the collecting assistant: HAX describes itself as hands-on venture capital for hard tech and as part of SOSV. The program page says hard tech requires founders who go beyond the keyboard, and that HAX provides capital, facilities, and engineering support. It says \"We provided up to $550,000 in initial pre-seed funding\" aimed at technical milestones, that it participates in follow-on rounds, and that founders get access to SOSV's network of 7,700+ global investors. It says founders receive a six-month residency at facilities anchored by a 35,000 sq. ft. Newark headquarters, with a 10,000 sq. ft. HAX Plasma Forge in Princeton described as coming. It says founders build alongside in-house mechanical, electrical, and chemical engineers. The \"provided\" wording is quoted as published; this record does not turn it into a current offer. No deadline was on the program text that was read.",
+    "sourceIds": ["program"],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the program page, prepared by the collecting assistant: the page addresses hard-tech founders who are ready to do hands-on technical work rather than follow a standard startup playbook. It does not publish a stage checklist, a degree requirement, or a location test beyond the residency it describes.",
+    "sourceIds": ["program"],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://hax.co/program/",
+      "title": "HAX program page — Official black wordmark hosted by SOSV",
+      "quote": "The live header asset is https://hax.co/wp-content/themes/hax/assets/images/logo.svg (white wordmark plus #02ff9a). The stored raster is the official black file https://sosv.com/wp-content/uploads/2022/05/hax-logo-black.svg so the mark remains visible on a light panel. It was not recolored.",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    },
+    {
+      "id": "program",
+      "url": "https://hax.co/program/",
+      "title": "HAX program page — Capital, residency, and engineering",
+      "quote": "building hard tech is hard\nWe know because we’ve done it. It’s not your standard startup playbook. It requires founders who are ready to get their hands dirty and move far beyond the computer keyboard. We don’t just offer advice from the sidelines; we provide the capital, facilities, and global engineering muscle to ensure your tech becomes an industrial reality.\n\nWe provided up to $550,000 in initial pre-seed funding, specifically structured to help you hit the critical technical milestones that traditional investors often find too risky. Beyond that first check, we participate in follow-on rounds and give you access to SOSV’s network of 7,700+ global investors.\n\nOur founders receive a six-month residency at our state-of-the-art facilities, anchored by our 35,000 sq. ft. Newark headquarters. This is an ecosystem of massive scale, soon to be bolstered by our 10,000 sq. ft. HAX Plasma Forge in Princeton.\n\nYou build alongside our in-house team of mechanical, electrical, and chemical engineers.",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "hard-tech-residency",
+      "label": "Hard-tech residency",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": ["program"],
+      "form": {
+        "id": "hax-residency-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://sosv.com/apply/hax/",
+        "checkedAt": "2026-10-27T00:25:00.000Z",
+        "supported": false,
+        "limitations": [
+          "The program page links applications through SOSV. That application was not opened. A newsletter form on the program page (name, email, company, job title, country) is not the application and was not imported. Fields stay empty and Start Application stays blocked.",
+          "No application deadline was published on the program text that was read. The funding sentence is in the past tense (\"We provided\") and is not stored as a confirmed current instrument."
+        ],
+        "fields": []
+      }
+    }
+  ],
+  "schemaVersion": 2
+}

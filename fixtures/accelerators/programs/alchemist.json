@@ -1,0 +1,66 @@
+{
+  "id": "alchemist",
+  "name": "Alchemist",
+  "logo": {
+    "path": "/accelerators/logos/alchemist.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.alchemist.vc/",
+  "applyUrl": "https://www.alchemist.vc/apply",
+  "description": {
+    "text": "AI-written synthesis of the cited official pages, prepared by the collecting assistant: the Alchemist homepage describes a Silicon Valley accelerator for enterprise and B2B startups and says Alchemist guides technical founders with expert coaching, a global network, and a direct bridge into Silicon Valley's venture ecosystem. The flagship page says tailored mentorship, investor access, and a network of industry leaders help startups turn ideas into scalable businesses, and it prints Alumni 750+ and Capital Raised 5B+. It describes expert mentorship, a tailored experience, a global network, and investor access, and it says the mission is to guide founders from idea to traction. The site also lists Alchemist Chicago, Alchemist Doha, and Alchemist Japan; those program pages were not opened. No investment amount or deadline was on the flagship text that was kept.",
+    "sourceIds": ["homepage", "flagship"],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the homepage and flagship page, prepared by the collecting assistant: the homepage addresses technical founders of enterprise and B2B startups. The flagship page talks about founders moving from idea to traction and says the experience is shaped by stage, sector, and ambitions. It does not publish a checklist, a stage enum, or a location requirement for the flagship.",
+    "sourceIds": ["homepage", "flagship"],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.alchemist.vc/",
+      "title": "Alchemist homepage — Logo image",
+      "quote": "https://22145576.fs1.hubspotusercontent-na1.net/hubfs/22145576/Alchemist%20Logo.png",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.alchemist.vc/",
+      "title": "Alchemist homepage — Accelerator description",
+      "quote": "Silicon Valley Accelerator for Enterprise & B2B Startups.\n\nAlchemist guides technical founders with expert coaching, a global network, and a direct bridge into Silicon Valley’s venture ecosystem.",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    },
+    {
+      "id": "flagship",
+      "url": "https://www.alchemist.vc/flagship-program",
+      "title": "Alchemist flagship page — What the program says it does",
+      "quote": "Through tailored mentorship, access to investors, and a powerful network of industry leaders, we help startups transform bold ideas into scalable, impactful businesses. Join the Program Alumni 750 + Capital Raised 5B +\n\nAlchemist helps founders transform vision into scalable businesses by connecting them with experienced operators, aligned investors, and a peer community navigating the same journey.\n\nOur mission is simple: to guide exceptional founders through the journey from idea to traction.\n\nA tailored experience shaped by your stage, sector, and ambitions, ensuring support aligns with how your company truly needs to grow.",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "flagship",
+      "label": "Flagship program",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": ["flagship"],
+      "form": {
+        "id": "alchemist-flagship-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.alchemist.vc/apply",
+        "checkedAt": "2026-10-27T00:25:00.000Z",
+        "supported": false,
+        "limitations": [
+          "The apply page was retrieved and its visible text was navigation plus \"Apply Now\". No application questions, options, or limits were in that text. Nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "Chicago, Doha, and Japan are listed as separate programs and were not opened. No flagship deadline was published on the pages that were read."
+        ],
+        "fields": []
+      }
+    }
+  ],
+  "schemaVersion": 2
+}

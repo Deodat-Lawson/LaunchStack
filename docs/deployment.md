@@ -137,27 +137,68 @@ Optional integrations:
 
 ### Web search (optional)
 
-One key turns on web search across the app. `EXA_API_KEY` is the recommended
-single key: Exa is the default engine for Ask's `search_web` tool, Prospects
-company search and lookalikes, competitor analysis, grant search (Find
-funders), the document generator's web research, and trend search (news).
-Exa bills the operator about $7 per 1,000 searches (type `auto`, up to 10
-results) and $1 per 1,000 pages for contents and summaries; new accounts get
-$10 of free credit that resets monthly. Create a key at
-<https://dashboard.exa.ai/api-keys>.
+One setting, `SEARCH_PROVIDER`, picks the engine for every feature that
+searches the web: Ask's `search_web` tool, Prospects, competitor analysis,
+grant search (Find funders), the document generator's web research,
+predictive analysis, and trend search (news). Each engine needs one
+credential:
 
-`SERPER_API_KEY` is an optional fallback: Serper serves general and trend
-search when it is the only key, but not company search or lookalikes, which
-need Exa's company index. `SEARCH_PROVIDER` matters only when both keys are
-set: `exa` (default) uses Exa for everything; `serper` moves general and
-trend search to Serper; `fallback` (Serper first, Exa when it finds nothing)
-and `parallel` (both, merged) apply to trend search only. See
+| `SEARCH_PROVIDER` | Credential             | Notes                                                                                                                                                                                                                                                                          |
+| ----------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `exa`             | `EXA_API_KEY`          | The only engine with a company index. Exa bills the operator about $7 per 1,000 searches (type `auto`, up to 10 results) and $1 per 1,000 pages for contents and summaries; new accounts get $10 of free credit that resets monthly. Keys: <https://dashboard.exa.ai/api-keys> |
+| `serper`          | `SERPER_API_KEY`       | Google results through <https://serper.dev>                                                                                                                                                                                                                                    |
+| `brave`           | `BRAVE_SEARCH_API_KEY` | The Brave Search API, <https://brave.com/search/api/>                                                                                                                                                                                                                          |
+| `tavily`          | `TAVILY_API_KEY`       | <https://app.tavily.com>                                                                                                                                                                                                                                                       |
+| `searxng`         | `SEARXNG_URL`          | Base URL of a SearXNG instance with JSON output enabled. Free and self-hosted; see below                                                                                                                                                                                       |
+
+Leave `SEARCH_PROVIDER` unset (or empty) and the first engine with a
+credential wins, in the order exa, serper, brave, tavily, searxng, so a
+deployment that only sets `EXA_API_KEY` or `SERPER_API_KEY` keeps working
+unchanged. Name an engine and only that engine is used: if its credential is
+missing, web search is **off** (logged, and shown in Settings › Models),
+never a silent switch to another engine. Settings › Models has a read-only
+Web search card showing the active engine. The old trend-search values
+`fallback` and `parallel` are gone; a configuration that still sets them
+keeps booting and is treated as unset.
+
+Company search needs Exa. With Exa active, Prospects finds companies in
+Exa's company index and offers lookalikes ("companies like our customers").
+With any other engine, Prospects discovers companies through ordinary web
+search on that engine, and lookalikes are off.
+
+**SearXNG, the free self-hosted option.** The Compose stack includes an
+optional SearXNG service under the `search` profile. It publishes no port;
+only the app and the worker reach it, over the Compose network. Its
+configuration, [`docker/searxng/settings.yml`](../docker/searxng/settings.yml),
+turns on JSON output and turns off SearXNG's bot limiter, which would
+otherwise reject the app's requests. Set the engine in `.env`:
+
+```bash
+SEARCH_PROVIDER=searxng
+SEARXNG_URL=http://searxng:8080
+# Signs SearXNG's cookies. The Compose default is a local key; override it in production.
+SEARXNG_SECRET=<a long random string>
+```
+
+Then start the stack with the profile. This starts SearXNG and recreates the
+app and the worker with the new settings:
+
+```bash
+docker compose --profile search up -d
+```
+
+SearXNG is a metasearch engine: it asks public engines (Google, Bing,
+DuckDuckGo and others) from your server's IP address, and they may
+rate-limit or CAPTCHA a busy instance, which then returns fewer results or
+none. It suits light and personal use; for steady traffic, use a keyed
+engine. To use a SearXNG instance you already run, point `SEARXNG_URL` at it
+and make sure `json` is in its `search.formats`, or it answers 403.
+
+With no engine, the features above skip their web step (trend search returns
+empty results with `providerUsed: none`, and Ask does not offer
+`search_web`), which is expected for local or OSS setups. Ask still reads
+links people paste into a question without any key. See
 [`.env.example`](../.env.example).
-
-With no key, those features skip their web step (trend search returns empty
-results with `providerUsed: none`, and Ask does not offer `search_web`) —
-expected for local or OSS setups. Ask still reads links people paste into a
-question without any key.
 
 ### Verifying object-storage uploads
 
@@ -194,44 +235,48 @@ Model ids, per-model behavior, and route assignments live in
 [Chat Models](./chat-models.md) for presets, route inheritance, reasoning
 modes, and migration from the pre-PR variables.
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `DATABASE_URL` | Yes | PostgreSQL connection string |
-| `BETTER_AUTH_SECRET` | Yes | Signs auth session cookies — `openssl rand -base64 32` |
-| `BETTER_AUTH_URL` | Yes | Public origin, e.g. `https://app.example.com` (`http://localhost:3000` locally). Without it, browser sign-up is refused with "Invalid origin" |
-| `CHAT_BASE_URL` | Yes | The OpenAI-compatible chat endpoint every route talks to |
-| `CHAT_API_KEY` | Conditional | Bearer credential for that endpoint; omit for keyless local endpoints |
-| `CHAT_MODELS_CONFIG` | Optional | Chat model configuration file, relative to `apps/web`. Defaults to `config/chat-models.yaml` (Gemini); `config/chat-models.azure.yaml` targets Azure OpenAI |
-| `OPENAI_API_KEY` or `AI_API_KEY` | Conditional | Supporting non-chat capabilities (OCR, embeddings, rerank, NER, transcription) when no per-capability provider is configured. Never used for chat |
-| `INNGEST_EVENT_KEY` | Cloud only | Inngest event key. Required when `DEPLOYMENT_MODE=cloud`; otherwise a missing key warns at boot and the background verticals stay off. **Ingestion does not need it** — that runs through the transactional outbox |
-| `BLOB_READ_WRITE_TOKEN` | Conditional | Only when using Vercel Blob as the object-storage backend; S3-compatible storage (SeaweedFS, MinIO, S3) is configured separately |
-| `UPLOADTHING_TOKEN` | Optional | UploadThing legacy uploader |
-| `TRANSCRIPTION_SERVICE_URL` + `TRANSCRIPTION_SERVICE_API_KEY` | Optional | Whisper transcription service (`services/transcription`) — the names the Compose stack uses |
-| `ADEU_SERVICE_URL` + `ADEU_SERVICE_API_KEY` | Optional | DOCX redlining service (`services/adeu-ai-docs-editing`) — the names the Compose stack uses |
-| `DOCUMENT_CONVERTER_URL` + `DOCUMENT_CONVERTER_API_KEY` | Optional | OCR routing/parsing service (`services/document-converter`) — the names the Compose stack uses |
-| `GOTENBERG_SERVICE_URL` + `GOTENBERG_SERVICE_USERNAME`/`GOTENBERG_SERVICE_PASSWORD` | Optional | Gotenberg PDF-rendering service ([ADR-009](./architecture/ADR-009-gotenberg-pdf-rendering.md)) — the one PDF owner. Unset, every PDF-producing route returns a typed 503. Override `GOTENBERG_SERVICE_PASSWORD` in production — the Compose default is a local key |
+| Variable                                                                            | Required    | Description                                                                                                                                                                                                                                                             |
+| ----------------------------------------------------------------------------------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DATABASE_URL`                                                                      | Yes         | PostgreSQL connection string                                                                                                                                                                                                                                            |
+| `BETTER_AUTH_SECRET`                                                                | Yes         | Signs auth session cookies — `openssl rand -base64 32`                                                                                                                                                                                                                  |
+| `BETTER_AUTH_URL`                                                                   | Yes         | Public origin, e.g. `https://app.example.com` (`http://localhost:3000` locally). Without it, browser sign-up is refused with "Invalid origin"                                                                                                                           |
+| `CHAT_BASE_URL`                                                                     | Yes         | The OpenAI-compatible chat endpoint every route talks to                                                                                                                                                                                                                |
+| `CHAT_API_KEY`                                                                      | Conditional | Bearer credential for that endpoint; omit for keyless local endpoints                                                                                                                                                                                                   |
+| `CHAT_MODELS_CONFIG`                                                                | Optional    | Chat model configuration file, relative to `apps/web`. Defaults to `config/chat-models.yaml` (Gemini); `config/chat-models.azure.yaml` targets Azure OpenAI                                                                                                             |
+| `OPENAI_API_KEY` or `AI_API_KEY`                                                    | Conditional | Supporting non-chat capabilities (OCR, embeddings, rerank, NER, transcription) when no per-capability provider is configured. Never used for chat                                                                                                                       |
+| `INNGEST_EVENT_KEY`                                                                 | Cloud only  | Inngest event key. Required when `DEPLOYMENT_MODE=cloud`; otherwise a missing key warns at boot and the background verticals stay off. **Ingestion does not need it** — that runs through the transactional outbox                                                      |
+| `BLOB_READ_WRITE_TOKEN`                                                             | Conditional | Only when using Vercel Blob as the object-storage backend; S3-compatible storage (SeaweedFS, MinIO, S3) is configured separately                                                                                                                                        |
+| `UPLOADTHING_TOKEN`                                                                 | Optional    | UploadThing legacy uploader                                                                                                                                                                                                                                             |
+| `TRANSCRIPTION_SERVICE_URL` + `TRANSCRIPTION_SERVICE_API_KEY`                       | Optional    | Whisper transcription service (`services/transcription`) — the names the Compose stack uses                                                                                                                                                                             |
+| `ADEU_SERVICE_URL` + `ADEU_SERVICE_API_KEY`                                         | Optional    | DOCX redlining service (`services/adeu-ai-docs-editing`) — the names the Compose stack uses                                                                                                                                                                             |
+| `DOCUMENT_CONVERTER_URL` + `DOCUMENT_CONVERTER_API_KEY`                             | Optional    | OCR routing/parsing service (`services/document-converter`) — the names the Compose stack uses                                                                                                                                                                          |
+| `GOTENBERG_SERVICE_URL` + `GOTENBERG_SERVICE_USERNAME`/`GOTENBERG_SERVICE_PASSWORD` | Optional    | Gotenberg PDF-rendering service ([ADR-009](./architecture/ADR-009-gotenberg-pdf-rendering.md)) — the one PDF owner. Unset, every PDF-producing route returns a typed 503. Override `GOTENBERG_SERVICE_PASSWORD` in production — the Compose default is a local key      |
+| `SEARCH_PROVIDER`                                                                   | Optional    | Web search engine for every feature: `exa`, `serper`, `brave`, `tavily` or `searxng`. Unset or empty: the first one with a credential, in that order. Named but missing its credential: web search is off, never another engine. See [Web search](#web-search-optional) |
+| `EXA_API_KEY`                                                                       | Optional    | Exa credential. The only engine with a company index (Prospects company search + lookalikes). ~$7 per 1,000 searches; $10 free monthly credit                                                                                                                           |
+| `SERPER_API_KEY`                                                                    | Optional    | Serper (Google results) credential                                                                                                                                                                                                                                      |
+| `BRAVE_SEARCH_API_KEY`                                                              | Optional    | Brave Search API credential                                                                                                                                                                                                                                             |
+| `TAVILY_API_KEY`                                                                    | Optional    | Tavily credential                                                                                                                                                                                                                                                       |
+| `SEARXNG_URL`                                                                       | Optional    | Base URL of a SearXNG instance with JSON output enabled, e.g. `http://searxng:8080` for the Compose `search` profile                                                                                                                                                    |
+| `SEARXNG_SECRET`                                                                    | Optional    | Compose only: signs the bundled SearXNG's cookies. Override the local default in production                                                                                                                                                                             |
+| `AZURE_DOC_INTELLIGENCE_*`                                                          | Optional    | OCR for scanned PDFs                                                                                                                                                                                                                                                    |
+| `DATALAB_API_KEY`                                                                   | Optional    | Alternative OCR                                                                                                                                                                                                                                                         |
+| `LANDING_AI_API_KEY`                                                                | Optional    | Fallback OCR                                                                                                                                                                                                                                                            |
+| `DEPLOYMENT_MODE`                                                                   | Optional    | `self-hosted` (default when unset) or `cloud` — see [Self-hosting defaults](#self-hosting-defaults)                                                                                                                                                                     |
+| `AI_MONTHLY_TOKEN_LIMIT_PER_USER`                                                   | Optional    | Monthly cap on one person's AI tokens (in + out) on this server's models, across all their workspaces; unset or `0` = none — see [AI allowances](#ai-allowances-per-person)                                                                                             |
+| `AI_TOKEN_LIMIT_EXEMPT_EMAILS`                                                      | Optional    | Comma-separated emails the server-wide cap never applies to (yours, say)                                                                                                                                                                                                |
+| `LANDING_PUBLIC_URL`                                                                | Optional    | Origin the public site (`apps/landing`) is served from, read per request. The logo, sign-out, Help, `/privacy` and `/terms` redirect there; set it when you run a prebuilt image                                                                                        |
+| `NEXT_PUBLIC_SITE_URL`                                                              | Optional    | The same origin, inlined at build time; the fallback when `LANDING_PUBLIC_URL` is unset                                                                                                                                                                                 |
+| `NEXT_PUBLIC_APP_URL`                                                               | Optional    | Origin this app is served from; where the public site's sign-in links point                                                                                                                                                                                             |
+| `EMAIL_UNSUBSCRIBE_SECRET`                                                          | Conditional | HMAC key for unsubscribe links; required to send email campaigns, min 16 chars                                                                                                                                                                                          |
+| `SUPPORT_CONTACT_EMAIL`                                                             | Optional    | Address the in-app contact form composes to. Unset hides the form                                                                                                                                                                                                       |
+| `FEEDBACK_ADMIN_EMAILS`                                                             | Optional    | Turns on in-app bug reports and feature requests and names who triages them: account emails, comma/space/semicolon separated, case-insensitive. Unset keeps the feature off. Accounts are not email-verified, so create the operator's account before listing it        |
+| `FEEDBACK_WEBHOOK_URL`                                                              | Optional    | Slack or Discord incoming webhook told about each new report — one line with the kind, severity, title and a Triage link; never the body, context or screenshots                                                                                                        |
 
 The legacy variables (`SIDECAR_URL`, `ADEU_SERVICE_URL`, `OCR_ROUTER_URL`,
 `OCR_WORKER_URL`) are being phased out per
 [ADR-004](./architecture/ADR-004-compute-service-consolidation.md); while the
 migration completes, set both the new and the legacy name if a service isn't
 being picked up.
-| `EXA_API_KEY` | Optional (recommended) | Exa, the default web search engine: Ask's `search_web`, Prospects company search + lookalikes, competitor analysis, grant search, document research, trend search. ~$7 per 1,000 searches; $10 free monthly credit — see [Web search](#web-search-optional) |
-| `SERPER_API_KEY` | Optional | Serper (Google) as a fallback for general and trend search; no company search or lookalikes |
-| `SEARCH_PROVIDER` | Optional | With both keys: `exa` (default), `serper`, or the trend-search-only `fallback` / `parallel` — see `.env.example` |
-| `AZURE_DOC_INTELLIGENCE_*` | Optional | OCR for scanned PDFs |
-| `DATALAB_API_KEY` | Optional | Alternative OCR |
-| `LANDING_AI_API_KEY` | Optional | Fallback OCR |
-| `DEPLOYMENT_MODE` | Optional | `self-hosted` (default when unset) or `cloud` — see [Self-hosting defaults](#self-hosting-defaults) |
-| `AI_MONTHLY_TOKEN_LIMIT_PER_USER` | Optional | Monthly cap on one person's AI tokens (in + out) on this server's models, across all their workspaces; unset or `0` = none — see [AI allowances](#ai-allowances-per-person) |
-| `AI_TOKEN_LIMIT_EXEMPT_EMAILS` | Optional | Comma-separated emails the server-wide cap never applies to (yours, say) |
-| `LANDING_PUBLIC_URL` | Optional | Origin the public site (`apps/landing`) is served from, read per request. The logo, sign-out, Help, `/privacy` and `/terms` redirect there; set it when you run a prebuilt image |
-| `NEXT_PUBLIC_SITE_URL` | Optional | The same origin, inlined at build time; the fallback when `LANDING_PUBLIC_URL` is unset |
-| `NEXT_PUBLIC_APP_URL` | Optional | Origin this app is served from; where the public site's sign-in links point |
-| `EMAIL_UNSUBSCRIBE_SECRET` | Conditional | HMAC key for unsubscribe links; required to send email campaigns, min 16 chars |
-| `SUPPORT_CONTACT_EMAIL` | Optional | Address the in-app contact form composes to. Unset hides the form |
-| `FEEDBACK_ADMIN_EMAILS` | Optional | Turns on in-app bug reports and feature requests and names who triages them: account emails, comma/space/semicolon separated, case-insensitive. Unset keeps the feature off. Accounts are not email-verified, so create the operator's account before listing it |
-| `FEEDBACK_WEBHOOK_URL` | Optional | Slack or Discord incoming webhook told about each new report — one line with the kind, severity, title and a Triage link; never the body, context or screenshots |
 
 ## AI allowances per person
 
@@ -247,7 +292,7 @@ UTC, and reset on the 1st.
   `AI_TOKEN_LIMIT_EXEMPT_EMAILS` are never capped. Because anyone who creates a
   workspace owns it, this is the only limit an individual can't lift themselves.
 - **The workspace's** — set in Workspace › Usage and costs › AI limits per person
-  by anyone with *settings.manage*: a default for everyone, and an override per
+  by anyone with _settings.manage_: a default for everyone, and an override per
   person (no limit, or a number of tokens). It counts all of the person's calls
   in that workspace, whoever's endpoint served them.
 

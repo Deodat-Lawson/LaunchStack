@@ -306,12 +306,27 @@ describe("executeSearch strategy logic", () => {
         });
     });
 
-    describe("missing EXA_API_KEY on exa path", () => {
-        it("returns empty results, providerUsed none, and does not call Exa API", async () => {
+    describe("no EXA_API_KEY on the default path", () => {
+        it("uses Serper when it is the only key, without calling Exa", async () => {
             setEnv({
                 SEARCH_PROVIDER: undefined,
                 EXA_API_KEY: undefined,
                 SERPER_API_KEY: "test-serper-key",
+            });
+
+            const { providerUsed } = await executeSearch(subQueries);
+
+            expect(providerUsed).toBe("serper");
+            const { exa, serper } = getFetchCallsByUrl(fetchSpy);
+            expect(exa).toBe(0);
+            expect(serper).toBeGreaterThan(0);
+        });
+
+        it("returns empty results, providerUsed none, and calls nothing with no key at all", async () => {
+            setEnv({
+                SEARCH_PROVIDER: undefined,
+                EXA_API_KEY: undefined,
+                SERPER_API_KEY: undefined,
             });
             const warnSpy = jest.spyOn(console, "warn").mockImplementation();
 

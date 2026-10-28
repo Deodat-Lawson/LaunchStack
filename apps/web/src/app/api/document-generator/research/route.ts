@@ -3,7 +3,7 @@
  *
  * Unified research endpoint combining:
  * - Document Research (RAG): Search uploaded company documents
- * - Web Research: Search the web using Exa
+ * - Web Research: Search the web (Exa, or Serper when it is the only key)
  * - arXiv Research: Search academic papers from arXiv.org
  */
 
@@ -12,10 +12,10 @@ import { z } from "zod";
 import { multiDocEnsembleSearch } from "~/server/rag/ensemble";
 import type { MultiDocSearchOptions, SearchResult } from "@launchstack/retrieval/search-types";
 import { document } from "@launchstack/store/schema";
+import { configuredWebSearchProvider, searchWeb } from "@launchstack/tools/web-research";
 import { db } from "~/server/db";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import { gateChunksByScope } from "~/server/rag/gate";
-import { performExaSearch } from "~/app/api/agents/documentQ&A/services/exaSearch";
 import { getEmbeddings } from "~/app/api/agents/documentQ&A/services";
 import { localeOfRequest } from "~/i18n/server";
 import { translatorFor } from "~/i18n/translate";
@@ -321,6 +321,11 @@ export async function POST(request: Request) {
         if (sources.includes("web")) {
             const webSearchPromise = (async () => {
                 try {
+                    if (configuredWebSearchProvider() === null) {
+                        console.warn("🌐 [Research] No search key configured; web search skipped");
+                        return;
+                    }
+
                     // Adjust query based on search type
                     let adjustedQuery = query;
                     const searchType = options?.searchType ?? "general";
@@ -331,10 +336,9 @@ export async function POST(request: Request) {
                         adjustedQuery = `latest news: ${query}`;
                     }
 
-                    const webResults = await performExaSearch(
-                        adjustedQuery,
-                        Math.min(maxResults, 5)
-                    );
+                    const { results: webResults } = await searchWeb(adjustedQuery, {
+                        maxResults: Math.min(maxResults, 5),
+                    });
 
                     for (let i = 0; i < webResults.length; i++) {
                         const result = webResults[i];

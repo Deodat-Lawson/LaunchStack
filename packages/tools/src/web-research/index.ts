@@ -119,10 +119,13 @@ export async function executeSearch(
     subQueries: PlannedQuery[],
     strategyOverride?: ProviderStrategy
 ): Promise<SearchExecutionResult> {
-    const strategy = resolveStrategy(strategyOverride);
-
     const hasExaKey = Boolean(getExaApiKey());
     const hasSerperKey = Boolean(getSerperApiKey());
+
+    // Exa is the default engine; with only a Serper key, Serper is the engine
+    // (an explicit override is left as asked).
+    let strategy = resolveStrategy(strategyOverride);
+    if (!strategyOverride && strategy === "exa" && !hasExaKey && hasSerperKey) strategy = "serper";
 
     const useSerper =
         hasSerperKey &&

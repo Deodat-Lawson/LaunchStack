@@ -30,6 +30,7 @@ import {
     type RelationshipEventRow,
 } from "./schema";
 import { assertTransition, isPastCandidate, STALE_AFTER_DAYS, STAGE_ORDER } from "./stages";
+import { MAX_LOOKALIKE_SEEDS, WON_STAGES } from "./types";
 import type {
     AgreementInput,
     AgreementRecord,
@@ -71,6 +72,7 @@ function toProgram(row: DistributionProgramRow): ProgramRecord {
         partnerKinds: (row.partnerKinds ?? []) as PartnerKind[],
         constraints: row.constraints ?? null,
         knownPartnerDomains: row.knownPartnerDomains ?? [],
+        customerDomains: row.customerDomains ?? [],
         status: row.status,
         createdAt: row.createdAt,
         updatedAt: row.updatedAt ?? null,
@@ -195,6 +197,11 @@ function toAgreement(row: DistributionAgreementRow): AgreementRecord {
 
 // ─── Programs ────────────────────────────────────────────────────────────────
 
+/** Normalised, de-duplicated domains; entries that are not a domain are dropped. */
+function normalizeDomains(values: readonly string[]): string[] {
+    return [...new Set(values.map(d => normalizeDomain(d)).filter((d): d is string => Boolean(d)))];
+}
+
 export async function createProgram(args: {
     companyId: bigint;
     userId: string;
@@ -214,9 +221,8 @@ export async function createProgram(args: {
             targetTerritories: args.input.targetTerritories,
             partnerKinds: args.input.partnerKinds,
             constraints: args.input.constraints ?? null,
-            knownPartnerDomains: args.input.knownPartnerDomains
-                .map(d => normalizeDomain(d))
-                .filter((d): d is string => Boolean(d)),
+            knownPartnerDomains: normalizeDomains(args.input.knownPartnerDomains),
+            customerDomains: normalizeDomains(args.input.customerDomains ?? []),
         })
         .returning();
     if (!row) throw new Error("Failed to create distribution program");
@@ -257,11 +263,10 @@ export async function updateProgram(
     if (patch.targetTerritories !== undefined) values.targetTerritories = patch.targetTerritories;
     if (patch.partnerKinds !== undefined) values.partnerKinds = patch.partnerKinds;
     if (patch.constraints !== undefined) values.constraints = patch.constraints ?? null;
-    if (patch.knownPartnerDomains !== undefined) {
-        values.knownPartnerDomains = patch.knownPartnerDomains
-            .map(d => normalizeDomain(d))
-            .filter((d): d is string => Boolean(d));
-    }
+    if (patch.knownPartnerDomains !== undefined)
+        values.knownPartnerDomains = normalizeDomains(patch.knownPartnerDomains);
+    if (patch.customerDomains !== undefined)
+        values.customerDomains = normalizeDomains(patch.customerDomains);
     if (patch.status !== undefined) values.status = patch.status;
     if (Object.keys(values).length === 0) return getProgram(id, companyId);
     const [row] = await db
@@ -851,7 +856,11 @@ export async function listExclusions(
 ): Promise<{ domains: string[]; keys: string[] }> {
     const db = getDb();
     const program = await getProgram(programId, companyId);
-    const domains = new Set<string>(program?.knownPartnerDomains ?? []);
+    // Customers the program names are lookalike seeds, never prospects.
+    const domains = new Set<string>([
+        ...(program?.knownPartnerDomains ?? []),
+        ...(program?.customerDomains ?? []),
+    ]);
     const keys = new Set<string>();
     const rows = await db
         .select({
@@ -876,6 +885,37 @@ export async function listExclusions(
         keys.add(row.resolveKey);
     }
     return { domains: [...domains], keys: [...keys] };
+}
+
+/**
+ * Domains of the program's won deals, most recently won first: with the
+ * customers the program names, the companies lookalike search starts from.
+ */
+export async function listWonDomains(
+    companyId: bigint,
+    programId: string,
+    limit = MAX_LOOKALIKE_SEEDS
+): Promise<string[]> {
+    const db = getDb();
+    const rows = await db
+        .select({ domain: partnerOrgs.domain })
+        .from(partnerRelationships)
+        .innerJoin(partnerOrgs, eq(partnerOrgs.id, partnerRelationships.orgId))
+        .where(
+            and(
+                eq(partnerRelationships.companyId, companyId),
+                eq(partnerRelationships.programId, programId),
+                inArray(partnerRelationships.stage, [...WON_STAGES]),
+                isNotNull(partnerOrgs.domain)
+            )
+        )
+        .orderBy(desc(partnerRelationships.stageChangedAt))
+        // One organisation can hold a won deal in two kinds; read enough to fill the cap.
+        .limit(limit * 2);
+    return [...new Set(rows.map(r => r.domain).filter((d): d is string => Boolean(d)))].slice(
+        0,
+        limit
+    );
 }
 
 // ─── Events and transitions ──────────────────────────────────────────────────

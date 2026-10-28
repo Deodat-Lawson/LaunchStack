@@ -167,6 +167,8 @@ interface RespondInput
                 | "documentId"
                 | "embeddingIndexKey"
                 | "conversationHistory"
+                | "priorQuestions"
+                | "questionOrigin"
                 | "aiPersona"
                 | "chatMode"
             >
@@ -662,6 +664,8 @@ export async function POST(request: Request) {
                 aiModel,
                 provider,
                 conversationHistory,
+                priorQuestions,
+                questionOrigin,
                 embeddingIndexKey,
                 thinkingMode: requestedThinking,
                 attachments: requestedAttachments,
@@ -948,6 +952,8 @@ export async function POST(request: Request) {
                 documentId,
                 embeddingIndexKey,
                 conversationHistory,
+                priorQuestions,
+                questionOrigin,
                 aiPersona,
                 chatMode,
                 userCompanyId,
@@ -1017,6 +1023,8 @@ export async function POST(request: Request) {
                 documentId,
                 embeddingIndexKey,
                 conversationHistory,
+                priorQuestions,
+                questionOrigin,
                 aiPersona,
                 chatMode,
                 userCompanyId,
@@ -1398,13 +1406,22 @@ export async function POST(request: Request) {
                 (resolved.behavior.nativeStructuredOutput ?? []).includes("tool-calling") ||
                 getChatModelsSource() === "workspace";
 
-            // Web search is a tool the model may call, not a step before the
-            // answer: it is offered when the turn's agent may use the web, a
-            // search provider key is configured and the model takes tools. A
-            // question that needs no web pays nothing for it.
+            // The web is a tool the model may call, not a step before the
+            // answer: it is offered when the turn's agent may use the web and
+            // the model takes tools. Reading a page the person linked needs no
+            // key; searching needs a search provider key. A question that needs
+            // no web pays nothing for it.
             const webTools =
-                enableWebSearch && webSearchAvailable() && takesTools
-                    ? createWebTools({}, locale)
+                enableWebSearch && takesTools
+                    ? createWebTools({}, locale, {
+                          search: webSearchAvailable(),
+                          personText: [
+                              // A question the app wrote (a plan) is not the person's.
+                              ...(questionOrigin ? [] : [question]),
+                              ...passages.map(passage => passage.text),
+                              ...(priorQuestions ?? []),
+                          ],
+                      })
                     : null;
 
             // The workspace's sources are tools too, offered whenever the model
@@ -1513,7 +1530,8 @@ export async function POST(request: Request) {
             } else if (writeAllowed && !mayUpload) {
                 systemPrompt += `\n\n${noDocumentToolsPrompt()}`;
             }
-            if (webTools) systemPrompt += `\n\n${webToolsPrompt(new Date())}`;
+            if (webTools)
+                systemPrompt += `\n\n${webToolsPrompt(new Date(), { search: webTools.search })}`;
             // Answer in the language the person reads the app in, unless they
             // write in another one (src/i18n/server.ts).
             const replyLanguage = replyLanguageInstruction(locale);

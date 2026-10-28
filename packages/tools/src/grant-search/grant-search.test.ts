@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import {
     buildSearchBody,
@@ -12,6 +12,7 @@ import {
     toIsoDay,
     webQueriesFor,
     webResultToOpportunity,
+    type GrantSearchQuery,
 } from "./index";
 
 function urlOf(input: RequestInfo | URL): string {
@@ -234,5 +235,83 @@ describe("findGrants", () => {
         expect(result.opportunities).toEqual([]);
         expect(result.sources[0]).toMatchObject({ id: "grants_gov", status: "failed" });
         expect(result.sources[1]).toMatchObject({ id: "web", status: "off", detail: "skipped" });
+    });
+});
+
+describe("findGrants web search", () => {
+    beforeEach(() => {
+        vi.stubEnv("EXA_API_KEY", "");
+        vi.stubEnv("SERPER_API_KEY", "");
+        vi.stubEnv("SEARCH_PROVIDER", "");
+    });
+    afterEach(() => vi.unstubAllEnvs());
+
+    const query: GrantSearchQuery = { keywords: ["youth literacy"], includeGrantsGov: false };
+
+    it("searches the whole web on Exa by default, not news", async () => {
+        vi.stubEnv("EXA_API_KEY", "exa-test");
+        const bodies: Record<string, unknown>[] = [];
+        const fetchImpl: typeof fetch = async (input, init) => {
+            expect(urlOf(input)).toBe("https://api.exa.ai/search");
+            expect((init?.headers as Record<string, string>)["x-api-key"]).toBe("exa-test");
+            bodies.push(JSON.parse(init!.body as string) as Record<string, unknown>);
+            return new Response(
+                JSON.stringify({
+                    results: [
+                        {
+                            title: "Literacy Grants | Reading Fund",
+                            url: "https://readingfund.example/grants",
+                            text: "The foundation funds youth literacy nonprofits.",
+                        },
+                    ],
+                }),
+                { status: 200 }
+            );
+        };
+
+        const result = await findGrants(query, { fetchImpl });
+
+        expect(bodies).toHaveLength(3);
+        for (const body of bodies) {
+            expect(body).not.toHaveProperty("category");
+            expect(body.query).toContain("youth literacy");
+        }
+        // Three queries found the same page; it is listed once.
+        expect(result.opportunities).toHaveLength(1);
+        expect(result.opportunities[0]).toMatchObject({
+            source: "web",
+            url: "https://readingfund.example/grants",
+            funder: "Reading Fund",
+        });
+        expect(result.sources).toContainEqual({ id: "web", status: "ok", found: 1, detail: null });
+    });
+
+    it("reports the web source failed when every query fails", async () => {
+        vi.stubEnv("EXA_API_KEY", "exa-test");
+        const fetchImpl: typeof fetch = async () => new Response("no", { status: 401 });
+
+        const result = await findGrants(query, { fetchImpl });
+
+        expect(result.sources).toContainEqual({
+            id: "web",
+            status: "failed",
+            found: 0,
+            detail: "Exa search failed (HTTP 401)",
+        });
+    });
+
+    it("leaves the web off without a search key", async () => {
+        const fetchImpl = vi.fn<typeof fetch>();
+
+        const result = await findGrants(query, { fetchImpl });
+
+        expect(fetchImpl).not.toHaveBeenCalled();
+        expect(result.opportunities).toEqual([]);
+        expect(result.sources).toContainEqual({
+            id: "web",
+            status: "off",
+            found: 0,
+            detail: "no search key",
+        });
     });
 });

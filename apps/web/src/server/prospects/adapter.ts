@@ -28,6 +28,7 @@ import {
     type SourceCount,
 } from "@launchstack/pipelines/distribution/types";
 import { normalizeDomain } from "@launchstack/tools/org-resolver";
+import type { SearchSetupView } from "@launchstack/tools/web-research";
 
 import type {
     Claim,
@@ -899,9 +900,40 @@ export interface SourceAvailability {
     lookalike: boolean;
     /** The search engine's name ("Exa", "SearXNG"); null when web search is off. */
     engine: string | null;
+    /** The setting that turns web search on: the chosen engine's missing key, or SEARCH_PROVIDER. */
+    webRequires: string;
+    /** The setting that brings lookalikes: EXA_API_KEY, or SEARCH_PROVIDER=exa while another engine is named. */
+    lookalikeRequires: string;
     place: boolean;
     trade: boolean;
     screening: boolean;
+}
+
+/**
+ * The search half of `SourceAvailability`, from the server's search setup
+ * (`describeSearchSetup`). Each row names the one setting that would turn it
+ * on: a named engine missing its key needs that key, not SEARCH_PROVIDER; and
+ * while SEARCH_PROVIDER names another engine, an Exa key alone never brings
+ * lookalikes back.
+ */
+export function searchSourceAvailability(
+    setup: SearchSetupView
+): Pick<SourceAvailability, "web" | "lookalike" | "engine" | "webRequires" | "lookalikeRequires"> {
+    const web = setup.provider !== null;
+    return {
+        web,
+        lookalike: setup.capabilities.companies,
+        engine: web ? setup.label : null,
+        webRequires:
+            setup.problem === "missing-credentials" && setup.credential
+                ? setup.credential
+                : "SEARCH_PROVIDER",
+        // Unset, Exa comes first, so its key is enough.
+        lookalikeRequires:
+            setup.source === "setting" && setup.requested !== "exa"
+                ? "SEARCH_PROVIDER=exa"
+                : "EXA_API_KEY",
+    };
 }
 
 const SOURCE_LABEL: Record<SourceCount["source"], string> = {
@@ -1046,7 +1078,7 @@ export function sourceRows(avail: SourceAvailability, latest: RunRecord | null):
                   : `${engine} web search: the site of each result stands for a company. A company index and lookalikes need Exa as the search engine. Needs a model for the research agent.`,
             enabled: avail.web,
             available: avail.web,
-            requires: "SEARCH_PROVIDER",
+            requires: avail.webRequires,
             cost: "credits per run",
             locked: true,
             lastYield: yieldFor("web", "live"),
@@ -1059,8 +1091,7 @@ export function sourceRows(avail: SourceAvailability, latest: RunRecord | null):
                 "Companies like your customers: the ones you list on the segment and your won deals, up to five per run, from the search engine's company index (Exa). Customers are never prospected themselves.",
             enabled: avail.lookalike,
             available: avail.lookalike,
-            // Another engine is chosen: only switching to Exa helps. None is: Exa's key does.
-            requires: avail.web ? "SEARCH_PROVIDER=exa" : "EXA_API_KEY",
+            requires: avail.lookalikeRequires,
             cost: "credits per run",
             locked: true,
             lastYield: yieldFor("lookalike", "live"),

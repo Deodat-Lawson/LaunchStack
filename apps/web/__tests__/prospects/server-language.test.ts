@@ -199,7 +199,16 @@ describe("adapter copies say their English field exactly", () => {
             [false, false, null],
         ] as const)
             for (const row of sourceRows(
-                { web, lookalike, engine, place: false, trade: false, screening: true },
+                {
+                    web,
+                    lookalike,
+                    engine,
+                    webRequires: "SEARCH_PROVIDER",
+                    lookalikeRequires: "EXA_API_KEY",
+                    place: false,
+                    trade: false,
+                    screening: true,
+                },
                 null
             )) {
                 expect(en(row.labelCopy)).toBe(row.label);
@@ -335,6 +344,8 @@ describe("in Chinese", () => {
                 web: true,
                 lookalike: true,
                 engine: "Exa",
+                webRequires: "SEARCH_PROVIDER",
+                lookalikeRequires: "EXA_API_KEY",
                 place: false,
                 trade: false,
                 screening: false,

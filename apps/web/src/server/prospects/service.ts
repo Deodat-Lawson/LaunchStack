@@ -41,7 +41,7 @@ import type {
 import { resolveComplianceProvider } from "@launchstack/tools/compliance-screen";
 import { isPlaceSearchConfigured } from "@launchstack/tools/place-search";
 import { isTradeDataConfigured } from "@launchstack/tools/trade-data";
-import { activeSearchProvider } from "@launchstack/tools/web-research";
+import { describeSearchSetup } from "@launchstack/tools/web-research";
 
 import type {
     CompaniesSort,
@@ -75,6 +75,7 @@ import {
     parseCustomerDomains,
     relationshipTarget,
     searchMatches,
+    searchSourceAvailability,
     sortRows,
     sourceRows,
     toCompanyDetail,
@@ -121,11 +122,8 @@ const companyNotFound = () => new ProspectsError(copy("growth.server.errors.comp
 // ── Availability ──────────────────────────────────────────────────────────
 
 export function availability(): SourceAvailability {
-    const engine = activeSearchProvider();
     return {
-        web: engine !== null,
-        lookalike: Boolean(engine?.companies),
-        engine: engine?.label ?? null,
+        ...searchSourceAvailability(describeSearchSetup()),
         place: isPlaceSearchConfigured(),
         trade: isTradeDataConfigured(),
         screening: resolveComplianceProvider() !== null,

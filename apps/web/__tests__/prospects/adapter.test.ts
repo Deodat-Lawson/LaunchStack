@@ -11,6 +11,7 @@ import type {
     RelationshipRecord,
     RunRecord,
 } from "@launchstack/pipelines/distribution/types";
+import type { SearchSetupView } from "@launchstack/tools/web-research";
 import {
     SALES_OF,
     allowedMoves,
@@ -21,6 +22,7 @@ import {
     profileClaims,
     relationshipTarget,
     segmentFields,
+    searchSourceAvailability,
     sourceRows,
     toRunDto,
     viewMatches,
@@ -366,9 +368,18 @@ describe("customers like these", () => {
 
 describe("source rows", () => {
     const off = { place: false, trade: false, screening: false };
-    const rowsFor = (web: boolean, lookalike: boolean, engine: string | null) =>
+    const rowsFor = (
+        web: boolean,
+        lookalike: boolean,
+        engine: string | null,
+        webRequires = "SEARCH_PROVIDER",
+        lookalikeRequires = "EXA_API_KEY"
+    ) =>
         Object.fromEntries(
-            sourceRows({ web, lookalike, engine, ...off }, null).map(r => [r.id, r])
+            sourceRows(
+                { web, lookalike, engine, webRequires, lookalikeRequires, ...off },
+                null
+            ).map(r => [r.id, r])
         );
 
     it("names the web source by the server's engine, a company index only on Exa", () => {
@@ -383,7 +394,7 @@ describe("source rows", () => {
         });
         expect(exa.lookalike!.enabled && exa.lookalike!.available).toBe(true);
 
-        const searxng = rowsFor(true, false, "SearXNG");
+        const searxng = rowsFor(true, false, "SearXNG", "SEARCH_PROVIDER", "SEARCH_PROVIDER=exa");
         expect(searxng.web).toMatchObject({
             label: "Web search (SearXNG)",
             enabled: true,
@@ -394,7 +405,6 @@ describe("source rows", () => {
             },
         });
         expect(searxng.web!.description).toContain("need Exa as the search engine");
-        // Another engine is chosen: only switching the engine to Exa brings lookalikes.
         expect(searxng.lookalike).toMatchObject({
             enabled: false,
             available: false,
@@ -402,7 +412,7 @@ describe("source rows", () => {
         });
     });
 
-    it("says what turns web search on when the server has no engine", () => {
+    it("says which setting turns each source on when web search is off", () => {
         const none = rowsFor(false, false, null);
         expect(none.web).toMatchObject({
             label: "Web search",
@@ -413,6 +423,137 @@ describe("source rows", () => {
         });
         expect(none.web!.labelCopy).not.toHaveProperty("values.engine");
         expect(none.lookalike).toMatchObject({ enabled: false, requires: "EXA_API_KEY" });
+
+        // SEARCH_PROVIDER names Brave, whose key is missing: the row asks for that key.
+        const brave = rowsFor(false, false, null, "BRAVE_SEARCH_API_KEY", "SEARCH_PROVIDER=exa");
+        expect(brave.web).toMatchObject({ enabled: false, requires: "BRAVE_SEARCH_API_KEY" });
+        expect(brave.lookalike).toMatchObject({ requires: "SEARCH_PROVIDER=exa" });
+    });
+});
+
+describe("searchSourceAvailability", () => {
+    const view = (over: Partial<SearchSetupView>): SearchSetupView => ({
+        provider: null,
+        label: null,
+        source: null,
+        requested: null,
+        problem: null,
+        credential: null,
+        capabilities: { web: false, news: false, companies: false },
+        providers: [],
+        ...over,
+    });
+    const on = { web: true, news: true };
+
+    it.each<[string, Partial<SearchSetupView>, ReturnType<typeof searchSourceAvailability>]>([
+        [
+            "Exa picked automatically",
+            {
+                provider: "exa",
+                label: "Exa",
+                source: "auto",
+                credential: "EXA_API_KEY",
+                capabilities: { ...on, companies: true },
+            },
+            {
+                web: true,
+                lookalike: true,
+                engine: "Exa",
+                webRequires: "SEARCH_PROVIDER",
+                lookalikeRequires: "EXA_API_KEY",
+            },
+        ],
+        [
+            "SearXNG named",
+            {
+                provider: "searxng",
+                label: "SearXNG",
+                source: "setting",
+                requested: "searxng",
+                capabilities: { ...on, companies: false },
+            },
+            {
+                web: true,
+                lookalike: false,
+                engine: "SearXNG",
+                webRequires: "SEARCH_PROVIDER",
+                lookalikeRequires: "SEARCH_PROVIDER=exa",
+            },
+        ],
+        [
+            "SearXNG picked automatically (an Exa key would take over)",
+            {
+                provider: "searxng",
+                label: "SearXNG",
+                source: "auto",
+                capabilities: { ...on, companies: false },
+            },
+            {
+                web: true,
+                lookalike: false,
+                engine: "SearXNG",
+                webRequires: "SEARCH_PROVIDER",
+                lookalikeRequires: "EXA_API_KEY",
+            },
+        ],
+        [
+            "Brave named without its key",
+            {
+                label: "Brave Search",
+                source: "setting",
+                requested: "brave",
+                problem: "missing-credentials",
+                credential: "BRAVE_SEARCH_API_KEY",
+            },
+            {
+                web: false,
+                lookalike: false,
+                engine: null,
+                webRequires: "BRAVE_SEARCH_API_KEY",
+                lookalikeRequires: "SEARCH_PROVIDER=exa",
+            },
+        ],
+        [
+            "Exa named without its key",
+            {
+                label: "Exa",
+                source: "setting",
+                requested: "exa",
+                problem: "missing-credentials",
+                credential: "EXA_API_KEY",
+            },
+            {
+                web: false,
+                lookalike: false,
+                engine: null,
+                webRequires: "EXA_API_KEY",
+                lookalikeRequires: "EXA_API_KEY",
+            },
+        ],
+        [
+            "a name that isn't an engine",
+            { source: "setting", requested: "bing", problem: "unknown-provider" },
+            {
+                web: false,
+                lookalike: false,
+                engine: null,
+                webRequires: "SEARCH_PROVIDER",
+                lookalikeRequires: "SEARCH_PROVIDER=exa",
+            },
+        ],
+        [
+            "nothing configured",
+            {},
+            {
+                web: false,
+                lookalike: false,
+                engine: null,
+                webRequires: "SEARCH_PROVIDER",
+                lookalikeRequires: "EXA_API_KEY",
+            },
+        ],
+    ])("%s", (_label, setup, expected) => {
+        expect(searchSourceAvailability(view(setup))).toEqual(expected);
     });
 });
 

@@ -3,8 +3,8 @@
  *
  * Two sources behind one result: Grants.gov (federal, keyless, always
  * available) and the web (foundations, state programmes, corporate giving)
- * through the web-research tool's general search (Exa first, Serper as the
- * fallback) when a search key is configured. Results
+ * through the web-research tool's general search (the server's engine,
+ * SEARCH_PROVIDER) when one is configured. Results
  * are listings — a title, a funder, dates and amounts where the source has
  * them — for a caller to score against what it knows about the applicant.
  * Nothing here calls a model.

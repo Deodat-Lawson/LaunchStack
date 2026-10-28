@@ -1,7 +1,7 @@
 /**
  * /api/document-generator/research: the web leg is general web search
- * (@launchstack/tools/web-research `searchWeb`, Exa first, Serper as the
- * fallback), not a hand-rolled Exa call — and with no search key it is
+ * (@launchstack/tools/web-research `searchWeb`, on the server's engine,
+ * SEARCH_PROVIDER), not a hand-rolled Exa call — and with no engine it is
  * skipped, leaving documents and arXiv to answer.
  */
 

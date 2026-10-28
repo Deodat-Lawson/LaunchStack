@@ -912,14 +912,16 @@ export interface SourceAvailability {
 /**
  * The search half of `SourceAvailability`, from the server's search setup
  * (`describeSearchSetup`). Each row names the one setting that would turn it
- * on: a named engine missing its key needs that key, not SEARCH_PROVIDER; and
- * while SEARCH_PROVIDER names another engine, an Exa key alone never brings
- * lookalikes back.
+ * on: a named engine missing its key needs that key, not SEARCH_PROVIDER; a
+ * name that isn't an engine needs a valid one; and while SEARCH_PROVIDER names
+ * another engine, an Exa key alone never brings lookalikes back.
  */
 export function searchSourceAvailability(
     setup: SearchSetupView
 ): Pick<SourceAvailability, "web" | "lookalike" | "engine" | "webRequires" | "lookalikeRequires"> {
     const web = setup.provider !== null;
+    const exaKey = setup.providers.some(p => p.id === "exa" && p.configured);
+    const otherEngineNamed = setup.source === "setting" && setup.requested !== "exa";
     return {
         web,
         lookalike: setup.capabilities.companies,
@@ -927,12 +929,15 @@ export function searchSourceAvailability(
         webRequires:
             setup.problem === "missing-credentials" && setup.credential
                 ? setup.credential
-                : "SEARCH_PROVIDER",
+                : setup.problem === "unknown-provider"
+                  ? `SEARCH_PROVIDER=${setup.providers.map(p => p.id).join("|")}`
+                  : "SEARCH_PROVIDER",
         // Unset, Exa comes first, so its key is enough.
-        lookalikeRequires:
-            setup.source === "setting" && setup.requested !== "exa"
-                ? "SEARCH_PROVIDER=exa"
-                : "EXA_API_KEY",
+        lookalikeRequires: !otherEngineNamed
+            ? "EXA_API_KEY"
+            : exaKey
+              ? "SEARCH_PROVIDER=exa"
+              : "SEARCH_PROVIDER=exa + EXA_API_KEY",
     };
 }
 

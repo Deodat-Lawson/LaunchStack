@@ -444,6 +444,14 @@ describe("searchSourceAvailability", () => {
         ...over,
     });
     const on = { web: true, news: true };
+    const engines = (exaConfigured: boolean): SearchSetupView["providers"] =>
+        (["exa", "serper", "brave", "tavily", "searxng"] as const).map(id => ({
+            id,
+            label: id,
+            credential: `${id.toUpperCase()}_KEY`,
+            configured: id === "exa" ? exaConfigured : id === "searxng",
+            companies: id === "exa",
+        }));
 
     it.each<[string, Partial<SearchSetupView>, ReturnType<typeof searchSourceAvailability>]>([
         [
@@ -464,13 +472,14 @@ describe("searchSourceAvailability", () => {
             },
         ],
         [
-            "SearXNG named",
+            "SearXNG named, with an Exa key on the server",
             {
                 provider: "searxng",
                 label: "SearXNG",
                 source: "setting",
                 requested: "searxng",
                 capabilities: { ...on, companies: false },
+                providers: engines(true),
             },
             {
                 web: true,
@@ -478,6 +487,24 @@ describe("searchSourceAvailability", () => {
                 engine: "SearXNG",
                 webRequires: "SEARCH_PROVIDER",
                 lookalikeRequires: "SEARCH_PROVIDER=exa",
+            },
+        ],
+        [
+            "SearXNG named, and no Exa key either",
+            {
+                provider: "searxng",
+                label: "SearXNG",
+                source: "setting",
+                requested: "searxng",
+                capabilities: { ...on, companies: false },
+                providers: engines(false),
+            },
+            {
+                web: true,
+                lookalike: false,
+                engine: "SearXNG",
+                webRequires: "SEARCH_PROVIDER",
+                lookalikeRequires: "SEARCH_PROVIDER=exa + EXA_API_KEY",
             },
         ],
         [
@@ -504,6 +531,7 @@ describe("searchSourceAvailability", () => {
                 requested: "brave",
                 problem: "missing-credentials",
                 credential: "BRAVE_SEARCH_API_KEY",
+                providers: engines(true),
             },
             {
                 web: false,
@@ -532,12 +560,17 @@ describe("searchSourceAvailability", () => {
         ],
         [
             "a name that isn't an engine",
-            { source: "setting", requested: "bing", problem: "unknown-provider" },
+            {
+                source: "setting",
+                requested: "bing",
+                problem: "unknown-provider",
+                providers: engines(true),
+            },
             {
                 web: false,
                 lookalike: false,
                 engine: null,
-                webRequires: "SEARCH_PROVIDER",
+                webRequires: "SEARCH_PROVIDER=exa|serper|brave|tavily|searxng",
                 lookalikeRequires: "SEARCH_PROVIDER=exa",
             },
         ],

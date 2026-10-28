@@ -102,9 +102,25 @@ export interface AIChatResponse {
     message?: string;
     error?: string;
     details?: string;
+    /**
+     * Why a failed request was refused, when the server named it — e.g.
+     * `ai_allowance_reached` (HTTP 429) for a person at their AI limit.
+     */
+    code?: string;
 }
 
 export type AIChatStreamEvent = ChatStreamEvent<AIChatResponse>;
+
+/** A failed request, carrying the server's `code` (if it sent one) past the catch. */
+class ChatRequestError extends Error {
+    constructor(
+        message: string,
+        readonly code?: string
+    ) {
+        super(message);
+        this.name = "ChatRequestError";
+    }
+}
 
 export interface AIChatSendOptions {
     stream?: boolean;
@@ -191,11 +207,13 @@ export function useAIChat() {
                     const errorData = (await response.json().catch(() => ({}))) as {
                         message?: string;
                         error?: string;
+                        code?: unknown;
                     };
-                    throw new Error(
+                    throw new ChatRequestError(
                         errorData.message ??
                             errorData.error ??
-                            t("requestFailed", { status: response.status })
+                            t("requestFailed", { status: response.status }),
+                        typeof errorData.code === "string" ? errorData.code : undefined
                     );
                 }
 
@@ -208,7 +226,11 @@ export function useAIChat() {
                 throwIfChatAborted(controller.signal);
                 if (!options.independent && !isCurrent())
                     throw new DOMException("Response stopped", "AbortError");
-                if (!data.success) throw new Error(data.message ?? data.error ?? t("noResponse"));
+                if (!data.success)
+                    throw new ChatRequestError(
+                        data.message ?? data.error ?? t("noResponse"),
+                        typeof data.code === "string" ? data.code : undefined
+                    );
                 return data;
             } catch (err) {
                 if (
@@ -220,7 +242,8 @@ export function useAIChat() {
                 }
                 const errorMessage = err instanceof Error ? err.message : t("sendFailed");
                 if (isCurrent()) setError(errorMessage);
-                return { success: false, message: errorMessage };
+                const code = err instanceof ChatRequestError ? err.code : undefined;
+                return { success: false, message: errorMessage, ...(code ? { code } : {}) };
             } finally {
                 options.signal?.removeEventListener("abort", abortFromCaller);
                 controllers.current.delete(id);

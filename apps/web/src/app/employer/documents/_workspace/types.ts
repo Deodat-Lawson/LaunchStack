@@ -21,6 +21,7 @@ import {
     Globe as IconGlobe,
     HandCoins as IconInvestors,
     KeyRound as IconKey,
+    Layers as IconProcessing,
     PenLine as IconProposals,
     Link as IconLink,
     Megaphone as IconMegaphone,
@@ -262,6 +263,12 @@ export interface ThreadMessage {
     id?: string;
     createdAt?: string;
     status?: "streaming" | "complete" | "stopped" | "error";
+    /**
+     * Why a failed answer was refused, when the server said: at an AI limit
+     * (`ai_allowance_reached`) a retry cannot succeed, so none is offered.
+     * Kept in memory only; the session store does not carry it.
+     */
+    failureCode?: "ai_allowance_reached";
     stage?: string;
     reasoning?: string;
     elapsedMs?: number;
@@ -371,6 +378,13 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         Icon: IconFolder,
         desc: "Browse and grow everything the workspace can cite",
         href: "/employer/documents?feature=knowledge",
+    },
+    {
+        id: "processing",
+        label: "Processing queue",
+        Icon: IconProcessing,
+        desc: "Files being read and indexed, stage by stage",
+        href: "/employer/documents?feature=processing",
     },
     {
         id: "meetings",
@@ -621,6 +635,16 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 label: "Knowledge",
                 Icon: IconFolder,
                 desc: "Browse, filter, and grow everything the workspace can cite",
+            },
+            {
+                // Where each file you add is on its way in: uploading,
+                // waiting for a worker, reading the text, splitting,
+                // indexing. Opens by itself when you add something.
+                id: "processing",
+                label: "Processing",
+                Icon: IconProcessing,
+                desc: "Watch files being read and indexed — what is running, what is waiting, and what needs a retry",
+                href: "/employer/documents?feature=processing",
             },
             {
                 id: "meetings",
@@ -996,6 +1020,7 @@ const TOOL_REGISTRY_KEYS = {
 const STUDIO_APP_MESSAGE_KEYS = {
     chat: "chat",
     knowledge: "knowledge",
+    processing: "processing",
     meetings: "meetings",
     agents: "agents",
     team: "team",
@@ -1056,6 +1081,7 @@ export function localizedStudioFeature<F extends StudioFeature>(text: StudioText
 
 const PALETTE_LINK_LABEL_KEYS = {
     knowledge: "knowledge",
+    processing: "processing",
     meetings: "meetings",
     agents: "agents",
     team: "team",

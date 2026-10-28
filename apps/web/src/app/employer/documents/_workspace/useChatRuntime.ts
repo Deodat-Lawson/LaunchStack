@@ -922,6 +922,12 @@ function applyResponse(
 ) {
     answer.status = response.success ? "complete" : "error";
     answer.stage = response.success ? words.t("stages.complete") : words.t("stages.failed");
+    // At an AI limit the server's sentence says which, when it resets and who
+    // can raise it; the panel offers no retry, which could not succeed.
+    answer.failureCode =
+        !response.success && response.code === "ai_allowance_reached"
+            ? "ai_allowance_reached"
+            : undefined;
     const failure = response.message ?? response.error;
     answer.text = response.success
         ? (response.summarizedAnswer ?? answer.text)

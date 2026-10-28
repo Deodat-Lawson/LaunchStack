@@ -63,6 +63,10 @@
       "label": "知识库",
       "description": "浏览、筛选并扩充工作区可引用的一切内容"
     },
+    "processing": {
+      "label": "处理队列",
+      "description": "查看文件的读取与索引进度——哪些正在处理、哪些在排队、哪些需要重试"
+    },
     "meetings": {
       "label": "会议",
       "description": "智能体在频道中推进一个目标——你可以随时加入"
@@ -119,6 +123,10 @@
     "knowledge": {
       "label": "知识库",
       "description": "浏览并扩充工作区可引用的一切内容"
+    },
+    "processing": {
+      "label": "处理队列",
+      "description": "文件的读取与索引，逐个阶段显示"
     },
     "meetings": {
       "label": "会议",
@@ -315,7 +323,9 @@
     "tabTitle": "{label}——{description}",
     "closeTab": "关闭 {label}",
     "openStudioApp": "打开工作台应用",
-    "paneMenuTitle": "拆分、最大化或关闭此窗格"
+    "paneMenuTitle": "拆分、最大化或关闭此窗格",
+    "countActive": "{count, plural, other {# 个文件正在处理}}",
+    "countAttention": "{count, plural, other {# 个文件，有文件需要处理}}"
   },
   "splitView": {
     "tooNarrow": "宽度不足，无法左右拆分。",

@@ -197,5 +197,9 @@
     "imageType": "Attach PNG, JPEG, WebP or GIF images.",
     "imageUnreadable": "One of the images couldn't be read. Try a PNG or JPEG.",
     "imageProcessFailed": "One of the images couldn't be processed. Try a different image."
+  },
+  "aiAllowance": {
+    "workspace": "You've reached your AI limit in this workspace for this month ({used} of {limit} tokens). It resets on {resetDate}. A workspace admin can raise it in Workspace › Usage and costs.",
+    "server": "You've reached this server's monthly AI limit ({used} of {limit} tokens, across all your workspaces). It resets on {resetDate}. Whoever runs this server can raise it."
   }
 }

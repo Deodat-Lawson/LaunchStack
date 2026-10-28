@@ -113,6 +113,13 @@ import {
 import { TOOL_ALIASES, toolTargetFromHref } from "~/lib/tool-app/locations";
 import { WORKSPACE_TOOL_ID, settingsDestination, workspaceHref } from "~/lib/settings/surfaces";
 import { useWorkspaceData } from "./useWorkspaceData";
+import { refreshProcessingQueue, useProcessingQueue } from "./processing/queueStore";
+import {
+    hasUnfinishedLocalTasks,
+    onLocalTaskHandedOff,
+    useLocalTasks,
+} from "./processing/uploadTasks";
+import { queueBadge } from "./processing/viewModel";
 import type {
     PassageSelection,
     CitationHighlight,
@@ -1719,6 +1726,44 @@ export function WorkspaceShell() {
     );
     expandFeatureRef.current = expandFeature;
 
+    /**
+     * Something was added (an upload, a folder, a link, a Drive or Gmail
+     * import): show the Processing tab, which follows it from its first byte
+     * to "ready". Asks the queue at once so the file is there when the tab is.
+     */
+    const openProcessing = useCallback(() => {
+        expandFeature("processing");
+        void refreshProcessingQueue();
+    }, [expandFeature]);
+
+    // An upload the dialog handed off reached the server: the library gains
+    // its row now, and the queue picks up its job.
+    useEffect(
+        () =>
+            onLocalTaskHandedOff(() => {
+                void refresh();
+                void refreshProcessingQueue();
+            }),
+        [refresh]
+    );
+
+    // Adding something opens the Processing tab: fetch its code while the
+    // dialog is up, so the tab draws the moment the dialog hands over.
+    useEffect(() => {
+        if (addOpen) void import("./processing/ProcessingQueuePane");
+    }, [addOpen]);
+
+    // Leaving the page drops a file whose bytes are still going up.
+    useEffect(() => {
+        const warn = (event: BeforeUnloadEvent) => {
+            if (!hasUnfinishedLocalTasks()) return;
+            event.preventDefault();
+            event.returnValue = "";
+        };
+        window.addEventListener("beforeunload", warn);
+        return () => window.removeEventListener("beforeunload", warn);
+    }, []);
+
     /** A tool's tab, at a place inside it: "/prospects/companies/12". */
     const openTool = useCallback(
         (toolId: string, at: string) => {
@@ -1787,6 +1832,16 @@ export function WorkspaceShell() {
         [openSettingsPlace, openTool, router]
     );
 
+    // The Processing tab says how many files are still moving beside its
+    // name — polled only while that tab is open somewhere.
+    const processingOpen = layout.groups.some(group => group.tabIds.includes("processing"));
+    const processingQueue = useProcessingQueue(processingOpen);
+    const localTasks = useLocalTasks();
+    const processingBadge = useMemo(
+        () => (processingOpen ? queueBadge(processingQueue.data?.items ?? [], localTasks) : null),
+        [processingOpen, processingQueue.data, localTasks]
+    );
+
     /**
      * What a tab id draws as. Two kinds live in the strip: Studio apps, named
      * by the registry, and sources opened beside the chat, which carry the
@@ -1808,11 +1863,18 @@ export function WorkspaceShell() {
                 };
             }
             const feature = resolveStudioFeature(id);
-            return feature && can(feature.requires)
-                ? localizedStudioFeature(studio, feature)
-                : undefined;
+            if (!feature || !can(feature.requires)) return undefined;
+            const localized = localizedStudioFeature(studio, feature);
+            if (id === "processing" && processingBadge) {
+                return {
+                    ...localized,
+                    count: processingBadge.count,
+                    countTone: processingBadge.tone,
+                };
+            }
+            return localized;
         },
-        [sources, can, studio, tSourceTypes]
+        [sources, can, studio, tSourceTypes, processingBadge]
     );
 
     /**
@@ -2923,6 +2985,20 @@ export function WorkspaceShell() {
                                     openAgentRequest,
                                 },
                                 team: teamTab,
+                                processing: {
+                                    viewerId: userId ?? null,
+                                    storageScope: layoutScope ?? undefined,
+                                    onOpenDocument: documentId => {
+                                        const id = `d${documentId}`;
+                                        if (sources.some(source => source.id === id)) {
+                                            openSource(id);
+                                        } else {
+                                            void refresh().then(() => openSource(id));
+                                        }
+                                    },
+                                    onAddSource: () => openAdd(),
+                                    onSettled: () => void refresh(),
+                                },
                                 investors: {
                                     onDraftInChat: prompt => seedComposer(prompt, "replace"),
                                     onSaveAsSource: markdown => {
@@ -2993,6 +3069,7 @@ export function WorkspaceShell() {
                 onUploaded={() => {
                     void refresh();
                 }}
+                onQueued={openProcessing}
                 sessions={{
                     onImported: refresh,
                     onOpenDocument: id => openSource(`d${id}`),

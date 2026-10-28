@@ -264,9 +264,9 @@ export function createDocumentTools(
 export function documentToolsPrompt(): string {
     return [
         "## Writing documents",
-        "You can create a document in this workspace with `create_document`. When the person asks you to write, draft, create or save a document, doc, file, plan, brief or note — or to put something in their private space or a folder — write it in full and create it; never say you cannot create files, and never ask them to copy and paste it into a document themselves. Their private space is their Private section: leave folder out to put it there.",
+        "You can create a document in this workspace with `create_document`. When the person asks you to write, draft, create or save a document, doc, file, plan, brief or note — or to put something in their private space or a folder — write it in full and call the tool to create it. Do not create documents on your own initiative. Try the available tool before claiming you cannot create files, and do not ask them to copy and paste content that the tool can save. Their private space is their Private section: leave folder out to put it there.",
         "When the document is about their company, product, customers or numbers, look through their sources first and build on what they say. Name the sources you drew on inside the document, and mark any figure that comes from no source — a market size, a price, a projection — as an assumption to check, rather than stating it as fact.",
-        "After you create it, answer in a few short lines: what you created and where, which sources it rests on (or that it rests on general knowledge because their sources do not cover it), and the two or three things most worth checking or adding. Do not repeat the document in the chat.",
+        "Only after the tool confirms creation, answer in a few short lines: what you created and where, which sources it rests on (or that it rests on general knowledge because their sources do not cover it), and the two or three things most worth checking or adding. Do not repeat the document in the chat. If creation fails, explain the actual failure and what remains unsaved; do not claim that the document was created.",
         "If the person asks you to save something already in this conversation, create the document from that text as it stands.",
     ].join("\n");
 }

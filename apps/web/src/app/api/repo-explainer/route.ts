@@ -11,6 +11,7 @@ import {
 } from "@launchstack/pipelines/repo-explainer";
 import { validateRequestBody } from "~/lib/validation";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
+import { refuseAtAiAllowance } from "~/server/ai-usage/refusal";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 import { getCompanyAccessToken } from "~/server/services/connectors/connection-store";
 import { createSuccessResponse, createValidationError, handleApiError } from "~/lib/api-utils";
@@ -82,7 +83,14 @@ export async function POST(request: Request) {
         const ctx = await requireWorkspacePermission("settings.manage");
         if (!ctx.success) return ctx.response;
 
-        return await withWorkspaceChatModels(ctx.data.companyId, "repoExplainer", async () => {
+        const aiUse = { feature: "repoExplainer", userId: ctx.data.authUserId } as const;
+        const refused = await refuseAtAiAllowance(
+            ctx.data.companyId,
+            aiUse.userId,
+            localeOfRequest(request)
+        );
+        if (refused) return refused;
+        return await withWorkspaceChatModels(ctx.data.companyId, aiUse, async () => {
             const validation = await validateRequestBody(request, RepoExplainerRequestSchema);
             if (!validation.success) {
                 return validation.response;

@@ -263,7 +263,9 @@
       "intro": "Paste any URL. We'll crawl the main content and strip the chrome.",
       "fetching": "Fetching…",
       "fetch": "Fetch",
-      "tip": "Tip: add <code>/**</code> to a URL to recursively crawl a subtree."
+      "tip": "Tip: add <code>/**</code> to a URL to recursively crawl a subtree.",
+      "notAWebAddress": "That isn't a web address",
+      "notAWebAddressHint": "Paste a link that starts with https://"
     },
     "youtube": {
       "signIn": "Sign in to transcribe videos",
@@ -273,7 +275,9 @@
       "intro": "Paste a YouTube URL. We'll pull the transcript and timestamps.",
       "titlePlaceholder": "Custom title (optional)",
       "transcribing": "Transcribing…",
-      "transcribe": "Transcribe"
+      "transcribe": "Transcribe",
+      "notAVideoLink": "That isn't a video link",
+      "notAVideoLinkHint": "Paste a link that starts with https://"
     },
     "connect": {
       "title": "Connect {name}",
@@ -304,6 +308,10 @@
         "dropboxAllTypes": "All file types indexed",
         "dropboxShared": "Shared folders supported"
       }
+    },
+    "handoff": {
+      "followAlong": "follow along in Processing",
+      "followAlongRecording": "recordings are transcribed first; follow along in Processing"
     }
   },
   "addDestinationBar": {
@@ -820,7 +828,8 @@
   "sourceUpload": {
     "withReason": "{name}: {reason}",
     "uploadFailed": "{name}: upload failed (HTTP {status})",
-    "registerFailed": "{name}: couldn't be added (HTTP {status})"
+    "registerFailed": "{name}: couldn't be added (HTTP {status})",
+    "connectionLost": "{name}: the connection dropped during the upload"
   },
   "sourceTypes": {
     "doc": "File",

@@ -271,8 +271,15 @@
     {
       "idx": 38,
       "version": "7",
-      "when": 1793080356929,
-      "tag": "20261027055236_prospects_customer_domains",
+      "when": 1793080045101,
+      "tag": "20261027054725_member_ai_allowances",
+      "breakpoints": true
+    },
+    {
+      "idx": 39,
+      "version": "7",
+      "when": 1793158004541,
+      "tag": "20261028032644_prospects_customer_domains",
       "breakpoints": true
     }
   ]

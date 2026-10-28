@@ -20,13 +20,14 @@ import { ChatConfigurationError } from "./types";
 import type { ChatUsageRecorder } from "./usage-meter";
 
 /**
- * A workspace brought its own endpoint and it can't be used right now. Unlike
- * a deployment configuration error, its message is written for the people who
- * can fix it (the workspace's admins) and names no model, so callers show it
- * as is.
+ * The scope's models can't be used right now: a workspace brought its own
+ * endpoint and it is unusable, or the host refuses the work outright (a
+ * person at their AI allowance, say — the host subclasses this with its own
+ * status). Unlike a deployment configuration error, its message is written
+ * for the people who can fix it and names no model, so callers show it as is.
  */
 export class ChatScopeUnavailableError extends ChatConfigurationError {
-    readonly status = 503 as const;
+    readonly status: number = 503;
 }
 
 export function isChatScopeUnavailableError(error: unknown): error is ChatScopeUnavailableError {

@@ -11,6 +11,11 @@ unset). In that mode:
   and `token_usage_daily` answer "which document burned 400k embedding tokens" —
   but nothing is ever refused for want of balance. Only `DEPLOYMENT_MODE=cloud`
   enforces a balance, because only a billing deployment has a way to add credits.
+- **No AI limit per person unless you set one.** Every model call is recorded
+  against the person it was for. To cap what one person can run on your models,
+  set `AI_MONTHLY_TOKEN_LIMIT_PER_USER` (see [AI allowances](#ai-allowances-per-person));
+  workspace admins can also set their own limits. Unlike a credit balance, a
+  limit can always be raised, so it applies in either mode.
 - **No telemetry and no phone-home.** Vercel Analytics is mounted only on cloud
   deployments, `NEXT_TELEMETRY_DISABLED=1` is set in the images, and there is no
   usage reporting of any kind.
@@ -218,6 +223,8 @@ being picked up.
 | `DATALAB_API_KEY` | Optional | Alternative OCR |
 | `LANDING_AI_API_KEY` | Optional | Fallback OCR |
 | `DEPLOYMENT_MODE` | Optional | `self-hosted` (default when unset) or `cloud` — see [Self-hosting defaults](#self-hosting-defaults) |
+| `AI_MONTHLY_TOKEN_LIMIT_PER_USER` | Optional | Monthly cap on one person's AI tokens (in + out) on this server's models, across all their workspaces; unset or `0` = none — see [AI allowances](#ai-allowances-per-person) |
+| `AI_TOKEN_LIMIT_EXEMPT_EMAILS` | Optional | Comma-separated emails the server-wide cap never applies to (yours, say) |
 | `LANDING_PUBLIC_URL` | Optional | Origin the public site (`apps/landing`) is served from, read per request. The logo, sign-out, Help, `/privacy` and `/terms` redirect there; set it when you run a prebuilt image |
 | `NEXT_PUBLIC_SITE_URL` | Optional | The same origin, inlined at build time; the fallback when `LANDING_PUBLIC_URL` is unset |
 | `NEXT_PUBLIC_APP_URL` | Optional | Origin this app is served from; where the public site's sign-in links point |
@@ -225,6 +232,31 @@ being picked up.
 | `SUPPORT_CONTACT_EMAIL` | Optional | Address the in-app contact form composes to. Unset hides the form |
 | `FEEDBACK_ADMIN_EMAILS` | Optional | Turns on in-app bug reports and feature requests and names who triages them: account emails, comma/space/semicolon separated, case-insensitive. Unset keeps the feature off. Accounts are not email-verified, so create the operator's account before listing it |
 | `FEEDBACK_WEBHOOK_URL` | Optional | Slack or Discord incoming webhook told about each new report — one line with the kind, severity, title and a Triage link; never the body, context or screenshots |
+
+## AI allowances per person
+
+Two limits can apply to a person; the tighter one binds. Both count AI tokens
+in plus out, as Workspace › Usage and costs reports them, by calendar month in
+UTC, and reset on the 1st.
+
+- **The server's** — `AI_MONTHLY_TOKEN_LIMIT_PER_USER`. It protects your model
+  bill: it sums one person's calls on this server's own models across every
+  workspace they belong to. Calls to an endpoint a workspace brought itself
+  (Settings › Bring your own keys) never count toward it, and it does not apply
+  while that workspace runs on its own models. People listed in
+  `AI_TOKEN_LIMIT_EXEMPT_EMAILS` are never capped. Because anyone who creates a
+  workspace owns it, this is the only limit an individual can't lift themselves.
+- **The workspace's** — set in Workspace › Usage and costs › AI limits per person
+  by anyone with *settings.manage*: a default for everyone, and an override per
+  person (no limit, or a number of tokens). It counts all of the person's calls
+  in that workspace, whoever's endpoint served them.
+
+At a limit, new AI work is refused with a message that says which limit, when it
+resets and who can raise it (HTTP 429, `code: "ai_allowance_reached"`). Work
+already running — a background run, a meeting, indexing — finishes and is
+counted; uploads are still accepted, and the AI that indexing spends on them
+counts toward the uploader. Usage recorded before this feature shipped belongs
+to no one, so allowances start counting from the upgrade.
 
 ## Post-deployment Checklist
 

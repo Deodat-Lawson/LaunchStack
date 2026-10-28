@@ -205,7 +205,11 @@ describe("AskPanel starter questions", () => {
             </ContextMenuProvider>
         );
 
-        expect(screen.getByText("1 source indexed · 1 processing · 1 failed")).toBeInTheDocument();
+        // The counts that aren't ready open the Processing queue tab.
+        const toQueue = screen.getByRole("button", { name: "1 processing · 1 failed" });
+        expect(toQueue.parentElement).toHaveTextContent(
+            "1 source indexed · 1 processing · 1 failed"
+        );
         const failedRow = within(screen.getByTestId("source-row-d9"));
         const failedCheckbox = failedRow.getByRole("checkbox");
         expect(failedCheckbox).toBeDisabled();

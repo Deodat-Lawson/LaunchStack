@@ -11,12 +11,13 @@
  */
 import { createTtlCache } from "../web-research/cache";
 import {
+    configuredWebSearchProvider,
     searchWeb as searchGeneralWeb,
     type RawSearchResult,
     type SearchWebOptions,
 } from "../web-research";
 
-import { getGrantsGovApiUrl, hasWebSearchKey, isGrantsGovEnabled } from "./config";
+import { getGrantsGovApiUrl, isGrantsGovEnabled } from "./config";
 import { DEFAULT_LIMIT, MAX_LIMIT, searchGrantsGov, type GrantsGovOptions } from "./grants-gov";
 import type {
     GrantOpportunity,
@@ -37,7 +38,12 @@ export {
     toIsoDay,
     type GrantsGovOptions,
 } from "./grants-gov";
-export { getGrantsGovApiUrl, hasWebSearchKey, isGrantsGovEnabled } from "./config";
+export { getGrantsGovApiUrl, isGrantsGovEnabled } from "./config";
+
+/** Whether the web source can run: the server's search provider is configured. */
+export function hasWebSearchKey(): boolean {
+    return configuredWebSearchProvider() !== null;
+}
 
 export interface FindGrantsOptions {
     /** Injectable for tests (Grants.gov and the default web search); defaults to global fetch. */

@@ -8,6 +8,15 @@ import {
     searchWeb,
 } from "./web-search";
 
+const SEARCH_ENV = [
+    "SEARCH_PROVIDER",
+    "EXA_API_KEY",
+    "SERPER_API_KEY",
+    "BRAVE_SEARCH_API_KEY",
+    "TAVILY_API_KEY",
+    "SEARXNG_URL",
+] as const;
+
 function jsonResponse(body: unknown, status = 200): Response {
     return new Response(JSON.stringify(body), {
         status,
@@ -17,9 +26,7 @@ function jsonResponse(body: unknown, status = 200): Response {
 
 describe("configuredWebSearchProvider", () => {
     beforeEach(() => {
-        vi.stubEnv("EXA_API_KEY", "");
-        vi.stubEnv("SERPER_API_KEY", "");
-        vi.stubEnv("SEARCH_PROVIDER", "");
+        for (const name of SEARCH_ENV) vi.stubEnv(name, "");
     });
     afterEach(() => vi.unstubAllEnvs());
 
@@ -39,13 +46,17 @@ describe("configuredWebSearchProvider", () => {
         vi.stubEnv("SERPER_API_KEY", "serper-test");
         expect(configuredWebSearchProvider()).toBe("serper");
     });
+
+    it("is off when SEARCH_PROVIDER names a provider without its key, never another engine", () => {
+        vi.stubEnv("EXA_API_KEY", "exa-test");
+        vi.stubEnv("SEARCH_PROVIDER", "serper");
+        expect(configuredWebSearchProvider()).toBeNull();
+    });
 });
 
 describe("searchWeb", () => {
     beforeEach(() => {
-        vi.stubEnv("EXA_API_KEY", "");
-        vi.stubEnv("SERPER_API_KEY", "");
-        vi.stubEnv("SEARCH_PROVIDER", "");
+        for (const name of SEARCH_ENV) vi.stubEnv(name, "");
     });
     afterEach(() => vi.unstubAllEnvs());
 
@@ -133,17 +144,23 @@ describe("searchWeb", () => {
 
 describe("searchCompanies", () => {
     beforeEach(() => {
-        vi.stubEnv("EXA_API_KEY", "");
-        vi.stubEnv("SERPER_API_KEY", "");
+        for (const name of SEARCH_ENV) vi.stubEnv(name, "");
     });
     afterEach(() => vi.unstubAllEnvs());
 
-    it("needs an Exa key; Serper alone does not do company search", async () => {
+    it("needs a provider with a company index; Serper has none", async () => {
         vi.stubEnv("SERPER_API_KEY", "serper-test");
         expect(companySearchAvailable()).toBe(false);
         await expect(searchCompanies("produce wholesalers in Houston")).rejects.toThrow(
-            "Company search needs an Exa key"
+            "Company search needs a provider with a company index; Serper has none"
         );
+    });
+
+    it("is off when another provider is chosen, even with an Exa key", () => {
+        vi.stubEnv("EXA_API_KEY", "exa-test");
+        vi.stubEnv("SEARXNG_URL", "http://searxng:8080");
+        vi.stubEnv("SEARCH_PROVIDER", "searxng");
+        expect(companySearchAvailable()).toBe(false);
     });
 
     it("asks Exa's company index in the country, never for excluded hosts", async () => {
@@ -215,7 +232,10 @@ describe("searchCompanies", () => {
 });
 
 describe("describeCompanies", () => {
-    beforeEach(() => vi.stubEnv("EXA_API_KEY", "exa-test"));
+    beforeEach(() => {
+        for (const name of SEARCH_ENV) vi.stubEnv(name, "");
+        vi.stubEnv("EXA_API_KEY", "exa-test");
+    });
     afterEach(() => vi.unstubAllEnvs());
 
     it("reads each homepage once and keeps Exa's summary, or the page start", async () => {

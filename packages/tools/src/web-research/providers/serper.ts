@@ -1,82 +1,49 @@
+/** Serper: Google results (organic web, or Google News) with short snippets. */
+
 import { getSerperApiKey } from "../config";
-import type { RawSearchResult } from "../types";
+import type { SearchProvider } from "../types";
+import { clip, requestJson, titleOf, withUrl } from "./http";
 
+const SERPER_SEARCH_URL = "https://google.serper.dev/search";
 const SERPER_NEWS_URL = "https://google.serper.dev/news";
-const MAX_RESULTS_PER_QUERY = 10;
 
-/** Response shape from Serper Google News API (subset we use). */
-interface SerperNewsItem {
+interface SerperItem {
     title?: string;
     link?: string;
     snippet?: string;
     date?: string;
-    source?: string;
-    position?: number;
 }
 
-interface SerperNewsResponse {
-    news?: SerperNewsItem[];
-}
-
-/**
- * Calls Serper.dev Google News API for a single query.
- * @returns RawSearchResult[] or empty array if SERPER_API_KEY not set; throws on non-2xx.
- */
-export async function callSerper(query: string): Promise<RawSearchResult[]> {
-    const apiKey = getSerperApiKey();
-    if (!apiKey) {
-        console.warn("[web-search] SERPER_API_KEY not set; skipping Serper search.");
-        return [];
-    }
-
-    const response = await fetch(SERPER_NEWS_URL, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "X-API-KEY": apiKey,
-        },
-        body: JSON.stringify({
-            q: query,
-            num: MAX_RESULTS_PER_QUERY,
-            gl: "us",
-            hl: "en",
-        }),
-    });
-
-    if (!response.ok) {
-        const text = await response.text().catch(() => "");
-        throw new Error(
-            `Serper API error: ${response.status} ${response.statusText}${text ? ` - ${text}` : ""}`
-        );
-    }
-
-    const data = (await response.json()) as SerperNewsResponse;
-    const items = Array.isArray(data.news) ? data.news : [];
-    if (items.length === 0) {
-        console.warn("[web-search] Serper returned no news results.");
-        return [];
-    }
-
-    const filtered = items.filter((item): item is SerperNewsItem & { link: string } =>
-        Boolean(item?.link)
-    );
-    if (filtered.length === 0) {
-        console.warn("[web-search] Serper returned no news results.");
-        return [];
-    }
-
-    const total = filtered.length;
-
-    return filtered.map((item, index) => {
-        const position = index + 1;
-        const score = Math.max(0, 1 - position / total);
-
-        return {
-            url: item.link,
-            title: item.title ?? "Untitled",
-            content: item.snippet ?? "",
-            score,
-            ...(item.date && { publishedDate: item.date }),
-        };
-    });
-}
+export const serper: SearchProvider = {
+    id: "serper",
+    label: "Serper",
+    credential: "SERPER_API_KEY",
+    isConfigured: () => Boolean(getSerperApiKey()),
+    async search(query, options) {
+        const apiKey = getSerperApiKey();
+        if (!apiKey) throw new Error("Serper search needs SERPER_API_KEY.");
+        const news = options.kind === "news";
+        const data = (await requestJson(
+            news ? SERPER_NEWS_URL : SERPER_SEARCH_URL,
+            {
+                method: "POST",
+                headers: { "X-API-KEY": apiKey },
+                // News keeps the US/English edition trend research has always read.
+                body: news
+                    ? { q: query, num: options.maxResults, gl: "us", hl: "en" }
+                    : { q: query, num: options.maxResults },
+            },
+            options,
+            "Serper"
+        )) as { organic?: SerperItem[]; news?: SerperItem[] };
+        const items = (news ? data.news : data.organic) ?? [];
+        return withUrl(items.map(item => ({ ...item, url: item.link })))
+            .slice(0, options.maxResults)
+            .map(item => ({
+                title: titleOf(item.title, item.url),
+                url: item.url,
+                snippet: clip(item.snippet ?? "", options.snippetChars),
+                ...(item.date ? { publishedDate: item.date } : {}),
+            }));
+    },
+};

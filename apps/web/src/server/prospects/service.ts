@@ -41,6 +41,7 @@ import type {
 import { resolveComplianceProvider } from "@launchstack/tools/compliance-screen";
 import { isPlaceSearchConfigured } from "@launchstack/tools/place-search";
 import { isTradeDataConfigured } from "@launchstack/tools/trade-data";
+import { activeSearchProvider } from "@launchstack/tools/web-research";
 
 import type {
     CompaniesSort,
@@ -61,7 +62,6 @@ import type {
     SourceRow,
     TodoItem,
 } from "~/app/employer/tools/growth/prospects/api";
-import { env } from "~/env";
 import { copy, isCopy, type Copy } from "~/i18n/copy";
 import { englishCopy } from "~/i18n/translate";
 
@@ -121,9 +121,11 @@ const companyNotFound = () => new ProspectsError(copy("growth.server.errors.comp
 // ── Availability ──────────────────────────────────────────────────────────
 
 export function availability(): SourceAvailability {
+    const engine = activeSearchProvider();
     return {
-        web: Boolean(env.server.EXA_API_KEY) || Boolean(env.server.SERPER_API_KEY),
-        lookalike: Boolean(env.server.EXA_API_KEY),
+        web: engine !== null,
+        lookalike: Boolean(engine?.companies),
+        engine: engine?.label ?? null,
         place: isPlaceSearchConfigured(),
         trade: isTradeDataConfigured(),
         screening: resolveComplianceProvider() !== null,

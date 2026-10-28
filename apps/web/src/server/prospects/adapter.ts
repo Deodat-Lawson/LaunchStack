@@ -890,10 +890,15 @@ export function joinNatural(items: string[]): string {
 // ── Sources (what the gather stage really has) ────────────────────────────
 
 export interface SourceAvailability {
-    /** Exa company search, or Serper web search when it is the only key. */
+    /**
+     * Company discovery through the server's search engine (SEARCH_PROVIDER):
+     * its company index where it has one (Exa), else ordinary web search.
+     */
     web: boolean;
-    /** Lookalikes of the segment's customers: Exa only. */
+    /** Lookalikes of the segment's customers: needs an engine with a company index (Exa). */
     lookalike: boolean;
+    /** The search engine's name ("Exa", "SearXNG"); null when web search is off. */
+    engine: string | null;
     place: boolean;
     trade: boolean;
     screening: boolean;
@@ -948,6 +953,8 @@ const SOURCE_DETAIL: Record<string, Copy> = {
     "no place queries planned": copy("growth.server.sources.details.noPlaceQueries"),
     "place search not configured": copy("growth.server.sources.details.placeNotConfigured"),
     "trade data not configured": copy("growth.server.sources.details.tradeNotConfigured"),
+    "needs Exa as the search engine": copy("growth.server.sources.details.lookalikeNeedsExa"),
+    // Runs recorded before the search engine became a setting.
     "needs EXA_API_KEY": copy("growth.server.sources.details.lookalikeNeedsExa"),
     "no customers yet": copy("growth.server.sources.details.noCustomersYet"),
 };
@@ -976,15 +983,16 @@ export function sourceDetailCopy(detail: string | null | undefined): Copy | null
     return null;
 }
 
-const rowCopy = (id: string, field: "label" | "description") =>
-    copy(`growth.server.sources.rows.${id}.${field}` as Copy["key"]);
+const rowCopy = (id: string, field: "label" | "description", values?: Record<string, string>) =>
+    copy(`growth.server.sources.rows.${id}.${field}` as Copy["key"], values);
 const costCopy = (cost: "free" | "creditsPerRun" | "included" | "providerRates") =>
     copy(`growth.server.sources.costs.${cost}`);
 
 export function sourceRows(avail: SourceAvailability, latest: RunRecord | null): SourceRow[] {
     const mode = latest?.options.mode ?? null;
-    // Lookalikes need Exa, so web search without them is Serper's.
-    const serperOnly = avail.web && !avail.lookalike;
+    // Which web row: the engine's company index, its plain web search, or off.
+    const webCopyId = !avail.web ? "webOff" : avail.lookalike ? "web" : "webSearch";
+    const engine = avail.engine ?? "";
     const yieldFor = (id: SourceCount["source"], forMode: RunRecord["options"]["mode"]) => {
         const s = latest?.summary?.sources.find(x => x.source === id);
         if (!latest || mode !== forMode || !s || s.status === "skipped") return null;
@@ -1023,42 +1031,36 @@ export function sourceRows(avail: SourceAvailability, latest: RunRecord | null):
             locked: true,
             lastYield: yieldFor("web", "keyless"),
         },
-        serperOnly
-            ? {
-                  id: "web",
-                  label: "Web search (Serper)",
-                  kind: "api",
-                  description:
-                      "Serper web search: the site of each result stands for a company. Add an Exa key for Exa's company index and lookalikes. Needs a model for the research agent.",
-                  enabled: true,
-                  available: true,
-                  requires: null,
-                  cost: "credits per run",
-                  locked: true,
-                  lastYield: yieldFor("web", "live"),
-              }
-            : {
-                  id: "web",
-                  label: "Exa company search",
-                  kind: "api",
-                  description:
-                      "Exa's company index: the homepages of companies matching each query in each territory. Serper web search is the fallback when it is the only key. Needs a model for the research agent.",
-                  enabled: avail.web,
-                  available: avail.web,
-                  requires: "EXA_API_KEY",
-                  cost: "credits per run",
-                  locked: true,
-                  lastYield: yieldFor("web", "live"),
-              },
+        {
+            id: "web",
+            label: !avail.web
+                ? "Web search"
+                : avail.lookalike
+                  ? `Company search (${engine})`
+                  : `Web search (${engine})`,
+            kind: "api",
+            description: !avail.web
+                ? "Companies found through the server's web search engine. Needs a model for the research agent."
+                : avail.lookalike
+                  ? `${engine}'s company index: the homepages of companies matching each query in each territory. Needs a model for the research agent.`
+                  : `${engine} web search: the site of each result stands for a company. A company index and lookalikes need Exa as the search engine. Needs a model for the research agent.`,
+            enabled: avail.web,
+            available: avail.web,
+            requires: "SEARCH_PROVIDER",
+            cost: "credits per run",
+            locked: true,
+            lastYield: yieldFor("web", "live"),
+        },
         {
             id: "lookalike",
             label: "Lookalikes",
             kind: "api",
             description:
-                "Companies like your customers: the ones you list on the segment and your won deals, up to five per run, from Exa. Customers are never prospected themselves.",
+                "Companies like your customers: the ones you list on the segment and your won deals, up to five per run, from the search engine's company index (Exa). Customers are never prospected themselves.",
             enabled: avail.lookalike,
             available: avail.lookalike,
-            requires: "EXA_API_KEY",
+            // Another engine is chosen: only switching to Exa helps. None is: Exa's key does.
+            requires: avail.web ? "SEARCH_PROVIDER=exa" : "EXA_API_KEY",
             cost: "credits per run",
             locked: true,
             lastYield: yieldFor("lookalike", "live"),
@@ -1120,11 +1122,12 @@ export function sourceRows(avail: SourceAvailability, latest: RunRecord | null):
         "provider rates": "providerRates",
     };
     return rows.map(row => {
-        const copyId = row.id === "web" && serperOnly ? "webSerper" : row.id;
+        const copyId = row.id === "web" ? webCopyId : row.id;
+        const values = row.id === "web" && avail.web ? { engine } : undefined;
         return {
             ...row,
-            labelCopy: rowCopy(copyId, "label"),
-            descriptionCopy: rowCopy(copyId, "description"),
+            labelCopy: rowCopy(copyId, "label", values),
+            descriptionCopy: rowCopy(copyId, "description", values),
             costCopy: costCopy(COST[row.cost]!),
         };
     });

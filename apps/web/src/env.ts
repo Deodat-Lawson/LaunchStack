@@ -107,12 +107,31 @@ const serverSchema = z.object({
     BLOB_READ_WRITE_TOKEN: optionalString(),
     UPLOADTHING_TOKEN: optionalString(),
     DATALAB_API_KEY: optionalString(),
-    // Web search providers
+    // Web search: SEARCH_PROVIDER picks one engine for every feature, and the
+    // engine needs its key (SearXNG: its address). Unset or empty, the first
+    // configured engine in this order is used. Read at call time by
+    // @launchstack/tools/web-research; validated here so a typo fails boot.
+    // `fallback` and `parallel` were trend-search strategies; they are retired
+    // and count as unset, so old configurations still boot.
+    SEARCH_PROVIDER: z.preprocess(
+        value => (typeof value === "string" ? normalize(value.trim().toLowerCase()) : value),
+        z
+            .enum(["exa", "serper", "brave", "tavily", "searxng", "fallback", "parallel"], {
+                errorMap: () => ({
+                    message:
+                        "SEARCH_PROVIDER must be one of exa, serper, brave, tavily, searxng (or empty to use the first configured one).",
+                }),
+            })
+            .optional()
+    ),
     EXA_API_KEY: optionalString(),
+    SERPER_API_KEY: optionalString(),
+    BRAVE_SEARCH_API_KEY: optionalString(),
+    TAVILY_API_KEY: optionalString(),
+    // A SearXNG instance with the JSON format enabled, e.g. http://searxng:8080.
+    SEARXNG_URL: z.preprocess(normalize, z.string().url().optional()),
     // Foursquare Places API (for Client Prospector)
     FOURSQUARE_SERVICE_KEY: optionalString(),
-    SERPER_API_KEY: optionalString(),
-    SEARCH_PROVIDER: z.enum(["exa", "serper", "fallback", "parallel"]).optional(),
     // Distribution pipeline — optional ports (design §4.6). Unset = stage skipped.
     OPENSANCTIONS_API_URL: optionalString(),
     OPENSANCTIONS_API_KEY: optionalString(),
@@ -568,18 +587,16 @@ function parseServerEnv() {
         UPLOADTHING_TOKEN: process.env.UPLOADTHING_TOKEN,
         DATALAB_API_KEY: process.env.DATALAB_API_KEY,
         EXA_API_KEY: process.env.EXA_API_KEY,
-        FOURSQUARE_SERVICE_KEY: process.env.FOURSQUARE_SERVICE_KEY,
         SERPER_API_KEY: process.env.SERPER_API_KEY,
+        BRAVE_SEARCH_API_KEY: process.env.BRAVE_SEARCH_API_KEY,
+        TAVILY_API_KEY: process.env.TAVILY_API_KEY,
+        SEARXNG_URL: process.env.SEARXNG_URL,
+        FOURSQUARE_SERVICE_KEY: process.env.FOURSQUARE_SERVICE_KEY,
         OPENSANCTIONS_API_URL: process.env.OPENSANCTIONS_API_URL,
         OPENSANCTIONS_API_KEY: process.env.OPENSANCTIONS_API_KEY,
         TRADE_DATA_PROVIDER: process.env.TRADE_DATA_PROVIDER,
         SEC_EDGAR_USER_AGENT: process.env.SEC_EDGAR_USER_AGENT,
-        SEARCH_PROVIDER: process.env.SEARCH_PROVIDER as
-            | "exa"
-            | "serper"
-            | "fallback"
-            | "parallel"
-            | undefined,
+        SEARCH_PROVIDER: process.env.SEARCH_PROVIDER,
         REDDIT_CLIENT_ID: process.env.REDDIT_CLIENT_ID,
         REDDIT_CLIENT_SECRET: process.env.REDDIT_CLIENT_SECRET,
         REDDIT_USER_AGENT: process.env.REDDIT_USER_AGENT,

@@ -34,7 +34,14 @@ function request(body: Record<string, unknown>): Request {
     });
 }
 
-const SEARCH_ENV = ["EXA_API_KEY", "SERPER_API_KEY", "SEARCH_PROVIDER"] as const;
+const SEARCH_ENV = [
+    "EXA_API_KEY",
+    "SERPER_API_KEY",
+    "BRAVE_SEARCH_API_KEY",
+    "TAVILY_API_KEY",
+    "SEARXNG_URL",
+    "SEARCH_PROVIDER",
+] as const;
 const savedEnv = Object.fromEntries(SEARCH_ENV.map(name => [name, process.env[name]]));
 const realFetch = global.fetch;
 const mockFetch = jest.fn<Promise<Response>, Parameters<typeof fetch>>();

@@ -365,44 +365,54 @@ describe("customers like these", () => {
 });
 
 describe("source rows", () => {
-    it("names the web source by its provider, and offers lookalikes with Exa only", () => {
-        const serperOnly = Object.fromEntries(
-            sourceRows(
-                { web: true, lookalike: false, place: false, trade: false, screening: false },
-                null
-            ).map(r => [r.id, r])
+    const off = { place: false, trade: false, screening: false };
+    const rowsFor = (web: boolean, lookalike: boolean, engine: string | null) =>
+        Object.fromEntries(
+            sourceRows({ web, lookalike, engine, ...off }, null).map(r => [r.id, r])
         );
-        // Serper alone is named as Serper, not as Exa, and needs nothing more.
-        expect(serperOnly.web).toMatchObject({
-            label: "Web search (Serper)",
+
+    it("names the web source by the server's engine, a company index only on Exa", () => {
+        const exa = rowsFor(true, true, "Exa");
+        expect(exa.web).toMatchObject({
+            label: "Company search (Exa)",
             enabled: true,
-            requires: null,
-            labelCopy: { key: "growth.server.sources.rows.webSerper.label" },
+            labelCopy: {
+                key: "growth.server.sources.rows.web.label",
+                values: { engine: "Exa" },
+            },
         });
-        expect(serperOnly.lookalike).toMatchObject({
-            label: "Lookalikes",
+        expect(exa.lookalike!.enabled && exa.lookalike!.available).toBe(true);
+
+        const searxng = rowsFor(true, false, "SearXNG");
+        expect(searxng.web).toMatchObject({
+            label: "Web search (SearXNG)",
+            enabled: true,
+            available: true,
+            labelCopy: {
+                key: "growth.server.sources.rows.webSearch.label",
+                values: { engine: "SearXNG" },
+            },
+        });
+        expect(searxng.web!.description).toContain("need Exa as the search engine");
+        // Another engine is chosen: only switching the engine to Exa brings lookalikes.
+        expect(searxng.lookalike).toMatchObject({
             enabled: false,
             available: false,
-            requires: "EXA_API_KEY",
+            requires: "SEARCH_PROVIDER=exa",
         });
-        const exa = Object.fromEntries(
-            sourceRows(
-                { web: true, lookalike: true, place: false, trade: false, screening: false },
-                null
-            ).map(r => [r.id, r])
-        );
-        expect(exa.lookalike!.enabled && exa.lookalike!.available).toBe(true);
-        expect(exa.web).toMatchObject({ label: "Exa company search", requires: "EXA_API_KEY" });
-        // No key: the row says which one key turns it on, with no English inside the copy.
-        const none = sourceRows(
-            { web: false, lookalike: false, place: false, trade: false, screening: false },
-            null
-        ).find(r => r.id === "web")!;
-        expect(none).toMatchObject({
-            label: "Exa company search",
+    });
+
+    it("says what turns web search on when the server has no engine", () => {
+        const none = rowsFor(false, false, null);
+        expect(none.web).toMatchObject({
+            label: "Web search",
             enabled: false,
-            requires: "EXA_API_KEY",
+            available: false,
+            requires: "SEARCH_PROVIDER",
+            labelCopy: { key: "growth.server.sources.rows.webOff.label" },
         });
+        expect(none.web!.labelCopy).not.toHaveProperty("values.engine");
+        expect(none.lookalike).toMatchObject({ enabled: false, requires: "EXA_API_KEY" });
     });
 });
 

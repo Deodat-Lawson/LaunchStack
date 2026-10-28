@@ -63,6 +63,14 @@ describe("CollapsedRail", () => {
         expect(screen.getByText("account-slot")).toBeInTheDocument();
     });
 
+    it("keeps the logo as the way home, not out to the public site", () => {
+        setup();
+        expect(screen.getByRole("link", { name: "Launchstack" })).toHaveAttribute(
+            "href",
+            "/employer/documents"
+        );
+    });
+
     it("brings the sidebar back, opens the palette, and adds knowledge", () => {
         const props = setup();
         fireEvent.click(screen.getByRole("button", { name: "Show sidebar" }));

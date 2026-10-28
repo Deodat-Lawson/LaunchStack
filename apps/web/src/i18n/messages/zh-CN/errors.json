@@ -11,6 +11,7 @@
     "title": "页面未找到",
     "body": "你要找的页面不存在或已被移动。你可以去以下这些地方看看。",
     "signIn": "前往登录",
+    "openWorkspace": "前往你的工作区",
     "deploymentGuide": "部署指南"
   },
   "unavailable": {

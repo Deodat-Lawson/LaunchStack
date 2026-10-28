@@ -438,6 +438,20 @@ export const SYSTEM_SERVICES: readonly ServiceDefinition[] = [
             "profile is the `workspace` service's `profile` routes.",
     },
     {
+        id: "usage",
+        tier: "system",
+        summary:
+            "The Usage tab: who is active, what they asked, added and opened, and the AI it took — for the workspace, a group or one person, by UTC day.",
+        scope: "workspace",
+        routes: ["usage"],
+        notes:
+            "Read-only rollups over what is already recorded (`ai_usage_daily`, Ask turns, " +
+            "`workspace_activity`, `document_views`); ~/server/usage. `usage/summary`, " +
+            "`usage/people`, `usage/activity` and `usage/documents` need analytics.view; " +
+            "`usage/me` answers any member with their own numbers and the workspace median, " +
+            "never anyone else's. The Spending screen's ledger is `settings/usage`.",
+    },
+    {
         id: "feedback",
         tier: "system",
         summary:

@@ -82,9 +82,9 @@
     },
     "usage": {
       "label": "用量与费用",
-      "blurb": "模型 token、费用、余额",
+      "blurb": "AI 用量、费用、余额",
       "title": "工作区的支出情况",
-      "description": "工作区的每一次 AI 模型调用及其费用，以及 token 余额和哪些功能在消耗它。这些数字是为本页的两项设置提供参考。"
+      "description": "工作区 AI 所做的一切（对话、嵌入、网页搜索）按同一单位统计及其费用，以及 token 余额和哪些功能在消耗它。这些数字是为本页的设置提供参考。"
     },
     "archive": {
       "label": "归档与保留",
@@ -221,7 +221,7 @@
       },
       "memberMonthlyTokenLimit": {
         "label": "每人 AI 上限",
-        "description": "每个人每月在此工作区可使用的 AI token（输入加输出），除非你在下方为某人单独设置上限。每月 1 日（UTC）重置。0 表示不设上限。",
+        "description": "每个人每月在此工作区可使用的 AI token，除非你在下方为某人单独设置上限。对话按实际 token 计，嵌入和网页搜索按费用折算。每月 1 日（UTC）重置。0 表示不设上限。",
         "consequence": "立即生效。已超过新上限的人在重置之前无法开始新的 AI 任务。",
         "unit": "token / 月"
       }
@@ -348,7 +348,7 @@
     },
     "aiAllowance": {
       "title": "你本月的 AI 额度",
-      "description": "自本月 1 日（UTC）起，你在此工作区使用的 AI token（输入加输出）。",
+      "description": "自本月 1 日（UTC）起，你在此工作区使用的 AI token：对话按实际 token，嵌入和网页搜索按费用折算。",
       "loadFailed": "无法加载你的 AI 额度。",
       "loadFailedStatus": "无法加载你的 AI 额度（{status}）。",
       "usedOf": "已用 {used} / {limit} 个 token",
@@ -1528,12 +1528,11 @@
       "purchased": "购买"
     },
     "models": {
-      "title": "AI 模型用量",
-      "description": "此工作区各项功能对 AI 模型的每一次调用，按模型服务商自己的报告计数。与下方余额分开统计，余额只由部分功能扣除。",
+      "title": "AI 用量",
+      "description": "此工作区各项功能的全部 AI 用量，按对话 token 当量计：一个对话 token 计为 1，嵌入和网页搜索按实际费用折算。与下方余额分开统计，余额只由部分功能扣除。",
       "ownEndpoint": "其中 {calls} 次调用发往此工作区自带的模型端点，由其服务商自行计费。",
-      "tokens": "最近 {days} 天的模型 token",
-      "split": "输入 {input} · 输出 {output} · {calls} 次调用",
-      "cost": "模型费用",
+      "tokens": "最近 {days} 天的 AI 用量",
+      "cost": "费用",
       "costPriced": "按每个模型设定的价格计算。",
       "costFallback": "未设定价格的模型按每百万 {price} 计算。",
       "costPartial": "{calls} 次调用中有 {priced} 次有模型价格，其余未计入。",
@@ -1541,7 +1540,7 @@
       "efficiency": "缓存与推理",
       "cached": "来自缓存的输入",
       "reasoning": "推理 token",
-      "nothing": "此时间段内没有模型调用。",
+      "nothing": "此时间段内没有 AI 用量。",
       "feature": "功能",
       "route": "模型路由",
       "calls": "调用次数",
@@ -1573,11 +1572,13 @@
         "reasoning": "推理",
         "vision": "图像",
         "auxiliary": "文档处理"
-      }
+      },
+      "unit": "对话 token 当量 · {calls} 次请求",
+      "usage": "用量"
     },
     "burn": {
       "title": "每日消耗",
-      "description": "按消耗来源统计从余额中扣除的 token。将鼠标悬停在某一天上可查看明细；下表包含相同的数据。",
+      "description": "按消耗来源统计从余额中扣除的 token。嵌入按对话 token 当量扣除，与上方 AI 用量一致。将鼠标悬停在某一天上可查看明细；下表包含相同的数据。",
       "lastDays": "最近 {days} 天",
       "nothing": "此时间段内没有消耗余额。"
     },
@@ -1603,7 +1604,7 @@
     },
     "members": {
       "title": "每人 AI 上限",
-      "description": "每个人本月已使用的 AI 额度，按输入加输出的 token 计。上限每月 1 日（UTC）重置；服务器也设置了上限时，以更严格的为准。",
+      "description": "每个人本月已使用的 AI 额度，以 token 计：对话按实际 token，嵌入和网页搜索按费用折算。上限每月 1 日（UTC）重置；服务器也设置了上限时，以更严格的为准。",
       "serverCap": "这台服务器限制每人每月最多使用 {limit} 个 token（合计其所有工作区，仅限服务器自己的模型）。该上限由服务器的管理者设置，无法在这里修改。",
       "serverCapNotHere": "这台服务器限制每人每月在其自有模型上最多使用 {limit} 个 token。此上限不适用于这里：此工作区使用自己的模型。",
       "loadFailed": "无法加载每人 AI 上限。",
@@ -1629,7 +1630,7 @@
       "unattributed": "未归属到个人：本月 {tokens} 个 token，来自后台任务以及按人计量之前的用量。",
       "dialog": {
         "title": "{name} 的 AI 上限",
-        "description": "此人每月在此工作区可使用的 AI token（输入加输出）。每月 1 日（UTC）重置。",
+        "description": "此人每月在此工作区可使用的 AI token：对话按实际 token，嵌入和网页搜索按费用折算。每月 1 日（UTC）重置。",
         "choiceLabel": "上限",
         "default": "工作区默认（{limit} 个 token）",
         "defaultNone": "工作区默认（不设上限）",
@@ -1642,6 +1643,20 @@
         "saveFailed": "无法保存上限。",
         "saveFailedStatus": "无法保存上限（{status}）。"
       }
+    },
+    "kinds": {
+      "title": "按类型",
+      "chat": "对话",
+      "embedding": "嵌入",
+      "search": "网页搜索",
+      "chatDetail": "输入 {input} · 输出 {output} · {calls} 次调用",
+      "embeddingDetail": "已嵌入 {tokens} 个 token",
+      "searchDetail": "{searches} 次搜索",
+      "searchPagesDetail": "{searches} 次搜索 · 读取 {pages} 个网页",
+      "none": "此时间段内没有",
+      "rates": "按费用折算：每一百万个嵌入 token 计为 {embedding}，每次网页搜索计为 {search}，对话 token 按每百万 {price} 计价。",
+      "item": "{label} {value}",
+      "splitLabel": "构成"
     }
   },
   "workspaceModel": {

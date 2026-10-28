@@ -47,6 +47,7 @@ import {
     bindingLimit,
     MEMBER_LIMIT_SETTING_KEY,
     useAllowanceFormat,
+    UsageSplitLine,
     type AllowanceTone,
     type MemberAllowanceRow,
     type MemberAllowancesResponse,
@@ -293,6 +294,7 @@ function MemberRow({
                 title={t("exactTokens", { value: format.tokens(allowance.used) })}
             >
                 {format.compact(allowance.used)}
+                <UsageSplitLine split={allowance.split} bare className="block text-[11.5px]" />
             </TableCell>
             <TableCell>
                 <div

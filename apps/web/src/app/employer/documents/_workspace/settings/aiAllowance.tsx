@@ -10,10 +10,11 @@
  * compile error here rather than a blank screen.
  */
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useLocale } from "next-intl";
+import { Fragment, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 
 import { Progress } from "~/components/ui/progress";
+import { AI_USAGE_GROUPS, type UsageSplit } from "~/lib/ai-usage";
 import { cn } from "~/lib/utils";
 import type { MemberAllowanceRow, MemberAllowances } from "~/server/ai-usage/members";
 import type { AiAllowance, MemberLimitChoice } from "~/server/ai-usage/quota";
@@ -232,5 +233,42 @@ export function AllowanceBar({
             data-tone={tone}
             className={cn("h-1.5", TONE_CLASSES[tone], className)}
         />
+    );
+}
+
+/**
+ * What a person's use is made of — "Made up of Chat 900K · Web search 250K ·
+ * Embeddings 50K" — biggest first. Usage is in chat-token equivalents, so this
+ * is where someone sees that embedding a document did not eat the allowance.
+ * Nothing when it is all chat: the total already says that. `bare` drops the
+ * "Made up of" lead, for a table cell.
+ */
+export function UsageSplitLine({
+    split,
+    bare = false,
+    className,
+}: {
+    split: UsageSplit;
+    bare?: boolean;
+    className?: string;
+}) {
+    const t = useTranslations("settings.usage.kinds");
+    const format = useAllowanceFormat();
+    const parts = AI_USAGE_GROUPS.filter(group => split[group] > 0).sort(
+        (a, b) => split[b] - split[a]
+    );
+    if (!parts.some(group => group !== "chat")) return null;
+    return (
+        <span className={cn("text-ink-3 text-[12px]", className)} data-testid="usage-split">
+            {!bare && `${t("splitLabel")} `}
+            {parts.map((group, index) => (
+                <Fragment key={group}>
+                    {index > 0 && " · "}
+                    <span className="whitespace-nowrap tabular-nums">
+                        {t("item", { label: t(group), value: format.compact(split[group]) })}
+                    </span>
+                </Fragment>
+            ))}
+        </span>
     );
 }

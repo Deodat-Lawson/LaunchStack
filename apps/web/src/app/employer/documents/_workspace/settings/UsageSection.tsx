@@ -3,15 +3,16 @@
 /**
  * Usage and costs.
  *
- * Body only. Two meters on one window. The balance: a hero figure, burn per
- * day stacked by service and the same numbers as a table — what the features
- * that debit have charged, in unified tokens. The models: every AI model call
- * the workspace made, from every feature, with the provider's own input,
- * output and cached counts and a cost from the price the operator declared
- * per model (or the workspace's own price, for models without one). Routes
- * are shown, never model ids. After the models, each person's AI use this
- * month against the limit that binds them (MemberAllowancesBlock). Then the
- * two settings the numbers inform.
+ * Body only. Two meters on one window, AI usage first. AI usage: everything
+ * the workspace's AI did — chat, embeddings, web search — from every feature,
+ * in chat-token equivalents (a chat token counts as one; embeddings and
+ * searches by what they cost), split by kind with each kind's own units beside
+ * it and the conversion spelled out, so a document's cheap embeddings never
+ * read as if they ate the allowance. Then each person's AI use this month
+ * against the limit that binds them (MemberAllowancesBlock). Then the balance:
+ * a hero figure, burn per day stacked by service and the same numbers as a
+ * table — what the features that debit have charged. Routes are shown, never
+ * model ids. Then the two settings the numbers inform.
  *
  * Series colours are design tokens; dark mode uses darker steps of the same
  * hues, validated against the dark surface rather than flipped.
@@ -23,6 +24,7 @@ import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
+import { Progress } from "~/components/ui/progress";
 import { Card, Section } from "~/components/layout/page-shell";
 import {
     ChartContainer,
@@ -40,7 +42,7 @@ import {
     TableHeader,
     TableRow,
 } from "~/components/ui/table";
-import { isAiFeature, isAiUsageRoute } from "~/lib/ai-usage";
+import { isAiFeature, isAiUsageRoute, type AiUsageGroup } from "~/lib/ai-usage";
 import { cn } from "~/lib/utils";
 
 import { usePublishedActions, type SettingsSectionProps } from "./contract";
@@ -58,6 +60,8 @@ interface UsageDay {
 /** `ModelUsageTotals` in ~/server/settings/usage. */
 interface ModelTotals {
     calls: number;
+    /** Chat-token equivalents: what everything on this half of the page adds up. */
+    weightedTokens: number;
     inputTokens: number;
     outputTokens: number;
     reasoningTokens: number;
@@ -66,8 +70,24 @@ interface ModelTotals {
     pricedCalls: number;
 }
 
+/** `UsageByGroup` in ~/server/settings/usage. */
+interface UsageByGroup extends ModelTotals {
+    group: AiUsageGroup;
+    searches: number;
+    pages: number;
+}
+
+/** `UsageRates` in ~/server/settings/usage. */
+interface UsageRates {
+    chat: { perMillion: number; source: "setting" | "model" | "default" };
+    embeddingPerMillion: number;
+    perSearch: number;
+}
+
 interface ModelUsage {
     totals: ModelTotals;
+    byGroup: UsageByGroup[];
+    rates: UsageRates;
     daily: { date: string; features: Record<string, number>; total: number }[];
     byFeature: (ModelTotals & { feature: string })[];
     byRoute: (ModelTotals & { route: string })[];
@@ -304,7 +324,7 @@ export function UsageSection({ onActions }: SettingsSectionProps) {
 
     const windowTotal = overview?.byService.reduce((sum, s) => sum + s.tokens, 0) ?? 0;
     const low = overview ? overview.balanceTokens < overview.lowBalanceThreshold : false;
-    const modelTokens = models ? models.totals.inputTokens + models.totals.outputTokens : 0;
+    const modelTokens = models ? models.totals.weightedTokens : 0;
 
     return (
         <>
@@ -329,65 +349,6 @@ export function UsageSection({ onActions }: SettingsSectionProps) {
                 ))}
             </div>
 
-            <Section title={t("balance.title")}>
-                <div className="grid gap-3.5 md:grid-cols-3">
-                    <Card padding={16}>
-                        <div className="text-ink-3 text-[12px]">{t("balance.remaining")}</div>
-                        <div
-                            className={cn(
-                                "mt-1 text-[36px] font-semibold leading-none tracking-tight",
-                                low ? "text-danger" : "text-ink"
-                            )}
-                        >
-                            {overview ? compact(overview.balanceTokens, locale) : "…"}
-                        </div>
-                        {overview && (
-                            <div className="text-ink-3 mt-2 text-[12px]">
-                                {t("balance.exactly", { value: num(overview.balanceTokens) })}
-                            </div>
-                        )}
-                    </Card>
-                    <Card padding={16}>
-                        <div className="text-ink-3 text-[12px]">
-                            {t("balance.usedInLast", { days })}
-                        </div>
-                        <div className="text-ink mt-1 text-[28px] font-semibold leading-none tracking-tight">
-                            {overview ? compact(windowTotal, locale) : "…"}
-                        </div>
-                        {overview?.estimatedCost !== null &&
-                        overview?.estimatedCost !== undefined ? (
-                            <div className="text-ink-3 mt-2 text-[12px]">
-                                {t("balance.estimate", {
-                                    cost: money(overview.estimatedCost, locale),
-                                    price: String(overview.pricePerMillionTokens),
-                                })}
-                            </div>
-                        ) : (
-                            <div className="text-ink-3 mt-2 text-[12px]">
-                                {t("balance.setPrice")}
-                            </div>
-                        )}
-                    </Card>
-                    <Card padding={16}>
-                        <div className="text-ink-3 text-[12px]">{t("balance.lifetime")}</div>
-                        <dl className="text-ink-2 mt-1.5 grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 text-[12.5px]">
-                            <dt className="text-ink-3">{t("balance.used")}</dt>
-                            <dd className="m-0 tabular-nums">
-                                {overview ? compact(overview.lifetime.used, locale) : "…"}
-                            </dd>
-                            <dt className="text-ink-3">{t("balance.granted")}</dt>
-                            <dd className="m-0 tabular-nums">
-                                {overview ? compact(overview.lifetime.granted, locale) : "…"}
-                            </dd>
-                            <dt className="text-ink-3">{t("balance.purchased")}</dt>
-                            <dd className="m-0 tabular-nums">
-                                {overview ? compact(overview.lifetime.purchased, locale) : "…"}
-                            </dd>
-                        </dl>
-                    </Card>
-                </div>
-            </Section>
-
             <Section title={t("models.title")} description={t("models.description")}>
                 {models && models.workspaceOwnedCalls > 0 && (
                     <StatusNote tone="muted">
@@ -402,11 +363,7 @@ export function UsageSection({ onActions }: SettingsSectionProps) {
                         </div>
                         {models && (
                             <div className="text-ink-3 mt-2 text-[12px]">
-                                {t("models.split", {
-                                    input: compact(models.totals.inputTokens, locale),
-                                    output: compact(models.totals.outputTokens, locale),
-                                    calls: num(models.totals.calls),
-                                })}
+                                {t("models.unit", { calls: num(models.totals.calls) })}
                             </div>
                         )}
                     </Card>
@@ -454,6 +411,15 @@ export function UsageSection({ onActions }: SettingsSectionProps) {
                         </dl>
                     </Card>
                 </div>
+
+                {models && (
+                    <ByKind
+                        rows={models.byGroup}
+                        total={modelTokens}
+                        rates={models.rates}
+                        loading={loading}
+                    />
+                )}
 
                 <Card className="mt-3.5">
                     {modelChartData.length === 0 ? (
@@ -533,10 +499,7 @@ export function UsageSection({ onActions }: SettingsSectionProps) {
                                         {t("models.calls")}
                                     </TableHead>
                                     <TableHead className="text-right">
-                                        {t("models.input")}
-                                    </TableHead>
-                                    <TableHead className="text-right">
-                                        {t("models.output")}
+                                        {t("models.usage")}
                                     </TableHead>
                                     <TableHead className="text-right">
                                         {t("models.costColumn")}
@@ -556,17 +519,14 @@ export function UsageSection({ onActions }: SettingsSectionProps) {
                                             {num(row.calls)}
                                         </TableCell>
                                         <TableCell className="text-right tabular-nums">
-                                            {num(row.inputTokens)}
-                                        </TableCell>
-                                        <TableCell className="text-right tabular-nums">
-                                            {num(row.outputTokens)}
+                                            {num(row.weightedTokens)}
                                         </TableCell>
                                         <TableCell className="text-right tabular-nums">
                                             {row.pricedCalls > 0 ? usd(row.costUsd, locale) : "—"}
                                         </TableCell>
                                         <TableCell className="text-right tabular-nums">
                                             {modelTokens > 0
-                                                ? `${Math.round(((row.inputTokens + row.outputTokens) / modelTokens) * 100)}%`
+                                                ? `${Math.round((row.weightedTokens / modelTokens) * 100)}%`
                                                 : "—"}
                                         </TableCell>
                                     </TableRow>
@@ -623,6 +583,65 @@ export function UsageSection({ onActions }: SettingsSectionProps) {
             </Section>
 
             <MemberAllowancesBlock refreshToken={membersRefresh} />
+
+            <Section title={t("balance.title")}>
+                <div className="grid gap-3.5 md:grid-cols-3">
+                    <Card padding={16}>
+                        <div className="text-ink-3 text-[12px]">{t("balance.remaining")}</div>
+                        <div
+                            className={cn(
+                                "mt-1 text-[36px] font-semibold leading-none tracking-tight",
+                                low ? "text-danger" : "text-ink"
+                            )}
+                        >
+                            {overview ? compact(overview.balanceTokens, locale) : "…"}
+                        </div>
+                        {overview && (
+                            <div className="text-ink-3 mt-2 text-[12px]">
+                                {t("balance.exactly", { value: num(overview.balanceTokens) })}
+                            </div>
+                        )}
+                    </Card>
+                    <Card padding={16}>
+                        <div className="text-ink-3 text-[12px]">
+                            {t("balance.usedInLast", { days })}
+                        </div>
+                        <div className="text-ink mt-1 text-[28px] font-semibold leading-none tracking-tight">
+                            {overview ? compact(windowTotal, locale) : "…"}
+                        </div>
+                        {overview?.estimatedCost !== null &&
+                        overview?.estimatedCost !== undefined ? (
+                            <div className="text-ink-3 mt-2 text-[12px]">
+                                {t("balance.estimate", {
+                                    cost: money(overview.estimatedCost, locale),
+                                    price: String(overview.pricePerMillionTokens),
+                                })}
+                            </div>
+                        ) : (
+                            <div className="text-ink-3 mt-2 text-[12px]">
+                                {t("balance.setPrice")}
+                            </div>
+                        )}
+                    </Card>
+                    <Card padding={16}>
+                        <div className="text-ink-3 text-[12px]">{t("balance.lifetime")}</div>
+                        <dl className="text-ink-2 mt-1.5 grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 text-[12.5px]">
+                            <dt className="text-ink-3">{t("balance.used")}</dt>
+                            <dd className="m-0 tabular-nums">
+                                {overview ? compact(overview.lifetime.used, locale) : "…"}
+                            </dd>
+                            <dt className="text-ink-3">{t("balance.granted")}</dt>
+                            <dd className="m-0 tabular-nums">
+                                {overview ? compact(overview.lifetime.granted, locale) : "…"}
+                            </dd>
+                            <dt className="text-ink-3">{t("balance.purchased")}</dt>
+                            <dd className="m-0 tabular-nums">
+                                {overview ? compact(overview.lifetime.purchased, locale) : "…"}
+                            </dd>
+                        </dl>
+                    </Card>
+                </div>
+            </Section>
 
             <Section title={t("burn.title")} description={t("burn.description")}>
                 <Card>
@@ -803,5 +822,86 @@ export function UsageSection({ onActions }: SettingsSectionProps) {
                 </Section>
             )}
         </>
+    );
+}
+
+/**
+ * Chat, embeddings and web search side by side, in the one unit the page adds
+ * up, each with a share bar and its own units underneath ("1.2M tokens
+ * embedded", "40 searches"), then the conversion that turned one into the
+ * other. A document's embeddings show as the sliver they cost, not as the
+ * millions of tokens they were.
+ */
+function ByKind({
+    rows,
+    total,
+    rates,
+    loading,
+}: {
+    rows: UsageByGroup[];
+    total: number;
+    rates: UsageRates;
+    loading: boolean;
+}) {
+    const t = useTranslations("settings.usage");
+    const locale = useLocale();
+    const num = (n: number) => n.toLocaleString(locale);
+
+    function detail(row: UsageByGroup): string {
+        if (row.calls === 0) return t("kinds.none");
+        if (row.group === "chat") {
+            return t("kinds.chatDetail", {
+                input: compact(row.inputTokens, locale),
+                output: compact(row.outputTokens, locale),
+                calls: num(row.calls),
+            });
+        }
+        if (row.group === "embedding") {
+            return t("kinds.embeddingDetail", { tokens: compact(row.inputTokens, locale) });
+        }
+        return row.pages > 0
+            ? t("kinds.searchPagesDetail", { searches: num(row.searches), pages: num(row.pages) })
+            : t("kinds.searchDetail", { searches: num(row.searches) });
+    }
+
+    return (
+        <Card className={cn("mt-3.5", loading && "opacity-60")}>
+            <div data-testid="usage-by-kind">
+                <div className="text-ink-3 mb-3 text-[12px]">{t("kinds.title")}</div>
+                <ul className="m-0 flex list-none flex-col gap-3.5 p-0">
+                    {rows.map(row => {
+                        const share = total > 0 ? (row.weightedTokens / total) * 100 : 0;
+                        return (
+                            <li key={row.group} data-testid={`usage-kind-${row.group}`}>
+                                <div className="flex items-baseline justify-between gap-3">
+                                    <span className="text-ink text-[13px] font-medium">
+                                        {t(`kinds.${row.group}`)}
+                                    </span>
+                                    <span className="text-ink text-[13px] font-semibold tabular-nums">
+                                        {compact(row.weightedTokens, locale)}
+                                        <span className="text-ink-3 ml-2 font-normal">
+                                            {total > 0 ? `${Math.round(share)}%` : "—"}
+                                        </span>
+                                    </span>
+                                </div>
+                                <Progress
+                                    value={share}
+                                    aria-label={t(`kinds.${row.group}`)}
+                                    className="bg-brand/15 mt-1.5 h-1.5"
+                                />
+                                <div className="text-ink-3 mt-1 text-[12px]">{detail(row)}</div>
+                            </li>
+                        );
+                    })}
+                </ul>
+                <p className="text-ink-3 m-0 mt-4 text-[12px] leading-normal">
+                    {t("kinds.rates", {
+                        embedding: compact(rates.embeddingPerMillion, locale),
+                        search: num(rates.perSearch),
+                        price: usd(rates.chat.perMillion, locale),
+                    })}
+                </p>
+            </div>
+        </Card>
     );
 }

@@ -327,7 +327,7 @@ export const SETTINGS: readonly SettingDefinition[] = [
         section: "usage",
         label: "AI limit per person",
         description:
-            "The AI tokens (in and out) each person may use in this workspace a month, unless you set their own limit below. Resets on the 1st (UTC). 0 means no limit.",
+            "The AI tokens each person may use in this workspace a month, unless you set their own limit below. Chat counts token for token; embeddings and web searches count by what they cost. Resets on the 1st (UTC). 0 means no limit.",
         consequence:
             "Applies at once. Someone already past the new limit can't start AI work until it resets.",
         aliases: ["quota", "limit", "allowance", "per user", "per member", "cap", "budget"],

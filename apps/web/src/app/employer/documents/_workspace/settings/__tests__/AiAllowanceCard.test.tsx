@@ -18,6 +18,7 @@ function allowance(over: Partial<AiAllowance> = {}): AiAllowance {
         resetsAt: "2026-11-01T00:00:00.000Z",
         used: 250_000,
         workspace: { limit: 1_000_000, source: "default" },
+        split: { chat: 0, embedding: 0, search: 0 },
         server: null,
         binding: "workspace",
         percent: 25,
@@ -64,7 +65,11 @@ describe("AiAllowanceCard", () => {
             allowance: allowance({
                 used: 900_000,
                 workspace: { limit: 1_000_000, source: "member" },
-                server: { limit: 5_000_000, used: 1_200_000 },
+                server: {
+                    limit: 5_000_000,
+                    used: 1_200_000,
+                    split: { chat: 1_200_000, embedding: 0, search: 0 },
+                },
                 percent: 90,
             }),
         });
@@ -82,7 +87,11 @@ describe("AiAllowanceCard", () => {
             allowance: allowance({
                 used: 300_000,
                 workspace: { limit: null, source: "default" },
-                server: { limit: 2_000_000, used: 2_000_000 },
+                server: {
+                    limit: 2_000_000,
+                    used: 2_000_000,
+                    split: { chat: 2_000_000, embedding: 0, search: 0 },
+                },
                 binding: "server",
                 percent: 100,
                 blocked: true,
@@ -121,5 +130,29 @@ describe("AiAllowanceCard", () => {
         answer(500, { error: "Something broke on our side." });
         render(<AiAllowanceCard />);
         expect(await screen.findByText("Something broke on our side.")).toBeInTheDocument();
+    });
+
+    it("says what the use is made of when embeddings or web search are in it", async () => {
+        answer(200, {
+            allowance: allowance({
+                used: 400_000,
+                split: { chat: 300_000, embedding: 40_000, search: 60_000 },
+                percent: 40,
+            }),
+        });
+        render(<AiAllowanceCard />);
+        const summary = await screen.findByTestId("ai-allowance-summary");
+        expect(within(summary).getByTestId("usage-split")).toHaveTextContent(
+            "Made up of Chat 300K · Web search 60K · Embeddings 40K"
+        );
+    });
+
+    it("leaves the split out when everything was chat", async () => {
+        answer(200, {
+            allowance: allowance({ split: { chat: 250_000, embedding: 0, search: 0 } }),
+        });
+        render(<AiAllowanceCard />);
+        const summary = await screen.findByTestId("ai-allowance-summary");
+        expect(within(summary).queryByTestId("usage-split")).not.toBeInTheDocument();
     });
 });

@@ -82,9 +82,9 @@
     },
     "usage": {
       "label": "Usage and costs",
-      "blurb": "Model tokens, cost, balance",
+      "blurb": "AI use, cost, balance",
       "title": "What the workspace is spending",
-      "description": "Every AI model call the workspace made and what it cost, then the token balance and what has been drawing on it. The numbers exist to inform the two settings on this page."
+      "description": "Everything the workspace's AI did — chat, embeddings, web search — in one unit and what it cost, then the token balance and what has been drawing on it. The numbers exist to inform the settings on this page."
     },
     "archive": {
       "label": "Archive and retention",
@@ -221,7 +221,7 @@
       },
       "memberMonthlyTokenLimit": {
         "label": "AI limit per person",
-        "description": "The AI tokens (in and out) each person may use in this workspace a month, unless you set their own limit below. Resets on the 1st (UTC). 0 means no limit.",
+        "description": "The AI tokens each person may use in this workspace a month, unless you set their own limit below. Chat counts token for token; embeddings and web searches count by what they cost. Resets on the 1st (UTC). 0 means no limit.",
         "consequence": "Applies at once. Someone already past the new limit can't start AI work until it resets.",
         "unit": "tokens a month"
       }
@@ -348,7 +348,7 @@
     },
     "aiAllowance": {
       "title": "Your AI allowance this month",
-      "description": "The AI tokens (in and out) your work used in this workspace since the 1st (UTC).",
+      "description": "The AI tokens your work used in this workspace since the 1st (UTC): chat token for token, embeddings and web searches by what they cost.",
       "loadFailed": "Couldn't load your AI allowance.",
       "loadFailedStatus": "Couldn't load your AI allowance ({status}).",
       "usedOf": "{used} of {limit} tokens",
@@ -1528,12 +1528,11 @@
       "purchased": "Purchased"
     },
     "models": {
-      "title": "AI model usage",
-      "description": "Every call this workspace made to an AI model, from every feature, counted from the provider's own report. Separate from the balance below, which only some features draw on.",
+      "title": "AI usage",
+      "description": "Everything this workspace's AI did, from every feature, in chat-token equivalents: a chat token counts as one, and embeddings and web searches count by what they cost. Separate from the balance below, which only some features draw on.",
       "ownEndpoint": "{calls} of these calls went to the model endpoint this workspace brought itself. Its own provider bills them.",
-      "tokens": "Model tokens in the last {days} days",
-      "split": "{input} in · {output} out · {calls} calls",
-      "cost": "Model cost",
+      "tokens": "AI usage in the last {days} days",
+      "cost": "Cost",
       "costPriced": "From the price set for each model.",
       "costFallback": "Models without a set price are counted at {price} per 1M.",
       "costPartial": "{priced} of {calls} calls have a model price; the rest aren't counted.",
@@ -1541,7 +1540,7 @@
       "efficiency": "Cache and reasoning",
       "cached": "Input from cache",
       "reasoning": "Reasoning tokens",
-      "nothing": "No model calls in this window.",
+      "nothing": "No AI use in this window.",
       "feature": "Feature",
       "route": "Model route",
       "calls": "Calls",
@@ -1573,11 +1572,13 @@
         "reasoning": "Reasoning",
         "vision": "Images",
         "auxiliary": "Document processing"
-      }
+      },
+      "unit": "chat-token equivalents · {calls} requests",
+      "usage": "Usage"
     },
     "burn": {
       "title": "Burn by day",
-      "description": "Tokens drawn from the balance, by what drew them. Hover a day for the breakdown; the table below carries the same numbers.",
+      "description": "Tokens drawn from the balance, by what drew them. Embeddings are charged in chat-token equivalents, like AI usage above. Hover a day for the breakdown; the table below carries the same numbers.",
       "lastDays": "Last {days} days",
       "nothing": "Nothing drew on the balance in this window."
     },
@@ -1603,7 +1604,7 @@
     },
     "members": {
       "title": "AI limits per person",
-      "description": "What each person used of their AI allowance this month, in tokens in and out. Limits reset on the 1st (UTC); when the server sets a cap too, the tighter one applies.",
+      "description": "What each person used of their AI allowance this month, in tokens: chat token for token, embeddings and web searches by what they cost. Limits reset on the 1st (UTC); when the server sets a cap too, the tighter one applies.",
       "serverCap": "This server caps each person at {limit} tokens a month across all their workspaces, on the server's own models. Whoever runs the server sets it; it can't be changed here.",
       "serverCapNotHere": "This server caps each person at {limit} tokens a month on its own models. It doesn't apply here: this workspace runs on its own model.",
       "loadFailed": "Couldn't load the AI limits per person.",
@@ -1629,7 +1630,7 @@
       "unattributed": "Not tied to a person: {tokens} tokens this month, from background work and from before use was counted per person.",
       "dialog": {
         "title": "AI limit for {name}",
-        "description": "The AI tokens (in and out) they may use in this workspace a month. Resets on the 1st (UTC).",
+        "description": "The AI tokens they may use in this workspace a month: chat token for token, embeddings and web searches by what they cost. Resets on the 1st (UTC).",
         "choiceLabel": "Limit",
         "default": "Workspace default ({limit} tokens)",
         "defaultNone": "Workspace default (no limit)",
@@ -1642,6 +1643,20 @@
         "saveFailed": "Couldn't save the limit.",
         "saveFailedStatus": "Couldn't save the limit ({status})."
       }
+    },
+    "kinds": {
+      "title": "By kind",
+      "chat": "Chat",
+      "embedding": "Embeddings",
+      "search": "Web search",
+      "chatDetail": "{input} in · {output} out · {calls} calls",
+      "embeddingDetail": "{tokens} tokens embedded",
+      "searchDetail": "{searches} searches",
+      "searchPagesDetail": "{searches} searches · {pages} pages read",
+      "none": "None in this window",
+      "rates": "Converted by price: a million embedded tokens counts as {embedding}, and one web search as {search}, against a chat token at {price} per 1M.",
+      "item": "{label} {value}",
+      "splitLabel": "Made up of"
     }
   },
   "workspaceModel": {

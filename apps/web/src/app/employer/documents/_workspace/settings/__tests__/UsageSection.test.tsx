@@ -154,6 +154,36 @@ describe("UsageSection", () => {
         expect(search).toHaveTextContent("0 searches · 2 pages read");
     });
 
+    it("counts one search, one page and one call in the singular", async () => {
+        const single = overview();
+        single.models.byGroup[0] = {
+            group: "chat",
+            ...totals({ calls: 1, weightedTokens: 900, inputTokens: 800, outputTokens: 100 }),
+            searches: 0,
+            pages: 0,
+        };
+        single.models.byGroup[2] = {
+            group: "search",
+            ...totals({ calls: 1, weightedTokens: 9_000 }),
+            searches: 1,
+            pages: 1,
+        };
+        single.models.totals = totals({ calls: 1, weightedTokens: 9_900 });
+        global.fetch = jest.fn(async () => ({
+            ok: true,
+            status: 200,
+            json: async () => single,
+        })) as unknown as typeof fetch;
+        render(<UsageSection onActions={jest.fn()} />);
+        expect(await screen.findByTestId("usage-kind-search")).toHaveTextContent(
+            "1 search · 1 page read"
+        );
+        expect(screen.getByTestId("usage-kind-chat")).toHaveTextContent(
+            "800 in · 100 out · 1 call"
+        );
+        expect(screen.getByText("chat-token equivalents · 1 request")).toBeInTheDocument();
+    });
+
     it("says so when a kind was not used in the window", async () => {
         const quiet = overview();
         quiet.models.byGroup[2] = { group: "search", ...totals(), searches: 0, pages: 0 };

@@ -365,7 +365,7 @@ export function UsageSection({ onActions }: SettingsSectionProps) {
                         </div>
                         {models && (
                             <div className="text-ink-3 mt-2 text-[12px]">
-                                {t("models.unit", { calls: num(models.totals.calls) })}
+                                {t("models.unit", { calls: models.totals.calls })}
                             </div>
                         )}
                     </Card>
@@ -855,15 +855,15 @@ function ByKind({
             return t("kinds.chatDetail", {
                 input: compact(row.inputTokens, locale),
                 output: compact(row.outputTokens, locale),
-                calls: num(row.calls),
+                calls: row.calls,
             });
         }
         if (row.group === "embedding") {
             return t("kinds.embeddingDetail", { tokens: compact(row.inputTokens, locale) });
         }
         return row.pages > 0
-            ? t("kinds.searchPagesDetail", { searches: num(row.searches), pages: num(row.pages) })
-            : t("kinds.searchDetail", { searches: num(row.searches) });
+            ? t("kinds.searchPagesDetail", { searches: row.searches, pages: row.pages })
+            : t("kinds.searchDetail", { searches: row.searches });
     }
 
     return (

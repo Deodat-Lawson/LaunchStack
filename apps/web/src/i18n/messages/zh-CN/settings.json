@@ -1573,7 +1573,7 @@
         "vision": "图像",
         "auxiliary": "文档处理"
       },
-      "unit": "对话 token 当量 · {calls} 次请求",
+      "unit": "对话 token 当量 · {calls, number} 次请求",
       "usage": "用量",
       "requests": "请求次数"
     },
@@ -1650,10 +1650,10 @@
       "chat": "对话",
       "embedding": "嵌入",
       "search": "网页搜索",
-      "chatDetail": "输入 {input} · 输出 {output} · {calls} 次调用",
+      "chatDetail": "输入 {input} · 输出 {output} · {calls, number} 次调用",
       "embeddingDetail": "已嵌入 {tokens} 个 token",
-      "searchDetail": "{searches} 次搜索",
-      "searchPagesDetail": "{searches} 次搜索 · 读取 {pages} 个网页",
+      "searchDetail": "{searches, number} 次搜索",
+      "searchPagesDetail": "{searches, number} 次搜索 · 读取 {pages, number} 个网页",
       "none": "此时间段内没有",
       "rates": "按费用折算：每一百万个嵌入 token 计为 {embedding}，每次网页搜索计为 {search}，对话 token 按每百万 {price} 计价。",
       "item": "{label} {value}",

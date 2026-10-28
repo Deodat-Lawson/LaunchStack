@@ -1573,7 +1573,7 @@
         "vision": "Images",
         "auxiliary": "Document processing"
       },
-      "unit": "chat-token equivalents · {calls} requests",
+      "unit": "chat-token equivalents · {calls, plural, one {# request} other {# requests}}",
       "usage": "Usage",
       "requests": "Requests"
     },
@@ -1650,10 +1650,10 @@
       "chat": "Chat",
       "embedding": "Embeddings",
       "search": "Web search",
-      "chatDetail": "{input} in · {output} out · {calls} calls",
+      "chatDetail": "{input} in · {output} out · {calls, plural, one {# call} other {# calls}}",
       "embeddingDetail": "{tokens} tokens embedded",
-      "searchDetail": "{searches} searches",
-      "searchPagesDetail": "{searches} searches · {pages} pages read",
+      "searchDetail": "{searches, plural, one {# search} other {# searches}}",
+      "searchPagesDetail": "{searches, plural, one {# search} other {# searches}} · {pages, plural, one {# page} other {# pages}} read",
       "none": "None in this window",
       "rates": "Converted by price: a million embedded tokens counts as {embedding}, and one web search as {search}, against a chat token at {price} per 1M.",
       "item": "{label} {value}",

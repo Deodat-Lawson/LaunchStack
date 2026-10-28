@@ -850,7 +850,7 @@ function ByKind({
     const num = (n: number) => n.toLocaleString(locale);
 
     function detail(row: UsageByGroup): string {
-        if (row.calls === 0) return t("kinds.none");
+        if (row.calls === 0 && row.pages === 0) return t("kinds.none");
         if (row.group === "chat") {
             return t("kinds.chatDetail", {
                 input: compact(row.inputTokens, locale),

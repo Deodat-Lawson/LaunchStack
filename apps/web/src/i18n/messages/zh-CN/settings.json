@@ -1533,7 +1533,7 @@
       "ownEndpoint": "其中 {calls} 次请求发往此工作区自带的模型，由其服务商自行计费。",
       "tokens": "最近 {days} 天的 AI 用量",
       "cost": "费用",
-      "costPriced": "按每个模型设定的价格计算。",
+      "costPriced": "按每个模型设定的价格计算，嵌入和网页搜索按标价计算。",
       "costFallback": "未设定价格的模型按每百万 {price} 计算。",
       "costPartial": "{calls} 次请求中有 {priced} 次有价格，其余未计入。",
       "costNone": "这些模型没有设定价格。在下方设置单价即可估算。",

@@ -136,6 +136,24 @@ describe("UsageSection", () => {
         expect(cached).toHaveTextContent("25%");
     });
 
+    it("shows pages read on the search line even with no searches beside them", async () => {
+        const pagesOnly = overview();
+        pagesOnly.models.byGroup[2] = {
+            group: "search",
+            ...totals({ weightedTokens: 4_000 }),
+            searches: 0,
+            pages: 2,
+        };
+        global.fetch = jest.fn(async () => ({
+            ok: true,
+            status: 200,
+            json: async () => pagesOnly,
+        })) as unknown as typeof fetch;
+        render(<UsageSection onActions={jest.fn()} />);
+        const search = await screen.findByTestId("usage-kind-search");
+        expect(search).toHaveTextContent("0 searches · 2 pages read");
+    });
+
     it("says so when a kind was not used in the window", async () => {
         const quiet = overview();
         quiet.models.byGroup[2] = { group: "search", ...totals(), searches: 0, pages: 0 };

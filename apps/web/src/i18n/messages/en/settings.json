@@ -1533,7 +1533,7 @@
       "ownEndpoint": "{calls} of these requests went to models this workspace brought itself. Its own provider bills them.",
       "tokens": "AI usage in the last {days} days",
       "cost": "Cost",
-      "costPriced": "From the price set for each model.",
+      "costPriced": "From the price set for each model, and list prices for embeddings and web search.",
       "costFallback": "Models without a set price are counted at {price} per 1M.",
       "costPartial": "{priced} of {calls} requests have a price; the rest aren't counted.",
       "costNone": "No price is set for these models. Set a price below to estimate.",

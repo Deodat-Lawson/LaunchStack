@@ -1,5 +1,5 @@
 /**
- * Writing what a workspace's model calls used.
+ * Writing what a workspace's model calls used, and for whom.
  *
  * `withWorkspaceChatModels` puts {@link aiUsageRecorder} on the chat scope;
  * the shared transport calls it once per completed model call with the
@@ -31,7 +31,8 @@ export async function recordAiUsage(
     companyId: bigint,
     feature: AiFeature,
     event: ChatUsageEvent,
-    at: Date = new Date()
+    at: Date = new Date(),
+    userId = ""
 ): Promise<void> {
     if (event.inputTokens + event.outputTokens <= 0) return;
     const priced = event.costUsd !== undefined;
@@ -45,6 +46,7 @@ export async function recordAiUsage(
             route: event.route ?? "",
             modelId: (event.modelId ?? "").slice(0, 200),
             owner: event.owner,
+            userId: userId.slice(0, 256),
             calls: 1,
             inputTokens: event.inputTokens,
             outputTokens: event.outputTokens,
@@ -61,6 +63,7 @@ export async function recordAiUsage(
                 aiUsageDaily.route,
                 aiUsageDaily.modelId,
                 aiUsageDaily.owner,
+                aiUsageDaily.userId,
             ],
             set: {
                 calls: sql`${aiUsageDaily.calls} + 1`,
@@ -76,19 +79,21 @@ export async function recordAiUsage(
 }
 
 /**
- * The recorder for work done for `companyId` by `feature`, or undefined when
- * the work belongs to no workspace (a signed-out request, an operator tool):
- * there is no one to count it against.
+ * The recorder for work done for `companyId` by `feature`, on behalf of
+ * `userId` (the auth id of the person it is for; omitted for work no one
+ * person started), or undefined when the work belongs to no workspace (a
+ * signed-out request, an operator tool): there is no one to count it against.
  */
 export function aiUsageRecorder(
     companyId: bigint | number | string | null | undefined,
-    feature: AiFeature
+    feature: AiFeature,
+    userId?: string | null
 ): ChatUsageRecorder | undefined {
     const id = workspaceId(companyId);
     if (id === null) return undefined;
     return {
         record(event) {
-            recordAiUsage(id, feature, event).catch((error: unknown) =>
+            recordAiUsage(id, feature, event, new Date(), userId ?? "").catch((error: unknown) =>
                 console.warn(
                     `[ai-usage] could not record a ${feature} call for workspace ${id}:`,
                     error instanceof Error ? error.message : error

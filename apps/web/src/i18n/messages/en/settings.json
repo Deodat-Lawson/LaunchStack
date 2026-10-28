@@ -218,6 +218,12 @@
         "label": "Low balance warning",
         "description": "The balance below which this page and the balance chip warn.",
         "unit": "tokens"
+      },
+      "memberMonthlyTokenLimit": {
+        "label": "AI limit per person",
+        "description": "The AI tokens (in and out) each person may use in this workspace a month, unless you set their own limit below. Resets on the 1st (UTC). 0 means no limit.",
+        "consequence": "Applies at once. Someone already past the new limit can't start AI work until it resets.",
+        "unit": "tokens a month"
       }
     },
     "retention": {
@@ -339,6 +345,25 @@
       "signOutOthers": "Sign out every other browser",
       "changing": "Changing…",
       "changeSubmit": "Change password"
+    },
+    "aiAllowance": {
+      "title": "Your AI allowance this month",
+      "description": "The AI tokens (in and out) your work used in this workspace since the 1st (UTC).",
+      "loadFailed": "Couldn't load your AI allowance.",
+      "loadFailedStatus": "Couldn't load your AI allowance ({status}).",
+      "usedOf": "{used} of {limit} tokens",
+      "percentUsed": "{percent}% used",
+      "progressLabel": "{percent}% of your AI allowance used",
+      "resets": "Resets on {date}.",
+      "noLimit": "No limit",
+      "noLimitBody": "No limit applies to you in this workspace. You've used {used} tokens this month.",
+      "sourceDefault": "This is the workspace's limit for everyone. Workspace admins can change it in Workspace › Usage and costs.",
+      "sourceMember": "A workspace admin set this limit for you. Workspace admins can change it in Workspace › Usage and costs.",
+      "sourceServer": "This is the server's limit, counted across all your workspaces. Whoever runs this server can change it.",
+      "usedHere": "{used} of it in this workspace.",
+      "alsoServer": "The server also caps you at {limit} tokens a month across all your workspaces ({used} used).",
+      "alsoWorkspace": "This workspace also limits you to {limit} tokens a month ({used} used).",
+      "reached": "You've reached this limit. New AI requests are refused until it resets or the limit is raised."
     }
   },
   "answerStyle": {
@@ -1575,6 +1600,48 @@
       "what": "What",
       "amount": "Amount",
       "balanceAfter": "Balance after"
+    },
+    "members": {
+      "title": "AI limits per person",
+      "description": "What each person used of their AI allowance this month, in tokens in and out. Limits reset on the 1st (UTC); when the server sets a cap too, the tighter one applies.",
+      "serverCap": "This server caps each person at {limit} tokens a month across all their workspaces, on the server's own models. Whoever runs the server sets it; it can't be changed here.",
+      "serverCapNotHere": "This server caps each person at {limit} tokens a month on its own models. It doesn't apply here: this workspace runs on its own model.",
+      "loadFailed": "Couldn't load the AI limits per person.",
+      "loadFailedStatus": "Couldn't load the AI limits per person ({status}).",
+      "empty": "No members to show yet.",
+      "person": "Person",
+      "used": "Used this month",
+      "limit": "Monthly limit",
+      "progress": "Of the limit",
+      "actions": "Actions",
+      "you": "(you)",
+      "noLimit": "No limit",
+      "exactTokens": "{value} tokens",
+      "progressLabel": "{name}: {percent}% of the limit used",
+      "source": {
+        "default": "Workspace default",
+        "member": "Set for them",
+        "server": "Server cap · {used} used across workspaces"
+      },
+      "editLimit": "Edit limit",
+      "editLimitFor": "Edit the AI limit for {name}",
+      "period": "Counted since {start}. Limits reset on {date}.",
+      "unattributed": "Not tied to a person: {tokens} tokens this month, from background work and from before use was counted per person.",
+      "dialog": {
+        "title": "AI limit for {name}",
+        "description": "The AI tokens (in and out) they may use in this workspace a month. Resets on the 1st (UTC).",
+        "choiceLabel": "Limit",
+        "default": "Workspace default ({limit} tokens)",
+        "defaultNone": "Workspace default (no limit)",
+        "none": "No limit",
+        "custom": "Custom",
+        "customLabel": "Tokens a month",
+        "customInvalid": "Enter a whole number of tokens, 1 or more.",
+        "serverStillApplies": "The server's cap of {limit} tokens a month still applies.",
+        "saved": "AI limit saved for {name}.",
+        "saveFailed": "Couldn't save the limit.",
+        "saveFailedStatus": "Couldn't save the limit ({status})."
+      }
     }
   },
   "workspaceModel": {

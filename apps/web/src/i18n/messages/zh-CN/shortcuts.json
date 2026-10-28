@@ -63,6 +63,10 @@
     "paneClose": {
       "label": "关闭此应用",
       "description": "关闭当前窗格中显示的标签页。"
+    },
+    "feedbackReport": {
+      "label": "报告问题",
+      "description": "打开反馈对话框，并附上当前页面和最近的错误。"
     }
   }
 }

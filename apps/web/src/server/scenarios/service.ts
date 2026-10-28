@@ -58,6 +58,7 @@ import type { Messages } from "~/i18n/messages";
 import { englishCopy } from "~/i18n/translate";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import { debitTokens, getBalance } from "~/lib/credits";
+import { assertWithinAiAllowance } from "~/server/ai-usage/refusal";
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
 import {
     SCENARIO_LIMITS,
@@ -211,7 +212,12 @@ export async function estimateScenario(
     };
 }
 
+/**
+ * The gate before any scenario model work: the person's AI allowance (a 429
+ * from the shared route handler), then, where it is enforced, the balance.
+ */
 async function requireCredits(ctx: Ctx, credits: number): Promise<void> {
+    await assertWithinAiAllowance(ctx.companyId, ctx.authUserId);
     if (!isMeteringEnforced()) return;
     const balance = await getBalance(ctx.companyId);
     if (balance < credits) {
@@ -591,7 +597,8 @@ export async function askScenario(
             ? buildAnalystRequest(world, run.report?.summary ?? "", question, history)
             : buildInterviewRequest(world, agentId, question, history);
     await requireCredits(ctx, 4_000);
-    const reply = await withWorkspaceChatModels(ctx.companyId, "scenarios", () =>
+    const aiUse = { feature: "scenarios", userId: ctx.authUserId } as const;
+    const reply = await withWorkspaceChatModels(ctx.companyId, aiUse, () =>
         createLlmSimulationModel().complete(request)
     );
     const credits = llmChatTokens(reply.usage?.inputTokens ?? 0, reply.usage?.outputTokens ?? 0);

@@ -119,7 +119,11 @@ it("keeps renewing the lease while a slow unit runs, so polls don't start a seco
         const { withWorkspaceChatModels } = jest.requireMock<{
             withWorkspaceChatModels: jest.Mock;
         }>("~/server/workspace-models/scope");
-        expect(withWorkspaceChatModels).toHaveBeenCalledWith(5n, "scenarios", expect.any(Function));
+        expect(withWorkspaceChatModels).toHaveBeenCalledWith(
+            5n,
+            expect.objectContaining({ feature: "scenarios", enforce: false }),
+            expect.any(Function)
+        );
         const renewals = leases.renewLease.mock.calls.length;
         await jest.advanceTimersByTimeAsync(LEASE_MS * 2);
         expect(leases.renewLease.mock.calls.length).toBe(renewals);

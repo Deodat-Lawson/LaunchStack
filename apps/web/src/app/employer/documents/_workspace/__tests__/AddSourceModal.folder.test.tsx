@@ -6,6 +6,7 @@ import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 
 import { AddSourceModal } from "../AddSourceModal";
+import { resetLocalTasksForTests } from "../processing/uploadTasks";
 
 /**
  * "Add a source" → Folder. The picked folder is created inside the folder the
@@ -56,28 +57,35 @@ const shared = {
     canManage: false,
 };
 
+beforeEach(() => {
+    resetLocalTasksForTests();
+});
+
 function mount(defaultCategory: string) {
     const onUploaded = jest.fn();
+    const onQueued = jest.fn();
+    const onClose = jest.fn();
     const { container } = render(
         <AddSourceModal
             open
-            onClose={jest.fn()}
+            onClose={onClose}
             userId="user_1"
             initialTab="folder"
             defaultCategory={defaultCategory}
             folders={["Q4 planning", "Unfiled"]}
             folderAccess={{ "Q4 planning": shared }}
             onUploaded={onUploaded}
+            onQueued={onQueued}
         />
     );
     const input = container.querySelector<HTMLInputElement>('input[type="file"]')!;
-    return { input, onUploaded };
+    return { input, onUploaded, onQueued, onClose };
 }
 
 describe("uploading a folder", () => {
     it("nests it inside the destination, keeps subfolders, and says so first", async () => {
         const user = userEvent.setup();
-        const { input, onUploaded } = mount("Q4 planning");
+        const { input, onUploaded, onQueued, onClose } = mount("Q4 planning");
 
         fireEvent.change(input, {
             target: {
@@ -100,11 +108,15 @@ describe("uploading a folder", () => {
 
         await user.click(screen.getByRole("button", { name: "Add 2 files to Q3 data" }));
 
-        await waitFor(() => expect(onUploaded).toHaveBeenCalled());
-        expect(mockRegister.mock.calls.map(([p]) => (p as { category: string }).category)).toEqual([
-            "Q4 planning/Q3 data",
-            "Q4 planning/Q3 data/raw",
-        ]);
+        // The dialog hands the files to the Processing queue and closes at
+        // once; the bytes go up behind it.
+        expect(onUploaded).toHaveBeenCalled();
+        expect(onQueued).toHaveBeenCalledTimes(1);
+        expect(onClose).toHaveBeenCalled();
+        await waitFor(() => expect(mockRegister).toHaveBeenCalledTimes(2));
+        expect(
+            mockRegister.mock.calls.map(([p]) => (p as { category: string }).category).sort()
+        ).toEqual(["Q4 planning/Q3 data", "Q4 planning/Q3 data/raw"]);
     });
 
     it("puts it at the top level, private to you, when there is no destination folder", async () => {

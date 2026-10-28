@@ -181,5 +181,26 @@
     "workspaceModelUnusable": "Your workspace's own model can't be used: {reason} A workspace admin can fix it in Workspace › Bring your own keys.",
     "workspaceKeyUnreadable": "Your workspace's own model can't be used: its saved API key can't be read on this server, so enter it again. A workspace admin can fix it in Workspace › Bring your own keys.",
     "workspaceSetupInvalid": "Your workspace's own model can't be used: its saved model setup isn't valid, so open it and save it again. A workspace admin can fix it in Workspace › Bring your own keys."
+  },
+  "feedback": {
+    "disabled": "Feedback is turned off on this instance: nobody has been named to read reports yet.",
+    "triagersOnly": "Only the people who triage feedback can do that.",
+    "cannotReply": "Only the person who filed this and the team can reply to it.",
+    "votesIdeasOnly": "Only feature requests take votes.",
+    "severityBugsOnly": "Only bug reports have a severity.",
+    "multipartRequired": "Send the report as multipart form data.",
+    "payloadMissing": "The report is missing its payload field.",
+    "payloadInvalid": "The report's payload field is not valid JSON.",
+    "requestTooLarge": "The report is too large to send: attach at most {max} images of up to {mb} MB each.",
+    "tooManyImages": "Attach at most {max} images.",
+    "imageEmpty": "One of the images is empty.",
+    "imageTooLarge": "Each image must be {mb} MB or smaller.",
+    "imageType": "Attach PNG, JPEG, WebP or GIF images.",
+    "imageUnreadable": "One of the images couldn't be read. Try a PNG or JPEG.",
+    "imageProcessFailed": "One of the images couldn't be processed. Try a different image."
+  },
+  "aiAllowance": {
+    "workspace": "You've reached your AI limit in this workspace for this month ({used} of {limit} tokens). It resets on {resetDate}. A workspace admin can raise it in Workspace › Usage and costs.",
+    "server": "You've reached this server's monthly AI limit ({used} of {limit} tokens, across all your workspaces). It resets on {resetDate}. Whoever runs this server can raise it."
   }
 }

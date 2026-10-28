@@ -31,6 +31,8 @@ export type PredictiveAnalysisEvent = {
         includeRelatedDocs: boolean;
         timeoutMs?: number;
         jobId: string;
+        /** Auth id of whoever asked; their AI allowance is charged. Absent on older events. */
+        userId?: string;
     };
 };
 
@@ -116,6 +118,8 @@ export type ScenarioRunEvent = {
         runId: number;
         /** Serialized bigint — event payloads must be JSON. */
         companyId: string;
+        /** Auth id of whoever started the run; their AI allowance is charged. Absent on older events. */
+        userId?: string;
     };
 };
 

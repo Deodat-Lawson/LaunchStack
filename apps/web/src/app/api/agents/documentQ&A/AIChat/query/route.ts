@@ -53,6 +53,7 @@ import {
     type ChatStreamEvent,
 } from "~/lib/chat-stream";
 import { answerWithTools, type ChatTool } from "~/server/chat-tool-loop";
+import { loadChatCompanyProfile } from "~/server/chat-company-profile";
 import {
     citedPassages,
     createSourceTools,
@@ -112,6 +113,7 @@ import {
     resolveChatAgent,
     type ChatAgentResolution,
 } from "~/server/collab/chat-agent";
+import { refuseAtAiAllowance } from "~/server/ai-usage/refusal";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 import { copy, type Copy } from "~/i18n/copy";
 import type { Locale } from "~/i18n/locales";
@@ -608,10 +610,13 @@ export async function POST(request: Request) {
                 return forbiddenForPermission("documents.read", locale);
             }
 
+            const aiUse = { feature: "ask", userId: ctx.data.authUserId } as const;
+            const refused = await refuseAtAiAllowance(ctx.data.companyId, aiUse.userId, locale);
+            if (refused) return refused;
             // Everything the answer runs (route resolution, web search, the model
             // call, a streamed body) resolves against the workspace's own models
             // when it brought them.
-            return await withWorkspaceChatModels(ctx.data.companyId, "ask", () => answer(ctx));
+            return await withWorkspaceChatModels(ctx.data.companyId, aiUse, () => answer(ctx));
         } catch (error) {
             if (request.signal.aborted) {
                 recordResult("error");
@@ -1475,12 +1480,16 @@ export async function POST(request: Request) {
                 conversationContext = `\n\nPrevious conversation context:\n${conversationHistory}\n\nPlease continue the conversation naturally, referencing previous exchanges when relevant.`;
             }
 
-            // Build comprehensive prompts. The agent's standing instructions go
-            // above the style prompt: who is speaking first, then how.
+            // Operating rules precede presentation preferences; a named
+            // agent supplies the role and more specific output contract.
             const stylePrompt = getSystemPrompt(selectedStyle, aiPersona);
             let systemPrompt = agent
-                ? `${agentSystemPromptBlock(agent.persona)}\n\n## Answer format\n${stylePrompt}`
+                ? `${stylePrompt}\n\n## Agent instructions\n${agentSystemPromptBlock(agent.persona)}`
                 : stylePrompt;
+            const companyProfile = sourcesAllowed
+                ? await loadChatCompanyProfile(ctx.data, scope)
+                : "";
+            if (companyProfile) systemPrompt += `\n\n${companyProfile}`;
             if (scopeFiles.length > 0) {
                 systemPrompt += `\n\n${attachedFilesPrompt(scopeFiles, coverage, Boolean(sourceTools))}`;
             }
@@ -1616,6 +1625,11 @@ export async function POST(request: Request) {
                     // Checking every file can take a listing, a fan-out and a
                     // second page of it before the answer.
                     maxToolRounds: sourceTools ? 6 : 3,
+                    hasInitialEvidence:
+                        documents.length > 0 ||
+                        passages.length > 0 ||
+                        attachmentTextBlock.length > 0 ||
+                        imageAttachmentUrls.length > 0,
                     signal,
                     stream: emit && {
                         onText: delta => {

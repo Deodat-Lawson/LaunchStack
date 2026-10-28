@@ -31,6 +31,8 @@ import scenarios from "./scenarios.json";
 import proposals from "./proposals.json";
 import tools from "./tools.json";
 import notes from "./notes.json";
+import processing from "./processing.json";
+import feedback from "./feedback.json";
 
 const messages = {
     common,
@@ -59,6 +61,8 @@ const messages = {
     proposals,
     tools,
     notes,
+    processing,
+    feedback,
 } satisfies Messages;
 
 export default messages;

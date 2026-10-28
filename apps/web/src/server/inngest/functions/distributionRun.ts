@@ -86,8 +86,9 @@ export const distributionRunJob = inngest.createFunction(
         // createDefaultPorts resolves its models when called, and a step body runs
         // outside the handler's async context: each step that builds ports or
         // calls a model enters the workspace's models itself.
+        const aiUse = { feature: "distribution", userId: data.userId, enforce: false } as const;
         const inWorkspace = <T>(work: () => Promise<T>) =>
-            withWorkspaceChatModels(companyId, "distribution", work);
+            withWorkspaceChatModels(companyId, aiUse, work);
         const ports = () =>
             createDefaultPorts({
                 publishDossier,

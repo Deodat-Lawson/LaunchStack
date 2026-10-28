@@ -8,7 +8,8 @@
     "darkTheme": "Switch to dark theme",
     "settings": "Settings",
     "documentation": "Documentation",
-    "logOut": "Log out"
+    "logOut": "Log out",
+    "feedback": "Send feedback"
   },
   "common": {
     "actionsFor": "Actions for {name}",
@@ -62,6 +63,10 @@
       "label": "Knowledge",
       "description": "Browse, filter, and grow everything the workspace can cite"
     },
+    "processing": {
+      "label": "Processing",
+      "description": "Watch files being read and indexed — what is running, what is waiting, and what needs a retry"
+    },
     "meetings": {
       "label": "Meetings",
       "description": "Agents work an objective in a channel — step in whenever you want"
@@ -105,6 +110,10 @@
     "workspace": {
       "label": "Workspace",
       "description": "The workspace's name and details, its people and access, company profile, your own keys, models, agents, integrations, usage and archive"
+    },
+    "feedback": {
+      "label": "Feedback",
+      "description": "Bugs you reported, the shared board of feature requests, and the team's replies"
     }
   },
   "studioDeniedNotes": {
@@ -114,6 +123,10 @@
     "knowledge": {
       "label": "Knowledge",
       "description": "Browse and grow everything the workspace can cite"
+    },
+    "processing": {
+      "label": "Processing queue",
+      "description": "Files being read and indexed, stage by stage"
     },
     "meetings": {
       "label": "Meetings",
@@ -310,7 +323,9 @@
     "tabTitle": "{label} — {description}",
     "closeTab": "Close {label}",
     "openStudioApp": "Open a Studio app",
-    "paneMenuTitle": "Split, maximize or close this pane"
+    "paneMenuTitle": "Split, maximize or close this pane",
+    "countActive": "{count, plural, one {# file in progress} other {# files in progress}}",
+    "countAttention": "{count, plural, one {# file, needs attention} other {# files, some need attention}}"
   },
   "splitView": {
     "tooNarrow": "Too narrow to split side by side.",

@@ -109,6 +109,8 @@ x-shared-env: &shared-env
   HUGGINGFACE_EMBEDDING_VERSION: ${HUGGINGFACE_EMBEDDING_VERSION:-v1}
   BLOB_READ_WRITE_TOKEN: ${BLOB_READ_WRITE_TOKEN:-}
   TOKEN_SIGNUP_BONUS: ${TOKEN_SIGNUP_BONUS:-10000000}
+  AI_MONTHLY_TOKEN_LIMIT_PER_USER: ${AI_MONTHLY_TOKEN_LIMIT_PER_USER:-}
+  AI_TOKEN_LIMIT_EXEMPT_EMAILS: ${AI_TOKEN_LIMIT_EXEMPT_EMAILS:-}
   NEXT_PUBLIC_STORAGE_PROVIDER: s3
   NEXT_PUBLIC_S3_ENDPOINT: http://seaweedfs:8333
   S3_REGION: ${S3_REGION:-us-east-1}
@@ -207,6 +209,10 @@ x-shared-env: &shared-env
   EMAIL_SENDING_ENABLED: ${EMAIL_SENDING_ENABLED:-}
   # Investor relations: the SEC rejects requests without "name email".
   SEC_EDGAR_USER_AGENT: ${SEC_EDGAR_USER_AGENT:-}
+  # In-app feedback: who triages (unset keeps it off) and the optional
+  # Slack/Discord webhook told about each new report.
+  FEEDBACK_ADMIN_EMAILS: ${FEEDBACK_ADMIN_EMAILS:-}
+  FEEDBACK_WEBHOOK_URL: ${FEEDBACK_WEBHOOK_URL:-}
   SERPER_API_KEY: ${SERPER_API_KEY:-}
 
 services:

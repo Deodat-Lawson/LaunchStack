@@ -9,6 +9,7 @@ import { Button } from "~/components/ui/button";
 import type { ToolHost } from "~/components/tool-app/nav";
 import { cn } from "~/lib/utils";
 import type { KnowledgePaneProps } from "./KnowledgePane";
+import type { ProcessingQueuePaneProps } from "./processing/ProcessingQueuePane";
 import type { PersonalSectionId } from "./SettingsHub";
 import { isStudioPaneId } from "./studioPaneIds";
 import type { TeamToolProps } from "./team/TeamTool";
@@ -56,6 +57,11 @@ export interface StudioPaneContext {
      */
     team?: Pick<TeamToolProps, "onOpenTarget" | "onShare">;
     /**
+     * The Processing queue opens a finished file in its own tab, opens Add a
+     * source, and tells the sidebar when a file settles — all the shell's.
+     */
+    processing?: Omit<ProcessingQueuePaneProps, "host">;
+    /**
      * For tools with screens of their own: whether this tab is the focused
      * one, a location to show, where to remember the last one, and how to
      * reach other tabs. See `components/tool-app`.
@@ -79,6 +85,14 @@ const InvestorsPane = dynamic(
 );
 
 const TeamTool = dynamic(() => import("./team/TeamTool").then(m => m.TeamTool), {
+    loading: () => <LoadingPage variant="pane" />,
+});
+
+const ProcessingQueuePane = dynamic(
+    () => import("./processing/ProcessingQueuePane").then(m => m.ProcessingQueuePane),
+    { loading: () => <LoadingPage variant="pane" /> }
+);
+const FeedbackTool = dynamic(() => import("./feedback/FeedbackTool").then(m => m.FeedbackTool), {
     loading: () => <LoadingPage variant="pane" />,
 });
 
@@ -505,6 +519,19 @@ export function renderStudioPane(
                     onShare={context?.team?.onShare}
                 />
             );
+        case "processing":
+            return (
+                <ProcessingQueuePane
+                    host={context?.tool}
+                    viewerId={context?.processing?.viewerId ?? null}
+                    storageScope={context?.processing?.storageScope}
+                    onOpenDocument={context?.processing?.onOpenDocument}
+                    onAddSource={context?.processing?.onAddSource}
+                    onSettled={context?.processing?.onSettled}
+                />
+            );
+        case "feedback":
+            return <FeedbackTool host={context?.tool} />;
         case "draft":
             return <DraftPane onClose={onClose} context={context} />;
         case "rewrite":

@@ -20,6 +20,7 @@ function allowance(overrides: Partial<AiAllowance> = {}): AiAllowance {
         start: "2026-10-01",
         resetsAt: "2026-11-01T00:00:00.000Z",
         used: 500_000,
+        split: { chat: 500_000, embedding: 0, search: 0 },
         workspace: { limit: 500_000, source: "member" },
         server: null,
         binding: "workspace",
@@ -47,7 +48,14 @@ describe("refuseAtAiAllowance", () => {
 
     it("names the server's limit, in Chinese for a Chinese reader", async () => {
         mockLoad.mockResolvedValue(
-            allowance({ binding: "server", server: { limit: 2_000_000, used: 2_000_001 } })
+            allowance({
+                binding: "server",
+                server: {
+                    limit: 2_000_000,
+                    used: 2_000_001,
+                    split: { chat: 2_000_001, embedding: 0, search: 0 },
+                },
+            })
         );
         const body = (await (await refuseAtAiAllowance(5n, "u-1", "zh-CN"))!.json()) as {
             message: string;

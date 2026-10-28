@@ -9,6 +9,7 @@ import {
     createUsageMeteringFetch,
     priceUsage,
     readReportedUsage,
+    reportUsage,
     type ChatUsageEvent,
 } from "./usage-meter";
 
@@ -90,6 +91,51 @@ describe("priceUsage", () => {
                 { input: 2, output: 8 }
             )
         ).toBeCloseTo(2);
+    });
+});
+
+describe("reportUsage", () => {
+    const search: ChatUsageEvent = {
+        kind: "web_search",
+        calls: 1,
+        modelId: "exa",
+        owner: "deployment",
+        inputTokens: 0,
+        outputTokens: 0,
+    };
+
+    it("hands the event to the recorder of the scope it is reported in", () => {
+        const first = recorder();
+        const second = recorder();
+        runWithChatModelsScope({ source: "deployment", usage: first.usage }, () =>
+            reportUsage(search)
+        );
+        runWithChatModelsScope({ source: "workspace", usage: second.usage }, () =>
+            reportUsage({ ...search, kind: "web_contents", calls: 3 })
+        );
+        expect(first.events).toEqual([search]);
+        expect(second.events).toEqual([{ ...search, kind: "web_contents", calls: 3 }]);
+    });
+
+    it("does nothing outside a scope, or in a scope nobody counts", () => {
+        expect(() => reportUsage(search)).not.toThrow();
+        expect(() =>
+            runWithChatModelsScope({ source: "deployment" }, () => reportUsage(search))
+        ).not.toThrow();
+    });
+
+    it("never throws when the recorder does", () => {
+        const warn = vi.spyOn(console, "warn").mockImplementation(() => undefined);
+        const usage = {
+            record: () => {
+                throw new Error("database is down");
+            },
+        };
+        expect(() =>
+            runWithChatModelsScope({ source: "deployment", usage }, () => reportUsage(search))
+        ).not.toThrow();
+        expect(warn).toHaveBeenCalledWith("[llm] usage recorder failed:", expect.any(Error));
+        warn.mockRestore();
     });
 });
 

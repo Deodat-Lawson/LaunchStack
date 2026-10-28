@@ -282,6 +282,13 @@ switching models) does not reprice past days. A workspace's own model
 (Workspace › Bring your own keys) carries no price: its provider bills the
 workspace directly, and the page says how many calls went there.
 
+The Standard model's price (the `default` route's, blended three input tokens
+to one output) also sets the rate for chat-token equivalents: embeddings and
+paid web searches count toward usage and allowances by their cost divided by
+what one Standard chat token costs. With no price on that model the rate is
+$1.00 per 1M unless `AI_USAGE_CHAT_PRICE_PER_MTOK` sets one (see
+[AI allowances per person](./deployment.md#ai-allowances-per-person)).
+
 Like the rest of the file, a price change takes effect on restart of the app
 and the worker.
 

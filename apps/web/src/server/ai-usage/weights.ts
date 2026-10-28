@@ -101,6 +101,17 @@ export function webUnitPrice(kind: "web_search" | "web_contents", provider?: str
     return (listed?.search ?? DEFAULT_SEARCH_PRICE_PER_1K) / 1000;
 }
 
+/**
+ * Up to a whole token, but not for floating-point noise: $0.13 over $0.000001
+ * comes out as 130000.00000000001, which is 130,000 and not 130,001.
+ */
+function wholeTokensUp(value: number): number {
+    const nearest = Math.round(value);
+    return Math.abs(value - nearest) <= 1e-12 * Math.max(1, Math.abs(value))
+        ? nearest
+        : Math.ceil(value);
+}
+
 export interface WeighedUsage {
     /** Chat-token equivalents. */
     weightedTokens: number;
@@ -129,7 +140,7 @@ export function weighUsage(
     if (kind === "embedding") {
         const cost = (event.inputTokens * embeddingPricePerMillion(event.modelId)) / 1_000_000;
         return {
-            weightedTokens: Math.ceil(cost / perToken),
+            weightedTokens: wholeTokensUp(cost / perToken),
             ...(event.owner === "deployment" ? { costUsd: cost } : {}),
         };
     }

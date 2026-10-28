@@ -272,7 +272,7 @@ describe("SettingsHub", () => {
             // The row scrolls itself into view on its screen.
             "/employer/documents?feature=usage&at=%2Fspending%3Ffocus%3Dusage.pricePerMillionTokens",
         ],
-        ["#statistics", "/employer/documents?feature=usage"],
+        ["#statistics", "/employer/documents?feature=usage&at=%2Foverview"],
     ])("forwards %s to where it lives now", async (hash, href) => {
         setUrl(hash);
         render(<SettingsHub />);

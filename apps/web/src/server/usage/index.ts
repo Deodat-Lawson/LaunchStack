@@ -17,15 +17,16 @@ import type { AiFeature } from "~/lib/ai-usage";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
 import { isoDay } from "~/lib/usage/range";
-import type {
-    UsageActivity,
-    UsageAllowance,
-    UsageDocuments,
-    UsageMe,
-    UsagePeople,
-    UsageScope,
-    UsageSummary,
-    UsageWindow,
+import {
+    MIN_MEMBERS_FOR_MEDIAN,
+    type UsageActivity,
+    type UsageAllowance,
+    type UsageDocuments,
+    type UsageMe,
+    type UsagePeople,
+    type UsageScope,
+    type UsageSummary,
+    type UsageWindow,
 } from "~/lib/usage/types";
 import { getAiAllowances } from "~/server/ai-usage/quota";
 import { workspacePricePerMillionTokens } from "~/server/settings/usage";
@@ -218,7 +219,10 @@ export async function usageMe(
             people: new Set([me.authUserId]),
             members: 1,
         }),
-        median: medianOf({ window, raw: everyone, authIds: current.map(m => m.authUserId) }),
+        median:
+            current.length >= MIN_MEMBERS_FOR_MEDIAN
+                ? medianOf({ window, raw: everyone, authIds: current.map(m => m.authUserId) })
+                : null,
         members: current.length,
         streak: streakOf(activeDaysOf(mine, me.authUserId), window, today),
     };

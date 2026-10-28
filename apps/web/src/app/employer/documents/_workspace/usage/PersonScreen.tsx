@@ -20,7 +20,7 @@ import { csvFileName, downloadCsv, toCsv } from "~/lib/usage/csv";
 import type { UsagePeople, UsageSummary } from "~/lib/usage/types";
 import { usePermissions } from "~/lib/use-permissions";
 
-import { AllowanceBar } from "../settings/aiAllowance";
+import { AllowanceBar, useAllowanceFormat } from "../settings/aiAllowance";
 import { useTimeFormat } from "../settings/people/format";
 import { BackButton, LoadingRows, Panel } from "../team/ui";
 import { DailyChart } from "./DailyChart";
@@ -37,6 +37,7 @@ export function PersonScreen({ memberId }: { memberId: number }) {
     const t = useTranslations("usage.person");
     const tm = useTranslations("usage.metrics");
     const format = useUsageFormat();
+    const allowance = useAllowanceFormat();
     const time = useTimeFormat();
     const roleLabel = useRoleLabel();
     const { navigate } = useToolNav();
@@ -219,14 +220,14 @@ export function PersonScreen({ memberId }: { memberId: number }) {
                                                 percent={person.allowance.percent}
                                                 blocked={person.allowance.blocked}
                                                 label={t("allowanceLabel", {
-                                                    percent: format.percent(
+                                                    percent: allowance.share(
                                                         person.allowance.percent
                                                     ),
                                                 })}
                                             />
                                             <p className="text-ink-2 m-0 text-[12.5px]">
                                                 {t("usedOf", {
-                                                    percent: format.percent(
+                                                    percent: allowance.share(
                                                         person.allowance.percent
                                                     ),
                                                     limit: format.compact(

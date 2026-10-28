@@ -245,6 +245,7 @@ const ACTIVITY: UsageActivity = {
 };
 
 let requests: string[] = [];
+let me: UsageMe = ME;
 const originalFetch = global.fetch;
 const respond = (body: unknown, status = 200) =>
     Promise.resolve({ ok: status < 400, status, json: async () => body } as unknown as Response);
@@ -264,7 +265,7 @@ function serve() {
             );
         }
         if (pathname === "/api/usage/people") return respond(PEOPLE);
-        if (pathname === "/api/usage/me") return respond(ME);
+        if (pathname === "/api/usage/me") return respond(me);
         if (pathname === "/api/usage/activity") return respond(ACTIVITY);
         return respond({ error: `unexpected ${url}` }, 404);
     }) as unknown as typeof fetch;
@@ -300,6 +301,7 @@ beforeEach(() => {
     window.history.replaceState(null, "", "/employer/documents");
     mockPermissions = { roleName: "Owner", permissions: "all" };
     requests = [];
+    me = ME;
     mockDownload.mockReset();
     serve();
 });
@@ -442,5 +444,40 @@ describe("the Usage tab", () => {
         fireEvent.click(within(bar()!).getByRole("link", { name: "Overview" }));
         await screen.findByTestId("usage-overview");
         expect(window.location.hash).toBe("");
+    });
+
+    it("exports only the people a filter shows, without the rows that are nobody's", async () => {
+        const user = userEvent.setup();
+        open("/people");
+        await screen.findByTestId("usage-people-table");
+        await user.type(screen.getByPlaceholderText("Filter people"), "ben");
+        await user.click(screen.getByTestId("usage-export"));
+        const [, csv] = mockDownload.mock.calls[0] as [string, string];
+        const lines = csv.trim().split("\r\n");
+        expect(lines).toHaveLength(2);
+        expect(lines[1]).toMatch(/^Ben Busy,/);
+    });
+
+    it("shows no median in a workspace too small to keep it anonymous", async () => {
+        as("member");
+        me = { ...ME, members: 2, median: null };
+        open("/you");
+        await screen.findByTestId("usage-you-questions");
+        expect(screen.queryByText(/^Median /)).not.toBeInTheDocument();
+        expect(screen.queryByText(/compared with the median/)).not.toBeInTheDocument();
+    });
+
+    it("shows a past window's longest run, not today's streak", async () => {
+        as("member");
+        me = {
+            ...ME,
+            summary: { ...ME.summary, window: { ...WINDOW, from: "2026-01-01", to: "2026-01-31" } },
+            streak: { current: 3, longest: 5 },
+        };
+        open("/you");
+        const tile = await screen.findByTestId("usage-you-streak");
+        expect(tile).toHaveTextContent("Longest streak");
+        expect(tile).toHaveTextContent("5 days");
+        expect(screen.queryByText(/in a row/)).not.toBeInTheDocument();
     });
 });

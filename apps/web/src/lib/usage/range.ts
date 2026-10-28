@@ -93,3 +93,16 @@ export function windowDays(window: Pick<UsageWindow, "from" | "to">): string[] {
     }
     return out;
 }
+
+export type RangeProblem = "order" | "future" | "tooLong";
+
+/**
+ * Why a custom range can't be shown, in words the bar can say; null when it
+ * can (or isn't filled in yet). The route checks the same rules.
+ */
+export function rangeProblem(from: string, to: string, today: string): RangeProblem | null {
+    if (!from || !to) return null;
+    if (to > today) return "future";
+    if (from > to) return "order";
+    return parseUsageWindow(new URLSearchParams({ from, to })).ok ? null : "tooLong";
+}

@@ -278,10 +278,11 @@ export async function workspaceGroupList(
 }
 
 /**
- * Documents the reader may see (`visible`, from `scopedDocumentWhere`), most
- * opened in the range first, with the opens per day. `lastViewedAt` is the
- * latest open up to the range's end, so a document nobody opened in the range
- * still says when it last was; a later one doesn't leak into a past window.
+ * Documents the reader may see (`visible`, from `scopedDocumentWhere`) that
+ * existed by the range's end, most opened in the range first, with the opens
+ * per day. `lastViewedAt` is the latest open up to the range's end, so a
+ * document nobody opened in the range still says when it last was; a later
+ * one doesn't leak into a past window, and neither does a later document.
  */
 export async function documentUsage(
     companyId: bigint,
@@ -298,6 +299,7 @@ export async function documentUsage(
     const views = sql<number>`count(${documentViews.id}) filter (where ${inRange})`;
     const viewers = sql<number>`count(distinct ${documentViews.userId}) filter (where ${inRange})`;
     const lastViewed = sql`max(${documentViews.viewedAt})`;
+    const existed = and(visible, lt(document.createdAt, end));
 
     const [documentRows, [total], trendRows] = await Promise.all([
         db
@@ -319,7 +321,7 @@ export async function documentUsage(
                     lt(documentViews.viewedAt, end)
                 )
             )
-            .where(visible)
+            .where(existed)
             .groupBy(document.id, document.title, document.category, document.createdAt)
             .orderBy(
                 desc(views),
@@ -329,7 +331,7 @@ export async function documentUsage(
                 desc(document.id)
             )
             .limit(limit),
-        db.select({ count: count() }).from(document).where(visible),
+        db.select({ count: count() }).from(document).where(existed),
         db
             .select({ date: utcDay(documentViews.viewedAt), views: count() })
             .from(documentViews)

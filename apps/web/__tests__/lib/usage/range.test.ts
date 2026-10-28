@@ -3,7 +3,7 @@
  * before any query runs, and the window before it has the same length.
  */
 
-import { parseUsageWindow, presetWindow, windowDays } from "~/lib/usage/range";
+import { parseUsageWindow, presetWindow, rangeProblem, windowDays } from "~/lib/usage/range";
 
 const NOW = new Date("2026-10-27T15:30:00Z");
 const parse = (query: string) => parseUsageWindow(new URLSearchParams(query), NOW);
@@ -77,5 +77,16 @@ describe("windowDays", () => {
             "2026-02-28",
             "2026-03-01",
         ]);
+    });
+});
+
+describe("rangeProblem", () => {
+    it("names the rule a custom range breaks, the same rules the route checks", () => {
+        const today = "2026-10-27";
+        expect(rangeProblem("", "2026-10-01", today)).toBeNull();
+        expect(rangeProblem("2026-10-01", "2026-10-27", today)).toBeNull();
+        expect(rangeProblem("2026-10-05", "2026-10-01", today)).toBe("order");
+        expect(rangeProblem("2026-10-01", "2026-10-28", today)).toBe("future");
+        expect(rangeProblem("2025-01-01", "2026-10-01", today)).toBe("tooLong");
     });
 });

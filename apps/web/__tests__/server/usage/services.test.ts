@@ -289,13 +289,30 @@ describe("usageMe", () => {
         });
         expect(result.summary.totals).toMatchObject({ questions: 1, aiTokens: 0 });
         expect(result.members).toBe(2);
-        // questions: me 1, teammate 9 → 5; tokens: 0 and 4000 → 2000.
-        expect(result.median).toMatchObject({ questions: 5, aiTokens: 2000 });
+        // Two members: the median would be their average, and mine (1) would
+        // give the teammate's (9) away, so there is none.
+        expect(result.median).toBeNull();
         expect(result.streak).toEqual({ current: 1, longest: 1 });
 
         const wire = JSON.stringify(result);
         for (const leak of ["teammate", "secret.example", "Secret", "invitee"]) {
             expect(wire).not.toContain(leak);
         }
+    });
+
+    it("gives the median from three members, idle ones included", async () => {
+        mockListMembers.mockResolvedValue({
+            members: [...MEMBERS, member(14, "quiet")],
+            counts: {},
+        });
+        mockUsageRaw.mockImplementation(
+            (_company: bigint, _range: unknown, filter?: { userIds?: string[] }) =>
+                Promise.resolve(filter?.userIds ? { ...RAW, ai: [] } : RAW)
+        );
+        const result = await usageMe(ctx, WINDOW, new Date("2026-10-07T18:00:00Z"));
+        expect(result.members).toBe(3);
+        // questions: me 1, teammate 9, quiet 0 → 1; tokens: 0, 4000, 0 → 0.
+        expect(result.median).toMatchObject({ questions: 1, aiTokens: 0 });
+        expect(JSON.stringify(result)).not.toContain("quiet");
     });
 });

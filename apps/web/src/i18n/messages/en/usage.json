@@ -24,7 +24,12 @@
     "apply": "Show this range",
     "groupLabel": "Group",
     "everyone": "Everyone",
-    "export": "Export CSV"
+    "export": "Export CSV",
+    "problems": {
+      "order": "The start is after the end.",
+      "future": "The end can be today at the latest.",
+      "tooLong": "A range can be at most {max} days."
+    }
   },
   "change": {
     "changed": "{sign}{percent} · was {previous}",
@@ -178,6 +183,8 @@
     "costTitle": "Estimated cost",
     "costUnpriced": "No price is set for the models you used, so there is no estimate.",
     "costBody": "For {calls} AI calls, at the prices this workspace set.",
-    "allowanceTitle": "Your AI limit this month"
+    "allowanceTitle": "Your AI limit this month",
+    "longestStreak": "Longest streak",
+    "inThisWindow": "Longest run of active days in this window"
   }
 }

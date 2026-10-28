@@ -13,7 +13,8 @@ import { useTranslations } from "next-intl";
 
 import { PageHeader } from "~/components/tools/PageHeader";
 import { csvFileName, downloadCsv, toCsv } from "~/lib/usage/csv";
-import type { UsageMe, UsageMedian } from "~/lib/usage/types";
+import { isoDay } from "~/lib/usage/range";
+import { MIN_MEMBERS_FOR_MEDIAN, type UsageMe, type UsageMedian } from "~/lib/usage/types";
 import { cn } from "~/lib/utils";
 
 import { AiAllowanceBody } from "../settings/AiAllowanceCard";
@@ -37,14 +38,21 @@ export function YouScreen() {
     const data = me?.summary;
     const range = useWindowLabel(data?.window);
 
+    // With two members the median is their average, and yours would give the
+    // other person's away; the route sends it from three.
+    const median = me && me.members >= MIN_MEMBERS_FOR_MEDIAN ? me.median : null;
+    const compared = median !== null;
+    // The current streak runs to today; a window that ends earlier shows its longest run instead.
+    const endsToday = data?.window.to === isoDay(new Date());
+
     /** "Workspace median 12 · you're above" — the comparison under a tile. */
     const versus = (key: Compared, yours: number) => {
-        if (!me || me.members < 2) return undefined;
-        const median = me.median[key];
-        const where = yours > median ? "above" : yours < median ? "below" : "at";
+        if (!median) return undefined;
+        const middle = median[key];
+        const where = yours > middle ? "above" : yours < middle ? "below" : "at";
         return (
             <span className="inline-flex items-center gap-1">
-                {t("median", { value: format.compact(median) })}
+                {t("median", { value: format.compact(middle) })}
                 <span
                     className={cn(
                         "rounded px-1 text-[10.5px] font-medium",
@@ -89,7 +97,7 @@ export function YouScreen() {
         <div className="mx-auto flex max-w-[1180px] flex-col gap-5" data-testid="usage-you">
             <PageHeader
                 title={t("title")}
-                sub={me ? (me.members < 2 ? range : t("sub", { range, members: me.members })) : " "}
+                sub={me ? (compared ? t("sub", { range, members: me.members }) : range) : " "}
                 actions={<WindowBar onExport={exportDaily} exportDisabled={!data} />}
             />
 
@@ -135,13 +143,19 @@ export function YouScreen() {
                         />
                         <StatTile
                             testId="usage-you-streak"
-                            label={t("streak")}
-                            value={t("streakDays", { days: me.streak.current })}
-                            sub={t("longest", { days: me.streak.longest })}
+                            label={endsToday ? t("streak") : t("longestStreak")}
+                            value={t("streakDays", {
+                                days: endsToday ? me.streak.current : me.streak.longest,
+                            })}
+                            sub={
+                                endsToday
+                                    ? t("longest", { days: me.streak.longest })
+                                    : t("inThisWindow")
+                            }
                         />
                     </TileGrid>
 
-                    {me.streak.current >= 3 && (
+                    {endsToday && me.streak.current >= 3 && (
                         <p className="text-ink-2 m-0 flex items-center gap-1.5 text-[12.5px]">
                             <Flame className="text-warn size-3.5" aria-hidden />
                             {t("onAStreak", { days: me.streak.current })}

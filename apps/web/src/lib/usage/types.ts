@@ -202,6 +202,9 @@ export interface UsageDocuments {
     trend: { date: string; views: number }[];
 }
 
+/** The fewest members a median is shown over (`UsageMe.median`). */
+export const MIN_MEMBERS_FOR_MEDIAN = 3;
+
 /** The workspace median of each per-person figure, over every current member. */
 export interface UsageMedian {
     questions: number;
@@ -214,7 +217,11 @@ export interface UsageMedian {
 /** `GET /api/usage/me`: the caller's own numbers. Any member may read their own. */
 export interface UsageMe {
     summary: UsageSummary;
-    median: UsageMedian;
+    /**
+     * Null below {@link MIN_MEMBERS_FOR_MEDIAN} members: with two, the median
+     * is their average, and the caller's own figure would give the other's away.
+     */
+    median: UsageMedian | null;
     /** Current members the median is taken over. */
     members: number;
     streak: {

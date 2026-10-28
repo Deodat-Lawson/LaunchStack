@@ -34,7 +34,7 @@ import { csvFileName, downloadCsv, toCsv } from "~/lib/usage/csv";
 import type { UsageCounts, UsagePeople, UsagePersonRow } from "~/lib/usage/types";
 import { cn } from "~/lib/utils";
 
-import { AllowanceBar, allowanceTone } from "../settings/aiAllowance";
+import { AllowanceBar, allowanceTone, useAllowanceFormat } from "../settings/aiAllowance";
 import { useTimeFormat } from "../settings/people/format";
 import { EmptyLine, FilterInput, LoadingRows } from "../team/ui";
 import { useUsageFilters, useUsageLoad, windowQuery } from "./data";
@@ -82,6 +82,8 @@ export function PeopleScreen() {
     const t = useTranslations("usage.people");
     const tm = useTranslations("usage.metrics");
     const format = useUsageFormat();
+    // Rounded down, as Spending and Your usage round a limit: 99.6% never reads as 100.
+    const allowance = useAllowanceFormat();
     const time = useTimeFormat();
     const roleLabel = useRoleLabel();
     const { navigate } = useToolNav();
@@ -171,8 +173,9 @@ export function PeopleScreen() {
                     person.allowance.limit,
                     person.lastActiveAt,
                 ]),
-                ...extra(t("formerMembers"), data.formerMembers),
-                ...extra(t("unattributed"), data.unattributed),
+                // The rows that are nobody's show only while the list isn't filtered; so do they here.
+                ...(needle ? [] : extra(t("formerMembers"), data.formerMembers)),
+                ...(needle ? [] : extra(t("unattributed"), data.unattributed)),
             ]
         );
         downloadCsv(csvFileName("people", data.window), csv);
@@ -219,7 +222,7 @@ export function PeopleScreen() {
             <TableRow data-testid={testId} className="text-ink-3">
                 <TableCell className="italic">{label}</TableCell>
                 <TableCell className="@max-lg:hidden" />
-                <TableCell className="text-right tabular-nums">
+                <TableCell className="@max-sm:hidden text-right tabular-nums">
                     {aiOnly ? "—" : format.num(counts.questions)}
                 </TableCell>
                 <TableCell className="@max-md:hidden text-right tabular-nums">
@@ -280,7 +283,7 @@ export function PeopleScreen() {
                                 <TableRow>
                                     {header("name", t("person"))}
                                     {header("activeDays", tm("activeDays"), "@max-lg:hidden")}
-                                    {header("questions", tm("questions"))}
+                                    {header("questions", tm("questions"), "@max-sm:hidden")}
                                     {header("filesAdded", tm("filesAdded"), "@max-md:hidden")}
                                     {header("docsOpened", tm("docsOpened"), "@max-xl:hidden")}
                                     {header("aiTokens", tm("aiTokens"))}
@@ -352,7 +355,7 @@ export function PeopleScreen() {
                                             <TableCell className="@max-lg:hidden text-right tabular-nums">
                                                 {format.num(person.activeDays)}
                                             </TableCell>
-                                            <TableCell className="text-right tabular-nums">
+                                            <TableCell className="@max-sm:hidden text-right tabular-nums">
                                                 {format.num(person.totals.questions)}
                                             </TableCell>
                                             <TableCell className="@max-md:hidden text-right tabular-nums">
@@ -387,7 +390,7 @@ export function PeopleScreen() {
                                                             percent={percent}
                                                             blocked={person.allowance.blocked}
                                                             label={t("allowanceLabel", {
-                                                                percent: format.percent(percent),
+                                                                percent: allowance.share(percent),
                                                             })}
                                                             className="min-w-0 flex-1"
                                                         />
@@ -402,7 +405,7 @@ export function PeopleScreen() {
                                                                     : "text-ink-2"
                                                             )}
                                                         >
-                                                            {format.percent(percent)}
+                                                            {allowance.share(percent)}
                                                         </span>
                                                     </div>
                                                 )}

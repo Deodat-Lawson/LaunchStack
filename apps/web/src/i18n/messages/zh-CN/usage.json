@@ -24,7 +24,12 @@
     "apply": "查看这个范围",
     "groupLabel": "群组",
     "everyone": "所有人",
-    "export": "导出 CSV"
+    "export": "导出 CSV",
+    "problems": {
+      "order": "开始日期晚于结束日期。",
+      "future": "结束日期最晚只能是今天。",
+      "tooLong": "时间范围最长 {max} 天。"
+    }
   },
   "change": {
     "changed": "{sign}{percent} · 此前 {previous}",
@@ -178,6 +183,8 @@
     "costTitle": "预估费用",
     "costUnpriced": "你用到的模型没有设置价格，因此无法估算。",
     "costBody": "共 {calls} 次 AI 调用，按工作区设置的价格计算。",
-    "allowanceTitle": "你本月的 AI 上限"
+    "allowanceTitle": "你本月的 AI 上限",
+    "longestStreak": "最长连续活跃",
+    "inThisWindow": "这个时间范围内最长的连续活跃天数"
   }
 }

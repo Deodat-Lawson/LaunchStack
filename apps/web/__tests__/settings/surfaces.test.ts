@@ -116,10 +116,12 @@ describe("settingsDestination", () => {
 
     it("sends the analytics hashes to the Usage tab, which Analytics folded into", () => {
         for (const hash of ["#analytics", "#statistics", "#stats"]) {
+            // Always the Overview, wherever the tab was last.
             expect(settingsDestination(hash)).toEqual({
                 kind: "app",
                 featureId: "usage",
-                href: "/employer/documents?feature=usage",
+                href: "/employer/documents?feature=usage&at=%2Foverview",
+                at: "/overview",
             });
         }
     });

@@ -22,7 +22,13 @@ import {
     SelectValue,
 } from "~/components/ui/select";
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
-import { USAGE_PRESETS, isoDay, parseUsageWindow, type UsagePreset } from "~/lib/usage/range";
+import {
+    MAX_USAGE_DAYS,
+    USAGE_PRESETS,
+    isoDay,
+    rangeProblem,
+    type UsagePreset,
+} from "~/lib/usage/range";
 import type { UsageWindow } from "~/lib/usage/types";
 import { cn } from "~/lib/utils";
 
@@ -55,7 +61,8 @@ export function WindowBar({
     const today = isoDay(new Date());
     const [from, setFrom] = useState(choice.kind === "custom" ? choice.from : "");
     const [to, setTo] = useState(choice.kind === "custom" ? choice.to : today);
-    const valid = Boolean(from && to) && parseUsageWindow(new URLSearchParams({ from, to })).ok;
+    const problem = rangeProblem(from, to, today);
+    const valid = Boolean(from && to) && !problem;
 
     const customLabel =
         choice.kind === "custom"
@@ -141,6 +148,15 @@ export function WindowBar({
                         <p className="text-ink-3 m-0 text-[12px] leading-normal">
                             {t("customHint")}
                         </p>
+                        {problem && (
+                            <p
+                                className="text-danger m-0 text-[12px] leading-normal"
+                                role="alert"
+                                data-testid="usage-window-problem"
+                            >
+                                {t(`problems.${problem}`, { max: MAX_USAGE_DAYS })}
+                            </p>
+                        )}
                         <Button type="submit" size="sm" disabled={!valid}>
                             {t("apply")}
                         </Button>

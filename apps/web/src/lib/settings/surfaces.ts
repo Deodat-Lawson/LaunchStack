@@ -45,6 +45,9 @@ export const USAGE_TOOL_ID = "usage";
 /** Where the `usage` settings section lives now: the Usage tab's Spending screen. */
 export const USAGE_SPENDING_PATH = "/spending";
 
+/** The Usage tab's Overview, where Analytics' old links land. */
+const USAGE_HOME_PATH = "/overview";
+
 /** What Settings shows, in rail order. Each is yours alone. */
 export const PERSONAL_SECTION_IDS = [
     "account",
@@ -173,8 +176,15 @@ export function settingsDestination(hash: string): SettingsDestination | null {
     const lower = clean.toLowerCase();
     if (!lower) return { kind: "settings", section: null, hash: "" };
 
+    // Analytics' hashes open the Overview, wherever the Usage tab was last.
     const app = MOVED_TO_STUDIO[lower];
-    if (app) return { kind: "app", featureId: app, href: toolTabHref(app) };
+    if (app)
+        return {
+            kind: "app",
+            featureId: app,
+            href: toolTabHref(app, USAGE_HOME_PATH),
+            at: USAGE_HOME_PATH,
+        };
     if (isRetiredDocumentsHash(lower)) {
         return {
             kind: "workspace",

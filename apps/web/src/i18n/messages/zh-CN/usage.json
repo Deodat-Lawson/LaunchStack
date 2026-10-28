@@ -185,6 +185,6 @@
     "costBody": "共 {calls} 次 AI 调用，按工作区设置的价格计算。",
     "allowanceTitle": "你本月的 AI 上限",
     "longestStreak": "最长连续活跃",
-    "inThisWindow": "这个时间范围内最长的连续活跃天数"
+    "inThisWindow": "这个时间范围内"
   }
 }

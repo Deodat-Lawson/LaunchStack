@@ -185,6 +185,6 @@
     "costBody": "For {calls} AI calls, at the prices this workspace set.",
     "allowanceTitle": "Your AI limit this month",
     "longestStreak": "Longest streak",
-    "inThisWindow": "Longest run of active days in this window"
+    "inThisWindow": "In this window"
   }
 }

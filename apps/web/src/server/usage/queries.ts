@@ -338,7 +338,7 @@ export async function documentUsage(
             .innerJoin(document, eq(document.id, documentViews.documentId))
             .where(
                 and(
-                    visible,
+                    existed,
                     eq(documentViews.companyId, companyId),
                     gte(documentViews.viewedAt, start),
                     lt(documentViews.viewedAt, end)

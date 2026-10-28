@@ -127,10 +127,10 @@ const WorkspaceTool = dynamic(() => import("./WorkspaceTool").then(m => m.Worksp
     loading: () => <LoadingPage variant="pane" />,
 });
 
-const StatisticsView = dynamic(
-    () => import("~/app/employer/statistics/StatisticsView").then(m => m.StatisticsView),
-    { loading: () => <LoadingPage variant="pane" /> }
-);
+// How the workspace and each person use it, with its screens across the top.
+const UsageTool = dynamic(() => import("./usage/UsageTool").then(m => m.UsageTool), {
+    loading: () => <LoadingPage variant="pane" />,
+});
 
 const AgentsPane = dynamic(() => import("./collab/AgentsPane").then(m => m.AgentsPane), {
     loading: () => <LoadingPage variant="pane" />,
@@ -298,15 +298,6 @@ export function CompanySettingsPane({
     return (
         <div style={{ height: "100%", display: "flex", flexDirection: "column", minHeight: 0 }}>
             <SettingsHub embedded initialSection={initialSection} />
-        </div>
-    );
-}
-
-/** Analytics reads, never configures, so it lives here beside the other views. */
-export function AnalyticsPane(_: PaneProps) {
-    return (
-        <div style={{ height: "100%", overflowY: "auto" }}>
-            <StatisticsView embedded />
         </div>
     );
 }
@@ -554,8 +545,8 @@ export function renderStudioPane(
             return <VantageTool host={context?.tool} />;
         case "scenarios":
             return <ScenariosTool host={context?.tool} />;
-        case "analytics":
-            return <AnalyticsPane onClose={onClose} />;
+        case "usage":
+            return <UsageTool host={context?.tool} />;
         // Yours alone: account, appearance, shortcuts, privacy.
         case "settings":
             return <CompanySettingsPane onClose={onClose} />;

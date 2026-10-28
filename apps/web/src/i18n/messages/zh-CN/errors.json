@@ -199,7 +199,7 @@
     "imageProcessFailed": "有一张图片无法处理，请换一张图片。"
   },
   "aiAllowance": {
-    "workspace": "你本月在此工作区的 AI 用量已达上限（{used} / {limit} 个 token）。将于 {resetDate} 重置。工作区管理员可以在“工作区 › 用量与费用”中提高上限。",
+    "workspace": "你本月在此工作区的 AI 用量已达上限（{used} / {limit} 个 token）。将于 {resetDate} 重置。工作区管理员可以在“用量 › 支出”中提高上限。",
     "server": "你本月在这台服务器上的 AI 用量已达上限（{used} / {limit} 个 token，合计你所有的工作区）。将于 {resetDate} 重置。服务器的管理者可以提高上限。"
   }
 }

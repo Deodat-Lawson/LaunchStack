@@ -1,17 +1,13 @@
+/**
+ * One document's opens, as the document sheet shows them
+ * (`GET /api/company/documents/[documentId]/stats`). The Usage tab's
+ * Documents screen opens the sheet from a `UsageDocumentRow`, which carries
+ * every field of `DocumentStat`.
+ */
+
 export interface TrendDataPoint {
     date: string;
     count: number;
-}
-
-export interface EmployeeInfo {
-    id: number;
-    name: string;
-    email: string;
-    role: string;
-    status: string;
-    lastActiveAt: string | null;
-    createdAt: string;
-    queryCount: number;
 }
 
 export interface DocumentStat {
@@ -21,15 +17,6 @@ export interface DocumentStat {
     views: number;
     lastViewedAt: string | null;
     createdAt: string;
-}
-
-export interface DashboardData {
-    totalEmployees: number;
-    totalDocuments: number;
-    employees: EmployeeInfo[];
-    employeeTrend: TrendDataPoint[];
-    documentViewsTrend: TrendDataPoint[];
-    documentStats: DocumentStat[];
 }
 
 export interface Viewer {

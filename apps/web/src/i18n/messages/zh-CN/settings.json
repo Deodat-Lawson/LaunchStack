@@ -680,6 +680,36 @@
       "limits": "上限",
       "context": "上下文 {count}",
       "output": "输出 {count}"
+    },
+    "webSearch": {
+      "title": "网页搜索",
+      "description": "所有功能搜索网页时使用的引擎：提问、竞品分析、资助方搜索、文档研究、趋势搜索和潜在客户。它在服务器上设置，这里无法更改。",
+      "on": "已开启",
+      "pickedSetting": "由 <code>SEARCH_PROVIDER</code> 指定。",
+      "pickedAuto": "第一个已配置的引擎；设置 <code>SEARCH_PROVIDER</code> 即可自行指定。",
+      "pickedRetired": "<code>SEARCH_PROVIDER={requested}</code> 已不再是可选值，因此使用第一个已配置的引擎。将 <code>SEARCH_PROVIDER</code> 设为下方的某个引擎即可指定。",
+      "setting": "配置项",
+      "webNews": "网页和新闻",
+      "webNewsEverywhere": "所有功能的网页和新闻搜索。",
+      "companies": "公司",
+      "companiesIndexed": "潜在客户中的公司搜索和相似公司查找。",
+      "companiesByWebSearch": "潜在客户通过普通网页搜索查找公司；查找相似公司需要 {engines}。",
+      "missingCredentials": "<code>SEARCH_PROVIDER={requested}</code> 需要 <code>{credential}</code>。设置之前，网页搜索保持关闭。",
+      "unknownProvider": "<code>SEARCH_PROVIDER={requested}</code> 不是搜索引擎，因此网页搜索已关闭。请将其设为以下值之一：<code>{values}</code>。",
+      "notConfigured": "网页搜索已关闭：尚未配置任何引擎。要开启它，请在服务器上将 <code>SEARCH_PROVIDER</code> 设为下方的某个引擎，并设置该引擎所需的配置项，然后重启。",
+      "engines": {
+        "title": "引擎",
+        "description": "在服务器环境中将 SEARCH_PROVIDER 设为其中一个值，并设置该引擎的配置项。未设置时，按此顺序使用第一个已配置的引擎。这里从不显示密钥。",
+        "engine": "引擎",
+        "needs": "所需配置",
+        "status": "本服务器",
+        "webNews": "网页和新闻搜索",
+        "webNewsCompanies": "网页、新闻和公司搜索，支持查找相似公司",
+        "inUse": "使用中",
+        "configured": "已配置",
+        "chosenMissing": "已指定，未配置",
+        "notSet": "未设置"
+      }
     }
   },
   "oauthClients": {

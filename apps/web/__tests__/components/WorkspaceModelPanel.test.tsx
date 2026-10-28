@@ -48,6 +48,52 @@ const OVERVIEW = {
     ],
 };
 
+/** The five engines as the server lists them: names of settings, never their values. */
+const ENGINES = [
+    { id: "exa", label: "Exa", credential: "EXA_API_KEY", configured: true, companies: true },
+    {
+        id: "serper",
+        label: "Serper",
+        credential: "SERPER_API_KEY",
+        configured: false,
+        companies: false,
+    },
+    {
+        id: "brave",
+        label: "Brave Search",
+        credential: "BRAVE_SEARCH_API_KEY",
+        configured: false,
+        companies: false,
+    },
+    {
+        id: "tavily",
+        label: "Tavily",
+        credential: "TAVILY_API_KEY",
+        configured: false,
+        companies: false,
+    },
+    {
+        id: "searxng",
+        label: "SearXNG",
+        credential: "SEARXNG_URL",
+        configured: true,
+        companies: false,
+    },
+];
+
+const OFF = { web: false, news: false, companies: false };
+
+const SEARCH_AUTO_EXA = {
+    provider: "exa",
+    label: "Exa",
+    source: "auto",
+    requested: null,
+    problem: null,
+    credential: "EXA_API_KEY",
+    capabilities: { web: true, news: true, companies: true },
+    providers: ENGINES,
+};
+
 const minutesAgo = (minutes: number) => new Date(Date.now() - minutes * 60_000).toISOString();
 
 const CONNECTED: WorkspaceEndpointView = {
@@ -85,6 +131,7 @@ let deletes: number;
 let listed: Body[];
 let tested: Body[];
 let actions: SettingsSectionActions | null;
+let webSearch: Record<string, unknown>;
 const originalFetch = global.fetch;
 
 /** A stand-in for the workspace model routes, keeping what was saved. */
@@ -92,7 +139,7 @@ function serve() {
     global.fetch = jest.fn((url: string, init?: RequestInit) => {
         const method = init?.method ?? "GET";
         const body = init?.body ? (JSON.parse(init.body as string) as Body) : {};
-        if (url === "/api/settings/models") return respond(OVERVIEW);
+        if (url === "/api/settings/models") return respond({ ...OVERVIEW, webSearch });
         if (url === "/api/settings/models/workspace") {
             if (method === "GET") return respond({ endpoint: stored });
             if (method === "DELETE") {
@@ -467,6 +514,7 @@ describe("Workspace › Bring your own keys › API key", () => {
 describe("Workspace › Models", () => {
     beforeEach(() => {
         stored = null;
+        webSearch = SEARCH_AUTO_EXA;
         serve();
     });
 
@@ -508,5 +556,130 @@ describe("Workspace › Models", () => {
                 /has no model chosen yet, so it still runs on the server default/
             )
         ).toBeInTheDocument();
+    });
+
+    /** The Web search section, once the overview has loaded. */
+    async function webSearchSection() {
+        const heading = await screen.findByRole("heading", { name: "Web search" });
+        return heading.closest("section")!;
+    }
+
+    /** The engines table row for one engine. */
+    function engineRow(section: HTMLElement, name: string) {
+        return within(section)
+            .getAllByRole("row")
+            .find(row => within(row).queryByText(name, { exact: true }))!;
+    }
+
+    it("names the engine in use, how it was picked and what it covers", async () => {
+        renderModels();
+        const section = await webSearchSection();
+
+        expect(section).toHaveTextContent("set on the server, so nothing here changes it");
+        expect(section).toHaveTextContent(
+            "The first configured engine; set SEARCH_PROVIDER to choose."
+        );
+        expect(section).toHaveTextContent("Web and news search for every feature.");
+        expect(section).toHaveTextContent("Company search and lookalikes in Prospects.");
+        expect(within(engineRow(section, "Exa")).getByText("In use")).toBeInTheDocument();
+        expect(within(engineRow(section, "SearXNG")).getByText("Configured")).toBeInTheDocument();
+        expect(within(engineRow(section, "SearXNG")).getByText("SEARXNG_URL")).toBeInTheDocument();
+        expect(within(engineRow(section, "Tavily")).getByText("Not set")).toBeInTheDocument();
+        // Read-only: nothing to press but the section's Re-read.
+        expect(within(section).queryByRole("button")).not.toBeInTheDocument();
+        expect(within(section).queryByRole("textbox")).not.toBeInTheDocument();
+    });
+
+    it("says an engine without a company index finds companies by web search", async () => {
+        webSearch = {
+            ...SEARCH_AUTO_EXA,
+            provider: "searxng",
+            label: "SearXNG",
+            source: "setting",
+            requested: "searxng",
+            credential: "SEARXNG_URL",
+            capabilities: { web: true, news: true, companies: false },
+        };
+        renderModels();
+        const section = await webSearchSection();
+
+        expect(section).toHaveTextContent("Chosen with SEARCH_PROVIDER.");
+        expect(section).toHaveTextContent(
+            "Prospects finds companies through ordinary web search; lookalikes need Exa."
+        );
+        expect(within(engineRow(section, "SearXNG")).getByText("In use")).toBeInTheDocument();
+        expect(within(engineRow(section, "Exa")).getByText("Configured")).toBeInTheDocument();
+    });
+
+    it("says a retired SEARCH_PROVIDER value no longer chooses", async () => {
+        webSearch = { ...SEARCH_AUTO_EXA, requested: "fallback" };
+        renderModels();
+        const section = await webSearchSection();
+
+        expect(section).toHaveTextContent(
+            "SEARCH_PROVIDER=fallback is no longer a choice, so this is the first configured engine."
+        );
+    });
+
+    it("warns that a named engine without its setting leaves web search off", async () => {
+        webSearch = {
+            ...SEARCH_AUTO_EXA,
+            provider: null,
+            label: "Tavily",
+            source: "setting",
+            requested: "tavily",
+            problem: "missing-credentials",
+            credential: "TAVILY_API_KEY",
+            capabilities: OFF,
+        };
+        renderModels();
+        const section = await webSearchSection();
+
+        expect(section).toHaveTextContent(
+            "SEARCH_PROVIDER=tavily needs TAVILY_API_KEY. Web search is off until it’s set."
+        );
+        expect(
+            within(engineRow(section, "Tavily")).getByText("Chosen, not set")
+        ).toBeInTheDocument();
+        expect(within(section).queryByText("In use")).not.toBeInTheDocument();
+        expect(within(section).queryByText("On")).not.toBeInTheDocument();
+    });
+
+    it("lists the valid values when SEARCH_PROVIDER is not a search engine", async () => {
+        webSearch = {
+            ...SEARCH_AUTO_EXA,
+            provider: null,
+            label: null,
+            source: "setting",
+            requested: "bing",
+            problem: "unknown-provider",
+            credential: null,
+            capabilities: OFF,
+        };
+        renderModels();
+        const section = await webSearchSection();
+
+        expect(section).toHaveTextContent(
+            "SEARCH_PROVIDER=bing isn’t a search engine, so web search is off. Set it to one of exa, serper, brave, tavily, searxng."
+        );
+    });
+
+    it("says how to turn web search on when nothing is configured", async () => {
+        webSearch = {
+            ...SEARCH_AUTO_EXA,
+            provider: null,
+            label: null,
+            source: null,
+            credential: null,
+            capabilities: OFF,
+            providers: ENGINES.map(engine => ({ ...engine, configured: false })),
+        };
+        renderModels();
+        const section = await webSearchSection();
+
+        expect(section).toHaveTextContent(
+            "Web search is off: no engine is configured. To turn it on, set SEARCH_PROVIDER"
+        );
+        expect(within(section).getAllByText("Not set")).toHaveLength(5);
     });
 });

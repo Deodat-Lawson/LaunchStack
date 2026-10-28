@@ -96,7 +96,7 @@ export interface LedgerCopy {
 
 /** Model calls and what they used. Token counts are the provider's own. */
 export interface ModelUsageTotals {
-    /** Requests made; for a web search, searches made (or pages read). */
+    /** Requests made: chat calls, embedding requests and searches (pages read are in `pages`). */
     calls: number;
     /** Everything below in chat-token equivalents: what allowances count. */
     weightedTokens: number;
@@ -327,23 +327,27 @@ export async function modelUsageOverview(
         };
         const tokens = row.weightedTokens;
         const date = isoDate(raw.date);
+        // A contents row's `calls` are pages read, not requests: they go in
+        // `pages`, and every request count on the page leaves them out.
+        const pages = raw.kind === "web_contents" ? row.calls : 0;
+        const counted = pages > 0 ? { ...row, calls: 0, pricedCalls: 0 } : row;
 
-        addTotals(totals, row);
+        addTotals(totals, counted);
         const group = byGroup.get(usageGroupOf(raw.kind))!;
-        addTotals(group, row);
+        addTotals(group, counted);
+        group.pages += pages;
         if (raw.kind === "web_search") {
             group.searches += row.calls;
             searched.searches += row.calls;
             searched.weighted += row.weightedTokens;
         }
-        if (raw.kind === "web_contents") group.pages += row.calls;
         const day = byDay.get(date) ?? { date, features: {}, total: 0 };
         day.features[raw.feature] = (day.features[raw.feature] ?? 0) + tokens;
         day.total += tokens;
         byDay.set(date, day);
 
         const feature = byFeature.get(raw.feature) ?? { feature: raw.feature, ...emptyTotals() };
-        addTotals(feature, row);
+        addTotals(feature, counted);
         byFeature.set(raw.feature, feature);
 
         if (raw.kind === "chat") {
@@ -353,7 +357,7 @@ export async function modelUsageOverview(
             byRoute.set(routeKey, route);
         }
 
-        if (raw.owner === "workspace") workspaceOwnedCalls += row.calls;
+        if (raw.owner === "workspace") workspaceOwnedCalls += counted.calls;
         // A row mixes priced and unpriced calls only on the day a price was
         // added; split its tokens by calls rather than pretend either way.
         if (row.calls > 0 && row.pricedCalls < row.calls) {

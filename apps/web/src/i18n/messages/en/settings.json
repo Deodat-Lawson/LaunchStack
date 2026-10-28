@@ -1530,12 +1530,12 @@
     "models": {
       "title": "AI usage",
       "description": "Everything this workspace's AI did, from every feature, in chat-token equivalents: a chat token counts as one, and embeddings and web searches count by what they cost. Separate from the balance below, which only some features draw on.",
-      "ownEndpoint": "{calls} of these calls went to the model endpoint this workspace brought itself. Its own provider bills them.",
+      "ownEndpoint": "{calls} of these requests went to models this workspace brought itself. Its own provider bills them.",
       "tokens": "AI usage in the last {days} days",
       "cost": "Cost",
       "costPriced": "From the price set for each model.",
       "costFallback": "Models without a set price are counted at {price} per 1M.",
-      "costPartial": "{priced} of {calls} calls have a model price; the rest aren't counted.",
+      "costPartial": "{priced} of {calls} requests have a price; the rest aren't counted.",
       "costNone": "No price is set for these models. Set a price below to estimate.",
       "efficiency": "Cache and reasoning",
       "cached": "Input from cache",
@@ -1574,7 +1574,8 @@
         "auxiliary": "Document processing"
       },
       "unit": "chat-token equivalents · {calls} requests",
-      "usage": "Usage"
+      "usage": "Usage",
+      "requests": "Requests"
     },
     "burn": {
       "title": "Burn by day",

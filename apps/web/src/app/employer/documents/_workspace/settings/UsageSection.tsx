@@ -325,6 +325,8 @@ export function UsageSection({ onActions }: SettingsSectionProps) {
     const windowTotal = overview?.byService.reduce((sum, s) => sum + s.tokens, 0) ?? 0;
     const low = overview ? overview.balanceTokens < overview.lowBalanceThreshold : false;
     const modelTokens = models ? models.totals.weightedTokens : 0;
+    // Caching is a chat thing: embedded tokens would dilute the share.
+    const chatTotals = models?.byGroup.find(row => row.group === "chat");
 
     return (
         <>
@@ -400,8 +402,8 @@ export function UsageSection({ onActions }: SettingsSectionProps) {
                             <dd className="m-0 tabular-nums">
                                 {!models
                                     ? "…"
-                                    : models.totals.inputTokens > 0
-                                      ? `${Math.round((models.totals.cachedInputTokens / models.totals.inputTokens) * 100)}%`
+                                    : chatTotals && chatTotals.inputTokens > 0
+                                      ? `${Math.round((chatTotals.cachedInputTokens / chatTotals.inputTokens) * 100)}%`
                                       : "—"}
                             </dd>
                             <dt className="text-ink-3">{t("models.reasoning")}</dt>
@@ -496,7 +498,7 @@ export function UsageSection({ onActions }: SettingsSectionProps) {
                                 <TableRow>
                                     <TableHead>{t("models.feature")}</TableHead>
                                     <TableHead className="text-right">
-                                        {t("models.calls")}
+                                        {t("models.requests")}
                                     </TableHead>
                                     <TableHead className="text-right">
                                         {t("models.usage")}

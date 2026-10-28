@@ -1530,12 +1530,12 @@
     "models": {
       "title": "AI 用量",
       "description": "此工作区各项功能的全部 AI 用量，按对话 token 当量计：一个对话 token 计为 1，嵌入和网页搜索按实际费用折算。与下方余额分开统计，余额只由部分功能扣除。",
-      "ownEndpoint": "其中 {calls} 次调用发往此工作区自带的模型端点，由其服务商自行计费。",
+      "ownEndpoint": "其中 {calls} 次请求发往此工作区自带的模型，由其服务商自行计费。",
       "tokens": "最近 {days} 天的 AI 用量",
       "cost": "费用",
       "costPriced": "按每个模型设定的价格计算。",
       "costFallback": "未设定价格的模型按每百万 {price} 计算。",
-      "costPartial": "{calls} 次调用中有 {priced} 次有模型价格，其余未计入。",
+      "costPartial": "{calls} 次请求中有 {priced} 次有价格，其余未计入。",
       "costNone": "这些模型没有设定价格。在下方设置单价即可估算。",
       "efficiency": "缓存与推理",
       "cached": "来自缓存的输入",
@@ -1574,7 +1574,8 @@
         "auxiliary": "文档处理"
       },
       "unit": "对话 token 当量 · {calls} 次请求",
-      "usage": "用量"
+      "usage": "用量",
+      "requests": "请求次数"
     },
     "burn": {
       "title": "每日消耗",

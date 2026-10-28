@@ -352,13 +352,14 @@ describeDb("AI usage meter", () => {
     it("totals every kind in chat-token equivalents, with each group's own units", async () => {
         const usage = await modelUsageOverview(kindsCompanyId, since, 0);
 
-        // 1,200 chat + 85,000 embedding + 30,000 search.
+        // 1,200 chat + 85,000 embedding + 30,000 search. Requests leave out
+        // the four pages Exa read: 1 chat call, 3 embedding requests, 4 searches.
         expect(usage.totals).toMatchObject({
-            calls: 12,
+            calls: 8,
             weightedTokens: 116_200,
             inputTokens: 1_501_000,
             outputTokens: 200,
-            pricedCalls: 11,
+            pricedCalls: 7,
         });
         expect(usage.totals.costUsd).toBeCloseTo(0.001 + 0.065 + 0.021 + 0.001 + 0.008, 9);
         expect(usage.byGroup).toEqual([
@@ -379,7 +380,7 @@ describeDb("AI usage meter", () => {
             }),
             expect.objectContaining({
                 group: "search",
-                calls: 8,
+                calls: 4,
                 weightedTokens: 30_000,
                 inputTokens: 0,
                 searches: 4,

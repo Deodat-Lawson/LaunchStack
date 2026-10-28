@@ -294,7 +294,12 @@ function MemberRow({
                 title={t("exactTokens", { value: format.tokens(allowance.used) })}
             >
                 {format.compact(allowance.used)}
-                <UsageSplitLine split={allowance.split} bare className="block text-[11.5px]" />
+                <UsageSplitLine
+                    split={allowance.split}
+                    bare
+                    // Wraps between kinds, so the split never widens the table.
+                    className="ml-auto block max-w-52 whitespace-normal text-[11.5px] leading-snug"
+                />
             </TableCell>
             <TableCell>
                 <div

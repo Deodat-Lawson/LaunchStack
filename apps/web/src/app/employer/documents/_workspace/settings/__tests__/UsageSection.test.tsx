@@ -42,6 +42,7 @@ function overview() {
         weightedTokens: 16_000_000,
         inputTokens: 14_000_000,
         outputTokens: 2_000_000,
+        cachedInputTokens: 3_500_000,
     });
     const embedding = totals({ calls: 1_100, weightedTokens: 1_690_000, inputTokens: 13_000_000 });
     const search = totals({ calls: 384, weightedTokens: 2_198_000 });
@@ -57,7 +58,13 @@ function overview() {
         lowBalanceThreshold: 500_000,
         estimatedCost: null,
         models: {
-            totals: totals({ calls: 3_484, weightedTokens: 19_888_000 }),
+            // Embedded tokens are input too: 14M chat + 13M embedded.
+            totals: totals({
+                calls: 3_484,
+                weightedTokens: 19_888_000,
+                inputTokens: 27_000_000,
+                cachedInputTokens: 3_500_000,
+            }),
             byGroup: [
                 { group: "chat", ...chat, searches: 0, pages: 0 },
                 { group: "embedding", ...embedding, searches: 0, pages: 0 },
@@ -119,6 +126,14 @@ describe("UsageSection", () => {
         expect(card).toHaveTextContent(
             "Converted by price: a million embedded tokens counts as 130K, and one web search as 7,000, against a chat token at $1.00 per 1M."
         );
+    });
+
+    it("works out the cache share from chat input alone", async () => {
+        render(<UsageSection onActions={jest.fn()} />);
+        await screen.findByTestId("usage-by-kind");
+        // 3.5M of 14M chat input is 25%; over all 27M input it would read 13%.
+        const cached = screen.getByText("Input from cache").nextElementSibling;
+        expect(cached).toHaveTextContent("25%");
     });
 
     it("says so when a kind was not used in the window", async () => {

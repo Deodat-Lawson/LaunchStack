@@ -4,12 +4,20 @@
  * endpoint. Defaults to the text-embedding-3-large model (see DEFAULT_CONFIG)
  * but never to a default *endpoint* — see the note there.
  * Includes batching, rate limiting, and error handling
+ *
+ * Every successful request is counted against the current unit of work
+ * (`reportUsage`), with the provider's token count or, when it reports none
+ * (Gemini), an estimate.
  */
+
+import { reportUsage } from "../usage-meter";
 
 /**
  * Embedding configuration
  */
 export interface EmbeddingConfig {
+    /** Whose endpoint this is, for counting: the deployment's (default) or one a workspace brought. */
+    owner?: "deployment" | "workspace";
     apiKey?: string;
     /**
      * Required. Base URL for the OpenAI-compatible endpoint. There is no
@@ -47,6 +55,7 @@ export class EmbeddingConfigurationError extends Error {
  * has to be a deliberate act paired with a re-index.
  */
 const DEFAULT_CONFIG: Omit<Required<EmbeddingConfig>, "baseUrl"> = {
+    owner: "deployment",
     apiKey: "",
     model: "text-embedding-3-large",
     batchSize: 100,
@@ -262,10 +271,25 @@ async function callEmbeddingAPI(
         item.embedding.length > dim ? item.embedding.slice(0, dim) : item.embedding
     );
 
-    return {
-        embeddings,
-        tokensUsed: data.usage?.total_tokens ?? 0,
-    };
+    const tokensUsed = data.usage?.total_tokens ?? 0;
+    reportUsage({
+        kind: "embedding",
+        modelId: config.model,
+        owner: config.owner,
+        inputTokens: tokensUsed > 0 ? tokensUsed : estimateEmbeddingTokens(sanitizedTexts),
+        outputTokens: 0,
+    });
+
+    return { embeddings, tokensUsed };
+}
+
+/**
+ * Tokens `texts` would cost to embed, for providers that report none: about
+ * four characters a token, the same rule ingestion's ledger debit uses.
+ */
+export function estimateEmbeddingTokens(texts: readonly string[]): number {
+    const chars = texts.reduce((sum, text) => sum + text.length, 0);
+    return Math.max(1, Math.ceil(chars / 4));
 }
 
 function delay(ms: number): Promise<void> {

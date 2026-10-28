@@ -15,6 +15,7 @@ import { document } from "@launchstack/store/schema";
 import { db } from "~/server/db";
 import { type NoteAnchor } from "~/server/db/schema";
 import { documentNotes, documentNoteEmbeddings } from "~/server/db/schema";
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 import {
     createNotesEmbeddingsProvider,
     EMBEDDING_DIM,
@@ -77,7 +78,12 @@ export async function embedNote(noteId: number): Promise<void> {
             return;
         }
 
-        const embedding = await provider.embedQuery(embeddingText);
+        // Counted toward the note's author; a legacy note with no workspace counts nowhere.
+        const embedding = await withWorkspaceChatModels(
+            note.companyId,
+            { feature: "notes", userId: note.userId, enforce: false },
+            () => provider.embedQuery(embeddingText)
+        );
         if (!embedding || embedding.length !== EMBEDDING_DIM) {
             console.warn(`[embedNote] unexpected embedding length ${embedding?.length ?? "null"}`);
             return;

@@ -634,7 +634,9 @@ export async function runIndexingStage(input: DocIngestionToolInput): Promise<In
                 service: "embedding",
                 description: `Embed ${totalStored} chunks for document ${documentId}`,
                 referenceId: String(documentId),
-                metadata: { estimatedTokens, chunks: totalStored },
+                // The host prices the debit by model (an embedding token costs far
+                // less than a chat token); see its CreditsPort.
+                metadata: { estimatedTokens, chunks: totalStored, model: embeddingIndex.model },
             });
         }
 

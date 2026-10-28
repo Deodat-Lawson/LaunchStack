@@ -6,10 +6,13 @@
  * tokens. Its cost figure is an estimate from a price the workspace sets
  * itself, because the ledger knows nothing about invoices.
  *
- * The model half reads `ai_usage_daily`: every model call made for the
- * workspace, whichever feature made it, with the provider's own input,
- * output and cached counts, priced at what the operator declared for each
- * model (see docs/chat-models.md). Routes, never model ids, reach the page.
+ * The model half reads `ai_usage_daily`: every model call, embedding request
+ * and paid web search made for the workspace, whichever feature made it, with
+ * the provider's own counts, priced at what the operator declared for each
+ * model (see docs/chat-models.md) or at list price (embeddings, search). Its
+ * totals are chat-token equivalents (~/server/ai-usage/weights), so a cheap
+ * embedding and an expensive search are compared by what they cost, not by
+ * raw token counts. Routes, never model ids, reach the page.
  *
  * Per-person use is the meter's too (`ai_usage_daily.user_id`), but it is
  * read with the allowances it is measured against: ~/server/ai-usage/members.
@@ -17,7 +20,15 @@
  */
 
 import { and, desc, eq, gte, sql } from "drizzle-orm";
+import { configuredWebSearchProvider } from "@launchstack/tools/web-research";
 
+import { AI_USAGE_GROUPS, usageGroupOf, type AiUsageGroup } from "~/lib/ai-usage";
+import {
+    standardChatPrice,
+    weighUsage,
+    webUnitPrice,
+    type ChatPrice,
+} from "~/server/ai-usage/weights";
 import { db } from "~/server/db";
 import {
     aiUsageDaily,
@@ -85,7 +96,11 @@ export interface LedgerCopy {
 
 /** Model calls and what they used. Token counts are the provider's own. */
 export interface ModelUsageTotals {
+    /** Requests made; for a web search, searches made (or pages read). */
     calls: number;
+    /** Everything below in chat-token equivalents: what allowances count. */
+    weightedTokens: number;
+    /** For an embedding, the tokens embedded. */
     inputTokens: number;
     /** Reasoning included. */
     outputTokens: number;
@@ -99,16 +114,38 @@ export interface ModelUsageTotals {
 export interface ModelUsageDay {
     /** ISO date. */
     date: string;
-    /** Input plus output tokens, by feature. */
+    /** Chat-token equivalents, by feature. */
     features: Record<string, number>;
     total: number;
 }
 
+/** One line of chat, embeddings or web search, with its own units beside the common one. */
+export interface UsageByGroup extends ModelUsageTotals {
+    group: AiUsageGroup;
+    /** Web search only: searches made, and pages the provider read. */
+    searches: number;
+    pages: number;
+}
+
+/** What the conversion into chat-token equivalents came to, for the page to say so. */
+export interface UsageRates {
+    /** The standard chat token's price and where it came from. */
+    chat: ChatPrice;
+    /** A million embedded tokens, in chat-token equivalents. */
+    embeddingPerMillion: number;
+    /** One web search, in chat-token equivalents. */
+    perSearch: number;
+}
+
 export interface ModelUsage {
+    /** Totals over every kind; `weightedTokens` is the page's headline. */
     totals: ModelUsageTotals;
+    /** Chat, embeddings, web search: always all three, in that order. */
+    byGroup: UsageByGroup[];
+    rates: UsageRates;
     daily: ModelUsageDay[];
     byFeature: (ModelUsageTotals & { feature: string })[];
-    /** default, fast, reasoning, vision, auxiliary — never a model id. */
+    /** Chat calls only: default, fast, reasoning, vision, auxiliary — never a model id. */
     byRoute: (ModelUsageTotals & { route: string })[];
     /** Calls to an endpoint the workspace brought itself, which its own provider bills. */
     workspaceOwnedCalls: number;
@@ -207,6 +244,7 @@ export function ledgerDescriptionCopy(description: string | null): LedgerCopy | 
 function emptyTotals(): ModelUsageTotals {
     return {
         calls: 0,
+        weightedTokens: 0,
         inputTokens: 0,
         outputTokens: 0,
         reasoningTokens: 0,
@@ -218,6 +256,7 @@ function emptyTotals(): ModelUsageTotals {
 
 function addTotals(into: ModelUsageTotals, row: ModelUsageTotals): void {
     into.calls += row.calls;
+    into.weightedTokens += row.weightedTokens;
     into.inputTokens += row.inputTokens;
     into.outputTokens += row.outputTokens;
     into.reasoningTokens += row.reasoningTokens;
@@ -242,7 +281,9 @@ export async function modelUsageOverview(
             feature: aiUsageDaily.feature,
             route: aiUsageDaily.route,
             owner: aiUsageDaily.owner,
+            kind: aiUsageDaily.kind,
             calls: sql<number>`sum(${aiUsageDaily.calls})`,
+            weightedTokens: sql<number>`sum(${aiUsageDaily.weightedTokens})`,
             inputTokens: sql<number>`sum(${aiUsageDaily.inputTokens})`,
             outputTokens: sql<number>`sum(${aiUsageDaily.outputTokens})`,
             reasoningTokens: sql<number>`sum(${aiUsageDaily.reasoningTokens})`,
@@ -252,10 +293,20 @@ export async function modelUsageOverview(
         })
         .from(aiUsageDaily)
         .where(and(eq(aiUsageDaily.companyId, companyId), gte(aiUsageDaily.date, sinceDate)))
-        .groupBy(aiUsageDaily.date, aiUsageDaily.feature, aiUsageDaily.route, aiUsageDaily.owner)
+        .groupBy(
+            aiUsageDaily.date,
+            aiUsageDaily.feature,
+            aiUsageDaily.route,
+            aiUsageDaily.owner,
+            aiUsageDaily.kind
+        )
         .orderBy(aiUsageDaily.date);
 
     const totals = emptyTotals();
+    const byGroup = new Map<AiUsageGroup, UsageByGroup>(
+        AI_USAGE_GROUPS.map(group => [group, { group, ...emptyTotals(), searches: 0, pages: 0 }])
+    );
+    const searched = { searches: 0, weighted: 0 };
     const byDay = new Map<string, ModelUsageDay>();
     const byFeature = new Map<string, ModelUsageTotals & { feature: string }>();
     const byRoute = new Map<string, ModelUsageTotals & { route: string }>();
@@ -266,6 +317,7 @@ export async function modelUsageOverview(
         // Postgres sums come back as strings (bigint, numeric); counts fit a double.
         const row: ModelUsageTotals = {
             calls: Number(raw.calls),
+            weightedTokens: Number(raw.weightedTokens),
             inputTokens: Number(raw.inputTokens),
             outputTokens: Number(raw.outputTokens),
             reasoningTokens: Number(raw.reasoningTokens),
@@ -273,10 +325,18 @@ export async function modelUsageOverview(
             costUsd: Number(raw.costUsd),
             pricedCalls: Number(raw.pricedCalls),
         };
-        const tokens = row.inputTokens + row.outputTokens;
+        const tokens = row.weightedTokens;
         const date = isoDate(raw.date);
 
         addTotals(totals, row);
+        const group = byGroup.get(usageGroupOf(raw.kind))!;
+        addTotals(group, row);
+        if (raw.kind === "web_search") {
+            group.searches += row.calls;
+            searched.searches += row.calls;
+            searched.weighted += row.weightedTokens;
+        }
+        if (raw.kind === "web_contents") group.pages += row.calls;
         const day = byDay.get(date) ?? { date, features: {}, total: 0 };
         day.features[raw.feature] = (day.features[raw.feature] ?? 0) + tokens;
         day.total += tokens;
@@ -286,10 +346,12 @@ export async function modelUsageOverview(
         addTotals(feature, row);
         byFeature.set(raw.feature, feature);
 
-        const routeKey = raw.route || "default";
-        const route = byRoute.get(routeKey) ?? { route: routeKey, ...emptyTotals() };
-        addTotals(route, row);
-        byRoute.set(routeKey, route);
+        if (raw.kind === "chat") {
+            const routeKey = raw.route || "default";
+            const route = byRoute.get(routeKey) ?? { route: routeKey, ...emptyTotals() };
+            addTotals(route, row);
+            byRoute.set(routeKey, route);
+        }
 
         if (raw.owner === "workspace") workspaceOwnedCalls += row.calls;
         // A row mixes priced and unpriced calls only on the day a price was
@@ -305,15 +367,60 @@ export async function modelUsageOverview(
 
     return {
         totals,
-        daily: [...byDay.values()],
-        byFeature: [...byFeature.values()].sort(
-            (a, b) => b.inputTokens + b.outputTokens - (a.inputTokens + a.outputTokens)
+        byGroup: [...byGroup.values()],
+        rates: usageRates(
+            {
+                tokens: byGroup.get("embedding")!.inputTokens,
+                weighted: byGroup.get("embedding")!.weightedTokens,
+            },
+            searched
         ),
+        daily: [...byDay.values()],
+        byFeature: [...byFeature.values()].sort((a, b) => b.weightedTokens - a.weightedTokens),
         byRoute: [...byRoute.values()].sort(
             (a, b) => b.inputTokens + b.outputTokens - (a.inputTokens + a.outputTokens)
         ),
         workspaceOwnedCalls,
         estimatedCostUsd: anyPrice ? totals.costUsd + fallback : null,
+    };
+}
+
+/** What one standard chat token costs, as a fraction of a dollar. */
+function perChatToken(chat: ChatPrice): number {
+    return chat.perMillion / 1_000_000;
+}
+
+/**
+ * The rates the window's rows were weighed at, so the page can say what a
+ * million embedded tokens or one search came to. With nothing of that kind in
+ * the window, today's rate for the deployment's defaults.
+ */
+function usageRates(
+    embedded: { tokens: number; weighted: number },
+    searched: { searches: number; weighted: number }
+): UsageRates {
+    const chat = standardChatPrice();
+    return {
+        chat,
+        embeddingPerMillion:
+            embedded.tokens > 0
+                ? Math.round((embedded.weighted / embedded.tokens) * 1_000_000)
+                : weighUsage(
+                      {
+                          kind: "embedding",
+                          owner: "deployment",
+                          inputTokens: 1_000_000,
+                          outputTokens: 0,
+                      },
+                      chat
+                  ).weightedTokens,
+        perSearch:
+            searched.searches > 0
+                ? Math.round(searched.weighted / searched.searches)
+                : Math.round(
+                      webUnitPrice("web_search", configuredWebSearchProvider() ?? "exa") /
+                          perChatToken(chat)
+                  ),
     };
 }
 

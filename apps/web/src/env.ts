@@ -410,6 +410,14 @@ const serverSchema = z.object({
     AI_MONTHLY_TOKEN_LIMIT_PER_USER: optionalString(),
     // Comma-separated emails the server-wide allowance never applies to.
     AI_TOKEN_LIMIT_EXEMPT_EMAILS: optionalString(),
+    // Converting embeddings and web searches into chat-token equivalents (by
+    // what they cost) for usage and allowances; see ~/server/ai-usage/weights.
+    // USD per 1M standard chat tokens (default: the Standard model's declared
+    // price, else 1.00), per 1M embedding tokens (default: the model's list
+    // price) and per 1,000 web searches (default: the provider's list price).
+    AI_USAGE_CHAT_PRICE_PER_MTOK: optionalString(),
+    AI_USAGE_EMBEDDING_PRICE_PER_MTOK: optionalString(),
+    AI_USAGE_WEB_SEARCH_PRICE_PER_1K: optionalString(),
     // Collaboration: meetings held in channels, with agents that may run on
     // other machines. COLLAB_HUB_SECRET is the shared secret every remote agent
     // worker signs its requests with — without it the hub refuses to accept any
@@ -674,6 +682,9 @@ function parseServerEnv() {
         TOKEN_SIGNUP_BONUS: process.env.TOKEN_SIGNUP_BONUS,
         AI_MONTHLY_TOKEN_LIMIT_PER_USER: process.env.AI_MONTHLY_TOKEN_LIMIT_PER_USER,
         AI_TOKEN_LIMIT_EXEMPT_EMAILS: process.env.AI_TOKEN_LIMIT_EXEMPT_EMAILS,
+        AI_USAGE_CHAT_PRICE_PER_MTOK: process.env.AI_USAGE_CHAT_PRICE_PER_MTOK,
+        AI_USAGE_EMBEDDING_PRICE_PER_MTOK: process.env.AI_USAGE_EMBEDDING_PRICE_PER_MTOK,
+        AI_USAGE_WEB_SEARCH_PRICE_PER_1K: process.env.AI_USAGE_WEB_SEARCH_PRICE_PER_1K,
         GOOGLE_DOCS_EDITING_ENABLED: process.env.GOOGLE_DOCS_EDITING_ENABLED,
         GOOGLE_OAUTH_CLIENT_ID: process.env.GOOGLE_OAUTH_CLIENT_ID,
         GOOGLE_OAUTH_CLIENT_SECRET: process.env.GOOGLE_OAUTH_CLIENT_SECRET,

@@ -8,8 +8,15 @@
  * (`@launchstack/llm`, usage-meter.ts), whichever feature made it. The two
  * answer different questions and neither writes the other.
  *
- * One row per workspace, day (UTC), feature, route, model, owner and person;
- * each call adds to it. `user_id` is the auth id of the person the work was
+ * One row per workspace, day (UTC), feature, route, model, owner, person and
+ * kind; each call adds to it. `kind` is what was used: `chat` completions,
+ * `embedding` requests, paid `web_search`es, or `web_contents` (pages a search
+ * provider read). For a search `calls` counts searches (or pages) and the
+ * token columns stay zero; for an embedding `input_tokens` is what was
+ * embedded. `weighted_tokens` is the row in chat-token equivalents
+ * (~/server/ai-usage/weights), fixed when recorded: chat one for one, the
+ * rest by price. It is what allowances and the usage page add up.
+ * `user_id` is the auth id of the person the work was
  * for, empty when no one was (a system job) or the call predates per-person
  * counting; per-person allowances (~/server/ai-usage/quota) sum it. `model_id` is kept for operators and never shown on screen.
  * `cost_usd` sums only the calls whose model declared a price; `priced_calls`
@@ -66,6 +73,10 @@ export const aiUsageDaily = pgTable(
          * Declared last: ADD COLUMN appends, and CI compares column order.
          */
         userId: varchar("user_id", { length: 256 }).default("").notNull(),
+        /** chat | embedding | web_search | web_contents. Declared last, like `user_id`. */
+        kind: varchar("kind", { length: 20 }).default("chat").notNull(),
+        /** The row in chat-token equivalents, weighed when each call was recorded. */
+        weightedTokens: bigint("weighted_tokens", { mode: "number" }).default(0).notNull(),
     },
     table => ({
         rowKey: uniqueIndex("ai_usage_daily_row_key").on(
@@ -75,7 +86,8 @@ export const aiUsageDaily = pgTable(
             table.route,
             table.modelId,
             table.owner,
-            table.userId
+            table.userId,
+            table.kind
         ),
         // The server-wide allowance sums one person's calls across every
         // workspace they belong to.

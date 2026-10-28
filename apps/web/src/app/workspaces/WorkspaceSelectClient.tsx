@@ -11,7 +11,7 @@ import { useAuth } from "~/lib/auth-client";
 import { resetMyProfile, useMyProfile } from "~/lib/profile/use-my-profile";
 import { LANDING_CONTACT_HREF } from "~/config/landing";
 import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
-import { LandingLogoLink } from "~/components/LandingLogoLink";
+import { LogoLink } from "~/components/LogoLink";
 import { useInstanceHost } from "~/lib/instance-host";
 import { isBuiltinRole, normalizeRoleSlug, roleLabel } from "~/lib/authz/permissions";
 import { WORKSPACE_TEAM_SIZES } from "~/lib/workspace-details";
@@ -388,10 +388,10 @@ export function WorkspaceSelectClient({
             </div>
 
             <div className={styles.topbar}>
-                <LandingLogoLink className={styles.brand}>
+                <LogoLink signedIn className={styles.brand}>
                     <LaunchstackMark size={24} title="Launchstack" />
                     Launchstack
-                </LandingLogoLink>
+                </LogoLink>
                 <div className={styles.spacer} />
                 <div className={styles.me} title={t("switchAccount")}>
                     <ProfileAvatar

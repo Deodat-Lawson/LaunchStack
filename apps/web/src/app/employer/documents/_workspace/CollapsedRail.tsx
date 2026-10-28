@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { PanelLeftOpen, Plus, Search } from "lucide-react";
 
 import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
-import { LandingLogoLink } from "~/components/LandingLogoLink";
+import { LogoLink } from "~/components/LogoLink";
 import { Button } from "~/components/ui/button";
 
 import { type ShortcutHints, withShortcut } from "./ShortcutHint";
@@ -47,9 +47,9 @@ export function CollapsedRail({
             data-testid="collapsed-rail"
             className="border-line bg-panel flex h-full w-12 shrink-0 flex-col items-center gap-1 border-r py-3"
         >
-            <LandingLogoLink>
+            <LogoLink signedIn>
                 <LaunchstackMark size={22} title="Launchstack" />
-            </LandingLogoLink>
+            </LogoLink>
             <Button
                 variant="ghost"
                 size="icon"

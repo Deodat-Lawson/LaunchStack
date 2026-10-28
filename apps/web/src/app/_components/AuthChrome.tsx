@@ -7,7 +7,7 @@ import { useAuth, useUser } from "~/lib/auth-client";
 import { UserMenu } from "~/components/UserMenu";
 import { ThemeToggle } from "./ThemeToggle";
 import { LaunchstackMark } from "./LaunchstackLogo";
-import { LandingLogoLink } from "~/components/LandingLogoLink";
+import { LogoLink } from "~/components/LogoLink";
 import { LANDING_HREF } from "~/config/landing";
 
 /**
@@ -37,14 +37,16 @@ export function AuthChrome() {
             }}
         >
             {/*
-              Cross-origin, and deliberately so. A logged-out visitor clicking
-              the brand from a sign-in screen wants the public site, not a
-              redirect straight back to where they already are.
+              A logged-out visitor clicking the brand from a sign-in screen
+              wants the public site, not a redirect straight back to where they
+              already are. Someone signed in (the OAuth connect screens, an
+              invite link, /signin's already-signed-in state) goes home. Until
+              the session has loaded, the visitor counts as logged out.
             */}
-            <LandingLogoLink className="flex items-center gap-[9px]">
+            <LogoLink signedIn={isLoaded && isSignedIn} className="flex items-center gap-[9px]">
                 <LaunchstackMark size={26} title="Launchstack" />
                 <span className="text-sm font-bold tracking-[-0.01em]">Launchstack</span>
-            </LandingLogoLink>
+            </LogoLink>
             <div style={{ flex: 1 }} />
             <LanguageToggle />
             <ThemeToggle />

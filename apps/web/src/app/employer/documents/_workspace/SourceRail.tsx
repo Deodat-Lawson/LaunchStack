@@ -29,7 +29,7 @@ import {
 import { ShortcutHint, type ShortcutHints, withShortcut } from "./ShortcutHint";
 
 import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
-import { LandingLogoLink } from "~/components/LandingLogoLink";
+import { LogoLink } from "~/components/LogoLink";
 import {
     UNFILED_FOLDER,
     buildFolderTree,
@@ -1432,12 +1432,12 @@ export function SourceRail({
                     the empty space between them part of the link. The name
                     yields before that control is pushed past the sidebar's
                     edge. */}
-                <LandingLogoLink className="mr-auto flex min-w-0 items-center gap-[9px]">
+                <LogoLink signedIn className="mr-auto flex min-w-0 items-center gap-[9px]">
                     <LaunchstackMark size={22} title={logoLabel} />
                     <span className="min-w-0 truncate text-[13px] font-bold tracking-[-0.01em]">
                         {logoLabel}
                     </span>
-                </LandingLogoLink>
+                </LogoLink>
                 {inbox && (
                     <InboxBell onOpenTarget={inboxOpen} onOpenFeedback={inbox.onOpenFeedback} />
                 )}

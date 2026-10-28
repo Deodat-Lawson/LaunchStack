@@ -40,8 +40,8 @@ export interface CreateDefaultPortsOptions {
 const COMPANIES_PER_QUERY = 10;
 
 /**
- * Each query through general web search (Exa first, Serper when it is the
- * only key), results merged by URL. A query that fails contributes nothing;
+ * Each query through general web search (the server's search engine,
+ * SEARCH_PROVIDER), results merged by URL. A query that fails contributes nothing;
  * every query failing is the source failing.
  */
 async function searchWebAll(queries: Array<{ searchQuery: string }>): Promise<RawSearchResult[]> {
@@ -74,8 +74,9 @@ async function searchWebAll(queries: Array<{ searchQuery: string }>): Promise<Ra
 
 export function createDefaultPorts(options: CreateDefaultPortsOptions = {}): DistributionPorts {
     const webEnabled = options.enableWeb !== false;
-    // Exa's company index finds companies themselves; general search is the
-    // fallback for discovery (Serper only) and the research agent's search.
+    // An engine with a company index (Exa) finds companies themselves; on any
+    // other engine, general search does discovery. General search is always
+    // the research agent's search.
     const companies = webEnabled && companySearchAvailable();
     const chat = resolveChatModel();
     const fast = resolveChatModel({ route: "fast", temperature: 0.3 });

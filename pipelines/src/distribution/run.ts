@@ -91,8 +91,8 @@ export interface DistributionPorts {
         | null;
     /**
      * Company search (Exa's company index). When set, discovery runs every
-     * planned web query through it, and lookalikes run; absent or null
-     * without an Exa key, and in keyless and fixture modes.
+     * planned web query through it, and lookalikes run; absent or null when
+     * the search engine has no company index, and in keyless and fixture modes.
      */
     searchCompanies?: SearchCompaniesPort | null;
     /** What each seed company sells, for lookalike queries (Exa). */

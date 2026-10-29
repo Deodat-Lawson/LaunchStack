@@ -154,9 +154,29 @@ afterEach(() => {
     globalThis.fetch = originalFetch;
 });
 
+async function savedSummary(text: string) {
+    const value = await screen.findByText(text);
+    const details = value.closest("details");
+    if (details && !details.open) fireEvent.click(details.querySelector("summary")!);
+    return value;
+}
+
+async function openTopic() {
+    const row = await screen.findByRole("article", { name: "Compare the recorded sample" });
+    fireEvent.click(within(row).getByRole("button"));
+    return screen.getByRole("dialog", { name: "Compare the recorded sample" });
+}
+
+async function openTopicEvidence() {
+    const detail = await openTopic();
+    const summary = within(detail).getByText(/^Evidence/);
+    fireEvent.click(summary);
+    return within(detail).getByRole("group", { name: "Supporting sources" });
+}
+
 it("loads saved context and native pending questions without automatically calling a model", async () => {
     render(<ContextDemoScreen />);
-    expect(await screen.findByText(report().summary)).toBeVisible();
+    expect(await savedSummary(report().summary)).toBeVisible();
     expect(screen.getByRole("region", { name: "Native pending queue" })).toHaveTextContent(
         "native-report-12"
     );
@@ -301,9 +321,9 @@ it("generates only after an explicit click and displays the returned saved repor
     next.report!.summary = "Fresh contextual report returned after validated save.";
     mockGenerate.mockResolvedValue(next);
     render(<ContextDemoScreen />);
-    await screen.findByText(report().summary);
+    await savedSummary(report().summary);
     fireEvent.click(screen.getByRole("button", { name: "Generate with context" }));
-    expect(await screen.findByText(next.report!.summary)).toBeVisible();
+    expect(await savedSummary(next.report!.summary)).toBeVisible();
     expect(mockGenerate).toHaveBeenCalledWith(
         "2026-10-12",
         expect.objectContaining({ aborted: false })
@@ -342,7 +362,7 @@ it("offers explicitly labeled offline replay before any contextual report exists
     expect(screen.queryByText(/ready to call the configured model/)).not.toBeInTheDocument();
     expect(mockGenerate).not.toHaveBeenCalled();
     fireEvent.click(buttons[0]!);
-    expect(await screen.findByText(saved.report!.summary)).toBeVisible();
+    expect(await savedSummary(saved.report!.summary)).toBeVisible();
     expect(screen.getByText("Recorded AI replay · no fresh model call")).toBeVisible();
     expect(mockGenerate).toHaveBeenCalledWith(
         "2026-10-12",
@@ -370,7 +390,7 @@ it("shows recorded model provenance without presenting replay timing as a fresh 
 it("keeps a saved actual AI report distinct from a currently selected replay generation mode", async () => {
     mockLoad.mockResolvedValue(state({ generationMode: "replay" }));
     render(<ContextDemoScreen />);
-    expect(await screen.findByText(report().summary)).toBeVisible();
+    expect(await savedSummary(report().summary)).toBeVisible();
     expect(screen.getByRole("button", { name: "Replay recorded report" })).toBeEnabled();
     expect(screen.getByText("Context-aware · AI")).toBeVisible();
     expect(screen.queryByText("Recorded AI replay · no fresh model call")).not.toBeInTheDocument();
@@ -379,7 +399,7 @@ it("keeps a saved actual AI report distinct from a currently selected replay gen
 
 it("opens a fact's exact canonical version instead of manufacturing a native evidence ID", async () => {
     render(<ContextDemoScreen />);
-    const topic = await screen.findByRole("article", { name: "Compare the recorded sample" });
+    const topic = await openTopicEvidence();
     fireEvent.click(within(topic).getByRole("button", { name: /QA sample record/ }));
     const dialog = await screen.findByRole("dialog", { name: qa.title });
     expect(await within(dialog).findByText(qa.body)).toBeVisible();
@@ -395,6 +415,7 @@ it.each(["kept", "dismissed"] as const)(
         next.report!.topics[0]!.status = status;
         mockReview.mockResolvedValue(next);
         render(<ContextDemoScreen />);
+        await openTopic();
         fireEvent.click(
             await screen.findByRole("button", { name: status === "kept" ? "Keep" : "Dismiss" })
         );
@@ -417,6 +438,7 @@ it.each(["go", "no-go", "needs-more-evidence"] as const)(
     "records human %s without automatic commitments or historical-question closure",
     async value => {
         render(<ContextDemoScreen />);
+        await openTopic();
         fireEvent.click(await screen.findByRole("button", { name: "Record decision" }));
         const dialog = screen.getByRole("dialog", { name: "Record your decision" });
         const labels = { go: "Go", "no-go": "No-go", "needs-more-evidence": "Needs more evidence" };
@@ -445,7 +467,7 @@ it("withholds old sidecar text when reload cannot verify current evidence or acc
         .mockResolvedValueOnce(state())
         .mockRejectedValueOnce(new DemoApiError("Unavailable", 503));
     render(<ContextDemoScreen />);
-    await screen.findByText(report().summary);
+    await savedSummary(report().summary);
     fireEvent.click(screen.getByRole("button", { name: "Reload saved contextual report" }));
     expect(await screen.findByRole("alert")).toHaveTextContent("Could not reload");
     expect(screen.queryByText(report().summary)).not.toBeInTheDocument();
@@ -457,6 +479,7 @@ it("does not claim a successful reload after a version conflict and failed readb
     mockReview.mockRejectedValue(new DemoApiError("Changed", 409));
     mockLoad.mockResolvedValueOnce(state()).mockRejectedValueOnce(new DemoApiError("Offline", 503));
     render(<ContextDemoScreen />);
+    await openTopic();
     fireEvent.click(await screen.findByRole("button", { name: "Keep" }));
     expect(await screen.findByRole("alert")).toHaveTextContent("Could not reload");
     expect(screen.queryByText(report().summary)).not.toBeInTheDocument();
@@ -466,10 +489,13 @@ it("does not claim a successful reload after a version conflict and failed readb
 it("withholds a report when the source resolver reports changed authorization", async () => {
     mockSource.mockRejectedValue(new DemoApiError("Source was revoked", 403));
     render(<ContextDemoScreen />);
-    const topic = await screen.findByRole("article", { name: "Compare the recorded sample" });
+    const topic = await openTopicEvidence();
     fireEvent.click(within(topic).getByRole("button", { name: /QA sample record/ }));
     expect(await screen.findByRole("alert")).toHaveTextContent("authorization changed");
     expect(screen.queryByText(report().summary)).not.toBeInTheDocument();
+    expect(
+        screen.queryByRole("dialog", { name: "Compare the recorded sample" })
+    ).not.toBeInTheDocument();
 });
 
 it("direct native review resolves the configured synthetic week instead of the wall clock", async () => {
@@ -602,7 +628,7 @@ it("keeps the saved contextual report and citations visible while Joseph require
     mockLoad.mockResolvedValue(state({ personalContextAvailable: true }));
     globalThis.fetch = jest.fn().mockResolvedValue({ ok: true, json: async () => personalView() });
     render(<ContextDemoScreen />);
-    expect(await screen.findByText(report().summary)).toBeVisible();
+    expect(await savedSummary(report().summary)).toBeVisible();
     await waitFor(() =>
         expect(screen.getByRole("button", { name: "Generate with context" })).toBeDisabled()
     );
@@ -617,12 +643,8 @@ it("keeps the saved contextual report and citations visible while Joseph require
     expect(details).toHaveTextContent("not browser storage or production PostgreSQL");
     expect(screen.getByText(report().summary)).toBeVisible();
     expect(screen.getByRole("button", { name: "Inspect Company Architecture" })).toBeEnabled();
-    expect(
-        within(screen.getByRole("article", { name: "Compare the recorded sample" })).getByRole(
-            "button",
-            { name: /QA sample record/ }
-        )
-    ).toBeEnabled();
+    const topic = await openTopicEvidence();
+    expect(within(topic).getByRole("button", { name: /QA sample record/ })).toBeEnabled();
     expect(mockGenerate).not.toHaveBeenCalled();
 });
 
@@ -671,7 +693,7 @@ it("uses Joseph multi-role, primary and star controls through the authenticated 
     });
     globalThis.fetch = fetch;
     render(<ContextDemoScreen />);
-    await screen.findByText(report().summary);
+    await savedSummary(report().summary);
     const details = openPersonalContext();
     fireEvent.click(
         await within(details).findByRole("button", { name: /Make primary.*Engineering/ })
@@ -707,7 +729,7 @@ it("fails closed on personal-context access errors without hiding the independen
         json: async () => ({ error: "PRIVATE_SOURCE_DETAIL" }),
     });
     render(<ContextDemoScreen />);
-    await screen.findByText(report().summary);
+    await savedSummary(report().summary);
     await waitFor(() =>
         expect(screen.getByRole("button", { name: "Generate with context" })).toBeDisabled()
     );
@@ -718,5 +740,46 @@ it("fails closed on personal-context access errors without hiding the independen
     expect(screen.queryByText("PRIVATE_SOURCE_DETAIL")).not.toBeInTheDocument();
     expect(screen.getByText(report().summary)).toBeVisible();
     expect(screen.getByRole("region", { name: "Native pending queue" })).toBeVisible();
+    expect(mockGenerate).not.toHaveBeenCalled();
+});
+
+it("keeps the row compact and opens the unchanged report in a keyboard-dismissable sheet", async () => {
+    const saved = state();
+    const before = JSON.stringify(saved);
+    mockLoad.mockResolvedValue(saved);
+    render(<ContextDemoScreen />);
+    const row = await screen.findByRole("article", { name: "Compare the recorded sample" });
+    expect(within(row).getByText("AI suggested")).toBeVisible();
+    expect(within(row).getByText("Needs review")).toBeVisible();
+    expect(within(row).queryByRole("button", { name: "Keep" })).not.toBeInTheDocument();
+    const trigger = within(row).getByRole("button");
+    trigger.focus();
+    fireEvent.click(trigger);
+    const detail = screen.getByRole("dialog", { name: "Compare the recorded sample" });
+    expect(within(detail).getByText("Issue")).toBeVisible();
+    expect(
+        within(detail).getByRole("heading", { name: /Why this matters.*AI interpretation/ })
+    ).toBeVisible();
+    expect(within(detail).queryByText("Owner")).not.toBeInTheDocument();
+    const evidenceSummary = within(detail).getByText(/^Evidence/);
+    expect(evidenceSummary.closest("details")).not.toHaveAttribute("open");
+    fireEvent.click(evidenceSummary);
+    const sources = within(detail).getByRole("group", { name: "Supporting sources" });
+    expect(within(sources).getByRole("button", { name: /QA sample record/ })).toBeVisible();
+    expect(sources).not.toHaveTextContent(qa.body);
+    const statementsSummary = within(detail).getByText("Reported statements and conflicts");
+    const statements = statementsSummary.closest("details")!;
+    expect(statements).not.toHaveAttribute("open");
+    expect(within(statements).getByText(qa.body)).not.toBeVisible();
+    fireEvent.click(statementsSummary);
+    expect(within(statements).getByText(qa.body)).toBeVisible();
+    fireEvent.click(within(detail).getByText(/^Original report/));
+    expect(within(detail).getByText(report().topics[0]!.proposedNextStep)).toBeVisible();
+    expect(within(detail).getByText(report().topics[0]!.rationale)).toBeVisible();
+    fireEvent.keyDown(document.activeElement ?? detail, { key: "Escape" });
+    await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
+    expect(trigger).toHaveFocus();
+    expect(JSON.stringify(saved)).toBe(before);
+    expect(mockReview).not.toHaveBeenCalled();
     expect(mockGenerate).not.toHaveBeenCalled();
 });

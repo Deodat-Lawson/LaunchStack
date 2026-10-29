@@ -39,6 +39,8 @@ import {
 import { Sheet, SheetContent, SheetTitle, SheetDescription } from "~/components/ui/sheet";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "~/components/ui/tabs";
 import { cn } from "~/lib/utils";
+import { CompactTopicRow } from "~/app/employer/tools/vantage/_components/CompactTopicRow";
+import { topicPresentation } from "~/app/employer/tools/vantage/_lib/topic-presentation";
 import { createItems, sourceKey, refLabel, type SampleData, type SampleItem } from "./sample-model";
 import s from "./sample.module.css";
 
@@ -100,18 +102,6 @@ function reviewLabel(item: SampleItem, review?: PreviewReview) {
         : item.status === "kept"
           ? "Kept for discussion"
           : "Dismissed";
-}
-
-function itemSummary(item: SampleItem) {
-    const summaries: Record<string, string> = {
-        "Reconcile run-17 samples before a privacy go/no-go":
-            "Compare QA and Operations account samples before a privacy go/no-go.",
-        "Keep pilot-access constraints distinct from test results":
-            "Check for a recorded privacy decision before pilot access.",
-        "Deletion acceptance: privacy review remains unverified":
-            "Identify the evidence a named privacy reviewer should compare.",
-    };
-    return summaries[item.originalTitle] ?? item.description;
 }
 
 function ItemIcon({ type }: { type: SampleItem["type"] }) {
@@ -421,7 +411,13 @@ function WorkspaceFrame({ data }: { data: SampleData }) {
                         onInspect={inspect}
                     />
                 ) : isReview ? (
-                    <WeeklyView data={data} items={items} reviews={reviews} onOpen={openItem} />
+                    <WeeklyView
+                        data={data}
+                        items={items}
+                        reviews={reviews}
+                        onOpen={openItem}
+                        selectedId={drawerOpen ? selectedId : null}
+                    />
                 ) : (
                     <>
                         <div className={s.filters} role="group" aria-label="Filter review items">
@@ -460,44 +456,54 @@ function WorkspaceFrame({ data }: { data: SampleData }) {
                             )}
                         </div>
                         <div className={s.queue} aria-label="Review queue">
-                            {filtered.map(item => (
-                                <Button
-                                    key={item.id}
-                                    variant="ghost"
-                                    className={cn(
-                                        s.row,
-                                        drawerOpen && selectedId === item.id && s.selectedRow
-                                    )}
-                                    onClick={event => openItem(item, event.currentTarget)}
-                                    aria-haspopup="dialog"
-                                    aria-controls="sample-item-detail"
-                                >
-                                    <ItemIcon type={item.type} />
-                                    <span className={s.rowCopy}>
-                                        <span className={s.rowTitle}>{item.title}</span>
-                                        <span className={s.rowSummary}>{itemSummary(item)}</span>
-                                    </span>
-                                    <span className={s.rowMeta}>
-                                        <span>
-                                            {typeLabels[item.type]}
-                                            {item.refs.length > 0
-                                                ? ` · ${item.refs.length} exact sources`
-                                                : ""}
-                                        </span>
-                                        <span>{reviewLabel(item, reviews[item.id])}</span>
-                                        {item.refs.some(ref => ref.kind === "company") ? (
-                                            <span>Company context unreviewed</span>
-                                        ) : null}
-                                        {item.owner ? ` · ${item.owner}` : ""}
-                                        {item.due ? ` · Due ${dateLabel(item.due)}` : ""}
-                                    </span>
-                                    <ChevronRight
-                                        size={16}
-                                        className={s.rowArrow}
-                                        aria-hidden="true"
+                            {filtered.map(item =>
+                                item.topic ? (
+                                    <CompactTopicRow
+                                        key={item.id}
+                                        topic={item.topic}
+                                        reviewLabel={reviewLabel(item, reviews[item.id])}
+                                        selected={drawerOpen && selectedId === item.id}
+                                        onOpen={trigger => openItem(item, trigger)}
                                     />
-                                </Button>
-                            ))}
+                                ) : (
+                                    <Button
+                                        key={item.id}
+                                        variant="ghost"
+                                        className={cn(
+                                            s.row,
+                                            drawerOpen && selectedId === item.id && s.selectedRow
+                                        )}
+                                        onClick={event => openItem(item, event.currentTarget)}
+                                        aria-haspopup="dialog"
+                                        aria-controls="sample-item-detail"
+                                    >
+                                        <ItemIcon type={item.type} />
+                                        <span className={s.rowCopy}>
+                                            <span className={s.rowTitle}>{item.title}</span>
+                                            <span className={s.rowSummary}>{item.description}</span>
+                                        </span>
+                                        <span className={s.rowMeta}>
+                                            <span>
+                                                {typeLabels[item.type]}
+                                                {item.refs.length > 0
+                                                    ? ` · ${item.refs.length} exact sources`
+                                                    : ""}
+                                            </span>
+                                            <span>{reviewLabel(item, reviews[item.id])}</span>
+                                            {item.refs.some(ref => ref.kind === "company") ? (
+                                                <span>Company context unreviewed</span>
+                                            ) : null}
+                                            {item.owner ? ` · ${item.owner}` : ""}
+                                            {item.due ? ` · Due ${dateLabel(item.due)}` : ""}
+                                        </span>
+                                        <ChevronRight
+                                            size={16}
+                                            className={s.rowArrow}
+                                            aria-hidden="true"
+                                        />
+                                    </Button>
+                                )
+                            )}
                             {filtered.length === 0 && (
                                 <div className={s.empty}>
                                     <Search size={20} aria-hidden="true" />
@@ -582,11 +588,13 @@ function WeeklyView({
     items,
     reviews,
     onOpen,
+    selectedId,
 }: {
     data: SampleData;
     items: SampleItem[];
     reviews: Record<string, PreviewReview>;
     onOpen: (item: SampleItem, trigger: HTMLElement) => void;
+    selectedId: string | null;
 }) {
     const report = data.state.report;
     const presentationBrief = report?.topics.some(
@@ -617,29 +625,14 @@ function WeeklyView({
                 <div className={s.weeklyList}>
                     {items
                         .filter(item => item.type === "proposal")
-                        .map((item, index) => (
-                            <Button
+                        .map(item => (
+                            <CompactTopicRow
                                 key={item.id}
-                                variant="ghost"
-                                className={s.weeklyRow}
-                                onClick={event => onOpen(item, event.currentTarget)}
-                                aria-haspopup="dialog"
-                            >
-                                <span className={s.topicNumber}>
-                                    {String(index + 1).padStart(2, "0")}
-                                </span>
-                                <span className={s.rowCopy}>
-                                    <span className={s.rowTitle}>{item.title}</span>
-                                    <span className={s.weeklyDescription}>
-                                        {item.topic?.decisionQuestion}
-                                    </span>
-                                    <span className={s.rowDescription}>
-                                        {item.refs.length} exact sources ·{" "}
-                                        {reviewLabel(item, reviews[item.id])}
-                                    </span>
-                                </span>
-                                <ChevronRight size={16} aria-hidden="true" />
-                            </Button>
+                                topic={item.topic!}
+                                reviewLabel={reviewLabel(item, reviews[item.id])}
+                                selected={selectedId === item.id}
+                                onOpen={trigger => onOpen(item, trigger)}
+                            />
                         ))}
                 </div>
             </section>
@@ -926,6 +919,7 @@ function ItemDetail({
     const primaryReviewControl = useRef<HTMLButtonElement | null>(null);
     const decisionControl = useRef<HTMLButtonElement | null>(null);
     const topic = item.topic;
+    const presentation = topic ? topicPresentation(topic) : null;
     return (
         <>
             <div className={s.drawerHeader}>
@@ -950,23 +944,41 @@ function ItemDetail({
                     ))}
                 </TabsList>
                 <TabsContent value="overview" className={s.tabContent}>
-                    <div className={s.decisionBlock}>
-                        <p className={s.drawerOverline}>
-                            {item.type === "proposal"
-                                ? "The decision"
+                    <DetailSection
+                        title={
+                            topic
+                                ? "Issue"
                                 : item.type === "question"
-                                  ? "The open question"
-                                  : "Completion test"}
-                        </p>
-                        <p>{topic?.decisionQuestion ?? item.description}</p>
-                    </div>
-                    {topic && (
-                        <DetailSection title="Proposed next step">
-                            <p className={s.body}>{topic.proposedNextStep}</p>
+                                  ? "Historical question"
+                                  : "Completion test"
+                        }
+                    >
+                        <p className={s.body}>{presentation?.issue ?? item.description}</p>
+                    </DetailSection>
+                    {presentation?.reason && (
+                        <DetailSection title="Why this matters">
+                            <p className={s.interpretationLabel}>AI interpretation</p>
+                            <p className={s.body}>{presentation.reason}</p>
                         </DetailSection>
                     )}
+                    {presentation && presentation.approach.length > 0 && (
+                        <details className={s.details}>
+                            <summary>Suggested approach</summary>
+                            <ul className={s.approachList}>
+                                {presentation.approach.map(step => (
+                                    <li key={step}>{step}</li>
+                                ))}
+                            </ul>
+                        </details>
+                    )}
+                    {presentation?.decision && (
+                        <details className={s.details}>
+                            <summary>Decision to make</summary>
+                            <p className={s.disclosureBody}>{presentation.decision}</p>
+                        </details>
+                    )}
                     <Button
-                        variant="secondary"
+                        variant="ghost"
                         className={s.evidenceOverview}
                         onClick={() => setTab("evidence")}
                     >
@@ -981,13 +993,14 @@ function ItemDetail({
                         <ChevronRight size={16} aria-hidden="true" />
                     </Button>
                     {topic?.unknowns.length ? (
-                        <DetailSection title="What is still unknown">
+                        <details className={s.details}>
+                            <summary>Unknowns and limitations ({topic.unknowns.length})</summary>
                             <ul className={s.plainList}>
                                 {topic.unknowns.map(unknown => (
                                     <li key={unknown}>{unknown}</li>
                                 ))}
                             </ul>
-                        </DetailSection>
+                        </details>
                     ) : null}
                     {item.question && (
                         <DetailSection title="Historical record">
@@ -998,9 +1011,27 @@ function ItemDetail({
                             </p>
                         </DetailSection>
                     )}
-                    <DetailSection title="Original title" quiet>
-                        <p className={s.small}>{item.originalTitle}</p>
-                    </DetailSection>
+                    {topic ? (
+                        <details className={s.details}>
+                            <summary>Original report wording</summary>
+                            <div className={s.originalWording}>
+                                <h3>Original title</h3>
+                                <p>{item.originalTitle}</p>
+                                <h3>Why it merits discussion</h3>
+                                <p>{topic.whyItMatters}</p>
+                                <h3>Decision question</h3>
+                                <p>{topic.decisionQuestion}</p>
+                                <h3>Original suggested next step</h3>
+                                <p>{topic.proposedNextStep}</p>
+                                <h3>Rationale</h3>
+                                <p>{topic.rationale}</p>
+                            </div>
+                        </details>
+                    ) : (
+                        <DetailSection title="Original title" quiet>
+                            <p className={s.small}>{item.originalTitle}</p>
+                        </DetailSection>
+                    )}
                     {review?.decision && (
                         <div className={s.savedDecision}>
                             <CheckCircle2 size={18} aria-hidden="true" />
@@ -1155,39 +1186,53 @@ function ItemDetail({
                     </p>
                 </TabsContent>
                 <TabsContent value="evidence" className={s.tabContent}>
+                    <p className={s.small}>
+                        Select a source to inspect its captured excerpt, exact version and
+                        provenance. This sample does not revalidate current access.
+                    </p>
                     {topic && (
-                        <DetailSection title="What the sources report">
-                            <ul className={s.factList}>
-                                {topic.facts.map((fact, index) => (
-                                    <li key={index}>
-                                        <p>{fact.text}</p>
-                                        <div className={s.refChips}>
-                                            {fact.refs.map(ref => (
-                                                <span key={sourceKey(ref)}>
-                                                    {sourceTitle(sources.get(sourceKey(ref)), ref)}{" "}
-                                                    · v
-                                                    {ref.version.length < 20
-                                                        ? ref.version
-                                                        : "exact version"}
-                                                </span>
+                        <details className={s.details}>
+                            <summary>Reported statements and conflicts</summary>
+                            <div className={s.originalWording}>
+                                {topic && (
+                                    <DetailSection title="What the sources report">
+                                        <ul className={s.factList}>
+                                            {topic.facts.map((fact, index) => (
+                                                <li key={index}>
+                                                    <p>{fact.text}</p>
+                                                    <div className={s.refChips}>
+                                                        {fact.refs.map(ref => (
+                                                            <span key={sourceKey(ref)}>
+                                                                {sourceTitle(
+                                                                    sources.get(sourceKey(ref)),
+                                                                    ref
+                                                                )}{" "}
+                                                                · v
+                                                                {ref.version.length < 20
+                                                                    ? ref.version
+                                                                    : "exact version"}
+                                                            </span>
+                                                        ))}
+                                                    </div>
+                                                </li>
                                             ))}
-                                        </div>
-                                    </li>
-                                ))}
-                            </ul>
-                        </DetailSection>
+                                        </ul>
+                                    </DetailSection>
+                                )}
+                                {topic?.conflicts.length ? (
+                                    <DetailSection title="Conflicting evidence">
+                                        <ul className={s.factList}>
+                                            {topic.conflicts.map((conflict, index) => (
+                                                <li key={index}>
+                                                    <p>{conflict.text}</p>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    </DetailSection>
+                                ) : null}
+                            </div>
+                        </details>
                     )}
-                    {topic?.conflicts.length ? (
-                        <DetailSection title="Conflicting evidence">
-                            <ul className={s.factList}>
-                                {topic.conflicts.map((conflict, index) => (
-                                    <li key={index}>
-                                        <p>{conflict.text}</p>
-                                    </li>
-                                ))}
-                            </ul>
-                        </DetailSection>
-                    ) : null}
                     <DetailSection title="Exact sources">
                         {item.refs.length === 0 && (
                             <p className={s.small}>

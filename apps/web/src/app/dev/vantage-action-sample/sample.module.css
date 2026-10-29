@@ -176,7 +176,8 @@
 .queue {
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 0;
+    border-top: 1px solid var(--line);
 }
 .row {
     min-height: 84px;
@@ -184,9 +185,10 @@
     padding: 16px;
     gap: 16px;
     justify-content: flex-start;
-    border: 1px solid var(--line);
-    border-radius: var(--r-md);
-    background: var(--panel);
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    border-radius: 0;
+    background: transparent;
     text-align: left;
     white-space: normal;
     transition:
@@ -215,7 +217,7 @@
     gap: 4px;
 }
 .rowTitle {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 500;
     line-height: 20px;
     overflow-wrap: anywhere;
@@ -542,7 +544,7 @@
 .drawerHeader {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 10px;
     padding-right: 16px;
 }
 .drawerOverline {
@@ -553,8 +555,8 @@
     font-weight: 500;
 }
 .drawerTitle {
-    font-size: 30px;
-    line-height: 36px;
+    font-size: 24px;
+    line-height: 30px;
     letter-spacing: -0.02em;
     font-weight: 600;
     color: var(--ink);
@@ -636,6 +638,36 @@
     font-size: 11px;
     line-height: 16px;
     color: var(--ink-3);
+}
+.interpretationLabel {
+    color: var(--ink-3);
+    font-size: 11px;
+    margin-top: -6px;
+}
+.approachList {
+    margin: 12px 0 0;
+    padding-left: 18px;
+    display: grid;
+    gap: 8px;
+    color: var(--ink-2);
+    list-style: disc;
+}
+.disclosureBody {
+    margin-top: 12px;
+    color: var(--ink-2);
+    font-size: 14px;
+    line-height: 22px;
+}
+.originalWording {
+    display: grid;
+    gap: 10px;
+    color: var(--ink-2);
+    overflow-wrap: anywhere;
+}
+.originalWording h3 {
+    color: var(--ink-3);
+    font-size: 12px;
+    font-weight: 500;
 }
 .evidenceOverview {
     height: auto;

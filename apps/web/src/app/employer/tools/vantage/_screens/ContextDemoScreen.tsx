@@ -1,7 +1,7 @@
 "use client";
 
-import { Check, ChevronDown, Loader2, RefreshCw, Sparkles, X } from "lucide-react";
-import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { Loader2, RefreshCw, Sparkles } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ToolLink } from "~/components/tool-app/ToolLink";
 import { useToolNav } from "~/components/tool-app/nav";
 import { EmptyState, InlineError } from "~/components/tools/EmptyState";
@@ -21,7 +21,8 @@ import { useResource } from "~/lib/tools/useResource";
 import { PersonalContextPanel } from "~/components/vantage-context/PersonalContextPanel";
 import { ContextSourceDialog } from "../_components/ContextSourceDialog";
 import { PendingQuestions } from "../_components/PendingQuestions";
-import { BasisTag } from "../_components/Primitives";
+import { CompactTopicRow } from "../_components/CompactTopicRow";
+import { TopicDetailSheet } from "../_components/TopicDetailSheet";
 import { DemoApiError, demoSourceKey, demoSourceName, vantageDemoApi } from "../demo-api";
 import { createDemoPersonalContextClient } from "../demo-personal-client";
 import type {
@@ -76,6 +77,8 @@ function ContextDemoWeek({
     const [refreshing, setRefreshing] = useState(false);
     const [withheld, setWithheld] = useState(false);
     const [source, setSource] = useState<DemoSourceRef | null>(null);
+    const [selectedTopicId, setSelectedTopicId] = useState<string | null>(null);
+    const topicTrigger = useRef<HTMLButtonElement | null>(null);
     const [decision, setDecision] = useState<DemoTopic | null>(null);
     const [personalOpen, setPersonalOpen] = useState(false);
     const [personalReady, setPersonalReady] = useState<boolean | null>(null);
@@ -92,6 +95,10 @@ function ContextDemoWeek({
     }, []);
     const data = state.data;
     const report = !withheld && !state.error ? data?.report : null;
+    const selectedTopic =
+        report?.topics.find(
+            topic => topic.id === selectedTopicId && topic.status !== "dismissed"
+        ) ?? null;
     const replayMode = data?.generationMode === "replay";
     const personalEnabled = data?.personalContextAvailable === true;
     const personalBlocked = personalEnabled && personalReady !== true;
@@ -129,6 +136,7 @@ function ContextDemoWeek({
             await state.reload();
             return false;
         }
+        setSelectedTopicId(null);
         setRefreshing(true);
         setError(null);
         setNotice(null);
@@ -388,7 +396,7 @@ function ContextDemoWeek({
                             <>
                                 <section
                                     aria-label="Saved contextual weekly summary"
-                                    className="border-line from-brand-soft rounded-xl border bg-gradient-to-br to-transparent px-5 py-5"
+                                    className="border-line rounded-lg border px-4 py-3"
                                 >
                                     <div className="mb-3 flex flex-wrap items-center gap-2">
                                         <Badge variant="outline">
@@ -410,30 +418,41 @@ function ContextDemoWeek({
                                     <h2 className="text-ink mb-2 text-sm font-semibold">
                                         Weekly Summary
                                     </h2>
-                                    <p className="text-ink max-w-[80ch] text-[15px] leading-relaxed">
-                                        {report.summary}
+                                    <p className="text-ink-2 text-[13px] leading-relaxed">
+                                        {
+                                            report.topics.filter(
+                                                topic => topic.status !== "dismissed"
+                                            ).length
+                                        }{" "}
+                                        discussion topics ready for your review. Read the issue,
+                                        inspect the evidence, and record your decision.
                                     </p>
+                                    <details className="text-ink-3 mt-2 text-xs">
+                                        <summary className="cursor-pointer">
+                                            Read full saved summary
+                                        </summary>
+                                        <p className="text-ink-2 mt-3 max-w-[80ch] text-[13px] leading-relaxed">
+                                            {report.summary}
+                                        </p>
+                                    </details>
                                 </section>
                                 <section aria-label="Contextual discussion topics">
                                     <SectionHeading
                                         title="Discussion topics"
                                         aside={`${report.topics.filter(topic => topic.status !== "dismissed").length} for review`}
                                     />
-                                    <div className="flex flex-col gap-4">
+                                    <div className="border-line border-t">
                                         {report.topics
                                             .filter(topic => topic.status !== "dismissed")
-                                            .map((topic, index) => (
-                                                <ContextTopicCard
+                                            .map(topic => (
+                                                <CompactTopicRow
                                                     key={topic.id}
                                                     topic={topic}
-                                                    report={report}
-                                                    index={index}
-                                                    busy={locked}
-                                                    onSource={setSource}
-                                                    onReview={changes =>
-                                                        void review(topic, changes)
-                                                    }
-                                                    onDecision={() => setDecision(topic)}
+                                                    selected={selectedTopicId === topic.id}
+                                                    onOpen={trigger => {
+                                                        topicTrigger.current = trigger;
+                                                        setSelectedTopicId(topic.id);
+                                                    }}
                                                 />
                                             ))}
                                         {report.topics.every(
@@ -538,6 +557,21 @@ function ContextDemoWeek({
                     </>
                 )
             )}
+            {report && selectedTopic && (
+                <TopicDetailSheet
+                    open
+                    topic={selectedTopic}
+                    report={report}
+                    busy={locked}
+                    triggerRef={topicTrigger}
+                    onOpenChange={open => {
+                        if (!open) setSelectedTopicId(null);
+                    }}
+                    onSource={setSource}
+                    onReview={status => void review(selectedTopic, { status })}
+                    onDecision={() => setDecision(selectedTopic)}
+                />
+            )}
             {data?.nativeAgendaId && (
                 <ContextSourceDialog
                     reportId={data.nativeAgendaId}
@@ -562,175 +596,6 @@ function ContextDemoWeek({
                     onSave={value => void review(decision, { decision: value })}
                 />
             )}
-        </div>
-    );
-}
-
-function ContextTopicCard({
-    topic,
-    report,
-    index,
-    busy,
-    onSource,
-    onReview,
-    onDecision,
-}: {
-    topic: DemoTopic;
-    report: DemoReport;
-    index: number;
-    busy: boolean;
-    onSource: (ref: DemoSourceRef) => void;
-    onReview: (changes: Pick<DemoTopicReview, "status" | "decision">) => void;
-    onDecision: () => void;
-}) {
-    const names = new Map(
-        report.diagnostics.sources.map(item => [demoSourceKey(item.source), item.title])
-    );
-    const refs = (values: DemoSourceRef[]) => (
-        <div className="mt-2 flex flex-wrap gap-1.5">
-            {values.map(ref => (
-                <Button
-                    key={demoSourceKey(ref)}
-                    variant="outline"
-                    size="sm"
-                    className="h-auto max-w-full whitespace-normal break-words text-left text-[11px]"
-                    title={demoSourceName(ref)}
-                    onClick={() => onSource(ref)}
-                >
-                    {names.get(demoSourceKey(ref)) ?? `${ref.kind}:${ref.id}`}{" "}
-                    <span className="text-ink-3">
-                        · v{ref.version.length < 18 ? ref.version : `${ref.version.slice(0, 12)}…`}
-                    </span>
-                </Button>
-            ))}
-        </div>
-    );
-    return (
-        <article
-            aria-label={topic.title}
-            className="border-line bg-panel overflow-hidden rounded-xl border"
-        >
-            <div className="border-line flex flex-col items-start justify-between gap-3 border-b px-5 py-4 sm:flex-row">
-                <div className="min-w-0 flex-1">
-                    <div className="mb-1.5 flex flex-wrap items-center gap-2">
-                        <span className="text-ink-3 text-[11px]">Topic {index + 1}</span>
-                        <Badge variant={topic.status === "kept" ? "success" : "outline"}>
-                            {topic.status === "kept" ? "Kept for review" : "AI suggestion"}
-                        </Badge>
-                    </div>
-                    <h3 className="text-ink text-base font-semibold leading-snug">{topic.title}</h3>
-                </div>
-                <div className="flex shrink-0 gap-1.5">
-                    <Button
-                        size="sm"
-                        variant="outline"
-                        disabled={busy || topic.status === "kept"}
-                        onClick={() => onReview({ status: "kept" })}
-                    >
-                        <Check aria-hidden="true" />
-                        {topic.status === "kept" ? "Kept" : "Keep"}
-                    </Button>
-                    <Button
-                        size="sm"
-                        variant="ghost"
-                        disabled={busy}
-                        onClick={() => onReview({ status: "dismissed" })}
-                    >
-                        <X aria-hidden="true" />
-                        Dismiss
-                    </Button>
-                </div>
-            </div>
-            <div className="flex flex-col gap-5 px-5 py-5">
-                <TopicPart title="What the sources report" basis="observed">
-                    <ul className="space-y-3">
-                        {topic.facts.map((fact, index) => (
-                            <li key={index}>
-                                <p>{fact.text}</p>
-                                {refs(fact.refs)}
-                            </li>
-                        ))}
-                    </ul>
-                </TopicPart>
-                <TopicPart title="Why it merits discussion" basis="interpretation">
-                    <p>{topic.whyItMatters}</p>
-                </TopicPart>
-                <div className="border-brand/20 bg-brand-soft rounded-lg border px-4 py-3">
-                    <p className="text-brand-ink mb-1 text-[11px] font-semibold uppercase tracking-wide">
-                        Decision question
-                    </p>
-                    <p className="text-ink text-sm font-medium leading-relaxed">
-                        {topic.decisionQuestion}
-                    </p>
-                </div>
-                {topic.proposedNextStep && (
-                    <TopicPart title="Proposed next step" basis="suggestion">
-                        <p>{topic.proposedNextStep}</p>
-                    </TopicPart>
-                )}
-                {topic.decision && (
-                    <div className="border-line rounded-lg border border-dashed p-3">
-                        <p className="text-ink text-sm font-medium">
-                            Your recorded decision: {DECISION_LABEL[topic.decision.value]}
-                        </p>
-                        {topic.decision.text && (
-                            <p className="mt-1 text-sm">{topic.decision.text}</p>
-                        )}
-                        <p className="text-ink-3 mt-1 text-xs">
-                            Recorded {new Date(topic.decision.recordedAt).toLocaleString()} · work
-                            completion remains unverified
-                        </p>
-                    </div>
-                )}
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                    <details className="text-ink-3 max-w-full text-xs">
-                        <summary className="flex cursor-pointer list-none items-center gap-1.5">
-                            <ChevronDown size={13} aria-hidden="true" />
-                            Uncertainty &amp; rationale
-                        </summary>
-                        <div className="mt-3 space-y-3 text-[13px] leading-relaxed">
-                            {topic.unknowns.length > 0 && (
-                                <ul className="list-disc space-y-1 pl-4">
-                                    {topic.unknowns.map((unknown, index) => (
-                                        <li key={index}>{unknown}</li>
-                                    ))}
-                                </ul>
-                            )}
-                            {topic.conflicts.map((conflict, index) => (
-                                <div key={index}>
-                                    <BasisTag basis="conflict" />
-                                    <p className="mt-1">{conflict.text}</p>
-                                    {refs(conflict.refs)}
-                                </div>
-                            ))}
-                            <p>{topic.rationale}</p>
-                        </div>
-                    </details>
-                    <Button variant="outline" size="sm" disabled={busy} onClick={onDecision}>
-                        {topic.decision ? "Update decision" : "Record decision"}
-                    </Button>
-                </div>
-            </div>
-        </article>
-    );
-}
-
-function TopicPart({
-    title,
-    basis,
-    children,
-}: {
-    title: string;
-    basis: "observed" | "interpretation" | "suggestion";
-    children: ReactNode;
-}) {
-    return (
-        <div className="text-ink-2 text-[13px] leading-relaxed">
-            <div className="mb-2 flex items-center gap-2">
-                <h4 className="text-ink text-xs font-semibold">{title}</h4>
-                <BasisTag basis={basis} />
-            </div>
-            {children}
         </div>
     );
 }

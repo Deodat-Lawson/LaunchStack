@@ -1,7 +1,13 @@
 import type { CommitmentDto } from "~/app/employer/tools/vantage/api";
 import type { DemoSourceRef } from "~/app/employer/tools/vantage/demo-contract";
 import snapshot from "./captured-sample.json";
-import { createItems, readableTitle, sourceKey, type SampleData } from "./sample-model";
+import {
+    createItems,
+    readableTitle,
+    sourceKey,
+    topicPresentation,
+    type SampleData,
+} from "./sample-model";
 
 const captured = snapshot.data as SampleData;
 
@@ -94,7 +100,11 @@ describe("captured Vantage sample adapter", () => {
     it("changes only presentation titles and leaves the captured data unchanged", () => {
         const before = JSON.stringify(captured);
         const items = createItems(captured);
-        expect(items[0]!.title).toBe("Reconcile run-17 deletion checks");
+        expect(items[0]!.title).toBe("Reconcile QA and Operations deletion results");
+        expect(items[0]!.description).toBe(
+            topicPresentation(captured.state.report!.topics[0]!).issue
+        );
+        expect(items[0]!.topic).toBe(captured.state.report!.topics[0]);
         expect(items[0]!.originalTitle).toBe(captured.state.report!.topics[0]!.title);
         expect(readableTitle("  A different report title  ")).toBe("A different report title");
         expect(JSON.stringify(captured)).toBe(before);

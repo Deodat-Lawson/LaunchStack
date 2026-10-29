@@ -1,3 +1,8 @@
+import { topicPresentation } from "~/app/employer/tools/vantage/_lib/topic-presentation";
+export {
+    topicPresentation,
+    type TopicPresentation,
+} from "~/app/employer/tools/vantage/_lib/topic-presentation";
 import type {
     CommitmentDto,
     PendingHistoricalQuestionsViewV1,
@@ -74,9 +79,9 @@ export function createItems(data: SampleData): SampleItem[] {
     const proposals: SampleItem[] = (report?.topics ?? []).map(topic => ({
         id: `proposal:${topic.id}`,
         type: "proposal",
-        title: readableTitle(topic.title),
+        title: topicPresentation(topic).title,
         originalTitle: topic.title,
-        description: topic.proposedNextStep,
+        description: topicPresentation(topic).issue,
         status: topic.status,
         owner: null,
         due: null,

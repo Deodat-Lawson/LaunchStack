@@ -279,11 +279,14 @@ describeDb("Usage tab", () => {
 
         const docs = await db
             .insert(document)
-            .values([
-                { url: "u1", category: "General", title: "Plan", companyId: workspace },
-                { url: "u2", category: "General", title: "Notes", companyId: workspace },
-                { url: "u3", category: "General", title: "Other", companyId: elsewhere },
-            ])
+            .values(
+                // Added before the window: the documents list counts those that existed by its end.
+                [
+                    { url: "u1", category: "General", title: "Plan", companyId: workspace },
+                    { url: "u2", category: "General", title: "Notes", companyId: workspace },
+                    { url: "u3", category: "General", title: "Other", companyId: elsewhere },
+                ].map(row => ({ ...row, createdAt: at("2026-08-01T00:00:00Z") }))
+            )
             .returning({ id: document.id });
         doc1 = Number(docs[0]!.id);
         doc2 = Number(docs[1]!.id);

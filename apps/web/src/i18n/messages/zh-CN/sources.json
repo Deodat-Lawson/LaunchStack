@@ -781,6 +781,8 @@
     "copyTitle": "复制标题",
     "copyLink": "复制链接",
     "share": "共享…",
+    "reembed": "重新嵌入",
+    "reembedRunning": "此来源正在处理中。",
     "delete": "删除…",
     "openFolder": "打开文件夹",
     "newSourceInFolder": "在此文件夹中新建来源…",
@@ -823,7 +825,9 @@
     "deleteDocument": "文档删除失败",
     "stillAdding": "此来源仍在添加中",
     "nothingToRetry": "此来源没有可重试的内容",
-    "retry": "无法重新处理"
+    "retry": "无法重新处理",
+    "nothingToReembed": "此来源没有可重新嵌入的内容",
+    "reembed": "无法重新嵌入此来源"
   },
   "sourceUpload": {
     "withReason": "{name}：{reason}",
@@ -896,6 +900,7 @@
       "trackViewFailed": "无法记录文档查看",
       "processingStatusFailed": "获取处理状态失败",
       "retryFailed": "无法重新处理",
+      "reembedFailed": "无法重新嵌入此来源",
       "storageReadFailed": "无法从存储中获取文档",
       "serveDocumentFailed": "文档读取失败",
       "noExtractedText": "此文档还没有提取出的文本，可能仍在处理中。",
@@ -919,6 +924,11 @@
       "notFailed": "此来源没有处理失败，因此无需重试。",
       "alreadyRunning": "此来源正在处理中。",
       "noJob": "此来源没有可重试的处理。"
+    },
+    "reembed": {
+      "alreadyRunning": "此来源正在处理中。",
+      "noFile": "此来源没有可重新读取的已存文件。",
+      "archive": "压缩包会拆分为其中的各个文件。请改为重新嵌入这些文件。"
     },
     "folders": {
       "pathRequired": "请提供文件夹路径。",

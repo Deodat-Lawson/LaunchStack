@@ -12,7 +12,7 @@
     "withheldWithRole": "你的角色（{role}）无权访问“{label}”。如有需要，请联系管理员。",
     "workspacePointer": {
       "label": "工作区设置",
-      "blurb": "名称、成员、自带密钥、模型、智能体、集成和用量"
+      "blurb": "名称、成员、自带密钥、模型、智能体和集成"
     }
   },
   "groups": {
@@ -81,10 +81,10 @@
       "description": "工作区与 Drive、Slack 和 GitHub 的连接；会议的 Slack 同步；以及远程智能体机器接入的中枢。全部可选，且彼此独立。"
     },
     "usage": {
-      "label": "用量与费用",
-      "blurb": "模型 token、费用、余额",
+      "label": "支出与上限",
+      "blurb": "余额、价格、每人 AI 上限",
       "title": "工作区的支出情况",
-      "description": "工作区的每一次 AI 模型调用及其费用，以及 token 余额和哪些功能在消耗它。这些数字是为本页的两项设置提供参考。"
+      "description": "token 余额和哪些功能在消耗它、每个人本月的 AI 用量与上限，以及这些数字所参考的两项设置。每次 AI 调用按功能、模型和成员的用量见“概览”。"
     },
     "archive": {
       "label": "归档与保留",
@@ -357,8 +357,8 @@
       "resets": "将于 {date} 重置。",
       "noLimit": "不设上限",
       "noLimitBody": "你在此工作区没有使用上限。本月你已使用 {used} 个 token。",
-      "sourceDefault": "这是工作区为所有人设置的上限。工作区管理员可以在“工作区 › 用量与费用”中修改。",
-      "sourceMember": "这是工作区管理员为你单独设置的上限。工作区管理员可以在“工作区 › 用量与费用”中修改。",
+      "sourceDefault": "这是工作区为所有人设置的上限。工作区管理员可以在“用量 › 支出”中修改。",
+      "sourceMember": "这是工作区管理员为你单独设置的上限。工作区管理员可以在“用量 › 支出”中修改。",
       "sourceServer": "这是服务器的上限，合计你所有的工作区。服务器的管理者可以修改它。",
       "usedHere": "其中 {used} 个用于此工作区。",
       "alsoServer": "服务器还限制你每月最多使用 {limit} 个 token（合计你所有的工作区，已用 {used}）。",
@@ -1558,26 +1558,6 @@
       "purchased": "购买"
     },
     "models": {
-      "title": "AI 模型用量",
-      "description": "此工作区各项功能对 AI 模型的每一次调用，按模型服务商自己的报告计数。与下方余额分开统计，余额只由部分功能扣除。",
-      "ownEndpoint": "其中 {calls} 次调用发往此工作区自带的模型端点，由其服务商自行计费。",
-      "tokens": "最近 {days} 天的模型 token",
-      "split": "输入 {input} · 输出 {output} · {calls} 次调用",
-      "cost": "模型费用",
-      "costPriced": "按每个模型设定的价格计算。",
-      "costFallback": "未设定价格的模型按每百万 {price} 计算。",
-      "costPartial": "{calls} 次调用中有 {priced} 次有模型价格，其余未计入。",
-      "costNone": "这些模型没有设定价格。在下方设置单价即可估算。",
-      "efficiency": "缓存与推理",
-      "cached": "来自缓存的输入",
-      "reasoning": "推理 token",
-      "nothing": "此时间段内没有模型调用。",
-      "feature": "功能",
-      "route": "模型路由",
-      "calls": "调用次数",
-      "input": "输入",
-      "output": "输出",
-      "costColumn": "费用",
       "features": {
         "ask": "提问",
         "mcp": "助手（MCP）",
@@ -1609,7 +1589,8 @@
       "title": "每日消耗",
       "description": "按消耗来源统计从余额中扣除的 token。将鼠标悬停在某一天上可查看明细；下表包含相同的数据。",
       "lastDays": "最近 {days} 天",
-      "nothing": "此时间段内没有消耗余额。"
+      "nothing": "此时间段内没有消耗余额。",
+      "window": "时间范围"
     },
     "byService": {
       "title": "按服务",
@@ -1917,7 +1898,7 @@
   },
   "workspaceTab": {
     "title": "工作区",
-    "about": "关于此工作区的一切：它叫什么、里面有谁以及他们能看到什么、它自带的密钥、它运行的模型和智能体、它连接了哪些服务，以及它的支出。你自己的账户、主题和快捷键在“设置”中。",
+    "about": "关于此工作区的一切：它叫什么、里面有谁以及他们能看到什么、它自带的密钥、它运行的模型和智能体，以及它连接了哪些服务。它的用量和支出在“用量”标签页中。你自己的账户、主题和快捷键在“设置”中。",
     "groups": {
       "basics": "基本信息",
       "setup": "配置",
@@ -1931,7 +1912,6 @@
       "models": "模型",
       "agents": "智能体",
       "integrations": "集成",
-      "usage": "用量",
       "archive": "归档",
       "labs": "实验室"
     }

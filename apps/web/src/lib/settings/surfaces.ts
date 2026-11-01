@@ -6,8 +6,12 @@
  * - **Workspace** is everything about the workspace, as a Studio tab with its
  *   screens across the top: its own details (General), people and access,
  *   the company profile, its own keys (Bring your own keys), models, agents,
- *   integrations, usage, the archive and labs. Each screen's path is
+ *   integrations, the archive and labs. Each screen's path is
  *   `/<section id>`.
+ * - **Usage** is a Studio tab of its own (the workspace's and each person's
+ *   numbers). Its Spending screen draws the `usage` section — balance,
+ *   pricing and per-person limits — which was a Workspace screen until
+ *   October 2026.
  *
  * Until October 2026 both were one Settings hub, so every link that exists
  * says `/employer/settings#<something>`: a section alias (`#people`,
@@ -35,6 +39,15 @@ export const SETTINGS_PATH = "/employer/settings";
 /** The Studio id of the Workspace tab. */
 export const WORKSPACE_TOOL_ID = "workspace";
 
+/** The Studio id of the Usage tab. */
+export const USAGE_TOOL_ID = "usage";
+
+/** Where the `usage` settings section lives now: the Usage tab's Spending screen. */
+export const USAGE_SPENDING_PATH = "/spending";
+
+/** The Usage tab's Overview, where Analytics' old links land. */
+const USAGE_HOME_PATH = "/overview";
+
 /** What Settings shows, in rail order. Each is yours alone. */
 export const PERSONAL_SECTION_IDS = [
     "account",
@@ -53,20 +66,19 @@ export const WORKSPACE_SCREEN_IDS = [
     "models",
     "agents",
     "integrations",
-    "usage",
     "archive",
     "labs",
 ] as const satisfies readonly SettingsSectionId[];
 export type WorkspaceScreenId = (typeof WORKSPACE_SCREEN_IDS)[number];
 
 /**
- * The bar's groups, in order: ten screens are more than one row holds, so
+ * The bar's groups, in order: nine screens are more than one row holds, so
  * they switch by group. Their names are `settings.workspaceTab.groups.<id>`.
  */
 export const WORKSPACE_SCREEN_GROUPS = [
     { id: "basics", screens: ["general", "people", "company"] },
     { id: "setup", screens: ["byok", "models", "agents", "integrations"] },
-    { id: "data", screens: ["usage", "archive", "labs"] },
+    { id: "data", screens: ["archive", "labs"] },
 ] as const satisfies readonly { id: string; screens: readonly WorkspaceScreenId[] }[];
 export type WorkspaceScreenGroupId = (typeof WORKSPACE_SCREEN_GROUPS)[number]["id"];
 
@@ -112,14 +124,29 @@ export function workspaceHref(
     return extra ? `${base}&${extra}` : base;
 }
 
+/**
+ * The link that opens the Usage tab's Spending screen — the `usage` section —
+ * bringing a row into view when `focus` names one.
+ */
+export function usageHref(focus?: string | null): string {
+    return toolTabHref(
+        USAGE_TOOL_ID,
+        focus ? `${USAGE_SPENDING_PATH}?focus=${encodeURIComponent(focus)}` : USAGE_SPENDING_PATH
+    );
+}
+
 /** People hashes that name its first tab, the member list: nothing to bring into view. */
 const PEOPLE_MEMBER_ALIASES = new Set(["people", "members", "team", "employees"]);
 
-/** Hashes that were sections of Settings once and are Studio apps of their own now. */
+/**
+ * Hashes that were sections of Settings once and are Studio apps of their
+ * own now. Analytics was an app of its own after that, until it folded into
+ * the Usage tab.
+ */
 const MOVED_TO_STUDIO: Record<string, string> = {
-    analytics: "analytics",
-    statistics: "analytics",
-    stats: "analytics",
+    analytics: USAGE_TOOL_ID,
+    statistics: USAGE_TOOL_ID,
+    stats: USAGE_TOOL_ID,
 };
 
 /**
@@ -136,8 +163,8 @@ export type SettingsDestination =
     | { kind: "settings"; section: PersonalSectionId | null; hash: string }
     /** The Workspace tab, at `at` (app-relative), which `href` opens. */
     | { kind: "workspace"; screen: WorkspaceScreenId; at: string; href: string }
-    /** Another Studio app (Analytics). */
-    | { kind: "app"; featureId: string; href: string };
+    /** Another Studio app (Usage), at `at` when it names a place inside it. */
+    | { kind: "app"; featureId: string; href: string; at?: string };
 
 /**
  * Where a `/employer/settings#<hash>` link goes now. An empty hash is
@@ -149,8 +176,15 @@ export function settingsDestination(hash: string): SettingsDestination | null {
     const lower = clean.toLowerCase();
     if (!lower) return { kind: "settings", section: null, hash: "" };
 
+    // Analytics' hashes open the Overview, wherever the Usage tab was last.
     const app = MOVED_TO_STUDIO[lower];
-    if (app) return { kind: "app", featureId: app, href: toolTabHref(app) };
+    if (app)
+        return {
+            kind: "app",
+            featureId: app,
+            href: toolTabHref(app, USAGE_HOME_PATH),
+            at: USAGE_HOME_PATH,
+        };
     if (isRetiredDocumentsHash(lower)) {
         return {
             kind: "workspace",
@@ -163,11 +197,17 @@ export function settingsDestination(hash: string): SettingsDestination | null {
     const section = settingsSectionFromHash(lower);
     if (!section) return null;
     if (isPersonalSection(section)) return { kind: "settings", section, hash: clean };
-    if (!isWorkspaceScreen(section)) return null;
 
     // The hash says more than the screen when it names a row, or one of
     // People's tabs (`#audit`); an alias such as `#byok` only names the screen.
     const row = SETTINGS.find(definition => definition.key.toLowerCase() === lower);
+    if (section === "usage") {
+        const href = usageHref(row?.key);
+        const at = toolTargetFromHref(href)?.at ?? USAGE_SPENDING_PATH;
+        return { kind: "app", featureId: USAGE_TOOL_ID, href, at };
+    }
+    if (!isWorkspaceScreen(section)) return null;
+
     const focus = row
         ? row.key
         : section === "people" && !PEOPLE_MEMBER_ALIASES.has(lower)
@@ -193,6 +233,9 @@ export function settingsSectionOfHref(href: string): SettingsSectionId | null {
     if (url.pathname === SETTINGS_PATH) return settingsSectionFromHash(url.hash);
     if (url.pathname !== WORKSPACE_PATH) return null;
     const target = toolTargetFromHref(href);
+    if (target?.toolId === USAGE_TOOL_ID) {
+        return parseToolHref(target.at).path === USAGE_SPENDING_PATH ? "usage" : null;
+    }
     if (target?.toolId !== WORKSPACE_TOOL_ID) return null;
     return workspaceScreenFromPath(target.at);
 }

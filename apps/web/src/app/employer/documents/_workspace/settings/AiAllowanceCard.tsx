@@ -34,28 +34,37 @@ const TONE_TEXT: Record<AllowanceTone, string> = {
 
 export function AiAllowanceCard() {
     const t = useTranslations("settings.account.aiAllowance");
-    const tc = useTranslations("common");
-    const { allowance, loaded, problem } = useAiAllowance();
-
     return (
         <Section title={t("title")} description={t("description")}>
             <Card>
-                {allowance ? (
-                    <AllowanceSummary allowance={allowance} />
-                ) : !loaded ? (
-                    <StatusNote tone="muted" style={{ marginBottom: 0 }}>
-                        {tc("status.loading")}
-                    </StatusNote>
-                ) : (
-                    <StatusNote tone="danger" style={{ marginBottom: 0 }}>
-                        {problem?.message ??
-                            (problem?.status
-                                ? t("loadFailedStatus", { status: problem.status })
-                                : t("loadFailed"))}
-                    </StatusNote>
-                )}
+                <AiAllowanceBody />
             </Card>
         </Section>
+    );
+}
+
+/**
+ * The card's contents without its section: the Usage tab's You screen puts
+ * them in a panel of its own.
+ */
+export function AiAllowanceBody() {
+    const t = useTranslations("settings.account.aiAllowance");
+    const tc = useTranslations("common");
+    const { allowance, loaded, problem } = useAiAllowance();
+
+    return allowance ? (
+        <AllowanceSummary allowance={allowance} />
+    ) : !loaded ? (
+        <StatusNote tone="muted" style={{ marginBottom: 0 }}>
+            {tc("status.loading")}
+        </StatusNote>
+    ) : (
+        <StatusNote tone="danger" style={{ marginBottom: 0 }}>
+            {problem?.message ??
+                (problem?.status
+                    ? t("loadFailedStatus", { status: problem.status })
+                    : t("loadFailed"))}
+        </StatusNote>
     );
 }
 

@@ -3,9 +3,10 @@
 /**
  * `/employer/settings` renders Settings — yours alone — the same surface the
  * workspace mounts as a Studio tab. Every deep link that ever pointed here
- * still lands: `#account` or `#appearance.theme` on its section, and what
- * belongs to the workspace now (`#people`, `#byok`, `#usage.…`) on its
- * screen of the Workspace tab (see `~/lib/settings/surfaces`).
+ * still lands: `#account` or `#appearance.theme` on its section, what
+ * belongs to the workspace now (`#people`, `#byok`) on its screen of the
+ * Workspace tab, and `#usage.…` on the Usage tab's Spending screen (see
+ * `~/lib/settings/surfaces`).
  */
 
 import { useTranslations } from "next-intl";

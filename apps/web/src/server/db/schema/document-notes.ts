@@ -170,6 +170,8 @@ export interface PdfQuadAnchor {
     page: number;
     /** Each quad: [x1, y1, x2, y2] in PDF user-space (0–1 normalized). */
     quads: Array<[number, number, number, number]>;
+    /** A highlight's colour, by name (see components/notes/_shared/highlight). */
+    color?: string;
 }
 
 export interface MediaFragmentAnchor {

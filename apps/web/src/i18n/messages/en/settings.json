@@ -12,7 +12,7 @@
     "withheldWithRole": "{label} isn't part of your role ({role}). Ask an admin if you need it.",
     "workspacePointer": {
       "label": "Workspace settings",
-      "blurb": "Name, people, your own keys, models, agents, integrations and usage"
+      "blurb": "Name, people, your own keys, models, agents and integrations"
     }
   },
   "groups": {
@@ -81,10 +81,10 @@
       "description": "Workspace connections to Drive, Slack and GitHub; Slack mirroring for meetings; and the hub that remote agent machines dial into. All optional and independent."
     },
     "usage": {
-      "label": "Usage and costs",
-      "blurb": "Model tokens, cost, balance",
+      "label": "Spending and limits",
+      "blurb": "Balance, pricing, per-person AI limits",
       "title": "What the workspace is spending",
-      "description": "Every AI model call the workspace made and what it cost, then the token balance and what has been drawing on it. The numbers exist to inform the two settings on this page."
+      "description": "The token balance and what has been drawing on it, each person's AI use this month against their limit, and the two settings the numbers inform. What every AI call used, by feature, model and person, is on the Overview."
     },
     "archive": {
       "label": "Archive and retention",
@@ -357,8 +357,8 @@
       "resets": "Resets on {date}.",
       "noLimit": "No limit",
       "noLimitBody": "No limit applies to you in this workspace. You've used {used} tokens this month.",
-      "sourceDefault": "This is the workspace's limit for everyone. Workspace admins can change it in Workspace › Usage and costs.",
-      "sourceMember": "A workspace admin set this limit for you. Workspace admins can change it in Workspace › Usage and costs.",
+      "sourceDefault": "This is the workspace's limit for everyone. Workspace admins can change it in Usage › Spending.",
+      "sourceMember": "A workspace admin set this limit for you. Workspace admins can change it in Usage › Spending.",
       "sourceServer": "This is the server's limit, counted across all your workspaces. Whoever runs this server can change it.",
       "usedHere": "{used} of it in this workspace.",
       "alsoServer": "The server also caps you at {limit} tokens a month across all your workspaces ({used} used).",
@@ -1558,26 +1558,6 @@
       "purchased": "Purchased"
     },
     "models": {
-      "title": "AI model usage",
-      "description": "Every call this workspace made to an AI model, from every feature, counted from the provider's own report. Separate from the balance below, which only some features draw on.",
-      "ownEndpoint": "{calls} of these calls went to the model endpoint this workspace brought itself. Its own provider bills them.",
-      "tokens": "Model tokens in the last {days} days",
-      "split": "{input} in · {output} out · {calls} calls",
-      "cost": "Model cost",
-      "costPriced": "From the price set for each model.",
-      "costFallback": "Models without a set price are counted at {price} per 1M.",
-      "costPartial": "{priced} of {calls} calls have a model price; the rest aren't counted.",
-      "costNone": "No price is set for these models. Set a price below to estimate.",
-      "efficiency": "Cache and reasoning",
-      "cached": "Input from cache",
-      "reasoning": "Reasoning tokens",
-      "nothing": "No model calls in this window.",
-      "feature": "Feature",
-      "route": "Model route",
-      "calls": "Calls",
-      "input": "Input",
-      "output": "Output",
-      "costColumn": "Cost",
       "features": {
         "ask": "Ask",
         "mcp": "Assistants (MCP)",
@@ -1609,7 +1589,8 @@
       "title": "Burn by day",
       "description": "Tokens drawn from the balance, by what drew them. Hover a day for the breakdown; the table below carries the same numbers.",
       "lastDays": "Last {days} days",
-      "nothing": "Nothing drew on the balance in this window."
+      "nothing": "Nothing drew on the balance in this window.",
+      "window": "Time window"
     },
     "byService": {
       "title": "By service",
@@ -1917,7 +1898,7 @@
   },
   "workspaceTab": {
     "title": "Workspace",
-    "about": "Everything about this workspace: what it is called, who is in it and what they can see, its own keys, the models and agents it runs, what it connects to and what it spends. Your own account, theme and shortcuts are in Settings.",
+    "about": "Everything about this workspace: what it is called, who is in it and what they can see, its own keys, the models and agents it runs and what it connects to. What it uses and spends is the Usage tab. Your own account, theme and shortcuts are in Settings.",
     "groups": {
       "basics": "Basics",
       "setup": "Setup",
@@ -1931,7 +1912,6 @@
       "models": "Models",
       "agents": "Agents",
       "integrations": "Integrations",
-      "usage": "Usage",
       "archive": "Archive",
       "labs": "Labs"
     }

@@ -145,6 +145,9 @@ describeDb("Usage tab", () => {
             pricedCalls: 0,
             costUsd: "0",
             ...row,
+            // Chat rows, as the recorder writes them: a chat token counts one.
+            kind: "chat",
+            weightedTokens: row.inputTokens + (row.outputTokens ?? 0),
         });
         await db.insert(aiUsageDaily).values([
             meter({

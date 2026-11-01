@@ -21,11 +21,13 @@
 import {
     ChatConfigurationError,
     buildChatModelsConfig,
+    type ChatModelPricing,
     type ChatModelsConfig,
     type ChatRoute,
 } from "@launchstack/llm";
 
 import { ASSISTANT_IDENTITY_RULE } from "~/lib/ai/assistant-identity";
+import { MAX_PRICE_TEXT, isPlausiblePrice } from "~/lib/ai/model-pricing";
 import type {
     WorkspaceModelChoice,
     WorkspaceModelSelection,
@@ -61,18 +63,81 @@ export function behaviorForChoice(choice: WorkspaceModelChoice) {
     };
 }
 
-/** The configuration-file document a selection stands for. */
+/**
+ * The configuration-file document a selection stands for. A price the admin
+ * gave goes onto the model's definition, where the chat transport prices each
+ * call from it (`costUsd`), as it does for the deployment's own models.
+ */
 export function workspaceModelsFile(selection: WorkspaceModelSelection) {
-    const models: Record<string, { id: string; behavior: ReturnType<typeof behaviorForChoice> }> =
-        {};
+    const models: Record<
+        string,
+        {
+            id: string;
+            behavior: ReturnType<typeof behaviorForChoice>;
+            pricing?: ChatModelPricing;
+        }
+    > = {};
     const routes: Partial<Record<ChatRoute, string>> = {};
     for (const route of WORKSPACE_MODEL_ROUTES) {
         const choice = selection[route];
         if (!choice) continue;
-        models[route] = { id: choice.id.trim(), behavior: behaviorForChoice(choice) };
+        // Only the fields the file takes, whatever else the stored row carries.
+        const pricing = usablePrice(choice.pricing);
+        models[route] = {
+            id: choice.id.trim(),
+            behavior: behaviorForChoice(choice),
+            ...(pricing ? { pricing } : {}),
+        };
         routes[route] = route;
     }
     return { version: 1, models, routes };
+}
+
+/**
+ * A price as a request carries it, before {@link selectionProblem} has looked
+ * at it: any field may be missing, and all of them missing means no price.
+ */
+export interface PricingDraft {
+    input?: number | null;
+    output?: number | null;
+    cachedInput?: number | null;
+}
+
+type ChoiceDraft = Omit<WorkspaceModelChoice, "pricing"> & { pricing?: PricingDraft | null };
+
+/** A selection as Settings sends it. A saved selection is one too. */
+export type SelectionDraft = { default: ChoiceDraft } & Partial<
+    Record<Exclude<(typeof WORKSPACE_MODEL_ROUTES)[number], "default">, ChoiceDraft>
+>;
+
+const given = (value: number | null | undefined): value is number =>
+    value !== null && value !== undefined;
+
+/** No price at all: every field left empty. */
+function isEmptyPrice(pricing: PricingDraft | null | undefined): boolean {
+    return (
+        !pricing || (!given(pricing.input) && !given(pricing.output) && !given(pricing.cachedInput))
+    );
+}
+
+/** The price, when both sides are given and every given field is in bounds. */
+function usablePrice(pricing: PricingDraft | null | undefined): ChatModelPricing | null {
+    if (!pricing || !given(pricing.input) || !given(pricing.output)) return null;
+    const price: ChatModelPricing = {
+        input: pricing.input,
+        output: pricing.output,
+        ...(given(pricing.cachedInput) ? { cachedInput: pricing.cachedInput } : {}),
+    };
+    return Object.values(price).every(isPlausiblePrice) ? price : null;
+}
+
+/** What is wrong with one model's price, in words an admin can act on, or null. */
+function pricingProblem(id: string, pricing: PricingDraft | null | undefined): string | null {
+    if (isEmptyPrice(pricing) || usablePrice(pricing)) return null;
+    if (!given(pricing?.input) || !given(pricing?.output)) {
+        return `Give "${id}" both an input and an output price, or leave both empty.`;
+    }
+    return `Prices for "${id}" have to be between 0 and ${MAX_PRICE_TEXT} US dollars per 1M tokens.`;
 }
 
 /**
@@ -80,13 +145,15 @@ export function workspaceModelsFile(selection: WorkspaceModelSelection) {
  * rather than discovered by the next person who asks a question. Returns the
  * first problem in words an admin can act on, or null.
  */
-export function selectionProblem(selection: WorkspaceModelSelection): string | null {
+export function selectionProblem(selection: SelectionDraft): string | null {
     for (const route of WORKSPACE_MODEL_ROUTES) {
         const choice = selection[route];
         if (!choice) continue;
         if (!isPlausibleModelId(choice.id.trim())) {
             return `"${choice.id}" doesn't look like a model id. Copy it exactly as your provider lists it.`;
         }
+        const problem = pricingProblem(choice.id.trim(), choice.pricing);
+        if (problem) return problem;
     }
     if (selection.vision && !selection.vision.vision) {
         return "The model for images has to be one that reads images.";
@@ -95,6 +162,25 @@ export function selectionProblem(selection: WorkspaceModelSelection): string | n
         return "The model for reasoning has to be one that reasons.";
     }
     return null;
+}
+
+/**
+ * The selection as it is stored: a price whose fields were all left empty is
+ * no price. The save route checks with {@link selectionProblem} first, so
+ * nothing else is dropped there; a connection test prices nothing and skips
+ * that check, so a price it couldn't use is left off rather than refused.
+ */
+export function settledSelection(draft: SelectionDraft): WorkspaceModelSelection {
+    const settle = ({ pricing, ...choice }: ChoiceDraft): WorkspaceModelChoice => {
+        const price = usablePrice(pricing);
+        return price ? { ...choice, pricing: price } : choice;
+    };
+    const selection: WorkspaceModelSelection = { default: settle(draft.default) };
+    for (const route of WORKSPACE_MODEL_ROUTES) {
+        const choice = draft[route];
+        if (route !== "default" && choice) selection[route] = settle(choice);
+    }
+    return selection;
 }
 
 export interface WorkspaceEndpointInput {

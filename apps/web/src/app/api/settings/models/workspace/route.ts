@@ -12,7 +12,7 @@ import { NextResponse } from "next/server";
 import { MissingSecretsKeyError } from "@launchstack/store/crypto";
 
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
-import { selectionProblem } from "~/server/workspace-models/config";
+import { selectionProblem, settledSelection } from "~/server/workspace-models/config";
 import {
     WorkspaceEndpointUrlError,
     assertEndpointUrlAllowed,
@@ -56,6 +56,8 @@ export async function PUT(request: Request) {
         if (problem)
             return NextResponse.json({ error: wordModels(problem, locale) }, { status: 400 });
     }
+    // Saving replaces the whole selection, so a price left empty is removed.
+    const models = body.models ? settledSelection(body.models) : null;
 
     try {
         const baseUrl = await assertEndpointUrlAllowed(body.baseUrl);
@@ -65,7 +67,7 @@ export async function PUT(request: Request) {
             provider: body.provider,
             baseUrl,
             apiKey: body.apiKey,
-            models: body.models,
+            models,
             connectedVia: body.provider === "openrouter" ? "openrouter" : "key",
         });
     } catch (error) {

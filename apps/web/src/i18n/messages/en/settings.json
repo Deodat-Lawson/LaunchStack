@@ -1721,7 +1721,8 @@
       "offNoReason": "Off: the main model doesn't reason",
       "lastChangedBy": "Last changed by {who}, {when}",
       "lastChanged": "Last changed {when}",
-      "chooseFirst": "Choose a model first."
+      "chooseFirst": "Choose a model first.",
+      "price": "{input} in, {output} out per 1M tokens"
     },
     "testingShort": "Testing…",
     "test": "Test",
@@ -1729,7 +1730,9 @@
     "problems": {
       "badId": "That doesn't look like a model id. Copy it exactly as your provider lists it, with no spaces.",
       "needsReasoning": "Only a reasoning model can take this work. Tick “Reasons step by step”, or leave it empty.",
-      "needsVision": "Only a model that reads images can take this work. Tick “Reads images”, or leave it empty."
+      "needsVision": "Only a model that reads images can take this work. Tick “Reads images”, or leave it empty.",
+      "pricePair": "Give both an input and an output price, or leave both empty.",
+      "priceRange": "A price is a number from 0 to {max, number}, in US dollars per 1M tokens."
     },
     "blockers": {
       "address": "the address",
@@ -1773,7 +1776,12 @@
       "readsImages": "Reads images",
       "reasons": "Reasons step by step (reasoning model)",
       "followsSchema": "Follows a JSON schema",
-      "structuredHint": "Structured output (response_format: json_schema). On for most OpenAI, Gemini and OpenRouter models; off for Claude through Anthropic’s compatible API. When it’s off, LaunchStack asks for JSON in the prompt instead."
+      "structuredHint": "Structured output (response_format: json_schema). On for most OpenAI, Gemini and OpenRouter models; off for Claude through Anthropic’s compatible API. When it’s off, LaunchStack asks for JSON in the prompt instead.",
+      "price": "Price per 1M tokens",
+      "priceInput": "Input",
+      "priceOutput": "Output",
+      "priceUnit": "$",
+      "priceHint": "What your provider charges, in US dollars. Used to show cost and to weigh this model against others in usage and limits. Left blank, its tokens count one for one."
     }
   },
   "server": {
@@ -1845,6 +1853,8 @@
       "notModelId": "\"{id}\" doesn't look like a model id. Copy it exactly as your provider lists it.",
       "visionModel": "The model for images has to be one that reads images.",
       "reasoningModel": "The model for reasoning has to be one that reasons.",
+      "pricePair": "Give \"{id}\" both an input and an output price, or leave both empty.",
+      "priceRange": "Prices for \"{id}\" have to be between 0 and {max} US dollars per 1M tokens.",
       "invalidSetup": "That isn't a valid model setup.",
       "saveFailed": "Couldn't save the model setup.",
       "chooseModel": "Choose a model to test.",

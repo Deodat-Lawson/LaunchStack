@@ -1721,7 +1721,8 @@
       "offNoReason": "关闭：主模型不支持推理",
       "lastChangedBy": "最近由 {who} 于 {when}修改",
       "lastChanged": "最近修改于 {when}",
-      "chooseFirst": "请先选择模型。"
+      "chooseFirst": "请先选择模型。",
+      "price": "每百万 token：输入 {input}，输出 {output}"
     },
     "testingShort": "正在测试…",
     "test": "测试",
@@ -1729,7 +1730,9 @@
     "problems": {
       "badId": "这看起来不像模型 ID。请完全按照提供商列出的样子复制，不要包含空格。",
       "needsReasoning": "只有推理模型才能处理此类工作。请勾选“逐步推理”，或留空。",
-      "needsVision": "只有能读取图片的模型才能处理此类工作。请勾选“可读取图片”，或留空。"
+      "needsVision": "只有能读取图片的模型才能处理此类工作。请勾选“可读取图片”，或留空。",
+      "pricePair": "请同时填写输入和输出价格，或两者都留空。",
+      "priceRange": "价格必须是 0 到 {max, number} 之间的数字，单位为美元/百万 token。"
     },
     "blockers": {
       "address": "地址",
@@ -1773,7 +1776,12 @@
       "readsImages": "可读取图片",
       "reasons": "逐步推理（推理模型）",
       "followsSchema": "遵循 JSON schema",
-      "structuredHint": "结构化输出（response_format: json_schema）。大多数 OpenAI、Gemini 和 OpenRouter 模型默认开启；通过 Anthropic 兼容 API 使用的 Claude 默认关闭。关闭时，LaunchStack 会改为在提示词中要求输出 JSON。"
+      "structuredHint": "结构化输出（response_format: json_schema）。大多数 OpenAI、Gemini 和 OpenRouter 模型默认开启；通过 Anthropic 兼容 API 使用的 Claude 默认关闭。关闭时，LaunchStack 会改为在提示词中要求输出 JSON。",
+      "price": "每百万 token 价格",
+      "priceInput": "输入",
+      "priceOutput": "输出",
+      "priceUnit": "$",
+      "priceHint": "你的服务商收取的费用，以美元计。用于显示费用，并在用量和上限中按价格折算这个模型的 token。留空则每个 token 按 1 计。"
     }
   },
   "server": {
@@ -1845,6 +1853,8 @@
       "notModelId": "“{id}”看起来不像模型 ID。请按服务商列出的原样复制。",
       "visionModel": "处理图片的模型必须能够读取图片。",
       "reasoningModel": "用于推理的模型必须具备推理能力。",
+      "pricePair": "请为“{id}”同时填写输入和输出价格，或两者都留空。",
+      "priceRange": "“{id}”的价格必须在 0 到 {max} 美元/百万 token 之间。",
       "invalidSetup": "这不是有效的模型设置。",
       "saveFailed": "无法保存模型设置。",
       "chooseModel": "请选择要测试的模型。",

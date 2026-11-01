@@ -6,7 +6,8 @@
  * What a workspace admin sees and sends when bringing their own model: the
  * two ways in, the editor's request body (a blank key keeps the saved one
  * only while the address is unchanged), the connected summary, which says
- * which key is saved without ever showing it, and the OpenRouter return leg.
+ * which key is saved without ever showing it, the OpenRouter return leg, and
+ * each model's optional price (filled from OpenRouter's catalogue when empty).
  */
 
 import React from "react";
@@ -124,7 +125,11 @@ function serve() {
         }
         if (url === "/api/settings/models/workspace/models") {
             listed.push(body);
-            return respond({ models: ["zeta/chat", "alpha/chat"] });
+            return respond({
+                models: ["zeta/chat", "alpha/chat"],
+                // OpenRouter's catalogue prices some of what it lists.
+                prices: { "alpha/chat": { input: 3, output: 15, cachedInput: 0.3 } },
+            });
         }
         if (url === "/api/settings/models/workspace/test") {
             tested.push(body);
@@ -158,6 +163,17 @@ async function pressPrimary() {
 const mainModel = () =>
     // An input with suggestions (`list`) is a combobox.
     screen.getByRole("combobox", { name: "Main model" });
+
+/** A route's price pair, inside its group. */
+function priceOf(route: RegExp) {
+    const group = within(screen.getByRole("group", { name: route }));
+    const prices = within(group.getByRole("group", { name: /Price per 1M tokens/ }));
+    return {
+        input: () => prices.getByRole("textbox", { name: "Input" }),
+        output: () => prices.getByRole("textbox", { name: "Output" }),
+        group: prices,
+    };
+}
 
 describe("Workspace › Bring your own keys › API key", () => {
     beforeAll(() => {
@@ -333,6 +349,220 @@ describe("Workspace › Bring your own keys › API key", () => {
 
         expect(puts[0]?.models).toEqual({
             default: { id: "main-1", vision: false, reasoning: false, structuredOutput: false },
+        });
+    });
+
+    describe("a model's price", () => {
+        it("renders an optional pair under the main model and sends it with the model", async () => {
+            stored = CONNECTED;
+            const user = userEvent.setup();
+            renderSection();
+
+            await user.click(await screen.findByRole("button", { name: "Edit" }));
+            const main = priceOf(/Main model/);
+            expect(main.input()).toHaveValue("");
+            expect(main.output()).toHaveValue("");
+            expect(main.input()).toHaveAttribute("inputmode", "decimal");
+            expect(
+                main.group.getByText(/What your provider charges, in US dollars/)
+            ).toBeInTheDocument();
+            expect(main.group.getByText(/its tokens count one for one/)).toBeInTheDocument();
+
+            await user.type(main.input(), "3");
+            await user.type(main.output(), "15");
+            await waitFor(() => expect(actions?.disabled).toBe(false));
+            await pressPrimary();
+
+            expect(puts[0]?.models).toEqual({
+                default: {
+                    id: "main-1",
+                    vision: false,
+                    reasoning: false,
+                    structuredOutput: true,
+                    pricing: { input: 3, output: 15 },
+                },
+            });
+            // The summary says what was saved.
+            expect(
+                await screen.findByText(/\$3\.00 in, \$15\.00 out per 1M tokens/)
+            ).toBeInTheDocument();
+        });
+
+        it("loads a saved price, and clearing it removes it", async () => {
+            stored = {
+                ...CONNECTED,
+                models: {
+                    default: {
+                        id: "main-1",
+                        vision: false,
+                        reasoning: false,
+                        pricing: { input: 2, output: 8, cachedInput: 0.2 },
+                    },
+                },
+            };
+            const user = userEvent.setup();
+            renderSection();
+
+            expect(
+                await screen.findByText(/\$2\.00 in, \$8\.00 out per 1M tokens/)
+            ).toBeInTheDocument();
+            await user.click(screen.getByRole("button", { name: "Edit" }));
+            const main = priceOf(/Main model/);
+            expect(main.input()).toHaveValue("2");
+            expect(main.output()).toHaveValue("8");
+
+            // Saved untouched, the cached-input price it came with stays.
+            await pressPrimary();
+            expect((puts[0]?.models as Body).default).toMatchObject({
+                pricing: { input: 2, output: 8, cachedInput: 0.2 },
+            });
+
+            await user.click(await screen.findByRole("button", { name: "Edit" }));
+            await user.clear(priceOf(/Main model/).input());
+            await user.clear(priceOf(/Main model/).output());
+            await waitFor(() => expect(actions?.disabled).toBe(false));
+            await pressPrimary();
+            expect((puts[1]?.models as Body).default).not.toHaveProperty("pricing");
+            await waitFor(() =>
+                expect(screen.queryByText(/out per 1M tokens/)).not.toBeInTheDocument()
+            );
+        });
+
+        it("refuses half a price and a price out of range", async () => {
+            stored = CONNECTED;
+            const user = userEvent.setup();
+            renderSection();
+
+            await user.click(await screen.findByRole("button", { name: "Edit" }));
+            const main = priceOf(/Main model/);
+            await user.type(main.input(), "3");
+            expect(
+                main.group.getByText("Give both an input and an output price, or leave both empty.")
+            ).toBeInTheDocument();
+            expect(main.input()).toHaveAttribute("aria-invalid", "true");
+            await waitFor(() => expect(actions?.disabled).toBe(true));
+
+            await user.type(main.output(), "20000");
+            expect(
+                main.group.getByText(
+                    "A price is a number from 0 to 10,000, in US dollars per 1M tokens."
+                )
+            ).toBeInTheDocument();
+            expect(actions?.disabled).toBe(true);
+
+            await user.clear(main.output());
+            await user.type(main.output(), "abc");
+            expect(main.group.getByText(/A price is a number/)).toBeInTheDocument();
+
+            await user.clear(main.output());
+            await user.type(main.output(), "0.6");
+            await waitFor(() => expect(actions?.disabled).toBe(false));
+        });
+
+        it("gives a routed model its own price once it is chosen", async () => {
+            stored = CONNECTED;
+            const user = userEvent.setup();
+            renderSection();
+
+            await user.click(await screen.findByRole("button", { name: "Edit" }));
+            await user.click(screen.getByRole("button", { name: /Use different models/ }));
+            const fast = screen.getByRole("group", { name: /^Fast/ });
+            expect(
+                within(fast).queryByRole("group", { name: /Price per 1M tokens/ })
+            ).not.toBeInTheDocument();
+
+            await user.type(within(fast).getByRole("combobox"), "small-1");
+            await user.type(priceOf(/^Fast/).input(), "0.15");
+            await user.type(priceOf(/^Fast/).output(), "0.6");
+            await waitFor(() => expect(actions?.disabled).toBe(false));
+            await pressPrimary();
+
+            expect(puts[0]?.models).toEqual({
+                default: { id: "main-1", vision: false, reasoning: false, structuredOutput: true },
+                fast: {
+                    id: "small-1",
+                    vision: false,
+                    reasoning: false,
+                    structuredOutput: true,
+                    pricing: { input: 0.15, output: 0.6 },
+                },
+            });
+        });
+
+        it("fills an empty price from OpenRouter's catalogue when the admin picks a model", async () => {
+            window.history.replaceState(null, "", "/employer/documents?openrouter=connected#byok");
+            stored = OPENROUTER_FRESH;
+            const user = userEvent.setup();
+            renderSection();
+
+            await waitFor(() => expect(listed).toHaveLength(1));
+            const main = priceOf(/Main model/);
+            await user.type(mainModel(), "alpha/chat");
+            expect(main.input()).toHaveValue("3");
+            expect(main.output()).toHaveValue("15");
+
+            // Another pick replaces the catalogue's price; one it doesn't price clears it.
+            await user.clear(mainModel());
+            await user.type(mainModel(), "zeta/chat");
+            expect(main.input()).toHaveValue("");
+            expect(main.output()).toHaveValue("");
+
+            await user.clear(mainModel());
+            await user.type(mainModel(), "alpha/chat");
+            await waitFor(() => expect(actions?.disabled).toBe(false));
+            await pressPrimary();
+            expect((puts[0]?.models as Body).default).toEqual({
+                id: "alpha/chat",
+                vision: false,
+                reasoning: false,
+                structuredOutput: true,
+                pricing: { input: 3, output: 15, cachedInput: 0.3 },
+            });
+        });
+
+        it("never replaces a price the admin typed", async () => {
+            window.history.replaceState(null, "", "/employer/documents?openrouter=connected#byok");
+            stored = OPENROUTER_FRESH;
+            const user = userEvent.setup();
+            renderSection();
+
+            await waitFor(() => expect(listed).toHaveLength(1));
+            const main = priceOf(/Main model/);
+            await user.type(main.input(), "1");
+            await user.type(main.output(), "2");
+            await user.type(mainModel(), "alpha/chat");
+            expect(main.input()).toHaveValue("1");
+            expect(main.output()).toHaveValue("2");
+
+            await pressPrimary();
+            expect((puts[0]?.models as Body).default).toMatchObject({
+                pricing: { input: 1, output: 2 },
+            });
+        });
+
+        it("fills a chosen model's empty price when the list arrives, but not a saved one", async () => {
+            stored = {
+                ...OPENROUTER_FRESH,
+                models: {
+                    default: { id: "alpha/chat", vision: false, reasoning: false },
+                    fast: {
+                        id: "alpha/chat",
+                        vision: false,
+                        reasoning: false,
+                        pricing: { input: 1, output: 2 },
+                    },
+                },
+                active: true,
+            };
+            const user = userEvent.setup();
+            renderSection();
+
+            await user.click(await screen.findByRole("button", { name: "Edit" }));
+            await user.click(screen.getByRole("button", { name: "Load models" }));
+            await waitFor(() => expect(priceOf(/Main model/).input()).toHaveValue("3"));
+            expect(priceOf(/Main model/).output()).toHaveValue("15");
+            expect(priceOf(/^Fast/).input()).toHaveValue("1");
+            expect(priceOf(/^Fast/).output()).toHaveValue("2");
         });
     });
 

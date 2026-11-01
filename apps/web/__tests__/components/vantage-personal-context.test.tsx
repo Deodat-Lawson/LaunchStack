@@ -55,12 +55,12 @@ it("shows revoked coverage without document content and lets the user remove the
     await screen.findByText("Access revoked");
     expect(screen.queryByText("Engineering operating constraints")).toBeNull();
     fireEvent.click(screen.getByRole("button", { name: "Remove unavailable star" }));
-    await screen.findByText("Required context is ready for handoff.");
+    await screen.findByText("Your context is loaded.");
 });
 it("distinguishes missing canonical company context", async () => {
     render(<PersonalContextPanel client={createPreviewClientV0("missing-company")} />);
     await screen.findByText("Canonical company context has not been created.");
-    expect(screen.getByText("Required context needs attention before generation.")).toBeTruthy();
+    expect(screen.getByText("Some context needs attention.")).toBeTruthy();
 });
 it("labels authorized source previews as not assembled while required context is blocked", async () => {
     const base = createPreviewClientV0("normal");
@@ -72,11 +72,11 @@ it("labels authorized source previews as not assembled while required context is
             }}
         />
     );
-    await screen.findByText("Authorized preview · not assembled");
-    expect(screen.getByText(/No complete required bundle has been prepared/)).toBeTruthy();
+    await screen.findByText("Available preview");
+    expect(screen.getByText(/Some context is still unavailable/)).toBeTruthy();
     expect(screen.queryByText("Included", { exact: true })).toBeNull();
-    expect(screen.getByText("Required context needs attention before generation.")).toBeTruthy();
-    expect(screen.queryByText("Required context is ready for handoff.")).toBeNull();
+    expect(screen.getByText("Some context needs attention.")).toBeTruthy();
+    expect(screen.queryByText("Your context is loaded.")).toBeNull();
 });
 it("prevents double submissions while a save is pending", async () => {
     const base = createPreviewClientV0("normal");
@@ -138,8 +138,6 @@ it("keeps failed mutation errors separate and permits explicit reload", async ()
 it("keeps role choices separate from permissions and report generation", async () => {
     render(<PersonalContextPanel client={createPreviewClientV0("normal")} />);
     await screen.findByText("Your roles and documents");
-    expect(
-        screen.getByText(/Business roles and stars never change document permissions/)
-    ).toBeTruthy();
+    expect(screen.getByText("Starring a document never changes who can see it.")).toBeTruthy();
     expect(screen.queryByRole("button", { name: /generate/i })).toBeNull();
 });

@@ -18,8 +18,10 @@ const TITLE = "Pending Questions from Previous Reviews";
 export function PendingQuestions({
     agendaId,
     onPendingCount,
+    compact = false,
 }: {
     agendaId: string;
+    compact?: boolean;
     onPendingCount?: (count: number | null) => void;
 }) {
     const pending = useResource(`vantage:pending:${agendaId}`, () =>
@@ -64,11 +66,17 @@ export function PendingQuestions({
 
     return (
         <section aria-label={TITLE}>
-            <SectionHeading title={TITLE} />
+            {!compact && <SectionHeading title={TITLE} />}
             <p className="text-ink-3 mb-3 max-w-[76ch] text-[12.5px] leading-relaxed">
-                These questions come from earlier reviews. Their current status is unverified;
-                keeping them visible does not mean the issue is still open. Your review does not
-                change any existing commitment.
+                {compact ? (
+                    "Historical questions. Progress remains unverified; reviewing one does not change an action."
+                ) : (
+                    <>
+                        These questions come from earlier reviews. Their current status is
+                        unverified; keeping them visible does not mean the issue is still open. Your
+                        review does not change any existing commitment.
+                    </>
+                )}
             </p>
             {pending.loading && (
                 <p className="text-ink-3 text-[13px]" aria-live="polite">

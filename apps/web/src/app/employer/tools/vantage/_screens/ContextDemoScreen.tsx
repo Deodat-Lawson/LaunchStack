@@ -1,13 +1,19 @@
 "use client";
 
-import { Loader2, RefreshCw, Sparkles } from "lucide-react";
+import {
+    ChevronLeft,
+    ChevronRight,
+    Loader2,
+    RefreshCw,
+    SlidersHorizontal,
+    Sparkles,
+} from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ToolLink } from "~/components/tool-app/ToolLink";
 import { useToolNav } from "~/components/tool-app/nav";
 import { EmptyState, InlineError } from "~/components/tools/EmptyState";
-import { PageHeader, SectionHeading } from "~/components/tools/PageHeader";
+
 import { SkeletonRows } from "~/components/tools/SkeletonRows";
-import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import {
     Dialog,
@@ -18,7 +24,10 @@ import {
 } from "~/components/ui/dialog";
 import { Textarea } from "~/components/ui/textarea";
 import { useResource } from "~/lib/tools/useResource";
-import { PersonalContextPanel } from "~/components/vantage-context/PersonalContextPanel";
+import { MyContextSheet } from "../_components/MyContextSheet";
+import { WeeklyBrief } from "../_components/WeeklyBrief";
+import ui from "./unified-review.module.css";
+import { calendarAdd } from "../_lib/reporting";
 import { ContextSourceDialog } from "../_components/ContextSourceDialog";
 import { PendingQuestions } from "../_components/PendingQuestions";
 import { CompactTopicRow } from "../_components/CompactTopicRow";
@@ -33,7 +42,6 @@ import type {
     DemoTopic,
     DemoTopicReview,
 } from "../demo-contract";
-import { fmtDate } from "../_lib/format";
 import { AgendaScreen } from "./AgendaScreen";
 
 const DECISION_LABEL: Record<DemoHumanDecision["value"], string> = {
@@ -81,6 +89,10 @@ function ContextDemoWeek({
     const topicTrigger = useRef<HTMLButtonElement | null>(null);
     const [decision, setDecision] = useState<DemoTopic | null>(null);
     const [personalOpen, setPersonalOpen] = useState(false);
+    const personalTrigger = useRef<HTMLButtonElement | null>(null);
+    const [topicFilter, setTopicFilter] = useState("all");
+    const [pendingCount, setPendingCount] = useState<number | null>(null);
+    const [decisionChoice, setDecisionChoice] = useState<DemoHumanDecision["value"] | undefined>();
     const [personalReady, setPersonalReady] = useState<boolean | null>(null);
     const [personalBlocker, setPersonalBlocker] = useState<string | null>(null);
     const alive = useRef(true);
@@ -95,10 +107,7 @@ function ContextDemoWeek({
     }, []);
     const data = state.data;
     const report = !withheld && !state.error ? data?.report : null;
-    const selectedTopic =
-        report?.topics.find(
-            topic => topic.id === selectedTopicId && topic.status !== "dismissed"
-        ) ?? null;
+    const selectedTopic = report?.topics.find(topic => topic.id === selectedTopicId) ?? null;
     const replayMode = data?.generationMode === "replay";
     const personalEnabled = data?.personalContextAvailable === true;
     const personalBlocked = personalEnabled && personalReady !== true;
@@ -179,7 +188,7 @@ function ContextDemoWeek({
                     !next.report
                         ? "The request finished, but contextual content is unavailable with the current evidence or access."
                         : label === "generate"
-                          ? "Contextual report saved. Your native report, decisions and actions are preserved."
+                          ? "Report saved. Earlier reports, decisions and actions are preserved."
                           : "Review saved. No action or commitment was created."
                 );
             }
@@ -229,135 +238,97 @@ function ContextDemoWeek({
         );
     }
 
+    const visibleTopics =
+        report?.topics.filter(
+            topic =>
+                topicFilter === "all" ||
+                (topicFilter === "open"
+                    ? topic.status !== "dismissed" && !topic.decision
+                    : topicFilter === "decided"
+                      ? !!topic.decision
+                      : topic.status === "dismissed")
+        ) ?? [];
+    const weekOptions = data?.weeks.map(item => item.weekStart).sort() ?? [];
+    const weekIndex = data ? weekOptions.indexOf(data.selectedWeek) : -1;
+    const chooseWeek = (value: string | undefined) => {
+        if (value) navigate(`/?week=${value}`);
+    };
     return (
-        <div className="mx-auto flex max-w-[1060px] flex-col gap-6">
-            <PageHeader
-                title={"Your weekly review, "}
-                accent="with context"
-                sub="Read the evidence, make a decision, and keep your earlier questions in view."
-                actions={
-                    <Button onClick={generate} disabled={!data || locked || personalBlocked}>
-                        {busy === "generate" ? (
-                            <Loader2 className="animate-spin" aria-hidden="true" />
-                        ) : (
-                            <Sparkles aria-hidden="true" />
+        <div className={ui.review}>
+            <header className={ui.reviewHeader}>
+                <div>
+                    <p className={ui.eyebrow}>Weekly Review</p>
+                    <div className={ui.weekPicker}>
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            aria-label="Previous week"
+                            disabled={locked || weekIndex < 1}
+                            onClick={() => chooseWeek(weekOptions[weekIndex - 1])}
+                        >
+                            <ChevronLeft aria-hidden="true" />
+                        </Button>
+                        <h1>{data ? reviewWeek(data.selectedWeek) : "Your weekly review"}</h1>
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            aria-label="Next week"
+                            disabled={
+                                locked || weekIndex < 0 || weekIndex === weekOptions.length - 1
+                            }
+                            onClick={() => chooseWeek(weekOptions[weekIndex + 1])}
+                        >
+                            <ChevronRight aria-hidden="true" />
+                        </Button>
+                        {report && (
+                            <span className={ui.openCount}>
+                                {
+                                    report.topics.filter(
+                                        topic => topic.status !== "dismissed" && !topic.decision
+                                    ).length
+                                }{" "}
+                                to review
+                            </span>
                         )}
-                        {busy === "generate"
-                            ? replayMode
-                                ? "Replaying…"
-                                : "Generating…"
-                            : replayMode
-                              ? "Replay recorded report"
-                              : "Generate with context"}
-                    </Button>
-                }
-            />
-            <div className="border-line flex flex-wrap items-center justify-between gap-3 border-b pb-4">
-                <div className="flex flex-wrap items-center gap-3">
-                    <label htmlFor="context-demo-week" className="text-ink-3 text-xs font-medium">
-                        Reporting week
-                    </label>
-                    <select
-                        id="context-demo-week"
-                        value={data?.selectedWeek ?? ""}
-                        disabled={!data || locked}
-                        onChange={event => navigate(`/context-demo?week=${event.target.value}`)}
-                        className="border-line bg-panel text-ink focus-visible:ring-brand/50 h-9 max-w-full rounded-md border px-3 text-sm focus-visible:outline-none focus-visible:ring-2"
-                    >
-                        {!data && <option value="">Loading weeks…</option>}
-                        {data?.weeks.map(item => (
-                            <option key={item.weekStart} value={item.weekStart}>
-                                Week of {fmtDate(item.weekStart)}
-                                {item.label ? ` · ${item.label}` : ""}
-                            </option>
-                        ))}
-                    </select>
+                    </div>
+                </div>
+                <div className={ui.headerActions}>
+                    {(personalEnabled || data?.companyArchitecture) && (
+                        <Button
+                            ref={personalTrigger}
+                            variant="outline"
+                            onClick={() => setPersonalOpen(true)}
+                        >
+                            <SlidersHorizontal aria-hidden="true" />
+                            My context
+                            {data?.companyArchitecture?.reviewState === "unreviewed" && (
+                                <span
+                                    className={ui.attentionDot}
+                                    aria-label="Company profile unreviewed"
+                                />
+                            )}
+                        </Button>
+                    )}
                     <Button
-                        variant="ghost"
-                        size="sm"
-                        aria-label="Reload saved contextual report"
+                        variant="outline"
+                        aria-label="Refresh saved weekly review"
                         disabled={locked}
                         onClick={() => void reloadSaved()}
                     >
                         <RefreshCw
-                            aria-hidden="true"
                             className={refreshing ? "animate-spin" : undefined}
+                            aria-hidden="true"
                         />
+                        Refresh
                     </Button>
                 </div>
-                <ToolLink
-                    href="/commitments"
-                    className="text-brand-ink text-xs underline underline-offset-4"
-                >
-                    Open Weekly Actions
-                </ToolLink>
-            </div>
-            <p className="text-ink-3 -mt-3 text-xs leading-relaxed">
-                {replayMode
-                    ? "Synthetic recorded replay · no fresh AI call."
-                    : "AI-generated suggestions for your review."}{" "}
-                Reviews record your choice; they do not create actions.
-            </p>
-            {personalEnabled && (
-                <section aria-label="Joseph personal context" className="border-line border-b py-3">
-                    <details
-                        open={personalOpen}
-                        onToggle={event => setPersonalOpen(event.currentTarget.open)}
-                    >
-                        <summary className="text-ink cursor-pointer text-sm font-medium">
-                            Your roles and Vantage stars · Joseph integration
-                        </summary>
-                        <p className="text-ink-3 mt-3 text-xs leading-relaxed">
-                            Role and star choices are held in this demo server process memory, not
-                            browser storage or production PostgreSQL. Browser reload retains them
-                            while this server runs; restarting the server resets them. These choices
-                            apply to future context preparation; the saved report retains its
-                            original context.
-                        </p>
-                        {personalOpen && <PersonalContextPanel client={personalClient} />}
-                        <p role="status" className="text-ink-3 mt-2 text-xs leading-relaxed">
-                            {personalReady === null
-                                ? "Checking Joseph required context before generation."
-                                : personalReady
-                                  ? "Joseph required context is ready for the next generation."
-                                  : (personalBlocker ??
-                                    "Joseph required context is incomplete. Inspect coverage before generation.")}
-                        </p>
-                        {personalBlocked && (
-                            <p className="text-ink-3 mt-2 text-xs">
-                                Generation is blocked until required context is ready. Earlier
-                                report, citations and human reviews remain available; no company
-                                review status is inferred.
-                            </p>
-                        )}
-                    </details>
-                </section>
-            )}
-            {data?.companyArchitecture && !withheld && !state.error && (
-                <section
-                    aria-label="Available Company Architecture"
-                    className="border-line text-ink-3 border-b py-3 text-xs"
-                >
-                    <details>
-                        <summary className="cursor-pointer">
-                            Company Architecture ·{" "}
-                            {data.companyArchitecture.reviewState ?? "unreviewed"}
-                        </summary>
-                        <p className="mt-3 leading-relaxed">
-                            Current authorized company context. Inspect the supplied facts, exact
-                            version and provenance before relying on this unreviewed profile.
-                        </p>
-                        <Button
-                            className="mt-3"
-                            size="sm"
-                            variant="outline"
-                            disabled={!data.nativeAgendaId || locked}
-                            onClick={() => setSource(data.companyArchitecture!.source)}
-                        >
-                            Inspect Company Architecture
-                        </Button>
-                    </details>
-                </section>
+            </header>
+            {personalReady === false && personalEnabled && (
+                <p role="status" className={ui.contextNotice}>
+                    Context needs attention before a new review can be prepared. Your saved report
+                    is still available.{" "}
+                    <button onClick={() => setPersonalOpen(true)}>Inspect My context</button>
+                </p>
             )}
             {(state.error ?? error) && (
                 <InlineError message={error ?? state.error!} onRetry={() => void reloadSaved()} />
@@ -368,13 +339,10 @@ function ContextDemoWeek({
                 </p>
             )}
             {busy === "generate" && (
-                <div
-                    role="status"
-                    className="border-line bg-panel text-ink-2 rounded-lg border px-5 py-4 text-sm"
-                >
-                    Reading authorized context and current evidence… Your saved review stays below
-                    until a new report passes validation.
-                </div>
+                <p role="status">
+                    Preparing the review. Your saved report stays available until the new result is
+                    validated.
+                </p>
             )}
             {state.loading ? (
                 <SkeletonRows rows={3} height={130} />
@@ -382,167 +350,187 @@ function ContextDemoWeek({
                 data && (
                     <>
                         {data.unavailableReason && (
-                            <p
-                                role="status"
-                                className="border-warn/30 bg-warn-soft text-warn rounded-lg border p-4 text-sm"
-                            >
-                                {data.unavailableReason}
+                            <p role="status" className={ui.contextNotice}>
+                                Saved content is unavailable with the current sources or access.
+                                Refresh to check again, or open the alternative saved report.
                             </p>
                         )}
                         {report ? (
                             <>
-                                <section
-                                    aria-label="Saved contextual weekly summary"
-                                    className="border-line rounded-lg border px-4 py-3"
-                                >
-                                    <div className="mb-3 flex flex-wrap items-center gap-2">
-                                        <Badge variant="outline">
-                                            {report.execution.mode === "replay"
-                                                ? "Recorded AI replay · no fresh model call"
-                                                : "Context-aware · AI"}
-                                        </Badge>
-                                    </div>
-                                    <h2 className="text-ink mb-2 text-sm font-semibold">
-                                        Weekly insight
-                                    </h2>
-                                    <p className="text-ink-2 text-[13px] leading-relaxed">
-                                        {
-                                            report.topics.filter(
-                                                topic => topic.status !== "dismissed"
-                                            ).length
-                                        }{" "}
-                                        discussion topics to review this week.
-                                    </p>
-                                    <details className="text-ink-3 mt-2 text-xs">
-                                        <summary className="cursor-pointer">
-                                            Read full saved summary
-                                        </summary>
-                                        <p className="text-ink-2 mt-3 max-w-[80ch] text-[13px] leading-relaxed">
-                                            {report.summary}
-                                        </p>
-                                    </details>
-                                </section>
-                                <section aria-label="Contextual discussion topics">
-                                    <SectionHeading
-                                        title="Discussion topics"
-                                        aside={`${report.topics.filter(topic => topic.status !== "dismissed").length} for review`}
-                                    />
-                                    <div className="border-line border-t">
-                                        {report.topics
-                                            .filter(topic => topic.status !== "dismissed")
-                                            .map(topic => (
-                                                <CompactTopicRow
-                                                    key={topic.id}
-                                                    topic={topic}
-                                                    selected={selectedTopicId === topic.id}
-                                                    onOpen={trigger => {
-                                                        topicTrigger.current = trigger;
-                                                        setSelectedTopicId(topic.id);
+                                <WeeklyBrief report={report} onSource={setSource} />
+                                <section aria-label="Decisions to make">
+                                    <div className={ui.sectionHeader}>
+                                        <h2>Decisions to make</h2>
+                                        <div
+                                            role="group"
+                                            aria-label="Filter decisions"
+                                            className={ui.filters}
+                                        >
+                                            {[
+                                                ["all", "All"],
+                                                ["open", "To review"],
+                                                ["decided", "Decided"],
+                                                ["dismissed", "Dismissed"],
+                                            ].map(([value, label]) => (
+                                                <button
+                                                    key={value}
+                                                    aria-pressed={topicFilter === value}
+                                                    onClick={() => {
+                                                        if (value) setTopicFilter(value);
                                                     }}
-                                                />
+                                                >
+                                                    {label}{" "}
+                                                    <span>
+                                                        {
+                                                            report.topics.filter(
+                                                                topic =>
+                                                                    value === "all" ||
+                                                                    (value === "open"
+                                                                        ? topic.status !==
+                                                                              "dismissed" &&
+                                                                          !topic.decision
+                                                                        : value === "decided"
+                                                                          ? !!topic.decision
+                                                                          : topic.status ===
+                                                                            "dismissed")
+                                                            ).length
+                                                        }
+                                                    </span>
+                                                </button>
                                             ))}
-                                        {report.topics.every(
-                                            topic => topic.status === "dismissed"
-                                        ) && (
-                                            <EmptyState
-                                                title="No topics waiting for review"
-                                                body="Your dismissed topics and earlier review records remain saved below."
+                                        </div>
+                                    </div>
+                                    <p className={ui.listNote}>
+                                        Suggestions for your review. Keeping a topic or recording a
+                                        decision does not create an action.
+                                    </p>
+                                    <div className={ui.decisionList}>
+                                        {visibleTopics.map(topic => (
+                                            <CompactTopicRow
+                                                key={topic.id}
+                                                topic={topic}
+                                                report={report}
+                                                selected={selectedTopicId === topic.id}
+                                                onOpen={trigger => {
+                                                    topicTrigger.current = trigger;
+                                                    setSelectedTopicId(topic.id);
+                                                }}
                                             />
+                                        ))}
+                                        {!visibleTopics.length && (
+                                            <p className="text-ink-3 p-5 text-sm">
+                                                No topics in this view. Other saved topics remain
+                                                available in the filters above.
+                                            </p>
                                         )}
                                     </div>
-                                    {report.topics.some(topic => topic.status === "dismissed") && (
-                                        <details className="border-line mt-4 rounded-lg border px-4 py-3">
-                                            <summary className="text-ink-3 cursor-pointer text-sm">
-                                                Dismissed topics (
-                                                {
-                                                    report.topics.filter(
-                                                        topic => topic.status === "dismissed"
-                                                    ).length
-                                                }
-                                                )
-                                            </summary>
-                                            <div className="mt-3 space-y-3">
-                                                {report.topics
-                                                    .filter(topic => topic.status === "dismissed")
-                                                    .map(topic => (
-                                                        <div
-                                                            key={topic.id}
-                                                            className="flex flex-wrap items-center justify-between gap-2"
-                                                        >
-                                                            <p className="text-ink-2 text-sm">
-                                                                {topic.title}
-                                                            </p>
-                                                            <Button
-                                                                size="sm"
-                                                                variant="outline"
-                                                                disabled={locked}
-                                                                onClick={() =>
-                                                                    void review(topic, {
-                                                                        status: "kept",
-                                                                    })
-                                                                }
-                                                            >
-                                                                Keep for review
-                                                            </Button>
-                                                        </div>
-                                                    ))}
-                                            </div>
-                                        </details>
-                                    )}
                                 </section>
-                                <ExecutionDetails report={report} onSource={setSource} />
                             </>
                         ) : (
                             <EmptyState
                                 title={
-                                    withheld || state.error
-                                        ? "Contextual content is hidden"
-                                        : data.unavailableReason
-                                          ? "Saved contextual content is withheld"
-                                          : "No contextual report saved for this week"
+                                    withheld || state.error || data.unavailableReason
+                                        ? "Saved content is withheld"
+                                        : "No saved weekly brief"
                                 }
-                                body={
-                                    withheld || state.error
-                                        ? "Reload to verify the current evidence and access before reviewing this report."
-                                        : data.unavailableReason
-                                          ? replayMode
-                                              ? "Earlier reports and human reviews remain stored. Replay is available only when its recorded evidence still matches the authorized fixture."
-                                              : "Earlier contextual reports and human reviews remain stored. Generate a fresh report from the current authorized evidence."
-                                          : replayMode
-                                            ? "Replay the recorded synthetic response without a fresh AI call. Your native weekly review and earlier human decisions remain available."
-                                            : "Generate when you are ready to call the configured model. Your native weekly review and earlier human decisions remain available."
-                                }
+                                body="Refresh to verify sources, open the alternative saved report, or prepare a review when the required context is ready."
                                 action={
-                                    <Button onClick={generate} disabled={locked || personalBlocked}>
-                                        <Sparkles aria-hidden="true" />
-                                        {replayMode
-                                            ? "Replay recorded report"
-                                            : "Generate with context"}
-                                    </Button>
+                                    <ToolLink
+                                        href={`/agenda?week=${data.selectedWeek}&report=rules`}
+                                        className="text-brand-ink underline"
+                                    >
+                                        Open alternative saved report
+                                    </ToolLink>
                                 }
                             />
                         )}
                         {data.nativeAgendaId && (
-                            <PendingQuestions
-                                key={data.nativeAgendaId}
-                                agendaId={data.nativeAgendaId}
-                            />
+                            <details className={ui.historical} open>
+                                <summary>
+                                    Questions from earlier reviews{" "}
+                                    {pendingCount !== null && (
+                                        <span className={ui.openCount}>{pendingCount}</span>
+                                    )}
+                                </summary>
+                                <PendingQuestions
+                                    key={data.nativeAgendaId}
+                                    agendaId={data.nativeAgendaId}
+                                    compact
+                                    onPendingCount={setPendingCount}
+                                />
+                            </details>
                         )}
-                        <div className="text-ink-3 border-line flex flex-wrap items-center justify-between gap-3 border-t pt-4 text-xs">
-                            <span>
-                                The native weekly report and actions use their existing review
-                                flows.
-                            </span>
+                        <footer className={ui.reportFooter}>
+                            <p>
+                                {replayMode
+                                    ? "Sample report ? recorded replay ? no live AI call"
+                                    : "Saved report ? suggestions for human review"}
+                            </p>
                             <ToolLink
-                                href={`/agenda?week=${data.selectedWeek}`}
-                                className="text-brand-ink underline underline-offset-4"
+                                href={`/agenda?week=${data.selectedWeek}&report=rules`}
+                                className="underline underline-offset-4"
                             >
-                                Open native Weekly Review
+                                Alternative saved report
                             </ToolLink>
-                        </div>
+                        </footer>
+                        <details className={ui.reportDetails} id="sources-report-details">
+                            <summary>Sources &amp; report details</summary>
+                            <label className="mt-4 block text-sm">
+                                Reporting week{" "}
+                                <select
+                                    aria-label="Reporting week"
+                                    value={data.selectedWeek}
+                                    disabled={locked}
+                                    onChange={event => chooseWeek(event.target.value)}
+                                >
+                                    {data.weeks.map(item => (
+                                        <option key={item.weekStart} value={item.weekStart}>
+                                            {reviewWeek(item.weekStart)}
+                                        </option>
+                                    ))}
+                                </select>
+                            </label>
+                            <p className="my-4 text-sm">
+                                Role and star choices are held by this local demo server and reset
+                                when it restarts. They apply to future preparation; saved reports
+                                retain their original context. Source versions and access are
+                                rechecked before saving and when opened.
+                            </p>
+                            {personalBlocker && (
+                                <p className="my-3 text-xs">
+                                    Context diagnostic: {personalBlocker}
+                                </p>
+                            )}
+                            {report && <ExecutionDetails report={report} onSource={setSource} />}
+                            <Button
+                                className="mt-4"
+                                onClick={generate}
+                                disabled={locked || personalBlocked}
+                            >
+                                {busy === "generate" ? (
+                                    <Loader2 className="animate-spin" aria-hidden="true" />
+                                ) : (
+                                    <Sparkles aria-hidden="true" />
+                                )}
+                                {replayMode ? "Replay sample report" : "Prepare a new report"}
+                            </Button>
+                        </details>
                     </>
                 )
             )}
+            <MyContextSheet
+                open={personalOpen}
+                onOpenChange={setPersonalOpen}
+                client={personalClient}
+                companyArchitecture={
+                    !withheld && !state.error ? data?.companyArchitecture : undefined
+                }
+                onInspectProfile={() => {
+                    if (data?.companyArchitecture) setSource(data.companyArchitecture.source);
+                }}
+                busy={locked}
+                triggerRef={personalTrigger}
+            />
             {report && selectedTopic && (
                 <TopicDetailSheet
                     open
@@ -555,7 +543,10 @@ function ContextDemoWeek({
                     }}
                     onSource={setSource}
                     onReview={status => void review(selectedTopic, { status })}
-                    onDecision={() => setDecision(selectedTopic)}
+                    onDecision={value => {
+                        setDecisionChoice(value);
+                        setDecision(selectedTopic);
+                    }}
                 />
             )}
             {data?.nativeAgendaId && (
@@ -567,16 +558,18 @@ function ContextDemoWeek({
                         setWithheld(true);
                         setSource(null);
                         setDecision(null);
+                        setPersonalOpen(false);
                         setError(
-                            "The source or its authorization changed. Contextual content is hidden; reload to verify the current review."
+                            "The source or its access changed. Content is hidden; refresh before continuing."
                         );
                     }}
                 />
             )}
             {report && decision && (
                 <DecisionReviewDialog
-                    key={decision.id}
+                    key={`${decision.id}:${decisionChoice ?? "saved"}`}
                     topic={decision}
+                    initialValue={decisionChoice}
                     busy={locked}
                     onClose={() => setDecision(null)}
                     onSave={value => void review(decision, { decision: value })}
@@ -584,6 +577,23 @@ function ContextDemoWeek({
             )}
         </div>
     );
+}
+
+function reviewWeek(week: string) {
+    const start = new Date(`${week}T12:00:00Z`);
+    const end = new Date(`${calendarAdd(week, 6)}T12:00:00Z`);
+    const month = new Intl.DateTimeFormat("en-US", {
+        month: "short",
+        timeZone: "America/New_York",
+    }).format(start);
+    const endMonth =
+        start.getUTCMonth() === end.getUTCMonth()
+            ? ""
+            : new Intl.DateTimeFormat("en-US", {
+                  month: "short",
+                  timeZone: "America/New_York",
+              }).format(end) + " ";
+    return `${month} ${start.getUTCDate()}\u2013${endMonth}${end.getUTCDate()}`;
 }
 
 function ExecutionDetails({
@@ -766,17 +776,19 @@ function ExecutionDetails({
 
 function DecisionReviewDialog({
     topic,
+    initialValue,
     busy,
     onClose,
     onSave,
 }: {
     topic: DemoTopic;
+    initialValue?: DemoHumanDecision["value"];
     busy: boolean;
     onClose: () => void;
     onSave: (decision: NonNullable<DemoTopicReview["decision"]>) => void;
 }) {
     const [value, setValue] = useState<DemoHumanDecision["value"]>(
-        topic.decision?.value ?? "needs-more-evidence"
+        initialValue ?? topic.decision?.value ?? "needs-more-evidence"
     );
     const [note, setNote] = useState(topic.decision?.text ?? "");
     return (

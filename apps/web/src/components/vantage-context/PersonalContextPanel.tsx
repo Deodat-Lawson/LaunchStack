@@ -120,7 +120,7 @@ export function PersonalContextPanel({ client }: { client: PersonalContextClient
     return (
         <div className="text-ink mx-auto max-w-4xl space-y-6 p-4 sm:p-8" aria-busy={busy}>
             <header className="space-y-2">
-                <p className="text-brand text-sm font-medium">Vantage · Personal context</p>
+                <p className="text-brand text-sm font-medium">Vantage context</p>
                 <h1 className="display text-2xl">Your roles and documents</h1>
                 <p className="text-ink-2 max-w-2xl text-sm">
                     Choose the responsibilities and documents that should inform your weekly review.
@@ -128,7 +128,7 @@ export function PersonalContextPanel({ client }: { client: PersonalContextClient
                 </p>
                 <p className="text-ink-2 flex items-center gap-2 text-sm">
                     <ShieldCheck className="h-4 w-4 shrink-0" aria-hidden="true" />
-                    Business roles and stars never change document permissions.
+                    Starring a document never changes who can see it.
                 </p>
             </header>
             {error ? (
@@ -149,9 +149,9 @@ export function PersonalContextPanel({ client }: { client: PersonalContextClient
                     {busy
                         ? "Checking context…"
                         : view?.ready
-                          ? "Required context is ready for handoff."
+                          ? "Your context is loaded."
                           : view
-                            ? "Required context needs attention before generation."
+                            ? "Some context needs attention."
                             : "Context has not loaded."}
                 </p>
                 <Button variant="outline" disabled={busy} onClick={() => void perform()}>
@@ -166,7 +166,7 @@ export function PersonalContextPanel({ client }: { client: PersonalContextClient
                     >
                         <div>
                             <h2 id="roles-heading" className="text-lg font-semibold">
-                                Business responsibilities
+                                Your roles
                             </h2>
                             <p className="text-ink-2 text-sm">
                                 Select all that apply. A primary perspective changes priority order.
@@ -179,8 +179,7 @@ export function PersonalContextPanel({ client }: { client: PersonalContextClient
                         ) : null}
                         {view.roles.fallback ? (
                             <p className="text-warn text-sm">
-                                Some responsibilities are unknown. Review your roles; no permissions
-                                have been inferred.
+                                Some responsibilities are unknown. Review your roles.
                             </p>
                         ) : null}
                         <div className="grid gap-3 sm:grid-cols-2">
@@ -240,7 +239,8 @@ export function PersonalContextPanel({ client }: { client: PersonalContextClient
                             Save roles
                         </Button>
                         <p className="text-ink-2 text-sm">
-                            Saved priorities: {mergedRolePrioritiesV0(view.roles).join(" · ")}
+                            Current saved priorities:{" "}
+                            {mergedRolePrioritiesV0(view.roles).join(" · ")}
                         </p>
                     </section>
                     <section
@@ -249,11 +249,12 @@ export function PersonalContextPanel({ client }: { client: PersonalContextClient
                     >
                         <div>
                             <h2 id="stars-heading" className="text-lg font-semibold">
-                                Your Vantage stars
+                                Always consider
                             </h2>
                             <p className="text-ink-2 text-sm">
-                                Every selected document is checked, even when it has not changed
-                                recently. Stars do not carry into other modules.
+                                Star documents to include in your review, even when they have not
+                                changed recently. These stars apply only to Vantage. Starring a
+                                document never changes who can see it.
                             </p>
                         </div>
                         {view.documents.length === 0 ? (
@@ -325,66 +326,65 @@ export function PersonalContextPanel({ client }: { client: PersonalContextClient
                                 </div>
                             ))}
                     </section>
-                    <section
-                        aria-labelledby="coverage-heading"
-                        className="border-line bg-panel space-y-4 rounded-xl border p-5"
-                    >
-                        <div>
-                            <h2 id="coverage-heading" className="text-lg font-semibold">
-                                Required source coverage
-                            </h2>
-                            <p className="text-ink-2 text-sm">
-                                Company context is mandatory and separate from your personal stars.
-                                Inclusion means prepared context, not proof that a model used it.
-                                {!view.ready &&
-                                    " No complete required bundle has been prepared; authorized previews remain pending."}
-                            </p>
-                        </div>
-                        <ul className="space-y-3">
-                            {view.diagnostics.sources.map((source, index) => (
-                                <li
-                                    key={`${source.lane}-${source.source?.id}-${index}`}
-                                    className="border-line rounded-lg border p-3 text-sm"
-                                >
-                                    <div className="flex flex-wrap items-center justify-between gap-2">
-                                        <span className="font-medium">
-                                            {source.lane === "company"
-                                                ? "Shared company architecture"
-                                                : source.lane === "mandatory"
-                                                  ? "Workspace requirement"
-                                                  : "Personal Vantage star"}
-                                        </span>
-                                        <span
-                                            className={
-                                                source.status === "used"
-                                                    ? "text-success"
-                                                    : "text-warn"
-                                            }
-                                        >
-                                            {!view.ready && source.status === "used"
-                                                ? "Authorized preview · not assembled"
-                                                : coverageLabel[source.status]}
-                                        </span>
-                                    </div>
-                                    {source.status === "used" && source.source ? (
-                                        <p className="text-ink-2 mt-1">
-                                            Source {source.source.id} · Version{" "}
-                                            {source.source.version}
-                                            {source.excerptOffsets
-                                                ? ` · Characters ${source.excerptOffsets.start}–${source.excerptOffsets.end}`
-                                                : ""}
+                    <details className="border-line rounded-lg border p-4 text-sm">
+                        <summary className="text-ink-3 cursor-pointer">Context details</summary>
+                        <section aria-labelledby="coverage-heading" className="mt-4 space-y-4">
+                            <div>
+                                <h2 id="coverage-heading" className="text-lg font-semibold">
+                                    Source availability
+                                </h2>
+                                <p className="text-ink-2 text-sm">
+                                    Company context is separate from your starred documents.
+                                    Available context does not prove it was used in a report.
+                                    {!view.ready && " Some context is still unavailable."}
+                                </p>
+                            </div>
+                            <ul className="space-y-3">
+                                {view.diagnostics.sources.map((source, index) => (
+                                    <li
+                                        key={`${source.lane}-${source.source?.id}-${index}`}
+                                        className="border-line rounded-lg border p-3 text-sm"
+                                    >
+                                        <div className="flex flex-wrap items-center justify-between gap-2">
+                                            <span className="font-medium">
+                                                {source.lane === "company"
+                                                    ? "Company profile"
+                                                    : source.lane === "mandatory"
+                                                      ? "Workspace requirement"
+                                                      : "Personal Vantage star"}
+                                            </span>
+                                            <span
+                                                className={
+                                                    source.status === "used"
+                                                        ? "text-success"
+                                                        : "text-warn"
+                                                }
+                                            >
+                                                {!view.ready && source.status === "used"
+                                                    ? "Available preview"
+                                                    : coverageLabel[source.status]}
+                                            </span>
+                                        </div>
+                                        {source.status === "used" && source.source ? (
+                                            <p className="text-ink-2 mt-1">
+                                                Source {source.source.id} · Version{" "}
+                                                {source.source.version}
+                                                {source.excerptOffsets
+                                                    ? ` · Characters ${source.excerptOffsets.start}–${source.excerptOffsets.end}`
+                                                    : ""}
+                                            </p>
+                                        ) : null}
+                                        {source.reason ? (
+                                            <p className="text-ink-2 mt-1">{source.reason}</p>
+                                        ) : null}
+                                        <p className="text-ink-2 mt-1 text-xs">
+                                            Checked {source.checkedAt}
                                         </p>
-                                    ) : null}
-                                    {source.reason ? (
-                                        <p className="text-ink-2 mt-1">{source.reason}</p>
-                                    ) : null}
-                                    <p className="text-ink-2 mt-1 text-xs">
-                                        Checked {source.checkedAt}
-                                    </p>
-                                </li>
-                            ))}
-                        </ul>
-                    </section>
+                                    </li>
+                                ))}
+                            </ul>
+                        </section>
+                    </details>
                 </>
             ) : null}
         </div>

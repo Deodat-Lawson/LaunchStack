@@ -1,0 +1,103 @@
+.sheet.sheet {
+    width: min(560px, 94%);
+    max-width: 560px;
+    gap: 0;
+    animation: none !important;
+    background: var(--panel);
+}
+.header {
+    flex-shrink: 0;
+    padding: 28px 48px 22px 28px;
+    border-bottom: 1px solid var(--line);
+}
+.body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 24px 28px;
+}
+.profile {
+    padding: 18px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--panel-2);
+    font-size: 13px;
+    line-height: 1.65;
+    color: var(--ink-2);
+}
+.profile h3 {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: var(--ink);
+    font-weight: 600;
+}
+.profile p {
+    margin-top: 8px;
+}
+.profile button {
+    margin-top: 12px;
+}
+.dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--warn, var(--ink-3));
+    flex-shrink: 0;
+}
+.personal > div {
+    padding: 24px 0 0;
+}
+.personal header {
+    display: none;
+}
+.personal section {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+}
+.personal section h2 {
+    font-size: 14px;
+}
+.personal section > div:first-child {
+    margin-bottom: 12px;
+}
+.personal section label {
+    font-size: 13px;
+}
+.personal section p {
+    font-size: 12px;
+}
+.footer {
+    flex-shrink: 0;
+    padding: 18px 28px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+.footer p {
+    flex: 1;
+    color: var(--ink-3);
+    font-size: 11px;
+    line-height: 1.5;
+}
+@media (max-width: 639px) {
+    .sheet.sheet {
+        width: 100%;
+        max-width: 100%;
+        height: 100%;
+        max-height: 100%;
+        border: 0;
+    }
+    .header {
+        padding-left: 20px;
+    }
+    .body {
+        padding: 20px;
+    }
+    .footer {
+        padding: 16px 20px max(16px, env(safe-area-inset-bottom));
+    }
+}

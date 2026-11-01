@@ -20,9 +20,6 @@ export function VantageContextPreview({ at }: { at: string }) {
     );
     return (
         <div data-preview="vantage-context" className="flex h-dvh flex-col">
-            <div className="border-line bg-panel text-ink-3 shrink-0 border-b px-4 py-2 text-[12px]">
-                Local synthetic workspace · authenticated session · changes are saved
-            </div>
             <div className="min-h-0 flex-1">
                 <VantageTool host={host} contextDemoEnabled />
             </div>

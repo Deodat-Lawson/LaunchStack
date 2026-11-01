@@ -1,10 +1,12 @@
 "use client";
 
-import type { RefObject } from "react";
+import { useRef, type RefObject } from "react";
+import { useSheetFocusRecovery } from "../_lib/use-sheet-focus-recovery";
+import { FileText } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from "~/components/ui/sheet";
 import { demoSourceKey, demoSourceName } from "../demo-api";
-import type { DemoReport, DemoSourceRef, DemoTopic } from "../demo-contract";
+import type { DemoHumanDecision, DemoReport, DemoSourceRef, DemoTopic } from "../demo-contract";
 import { topicPresentation, type TopicPresentation } from "../_lib/topic-presentation";
 import styles from "./compact-topic.module.css";
 
@@ -16,11 +18,16 @@ export interface TopicDetailSheetProps {
     presentation?: TopicPresentation;
     busy?: boolean;
     onReview: (status: "kept" | "dismissed") => void;
-    onDecision: () => void;
+    onDecision: (value?: DemoHumanDecision["value"]) => void;
     onSource: (ref: DemoSourceRef) => void;
     sourceName?: (ref: DemoSourceRef) => string;
     triggerRef?: RefObject<HTMLButtonElement | null>;
 }
+const choices = [
+    { value: "go", label: "Go" },
+    { value: "no-go", label: "No-go" },
+    { value: "needs-more-evidence", label: "Needs more evidence" },
+] as const;
 
 export function TopicDetailSheet({
     open,
@@ -35,6 +42,8 @@ export function TopicDetailSheet({
     sourceName,
     triggerRef,
 }: TopicDetailSheetProps) {
+    const heading = useRef<HTMLElement | null>(null);
+    useSheetFocusRecovery(open, heading);
     if (!topic) return null;
     const view = presentation ?? topicPresentation(topic);
     const name = (ref: DemoSourceRef) =>
@@ -47,26 +56,19 @@ export function TopicDetailSheet({
         : topic.proposedNextStep
           ? [topic.proposedNextStep]
           : [];
-    const sourceRefs = [
-        ...new Map(
-            [...topic.facts, ...topic.conflicts]
-                .flatMap(fact => fact.refs)
-                .map(ref => [demoSourceKey(ref), ref])
-        ).values(),
-    ];
     const refs = (values: DemoSourceRef[]) => (
-        <div className="mt-2 flex flex-col items-start gap-2">
+        <div className={styles.sourceRefs}>
             {values.map(ref => (
                 <button
                     type="button"
                     key={demoSourceKey(ref)}
                     onClick={() => onSource(ref)}
-                    className="text-brand-ink max-w-full text-left text-xs underline underline-offset-4 focus-visible:outline focus-visible:outline-2"
+                    className={styles.sourceChip}
+                    title={demoSourceName(ref)}
                 >
+                    <FileText size={12} aria-hidden="true" />
                     <span>{name(ref)}</span>
-                    <span className="text-ink-3 mt-0.5 block break-all font-mono text-[10px]">
-                        {demoSourceName(ref)}
-                    </span>
+                    <span className="sr-only">{demoSourceName(ref)}</span>
                 </button>
             ))}
         </div>
@@ -86,137 +88,96 @@ export function TopicDetailSheet({
                         event.preventDefault();
                 }}
             >
-                <header className={styles.sheetHeader}>
-                    <SheetTitle className="text-lg leading-snug">{view.title}</SheetTitle>
-                    <SheetDescription className="mt-2 text-xs">
-                        AI suggested ·{" "}
+                <header ref={heading} tabIndex={-1} className={styles.sheetHeader}>
+                    <SheetDescription className={styles.eyebrow}>
                         {topic.status === "kept"
                             ? "Kept for review"
                             : topic.status === "dismissed"
                               ? "Dismissed"
-                              : "Needs review"}
+                              : "Decision to review"}
+                        {topic.decision ? " / Decision recorded" : ""}
                     </SheetDescription>
-                    {view.title !== topic.title && (
+                    <SheetTitle className={styles.sheetTitle}>{view.title}</SheetTitle>
+                    {view.title !== topic.title ? (
                         <p className="sr-only">Original title: {topic.title}</p>
-                    )}
+                    ) : null}
+                    <div className={styles.keyQuestion}>
+                        <h3>The decision</h3>
+                        <p>{topic.decisionQuestion || "No decision question supplied."}</p>
+                    </div>
                 </header>
                 <div className={styles.body}>
-                    <section>
-                        <h3 className={styles.sectionTitle}>Issue {"\u00b7"} source reports</h3>
-                        <p>{view.issue}</p>
-                    </section>
-                    {view.reason && (
-                        <section>
-                            <h3 className={styles.sectionTitle}>
-                                Why this matters{" "}
-                                <span className="text-ink-3 font-normal">
-                                    {"\u00b7"} AI interpretation
-                                </span>
-                            </h3>
-                            <p>{view.reason}</p>
-                        </section>
-                    )}
-                    {view.decision && (
-                        <section>
-                            <h3 className={styles.sectionTitle}>Key decision</h3>
-                            <p>{view.decision}</p>
-                        </section>
-                    )}
-                    {nextSteps.length > 0 && (
-                        <section>
-                            <h3 className={styles.sectionTitle}>
-                                Suggested next step · AI suggestion
-                            </h3>
-                            <ul className="list-disc space-y-2 pl-4">
-                                {nextSteps.map((step, index) => (
-                                    <li key={index}>{step}</li>
+                    <section aria-label="Source evidence">
+                        <h3 className={styles.sectionTitle}>What the sources report</h3>
+                        {topic.facts.length ? (
+                            <div className={styles.factGrid}>
+                                {topic.facts.map((fact, index) => (
+                                    <div className={styles.factCard} key={index}>
+                                        <p>{fact.text}</p>
+                                        {refs(fact.refs)}
+                                    </div>
                                 ))}
-                            </ul>
-                        </section>
-                    )}
-                    {topic.decision && (
-                        <section>
-                            <h3 className={styles.sectionTitle}>Your recorded decision</h3>
-                            <p>
-                                {
-                                    {
-                                        go: "Go",
-                                        "no-go": "No-go",
-                                        "needs-more-evidence": "Needs more evidence",
-                                    }[topic.decision.value]
-                                }
-                            </p>
-                            {topic.decision.text && <p>{topic.decision.text}</p>}
-                            <p className="text-ink-3 mt-2 text-xs">
-                                Recorded {new Date(topic.decision.recordedAt).toLocaleString()} ·
-                                work completion remains unverified
-                            </p>
-                        </section>
-                    )}
-                    <details className={styles.disclosure}>
-                        <summary>
-                            Evidence · {topic.facts.length} source statements
-                            {topic.conflicts.length > 0
-                                ? ` · ${topic.conflicts.length} ${topic.conflicts.length === 1 ? "conflict" : "conflicts"}`
-                                : ""}
-                        </summary>
-                        <div className="mt-4 space-y-5">
-                            <p className="text-ink-3 text-xs">
-                                Select a source to inspect its authorized excerpt, exact version and
-                                provenance.
-                            </p>
-                            <div role="group" aria-label="Supporting sources">
-                                {refs(sourceRefs)}
                             </div>
-                            <details className={styles.disclosure}>
-                                <summary>Reported statements and conflicts</summary>
-                                <div className="mt-4 space-y-5">
-                                    {topic.facts.map((fact, index) => (
-                                        <div key={index}>
-                                            <p>{fact.text}</p>
-                                            {refs(fact.refs)}
-                                        </div>
-                                    ))}
-                                    {topic.conflicts.map((conflict, index) => (
-                                        <div key={index}>
-                                            <p className="text-ink mb-1 font-medium">Conflict</p>
-                                            <p>{conflict.text}</p>
-                                            {refs(conflict.refs)}
-                                        </div>
-                                    ))}
-                                </div>
-                            </details>
-                        </div>
-                    </details>
-                    <details className={styles.disclosure}>
-                        <summary>Unknowns · {topic.unknowns.length}</summary>
-                        {topic.unknowns.length ? (
-                            <ul className="mt-3 list-disc space-y-2 pl-4">
-                                {topic.unknowns.map((value, index) => (
-                                    <li key={index}>{value}</li>
-                                ))}
-                            </ul>
                         ) : (
-                            <p className="mt-3">None supplied.</p>
+                            <p>No source statements supplied.</p>
                         )}
-                    </details>
-                    <details className={styles.disclosure}>
-                        <summary>Conflicts · {topic.conflicts.length}</summary>
-                        <div className="mt-3 space-y-4">
-                            {topic.conflicts.length ? (
-                                topic.conflicts.map((conflict, index) => (
+                    </section>
+                    {topic.conflicts.length > 0 ? (
+                        <section>
+                            <h3 className={styles.sectionTitle}>Reported differences</h3>
+                            <div className="space-y-4">
+                                {topic.conflicts.map((conflict, index) => (
                                     <div key={index}>
                                         <p>{conflict.text}</p>
                                         {refs(conflict.refs)}
                                     </div>
-                                ))
-                            ) : (
-                                <p>None supplied.</p>
-                            )}
-                        </div>
-                    </details>
+                                ))}
+                            </div>
+                        </section>
+                    ) : null}
+                    <section>
+                        <h3 className={styles.sectionTitle}>Not known yet</h3>
+                        {topic.unknowns.length ? (
+                            <ul className={styles.unknowns}>
+                                {topic.unknowns.map((value, index) => (
+                                    <li key={index}>
+                                        <span aria-hidden="true">?</span>
+                                        <span>{value}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p>No unknowns supplied.</p>
+                        )}
+                    </section>
+                    {nextSteps.length > 0 ? (
+                        <section>
+                            <h3 className={styles.sectionTitle}>Suggested next step</h3>
+                            <div className={styles.nextStep}>
+                                {nextSteps.map((step, index) => (
+                                    <p key={index}>{step}</p>
+                                ))}
+                            </div>
+                        </section>
+                    ) : null}
+                    {topic.decision ? (
+                        <section>
+                            <h3 className={styles.sectionTitle}>Your recorded decision</h3>
+                            <p>
+                                {
+                                    choices.find(choice => choice.value === topic.decision?.value)
+                                        ?.label
+                                }
+                            </p>
+                            {topic.decision.text ? <p>{topic.decision.text}</p> : null}
+                            <p className="text-ink-3 mt-2 text-xs">
+                                Recorded {new Date(topic.decision.recordedAt).toLocaleString()}.
+                                Work completion remains unverified.
+                            </p>
+                        </section>
+                    ) : null}
                     <details className={styles.disclosure}>
-                        <summary>Original report · rationale</summary>
+                        <summary>Reasoning and original report</summary>
                         <dl className={styles.original}>
                             <dt>Original title</dt>
                             <dd>{topic.title}</dd>
@@ -224,7 +185,7 @@ export function TopicDetailSheet({
                             <dd>{topic.whyItMatters}</dd>
                             <dt>Decision question</dt>
                             <dd>{topic.decisionQuestion}</dd>
-                            <dt>Proposed next step · AI suggestion</dt>
+                            <dt>Proposed next step</dt>
                             <dd>{topic.proposedNextStep || "None supplied."}</dd>
                             <dt>Rationale</dt>
                             <dd>{topic.rationale}</dd>
@@ -232,25 +193,43 @@ export function TopicDetailSheet({
                     </details>
                 </div>
                 <footer className={styles.footer}>
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        disabled={busy || topic.status === "kept"}
-                        onClick={() => onReview("kept")}
-                    >
-                        {topic.status === "kept" ? "Kept" : "Keep"}
-                    </Button>
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        disabled={busy}
-                        onClick={() => onReview("dismissed")}
-                    >
-                        Dismiss
-                    </Button>
-                    <Button size="sm" className="ml-auto" disabled={busy} onClick={onDecision}>
-                        {topic.decision ? "Update decision" : "Record decision"}
-                    </Button>
+                    <p className={styles.footerLabel}>
+                        {topic.decision ? "Update your decision" : "Record your decision"}
+                    </p>
+                    <div className={styles.decisionChoices}>
+                        {choices.map(choice => (
+                            <Button
+                                key={choice.value}
+                                variant={
+                                    choice.value === "needs-more-evidence" ? "default" : "outline"
+                                }
+                                size="sm"
+                                disabled={busy}
+                                onClick={() => onDecision(choice.value)}
+                            >
+                                {choice.label}
+                            </Button>
+                        ))}
+                    </div>
+                    <div className={styles.secondaryActions}>
+                        <p>Recording a decision doesn’t create an action.</p>
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            disabled={busy || topic.status === "dismissed"}
+                            onClick={() => onReview("dismissed")}
+                        >
+                            {topic.status === "dismissed" ? "Dismissed" : "Dismiss topic"}
+                        </Button>
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            disabled={busy || topic.status === "kept"}
+                            onClick={() => onReview("kept")}
+                        >
+                            {topic.status === "kept" ? "Kept" : "Keep for later"}
+                        </Button>
+                    </div>
                 </footer>
             </SheetContent>
         </Sheet>

@@ -1,0 +1,241 @@
+.frame {
+    height: 100%;
+    min-height: 0;
+}
+.review {
+    max-width: 1060px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    padding-bottom: 24px;
+}
+.reviewHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+.eyebrow {
+    color: var(--ink-3);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+.weekPicker {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.weekPicker h1 {
+    font-size: 30px;
+    font-weight: 650;
+    letter-spacing: -0.03em;
+}
+.openCount {
+    font-size: 12px;
+    color: var(--ink-2);
+    background: var(--panel-2);
+    padding: 4px 9px;
+    border-radius: 6px;
+    margin-left: 8px;
+}
+.headerActions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.attentionDot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--warn);
+}
+.contextNotice {
+    font-size: 12px;
+    color: var(--ink-2);
+    padding: 10px 14px;
+    border: 1px solid var(--line);
+    border-radius: 9px;
+}
+.contextNotice button {
+    color: var(--accent);
+    text-decoration: underline;
+    margin-left: 4px;
+}
+.sectionHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+.sectionHeader h2 {
+    color: var(--ink);
+    font-size: 18px;
+    font-weight: 600;
+}
+.filters {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+.filters button {
+    color: var(--ink-3);
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: 6px;
+}
+.filters button[aria-pressed="true"] {
+    background: var(--panel-2);
+    color: var(--ink);
+}
+.filters span {
+    margin-left: 3px;
+    font-variant-numeric: tabular-nums;
+}
+.listNote {
+    font-size: 12px;
+    color: var(--ink-3);
+    margin: 10px 0 16px;
+}
+.decisionList {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+}
+.historical {
+    border-top: 1px solid var(--line);
+    padding-top: 24px;
+}
+.historical > summary {
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 16px;
+    color: var(--ink-2);
+}
+.reportFooter {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--line);
+    padding-top: 20px;
+    font-size: 12px;
+    color: var(--ink-3);
+}
+.reportDetails {
+    font-size: 12px;
+    color: var(--ink-3);
+}
+.reportDetails > summary {
+    cursor: pointer;
+    text-decoration: underline;
+    color: var(--ink-2);
+}
+.reportDetails select {
+    margin-left: 8px;
+    padding: 6px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+}
+.mobileNav {
+    display: none;
+}
+.alternative {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+.alternativeBanner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 12px;
+    color: var(--ink-2);
+    margin-bottom: 24px;
+}
+.alternativeBanner a {
+    color: var(--accent);
+    text-decoration: underline;
+}
+@media (max-width: 639px) {
+    .review {
+        gap: 24px;
+        padding-bottom: 24px;
+    }
+    .frameContent {
+        padding-bottom: calc(88px + env(safe-area-inset-bottom));
+    }
+    .reviewHeader {
+        align-items: flex-start;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+    .reviewHeader > div:first-child {
+        flex: 1;
+        min-width: 0;
+    }
+    .weekPicker {
+        gap: 2px;
+    }
+    .weekPicker h1 {
+        font-size: 25px;
+    }
+    .eyebrow {
+        display: none;
+    }
+    .openCount {
+        display: block;
+        background: none;
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        text-align: center;
+    }
+    .headerActions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+    .headerActions > button {
+        min-height: 40px;
+    }
+    .sectionHeader {
+        align-items: flex-start;
+    }
+    .filters {
+        gap: 0;
+    }
+    .filters button {
+        padding: 6px;
+        font-size: 11px;
+    }
+    .mobileNav {
+        display: flex;
+        justify-content: space-around;
+        position: fixed;
+        z-index: 40;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: var(--panel);
+        border-top: 1px solid var(--line);
+        padding: 16px 8px max(18px, env(safe-area-inset-bottom));
+    }
+    .mobileNav a {
+        color: var(--ink-3);
+        font-size: 13px;
+        padding: 6px 10px;
+    }
+    .mobileNav a[aria-current="page"] {
+        color: var(--ink);
+        font-weight: 600;
+    }
+}

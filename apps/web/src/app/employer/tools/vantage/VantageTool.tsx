@@ -1,7 +1,9 @@
 "use client";
 
-import { CalendarCheck, ChartLine, Handshake, Inbox, Sparkles } from "lucide-react";
+import { CalendarCheck, ChartLine, Handshake, Inbox } from "lucide-react";
 import { useMemo, useState } from "react";
+import { ToolLink } from "~/components/tool-app/ToolLink";
+import ui from "./_screens/unified-review.module.css";
 
 import { VantageMark } from "~/components/icons/vantage";
 import { EmptyState } from "~/components/tools/EmptyState";
@@ -52,11 +54,13 @@ function screenGroups(contextDemoEnabled: boolean): ToolNavGroup[] {
             id: "vantage-loop",
             label: "Vantage",
             items: [
-                ...(contextDemoEnabled
-                    ? [{ to: "/context-demo", label: "Context-Aware Demo", icon: Sparkles }]
-                    : []),
-                { to: vantagePath(""), label: "Weekly Review", icon: CalendarCheck, exact: true },
-                { to: vantagePath("/commitments"), label: "Weekly Actions", icon: Handshake },
+                {
+                    to: contextDemoEnabled ? "/" : vantagePath(""),
+                    label: "Weekly Review",
+                    icon: CalendarCheck,
+                    exact: true,
+                },
+                { to: vantagePath("/commitments"), label: "Actions", icon: Handshake },
                 { to: vantagePath("/evidence"), label: "Evidence", icon: Inbox },
                 { to: vantagePath("/metrics"), label: "Metrics", icon: ChartLine },
             ],
@@ -68,20 +72,86 @@ function screenGroups(contextDemoEnabled: boolean): ToolNavGroup[] {
 function VantageFrame({ contextDemoEnabled }: { contextDemoEnabled: boolean }) {
     const { path, search } = useToolNav();
     const [demoWeek, setDemoWeek] = useState<string | undefined>();
-    const groups = useMemo(() => screenGroups(contextDemoEnabled), [contextDemoEnabled]);
+    const reviewPath = path === "/context-demo" || path === "/agenda";
+    const groups = useMemo(
+        () =>
+            screenGroups(contextDemoEnabled).map(group => ({
+                ...group,
+                items: group.items.map(item =>
+                    item.label === "Weekly Review" && contextDemoEnabled && reviewPath
+                        ? { ...item, to: path }
+                        : item
+                ),
+            })),
+        [contextDemoEnabled, reviewPath, path]
+    );
     const screen = vantageScreenFor(`${path}${search}`);
+    const reviewScreen =
+        screen.kind === "overview" || screen.kind === "agenda" || path === "/context-demo";
+    const alternative = contextDemoEnabled && new URLSearchParams(search).get("report") === "rules";
+    const primaryParams = new URLSearchParams(search);
+    primaryParams.delete("report");
     return (
-        <ToolFrame title="Vantage" mark={<VantageMark size={15} tile />} groups={groups}>
-            {contextDemoEnabled && path === "/context-demo" ? (
-                <ContextDemoScreen onSelectedWeek={setDemoWeek} />
-            ) : (
-                <Screen
-                    screen={screen}
-                    contextDemoEnabled={contextDemoEnabled}
-                    demoWeek={demoWeek}
-                />
-            )}
-        </ToolFrame>
+        <div className={ui.frame}>
+            <ToolFrame
+                title="Vantage"
+                mark={<VantageMark size={15} tile />}
+                groups={groups}
+                contentClassName={ui.frameContent}
+            >
+                {contextDemoEnabled && reviewScreen ? (
+                    alternative ? (
+                        <div className={ui.alternative}>
+                            <div className={ui.alternativeBanner}>
+                                <span>
+                                    Alternative saved report - kept separate from your weekly brief
+                                </span>
+                                <ToolLink href={`/?${primaryParams.toString()}`}>
+                                    Back to Weekly Review
+                                </ToolLink>
+                            </div>
+                            <ContextNativeReview
+                                week={new URLSearchParams(search).get("week") ?? demoWeek}
+                            />
+                        </div>
+                    ) : (
+                        <ContextDemoScreen onSelectedWeek={setDemoWeek} />
+                    )
+                ) : (
+                    <Screen
+                        screen={screen}
+                        contextDemoEnabled={contextDemoEnabled}
+                        demoWeek={demoWeek}
+                    />
+                )}
+                {contextDemoEnabled && (
+                    <nav className={ui.mobileNav} aria-label="Vantage navigation">
+                        {[
+                            { to: "/", label: "Review", active: reviewScreen },
+                            {
+                                to: "/commitments",
+                                label: "Actions",
+                                active: screen.kind === "commitments",
+                            },
+                            {
+                                to: "/evidence",
+                                label: "Evidence",
+                                active: screen.kind === "evidence",
+                            },
+                            { to: "/metrics", label: "Metrics", active: screen.kind === "metrics" },
+                        ].map(item => (
+                            <ToolLink
+                                key={item.to}
+                                href={item.to}
+                                aria-current={item.active ? "page" : undefined}
+                            >
+                                {item.label}
+                            </ToolLink>
+                        ))}
+                    </nav>
+                )}
+            </ToolFrame>
+        </div>
     );
 }
 

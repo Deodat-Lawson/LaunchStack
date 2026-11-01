@@ -154,21 +154,42 @@ afterEach(() => {
     globalThis.fetch = originalFetch;
 });
 
+async function openPersonalContext() {
+    const existing = screen.queryByRole("dialog", { name: "My context" });
+    if (existing) return existing;
+    fireEvent.click(await screen.findByRole("button", { name: /^My context/ }));
+    return screen.getByRole("dialog", { name: "My context" });
+}
+
 async function companyInspection() {
-    const section = await screen.findByRole("region", { name: "Available Company Architecture" });
-    const details = section.querySelector("details")!;
-    if (!details.open) fireEvent.click(details.querySelector("summary")!);
-    return within(section).getByRole("button", { name: "Inspect Company Architecture" });
+    const sheet = await openPersonalContext();
+    return within(sheet).getByRole("button", { name: "Inspect profile" });
 }
 
 async function savedSummary(text: string) {
-    const value = await screen.findByText(text);
-    const details = value.closest("details");
-    if (details && !details.open) fireEvent.click(details.querySelector("summary")!);
-    return value;
+    const summary = await screen.findByText(/^Read full brief/);
+    const details = summary.closest("details")!;
+    if (!details.open) fireEvent.click(summary);
+    return within(details).findByText(text);
+}
+
+async function reportDetailsForEmptyReport() {
+    const summary = await screen.findByText("Sources & report details");
+    if (!summary.closest("details")!.open) fireEvent.click(summary);
+    return summary.closest("details")!;
+}
+
+async function reportDetails() {
+    const outer = await screen.findByText("Sources & report details");
+    if (!outer.closest("details")!.open) fireEvent.click(outer);
+    const summary = within(outer.closest("details")!).getByText(/^Saved report details/);
+    if (!summary.closest("details")!.open) fireEvent.click(summary);
+    return summary.closest("details")!;
 }
 
 async function openTopic() {
+    const context = screen.queryByRole("dialog", { name: "My context" });
+    if (context) fireEvent.click(within(context).getByRole("button", { name: "Done" }));
     const row = await screen.findByRole("article", { name: "Compare the recorded sample" });
     fireEvent.click(within(row).getByRole("button"));
     return screen.getByRole("dialog", { name: "Compare the recorded sample" });
@@ -176,9 +197,7 @@ async function openTopic() {
 
 async function openTopicEvidence() {
     const detail = await openTopic();
-    const summary = within(detail).getByText(/^Evidence/);
-    fireEvent.click(summary);
-    return within(detail).getByRole("group", { name: "Supporting sources" });
+    return within(detail).getByRole("region", { name: "Source evidence" });
 }
 
 it("loads saved context and native pending questions without automatically calling a model", async () => {
@@ -187,13 +206,9 @@ it("loads saved context and native pending questions without automatically calli
     expect(screen.getByRole("region", { name: "Native pending queue" })).toHaveTextContent(
         "native-report-12"
     );
-    expect(screen.getByRole("link", { name: "Open Weekly Actions" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "Alternative saved report" })).toHaveAttribute(
         "href",
-        "/commitments"
-    );
-    expect(screen.getByRole("link", { name: "Open native Weekly Review" })).toHaveAttribute(
-        "href",
-        "/agenda?week=2026-10-12"
+        "/agenda?week=2026-10-12&report=rules"
     );
     expect(mockGenerate).not.toHaveBeenCalled();
     expect(mockReview).not.toHaveBeenCalled();
@@ -329,13 +344,16 @@ it("generates only after an explicit click and displays the returned saved repor
     mockGenerate.mockResolvedValue(next);
     render(<ContextDemoScreen />);
     await savedSummary(report().summary);
-    fireEvent.click(screen.getByRole("button", { name: "Generate with context" }));
+    await reportDetails();
+    fireEvent.click(screen.getByRole("button", { name: "Prepare a new report" }));
     expect(await savedSummary(next.report!.summary)).toBeVisible();
     expect(mockGenerate).toHaveBeenCalledWith(
         "2026-10-12",
         expect.objectContaining({ aborted: false })
     );
-    expect(screen.getByRole("status")).toHaveTextContent("Contextual report saved");
+    expect(
+        screen.getByText("Report saved. Earlier reports, decisions and actions are preserved.")
+    ).toBeVisible();
     expect(mockReview).not.toHaveBeenCalled();
 });
 
@@ -362,15 +380,17 @@ it("offers explicitly labeled offline replay before any contextual report exists
     const saved = state({ report: recordedReplay(), generationMode: "replay" });
     mockGenerate.mockResolvedValue(saved);
     render(<ContextDemoScreen />);
-    const buttons = await screen.findAllByRole("button", { name: "Replay recorded report" });
-    expect(buttons).toHaveLength(2);
-    expect(screen.queryByRole("button", { name: "Generate with context" })).not.toBeInTheDocument();
-    expect(screen.getByText(/Synthetic recorded replay.*no fresh AI call/)).toBeVisible();
+    await reportDetailsForEmptyReport();
+    const buttons = await screen.findAllByRole("button", { name: "Replay sample report" });
+    expect(buttons).toHaveLength(1);
+    expect(screen.queryByRole("button", { name: "Prepare a new report" })).not.toBeInTheDocument();
+    expect(screen.getByText(/Sample report.*recorded replay.*no live AI call/)).toBeVisible();
     expect(screen.queryByText(/ready to call the configured model/)).not.toBeInTheDocument();
     expect(mockGenerate).not.toHaveBeenCalled();
     fireEvent.click(buttons[0]!);
     expect(await savedSummary(saved.report!.summary)).toBeVisible();
-    expect(screen.getByText("Recorded AI replay · no fresh model call")).toBeVisible();
+    await reportDetails();
+    expect(screen.getByText("Recorded replay · no model call")).toBeVisible();
     expect(mockGenerate).toHaveBeenCalledWith(
         "2026-10-12",
         expect.objectContaining({ aborted: false })
@@ -381,13 +401,19 @@ it("offers explicitly labeled offline replay before any contextual report exists
 it("shows recorded model provenance without presenting replay timing as a fresh provider attempt", async () => {
     mockLoad.mockResolvedValue(state({ report: recordedReplay(), generationMode: "replay" }));
     render(<ContextDemoScreen />);
-    expect(await screen.findByText("Recorded AI replay · no fresh model call")).toBeVisible();
+    await reportDetails();
+    expect(screen.getByText("Recorded replay · no model call")).toBeVisible();
     expect(screen.getByText(/gpt-6-luna-2026-09-22/)).toHaveTextContent("2026-10-26T19:12:55.000Z");
-    fireEvent.click(screen.getByText(/Saved report details ·/));
+
     expect(screen.getByText("Recorded replay · no model call")).toBeVisible();
     expect(screen.queryByText(/AI · 0 attempts/)).not.toBeInTheDocument();
     expect(screen.queryByText("Context-aware · AI")).not.toBeInTheDocument();
     expect(await companyInspection()).toBeEnabled();
+    fireEvent.click(
+        within(screen.getByRole("dialog", { name: "My context" })).getByRole("button", {
+            name: "Done",
+        })
+    );
     expect(screen.getByRole("region", { name: "Native pending queue" })).toBeVisible();
     expect(mockGenerate).not.toHaveBeenCalled();
 });
@@ -396,8 +422,9 @@ it("keeps a saved actual AI report distinct from a currently selected replay gen
     mockLoad.mockResolvedValue(state({ generationMode: "replay" }));
     render(<ContextDemoScreen />);
     expect(await savedSummary(report().summary)).toBeVisible();
-    expect(screen.getByRole("button", { name: "Replay recorded report" })).toBeEnabled();
-    expect(screen.getByText("Context-aware · AI")).toBeVisible();
+    expect(screen.getByRole("button", { name: "Replay sample report" })).toBeEnabled();
+    await reportDetails();
+    expect(screen.getByText(/AI · 1 attempt/)).toBeVisible();
     expect(screen.queryByText("Recorded AI replay · no fresh model call")).not.toBeInTheDocument();
     expect(mockGenerate).not.toHaveBeenCalled();
 });
@@ -420,9 +447,11 @@ it.each(["kept", "dismissed"] as const)(
         next.report!.topics[0]!.status = status;
         mockReview.mockResolvedValue(next);
         render(<ContextDemoScreen />);
-        await openTopic();
+        const detail = await openTopic();
         fireEvent.click(
-            await screen.findByRole("button", { name: status === "kept" ? "Keep" : "Dismiss" })
+            within(detail).getByRole("button", {
+                name: status === "kept" ? "Keep for later" : "Dismiss topic",
+            })
         );
         await waitFor(() =>
             expect(mockReview).toHaveBeenCalledWith({
@@ -435,6 +464,15 @@ it.each(["kept", "dismissed"] as const)(
         expect(
             await screen.findByText("Review saved. No action or commitment was created.")
         ).toBeVisible();
+        const row = screen.getByRole("article", {
+            name: "Compare the recorded sample",
+            hidden: true,
+        });
+        expect(
+            within(row).getByText(status === "kept" ? "Kept for review" : "Dismissed")
+        ).toBeInTheDocument();
+        expect(mockReview).toHaveBeenCalledTimes(1);
+        expect(mockReview.mock.calls[0]![0]).not.toHaveProperty("decision");
         expect(mockGenerate).not.toHaveBeenCalled();
     }
 );
@@ -443,11 +481,12 @@ it.each(["go", "no-go", "needs-more-evidence"] as const)(
     "records human %s without automatic commitments or historical-question closure",
     async value => {
         render(<ContextDemoScreen />);
-        await openTopic();
-        fireEvent.click(await screen.findByRole("button", { name: "Record decision" }));
-        const dialog = screen.getByRole("dialog", { name: "Record your decision" });
+        const detail = await openTopic();
         const labels = { go: "Go", "no-go": "No-go", "needs-more-evidence": "Needs more evidence" };
-        fireEvent.click(within(dialog).getByRole("radio", { name: labels[value] }));
+        fireEvent.click(within(detail).getByRole("button", { name: labels[value] }));
+        const dialog = screen.getByRole("dialog", { name: "Record your decision" });
+        expect(within(dialog).getByRole("radio", { name: labels[value] })).toBeChecked();
+        expect(mockReview).not.toHaveBeenCalled();
         fireEvent.change(
             within(dialog).getByRole("textbox", { name: "Decision note (optional)" }),
             { target: { value: "Compare the full shared sample first." } }
@@ -473,10 +512,10 @@ it("withholds old sidecar text when reload cannot verify current evidence or acc
         .mockRejectedValueOnce(new DemoApiError("Unavailable", 503));
     render(<ContextDemoScreen />);
     await savedSummary(report().summary);
-    fireEvent.click(screen.getByRole("button", { name: "Reload saved contextual report" }));
+    fireEvent.click(screen.getByRole("button", { name: "Refresh saved weekly review" }));
     expect(await screen.findByRole("alert")).toHaveTextContent("Could not reload");
     expect(screen.queryByText(report().summary)).not.toBeInTheDocument();
-    expect(screen.getByText("Contextual content is hidden")).toBeVisible();
+    expect(screen.getByText("Saved content is withheld")).toBeVisible();
     expect(screen.queryByText(/has been loaded/)).not.toBeInTheDocument();
 });
 
@@ -485,7 +524,7 @@ it("does not claim a successful reload after a version conflict and failed readb
     mockLoad.mockResolvedValueOnce(state()).mockRejectedValueOnce(new DemoApiError("Offline", 503));
     render(<ContextDemoScreen />);
     await openTopic();
-    fireEvent.click(await screen.findByRole("button", { name: "Keep" }));
+    fireEvent.click(screen.getByRole("button", { name: "Keep for later" }));
     expect(await screen.findByRole("alert")).toHaveTextContent("Could not reload");
     expect(screen.queryByText(report().summary)).not.toBeInTheDocument();
     expect(screen.queryByText(/has been loaded/)).not.toBeInTheDocument();
@@ -496,7 +535,7 @@ it("withholds a report when the source resolver reports changed authorization", 
     render(<ContextDemoScreen />);
     const topic = await openTopicEvidence();
     fireEvent.click(within(topic).getByRole("button", { name: /QA sample record/ }));
-    expect(await screen.findByRole("alert")).toHaveTextContent("authorization changed");
+    expect(await screen.findByRole("alert")).toHaveTextContent("source or its access changed");
     expect(screen.queryByText(report().summary)).not.toBeInTheDocument();
     expect(
         screen.queryByRole("dialog", { name: "Compare the recorded sample" })
@@ -519,10 +558,11 @@ it("week selection navigates to the explicitly chosen context week", async () =>
         })
     );
     render(<ContextDemoScreen />);
-    fireEvent.change(await screen.findByRole("combobox", { name: "Reporting week" }), {
+    await reportDetails();
+    fireEvent.change(screen.getByRole("combobox", { name: "Reporting week" }), {
         target: { value: "2026-10-05" },
     });
-    expect(mockNavigate).toHaveBeenCalledWith("/context-demo?week=2026-10-05");
+    expect(mockNavigate).toHaveBeenCalledWith("/?week=2026-10-05");
     const options = screen.getAllByRole("option");
     expect(options[0]!.textContent).not.toBe(options[1]!.textContent);
     expect(mockGenerate).not.toHaveBeenCalled();
@@ -546,9 +586,7 @@ it("shows captured retrieval, research and selection diagnostics without assumin
     };
     mockLoad.mockResolvedValue(saved);
     render(<ContextDemoScreen />);
-    const summary = await screen.findByText(/Saved report details ·/);
-    fireEvent.click(summary);
-    const details = summary.closest("details")!;
+    const details = await reportDetails();
     expect(within(details).getByText("Sophia retrieval")).toBeVisible();
     expect(within(details).getAllByText("partial")).toHaveLength(2);
     expect(within(details).getByText("STOP · stopped")).toBeVisible();
@@ -562,8 +600,7 @@ it("shows captured retrieval, research and selection diagnostics without assumin
 
 it("labels uncaptured old-report diagnostics instead of inventing retrieval success", async () => {
     render(<ContextDemoScreen />);
-    const summary = await screen.findByText(/Saved report details ·/);
-    fireEvent.click(summary);
+    await reportDetails();
     expect(
         screen.getByText("Context selection diagnostics were not captured for this saved report.")
     ).toBeVisible();
@@ -620,33 +657,22 @@ function personalView(): DemoPersonalContextView {
         persistence: "server-process-memory",
     };
 }
-function openPersonalContext() {
-    const details = screen
-        .getByText("Your roles and Vantage stars · Joseph integration")
-        .closest("details")!;
-    details.open = true;
-    fireEvent(details, new Event("toggle"));
-    return details;
-}
 
 it("keeps the saved contextual report and citations visible while Joseph required context blocks fresh generation", async () => {
     mockLoad.mockResolvedValue(state({ personalContextAvailable: true }));
     globalThis.fetch = jest.fn().mockResolvedValue({ ok: true, json: async () => personalView() });
     render(<ContextDemoScreen />);
     expect(await savedSummary(report().summary)).toBeVisible();
+    await reportDetails();
     await waitFor(() =>
-        expect(screen.getByRole("button", { name: "Generate with context" })).toBeDisabled()
+        expect(screen.getByRole("button", { name: "Prepare a new report" })).toBeDisabled()
     );
-    const details = openPersonalContext();
-    expect(
-        await within(details).findByRole("heading", { name: "Your roles and documents" })
-    ).toBeVisible();
-    expect(
-        await within(details).findByText("Required context needs attention before generation.")
-    ).toBeVisible();
-    expect(details).toHaveTextContent("restarting the server resets them");
-    expect(details).toHaveTextContent("not browser storage or production PostgreSQL");
-    expect(screen.getByText(report().summary)).toBeVisible();
+    const details = await openPersonalContext();
+    expect(await within(details).findByRole("heading", { name: "Your roles" })).toBeVisible();
+    expect(await within(details).findByText("Some context needs attention.")).toBeVisible();
+    expect(details).toHaveTextContent("saved reports keep their original context");
+    expect(details).not.toHaveTextContent(/Joseph|process.memory|PostgreSQL/);
+    expect(await savedSummary(report().summary)).toBeVisible();
     expect(await companyInspection()).toBeEnabled();
     const topic = await openTopicEvidence();
     expect(within(topic).getByRole("button", { name: /QA sample record/ })).toBeEnabled();
@@ -699,7 +725,7 @@ it("uses Joseph multi-role, primary and star controls through the authenticated 
     globalThis.fetch = fetch;
     render(<ContextDemoScreen />);
     await savedSummary(report().summary);
-    const details = openPersonalContext();
+    const details = await openPersonalContext();
     fireEvent.click(
         await within(details).findByRole("button", { name: /Make primary.*Engineering/ })
     );
@@ -720,9 +746,12 @@ it("uses Joseph multi-role, primary and star controls through the authenticated 
     fireEvent.click(within(details).getByRole("button", { name: "Star QA sample record" }));
     await within(details).findByRole("button", { name: "Unstar QA sample record" });
     expect(within(details).getByText("Version 18 · Updated 2026-10-16")).toBeVisible();
+    fireEvent.click(within(details).getByText("Context details"));
     expect(within(details).getByText("Source workspace-document/12 · Version 18")).toBeVisible();
-    expect(screen.getByRole("button", { name: "Generate with context" })).toBeDisabled();
-    expect(screen.getByText(report().summary)).toBeVisible();
+    fireEvent.click(within(details).getByRole("button", { name: "Done" }));
+    await reportDetails();
+    expect(screen.getByRole("button", { name: "Prepare a new report" })).toBeDisabled();
+    expect(await savedSummary(report().summary)).toBeVisible();
     expect(mockGenerate).not.toHaveBeenCalled();
 });
 
@@ -735,60 +764,51 @@ it("fails closed on personal-context access errors without hiding the independen
     });
     render(<ContextDemoScreen />);
     await savedSummary(report().summary);
+    await reportDetails();
     await waitFor(() =>
-        expect(screen.getByRole("button", { name: "Generate with context" })).toBeDisabled()
+        expect(screen.getByRole("button", { name: "Prepare a new report" })).toBeDisabled()
     );
-    const details = openPersonalContext();
+    const details = await openPersonalContext();
     expect(await within(details).findByRole("alert")).toHaveTextContent(
         "Context could not be loaded"
     );
     expect(screen.queryByText("PRIVATE_SOURCE_DETAIL")).not.toBeInTheDocument();
-    expect(screen.getByText(report().summary)).toBeVisible();
+    fireEvent.click(within(details).getByRole("button", { name: "Done" }));
+    expect(await savedSummary(report().summary)).toBeVisible();
     expect(screen.getByRole("region", { name: "Native pending queue" })).toBeVisible();
     expect(mockGenerate).not.toHaveBeenCalled();
 });
 
-it("keeps the row compact and opens the unchanged report in a keyboard-dismissable sheet", async () => {
+it("keeps the row compact and opens exact evidence in a keyboard-dismissable sheet", async () => {
     const saved = state();
     const before = JSON.stringify(saved);
     mockLoad.mockResolvedValue(saved);
     render(<ContextDemoScreen />);
     const row = await screen.findByRole("article", { name: "Compare the recorded sample" });
-    expect(within(row).getByText("AI suggested")).toBeVisible();
-    expect(within(row).getByText("Needs review")).toBeVisible();
-    expect(within(row).queryByRole("button", { name: "Keep" })).not.toBeInTheDocument();
+    expect(within(row).queryByText("AI suggested")).not.toBeInTheDocument();
+    expect(within(row).getByText("1 source")).toBeVisible();
+    expect(within(row).getByText("1 unknown")).toBeVisible();
+    expect(within(row).queryByText("Reported differences")).not.toBeInTheDocument();
+    expect(within(row).getByText(report().topics[0]!.decisionQuestion)).toBeVisible();
+    expect(within(row).queryByRole("button", { name: "Keep for later" })).not.toBeInTheDocument();
     const trigger = within(row).getByRole("button");
     trigger.focus();
     fireEvent.click(trigger);
     const detail = screen.getByRole("dialog", { name: "Compare the recorded sample" });
-    expect(within(row).queryByText(report().topics[0]!.facts[0]!.text)).not.toBeInTheDocument();
-    expect(within(detail).getByRole("heading", { name: "Key decision" })).toBeVisible();
-    expect(
-        within(detail).getByRole("heading", { name: /Why this matters.*AI interpretation/ })
-    ).toBeVisible();
+    expect(within(row).queryByText(qa.body)).not.toBeInTheDocument();
+    expect(within(detail).getByRole("heading", { name: "The decision" })).toBeVisible();
     expect(within(detail).queryByText("Owner")).not.toBeInTheDocument();
-    expect(within(detail).getByRole("heading", { name: /Suggested next step/ })).toBeVisible();
-    const unknowns = within(detail)
-        .getByText(/^Unknowns/)
-        .closest("details")!;
-    expect(unknowns).not.toHaveAttribute("open");
-    fireEvent.click(unknowns.querySelector("summary")!);
-    expect(within(unknowns).getByText("Whether the samples overlap.")).toBeVisible();
-    const evidenceSummary = within(detail).getByText(/^Evidence/);
-    expect(evidenceSummary.closest("details")).not.toHaveAttribute("open");
-    fireEvent.click(evidenceSummary);
-    const sources = within(detail).getByRole("group", { name: "Supporting sources" });
-    expect(within(sources).getByRole("button", { name: /QA sample record/ })).toBeVisible();
-    expect(sources).not.toHaveTextContent(qa.body);
-    const statementsSummary = within(detail).getByText("Reported statements and conflicts");
-    const statements = statementsSummary.closest("details")!;
-    expect(statements).not.toHaveAttribute("open");
-    expect(within(statements).getByText(qa.body)).not.toBeVisible();
-    fireEvent.click(statementsSummary);
-    expect(within(statements).getByText(qa.body)).toBeVisible();
-    fireEvent.click(within(detail).getByText(/^Original report/));
-    expect(within(detail).getAllByText(report().topics[0]!.proposedNextStep)[0]).toBeVisible();
-    expect(within(detail).getByText(report().topics[0]!.rationale)).toBeVisible();
+    expect(within(detail).getByRole("heading", { name: "Suggested next step" })).toBeVisible();
+    expect(within(detail).getByText("Whether the samples overlap.")).toBeVisible();
+    const evidence = within(detail).getByRole("region", { name: "Source evidence" });
+    expect(within(evidence).getByRole("button", { name: /QA sample record/ })).toBeVisible();
+    expect(within(evidence).getByText(qa.body)).toBeVisible();
+    const reasoning = within(detail).getByText("Reasoning and original report").closest("details")!;
+    expect(reasoning).not.toHaveAttribute("open");
+    expect(within(reasoning).getByText(report().topics[0]!.rationale)).not.toBeVisible();
+    fireEvent.click(reasoning.querySelector("summary")!);
+    expect(within(reasoning).getByText(report().topics[0]!.proposedNextStep)).toBeVisible();
+    expect(within(reasoning).getByText(report().topics[0]!.rationale)).toBeVisible();
     fireEvent.keyDown(document.activeElement ?? detail, { key: "Escape" });
     await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
     expect(trigger).toHaveFocus();
@@ -797,17 +817,76 @@ it("keeps the row compact and opens the unchanged report in a keyboard-dismissab
     expect(mockGenerate).not.toHaveBeenCalled();
 });
 
-it("keeps company context and detailed generation metadata secondary on initial load", async () => {
+it("keeps context settings and technical generation metadata secondary on initial load", async () => {
     render(<ContextDemoScreen />);
-    const architecture = await screen.findByRole("region", {
-        name: "Available Company Architecture",
-    });
-    expect(architecture.querySelector("details")).not.toHaveAttribute("open");
-    expect(architecture).toHaveTextContent("unreviewed");
-    expect(within(architecture).getByRole("button")).not.toBeVisible();
-    expect(screen.getByRole("heading", { name: "Weekly insight" })).toBeVisible();
-    expect(screen.getByText("1 discussion topics to review this week.")).toBeVisible();
-    expect(screen.getByText(report().execution.modelId)).not.toBeVisible();
-    expect(screen.getByText(report().summary)).not.toBeVisible();
+    expect(await screen.findByRole("button", { name: /^My context/ })).toBeVisible();
+    expect(screen.queryByRole("dialog", { name: "My context" })).not.toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Compare the recorded sample" })).toBeVisible();
+    const fullBrief = screen.getByText(/^Read full brief/).closest("details")!;
+    expect(fullBrief).not.toHaveAttribute("open");
+    const metadata = screen.getByText("Sources & report details").closest("details")!;
+    expect(metadata).not.toHaveAttribute("open");
+    expect(within(metadata).getByText(report().execution.modelId)).not.toBeVisible();
     expect(mockGenerate).not.toHaveBeenCalled();
+});
+
+it("labels thirteen supplied profile facts without claiming extraction or profile approval", async () => {
+    const thirteen = {
+        ...company,
+        body: JSON.stringify({
+            facts: Array.from({ length: 13 }, (_, index) => ({
+                label: `Supplied fact ${index + 1}`,
+                value: `Synthetic supplied value ${index + 1}`,
+            })),
+            unknowns: [{ code: "hierarchy_unknown" }],
+        }),
+    };
+    mockLoad.mockResolvedValue(
+        state({ companyArchitecture: thirteen, personalContextAvailable: true })
+    );
+    mockSource.mockResolvedValue(thirteen);
+    globalThis.fetch = jest.fn().mockResolvedValue({ ok: true, json: async () => personalView() });
+    render(<ContextDemoScreen />);
+    const context = await openPersonalContext();
+    expect(within(context).getByText("Company profile isn't reviewed yet")).toBeVisible();
+    expect(within(context).getByText("Supplied company facts: 13.")).toBeVisible();
+    expect(context).not.toHaveTextContent(
+        /AI.extracted|13 facts were extracted|won.t prepare a fresh report|Joseph|process.memory|fixture|ACL/
+    );
+    expect(
+        within(context).queryByRole("button", { name: /Review profile|Approve profile|Save$/ })
+    ).not.toBeInTheDocument();
+    expect(mockSource).not.toHaveBeenCalled();
+    expect(mockReview).not.toHaveBeenCalled();
+    fireEvent.click(within(context).getByRole("button", { name: "Inspect profile" }));
+    const source = await screen.findByRole("dialog", { name: company.title });
+    expect(await within(source).findByText("hierarchy unknown")).toBeVisible();
+    expect(within(source).getByText("unreviewed")).toBeVisible();
+    expect(mockSource.mock.calls[0]!.slice(0, 2)).toEqual(["native-report-12", company.source]);
+    expect(mockReview).not.toHaveBeenCalled();
+    expect(mockGenerate).not.toHaveBeenCalled();
+});
+
+it("reports source differences and unreviewed context only from matching report evidence", async () => {
+    const saved = state();
+    const topic = saved.report!.topics[0]!;
+    topic.facts.push({
+        text: "The supplied company profile is unreviewed.",
+        refs: [company.source],
+    });
+    topic.conflicts.push({
+        text: "The reports use different sample descriptions; the cause is unknown.",
+        refs: [qa.source, company.source],
+    });
+    saved.report!.diagnostics.sources[0]!.reviewState = "unreviewed";
+    mockLoad.mockResolvedValue(saved);
+    render(<ContextDemoScreen />);
+    const row = await screen.findByRole("article", { name: topic.title });
+    expect(within(row).getByText("2 sources")).toBeVisible();
+    expect(within(row).getByText("Reported differences")).toBeVisible();
+    expect(within(row).getByText("Uses unreviewed context")).toBeVisible();
+    expect(row).not.toHaveTextContent(/definitive contradiction|AI suggested/);
+    const detail = await openTopic();
+    expect(within(detail).getByText(topic.conflicts[0]!.text)).toBeVisible();
+    expect(mockReview).not.toHaveBeenCalled();
 });

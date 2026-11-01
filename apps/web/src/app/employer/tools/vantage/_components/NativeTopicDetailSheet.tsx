@@ -3,6 +3,7 @@
 import { ChevronRight } from "lucide-react";
 import { useRef, useState, type ReactNode } from "react";
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from "~/components/ui/sheet";
+import { useSheetFocusRecovery } from "../_lib/use-sheet-focus-recovery";
 import type { TopicV1Dto } from "../api";
 import styles from "./compact-topic.module.css";
 
@@ -15,6 +16,8 @@ export function NativeTopicDetailSheet({
     children: ReactNode;
 }) {
     const [open, setOpen] = useState(false);
+    const heading = useRef<HTMLElement | null>(null);
+    useSheetFocusRecovery(open, heading);
     const trigger = useRef<HTMLButtonElement>(null);
     const origin =
         topic.origin === "ai"
@@ -55,7 +58,7 @@ export function NativeTopicDetailSheet({
                             event.preventDefault();
                     }}
                 >
-                    <header className={styles.sheetHeader}>
+                    <header ref={heading} tabIndex={-1} className={styles.sheetHeader}>
                         <SheetTitle className="text-lg leading-snug">{topic.title}</SheetTitle>
                         <SheetDescription className="mt-2 text-xs">
                             {origin} · {topic.status}

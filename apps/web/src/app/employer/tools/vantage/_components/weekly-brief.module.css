@@ -1,0 +1,140 @@
+.brief {
+    padding: 30px 36px;
+    border: 1px solid color-mix(in srgb, var(--accent) 18%, var(--line));
+    border-radius: 16px;
+    background: color-mix(in srgb, var(--accent) 9%, var(--panel));
+    color: var(--ink);
+    overflow-wrap: anywhere;
+}
+.eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    margin: 0 0 12px;
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.035em;
+    text-transform: uppercase;
+}
+.headline {
+    max-width: 850px;
+    margin: 0;
+    font-size: clamp(21px, 2.2vw, 27px);
+    font-weight: 650;
+    line-height: 1.24;
+    letter-spacing: -0.025em;
+    text-wrap: balance;
+}
+.preview {
+    max-width: 960px;
+    margin: 16px 0 0;
+    color: var(--ink-2);
+    font-size: 15px;
+    line-height: 1.65;
+    white-space: pre-wrap;
+}
+.disclosure {
+    margin-top: 22px;
+}
+.disclosure summary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: fit-content;
+    list-style: none;
+    color: var(--accent);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.disclosure summary::-webkit-details-marker {
+    display: none;
+}
+.disclosure summary:focus-visible,
+.sources button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+    border-radius: 2px;
+}
+.disclosure[open] .chevron {
+    transform: rotate(180deg);
+}
+.fullBrief {
+    margin-top: 18px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    color: var(--ink-2);
+    font-size: 14px;
+    line-height: 1.65;
+}
+.fullBrief h3 {
+    margin: 0 0 8px;
+    color: var(--ink);
+    font-size: 13px;
+    font-weight: 600;
+}
+.original {
+    margin: 0;
+    white-space: pre-wrap;
+}
+.evidence {
+    margin-top: 20px;
+}
+.evidence ul {
+    margin: 0;
+    padding-left: 20px;
+}
+.evidence li + li {
+    margin-top: 14px;
+}
+.sources {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    margin-top: 6px;
+}
+.sources button {
+    color: var(--accent);
+    text-align: left;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+.version {
+    font-size: 12px;
+}
+@media (max-width: 600px) {
+    .brief {
+        padding: 24px 20px;
+        border-radius: 12px;
+    }
+    .preview {
+        font-size: 14px;
+    }
+}
+.preview > p {
+    margin: 0;
+}
+.preview > .previewLabel {
+    margin-bottom: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--ink-3);
+}
+
+.highlight {
+    margin-top: 20px;
+    padding: 16px 18px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--panel);
+    color: var(--ink-2);
+    font-size: 13px;
+    line-height: 1.6;
+}
+.highlightLabel {
+    margin: 0 0 6px;
+    color: var(--ink-3);
+    font-size: 11px;
+    font-weight: 600;
+}

@@ -446,6 +446,8 @@
     "uploadingPercent": "Uploading {percent}%…",
     "indexingVersion": "Indexing new version…",
     "uploadNewVersion": "Upload new version",
+    "reembedHint": "Re-embed: read this file again and embed it with the workspace's current model, as a new version",
+    "reembeddedFrom": "Re-embedded from v{number}",
     "mustMatch": "Must match: {mime}",
     "noVersions": "No version history available for this source.",
     "versionLabel": "v{number}",
@@ -460,6 +462,8 @@
     "unfiled": "Unfiled",
     "metaIndexed": "Indexed",
     "readyToQuery": "✓ ready to query",
+    "indexProcessing": "Processing…",
+    "indexFailed": "Processing failed",
     "metaEdited": "Edited",
     "metaCitable": "Citable",
     "citableYes": "✓ answers can cite it",
@@ -475,7 +479,9 @@
     "confirmRestoreBody": "It becomes the current version, and answers cite it from now on. The other versions stay in the history.",
     "confirmTrashBody": "You can undo it right after.",
     "confirmDeleteBody": "This cannot be undone.",
-    "moveToTrash": "Move to trash"
+    "moveToTrash": "Move to trash",
+    "highlightFailed": "Couldn't save the highlight",
+    "highlightRemoveFailed": "Couldn't remove the highlight"
   },
   "documentMenu": {
     "askMindmap": "Ask about this mindmap",
@@ -531,6 +537,8 @@
     "clipboardEmpty": "The clipboard is empty",
     "retrying": "Retrying",
     "retryProcessingFailed": "Couldn't retry processing",
+    "reembedding": "Re-embedding",
+    "reembedFailed": "Couldn't re-embed this source",
     "movedTo": "Moved to {folder}",
     "movedToTop": "Moved {name} to the top level",
     "moveFailed": "Couldn't move that",

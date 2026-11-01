@@ -446,6 +446,8 @@
     "uploadingPercent": "正在上传 {percent}%…",
     "indexingVersion": "正在为新版本建立索引…",
     "uploadNewVersion": "上传新版本",
+    "reembedHint": "重新嵌入：重新读取此文件，并用工作区当前的模型嵌入，生成一个新版本",
+    "reembeddedFrom": "由 v{number} 重新嵌入",
     "mustMatch": "必须匹配：{mime}",
     "noVersions": "该来源没有可用的版本历史。",
     "versionLabel": "v{number}",
@@ -460,6 +462,8 @@
     "unfiled": "未归档",
     "metaIndexed": "索引",
     "readyToQuery": "✓ 可供查询",
+    "indexProcessing": "处理中…",
+    "indexFailed": "处理失败",
     "metaEdited": "编辑时间",
     "metaCitable": "可引用",
     "citableYes": "✓ 回答可以引用它",
@@ -475,7 +479,9 @@
     "confirmRestoreBody": "它将成为当前版本，之后的回答都会引用它。其他版本仍保留在历史记录中。",
     "confirmTrashBody": "之后可以立即撤销。",
     "confirmDeleteBody": "此操作无法撤销。",
-    "moveToTrash": "移到回收站"
+    "moveToTrash": "移到回收站",
+    "highlightFailed": "无法保存高亮",
+    "highlightRemoveFailed": "无法移除高亮"
   },
   "documentMenu": {
     "askMindmap": "就此思维导图提问",
@@ -531,6 +537,8 @@
     "clipboardEmpty": "剪贴板为空",
     "retrying": "正在重试",
     "retryProcessingFailed": "无法重试处理",
+    "reembedding": "正在重新嵌入",
+    "reembedFailed": "无法重新嵌入此来源",
     "movedTo": "已移到 {folder}",
     "movedToTop": "已将 {name} 移到顶层",
     "moveFailed": "无法移动",

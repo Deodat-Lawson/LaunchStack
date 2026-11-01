@@ -39,7 +39,8 @@
     "status": {
       "drifted": "锚点已移动",
       "orphaned": "未锚定"
-    }
+    },
+    "highlight": "高亮"
   },
   "draft": {
     "titlePlaceholder": "标题",
@@ -71,7 +72,39 @@
     "addNote": "+ 笔记",
     "askAi": "✦ 问 AI",
     "askAiTitle": "在对话中就这段内容提问",
-    "pinTitle": "笔记 {ordinal}"
+    "pinTitle": "笔记 {ordinal}",
+    "toolbar": "PDF 控件",
+    "previousPage": "上一页",
+    "nextPage": "下一页",
+    "pageNumber": "页码",
+    "ofPages": "共 {count} 页",
+    "zoomOut": "缩小",
+    "zoomOutShortcut": "缩小（⌘/Ctrl −）",
+    "zoomIn": "放大",
+    "zoomInShortcut": "放大（⌘/Ctrl +）",
+    "zoomLevel": "缩放：{level}",
+    "zoomAuto": "自动（⌘/Ctrl 0）",
+    "fitWidth": "适合宽度",
+    "actualSize": "实际大小",
+    "find": "在文档中查找",
+    "findShortcut": "在文档中查找（⌘/Ctrl F）",
+    "findPlaceholder": "在文档中查找",
+    "findNone": "无匹配项",
+    "findCount": "第 {current} 个，共 {total} 个",
+    "findPrevious": "上一个匹配项（Shift+Enter）",
+    "findNext": "下一个匹配项（Enter）",
+    "findClose": "关闭查找（Esc）",
+    "download": "下载",
+    "highlight": "高亮",
+    "highlightIn": "用{color}高亮",
+    "colors": {
+      "yellow": "黄色",
+      "green": "绿色",
+      "blue": "蓝色",
+      "pink": "粉色"
+    },
+    "highlightMenu": "高亮",
+    "removeHighlight": "移除"
   },
   "server": {
     "errors": {

@@ -1,6 +1,6 @@
 /** @jest-environment jsdom */
 
-import { citationNeedles, findTextRange } from "../find-text-range";
+import { citationNeedles, findAllTextRanges, findTextRange } from "../find-text-range";
 
 /**
  * The citation locator turns a retrieval snippet into a DOM Range inside a
@@ -87,5 +87,33 @@ describe("findTextRange", () => {
     it("returns null when nothing matches", () => {
         const el = root("<p>completely unrelated content</p>");
         expect(findTextRange(el, citationNeedles("the quick brown fox jumps"))).toBeNull();
+    });
+});
+
+describe("findAllTextRanges", () => {
+    it("finds every match in reading order, ignoring case", () => {
+        const el = root("<p>Revenue grew. revenue fell.</p><p>REVENUE held.</p>");
+        const ranges = findAllTextRanges(el, "revenue");
+        expect(ranges.map(r => r.toString())).toEqual(["Revenue", "revenue", "REVENUE"]);
+    });
+
+    it("matches a phrase that a PDF text layer splits across spans and lines", () => {
+        const el = root("<span>net </span><span>operating</span><br><span>income</span>");
+        const ranges = findAllTextRanges(el, "net operating income");
+        expect(ranges).toHaveLength(1);
+        // From the first span's text to the last's; a <br> carries no text.
+        expect(ranges[0]!.startContainer.textContent).toBe("net ");
+        expect(ranges[0]!.endContainer.textContent).toBe("income");
+        expect(ranges[0]!.toString().replace(/\s+/g, "")).toBe("netoperatingincome");
+    });
+
+    it("does not count overlapping matches twice", () => {
+        expect(findAllTextRanges(root("<p>aaaa</p>"), "aa")).toHaveLength(2);
+    });
+
+    it("stops at the limit, and finds nothing for a blank query", () => {
+        const el = root("<p>" + "x ".repeat(50) + "</p>");
+        expect(findAllTextRanges(el, "x", 5)).toHaveLength(5);
+        expect(findAllTextRanges(el, "   ")).toEqual([]);
     });
 });

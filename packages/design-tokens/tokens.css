@@ -179,6 +179,22 @@
     --paper-accent: oklch(0.54 0.24 var(--accent-h));
     --paper-warn: oklch(0.7 0.16 75);
 
+    /* Highlighter inks for a PDF page, which is printed paper — white in
+       both themes — so, like the rest of this set, they are not overridden
+       below. Translucent, and painted with mix-blend-mode: multiply, so the
+       type under them stays black. `find` marks every search match and
+       `find-current` the one the reader is on.
+
+       Every one must sit inside sRGB: Chromium blends an out-of-gamut
+       colour under multiply into garbage (an orange came out green), so
+       chroma here is held under each hue's sRGB limit at its lightness. */
+    --paper-hl-yellow: oklch(0.9 0.17 100 / 0.55);
+    --paper-hl-green: oklch(0.88 0.15 150 / 0.5);
+    --paper-hl-blue: oklch(0.84 0.09 235 / 0.5);
+    --paper-hl-pink: oklch(0.84 0.1 350 / 0.5);
+    --paper-hl-find: oklch(0.86 0.15 95 / 0.45);
+    --paper-hl-find-current: oklch(0.76 0.16 55 / 0.6);
+
     /* …and the set for a board whose own paper is dark. Selected by the
        canvas from the page background's lightness, not by the app theme:
        a dark board stays dark for a viewer in light mode, because the

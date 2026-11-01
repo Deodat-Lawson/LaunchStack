@@ -1,11 +1,47 @@
 "use client";
 
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+    memo,
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
+    type KeyboardEvent as ReactKeyboardEvent,
+    type MouseEvent as ReactMouseEvent,
+} from "react";
 import { useTranslations } from "next-intl";
 import { Document, Page, pdfjs } from "react-pdf";
+import {
+    ChevronDown,
+    ChevronUp,
+    Download,
+    Minus,
+    MoveHorizontal,
+    Plus,
+    Search,
+    Trash2,
+    X,
+} from "lucide-react";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
-import { citationNeedles, findTextRange, type ViewerHighlight } from "~/lib/find-text-range";
+import { Button } from "~/components/ui/button";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
+import { Input } from "~/components/ui/input";
+import {
+    citationNeedles,
+    findAllTextRanges,
+    findTextRange,
+    type ViewerHighlight,
+} from "~/lib/find-text-range";
+import { cn } from "~/lib/utils";
+import { HIGHLIGHT_COLORS, HIGHLIGHT_FILL, type HighlightColor } from "./_shared/highlight";
 import { createSelectionCommitter } from "./_shared/selectionGesture";
 
 /**
@@ -35,22 +71,34 @@ export interface PdfAnchorCapture {
     quote: { exact: string; prefix?: string; suffix?: string };
 }
 
+/** A selection to mark, and the colour to mark it in. */
+export interface PdfHighlightCapture extends PdfAnchorCapture {
+    color: HighlightColor;
+}
+
 export interface PdfNoteLite {
     id: number;
     title: string | null;
     page?: number | null;
-    /** Normalized quads in [0, 1] space matching `PdfAnchorCapture.quads`. */
+    /**
+     * Normalized quads in [0, 1] space matching `PdfAnchorCapture.quads`.
+     * Empty when a new version moved the note: rehydration keeps the quote
+     * and a page but cannot know the layout, so the viewer finds the quote.
+     */
     quads: PdfQuad[];
     quote?: string;
     anchorStatus?: "resolved" | "drifted" | "orphaned" | null;
+    /** Set when the note is a highlight: drawn in this colour, with no pin. */
+    highlight?: HighlightColor | null;
 }
 
 interface Props {
     url: string;
     /**
      * Notes that already exist for the document. Renders a numbered pin +
-     * highlight overlay on the appropriate page for each. Notes with no
-     * `page` / empty quads are skipped (shown only in the sidebar list).
+     * highlight overlay on the appropriate page for each, or just the colour
+     * for a highlight. Notes with no page are skipped (shown only in the
+     * sidebar list).
      */
     notes: PdfNoteLite[];
     /**
@@ -66,6 +114,15 @@ interface Props {
      * with the anchor pre-filled.
      */
     onCreateAnchoredNote: (anchor: PdfAnchorCapture) => void;
+    /**
+     * When set, the selection popup offers a highlighter in each colour: the
+     * passage is marked and kept, with nothing to write.
+     */
+    onCreateHighlight?: (highlight: PdfHighlightCapture) => void;
+    /** Clicking a highlight offers its colours; this changes it. */
+    onRecolorHighlight?: (noteId: number, color: HighlightColor) => void;
+    /** …and Remove. */
+    onRemoveHighlight?: (noteId: number) => void;
     /**
      * When set, the selection popup offers "Ask AI": the passage and the page
      * it sits on go to the chat, with the document kept in view beside it.
@@ -90,10 +147,32 @@ interface Props {
      * Located once per `nonce` — a repeat click re-runs the jump.
      */
     citationHighlight?: ViewerHighlight | null;
+    /** The file to offer from the toolbar's Download, and the name to save it under. */
+    downloadUrl?: string;
+    downloadName?: string;
 }
 
-/** The floating button row's widest form (+ Note plus the three AI captures). */
-const POPUP_WIDTH_PX = 300;
+/** The floating button row's widest form: + Note, the four highlighters, Ask AI. */
+const POPUP_WIDTH_PX = 330;
+
+/**
+ * How big the pages are drawn. `auto` fits the column without ever growing
+ * past the page's natural size — the default, and what a column beside the
+ * chat needs. `fit` fills the column's width whatever that takes. A number
+ * is a scale the reader chose, 1 being the page's natural size.
+ */
+type Zoom = "auto" | "fit" | number;
+
+const MIN_SCALE = 0.2;
+const MAX_SCALE = 4;
+/** Where + and − step to, from wherever the scale is now. */
+const ZOOM_STEPS = [0.25, 0.33, 0.5, 0.67, 0.75, 0.9, 1, 1.1, 1.25, 1.5, 1.75, 2, 2.5, 3, 4];
+/** The scales the zoom menu names. */
+const ZOOM_PRESETS = [0.5, 0.75, 1, 1.25, 1.5, 2, 3];
+/** Find stops marking after this many matches; the count says "1000+". */
+const MAX_FIND_HITS = 1000;
+/** Below this column width the toolbar drops its secondary buttons. */
+const COMPACT_TOOLBAR_PX = 440;
 
 interface SelectionDraft {
     page: number;
@@ -104,10 +183,61 @@ interface SelectionDraft {
     buttonY: number;
 }
 
-interface PageGeometry {
-    /** Display width in CSS pixels (what we render at). */
-    width: number;
-    height: number;
+/** The colour menu opened by clicking a highlight, in page-container coords. */
+interface HighlightMenu {
+    noteId: number;
+    x: number;
+    y: number;
+}
+
+/** A note where it is drawn: its own quads, or where its quote was found. */
+interface PlacedNote {
+    note: PdfNoteLite;
+    quads: PdfQuad[];
+    /** The pin's number; null for a highlight, which has no pin. */
+    ordinal: number | null;
+}
+
+interface FindHit {
+    page: number;
+    quads: PdfQuad[];
+}
+
+/** A point on a page held still while the scale changes around it. */
+interface ZoomAnchor {
+    page: number;
+    fracX: number;
+    fracY: number;
+    /** Where that point sat in the visible area, in pixels. */
+    viewX: number;
+    viewY: number;
+    at: number;
+}
+
+function clampScale(scale: number): number {
+    return Math.min(MAX_SCALE, Math.max(MIN_SCALE, scale));
+}
+
+/** `range`'s boxes as fractions of `pageRect`, which is what every overlay stores. */
+function quadsOfRange(range: Range, pageRect: DOMRect): PdfQuad[] {
+    if (pageRect.width <= 0 || pageRect.height <= 0) return [];
+    return Array.from(range.getClientRects())
+        .filter(r => r.width > 0 && r.height > 0)
+        .map(r => [
+            (r.left - pageRect.left) / pageRect.width,
+            (r.top - pageRect.top) / pageRect.height,
+            (r.right - pageRect.left) / pageRect.width,
+            (r.bottom - pageRect.top) / pageRect.height,
+        ]);
+}
+
+function textLayerOf(pageEl: HTMLElement): Element | null {
+    return pageEl.querySelector(".react-pdf__Page__textContent");
+}
+
+/** The pages in order, as [number, element]. */
+function orderedPages(pageRefs: Map<number, HTMLDivElement>): Array<[number, HTMLDivElement]> {
+    return Array.from(pageRefs.entries()).sort((a, b) => a[0] - b[0]);
 }
 
 export function PdfViewerWithNotes({
@@ -115,22 +245,28 @@ export function PdfViewerWithNotes({
     notes,
     scrollToNoteId,
     onCreateAnchoredNote,
+    onCreateHighlight,
+    onRecolorHighlight,
+    onRemoveHighlight,
     onAskAi,
     onNotePinClick,
     onSelectionDraft,
     citationHighlight,
+    downloadUrl,
+    downloadName,
 }: Props) {
     const t = useTranslations("notes.pdf");
     const [numPages, setNumPages] = useState<number | null>(null);
-    const [pageGeometry, setPageGeometry] = useState<Map<number, PageGeometry>>(() => new Map());
+    const [renderedPages, setRenderedPages] = useState<Set<number>>(() => new Set());
     const [selectionDraft, setSelectionDraft] = useState<SelectionDraft | null>(null);
+    const [highlightMenu, setHighlightMenu] = useState<HighlightMenu | null>(null);
     const [loadError, setLoadError] = useState<string | null>(null);
     /** Quads for the located citation passage, rendered as a distinct overlay. */
     const [citeOverlay, setCiteOverlay] = useState<{
         page: number;
         quads: PdfQuad[];
     } | null>(null);
-    /** Bumped whenever a page's text layer finishes rendering — retriggers the locate effect. */
+    /** Bumped whenever a page's text layer finishes rendering — retriggers the locate effects. */
     const [textLayerVersion, setTextLayerVersion] = useState(0);
     const locatedNonce = useRef<number | null>(null);
     const scrolledNonce = useRef<number | null>(null);
@@ -157,17 +293,70 @@ export function PdfViewerWithNotes({
         return cb;
     }, []);
     const onTextLayerReady = useCallback(() => setTextLayerVersion(v => v + 1), []);
+
+    // ---------------------------------------------------------------------
+    // Notes a new version moved: find their quote again
+    // ---------------------------------------------------------------------
+
+    /**
+     * Where each note with no quads of its own was found, by id. Anchor
+     * rehydration keeps a moved note's quote but drops its quads (it runs on
+     * the server and cannot see the layout), and its page is only a hint —
+     * so the passage is searched for on that page first, then everywhere.
+     */
+    const [relocated, setRelocated] = useState<Map<number, FindHit>>(() => new Map());
+    useEffect(() => {
+        const missing = notes.filter(
+            n =>
+                n.quads.length === 0 && n.quote && n.quote.trim().length > 0 && !relocated.has(n.id)
+        );
+        if (missing.length === 0) return;
+        const timer = setTimeout(() => {
+            const pages = orderedPages(pageRefs.current);
+            const found = new Map(relocated);
+            for (const note of missing) {
+                const quote = note.quote!;
+                const needles = [quote.toLowerCase(), ...citationNeedles(quote)];
+                const hinted = pages.filter(([n]) => n === note.page);
+                for (const [pageNumber, pageEl] of [...hinted, ...pages]) {
+                    const layer = textLayerOf(pageEl);
+                    if (!layer) continue;
+                    const range = findTextRange(layer, needles);
+                    if (!range) continue;
+                    const quads = quadsOfRange(range, pageEl.getBoundingClientRect());
+                    if (quads.length === 0) continue;
+                    found.set(note.id, { page: pageNumber, quads });
+                    break;
+                }
+            }
+            if (found.size !== relocated.size) setRelocated(found);
+        }, 200);
+        return () => clearTimeout(timer);
+    }, [notes, relocated, textLayerVersion]);
+
     const notesByPage = useMemo(() => {
-        const map = new Map<number, PdfNoteLite[]>();
+        const map = new Map<number, PlacedNote[]>();
         for (const note of notes) {
-            if (!note.page || note.quads.length === 0) continue;
-            const list = map.get(note.page) ?? [];
-            list.push(note);
-            map.set(note.page, list);
+            const placed =
+                note.quads.length > 0 && note.page
+                    ? { page: note.page, quads: note.quads }
+                    : relocated.get(note.id);
+            if (!placed || placed.quads.length === 0) continue;
+            const list = map.get(placed.page) ?? [];
+            list.push({ note, quads: placed.quads, ordinal: null });
+            map.set(placed.page, list);
+        }
+        // Pins are numbered per page; highlights carry no number.
+        for (const list of map.values()) {
+            let ordinal = 0;
+            for (const placed of list) {
+                if (!placed.note.highlight) placed.ordinal = ++ordinal;
+            }
         }
         return map;
-    }, [notes]);
-    const EMPTY_NOTES = useMemo<PdfNoteLite[]>(() => [], []);
+    }, [notes, relocated]);
+    const EMPTY_NOTES = useMemo<PlacedNote[]>(() => [], []);
+    const EMPTY_QUADS = useMemo<PdfQuad[]>(() => [], []);
     const pinClickRef = useRef(onNotePinClick);
     pinClickRef.current = onNotePinClick;
     const handlePinClick = useCallback((noteId: number) => pinClickRef.current?.(noteId), []);
@@ -186,19 +375,19 @@ export function PdfViewerWithNotes({
         );
     }, [selectionDraft]);
 
+    // ---------------------------------------------------------------------
+    // Scale
+    // ---------------------------------------------------------------------
+
     /**
-     * Pages fit the column they are in. They render at their natural size
-     * (1pt = 1px) when there is room, and shrink — never grow — when there is
-     * not: at scale 1 a Letter page is 612px wide, so any column narrower
-     * than that, which is most columns beside the chat, scrolled sideways
-     * and cut the right edge of every line off.
-     *
-     * The first page's width is read before any page renders, so pages come
-     * up at their fitted size instead of drawing wide and then shrinking.
-     * One scale for the whole document keeps mixed page sizes in proportion.
+     * The page's natural width is read before any page renders, so pages
+     * come up at their fitted size instead of drawing wide and then
+     * shrinking. One scale for the whole document keeps mixed page sizes in
+     * proportion.
      */
     const [naturalWidth, setNaturalWidth] = useState<number | null>(null);
     const [availableWidth, setAvailableWidth] = useState<number | null>(null);
+    const [zoom, setZoom] = useState<Zoom>("auto");
     useEffect(() => {
         const element = containerRef.current;
         if (!element || typeof ResizeObserver === "undefined") return;
@@ -209,15 +398,126 @@ export function PdfViewerWithNotes({
         observer.observe(element);
         return () => observer.disconnect();
     }, []);
-    const pageScale =
+    const fitScale =
         naturalWidth && availableWidth
-            ? // Hundredths, so a resize drag does not re-render every page
-              // for every pixel.
-              Math.floor(
-                  Math.min(1, Math.max(0.2, (availableWidth - PAGE_GUTTER_PX * 2) / naturalWidth)) *
-                      100
-              ) / 100
-            : 1;
+            ? (availableWidth - PAGE_GUTTER_PX * 2) / naturalWidth
+            : null;
+    /*
+     * Pages fit the column they are in by default. They render at their
+     * natural size (1pt = 1px) when there is room, and shrink — never grow —
+     * when there is not: at scale 1 a Letter page is 612px wide, so any
+     * column narrower than that, which is most columns beside the chat,
+     * scrolled sideways and cut the right edge of every line off. Zooming in
+     * past the column is the reader's choice, and then sideways scrolling is
+     * what they asked for.
+     */
+    const pageScale =
+        // Hundredths, so a resize drag does not re-render every page for
+        // every pixel.
+        Math.floor(
+            clampScale(
+                zoom === "auto"
+                    ? Math.min(1, fitScale ?? 1)
+                    : zoom === "fit"
+                      ? (fitScale ?? 1)
+                      : zoom
+            ) * 100
+        ) / 100;
+    const pageScaleRef = useRef(pageScale);
+    pageScaleRef.current = pageScale;
+
+    /** The point a zoom keeps still, captured just before the scale changes. */
+    const zoomAnchor = useRef<ZoomAnchor | null>(null);
+
+    const applyZoom = useCallback((next: Zoom, at?: { x: number; y: number }) => {
+        const container = containerRef.current;
+        if (container) {
+            const box = container.getBoundingClientRect();
+            const x = at?.x ?? box.left + container.clientWidth / 2;
+            const y = at?.y ?? box.top + container.clientHeight / 3;
+            const pages = orderedPages(pageRefs.current);
+            // The page under the point, or the last one that starts above it.
+            let chosen: [number, HTMLDivElement] | undefined;
+            for (const entry of pages) {
+                if (entry[1].getBoundingClientRect().top <= y) chosen = entry;
+                else break;
+            }
+            chosen ??= pages[0];
+            if (chosen) {
+                const rect = chosen[1].getBoundingClientRect();
+                zoomAnchor.current = {
+                    page: chosen[0],
+                    fracX: rect.width > 0 ? (x - rect.left) / rect.width : 0,
+                    fracY: rect.height > 0 ? (y - rect.top) / rect.height : 0,
+                    viewX: x - box.left,
+                    viewY: y - box.top,
+                    at: Date.now(),
+                };
+            }
+        }
+        // Positions captured at the old scale mean nothing at the new one.
+        setSelectionDraft(null);
+        setHighlightMenu(null);
+        setZoom(next);
+    }, []);
+    const applyZoomRef = useRef(applyZoom);
+    applyZoomRef.current = applyZoom;
+
+    // Put the anchored point back where it was. Children's effects run
+    // before a parent's, so by now every page has resized its canvas for the
+    // new scale and the offsets read below are the new ones.
+    useEffect(() => {
+        const anchor = zoomAnchor.current;
+        zoomAnchor.current = null;
+        if (!anchor || Date.now() - anchor.at > 1500) return;
+        const container = containerRef.current;
+        const pageEl = pageRefs.current.get(anchor.page);
+        if (!container || !pageEl) return;
+        container.scrollTop = pageEl.offsetTop + anchor.fracY * pageEl.offsetHeight - anchor.viewY;
+        container.scrollLeft = pageEl.offsetLeft + anchor.fracX * pageEl.offsetWidth - anchor.viewX;
+    }, [pageScale]);
+
+    const zoomIn = useCallback(() => {
+        const current = pageScaleRef.current;
+        const next = ZOOM_STEPS.find(step => step > current + 0.005);
+        if (next !== undefined) applyZoom(next);
+    }, [applyZoom]);
+    const zoomOut = useCallback(() => {
+        const current = pageScaleRef.current;
+        const next = [...ZOOM_STEPS].reverse().find(step => step < current - 0.005);
+        if (next !== undefined) applyZoom(next);
+    }, [applyZoom]);
+
+    // Pinch on a trackpad, or ⌘/Ctrl + scroll wheel. Both arrive as wheel
+    // events with ctrlKey set; the browser would zoom the whole app. A burst
+    // of events is gathered into one scale change, since each one redraws
+    // every page.
+    useEffect(() => {
+        const container = containerRef.current;
+        if (!container) return;
+        let factor = 1;
+        let point = { x: 0, y: 0 };
+        let timer: ReturnType<typeof setTimeout> | null = null;
+        const onWheel = (event: WheelEvent) => {
+            if (!event.ctrlKey && !event.metaKey) return;
+            event.preventDefault();
+            const delta = Math.max(-100, Math.min(100, event.deltaY));
+            factor *= Math.exp(-delta * 0.0025);
+            point = { x: event.clientX, y: event.clientY };
+            if (timer) return;
+            timer = setTimeout(() => {
+                timer = null;
+                const next = Math.round(clampScale(pageScaleRef.current * factor) * 100) / 100;
+                factor = 1;
+                if (next !== pageScaleRef.current) applyZoomRef.current(next, point);
+            }, 90);
+        };
+        container.addEventListener("wheel", onWheel, { passive: false });
+        return () => {
+            container.removeEventListener("wheel", onWheel);
+            if (timer) clearTimeout(timer);
+        };
+    }, []);
 
     const onDocumentLoadSuccess = useCallback(
         (pdf: {
@@ -244,30 +544,89 @@ export function PdfViewerWithNotes({
         [t]
     );
 
-    const onPageRenderSuccess = useCallback(
-        (page: { pageNumber: number; width: number; height: number }) => {
-            setPageGeometry(prev => {
-                const next = new Map(prev);
-                next.set(page.pageNumber, {
-                    width: page.width,
-                    height: page.height,
-                });
-                return next;
+    const onPageRenderSuccess = useCallback((pageNumber: number) => {
+        setRenderedPages(prev => {
+            if (prev.has(pageNumber)) return prev;
+            const next = new Set(prev);
+            next.add(pageNumber);
+            return next;
+        });
+    }, []);
+
+    // ---------------------------------------------------------------------
+    // Where the reader is, and getting somewhere
+    // ---------------------------------------------------------------------
+
+    const [currentPage, setCurrentPage] = useState(1);
+    useEffect(() => {
+        const container = containerRef.current;
+        if (!container) return;
+        let frame = 0;
+        const onScroll = () => {
+            if (frame) return;
+            frame = requestAnimationFrame(() => {
+                frame = 0;
+                // The page holding the line a third of the way down.
+                const probe = container.scrollTop + container.clientHeight / 3;
+                let page = 1;
+                for (const [pageNumber, pageEl] of orderedPages(pageRefs.current)) {
+                    if (pageEl.offsetTop <= probe) page = pageNumber;
+                    else break;
+                }
+                setCurrentPage(page);
             });
-        },
-        []
-    );
+        };
+        container.addEventListener("scroll", onScroll, { passive: true });
+        return () => {
+            container.removeEventListener("scroll", onScroll);
+            cancelAnimationFrame(frame);
+        };
+    }, []);
+
+    const goToPage = useCallback((page: number) => {
+        const container = containerRef.current;
+        const pageEl = pageRefs.current.get(page);
+        if (!container || !pageEl) return;
+        container.scrollTo({ top: pageEl.offsetTop - 12 });
+        setCurrentPage(page);
+    }, []);
+
+    /** Bring a box on a page into view, a third of the way down. */
+    const scrollToQuad = useCallback((page: number, quad: PdfQuad | undefined) => {
+        const container = containerRef.current;
+        const pageEl = pageRefs.current.get(page);
+        if (!container || !pageEl) return;
+        if (!quad) {
+            container.scrollTo({ top: pageEl.offsetTop - 12 });
+            return;
+        }
+        const left = pageEl.offsetLeft + quad[0] * pageEl.offsetWidth;
+        const right = pageEl.offsetLeft + quad[2] * pageEl.offsetWidth;
+        // Instant, not smooth — the passage can be many pages away.
+        container.scrollTo({
+            top: pageEl.offsetTop + quad[1] * pageEl.offsetHeight - container.clientHeight / 3,
+            // Sideways only when the box is out of view, as at a high zoom.
+            left:
+                left < container.scrollLeft || right > container.scrollLeft + container.clientWidth
+                    ? left - 24
+                    : container.scrollLeft,
+        });
+    }, []);
 
     // Scroll to a pinned note when the parent requests it.
     useEffect(() => {
         if (!scrollToNoteId) return;
-        const n = notes.find(x => x.id === scrollToNoteId);
-        if (!n?.page) return;
-        const el = pageRefs.current.get(n.page);
-        if (el) {
-            el.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
-    }, [scrollToNoteId, notes]);
+        const note = notes.find(x => x.id === scrollToNoteId);
+        if (!note) return;
+        const placed =
+            note.quads.length > 0 && note.page
+                ? { page: note.page, quads: note.quads }
+                : relocated.get(note.id);
+        if (placed) scrollToQuad(placed.page, placed.quads[0]);
+        else if (note.page) scrollToQuad(note.page, undefined);
+        // Only a new request scrolls; the note being found later does not.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [scrollToNoteId, notes, scrollToQuad]);
 
     // Locate a cited passage. Text layers render asynchronously page by page,
     // so this effect re-runs on every textLayerVersion bump until the passage
@@ -299,42 +658,112 @@ export function PdfViewerWithNotes({
 
         for (const pageNumber of candidatePages) {
             const pageEl = pageRefs.current.get(pageNumber);
-            const geom = pageGeometry.get(pageNumber);
-            if (!pageEl || !geom) continue;
-            const textLayer = pageEl.querySelector(".react-pdf__Page__textContent");
+            if (!pageEl || !renderedPages.has(pageNumber)) continue;
+            const textLayer = textLayerOf(pageEl);
             if (!textLayer) continue;
 
             const range = findTextRange(textLayer, needles);
             if (!range) continue;
 
-            const pageRect = pageEl.getBoundingClientRect();
-            const rects = Array.from(range.getClientRects()).filter(
-                r => r.width > 0 && r.height > 0
-            );
-            if (rects.length === 0) continue;
-
-            const quads: PdfQuad[] = rects.map(r => [
-                (r.left - pageRect.left) / geom.width,
-                (r.top - pageRect.top) / geom.height,
-                (r.right - pageRect.left) / geom.width,
-                (r.bottom - pageRect.top) / geom.height,
-            ]);
+            const quads = quadsOfRange(range, pageEl.getBoundingClientRect());
+            if (quads.length === 0) continue;
 
             locatedNonce.current = citationHighlight.nonce;
             setCiteOverlay({ page: pageNumber, quads });
-
-            // Jump the first highlight rect into the upper third. Instant,
-            // not smooth — the passage can be many pages away.
-            const container = containerRef.current;
-            const firstQuad = quads[0];
-            if (container && firstQuad) {
-                container.scrollTo({
-                    top: pageEl.offsetTop + firstQuad[1] * geom.height - container.clientHeight / 3,
-                });
-            }
+            // Jump the first highlight rect into the upper third.
+            scrollToQuad(pageNumber, quads[0]);
             return;
         }
-    }, [citationHighlight, pageGeometry, textLayerVersion]);
+    }, [citationHighlight, renderedPages, textLayerVersion, scrollToQuad]);
+
+    // ---------------------------------------------------------------------
+    // Find
+    // ---------------------------------------------------------------------
+
+    const [findOpen, setFindOpen] = useState(false);
+    const [findQuery, setFindQuery] = useState("");
+    const [findHits, setFindHits] = useState<FindHit[]>([]);
+    const [findIndex, setFindIndex] = useState(0);
+    const findInputRef = useRef<HTMLInputElement>(null);
+    /** The query and match last scrolled to, so a re-search does not jump. */
+    const findScrolledTo = useRef("");
+
+    const openFind = useCallback(() => {
+        setFindOpen(true);
+        // After the bar mounts.
+        requestAnimationFrame(() => {
+            findInputRef.current?.focus();
+            findInputRef.current?.select();
+        });
+    }, []);
+    const closeFind = useCallback(() => {
+        setFindOpen(false);
+        setFindHits([]);
+        findScrolledTo.current = "";
+        containerRef.current?.focus({ preventScroll: true });
+    }, []);
+
+    useEffect(() => {
+        setFindIndex(0);
+    }, [findQuery]);
+
+    // Search every rendered page's text. Re-run as more pages finish
+    // rendering, and at a new scale (the text layer is redrawn).
+    useEffect(() => {
+        const query = findQuery.trim();
+        if (!findOpen || query.length < 2) {
+            setFindHits([]);
+            return;
+        }
+        const timer = setTimeout(() => {
+            const hits: FindHit[] = [];
+            for (const [pageNumber, pageEl] of orderedPages(pageRefs.current)) {
+                const layer = textLayerOf(pageEl);
+                if (!layer) continue;
+                const pageRect = pageEl.getBoundingClientRect();
+                for (const range of findAllTextRanges(layer, query, MAX_FIND_HITS - hits.length)) {
+                    const quads = quadsOfRange(range, pageRect);
+                    if (quads.length > 0) hits.push({ page: pageNumber, quads });
+                }
+                if (hits.length >= MAX_FIND_HITS) break;
+            }
+            setFindHits(hits);
+            setFindIndex(index => Math.min(index, Math.max(0, hits.length - 1)));
+        }, 150);
+        return () => clearTimeout(timer);
+    }, [findOpen, findQuery, textLayerVersion, pageScale]);
+
+    useEffect(() => {
+        const hit = findHits[findIndex];
+        if (!hit) return;
+        const key = `${findQuery}\u0000${findIndex}`;
+        if (findScrolledTo.current === key) return;
+        findScrolledTo.current = key;
+        scrollToQuad(hit.page, hit.quads[0]);
+    }, [findHits, findIndex, findQuery, scrollToQuad]);
+
+    const stepFind = useCallback(
+        (step: 1 | -1) => {
+            if (findHits.length === 0) return;
+            setFindIndex(index => (index + step + findHits.length) % findHits.length);
+        },
+        [findHits.length]
+    );
+
+    const findByPage = useMemo(() => {
+        const map = new Map<number, { all: PdfQuad[]; current: PdfQuad[] }>();
+        findHits.forEach((hit, index) => {
+            const entry = map.get(hit.page) ?? { all: [], current: [] };
+            if (index === findIndex) entry.current.push(...hit.quads);
+            else entry.all.push(...hit.quads);
+            map.set(hit.page, entry);
+        });
+        return map;
+    }, [findHits, findIndex]);
+
+    // ---------------------------------------------------------------------
+    // Selection → note, highlight, or a question
+    // ---------------------------------------------------------------------
 
     // Capture text selections as anchor candidates. A selection is valid when
     // it falls entirely within one rendered page and has at least one rect
@@ -364,25 +793,16 @@ export function PdfViewerWithNotes({
                 return;
             }
             const { pageNumber, pageEl } = pageEntry;
-
-            const geom = pageGeometry.get(pageNumber);
-            if (!geom) return;
-            const pageRect = pageEl.getBoundingClientRect();
+            if (!renderedPages.has(pageNumber)) return;
 
             const rects = Array.from(range.getClientRects()).filter(
                 r => r.width > 0 && r.height > 0
             );
-            if (rects.length === 0) {
+            const quads = quadsOfRange(range, pageEl.getBoundingClientRect());
+            if (rects.length === 0 || quads.length === 0) {
                 setSelectionDraft(null);
                 return;
             }
-
-            const quads: PdfQuad[] = rects.map(r => [
-                (r.left - pageRect.left) / geom.width,
-                (r.top - pageRect.top) / geom.height,
-                (r.right - pageRect.left) / geom.width,
-                (r.bottom - pageRect.top) / geom.height,
-            ]);
 
             // Anchor the floating action button just below the last selection
             // rect, in page-container (the scrollable wrapper) coordinates —
@@ -393,10 +813,11 @@ export function PdfViewerWithNotes({
             const halfPopup = POPUP_WIDTH_PX / 2 + 8;
             const buttonX = Math.min(
                 Math.max(lastRect.right - containerRect.left + container.scrollLeft, halfPopup),
-                container.clientWidth - halfPopup
+                container.scrollLeft + container.clientWidth - halfPopup
             );
             const buttonY = lastRect.bottom - containerRect.top + container.scrollTop + 6;
 
+            setHighlightMenu(null);
             setSelectionDraft({
                 page: pageNumber,
                 quads,
@@ -424,7 +845,7 @@ export function PdfViewerWithNotes({
             document.removeEventListener("pointercancel", onPointerUp);
             document.removeEventListener("selectionchange", onSelectionChange);
         };
-    }, [pageGeometry]);
+    }, [renderedPages]);
 
     // Clear the selection draft when the user clicks elsewhere (outside the
     // floating button). Without this, the button lingers after the user's
@@ -436,6 +857,7 @@ export function PdfViewerWithNotes({
             if (e.button !== 0) return;
             const target = e.target as HTMLElement | null;
             if (target?.closest("[data-note-anchor-btn]")) return;
+            setHighlightMenu(null);
             const sel = window.getSelection();
             if (!sel || sel.isCollapsed) {
                 setSelectionDraft(null);
@@ -456,6 +878,18 @@ export function PdfViewerWithNotes({
         setSelectionDraft(null);
     };
 
+    const handleHighlight = (color: HighlightColor) => {
+        if (!selectionDraft || !onCreateHighlight) return;
+        onCreateHighlight({
+            page: selectionDraft.page,
+            quads: selectionDraft.quads,
+            quote: { exact: selectionDraft.quote },
+            color,
+        });
+        window.getSelection()?.removeAllRanges();
+        setSelectionDraft(null);
+    };
+
     const handleAskAi = () => {
         if (!selectionDraft || !onAskAi) return;
         onAskAi({ text: selectionDraft.quote, page: selectionDraft.page });
@@ -463,103 +897,468 @@ export function PdfViewerWithNotes({
         setSelectionDraft(null);
     };
 
+    /**
+     * A click on a highlight opens its colours. The overlays let pointer
+     * events through (the text under them has to stay selectable), so the
+     * page works out which highlight, if any, is under the click.
+     */
+    const highlightsEditable = Boolean(onRecolorHighlight ?? onRemoveHighlight);
+    const notesByPageRef = useRef(notesByPage);
+    notesByPageRef.current = notesByPage;
+    const handlePageClick = useCallback(
+        (pageNumber: number, event: ReactMouseEvent<HTMLDivElement>) => {
+            if (!highlightsEditable) return;
+            const sel = window.getSelection();
+            if (sel && !sel.isCollapsed) return;
+            const container = containerRef.current;
+            const pageEl = pageRefs.current.get(pageNumber);
+            if (!container || !pageEl) return;
+            const rect = pageEl.getBoundingClientRect();
+            const x = (event.clientX - rect.left) / rect.width;
+            const y = (event.clientY - rect.top) / rect.height;
+            const hit = (notesByPageRef.current.get(pageNumber) ?? []).find(
+                placed =>
+                    placed.note.highlight &&
+                    placed.quads.some(
+                        ([x1, y1, x2, y2]) => x >= x1 && x <= x2 && y >= y1 && y <= y2
+                    )
+            );
+            if (!hit) return;
+            const box = container.getBoundingClientRect();
+            const half = HIGHLIGHT_MENU_WIDTH_PX / 2 + 8;
+            setSelectionDraft(null);
+            setHighlightMenu({
+                noteId: hit.note.id,
+                x: Math.min(
+                    Math.max(event.clientX - box.left + container.scrollLeft, half),
+                    container.scrollLeft + container.clientWidth - half
+                ),
+                y: event.clientY - box.top + container.scrollTop + 10,
+            });
+        },
+        [highlightsEditable]
+    );
+    const menuNote = highlightMenu ? notes.find(n => n.id === highlightMenu.noteId) : undefined;
+
+    // ---------------------------------------------------------------------
+    // Keys
+    // ---------------------------------------------------------------------
+
+    const onKeyDown = (event: ReactKeyboardEvent<HTMLDivElement>) => {
+        const mod = event.metaKey || event.ctrlKey;
+        if (mod && (event.key === "=" || event.key === "+")) {
+            event.preventDefault();
+            zoomIn();
+        } else if (mod && event.key === "-") {
+            event.preventDefault();
+            zoomOut();
+        } else if (mod && event.key === "0") {
+            event.preventDefault();
+            applyZoom("auto");
+        } else if (mod && event.key.toLowerCase() === "f") {
+            event.preventDefault();
+            openFind();
+        } else if (event.key === "Escape" && (highlightMenu || selectionDraft)) {
+            event.stopPropagation();
+            setHighlightMenu(null);
+            setSelectionDraft(null);
+        }
+    };
+
+    const compact = availableWidth !== null && availableWidth < COMPACT_TOOLBAR_PX;
+    const zoomLabel = `${Math.round(pageScale * 100)}%`;
+    const [pageDraft, setPageDraft] = useState<string | null>(null);
+    const commitPageDraft = () => {
+        if (pageDraft === null) return;
+        const page = Number.parseInt(pageDraft, 10);
+        setPageDraft(null);
+        if (numPages && Number.isFinite(page)) goToPage(Math.min(numPages, Math.max(1, page)));
+    };
+
     return (
-        <div
-            ref={containerRef}
-            style={{
-                position: "relative",
-                flex: 1,
-                overflow: "auto",
-                background: "var(--bg-2)",
-                padding: "20px 0",
-            }}
-        >
-            {loadError ? (
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col" onKeyDown={onKeyDown}>
+            {!loadError && numPages !== null && (
                 <div
-                    style={{
-                        textAlign: "center",
-                        color: "var(--ink-3)",
-                        padding: 40,
+                    role="toolbar"
+                    aria-label={t("toolbar")}
+                    data-testid="pdf-toolbar"
+                    className="border-line bg-panel text-ink-2 flex h-10 shrink-0 items-center gap-0.5 border-b px-2 text-xs"
+                >
+                    {!compact && (
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="size-7"
+                            aria-label={t("previousPage")}
+                            title={t("previousPage")}
+                            disabled={currentPage <= 1}
+                            onClick={() => goToPage(currentPage - 1)}
+                        >
+                            <ChevronUp />
+                        </Button>
+                    )}
+                    <Input
+                        value={pageDraft ?? String(currentPage)}
+                        inputMode="numeric"
+                        aria-label={t("pageNumber")}
+                        className="h-7 w-11 px-1 text-center"
+                        onFocus={e => e.currentTarget.select()}
+                        onChange={e => setPageDraft(e.target.value.replace(/\D/g, ""))}
+                        onBlur={commitPageDraft}
+                        onKeyDown={e => {
+                            if (e.key === "Enter") commitPageDraft();
+                            if (e.key === "Escape") setPageDraft(null);
+                        }}
+                    />
+                    <span className="text-ink-3 whitespace-nowrap px-1">
+                        {t("ofPages", { count: numPages })}
+                    </span>
+                    {!compact && (
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className="size-7"
+                            aria-label={t("nextPage")}
+                            title={t("nextPage")}
+                            disabled={currentPage >= numPages}
+                            onClick={() => goToPage(currentPage + 1)}
+                        >
+                            <ChevronDown />
+                        </Button>
+                    )}
+
+                    <div className="bg-line mx-1.5 h-5 w-px shrink-0" aria-hidden />
+
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="size-7"
+                        aria-label={t("zoomOut")}
+                        title={t("zoomOutShortcut")}
+                        disabled={pageScale <= ZOOM_STEPS[0]!}
+                        onClick={zoomOut}
+                        data-testid="pdf-zoom-out"
+                    >
+                        <Minus />
+                    </Button>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-7 min-w-[64px] gap-1 px-2 text-xs tabular-nums"
+                                aria-label={t("zoomLevel", { level: zoomLabel })}
+                                data-testid="pdf-zoom-level"
+                            >
+                                {zoomLabel}
+                                <ChevronDown className="size-3" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="center" className="min-w-[150px]">
+                            <DropdownMenuItem onSelect={() => applyZoom("auto")}>
+                                {t("zoomAuto")}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onSelect={() => applyZoom("fit")}>
+                                {t("fitWidth")}
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onSelect={() => applyZoom(1)}>
+                                {t("actualSize")}
+                            </DropdownMenuItem>
+                            <DropdownMenuSeparator />
+                            {ZOOM_PRESETS.map(level => (
+                                <DropdownMenuItem
+                                    key={level}
+                                    onSelect={() => applyZoom(level)}
+                                    className="tabular-nums"
+                                >
+                                    {`${Math.round(level * 100)}%`}
+                                </DropdownMenuItem>
+                            ))}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="size-7"
+                        aria-label={t("zoomIn")}
+                        title={t("zoomInShortcut")}
+                        disabled={pageScale >= ZOOM_STEPS[ZOOM_STEPS.length - 1]!}
+                        onClick={zoomIn}
+                        data-testid="pdf-zoom-in"
+                    >
+                        <Plus />
+                    </Button>
+                    {!compact && (
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className={cn(
+                                "size-7",
+                                zoom === "fit" && "bg-brand-soft text-brand-ink"
+                            )}
+                            aria-label={t("fitWidth")}
+                            title={t("fitWidth")}
+                            aria-pressed={zoom === "fit"}
+                            onClick={() => applyZoom(zoom === "fit" ? "auto" : "fit")}
+                            data-testid="pdf-fit-width"
+                        >
+                            <MoveHorizontal />
+                        </Button>
+                    )}
+
+                    <div className="ml-auto flex items-center gap-0.5">
+                        <Button
+                            variant="ghost"
+                            size="icon"
+                            className={cn("size-7", findOpen && "bg-brand-soft text-brand-ink")}
+                            aria-label={t("find")}
+                            title={t("findShortcut")}
+                            aria-pressed={findOpen}
+                            onClick={() => (findOpen ? closeFind() : openFind())}
+                            data-testid="pdf-find-toggle"
+                        >
+                            <Search />
+                        </Button>
+                        {downloadUrl && (
+                            <Button
+                                asChild
+                                variant="ghost"
+                                size="icon"
+                                className="size-7"
+                                title={t("download")}
+                            >
+                                <a
+                                    href={downloadUrl}
+                                    download={downloadName ?? true}
+                                    aria-label={t("download")}
+                                >
+                                    <Download />
+                                </a>
+                            </Button>
+                        )}
+                    </div>
+                </div>
+            )}
+
+            {findOpen && (
+                <div
+                    role="search"
+                    className="border-line bg-panel flex h-10 shrink-0 items-center gap-1 border-b px-2"
+                >
+                    <Input
+                        ref={findInputRef}
+                        value={findQuery}
+                        placeholder={t("findPlaceholder")}
+                        aria-label={t("find")}
+                        className="h-7 min-w-0 flex-1"
+                        data-testid="pdf-find-input"
+                        onChange={e => setFindQuery(e.target.value)}
+                        onKeyDown={e => {
+                            if (e.key === "Enter") {
+                                e.preventDefault();
+                                stepFind(e.shiftKey ? -1 : 1);
+                            } else if (e.key === "Escape") {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                closeFind();
+                            }
+                        }}
+                    />
+                    <span
+                        className="text-ink-3 min-w-[64px] whitespace-nowrap text-center text-xs tabular-nums"
+                        aria-live="polite"
+                        data-testid="pdf-find-count"
+                    >
+                        {findQuery.trim().length < 2
+                            ? ""
+                            : findHits.length === 0
+                              ? t("findNone")
+                              : t("findCount", {
+                                    current: findIndex + 1,
+                                    total:
+                                        findHits.length >= MAX_FIND_HITS
+                                            ? `${MAX_FIND_HITS}+`
+                                            : String(findHits.length),
+                                })}
+                    </span>
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="size-7"
+                        aria-label={t("findPrevious")}
+                        title={t("findPrevious")}
+                        disabled={findHits.length === 0}
+                        onClick={() => stepFind(-1)}
+                    >
+                        <ChevronUp />
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="size-7"
+                        aria-label={t("findNext")}
+                        title={t("findNext")}
+                        disabled={findHits.length === 0}
+                        onClick={() => stepFind(1)}
+                    >
+                        <ChevronDown />
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="size-7"
+                        aria-label={t("findClose")}
+                        title={t("findClose")}
+                        onClick={closeFind}
+                    >
+                        <X />
+                    </Button>
+                </div>
+            )}
+
+            <div
+                ref={containerRef}
+                // Focusable, so the zoom and find keys reach it after a click
+                // on the page — page text itself takes no focus.
+                tabIndex={0}
+                data-testid="pdf-scroll"
+                className="bg-surface-2 relative min-h-0 flex-1 overflow-auto py-5 outline-none"
+            >
+                {loadError ? (
+                    <div
                         // The message carries the file's URL, one unbroken
                         // word that pushed a narrow column into scrolling
                         // sideways.
-                        overflowWrap: "anywhere",
-                    }}
-                >
-                    {t("loadError", { error: loadError })}
-                </div>
-            ) : (
-                <Document
-                    file={file}
-                    onLoadSuccess={onDocumentLoadSuccess}
-                    onLoadError={onDocumentLoadError}
-                    loading={<LoadingPlaceholder />}
-                    error={<LoadingPlaceholder text={t("failedToLoad")} />}
-                >
-                    {numPages !== null &&
-                        Array.from({ length: numPages }, (_, i) => i + 1).map(pageNum => (
-                            <PdfPage
-                                key={pageNum}
-                                pageNum={pageNum}
-                                scale={pageScale}
-                                pageRef={pageRefFor(pageNum)}
-                                onRenderSuccess={onPageRenderSuccess}
-                                onTextLayerReady={onTextLayerReady}
-                                notesOnPage={notesByPage.get(pageNum) ?? EMPTY_NOTES}
-                                highlightedNoteId={scrollToNoteId ?? null}
-                                onNotePinClick={handlePinClick}
-                                citeQuads={citeOverlay?.page === pageNum ? citeOverlay.quads : null}
-                            />
-                        ))}
-                </Document>
-            )}
-
-            {selectionDraft && (
-                <div
-                    data-note-anchor-btn
-                    style={{
-                        position: "absolute",
-                        left: selectionDraft.buttonX,
-                        top: selectionDraft.buttonY,
-                        transform: "translate(-50%, 0)",
-                        display: "flex",
-                        gap: 4,
-                        padding: 3,
-                        borderRadius: 9,
-                        background: "var(--panel)",
-                        border: "1px solid var(--line)",
-                        boxShadow: "0 6px 18px oklch(0 0 0 / 0.18)",
-                        zIndex: 20,
-                    }}
-                >
-                    <button
-                        type="button"
-                        onClick={handleCreateFromSelection}
-                        style={{
-                            padding: "5px 10px",
-                            borderRadius: 6,
-                            background: "var(--accent)",
-                            color: "white",
-                            fontSize: 12,
-                            fontWeight: 600,
-                            border: "none",
-                            cursor: "pointer",
-                        }}
+                        className="text-ink-3 p-10 text-center [overflow-wrap:anywhere]"
                     >
-                        {t("addNote")}
-                    </button>
-                    {onAskAi && (
+                        {t("loadError", { error: loadError })}
+                    </div>
+                ) : (
+                    // At least as wide as the column, so a page narrower than
+                    // it is centred, and as wide as the widest page, so a
+                    // zoomed-in one scrolls sideways instead of being cut.
+                    <div className="w-max min-w-full">
+                        <Document
+                            file={file}
+                            onLoadSuccess={onDocumentLoadSuccess}
+                            onLoadError={onDocumentLoadError}
+                            loading={<LoadingPlaceholder />}
+                            error={<LoadingPlaceholder text={t("failedToLoad")} />}
+                        >
+                            {numPages !== null &&
+                                Array.from({ length: numPages }, (_, i) => i + 1).map(pageNum => {
+                                    const found = findByPage.get(pageNum);
+                                    return (
+                                        <PdfPage
+                                            key={pageNum}
+                                            pageNum={pageNum}
+                                            scale={pageScale}
+                                            pageRef={pageRefFor(pageNum)}
+                                            onRenderSuccess={onPageRenderSuccess}
+                                            onTextLayerReady={onTextLayerReady}
+                                            notesOnPage={notesByPage.get(pageNum) ?? EMPTY_NOTES}
+                                            highlightedNoteId={scrollToNoteId ?? null}
+                                            onNotePinClick={handlePinClick}
+                                            onPageClick={handlePageClick}
+                                            citeQuads={
+                                                citeOverlay?.page === pageNum
+                                                    ? citeOverlay.quads
+                                                    : null
+                                            }
+                                            findQuads={found?.all ?? EMPTY_QUADS}
+                                            currentFindQuads={found?.current ?? EMPTY_QUADS}
+                                        />
+                                    );
+                                })}
+                        </Document>
+                    </div>
+                )}
+
+                {selectionDraft && (
+                    <div
+                        data-note-anchor-btn
+                        // w-max: near the column's right edge the box would
+                        // otherwise shrink to fit and wrap "+ Note" in two.
+                        className="border-line bg-panel absolute z-20 flex w-max -translate-x-1/2 items-center gap-1 whitespace-nowrap rounded-[9px] border p-[3px] shadow-[0_6px_18px_oklch(0_0_0/0.18)]"
+                        style={{ left: selectionDraft.buttonX, top: selectionDraft.buttonY }}
+                    >
                         <button
                             type="button"
-                            onClick={handleAskAi}
-                            title={t("askAiTitle")}
-                            style={askBtnStyle}
+                            onClick={handleCreateFromSelection}
+                            className="bg-brand text-brand-fg rounded-md px-2.5 py-[5px] text-xs font-semibold"
                         >
-                            {t("askAi")}
+                            {t("addNote")}
                         </button>
-                    )}
-                </div>
-            )}
+                        {onCreateHighlight && (
+                            <div
+                                role="group"
+                                aria-label={t("highlight")}
+                                className="border-line-2 flex items-center gap-1 border-x px-1.5"
+                            >
+                                {HIGHLIGHT_COLORS.map(color => (
+                                    <ColorSwatch
+                                        key={color}
+                                        color={color}
+                                        label={t("highlightIn", { color: t(`colors.${color}`) })}
+                                        onClick={() => handleHighlight(color)}
+                                    />
+                                ))}
+                            </div>
+                        )}
+                        {onAskAi && (
+                            <button
+                                type="button"
+                                onClick={handleAskAi}
+                                title={t("askAiTitle")}
+                                className="border-line-2 bg-panel-2 text-ink-2 rounded-md border px-2 py-[5px] text-[11px] font-semibold"
+                            >
+                                {t("askAi")}
+                            </button>
+                        )}
+                    </div>
+                )}
+
+                {highlightMenu && menuNote?.highlight && (
+                    <div
+                        data-note-anchor-btn
+                        role="menu"
+                        aria-label={t("highlightMenu")}
+                        data-testid="pdf-highlight-menu"
+                        className="border-line bg-panel absolute z-20 flex w-max -translate-x-1/2 items-center gap-1 whitespace-nowrap rounded-[9px] border p-1 shadow-[0_6px_18px_oklch(0_0_0/0.18)]"
+                        style={{ left: highlightMenu.x, top: highlightMenu.y }}
+                    >
+                        {onRecolorHighlight &&
+                            HIGHLIGHT_COLORS.map(color => (
+                                <ColorSwatch
+                                    key={color}
+                                    color={color}
+                                    label={t("highlightIn", { color: t(`colors.${color}`) })}
+                                    selected={menuNote.highlight === color}
+                                    onClick={() => {
+                                        if (color !== menuNote.highlight) {
+                                            onRecolorHighlight(menuNote.id, color);
+                                        }
+                                        setHighlightMenu(null);
+                                    }}
+                                />
+                            ))}
+                        {onRemoveHighlight && (
+                            <button
+                                type="button"
+                                role="menuitem"
+                                onClick={() => {
+                                    onRemoveHighlight(menuNote.id);
+                                    setHighlightMenu(null);
+                                }}
+                                className="text-danger-ink hover:bg-danger-soft ml-1 flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium"
+                            >
+                                <Trash2 className="size-3.5" />
+                                {t("removeHighlight")}
+                            </button>
+                        )}
+                    </div>
+                )}
+            </div>
         </div>
     );
 }
@@ -567,46 +1366,77 @@ export function PdfViewerWithNotes({
 /** Space kept either side of a page when it is fitted to a narrow column. */
 const PAGE_GUTTER_PX = 16;
 
-const askBtnStyle: React.CSSProperties = {
-    padding: "5px 8px",
-    borderRadius: 6,
-    background: "var(--panel-2)",
-    color: "var(--ink-2)",
-    fontSize: 11,
-    fontWeight: 600,
-    border: "1px solid var(--line-2)",
-    cursor: "pointer",
-};
+/** The highlight menu's width: four swatches and Remove. */
+const HIGHLIGHT_MENU_WIDTH_PX = 210;
+
+function ColorSwatch({
+    color,
+    label,
+    selected = false,
+    onClick,
+}: {
+    color: HighlightColor;
+    label: string;
+    selected?: boolean;
+    onClick: () => void;
+}) {
+    return (
+        <button
+            type="button"
+            aria-label={label}
+            title={label}
+            aria-pressed={selected}
+            data-highlight-color={color}
+            onClick={onClick}
+            // The ink as it lands on the page: the translucent fill over
+            // white paper, so on a dark panel it shows the colour the
+            // reader will get rather than a muddy see-through one.
+            className={cn(
+                "border-line size-5 shrink-0 rounded-full border bg-[var(--paper-panel)] transition-transform hover:scale-110",
+                selected && "ring-brand ring-2 ring-offset-1 ring-offset-[var(--panel)]"
+            )}
+            style={{
+                backgroundImage: `linear-gradient(${HIGHLIGHT_FILL[color]}, ${HIGHLIGHT_FILL[color]})`,
+            }}
+        />
+    );
+}
 
 function LoadingPlaceholder({ text }: { text?: string }) {
     const t = useTranslations("notes.pdf");
-    return (
-        <div
-            style={{
-                padding: 40,
-                textAlign: "center",
-                color: "var(--ink-3)",
-                fontSize: 13,
-            }}
-        >
-            {text ?? t("loading")}
-        </div>
-    );
+    return <div className="text-ink-3 p-10 text-center text-[13px]">{text ?? t("loading")}</div>;
 }
 
 interface PdfPageProps {
     pageNum: number;
-    /** Fit-to-column scale, at most 1. */
     scale: number;
     pageRef: (el: HTMLDivElement | null) => void;
-    onRenderSuccess: (page: { pageNumber: number; width: number; height: number }) => void;
-    notesOnPage: PdfNoteLite[];
+    onRenderSuccess: (pageNumber: number) => void;
+    notesOnPage: PlacedNote[];
     highlightedNoteId: number | null;
     onNotePinClick?: (noteId: number) => void;
+    onPageClick: (pageNumber: number, event: ReactMouseEvent<HTMLDivElement>) => void;
     /** Fires when this page's text layer has rendered and is searchable. */
     onTextLayerReady: () => void;
     /** Located citation quads to paint on this page, if any. */
     citeQuads: PdfQuad[] | null;
+    /** Find's matches on this page, and the one the reader is on. */
+    findQuads: PdfQuad[];
+    currentFindQuads: PdfQuad[];
+}
+
+/**
+ * Overlays are placed in percentages of the page, not pixels: the page box
+ * changes size the moment the scale does, and a percentage moves with it,
+ * where pixels would sit at the old size until the canvas finished redrawing.
+ */
+function quadStyle([x1, y1, x2, y2]: PdfQuad) {
+    return {
+        left: `${x1 * 100}%`,
+        top: `${y1 * 100}%`,
+        width: `${(x2 - x1) * 100}%`,
+        height: `${(y2 - y1) * 100}%`,
+    };
 }
 
 const PdfPage = memo(function PdfPage({
@@ -617,106 +1447,118 @@ const PdfPage = memo(function PdfPage({
     notesOnPage,
     highlightedNoteId,
     onNotePinClick,
+    onPageClick,
     onTextLayerReady,
     citeQuads,
+    findQuads,
+    currentFindQuads,
 }: PdfPageProps) {
-    const [size, setSize] = useState<{ w: number; h: number } | null>(null);
+    const [rendered, setRendered] = useState(false);
 
     return (
         <div
             ref={pageRef}
             data-pdf-page={pageNum}
-            style={{
-                position: "relative",
-                margin: "0 auto 16px",
-                width: "fit-content",
-                boxShadow: "0 4px 18px oklch(0 0 0 / 0.08), 0 1px 3px oklch(0 0 0 / 0.06)",
-                background: "#fff",
-                borderRadius: 4,
-            }}
+            onClick={event => onPageClick(pageNum, event)}
+            // The page is paper: white in both themes.
+            className="relative mx-auto mb-4 w-fit rounded bg-[var(--paper-panel)] shadow-[0_4px_18px_oklch(0_0_0/0.08),0_1px_3px_oklch(0_0_0/0.06)]"
         >
             <Page
                 pageNumber={pageNum}
                 scale={scale}
                 renderTextLayer
                 renderAnnotationLayer={false}
-                onRenderSuccess={page => {
-                    setSize({ w: page.width, h: page.height });
-                    onRenderSuccess({
-                        pageNumber: pageNum,
-                        width: page.width,
-                        height: page.height,
-                    });
+                onRenderSuccess={() => {
+                    setRendered(true);
+                    onRenderSuccess(pageNum);
                 }}
                 onRenderTextLayerSuccess={onTextLayerReady}
             />
-            {size &&
-                notesOnPage.map((note, idx) => (
+            {rendered &&
+                notesOnPage.map(placed => (
                     <NoteOverlay
-                        key={note.id}
-                        note={note}
-                        ordinal={idx + 1}
-                        pageW={size.w}
-                        pageH={size.h}
-                        highlighted={note.id === highlightedNoteId}
-                        onClick={() => onNotePinClick?.(note.id)}
+                        key={placed.note.id}
+                        placed={placed}
+                        highlighted={placed.note.id === highlightedNoteId}
+                        onClick={() => onNotePinClick?.(placed.note.id)}
                     />
                 ))}
-            {size &&
-                citeQuads?.map((q, i) => {
-                    const [x1, y1, x2, y2] = q;
-                    return (
-                        <div
-                            key={`cite-${i}`}
-                            style={{
-                                position: "absolute",
-                                left: x1 * size.w,
-                                top: y1 * size.h,
-                                width: (x2 - x1) * size.w,
-                                height: (y2 - y1) * size.h,
-                                background: "oklch(0.85 0.16 95 / 0.4)",
-                                outline: "1.5px solid oklch(0.7 0.15 95)",
-                                borderRadius: 2,
-                                pointerEvents: "none",
-                                mixBlendMode: "multiply",
-                            }}
-                        />
-                    );
-                })}
+            {rendered &&
+                citeQuads?.map((q, i) => (
+                    <div
+                        key={`cite-${i}`}
+                        aria-hidden
+                        className="pointer-events-none absolute rounded-sm mix-blend-multiply outline outline-[1.5px] outline-[oklch(0.7_0.13_95)]"
+                        style={{ ...quadStyle(q), background: "var(--paper-hl-find)" }}
+                    />
+                ))}
+            {rendered &&
+                findQuads.map((q, i) => (
+                    <div
+                        key={`find-${i}`}
+                        aria-hidden
+                        data-find-hit
+                        className="pointer-events-none absolute rounded-sm mix-blend-multiply"
+                        style={{ ...quadStyle(q), background: "var(--paper-hl-find)" }}
+                    />
+                ))}
+            {rendered &&
+                currentFindQuads.map((q, i) => (
+                    <div
+                        key={`find-current-${i}`}
+                        aria-hidden
+                        data-find-hit="current"
+                        className="pointer-events-none absolute rounded-sm mix-blend-multiply"
+                        style={{ ...quadStyle(q), background: "var(--paper-hl-find-current)" }}
+                    />
+                ))}
         </div>
     );
 });
 
 function NoteOverlay({
-    note,
-    ordinal,
-    pageW,
-    pageH,
+    placed,
     highlighted,
     onClick,
 }: {
-    note: PdfNoteLite;
-    ordinal: number;
-    pageW: number;
-    pageH: number;
+    placed: PlacedNote;
     highlighted: boolean;
     onClick: () => void;
 }) {
     const t = useTranslations("notes.pdf");
-    // First quad's top-left is where the pin goes.
-    const firstQuad = note.quads[0];
+    const { note, quads, ordinal } = placed;
+    const firstQuad = quads[0];
     if (!firstQuad) return null;
-    const [x1, y1] = firstQuad;
-    const pinLeft = x1 * pageW;
-    const pinTop = y1 * pageH;
+
+    if (note.highlight) {
+        return (
+            <>
+                {quads.map((q, i) => (
+                    <div
+                        key={i}
+                        aria-hidden
+                        data-highlight={note.highlight ?? undefined}
+                        data-note-id={note.id}
+                        className={cn(
+                            "pointer-events-none absolute rounded-[2px] mix-blend-multiply",
+                            highlighted && "outline-brand outline outline-[1.5px]"
+                        )}
+                        style={{ ...quadStyle(q), background: HIGHLIGHT_FILL[note.highlight!] }}
+                    />
+                ))}
+            </>
+        );
+    }
 
     const status = note.anchorStatus ?? "resolved";
     const fillColor =
         status === "orphaned"
             ? "oklch(0.6 0.18 25 / 0.18)"
             : status === "drifted"
-              ? "oklch(0.7 0.18 70 / 0.22)"
-              : "oklch(0.72 0.19 285 / 0.18)";
+              ? "oklch(0.7 0.14 70 / 0.22)"
+              : // In sRGB, like every fill blended by multiply — see the
+                // --paper-hl-* tokens.
+                "oklch(0.72 0.15 285 / 0.18)";
     const borderColor =
         status === "orphaned"
             ? "oklch(0.5 0.2 25)"
@@ -726,35 +1568,34 @@ function NoteOverlay({
 
     return (
         <>
-            {note.quads.map((q, i) => {
-                const [qx1, qy1, qx2, qy2] = q;
-                return (
-                    <div
-                        key={i}
-                        style={{
-                            position: "absolute",
-                            left: qx1 * pageW,
-                            top: qy1 * pageH,
-                            width: (qx2 - qx1) * pageW,
-                            height: (qy2 - qy1) * pageH,
-                            background: fillColor,
-                            border: highlighted ? `1.5px solid ${borderColor}` : "none",
-                            borderRadius: 2,
-                            pointerEvents: "none",
-                            mixBlendMode: "multiply",
-                            transition: "background .2s, border .2s",
-                        }}
-                    />
-                );
-            })}
+            {quads.map((q, i) => (
+                <div
+                    key={i}
+                    style={{
+                        position: "absolute",
+                        ...quadStyle(q),
+                        background: fillColor,
+                        border: highlighted ? `1.5px solid ${borderColor}` : "none",
+                        borderRadius: 2,
+                        pointerEvents: "none",
+                        mixBlendMode: "multiply",
+                        transition: "background .2s, border .2s",
+                    }}
+                />
+            ))}
             <button
                 type="button"
-                onClick={onClick}
-                title={note.title ?? t("pinTitle", { ordinal })}
+                onClick={event => {
+                    // Not the page's click: that would look for a highlight.
+                    event.stopPropagation();
+                    onClick();
+                }}
+                title={note.title ?? t("pinTitle", { ordinal: ordinal ?? 0 })}
                 style={{
                     position: "absolute",
-                    left: pinLeft - 12,
-                    top: pinTop - 12,
+                    // First quad's top-left is where the pin goes.
+                    left: `calc(${firstQuad[0] * 100}% - 12px)`,
+                    top: `calc(${firstQuad[1] * 100}% - 12px)`,
                     width: 22,
                     height: 22,
                     borderRadius: "50%",

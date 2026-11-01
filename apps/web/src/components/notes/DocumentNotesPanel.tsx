@@ -74,6 +74,12 @@ interface Props {
      * makes the pairing work in both directions rather than only outward.
      */
     activeNoteId?: number | null;
+    /**
+     * Changed by the document when it changed the notes itself — a
+     * highlight made, recoloured or removed in the page — so the list
+     * fetches them again.
+     */
+    refreshKey?: number;
 }
 
 /** Trimmed text, or null when there is none worth searching for. */
@@ -92,6 +98,7 @@ export function DocumentNotesPanel({
     onNoteClick,
     onDeleted,
     activeNoteId = null,
+    refreshKey,
 }: Props) {
     const t = useTranslations("notes.panel");
     const [notes, setNotes] = useState<DocumentNote[]>([]);
@@ -136,6 +143,14 @@ export function DocumentNotesPanel({
         void fetchNotes();
     }, [fetchNotes]);
 
+    // The first value is the mount, which the fetch above already covers.
+    const seenRefreshKey = useRef(refreshKey);
+    useEffect(() => {
+        if (seenRefreshKey.current === refreshKey) return;
+        seenRefreshKey.current = refreshKey;
+        void fetchNotes();
+    }, [refreshKey, fetchNotes]);
+
     // Open the editor automatically when the parent hands us a selection
     // captured from the PDF viewer.
     useEffect(() => {
@@ -176,7 +191,12 @@ export function DocumentNotesPanel({
     const startEditDraft = (note: DocumentNote) => {
         const anchor = note.anchor as NoteAnchorLite | null;
         const primary = anchor?.primary as
-            | { kind?: string; page?: number; quads?: Array<[number, number, number, number]> }
+            | {
+                  kind?: string;
+                  page?: number;
+                  quads?: Array<[number, number, number, number]>;
+                  color?: unknown;
+              }
             | undefined;
         setDraft({
             id: note.id,
@@ -192,6 +212,8 @@ export function DocumentNotesPanel({
             anchorQuote: anchor?.quote?.exact ?? "",
             anchorPage: primaryPageOfAnchor(anchor)?.toString() ?? "",
             anchorQuads: Array.isArray(primary?.quads) ? primary.quads : [],
+            // A highlight keeps its colour through an edit.
+            anchorColor: typeof primary?.color === "string" ? primary.color : undefined,
         });
         setError(null);
     };

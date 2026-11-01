@@ -456,7 +456,7 @@ export async function runMarketingPipeline(args: {
         id: "verifying-claims",
         policy: "degradable",
         fallback: {
-            value: { claims: [], totalClaimsFound: 0 },
+            value: { claims: [], totalClaimsFound: 0, unavailable: true },
             detail: "Claim source lookup unavailable",
             narration:
                 "Claim source lookup unavailable — could not cross-reference claims with the knowledge base. Manual review recommended.",
@@ -464,26 +464,30 @@ export async function runMarketingPipeline(args: {
         },
         run: () => checkClaimSources({ companyId: args.companyId, message: bestVariant.message }),
         report: result => {
-            const sourced = result.claims.filter(c => c.match !== null).length;
+            const supported = result.claims.filter(c => c.support === "supported").length;
+            const review = result.claims.length - supported;
             const truncationNote =
                 result.totalClaimsFound > result.claims.length
                     ? ` (checked ${result.claims.length} of ${result.totalClaimsFound} found)`
                     : "";
             return {
-                detail: `${result.claims.length} claim${result.claims.length !== 1 ? "s" : ""}, ${sourced} sourced${truncationNote}`,
+                detail: `${result.claims.length} claim${result.claims.length !== 1 ? "s" : ""}, ${supported} supported by your documents${truncationNote}`,
                 data: {
                     claims: result.claims.map(c => ({
                         claim: c.claim.slice(0, 100),
+                        support: c.support,
                         sourceDoc: c.match?.sourceDoc ?? null,
-                        relevance:
-                            c.match?.relevance != null ? Math.round(c.match.relevance * 100) : null,
                     })),
                 },
-                narration: `Cross-referencing claims against the knowledge base... ${sourced}/${result.claims.length} claim${result.claims.length !== 1 ? "s" : ""} have a matching source. ${sourced === result.claims.length ? "Every claim has a source." : "Some claims lack a matching source — review recommended."}`,
+                narration:
+                    review === 0
+                        ? `Checking each claim against the company's documents... all ${result.claims.length} are stated in a document.`
+                        : `Checking each claim against the company's documents... ${supported}/${result.claims.length} are stated in a document; ${review} need${review === 1 ? "s" : ""} a person to check before posting.`,
             };
         },
     });
     const claimSources = checked.claims;
+    const claimCheckUnavailable = checked.unavailable === true;
 
     // 6) Save to performance history (fire & forget)
     void saveGeneratedContent({
@@ -530,5 +534,6 @@ export async function runMarketingPipeline(args: {
             companyContext: companyContextBase,
         },
         claimSources,
+        ...(claimCheckUnavailable ? { claimCheckUnavailable } : {}),
     };
 }

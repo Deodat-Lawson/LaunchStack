@@ -240,7 +240,7 @@ being picked up.
 ## AI allowances per person
 
 Two limits can apply to a person; the tighter one binds. Both count
-chat-token equivalents, as Workspace › Usage and costs reports them, by
+chat-token equivalents, as the Usage tab reports them, by
 calendar month in UTC, and reset on the 1st.
 
 A chat-token equivalent puts chat, embeddings and paid web searches in one
@@ -277,7 +277,7 @@ charged at the same weight.
   on its own models. People listed in `AI_TOKEN_LIMIT_EXEMPT_EMAILS` are never
   capped. Because anyone who creates a workspace owns it, this is the only limit
   an individual can't lift themselves.
-- **The workspace's** — set in Workspace › Usage and costs › AI limits per person
+- **The workspace's** — set in Usage › Spending › AI limits per person
   by anyone with *settings.manage*: a default for everyone, and an override per
   person (no limit, or a number of tokens). It counts all of the person's use
   in that workspace, whoever's endpoint served it.

@@ -24,7 +24,7 @@ export const STUDIO_PANE_IDS = [
     "rewrite",
     "workspace",
     "settings",
-    "analytics",
+    "usage",
     "mindmap",
     "workflows",
     "feedback",

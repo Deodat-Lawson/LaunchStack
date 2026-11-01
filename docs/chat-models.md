@@ -259,7 +259,7 @@ off entirely is a startup error telling you to declare it.
 Every chat completion the app makes for a workspace is counted from the
 provider's own usage report (input, output, reasoning and cached tokens) as it
 passes the shared transport, whichever feature made it, and lands in
-`ai_usage_daily`. Workspace › Usage shows it by feature and by route. To turn
+`ai_usage_daily`. The Usage tab's Overview shows it by feature, by route and by person. To turn
 those counts into dollars, declare what each model costs, in US dollars per
 million tokens:
 

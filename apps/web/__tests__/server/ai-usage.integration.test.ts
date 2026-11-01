@@ -1,8 +1,9 @@
 /**
  * The model meter against a real database: concurrent calls add up in one
- * day's row instead of racing, and the usage page's figures — by feature, by
- * route, by kind (chat, embeddings, web search), in chat-token equivalents,
- * priced and unpriced cost — come back from what was recorded.
+ * day's row instead of racing, and embeddings and web searches land in rows
+ * of their own kind, weighed into chat-token equivalents. What the Usage tab
+ * reads back from it — by feature, route, person and kind, priced and
+ * unpriced — is usage.integration.test.ts.
  */
 import { eq } from "drizzle-orm";
 
@@ -39,7 +40,6 @@ import { company } from "@launchstack/store/schema";
 import { recordAiUsage } from "~/server/ai-usage/record";
 import { db } from "~/server/db";
 import { aiUsageDaily } from "~/server/db/schema";
-import { modelUsageOverview } from "~/server/settings/usage";
 
 const describeDb = process.env.DATABASE_URL ? describe : describe.skip;
 
@@ -142,47 +142,6 @@ describeDb("AI usage meter", () => {
             pricedCalls: 8,
         });
         expect(Number(ask.costUsd)).toBeCloseTo(8 * 0.0012345678, 9);
-    });
-
-    it("totals the window by feature and route, with priced cost and the workspace's fallback", async () => {
-        const unpriced = await modelUsageOverview(companyId, since, 0);
-        expect(unpriced.totals).toMatchObject({
-            calls: 10,
-            weightedTokens: 11200,
-            inputTokens: 9300,
-            outputTokens: 1900,
-            pricedCalls: 9,
-        });
-        expect(unpriced.byGroup.map(g => [g.group, g.calls, g.weightedTokens])).toEqual([
-            ["chat", 10, 11200],
-            ["embedding", 0, 0],
-            ["search", 0, 0],
-        ]);
-        // Nothing embedded or searched in the window: today's rates for the defaults.
-        expect(unpriced.rates).toEqual({
-            chat: { perMillion: 1, source: "setting" },
-            embeddingPerMillion: 130_000,
-            perSearch: 7_000,
-        });
-        expect(unpriced.totals.costUsd).toBeCloseTo(8 * 0.0012345678 + 0.01, 9);
-        expect(unpriced.estimatedCostUsd).toBeCloseTo(unpriced.totals.costUsd, 9);
-        expect(unpriced.byFeature.map(f => f.feature)).toEqual(["ask", "ingestion"]);
-        expect(unpriced.byRoute.map(r => [r.route, r.calls])).toEqual([
-            ["default", 8],
-            ["reasoning", 1],
-            ["auxiliary", 1],
-        ]);
-        expect(unpriced.workspaceOwnedCalls).toBe(1);
-        expect(unpriced.daily).toEqual([
-            { date, features: { ask: 10800, ingestion: 400 }, total: 11200 },
-        ]);
-
-        // The unpriced call's 400 tokens at the workspace's own $2 per 1M.
-        const fallback = await modelUsageOverview(companyId, since, 2);
-        expect(fallback.estimatedCostUsd).toBeCloseTo(
-            unpriced.totals.costUsd + (400 / 1_000_000) * 2,
-            9
-        );
     });
 
     it("keeps embeddings and searches in their own rows, weighed into chat-token equivalents", async () => {
@@ -347,80 +306,5 @@ describeDb("AI usage meter", () => {
             calls: 4,
             weightedTokens: 8_000,
         });
-    });
-
-    it("totals every kind in chat-token equivalents, with each group's own units", async () => {
-        const usage = await modelUsageOverview(kindsCompanyId, since, 0);
-
-        // 1,200 chat + 85,000 embedding + 30,000 search. Requests leave out
-        // the four pages Exa read: 1 chat call, 3 embedding requests, 4 searches.
-        expect(usage.totals).toMatchObject({
-            calls: 8,
-            weightedTokens: 116_200,
-            inputTokens: 1_501_000,
-            outputTokens: 200,
-            pricedCalls: 7,
-        });
-        expect(usage.totals.costUsd).toBeCloseTo(0.001 + 0.065 + 0.021 + 0.001 + 0.008, 9);
-        expect(usage.byGroup).toEqual([
-            expect.objectContaining({
-                group: "chat",
-                calls: 1,
-                weightedTokens: 1_200,
-                searches: 0,
-                pages: 0,
-            }),
-            expect.objectContaining({
-                group: "embedding",
-                calls: 3,
-                weightedTokens: 85_000,
-                inputTokens: 1_500_000,
-                searches: 0,
-                pages: 0,
-            }),
-            expect.objectContaining({
-                group: "search",
-                calls: 4,
-                weightedTokens: 30_000,
-                inputTokens: 0,
-                searches: 4,
-                pages: 4,
-            }),
-        ]);
-        // The rates the window was weighed at: 85,000 over 1.5M embedded, and
-        // 22,000 over four searches (pages are not searches).
-        expect(usage.rates).toEqual({
-            chat: { perMillion: 1, source: "setting" },
-            embeddingPerMillion: 56_667,
-            perSearch: 5_500,
-        });
-        // Routes are chat's alone; searches and embeddings carry none.
-        expect(usage.byRoute.map(r => [r.route, r.calls, r.weightedTokens])).toEqual([
-            ["default", 1, 1_200],
-        ]);
-        expect(usage.byFeature.map(f => [f.feature, f.weightedTokens])).toEqual([
-            ["ingestion", 85_000],
-            ["ask", 31_200],
-        ]);
-        expect(usage.daily).toEqual([
-            { date, features: { ingestion: 85_000, ask: 31_200 }, total: 116_200 },
-        ]);
-        expect(usage.workspaceOwnedCalls).toBe(1);
-        expect(usage.estimatedCostUsd).toBeCloseTo(usage.totals.costUsd, 9);
-
-        // The workspace-owned embedding is the only unpriced row: its 20,000
-        // chat-token equivalents at the workspace's own $2 per 1M.
-        const fallback = await modelUsageOverview(kindsCompanyId, since, 2);
-        expect(fallback.estimatedCostUsd).toBeCloseTo(
-            usage.totals.costUsd + (20_000 / 1_000_000) * 2,
-            9
-        );
-    });
-
-    it("reports no cost when nothing in the window could be priced", async () => {
-        const later = new Date(Date.now() + 2 * 86_400_000).toISOString().slice(0, 10);
-        const empty = await modelUsageOverview(companyId, later, 0);
-        expect(empty.totals.calls).toBe(0);
-        expect(empty.estimatedCostUsd).toBeNull();
     });
 });

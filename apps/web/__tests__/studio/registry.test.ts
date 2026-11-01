@@ -212,12 +212,20 @@ describe("studio registry", () => {
         expect(TOOL_ALIASES.metadata).toEqual({ toolId: "workspace", at: "/company" });
     });
 
-    it("lists Analytics as its own Management app, gated like its API", () => {
+    it("lists Usage as a Management app everyone may open, and Analytics nowhere", () => {
         const management = STUDIO_GROUPS.find(g => g.id === "management");
-        const analytics = management?.features.find(f => f.id === "analytics");
-        expect(analytics?.requires).toBe("analytics.view");
-        // Settings does not hold analytics; its #analytics hash forwards here.
-        expect(STUDIO_FEATURES_BY_ID.settings?.desc).not.toMatch(/analytics/i);
+        const usage = management?.features.find(f => f.id === "usage");
+        // Everyone sees their own numbers; the screens and routes gate the rest.
+        expect(usage).toBeDefined();
+        expect(usage?.requires).toBeUndefined();
+        // Analytics folded into Usage: no tile, no palette row, and its id
+        // opens the Usage tab (TOOL_ALIASES), not a pane of its own.
+        expect(STUDIO_FEATURES_BY_ID.analytics).toBeUndefined();
+        expect(DEMOTED_FEATURES.some(f => f.id === "analytics")).toBe(false);
+        expect(TOOL_ALIASES.analytics).toEqual({ toolId: "usage", at: "/overview" });
+        // Settings and Workspace do not hold usage; their old hashes forward here.
+        expect(STUDIO_FEATURES_BY_ID.settings?.desc).not.toMatch(/analytics|usage/i);
+        expect(STUDIO_FEATURES_BY_ID.workspace?.desc).not.toMatch(/usage/i);
     });
 
     it("sends a palette row with nowhere of its own to its real destination", () => {
@@ -259,7 +267,14 @@ describe("studio registry", () => {
             f => !resolveStudioFeature(f.id) && settingsSectionOfHref(f.href) !== null
         );
         expect(intoSettings.map(f => f.id).sort()).toEqual(
-            ["agents-nodes", "byok", "people-access", "profile", "workspace-general"].sort()
+            [
+                "agents-nodes",
+                "byok",
+                "people-access",
+                "profile",
+                "spending",
+                "workspace-general",
+            ].sort()
         );
         // The old "Self-host / BYOK" row (Vercel, Docker, your own keys) is
         // Bring your own keys now, and says nothing about embeddings.

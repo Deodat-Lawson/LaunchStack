@@ -103,7 +103,32 @@ export const TOOL_ALIASES: Readonly<Record<string, ToolTarget>> = {
     metadata: { toolId: "workspace", at: "/company" },
     "agents-nodes": { toolId: "workspace", at: "/agents" },
     byok: { toolId: "workspace", at: "/byok" },
+    // Analytics folded into the Usage tab; its links open the Overview.
+    analytics: { toolId: "usage", at: "/overview" },
+    spending: { toolId: "usage", at: "/spending" },
 };
+
+/**
+ * Screens that moved from one tool to another: a link to the old place
+ * (`?feature=workspace&at=/usage?focus=…`) opens the new one, its query
+ * kept.
+ */
+const MOVED_SCREENS: readonly { from: ToolTarget; to: ToolTarget }[] = [
+    { from: { toolId: "workspace", at: "/usage" }, to: { toolId: "usage", at: "/spending" } },
+];
+
+function movedScreen(target: ToolTarget): ToolTarget {
+    const location = parseToolHref(target.at);
+    const moved = MOVED_SCREENS.find(
+        m => m.from.toolId === target.toolId && m.from.at === location.path
+    );
+    return moved
+        ? {
+              toolId: moved.to.toolId,
+              at: formatToolHref({ path: moved.to.at, search: location.search }),
+          }
+        : target;
+}
 
 /**
  * The tool and location a site href points at, or null when it is not a
@@ -124,7 +149,7 @@ export function toolTargetFromHref(href: string): ToolTarget | null {
         const alias = TOOL_ALIASES[feature];
         if (alias) return alias;
         const at = url.searchParams.get("at");
-        return at ? { toolId: feature, at: formatToolHref(parseToolHref(at)) } : null;
+        return at ? movedScreen({ toolId: feature, at: formatToolHref(parseToolHref(at)) }) : null;
     }
     for (const route of LEGACY_TOOL_ROUTES) {
         if (path === route.prefix || path.startsWith(`${route.prefix}/`)) {

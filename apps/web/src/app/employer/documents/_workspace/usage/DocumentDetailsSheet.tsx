@@ -9,7 +9,8 @@ import {
     SheetTitle,
     SheetDescription,
 } from "~/components/ui/sheet";
-import type { DocumentStat, DocumentDetails } from "../types";
+import { useToolNav } from "~/components/tool-app/nav";
+import type { DocumentStat, DocumentDetails } from "./documentStats";
 import {
     ChartContainer,
     ChartTooltip,
@@ -32,7 +33,6 @@ import { FileText, Users, Eye, TrendingUp, ExternalLink } from "lucide-react";
 import { Card } from "~/components/ui/card";
 import { Button } from "~/components/ui/button";
 import { Skeleton } from "~/components/ui/skeleton";
-import { useRouter } from "next/navigation";
 import { StatsCard } from "./StatsCard";
 
 interface DocumentDetailsSheetProps {
@@ -98,7 +98,7 @@ export function DocumentDetailsSheet({ document, isOpen, onClose }: DocumentDeta
     const [loading, setLoading] = useState(false);
     // "" when the failure carried no message — the fallback is worded at render.
     const [error, setError] = useState<string | null>(null);
-    const router = useRouter();
+    const { navigate } = useToolNav();
 
     useEffect(() => {
         if (isOpen && document) {
@@ -130,7 +130,7 @@ export function DocumentDetailsSheet({ document, isOpen, onClose }: DocumentDeta
 
     const handleViewDocument = () => {
         if (document) {
-            router.push(`/employer/documents?docId=${document.id}`);
+            navigate(`/employer/documents?docId=${document.id}`);
         }
     };
 

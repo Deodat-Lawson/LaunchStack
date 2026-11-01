@@ -53,7 +53,7 @@
     "questions": "提问数",
     "filesAdded": "添加的文件",
     "docsOpened": "打开的文档",
-    "aiTokens": "AI token",
+    "aiTokens": "AI 用量",
     "costUsd": "预估费用"
   },
   "features": {
@@ -66,7 +66,9 @@
     "output": "输出",
     "tokens": "Token",
     "cost": "费用",
-    "share": "占比"
+    "share": "占比",
+    "requests": "请求",
+    "usage": "用量"
   },
   "overview": {
     "title": "概览",
@@ -74,15 +76,16 @@
     "subGroup": "{group} · {range}",
     "ofMembers": "{active} / {members}",
     "costUnpriced": "在“支出”中设置价格即可估算",
-    "unattributed": "有 {tokens} 个 AI token 来自不属于任何个人的工作，例如同步和定时任务。它们计入工作区总量，不计入任何人。",
-    "ownEndpoint": "有 {calls} 次 AI 调用发往了这个工作区自带的模型端点，由它自己的服务商计费。",
+    "unattributed": "有 {tokens} 的 AI 用量来自不属于任何个人的工作，例如同步和定时任务。它计入工作区总量，不计入任何人。",
+    "ownEndpoint": "有 {calls} 次 AI 请求发往了这个工作区自带的模型，由它自己的服务商计费。",
     "daily": "每日",
     "byFeature": "按功能",
     "byRoute": "按模型",
     "topPeople": "最活跃",
     "seeEveryone": "查看所有人",
     "nobody": "这个时间范围内没有人使用工作区。",
-    "topLine": "提问 {questions} · {tokens} token"
+    "topLine": "提问 {questions} · {tokens} token",
+    "tokensUnit": "对话 token 当量"
   },
   "people": {
     "title": "成员",
@@ -143,7 +146,13 @@
     "former": "已离开的成员",
     "shown": "第 {shown} 行，共 {total} 行",
     "showMore": "显示更多",
-    "loadingMore": "加载中…"
+    "loadingMore": "加载中…",
+    "usage": "用量",
+    "kinds": {
+      "embedding": "嵌入",
+      "web_search": "网页搜索",
+      "web_contents": "网页读取"
+    }
   },
   "documents": {
     "title": "文档",

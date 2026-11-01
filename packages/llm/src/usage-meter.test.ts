@@ -172,6 +172,7 @@ describe("createEndpointFetch metering", () => {
                 inputTokens: 100,
                 outputTokens: 50,
                 costUsd: (100 * 1 + 50 * 2) / 1_000_000,
+                pricing: { input: 1, output: 2 },
             },
         ]);
     });
@@ -330,6 +331,7 @@ describe("resolved chat models", () => {
                 outputTokens: 200,
                 cachedInputTokens: 800,
                 costUsd: (200 * 1.25 + 800 * 0.15 + 200 * 4.25) / 1_000_000,
+                pricing: { input: 1.25, output: 4.25, cachedInput: 0.15 },
             },
         ]);
     });

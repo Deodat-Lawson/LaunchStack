@@ -56,6 +56,10 @@ export const AI_USAGE_KINDS = ["chat", "embedding", "web_search", "web_contents"
 
 export type AiUsageKind = (typeof AI_USAGE_KINDS)[number];
 
+export function isAiUsageKind(value: string): value is AiUsageKind {
+    return (AI_USAGE_KINDS as readonly string[]).includes(value);
+}
+
 /**
  * How people see the kinds: a search and the pages it read are one line.
  * Message keys under `settings.usage.kinds`.

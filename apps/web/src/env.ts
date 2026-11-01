@@ -418,6 +418,10 @@ const serverSchema = z.object({
     AI_USAGE_CHAT_PRICE_PER_MTOK: optionalString(),
     AI_USAGE_EMBEDDING_PRICE_PER_MTOK: optionalString(),
     AI_USAGE_WEB_SEARCH_PRICE_PER_1K: optionalString(),
+    // The operator's own prices for models and search providers the built-in
+    // list doesn't know: inline JSON or a path to a JSON file. See
+    // ~/server/ai-usage/price-table for the shape.
+    AI_USAGE_PRICES: optionalString(),
     // Collaboration: meetings held in channels, with agents that may run on
     // other machines. COLLAB_HUB_SECRET is the shared secret every remote agent
     // worker signs its requests with — without it the hub refuses to accept any
@@ -685,6 +689,7 @@ function parseServerEnv() {
         AI_USAGE_CHAT_PRICE_PER_MTOK: process.env.AI_USAGE_CHAT_PRICE_PER_MTOK,
         AI_USAGE_EMBEDDING_PRICE_PER_MTOK: process.env.AI_USAGE_EMBEDDING_PRICE_PER_MTOK,
         AI_USAGE_WEB_SEARCH_PRICE_PER_1K: process.env.AI_USAGE_WEB_SEARCH_PRICE_PER_1K,
+        AI_USAGE_PRICES: process.env.AI_USAGE_PRICES,
         GOOGLE_DOCS_EDITING_ENABLED: process.env.GOOGLE_DOCS_EDITING_ENABLED,
         GOOGLE_OAUTH_CLIENT_ID: process.env.GOOGLE_OAUTH_CLIENT_ID,
         GOOGLE_OAUTH_CLIENT_SECRET: process.env.GOOGLE_OAUTH_CLIENT_SECRET,

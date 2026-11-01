@@ -34,7 +34,12 @@ import { csvFileName, downloadCsv, toCsv } from "~/lib/usage/csv";
 import type { UsageCounts, UsagePeople, UsagePersonRow } from "~/lib/usage/types";
 import { cn } from "~/lib/utils";
 
-import { AllowanceBar, allowanceTone, useAllowanceFormat } from "../settings/aiAllowance";
+import {
+    AllowanceBar,
+    allowanceTone,
+    useAllowanceFormat,
+    UsageSplitLine,
+} from "../settings/aiAllowance";
 import { useTimeFormat } from "../settings/people/format";
 import { EmptyLine, FilterInput, LoadingRows } from "../team/ui";
 import { useUsageFilters, useUsageLoad, windowQuery } from "./data";
@@ -366,6 +371,12 @@ export function PeopleScreen() {
                                             </TableCell>
                                             <TableCell className="text-ink text-right font-medium tabular-nums">
                                                 {format.compact(person.totals.aiTokens)}
+                                                <UsageSplitLine
+                                                    split={person.totals.aiSplit}
+                                                    bare
+                                                    // Wraps between kinds, so the split never widens the table.
+                                                    className="ml-auto block max-w-52 whitespace-normal text-[11.5px] font-normal leading-snug"
+                                                />
                                             </TableCell>
                                             <TableCell className="@max-md:hidden text-right tabular-nums">
                                                 {format.usd(person.totals.costUsd)}

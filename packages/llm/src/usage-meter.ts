@@ -56,6 +56,11 @@ export interface ChatUsageEvent {
     cachedInputTokens?: number;
     /** US dollars, when the model declares pricing. */
     costUsd?: number;
+    /**
+     * The price the model declared (the model file, or a workspace's own
+     * settings), so the host can weigh this call against its other models.
+     */
+    pricing?: ChatModelPricing;
 }
 
 /** Where a unit of work's usage goes. Must not throw; it runs on the response path. */
@@ -283,7 +288,9 @@ export function prepareUsageMeter(
                     ...(modelId ? { modelId } : {}),
                     owner: meter?.owner ?? "deployment",
                     ...usage,
-                    ...(meter?.pricing ? { costUsd: priceUsage(usage, meter.pricing) } : {}),
+                    ...(meter?.pricing
+                        ? { costUsd: priceUsage(usage, meter.pricing), pricing: meter.pricing }
+                        : {}),
                 });
             } catch (error) {
                 console.warn("[llm] usage recorder failed:", error);

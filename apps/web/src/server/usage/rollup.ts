@@ -32,12 +32,15 @@ import type {
     UsageMedian,
     UsagePeople,
     UsagePersonRow,
+    UsageRates,
     UsageRouteRow,
     UsageScope,
     UsageSummary,
     UsageTotals,
     UsageWindow,
 } from "~/lib/usage/types";
+import { emptySplit, isAiUsageKind, type UsageSplit } from "~/lib/ai-usage";
+import { conversionRates } from "~/server/ai-usage/weights";
 import { estimatedCostUsd, unpricedTokensOf } from "~/server/settings/usage";
 
 // ── Raw rows (what ./queries returns) ───────────────────────────────
@@ -57,7 +60,11 @@ export interface AiUsageRow {
     /** Empty when the transport could not tell; read as `default`. */
     route: string;
     owner: string;
+    /** chat | embedding | web_search | web_contents */
+    kind: string;
     calls: number;
+    /** Chat-token equivalents, weighed when recorded. */
+    weightedTokens: number;
     inputTokens: number;
     outputTokens: number;
     cachedInputTokens: number;
@@ -108,12 +115,21 @@ export function currentMembers(members: readonly MemberView[]): UsageMember[] {
 
 // ── Tallies ─────────────────────────────────────────────────────────
 
-/** Running sums for one slice; `toCounts` prices it. */
+/**
+ * Running sums for one slice; `toCounts` prices it. Token counts are chat's
+ * own; `weightedTokens` is every kind in chat-token equivalents.
+ */
 interface Tally {
     questions: number;
     filesAdded: number;
     docsOpened: number;
     aiCalls: number;
+    chatCalls: number;
+    weightedTokens: number;
+    split: UsageSplit;
+    embeddedTokens: number;
+    searches: number;
+    pages: number;
     inputTokens: number;
     outputTokens: number;
     cachedInputTokens: number;
@@ -129,6 +145,12 @@ function emptyTally(): Tally {
         filesAdded: 0,
         docsOpened: 0,
         aiCalls: 0,
+        chatCalls: 0,
+        weightedTokens: 0,
+        split: emptySplit(),
+        embeddedTokens: 0,
+        searches: 0,
+        pages: 0,
         inputTokens: 0,
         outputTokens: 0,
         cachedInputTokens: 0,
@@ -144,6 +166,14 @@ function addTally(into: Tally, from: Tally): void {
     into.filesAdded += from.filesAdded;
     into.docsOpened += from.docsOpened;
     into.aiCalls += from.aiCalls;
+    into.chatCalls += from.chatCalls;
+    into.weightedTokens += from.weightedTokens;
+    into.split.chat += from.split.chat;
+    into.split.embedding += from.split.embedding;
+    into.split.search += from.split.search;
+    into.embeddedTokens += from.embeddedTokens;
+    into.searches += from.searches;
+    into.pages += from.pages;
     into.inputTokens += from.inputTokens;
     into.outputTokens += from.outputTokens;
     into.cachedInputTokens += from.cachedInputTokens;
@@ -159,7 +189,8 @@ function sumTallies(entries: readonly { tally: Tally }[]): Tally {
     return total;
 }
 
-const tokensOf = (tally: Tally) => tally.inputTokens + tally.outputTokens;
+/** Every kind in one unit: what the tab charts, ranks and compares. */
+const tokensOf = (tally: Tally) => tally.weightedTokens;
 
 const isActive = (tally: Tally) =>
     tally.questions + tally.filesAdded + tally.docsOpened + tally.aiCalls > 0;
@@ -182,10 +213,15 @@ function toCounts(tally: Tally, pricePerMillionTokens: number): UsageCounts {
         docsOpened: tally.docsOpened,
         aiCalls: tally.aiCalls,
         aiTokens: tokensOf(tally),
+        aiSplit: { ...tally.split },
+        chatCalls: tally.chatCalls,
         inputTokens: tally.inputTokens,
         outputTokens: tally.outputTokens,
         cachedInputTokens: tally.cachedInputTokens,
         reasoningTokens: tally.reasoningTokens,
+        embeddedTokens: tally.embeddedTokens,
+        searches: tally.searches,
+        pages: tally.pages,
         costUsd: costOf(tally, pricePerMillionTokens),
     };
 }
@@ -198,22 +234,44 @@ interface Entry {
     lastAt: string | null;
     tally: Tally;
     /** Set on AI rows. */
-    ai?: { feature: string; route: string; owner: string };
+    ai?: { feature: string; route: string; owner: string; kind: string };
 }
 
-/** One meter row's tally. Its unpriced share is taken per row, so tallies add up. */
+/**
+ * One meter row's tally, by kind. Its unpriced share is taken per row, so
+ * tallies add up. A contents row's calls are pages read, not requests.
+ */
 function aiTally(row: AiUsageRow): Tally {
-    return {
+    const tally: Tally = {
         ...emptyTally(),
-        aiCalls: row.calls,
-        inputTokens: row.inputTokens,
-        outputTokens: row.outputTokens,
-        cachedInputTokens: row.cachedInputTokens,
-        reasoningTokens: row.reasoningTokens,
-        pricedCalls: row.pricedCalls,
+        weightedTokens: row.weightedTokens,
         pricedCostUsd: row.costUsd,
         unpricedTokens: unpricedTokensOf(row),
     };
+    if (row.kind === "embedding") {
+        tally.aiCalls = row.calls;
+        tally.pricedCalls = row.pricedCalls;
+        tally.embeddedTokens = row.inputTokens;
+        tally.split.embedding = row.weightedTokens;
+    } else if (row.kind === "web_search") {
+        tally.aiCalls = row.calls;
+        tally.pricedCalls = row.pricedCalls;
+        tally.searches = row.calls;
+        tally.split.search = row.weightedTokens;
+    } else if (row.kind === "web_contents") {
+        tally.pages = row.calls;
+        tally.split.search = row.weightedTokens;
+    } else {
+        tally.aiCalls = row.calls;
+        tally.chatCalls = row.calls;
+        tally.pricedCalls = row.pricedCalls;
+        tally.inputTokens = row.inputTokens;
+        tally.outputTokens = row.outputTokens;
+        tally.cachedInputTokens = row.cachedInputTokens;
+        tally.reasoningTokens = row.reasoningTokens;
+        tally.split.chat = row.weightedTokens;
+    }
+    return tally;
 }
 
 function entriesOf(raw: UsageRaw): Entry[] {
@@ -224,7 +282,12 @@ function entriesOf(raw: UsageRaw): Entry[] {
             userId: row.userId,
             lastAt: row.lastAt,
             tally: aiTally(row),
-            ai: { feature: row.feature, route: row.route || "default", owner: row.owner },
+            ai: {
+                feature: row.feature,
+                route: row.route || "default",
+                owner: row.owner,
+                kind: row.kind,
+            },
         });
     }
     const counted = [
@@ -297,12 +360,8 @@ function dailyOf(
 }
 
 /** Biggest first; a stable name order breaks ties. */
-function byTokens<T extends { inputTokens: number; outputTokens: number }>(
-    name: (row: T) => string
-) {
-    return (a: T, b: T) =>
-        b.inputTokens + b.outputTokens - (a.inputTokens + a.outputTokens) ||
-        name(a).localeCompare(name(b));
+function byTokens<T>(tokens: (row: T) => number, name: (row: T) => string) {
+    return (a: T, b: T) => tokens(b) - tokens(a) || name(a).localeCompare(name(b));
 }
 
 function featuresOf(entries: readonly Entry[], pricePerMillionTokens: number): UsageFeatureRow[] {
@@ -318,6 +377,7 @@ function featuresOf(entries: readonly Entry[], pricePerMillionTokens: number): U
         .map(([feature, { tally, people }]) => ({
             feature,
             calls: tally.aiCalls,
+            aiTokens: tally.weightedTokens,
             inputTokens: tally.inputTokens,
             outputTokens: tally.outputTokens,
             cachedInputTokens: tally.cachedInputTokens,
@@ -325,13 +385,19 @@ function featuresOf(entries: readonly Entry[], pricePerMillionTokens: number): U
             costUsd: costOf(tally, pricePerMillionTokens),
             people: people.size,
         }))
-        .sort(byTokens(row => row.feature));
+        .sort(
+            byTokens(
+                row => row.aiTokens,
+                row => row.feature
+            )
+        );
 }
 
 function routesOf(entries: readonly Entry[], pricePerMillionTokens: number): UsageRouteRow[] {
     const byRoute = new Map<string, Tally>();
     for (const entry of entries) {
-        if (!entry.ai) continue;
+        // Routes are chat's: embeddings and searches have none.
+        if (!entry.ai || entry.ai.kind !== "chat") continue;
         const tally = byRoute.get(entry.ai.route) ?? emptyTally();
         addTally(tally, entry.tally);
         byRoute.set(entry.ai.route, tally);
@@ -344,7 +410,36 @@ function routesOf(entries: readonly Entry[], pricePerMillionTokens: number): Usa
             outputTokens: tally.outputTokens,
             costUsd: costOf(tally, pricePerMillionTokens),
         }))
-        .sort(byTokens(row => row.route));
+        .sort(
+            byTokens(
+                row => row.inputTokens + row.outputTokens,
+                row => row.route
+            )
+        );
+}
+
+/**
+ * What the window's embeddings and searches were converted at, from the rows
+ * themselves (pages read are left out of the search rate).
+ */
+function ratesOf(
+    rows: readonly AiUsageRow[],
+    window: UsageRange,
+    people: ReadonlySet<string> | undefined
+): UsageRates {
+    const observed = { embeddedTokens: 0, embeddedWeighted: 0, searches: 0, searchWeighted: 0 };
+    for (const row of rows) {
+        if (row.date < window.from || row.date > window.to) continue;
+        if (people && !people.has(row.userId)) continue;
+        if (row.kind === "embedding") {
+            observed.embeddedTokens += row.inputTokens;
+            observed.embeddedWeighted += row.weightedTokens;
+        } else if (row.kind === "web_search") {
+            observed.searches += row.calls;
+            observed.searchWeighted += row.weightedTokens;
+        }
+    }
+    return conversionRates(observed);
 }
 
 // ── Summary ─────────────────────────────────────────────────────────
@@ -384,6 +479,7 @@ export function summarize(input: SummaryInput): UsageSummary {
     return {
         window,
         scope: input.scope,
+        rates: ratesOf(input.raw.ai, window, people),
         totals: totalsOf(current, price),
         previous: totalsOf(previous, price),
         daily: dailyOf(current, window, price),
@@ -400,6 +496,10 @@ export function summarize(input: SummaryInput): UsageSummary {
 export function toUsageAllowance(allowance: AiAllowance): UsageAllowance {
     return {
         used: allowance.used,
+        split:
+            allowance.binding === "server" && allowance.server
+                ? allowance.server.split
+                : allowance.split,
         // The binding limit: the server's cap when that is the one nearest its end.
         limit:
             allowance.binding === "server"
@@ -525,6 +625,7 @@ interface ActivityKey {
     userId: string;
     feature: string;
     route: string;
+    kind: UsageActivityRow["kind"];
     owner: UsageActivityRow["owner"];
 }
 
@@ -538,10 +639,14 @@ export function activityOf(input: ActivityInput): UsageActivity {
             date: row.date,
             userId: row.userId,
             feature: row.feature,
-            route: row.route || "default",
+            kind: isAiUsageKind(row.kind) ? row.kind : "chat",
+            // Routes are chat's; an embedding or a search has none.
+            route: row.kind === "chat" || !isAiUsageKind(row.kind) ? row.route || "default" : "",
             owner: row.owner === "workspace" ? "workspace" : "deployment",
         };
-        const id = [key.date, key.userId, key.feature, key.route, key.owner].join("\u0000");
+        const id = [key.date, key.userId, key.feature, key.route, key.kind, key.owner].join(
+            "\u0000"
+        );
         const slot = groups.get(id) ?? { key, tally: emptyTally() };
         addTally(slot.tally, aiTally(row));
         groups.set(id, slot);
@@ -554,6 +659,7 @@ export function activityOf(input: ActivityInput): UsageActivity {
             b.tally.aiCalls - a.tally.aiCalls ||
             a.key.feature.localeCompare(b.key.feature) ||
             a.key.route.localeCompare(b.key.route) ||
+            a.key.kind.localeCompare(b.key.kind) ||
             a.key.owner.localeCompare(b.key.owner) ||
             a.key.userId.localeCompare(b.key.userId)
     );
@@ -573,8 +679,11 @@ export function activityOf(input: ActivityInput): UsageActivity {
                           : "former",
                 feature: key.feature,
                 route: key.route,
+                kind: key.kind,
                 owner: key.owner,
-                calls: tally.aiCalls,
+                // A contents row counts pages read: say how many.
+                calls: key.kind === "web_contents" ? tally.pages : tally.aiCalls,
+                aiTokens: tally.weightedTokens,
                 inputTokens: tally.inputTokens,
                 outputTokens: tally.outputTokens,
                 cachedInputTokens: tally.cachedInputTokens,

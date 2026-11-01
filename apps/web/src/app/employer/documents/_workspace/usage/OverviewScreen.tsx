@@ -18,6 +18,7 @@ import type { UsagePeople, UsageSummary } from "~/lib/usage/types";
 
 import { StatusNote } from "../settings/ui";
 import { EmptyLine, LoadingRows, Panel } from "../team/ui";
+import { ByKindPanel } from "./ByKindPanel";
 import { DailyChart } from "./DailyChart";
 import { FeatureTable, RouteTable } from "./FeatureTable";
 import { useUsageFilters, useUsageLoad, windowQuery } from "./data";
@@ -51,10 +52,14 @@ export function OverviewScreen() {
                 "questions",
                 "files_added",
                 "documents_opened",
-                "ai_calls",
-                "ai_input_tokens",
-                "ai_output_tokens",
-                "ai_cached_input_tokens",
+                "ai_requests",
+                "ai_usage_chat_token_equivalents",
+                "ai_chat_input_tokens",
+                "ai_chat_output_tokens",
+                "ai_chat_cached_input_tokens",
+                "ai_embedded_tokens",
+                "ai_web_searches",
+                "ai_pages_read",
                 "estimated_cost_usd",
             ],
             data.daily.map(day => [
@@ -64,9 +69,13 @@ export function OverviewScreen() {
                 day.filesAdded,
                 day.docsOpened,
                 day.aiCalls,
+                day.aiTokens,
                 day.inputTokens,
                 day.outputTokens,
                 day.cachedInputTokens,
+                day.embeddedTokens,
+                day.searches,
+                day.pages,
                 day.costUsd,
             ])
         );
@@ -147,6 +156,7 @@ export function OverviewScreen() {
                             change={changeOf(data.totals.aiTokens, data.previous.aiTokens)}
                             previous={format.compact(data.previous.aiTokens)}
                             previousDays={days}
+                            sub={t("tokensUnit")}
                         />
                         <StatTile
                             testId="usage-tile-cost"
@@ -182,6 +192,11 @@ export function OverviewScreen() {
                         </div>
                     )}
 
+                    <ByKindPanel
+                        totals={data.totals}
+                        rates={data.rates}
+                        loading={summary.loading}
+                    />
                     <DailyChart
                         title={t("daily")}
                         daily={data.daily}

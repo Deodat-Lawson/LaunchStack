@@ -88,7 +88,7 @@ const toCount = (row: { date: string; userId: string; count: number; lastAt: str
     lastAt: row.lastAt,
 });
 
-/** The meter's rows, one per day, person, feature, route, owner and (unread) model. */
+/** The meter's rows, one per day, person, feature, route, owner, kind and (unread) model. */
 export async function aiUsageRows(
     companyId: bigint,
     range: UsageRange,
@@ -102,7 +102,9 @@ export async function aiUsageRows(
             feature: aiUsageDaily.feature,
             route: aiUsageDaily.route,
             owner: aiUsageDaily.owner,
+            kind: aiUsageDaily.kind,
             calls: aiUsageDaily.calls,
+            weightedTokens: aiUsageDaily.weightedTokens,
             inputTokens: aiUsageDaily.inputTokens,
             outputTokens: aiUsageDaily.outputTokens,
             cachedInputTokens: aiUsageDaily.cachedInputTokens,
@@ -131,7 +133,9 @@ export async function aiUsageRows(
         feature: row.feature,
         route: row.route,
         owner: row.owner,
+        kind: row.kind,
         calls: Number(row.calls),
+        weightedTokens: Number(row.weightedTokens),
         inputTokens: Number(row.inputTokens),
         outputTokens: Number(row.outputTokens),
         cachedInputTokens: Number(row.cachedInputTokens),

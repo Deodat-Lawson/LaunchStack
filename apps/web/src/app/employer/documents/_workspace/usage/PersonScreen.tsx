@@ -23,6 +23,7 @@ import { usePermissions } from "~/lib/use-permissions";
 import { AllowanceBar, useAllowanceFormat } from "../settings/aiAllowance";
 import { useTimeFormat } from "../settings/people/format";
 import { BackButton, LoadingRows, Panel } from "../team/ui";
+import { ByKindPanel } from "./ByKindPanel";
 import { DailyChart } from "./DailyChart";
 import { FeatureTable } from "./FeatureTable";
 import { useUsageFilters, useUsageLoad, windowQuery } from "./data";
@@ -187,6 +188,7 @@ export function PersonScreen({ memberId }: { memberId: number }) {
                             previousDays={data.totals.costUsd === null ? undefined : days}
                         />
                     </TileGrid>
+                    <ByKindPanel totals={data.totals} rates={data.rates} />
 
                     <DailyChart
                         title={t("daily")}

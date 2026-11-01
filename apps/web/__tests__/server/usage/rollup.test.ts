@@ -37,10 +37,11 @@ const WINDOW: UsageWindow = {
 const PRICE = 2; // $ per 1M tokens, for calls whose model declared none
 
 function ai(row: Partial<AiUsageRow> & Pick<AiUsageRow, "date" | "userId">): AiUsageRow {
-    return {
+    const base = {
         feature: "ask",
         route: "default",
         owner: "deployment",
+        kind: "chat",
         calls: 1,
         inputTokens: 0,
         outputTokens: 0,
@@ -51,6 +52,8 @@ function ai(row: Partial<AiUsageRow> & Pick<AiUsageRow, "date" | "userId">): AiU
         lastAt: `${row.date}T12:00:00.000Z`,
         ...row,
     };
+    // A chat token counts one: unless a test says otherwise, the weight is in + out.
+    return { ...base, weightedTokens: row.weightedTokens ?? base.inputTokens + base.outputTokens };
 }
 
 const at = (date: string, userId: string, count: number) => ({
@@ -135,6 +138,7 @@ const MEMBERS: UsageMember[] = currentMembers([
 
 const ALLOWANCE = {
     used: 0,
+    split: { chat: 0, embedding: 0, search: 0 },
     limit: null,
     percent: null,
     blocked: false,
@@ -371,16 +375,20 @@ describe("peopleOf", () => {
 
 // ── The invariant: people + former members + unattributed = the workspace ──
 
-const ADDITIVE: Exclude<keyof UsageCounts, "costUsd">[] = [
+const ADDITIVE: Exclude<keyof UsageCounts, "costUsd" | "aiSplit">[] = [
     "questions",
     "filesAdded",
     "docsOpened",
     "aiCalls",
     "aiTokens",
+    "chatCalls",
     "inputTokens",
     "outputTokens",
     "cachedInputTokens",
     "reasoningTokens",
+    "embeddedTokens",
+    "searches",
+    "pages",
 ];
 
 function expectPartsAddUp(raw: UsageRaw, price: number) {
@@ -609,12 +617,16 @@ describe("toUsageAllowance", () => {
     it("names the limit that binds", () => {
         expect(toUsageAllowance(base)).toEqual({
             used: 600,
+            // The server's cap binds, so its use across workspaces is what's split.
+            split: { chat: 790, embedding: 0, search: 0 },
             limit: 800,
             percent: 98.8,
             blocked: false,
             resetsAt: "2026-11-01T00:00:00.000Z",
         });
-        expect(toUsageAllowance({ ...base, binding: "workspace", percent: 60 }).limit).toBe(1000);
+        const here = toUsageAllowance({ ...base, binding: "workspace", percent: 60 });
+        expect(here.limit).toBe(1000);
+        expect(here.split).toEqual({ chat: 600, embedding: 0, search: 0 });
         expect(
             toUsageAllowance({
                 ...base,
@@ -624,5 +636,129 @@ describe("toUsageAllowance", () => {
                 percent: null,
             })
         ).toMatchObject({ limit: null, percent: null });
+    });
+});
+
+describe("kinds: chat, embeddings and web search in one unit", () => {
+    // One day, one person: a chat call, embeddings, Exa and Serper searches,
+    // and pages Exa read. Weights are as recorded: 85,000 for 1.5M embedded
+    // tokens, 21,000 + 1,000 for four searches, 8,000 for four pages.
+    const raw: UsageRaw = {
+        ai: [
+            ai({
+                date: "2026-10-03",
+                userId: "a",
+                inputTokens: 1000,
+                outputTokens: 200,
+                pricedCalls: 1,
+                costUsd: 0.001,
+            }),
+            ai({
+                date: "2026-10-03",
+                userId: "a",
+                feature: "ingestion",
+                route: "",
+                kind: "embedding",
+                calls: 3,
+                inputTokens: 1_500_000,
+                weightedTokens: 85_000,
+                pricedCalls: 2,
+                costUsd: 0.065,
+            }),
+            ai({
+                date: "2026-10-03",
+                userId: "a",
+                route: "",
+                kind: "web_search",
+                calls: 3,
+                weightedTokens: 21_000,
+                pricedCalls: 3,
+                costUsd: 0.021,
+            }),
+            ai({
+                date: "2026-10-03",
+                userId: "a",
+                route: "",
+                kind: "web_search",
+                calls: 1,
+                weightedTokens: 1_000,
+                pricedCalls: 1,
+                costUsd: 0.001,
+            }),
+            ai({
+                date: "2026-10-03",
+                userId: "a",
+                feature: "prospects",
+                route: "",
+                kind: "web_contents",
+                calls: 4,
+                weightedTokens: 8_000,
+                pricedCalls: 4,
+                costUsd: 0.008,
+            }),
+        ],
+        questions: [],
+        filesAdded: [],
+        docsOpened: [],
+    };
+    const whole = () =>
+        summarize({
+            window: WINDOW,
+            scope: { kind: "workspace" },
+            raw,
+            pricePerMillionTokens: 0,
+            members: 1,
+        });
+
+    it("totals every kind in chat-token equivalents, keeping each kind's own units apart", () => {
+        const { totals } = whole();
+        expect(totals).toMatchObject({
+            aiTokens: 116_200,
+            aiSplit: { chat: 1_200, embedding: 85_000, search: 30_000 },
+            // Requests leave out the four pages read.
+            aiCalls: 8,
+            chatCalls: 1,
+            // Input and output are chat's own; embedded tokens are counted apart.
+            inputTokens: 1000,
+            outputTokens: 200,
+            embeddedTokens: 1_500_000,
+            searches: 4,
+            pages: 4,
+        });
+        expect(totals.costUsd).toBeCloseTo(0.001 + 0.065 + 0.021 + 0.001 + 0.008, 9);
+    });
+
+    it("ranks features by the common unit, keeps routes to chat, and reports the rates the window was weighed at", () => {
+        const summary = whole();
+        expect(summary.byFeature.map(f => [f.feature, f.aiTokens])).toEqual([
+            ["ingestion", 85_000],
+            ["ask", 23_200],
+            ["prospects", 8_000],
+        ]);
+        expect(summary.byRoute.map(r => [r.route, r.calls])).toEqual([["default", 1]]);
+        expect(summary.daily.find(d => d.date === "2026-10-03")?.features).toEqual({
+            ingestion: 85_000,
+            ask: 23_200,
+            prospects: 8_000,
+        });
+        // 85,000 over 1.5M embedded; 22,000 over four searches (pages are not searches).
+        expect(summary.rates).toMatchObject({ embeddingPerMillion: 56_667, perSearch: 5_500 });
+    });
+
+    it("gives each activity row its kind and weight, with pages read as a contents row's count", () => {
+        const activity = activityOf({
+            window: WINDOW,
+            rows: raw.ai,
+            members: MEMBERS,
+            pricePerMillionTokens: 0,
+            offset: 0,
+            limit: 50,
+        });
+        expect(activity.rows.map(r => [r.feature, r.kind, r.route, r.calls, r.aiTokens])).toEqual([
+            ["ingestion", "embedding", "", 3, 85_000],
+            ["ask", "web_search", "", 4, 22_000],
+            ["prospects", "web_contents", "", 4, 8_000],
+            ["ask", "chat", "default", 1, 1_200],
+        ]);
     });
 });

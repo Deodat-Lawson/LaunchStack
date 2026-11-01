@@ -8,15 +8,20 @@
  * - **questions** — turns a person sent in Ask chats they own.
  * - **filesAdded** — documents they added (`workspace_activity`, verb `added`).
  * - **docsOpened** — documents they opened (`document_views`).
- * - **AI** — model calls made for them, with the provider's own token counts
- *   (`ai_usage_daily`). Work no one person started (a sync, a scheduled job)
- *   and calls from before per-person counting are **unattributed**.
+ * - **AI** — model calls, embedding requests and paid web searches made for
+ *   them (`ai_usage_daily`), in **chat-token equivalents**: a chat token counts
+ *   one (times its model's price over the Standard model's, when priced), and
+ *   embeddings and searches count by what they cost (~/server/ai-usage/weights).
+ *   Work no one person started (a sync, a scheduled job) and calls from before
+ *   per-person counting are **unattributed**.
  *
  * A person is **active** on a day when any of those is above zero.
  * Cost is an estimate: the price each model declared, plus the workspace's
  * own per-million price (`usage.pricePerMillionTokens`) for calls whose model
  * declared none; null when nothing in the window is priced.
  */
+
+import type { AiUsageKind, UsageSplit } from "~/lib/ai-usage";
 
 export interface UsageWindow {
     /** First day, ISO `YYYY-MM-DD` (UTC). */
@@ -33,13 +38,26 @@ export interface UsageCounts {
     questions: number;
     filesAdded: number;
     docsOpened: number;
+    /** Requests: chat calls, embedding requests and searches (pages read are in `pages`). */
     aiCalls: number;
-    /** Input + output. */
+    /** Chat-token equivalents, every kind together. */
     aiTokens: number;
+    /** `aiTokens` by kind. */
+    aiSplit: UsageSplit;
+    /** Chat calls alone. */
+    chatCalls: number;
+    /** Chat tokens in (cached included). Chat only: embedded tokens are in `embeddedTokens`. */
     inputTokens: number;
+    /** Chat tokens out, reasoning included. */
     outputTokens: number;
     cachedInputTokens: number;
     reasoningTokens: number;
+    /** Tokens embedded, as the provider counted them. */
+    embeddedTokens: number;
+    /** Paid web searches made. */
+    searches: number;
+    /** Pages a search provider read (Exa company descriptions). */
+    pages: number;
     costUsd: number | null;
 }
 
@@ -61,7 +79,10 @@ export interface UsageDay extends UsageCounts {
 export interface UsageFeatureRow {
     /** An `AiFeature` id. */
     feature: string;
+    /** Requests, as `UsageCounts.aiCalls`. */
     calls: number;
+    /** Chat-token equivalents. */
+    aiTokens: number;
     inputTokens: number;
     outputTokens: number;
     cachedInputTokens: number;
@@ -71,6 +92,7 @@ export interface UsageFeatureRow {
     people: number;
 }
 
+/** Chat calls only: embeddings and searches have no route. */
 export interface UsageRouteRow {
     /** An `AiUsageRoute` id. */
     route: string;
@@ -96,6 +118,8 @@ export interface UsageSummary {
     byFeature: UsageFeatureRow[];
     /** Most AI tokens first. */
     byRoute: UsageRouteRow[];
+    /** What the window's embeddings and searches were converted at. */
+    rates: UsageRates;
     /** AI tokens in the window no one person started. Workspace scope only; 0 otherwise. */
     unattributedTokens: number;
     /** Calls that went to a model endpoint the workspace brought (it pays for those itself). */
@@ -104,9 +128,21 @@ export interface UsageSummary {
     members: number;
 }
 
+/** The conversion into chat-token equivalents, for the page to say it. */
+export interface UsageRates {
+    /** US dollars per 1M standard chat tokens, and where that price came from. */
+    chat: { perMillion: number; source: "setting" | "model" | "default" };
+    /** A million embedded tokens, in chat-token equivalents. */
+    embeddingPerMillion: number;
+    /** One web search, in chat-token equivalents. */
+    perSearch: number;
+}
+
 export interface UsageAllowance {
-    /** Tokens this person used in this workspace this calendar month (UTC). */
+    /** Chat-token equivalents this person used in this workspace this calendar month (UTC). */
     used: number;
+    /** What `used` (or the server cap's use, when that binds) is made of. */
+    split: UsageSplit;
     /** The limit that binds them, or null for none. */
     limit: number | null;
     /** Share of `limit` used, 0–100 (may pass 100), or null. */
@@ -158,10 +194,15 @@ export interface UsageActivityRow {
     /** Null for unattributed work; `former` for someone who has left. */
     person: { displayName: string; avatarUrl: string | null } | "former" | null;
     feature: string;
+    /** Empty for embeddings and searches. */
     route: string;
+    kind: AiUsageKind;
     /** `workspace` when the call went to the workspace's own endpoint. */
     owner: "deployment" | "workspace";
+    /** Requests; for `web_contents`, pages read. */
     calls: number;
+    /** Chat-token equivalents. */
+    aiTokens: number;
     inputTokens: number;
     outputTokens: number;
     cachedInputTokens: number;

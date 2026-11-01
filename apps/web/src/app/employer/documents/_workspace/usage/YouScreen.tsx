@@ -19,6 +19,7 @@ import { cn } from "~/lib/utils";
 
 import { AiAllowanceBody } from "../settings/AiAllowanceCard";
 import { LoadingRows, Panel } from "../team/ui";
+import { ByKindPanel } from "./ByKindPanel";
 import { DailyChart } from "./DailyChart";
 import { FeatureTable } from "./FeatureTable";
 import { useUsageFilters, useUsageLoad, windowQuery } from "./data";
@@ -154,6 +155,7 @@ export function YouScreen() {
                             }
                         />
                     </TileGrid>
+                    <ByKindPanel totals={data.totals} rates={data.rates} />
 
                     {endsToday && me.streak.current >= 3 && (
                         <p className="text-ink-2 m-0 flex items-center gap-1.5 text-[12.5px]">

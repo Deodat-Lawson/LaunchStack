@@ -10,6 +10,7 @@ const mockEnv = {
         AI_USAGE_CHAT_PRICE_PER_MTOK: undefined as string | undefined,
         AI_USAGE_EMBEDDING_PRICE_PER_MTOK: undefined as string | undefined,
         AI_USAGE_WEB_SEARCH_PRICE_PER_1K: undefined as string | undefined,
+        AI_USAGE_PRICES: undefined as string | undefined,
     },
 };
 jest.mock("~/env", () => ({
@@ -26,6 +27,7 @@ jest.mock("~/server/chat-models", () => ({
 import type { ChatUsageEvent } from "@launchstack/llm";
 
 import {
+    conversionRates,
     embeddingPricePerMillion,
     embeddingTokensAsChat,
     standardChatPrice,
@@ -278,5 +280,151 @@ describe("embeddingTokensAsChat", () => {
     it("is always at least 1", () => {
         expect(embeddingTokensAsChat(1, "text-embedding-3-small")).toBe(1);
         expect(embeddingTokensAsChat(0, "text-embedding-3-large")).toBe(1);
+    });
+});
+
+const chat = (over: Partial<ChatUsageEvent> = {}): ChatUsageEvent => ({
+    modelId: "vendor/model",
+    owner: "deployment",
+    inputTokens: 3000,
+    outputTokens: 1000,
+    ...over,
+});
+
+describe("chat weighed by its price against the Standard model's", () => {
+    beforeEach(() => {
+        mockEnv.server.AI_USAGE_PRICES = undefined;
+        mockEnv.server.AI_USAGE_CHAT_PRICE_PER_MTOK = undefined;
+        mockChatModelsConfig.mockReset();
+    });
+
+    it("counts an unpriced model one for one, as before", () => {
+        mockChatModelsConfig.mockReturnValue(modelsConfig({ input: 0.3, output: 2.5 }));
+        expect(weighUsage(chat()).weightedTokens).toBe(4000);
+    });
+
+    it("counts the Standard model itself one for one, and a dearer one by its ratio", () => {
+        // Standard blends to (3 × 0.3 + 2.5) / 4 = 0.85 per 1M.
+        mockChatModelsConfig.mockReturnValue(modelsConfig({ input: 0.3, output: 2.5 }));
+        const standard = weighUsage(
+            chat({ pricing: { input: 0.3, output: 2.5 }, costUsd: 0.0034 })
+        );
+        expect(standard.weightedTokens).toBe(4000);
+        expect(standard.costUsd).toBe(0.0034);
+        // Four times the blended price (3.4 per 1M) counts four per token.
+        const dear = weighUsage(chat({ pricing: { input: 1.2, output: 10 } }));
+        expect(dear.weightedTokens).toBe(16_000);
+        // No meter cost on the event: priced from the declared price.
+        expect(dear.costUsd).toBeCloseTo((3000 * 1.2 + 1000 * 10) / 1_000_000, 12);
+    });
+
+    it("prices a model the model file doesn't, from AI_USAGE_PRICES (with or without a vendor prefix)", () => {
+        mockChatModelsConfig.mockReturnValue(modelsConfig());
+        mockEnv.server.AI_USAGE_PRICES = JSON.stringify({
+            chat: { "gpt-5-mini": { input: 0.25, output: 2 }, "llama3.1:8b": { ratio: 0 } },
+        });
+        // No Standard price anywhere: a chat token costs $1.00 per 1M.
+        // gpt-5-mini blends to (3 × 0.25 + 2) / 4 = 0.6875.
+        const priced = weighUsage(chat({ modelId: "openai/gpt-5-mini" }));
+        expect(priced.weightedTokens).toBe(2750);
+        expect(priced.costUsd).toBeCloseTo((3000 * 0.25 + 1000 * 2) / 1_000_000, 12);
+        // A local model at ratio 0: free toward limits, and no invented cost.
+        const local = weighUsage(chat({ modelId: "llama3.1:8b" }));
+        expect(local).toEqual({ weightedTokens: 0 });
+    });
+
+    it("lets a model's own declared price win over the table", () => {
+        mockChatModelsConfig.mockReturnValue(modelsConfig());
+        mockEnv.server.AI_USAGE_PRICES = JSON.stringify({ chat: { model: { ratio: 9 } } });
+        const declared = weighUsage(chat({ pricing: { input: 1, output: 1 } }));
+        expect(declared.weightedTokens).toBe(4000);
+    });
+
+    it("takes the Standard price from the table when the model file declares none", () => {
+        mockChatModelsConfig.mockReturnValue({
+            models: new Map([["primary", { id: "vendor/standard" }]]),
+            routes: { default: "primary" },
+        });
+        mockEnv.server.AI_USAGE_PRICES = JSON.stringify({
+            chat: { standard: { input: 2, output: 4 } },
+        });
+        expect(standardChatPrice()).toEqual({ perMillion: 2.5, source: "model" });
+    });
+});
+
+describe("AI_USAGE_PRICES for embeddings and search", () => {
+    beforeEach(() => {
+        mockEnv.server.AI_USAGE_PRICES = undefined;
+        mockEnv.server.AI_USAGE_EMBEDDING_PRICE_PER_MTOK = undefined;
+        mockEnv.server.AI_USAGE_WEB_SEARCH_PRICE_PER_1K = undefined;
+        mockEnv.server.AI_USAGE_CHAT_PRICE_PER_MTOK = "1";
+    });
+
+    it("prices models and providers the built-in list doesn't know, ahead of the blanket variables", () => {
+        mockEnv.server.AI_USAGE_EMBEDDING_PRICE_PER_MTOK = "0.5";
+        mockEnv.server.AI_USAGE_WEB_SEARCH_PRICE_PER_1K = "9";
+        mockEnv.server.AI_USAGE_PRICES = JSON.stringify({
+            embedding: { "voyage-3": 0.06 },
+            search: { brave: 5 },
+        });
+        expect(weighUsage(embedding("voyage-3", 1_000_000)).weightedTokens).toBe(60_000);
+        // Not in the table: the blanket variable.
+        expect(weighUsage(embedding("text-embedding-3-large", 1_000_000)).weightedTokens).toBe(
+            500_000
+        );
+        expect(weighUsage(search("brave")).weightedTokens).toBe(5_000);
+        expect(weighUsage(search("exa")).weightedTokens).toBe(9_000);
+    });
+
+    it("weighs a ratio entry without inventing a cost", () => {
+        mockEnv.server.AI_USAGE_PRICES = JSON.stringify({
+            embedding: { "nomic-embed-text": { ratio: 0.01 } },
+            search: { searxng: { ratio: 0 } },
+        });
+        expect(weighUsage(embedding("nomic-embed-text", 1_000_000))).toEqual({
+            weightedTokens: 10_000,
+        });
+        expect(weighUsage(search("searxng"))).toEqual({ weightedTokens: 0 });
+    });
+
+    it("ignores an invalid table, says which entry, and keeps the built-in prices", () => {
+        const error = jest.spyOn(console, "error").mockImplementation(() => undefined);
+        mockEnv.server.AI_USAGE_PRICES = JSON.stringify({ embedding: { "voyage-3": -1 } });
+        expect(weighUsage(embedding("text-embedding-3-large", 1_000_000)).weightedTokens).toBe(
+            130_000
+        );
+        expect(error).toHaveBeenCalledWith(expect.stringContaining("embedding.voyage-3"));
+        error.mockRestore();
+    });
+});
+
+describe("conversionRates", () => {
+    beforeEach(() => {
+        mockEnv.server.AI_USAGE_PRICES = undefined;
+        mockEnv.server.AI_USAGE_EMBEDDING_PRICE_PER_MTOK = undefined;
+        mockEnv.server.AI_USAGE_WEB_SEARCH_PRICE_PER_1K = undefined;
+        mockEnv.server.AI_USAGE_CHAT_PRICE_PER_MTOK = "1";
+    });
+
+    it("reports what a window was weighed at, else today's rates", () => {
+        expect(
+            conversionRates({
+                embeddedTokens: 1_500_000,
+                embeddedWeighted: 85_000,
+                searches: 4,
+                searchWeighted: 22_000,
+            })
+        ).toMatchObject({ embeddingPerMillion: 56_667, perSearch: 5_500 });
+        expect(
+            conversionRates({
+                embeddedTokens: 0,
+                embeddedWeighted: 0,
+                searches: 0,
+                searchWeighted: 0,
+            })
+        ).toMatchObject({
+            chat: { perMillion: 1, source: "setting" },
+            embeddingPerMillion: 130_000,
+        });
     });
 });

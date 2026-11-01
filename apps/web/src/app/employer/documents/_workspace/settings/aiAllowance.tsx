@@ -237,6 +237,27 @@ export function AllowanceBar({
 }
 
 /**
+ * The same split as text ("Chat 900K · Web search 250K · Embeddings 50K"),
+ * biggest first, for a tooltip; null when it is all chat or nothing.
+ */
+export function useUsageSplitText(): (split: UsageSplit) => string | null {
+    const t = useTranslations("settings.usage.kinds");
+    const format = useAllowanceFormat();
+    return useCallback(
+        (split: UsageSplit) => {
+            const parts = AI_USAGE_GROUPS.filter(group => split[group] > 0).sort(
+                (a, b) => split[b] - split[a]
+            );
+            if (!parts.some(group => group !== "chat")) return null;
+            return parts
+                .map(group => t("item", { label: t(group), value: format.compact(split[group]) }))
+                .join(" · ");
+        },
+        [t, format]
+    );
+}
+
+/**
  * What a person's use is made of — "Made up of Chat 900K · Web search 250K ·
  * Embeddings 50K" — biggest first. Usage is in chat-token equivalents, so this
  * is where someone sees that embedding a document did not eat the allowance.

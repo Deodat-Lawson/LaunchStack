@@ -38,7 +38,7 @@ import {
     AllowanceBar,
     allowanceTone,
     useAllowanceFormat,
-    UsageSplitLine,
+    useUsageSplitText,
 } from "../settings/aiAllowance";
 import { useTimeFormat } from "../settings/people/format";
 import { EmptyLine, FilterInput, LoadingRows } from "../team/ui";
@@ -87,6 +87,7 @@ export function PeopleScreen() {
     const t = useTranslations("usage.people");
     const tm = useTranslations("usage.metrics");
     const format = useUsageFormat();
+    const splitText = useUsageSplitText();
     // Rounded down, as Spending and Your usage round a limit: 99.6% never reads as 100.
     const allowance = useAllowanceFormat();
     const time = useTimeFormat();
@@ -378,15 +379,15 @@ export function PeopleScreen() {
                                             <TableCell className="@max-xl:hidden text-right tabular-nums">
                                                 {format.num(person.totals.docsOpened)}
                                             </TableCell>
-                                            <TableCell className="text-ink text-right font-medium tabular-nums">
+                                            <TableCell
+                                                className="text-ink text-right font-medium tabular-nums"
+                                                // The split on hover: a line under each total would widen
+                                                // the table past its panel. Each person's page shows it in full.
+                                                title={
+                                                    splitText(person.totals.aiSplit) ?? undefined
+                                                }
+                                            >
                                                 {format.compact(person.totals.aiTokens)}
-                                                <UsageSplitLine
-                                                    split={person.totals.aiSplit}
-                                                    bare
-                                                    // Only where the table has room: it wraps between kinds, and a
-                                                    // narrower table keeps the split on each person's own page.
-                                                    className="@max-5xl:hidden ml-auto block max-w-52 whitespace-normal text-[11.5px] font-normal leading-snug"
-                                                />
                                             </TableCell>
                                             <TableCell className="@max-md:hidden text-right tabular-nums">
                                                 {format.usd(person.totals.costUsd)}

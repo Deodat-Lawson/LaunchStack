@@ -10,6 +10,7 @@
 
 import type * as MockRequireWorkspaceContext from "../helpers/mock-require-workspace-context";
 import type * as Zod from "zod";
+import type * as UsageParams from "~/server/usage/params";
 
 import type { Permission } from "~/lib/authz/permissions";
 import type { WorkspaceContextResult } from "~/lib/require-workspace-context";
@@ -217,6 +218,19 @@ jest.mock("~/server/collab/personas", () => ({
 jest.mock("~/server/collab/runtime", () => ({ getHub: jest.fn(), listKnownNodes: jest.fn() }));
 jest.mock("~/server/collab/slack", () => ({ getSlackStatus: jest.fn() }));
 jest.mock("~/server/settings/store", () => ({ readWorkspaceSetting: jest.fn() }));
+// The Usage tab's services are past the gate; `/me` reaches its stub.
+jest.mock("~/server/usage", () => {
+    const params = jest.requireActual<typeof UsageParams>("~/server/usage/params");
+    return {
+        readUsageQuery: params.readUsageQuery,
+        DOCUMENTS_PAGE: params.DOCUMENTS_PAGE,
+        usageSummary: jest.fn(),
+        usagePeople: jest.fn(),
+        usageActivity: jest.fn(),
+        usageDocuments: jest.fn(),
+        usageMe: jest.fn().mockResolvedValue({ mine: true }),
+    };
+});
 
 // ---------------------------------------------------------------------------
 // Handlers
@@ -265,7 +279,6 @@ import {
     GET as previewAgentSessions,
     POST as syncAgentSessions,
 } from "~/app/api/connectors/agent-sessions/route";
-import { GET as analysisDashboard } from "~/app/api/company/analysis-dashboard/route";
 import { GET as documentStats } from "~/app/api/company/documents/[documentId]/stats/route";
 import { POST as approveCampaign } from "~/app/api/email-campaigns/[campaignId]/approve/route";
 import { POST as sendCampaign } from "~/app/api/email-campaigns/[campaignId]/send/route";
@@ -280,6 +293,11 @@ import {
 import { POST as resetAgent } from "~/app/api/collab/agents/[personaId]/reset/route";
 import { GET as memberAllowances } from "~/app/api/settings/usage/members/route";
 import { PUT as setMemberLimit } from "~/app/api/settings/usage/members/[userId]/route";
+import { GET as usageSummary } from "~/app/api/usage/summary/route";
+import { GET as usagePeople } from "~/app/api/usage/people/route";
+import { GET as usageActivity } from "~/app/api/usage/activity/route";
+import { GET as usageDocuments } from "~/app/api/usage/documents/route";
+import { GET as usageMe } from "~/app/api/usage/me/route";
 
 // ---------------------------------------------------------------------------
 // Table
@@ -670,11 +688,28 @@ const GATES: readonly Gate[] = [
         call: () => memberAllowances(new Request("http://localhost/api/settings/usage/members")),
     },
     {
-        route: "GET /api/company/analysis-dashboard",
+        route: "GET /api/usage/summary (the workspace's usage)",
         permission: "analytics.view",
         deniedRole: "member",
-        call: () =>
-            analysisDashboard(new Request("http://localhost/api/company/analysis-dashboard")),
+        call: () => usageSummary(new Request("http://localhost/api/usage/summary?days=7")),
+    },
+    {
+        route: "GET /api/usage/people (who used how much)",
+        permission: "analytics.view",
+        deniedRole: "member",
+        call: () => usagePeople(new Request("http://localhost/api/usage/people")),
+    },
+    {
+        route: "GET /api/usage/activity (AI use by person)",
+        permission: "analytics.view",
+        deniedRole: "member",
+        call: () => usageActivity(new Request("http://localhost/api/usage/activity")),
+    },
+    {
+        route: "GET /api/usage/documents (what was opened)",
+        permission: "analytics.view",
+        deniedRole: "member",
+        call: () => usageDocuments(new Request("http://localhost/api/usage/documents")),
     },
     {
         route: "GET /api/company/documents/[documentId]/stats",
@@ -813,6 +848,16 @@ describe("permission gates", () => {
             if (saved.app === undefined) delete process.env.APP_PUBLIC_URL;
             else process.env.APP_PUBLIC_URL = saved.app;
         }
+    });
+
+    // A member's own usage is theirs to read: the one Usage route without the gate.
+    it.each(["member", "viewer"])("GET /api/usage/me answers a %s", async role => {
+        signInAs(role);
+
+        const response = await usageMe(new Request("http://localhost/api/usage/me"));
+
+        expect(response.status).toBe(200);
+        await expect(response.json()).resolves.toEqual({ mine: true });
     });
 
     it("lets an admin through the same gate (the harness is not refusing everyone)", async () => {

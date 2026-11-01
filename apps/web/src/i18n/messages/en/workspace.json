@@ -95,9 +95,9 @@
       "label": "Settings",
       "description": "Your account, appearance, shortcuts and privacy"
     },
-    "analytics": {
-      "label": "Analytics",
-      "description": "Documents, queries, and activity across the workspace"
+    "usage": {
+      "label": "Usage",
+      "description": "Who is active, what they ask and add, the AI it takes and what it costs — and your own numbers"
     },
     "mindmap": {
       "label": "Mindmap",
@@ -109,7 +109,7 @@
     },
     "workspace": {
       "label": "Workspace",
-      "description": "The workspace's name and details, its people and access, company profile, your own keys, models, agents, integrations, usage and archive"
+      "description": "The workspace's name and details, its people and access, company profile, your own keys, models, agents, integrations and archive"
     },
     "feedback": {
       "label": "Feedback",
@@ -192,9 +192,13 @@
       "label": "Predictive gaps",
       "description": "Missing exhibits, schedules, and compliance gaps"
     },
-    "analytics": {
-      "label": "Analytics",
-      "description": "Documents, queries, and activity"
+    "usage": {
+      "label": "Usage",
+      "description": "Your numbers, and for admins the workspace's and each person's"
+    },
+    "spending": {
+      "label": "Spending and limits",
+      "description": "The balance, what each service cost, pricing and per-person AI limits"
     },
     "peopleAccess": {
       "label": "People and access",
@@ -210,7 +214,7 @@
     },
     "workspace": {
       "label": "Workspace",
-      "description": "Its name and URL, people and access, your own keys, models, agents, integrations and usage"
+      "description": "Its name and URL, people and access, your own keys, models, agents and integrations"
     },
     "workspaceGeneral": {
       "label": "Rename the workspace",

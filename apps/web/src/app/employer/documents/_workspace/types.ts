@@ -511,11 +511,20 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         href: "/employer/documents?feature=audit",
     },
     {
-        id: "analytics",
-        label: "Analytics",
+        id: "usage",
+        label: "Usage",
         Icon: IconChart,
-        desc: "Documents, queries, and activity",
-        href: "/employer/documents?feature=analytics",
+        desc: "Your numbers, and for admins the workspace's and each person's",
+        href: "/employer/documents?feature=usage",
+    },
+    {
+        // A screen of the Usage tab (`TOOL_ALIASES`): balance, pricing and limits.
+        id: "spending",
+        label: "Spending and limits",
+        Icon: IconChart,
+        desc: "The balance, what each service cost, pricing and per-person AI limits",
+        href: "/employer/documents?feature=usage&at=%2Fspending",
+        requires: "analytics.view",
     },
     // Screens of the Workspace tab. Each id is a `TOOL_ALIASES` entry, which
     // is how picking the row opens the tab on its screen; the href is the
@@ -749,8 +758,8 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
             // the workspace, with its screens across the top
             // (`WorkspaceTool`); Settings is yours alone (`SettingsHub`).
             // Every old `/employer/settings#…` link lands on the right one
-            // (`~/lib/settings/surfaces`). Analytics is neither: it has its
-            // own pane and its own permission.
+            // (`~/lib/settings/surfaces`). Usage is neither: everyone sees
+            // their own numbers there, and `analytics.view` the workspace's.
             //
             // Both ungated: everyone has an account, a theme and shortcuts to
             // set, and may read the workspace's name and policy. Each
@@ -759,7 +768,7 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 id: "workspace",
                 label: "Workspace",
                 Icon: IconWorkspace,
-                desc: "The workspace's name and details, its people and access, company profile, your own keys, models, agents, integrations, usage and archive",
+                desc: "The workspace's name and details, its people and access, company profile, your own keys, models, agents, integrations and archive",
                 href: "/employer/documents?feature=workspace",
             },
             {
@@ -769,11 +778,13 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 desc: "Your account, appearance, shortcuts and privacy",
             },
             {
-                id: "analytics",
-                label: "Analytics",
+                // Cursor's team dashboard for a workspace: your own numbers
+                // for everyone; the workspace's and each person's for
+                // `analytics.view`. Its screens are across the top (`UsageTool`).
+                id: "usage",
+                label: "Usage",
                 Icon: IconChart,
-                desc: "Documents, queries, and activity across the workspace",
-                requires: "analytics.view",
+                desc: "Who is active, what they ask and add, the AI it takes and what it costs — and your own numbers",
             },
         ],
     },
@@ -1029,7 +1040,7 @@ const STUDIO_APP_MESSAGE_KEYS = {
     rewrite: "rewrite",
     workspace: "workspace",
     settings: "settings",
-    analytics: "analytics",
+    usage: "usage",
     mindmap: "mindmap",
     workflows: "workflows",
     feedback: "feedback",
@@ -1095,7 +1106,8 @@ const PALETTE_LINK_LABEL_KEYS = {
     prospects: "prospects",
     investors: "investors",
     audit: "audit",
-    analytics: "analytics",
+    usage: "usage",
+    spending: "spending",
     workspace: "workspace",
     "workspace-general": "workspaceGeneral",
     settings: "settings",

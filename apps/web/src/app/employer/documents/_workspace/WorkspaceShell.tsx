@@ -151,7 +151,7 @@ const LEGACY_VIEW_REDIRECTS: Record<string, string> = {
     rewrite: "/employer/documents?feature=rewrite",
     upload: "/employer/documents?add=1",
     dashboard: "/employer/home",
-    analytics: "/employer/documents?feature=analytics",
+    analytics: "/employer/documents?feature=usage",
     employees: workspaceHref("people"),
     settings: "/employer/settings",
     metadata: workspaceHref("company"),
@@ -178,6 +178,7 @@ const LAUNCHER_APPS = ["chat", "knowledge", "meetings"] as const;
  */
 const MOUNT_ON_FIRST_SHOW = new Set([
     "workspace",
+    "usage",
     "growth",
     "proposals",
     "vantage",
@@ -1656,7 +1657,8 @@ export function WorkspaceShell() {
      * Where a `/employer/settings#<hash>` link goes inside the workspace:
      * Settings on one of its own sections, the Workspace tab on the screen a
      * workspace section moved to (with the row or People tab the hash named
-     * as its `focus`), or Analytics. Never a page leave.
+     * as its `focus`), or the Usage tab (Spending, for `#usage…`). Never a
+     * page leave.
      */
     const openSettingsPlace = useCallback(
         (hash: string) => {
@@ -1667,6 +1669,7 @@ export function WorkspaceShell() {
                 return;
             }
             if (destination?.kind === "app") {
+                if (destination.at) requestToolLocation(destination.featureId, destination.at);
                 expandFeatureRef.current(destination.featureId);
                 return;
             }

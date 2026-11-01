@@ -12,9 +12,9 @@
  * one header, one action area and one read-only rule for both.
  *
  * Deep links: every `/employer/settings#…` that ever worked still lands —
- * `#appearance.theme` on its row here, and `#people`, `#byok` or
- * `#usage.pricePerMillionTokens` on their screen of the Workspace tab
- * (`~/lib/settings/surfaces` decides which).
+ * `#appearance.theme` on its row here, `#people` or `#byok` on their screen
+ * of the Workspace tab, and `#usage.pricePerMillionTokens` on the Usage
+ * tab's Spending screen (`~/lib/settings/surfaces` decides which).
  */
 
 import React, { useCallback, useEffect, useState } from "react";
@@ -94,9 +94,10 @@ export function SettingsHub({ embedded = false, initialSection }: SettingsHubPro
                 return;
             }
             // Inside the shell, a hash this hub finds when it mounts may be
-            // left over from the Workspace tab, which the shell has already
-            // opened; only a link followed from here (a hash change) moves.
-            if (embedded && onMount && destination.kind === "workspace") return;
+            // left over from the Workspace or Usage tab, which the shell has
+            // already opened; only a link followed from here (a hash change)
+            // moves.
+            if (embedded && onMount) return;
             router.replace(destination.href);
         };
         applyHash(true);

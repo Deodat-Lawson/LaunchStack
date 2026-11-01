@@ -7,7 +7,8 @@
  * - **Basics** — General (the workspace's name, URL, description, industry,
  *   team size and colour), People and access, Company profile.
  * - **Setup** — Bring your own keys, Models, Agents, Integrations.
- * - **Data** — Usage, Archive, Labs.
+ * - **Data** — Archive, Labs. (Usage became a tab of its own, `usage/UsageTool`;
+ *   `/usage` and its old links open its Spending screen.)
  *
  * Its words are `settings.workspaceTab` (the tab's name, what it is for, its
  * groups and its screens' names) and, inside a screen, `settings.sections`.
@@ -19,14 +20,14 @@
  * whose role may not see it, read-only for someone who may only read it.
  *
  * A screen can be asked to bring something into view — `/people?focus=audit`
- * opens People on the audit log, `/usage?focus=usage.pricePerMillionTokens`
- * scrolls that row into view. The sections read that from the address bar's
+ * opens People on the audit log, `/agents?focus=agents.autonomy` scrolls
+ * that row into view. The sections read that from the address bar's
  * hash, as they did in Settings, so the tab writes it there (without a
  * `hashchange`, which Settings would take as a link to follow) and draws the
  * section afresh.
  */
 
-import React, { useLayoutEffect, useMemo } from "react";
+import React, { useEffect, useLayoutEffect, useMemo } from "react";
 import { Briefcase } from "lucide-react";
 import { useTranslations } from "next-intl";
 
@@ -44,6 +45,7 @@ import {
     WORKSPACE_SCREEN_IDS,
     WORKSPACE_TOOL_ID,
     settingsDestination,
+    usageHref,
     workspaceScreenFromPath,
 } from "~/lib/settings/surfaces";
 import { usePermissions } from "~/lib/use-permissions";
@@ -67,11 +69,21 @@ export function WorkspaceTool({ host }: { host?: ToolHost }) {
 
 function WorkspaceFrame() {
     const t = useTranslations("settings.workspaceTab");
-    const { path, searchParams } = useToolNav();
+    const { path, searchParams, navigate } = useToolNav();
     const { can } = usePermissions();
     const screen = workspaceScreenFromPath(path);
     const focus = searchParams.get("focus");
     useFocusHash(focus);
+
+    // Usage was a screen here until it became a tab of its own. A link the
+    // shell didn't rewrite, or this tab's memory of it, opens it there, and
+    // this tab goes home rather than to a page that no longer exists.
+    const movedToUsage = path === "/usage";
+    useEffect(() => {
+        if (!movedToUsage) return;
+        navigate(WORKSPACE_HOME, { replace: true });
+        navigate(usageHref(focus));
+    }, [movedToUsage, focus, navigate]);
 
     // Fails closed: until permissions load, only the ungated screens show.
     const groups = useMemo<ToolNavGroup[]>(
@@ -114,23 +126,30 @@ function WorkspaceFrame() {
     );
 }
 
+/** A hash the Workspace tab put in the address bar. */
+const isWorkspaceHash = (hash: string) => settingsDestination(hash)?.kind === "workspace";
+
 /**
  * Puts the screen's `focus` in the address bar's hash, where a row
  * (`SettingRow`) and People's tabs look for it, before the section's own
- * effects run. A hash this tab put there is cleared again on a screen that
- * asks for nothing, so People does not reopen on the audit log next time.
+ * effects run. A hash the tab put there (`ownHash`) is cleared again on a
+ * screen that asks for nothing, so People does not reopen on the audit log
+ * next time. The Usage tab's Spending screen uses it the same way.
  */
-function useFocusHash(focus: string | null) {
+export function useFocusHash(
+    focus: string | null,
+    ownHash: (hash: string) => boolean = isWorkspaceHash
+) {
     useLayoutEffect(() => {
         const current = window.location.hash.replace(/^#/, "");
         const next = focus ?? "";
         if (current === next) return;
-        if (!focus && settingsDestination(current)?.kind !== "workspace") return;
+        if (!focus && !ownHash(current)) return;
         const { pathname, search } = window.location;
         window.history.replaceState(
             window.history.state,
             "",
             `${pathname}${search}${next ? `#${next}` : ""}`
         );
-    }, [focus]);
+    }, [focus, ownHash]);
 }

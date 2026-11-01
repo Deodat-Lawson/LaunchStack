@@ -184,13 +184,13 @@ afterAll(() => {
 });
 
 describe("the Workspace tab", () => {
-    it("opens on General, with ten screens in three groups for an owner", async () => {
+    it("opens on General, with nine screens in three groups for an owner", async () => {
         open();
 
         await waitFor(() =>
             expect(heading()).toHaveTextContent("What the workspace is called, and how it is known")
         );
-        // Ten screens are more than a row holds: the bar switches by group.
+        // Nine screens are more than a row holds: the bar switches by group.
         const area = screen.getByRole("radiogroup", { name: "Area" });
         expect(
             within(area)
@@ -204,7 +204,21 @@ describe("the Workspace tab", () => {
             expect(tabs()).toEqual(["Bring your own keys", "Models", "Agents", "Integrations"])
         );
         fireEvent.click(within(area).getByRole("radio", { name: "Data" }));
-        await waitFor(() => expect(tabs()).toEqual(["Usage", "Archive", "Labs"]));
+        await waitFor(() => expect(tabs()).toEqual(["Archive", "Labs"]));
+    });
+
+    it("sends its old Usage screen to the Usage tab's Spending screen, and goes home", async () => {
+        const { host } = open("/usage?focus=usage.memberMonthlyTokenLimit");
+        await waitFor(() =>
+            expect(host.openTool).toHaveBeenCalledWith(
+                "usage",
+                "/spending?focus=usage.memberMonthlyTokenLimit"
+            )
+        );
+        await waitFor(() =>
+            expect(heading()).toHaveTextContent("What the workspace is called, and how it is known")
+        );
+        expect(screen.queryByTestId("body-usage")).not.toBeInTheDocument();
     });
 
     it("shows a Member only the screens their role can read, in one row, read-only where they may only read", async () => {
@@ -274,12 +288,10 @@ describe("the Workspace tab", () => {
 
     it("puts a deep link's row in the hash before the section reads it, and takes it away after", async () => {
         const user = userEvent.setup();
-        open("/usage?focus=usage.pricePerMillionTokens");
+        open("/archive?focus=retention.trashDays");
 
-        const usage = await screen.findByTestId("body-usage");
-        await waitFor(() =>
-            expect(usage).toHaveAttribute("data-hash", "#usage.pricePerMillionTokens")
-        );
+        const archive = await screen.findByTestId("body-archive");
+        await waitFor(() => expect(archive).toHaveAttribute("data-hash", "#retention.trashDays"));
 
         fireEvent.click(screen.getByRole("radio", { name: "Basics" }));
         await user.click(within(bar()).getByRole("link", { name: "People and access" }));

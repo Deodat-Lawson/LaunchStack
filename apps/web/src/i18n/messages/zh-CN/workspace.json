@@ -95,9 +95,9 @@
       "label": "设置",
       "description": "你的账户、外观、快捷键和隐私"
     },
-    "analytics": {
-      "label": "分析",
-      "description": "整个工作区的文档、查询和活动"
+    "usage": {
+      "label": "用量",
+      "description": "谁在活跃，提了什么问题、添加了什么，用了多少 AI、花了多少钱——以及你自己的数据"
     },
     "mindmap": {
       "label": "思维导图",
@@ -109,7 +109,7 @@
     },
     "workspace": {
       "label": "工作区",
-      "description": "工作区的名称和详情、成员与权限、公司档案、自带密钥、模型、智能体、集成、用量和归档"
+      "description": "工作区的名称和详情、成员与权限、公司档案、自带密钥、模型、智能体、集成和归档"
     },
     "feedback": {
       "label": "反馈",
@@ -192,9 +192,13 @@
       "label": "预测缺口",
       "description": "缺失的附件、附表和合规缺口"
     },
-    "analytics": {
-      "label": "分析",
-      "description": "文档、查询和活动"
+    "usage": {
+      "label": "用量",
+      "description": "你自己的数据；管理员还能看到整个工作区和每个人的数据"
+    },
+    "spending": {
+      "label": "支出与上限",
+      "description": "余额、各项服务的花费、价格和每人 AI 上限"
     },
     "peopleAccess": {
       "label": "成员与权限",
@@ -210,7 +214,7 @@
     },
     "workspace": {
       "label": "工作区",
-      "description": "名称和网址、成员与权限、自带密钥、模型、智能体、集成和用量"
+      "description": "名称和网址、成员与权限、自带密钥、模型、智能体和集成"
     },
     "workspaceGeneral": {
       "label": "重命名工作区",

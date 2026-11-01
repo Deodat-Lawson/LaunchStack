@@ -1359,6 +1359,19 @@ export function WorkspaceShell() {
         [refresh, t, tSourceApi]
     );
 
+    const handleReembedSource = useCallback(
+        async (source: WorkspaceSource) => {
+            try {
+                await sourceApi.reembedSource(source);
+                toast.success(t("shell.reembedding"), { description: source.title });
+            } catch (err) {
+                toast.error(sourceApiErrorMessage(err, tSourceApi, t("shell.reembedFailed")));
+            }
+            await refresh();
+        },
+        [refresh, t, tSourceApi]
+    );
+
     const handleMoveToFolder = useCallback(
         async (sourceId: string, folderName: string) => {
             const src = sources.find(s => s.id === sourceId);
@@ -2560,6 +2573,11 @@ export function WorkspaceShell() {
                             onDeleteSource={source => requestDelete([source])}
                             onDeleteSources={requestDelete}
                             onRetrySource={canRetrySources ? handleRetrySource : undefined}
+                            onReembedSource={
+                                canRetrySources
+                                    ? source => void handleReembedSource(source)
+                                    : undefined
+                            }
                             onAddToFolder={path => {
                                 setAddFolder(path);
                                 openAdd();
@@ -2636,6 +2654,9 @@ export function WorkspaceShell() {
                         onDeleteSource={source => requestDelete([source])}
                         onDeleteSources={requestDelete}
                         onRetrySource={canRetrySources ? handleRetrySource : undefined}
+                        onReembedSource={
+                            canRetrySources ? source => void handleReembedSource(source) : undefined
+                        }
                         onAddToFolder={path => {
                             setAddFolder(path);
                             openAdd();
@@ -2779,7 +2800,7 @@ export function WorkspaceShell() {
                             editingQueued={Boolean(editingQueued)}
                             queuedEditUnavailable={Boolean(
                                 editingQueued &&
-                                !chatRuntime.queue.items.some(item => item.id === editingQueued)
+                                    !chatRuntime.queue.items.some(item => item.id === editingQueued)
                             )}
                             onCancelQueueEdit={() => setEditingQueued(null)}
                             onQueueSendOldest={() => {
@@ -2892,6 +2913,7 @@ export function WorkspaceShell() {
                             onAskAbout={handleAskAbout}
                             onAskAboutPassage={askAboutPassage}
                             onVersionChanged={() => void refresh()}
+                            onReembed={canRetrySources ? handleReembedSource : undefined}
                             onEdit={source => openSource(source.id, true)}
                             onPublished={() => void refresh()}
                             highlight={
@@ -3223,6 +3245,7 @@ function EmbeddedSourcePane({
     onAskAbout: (source: WorkspaceSource) => void;
     onAskAboutPassage: (source: WorkspaceSource, selection: PassageSelection) => void;
     onVersionChanged: () => void;
+    onReembed?: (source: WorkspaceSource) => Promise<void>;
     onEdit: (source: WorkspaceSource) => void;
     onPublished: () => void;
     highlight: CitationHighlight | null;

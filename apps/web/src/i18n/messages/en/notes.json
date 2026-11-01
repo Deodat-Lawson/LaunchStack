@@ -39,7 +39,8 @@
     "status": {
       "drifted": "Anchor moved",
       "orphaned": "Unanchored"
-    }
+    },
+    "highlight": "Highlight"
   },
   "draft": {
     "titlePlaceholder": "Title",
@@ -71,7 +72,39 @@
     "addNote": "+ Note",
     "askAi": "✦ Ask AI",
     "askAiTitle": "Ask about this passage in the chat",
-    "pinTitle": "Note {ordinal}"
+    "pinTitle": "Note {ordinal}",
+    "toolbar": "PDF controls",
+    "previousPage": "Previous page",
+    "nextPage": "Next page",
+    "pageNumber": "Page number",
+    "ofPages": "of {count}",
+    "zoomOut": "Zoom out",
+    "zoomOutShortcut": "Zoom out (⌘/Ctrl −)",
+    "zoomIn": "Zoom in",
+    "zoomInShortcut": "Zoom in (⌘/Ctrl +)",
+    "zoomLevel": "Zoom: {level}",
+    "zoomAuto": "Automatic (⌘/Ctrl 0)",
+    "fitWidth": "Fit to width",
+    "actualSize": "Actual size",
+    "find": "Find in document",
+    "findShortcut": "Find in document (⌘/Ctrl F)",
+    "findPlaceholder": "Find in document",
+    "findNone": "No matches",
+    "findCount": "{current} of {total}",
+    "findPrevious": "Previous match (Shift+Enter)",
+    "findNext": "Next match (Enter)",
+    "findClose": "Close find (Esc)",
+    "download": "Download",
+    "highlight": "Highlight",
+    "highlightIn": "Highlight in {color}",
+    "colors": {
+      "yellow": "yellow",
+      "green": "green",
+      "blue": "blue",
+      "pink": "pink"
+    },
+    "highlightMenu": "Highlight",
+    "removeHighlight": "Remove"
   },
   "server": {
     "errors": {

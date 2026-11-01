@@ -239,6 +239,7 @@ import { PATCH as patchDocument } from "~/app/api/documents/[id]/route";
 import { POST as revertVersion } from "~/app/api/documents/[id]/versions/[versionId]/revert/route";
 import { POST as createVersion } from "~/app/api/documents/[id]/versions/route";
 import { POST as retryProcessing } from "~/app/api/documents/[id]/retry/route";
+import { POST as reembedSource } from "~/app/api/documents/[id]/reembed/route";
 import { POST as uploadDocument } from "~/app/api/uploadDocument/route";
 import { POST as uploadWebsite } from "~/app/api/upload/website/route";
 import { POST as uploadVideoUrl } from "~/app/api/upload/video-url/route";
@@ -504,6 +505,14 @@ const GATES: readonly Gate[] = [
         deniedRole: "viewer",
         call: () =>
             retryProcessing(json("/api/documents/1/retry", "POST", {}), params({ id: "1" })),
+    },
+    // Re-embedding re-runs processing too, as a new version of the same file.
+    {
+        route: "POST /api/documents/[id]/reembed",
+        permission: "documents.upload",
+        deniedRole: "viewer",
+        call: () =>
+            reembedSource(json("/api/documents/1/reembed", "POST", {}), params({ id: "1" })),
     },
     {
         route: "POST /api/uploadDocument",

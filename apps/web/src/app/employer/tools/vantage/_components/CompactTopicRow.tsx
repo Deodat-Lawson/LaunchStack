@@ -31,7 +31,6 @@ export function CompactTopicRow({
             >
                 <span className={styles.rowCopy}>
                     <span className={styles.title}>{presentation.title}</span>
-                    <span className={styles.issue}>{presentation.issue}</span>
                     <span className={styles.metadata}>
                         <span>AI suggested</span>
                         <span>

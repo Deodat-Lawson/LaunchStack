@@ -6,8 +6,8 @@
     align-items: center;
     gap: 16px;
     width: 100%;
-    min-height: 85px;
-    padding: 13px 12px;
+    min-height: 64px;
+    padding: 12px;
     text-align: left;
     border-radius: 6px;
     transition: background-color 120ms ease-out;
@@ -33,14 +33,6 @@
     font-weight: 600;
     line-height: 1.35;
 }
-.issue {
-    color: var(--ink-2);
-    font-size: 13px;
-    line-height: 1.4;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
 .metadata {
     display: flex;
     flex-wrap: wrap;
@@ -60,6 +52,7 @@
     animation: none !important;
 }
 .sheetHeader {
+    flex-shrink: 0;
     padding: 24px 48px 20px 24px;
     border-bottom: 1px solid var(--line);
 }
@@ -103,6 +96,7 @@
     margin-top: 4px;
 }
 .footer {
+    flex-shrink: 0;
     border-top: 1px solid var(--line);
     padding: 16px 24px;
     display: flex;
@@ -113,5 +107,24 @@
 @media (hover: hover) and (pointer: fine) {
     .rowButton:hover {
         background: var(--panel-2);
+    }
+}
+
+@media (max-width: 639px) {
+    .sheet.sheet {
+        width: 100%;
+        max-width: 100%;
+        height: 100%;
+        max-height: 100%;
+        border: 0;
+    }
+    .sheetHeader {
+        padding-left: 20px;
+    }
+    .body {
+        padding: 20px;
+    }
+    .footer {
+        padding: 16px 20px max(16px, env(safe-area-inset-bottom));
     }
 }

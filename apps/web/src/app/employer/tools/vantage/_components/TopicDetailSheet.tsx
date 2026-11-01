@@ -42,6 +42,11 @@ export function TopicDetailSheet({
         report?.diagnostics.sources.find(item => demoSourceKey(item.source) === demoSourceKey(ref))
             ?.title ??
         `${ref.kind}:${ref.id}`;
+    const nextSteps = view.approach.length
+        ? view.approach
+        : topic.proposedNextStep
+          ? [topic.proposedNextStep]
+          : [];
     const sourceRefs = [
         ...new Map(
             [...topic.facts, ...topic.conflicts]
@@ -97,31 +102,33 @@ export function TopicDetailSheet({
                 </header>
                 <div className={styles.body}>
                     <section>
-                        <h3 className={styles.sectionTitle}>Issue</h3>
+                        <h3 className={styles.sectionTitle}>Issue {"\u00b7"} source reports</h3>
                         <p>{view.issue}</p>
                     </section>
                     {view.reason && (
                         <section>
                             <h3 className={styles.sectionTitle}>
                                 Why this matters{" "}
-                                <span className="text-ink-3 font-normal">· AI interpretation</span>
+                                <span className="text-ink-3 font-normal">
+                                    {"\u00b7"} AI interpretation
+                                </span>
                             </h3>
                             <p>{view.reason}</p>
                         </section>
                     )}
                     {view.decision && (
                         <section>
-                            <h3 className={styles.sectionTitle}>Decision to consider</h3>
+                            <h3 className={styles.sectionTitle}>Key decision</h3>
                             <p>{view.decision}</p>
                         </section>
                     )}
-                    {view.approach.length > 0 && (
+                    {nextSteps.length > 0 && (
                         <section>
                             <h3 className={styles.sectionTitle}>
-                                Possible approach · AI suggestion
+                                Suggested next step · AI suggestion
                             </h3>
                             <ul className="list-disc space-y-2 pl-4">
-                                {view.approach.map((step, index) => (
+                                {nextSteps.map((step, index) => (
                                     <li key={index}>{step}</li>
                                 ))}
                             </ul>
@@ -182,48 +189,43 @@ export function TopicDetailSheet({
                         </div>
                     </details>
                     <details className={styles.disclosure}>
-                        <summary>Original report · uncertainty &amp; rationale</summary>
+                        <summary>Unknowns · {topic.unknowns.length}</summary>
+                        {topic.unknowns.length ? (
+                            <ul className="mt-3 list-disc space-y-2 pl-4">
+                                {topic.unknowns.map((value, index) => (
+                                    <li key={index}>{value}</li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p className="mt-3">None supplied.</p>
+                        )}
+                    </details>
+                    <details className={styles.disclosure}>
+                        <summary>Conflicts · {topic.conflicts.length}</summary>
+                        <div className="mt-3 space-y-4">
+                            {topic.conflicts.length ? (
+                                topic.conflicts.map((conflict, index) => (
+                                    <div key={index}>
+                                        <p>{conflict.text}</p>
+                                        {refs(conflict.refs)}
+                                    </div>
+                                ))
+                            ) : (
+                                <p>None supplied.</p>
+                            )}
+                        </div>
+                    </details>
+                    <details className={styles.disclosure}>
+                        <summary>Original report · rationale</summary>
                         <dl className={styles.original}>
                             <dt>Original title</dt>
                             <dd>{topic.title}</dd>
-                            <dt>What the sources report</dt>
-                            <dd>
-                                {topic.facts.map((fact, index) => (
-                                    <div key={index}>
-                                        <p>{fact.text}</p>
-                                        {refs(fact.refs)}
-                                    </div>
-                                ))}
-                            </dd>
                             <dt>Why it merits discussion</dt>
                             <dd>{topic.whyItMatters}</dd>
                             <dt>Decision question</dt>
                             <dd>{topic.decisionQuestion}</dd>
                             <dt>Proposed next step · AI suggestion</dt>
                             <dd>{topic.proposedNextStep || "None supplied."}</dd>
-                            <dt>Unknowns</dt>
-                            <dd>
-                                {topic.unknowns.length ? (
-                                    <ul>
-                                        {topic.unknowns.map((value, index) => (
-                                            <li key={index}>{value}</li>
-                                        ))}
-                                    </ul>
-                                ) : (
-                                    "None supplied."
-                                )}
-                            </dd>
-                            <dt>Conflicts</dt>
-                            <dd>
-                                {topic.conflicts.length
-                                    ? topic.conflicts.map((conflict, index) => (
-                                          <div key={index}>
-                                              <p>{conflict.text}</p>
-                                              {refs(conflict.refs)}
-                                          </div>
-                                      ))
-                                    : "None supplied."}
-                            </dd>
                             <dt>Rationale</dt>
                             <dd>{topic.rationale}</dd>
                         </dl>

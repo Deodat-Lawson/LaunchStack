@@ -597,11 +597,9 @@ function WeeklyView({
     selectedId: string | null;
 }) {
     const report = data.state.report;
-    const presentationBrief = report?.topics.some(
-        topic => topic.title === "Reconcile run-17 samples before a privacy go/no-go"
-    )
-        ? "QA and Operations report different deletion results; their account samples may differ. No named privacy reviewer's approval is recorded in the supplied evidence."
-        : report?.summary;
+    const presentationBrief = report
+        ? `${report.topics.length} recommendations ready for review. Keeping a topic does not create an action.`
+        : "No report was present in the captured sample.";
     return (
         <>
             <section className={s.summary}>

@@ -8,6 +8,14 @@ import "./src/env";
 const useStandalone = process.env.STANDALONE_BUILD === "1" || process.platform !== "win32";
 
 const config: NextConfig = {
+    // The local decision preview has a full-height mobile review footer.
+    // Keep the development indicator from covering its controls in this mode only.
+    devIndicators:
+        process.env.NODE_ENV === "development" &&
+        process.env.VANTAGE_CONTEXT_DEMO_ENABLED === "true" &&
+        process.env.VANTAGE_CONTEXT_DEMO_APP_PORT === "3111"
+            ? false
+            : undefined,
     // Standalone output for Docker deployment (smaller production image).
     // outputFileTracingRoot pins the workspace root so Next traces workspace
     // packages (@launchstack/engine, @launchstack/pipelines) into the standalone

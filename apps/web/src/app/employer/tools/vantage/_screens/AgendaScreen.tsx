@@ -28,7 +28,7 @@ import {
 } from "../api";
 import { TopicDialog, DecisionDialog } from "../_components/TopicDialogs";
 import { SourceDialog, SourceLinks } from "../_components/SourceDialog";
-import { BasisTag, FormError, StatusWord } from "../_components/Primitives";
+import { BasisTag, FormError } from "../_components/Primitives";
 import { vantagePath } from "../_lib/paths";
 import {
     calendarAdd,
@@ -38,6 +38,7 @@ import {
     validReportingDate,
 } from "../_lib/reporting";
 import { weekRange } from "../_lib/format";
+import { NativeTopicDetailSheet } from "../_components/NativeTopicDetailSheet";
 
 export function AgendaScreen({ week }: { week?: string | null }) {
     const normalized = week && validReportingDate(week) ? mondayOf(week) : (week ?? undefined);
@@ -356,7 +357,17 @@ function WeeklyAgenda({ week }: { week?: string }) {
                 <SkeletonRows rows={3} height={100} />
             ) : agenda ? (
                 <>
-                    <ReportMetadata agenda={agenda} />
+                    <details className="border-line rounded-lg border px-4 py-3">
+                        <summary className="text-ink-3 cursor-pointer text-xs">
+                            Report details
+                        </summary>
+                        <div className="mt-3">
+                            <p className="text-ink-3 mb-3 text-xs">
+                                Saved version {agenda.version}
+                            </p>
+                            <ReportMetadata agenda={agenda} />
+                        </div>
+                    </details>
                     <section
                         className="border-line bg-panel rounded-xl border p-5"
                         aria-label="Report summary"
@@ -369,13 +380,23 @@ function WeeklyAgenda({ week }: { week?: string }) {
                                 {agenda.topics.filter(t => t.decision).length}{" "}
                                 {agenda.topics.filter(t => t.decision).length === 1
                                     ? "decision"
-                                    : "decisions"}{" "}
-                                · Saved version {agenda.version}
+                                    : "decisions"}
                             </span>
                         </div>
-                        <p className="text-ink-2 whitespace-pre-wrap text-sm leading-relaxed">
-                            {agenda.summary ?? "No summary was saved for this report."}
+                        <p className="text-ink-2 text-sm leading-relaxed">
+                            {agenda.topics.filter(topic => topic.status !== "dismissed").length}{" "}
+                            topics available for review. Open a topic to prepare your decision.
                         </p>
+                        {agenda.summary && (
+                            <details className="mt-3">
+                                <summary className="text-ink-3 cursor-pointer text-xs">
+                                    Read full summary
+                                </summary>
+                                <p className="text-ink-2 mt-3 whitespace-pre-wrap text-sm leading-relaxed">
+                                    {agenda.summary}
+                                </p>
+                            </details>
+                        )}
                         {agenda.execution?.outcome === "empty" && (
                             <p className="text-ink-2 mt-3 text-sm">
                                 Generation completed with no eligible evidence. Add evidence or
@@ -412,64 +433,16 @@ function WeeklyAgenda({ week }: { week?: string }) {
                             Write a topic
                         </Button>
                     </div>
-                    <div className="flex flex-col gap-4">
-                        {topics.map((topic, index) => (
-                            <article
-                                key={topic.id}
-                                className="border-line bg-panel overflow-hidden rounded-xl border"
-                                aria-label={topic.title}
-                            >
+                    <div className="border-line bg-panel divide-line divide-y overflow-hidden rounded-xl border">
+                        {topics.map(topic => (
+                            <NativeTopicDetailSheet key={topic.id} topic={topic}>
                                 <div className="p-5">
-                                    <div className="mb-3 flex flex-wrap items-center gap-2">
-                                        <span className="text-ink-3 font-mono text-xs">
-                                            {String(index + 1).padStart(2, "0")}
-                                        </span>
-                                        <StatusWord
-                                            tone={topic.status === "kept" ? "success" : "neutral"}
-                                        >
-                                            {topic.status}
-                                        </StatusWord>
-                                        <span className="text-ink-3 text-xs">
-                                            {topic.origin === "ai"
-                                                ? "AI suggestion"
-                                                : topic.origin === "rules"
-                                                  ? "Rules suggestion"
-                                                  : "Human topic"}{" "}
-                                            · Content version {topic.contentVersion}
-                                        </span>
-                                    </div>
-                                    <h2 className="text-ink display text-lg">{topic.title}</h2>
                                     <div className="mt-4 grid gap-4">
-                                        <div>
-                                            <BasisTag basis="observed" />
-                                            <ul className="mt-2 space-y-3">
-                                                {topic.facts.map((fact, i) => (
-                                                    <li key={i} className="text-ink text-sm">
-                                                        <p className="whitespace-pre-wrap">
-                                                            {fact.text}
-                                                        </p>
-                                                        {(fact.unsupported === true ||
-                                                            !fact.refs.length) && (
-                                                            <p className="text-warn mt-1 text-xs">
-                                                                No verified supporting source on
-                                                                file.
-                                                            </p>
-                                                        )}
-                                                        <SourceLinks
-                                                            refs={fact.refs}
-                                                            onOpen={setSource}
-                                                        />
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                            {!topic.facts.length && (
-                                                <p className="text-ink-3 mt-2 text-sm">
-                                                    No facts recorded.
-                                                </p>
-                                            )}
-                                        </div>
                                         {topic.whyItMatters && (
                                             <div>
+                                                <h3 className="text-ink text-sm font-medium">
+                                                    Why this matters
+                                                </h3>
                                                 <BasisTag basis="interpretation" />
                                                 <p className="text-ink-2 mt-2 whitespace-pre-wrap text-sm">
                                                     {topic.whyItMatters}
@@ -477,9 +450,9 @@ function WeeklyAgenda({ week }: { week?: string }) {
                                             </div>
                                         )}
                                         {topic.decisionQuestion && (
-                                            <div className="bg-panel-2 rounded-lg p-3">
-                                                <p className="text-ink-3 text-xs font-medium">
-                                                    Decision to make
+                                            <div>
+                                                <p className="text-ink text-sm font-medium">
+                                                    Key question
                                                 </p>
                                                 <p className="text-ink mt-1 text-sm font-medium">
                                                     {topic.decisionQuestion}
@@ -488,6 +461,9 @@ function WeeklyAgenda({ week }: { week?: string }) {
                                         )}
                                         {topic.proposedNextStep && (
                                             <div>
+                                                <h3 className="text-ink text-sm font-medium">
+                                                    Suggested next step
+                                                </h3>
                                                 <BasisTag basis="suggestion" />
                                                 <p className="text-ink-2 mt-2 text-sm">
                                                     {topic.proposedNextStep}
@@ -498,38 +474,86 @@ function WeeklyAgenda({ week }: { week?: string }) {
                                                 </p>
                                             </div>
                                         )}
-                                        {topic.unknowns.length > 0 && (
-                                            <div>
-                                                <BasisTag basis="unknown" />
-                                                <ul className="text-ink-2 mt-2 list-inside list-disc text-sm">
-                                                    {topic.unknowns.map((item, i) => (
-                                                        <li key={i}>{item}</li>
-                                                    ))}
-                                                </ul>
+                                        <details className="border-line rounded-lg border p-3">
+                                            <summary className="text-ink cursor-pointer text-sm font-medium">
+                                                Evidence
+                                            </summary>
+                                            <div className="mt-3">
+                                                <div>
+                                                    <BasisTag basis="observed" />
+                                                    <ul className="mt-2 space-y-3">
+                                                        {topic.facts.map((fact, i) => (
+                                                            <li
+                                                                key={i}
+                                                                className="text-ink text-sm"
+                                                            >
+                                                                <p className="whitespace-pre-wrap">
+                                                                    {fact.text}
+                                                                </p>
+                                                                {(fact.unsupported === true ||
+                                                                    !fact.refs.length) && (
+                                                                    <p className="text-warn mt-1 text-xs">
+                                                                        No verified supporting
+                                                                        source on file.
+                                                                    </p>
+                                                                )}
+                                                                <SourceLinks
+                                                                    refs={fact.refs}
+                                                                    onOpen={setSource}
+                                                                />
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                    {!topic.facts.length && (
+                                                        <p className="text-ink-3 mt-2 text-sm">
+                                                            No facts recorded.
+                                                        </p>
+                                                    )}
+                                                </div>
                                             </div>
-                                        )}
-                                        {topic.conflicts.map((conflict, i) => (
-                                            <div key={i}>
-                                                <BasisTag basis="conflict" />
-                                                <p className="text-ink-2 mt-2 text-sm">
-                                                    {conflict.text}
+                                        </details>
+                                        <details className="border-line rounded-lg border p-3">
+                                            <summary className="text-ink cursor-pointer text-sm font-medium">
+                                                More details
+                                            </summary>
+                                            <div className="mt-3 grid gap-4">
+                                                {topic.unknowns.length > 0 && (
+                                                    <div>
+                                                        <BasisTag basis="unknown" />
+                                                        <ul className="text-ink-2 mt-2 list-inside list-disc text-sm">
+                                                            {topic.unknowns.map((item, i) => (
+                                                                <li key={i}>{item}</li>
+                                                            ))}
+                                                        </ul>
+                                                    </div>
+                                                )}
+                                                {topic.conflicts.map((conflict, i) => (
+                                                    <div key={i}>
+                                                        <BasisTag basis="conflict" />
+                                                        <p className="text-ink-2 mt-2 text-sm">
+                                                            {conflict.text}
+                                                        </p>
+                                                        <SourceLinks
+                                                            refs={conflict.refs}
+                                                            onOpen={setSource}
+                                                        />
+                                                    </div>
+                                                ))}
+                                                {topic.rationale && (
+                                                    <p className="text-ink-3 text-xs">
+                                                        Rationale: {topic.rationale}
+                                                    </p>
+                                                )}
+                                                {topic.helpRequested && (
+                                                    <p className="text-ink-2 text-sm">
+                                                        Help requested: {topic.helpRequested}
+                                                    </p>
+                                                )}
+                                                <p className="text-ink-3 text-xs">
+                                                    Content version {topic.contentVersion}
                                                 </p>
-                                                <SourceLinks
-                                                    refs={conflict.refs}
-                                                    onOpen={setSource}
-                                                />
                                             </div>
-                                        ))}
-                                        {topic.rationale && (
-                                            <p className="text-ink-3 text-xs">
-                                                Rationale: {topic.rationale}
-                                            </p>
-                                        )}
-                                        {topic.helpRequested && (
-                                            <p className="text-ink-2 text-sm">
-                                                Help requested: {topic.helpRequested}
-                                            </p>
-                                        )}
+                                        </details>
                                         {topic.decision && (
                                             <div className="border-success/30 rounded-lg border p-3">
                                                 <p className="text-success text-xs font-semibold">
@@ -702,7 +726,7 @@ function WeeklyAgenda({ week }: { week?: string }) {
                                             </section>
                                         );
                                     })}
-                            </article>
+                            </NativeTopicDetailSheet>
                         ))}
                         {topics.length === 0 && (
                             <p className="text-ink-3 border-line rounded-lg border border-dashed p-6 text-center text-sm">

@@ -294,15 +294,12 @@ function ContextDemoWeek({
             </div>
             <p className="text-ink-3 -mt-3 text-xs leading-relaxed">
                 {replayMode
-                    ? "Offline replay uses a recorded synthetic model response, with current authorized source bindings and guarded storage. No fresh AI call occurs."
-                    : "Generation explicitly calls the configured model and saves this contextual report only after validation."}{" "}
+                    ? "Synthetic recorded replay · no fresh AI call."
+                    : "AI-generated suggestions for your review."}{" "}
                 Reviews record your choice; they do not create actions.
             </p>
             {personalEnabled && (
-                <section
-                    aria-label="Joseph personal context"
-                    className="border-line bg-panel rounded-lg border px-4 py-3"
-                >
+                <section aria-label="Joseph personal context" className="border-line border-b py-3">
                     <details
                         open={personalOpen}
                         onToggle={event => setPersonalOpen(event.currentTarget.open)}
@@ -318,48 +315,48 @@ function ContextDemoWeek({
                             original context.
                         </p>
                         {personalOpen && <PersonalContextPanel client={personalClient} />}
-                    </details>
-                    <p role="status" className="text-ink-3 mt-2 text-xs leading-relaxed">
-                        {personalReady === null
-                            ? "Checking Joseph required context before generation."
-                            : personalReady
-                              ? "Joseph required context is ready for the next generation."
-                              : (personalBlocker ??
-                                "Joseph required context is incomplete. Inspect coverage before generation.")}
-                    </p>
-                    {personalBlocked && (
-                        <p className="text-ink-3 mt-2 text-xs">
-                            Generation is blocked until required context is ready. Earlier report,
-                            citations and human reviews remain available; no company review status
-                            is inferred.
+                        <p role="status" className="text-ink-3 mt-2 text-xs leading-relaxed">
+                            {personalReady === null
+                                ? "Checking Joseph required context before generation."
+                                : personalReady
+                                  ? "Joseph required context is ready for the next generation."
+                                  : (personalBlocker ??
+                                    "Joseph required context is incomplete. Inspect coverage before generation.")}
                         </p>
-                    )}
+                        {personalBlocked && (
+                            <p className="text-ink-3 mt-2 text-xs">
+                                Generation is blocked until required context is ready. Earlier
+                                report, citations and human reviews remain available; no company
+                                review status is inferred.
+                            </p>
+                        )}
+                    </details>
                 </section>
             )}
             {data?.companyArchitecture && !withheld && !state.error && (
                 <section
                     aria-label="Available Company Architecture"
-                    className="border-line bg-panel flex flex-wrap items-center justify-between gap-3 rounded-lg border px-4 py-3"
+                    className="border-line text-ink-3 border-b py-3 text-xs"
                 >
-                    <div className="min-w-0">
-                        <p className="text-ink text-sm font-medium">
-                            Company Architecture{" "}
-                            <span className="text-ink-3 font-normal">
-                                · {data.companyArchitecture.reviewState ?? "unreviewed"}
-                            </span>
+                    <details>
+                        <summary className="cursor-pointer">
+                            Company Architecture ·{" "}
+                            {data.companyArchitecture.reviewState ?? "unreviewed"}
+                        </summary>
+                        <p className="mt-3 leading-relaxed">
+                            Current authorized company context. Inspect the supplied facts, exact
+                            version and provenance before relying on this unreviewed profile.
                         </p>
-                        <p className="text-ink-3 mt-1 text-xs">
-                            Current authorized company context, available before generation.
-                        </p>
-                    </div>
-                    <Button
-                        size="sm"
-                        variant="outline"
-                        disabled={!data.nativeAgendaId || locked}
-                        onClick={() => setSource(data.companyArchitecture!.source)}
-                    >
-                        Inspect Company Architecture
-                    </Button>
+                        <Button
+                            className="mt-3"
+                            size="sm"
+                            variant="outline"
+                            disabled={!data.nativeAgendaId || locked}
+                            onClick={() => setSource(data.companyArchitecture!.source)}
+                        >
+                            Inspect Company Architecture
+                        </Button>
+                    </details>
                 </section>
             )}
             {(state.error ?? error) && (
@@ -404,19 +401,9 @@ function ContextDemoWeek({
                                                 ? "Recorded AI replay · no fresh model call"
                                                 : "Context-aware · AI"}
                                         </Badge>
-                                        {report.execution.replay && (
-                                            <span className="text-ink-3 text-xs">
-                                                Original response:{" "}
-                                                {report.execution.replay.originalModelId},{" "}
-                                                {report.execution.replay.recordedAt}
-                                            </span>
-                                        )}
-                                        <span className="text-ink-3 text-xs">
-                                            Saved {new Date(report.generatedAt).toLocaleString()}
-                                        </span>
                                     </div>
                                     <h2 className="text-ink mb-2 text-sm font-semibold">
-                                        Weekly Summary
+                                        Weekly insight
                                     </h2>
                                     <p className="text-ink-2 text-[13px] leading-relaxed">
                                         {
@@ -424,8 +411,7 @@ function ContextDemoWeek({
                                                 topic => topic.status !== "dismissed"
                                             ).length
                                         }{" "}
-                                        discussion topics ready for your review. Read the issue,
-                                        inspect the evidence, and record your decision.
+                                        discussion topics to review this week.
                                     </p>
                                     <details className="text-ink-3 mt-2 text-xs">
                                         <summary className="cursor-pointer">
@@ -611,10 +597,22 @@ function ExecutionDetails({
     return (
         <details className="border-line text-ink-3 rounded-lg border px-4 py-3 text-xs">
             <summary className="cursor-pointer">
-                Saved report details · {report.execution.modelId} ·{" "}
-                {report.diagnostics.sources.length} sources
+                Saved report details {"\u00b7"} {report.diagnostics.sources.length} sources
             </summary>
             <dl className="mt-3 grid grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-2">
+                <dt>Model</dt>
+                <dd>{report.execution.modelId}</dd>
+                <dt>Saved</dt>
+                <dd>{new Date(report.generatedAt).toLocaleString()}</dd>
+                {report.execution.replay && (
+                    <>
+                        <dt>Original recorded response</dt>
+                        <dd>
+                            {report.execution.replay.originalModelId} ·{" "}
+                            {report.execution.replay.recordedAt}
+                        </dd>
+                    </>
+                )}
                 <dt>Generation</dt>
                 <dd>
                     {report.execution.mode === "replay" ? (

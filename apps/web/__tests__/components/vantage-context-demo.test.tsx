@@ -154,6 +154,13 @@ afterEach(() => {
     globalThis.fetch = originalFetch;
 });
 
+async function companyInspection() {
+    const section = await screen.findByRole("region", { name: "Available Company Architecture" });
+    const details = section.querySelector("details")!;
+    if (!details.open) fireEvent.click(details.querySelector("summary")!);
+    return within(section).getByRole("button", { name: "Inspect Company Architecture" });
+}
+
 async function savedSummary(text: string) {
     const value = await screen.findByText(text);
     const details = value.closest("details");
@@ -195,7 +202,7 @@ it("loads saved context and native pending questions without automatically calli
 it("allows exact authorized Company Architecture inspection before a contextual report exists", async () => {
     mockLoad.mockResolvedValue(state({ report: null }));
     render(<ContextDemoScreen />);
-    fireEvent.click(await screen.findByRole("button", { name: "Inspect Company Architecture" }));
+    fireEvent.click(await companyInspection());
     const dialog = await screen.findByRole("dialog", { name: "Company Architecture" });
     expect(await within(dialog).findByText("Synthetic Orbit")).toBeVisible();
     expect(within(dialog).getByText("unreviewed")).toBeVisible();
@@ -234,7 +241,7 @@ it("attributes every same-labeled architecture responsibility to its supplied su
     mockLoad.mockResolvedValue(state({ report: null, companyArchitecture: rich }));
     mockSource.mockResolvedValue(rich);
     render(<ContextDemoScreen />);
-    fireEvent.click(await screen.findByRole("button", { name: "Inspect Company Architecture" }));
+    fireEvent.click(await companyInspection());
     const dialog = await screen.findByRole("dialog", { name: "Company Architecture" });
     expect(await within(dialog).findByText("Responsibilities · Engineering")).toBeVisible();
     expect(within(dialog).getByText("Responsibilities · Operations")).toBeVisible();
@@ -268,7 +275,7 @@ it("does not infer a per-fact basis from the profile-level review state", async 
     mockLoad.mockResolvedValue(state({ report: null, companyArchitecture: unclassified }));
     mockSource.mockResolvedValue(unclassified);
     render(<ContextDemoScreen />);
-    fireEvent.click(await screen.findByRole("button", { name: "Inspect Company Architecture" }));
+    fireEvent.click(await companyInspection());
     const dialog = await screen.findByRole("dialog", { name: "Company Architecture" });
     expect(await within(dialog).findByText("Responsibilities · Engineering")).toBeVisible();
     expect(within(dialog).getByText("unreviewed")).toBeVisible();
@@ -303,7 +310,7 @@ it("names exact market, service and project paths without changing their capture
     mockLoad.mockResolvedValue(state({ report: null, companyArchitecture: rich }));
     mockSource.mockResolvedValue(rich);
     render(<ContextDemoScreen />);
-    fireEvent.click(await screen.findByRole("button", { name: "Inspect Company Architecture" }));
+    fireEvent.click(await companyInspection());
     const dialog = await screen.findByRole("dialog", { name: "Company Architecture" });
     expect(await within(dialog).findByText("Target customers")).toBeVisible();
     expect(within(dialog).getByText("Product or service")).toBeVisible();
@@ -358,7 +365,7 @@ it("offers explicitly labeled offline replay before any contextual report exists
     const buttons = await screen.findAllByRole("button", { name: "Replay recorded report" });
     expect(buttons).toHaveLength(2);
     expect(screen.queryByRole("button", { name: "Generate with context" })).not.toBeInTheDocument();
-    expect(screen.getByText(/No fresh AI call occurs/)).toBeVisible();
+    expect(screen.getByText(/Synthetic recorded replay.*no fresh AI call/)).toBeVisible();
     expect(screen.queryByText(/ready to call the configured model/)).not.toBeInTheDocument();
     expect(mockGenerate).not.toHaveBeenCalled();
     fireEvent.click(buttons[0]!);
@@ -375,14 +382,12 @@ it("shows recorded model provenance without presenting replay timing as a fresh 
     mockLoad.mockResolvedValue(state({ report: recordedReplay(), generationMode: "replay" }));
     render(<ContextDemoScreen />);
     expect(await screen.findByText("Recorded AI replay · no fresh model call")).toBeVisible();
-    expect(screen.getByText(/Original response: gpt-6-luna-2026-09-22/)).toHaveTextContent(
-        "2026-10-26T19:12:55.000Z"
-    );
+    expect(screen.getByText(/gpt-6-luna-2026-09-22/)).toHaveTextContent("2026-10-26T19:12:55.000Z");
     fireEvent.click(screen.getByText(/Saved report details ·/));
     expect(screen.getByText("Recorded replay · no model call")).toBeVisible();
     expect(screen.queryByText(/AI · 0 attempts/)).not.toBeInTheDocument();
     expect(screen.queryByText("Context-aware · AI")).not.toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Inspect Company Architecture" })).toBeEnabled();
+    expect(await companyInspection()).toBeEnabled();
     expect(screen.getByRole("region", { name: "Native pending queue" })).toBeVisible();
     expect(mockGenerate).not.toHaveBeenCalled();
 });
@@ -642,7 +647,7 @@ it("keeps the saved contextual report and citations visible while Joseph require
     expect(details).toHaveTextContent("restarting the server resets them");
     expect(details).toHaveTextContent("not browser storage or production PostgreSQL");
     expect(screen.getByText(report().summary)).toBeVisible();
-    expect(screen.getByRole("button", { name: "Inspect Company Architecture" })).toBeEnabled();
+    expect(await companyInspection()).toBeEnabled();
     const topic = await openTopicEvidence();
     expect(within(topic).getByRole("button", { name: /QA sample record/ })).toBeEnabled();
     expect(mockGenerate).not.toHaveBeenCalled();
@@ -756,11 +761,19 @@ it("keeps the row compact and opens the unchanged report in a keyboard-dismissab
     trigger.focus();
     fireEvent.click(trigger);
     const detail = screen.getByRole("dialog", { name: "Compare the recorded sample" });
-    expect(within(detail).getByText("Issue")).toBeVisible();
+    expect(within(row).queryByText(report().topics[0]!.facts[0]!.text)).not.toBeInTheDocument();
+    expect(within(detail).getByRole("heading", { name: "Key decision" })).toBeVisible();
     expect(
         within(detail).getByRole("heading", { name: /Why this matters.*AI interpretation/ })
     ).toBeVisible();
     expect(within(detail).queryByText("Owner")).not.toBeInTheDocument();
+    expect(within(detail).getByRole("heading", { name: /Suggested next step/ })).toBeVisible();
+    const unknowns = within(detail)
+        .getByText(/^Unknowns/)
+        .closest("details")!;
+    expect(unknowns).not.toHaveAttribute("open");
+    fireEvent.click(unknowns.querySelector("summary")!);
+    expect(within(unknowns).getByText("Whether the samples overlap.")).toBeVisible();
     const evidenceSummary = within(detail).getByText(/^Evidence/);
     expect(evidenceSummary.closest("details")).not.toHaveAttribute("open");
     fireEvent.click(evidenceSummary);
@@ -774,12 +787,27 @@ it("keeps the row compact and opens the unchanged report in a keyboard-dismissab
     fireEvent.click(statementsSummary);
     expect(within(statements).getByText(qa.body)).toBeVisible();
     fireEvent.click(within(detail).getByText(/^Original report/));
-    expect(within(detail).getByText(report().topics[0]!.proposedNextStep)).toBeVisible();
+    expect(within(detail).getAllByText(report().topics[0]!.proposedNextStep)[0]).toBeVisible();
     expect(within(detail).getByText(report().topics[0]!.rationale)).toBeVisible();
     fireEvent.keyDown(document.activeElement ?? detail, { key: "Escape" });
     await waitFor(() => expect(screen.queryByRole("dialog")).not.toBeInTheDocument());
     expect(trigger).toHaveFocus();
     expect(JSON.stringify(saved)).toBe(before);
     expect(mockReview).not.toHaveBeenCalled();
+    expect(mockGenerate).not.toHaveBeenCalled();
+});
+
+it("keeps company context and detailed generation metadata secondary on initial load", async () => {
+    render(<ContextDemoScreen />);
+    const architecture = await screen.findByRole("region", {
+        name: "Available Company Architecture",
+    });
+    expect(architecture.querySelector("details")).not.toHaveAttribute("open");
+    expect(architecture).toHaveTextContent("unreviewed");
+    expect(within(architecture).getByRole("button")).not.toBeVisible();
+    expect(screen.getByRole("heading", { name: "Weekly insight" })).toBeVisible();
+    expect(screen.getByText("1 discussion topics to review this week.")).toBeVisible();
+    expect(screen.getByText(report().execution.modelId)).not.toBeVisible();
+    expect(screen.getByText(report().summary)).not.toBeVisible();
     expect(mockGenerate).not.toHaveBeenCalled();
 });

@@ -80,10 +80,13 @@ export function blendedPerMillion(pricing: ChatModelPricing): number {
     return (3 * pricing.input + pricing.output) / 4;
 }
 
-/** What one standard chat token costs: the unit every other kind converts into. */
-export function standardChatPrice(): ChatPrice {
-    const configured = priceFromEnv(env.server.AI_USAGE_CHAT_PRICE_PER_MTOK);
-    if (configured !== null && configured > 0) return { perMillion: configured, source: "setting" };
+/**
+ * The Standard (`default` route) model's own price, blended, when it has one:
+ * declared in the model file, else its `AI_USAGE_PRICES` entry. What every
+ * other chat model is weighed against, so the Standard model itself always
+ * counts one for one.
+ */
+export function standardModelPerMillion(): number | null {
     try {
         const config = getAppChatModelsConfig(env.server);
         const standard = config.models.get(config.routes.default);
@@ -91,10 +94,23 @@ export function standardChatPrice(): ChatPrice {
         const pricing =
             standard?.pricing ?? (listed && "pricing" in listed ? listed.pricing : undefined);
         const blended = pricing ? blendedPerMillion(pricing) : 0;
-        if (blended > 0) return { perMillion: blended, source: "model" };
+        return blended > 0 ? blended : null;
     } catch {
-        // No readable model file (a test, a half-configured server): use the default.
+        // No readable model file (a test, a half-configured server).
+        return null;
     }
+}
+
+/**
+ * What one standard chat token costs: the unit embeddings and searches
+ * convert into. `AI_USAGE_CHAT_PRICE_PER_MTOK` moves only those; chat is
+ * always weighed against the Standard model's own price.
+ */
+export function standardChatPrice(): ChatPrice {
+    const configured = priceFromEnv(env.server.AI_USAGE_CHAT_PRICE_PER_MTOK);
+    if (configured !== null && configured > 0) return { perMillion: configured, source: "setting" };
+    const standard = standardModelPerMillion();
+    if (standard !== null) return { perMillion: standard, source: "model" };
     return { perMillion: DEFAULT_CHAT_PRICE_PER_MTOK, source: "default" };
 }
 
@@ -197,10 +213,11 @@ export function weighUsage(
                 ...(event.costUsd !== undefined ? { costUsd: event.costUsd } : {}),
             };
         }
+        // Against the Standard model's own price, so it stays one for one
+        // whatever AI_USAGE_CHAT_PRICE_PER_MTOK says; with none, the unit's.
+        const standard = standardModelPerMillion() ?? chatPrice.perMillion;
         return {
-            weightedTokens: wholeTokensUp(
-                (tokens * blendedPerMillion(rate.pricing)) / chatPrice.perMillion
-            ),
+            weightedTokens: wholeTokensUp((tokens * blendedPerMillion(rate.pricing)) / standard),
             costUsd: event.costUsd ?? priceUsage(event, rate.pricing),
         };
     }

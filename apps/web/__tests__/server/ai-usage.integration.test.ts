@@ -49,7 +49,6 @@ describeDb("AI usage meter", () => {
     let kindsCompanyId: bigint;
     const today = new Date();
     const date = today.toISOString().slice(0, 10);
-    const since = new Date(Date.now() - 7 * 86_400_000).toISOString().slice(0, 10);
     // With no search in the window, the page quotes the configured provider's rate.
     const searchKeys = ["EXA_API_KEY", "SERPER_API_KEY", "SEARCH_PROVIDER"] as const;
     const savedSearchKeys = new Map<string, string | undefined>();

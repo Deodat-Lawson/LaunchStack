@@ -221,7 +221,7 @@
       },
       "memberMonthlyTokenLimit": {
         "label": "AI limit per person",
-        "description": "The AI tokens each person may use in this workspace a month, unless you set their own limit below. Chat counts token for token; embeddings and web searches count by what they cost. Resets on the 1st (UTC). 0 means no limit.",
+        "description": "The AI each person may use in this workspace a month, unless you set their own limit below, in chat-token equivalents: a token on the standard chat model counts one, other models by their price against it, and embeddings and web searches by what they cost. Resets on the 1st (UTC). 0 means no limit.",
         "consequence": "Applies at once. Someone already past the new limit can't start AI work until it resets.",
         "unit": "tokens a month"
       }
@@ -348,7 +348,7 @@
     },
     "aiAllowance": {
       "title": "Your AI allowance this month",
-      "description": "The AI tokens your work used in this workspace since the 1st (UTC): chat token for token, embeddings and web searches by what they cost.",
+      "description": "The AI your work used in this workspace since the 1st (UTC), in chat-token equivalents: a token on the standard chat model counts one, other models count by their price against it, and embeddings and web searches by what they cost.",
       "loadFailed": "Couldn't load your AI allowance.",
       "loadFailedStatus": "Couldn't load your AI allowance ({status}).",
       "usedOf": "{used} of {limit} tokens",
@@ -1584,7 +1584,7 @@
     },
     "members": {
       "title": "AI limits per person",
-      "description": "What each person used of their AI allowance this month, in tokens: chat token for token, embeddings and web searches by what they cost. Limits reset on the 1st (UTC); when the server sets a cap too, the tighter one applies.",
+      "description": "What each person used of their AI allowance this month, in chat-token equivalents: a token on the standard chat model counts one, other models by their price against it, and embeddings and web searches by what they cost. Limits reset on the 1st (UTC); when the server sets a cap too, the tighter one applies.",
       "serverCap": "This server caps each person at {limit} tokens a month across all their workspaces, on the server's own models. Whoever runs the server sets it; it can't be changed here.",
       "serverCapNotHere": "This server caps each person at {limit} tokens a month on its own models. It doesn't apply here: this workspace runs on its own model.",
       "loadFailed": "Couldn't load the AI limits per person.",
@@ -1610,7 +1610,7 @@
       "unattributed": "Not tied to a person: {tokens} tokens this month, from background work and from before use was counted per person.",
       "dialog": {
         "title": "AI limit for {name}",
-        "description": "The AI tokens they may use in this workspace a month: chat token for token, embeddings and web searches by what they cost. Resets on the 1st (UTC).",
+        "description": "The AI they may use in this workspace a month, in chat-token equivalents: a token on the standard chat model counts one, other models by their price against it, and embeddings and web searches by what they cost. Resets on the 1st (UTC).",
         "choiceLabel": "Limit",
         "default": "Workspace default ({limit} tokens)",
         "defaultNone": "Workspace default (no limit)",
@@ -1634,7 +1634,7 @@
       "searchDetail": "{searches, plural, one {# search} other {# searches}}",
       "searchPagesDetail": "{searches, plural, one {# search} other {# searches}} · {pages, plural, one {# page} other {# pages}} read",
       "none": "None in this window",
-      "rates": "Converted by price: a million embedded tokens counts as {embedding}, and one web search as {search}, against a chat token at {price} per 1M.",
+      "rates": "Converted by price. In this window a million embedded tokens counted as {embedding} on average, and one web search as {search}. A standard chat token is priced at {price} per 1M today.",
       "item": "{label} {value}",
       "splitLabel": "Made up of"
     }

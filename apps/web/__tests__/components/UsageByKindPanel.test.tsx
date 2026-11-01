@@ -59,7 +59,7 @@ describe("ByKindPanel", () => {
         expect(search).toHaveTextContent("286 searches · 98 pages read");
 
         expect(panel).toHaveTextContent(
-            "Converted by price: a million embedded tokens counts as 130K, and one web search as 7,000"
+            "Converted by price. In this window a million embedded tokens counted as 130K on average, and one web search as 7,000. A standard chat token is priced at $1.00 per 1M today."
         );
     });
 

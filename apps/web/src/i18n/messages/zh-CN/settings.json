@@ -221,7 +221,7 @@
       },
       "memberMonthlyTokenLimit": {
         "label": "每人 AI 上限",
-        "description": "每个人每月在此工作区可使用的 AI token，除非你在下方为某人单独设置上限。对话按实际 token 计，嵌入和网页搜索按费用折算。每月 1 日（UTC）重置。0 表示不设上限。",
+        "description": "每个人每月在此工作区可使用的 AI，除非你在下方为某人单独设置上限。以对话 token 当量计：标准对话模型的一个 token 计为 1，其他模型按相对它的价格计，嵌入和网页搜索按费用折算。每月 1 日（UTC）重置。0 表示不设上限。",
         "consequence": "立即生效。已超过新上限的人在重置之前无法开始新的 AI 任务。",
         "unit": "token / 月"
       }
@@ -348,7 +348,7 @@
     },
     "aiAllowance": {
       "title": "你本月的 AI 额度",
-      "description": "自本月 1 日（UTC）起，你在此工作区使用的 AI token：对话按实际 token，嵌入和网页搜索按费用折算。",
+      "description": "自本月 1 日（UTC）起，你在此工作区使用的 AI，以对话 token 当量计：标准对话模型的一个 token 计为 1，其他模型按相对它的价格计，嵌入和网页搜索按费用折算。",
       "loadFailed": "无法加载你的 AI 额度。",
       "loadFailedStatus": "无法加载你的 AI 额度（{status}）。",
       "usedOf": "已用 {used} / {limit} 个 token",
@@ -1584,7 +1584,7 @@
     },
     "members": {
       "title": "每人 AI 上限",
-      "description": "每个人本月已使用的 AI 额度，以 token 计：对话按实际 token，嵌入和网页搜索按费用折算。上限每月 1 日（UTC）重置；服务器也设置了上限时，以更严格的为准。",
+      "description": "每个人本月已使用的 AI 额度，以对话 token 当量计：标准对话模型的一个 token 计为 1，其他模型按相对它的价格计，嵌入和网页搜索按费用折算。上限每月 1 日（UTC）重置；服务器也设置了上限时，以更严格的为准。",
       "serverCap": "这台服务器限制每人每月最多使用 {limit} 个 token（合计其所有工作区，仅限服务器自己的模型）。该上限由服务器的管理者设置，无法在这里修改。",
       "serverCapNotHere": "这台服务器限制每人每月在其自有模型上最多使用 {limit} 个 token。此上限不适用于这里：此工作区使用自己的模型。",
       "loadFailed": "无法加载每人 AI 上限。",
@@ -1610,7 +1610,7 @@
       "unattributed": "未归属到个人：本月 {tokens} 个 token，来自后台任务以及按人计量之前的用量。",
       "dialog": {
         "title": "{name} 的 AI 上限",
-        "description": "此人每月在此工作区可使用的 AI token：对话按实际 token，嵌入和网页搜索按费用折算。每月 1 日（UTC）重置。",
+        "description": "此人每月在此工作区可使用的 AI，以对话 token 当量计：标准对话模型的一个 token 计为 1，其他模型按相对它的价格计，嵌入和网页搜索按费用折算。每月 1 日（UTC）重置。",
         "choiceLabel": "上限",
         "default": "工作区默认（{limit} 个 token）",
         "defaultNone": "工作区默认（不设上限）",
@@ -1634,7 +1634,7 @@
       "searchDetail": "{searches, number} 次搜索",
       "searchPagesDetail": "{searches, number} 次搜索 · 读取 {pages, number} 个网页",
       "none": "此时间段内没有",
-      "rates": "按费用折算：每一百万个嵌入 token 计为 {embedding}，每次网页搜索计为 {search}，对话 token 按每百万 {price} 计价。",
+      "rates": "按费用折算。本时间段内，每一百万个嵌入 token 平均计为 {embedding}，每次网页搜索计为 {search}。目前一个标准对话 token 按每百万 {price} 计价。",
       "item": "{label} {value}",
       "splitLabel": "构成"
     }

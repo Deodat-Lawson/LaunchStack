@@ -134,6 +134,9 @@ export function PeopleScreen() {
                           counts.docsOpened,
                           counts.aiCalls,
                           counts.aiTokens,
+                          counts.aiSplit.chat,
+                          counts.aiSplit.embedding,
+                          counts.aiSplit.search,
                           counts.costUsd,
                           "",
                           "",
@@ -152,11 +155,14 @@ export function PeopleScreen() {
                 "questions",
                 "files_added",
                 "documents_opened",
-                "ai_calls",
-                "ai_tokens",
+                "ai_requests",
+                "ai_usage_chat_token_equivalents",
+                "ai_usage_chat",
+                "ai_usage_embeddings",
+                "ai_usage_web_search",
                 "estimated_cost_usd",
                 "top_feature",
-                "month_tokens_used",
+                "month_usage_chat_token_equivalents",
                 "month_limit",
                 "last_active",
             ],
@@ -172,6 +178,9 @@ export function PeopleScreen() {
                     person.totals.docsOpened,
                     person.totals.aiCalls,
                     person.totals.aiTokens,
+                    person.totals.aiSplit.chat,
+                    person.totals.aiSplit.embedding,
+                    person.totals.aiSplit.search,
                     person.totals.costUsd,
                     person.topFeature ? format.feature(person.topFeature) : "",
                     person.allowance.used,
@@ -374,8 +383,9 @@ export function PeopleScreen() {
                                                 <UsageSplitLine
                                                     split={person.totals.aiSplit}
                                                     bare
-                                                    // Wraps between kinds, so the split never widens the table.
-                                                    className="ml-auto block max-w-52 whitespace-normal text-[11.5px] font-normal leading-snug"
+                                                    // Only where the table has room: it wraps between kinds, and a
+                                                    // narrower table keeps the split on each person's own page.
+                                                    className="@max-5xl:hidden ml-auto block max-w-52 whitespace-normal text-[11.5px] font-normal leading-snug"
                                                 />
                                             </TableCell>
                                             <TableCell className="@max-md:hidden text-right tabular-nums">

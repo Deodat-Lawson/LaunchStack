@@ -184,9 +184,7 @@ export function OverviewScreen() {
                             )}
                             {data.workspaceOwnedCalls > 0 && (
                                 <StatusNote tone="muted" style={{ marginBottom: 0 }}>
-                                    {t("ownEndpoint", {
-                                        calls: format.num(data.workspaceOwnedCalls),
-                                    })}
+                                    {t("ownEndpoint", { calls: data.workspaceOwnedCalls })}
                                 </StatusNote>
                             )}
                         </div>

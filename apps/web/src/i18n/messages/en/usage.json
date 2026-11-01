@@ -77,7 +77,7 @@
     "ofMembers": "{active} of {members}",
     "costUnpriced": "Set a price in Spending to estimate",
     "unattributed": "{tokens} of AI usage came from work no one person started, such as syncs and scheduled jobs. It counts in the workspace's totals, not anyone's.",
-    "ownEndpoint": "{calls} AI requests went to models this workspace brought itself. Its own provider bills them.",
+    "ownEndpoint": "{calls, plural, one {# AI request} other {# AI requests}} went to models this workspace brought itself. Its own provider bills them.",
     "daily": "Day by day",
     "byFeature": "By feature",
     "byRoute": "By model",
@@ -191,7 +191,7 @@
     "byFeature": "Where your AI use went",
     "costTitle": "Estimated cost",
     "costUnpriced": "No price is set for the models you used, so there is no estimate.",
-    "costBody": "For {calls} AI calls, at the prices this workspace set.",
+    "costBody": "For {calls, plural, one {# AI request} other {# AI requests}}: chat at each model's price, embeddings and web search at list price.",
     "allowanceTitle": "Your AI limit this month",
     "longestStreak": "Longest streak",
     "inThisWindow": "In this window"

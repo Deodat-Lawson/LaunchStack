@@ -77,7 +77,7 @@
     "ofMembers": "{active} / {members}",
     "costUnpriced": "在“支出”中设置价格即可估算",
     "unattributed": "有 {tokens} 的 AI 用量来自不属于任何个人的工作，例如同步和定时任务。它计入工作区总量，不计入任何人。",
-    "ownEndpoint": "有 {calls} 次 AI 请求发往了这个工作区自带的模型，由它自己的服务商计费。",
+    "ownEndpoint": "有 {calls, number} 次 AI 请求发往了这个工作区自带的模型，由它自己的服务商计费。",
     "daily": "每日",
     "byFeature": "按功能",
     "byRoute": "按模型",
@@ -191,7 +191,7 @@
     "byFeature": "你的 AI 用在了哪里",
     "costTitle": "预估费用",
     "costUnpriced": "你用到的模型没有设置价格，因此无法估算。",
-    "costBody": "共 {calls} 次 AI 调用，按工作区设置的价格计算。",
+    "costBody": "共 {calls, number} 次 AI 请求：对话按各模型的价格，嵌入和网页搜索按标价计算。",
     "allowanceTitle": "你本月的 AI 上限",
     "longestStreak": "最长连续活跃",
     "inThisWindow": "这个时间范围内"

@@ -340,6 +340,27 @@ describe("chat weighed by its price against the Standard model's", () => {
         expect(declared.weightedTokens).toBe(4000);
     });
 
+    it("keeps a priced Standard model one for one when AI_USAGE_CHAT_PRICE_PER_MTOK sets the unit", () => {
+        // The setting moves embeddings and searches; chat is weighed against the Standard model.
+        mockEnv.server.AI_USAGE_CHAT_PRICE_PER_MTOK = "1";
+        mockChatModelsConfig.mockReturnValue({
+            models: new Map([["primary", { id: "vendor/standard" }]]),
+            routes: { default: "primary" },
+        });
+        mockEnv.server.AI_USAGE_PRICES = JSON.stringify({
+            chat: { standard: { input: 0.3, output: 2.5 } },
+        });
+        expect(weighUsage(chat({ modelId: "vendor/standard" })).weightedTokens).toBe(4000);
+        // Four times the Standard model's blended 0.85 still counts four.
+        expect(weighUsage(chat({ pricing: { input: 1.2, output: 10 } })).weightedTokens).toBe(
+            16_000
+        );
+        // An embedding is weighed against the $1.00 unit, not the Standard model.
+        expect(weighUsage(embedding("text-embedding-3-large", 1_000_000)).weightedTokens).toBe(
+            130_000
+        );
+    });
+
     it("takes the Standard price from the table when the model file declares none", () => {
         mockChatModelsConfig.mockReturnValue({
             models: new Map([["primary", { id: "vendor/standard" }]]),

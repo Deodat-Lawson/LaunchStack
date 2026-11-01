@@ -75,9 +75,13 @@ export function YouScreen() {
                 "questions",
                 "files_added",
                 "documents_opened",
-                "ai_calls",
-                "ai_input_tokens",
-                "ai_output_tokens",
+                "ai_requests",
+                "ai_usage_chat_token_equivalents",
+                "ai_chat_input_tokens",
+                "ai_chat_output_tokens",
+                "ai_embedded_tokens",
+                "ai_web_searches",
+                "ai_pages_read",
                 "estimated_cost_usd",
             ],
             data.daily.map(day => [
@@ -86,8 +90,12 @@ export function YouScreen() {
                 day.filesAdded,
                 day.docsOpened,
                 day.aiCalls,
+                day.aiTokens,
                 day.inputTokens,
                 day.outputTokens,
+                day.embeddedTokens,
+                day.searches,
+                day.pages,
                 day.costUsd,
             ])
         );
@@ -187,9 +195,7 @@ export function YouScreen() {
                                     <p className="text-ink-3 m-0 mt-1 text-[12.5px] leading-normal">
                                         {data.totals.costUsd === null
                                             ? t("costUnpriced")
-                                            : t("costBody", {
-                                                  calls: format.num(data.totals.aiCalls),
-                                              })}
+                                            : t("costBody", { calls: data.totals.aiCalls })}
                                     </p>
                                 </div>
                             </Panel>

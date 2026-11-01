@@ -264,9 +264,11 @@ defaults, against a chat token at $1.00 per 1M:
 The standard chat token's price is `AI_USAGE_CHAT_PRICE_PER_MTOK` if set, else
 the Standard (`default` route) model's declared `pricing` blended three input
 tokens to one output (see [docs/chat-models.md](./chat-models.md#pricing)), else
-$1.00 per 1M. `AI_USAGE_EMBEDDING_PRICE_PER_MTOK` and
-`AI_USAGE_WEB_SEARCH_PRICE_PER_1K` replace the embedding and search list prices
-for every model and provider.
+$1.00 per 1M. It is the unit embeddings and searches convert into; chat is
+always weighed against the Standard model's own price, so setting
+`AI_USAGE_CHAT_PRICE_PER_MTOK` never takes the Standard model off one for one.
+`AI_USAGE_EMBEDDING_PRICE_PER_MTOK` and `AI_USAGE_WEB_SEARCH_PRICE_PER_1K`
+replace the embedding and search list prices for every model and provider.
 
 ### Prices for new and self-hosted models
 

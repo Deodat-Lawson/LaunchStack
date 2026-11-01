@@ -32,6 +32,8 @@ export type DraftState = {
     anchorPage: string;
     /** Captured quads from PDF selection; empty when user typed the anchor manually. */
     anchorQuads: Array<[number, number, number, number]>;
+    /** A highlight's colour, carried through an edit so saving does not drop it. */
+    anchorColor?: string;
 };
 
 export const EMPTY_DRAFT: DraftState = {
@@ -61,6 +63,7 @@ export function buildAnchorFromDraft(draft: DraftState): NoteAnchorLite | null {
                   kind: "pdf" as const,
                   page: pageNum,
                   quads: draft.anchorQuads,
+                  ...(draft.anchorColor ? { color: draft.anchorColor } : {}),
               }
             : undefined;
     return {

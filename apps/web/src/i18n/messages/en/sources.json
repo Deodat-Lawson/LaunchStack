@@ -781,6 +781,8 @@
     "copyTitle": "Copy title",
     "copyLink": "Copy link",
     "share": "Share…",
+    "reembed": "Re-embed",
+    "reembedRunning": "This source is already being processed.",
     "delete": "Delete…",
     "openFolder": "Open folder",
     "newSourceInFolder": "New source in this folder…",
@@ -823,7 +825,9 @@
     "deleteDocument": "Failed to delete document",
     "stillAdding": "This source is still being added",
     "nothingToRetry": "This source has nothing to retry",
-    "retry": "Couldn't retry processing"
+    "retry": "Couldn't retry processing",
+    "nothingToReembed": "This source has nothing to re-embed",
+    "reembed": "Couldn't re-embed this source"
   },
   "sourceUpload": {
     "withReason": "{name}: {reason}",
@@ -896,6 +900,7 @@
       "trackViewFailed": "Unable to track document view",
       "processingStatusFailed": "Failed to fetch processing status",
       "retryFailed": "Could not retry processing",
+      "reembedFailed": "Could not re-embed this source",
       "storageReadFailed": "Failed to retrieve document from storage",
       "serveDocumentFailed": "Failed to serve document",
       "noExtractedText": "No extracted text available for this document. It may still be processing.",
@@ -919,6 +924,11 @@
       "notFailed": "This source isn't failed, so there is nothing to retry.",
       "alreadyRunning": "This source is already being processed.",
       "noJob": "This source has no processing to retry."
+    },
+    "reembed": {
+      "alreadyRunning": "This source is already being processed.",
+      "noFile": "This source has no stored file to read again.",
+      "archive": "An archive is split into the files inside it. Re-embed those files instead."
     },
     "folders": {
       "pathRequired": "A folder path is required.",

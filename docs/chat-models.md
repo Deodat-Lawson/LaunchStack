@@ -285,8 +285,12 @@ workspace directly, and the page says how many calls went there.
 The Standard model's price (the `default` route's, blended three input tokens
 to one output) also sets the rate for chat-token equivalents: embeddings and
 paid web searches count toward usage and allowances by their cost divided by
-what one Standard chat token costs. With no price on that model the rate is
-$1.00 per 1M unless `AI_USAGE_CHAT_PRICE_PER_MTOK` sets one (see
+what one Standard chat token costs, and a priced model on any route counts
+its own blended price over the Standard model's per token. With no price on
+the Standard model, a standard chat token costs $1.00 per 1M unless
+`AI_USAGE_CHAT_PRICE_PER_MTOK` sets one. A model this file doesn't price can be
+priced in `AI_USAGE_PRICES` (a price here wins over its entry there), and a
+workspace prices its own models in Settings › Bring your own keys (see
 [AI allowances per person](./deployment.md#ai-allowances-per-person)).
 
 Like the rest of the file, a price change takes effect on restart of the app

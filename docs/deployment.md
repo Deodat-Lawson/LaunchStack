@@ -229,6 +229,7 @@ being picked up.
 | `AI_USAGE_CHAT_PRICE_PER_MTOK` | Optional | US dollars per 1M standard chat tokens, the price embeddings and web searches are converted against. Default: the Standard model's declared price (three input tokens to one output), else `1.00` — see [AI allowances](#ai-allowances-per-person) |
 | `AI_USAGE_EMBEDDING_PRICE_PER_MTOK` | Optional | US dollars per 1M embedding tokens, for every embedding model. Default: the model's list price (`text-embedding-3-large` $0.13, `-3-small` $0.02, `ada-002` $0.10, `gemini-embedding-001` $0.15; anything else $0.13) |
 | `AI_USAGE_WEB_SEARCH_PRICE_PER_1K` | Optional | US dollars per 1,000 web searches, for every search provider. Default: the provider's list price (Exa $7, Serper $1). Pages Exa reads for company descriptions stay at $2 per 1,000 |
+| `AI_USAGE_PRICES` | Optional | Your own price table for chat, embedding and search models the built-in list doesn't know: inline JSON or a path to a JSON file. Entries are dollar prices or `{ "ratio": n }` — see [Prices for new and self-hosted models](#prices-for-new-and-self-hosted-models) |
 | `LANDING_PUBLIC_URL` | Optional | Origin the public site (`apps/landing`) is served from, read per request. The logo, sign-out, Help, `/privacy` and `/terms` redirect there; set it when you run a prebuilt image |
 | `NEXT_PUBLIC_SITE_URL` | Optional | The same origin, inlined at build time; the fallback when `LANDING_PUBLIC_URL` is unset |
 | `NEXT_PUBLIC_APP_URL` | Optional | Origin this app is served from; where the public site's sign-in links point |
@@ -244,11 +245,13 @@ chat-token equivalents, as the Usage tab reports them, by
 calendar month in UTC, and reset on the 1st.
 
 A chat-token equivalent puts chat, embeddings and paid web searches in one
-unit. A chat token, in or out, on any route, counts as one. An embedding token
-or a web search counts what it costs divided by what one standard chat token
-costs, so cheap, bulky work (embedding a whole document) and expensive, small
-work (one search) each weigh what they cost. At the defaults, against a chat
-token at $1.00 per 1M:
+unit. A chat token, in or out, counts as one, times its model's price over the
+Standard model's when that model has a price, so the Standard model itself
+counts one for one and a model at four times its price counts four. An
+embedding token or a web search counts what it costs divided by what one
+standard chat token costs, so cheap, bulky work (embedding a whole document)
+and expensive, small work (one search) each weigh what they cost. At the
+defaults, against a chat token at $1.00 per 1M:
 
 | Work | Price | Counts as |
 | --- | --- | --- |
@@ -263,7 +266,51 @@ the Standard (`default` route) model's declared `pricing` blended three input
 tokens to one output (see [docs/chat-models.md](./chat-models.md#pricing)), else
 $1.00 per 1M. `AI_USAGE_EMBEDDING_PRICE_PER_MTOK` and
 `AI_USAGE_WEB_SEARCH_PRICE_PER_1K` replace the embedding and search list prices
-for every model and provider. Each call is weighed when it is recorded, so a
+for every model and provider.
+
+### Prices for new and self-hosted models
+
+The built-in list knows a handful of hosted models. For anything else (a new
+release, a model you serve with Ollama or vLLM, another search engine), set
+`AI_USAGE_PRICES` to a JSON price table, inline or as a path to a JSON file
+(relative to the app's working directory, so mount it as you mount the model
+file):
+
+```json
+{
+  "chat": {
+    "gpt-5-mini": { "input": 0.25, "output": 2 },
+    "llama3.1:8b": { "ratio": 0 }
+  },
+  "embedding": { "voyage-3": 0.06, "nomic-embed-text": 0 },
+  "search": { "brave": 5, "searxng": 0 }
+}
+```
+
+- **chat** — US dollars per 1M tokens: `input`, `output`, optional
+  `cachedInput`. It prices the model's calls and sets its weight. A model's
+  own `pricing` in the model file wins over its entry here.
+- **embedding** — US dollars per 1M tokens embedded.
+- **search** — US dollars per 1,000 searches, keyed by provider (`exa`,
+  `serper`, …).
+- **`{ "ratio": n }`** — instead of a price, anywhere: chat-token equivalents
+  per token (chat, embedding) or per search. Use it when a model has no dollar
+  price: `0` makes a local model free toward limits. A ratio weighs usage but
+  never shows a cost.
+
+Keys match model ids and providers without case, with or without a vendor
+prefix (`openai/gpt-5-mini` matches `gpt-5-mini`). Entries win over
+`AI_USAGE_EMBEDDING_PRICE_PER_MTOK` and `AI_USAGE_WEB_SEARCH_PRICE_PER_1K`. An
+entry for the Standard model's id also sets the standard chat token's price
+when the model file declares none. The table is read on start; a table that
+doesn't parse is reported once in the server log, naming the bad entry, and
+ignored, so AI keeps working on the built-in prices.
+
+A workspace that brings its own models (Settings › Bring your own keys) can
+give each one a price there. That price counts toward that workspace's limits
+and shows its cost; the server cap never counts a workspace's own models.
+
+Each call is weighed when it is recorded, so a
 price change applies from then on and never rewrites past usage. When a
 provider reports no embedding token count (Gemini, Ollama, Hugging Face), it is
 estimated at four characters a token. Embedding debits in the credit ledger are

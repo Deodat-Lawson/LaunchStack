@@ -29,6 +29,7 @@ import {
     ALLOWED_TRANSITIONS,
     StageTransitionError,
 } from "@launchstack/pipelines/distribution/stages";
+import { MAX_CUSTOMER_DOMAINS } from "@launchstack/pipelines/distribution/types";
 import type {
     ProgramInput,
     ProgramPatch,
@@ -71,6 +72,7 @@ import {
     excludedBlock,
     inMotion,
     latestCompleted,
+    parseCustomerDomains,
     relationshipTarget,
     searchMatches,
     sortRows,
@@ -121,6 +123,7 @@ const companyNotFound = () => new ProspectsError(copy("growth.server.errors.comp
 export function availability(): SourceAvailability {
     return {
         web: Boolean(env.server.EXA_API_KEY) || Boolean(env.server.SERPER_API_KEY),
+        lookalike: Boolean(env.server.EXA_API_KEY),
         place: isPlaceSearchConfigured(),
         trade: isTradeDataConfigured(),
         screening: resolveComplianceProvider() !== null,
@@ -129,7 +132,10 @@ export function availability(): SourceAvailability {
 
 /** Keyless sources (OpenStreetMap, YC) and sample data are always on; keyed ones when configured. */
 function sourcesOn(avail: SourceAvailability): number {
-    return [avail.web, avail.place, avail.trade, avail.screening].filter(Boolean).length + 3;
+    return (
+        [avail.web, avail.lookalike, avail.place, avail.trade, avail.screening].filter(Boolean)
+            .length + 3
+    );
 }
 
 // ── Loading ───────────────────────────────────────────────────────────────
@@ -206,6 +212,7 @@ export async function createSegment(
         partnerKinds: ["distributor", "retailer", "wholesaler"],
         constraints: null,
         knownPartnerDomains: [],
+        customerDomains: [],
     };
     const program = await createProgram({
         companyId: ctx.companyId,
@@ -254,6 +261,24 @@ export async function patchSegment(
             case "disqualifiers":
                 patch.constraints = text.trim() || null;
                 break;
+            case "seedDomains": {
+                const parsed = parseCustomerDomains(list);
+                const bad = parsed.invalid[0];
+                if (bad !== undefined)
+                    throw new ProspectsError(
+                        copy("growth.server.errors.customerDomainInvalid", { value: bad }),
+                        400
+                    );
+                if (parsed.tooMany)
+                    throw new ProspectsError(
+                        copy("growth.server.errors.customerDomainsTooMany", {
+                            max: MAX_CUSTOMER_DOMAINS,
+                        }),
+                        400
+                    );
+                patch.customerDomains = parsed.domains;
+                break;
+            }
             default:
                 break;
         }

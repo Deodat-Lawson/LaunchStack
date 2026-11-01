@@ -752,7 +752,7 @@ export async function simulate(url: string, init?: RequestInit): Promise<Respons
                     },
                     {
                         key: "seedDomains",
-                        label: "Looks like",
+                        label: "Customers like these",
                         value: [],
                         sources: [],
                         editable: true,

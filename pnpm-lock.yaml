@@ -354,9 +354,6 @@ importers:
       drizzle-orm:
         specifier: ^0.45.1
         version: 0.45.1(@neondatabase/serverless@1.0.1)(@opentelemetry/api@1.9.1)(@types/pg@8.15.6)(postgres@3.4.7)
-      duck-duck-scrape:
-        specifier: ^2.2.7
-        version: 2.2.7
       formdata-node:
         specifier: ^6.0.3
         version: 6.0.3
@@ -1079,6 +1076,9 @@ importers:
       drizzle-orm:
         specifier: ^0.45.1
         version: 0.45.1(@neondatabase/serverless@1.0.1)(@opentelemetry/api@1.9.1)(@types/pg@8.15.6)(postgres@3.4.7)
+      undici:
+        specifier: ^7.29.1
+        version: 7.29.1
       zod:
         specifier: ^3.23.8
         version: 3.25.76
@@ -11635,10 +11635,6 @@ packages:
     resolution: {integrity: sha512-VfQPToRA5FZs/qJxLIinmU59u0r7LXqoJkCzinq3ckNJp3vKEh7jTWN589YQ5+aoAC/TGRLyJLCPKcLQbM8r9g==}
     engines: {node: '>=18.17'}
 
-  undici@7.25.0:
-    resolution: {integrity: sha512-xXnp4kTyor2Zq+J1FfPI6Eq3ew5h6Vl0F/8d9XU5zZQf1tX9s2Su1/3PiMmUANFULpmksxkClamIZcaUqryHsQ==}
-    engines: {node: '>=20.18.1'}
-
   undici@7.29.1:
     resolution: {integrity: sha512-RYONW2MeafgYlkVOKYKkA/Ag7BmXqgIWCa8t1m0JcxrQg9pI9lEqRhAOruOBCbAohOa/gkCF+iPi9hrgvTzu6Q==}
     engines: {node: '>=20.18.1'}
@@ -18487,7 +18483,7 @@ snapshots:
       parse5: 7.3.0
       parse5-htmlparser2-tree-adapter: 7.1.0
       parse5-parser-stream: 7.1.2
-      undici: 7.25.0
+      undici: 7.29.1
       whatwg-mimetype: 4.0.0
 
   chevrotain-allstar@0.3.1(chevrotain@11.1.2):
@@ -19049,6 +19045,7 @@ snapshots:
     dependencies:
       html-entities: 2.6.0
       needle: 3.3.1
+    optional: true
 
   duck@0.1.12:
     dependencies:
@@ -20081,7 +20078,8 @@ snapshots:
     transitivePeerDependencies:
       - '@noble/hashes'
 
-  html-entities@2.6.0: {}
+  html-entities@2.6.0:
+    optional: true
 
   html-escaper@2.0.2: {}
 
@@ -20860,7 +20858,7 @@ snapshots:
       saxes: 6.0.0
       symbol-tree: 3.2.4
       tough-cookie: 6.0.1
-      undici: 7.25.0
+      undici: 7.29.1
       w3c-xmlserializer: 5.0.0
       webidl-conversions: 8.0.1
       whatwg-mimetype: 5.0.0
@@ -21710,6 +21708,7 @@ snapshots:
     dependencies:
       iconv-lite: 0.6.3
       sax: 1.4.1
+    optional: true
 
   negotiator@1.1.0:
     dependencies:
@@ -22919,7 +22918,8 @@ snapshots:
 
   safer-buffer@2.1.2: {}
 
-  sax@1.4.1: {}
+  sax@1.4.1:
+    optional: true
 
   saxes@6.0.0:
     dependencies:
@@ -23595,8 +23595,6 @@ snapshots:
     optional: true
 
   undici@6.23.0: {}
-
-  undici@7.25.0: {}
 
   undici@7.29.1: {}
 

@@ -82,7 +82,9 @@ describe("web research guidance", () => {
             truncated: false,
             fetchedAt: "2026-10-25T17:00:00Z",
         }));
-        const session = createWebTools({ search, fetchPage });
+        const session = createWebTools({ search, fetchPage }, "en", {
+            personText: ["What changed in https://docs.example.com/release?"],
+        });
         const result = await session.tools[1]!.run(
             { url: "https://docs.example.com/release" },
             new AbortController().signal

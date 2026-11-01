@@ -23,8 +23,10 @@ import {
     listEvents,
     listExclusions,
     listPartners,
+    listWonDomains,
     setResearchResult,
     transitionStage,
+    updateProgram,
     updateRun,
     upsertCandidateRelationships,
     upsertOrgs,
@@ -106,6 +108,7 @@ describeDb("distribution persistence", () => {
                 partnerKinds: ["importer", "distributor"],
                 constraints: null,
                 knownPartnerDomains: ["existing-importer.de"],
+                customerDomains: [],
             },
         });
     }
@@ -367,5 +370,48 @@ describeDb("distribution persistence", () => {
                 excludeKeys: exclusions.keys,
             })
         ).toEqual([]);
+    });
+
+    it("keeps named customers as bare domains, excludes them, and seeds lookalikes from won deals", async () => {
+        const program = await makeProgram(companyA);
+        expect(program.customerDomains).toEqual([]);
+        await importPartners({
+            companyId: companyA,
+            programId: program.id,
+            userId: "user-1",
+            rows: [
+                {
+                    name: "Won Foods BV",
+                    domain: "wonfoods.nl",
+                    country: "NL",
+                    kind: "distributor",
+                    stage: "active",
+                    territoryCountry: "NL",
+                    ownerUserId: null,
+                },
+                {
+                    name: "Talking Foods BV",
+                    domain: "talkingfoods.nl",
+                    country: "NL",
+                    kind: "distributor",
+                    stage: "contacted",
+                    territoryCountry: "NL",
+                    ownerUserId: null,
+                },
+            ],
+        });
+        const updated = await updateProgram(program.id, companyA, {
+            customerDomains: [
+                "https://www.Customer-One.nl/about",
+                "customer-one.nl",
+                "customer-two.nl",
+            ],
+        });
+        expect(updated!.customerDomains).toEqual(["customer-one.nl", "customer-two.nl"]);
+        expect((await listExclusions(companyA, program.id)).domains).toEqual(
+            expect.arrayContaining(["customer-one.nl", "customer-two.nl", "wonfoods.nl"])
+        );
+        // Only won deals seed lookalikes; a deal still in conversation does not.
+        expect(await listWonDomains(companyA, program.id)).toEqual(["wonfoods.nl"]);
     });
 });

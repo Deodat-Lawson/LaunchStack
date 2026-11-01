@@ -27,6 +27,7 @@ const program = {
     partnerKinds: ["importer"],
     constraints: null,
     knownPartnerDomains: [],
+    customerDomains: [],
     status: "active",
     createdAt: new Date(),
     updatedAt: null,

@@ -7,6 +7,7 @@
  */
 import type {
     EvidenceRecord,
+    ProgramRecord,
     RelationshipRecord,
     RunRecord,
 } from "@launchstack/pipelines/distribution/types";
@@ -14,9 +15,13 @@ import {
     SALES_OF,
     allowedMoves,
     contactPeople,
+    customerDomainOf,
     moveReason,
+    parseCustomerDomains,
     profileClaims,
     relationshipTarget,
+    segmentFields,
+    sourceRows,
     toRunDto,
     viewMatches,
 } from "~/server/prospects/adapter";
@@ -293,6 +298,111 @@ describe("runs", () => {
         expect(dto.summary?.sources[0]!.sourceId).toBe("fixture:web");
         const sources = dto.steps.find(s => s.id === "sources")!;
         expect(sources.children!.map(c => c.status)).toEqual(["done", "skipped", "done"]);
+    });
+
+    it("lists every source, lookalikes included, before a run has a summary", () => {
+        const dto = toRunDto(
+            run({ status: "gathering", options: { maxCandidates: 25, mode: "live" } })
+        );
+        const sources = dto.steps.find(s => s.id === "sources")!;
+        expect(sources.children!.map(c => [c.id, c.label])).toEqual([
+            ["web", "Web search"],
+            ["place", "Places"],
+            ["trade", "Trade data"],
+            ["lookalike", "Lookalikes"],
+        ]);
+    });
+});
+
+describe("customers like these", () => {
+    it("normalises a typed website to its bare domain", () => {
+        expect(customerDomainOf("https://www.Delta-Logistics.nl/over-ons?x=1")).toBe(
+            "delta-logistics.nl"
+        );
+        expect(customerDomainOf("pickpoint.co.uk")).toBe("pickpoint.co.uk");
+        expect(customerDomainOf("shop.acme.com")).toBe("acme.com");
+        for (const bad of ["Acme Inc", "acme", "localhost", "10.0.0.1", "acme.c", "-acme.com"])
+            expect(customerDomainOf(bad)).toBeNull();
+    });
+
+    it("splits, de-duplicates and caps the list, and names what is not a website", () => {
+        expect(
+            parseCustomerDomains(["https://delta.example/", "pickpoint.example, www.delta.example"])
+        ).toEqual({ domains: ["delta.example", "pickpoint.example"], invalid: [], tooMany: false });
+        expect(parseCustomerDomains(["delta.example", "not a site"]).invalid).toEqual([
+            "not",
+            "a",
+            "site",
+        ]);
+        const many = Array.from({ length: 26 }, (_, i) => `customer-${i}.example`);
+        expect(parseCustomerDomains(many).tooMany).toBe(true);
+        expect(parseCustomerDomains(many.slice(0, 25)).tooMany).toBe(false);
+    });
+
+    it("is an editable field on the segment, after where", () => {
+        const program = {
+            name: "NL fulfilment",
+            offering: "Picking robots",
+            categories: [],
+            hsCodes: [],
+            targetTerritories: [{ country: "NL" }],
+            partnerKinds: ["distributor"],
+            constraints: null,
+            knownPartnerDomains: [],
+            customerDomains: ["delta.example"],
+        } as unknown as ProgramRecord;
+        const fields = segmentFields(program);
+        const keys = fields.map(f => f.key);
+        expect(keys.indexOf("seedDomains")).toBe(keys.indexOf("geographies") + 1);
+        expect(fields.find(f => f.key === "seedDomains")).toMatchObject({
+            label: "Customers like these",
+            value: ["delta.example"],
+            editable: true,
+        });
+        const empty = segmentFields({ ...program, customerDomains: [] });
+        expect(empty.find(f => f.key === "seedDomains")).toMatchObject({ value: [], sources: [] });
+    });
+});
+
+describe("source rows", () => {
+    it("names the web source by its provider, and offers lookalikes with Exa only", () => {
+        const serperOnly = Object.fromEntries(
+            sourceRows(
+                { web: true, lookalike: false, place: false, trade: false, screening: false },
+                null
+            ).map(r => [r.id, r])
+        );
+        // Serper alone is named as Serper, not as Exa, and needs nothing more.
+        expect(serperOnly.web).toMatchObject({
+            label: "Web search (Serper)",
+            enabled: true,
+            requires: null,
+            labelCopy: { key: "growth.server.sources.rows.webSerper.label" },
+        });
+        expect(serperOnly.lookalike).toMatchObject({
+            label: "Lookalikes",
+            enabled: false,
+            available: false,
+            requires: "EXA_API_KEY",
+        });
+        const exa = Object.fromEntries(
+            sourceRows(
+                { web: true, lookalike: true, place: false, trade: false, screening: false },
+                null
+            ).map(r => [r.id, r])
+        );
+        expect(exa.lookalike!.enabled && exa.lookalike!.available).toBe(true);
+        expect(exa.web).toMatchObject({ label: "Exa company search", requires: "EXA_API_KEY" });
+        // No key: the row says which one key turns it on, with no English inside the copy.
+        const none = sourceRows(
+            { web: false, lookalike: false, place: false, trade: false, screening: false },
+            null
+        ).find(r => r.id === "web")!;
+        expect(none).toMatchObject({
+            label: "Exa company search",
+            enabled: false,
+            requires: "EXA_API_KEY",
+        });
     });
 });
 

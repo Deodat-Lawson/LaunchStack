@@ -248,6 +248,9 @@
     },
     "segment": {
       "separateItems": "用逗号分隔各项。",
+      "separateDomains": "用逗号或空格分隔各个网站。",
+      "seedDomainsHelp": "已经向你购买的公司的网站。每次运行都会寻找与它们相似的公司；这些客户本身永远不会被列为潜在客户。",
+      "seedDomainsPlaceholder": "例如 acme.com、globex.de",
       "editAria": "编辑 {label}",
       "confirmed": "细分市场已确认。之后的运行将使用此版本。",
       "confirmFailed": "无法确认",
@@ -1099,7 +1102,9 @@
       "insufficientCredits": "额度不足",
       "deriveLater": "根据你的文档推导细分市场的功能将随流程重构一起推出",
       "newSegmentRequired": "请填写名称、你卖什么，以及至少一个国家/地区",
-      "sourceSettingsLater": "来源设置将随来源注册表一起推出；目前由环境变量中的密钥决定"
+      "sourceSettingsLater": "来源设置将随来源注册表一起推出；目前由环境变量中的密钥决定",
+      "customerDomainInvalid": "“{value}”不是网站。请使用 acme.com 这样的域名。",
+      "customerDomainsTooMany": "最多列出 {max} 个客户网站。"
     },
     "stageErrors": {
       "unknownStage": "未知阶段“{to}”。",
@@ -1132,6 +1137,7 @@
         "archetype": "买家类型",
         "industries": "行业",
         "geographies": "地区",
+        "seedDomains": "类似这些客户",
         "disqualifiers": "不合适",
         "exclusions": "已有合作伙伴"
       },
@@ -1141,6 +1147,7 @@
         "categories": "来自计划 · 类别",
         "territories": "来自计划 · 地区",
         "constraints": "来自计划 · 限制条件",
+        "customers": "来自计划 · 客户",
         "imports": "来自计划和导入"
       },
       "exclusionsCount": "{count} 个域名已从每次运行中排除",
@@ -1191,16 +1198,19 @@
       "labels": {
         "live": {
           "web": "网页搜索",
+          "lookalike": "相似公司",
           "place": "地点",
           "trade": "贸易数据"
         },
         "keyless": {
           "web": "公开目录（YC）",
+          "lookalike": "相似公司",
           "place": "OpenStreetMap",
           "trade": "贸易数据"
         },
         "fixture": {
           "web": "示例网页搜索",
+          "lookalike": "相似公司",
           "place": "示例地点",
           "trade": "示例贸易数据"
         }
@@ -1215,8 +1225,16 @@
           "description": "细分市场所在国家/地区中，简介与其关键词匹配的活跃 YC 公司。免费，无需密钥。"
         },
         "web": {
-          "label": "网页搜索",
-          "description": "用 Exa 或 Serper 搜索每个地区的组织；研究智能体需要配置模型。"
+          "label": "Exa 公司搜索",
+          "description": "Exa 的公司索引：按每个地区的每条查询找到匹配公司的官网。只配置了 Serper 密钥时，改用 Serper 网页搜索。研究智能体需要配置模型。"
+        },
+        "webSerper": {
+          "label": "网页搜索（Serper）",
+          "description": "Serper 网页搜索：每条结果所在的网站视为一家公司。配置 Exa 密钥即可使用 Exa 的公司索引和相似公司。研究智能体需要配置模型。"
+        },
+        "lookalike": {
+          "label": "相似公司",
+          "description": "与你的客户相似的公司：包括你在细分市场中列出的客户和已赢单的客户，每次运行最多五个，数据来自 Exa。这些客户本身永远不会被列为潜在客户。"
         },
         "place": {
           "label": "地点",
@@ -1249,7 +1267,11 @@
         "placeNotConfigured": "未配置地点搜索",
         "tradeNotConfigured": "未配置贸易数据",
         "queriesFailed": "{count} 个查询失败",
-        "territoriesFailed": "{count} 个地区查询失败"
+        "territoriesFailed": "{count} 个地区查询失败",
+        "lookalikeNeedsExa": "需要 EXA_API_KEY",
+        "noCustomersYet": "还没有客户",
+        "fromCustomers": "{count, plural, other {来自 # 个客户}}",
+        "customersFailed": "{total} 个客户中有 {failed} 个查询失败"
       },
       "status": {
         "degraded": "部分可用",

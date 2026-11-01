@@ -432,7 +432,7 @@ const NO_MODEL_CALL: Record<string, string> = {
     [`${API}/company/onboarding/route.ts`]:
         "saves profile facts; the reassembly it asks for enters the scope itself in company-profile/service's after()",
     [`${API}/document-generator/research/route.ts`]:
-        "takes getEmbeddings from the Q&A services barrel; Exa, arXiv and retrieval only, no chat model",
+        "takes getEmbeddings from the Q&A services barrel; web search, arXiv and retrieval only, no chat model",
     [`${API}/email-campaigns/[campaignId]/route.ts`]: "getCampaign reads rows",
     [`${API}/email-campaigns/[campaignId]/approve/route.ts`]:
         "approveEmailCampaign records a human approval of an existing version; nothing is generated",

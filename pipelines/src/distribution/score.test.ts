@@ -18,6 +18,7 @@ const program: ProgramRecord = {
     partnerKinds: ["importer", "distributor", "retailer"],
     constraints: null,
     knownPartnerDomains: [],
+    customerDomains: [],
     status: "active",
     createdAt: new Date("2026-09-01T00:00:00Z"),
     updatedAt: null,

@@ -32,7 +32,13 @@ import {
     type DossierAgentInput,
     type DossierAgentPorts,
 } from "./dossier-agent";
-import { gather, type GatherPorts } from "./gather";
+import {
+    gather,
+    lookalikeSeeds,
+    type DescribeCompaniesPort,
+    type GatherPorts,
+    type SearchCompaniesPort,
+} from "./gather";
 import { planDiscovery, type PlanInput, type SellerProfile } from "./plan";
 import { makeDossierCreationKey, makeDossierFilename, renderDossierMarkdown } from "./render";
 import { buildRationaleInput, computeFit, deriveRiskFlags, templateRationale } from "./score";
@@ -77,11 +83,20 @@ export interface PublishDossierInput {
 export interface DistributionPorts {
     model: AgentModelPort;
     fetchPage: (url: string, signal?: AbortSignal) => Promise<ReadablePage>;
+    /** General web search: discovery without a company index, and the research agent. */
     searchWeb:
         | ((
               queries: Array<{ searchQuery: string; category: string; rationale: string }>
           ) => Promise<RawSearchResult[]>)
         | null;
+    /**
+     * Company search (Exa's company index). When set, discovery runs every
+     * planned web query through it, and lookalikes run; absent or null
+     * without an Exa key, and in keyless and fixture modes.
+     */
+    searchCompanies?: SearchCompaniesPort | null;
+    /** What each seed company sells, for lookalike queries (Exa). */
+    describeCompanies?: DescribeCompaniesPort | null;
     /** Geocode + place search for one city/region query; null when not configured. */
     searchPlaces:
         | ((args: { query: string; categoryIds?: string[]; territory: Territory }) => Promise<
@@ -250,7 +265,7 @@ export async function prepareRun(
                 territories,
                 partnerKinds,
                 sources: {
-                    web: ports.searchWeb !== null,
+                    web: ports.searchWeb !== null || Boolean(ports.searchCompanies),
                     place: ports.searchPlaces !== null,
                     trade: ports.tradeData !== null,
                 },
@@ -263,6 +278,16 @@ export async function prepareRun(
 
     // 3. gather
     await setStatus(ctx, "gathering");
+    // Read once for discovery and for the resolver: company search is told
+    // to leave out excluded companies, customers and the lookalike seeds.
+    const exclusions = await db.listExclusions(ctx.companyId, ctx.programId);
+    const seeds = ports.searchCompanies
+        ? lookalikeSeeds(
+              program.customerDomains,
+              await db.listWonDomains(ctx.companyId, ctx.programId)
+          )
+        : [];
+    const countries = [...new Set(territories.map(t => t.country))];
     const gatherPorts: GatherPorts = {
         searchWeb: ports.searchWeb
             ? queries =>
@@ -282,6 +307,14 @@ export async function prepareRun(
                       territory: query.territory,
                   })
             : null,
+        searchCompanies: ports.searchCompanies ?? null,
+        describeCompanies: ports.describeCompanies ?? null,
+        excludeDomains: [...exclusions.domains, ...seeds],
+        lookalikes: {
+            seeds,
+            country: countries.length === 1 ? countries[0]! : null,
+            partnerKind: partnerKinds[0]!,
+        },
         tradeData: ports.tradeData,
         hsCodes: program.hsCodes,
         signal: ctx.signal,
@@ -317,7 +350,6 @@ export async function prepareRun(
         id: "resolving",
         policy: "required",
         run: async () => {
-            const exclusions = await db.listExclusions(ctx.companyId, ctx.programId);
             const sellerKey = normalizeOrgName(identity.name);
             const mentions: OrgMention[] = gathered.mentions;
             const before = resolveOrganizations(mentions).length;

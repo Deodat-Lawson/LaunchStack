@@ -931,6 +931,12 @@ export function PdfViewerWithNotes({
         setNotePages(new Map());
         setRelocated(new Map());
         setRenderedPages(new Set());
+        // A citation still in hand is for this file now: searched afresh,
+        // not painted onto the same page number of the new one.
+        setCiteTarget(null);
+        setCiteOverlay(null);
+        pagedNonce.current = null;
+        locatedNonce.current = null;
         void pdf
             .getPage(1)
             .then(
@@ -1195,7 +1201,15 @@ export function PdfViewerWithNotes({
             scrollToQuad(pageNumber, quads[0]);
             return;
         }
-    }, [citationHighlight, citeTarget, citeOverlay, renderedPages, textLayerVersion, scrollToQuad]);
+    }, [
+        citationHighlight,
+        citeTarget,
+        citeOverlay,
+        pdfDoc,
+        renderedPages,
+        textLayerVersion,
+        scrollToQuad,
+    ]);
 
     // Which page: the hinted page is shown at once, so the reader sees
     // movement while it draws; the extracted text then confirms it or finds
@@ -1229,7 +1243,7 @@ export function PdfViewerWithNotes({
             if (pagedNonce.current === nonce) setCiteTarget({ nonce, page: null });
         };
         void run();
-    }, [citationHighlight, numPages, goToPage, pageText]);
+    }, [citationHighlight, numPages, pdfDoc, goToPage, pageText]);
 
     // ---------------------------------------------------------------------
     // Find

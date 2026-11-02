@@ -812,6 +812,38 @@ describe("PdfViewerWithNotes citations", () => {
         expect(document.querySelector('[data-pdf-page="1"] [class*="outline-"]')).toBeNull();
         expect(screen.getByTestId("pdf-toolbar").querySelector("input")).toHaveValue("12");
     });
+    it("searches a citation again in a document that replaces the last", async () => {
+        mockNumPages = 30;
+        mockPageTexts.set(12, "The gross margin improved for the third year running.");
+        const props = {
+            notes: [],
+            onCreateAnchoredNote: jest.fn(),
+            citationHighlight: {
+                text: "gross margin improved for the third year",
+                page: null,
+                nonce: 1,
+            },
+        };
+        const { rerender } = render(<PdfViewerWithNotes {...props} url="/api/files/9" />);
+        await toolbar();
+        await waitFor(() =>
+            expect(
+                document.querySelector('[data-pdf-page="12"] [class*="outline-"]')
+            ).toBeInTheDocument()
+        );
+
+        // The same citation, a new file: the passage is on page 5 now.
+        mockPageTexts.clear();
+        mockPageTexts.set(5, "Elsewhere, the gross margin improved for the third year running.");
+        rerender(<PdfViewerWithNotes {...props} url="/api/files/10" />);
+        await waitFor(() =>
+            expect(
+                document.querySelector('[data-pdf-page="5"] [class*="outline-"]')
+            ).toBeInTheDocument()
+        );
+        expect(document.querySelector('[data-pdf-page="12"] [class*="outline-"]')).toBeNull();
+        expect(screen.getByTestId("pdf-toolbar").querySelector("input")).toHaveValue("5");
+    });
 });
 
 describe("PdfViewerWithNotes highlights", () => {

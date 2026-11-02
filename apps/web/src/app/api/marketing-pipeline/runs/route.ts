@@ -1,10 +1,14 @@
 // POST /api/marketing-pipeline/runs — queue a post-writer run: { platform, prompt, … }
 //   → 202 { run }. The run executes off the request (see server/marketing/executor.ts);
 //   the screen polls GET /api/marketing-pipeline/runs/[id].
-// GET  /api/marketing-pipeline/runs — this member's unfinished runs, so a reload
-//   (or another tab) picks up the one in progress instead of starting over.
+// GET  /api/marketing-pipeline/runs — this member's unfinished runs and recent
+//   completedRuns, so returning after completion can recover the draft too.
 import { MarketingPipelineInputSchema } from "@launchstack/pipelines/marketing";
-import { createMarketingRun, listActiveMarketingRuns } from "@launchstack/pipelines/marketing/runs";
+import {
+    createMarketingRun,
+    listActiveMarketingRuns,
+    listCompletedMarketingRuns,
+} from "@launchstack/pipelines/marketing/runs";
 
 import { localeOfRequest } from "~/i18n/server";
 import { translatorFor } from "~/i18n/translate";
@@ -49,9 +53,15 @@ export async function GET(request: Request) {
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
-        const runs = await listActiveMarketingRuns(ctx.data.companyId, ctx.data.authUserId);
+        const [runs, completedRuns] = await Promise.all([
+            listActiveMarketingRuns(ctx.data.companyId, ctx.data.authUserId),
+            listCompletedMarketingRuns(ctx.data.companyId, ctx.data.authUserId),
+        ]);
         // The list carries no events; the poll of one run replays them.
-        return ok({ runs: runs.map(run => ({ ...toRunView(run, run.events.length, locale) })) });
+        return ok({
+            runs: runs.map(run => toRunView(run, run.events.length, locale)),
+            completedRuns: completedRuns.map(run => toRunView(run, run.events.length, locale)),
+        });
     } catch (error) {
         console.error("[marketing-run] GET error:", error);
         return fail(translatorFor(locale, "growth.server.marketing")("runListFailed"), 500);

@@ -35,6 +35,7 @@ const EVENTS = [
 function view(status: string, from: number, to: number, extra: Json = {}): Json {
     return {
         id: "run-1",
+        createdAt: "2026-10-24T10:00:00Z",
         status,
         input: { platform: "linkedin", prompt: "Announce the roast" },
         events: EVENTS.slice(from, to),
@@ -175,4 +176,91 @@ it("a run that failed for good shows its reason and stops polling", async () => 
     expect(result.current.loading).toBe(false);
     await tick();
     expect(polls).toHaveLength(1);
+});
+
+it("recovers a draft that completed after its screen was closed, even in a new tab", async () => {
+    script = [() => respond({ run: view("running", 0, 3) })];
+    (global.fetch as jest.Mock).mockImplementation((input: RequestInfo | URL) => {
+        const url = urlOf(input);
+        if (url === "/api/marketing-pipeline/runs")
+            return respond({ runs: [view("running", 0, 0)], completedRuns: [] });
+        polls.push(url);
+        return script.shift()!(url);
+    });
+    const first = renderHook(() => useMarketingPipelineController({ debug: false }));
+    await waitFor(() => expect(first.result.current.loading).toBe(true));
+    first.unmount();
+    sessionStorage.clear();
+    (global.fetch as jest.Mock).mockImplementation(() =>
+        respond({
+            runs: [],
+            completedRuns: [view("completed", 5, 5)],
+        })
+    );
+    const reopened = renderHook(() => useMarketingPipelineController({ debug: false }));
+    await waitFor(() => expect(reopened.result.current.editableMessage).toBe(RESULT.message));
+    expect(reopened.result.current.sessions).toHaveLength(1);
+    expect(reopened.result.current.sessions[0]!.id).toBe("run-1");
+    expect(reopened.result.current.loading).toBe(false);
+    reopened.unmount();
+    await tick();
+    expect(polls).toHaveLength(1);
+});
+
+it("does not overwrite saved edits or duplicate a recovered run on another visit", async () => {
+    script = [() => respond({ run: view("completed", 0, 5) })];
+    const first = renderHook(() => useMarketingPipelineController({ debug: false }));
+    await act(async () => {
+        first.result.current.setPlatform("linkedin");
+        first.result.current.setPrompt("Announce the roast");
+    });
+    await act(async () => {
+        await first.result.current.runPipeline();
+    });
+    await act(async () => {
+        first.result.current.setEditableMessage("My edited coffee draft.");
+    });
+    first.unmount();
+    (global.fetch as jest.Mock).mockImplementation(() =>
+        respond({
+            runs: [],
+            completedRuns: [view("completed", 5, 5)],
+        })
+    );
+    const reopened = renderHook(() => useMarketingPipelineController({ debug: false }));
+    await act(async () => {
+        await Promise.resolve();
+    });
+    expect(reopened.result.current.editableMessage).toBe("My edited coffee draft.");
+    expect(reopened.result.current.sessions).toHaveLength(1);
+});
+
+it("replaces a queued session with its completed result when the screen is reopened", async () => {
+    script = [() => respond({ run: view("running", 0, 3) })];
+    const first = renderHook(() => useMarketingPipelineController({ debug: false }));
+    await act(async () => {
+        first.result.current.handleStartNewSession();
+    });
+    await act(async () => {
+        first.result.current.setPlatform("linkedin");
+        first.result.current.setPrompt("Announce the roast");
+    });
+    act(() => {
+        void first.result.current.runPipeline();
+    });
+    await waitFor(() => expect(first.result.current.loading).toBe(true));
+    expect(first.result.current.sessions.map(session => session.id)).toEqual(["run-1"]);
+    first.unmount();
+    (global.fetch as jest.Mock).mockImplementation(() =>
+        respond({
+            runs: [],
+            completedRuns: [view("completed", 5, 5)],
+        })
+    );
+    const reopened = renderHook(() => useMarketingPipelineController({ debug: false }));
+    await waitFor(() => expect(reopened.result.current.editableMessage).toBe(RESULT.message));
+    expect(reopened.result.current.sessions).toHaveLength(1);
+    expect(reopened.result.current.sessions[0]!.result).not.toBeNull();
+    reopened.unmount();
+    await tick();
 });

@@ -150,4 +150,16 @@ describe("checkClaimSources", () => {
         });
         expect(mockInvoke).toHaveBeenCalledTimes(1);
     });
+
+    it("can check every extracted claim for publishing while keeping preview checks bounded", async () => {
+        const claims = Array.from({ length: 7 }, (_, i) => `Product fact ${i}`);
+        rag({});
+        mockInvoke.mockResolvedValue({ result: { claims } });
+        const preview = await checkClaimSources({ companyId: 1, message: "post" });
+        expect(preview.totalClaimsFound).toBe(7);
+        expect(preview.claims).toHaveLength(5);
+        const publish = await checkClaimSources({ companyId: 1, message: "post", maxClaims: null });
+        expect(publish.claims.map(claim => claim.claim)).toEqual(claims);
+        expect(publish.claims.every(claim => claim.support === "unsupported")).toBe(true);
+    });
 });

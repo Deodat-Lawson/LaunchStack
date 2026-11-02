@@ -107,9 +107,10 @@ export interface ClaimEvidenceResult {
 export async function checkClaimSources(args: {
     companyId: number;
     message: string;
-    maxClaims?: number;
+    /** Preview checks default to five; null checks every claim before publishing. */
+    maxClaims?: number | null;
 }): Promise<ClaimEvidenceResult> {
-    const maxClaims = args.maxClaims ?? DEFAULT_MAX_CLAIMS;
+    const maxClaims = args.maxClaims === undefined ? DEFAULT_MAX_CLAIMS : args.maxClaims;
 
     const { result } = await invokeToolStructured(
         CLAIM_EVIDENCE_MODELS.extraction,
@@ -127,7 +128,9 @@ export async function checkClaimSources(args: {
     if (allClaims.length === 0) return { claims: [], totalClaimsFound: 0 };
 
     const looked = await Promise.all(
-        allClaims.slice(0, maxClaims).map(claim => lookUpClaimEvidence(args.companyId, claim))
+        (maxClaims === null ? allClaims : allClaims.slice(0, maxClaims)).map(claim =>
+            lookUpClaimEvidence(args.companyId, claim)
+        )
     );
     const claims = await judgeClaims(looked);
     return { claims, totalClaimsFound: allClaims.length };

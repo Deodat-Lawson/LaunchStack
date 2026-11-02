@@ -107,6 +107,26 @@ export async function listActiveMarketingRuns(
     return rows.map(toRecord);
 }
 
+/** Recent results stay discoverable even when the member left before completion. */
+export async function listCompletedMarketingRuns(
+    companyId: bigint,
+    userId: string
+): Promise<MarketingRunRecord[]> {
+    const rows = await getDb()
+        .select()
+        .from(marketingRuns)
+        .where(
+            and(
+                eq(marketingRuns.companyId, companyId),
+                eq(marketingRuns.userId, userId),
+                eq(marketingRuns.status, "completed")
+            )
+        )
+        .orderBy(desc(marketingRuns.createdAt))
+        .limit(25);
+    return rows.map(toRecord);
+}
+
 /**
  * Take the run for one attempt: queued, or running with a heartbeat older
  * than `staleBefore` (its process died). One conditional update, so two

@@ -14,10 +14,12 @@ jest.mock("~/lib/require-workspace-context", () => ({
 const mockCreate = jest.fn();
 const mockGet = jest.fn();
 const mockListActive = jest.fn();
+const mockListCompleted = jest.fn();
 jest.mock("@launchstack/pipelines/marketing/runs", () => ({
     createMarketingRun: (...a: unknown[]) => mockCreate(...a),
     getMarketingRun: (...a: unknown[]) => mockGet(...a),
     listActiveMarketingRuns: (...a: unknown[]) => mockListActive(...a),
+    listCompletedMarketingRuns: (...a: unknown[]) => mockListCompleted(...a),
 }));
 jest.mock("@launchstack/pipelines/marketing", () => {
     const { z } = jest.requireActual<typeof Zod>("zod");
@@ -64,6 +66,7 @@ const run = (over: Record<string, unknown> = {}) => ({
 
 beforeEach(() => {
     jest.clearAllMocks();
+    mockListCompleted.mockResolvedValue([]);
     mockCtx.mockResolvedValue({ success: true, data: { companyId: 42n, authUserId: "u1" } });
 });
 
@@ -132,6 +135,26 @@ it("the list is this member's unfinished runs, without their events", async () =
     expect(body.data.runs.map(r => r.id)).toEqual(["run-1"]);
     expect(body.data.runs[0]!.events).toEqual([]);
     expect(mockListActive).toHaveBeenCalledWith(42n, "u1");
+});
+
+it("also returns completed drafts for this member, without replaying all progress events", async () => {
+    mockListActive.mockResolvedValue([]);
+    mockListCompleted.mockResolvedValue([
+        run({
+            status: "completed",
+            result: { platform: "linkedin", message: "Finished while away." },
+        }),
+    ]);
+    const res = await LIST(new Request("http://x/api/marketing-pipeline/runs"));
+    const body = await res.json();
+    expect(body.data.runs).toEqual([]);
+    expect(body.data.completedRuns[0]).toMatchObject({
+        id: "run-1",
+        status: "completed",
+        events: [],
+        result: { message: "Finished while away." },
+    });
+    expect(mockListCompleted).toHaveBeenCalledWith(42n, "u1");
 });
 
 it("a signed-out caller gets the auth response", async () => {

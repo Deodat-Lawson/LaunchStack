@@ -47,17 +47,19 @@ export async function claimGate(
     const aiUse = { feature: "marketing", userId, enforce: false } as const;
     try {
         result = await withWorkspaceChatModels(companyId, aiUse, () =>
-            checkClaimSources({ companyId: Number(companyId), message: body })
+            checkClaimSources({ companyId: Number(companyId), message: body, maxClaims: null })
         );
     } catch (error) {
         console.warn("[brand] claim check failed before posting:", error);
         return { code: "unsupported_claims", unavailable: true, claims: [] };
     }
     const review = result.claims.filter(claimNeedsReview);
-    if (review.length === 0) return null;
+    const incomplete =
+        result.unavailable === true || result.totalClaimsFound > result.claims.length;
+    if (review.length === 0 && !incomplete) return null;
     return {
         code: "unsupported_claims",
-        unavailable: false,
+        unavailable: incomplete,
         claims: review.map(c => ({
             claim: c.claim,
             support: c.support,

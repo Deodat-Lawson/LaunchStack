@@ -9,14 +9,30 @@ import type { PdfOutlineNode } from "../_shared/pdfOutline";
 
 /**
  * The Contents strip over a stand-in for react-pdf: a thumbnail is a box
- * that records which page and width it was asked for.
+ * that records which page and width it was asked for, and reports a page
+ * shape of 2:3 once "loaded", as a real one would.
  */
 
-jest.mock("react-pdf", () => ({
-    Thumbnail: ({ pageNumber, width }: { pageNumber: number; width: number }) => (
-        <div data-mock-thumb data-page={pageNumber} data-width={width} />
-    ),
-}));
+jest.mock("react-pdf", () => {
+    const { useEffect } = jest.requireActual<typeof React>("react");
+    return {
+        Thumbnail: ({
+            pageNumber,
+            width,
+            onLoadSuccess,
+        }: {
+            pageNumber: number;
+            width: number;
+            onLoadSuccess?: (page: { originalWidth: number; originalHeight: number }) => void;
+        }) => {
+            useEffect(() => {
+                onLoadSuccess?.({ originalWidth: 100, originalHeight: 150 });
+                // eslint-disable-next-line react-hooks/exhaustive-deps
+            }, []);
+            return <div data-mock-thumb data-page={pageNumber} data-width={width} />;
+        },
+    };
+});
 
 const PDF = { fake: true };
 
@@ -127,6 +143,35 @@ describe("PdfContentsPanel thumbnails", () => {
         } finally {
             // @ts-expect-error -- jsdom has none; put it back that way.
             delete global.IntersectionObserver;
+        }
+    });
+
+    it("centres the current row once the thumbnails report the page shape, and nudges on a page change", () => {
+        const scrolls: Array<{ page: string | null; block: string | undefined }> = [];
+        const original = Element.prototype.scrollIntoView;
+        Element.prototype.scrollIntoView = function (
+            this: Element,
+            options?: boolean | ScrollIntoViewOptions
+        ) {
+            scrolls.push({
+                page: this.getAttribute("data-page"),
+                block: typeof options === "object" ? options.block : undefined,
+            });
+        };
+        try {
+            const { rerender, props } = renderPanel({ currentPage: 3 });
+            // Into view on mount; then centred, because every row changed
+            // height when the first thumbnail reported the real page shape
+            // (2:3 here, taller than the A4-ish box rows start with).
+            expect(scrolls).toEqual([
+                { page: "3", block: "nearest" },
+                { page: "3", block: "center" },
+            ]);
+
+            rerender(<PdfContentsPanel {...props} currentPage={5} />);
+            expect(scrolls.at(-1)).toEqual({ page: "5", block: "nearest" });
+        } finally {
+            Element.prototype.scrollIntoView = original;
         }
     });
 

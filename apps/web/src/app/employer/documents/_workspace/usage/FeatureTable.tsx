@@ -33,7 +33,8 @@ export function FeatureTable({
 }) {
     const t = useTranslations("usage.features");
     const format = useUsageFormat();
-    const total = rows.reduce((sum, row) => sum + row.inputTokens + row.outputTokens, 0);
+    // Shares are of the one unit every kind adds up in; input and output are chat's own.
+    const total = rows.reduce((sum, row) => sum + row.aiTokens, 0);
 
     return (
         <Panel title={title} testId="usage-feature-table">
@@ -49,21 +50,21 @@ export function FeatureTable({
                                     {t("people")}
                                 </TableHead>
                             )}
-                            <TableHead className="text-right">{t("calls")}</TableHead>
+                            <TableHead className="text-right">{t("requests")}</TableHead>
                             <TableHead className="@max-lg:hidden text-right">
                                 {t("input")}
                             </TableHead>
                             <TableHead className="@max-lg:hidden text-right">
                                 {t("output")}
                             </TableHead>
-                            <TableHead className="text-right">{t("tokens")}</TableHead>
+                            <TableHead className="text-right">{t("usage")}</TableHead>
                             <TableHead className="@max-md:hidden text-right">{t("cost")}</TableHead>
                             <TableHead className="text-right">{t("share")}</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         {rows.map(row => {
-                            const tokens = row.inputTokens + row.outputTokens;
+                            const tokens = row.aiTokens;
                             return (
                                 <TableRow key={row.feature}>
                                     <TableCell className="text-ink">

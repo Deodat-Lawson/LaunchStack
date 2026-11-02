@@ -15,8 +15,9 @@
  *   person (`member_ai_limits`, where a null limit means none). It counts all
  *   of the person's calls in that workspace, whoever's endpoint served them.
  *
- * Usage is the meter's (`ai_usage_daily`, written by ./record): tokens in plus
- * out, by calendar month in UTC. A person at a limit is refused new AI work
+ * Usage is the meter's (`ai_usage_daily`, written by ./record), in chat-token
+ * equivalents (./weights): chat tokens in plus out, and embeddings and web
+ * searches by what they cost, by calendar month in UTC. A person at a limit is refused new AI work
  * when it starts (see withWorkspaceChatModels and ./refusal); work already
  * running finishes, so one request can carry them a little past it.
  */
@@ -25,6 +26,7 @@ import { and, eq, gte, inArray, sql } from "drizzle-orm";
 import { createSlot } from "@launchstack/runtime";
 
 import { env } from "~/env";
+import { emptySplit, usageGroupOf, type UsageSplit } from "~/lib/ai-usage";
 import { db } from "~/server/db";
 import { aiUsageDaily, memberAiLimits, users } from "~/server/db/schema";
 import { readWorkspaceSetting } from "~/server/settings/store";
@@ -46,8 +48,10 @@ export interface AllowancePeriod {
 }
 
 export interface AiAllowance extends AllowancePeriod {
-    /** Tokens this person used in this workspace this month. */
+    /** Chat-token equivalents this person used in this workspace this month. */
     used: number;
+    /** `used`, by chat, embeddings and web search. */
+    split: UsageSplit;
     workspace: {
         /** Tokens a month, or null for no limit. */
         limit: number | null;
@@ -55,7 +59,7 @@ export interface AiAllowance extends AllowancePeriod {
         source: "default" | "member";
     };
     /** The server-wide cap, or null when none applies to this person here. */
-    server: { limit: number; used: number } | null;
+    server: { limit: number; used: number; split: UsageSplit } | null;
     /** The limit nearest to (or past) its end, or null when none applies. */
     binding: "workspace" | "server" | null;
     /** Share of the binding limit used, 0–100 (may pass 100), or null. */
@@ -99,18 +103,39 @@ export function isExemptFromServerLimit(email: string | null | undefined): boole
 // ── Reading usage and limits ────────────────────────────────────────
 
 /** Built per query, not at import: tests mock the schema module. */
-const usedTokens = () =>
-    sql<string>`coalesce(sum(${aiUsageDaily.inputTokens} + ${aiUsageDaily.outputTokens}), 0)`;
+const usedTokens = () => sql<string>`coalesce(sum(${aiUsageDaily.weightedTokens}), 0)`;
+
+/** One person's use: the total and its split. */
+interface Used {
+    total: number;
+    split: UsageSplit;
+}
+
+function noUse(): Used {
+    return { total: 0, split: emptySplit() };
+}
+
+/** Rows of (person, kind, tokens) folded into each person's total and split. */
+function foldUse(rows: { userId: string; kind: string; tokens: string | number }[]) {
+    const used = new Map<string, Used>();
+    for (const row of rows) {
+        const tokens = Number(row.tokens);
+        const entry = used.get(row.userId) ?? noUse();
+        entry.total += tokens;
+        entry.split[usageGroupOf(row.kind)] += tokens;
+        used.set(row.userId, entry);
+    }
+    return used;
+}
 
 async function workspaceUsedBy(
     companyId: bigint,
     userIds: string[],
     since: string
-): Promise<Map<string, number>> {
-    const used = new Map<string, number>();
-    if (userIds.length === 0) return used;
+): Promise<Map<string, Used>> {
+    if (userIds.length === 0) return new Map();
     const rows = await db
-        .select({ userId: aiUsageDaily.userId, tokens: usedTokens() })
+        .select({ userId: aiUsageDaily.userId, kind: aiUsageDaily.kind, tokens: usedTokens() })
         .from(aiUsageDaily)
         .where(
             and(
@@ -119,17 +144,15 @@ async function workspaceUsedBy(
                 inArray(aiUsageDaily.userId, userIds)
             )
         )
-        .groupBy(aiUsageDaily.userId);
-    for (const row of rows) used.set(row.userId, Number(row.tokens));
-    return used;
+        .groupBy(aiUsageDaily.userId, aiUsageDaily.kind);
+    return foldUse(rows);
 }
 
-/** Each person's calls on this server's own models, in every workspace. */
-async function serverUsedBy(userIds: string[], since: string): Promise<Map<string, number>> {
-    const used = new Map<string, number>();
-    if (userIds.length === 0) return used;
+/** Each person's use the server pays for (its own models and search keys), in every workspace. */
+async function serverUsedBy(userIds: string[], since: string): Promise<Map<string, Used>> {
+    if (userIds.length === 0) return new Map();
     const rows = await db
-        .select({ userId: aiUsageDaily.userId, tokens: usedTokens() })
+        .select({ userId: aiUsageDaily.userId, kind: aiUsageDaily.kind, tokens: usedTokens() })
         .from(aiUsageDaily)
         .where(
             and(
@@ -138,9 +161,8 @@ async function serverUsedBy(userIds: string[], since: string): Promise<Map<strin
                 eq(aiUsageDaily.owner, "deployment")
             )
         )
-        .groupBy(aiUsageDaily.userId);
-    for (const row of rows) used.set(row.userId, Number(row.tokens));
-    return used;
+        .groupBy(aiUsageDaily.userId, aiUsageDaily.kind);
+    return foldUse(rows);
 }
 
 /** The workspace default, in tokens a month; null when it sets none. */
@@ -180,9 +202,15 @@ async function emailsOf(userIds: string[]): Promise<Map<string, string>> {
 interface AllowanceInputs {
     period: AllowancePeriod;
     used: number;
+    /** Defaults to all chat, for callers that only know a total. */
+    split?: UsageSplit;
     workspaceLimit: number | null;
     workspaceSource: "default" | "member";
-    server: { limit: number; used: number } | null;
+    server: { limit: number; used: number; split?: UsageSplit } | null;
+}
+
+function chatOnly(total: number): UsageSplit {
+    return { ...emptySplit(), chat: total };
 }
 
 /** Pure: which limit binds, how far along it is, and whether it is reached. */
@@ -198,8 +226,13 @@ export function evaluateAllowance(inputs: AllowanceInputs): AiAllowance {
     return {
         ...inputs.period,
         used: inputs.used,
+        split: inputs.split ?? chatOnly(inputs.used),
         workspace: { limit: inputs.workspaceLimit, source: inputs.workspaceSource },
-        server: inputs.server,
+        server: inputs.server && {
+            limit: inputs.server.limit,
+            used: inputs.server.used,
+            split: inputs.server.split ?? chatOnly(inputs.server.used),
+        },
         binding: tightest?.which ?? null,
         percent: tightest ? Math.round(tightest.ratio * 1000) / 10 : null,
         blocked: ratios.some(r => r.ratio >= 1),
@@ -231,7 +264,7 @@ export async function getAiAllowances(
         workspaceDefaultLimit(companyId),
         serverLimit === null ? Promise.resolve(new Map<string, string>()) : emailsOf(userIds),
         serverLimit === null
-            ? Promise.resolve(new Map<string, number>())
+            ? Promise.resolve(new Map<string, Used>())
             : serverUsedBy(userIds, period.start),
     ]);
 
@@ -239,14 +272,19 @@ export async function getAiAllowances(
     for (const userId of userIds) {
         const hasOverride = overrides.has(userId);
         const capped = serverLimit !== null && !isExemptFromServerLimit(emails.get(userId));
+        const here = used.get(userId) ?? noUse();
+        const everywhere = serverUsed.get(userId) ?? noUse();
         allowances.set(
             userId,
             evaluateAllowance({
                 period,
-                used: used.get(userId) ?? 0,
+                used: here.total,
+                split: here.split,
                 workspaceLimit: hasOverride ? (overrides.get(userId) ?? null) : workspaceDefault,
                 workspaceSource: hasOverride ? "member" : "default",
-                server: capped ? { limit: serverLimit, used: serverUsed.get(userId) ?? 0 } : null,
+                server: capped
+                    ? { limit: serverLimit, used: everywhere.total, split: everywhere.split }
+                    : null,
             })
         );
     }

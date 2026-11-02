@@ -53,7 +53,7 @@
     "questions": "Questions asked",
     "filesAdded": "Files added",
     "docsOpened": "Documents opened",
-    "aiTokens": "AI tokens",
+    "aiTokens": "AI usage",
     "costUsd": "Estimated cost"
   },
   "features": {
@@ -66,7 +66,9 @@
     "output": "Output",
     "tokens": "Tokens",
     "cost": "Cost",
-    "share": "Share"
+    "share": "Share",
+    "requests": "Requests",
+    "usage": "Usage"
   },
   "overview": {
     "title": "Overview",
@@ -74,15 +76,16 @@
     "subGroup": "{group} · {range}",
     "ofMembers": "{active} of {members}",
     "costUnpriced": "Set a price in Spending to estimate",
-    "unattributed": "{tokens} AI tokens came from work no one person started, such as syncs and scheduled jobs. They count in the workspace's totals, not anyone's.",
-    "ownEndpoint": "{calls} AI calls went to the model endpoint this workspace brought itself. Its own provider bills them.",
+    "unattributed": "{tokens} of AI usage came from work no one person started, such as syncs and scheduled jobs. It counts in the workspace's totals, not anyone's.",
+    "ownEndpoint": "{calls, plural, one {# AI request} other {# AI requests}} went to models this workspace brought itself. Its own provider bills them.",
     "daily": "Day by day",
     "byFeature": "By feature",
     "byRoute": "By model",
     "topPeople": "Most active",
     "seeEveryone": "See everyone",
     "nobody": "No one used the workspace in this window.",
-    "topLine": "{questions} asked · {tokens} tokens"
+    "topLine": "{questions} asked · {tokens} tokens",
+    "tokensUnit": "chat-token equivalents"
   },
   "people": {
     "title": "People",
@@ -143,7 +146,13 @@
     "former": "Someone who has left",
     "shown": "{shown} of {total} rows",
     "showMore": "Show more",
-    "loadingMore": "Loading…"
+    "loadingMore": "Loading…",
+    "usage": "Usage",
+    "kinds": {
+      "embedding": "Embeddings",
+      "web_search": "Web search",
+      "web_contents": "Pages read"
+    }
   },
   "documents": {
     "title": "Documents",
@@ -182,7 +191,7 @@
     "byFeature": "Where your AI use went",
     "costTitle": "Estimated cost",
     "costUnpriced": "No price is set for the models you used, so there is no estimate.",
-    "costBody": "For {calls} AI calls, at the prices this workspace set.",
+    "costBody": "For {calls, plural, one {# AI request} other {# AI requests}}: chat at each model's price, embeddings and web search at list price.",
     "allowanceTitle": "Your AI limit this month",
     "longestStreak": "Longest streak",
     "inThisWindow": "In this window"

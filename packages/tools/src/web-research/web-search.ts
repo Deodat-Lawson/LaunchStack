@@ -13,8 +13,11 @@
  *    and to whom, from its homepage (Exa contents), to search for lookalikes.
  *
  * All throw on failure so the caller can say the search failed rather than
- * that nothing exists.
+ * that nothing exists. Each request the vendor answers is counted against the
+ * current unit of work (`reportUsage`): a search, or the pages Exa read.
  */
+
+import { reportUsage } from "@launchstack/llm";
 
 import { getExaApiKey, getSearchStrategyFromEnv, getSerperApiKey } from "./config";
 
@@ -72,12 +75,20 @@ function clip(text: string, chars: number): string {
     return flat.length > chars ? `${flat.slice(0, chars)}…` : flat;
 }
 
+/** What one answered request is billed as: a search, or `units` pages read. */
+interface Billing {
+    provider: WebSearchProviderName;
+    kind: "web_search" | "web_contents";
+    units: number;
+}
+
 async function postJson(
     url: string,
     headers: Record<string, string>,
     body: unknown,
     options: SearchWebOptions,
-    vendor: string
+    vendor: string,
+    billing: Billing
 ): Promise<unknown> {
     const timeout = AbortSignal.timeout(options.timeoutMs ?? 10_000);
     const response = await (options.fetchImpl ?? fetch)(url, {
@@ -91,8 +102,23 @@ async function postJson(
         // The status only: a vendor's error body is not shown to a model.
         throw new Error(`${vendor} search failed (HTTP ${response.status})`);
     }
+    // Search keys are always the deployment's: no workspace brings its own.
+    reportUsage({
+        kind: billing.kind,
+        calls: billing.units,
+        modelId: billing.provider,
+        owner: "deployment",
+        inputTokens: 0,
+        outputTokens: 0,
+    });
     return response.json();
 }
+
+const SEARCH = (provider: WebSearchProviderName): Billing => ({
+    provider,
+    kind: "web_search",
+    units: 1,
+});
 
 async function searchExa(
     apiKey: string,
@@ -111,7 +137,8 @@ async function searchExa(
             contents: { text: { maxCharacters: snippetChars } },
         },
         options,
-        "Exa"
+        "Exa",
+        SEARCH("exa")
     )) as {
         results?: Array<{ title?: string; url?: string; text?: string; publishedDate?: string }>;
     };
@@ -137,7 +164,8 @@ async function searchSerper(
         { "X-API-KEY": apiKey },
         { q: query, num: maxResults },
         options,
-        "Serper"
+        "Serper",
+        SEARCH("serper")
     )) as {
         organic?: Array<{ title?: string; link?: string; snippet?: string; date?: string }>;
     };
@@ -254,7 +282,8 @@ export async function searchCompanies(
             contents: { text: { maxCharacters: descriptionChars } },
         },
         { ...options, timeoutMs: options.timeoutMs ?? 20_000 },
-        "Exa company"
+        "Exa company",
+        SEARCH("exa")
     )) as { results?: Array<{ title?: string; url?: string; text?: string }> };
 
     const skip = new Set(excluded);
@@ -307,7 +336,9 @@ export async function describeCompanies(
             text: { maxCharacters: 400 },
         },
         { ...options, timeoutMs: options.timeoutMs ?? 30_000 },
-        "Exa contents"
+        "Exa contents",
+        // Billed per page asked for, with a summary of each.
+        { provider: "exa", kind: "web_contents", units: wanted.length }
     )) as { results?: Array<{ url?: string; title?: string; summary?: string; text?: string }> };
 
     const described: CompanyDescription[] = [];

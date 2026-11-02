@@ -49,6 +49,7 @@ function allowance(over: Partial<AiAllowance> = {}): AiAllowance {
         resetsAt: "2026-11-01T00:00:00.000Z",
         used: 840_000,
         workspace: { limit: 1_000_000, source: "default" },
+        split: { chat: 0, embedding: 0, search: 0 },
         server: null,
         binding: "workspace",
         percent: 84,
@@ -159,7 +160,11 @@ describe("AskPanel AI allowance", () => {
 
     it("names the server's cap when that is the limit reached", async () => {
         current = allowance({
-            server: { limit: 2_000_000, used: 2_000_000 },
+            server: {
+                limit: 2_000_000,
+                used: 2_000_000,
+                split: { chat: 2_000_000, embedding: 0, search: 0 },
+            },
             binding: "server",
             percent: 100,
             blocked: true,

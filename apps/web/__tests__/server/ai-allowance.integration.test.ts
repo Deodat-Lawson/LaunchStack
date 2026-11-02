@@ -1,8 +1,9 @@
 /**
  * Per-person AI allowances against a real database: calls are counted per
  * person, the workspace limit sums one workspace, the server cap sums every
- * workspace but only the server's own models, and an admin's choice for one
- * person overrides the workspace default.
+ * workspace but only the server's own models and keys, embeddings and web
+ * searches count in chat-token equivalents and are split out, and an admin's
+ * choice for one person overrides the workspace default.
  */
 import { eq, inArray } from "drizzle-orm";
 
@@ -59,8 +60,25 @@ describeDb("AI allowances", () => {
         inputTokens,
         outputTokens: 0,
     });
+    const embedded = (owner: "deployment" | "workspace", modelId: string, inputTokens: number) => ({
+        kind: "embedding" as const,
+        modelId,
+        owner,
+        inputTokens,
+        outputTokens: 0,
+    });
+    const searched = (calls: number) => ({
+        kind: "web_search" as const,
+        calls,
+        modelId: "exa",
+        owner: "deployment" as const,
+        inputTokens: 0,
+        outputTokens: 0,
+    });
 
     beforeAll(async () => {
+        // A standard chat token at $1.00 per million, so the weights below are exact.
+        mockServerEnv.AI_USAGE_CHAT_PRICE_PER_MTOK = "1";
         const rows = await db
             .insert(company)
             .values([
@@ -88,9 +106,34 @@ describeDb("AI allowances", () => {
             recordAiUsage(workspaceB, "ask", call("deployment", 500_000), now, alice),
             recordAiUsage(workspaceB, "ask", call("workspace", 900_000), now, alice),
             recordAiUsage(workspaceA, "ask", call("deployment", 5_000_000), lastMonth, alice),
-            // Bob: 100k here. Indexing no one started: 50k.
+            // Alice also embeds 1M tokens here on the server's endpoint ($0.13 =
+            // 130k), runs two Exa searches here (7k each = 14k), and embeds 1M
+            // in B on B's own endpoint ($0.02 = 20k, B's bill).
+            recordAiUsage(
+                workspaceA,
+                "notes",
+                embedded("deployment", "text-embedding-3-large", 1_000_000),
+                now,
+                alice
+            ),
+            recordAiUsage(workspaceA, "ask", searched(2), now, alice),
+            recordAiUsage(
+                workspaceB,
+                "ingestion",
+                embedded("workspace", "text-embedding-3-small", 1_000_000),
+                now,
+                alice
+            ),
+            // Bob: 100k here. Indexing no one started: 50k, and 10k tokens
+            // embedded ($0.0013 = 1,300).
             recordAiUsage(workspaceA, "ask", call("deployment", 100_000), now, bob),
             recordAiUsage(workspaceA, "ingestion", call("deployment", 50_000), now),
+            recordAiUsage(
+                workspaceA,
+                "ingestion",
+                embedded("deployment", "text-embedding-3-large", 10_000),
+                now
+            ),
         ]);
         // The workspace default: 1M a month.
         await db.insert(settingsValues).values({
@@ -104,6 +147,7 @@ describeDb("AI allowances", () => {
 
     afterEach(() => {
         for (const key of Object.keys(mockServerEnv)) delete mockServerEnv[key];
+        mockServerEnv.AI_USAGE_CHAT_PRICE_PER_MTOK = "1";
     });
 
     afterAll(async () => {
@@ -114,16 +158,31 @@ describeDb("AI allowances", () => {
 
     it("records each call against its person", async () => {
         const rows = await db
-            .select({ userId: aiUsageDaily.userId, inputTokens: aiUsageDaily.inputTokens })
+            .select({
+                userId: aiUsageDaily.userId,
+                kind: aiUsageDaily.kind,
+                inputTokens: aiUsageDaily.inputTokens,
+                weightedTokens: aiUsageDaily.weightedTokens,
+            })
             .from(aiUsageDaily)
             .where(eq(aiUsageDaily.companyId, workspaceA));
-        const byPerson = new Map<string, number>();
+        const chatByPerson = new Map<string, number>();
+        const weightedByPerson = new Map<string, number>();
         for (const row of rows) {
-            byPerson.set(row.userId, (byPerson.get(row.userId) ?? 0) + row.inputTokens);
+            if (row.kind === "chat") {
+                chatByPerson.set(row.userId, (chatByPerson.get(row.userId) ?? 0) + row.inputTokens);
+            }
+            weightedByPerson.set(
+                row.userId,
+                (weightedByPerson.get(row.userId) ?? 0) + row.weightedTokens
+            );
         }
-        expect(byPerson.get(alice)).toBe(5_600_000);
-        expect(byPerson.get(bob)).toBe(100_000);
-        expect(byPerson.get("")).toBe(50_000);
+        expect(chatByPerson.get(alice)).toBe(5_600_000);
+        expect(chatByPerson.get(bob)).toBe(100_000);
+        expect(chatByPerson.get("")).toBe(50_000);
+        // Last month's 5M, this month's 600k chat, 130k embedded, 14k searched.
+        expect(weightedByPerson.get(alice)).toBe(5_744_000);
+        expect(weightedByPerson.get("")).toBe(51_300);
     });
 
     it("sums this month in this workspace against the workspace default", async () => {
@@ -131,14 +190,20 @@ describeDb("AI allowances", () => {
             serverCapApplies: true,
         });
         expect(allowances.get(alice)).toMatchObject({
-            used: 600_000,
+            used: 744_000,
+            split: { chat: 600_000, embedding: 130_000, search: 14_000 },
             workspace: { limit: 1_000_000, source: "default" },
             server: null,
             binding: "workspace",
-            percent: 60,
+            percent: 74.4,
             blocked: false,
         });
-        expect(allowances.get(bob)).toMatchObject({ used: 100_000, percent: 10, blocked: false });
+        expect(allowances.get(bob)).toMatchObject({
+            used: 100_000,
+            split: { chat: 100_000, embedding: 0, search: 0 },
+            percent: 10,
+            blocked: false,
+        });
     });
 
     it("sums the server cap across workspaces, on the server's models only", async () => {
@@ -146,9 +211,14 @@ describeDb("AI allowances", () => {
         const allowances = await getAiAllowances(workspaceA, [alice, bob], {
             serverCapApplies: true,
         });
-        // 600k here + 500k in B; B's own-endpoint 900k is B's bill, not the server's.
+        // 600k here + 500k in B, plus 130k embedded and 14k searched here; B's
+        // own-endpoint 900k chat and 20k embedded are B's bill, not the server's.
         expect(allowances.get(alice)).toMatchObject({
-            server: { limit: 1_000_000, used: 1_100_000 },
+            server: {
+                limit: 1_000_000,
+                used: 1_244_000,
+                split: { chat: 1_100_000, embedding: 130_000, search: 14_000 },
+            },
             binding: "server",
             blocked: true,
         });
@@ -194,7 +264,18 @@ describeDb("AI allowances", () => {
         expect(bobs.get(bob)?.workspace).toEqual({ limit: 1_000_000, source: "default" });
     });
 
+    it("counts a workspace's own embedding against that workspace, not the server", async () => {
+        mockServerEnv.AI_MONTHLY_TOKEN_LIMIT_PER_USER = "1000000";
+        const inB = await getAiAllowances(workspaceB, [alice], { serverCapApplies: true });
+        expect(inB.get(alice)).toMatchObject({
+            used: 1_420_000,
+            split: { chat: 1_400_000, embedding: 20_000, search: 0 },
+            server: { used: 1_244_000 },
+        });
+    });
+
     it("reports this month's usage no one person started", async () => {
-        await expect(unattributedUsage(workspaceA)).resolves.toBe(50_000);
+        // 50k chat and 1,300 for the 10k tokens embedded.
+        await expect(unattributedUsage(workspaceA)).resolves.toBe(51_300);
     });
 });

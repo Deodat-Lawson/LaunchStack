@@ -221,7 +221,7 @@
       },
       "memberMonthlyTokenLimit": {
         "label": "每人 AI 上限",
-        "description": "每个人每月在此工作区可使用的 AI token（输入加输出），除非你在下方为某人单独设置上限。每月 1 日（UTC）重置。0 表示不设上限。",
+        "description": "每个人每月在此工作区可使用的 AI，除非你在下方为某人单独设置上限。以对话 token 当量计：标准对话模型的一个 token 计为 1，其他模型按相对它的价格计，嵌入和网页搜索按费用折算。每月 1 日（UTC）重置。0 表示不设上限。",
         "consequence": "立即生效。已超过新上限的人在重置之前无法开始新的 AI 任务。",
         "unit": "token / 月"
       }
@@ -348,7 +348,7 @@
     },
     "aiAllowance": {
       "title": "你本月的 AI 额度",
-      "description": "自本月 1 日（UTC）起，你在此工作区使用的 AI token（输入加输出）。",
+      "description": "自本月 1 日（UTC）起，你在此工作区使用的 AI，以对话 token 当量计：标准对话模型的一个 token 计为 1，其他模型按相对它的价格计，嵌入和网页搜索按费用折算。",
       "loadFailed": "无法加载你的 AI 额度。",
       "loadFailedStatus": "无法加载你的 AI 额度（{status}）。",
       "usedOf": "已用 {used} / {limit} 个 token",
@@ -1557,7 +1557,7 @@
     },
     "burn": {
       "title": "每日消耗",
-      "description": "按消耗来源统计从余额中扣除的 token。将鼠标悬停在某一天上可查看明细；下表包含相同的数据。",
+      "description": "按消耗来源统计从余额中扣除的 token。嵌入按对话 token 当量扣除，与上方 AI 用量一致。将鼠标悬停在某一天上可查看明细；下表包含相同的数据。",
       "lastDays": "最近 {days} 天",
       "nothing": "此时间段内没有消耗余额。",
       "window": "时间范围"
@@ -1584,7 +1584,7 @@
     },
     "members": {
       "title": "每人 AI 上限",
-      "description": "每个人本月已使用的 AI 额度，按输入加输出的 token 计。上限每月 1 日（UTC）重置；服务器也设置了上限时，以更严格的为准。",
+      "description": "每个人本月已使用的 AI 额度，以对话 token 当量计：标准对话模型的一个 token 计为 1，其他模型按相对它的价格计，嵌入和网页搜索按费用折算。上限每月 1 日（UTC）重置；服务器也设置了上限时，以更严格的为准。",
       "serverCap": "这台服务器限制每人每月最多使用 {limit} 个 token（合计其所有工作区，仅限服务器自己的模型）。该上限由服务器的管理者设置，无法在这里修改。",
       "serverCapNotHere": "这台服务器限制每人每月在其自有模型上最多使用 {limit} 个 token。此上限不适用于这里：此工作区使用自己的模型。",
       "loadFailed": "无法加载每人 AI 上限。",
@@ -1610,7 +1610,7 @@
       "unattributed": "未归属到个人：本月 {tokens} 个 token，来自后台任务以及按人计量之前的用量。",
       "dialog": {
         "title": "{name} 的 AI 上限",
-        "description": "此人每月在此工作区可使用的 AI token（输入加输出）。每月 1 日（UTC）重置。",
+        "description": "此人每月在此工作区可使用的 AI，以对话 token 当量计：标准对话模型的一个 token 计为 1，其他模型按相对它的价格计，嵌入和网页搜索按费用折算。每月 1 日（UTC）重置。",
         "choiceLabel": "上限",
         "default": "工作区默认（{limit} 个 token）",
         "defaultNone": "工作区默认（不设上限）",
@@ -1623,6 +1623,20 @@
         "saveFailed": "无法保存上限。",
         "saveFailedStatus": "无法保存上限（{status}）。"
       }
+    },
+    "kinds": {
+      "title": "按类型",
+      "chat": "对话",
+      "embedding": "嵌入",
+      "search": "网页搜索",
+      "chatDetail": "输入 {input} · 输出 {output} · {calls, number} 次调用",
+      "embeddingDetail": "已嵌入 {tokens} 个 token",
+      "searchDetail": "{searches, number} 次搜索",
+      "searchPagesDetail": "{searches, number} 次搜索 · 读取 {pages, number} 个网页",
+      "none": "此时间段内没有",
+      "rates": "按费用折算。本时间段内，每一百万个嵌入 token 平均计为 {embedding}，每次网页搜索计为 {search}。目前一个标准对话 token 按每百万 {price} 计价。",
+      "item": "{label} {value}",
+      "splitLabel": "构成"
     }
   },
   "workspaceModel": {
@@ -1707,7 +1721,8 @@
       "offNoReason": "关闭：主模型不支持推理",
       "lastChangedBy": "最近由 {who} 于 {when}修改",
       "lastChanged": "最近修改于 {when}",
-      "chooseFirst": "请先选择模型。"
+      "chooseFirst": "请先选择模型。",
+      "price": "每百万 token：输入 {input}，输出 {output}"
     },
     "testingShort": "正在测试…",
     "test": "测试",
@@ -1715,7 +1730,9 @@
     "problems": {
       "badId": "这看起来不像模型 ID。请完全按照提供商列出的样子复制，不要包含空格。",
       "needsReasoning": "只有推理模型才能处理此类工作。请勾选“逐步推理”，或留空。",
-      "needsVision": "只有能读取图片的模型才能处理此类工作。请勾选“可读取图片”，或留空。"
+      "needsVision": "只有能读取图片的模型才能处理此类工作。请勾选“可读取图片”，或留空。",
+      "pricePair": "请同时填写输入和输出价格，或两者都留空。",
+      "priceRange": "价格必须是 0 到 {max, number} 之间的数字，单位为美元/百万 token。"
     },
     "blockers": {
       "address": "地址",
@@ -1759,7 +1776,12 @@
       "readsImages": "可读取图片",
       "reasons": "逐步推理（推理模型）",
       "followsSchema": "遵循 JSON schema",
-      "structuredHint": "结构化输出（response_format: json_schema）。大多数 OpenAI、Gemini 和 OpenRouter 模型默认开启；通过 Anthropic 兼容 API 使用的 Claude 默认关闭。关闭时，LaunchStack 会改为在提示词中要求输出 JSON。"
+      "structuredHint": "结构化输出（response_format: json_schema）。大多数 OpenAI、Gemini 和 OpenRouter 模型默认开启；通过 Anthropic 兼容 API 使用的 Claude 默认关闭。关闭时，LaunchStack 会改为在提示词中要求输出 JSON。",
+      "price": "每百万 token 价格",
+      "priceInput": "输入",
+      "priceOutput": "输出",
+      "priceUnit": "$",
+      "priceHint": "你的服务商收取的费用，以美元计。用于显示费用，并在用量和上限中按价格折算这个模型的 token。留空则每个 token 按 1 计。"
     }
   },
   "server": {
@@ -1831,6 +1853,8 @@
       "notModelId": "“{id}”看起来不像模型 ID。请按服务商列出的原样复制。",
       "visionModel": "处理图片的模型必须能够读取图片。",
       "reasoningModel": "用于推理的模型必须具备推理能力。",
+      "pricePair": "请为“{id}”同时填写输入和输出价格，或两者都留空。",
+      "priceRange": "“{id}”的价格必须在 0 到 {max} 美元/百万 token 之间。",
       "invalidSetup": "这不是有效的模型设置。",
       "saveFailed": "无法保存模型设置。",
       "chooseModel": "请选择要测试的模型。",

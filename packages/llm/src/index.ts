@@ -12,6 +12,8 @@ export {
     createUsageMeteringFetch,
     priceUsage,
     readReportedUsage,
+    reportUsage,
+    type AiUsageKind,
     type ChatUsageEvent,
     type ChatUsageRecorder,
     type ReportedUsage,

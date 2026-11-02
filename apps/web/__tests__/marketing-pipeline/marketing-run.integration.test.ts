@@ -16,6 +16,8 @@ import {
     createMarketingRun,
     getMarketingRun,
     listActiveMarketingRuns,
+    listCompletedMarketingRuns,
+    finishMarketingRun,
 } from "@launchstack/pipelines/marketing/runs";
 
 import { createFounderWeeklyReviewTestDatabase } from "../founderWeeklyReview/testDb";
@@ -151,6 +153,28 @@ describeDb("post-writer runs", () => {
         expect(
             await claimMarketingRun(run.id, companyId, later, new Date(later.getTime() - STALE_MS))
         ).not.toBeNull();
+    });
+
+    it("keeps completed results discoverable for their author in their workspace", async () => {
+        const own = await createMarketingRun({ companyId, userId: "returning-member", input });
+        const otherMember = await createMarketingRun({ companyId, userId: "someone-else", input });
+        const [otherCompany] = await testDb.db
+            .insert(company)
+            .values({ name: "Another workspace", numberOfEmployees: "1" })
+            .returning();
+        const otherWorkspace = await createMarketingRun({
+            companyId: BigInt(otherCompany!.id),
+            userId: "returning-member",
+            input,
+        });
+        const result = { platform: "linkedin", message: "Finished while away." } as never;
+        for (const run of [own, otherMember, otherWorkspace]) {
+            await finishMarketingRun(run.id, { status: "completed", result });
+        }
+        const completed = await listCompletedMarketingRuns(companyId, "returning-member");
+        expect(completed.map(run => run.id)).toEqual([own.id]);
+        expect(completed[0]!.result).toMatchObject({ message: "Finished while away." });
+        expect(await listActiveMarketingRuns(companyId, "returning-member")).toEqual([]);
     });
 
     it("a run out of attempts ends failed with a reason, so the screen stops polling", async () => {

@@ -41,6 +41,7 @@ interface RunInput {
 /** The poll's view of a run (server/marketing/run-view.ts). */
 interface MarketingRunView {
     id: string;
+    createdAt: string;
     status: "queued" | "running" | "completed" | "failed";
     input: RunInput;
     events: PipelineSSEEvent[];
@@ -444,53 +445,15 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
         }
     }, []);
 
-    /**
-     * Follow a queued run to its end: poll its progress events (the same
-     * events the stepper always consumed) after a cursor, then take its
-     * result. The run lives on the server, so closing the tab loses nothing;
-     * a reload finds it again (see the effect below) and replays its events.
-     */
-    const followRun = useCallback(
-        async (runId: string, input: RunInput, signal: AbortSignal) => {
-            let cursor = 0;
-            let pipelineResult: PipelineData | null = null;
-            while (!signal.aborted) {
-                const response = await fetch(
-                    `/api/marketing-pipeline/runs/${encodeURIComponent(runId)}?after=${cursor}`,
-                    { signal, cache: "no-store" }
-                );
-                if (!response.ok) {
-                    setError(t("errors.generateFailed"));
-                    return;
-                }
-                const { data } = (await response.json()) as { data: { run: MarketingRunView } };
-                const run = data.run;
-                for (const event of run.events) handleSSEEvent(event);
-                cursor = run.eventCount;
-                if (run.status === "failed") {
-                    setError(run.error ?? t("errors.pipelineFailed"));
-                    return;
-                }
-                if (run.status === "completed") {
-                    pipelineResult = run.result;
-                    break;
-                }
-                await new Promise(resolve => setTimeout(resolve, RUN_POLL_MS));
-            }
-            if (signal.aborted) return;
-
-            if (!pipelineResult) {
-                setError(t("errors.incomplete"));
-                return;
-            }
-
+    /** A server run has one stable history id, including after a fresh browser tab. */
+    const sessionForRun = useCallback(
+        (run: MarketingRunView): MarketingSession | null => {
+            const pipelineResult = run.result;
+            if (run.status !== "completed" || !pipelineResult) return null;
             const now = Date.now();
-            const sessionId =
-                activeSessionId ??
-                (typeof crypto !== "undefined" && "randomUUID" in crypto
-                    ? crypto.randomUUID()
-                    : `session-${now}`);
-
+            const createdAt = Date.parse(run.createdAt) || now;
+            const runId = run.id;
+            const input = run.input;
             const pipelineVariants = pipelineResult.variants;
             let initialVariants: MessageVariant[];
             let initialActiveId: string;
@@ -510,10 +473,7 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
                 }));
                 initialActiveId = initialVariants[0]!.id;
             } else {
-                const originalVariantId =
-                    typeof crypto !== "undefined" && "randomUUID" in crypto
-                        ? crypto.randomUUID()
-                        : `variant-${now}`;
+                const originalVariantId = `${runId}-original`;
                 initialVariants = [
                     {
                         id: originalVariantId,
@@ -525,9 +485,9 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
                 initialActiveId = originalVariantId;
             }
 
-            const nextSession: MarketingSession = {
-                id: sessionId,
-                createdAt: now,
+            return {
+                id: runId,
+                createdAt,
                 updatedAt: now,
                 platform: input.platform,
                 prompt: input.prompt,
@@ -542,29 +502,65 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
                 targetAudience: input.targetAudience,
                 contentType: input.contentType,
             };
-
-            setResult(pipelineResult);
-            setEditableMessage(pipelineResult.message);
-            setViewMode("preview");
-            setMessageVariants(initialVariants);
-            setActiveVariantId(initialActiveId);
-            setActiveSessionId(nextSession.id);
-            setSessions(prev => {
-                const existingIndex = prev.findIndex(session => session.id === nextSession.id);
-                if (existingIndex === -1) {
-                    return [nextSession, ...prev].slice(0, MAX_MARKETING_SESSIONS);
-                }
-
-                const updated = [...prev];
-                const existing = updated[existingIndex];
-                updated[existingIndex] = {
-                    ...nextSession,
-                    createdAt: existing?.createdAt ?? nextSession.createdAt,
-                };
-                return updated;
-            });
         },
-        [activeSessionId, handleSSEEvent, t]
+        [t]
+    );
+
+    /**
+     * Follow a queued run to its end: poll its progress events (the same
+     * events the stepper always consumed) after a cursor, then take its
+     * result. The run lives on the server, so closing the tab loses nothing;
+     * a reload finds it again (see the effect below) and replays its events.
+     */
+    const followRun = useCallback(
+        async (runId: string, signal: AbortSignal) => {
+            let cursor = 0;
+            let completedRun: MarketingRunView | null = null;
+            while (!signal.aborted) {
+                const response = await fetch(
+                    `/api/marketing-pipeline/runs/${encodeURIComponent(runId)}?after=${cursor}`,
+                    { signal, cache: "no-store" }
+                );
+                if (!response.ok) {
+                    setError(t("errors.generateFailed"));
+                    return;
+                }
+                const { data } = (await response.json()) as { data: { run: MarketingRunView } };
+                const run = data.run;
+                for (const event of run.events) handleSSEEvent(event);
+                cursor = run.eventCount;
+                if (run.status === "failed") {
+                    setError(run.error ?? t("errors.pipelineFailed"));
+                    return;
+                }
+                if (run.status === "completed") {
+                    completedRun = run;
+                    break;
+                }
+                await new Promise(resolve => setTimeout(resolve, RUN_POLL_MS));
+            }
+            if (signal.aborted) return;
+
+            const nextSession = completedRun && sessionForRun(completedRun);
+            if (!nextSession) {
+                setError(t("errors.incomplete"));
+                return;
+            }
+
+            applySession(nextSession);
+            setActiveSessionId(nextSession.id);
+            setSessions(prev =>
+                [
+                    nextSession,
+                    ...prev.filter(
+                        session =>
+                            session.id !== nextSession.id &&
+                            (session.id !== activeSessionId || session.result !== null)
+                    ),
+                ].slice(0, MAX_MARKETING_SESSIONS)
+            );
+        },
+        [activeSessionId, applySession, handleSSEEvent, sessionForRun, t]
     );
 
     /** Watch a run from the start or, after a reload, from wherever it got to. */
@@ -573,12 +569,18 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
             abortRef.current?.abort();
             const controller = new AbortController();
             abortRef.current = controller;
+            setPlatform(input.platform);
+            setPrompt(input.prompt ?? "");
+            setPlatformMeta(input.platformMeta ?? {});
+            setToneOverride(input.toneOverride);
+            setTargetAudience(input.targetAudience ?? "");
+            setContentType(input.contentType);
             setLoading(true);
             setPipelineSteps(buildInitialSteps());
             setThinkingLog([]);
             setGenerationStartTime(Date.now());
             try {
-                await followRun(runId, input, controller.signal);
+                await followRun(runId, controller.signal);
             } catch (requestError) {
                 if (requestError instanceof DOMException && requestError.name === "AbortError")
                     return;
@@ -596,30 +598,67 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
         [followRun, t]
     );
 
-    // A run still going on the server (this tab was closed or reloaded mid-run):
-    // pick it up instead of leaving it orphaned.
+    // Restore active work and results that finished while this screen was closed.
     useEffect(() => {
         let cancelled = false;
+        const feedbackEpoch = postFeedbackEpochRef.current;
         void (async () => {
             try {
                 const response = await fetch("/api/marketing-pipeline/runs", { cache: "no-store" });
                 if (!response.ok || cancelled) return;
                 const { data } = (await response.json()) as {
-                    data: { runs: MarketingRunView[] };
+                    data: { runs: MarketingRunView[]; completedRuns?: MarketingRunView[] };
                 };
+                if (cancelled) return;
+                const completed = (data.completedRuns ?? [])
+                    .map(sessionForRun)
+                    .filter((session): session is MarketingSession => session !== null);
+                // Preserve this tab's edits. Server results only fill missing history entries.
+                let cached: MarketingSession[] = [];
+                try {
+                    const parsed: unknown = JSON.parse(
+                        sessionStorage.getItem(MARKETING_SESSIONS_STORAGE_KEY) ?? "[]"
+                    );
+                    if (Array.isArray(parsed)) cached = parsed as MarketingSession[];
+                } catch {
+                    // A blocked or malformed cache does not prevent server recovery.
+                }
+                setSessions(prev => {
+                    const ids = new Set(prev.map(session => session.id));
+                    const byId = new Map(completed.map(session => [session.id, session]));
+                    const saved = prev.map(session =>
+                        session.result ? session : (byId.get(session.id) ?? session)
+                    );
+                    return [...saved, ...completed.filter(session => !ids.has(session.id))]
+                        .sort((a, b) => b.createdAt - a.createdAt)
+                        .slice(0, MAX_MARKETING_SESSIONS);
+                });
+                // An interaction while the lookup was in flight takes precedence.
+                if (postFeedbackEpochRef.current !== feedbackEpoch) return;
                 const active = data.runs[0];
-                if (!active || cancelled) return;
-                setPlatform(active.input.platform);
-                setPrompt(active.input.prompt ?? "");
-                void watchRun(active.id, active.input);
+                if (active) {
+                    void watchRun(active.id, active.input);
+                    return;
+                }
+                const latest = completed[0];
+                const newestSavedAt = Math.max(0, ...cached.map(session => session.createdAt));
+                if (
+                    latest &&
+                    latest.createdAt >= newestSavedAt &&
+                    !cached.some(session => session.id === latest.id && session.result !== null)
+                ) {
+                    applySession(latest);
+                    setActiveSessionId(latest.id);
+                }
             } catch {
-                // Nothing to resume.
+                // Cached sessions still work when the server cannot be reached.
             }
         })();
         return () => {
             cancelled = true;
+            abortRef.current?.abort();
         };
-        // Once per mount: a later watchRun identity must not re-trigger the lookup.
+        // Once per mount: later callback identities must not restart recovery.
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -671,12 +710,34 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
                 return;
             }
             const { data } = (await response.json()) as { data: { run: MarketingRunView } };
+            const now = Date.now();
+            const pending: MarketingSession = {
+                ...input,
+                id: data.run.id,
+                createdAt: Date.parse(data.run.createdAt) || now,
+                updatedAt: now,
+                result: null,
+                editableMessage: "",
+                viewMode: "preview",
+            };
+            setSessions(prev =>
+                [
+                    pending,
+                    ...prev.filter(
+                        session =>
+                            session.id !== pending.id &&
+                            (session.id !== activeSessionId || session.result !== null)
+                    ),
+                ].slice(0, MAX_MARKETING_SESSIONS)
+            );
+            setActiveSessionId(pending.id);
             await watchRun(data.run.id, input);
         } catch (requestError) {
             console.error("[marketing-pipeline] request error:", requestError);
             setError(t("errors.engine"));
         }
     }, [
+        activeSessionId,
         contentType,
         debug,
         platform,

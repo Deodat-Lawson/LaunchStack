@@ -752,6 +752,25 @@ export function PdfViewerWithNotes({
 
     /** The point a zoom keeps still, captured just before the scale changes. */
     const zoomAnchor = useRef<ZoomAnchor | null>(null);
+    /**
+     * The page at the probe line (a third of the way down the view) and how
+     * far down it, kept current on every scroll and jump. A change of scale
+     * that is not a zoom — the column resized, the contents panel opened,
+     * a page's real size arrived — moves every offset in pixels while the
+     * scroll position stays put, which would land the reader on another
+     * page; this puts the same page back at the same place instead.
+     */
+    const viewAnchor = useRef<{ page: number; frac: number } | null>(null);
+    const noteViewAnchor = useCallback((page: number, scrollTop: number) => {
+        const container = containerRef.current;
+        const pageEl = pageRefs.current.get(page);
+        if (!container || !pageEl) return;
+        const probe = scrollTop + container.clientHeight / 3;
+        viewAnchor.current = {
+            page,
+            frac: pageEl.offsetHeight > 0 ? (probe - pageEl.offsetTop) / pageEl.offsetHeight : 0,
+        };
+    }, []);
 
     const applyZoom = useCallback((next: Zoom, at?: { x: number; y: number }) => {
         const container = containerRef.current;
@@ -788,21 +807,35 @@ export function PdfViewerWithNotes({
     applyZoomRef.current = applyZoom;
 
     // Put the anchored point back where it was. Every page's box is sized
-    // from the new scale in the same render, so the offsets read below are
-    // the new ones; then the pages near the restored position are drawn.
+    // from the new scale and sizes in the same render, so the offsets read
+    // below are the new ones; then the pages near the restored position are
+    // drawn. A zoom keeps the point under the pointer still; any other
+    // change keeps the current page where it was.
     useEffect(() => {
+        const container = containerRef.current;
+        if (!container) return;
         const anchor = zoomAnchor.current;
         zoomAnchor.current = null;
-        const container = containerRef.current;
-        const pageEl = anchor ? pageRefs.current.get(anchor.page) : null;
-        if (anchor && container && pageEl && Date.now() - anchor.at <= 1500) {
+        const zoomedPage = anchor ? pageRefs.current.get(anchor.page) : null;
+        if (anchor && zoomedPage && Date.now() - anchor.at <= 1500) {
             container.scrollTop =
-                pageEl.offsetTop + anchor.fracY * pageEl.offsetHeight - anchor.viewY;
+                zoomedPage.offsetTop + anchor.fracY * zoomedPage.offsetHeight - anchor.viewY;
             container.scrollLeft =
-                pageEl.offsetLeft + anchor.fracX * pageEl.offsetWidth - anchor.viewX;
+                zoomedPage.offsetLeft + anchor.fracX * zoomedPage.offsetWidth - anchor.viewX;
+            noteViewAnchor(anchor.page, container.scrollTop);
+        } else if (viewAnchor.current) {
+            const { page, frac } = viewAnchor.current;
+            const pageEl = pageRefs.current.get(page);
+            if (pageEl) {
+                const top = Math.max(
+                    0,
+                    pageEl.offsetTop + frac * pageEl.offsetHeight - container.clientHeight / 3
+                );
+                if (Math.abs(container.scrollTop - top) > 1) container.scrollTop = top;
+            }
         }
         updateDrawn();
-    }, [pageScale, updateDrawn]);
+    }, [pageScale, pageSizes, updateDrawn, noteViewAnchor]);
 
     const zoomIn = useCallback(() => {
         const current = pageScaleRef.current;
@@ -929,6 +962,7 @@ export function PdfViewerWithNotes({
                     else break;
                 }
                 setCurrentPage(page);
+                noteViewAnchor(page, container.scrollTop);
                 updateDrawn();
             });
         };
@@ -937,7 +971,7 @@ export function PdfViewerWithNotes({
             container.removeEventListener("scroll", onScroll);
             cancelAnimationFrame(frame);
         };
-    }, [updateDrawn]);
+    }, [updateDrawn, noteViewAnchor]);
 
     const goToPage = useCallback(
         (page: number) => {
@@ -946,9 +980,10 @@ export function PdfViewerWithNotes({
             if (!container || !pageEl) return;
             container.scrollTo({ top: pageEl.offsetTop - 12 });
             setCurrentPage(page);
+            noteViewAnchor(page, Math.max(0, pageEl.offsetTop - 12));
             updateDrawn();
         },
-        [updateDrawn]
+        [updateDrawn, noteViewAnchor]
     );
 
     /** Bring a box on a page into view, a third of the way down. */
@@ -959,6 +994,7 @@ export function PdfViewerWithNotes({
             if (!container || !pageEl) return;
             if (!quad) {
                 container.scrollTo({ top: pageEl.offsetTop - 12 });
+                noteViewAnchor(page, Math.max(0, pageEl.offsetTop - 12));
                 updateDrawn();
                 return;
             }
@@ -974,9 +1010,10 @@ export function PdfViewerWithNotes({
                         ? left - 24
                         : container.scrollLeft,
             });
+            viewAnchor.current = { page, frac: quad[1] };
             updateDrawn();
         },
-        [updateDrawn]
+        [updateDrawn, noteViewAnchor]
     );
 
     // Scroll to a pinned note when the parent requests it.

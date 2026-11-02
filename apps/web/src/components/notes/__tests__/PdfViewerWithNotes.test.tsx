@@ -86,28 +86,52 @@ jest.mock("react-pdf", () => {
 let columnWidth = 1232;
 /** How tall the visible area is: a little under one page. */
 const VIEW_HEIGHT = 700;
+const resizeObservers = new Set<FakeResizeObserver>();
 class FakeResizeObserver {
-    constructor(private readonly callback: ResizeObserverCallback) {}
+    private readonly targets = new Set<Element>();
+    constructor(private readonly callback: ResizeObserverCallback) {
+        resizeObservers.add(this);
+    }
     observe(target: Element) {
+        this.targets.add(target);
+        this.fire([target]);
+    }
+    fire(targets: Element[] = Array.from(this.targets)) {
         this.callback(
-            [
-                {
-                    target,
-                    contentRect: { width: columnWidth, height: VIEW_HEIGHT },
-                } as ResizeObserverEntry,
-            ],
+            targets.map(
+                target =>
+                    ({
+                        target,
+                        contentRect: { width: columnWidth, height: VIEW_HEIGHT },
+                    }) as ResizeObserverEntry
+            ),
             this as unknown as ResizeObserver
         );
     }
     unobserve() {}
-    disconnect() {}
+    disconnect() {
+        resizeObservers.delete(this);
+    }
 }
 
-/** Pages sit one under the other: 20px above the first, 800px tall, 16px apart. */
+/** The column changes width, as dragging a rail would. */
+function resizeColumnTo(width: number) {
+    columnWidth = width;
+    act(() => {
+        for (const observer of resizeObservers) observer.fire();
+    });
+}
+
+/**
+ * Pages sit one under the other: 20px above the first, 800px tall at scale
+ * 1, 16px apart. With `layoutRects` on, a page box is as tall as the viewer
+ * sized it, so a change of scale moves every page the way it does on screen.
+ */
 const PAGE_HEIGHT = 800;
 const PAGE_GAP = 16;
 const FIRST_PAGE_TOP = 20;
-const pageTop = (page: number) => FIRST_PAGE_TOP + (page - 1) * (PAGE_HEIGHT + PAGE_GAP);
+const pageTop = (page: number, scale = 1) =>
+    FIRST_PAGE_TOP + (page - 1) * (Math.floor(PAGE_HEIGHT * scale) + PAGE_GAP);
 
 const PAGE_BOX = {
     x: 0,
@@ -155,17 +179,21 @@ beforeAll(() => {
     } as Element["scrollTo"];
 
     const pageOf = (el: HTMLElement) => Number(el.dataset.pdfPage ?? 0);
+    const boxHeight = (el: HTMLElement) => {
+        const sized = Number.parseFloat(el.style.height);
+        return layoutRects && Number.isFinite(sized) && sized > 0 ? sized : PAGE_HEIGHT;
+    };
     Object.defineProperty(HTMLElement.prototype, "offsetTop", {
         configurable: true,
         get(this: HTMLElement) {
             const page = pageOf(this);
-            return page ? pageTop(page) : 0;
+            return page ? FIRST_PAGE_TOP + (page - 1) * (boxHeight(this) + PAGE_GAP) : 0;
         },
     });
     Object.defineProperty(HTMLElement.prototype, "offsetHeight", {
         configurable: true,
         get(this: HTMLElement) {
-            return pageOf(this) ? PAGE_HEIGHT : 0;
+            return pageOf(this) ? boxHeight(this) : 0;
         },
     });
     Object.defineProperty(HTMLElement.prototype, "offsetWidth", {
@@ -401,15 +429,34 @@ describe("PdfViewerWithNotes pages in view", () => {
 
         // Every page has a box; only the first screenfuls carry a canvas.
         expect(document.querySelectorAll("[data-pdf-page]")).toHaveLength(30);
-        await waitFor(() => expect(drawnPages()).toEqual([1, 2, 3]));
+        await waitFor(() => expect(drawnPages()).toEqual([1, 2]));
         const blank = document.querySelector('[data-pdf-page="20"]')!;
         expect(blank.style.width).toBe("750px");
         expect(blank.style.height).toBe("1000px");
 
         // Scrolled to page 21: the pages around it are drawn and the first is not.
-        scrollPagesTo(pageTop(21));
+        scrollPagesTo(pageTop(21, 1.25));
         await waitFor(() => expect(bar.getByLabelText("Page number")).toHaveValue("21"));
-        await waitFor(() => expect(drawnPages()).toEqual([20, 21, 22, 23]));
+        await waitFor(() => expect(drawnPages()).toEqual([20, 21, 22]));
+    });
+
+    it("keeps the page in view when the column changes width", async () => {
+        mockNumPages = 30;
+        layoutRects = true;
+        renderViewer();
+        const bar = await toolbar();
+        scrollPagesTo(pageTop(21, 1.25));
+        await waitFor(() => expect(bar.getByLabelText("Page number")).toHaveValue("21"));
+
+        // Narrower: 600px for a 600pt page, so the pages shrink to 100% and
+        // every offset moves — the view follows page 21 rather than staying
+        // at a pixel that now belongs to page 26.
+        resizeColumnTo(632);
+        await waitFor(() => expect(bar.getByTestId("pdf-zoom-level")).toHaveTextContent("100%"));
+        const scrollTop = screen.getByTestId("pdf-scroll").scrollTop;
+        expect(scrollTop).toBeGreaterThanOrEqual(pageTop(21) - VIEW_HEIGHT / 3);
+        expect(scrollTop).toBeLessThan(pageTop(22));
+        await waitFor(() => expect(drawnPages()).toContain(21));
     });
 
     it("a zoom step redraws only the pages in view", async () => {
@@ -417,12 +464,12 @@ describe("PdfViewerWithNotes pages in view", () => {
         layoutRects = true;
         renderViewer();
         const bar = await toolbar();
-        await waitFor(() => expect(drawnPages()).toEqual([1, 2, 3]));
+        await waitFor(() => expect(drawnPages()).toEqual([1, 2]));
         mockPageScales.clear();
 
         fireEvent.click(bar.getByTestId("pdf-zoom-in"));
         await waitFor(() => expect(bar.getByTestId("pdf-zoom-level")).toHaveTextContent("150%"));
-        expect(Array.from(mockPageScales.keys()).sort((a, b) => a - b)).toEqual([1, 2, 3]);
+        expect(Array.from(mockPageScales.keys()).sort((a, b) => a - b)).toEqual([1, 2]);
         expect(mockPageScales.get(2)).toBe(1.5);
     });
 });

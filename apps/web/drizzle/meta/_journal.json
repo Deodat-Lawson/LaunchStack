@@ -288,6 +288,13 @@
       "when": 1793163053692,
       "tag": "20261028045053_ai_usage_kinds",
       "breakpoints": true
+    },
+    {
+      "idx": 41,
+      "version": "7",
+      "when": 1793649411551,
+      "tag": "20261102195651_accelerator_catalogue",
+      "breakpoints": true
     }
   ]
 }

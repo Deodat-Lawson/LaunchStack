@@ -213,8 +213,7 @@ export function computeFit(input: ScoreInput): FitBreakdown {
             : fit === "out"
               ? 0
               : Math.round(WEIGHTS.territoryMatch * 0.5);
-    }
-    else if (input.org.country && targetCountries.has(input.org.country))
+    } else if (input.org.country && targetCountries.has(input.org.country))
         territoryMatch = Math.round(WEIGHTS.territoryMatch * 0.8);
     else if (wanted && dossierTerritories.some(t => t.includes(wanted.toLowerCase())))
         territoryMatch = Math.round(WEIGHTS.territoryMatch * 0.7);

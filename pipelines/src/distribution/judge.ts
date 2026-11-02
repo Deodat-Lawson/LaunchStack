@@ -56,7 +56,10 @@ export function createFitJudge(): JudgeFit {
             const result = await invokeStructured(
                 model,
                 VerdictsSchema,
-                [new SystemMessage(SYSTEM), new HumanMessage(buildJudgePrompt(brief, where, batch, seller))],
+                [
+                    new SystemMessage(SYSTEM),
+                    new HumanMessage(buildJudgePrompt(brief, where, batch, seller)),
+                ],
                 { name: "prospect_fit" }
             );
             const ids = new Set(batch.map(c => c.id));

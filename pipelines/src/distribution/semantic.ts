@@ -64,7 +64,9 @@ export function buyerBrief(
             : "",
         partnerKinds.length > 0 ? `As: ${partnerKinds.join(", ")}.` : "",
         program.constraints ? `Constraints: ${program.constraints}` : "",
-        seller?.identity.trim() ? `Seller: ${seller.identity.trim().slice(0, SELLER_IN_BRIEF)}` : "",
+        seller?.identity.trim()
+            ? `Seller: ${seller.identity.trim().slice(0, SELLER_IN_BRIEF)}`
+            : "",
     ]
         .filter(Boolean)
         .join(" ");

@@ -74,10 +74,14 @@
     "askAiTitle": "在对话中就这段内容提问",
     "pinTitle": "笔记 {ordinal}",
     "toolbar": "PDF 控件",
+    "showContents": "显示目录",
+    "hideContents": "隐藏目录",
+    "prevNextKeys": "页面横向放得下时，← → 可翻页",
     "previousPage": "上一页",
     "nextPage": "下一页",
     "pageNumber": "页码",
     "ofPages": "共 {count} 页",
+    "pageOfLabelled": "（第 {page} 页，共 {count} 页）",
     "zoomOut": "缩小",
     "zoomOutShortcut": "缩小（⌘/Ctrl −）",
     "zoomIn": "放大",
@@ -85,11 +89,13 @@
     "zoomLevel": "缩放：{level}",
     "zoomAuto": "自动（⌘/Ctrl 0）",
     "fitWidth": "适合宽度",
+    "fitPage": "适合页面",
     "actualSize": "实际大小",
     "find": "在文档中查找",
     "findShortcut": "在文档中查找（⌘/Ctrl F）",
     "findPlaceholder": "在文档中查找",
     "findNone": "无匹配项",
+    "findSearching": "正在查找…",
     "findCount": "第 {current} 个，共 {total} 个",
     "findPrevious": "上一个匹配项（Shift+Enter）",
     "findNext": "下一个匹配项（Enter）",
@@ -104,7 +110,18 @@
       "pink": "粉色"
     },
     "highlightMenu": "高亮",
-    "removeHighlight": "移除"
+    "removeHighlight": "移除",
+    "contents": {
+      "title": "目录",
+      "thumbnails": "缩略图",
+      "outline": "大纲",
+      "close": "隐藏目录",
+      "loadingOutline": "正在读取大纲…",
+      "noOutline": "此文档没有大纲",
+      "pageTitle": "第 {label} 页",
+      "toggle": "展开 {title}",
+      "collapse": "收起 {title}"
+    }
   },
   "server": {
     "errors": {

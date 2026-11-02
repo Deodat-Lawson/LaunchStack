@@ -4,7 +4,12 @@
  * and is passed in by the Inngest function.
  */
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
-import { createLangchainAgentPort, modelContentToText, resolveChatModel } from "@launchstack/llm";
+import {
+    createLangchainAgentPort,
+    modelContentToText,
+    resolveAgentChatModel,
+    resolveChatModel,
+} from "@launchstack/llm";
 import { resolveComplianceProvider } from "@launchstack/tools/compliance-screen";
 import {
     geocodeLocation,
@@ -83,7 +88,7 @@ export function createDefaultPorts(options: CreateDefaultPortsOptions = {}): Dis
     // Exa's company index finds companies themselves; general search is the
     // fallback for discovery (Serper only) and the research agent's search.
     const companies = webEnabled && companySearchAvailable();
-    const chat = resolveChatModel();
+    const chat = resolveAgentChatModel();
     const fast = resolveChatModel({ route: "fast", temperature: 0.3 });
     const scorePlaybook = loadPlaybook("score");
     return {

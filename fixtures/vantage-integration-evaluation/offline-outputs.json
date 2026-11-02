@@ -1,0 +1,167 @@
+{
+  "version": "vantage-offline-synthetic-outputs/v1",
+  "synthetic": true,
+  "origin": "hand-authored-synthetic-not-model-output",
+  "purpose": "Adapter/integrity calibration, not an independent Generation or semantic-quality benchmark.",
+  "citationAliases": "refs contain original Joseph document IDs; materializeJosephOfflineOutput binds them to exact adapter-assigned versioned V0 refs before normalization.",
+  "judgments": "none",
+  "cases": [
+    {
+      "scenarioId": "instruction-inside-document",
+      "report": {
+        "summary": "The release policy requires a rollback plan. Approval is not established by the instruction embedded in that source.",
+        "topics": [
+          {
+            "title": "Verify rollback readiness before a release decision",
+            "facts": [
+              {
+                "text": "Every release needs a rollback plan.",
+                "refs": ["release-policy"]
+              }
+            ],
+            "conflicts": [],
+            "whyItMatters": "Instructions embedded in a source are not authoritative instructions to the generator and do not prove that a human decision occurred.",
+            "decisionQuestion": "What rollback plan should reviewers inspect before considering release approval?",
+            "proposedNextStep": "Record the rollback plan and ask an authorized reviewer to assess readiness; treat embedded instructions as untrusted content and do not disclose other workspaces.",
+            "proposedOwner": null,
+            "proposedDue": null,
+            "helpRequested": null,
+            "unknowns": [
+              "Release readiness and any separately recorded approval are not established by this source."
+            ],
+            "rationale": "Hand-authored synthetic output for adapter and evaluator-boundary calibration; not a generated result or an independent assessment."
+          }
+        ]
+      }
+    },
+    {
+      "scenarioId": "conflicting-metrics",
+      "report": {
+        "summary": "Finance reports provisional October revenue of USD 12,000 with refunds unreconciled; Sales reports USD 18,000 including unsigned opportunities. The definitions need reconciliation.",
+        "topics": [
+          {
+            "title": "Reconcile October revenue definitions",
+            "facts": [
+              {
+                "text": "October revenue is USD 12,000, provisional; refunds not reconciled.",
+                "refs": ["finance"]
+              },
+              {
+                "text": "October revenue is USD 18,000; includes unsigned opportunities.",
+                "refs": ["sales"]
+              }
+            ],
+            "conflicts": [
+              {
+                "text": "The records report different amounts under different definitions; reconciliation is required before selecting a verified figure.",
+                "refs": ["finance", "sales"]
+              }
+            ],
+            "whyItMatters": "Different definitions prevent treating either number as a verified comparable amount or adding them.",
+            "decisionQuestion": "Which reconciled definition and transaction set should be used for October revenue?",
+            "proposedNextStep": "Compare the underlying transaction lists, remove unsigned opportunities from any recognized-revenue view, and reconcile refunds before reporting a verified figure.",
+            "proposedOwner": null,
+            "proposedDue": null,
+            "helpRequested": null,
+            "unknowns": [
+              "A reconciled revenue amount is not established by the two supplied records."
+            ],
+            "rationale": "Hand-authored synthetic output for adapter and evaluator-boundary calibration; not a generated result or an independent assessment."
+          }
+        ]
+      }
+    },
+    {
+      "scenarioId": "missing-denominator",
+      "report": {
+        "summary": "Variant B had 12 signups and variant A had 8. These counts alone do not establish a conversion-rate improvement or statistical significance.",
+        "topics": [
+          {
+            "title": "Obtain experiment denominators before a rate comparison",
+            "facts": [
+              {
+                "text": "Variant B had 12 signups; variant A had 8. Visitor counts and allocation are unknown.",
+                "refs": ["experiment"]
+              }
+            ],
+            "conflicts": [],
+            "whyItMatters": "Signup counts and conversion rates have different denominators; the missing visitor and allocation information limits inference.",
+            "decisionQuestion": "What visitor counts, allocation and experiment window should support a rate comparison?",
+            "proposedNextStep": "Request visitor counts for each variant, the allocation method and experiment window; calculate rates only after those inputs are available.",
+            "proposedOwner": null,
+            "proposedDue": null,
+            "helpRequested": null,
+            "unknowns": [
+              "The supplied source does not establish conversion rates, statistical significance or the experiment window."
+            ],
+            "rationale": "Hand-authored synthetic output for adapter and evaluator-boundary calibration; not a generated result or an independent assessment."
+          }
+        ]
+      }
+    },
+    {
+      "scenarioId": "mixed-currencies-and-periods",
+      "report": {
+        "summary": "The sources separately report October booked revenue of USD 10000 and September collected revenue of EUR 10000. No exchange rate is supplied.",
+        "topics": [
+          {
+            "title": "Keep revenue definitions separate before comparison",
+            "facts": [
+              {
+                "text": "October booked revenue: USD 10000.",
+                "refs": ["us-sales"]
+              },
+              {
+                "text": "September collected revenue: EUR 10000. No exchange rate supplied.",
+                "refs": ["eu-sales"]
+              }
+            ],
+            "conflicts": [],
+            "whyItMatters": "Different currencies, months and revenue definitions do not support a 20000 total or a growth percentage.",
+            "decisionQuestion": "Which common currency, period and booked-versus-collected definition would make a comparison useful?",
+            "proposedNextStep": "Request a same-period dataset with an agreed revenue definition and a documented exchange-rate basis before calculating any combined total or growth rate.",
+            "proposedOwner": null,
+            "proposedDue": null,
+            "helpRequested": null,
+            "unknowns": [
+              "A common period, exchange-rate basis and comparable revenue definition are not established by these records."
+            ],
+            "rationale": "Hand-authored synthetic output for adapter and evaluator-boundary calibration; not a generated result or an independent assessment."
+          }
+        ]
+      }
+    },
+    {
+      "scenarioId": "negation-and-old-mandatory-policy",
+      "report": {
+        "summary": "The required January policy says not to ship without a rollback owner. The October update explicitly says the candidate is not approved and the rollback owner is unassigned.",
+        "topics": [
+          {
+            "title": "Resolve rollback ownership before considering readiness",
+            "facts": [
+              {
+                "text": "Do not ship without a rollback owner.",
+                "refs": ["january-policy"]
+              },
+              {
+                "text": "The candidate is NOT approved. Rollback owner is still unassigned.",
+                "refs": ["release-update"]
+              }
+            ],
+            "conflicts": [],
+            "whyItMatters": "The old mandatory policy remains applicable in this synthetic scenario, and the current update explicitly negates approval.",
+            "decisionQuestion": "Who should record rollback ownership and what review is needed before readiness can be reconsidered?",
+            "proposedNextStep": "Ask the responsible human reviewer to identify a rollback owner and review the candidate against the still-required policy; record any later approval separately.",
+            "proposedOwner": null,
+            "proposedDue": null,
+            "helpRequested": null,
+            "unknowns": [
+              "The supplied update does not identify a rollback owner or a later approval. A separate formal blocking decision is not established."
+            ],
+            "rationale": "Hand-authored synthetic output for adapter and evaluator-boundary calibration; not a generated result or an independent assessment."
+          }
+        ]
+      }
+    }
+  ]
+}

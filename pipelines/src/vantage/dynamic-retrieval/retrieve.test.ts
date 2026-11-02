@@ -72,6 +72,39 @@ function fixture() {
 }
 
 describe("Sophia deterministic retrieval", () => {
+    it("offers focused selection with explicit exclusions while preserving the broad default", async () => {
+        const { input, metadata } = fixture();
+        const broad = await createDynamicRetrievalProviderV0({ metadata }).retrieve(input);
+        const focused = await createDynamicRetrievalProviderV0({
+            metadata,
+            selectionPolicy: "focused",
+        }).retrieve(input);
+        expect(broad.sourceRegistry).toHaveLength(4);
+        expect(focused.sourceRegistry.map(entry => entry.source.id)).toEqual([
+            "old-open",
+            "funding",
+        ]);
+        expect(focused.diagnostics.excluded).toEqual([
+            { source: input.sourceCatalog[1]!.source, reason: "older-resolved" },
+            { source: input.sourceCatalog[3]!.source, reason: "irrelevant-recent" },
+        ]);
+        expect(focused.status).toBe("complete");
+        expect(focused.diagnostics.tokenUpperBound).toBeLessThan(broad.diagnostics.tokenUpperBound);
+    });
+
+    it("keeps newly resolved relevant changes and never infers open work from historical questions", async () => {
+        const { input, metadata } = fixture();
+        input.sourceCatalog[1]!.sourceDate = "2026-10-16T00:00:00Z";
+        metadata[0]!.state = undefined;
+        input.sourceCatalog[0]!.excerpt = "Historical deployment question: is it done?";
+        const result = await createDynamicRetrievalProviderV0({
+            metadata,
+            selectionPolicy: "focused",
+        }).retrieve(input);
+        expect(result.unresolvedOlderItems).toEqual([]);
+        expect(result.recentChanges.some(entry => entry.source.id === "old-closed")).toBe(true);
+        expect(result.roleMatches.some(entry => entry.source.id === "old-open")).toBe(true);
+    });
     it("compares metadata by meaning rather than property or tag order", async () => {
         const { input } = fixture();
         const result = await createDynamicRetrievalProviderV0({

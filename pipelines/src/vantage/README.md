@@ -12,6 +12,20 @@ evidence + metric observations ──► signals (pure) ──► evidence pack
         ──► decision + commitment ──► next week's signals
 ```
 
+## Final-output validation
+
+Sophia's evaluation agent is exported separately from
+`@launchstack/pipelines/vantage/validation`. It consumes Joseph's scenario documents
+and expectations plus actual Vantage output, then assesses grounding, expected-item
+coverage, temporal correctness, relevance, actionability and readability. It returns
+traceable findings and JSON/Markdown reports without changing generation or saving actions.
+
+Run `pnpm --filter @launchstack/pipelines demo:validation` for five labeled offline
+examples, or `test:validation` for evaluator regression tests. Without an explicitly
+configured judge, semantic scores stay unassessed. The demo is recorded fixture
+replay, not live model validation. See the [validation agent handoff](../../../docs/design/vantage-validation-agent.md)
+for Joseph's JSON format, saved-report adapters, live opt-in, scoring and calibration.
+
 ## Tables (product migration set)
 
 | Table                                   | What one row is                                                                                               |
@@ -185,3 +199,22 @@ queries and validate/register public sources. Review ranking defaults and budget
 before activation, then run the signed-in database/API/browser acceptance suite.
 No new environment variables, migrations, production connector setup or UI are
 introduced by this provider handoff.
+
+### Authorized RAG follow-up
+
+`createAuthorizedRagSearchV0` now adapts the existing `RagPort` to document retrieval
+using explicit native document/version bindings, current authorization callbacks,
+and a document-only search scope. The recent lane uses the authorized version-event
+metadata; it does not rely on semantic top-k to discover changes. Backend text is
+never used to replace trusted catalog excerpts. Unverifiable hits or unsupported
+source kinds mark coverage partial. Production source discovery, corpus bounds and
+the TL's final ACL/version/commit checks remain host responsibilities.
+
+`createDynamicRetrievalProviderV0({ selectionPolicy: "focused" })` optionally omits
+unrelated recent updates and explicitly resolved older items. It preserves relevant
+recent resolutions and reports exclusions in `diagnostics.excluded`. The default is
+still `"broad"`; required company context and personal stars retain priority in
+`runDynamicContextV0` regardless of this option.
+
+See the [Sophia audit and integration handoff](../../../docs/design/vantage-sophia-retrieval-followup-2026-11-01.md)
+for the wiring example, proposed weekly priorities, validation and backend limits.

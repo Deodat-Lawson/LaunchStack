@@ -28,6 +28,8 @@ export interface DynamicRetrievalOptionsV0 {
     maxCandidates?: number;
     signal?: AbortSignal;
     now?: () => number;
+    /** Opt-in: omit unrelated recent updates and explicitly resolved older work. */
+    selectionPolicy?: "broad" | "focused";
 }
 
 function metadataIdentity(item: RetrievalMetadataV0): string {
@@ -104,6 +106,7 @@ export function createDynamicRetrievalProviderV0(options: DynamicRetrievalOption
                     selected: 0,
                     excerptChars: 0,
                     tokenUpperBound: 0,
+                    excluded: [],
                     scores: [],
                 },
             };
@@ -155,10 +158,17 @@ export function createDynamicRetrievalProviderV0(options: DynamicRetrievalOption
                                       metadata.get(key(entry.source)) ?? { source: entry.source }
                               ),
                               truncated: false,
+                              incomplete: false,
                           };
                     if (!Array.isArray(result.hits) || result.hits.length > maxCandidates)
                         throw new Error("Invalid bounded search response");
                     if (result.truncated) output.omissions.push({ reason: "budget" });
+                    if (result.incomplete)
+                        output.failures.push({
+                            code: "invalid_source",
+                            message:
+                                "Some search hits could not be verified against the source catalog.",
+                        });
                     for (const hit of result.hits) {
                         const id = key(hit.source);
                         const entry = catalog.get(id);
@@ -279,6 +289,18 @@ export function createDynamicRetrievalProviderV0(options: DynamicRetrievalOption
                     meta.state?.value === "open";
                 const roleMatch = memberships.has("role") && relevant;
                 if (!roleMatch && !recent && !olderOpen) continue;
+                if (options.selectionPolicy === "focused") {
+                    const reason =
+                        changedAt < start && meta.state?.value === "resolved"
+                            ? "older-resolved"
+                            : recent && !relevant
+                              ? "irrelevant-recent"
+                              : undefined;
+                    if (reason) {
+                        output.diagnostics.excluded.push({ source: entry.source, reason });
+                        continue;
+                    }
+                }
                 candidates.push({
                     entry,
                     metadata: meta,

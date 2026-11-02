@@ -22,6 +22,8 @@ let mockOutline: Array<{ title: string; dest: unknown; items: unknown[] }> = [];
 /** What a page's text says when it is not the stock sentence. */
 const mockPageTexts = new Map<number, string>();
 const textFor = (page: number) => mockPageTexts.get(page) ?? mockPageText;
+/** Pages whose text arrives only when a test says so, by document URL. */
+const mockTextDelays = new Map<string, Map<number, Promise<string>>>();
 
 interface MockPageProps {
     pageNumber: number;
@@ -37,12 +39,16 @@ jest.mock("react-pdf", () => {
         pdfjs: { GlobalWorkerOptions: { workerSrc: "" } },
         Document: ({
             children,
+            file,
             onLoadSuccess,
         }: {
             children: ReactNode;
+            file: { url: string };
             onLoadSuccess: (pdf: unknown) => void;
         }) => {
+            // Loads once per file, as react-pdf does.
             useEffect(() => {
+                const url = file.url;
                 onLoadSuccess({
                     numPages: mockNumPages,
                     getPage: (n: number) =>
@@ -52,7 +58,9 @@ jest.mock("react-pdf", () => {
                                 height: 800 * scale,
                             }),
                             getTextContent: () =>
-                                Promise.resolve({ items: [{ str: textFor(n), hasEOL: true }] }),
+                                (
+                                    mockTextDelays.get(url)?.get(n) ?? Promise.resolve(textFor(n))
+                                ).then(str => ({ items: [{ str, hasEOL: true }] })),
                         }),
                     getPageLabels: () => Promise.resolve(mockPageLabels),
                     getOutline: () => Promise.resolve(mockOutline),
@@ -60,7 +68,7 @@ jest.mock("react-pdf", () => {
                     getPageIndex: (ref: { num: number }) => Promise.resolve(ref.num - 1),
                 });
                 // eslint-disable-next-line react-hooks/exhaustive-deps
-            }, []);
+            }, [file.url]);
             return <div>{children}</div>;
         },
         Page: ({ pageNumber, scale, onRenderSuccess, onRenderTextLayerSuccess }: MockPageProps) => {
@@ -222,6 +230,7 @@ beforeAll(() => {
 beforeEach(() => {
     mockPageScales.clear();
     mockPageTexts.clear();
+    mockTextDelays.clear();
     mockNumPages = 3;
     mockPageLabels = null;
     mockOutline = [];
@@ -607,6 +616,80 @@ describe("PdfViewerWithNotes find", () => {
         expect(scrollTop).toBeLessThan(pageTop(18));
         expect(screen.getByTestId("pdf-toolbar").querySelector("input")).toHaveValue("17");
     });
+    it("keeps the reader on the same match while the rest of the text arrives", async () => {
+        mockNumPages = 30;
+        let release!: (text: string) => void;
+        mockTextDelays.set(
+            "/api/files/9",
+            new Map([[1, new Promise<string>(resolve => (release = resolve))]])
+        );
+        mockPageTexts.set(2, "A zebra crossing on page two.");
+        renderViewer();
+        await toolbar();
+
+        fireEvent.click(screen.getByTestId("pdf-find-toggle"));
+        fireEvent.change(await screen.findByTestId("pdf-find-input"), {
+            target: { value: "zebra" },
+        });
+        // Page 1 has not answered: one match so far, and the count says so.
+        await waitFor(() =>
+            expect(screen.getByTestId("pdf-find-count")).toHaveTextContent("1 of 1…")
+        );
+        await waitFor(() =>
+            expect(
+                document.querySelector('[data-pdf-page="2"] [data-find-hit="current"]')
+            ).toBeInTheDocument()
+        );
+
+        // Page 1 answers with two matches that sort before it: the reader
+        // stays on page 2's match, now the third of three.
+        await act(async () => {
+            release("zebra, zebra.");
+            await new Promise(resolve => setTimeout(resolve, 300));
+        });
+        await waitFor(() =>
+            expect(screen.getByTestId("pdf-find-count")).toHaveTextContent("3 of 3")
+        );
+        expect(
+            document.querySelector('[data-pdf-page="2"] [data-find-hit="current"]')
+        ).toBeInTheDocument();
+    });
+
+    it("ignores page text that arrives for a document already replaced", async () => {
+        let release!: (text: string) => void;
+        mockTextDelays.set(
+            "/api/files/9",
+            new Map([[3, new Promise<string>(resolve => (release = resolve))]])
+        );
+        mockPageTexts.set(2, "A zebra on page two.");
+        const props = { notes: [], onCreateAnchoredNote: jest.fn() };
+        const { rerender } = render(<PdfViewerWithNotes {...props} url="/api/files/9" />);
+        await toolbar();
+        fireEvent.click(screen.getByTestId("pdf-find-toggle"));
+        fireEvent.change(await screen.findByTestId("pdf-find-input"), {
+            target: { value: "zebra" },
+        });
+        // Counted once: page 2's match is in, page 3's text is on its way.
+        await waitFor(() =>
+            expect(screen.getByTestId("pdf-find-count")).toHaveTextContent("1 of 1…")
+        );
+
+        // Another document takes the viewer over; its pages all answer at
+        // once, and none of them mentions a zebra.
+        mockPageTexts.clear();
+        rerender(<PdfViewerWithNotes {...props} url="/api/files/10" />);
+        await waitFor(() =>
+            expect(screen.getByTestId("pdf-find-count")).toHaveTextContent("No matches")
+        );
+
+        // The old document's page 3 answers late — and must not be taken
+        // for the new document's page 3.
+        await act(async () => {
+            release("A zebra crossing.");
+            await new Promise(resolve => setTimeout(resolve, 300));
+        });
+        expect(screen.getByTestId("pdf-find-count")).toHaveTextContent("No matches");
+    });
 });
 
 describe("PdfViewerWithNotes contents", () => {
@@ -695,6 +778,38 @@ describe("PdfViewerWithNotes citations", () => {
                 document.querySelector('[data-pdf-page="12"] [class*="outline"]')
             ).toBeInTheDocument()
         );
+        expect(screen.getByTestId("pdf-toolbar").querySelector("input")).toHaveValue("12");
+    });
+    it("lets the whole passage on a far page beat a loose window of it on a drawn page", async () => {
+        mockNumPages = 30;
+        mockPageTexts.set(1, "Intro. The quick brown fox jumps over the lazy dog. More intro.");
+        mockPageTexts.set(
+            12,
+            "Body. The quick brown fox jumps over the lazy dog and then some more unique words follow here. End."
+        );
+        const { rerender } = renderViewer();
+        await toolbar();
+        await waitFor(() => expect(drawnPages()).toEqual([1, 2, 3]));
+
+        rerender(
+            <PdfViewerWithNotes
+                url="/api/files/9"
+                notes={[]}
+                onCreateAnchoredNote={jest.fn()}
+                citationHighlight={{
+                    text: "the quick brown fox jumps over the lazy dog and then some more unique words follow here",
+                    page: null,
+                    nonce: 1,
+                }}
+            />
+        );
+        await waitFor(() =>
+            expect(
+                document.querySelector('[data-pdf-page="12"] [class*="outline-"]')
+            ).toBeInTheDocument()
+        );
+        // Page 1, drawn from the start, holds only the first words.
+        expect(document.querySelector('[data-pdf-page="1"] [class*="outline-"]')).toBeNull();
         expect(screen.getByTestId("pdf-toolbar").querySelector("input")).toHaveValue("12");
     });
 });

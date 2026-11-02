@@ -408,6 +408,10 @@ export function PdfViewerWithNotes({
     const [textLayerVersion, setTextLayerVersion] = useState(0);
     const locatedNonce = useRef<number | null>(null);
     const pagedNonce = useRef<number | null>(null);
+    /** The page the extracted text says holds the citation; null once searched and not found. */
+    const [citeTarget, setCiteTarget] = useState<{ nonce: number; page: number | null } | null>(
+        null
+    );
 
     const rootRef = useRef<HTMLDivElement>(null);
     const containerRef = useRef<HTMLDivElement>(null);
@@ -450,6 +454,8 @@ export function PdfViewerWithNotes({
      */
     const textCache = useRef<Map<number, string>>(new Map());
     const textPending = useRef<Map<number, Promise<string>>>(new Map());
+    /** Bumped per loaded document: text that arrives for an earlier one is dropped. */
+    const textGeneration = useRef(0);
     /** Bumped, at most a few times a second, as pages' text arrives. */
     const [textVersion, setTextVersion] = useState(0);
     const textVersionTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -475,11 +481,15 @@ export function PdfViewerWithNotes({
             if (pending) return pending;
             const doc = pdfDocRef.current;
             if (!doc) return Promise.resolve("");
+            const generation = textGeneration.current;
             const task = doc
                 .getPage(page)
                 .then(p => (p.getTextContent ? p.getTextContent() : { items: [] }))
                 .then(textOfContent, () => "")
                 .then(text => {
+                    // Another document has loaded meanwhile: this is its
+                    // predecessor's page, not the new document's.
+                    if (textGeneration.current !== generation) return text;
                     textCache.current.set(page, text);
                     textPending.current.delete(page);
                     bumpTextVersion();
@@ -915,6 +925,7 @@ export function PdfViewerWithNotes({
     const onDocumentLoadSuccess = useCallback((pdf: PdfDocumentLike) => {
         setLoadError(null);
         pdfDocRef.current = pdf;
+        textGeneration.current += 1;
         textCache.current.clear();
         textPending.current.clear();
         setNotePages(new Map());
@@ -1132,9 +1143,12 @@ export function PdfViewerWithNotes({
     // Citations: locate a cited passage
     // ---------------------------------------------------------------------
 
-    // Where on the page: searched in the text layers of the drawn pages,
-    // hinted page first, re-run as layers render until the passage is found
-    // (or the citation changes).
+    // Where on the page: searched in the text layer of the page the
+    // extracted text points to — until that is known, the hinted page — and
+    // re-run as layers render until the passage is found. Never in whatever
+    // page happens to be drawn: a loose window of the snippet can occur on
+    // a page in view, and taking it would claim the citation for the wrong
+    // page. Only when no page holds the passage are the drawn pages tried.
     useEffect(() => {
         if (!citationHighlight) {
             setCiteOverlay(null);
@@ -1142,14 +1156,28 @@ export function PdfViewerWithNotes({
             pagedNonce.current = null;
             return;
         }
-        if (locatedNonce.current === citationHighlight.nonce) return;
+        const { nonce } = citationHighlight;
+        const target = citeTarget?.nonce === nonce ? citeTarget : null;
+        const targetPage = target?.page ?? null;
+        // Located already — unless the text has since named another page.
+        if (
+            locatedNonce.current === nonce &&
+            (targetPage === null || citeOverlay?.page === targetPage)
+        ) {
+            return;
+        }
 
         const needles = citationNeedles(citationHighlight.text, citationHighlight.matchText);
         const hintedPage = citationHighlight.page ?? null;
-        const candidatePages = Array.from(renderedPages).sort((a, b) =>
-            a === hintedPage ? -1 : b === hintedPage ? 1 : a - b
-        );
+        const candidatePages = target
+            ? target.page !== null
+                ? [target.page]
+                : Array.from(renderedPages).sort((a, b) => a - b)
+            : hintedPage
+              ? [hintedPage]
+              : [];
         for (const pageNumber of candidatePages) {
+            if (!renderedPages.has(pageNumber)) continue;
             const pageEl = pageRefs.current.get(pageNumber);
             if (!pageEl) continue;
             const textLayer = textLayerOf(pageEl);
@@ -1161,35 +1189,44 @@ export function PdfViewerWithNotes({
             const quads = quadsOfRange(range, pageEl.getBoundingClientRect());
             if (quads.length === 0) continue;
 
-            locatedNonce.current = citationHighlight.nonce;
+            locatedNonce.current = nonce;
             setCiteOverlay({ page: pageNumber, quads });
             // Jump the first highlight rect into the upper third.
             scrollToQuad(pageNumber, quads[0]);
             return;
         }
-    }, [citationHighlight, renderedPages, textLayerVersion, scrollToQuad]);
+    }, [citationHighlight, citeTarget, citeOverlay, renderedPages, textLayerVersion, scrollToQuad]);
 
     // Which page: the hinted page is shown at once, so the reader sees
     // movement while it draws; the extracted text then confirms it or finds
     // the page that really holds the passage, and the viewer goes there.
+    // The strongest needle is tried on every page before a weaker one on
+    // any, so a loose window of the snippet on an earlier page never beats
+    // the whole snippet further on.
     useEffect(() => {
         if (!citationHighlight || !numPages) return;
         if (pagedNonce.current === citationHighlight.nonce) return;
         pagedNonce.current = citationHighlight.nonce;
         const { nonce } = citationHighlight;
         const hintedPage = citationHighlight.page ?? null;
+        setCiteTarget(null);
         if (hintedPage && pageRefs.current.has(hintedPage)) goToPage(hintedPage);
         const needles = citationNeedles(citationHighlight.text, citationHighlight.matchText);
+        const order = pageOrder(numPages, hintedPage);
         const run = async () => {
-            for (const page of pageOrder(numPages, hintedPage)) {
-                const text = await pageText(page);
-                // A newer citation, or one already located, ends the search.
-                if (pagedNonce.current !== nonce || locatedNonce.current === nonce) return;
-                if (textContainsNeedle(text, needles)) {
-                    if (page !== hintedPage) goToPage(page);
-                    return;
+            for (const needle of needles) {
+                for (const page of order) {
+                    const text = await pageText(page);
+                    // A newer citation ends the search.
+                    if (pagedNonce.current !== nonce) return;
+                    if (textContainsNeedle(text, [needle])) {
+                        setCiteTarget({ nonce, page });
+                        if (page !== hintedPage) goToPage(page);
+                        return;
+                    }
                 }
             }
+            if (pagedNonce.current === nonce) setCiteTarget({ nonce, page: null });
         };
         void run();
     }, [citationHighlight, numPages, goToPage, pageText]);
@@ -1218,6 +1255,8 @@ export function PdfViewerWithNotes({
         query: "",
         byPage: new Map(),
     }));
+    const findResultRef = useRef(findResult);
+    findResultRef.current = findResult;
     const query = findQuery.trim();
     const findHits = findResult.query === query ? findResult.hits : EMPTY_HITS;
     const findComplete = findResult.query === query ? findResult.complete : false;
@@ -1248,9 +1287,9 @@ export function PdfViewerWithNotes({
 
     // Count the matches on every page from its extracted text — the pages
     // whose text has not arrived yet are asked for, and the count grows as
-    // they answer.
+    // they answer. Counted afresh for a new document, whose text is new.
     useEffect(() => {
-        if (!findOpen || query.length < 2 || !numPages) {
+        if (!findOpen || query.length < 2 || !numPages || !pdfDoc) {
             setFindResult({ query: "", hits: [], complete: true });
             return;
         }
@@ -1268,11 +1307,20 @@ export function PdfViewerWithNotes({
                 for (let index = 0; index < count; index++) hits.push({ page, index });
                 if (hits.length >= MAX_FIND_HITS) break;
             }
+            // Pages answer out of order, so a recount can put new matches
+            // before the one the reader is on: keep them on that one.
+            const previous = findResultRef.current;
             setFindResult({ query, hits, complete });
-            setFindIndex(index => Math.min(index, Math.max(0, hits.length - 1)));
+            setFindIndex(index => {
+                const current = previous.query === query ? previous.hits[index] : undefined;
+                const kept = current
+                    ? hits.findIndex(h => h.page === current.page && h.index === current.index)
+                    : -1;
+                return kept >= 0 ? kept : Math.min(index, Math.max(0, hits.length - 1));
+            });
         }, 120);
         return () => clearTimeout(timer);
-    }, [findOpen, query, numPages, textVersion, pageText]);
+    }, [findOpen, query, numPages, pdfDoc, textVersion, pageText]);
 
     // Where each match sits on the drawn pages, from their text layers. Re-run
     // as pages draw, and at a new scale (the text layer is redrawn).

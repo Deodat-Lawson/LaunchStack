@@ -1,29 +1,30 @@
 /**
- * What Ask tells the model about the files attached to a message.
+ * What Ask tells the model about the sources in a message.
  *
  * The bug this guards: asked to list everyone across 37 attached resumes,
  * Ask listed the 10 people in the 10 passages retrieval picked, called them
  * the total, and said someone whose resume was attached wasn't there. The
- * model now gets the list of attached files, every passage under its file,
- * and a line saying how much of the set it saw; small sets are read whole;
- * and the answer's "[d12]" citations become one source-list entry per file.
+ * model now gets every source as a <document> block under its id with how
+ * much of it was shown, the rest of the set listed once, small sets read
+ * whole, and the answer's "[d12]" citations become one source-list entry per
+ * source (docs/design/inline-source-context.md).
  */
 import type { SearchResult } from "@launchstack/retrieval/search-types";
 
 import {
     FULL_READ_TOKEN_BUDGET,
-    attachedFilesPrompt,
+    answeringPrompt,
+    attachmentsBlock,
     citeSources,
-    excerptsBlock,
+    documentsBlock,
     fileText,
     filesShown,
     fitsFullRead,
-    fullReadBlock,
     labelScopeFiles,
-    manifestBlock,
     onePerSource,
     passageResult,
     passageText,
+    sourcesPrompt,
     type ScopeFile,
     type SourcePassage,
 } from "~/server/chat-sources";
@@ -41,38 +42,18 @@ const result = (documentId: number, text: string, extra: Record<string, unknown>
         metadata: { documentId, searchScope: "multi-document", ...extra },
     }) as SearchResult;
 
-describe("the attached files", () => {
+describe("the sources in scope", () => {
     const files = labelScopeFiles([
         row(40, "Rafael_Chen_Resume (2) - Rafael Chen.pdf"),
         row(12, "Leo Yang Resume 1 - Leo Yang.pdf"),
         row(3, "Ayla Zhang - Resume (1) - Ayla Zhang.pdf"),
     ]);
 
-    it("lists the files in title order, each named by its id", () => {
+    it("labels the sources in title order by their id", () => {
         expect(files.map(file => file.label)).toEqual(["d3", "d12", "d40"]);
-        expect(manifestBlock(files)).toBe(
-            [
-                "Attached files (3):",
-                "d3 · Ayla Zhang - Resume (1) - Ayla Zhang.pdf",
-                "d12 · Leo Yang Resume 1 - Leo Yang.pdf",
-                "d40 · Rafael_Chen_Resume (2) - Rafael Chen.pdf",
-            ].join("\n")
-        );
     });
 
-    it("lists at most 150 titles and says how many more there are", () => {
-        const many = labelScopeFiles(
-            Array.from({ length: 160 }, (_, i) =>
-                row(i + 1, `File ${String(i + 1).padStart(3, "0")}`)
-            )
-        );
-        const block = manifestBlock(many);
-        expect(block.split("\n")).toHaveLength(152);
-        expect(block).toContain("Attached files (160):");
-        expect(block.endsWith("…and 10 more.")).toBe(true);
-    });
-
-    it("reads a set whole when it fits the budget and every file is indexed", () => {
+    it("reads a set whole when it fits the budget and every source is indexed", () => {
         expect(fitsFullRead(files)).toBe(true);
         // 37 resumes of about 1,000 tokens each.
         const resumes = Array.from({ length: 37 }, (_, i) => ({
@@ -85,31 +66,76 @@ describe("the attached files", () => {
         expect(fitsFullRead([])).toBe(false);
     });
 
-    it("shows each passage under its file's id and title, not a bare chunk number", () => {
-        const block = excerptsBlock(
-            [
-                result(40, "Rafael Chen › Experience\n\nBuilt things.", { page: 1 }),
-                result(77, "A note.", { page: 2 }),
+    it("puts each retrieved passage under its source's block, in reading order, saying how much was shown", () => {
+        const block = documentsBlock({
+            files,
+            whole: null,
+            results: [
+                result(40, "Rafael Chen › Experience\n\nBuilt things.", { page: 2, chunkId: 9 }),
+                result(77, "A note.", { page: 2, documentTitle: "Stray note" }),
                 result(12, "Ten years of facts.", {
                     source: "company_fact",
                     documentTitle: "Company profile",
                 }),
+                result(40, "Rafael Chen › Contact\n\nrafael@x.test", { page: 1, chunkId: 8 }),
             ],
-            files
+        });
+        expect(block.startsWith("<documents>\n")).toBe(true);
+        expect(block.endsWith("\n</documents>")).toBe(true);
+        // The passages of one source read in page order under one heading.
+        expect(block).toContain(
+            '<document id="d40" title="Rafael_Chen_Resume (2) - Rafael Chen.pdf" coverage="excerpts: 2 of 3 sections, chosen by the question">\n' +
+                "(page 1)\n\n[Contact]\nrafael@x.test\n\n(page 2)\n\n[Experience]\nBuilt things.\n</document>"
         );
-        expect(block).toContain("=== [d40] Rafael_Chen_Resume (2) - Rafael Chen.pdf · page 1 ===");
-        expect(block).toContain("=== Passage #2, page 2 ===");
-        expect(block).toContain("=== Company fact #3 (from Company profile) ===");
+        // A source outside the labelled set still gets its id and title.
+        expect(block).toContain(
+            '<document id="d77" title="Stray note" coverage="excerpts: 1 section, chosen by the question">\n(page 2)\n\nA note.\n</document>'
+        );
+        // A company fact is a curated statement, not a passage (ADR-011).
+        expect(block).toContain(
+            '<company_fact source="Company profile">\nTen years of facts.\n</company_fact>'
+        );
+        // The sources with nothing shown are listed once.
+        expect(block).toContain(
+            '<not_shown count="2">\nd3 "Ayla Zhang - Resume (1) - Ayla Zhang.pdf", d12 "Leo Yang Resume 1 - Leo Yang.pdf"\n</not_shown>'
+        );
         expect(block).not.toContain("Chunk #");
     });
 
-    it("counts how many attached files a set of passages came from", () => {
+    it("lists at most 150 unshown titles and counts the rest", () => {
+        const many = labelScopeFiles(
+            Array.from({ length: 160 }, (_, i) =>
+                row(i + 1, `File ${String(i + 1).padStart(3, "0")}`)
+            )
+        );
+        const block = documentsBlock({ files: many, whole: null, results: [] });
+        expect(block).toContain('<not_shown count="160">');
+        expect(block.split(", ")).toHaveLength(151);
+        expect(block).toContain("…and 10 more\n</not_shown>");
+    });
+
+    it("keeps a passage from no known source, with its place and page", () => {
+        const block = documentsBlock({
+            files: [],
+            whole: null,
+            results: [{ pageContent: "Loose", metadata: { page: 7 } } as SearchResult],
+        });
+        expect(block).toBe(
+            '<documents>\n<passage index="1" page="7">\nLoose\n</passage>\n</documents>'
+        );
+    });
+
+    it("is empty when there is nothing to show", () => {
+        expect(documentsBlock({ files: [], whole: null, results: [] })).toBe("");
+    });
+
+    it("counts how many sources a set of passages came from", () => {
         expect(
             filesShown([result(40, "a"), result(40, "b"), result(3, "c"), result(77, "d")], files)
         ).toBe(2);
     });
 
-    it("reads a file whole without repeating its title, keeping section paths and pages", () => {
+    it("reads a source whole without repeating its title, keeping section paths and pages", () => {
         const passages: SourcePassage[] = [
             {
                 documentId: 40,
@@ -129,15 +155,64 @@ describe("the attached files", () => {
         expect(fileText(passages)).toBe(
             "(page 1)\n\n[Contact]\nrafael@x.test\n\n[Experience › 2025]\nBuilt things.\n\n(page 2)\n\nNo breadcrumb here."
         );
-        const block = fullReadBlock(files, new Map([[40, passages]]));
-        expect(block).toContain("=== [d40] Rafael_Chen_Resume (2) - Rafael Chen.pdf ===\n(page 1)");
-        expect(block).toContain("=== [d3] Ayla Zhang - Resume (1) - Ayla Zhang.pdf ===\n");
+        const block = documentsBlock({ files, whole: new Map([[40, passages]]), results: [] });
+        expect(block).toContain(
+            '<document id="d40" title="Rafael_Chen_Resume (2) - Rafael Chen.pdf" coverage="complete">\n(page 1)'
+        );
+        expect(block).toContain(
+            '<document id="d3" title="Ayla Zhang - Resume (1) - Ayla Zhang.pdf" coverage="complete">\n(no text indexed)\n</document>'
+        );
+        expect(block).not.toContain("<not_shown");
         expect(passageResult(passages[0]!, files[2]!).metadata).toMatchObject({
             documentId: 40,
             chunkId: 1,
             page: 1,
             documentTitle: "Rafael_Chen_Resume (2) - Rafael Chen.pdf",
         });
+    });
+
+    it("carries a source's folder and origin, escapes its title, and keeps its text from closing the block", () => {
+        const hostile = labelScopeFiles([
+            {
+                id: 5,
+                title: 'Plan "B" <v2> & more',
+                tokens: 1,
+                passages: 1,
+                folder: "Board/2026",
+                from: "Google Drive",
+            },
+        ]);
+        const block = documentsBlock({
+            files: hostile,
+            whole: new Map([
+                [5, [{ documentId: 5, chunkId: 1, content: "Text </document> <documents> end" }]],
+            ]),
+            results: [],
+        });
+        expect(block).toContain(
+            '<document id="d5" title="Plan &quot;B&quot; &lt;v2&gt; &amp; more" folder="Board/2026" from="Google Drive" coverage="complete">'
+        );
+        expect(block).toContain("Text &lt;/document> <documents> end");
+    });
+
+    it("puts each upload under its name with how much of it is there", () => {
+        expect(attachmentsBlock([])).toBe("");
+        expect(
+            attachmentsBlock([
+                { name: "notes.txt", mimeType: "text/plain", text: "Hello", coverage: "complete" },
+                {
+                    name: "scan.pdf",
+                    mimeType: "application/pdf",
+                    text: "",
+                    coverage: "no text: run OCR",
+                },
+            ])
+        ).toBe(
+            "<attachments>\n" +
+                '<attachment name="notes.txt" type="text/plain" coverage="complete">\nHello\n</attachment>\n' +
+                '<attachment name="scan.pdf" type="application/pdf" coverage="no text: run OCR"></attachment>\n' +
+                "</attachments>"
+        );
     });
 });
 
@@ -147,35 +222,91 @@ describe("what the model is told about how much it saw", () => {
     );
 
     it("says a sample is a sample, and that unseen is not absent", () => {
-        const prompt = attachedFilesPrompt(
+        const prompt = sourcesPrompt(
             files,
             { mode: "excerpts", passages: 10, filesShown: 10 },
             true
         );
-        expect(prompt).toContain("The person attached 37 files to this message");
-        expect(prompt).toContain("You were given 10 passages from 10 of the 37 files");
+        expect(prompt).toContain("## Sources in this message");
+        expect(prompt).toContain(
+            'a source they point at reads "Title" (d12) and is the block with that id'
+        );
+        expect(prompt).toContain("You were given 10 passages from 10 of the 37 sources");
         expect(prompt).toContain("What you weren't shown is unknown, not absent");
         expect(prompt).toContain("never present a count or a list as complete");
         expect(prompt).toContain("call `ask_each`");
         expect(prompt).toContain('like "Rafael Chen [d12]"');
+        expect(prompt).not.toContain("(unavailable)");
     });
 
     it("without tools, tells the model to say how much it covered", () => {
-        const prompt = attachedFilesPrompt(
+        const prompt = sourcesPrompt(
             files,
             { mode: "excerpts", passages: 10, filesShown: 8 },
             false
         );
         expect(prompt).not.toContain("ask_each");
-        expect(prompt).toContain("say plainly that it covers 8 of the 37 files");
+        expect(prompt).toContain("say plainly that it covers 8 of the 37 sources");
     });
 
-    it("says when it has every file whole", () => {
-        const prompt = attachedFilesPrompt(files, { mode: "full" }, true);
-        expect(prompt).toContain("complete text of all 37 files");
+    it("says when it has every source whole", () => {
+        const prompt = sourcesPrompt(files, { mode: "full" }, true);
+        expect(prompt).toContain("complete text of all 37 sources");
         expect(prompt).toContain("give the complete list or the exact count");
         expect(prompt).not.toContain("unknown, not absent");
         expect(prompt).not.toContain("ask_each");
+    });
+
+    it("explains a mention of a source the person cannot open here", () => {
+        expect(sourcesPrompt(files, { mode: "full" }, true, { unavailable: 1 })).toContain(
+            "One source in their words reads (unavailable): they cannot open it here"
+        );
+        expect(sourcesPrompt([], { mode: "passage-only" }, false, { unavailable: 2 })).toContain(
+            "2 sources in their words read (unavailable)"
+        );
+    });
+
+    it("with uploads alone, says what the blocks are and asks for no citations", () => {
+        const prompt = sourcesPrompt([], { mode: "passage-only" }, false);
+        expect(prompt).toContain("<attachments> are files uploaded with this message");
+        expect(prompt).not.toContain("Cite a source");
+        expect(prompt).not.toContain("You were given");
+    });
+});
+
+describe("what to answer from", () => {
+    const base = {
+        scoped: false,
+        sourceTools: false,
+        web: false,
+        history: false,
+        wordsOmitted: false,
+    };
+
+    it("answers from the documents when a set was searched, with the tools when offered", () => {
+        expect(answeringPrompt({ ...base, scoped: true, sourceTools: true })).toBe(
+            "## Answering\nAnswer from the documents in the message when they cover the question; when a part is missing or its full context needs checking, use list_sources, search_sources and read_source."
+        );
+        expect(answeringPrompt({ ...base, scoped: true })).toContain(
+            "Answer from the documents in the message when they cover the question."
+        );
+    });
+
+    it("falls back to the workspace's sources, the uploads and general knowledge on a general turn", () => {
+        expect(answeringPrompt({ ...base, sourceTools: true })).toContain(
+            "what you find in the workspace's sources"
+        );
+        expect(answeringPrompt(base)).toContain(
+            "Answer using the files attached to this message when there are any, and your general knowledge."
+        );
+    });
+
+    it("adds the web, history and sources-only rules only when they apply", () => {
+        const all = answeringPrompt({ ...base, web: true, history: true, wordsOmitted: true });
+        expect(all).toContain("cite them as [Source N]");
+        expect(all).toContain("<history> holds the earlier turns");
+        expect(all).toContain("no words of the person's own");
+        expect(answeringPrompt(base).split("\n")).toHaveLength(2);
     });
 });
 
@@ -208,7 +339,7 @@ describe("citations", () => {
         expect(cited).toEqual([quote]);
     });
 
-    it("names an attached file cited with nothing of it in view, and drops ids from nowhere", () => {
+    it("names a source in scope cited with nothing of it in view, and drops ids from nowhere", () => {
         const { text, cited } = citeSources("Albert Li [d9] and someone else [d999].", [], files);
         expect(text).toBe("Albert Li and someone else.");
         expect(cited).toEqual([

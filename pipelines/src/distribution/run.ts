@@ -155,7 +155,7 @@ export interface DistributionPorts {
     judgeFit?: JudgeFit | null;
 }
 
-/** Companies the model checks per shortlist place: enough to fill it after its no's. */
+/** Companies the model checks per open shortlist place, each round down the ranking. */
 const JUDGE_POOL_FACTOR = 2;
 
 export interface RunContext {
@@ -424,44 +424,57 @@ export async function prepareRun(
             };
 
             let notBuyers = 0;
-            // Companies the fit check saw; past them the shortlist does not reach.
+            // Companies the fit check saw; the shortlist comes from these alone.
             let checked: Set<string> | null = null;
             if (ports.judgeFit && orgs.length > 0) {
-                const pool = [...orgs]
-                    .sort(byRank)
-                    .slice(0, options.maxCandidates * JUDGE_POOL_FACTOR);
+                const queue = [...orgs].sort(byRank);
+                const seen = new Set<string>();
+                const rejected = new Set<string>();
+                // Down the ranking until the shortlist is full or no one is
+                // left: a batch of no's must not end the run with an empty list.
+                let at = 0;
+                let kept = 0;
                 try {
-                    const verdicts = await ports.judgeFit({
-                        brief: buyerBrief(program, partnerKinds, profile),
-                        where: territories.map(placeLabel).join("; "),
-                        seller: profile,
-                        candidates: pool.map(o => ({
-                            id: o.resolveKey,
-                            name: o.name,
-                            text: companyText(o),
-                        })),
-                    });
-                    const rejected = new Set(
-                        [...verdicts].filter(([, v]) => !v.fit).map(([key]) => key)
-                    );
-                    notBuyers = rejected.size;
-                    orgs = orgs.filter(o => !rejected.has(o.resolveKey));
-                    checked = new Set(pool.map(o => o.resolveKey));
-                    // It read the text and kept these: the country named there
-                    // was not where they are.
-                    orgs = orgs.map(o =>
-                        isOut(o) && checked!.has(o.resolveKey)
-                            ? { ...o, country: null, region: null, city: null }
-                            : o
-                    );
+                    while (at < queue.length && kept < options.maxCandidates) {
+                        const room = options.maxCandidates - kept;
+                        const batch = queue.slice(at, at + room * JUDGE_POOL_FACTOR);
+                        at += batch.length;
+                        const verdicts = await ports.judgeFit({
+                            brief: buyerBrief(program, partnerKinds, profile),
+                            where: territories.map(placeLabel).join("; "),
+                            seller: profile,
+                            candidates: batch.map(o => ({
+                                id: o.resolveKey,
+                                name: o.name,
+                                text: companyText(o),
+                            })),
+                        });
+                        for (const o of batch) {
+                            seen.add(o.resolveKey);
+                            const verdict = verdicts.get(o.resolveKey);
+                            if (verdict && !verdict.fit) {
+                                rejected.add(o.resolveKey);
+                                console.info(
+                                    `${LOG_PREFIX} fit check left out ${o.name}: ${verdict.reason}`
+                                );
+                            } else kept += 1;
+                        }
+                    }
                 } catch (error) {
                     console.warn(`${LOG_PREFIX} fit check failed; keeping the ranking:`, error);
                     warnings.push(
-                        "The fit check could not run; the list is ranked by meaning only."
+                        "The fit check could not finish; part of the list is ranked by meaning only."
                     );
-                    outOfArea = orgs.filter(isOut).length;
-                    orgs = orgs.filter(o => !isOut(o));
                 }
+                notBuyers = rejected.size;
+                orgs = orgs.filter(o => !rejected.has(o.resolveKey));
+                if (seen.size > 0) checked = seen;
+                // Kept by the fit check: the country named in the text was not
+                // where they are. Named elsewhere and not read: out, as without one.
+                outOfArea = orgs.filter(o => isOut(o) && !seen.has(o.resolveKey)).length;
+                orgs = orgs
+                    .filter(o => !isOut(o) || seen.has(o.resolveKey))
+                    .map(o => (isOut(o) ? { ...o, country: null, region: null, city: null } : o));
             }
             if (outOfArea + offTopic + notBuyers > 0)
                 warnings.push(

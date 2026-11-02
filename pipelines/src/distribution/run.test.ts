@@ -181,6 +181,32 @@ beforeEach(() => {
 });
 
 describe("prepareRun discovery", () => {
+    it("keeps checking down the ranking when the fit check rejects a whole batch", async () => {
+        const calls = { described: [] as string[][], searches: [] };
+        const companies = Array.from({ length: 80 }, (_, i) =>
+            hit(`firm-${i}.example`, `Fulfilment Firm ${i}`)
+        );
+        const rounds: number[] = [];
+        const ports: DistributionPorts = {
+            ...livePorts(calls),
+            searchCompanies: async query =>
+                query.startsWith("Companies similar to") ? [] : companies,
+            // The first batch is all no's; everyone after it is a yes.
+            judgeFit: async ({ candidates }) => {
+                rounds.push(candidates.length);
+                const no = rounds.length === 1;
+                return new Map(
+                    candidates.map(c => [c.id, { fit: !no, reason: no ? "No." : "Yes." }])
+                );
+            },
+        };
+        const prepared = await prepareRun(ctx, ports);
+
+        expect(rounds.length).toBeGreaterThan(1);
+        expect(prepared.candidateRelationshipIds.length).toBeGreaterThan(0);
+        expect(prepared.warnings.join(" ")).toContain(`${rounds[0]} the fit check judged`);
+    });
+
     it("ranks confirmed local first, and lets the fit check decide on a country a text names", async () => {
         const calls = { described: [] as string[][], searches: [] };
         const about = (domain: string, title: string, description: string): CompanyHit => ({

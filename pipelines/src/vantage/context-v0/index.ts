@@ -10,3 +10,4 @@ export * from "./evidence-snapshot";
 export * from "./ports";
 export * from "./adapters";
 export * from "./mocks";
+export * from "../dynamic-retrieval";

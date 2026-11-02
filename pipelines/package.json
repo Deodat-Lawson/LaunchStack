@@ -272,7 +272,9 @@
         "typecheck": "tsc -p tsconfig.json --noEmit",
         "test": "vitest run",
         "test:ai": "vitest run src/vantage/generation-v1.test.ts",
-        "harness:ai": "node --import tsx scripts/vantage-ai-harness.mjs"
+        "harness:ai": "node --import tsx scripts/vantage-ai-harness.mjs",
+        "test:retrieval": "vitest run src/vantage/dynamic-retrieval src/vantage/context-v0 src/vantage/proposals/context-v0.test.ts",
+        "demo:retrieval": "node --import tsx scripts/vantage-retrieval-demo.mjs"
     },
     "dependencies": {
         "@langchain/core": "^0.3.74",

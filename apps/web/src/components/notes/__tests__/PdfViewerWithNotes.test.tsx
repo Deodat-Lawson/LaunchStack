@@ -417,6 +417,42 @@ describe("PdfViewerWithNotes toolbar", () => {
             })
         );
     });
+    it("applies the view saved under a key that arrives after mount", async () => {
+        window.localStorage.setItem(
+            "pdf-view:doc-9:176",
+            JSON.stringify({ page: 3, zoom: 0.5, contents: true, tab: "outline" })
+        );
+        const props = {
+            url: "/api/files/9",
+            notes: [],
+            onCreateAnchoredNote: jest.fn(),
+        };
+        // The host knows the document before its version, so the viewer
+        // mounts under a provisional key with nothing saved…
+        const { rerender } = render(<PdfViewerWithNotes {...props} persistKey="doc-9:current" />);
+        const bar = await toolbar();
+        expect(bar.getByTestId("pdf-zoom-level")).toHaveTextContent("125%");
+        await waitFor(() => expect(bar.getByLabelText("Page number")).toHaveValue("1"));
+
+        // …and the version's own saved view is applied once its key arrives.
+        rerender(<PdfViewerWithNotes {...props} persistKey="doc-9:176" />);
+        await waitFor(() => expect(bar.getByTestId("pdf-zoom-level")).toHaveTextContent("50%"));
+        await waitFor(() => expect(bar.getByLabelText("Page number")).toHaveValue("3"));
+        const panel = within(await screen.findByTestId("pdf-contents"));
+        expect(panel.getByTestId("pdf-contents-tab-outline")).toHaveAttribute(
+            "aria-pressed",
+            "true"
+        );
+        // Nothing wrote the provisional defaults over it.
+        await waitFor(() =>
+            expect(JSON.parse(window.localStorage.getItem("pdf-view:doc-9:176")!)).toMatchObject({
+                page: 3,
+                zoom: 0.5,
+                contents: true,
+                tab: "outline",
+            })
+        );
+    });
 });
 
 describe("PdfViewerWithNotes pages in view", () => {
@@ -512,6 +548,39 @@ describe("PdfViewerWithNotes find", () => {
         await waitFor(() =>
             expect(screen.getByTestId("pdf-find-count")).toHaveTextContent("No matches")
         );
+    });
+
+    it("does not mistake the last query's matches for a new query's", async () => {
+        mockNumPages = 30;
+        mockPageTexts.set(25, "Cash runway stands at nineteen months.");
+        renderViewer();
+        await toolbar();
+        await waitFor(() => expect(drawnPages()).toEqual([1, 2, 3]));
+
+        fireEvent.click(screen.getByTestId("pdf-find-toggle"));
+        const input = await screen.findByTestId("pdf-find-input");
+        fireEvent.change(input, { target: { value: "revenue" } });
+        await waitFor(() =>
+            expect(screen.getByTestId("pdf-find-count")).toHaveTextContent("1 of 58")
+        );
+        await waitFor(() =>
+            expect(document.querySelectorAll('[data-find-hit="current"]')).toHaveLength(1)
+        );
+
+        // A new query whose only match is far away: the old matches must
+        // not be scrolled to under the new query's name, which would mark
+        // its jump as done and leave page 25 undrawn.
+        fireEvent.change(input, { target: { value: "cash runway" } });
+        await waitFor(() =>
+            expect(screen.getByTestId("pdf-find-count")).toHaveTextContent("1 of 1")
+        );
+        await waitFor(() => expect(drawnPages()).toContain(25));
+        await waitFor(() =>
+            expect(
+                document.querySelector('[data-pdf-page="25"] [data-find-hit="current"]')
+            ).toBeInTheDocument()
+        );
+        expect(screen.getByTestId("pdf-toolbar").querySelector("input")).toHaveValue("25");
     });
 
     it("finds a word on a page that is not drawn, and goes there", async () => {

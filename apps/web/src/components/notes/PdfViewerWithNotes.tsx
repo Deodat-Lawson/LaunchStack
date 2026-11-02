@@ -266,6 +266,20 @@ interface FindHit {
     page: number;
     index: number;
 }
+/** Find's matches, and the query they are the matches of. */
+interface FindResult {
+    query: string;
+    hits: FindHit[];
+    /** False while some pages' text has not arrived yet. */
+    complete: boolean;
+}
+/** Where the query's matches sit on the drawn pages, by page, in reading order. */
+interface FindRanges {
+    query: string;
+    byPage: Map<number, PdfQuad[][]>;
+}
+const EMPTY_HITS: FindHit[] = [];
+const EMPTY_RANGES = new Map<number, PdfQuad[][]>();
 
 /** A point on a page held still while the scale changes around it. */
 interface ZoomAnchor {
@@ -628,6 +642,10 @@ export function PdfViewerWithNotes({
     const [availableWidth, setAvailableWidth] = useState<number | null>(null);
     const [availableHeight, setAvailableHeight] = useState<number | null>(null);
     const [zoom, setZoom] = useState<Zoom>(() => (isZoom(saved?.zoom) ? saved.zoom : "auto"));
+    const [contentsOpen, setContentsOpen] = useState<boolean>(() => saved?.contents === true);
+    const [contentsTab, setContentsTab] = useState<PdfContentsTab>(() =>
+        saved?.tab === "outline" ? "outline" : "thumbnails"
+    );
     useEffect(() => {
         const root = rootRef.current;
         const container = containerRef.current;
@@ -1050,7 +1068,21 @@ export function PdfViewerWithNotes({
     const resumed = useRef(false);
     useEffect(() => {
         resumed.current = false;
-    }, [storageKey, url]);
+    }, [url]);
+    // The key can change after mount — the host learns the document's
+    // version a moment after it opens — and the state initialisers above ran
+    // for the first key only. The view saved under the new key is applied
+    // in full here, and the page below, before anything is written to it.
+    const appliedKey = useRef(storageKey);
+    useEffect(() => {
+        if (appliedKey.current === storageKey) return;
+        appliedKey.current = storageKey;
+        resumed.current = false;
+        if (!saved) return;
+        if (isZoom(saved.zoom)) setZoom(saved.zoom);
+        setContentsOpen(saved.contents === true);
+        setContentsTab(saved.tab === "outline" ? "outline" : "thumbnails");
+    }, [storageKey, saved]);
     useEffect(() => {
         if (resumed.current || !numPages || !sizesComplete) return;
         resumed.current = true;
@@ -1065,10 +1097,6 @@ export function PdfViewerWithNotes({
     // Contents: thumbnails and the outline
     // ---------------------------------------------------------------------
 
-    const [contentsOpen, setContentsOpen] = useState<boolean>(() => saved?.contents === true);
-    const [contentsTab, setContentsTab] = useState<PdfContentsTab>(() =>
-        saved?.tab === "outline" ? "outline" : "thumbnails"
-    );
     const panelOverlays = viewerWidth !== null && viewerWidth < CONTENTS_OVERLAY_BELOW_PX;
     const panelOverlaysRef = useRef(panelOverlays);
     panelOverlaysRef.current = panelOverlays;
@@ -1172,11 +1200,28 @@ export function PdfViewerWithNotes({
 
     const [findOpen, setFindOpen] = useState(false);
     const [findQuery, setFindQuery] = useState("");
-    const [findHits, setFindHits] = useState<FindHit[]>([]);
-    const [findComplete, setFindComplete] = useState(true);
+    /**
+     * Results carry the query they answer: the count and the positions are
+     * worked out a beat after a keystroke, and until they are, the last
+     * query's are not the new one's — scrolling to one of them under the
+     * new query's name would record the jump as done and leave the real
+     * match unseen.
+     */
+    const [findResult, setFindResult] = useState<FindResult>(() => ({
+        query: "",
+        hits: [],
+        complete: true,
+    }));
     const [findIndex, setFindIndex] = useState(0);
     /** Find's matches on each drawn page, as quads, in reading order. */
-    const [findRanges, setFindRanges] = useState<Map<number, PdfQuad[][]>>(() => new Map());
+    const [findRanges, setFindRanges] = useState<FindRanges>(() => ({
+        query: "",
+        byPage: new Map(),
+    }));
+    const query = findQuery.trim();
+    const findHits = findResult.query === query ? findResult.hits : EMPTY_HITS;
+    const findComplete = findResult.query === query ? findResult.complete : false;
+    const rangesByPage = findRanges.query === query ? findRanges.byPage : EMPTY_RANGES;
     const findInputRef = useRef<HTMLInputElement>(null);
     /** The query and match last scrolled to, so a re-search does not jump. */
     const findScrolledTo = useRef("");
@@ -1191,8 +1236,8 @@ export function PdfViewerWithNotes({
     }, []);
     const closeFind = useCallback(() => {
         setFindOpen(false);
-        setFindHits([]);
-        setFindRanges(new Map());
+        setFindResult({ query: "", hits: [], complete: true });
+        setFindRanges({ query: "", byPage: new Map() });
         findScrolledTo.current = "";
         containerRef.current?.focus({ preventScroll: true });
     }, []);
@@ -1205,10 +1250,8 @@ export function PdfViewerWithNotes({
     // whose text has not arrived yet are asked for, and the count grows as
     // they answer.
     useEffect(() => {
-        const query = findQuery.trim();
         if (!findOpen || query.length < 2 || !numPages) {
-            setFindHits([]);
-            setFindComplete(true);
+            setFindResult({ query: "", hits: [], complete: true });
             return;
         }
         const timer = setTimeout(() => {
@@ -1225,19 +1268,17 @@ export function PdfViewerWithNotes({
                 for (let index = 0; index < count; index++) hits.push({ page, index });
                 if (hits.length >= MAX_FIND_HITS) break;
             }
-            setFindHits(hits);
-            setFindComplete(complete);
+            setFindResult({ query, hits, complete });
             setFindIndex(index => Math.min(index, Math.max(0, hits.length - 1)));
         }, 120);
         return () => clearTimeout(timer);
-    }, [findOpen, findQuery, numPages, textVersion, pageText]);
+    }, [findOpen, query, numPages, textVersion, pageText]);
 
     // Where each match sits on the drawn pages, from their text layers. Re-run
     // as pages draw, and at a new scale (the text layer is redrawn).
     useEffect(() => {
-        const query = findQuery.trim();
         if (!findOpen || query.length < 2) {
-            setFindRanges(new Map());
+            setFindRanges({ query: "", byPage: new Map() });
             return;
         }
         const timer = setTimeout(() => {
@@ -1254,19 +1295,19 @@ export function PdfViewerWithNotes({
                     )
                 );
             }
-            setFindRanges(map);
+            setFindRanges({ query, byPage: map });
         }, 100);
         return () => clearTimeout(timer);
-    }, [findOpen, findQuery, textLayerVersion, pageScale, drawn]);
+    }, [findOpen, query, textLayerVersion, pageScale, drawn]);
 
     // Go to the current match: to its page first, which draws it, then to
     // the match itself once the page's text layer has placed it.
     useEffect(() => {
         const hit = findHits[findIndex];
         if (!hit) return;
-        const ranges = findRanges.get(hit.page);
+        const ranges = rangesByPage.get(hit.page);
         const quads = ranges?.[Math.min(hit.index, ranges.length - 1)];
-        const key = `${findQuery}\u0000${findIndex}`;
+        const key = `${query}\u0000${findIndex}`;
         if (quads && quads.length > 0) {
             if (findScrolledTo.current === `${key}\u0000fine`) return;
             findScrolledTo.current = `${key}\u0000fine`;
@@ -1275,7 +1316,7 @@ export function PdfViewerWithNotes({
             findScrolledTo.current = `${key}\u0000page`;
             goToPage(hit.page);
         }
-    }, [findHits, findIndex, findQuery, findRanges, scrollToQuad, goToPage]);
+    }, [findHits, findIndex, query, rangesByPage, scrollToQuad, goToPage]);
 
     const stepFind = useCallback(
         (step: 1 | -1) => {
@@ -1288,7 +1329,7 @@ export function PdfViewerWithNotes({
     const findByPage = useMemo(() => {
         const map = new Map<number, { all: PdfQuad[]; current: PdfQuad[] }>();
         const current = findHits[findIndex];
-        for (const [page, ranges] of findRanges) {
+        for (const [page, ranges] of rangesByPage) {
             const entry = { all: [] as PdfQuad[], current: [] as PdfQuad[] };
             const currentIndex =
                 current?.page === page ? Math.min(current.index, ranges.length - 1) : -1;
@@ -1299,7 +1340,7 @@ export function PdfViewerWithNotes({
             map.set(page, entry);
         }
         return map;
-    }, [findRanges, findHits, findIndex]);
+    }, [rangesByPage, findHits, findIndex]);
 
     // ---------------------------------------------------------------------
     // Selection → note, highlight, or a question

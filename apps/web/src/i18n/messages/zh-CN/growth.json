@@ -620,7 +620,7 @@
     },
     "campaigns": {
       "title": "营销活动",
-      "sub": "基于你的文档生成草稿：切入角度、品牌语气、目标画像，每条论断在发出前都会对照你的文档核对。可以直接在这里发布，也可以排到日历上。"
+      "sub": "基于公司知识，创作、审核并发布内容。"
     },
     "accounts": {
       "title": "账号",
@@ -883,7 +883,7 @@
       "addHashtag": "添加话题标签..."
     },
     "variants": {
-      "header": "变体（{count}）",
+      "header": "选择版本（{count}）",
       "active": "使用中",
       "useThis": "使用此版本",
       "best": "最佳",
@@ -947,8 +947,8 @@
       "newCampaign": "新建营销活动",
       "confirmNew": "要开始新的营销活动吗？当前草稿已保存在会话中。",
       "yesStartNew": "是，开始新的",
-      "promptTitle": "描述你想推广的内容",
-      "promptHint": "1–3 句话即可。",
+      "promptTitle": "创作简报",
+      "promptHint": "你想分享什么？目标读者是谁？",
       "promptPlaceholder": "例如：本月面向初创公司运营团队推广我们的 AI 文档工作流。",
       "generating": "正在生成营销活动...",
       "generate": "生成营销活动草稿",
@@ -1007,7 +1007,15 @@
       "refinementFailed": "优化失败"
     },
     "draftDocTitle": "营销活动草稿（{platform}）",
-    "draftDocFallback": "营销"
+    "draftDocFallback": "营销",
+    "studio": {
+      "settings": "帖子设置",
+      "characters": "{count, number} 个字符",
+      "postText": "帖子正文",
+      "moreActions": "更多草稿操作",
+      "claimsToReview": "{count, plural, one {# 项声明需要你审核} other {# 项声明需要你审核}}",
+      "reviewUnavailable": "声明审核暂不可用。请在发布前检查帖子。"
+    }
   },
   "emailPipeline": {
     "title": "邮件外联",

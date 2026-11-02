@@ -47,11 +47,9 @@ export function CampaignsScreen() {
     return (
         // Wider than Brand's other screens: the generator is two panes (controls
         // and output) and the output keeps its own tabs.
-        <div className="mx-auto flex max-w-[1320px] flex-col gap-5">
+        <div className="mx-auto flex max-w-[1440px] flex-col gap-5">
             <PageHeader size="md" title={t("title")} sub={t("sub")} />
-            <div className="border-line bg-panel rounded-lg border p-4 @max-md:p-2">
-                <Workspace />
-            </div>
+            <Workspace />
         </div>
     );
 }

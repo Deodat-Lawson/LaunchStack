@@ -49,7 +49,11 @@
     font-size: 0.8rem;
     padding: 0.25rem 0.7rem;
     cursor: pointer;
-    transition: all 0.2s;
+    transition:
+        background-color 0.2s,
+        border-color 0.2s,
+        color 0.2s,
+        box-shadow 0.2s;
     font-family: inherit;
 }
 
@@ -87,7 +91,11 @@
     text-align: left;
     padding: 0.6rem 0.7rem;
     cursor: pointer;
-    transition: all 0.2s;
+    transition:
+        background-color 0.2s,
+        border-color 0.2s,
+        color 0.2s,
+        box-shadow 0.2s;
     font-family: inherit;
 }
 
@@ -607,7 +615,11 @@
     background: transparent;
     color: var(--ink-2);
     cursor: pointer;
-    transition: all 0.2s;
+    transition:
+        background-color 0.2s,
+        border-color 0.2s,
+        color 0.2s,
+        box-shadow 0.2s;
     font-family: inherit;
 }
 
@@ -673,7 +685,11 @@
     border: 1px solid var(--line-2);
     border-radius: 12px;
     padding: 0.875rem;
-    transition: all 0.3s ease;
+    transition:
+        background-color 0.3s ease,
+        border-color 0.3s ease,
+        color 0.3s ease,
+        box-shadow 0.3s ease;
     box-shadow: 0 2px 8px oklch(0 0 0 / 0.04);
 }
 
@@ -1413,7 +1429,11 @@
     color: var(--ink-2);
     font-size: 0.78rem;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease;
     text-align: left;
     line-height: 1.35;
     font-family: inherit;
@@ -1446,7 +1466,11 @@
     font-size: 0.875rem;
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease;
     font-family: inherit;
 }
 
@@ -1544,7 +1568,11 @@
     font-size: 0.8rem;
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease;
     font-family: inherit;
 }
 
@@ -1683,7 +1711,11 @@
     font-size: 0.78rem;
     cursor: pointer;
     font-family: inherit;
-    transition: all 160ms ease;
+    transition:
+        background-color 160ms ease,
+        border-color 160ms ease,
+        color 160ms ease,
+        box-shadow 160ms ease;
 }
 
 .confirmBarNo:hover {
@@ -1874,7 +1906,11 @@
     border: 1px dashed var(--line);
     border-radius: 9999px;
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition:
+        background-color 0.15s ease,
+        border-color 0.15s ease,
+        color 0.15s ease,
+        box-shadow 0.15s ease;
     font-family: inherit;
 }
 
@@ -1887,96 +1923,60 @@
 /* ---------------- Variant stack ---------------- */
 
 .variantStack {
-    margin-top: 1rem;
-    border: 1px solid var(--line-2);
-    border-radius: 12px;
-    overflow: hidden;
-    background: var(--panel);
+    min-width: 0;
+    padding: 0;
+    margin: 0 0 10px;
+    border: 0;
 }
 
 .variantStackHeader {
-    padding: 0.5rem 0.75rem;
-    font-size: 0.6875rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
+    padding: 0;
+    margin-bottom: 9px;
+    font-size: 12px;
+    font-weight: 500;
     color: var(--ink-3);
-    background: var(--panel-2);
-    border-bottom: 1px solid var(--line-2);
 }
 
-.variantCard {
-    padding: 0.625rem 0.75rem;
-    border-bottom: 1px solid var(--line-2);
-    transition: background 0.15s ease;
+.variantChoices {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
 }
 
-.variantCard:last-child {
-    border-bottom: none;
-}
-
-.variantCard:hover {
-    background: var(--panel-2);
-}
-
-.variantCardActive {
-    background: var(--accent-soft);
-    box-shadow: inset 0 0 0 1px var(--accent);
-}
-
-.variantCardHeader {
+.variantChoice {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    margin-bottom: 0.25rem;
+    gap: 8px;
+    padding: 8px 10px;
+    min-height: 36px;
+    max-width: 100%;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--ink-2);
+    font-size: 12px;
+    text-align: left;
+    cursor: pointer;
+    transition:
+        border-color 150ms ease,
+        background-color 150ms ease,
+        color 150ms ease;
 }
-
-.variantLabel {
-    font-size: 0.75rem;
-    font-weight: 600;
+.variantChoice span {
+    overflow-wrap: anywhere;
+}
+.variantChoice:hover {
+    background: var(--panel-2);
+    border-color: var(--ink-3);
+}
+.variantChoice[aria-pressed="true"] {
+    border-color: var(--accent);
+    background: var(--accent-soft);
     color: var(--ink);
 }
-
-.variantPreview {
-    font-size: 0.6875rem;
-    color: var(--ink-3);
-    line-height: 1.4;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    margin: 0;
-}
-
-.variantActiveBadge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    padding: 0.125rem 0.5rem;
-    font-size: 0.625rem;
-    font-weight: 600;
+.variantChoice svg {
     color: var(--accent);
-    background: var(--accent-soft);
-    border-radius: 9999px;
-}
-
-.variantUseButton {
-    padding: 0.125rem 0.625rem;
-    font-size: 0.6875rem;
-    font-weight: 500;
-    color: var(--ink-2);
-    background: none;
-    border: 1px solid var(--line);
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.15s ease;
-    font-family: inherit;
-}
-
-.variantUseButton:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-    background: var(--accent-soft);
+    flex-shrink: 0;
 }
 
 /* ---------------- Dark mode polish on platform-specific brand chips ---------------- */
@@ -2093,37 +2093,311 @@
    right, and the output is split into tabs (Draft, Claims, Why it works,
    Research, Process), so a long run costs a click, not a scroll.
 
-   The two panes are a wrapping flex row rather than a media or container
-   query: the workspace is mounted in tabs of any width, beside a sessions
-   sidebar or not, so the panes sit side by side exactly when the output can
-   keep 440px, and otherwise stack with the page scrolling naturally. No pane
-   gets a fixed height. */
+   The grid reserves a compact brief column and gives the remaining width to
+   the draft. Its named container query stacks the panes in narrow workspace
+   tabs, including split views and standalone screens. The document scrolls
+   naturally; neither pane has a fixed height. */
+
+.workspaceLayoutSingle {
+    container-type: inline-size;
+    container-name: campaign-studio;
+}
 
 .studio {
+    display: grid;
+    grid-template-columns: minmax(240px, 280px) minmax(0, 1fr);
+    gap: 24px 28px;
+    align-items: start;
+}
+
+.studio > .workspaceMainHeader,
+.studioHeader {
+    grid-column: 1 / -1;
+}
+
+.studioHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--line);
+}
+
+.studioControls,
+.studioOutput {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 16px;
+}
+
+.studio .promptCard {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    backdrop-filter: none;
+    box-shadow: none;
+}
+
+.studio .promptHeaderRow {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    margin-bottom: 14px;
+}
+
+.studio .promptTitle {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.studio .promptHint {
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--ink-3);
+}
+
+.studio .textarea {
+    min-height: 160px;
+    padding: 14px;
+    font-size: 14px;
+    line-height: 1.65;
+    background: var(--panel-2);
+}
+
+.studio .generateButton {
+    width: 100%;
+    min-height: 42px;
+    margin-top: 0;
+}
+
+.studio .generateRow {
+    margin-top: 16px;
+}
+
+.studio .platformPreviewCard {
+    box-shadow: none;
+    background: var(--panel-2);
+    backdrop-filter: none;
+    border-radius: 12px;
+}
+
+.studio .platformPreviewBody {
+    padding: 24px;
+    font-size: 15px;
+    line-height: 1.75;
+    overflow-wrap: anywhere;
+}
+
+.studio .platformPreviewBody p {
+    margin-bottom: 1em;
+}
+
+.studio .viewModeToggle {
+    width: auto;
+    min-height: 32px;
+    padding: 0 9px;
+    gap: 6px;
+    font-size: 12px;
+}
+
+.characterCount {
+    font-size: 11px;
+    color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.postSettings {
+    border-top: 1px solid var(--line);
+    margin-top: 18px;
+    padding-top: 16px;
+}
+
+.postSettings summary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 32px;
+    color: var(--ink-2);
+    font-size: 13px;
+    cursor: pointer;
+    list-style: none;
+}
+
+.postSettings summary::-webkit-details-marker {
+    display: none;
+}
+.postSettings summary > svg:last-child {
+    margin-left: auto;
+}
+.postSettings[open] summary > svg:last-child {
+    transform: rotate(180deg);
+}
+.postSettings summary:hover {
+    color: var(--ink);
+}
+
+.settingsContent {
+    display: grid;
+    gap: 18px;
+    padding-top: 16px;
+}
+
+.settingsField {
+    display: grid;
+    min-width: 0;
+    gap: 8px;
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+
+.settingsField legend,
+.settingsField label {
+    margin-bottom: 8px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--ink-2);
+}
+
+.settingsField input {
+    width: 100%;
+    min-height: 38px;
+    padding: 8px 10px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--panel-2);
+    color: var(--ink);
+    font-size: 13px;
+}
+
+.settingChoices {
     display: flex;
     flex-wrap: wrap;
-    gap: 1.5rem;
-    align-items: flex-start;
+    gap: 6px;
 }
 
-.studio > .workspaceMainHeader {
-    flex-basis: 100%;
+.settingChoices button {
+    padding: 6px 9px;
+    min-height: 32px;
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    background: transparent;
+    color: var(--ink-2);
+    font-size: 12px;
+    cursor: pointer;
 }
 
-.studioControls {
-    flex: 1 1 340px;
+.settingChoices button:hover,
+.settingChoices button[aria-pressed="true"] {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    color: var(--accent);
+}
+
+.moreActions {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    min-height: 36px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    color: var(--ink-2);
+    background: transparent;
+    cursor: pointer;
+}
+
+.moreActions:hover {
+    background: var(--panel-2);
+    color: var(--ink);
+}
+
+.reviewNotice {
     display: flex;
-    flex-direction: column;
-    gap: 1.25rem;
-    min-width: 0;
+    align-items: center;
+    width: 100%;
+    gap: 9px;
+    padding: 11px 12px;
+    margin-top: 6px;
+    border: 1px solid color-mix(in oklch, var(--warn) 26%, var(--line));
+    border-radius: 8px;
+    color: var(--ink-2);
+    background: var(--warn-soft);
+    font-size: 12px;
+    text-align: left;
+    cursor: pointer;
+}
+.reviewNotice svg {
+    flex-shrink: 0;
+    color: var(--warn);
+}
+.reviewNotice svg:last-child {
+    margin-left: auto;
+}
+.reviewNotice:hover {
+    border-color: var(--warn);
 }
 
-.studioOutput {
-    flex: 999 1 440px;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-    min-width: 0;
+.studio .draftActions {
+    align-items: center;
+    gap: 7px;
+    margin-top: 10px;
+}
+.studio .draftActions button {
+    min-height: 36px;
+    font-size: 12px;
+}
+.studio .actionPrimary {
+    margin-left: 0;
+}
+
+.studio :is(button, summary, input, textarea):focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+@container campaign-studio (max-width: 760px) {
+    .studio {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 20px;
+    }
+    .studioHeader {
+        padding-bottom: 14px;
+    }
+    .studio .textarea {
+        min-height: 128px;
+    }
+    .studio .platformPreviewBody {
+        padding: 18px;
+    }
+    .studio .draftActions {
+        flex-direction: row;
+    }
+    .studio .actionPrimary {
+        width: auto;
+    }
+}
+
+@container campaign-studio (max-width: 420px) {
+    .characterCount {
+        display: none;
+    }
+    .studio .platformPreviewHeader {
+        padding: 10px;
+    }
+    .studio .platformPreviewBody {
+        padding: 14px;
+        font-size: 14px;
+    }
+    .studioHeader {
+        align-items: flex-start;
+    }
 }
 
 .resultTabs {
@@ -2217,15 +2491,6 @@
     padding: 0.5rem 0;
 }
 
-/* Side by side (the row is at least 340 + 440 + gap = 804px), the controls
-   stop at a comfortable form width (420px); stacked, they take the whole line. The
-   multiplier turns "row narrower than 804px" into an unlimited max-width and
-   "wider" into a negative one, so max() picks 400px — a breakpoint keyed to
-   this row's own width, not the window's. */
-.studioControls {
-    max-width: max(420px, calc((804px - 100%) * 9999));
-}
-
 .workspaceHeaderActions {
     display: flex;
     flex-wrap: wrap;
@@ -2249,17 +2514,6 @@
     min-height: 0;
     max-height: none;
     overflow-y: auto;
-}
-
-/* In the narrower controls pane the header wraps instead of pushing its
-   buttons into the output pane. */
-.studioControls .workspaceLeftHeader {
-    flex-wrap: wrap;
-    row-gap: 0.5rem;
-}
-
-.studioControls .workspaceHeaderActions {
-    margin-left: auto;
 }
 
 /* Leave room for the drawer's own close button. */

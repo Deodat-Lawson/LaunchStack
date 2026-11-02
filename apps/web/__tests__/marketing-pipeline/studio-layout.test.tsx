@@ -33,6 +33,16 @@ function seed() {
         prompt: "Announce faster onboarding",
         viewMode: "preview",
         editableMessage: MESSAGE,
+        messageVariants: [
+            { id: "v1", label: "Best", text: MESSAGE, createdAt: 1 },
+            {
+                id: "v2",
+                label: "Another angle",
+                text: "A second approach to onboarding.",
+                createdAt: 2,
+            },
+        ],
+        activeVariantId: "v1",
         result: {
             platform: "linkedin",
             message: MESSAGE,
@@ -121,4 +131,26 @@ it("shows where the draft will appear before any run", async () => {
         await screen.findByText("Your draft appears here. Describe what to promote and generate.")
     ).toBeInTheDocument();
     expect(screen.queryByRole("tablist")).not.toBeInTheDocument();
+});
+
+it("labels the brief and keeps version switching beside the preview", async () => {
+    seed();
+    render(<MarketingPipelineWorkspace embedded />);
+    expect(await screen.findByRole("textbox", { name: "Campaign brief" })).toBeVisible();
+    const alternative = screen.getByRole("button", { name: "Another angle" });
+    fireEvent.click(alternative);
+    expect(alternative).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByText("A second approach to onboarding.")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Edit" }));
+    expect(screen.getByRole("textbox", { name: "Post text" })).toHaveValue(
+        "A second approach to onboarding."
+    );
+});
+
+it("opens the claims tab from the review notice", async () => {
+    seed();
+    render(<MarketingPipelineWorkspace embedded />);
+    fireEvent.click(await screen.findByRole("button", { name: "1 claim needs your review" }));
+    expect(screen.getByRole("tab", { name: /Claims/ })).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByText("A human on every first call")).toBeInTheDocument();
 });

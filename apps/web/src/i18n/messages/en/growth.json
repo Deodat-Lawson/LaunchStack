@@ -620,7 +620,7 @@
     },
     "campaigns": {
       "title": "Campaigns",
-      "sub": "Drafts grounded in your documents: angles, brand voice, persona, and every claim checked against your documents before it goes out. Publish from here or schedule it on the calendar."
+      "sub": "Create, review and publish posts grounded in your company’s knowledge."
     },
     "accounts": {
       "title": "Accounts",
@@ -883,7 +883,7 @@
       "addHashtag": "Add a hashtag..."
     },
     "variants": {
-      "header": "Variants ({count})",
+      "header": "Choose a version ({count})",
       "active": "Active",
       "useThis": "Use this",
       "best": "Best",
@@ -947,10 +947,10 @@
       "newCampaign": "New campaign",
       "confirmNew": "Start a new campaign? Your current draft is saved in sessions.",
       "yesStartNew": "Yes, start new",
-      "promptTitle": "Describe what you want to promote",
-      "promptHint": "1-3 sentences is perfect.",
+      "promptTitle": "Campaign brief",
+      "promptHint": "What are you sharing, and who is it for?",
       "promptPlaceholder": "Example: Promote our AI-powered document workflow for startup operations teams this month.",
-      "generating": "Generating campaign...",
+      "generating": "Generating campaign…",
       "generate": "Generate campaign draft",
       "draft": "Campaign draft",
       "preview": "{platform} preview",
@@ -1007,7 +1007,15 @@
       "refinementFailed": "Refinement failed"
     },
     "draftDocTitle": "Campaign Draft ({platform})",
-    "draftDocFallback": "Marketing"
+    "draftDocFallback": "Marketing",
+    "studio": {
+      "settings": "Post settings",
+      "characters": "{count, number} characters",
+      "postText": "Post text",
+      "moreActions": "More draft actions",
+      "claimsToReview": "{count, plural, one {# claim needs your review} other {# claims need your review}}",
+      "reviewUnavailable": "Claim review is unavailable. Review this post before publishing."
+    }
   },
   "emailPipeline": {
     "title": "Email outreach",

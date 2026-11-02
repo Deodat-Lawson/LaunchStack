@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useId, useRef, useState, type ReactNode } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { useFormatter, useTranslations } from "next-intl";
@@ -21,6 +21,9 @@ import {
     Loader2,
     Megaphone,
     MessageSquareText,
+    MoreHorizontal,
+    SlidersHorizontal,
+    Eye,
     Pencil,
     Plus,
     Send,
@@ -32,6 +35,12 @@ import {
 import { cn } from "~/lib/utils";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "~/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
 import { RewriteWorkflow } from "~/app/employer/documents/components/generator/RewriteWorkflow";
 import styles from "~/styles/Employer/MarketingPipeline.module.css";
 import {
@@ -806,6 +815,7 @@ function CustomizationControls({
     onTargetAudienceChange,
     contentType,
     onContentTypeChange,
+    children,
 }: {
     toneOverride?: FormalityLevel;
     onToneChange: (v: FormalityLevel | undefined) => void;
@@ -813,166 +823,69 @@ function CustomizationControls({
     onTargetAudienceChange: (v: string) => void;
     contentType?: ContentType;
     onContentTypeChange: (v: ContentType | undefined) => void;
+    children?: ReactNode;
 }) {
     const t = useTranslations("growth.marketingPipeline");
-    const [expanded, setExpanded] = useState(false);
-
+    const audienceId = useId();
     return (
-        <div style={{ marginTop: "0.75rem" }}>
-            <button
-                type="button"
-                onClick={() => setExpanded(p => !p)}
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.375rem",
-                    background: "none",
-                    border: "none",
-                    cursor: "pointer",
-                    padding: 0,
-                    fontSize: "0.8125rem",
-                    fontWeight: 600,
-                    color: "var(--ink-3)",
-                }}
-            >
-                <Target size={14} />
-                {t("customize.toggle")}
-                {expanded ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
-            </button>
-            {expanded && (
-                <div
-                    style={{
-                        marginTop: "0.5rem",
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "0.75rem",
-                    }}
-                >
-                    <div>
-                        <label
-                            style={{
-                                display: "block",
-                                fontSize: "0.75rem",
-                                fontWeight: 600,
-                                marginBottom: "0.25rem",
-                                color: "var(--ink-3)",
-                            }}
-                        >
-                            {t("customize.tone")}
-                        </label>
-                        <div style={{ display: "flex", gap: "0.375rem", flexWrap: "wrap" }}>
-                            {TONE_OPTIONS.map(tone => (
-                                <button
-                                    key={tone}
-                                    type="button"
-                                    onClick={() =>
-                                        onToneChange(toneOverride === tone ? undefined : tone)
-                                    }
-                                    style={{
-                                        padding: "0.25rem 0.625rem",
-                                        borderRadius: "9999px",
-                                        fontSize: "0.75rem",
-                                        fontWeight: 500,
-                                        border:
-                                            toneOverride === tone
-                                                ? "1.5px solid var(--accent)"
-                                                : "1px solid var(--line)",
-                                        background:
-                                            toneOverride === tone
-                                                ? "var(--accent-soft)"
-                                                : "transparent",
-                                        color:
-                                            toneOverride === tone
-                                                ? "var(--accent)"
-                                                : "var(--ink-2)",
-                                        cursor: "pointer",
-                                    }}
-                                >
-                                    {t(`tones.${tone}`)}
-                                </button>
-                            ))}
-                        </div>
+        <details className={styles.postSettings}>
+            <summary>
+                <SlidersHorizontal size={15} aria-hidden="true" />
+                <span>{t("studio.settings")}</span>
+                <ChevronDown size={14} aria-hidden="true" />
+            </summary>
+            <div className={styles.settingsContent}>
+                <fieldset className={styles.settingsField}>
+                    <legend>{t("customize.tone")}</legend>
+                    <div className={styles.settingChoices}>
+                        {TONE_OPTIONS.map(tone => (
+                            <button
+                                key={tone}
+                                type="button"
+                                aria-pressed={toneOverride === tone}
+                                onClick={() =>
+                                    onToneChange(toneOverride === tone ? undefined : tone)
+                                }
+                            >
+                                {t(`tones.${tone}`)}
+                            </button>
+                        ))}
                     </div>
-
-                    <div>
-                        <label
-                            style={{
-                                display: "block",
-                                fontSize: "0.75rem",
-                                fontWeight: 600,
-                                marginBottom: "0.25rem",
-                                color: "var(--ink-3)",
-                            }}
-                        >
-                            {t("customize.audience")}
-                        </label>
-                        <input
-                            type="text"
-                            value={targetAudience}
-                            onChange={e => onTargetAudienceChange(e.target.value)}
-                            placeholder={t("customize.audiencePlaceholder")}
-                            style={{
-                                width: "100%",
-                                padding: "0.375rem 0.5rem",
-                                borderRadius: "0.375rem",
-                                border: "1px solid var(--line)",
-                                fontSize: "0.8125rem",
-                                background: "var(--panel)",
-                            }}
-                        />
-                    </div>
-
-                    <div>
-                        <label
-                            style={{
-                                display: "block",
-                                fontSize: "0.75rem",
-                                fontWeight: 600,
-                                marginBottom: "0.25rem",
-                                color: "var(--ink-3)",
-                            }}
-                        >
-                            {t("customize.contentType")}
-                        </label>
-                        <div style={{ display: "flex", gap: "0.375rem", flexWrap: "wrap" }}>
-                            {CONTENT_TYPE_OPTIONS.map(ct => (
-                                <button
-                                    key={ct.id}
-                                    type="button"
-                                    onClick={() =>
-                                        onContentTypeChange(
-                                            contentType === ct.id ? undefined : ct.id
-                                        )
-                                    }
-                                    title={t(`contentTypes.${ct.key}.hint`)}
-                                    style={{
-                                        padding: "0.25rem 0.625rem",
-                                        borderRadius: "9999px",
-                                        fontSize: "0.75rem",
-                                        fontWeight: 500,
-                                        border:
-                                            contentType === ct.id
-                                                ? "1.5px solid var(--accent)"
-                                                : "1px solid var(--line)",
-                                        background:
-                                            contentType === ct.id
-                                                ? "var(--accent-soft)"
-                                                : "transparent",
-                                        color:
-                                            contentType === ct.id
-                                                ? "var(--accent)"
-                                                : "var(--ink-2)",
-                                        cursor: "pointer",
-                                    }}
-                                >
-                                    {t(`contentTypes.${ct.key}.label`)}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
+                </fieldset>
+                <div className={styles.settingsField}>
+                    <label htmlFor={audienceId}>{t("customize.audience")}</label>
+                    <input
+                        id={audienceId}
+                        name="targetAudience"
+                        autoComplete="off"
+                        type="text"
+                        value={targetAudience}
+                        maxLength={200}
+                        onChange={e => onTargetAudienceChange(e.target.value)}
+                        placeholder={t("customize.audiencePlaceholder")}
+                    />
                 </div>
-            )}
-        </div>
+                <fieldset className={styles.settingsField}>
+                    <legend>{t("customize.contentType")}</legend>
+                    <div className={styles.settingChoices}>
+                        {CONTENT_TYPE_OPTIONS.map(ct => (
+                            <button
+                                key={ct.id}
+                                type="button"
+                                aria-pressed={contentType === ct.id}
+                                onClick={() =>
+                                    onContentTypeChange(contentType === ct.id ? undefined : ct.id)
+                                }
+                                title={t(`contentTypes.${ct.key}.hint`)}
+                            >
+                                {t(`contentTypes.${ct.key}.label`)}
+                            </button>
+                        ))}
+                    </div>
+                </fieldset>
+                {children}
+            </div>
+        </details>
     );
 }
 
@@ -988,6 +901,7 @@ function SubredditField({
     onChange: (v: string) => void;
 }) {
     const t = useTranslations("growth.marketingPipeline.fields");
+    const fieldId = useId();
     const [open, setOpen] = useState(false);
     const [inputValue, setInputValue] = useState(value.replace(/^r\//, ""));
 
@@ -1004,10 +918,16 @@ function SubredditField({
 
     return (
         <div className={styles.platformFieldGroup}>
-            <label className={styles.platformFieldLabel}>{t(config.type)}</label>
+            <label htmlFor={fieldId} className={styles.platformFieldLabel}>
+                {t(config.type)}
+            </label>
             <div className={styles.subredditInputWrapper}>
                 <span className={styles.subredditPrefix}>r/</span>
                 <input
+                    id={fieldId}
+                    name="subreddit"
+                    autoComplete="off"
+                    spellCheck={false}
                     type="text"
                     className={styles.subredditInput}
                     value={inputValue}
@@ -1050,6 +970,7 @@ function HashtagField({
     onChange: (v: string[]) => void;
 }) {
     const t = useTranslations("growth.marketingPipeline.fields");
+    const fieldId = useId();
     const [inputValue, setInputValue] = useState("");
     const atLimit = values.length >= config.maxItems;
 
@@ -1070,7 +991,7 @@ function HashtagField({
 
     return (
         <div className={styles.platformFieldGroup}>
-            <label className={styles.platformFieldLabel}>
+            <label htmlFor={fieldId} className={styles.platformFieldLabel}>
                 {t(config.type)}
                 <span className={styles.platformFieldCount}>
                     {values.length}/{config.maxItems}
@@ -1092,6 +1013,10 @@ function HashtagField({
                 ))}
                 {!atLimit && (
                     <input
+                        id={fieldId}
+                        name="hashtags"
+                        autoComplete="off"
+                        spellCheck={false}
                         type="text"
                         className={styles.hashtagInput}
                         value={inputValue}
@@ -1166,9 +1091,9 @@ function PlatformFields({
     );
 }
 
-/* ─── Stacked rewrite variants ─── */
+/* ─── Draft variants ─── */
 
-function VariantStack({
+function VariantSelector({
     variants,
     activeVariantId,
     onSelect,
@@ -1179,43 +1104,26 @@ function VariantStack({
 }) {
     const t = useTranslations("growth.marketingPipeline.variants");
     if (variants.length < 2) return null;
-
     return (
-        <div className={styles.variantStack}>
-            <div className={styles.variantStackHeader}>
+        <fieldset className={styles.variantStack}>
+            <legend className={styles.variantStackHeader}>
                 {t("header", { count: variants.length })}
-            </div>
-            {variants.map(v => {
-                const isActive = v.id === activeVariantId;
-                return (
-                    <div
+            </legend>
+            <div className={styles.variantChoices}>
+                {variants.map(v => (
+                    <button
                         key={v.id}
-                        className={`${styles.variantCard} ${isActive ? styles.variantCardActive : ""}`}
+                        type="button"
+                        className={styles.variantChoice}
+                        aria-pressed={v.id === activeVariantId}
+                        onClick={() => onSelect(v.id)}
                     >
-                        <div className={styles.variantCardHeader}>
-                            <span className={styles.variantLabel}>{v.label}</span>
-                            {isActive ? (
-                                <span className={styles.variantActiveBadge}>
-                                    <Check size={10} />
-                                    {t("active")}
-                                </span>
-                            ) : (
-                                <button
-                                    type="button"
-                                    className={styles.variantUseButton}
-                                    onClick={() => onSelect(v.id)}
-                                >
-                                    {t("useThis")}
-                                </button>
-                            )}
-                        </div>
-                        <p className={styles.variantPreview}>
-                            {v.text.length > 140 ? `${v.text.slice(0, 140)}...` : v.text}
-                        </p>
-                    </div>
-                );
-            })}
-        </div>
+                        <span>{v.label}</span>
+                        {v.id === activeVariantId && <Check size={14} aria-hidden="true" />}
+                    </button>
+                ))}
+            </div>
+        </fieldset>
     );
 }
 
@@ -1230,6 +1138,7 @@ export function MarketingPipelineWorkspace({
     const t = useTranslations("growth.marketingPipeline");
     const tc = useTranslations("common.actions");
     const format = useFormatter();
+    const promptId = useId();
     const [debugOpen, setDebugOpen] = useState(false);
     // Which part of a finished run is showing. A new result opens on the draft.
     const [resultTab, setResultTab] = useState("draft");
@@ -1479,46 +1388,45 @@ export function MarketingPipelineWorkspace({
                                         </h2>
                                     </div>
                                 )}
-                                <div className={styles.studioControls}>
-                                    <header className={styles.workspaceLeftHeader}>
-                                        <div className={styles.selectedPlatformPill}>
-                                            {selectedPlatform && (
-                                                <PlatformLogo
-                                                    platform={selectedPlatform.id}
-                                                    size={28}
-                                                    className={styles.selectedPlatformLogo}
-                                                />
-                                            )}
-                                            <span className={styles.selectedPlatformLabel}>
-                                                {selectedPlatform?.label}
-                                            </span>
-                                        </div>
-                                        <div className={styles.workspaceHeaderActions}>
-                                            {hasSessions && (
-                                                <button
-                                                    type="button"
-                                                    className={styles.changePlatformButton}
-                                                    onClick={() => setHistoryOpen(true)}
-                                                    aria-haspopup="dialog"
-                                                >
-                                                    <History size={14} />
-                                                    {t("workspace.history", {
-                                                        count: sessions.length,
-                                                    })}
-                                                </button>
-                                            )}
-                                            {/* Fix 7: Renamed to "New campaign" with confirmation */}
+                                <header className={styles.studioHeader}>
+                                    <div className={styles.selectedPlatformPill}>
+                                        {selectedPlatform && (
+                                            <PlatformLogo
+                                                platform={selectedPlatform.id}
+                                                size={28}
+                                                className={styles.selectedPlatformLogo}
+                                            />
+                                        )}
+                                        <span className={styles.selectedPlatformLabel}>
+                                            {selectedPlatform?.label}
+                                        </span>
+                                    </div>
+                                    <div className={styles.workspaceHeaderActions}>
+                                        {hasSessions && (
                                             <button
                                                 type="button"
                                                 className={styles.changePlatformButton}
-                                                onClick={handleNewCampaignClick}
+                                                onClick={() => setHistoryOpen(true)}
+                                                aria-haspopup="dialog"
                                             >
-                                                <Plus size={14} />
-                                                {t("workspace.newCampaign")}
+                                                <History size={14} />
+                                                {t("workspace.history", {
+                                                    count: sessions.length,
+                                                })}
                                             </button>
-                                        </div>
-                                    </header>
-
+                                        )}
+                                        {/* Fix 7: Renamed to "New campaign" with confirmation */}
+                                        <button
+                                            type="button"
+                                            className={styles.changePlatformButton}
+                                            onClick={handleNewCampaignClick}
+                                        >
+                                            <Plus size={14} />
+                                            {t("workspace.newCampaign")}
+                                        </button>
+                                    </div>
+                                </header>
+                                <div className={styles.studioControls}>
                                     {/* Fix 7: Confirmation dialog */}
                                     {confirmNewCampaign && (
                                         <div className={styles.confirmBar}>
@@ -1545,13 +1453,22 @@ export function MarketingPipelineWorkspace({
                                     <div className={styles.promptCard}>
                                         <div className={styles.promptHeaderRow}>
                                             <h2 className={styles.promptTitle}>
-                                                {t("workspace.promptTitle")}
+                                                <label htmlFor={promptId}>
+                                                    {t("workspace.promptTitle")}
+                                                </label>
                                             </h2>
-                                            <span className={styles.promptHint}>
+                                            <span
+                                                id={`${promptId}-hint`}
+                                                className={styles.promptHint}
+                                            >
                                                 {t("workspace.promptHint")}
                                             </span>
                                         </div>
                                         <textarea
+                                            id={promptId}
+                                            name="campaignBrief"
+                                            aria-describedby={`${promptId}-hint`}
+                                            maxLength={2000}
                                             className={styles.textarea}
                                             value={prompt}
                                             onChange={e => setPrompt(e.target.value)}
@@ -1584,14 +1501,6 @@ export function MarketingPipelineWorkspace({
                                             </div>
                                         )}
 
-                                        {selectedPlatform?.platformFields && (
-                                            <PlatformFields
-                                                fields={selectedPlatform.platformFields}
-                                                meta={platformMeta}
-                                                onMetaChange={setPlatformMeta}
-                                            />
-                                        )}
-
                                         <CustomizationControls
                                             toneOverride={toneOverride}
                                             onToneChange={setToneOverride}
@@ -1599,7 +1508,15 @@ export function MarketingPipelineWorkspace({
                                             onTargetAudienceChange={setTargetAudience}
                                             contentType={contentType}
                                             onContentTypeChange={setContentType}
-                                        />
+                                        >
+                                            {selectedPlatform?.platformFields && (
+                                                <PlatformFields
+                                                    fields={selectedPlatform.platformFields}
+                                                    meta={platformMeta}
+                                                    onMetaChange={setPlatformMeta}
+                                                />
+                                            )}
+                                        </CustomizationControls>
 
                                         {error && (
                                             <div className={styles.inlineAlert}>
@@ -1687,9 +1604,11 @@ export function MarketingPipelineWorkspace({
                                                 className={styles.resultPanel}
                                             >
                                                 <div className={styles.assistantResult}>
-                                                    <div className={styles.assistantSectionHeader}>
-                                                        {t("workspace.draft")}
-                                                    </div>
+                                                    <VariantSelector
+                                                        variants={messageVariants}
+                                                        activeVariantId={activeVariantId}
+                                                        onSelect={selectVariant}
+                                                    />
                                                     <div className={styles.platformPreviewCard}>
                                                         <div
                                                             className={styles.platformPreviewHeader}
@@ -1724,6 +1643,13 @@ export function MarketingPipelineWorkspace({
                                                                         )?.label ?? result.platform,
                                                                 })}
                                                             </span>
+                                                            <span className={styles.characterCount}>
+                                                                {t("studio.characters", {
+                                                                    count: Array.from(
+                                                                        editableMessage
+                                                                    ).length,
+                                                                })}
+                                                            </span>
                                                             <button
                                                                 type="button"
                                                                 className={styles.viewModeToggle}
@@ -1740,7 +1666,20 @@ export function MarketingPipelineWorkspace({
                                                                         : tc("preview")
                                                                 }
                                                             >
-                                                                <Pencil size={14} />
+                                                                {viewMode === "preview" ? (
+                                                                    <Pencil
+                                                                        size={14}
+                                                                        aria-hidden="true"
+                                                                    />
+                                                                ) : (
+                                                                    <Eye
+                                                                        size={14}
+                                                                        aria-hidden="true"
+                                                                    />
+                                                                )}
+                                                                {viewMode === "preview"
+                                                                    ? tc("edit")
+                                                                    : tc("preview")}
                                                             </button>
                                                         </div>
                                                         <div className={styles.platformPreviewBody}>
@@ -1755,6 +1694,10 @@ export function MarketingPipelineWorkspace({
                                                                     className={
                                                                         styles.editableMessageTextarea
                                                                     }
+                                                                    aria-label={t(
+                                                                        "studio.postText"
+                                                                    )}
+                                                                    name="postText"
                                                                     value={editableMessage}
                                                                     onChange={e =>
                                                                         setEditableMessage(
@@ -1769,18 +1712,81 @@ export function MarketingPipelineWorkspace({
                                                         </div>
                                                     </div>
 
-                                                    {/* Fix 4: Button hierarchy -- tertiary / secondary / primary */}
-                                                    <div className={styles.draftActions}>
+                                                    {claimsToReview > 0 && (
                                                         <button
                                                             type="button"
-                                                            className={styles.actionTertiary}
-                                                            onClick={handlePushToRewriteDocument}
-                                                            disabled={!editableMessage.trim()}
-                                                            title={t("workspace.saveAsDocTitle")}
+                                                            className={styles.reviewNotice}
+                                                            onClick={() => setResultTab("claims")}
                                                         >
-                                                            <FileText size={14} />
-                                                            {t("workspace.saveAsDoc")}
+                                                            <AlertTriangle
+                                                                size={15}
+                                                                aria-hidden="true"
+                                                            />
+                                                            <span>
+                                                                {result.claimCheckUnavailable
+                                                                    ? t("studio.reviewUnavailable")
+                                                                    : t("studio.claimsToReview", {
+                                                                          count: claimsToReview,
+                                                                      })}
+                                                            </span>
+                                                            <ChevronRight
+                                                                size={15}
+                                                                aria-hidden="true"
+                                                            />
                                                         </button>
+                                                    )}
+                                                    {/* Fix 4: Button hierarchy -- tertiary / secondary / primary */}
+                                                    <div className={styles.draftActions}>
+                                                        <DropdownMenu>
+                                                            <DropdownMenuTrigger asChild>
+                                                                <button
+                                                                    type="button"
+                                                                    className={styles.moreActions}
+                                                                    aria-label={t(
+                                                                        "studio.moreActions"
+                                                                    )}
+                                                                >
+                                                                    <MoreHorizontal
+                                                                        size={18}
+                                                                        aria-hidden="true"
+                                                                    />
+                                                                </button>
+                                                            </DropdownMenuTrigger>
+                                                            <DropdownMenuContent align="start">
+                                                                <DropdownMenuItem
+                                                                    onSelect={
+                                                                        handlePushToRewriteDocument
+                                                                    }
+                                                                    disabled={
+                                                                        !editableMessage.trim()
+                                                                    }
+                                                                >
+                                                                    <FileText
+                                                                        size={14}
+                                                                        aria-hidden="true"
+                                                                    />
+                                                                    {t("workspace.saveAsDoc")}
+                                                                </DropdownMenuItem>
+                                                                <DropdownMenuItem
+                                                                    onSelect={() =>
+                                                                        void evaluatePost()
+                                                                    }
+                                                                    disabled={
+                                                                        !editableMessage.trim() ||
+                                                                        evaluating
+                                                                    }
+                                                                >
+                                                                    <Gauge
+                                                                        size={14}
+                                                                        aria-hidden="true"
+                                                                    />
+                                                                    {evaluating
+                                                                        ? t("workspace.scoring")
+                                                                        : t("workspace.evaluate")}
+                                                                </DropdownMenuItem>
+                                                            </DropdownMenuContent>
+                                                        </DropdownMenu>
+
                                                         <button
                                                             type="button"
                                                             className={styles.actionSecondary}
@@ -1796,7 +1802,7 @@ export function MarketingPipelineWorkspace({
                                                         </button>
                                                         <button
                                                             type="button"
-                                                            className={styles.actionSecondary}
+                                                            className={styles.actionPrimary}
                                                             onClick={handleCopy}
                                                             disabled={!editableMessage.trim()}
                                                         >
@@ -1808,28 +1814,6 @@ export function MarketingPipelineWorkspace({
                                                                           platformLabel ??
                                                                           t("workspace.platform"),
                                                                   })}
-                                                        </button>
-                                                        <button
-                                                            type="button"
-                                                            className={styles.actionSecondary}
-                                                            onClick={() => void evaluatePost()}
-                                                            disabled={
-                                                                !editableMessage.trim() ||
-                                                                evaluating
-                                                            }
-                                                            title={t("workspace.evaluateTitle")}
-                                                        >
-                                                            {evaluating ? (
-                                                                <Loader2
-                                                                    size={14}
-                                                                    className={styles.spinIcon}
-                                                                />
-                                                            ) : (
-                                                                <Gauge size={14} />
-                                                            )}
-                                                            {evaluating
-                                                                ? t("workspace.scoring")
-                                                                : t("workspace.evaluate")}
                                                         </button>
                                                         {onSchedule && result.platform && (
                                                             <button
@@ -1850,7 +1834,7 @@ export function MarketingPipelineWorkspace({
                                                         )}
                                                         <button
                                                             type="button"
-                                                            className={styles.actionPrimary}
+                                                            className={styles.actionSecondary}
                                                             onClick={() => void publishPost()}
                                                             disabled={
                                                                 !editableMessage.trim() ||
@@ -2128,7 +2112,7 @@ export function MarketingPipelineWorkspace({
                                                             side="right"
                                                             className="flex w-full flex-col overflow-y-auto p-0 sm:max-w-2xl"
                                                         >
-                                                            <SheetHeader className="shrink-0 border-b px-6 pt-6 pb-4">
+                                                            <SheetHeader className="shrink-0 border-b px-6 pb-4 pt-6">
                                                                 <SheetTitle className="text-lg font-semibold">
                                                                     {t("workspace.refineTitle")}
                                                                 </SheetTitle>
@@ -2158,12 +2142,6 @@ export function MarketingPipelineWorkspace({
                                                             </div>
                                                         </SheetContent>
                                                     </Sheet>
-
-                                                    <VariantStack
-                                                        variants={messageVariants}
-                                                        activeVariantId={activeVariantId}
-                                                        onSelect={selectVariant}
-                                                    />
                                                 </div>
                                             </TabsContent>
                                             <TabsContent
@@ -2308,14 +2286,14 @@ export function MarketingPipelineWorkspace({
                                                                             result.dnaDebug
                                                                                 .source ===
                                                                             "metadata"
-                                                                                ? "#dcfce7"
-                                                                                : "#fef3c7",
+                                                                                ? "var(--success-soft)"
+                                                                                : "var(--warn-soft)",
                                                                         color:
                                                                             result.dnaDebug
                                                                                 .source ===
                                                                             "metadata"
-                                                                                ? "#166534"
-                                                                                : "#92400e",
+                                                                                ? "var(--success)"
+                                                                                : "var(--warn)",
                                                                     }}
                                                                 >
                                                                     {result.dnaDebug.source}

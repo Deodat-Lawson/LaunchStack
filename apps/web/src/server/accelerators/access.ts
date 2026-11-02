@@ -1,7 +1,7 @@
 import type { Permission } from "~/lib/authz/permissions";
 import { resolveMemberContext, type WorkspaceContext } from "~/lib/require-workspace-context";
 
-/** A company role alone never grants access to this app's company-wide answers. */
+/** Company-wide matching requires unrestricted access to company documents. */
 export class AcceleratorAccessError extends Error {
     readonly status = 403;
     readonly code = "accelerators_full_access_required";

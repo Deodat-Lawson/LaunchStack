@@ -1,18 +1,17 @@
 "use client";
 
-import { ArrowRight, FileText, Loader2, RefreshCw, Sparkles } from "lucide-react";
+import { ArrowRight, Loader2, MapPin, RefreshCw, Sparkles } from "lucide-react";
 import Image from "next/image";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { useRef, useState } from "react";
 
 import { ToolLink } from "~/components/tool-app/ToolLink";
-import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { useErrorText } from "~/lib/tools/errorText";
 
 import { FitStatus, Notice } from "../_components/ProgramFacts";
 import { useAccelerators } from "../_lib/context";
-import { applicationPath, programPath } from "../_lib/screens";
+import { programPath } from "../_lib/screens";
 
 export function ProgramsScreen() {
     const t = useTranslations("accelerators");
@@ -27,7 +26,8 @@ export function ProgramsScreen() {
     if (!home) return null;
     const ranked = [...home.programs].sort(
         (left, right) =>
-            (right.fit?.assessment.score ?? -1) - (left.fit?.assessment.score ?? -1) ||
+            (right.fitStale ? -1 : (right.fit?.assessment.score ?? -1)) -
+                (left.fitStale ? -1 : (left.fit?.assessment.score ?? -1)) ||
             left.program.name.localeCompare(right.program.name, locale)
     );
     const matchPrograms = async () => {
@@ -118,105 +118,39 @@ export function ProgramsScreen() {
                     <p className="mt-1">{t("home.emptyBody")}</p>
                 </Notice>
             ) : (
-                <div className="grid gap-4 [@container(min-width:750px)]:grid-cols-2">
+                <div className="space-y-2">
                     {ranked.map(view => (
-                        <article
+                        <ToolLink
                             key={view.program.id}
-                            className="border-line bg-panel flex flex-col gap-4 rounded-xl border p-5"
+                            href={programPath(view.program.id)}
+                            aria-label={view.program.name}
+                            className="border-line bg-panel hover:bg-panel-2 focus-visible:ring-brand/50 group flex items-center gap-3 rounded-lg border px-4 py-3 outline-none transition-colors focus-visible:ring-2"
                         >
-                            <div className="flex flex-wrap items-start justify-between gap-3">
-                                <div className="flex min-w-0 flex-1 items-center gap-3">
-                                    <Image
-                                        src={view.program.logo.path}
-                                        alt=""
-                                        width={48}
-                                        height={48}
-                                        className="size-12 shrink-0 rounded-md object-contain"
-                                    />
-                                    <h2 className="text-ink text-lg font-semibold">
-                                        <ToolLink
-                                            href={programPath(view.program.id)}
-                                            className="hover:text-brand underline-offset-4 hover:underline"
-                                        >
-                                            {view.program.name}
-                                        </ToolLink>
-                                    </h2>
-                                </div>
-                                <FitStatus view={view} />
-                            </div>
-                            <p className="text-ink-2 line-clamp-4 text-sm leading-relaxed">
-                                {view.program.description.text}
-                            </p>
-                            {view.fit?.assessment.reasons[0] && (
-                                <p className="text-ink-3 line-clamp-3 text-sm">
-                                    {view.fit.assessment.reasons[0]}
+                            <Image
+                                src={view.program.logo.path}
+                                alt=""
+                                width={40}
+                                height={40}
+                                className="size-10 shrink-0 rounded-md object-contain"
+                            />
+                            <div className="min-w-0 flex-1 space-y-1">
+                                <h2 className="text-ink group-hover:text-brand break-words text-sm font-semibold">
+                                    {view.program.name}
+                                </h2>
+                                <p className="text-ink-3 flex items-start gap-1.5 text-xs">
+                                    <MapPin aria-hidden="true" className="mt-0.5 size-3 shrink-0" />
+                                    {view.program.location?.text ?? t("home.locationUnknown")}
                                 </p>
-                            )}
-                            {view.fitStale && (
-                                <p className="text-warn text-xs">{t("fit.staleHint")}</p>
-                            )}
-                            <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-1">
-                                <Badge variant="outline">{t("home.savedOnly")}</Badge>
-                                <Button asChild variant="ghost" size="sm">
-                                    <ToolLink href={programPath(view.program.id)}>
-                                        {t("common.viewProgram")}
-                                        <ArrowRight className="size-3.5" />
-                                    </ToolLink>
-                                </Button>
                             </div>
-                        </article>
+                            <FitStatus view={view} ring />
+                            <ArrowRight
+                                aria-hidden="true"
+                                className="text-ink-3 hidden size-4 shrink-0 [@container(min-width:600px)]:block"
+                            />
+                        </ToolLink>
                     ))}
                 </div>
             )}
-            <section className="space-y-4">
-                <div className="space-y-1">
-                    <h2 className="text-ink text-lg font-semibold">{t("home.applications")}</h2>
-                    <p className="text-ink-3 text-sm">{t("home.applicationsHint")}</p>
-                </div>
-                {home.applications.length === 0 ? (
-                    <Notice>{t("home.noApplications")}</Notice>
-                ) : (
-                    <div className="border-line divide-line divide-y rounded-xl border">
-                        {home.applications.map(application => {
-                            const editable = application.sections.filter(
-                                section =>
-                                    section.field.fieldType !== "file" &&
-                                    section.field.fieldType !== "video"
-                            );
-                            const answered = editable.filter(
-                                section => Boolean(section.draft?.trim()) && section.draft !== "[]"
-                            ).length;
-                            return (
-                                <div
-                                    key={application.id}
-                                    className="flex flex-wrap items-center justify-between gap-3 p-4"
-                                >
-                                    <div className="flex min-w-0 items-center gap-3">
-                                        <FileText className="text-ink-3 size-4 shrink-0" />
-                                        <div className="min-w-0 space-y-1">
-                                            <h3 className="text-ink break-words text-sm font-medium">
-                                                {application.title}
-                                            </h3>
-                                            <p className="text-ink-3 text-xs">
-                                                {t("home.answers", {
-                                                    answered,
-                                                    total: editable.length,
-                                                })}
-                                            </p>
-                                        </div>
-                                    </div>
-                                    <Button asChild variant="outline" size="sm">
-                                        <ToolLink href={applicationPath(application.id)}>
-                                            {t("common.openApplication")}
-                                            <ArrowRight className="size-3.5" />
-                                        </ToolLink>
-                                    </Button>
-                                </div>
-                            );
-                        })}
-                    </div>
-                )}
-            </section>
         </div>
     );
 }

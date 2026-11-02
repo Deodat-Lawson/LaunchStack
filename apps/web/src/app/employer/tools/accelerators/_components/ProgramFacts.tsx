@@ -1,62 +1,78 @@
 "use client";
 
-import { ExternalLink } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
 import type { ReactNode } from "react";
 
 import { Badge } from "~/components/ui/badge";
 import { cn } from "~/lib/utils";
 
-import type { ProgramSource, ProgramView, SourcedNarrative } from "../api";
+import type { ProgramView, SourcedNarrative } from "../api";
 
-export function SourceLinks({ ids, sources }: { ids: string[]; sources: ProgramSource[] }) {
+export function Narrative({ title, narrative }: { title: string; narrative: SourcedNarrative }) {
     const t = useTranslations("accelerators.program");
-    return (
-        <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs">
-            {sources
-                .filter(source => ids.includes(source.id))
-                .map(source => (
-                    <a
-                        key={source.id}
-                        href={source.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-brand inline-flex items-center gap-1 underline underline-offset-4"
-                    >
-                        {t("sourceLink", { title: source.title })}
-                        <ExternalLink className="size-3 shrink-0" />
-                    </a>
-                ))}
-        </div>
-    );
-}
-
-export function Narrative({
-    title,
-    narrative,
-    sources,
-}: {
-    title: string;
-    narrative: SourcedNarrative;
-    sources: ProgramSource[];
-}) {
-    const t = useTranslations("accelerators.program");
+    const text = narrative.text.replace(/^AI-written (?:synthesis|interpretation)\b[^:]*:\s*/i, "");
     return (
         <section className="space-y-3">
-            <h2 className="text-ink text-base font-semibold">{title}</h2>
-            <p className="text-ink-2 whitespace-pre-wrap text-sm leading-relaxed">
-                {narrative.text}
-            </p>
-            <p className="text-ink-3 text-xs">
-                {t(narrative.interpretation ? "interpretation" : "sourceSummary")}
-            </p>
-            <SourceLinks ids={narrative.sourceIds} sources={sources} />
+            <div className="flex flex-wrap items-center gap-2">
+                <h2 className="text-ink text-base font-semibold">{title}</h2>
+                {narrative.interpretation && (
+                    <Badge role="note" variant="outline" className="text-ink-3 font-normal">
+                        {t("interpretation")}
+                    </Badge>
+                )}
+            </div>
+            <p className="text-ink-2 whitespace-pre-wrap text-sm leading-relaxed">{text}</p>
         </section>
     );
 }
 
-export function FitStatus({ view }: { view: ProgramView }) {
+export function FitStatus({ view, ring = false }: { view: ProgramView; ring?: boolean }) {
     const t = useTranslations("accelerators.fit");
+    const format = useFormatter();
+    const score = view.fit?.assessment.score;
+    const label = !view.fit ? t("unmatched") : score == null ? t("unknown") : t("score", { score });
+    if (ring) {
+        return (
+            <div className="flex w-36 shrink-0 items-center gap-2">
+                <div
+                    role="img"
+                    aria-label={label}
+                    className="relative flex size-12 shrink-0 items-center justify-center"
+                >
+                    <svg
+                        aria-hidden="true"
+                        viewBox="0 0 64 64"
+                        className="absolute inset-0 size-full -rotate-90"
+                        fill="none"
+                        strokeWidth="4"
+                    >
+                        <circle cx="32" cy="32" r="28" className="stroke-line" />
+                        {score != null && (
+                            <circle
+                                cx="32"
+                                cy="32"
+                                r="28"
+                                pathLength="100"
+                                strokeDasharray={`${score} 100`}
+                                strokeLinecap="round"
+                                className="stroke-brand"
+                            />
+                        )}
+                    </svg>
+                    <span
+                        aria-hidden="true"
+                        className="text-ink text-sm font-semibold tabular-nums"
+                    >
+                        {score == null ? "—" : format.number(score)}
+                    </span>
+                </div>
+                <div className="space-y-0.5 text-xs">
+                    <p className="text-ink-3">{score == null ? label : t("title")}</p>
+                    {view.fitStale && <p className="text-warn">{t("stale")}</p>}
+                </div>
+            </div>
+        );
+    }
     return (
         <div className="flex flex-wrap items-center gap-2">
             <Badge
@@ -66,11 +82,7 @@ export function FitStatus({ view }: { view: ProgramView }) {
                         "border-brand/30 bg-brand-soft text-brand-ink"
                 )}
             >
-                {!view.fit
-                    ? t("unmatched")
-                    : view.fit.assessment.score == null
-                      ? t("unknown")
-                      : t("score", { score: view.fit.assessment.score })}
+                {label}
             </Badge>
             {view.fitStale && (
                 <Badge variant="outline" className="border-warn/40 text-warn">
@@ -114,7 +126,6 @@ export function FitDetails({ view }: { view: ProgramView }) {
                                 </div>
                             )
                     )}
-                    <SourceLinks ids={fit.assessment.sourceIds} sources={view.program.sources} />
                     {fit.assessment.companyEvidenceIds.length > 0 && (
                         <p className="text-ink-3 text-xs">
                             {t("evidence", {

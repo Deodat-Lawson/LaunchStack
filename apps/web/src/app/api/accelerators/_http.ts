@@ -54,13 +54,3 @@ export async function acceleratorRequest(
         });
     }
 }
-
-export async function parseBody<T>(request: Request, schema: z.ZodType<T>): Promise<T> {
-    let body: unknown;
-    try {
-        body = await request.json();
-    } catch {
-        body = undefined;
-    }
-    return schema.parse(body);
-}

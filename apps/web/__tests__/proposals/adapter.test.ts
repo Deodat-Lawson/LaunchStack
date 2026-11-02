@@ -168,7 +168,6 @@ describe("rows", () => {
             input: {},
             steps: [{ id: "draft:0", label: "Need", status: "done", detail: "2 citations" }],
             summary: { headline: "1 section drafted" },
-            result: null,
             error: null,
             creditsUsed: 1500,
             createdAt: NOW,

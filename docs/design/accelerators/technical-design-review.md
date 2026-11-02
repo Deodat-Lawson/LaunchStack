@@ -1,5 +1,7 @@
 # Technical Design — Accelerators
 
+> **Historical review.** The current branch is limited to Program discovery and company-fit matching. Form filling, answer drafting, and selected-text editing have been removed from the active product. Use the [current handoff README](README.md) for scope, contracts, and team work.
+
 Feature **Accelerators — program sourcing, application writing and autofill** · Author TBD · Date 2026-10-13 · Status **In review** · Brief [Feature Brief — Proposal Feature (Approved 2026-10-04)](https://docs.google.com/document/d/1Xf0B3lwtY6HzJVW0oVYifkRuxxKAppKtHdXonPXj4L0/edit?tab=t.0)
 
 _Condensed for review. Full design, rationale and citations: [docs/design/accelerators/technical-design.md](https://github.com/Deodat-Lawson/LaunchStack/blob/kiendle/accelerators-technical-design/docs/design/accelerators/technical-design.md) (branch kiendle/accelerators-technical-design)._

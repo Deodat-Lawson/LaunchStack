@@ -40,7 +40,6 @@ function run(partial: Partial<RunRecord>): RunRecord {
         input: {},
         steps: [],
         summary: null,
-        result: null,
         error: null,
         creditsUsed: 0,
         createdAt: NOW,

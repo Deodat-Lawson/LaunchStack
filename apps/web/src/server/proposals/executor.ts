@@ -13,6 +13,7 @@ import {
     failProposalRun,
     queueProposalRun,
     PROPOSAL_CREDITS,
+    RunKindSchema,
     type RunInput,
     type RunKind,
     type RunRecord,
@@ -52,7 +53,7 @@ export class InsufficientCreditsError extends Error {
 /** What a run of this kind costs at most, for the pre-check. */
 export function creditsFor(kind: RunKind, sections = 1): number {
     return kind === "draft"
-        ? PROPOSAL_CREDITS.draft * Math.max(1, sections)
+        ? PROPOSAL_CREDITS[kind] * Math.max(1, sections)
         : PROPOSAL_CREDITS[kind];
 }
 
@@ -79,7 +80,7 @@ export async function executeProposalRunForMember(
     const member = await resolveMemberContext(run.userId, companyId);
     if (!member) throw new Error("The run's writer is no longer an active workspace member.");
     const scope = await member.documentScope();
-    if (run.kind === "programs" || run.kind === "accel_draft" || run.kind === "accel_edit") {
+    if (run.kind === "programs") {
         await assertAcceleratorAccess(member, "documents.edit");
     }
     return executeProposalRun({ ...ctx, scope }, createProposalPorts(companyId, run.userId));
@@ -87,15 +88,17 @@ export async function executeProposalRunForMember(
 
 /** Queue a run and hand it to the executor. Returns the queued row at once. */
 export async function startProposalRun(args: StartRunArgs): Promise<RunRecord> {
+    const kind = RunKindSchema.parse(args.kind);
+    const sections = args.sectionLabels?.length ?? 1;
     if (isMeteringEnforced()) {
-        const required = creditsFor(args.kind, args.sectionLabels?.length ?? 1);
+        const required = creditsFor(kind, sections);
         if (!(await hasTokens(args.companyId, required)))
             throw new InsufficientCreditsError(required);
     }
     const run = await queueProposalRun({
         companyId: args.companyId,
         userId: args.userId,
-        kind: args.kind,
+        kind,
         input: args.input,
         sectionLabels: args.sectionLabels,
     });

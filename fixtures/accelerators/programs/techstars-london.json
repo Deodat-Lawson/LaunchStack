@@ -6,6 +6,11 @@
     "path": "/accelerators/logos/techstars-london.png",
     "sourceId": "official-logo"
   },
+  "location": {
+    "text": "London, United Kingdom",
+    "sourceIds": ["london-overview"],
+    "interpretation": false
+  },
   "websiteUrl": "https://www.techstars.com/accelerators/london",
   "applyUrl": "https://apply.techstars.com/",
   "description": {

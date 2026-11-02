@@ -10,7 +10,6 @@
  */
 import { z } from "zod";
 
-import { EditSuggestionSchema, type FormField } from "./accelerators/types";
 // ─── Vocabulary ──────────────────────────────────────────────────────────────
 
 export const APPLICATION_STATUSES = [
@@ -43,16 +42,7 @@ export const OpportunityStatusSchema = z.enum(OPPORTUNITY_STATUSES);
 export type OpportunityStatus = z.infer<typeof OpportunityStatusSchema>;
 
 /** The profile is built by the company profile (Settings › Company), not by a proposals run. */
-export const RUN_KINDS = [
-    "funders",
-    "extract",
-    "draft",
-    "rewrite",
-    "review",
-    "programs",
-    "accel_draft",
-    "accel_edit",
-] as const;
+export const RUN_KINDS = ["funders", "extract", "draft", "rewrite", "review", "programs"] as const;
 export const RunKindSchema = z.enum(RUN_KINDS);
 export type RunKind = z.infer<typeof RunKindSchema>;
 
@@ -312,24 +302,6 @@ export interface RunSummary {
     durationMs?: number;
 }
 
-/**
- * What a run hands back to the person who started it, kept apart from `summary` (history and
- * status). Tagged by `kind` so another run kind can add its own member. Null on every run that
- * only changes stored records.
- */
-export const RunResultSchema = z.discriminatedUnion("kind", [
-    z
-        .object({
-            kind: z.literal("accel_edit"),
-            applicationId: z.string().min(1),
-            sectionId: z.string().min(1),
-            /** A proposal only: it changes no answer until the user applies it. */
-            suggestion: EditSuggestionSchema,
-        })
-        .strict(),
-]);
-export type RunResult = z.infer<typeof RunResultSchema>;
-
 /** The rewrites a person can ask for without typing; `custom` carries their own words. */
 export const REWRITE_PRESETS = ["tighten", "specific", "plainer", "stronger", "custom"] as const;
 export const RewritePresetSchema = z.enum(REWRITE_PRESETS);
@@ -341,27 +313,6 @@ export const RunInputSchema = z.object({
     funders: FunderSearchInputSchema.optional(),
     rewrite: z
         .object({ preset: RewritePresetSchema, instruction: z.string().max(600).optional() })
-        .optional(),
-    acceleratorDraft: z
-        .object({
-            sectionId: z.string().min(1),
-            expectedRevision: z.number().int().nonnegative(),
-        })
-        .strict()
-        .optional(),
-    acceleratorEdit: z
-        .object({
-            sectionId: z.string().min(1),
-            expectedRevision: z.number().int().nonnegative(),
-            start: z.number().int().nonnegative(),
-            end: z.number().int().positive(),
-            instruction: z.string().trim().min(1),
-        })
-        .strict()
-        .refine(value => value.end > value.start, {
-            message: "Select a non-empty original range",
-            path: ["end"],
-        })
         .optional(),
 });
 export type RunInput = z.infer<typeof RunInputSchema>;
@@ -421,10 +372,6 @@ export interface ApplicationRecord {
     createdByUserId: string;
     createdAt: Date;
     updatedAt: Date | null;
-    kind?: "grant" | "accelerator";
-    programId?: string | null;
-    cycleId?: string | null;
-    formHash?: string | null;
 }
 
 export interface SectionRecord {
@@ -442,8 +389,6 @@ export interface SectionRecord {
     draftMeta: DraftMeta | null;
     createdAt: Date;
     updatedAt: Date | null;
-    formField?: FormField | null;
-    revision?: number;
 }
 
 export interface LibraryItemRecord {
@@ -472,7 +417,6 @@ export interface RunRecord {
     input: RunInput;
     steps: RunStep[];
     summary: RunSummary | null;
-    result: RunResult | null;
     error: string | null;
     creditsUsed: number;
     createdAt: Date;

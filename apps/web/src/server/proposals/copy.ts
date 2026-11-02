@@ -105,6 +105,7 @@ const RUN_ERRORS = [
     "sectionNotFound",
     "noDraft",
     "profileOrKeywords",
+    "insufficientCredits",
 ].map(name => key(`runErrors.${name}`));
 
 /** `{count}` as the English printed it (grouped or bare), so it reads the same in every language. */

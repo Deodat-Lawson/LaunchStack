@@ -1,5 +1,7 @@
 # Technical Design — Accelerators
 
+> **Historical proposal.** The current branch is limited to Program discovery and company-fit matching. Form filling, answer drafting, and selected-text editing have been removed from the active product. Use the [current handoff README](README.md) for scope, contracts, and team work.
+
 Feature **Accelerators — program sourcing, application writing and autofill** · Author TBD · Date 2026-10-13 · Status **In review** · Brief [Feature Brief — Proposal Feature (Approved 2026-10-04)](https://docs.google.com/document/d/1Xf0B3lwtY6HzJVW0oVYifkRuxxKAppKtHdXonPXj4L0/edit?tab=t.0)
 
 > **Scope change from the brief, for TL ack** — [PROPOSED] This design covers accelerator programs only. The existing grants tool in Proposals is frozen, not removed. Diagram generation is out of v1. The brief's kill test and success signal are unchanged: the pilot must prove value beyond a one-off draft from Claude plus a folder of documents, using current, permissioned company evidence, claim provenance and repeatable review; the signal is the share of source-verified answers the founder approves with an edit ratio ≤ X. Grantable covers the grants workflow. Our edge is founder evidence and answer reuse across many near-identical accelerator forms, rather than another grants-writing tool.

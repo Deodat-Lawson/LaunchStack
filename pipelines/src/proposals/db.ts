@@ -5,7 +5,7 @@
  */
 import { randomUUID } from "node:crypto";
 
-import { and, asc, desc, eq, inArray, notInArray, sql } from "drizzle-orm";
+import { and, asc, desc, eq, inArray, isNull, or, sql } from "drizzle-orm";
 
 import { getDb } from "@launchstack/store/client";
 import { company, document } from "@launchstack/store/schema";
@@ -27,7 +27,7 @@ import {
     type ProposalRunRow,
     type ProposalSectionRow,
 } from "./schema";
-import { SourceProvenanceSchema } from "./types";
+import { RUN_KINDS, RunKindSchema, SourceProvenanceSchema } from "./types";
 import type {
     ApplicationRecord,
     ApplicationStatus,
@@ -45,7 +45,6 @@ import type {
     RunInput,
     RunKind,
     RunRecord,
-    RunResult,
     RunStep,
     RunSummary,
     SectionRecord,
@@ -103,10 +102,6 @@ function toApplication(row: ProposalApplicationRow): ApplicationRecord {
         createdByUserId: row.createdByUserId,
         createdAt: row.createdAt,
         updatedAt: row.updatedAt ?? null,
-        kind: row.kind,
-        programId: row.programId,
-        cycleId: row.cycleId,
-        formHash: row.formHash,
     };
 }
 
@@ -126,8 +121,6 @@ function toSection(row: ProposalSectionRow): SectionRecord {
         draftMeta: row.draftMeta ?? null,
         createdAt: row.createdAt,
         updatedAt: row.updatedAt ?? null,
-        formField: row.formField,
-        revision: row.revision,
     };
 }
 
@@ -165,7 +158,6 @@ function toRun(row: ProposalRunRow): RunRecord {
         input: row.input ?? {},
         steps: row.steps ?? [],
         summary: row.summary ?? null,
-        result: row.result ?? null,
         error: row.error ?? null,
         creditsUsed: row.creditsUsed,
         createdAt: row.createdAt,
@@ -185,14 +177,23 @@ function grantSectionCondition(companyId: bigint) {
         and ${proposalApplications.kind} = 'grant')`;
 }
 
+const GRANT_RUN_KINDS = RUN_KINDS.filter(kind => kind !== "programs");
+
 /** Runs without a parent are grant searches only when their kind is also a grant kind. */
 function grantRunCondition(companyId: bigint) {
     return and(
-        notInArray(proposalRuns.kind, ["programs", "accel_draft", "accel_edit"]),
+        inArray(proposalRuns.kind, GRANT_RUN_KINDS),
         sql`(${proposalRuns.applicationId} is null or exists (select 1 from ${proposalApplications}
             where ${proposalApplications.id} = ${proposalRuns.applicationId}
             and ${proposalApplications.companyId} = ${companyId}
             and ${proposalApplications.kind} = 'grant'))`
+    );
+}
+
+function activeRunCondition(companyId: bigint) {
+    return or(
+        grantRunCondition(companyId),
+        and(eq(proposalRuns.kind, "programs"), isNull(proposalRuns.applicationId))
     );
 }
 
@@ -905,7 +906,7 @@ async function expireRuns(
                 id !== undefined ? eq(proposalRuns.id, id) : undefined,
                 eq(proposalRuns.status, "running"),
                 expiredRunCondition,
-                includeAccelerators ? undefined : grantRunCondition(companyId)
+                includeAccelerators ? activeRunCondition(companyId) : grantRunCondition(companyId)
             )
         );
 }
@@ -918,13 +919,10 @@ export async function createRun(input: {
     input: RunInput;
     steps: RunStep[];
 }): Promise<RunRecord> {
-    const accelerator =
-        input.kind === "programs" || input.kind === "accel_draft" || input.kind === "accel_edit";
+    const accelerator = input.kind === "programs";
     if (
-        (input.kind === "programs" && input.applicationId !== null) ||
-        (input.kind === "accel_draft" && (!input.applicationId || !input.input.acceleratorDraft)) ||
-        (input.kind === "accel_edit" && (!input.applicationId || !input.input.acceleratorEdit)) ||
-        (!accelerator && (input.input.acceleratorDraft || input.input.acceleratorEdit)) ||
+        !RunKindSchema.safeParse(input.kind).success ||
+        (accelerator && input.applicationId !== null) ||
         (input.input.applicationId !== undefined &&
             input.input.applicationId !== input.applicationId)
     ) {
@@ -941,7 +939,7 @@ export async function createRun(input: {
                 and(
                     eq(proposalApplications.id, input.applicationId),
                     eq(proposalApplications.companyId, input.companyId),
-                    eq(proposalApplications.kind, accelerator ? "accelerator" : "grant")
+                    eq(proposalApplications.kind, "grant")
                 )
             )
             .limit(1);
@@ -979,7 +977,8 @@ export async function createRun(input: {
                 .where(
                     and(
                         eq(proposalRuns.companyId, input.companyId),
-                        inArray(proposalRuns.status, ["queued", "running"])
+                        inArray(proposalRuns.status, ["queued", "running"]),
+                        activeRunCondition(input.companyId)
                     )
                 )
                 .limit(1);
@@ -1013,7 +1012,9 @@ export async function getRun(
             and(
                 eq(proposalRuns.id, id),
                 eq(proposalRuns.companyId, companyId),
-                options.includeAccelerators ? undefined : grantRunCondition(companyId)
+                options.includeAccelerators
+                    ? activeRunCondition(companyId)
+                    : grantRunCondition(companyId)
             )
         )
         .limit(1);
@@ -1028,7 +1029,7 @@ export async function listRuns(
     const where = and(
         eq(proposalRuns.companyId, companyId),
         options.applicationId ? eq(proposalRuns.applicationId, options.applicationId) : undefined,
-        options.includeAccelerators ? undefined : grantRunCondition(companyId)
+        options.includeAccelerators ? activeRunCondition(companyId) : grantRunCondition(companyId)
     );
     const rows = await getDb()
         .select()
@@ -1052,7 +1053,9 @@ export async function findLiveRun(
             and(
                 eq(proposalRuns.companyId, companyId),
                 inArray(proposalRuns.status, ["queued", "running"]),
-                options.includeAccelerators ? undefined : grantRunCondition(companyId)
+                options.includeAccelerators
+                    ? activeRunCondition(companyId)
+                    : grantRunCondition(companyId)
             )
         )
         .orderBy(desc(proposalRuns.createdAt))
@@ -1070,7 +1073,8 @@ export async function claimRun(companyId: bigint, id: string): Promise<RunRecord
             and(
                 eq(proposalRuns.id, id),
                 eq(proposalRuns.companyId, companyId),
-                eq(proposalRuns.status, "queued")
+                eq(proposalRuns.status, "queued"),
+                activeRunCondition(companyId)
             )
         )
         .returning();
@@ -1087,7 +1091,8 @@ export async function isRunActive(companyId: bigint, id: string): Promise<boolea
                 eq(proposalRuns.id, id),
                 eq(proposalRuns.companyId, companyId),
                 eq(proposalRuns.status, "running"),
-                freshRunCondition
+                freshRunCondition,
+                activeRunCondition(companyId)
             )
         )
         .limit(1);
@@ -1108,7 +1113,8 @@ export async function updateRunSteps(
                 eq(proposalRuns.id, id),
                 eq(proposalRuns.companyId, companyId),
                 eq(proposalRuns.status, "running"),
-                freshRunCondition
+                freshRunCondition,
+                activeRunCondition(companyId)
             )
         )
         .returning({ id: proposalRuns.id });
@@ -1124,14 +1130,19 @@ export async function completeRun(
     companyId: bigint,
     id: string,
     summary: RunSummary,
-    debit: (executor: ProposalDebitExecutor) => Promise<number>,
-    result: RunResult | null = null
+    debit: (executor: ProposalDebitExecutor) => Promise<number>
 ): Promise<RunRecord | null> {
     return getDb().transaction(async tx => {
         const [row] = await tx
             .select()
             .from(proposalRuns)
-            .where(and(eq(proposalRuns.id, id), eq(proposalRuns.companyId, companyId)))
+            .where(
+                and(
+                    eq(proposalRuns.id, id),
+                    eq(proposalRuns.companyId, companyId),
+                    activeRunCondition(companyId)
+                )
+            )
             .for("update");
         if (!row) return null;
         if (row.status !== "running") return toRun(row);
@@ -1158,7 +1169,6 @@ export async function completeRun(
             .set({
                 status: "completed",
                 summary,
-                result,
                 creditsUsed,
                 completedAt: new Date(),
                 updatedAt: new Date(),
@@ -1175,7 +1185,7 @@ export async function completeRun(
     });
 }
 
-/** Restrict failure to the caller's expected state, without replacing terminal results. */
+/** Restrict failure to the caller's expected state, without replacing terminal runs. */
 export async function failRun(
     companyId: bigint,
     id: string,
@@ -1198,7 +1208,8 @@ export async function failRun(
             and(
                 eq(proposalRuns.id, id),
                 eq(proposalRuns.companyId, companyId),
-                eq(proposalRuns.status, expectedStatus)
+                eq(proposalRuns.status, expectedStatus),
+                activeRunCondition(companyId)
             )
         )
         .returning();
@@ -1216,7 +1227,9 @@ export async function deleteRun(
             and(
                 eq(proposalRuns.id, id),
                 eq(proposalRuns.companyId, companyId),
-                options.includeAccelerators ? undefined : grantRunCondition(companyId)
+                options.includeAccelerators
+                    ? activeRunCondition(companyId)
+                    : grantRunCondition(companyId)
             )
         )
         .returning({ id: proposalRuns.id });

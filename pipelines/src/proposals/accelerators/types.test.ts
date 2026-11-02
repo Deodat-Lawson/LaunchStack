@@ -2,13 +2,9 @@ import { describe, expect, it } from "vitest";
 
 import { hashValue } from "./hash";
 import {
-    AnswerPatchSchema,
-    ApplyEditSchema,
     CatalogueProgramSchema,
     FitAssessmentSchema,
     FormFieldSchema,
-    assertAnswer,
-    canStartForm,
     type CatalogueProgram,
     type FormField,
 } from "./types";
@@ -66,14 +62,29 @@ const program: CatalogueProgram = {
 };
 
 describe("Catalogue and Form validation", () => {
-    it("keeps unknown limits and dates unknown, and requires a checked supported nonempty Form", () => {
+    it("keeps unknown limits and dates unknown in existing Form metadata", () => {
         expect(CatalogueProgramSchema.parse(program)).toEqual(program);
-        const form = program.cycles[0]!.form;
-        expect(canStartForm(form)).toBe(true);
-        expect(canStartForm({ ...form, status: "unconfirmed" })).toBe(false);
-        expect(canStartForm({ ...form, supported: false })).toBe(false);
-        expect(canStartForm({ ...form, fields: [] })).toBe(false);
-        expect(canStartForm({ ...form, checkedAt: null })).toBe(false);
+        expect(program.cycles[0]!.deadlineAt).toBeNull();
+        expect(program.cycles[0]!.form!.fields[0]!.charLimit).toBeNull();
+        expect(program.cycles[0]!.form!.fields[0]!.wordLimit).toBeNull();
+    });
+
+    it("validates discovery cycles without Form metadata and preserves sourced cycle details", () => {
+        const discovery = structuredClone(program);
+        delete discovery.cycles[0]!.form;
+        discovery.cycles[0]!.dateOnly = "2026-11-02";
+        const parsed = CatalogueProgramSchema.parse(discovery);
+        expect(parsed).toEqual(discovery);
+        expect(parsed.cycles[0]).toEqual({
+            id: "rolling",
+            label: "Rolling",
+            deadlineAt: null,
+            deadlineTimezone: null,
+            dateOnly: "2026-11-02",
+            rolling: true,
+            sourceIds: ["official"],
+        });
+        expect(hashValue(parsed)).toBe(hashValue(discovery));
     });
 
     it("rejects missing logos, external logo requests, and untraceable logo sources", () => {
@@ -94,11 +105,30 @@ describe("Catalogue and Form validation", () => {
         ).toBe(false);
     });
 
+    it("keeps location optional but requires traceable sources when supplied", () => {
+        expect(CatalogueProgramSchema.parse(program).location).toBeUndefined();
+        const located = {
+            ...program,
+            location: {
+                text: "London, United Kingdom",
+                sourceIds: ["official"],
+                interpretation: false,
+            },
+        };
+        expect(CatalogueProgramSchema.parse(located).location).toEqual(located.location);
+        expect(
+            CatalogueProgramSchema.safeParse({
+                ...located,
+                location: { ...located.location, sourceIds: ["missing"] },
+            }).success
+        ).toBe(false);
+    });
+
     it("rejects duplicate Field identities and positions, options, unsourced limits, and dangling sources", () => {
         const duplicate = structuredClone(program);
-        duplicate.cycles[0]!.form.fields.push({ ...field, key: "another" });
+        duplicate.cycles[0]!.form!.fields.push({ ...field, key: "another" });
         expect(CatalogueProgramSchema.safeParse(duplicate).success).toBe(false);
-        duplicate.cycles[0]!.form.fields[1] = { ...field, position: 1 };
+        duplicate.cycles[0]!.form!.fields[1] = { ...field, position: 1 };
         expect(CatalogueProgramSchema.safeParse(duplicate).success).toBe(false);
         expect(FormFieldSchema.safeParse({ ...field, charLimit: 100 }).success).toBe(false);
         expect(
@@ -125,66 +155,8 @@ describe("Catalogue and Form validation", () => {
     });
 });
 
-describe("typed answers and edits", () => {
-    it("allows unfinished required answers, counts UTF16 characters and enforces only actual limits", () => {
-        expect(() => assertAnswer(field, null)).not.toThrow();
-        expect(() => assertAnswer(field, "a".repeat(5000))).not.toThrow();
-        expect(() => assertAnswer({ ...field, charLimit: 1 }, "😀")).toThrow(/character limit/);
-        expect(() => assertAnswer({ ...field, wordLimit: 2 }, "one\ntwo three")).toThrow(
-            /word limit/
-        );
-    });
-
-    it("rejects invalid typed values and unknown or repeated choices", () => {
-        for (const [fieldType, value] of [
-            ["number", "Infinity"],
-            ["number", "0x10"],
-            ["email", "not-email"],
-            ["url", "javascript:alert(1)"],
-            ["date", "2026-02-30"],
-            ["short_text", "two\nlines"],
-        ] as const) {
-            expect(() => assertAnswer({ ...field, fieldType }, value)).toThrow();
-        }
-        const choices: FormField = {
-            ...field,
-            fieldType: "multi_select",
-            options: [{ value: "one", label: "One" }],
-        };
-        expect(() => assertAnswer(choices, '["one"]')).not.toThrow();
-        expect(() => assertAnswer(choices, '["missing"]')).toThrow();
-        expect(() => assertAnswer(choices, '["one","one"]')).toThrow();
-        expect(() => assertAnswer({ ...field, fieldType: "file" }, "uploaded.pdf")).toThrow(
-            /portal/
-        );
-        expect(() =>
-            assertAnswer({ ...field, fieldType: "video" }, "https://example.test/video")
-        ).toThrow(/portal/);
-    });
-
-    it("requires an authoritative nonnegative revision and a nonempty UTF16 selection", () => {
-        expect(AnswerPatchSchema.safeParse({ draft: "answer" }).success).toBe(false);
-        expect(AnswerPatchSchema.safeParse({ expectedRevision: -1, draft: "answer" }).success).toBe(
-            false
-        );
-        expect(
-            ApplyEditSchema.safeParse({
-                expectedRevision: 0,
-                start: 1,
-                end: 1,
-                original: "",
-                replacement: "",
-            }).success
-        ).toBe(false);
-        expect(
-            ApplyEditSchema.safeParse({
-                expectedRevision: 0,
-                start: 1,
-                end: 2,
-                original: "a",
-                replacement: "",
-            }).success
-        ).toBe(true);
+describe("fit assessment validation", () => {
+    it("rejects scores outside the match range", () => {
         expect(
             FitAssessmentSchema.safeParse({
                 score: 101,

@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import type { DraftMeta, RunKind, RunResult, RunStatus, RunStep, RunSummary } from "../types";
+import type { RunStatus, RunStep, RunSummary } from "../types";
 
 export const FIELD_TYPES = [
     "long_text",
@@ -160,7 +160,7 @@ export const ProgramCycleSchema = z
         dateOnly: DateOnlySchema.optional(),
         rolling: z.boolean(),
         sourceIds: z.array(IdSchema),
-        form: ProgramFormSchema,
+        form: ProgramFormSchema.optional(),
     })
     .strict()
     .superRefine((cycle, ctx) => {
@@ -214,6 +214,7 @@ export const CatalogueProgramSchema = z
         applyUrl: HttpUrlSchema,
         description: SourcedNarrativeSchema,
         targetApplicants: SourcedNarrativeSchema,
+        location: SourcedNarrativeSchema.optional(),
         sources: z.array(ProgramSourceSchema).min(1),
         cycles: z.array(ProgramCycleSchema),
     })
@@ -238,6 +239,9 @@ export const CatalogueProgramSchema = z
             { ids: [program.logo.sourceId], path: ["logo", "sourceId"] },
             { ids: program.description.sourceIds, path: ["description", "sourceIds"] },
             { ids: program.targetApplicants.sourceIds, path: ["targetApplicants", "sourceIds"] },
+            ...(program.location
+                ? [{ ids: program.location.sourceIds, path: ["location", "sourceIds"] }]
+                : []),
             ...program.cycles.map((cycle, index) => ({
                 ids: cycle.sourceIds,
                 path: ["cycles", index, "sourceIds"],
@@ -282,95 +286,24 @@ export interface ProgramView {
     fit: StoredFit | null;
     fitStale: boolean;
 }
-export interface AcceleratorSection {
-    id: string;
-    key: string;
-    field: FormField;
-    draft: string | null;
-    revision: number;
-    draftMeta: DraftMeta | null;
-}
-export interface AcceleratorApplication {
-    id: string;
-    title: string;
-    programId: string;
-    cycleId: string;
-    formHash: string;
-    sections: AcceleratorSection[];
-}
 export interface HomeResponse {
     programs: ProgramView[];
-    applications: AcceleratorApplication[];
     profileReady: boolean;
     canEdit: boolean;
-    costs: { match: number; draft: number; edit: number };
+    costs: { match: number };
 }
 export interface RunView {
     id: string;
-    kind: RunKind;
+    kind: "programs";
     status: RunStatus;
     steps: RunStep[];
     summary: RunSummary | null;
-    /** What the run hands back, e.g. a selected-text Suggestion; null for runs that only save records. */
-    result: RunResult | null;
     error: string | null;
     creditsUsed: number;
     createdAt: string;
     startedAt: string | null;
     completedAt: string | null;
 }
-
-export const AnswerPatchSchema = z
-    .object({
-        expectedRevision: z.number().int().nonnegative(),
-        draft: z.string().nullable(),
-    })
-    .strict();
-export type AnswerPatch = z.infer<typeof AnswerPatchSchema>;
-const SelectionShape = {
-    expectedRevision: z.number().int().nonnegative(),
-    start: z.number().int().nonnegative(),
-    end: z.number().int().positive(),
-};
-
-/** `original` is the text the Suggestion replaces; Apply refuses if the saved slice differs. */
-export const ApplyEditSchema = z
-    .object({ ...SelectionShape, original: z.string().min(1), replacement: z.string() })
-    .strict()
-    .refine(value => value.end > value.start, {
-        message: "Select a non-empty original range",
-        path: ["end"],
-    })
-    .refine(value => value.end - value.start === value.original.length, {
-        message: "Original text must match the UTF-16 selection length",
-        path: ["original"],
-    });
-export type ApplyEdit = z.infer<typeof ApplyEditSchema>;
-
-/** IDs belong in the Application/Field route; tenancy is always resolved by the server. */
-export const EditSuggestionRequestSchema = z
-    .object({ ...SelectionShape, instruction: z.string().trim().min(1) })
-    .strict()
-    .refine(value => value.end > value.start, {
-        message: "Select a non-empty original range",
-        path: ["end"],
-    });
-export type EditSuggestionRequest = z.infer<typeof EditSuggestionRequestSchema>;
-
-/** B attaches the validated selection to its generated preview, without saving an answer. */
-export const EditSuggestionSchema = z
-    .object({
-        ...SelectionShape,
-        original: z.string().min(1),
-        replacement: z.string(),
-        gaps: z.array(z.string()),
-    })
-    .strict()
-    .refine(value => value.end - value.start === value.original.length, {
-        message: "Original text must match the UTF-16 selection length",
-        path: ["original"],
-    });
-export type EditSuggestion = z.infer<typeof EditSuggestionSchema>;
 
 export class AcceleratorError extends Error {
     constructor(
@@ -381,87 +314,4 @@ export class AcceleratorError extends Error {
         super(message);
         this.name = "AcceleratorError";
     }
-}
-
-/** A required Field may be saved incomplete; required is a submission requirement. */
-export function assertAnswer(field: FormField, draft: string | null): void {
-    if (draft === null || draft === "") return;
-    if (field.fieldType === "file" || field.fieldType === "video") {
-        throw new AcceleratorError(
-            "File and video requirements must be completed in the Program's portal",
-            400,
-            "manual_requirement"
-        );
-    }
-    if (field.charLimit !== null && draft.length > field.charLimit) {
-        throw new AcceleratorError(
-            `Answer exceeds the ${field.charLimit} character limit`,
-            400,
-            "character_limit"
-        );
-    }
-    if (
-        field.wordLimit !== null &&
-        draft.trim().split(/\s+/u).filter(Boolean).length > field.wordLimit
-    ) {
-        throw new AcceleratorError(
-            `Answer exceeds the ${field.wordLimit} word limit`,
-            400,
-            "word_limit"
-        );
-    }
-    let valid = true;
-    switch (field.fieldType) {
-        case "url":
-            valid = HttpUrlSchema.safeParse(draft).success;
-            break;
-        case "email":
-            valid = z.string().email().safeParse(draft).success;
-            break;
-        case "number":
-            valid =
-                /^[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?$/.test(draft) &&
-                Number.isFinite(Number(draft));
-            break;
-        case "date":
-            valid = DateOnlySchema.safeParse(draft).success;
-            break;
-        case "select":
-            valid = field.options.some(option => option.value === draft);
-            break;
-        case "multi_select": {
-            try {
-                const values: unknown = JSON.parse(draft);
-                valid =
-                    Array.isArray(values) &&
-                    values.every(
-                        value =>
-                            typeof value === "string" &&
-                            field.options.some(option => option.value === value)
-                    ) &&
-                    new Set(values).size === values.length;
-            } catch {
-                valid = false;
-            }
-            break;
-        }
-        case "short_text":
-            valid = !/[\r\n]/.test(draft);
-            break;
-    }
-    if (!valid)
-        throw new AcceleratorError(
-            `Answer is not a valid ${field.fieldType} value`,
-            400,
-            "invalid_answer"
-        );
-}
-
-export function canStartForm(form: ProgramForm): boolean {
-    return (
-        form.status === "checked" &&
-        form.supported &&
-        form.checkedAt !== null &&
-        form.fields.length > 0
-    );
 }

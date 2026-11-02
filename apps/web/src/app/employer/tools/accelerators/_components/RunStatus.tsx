@@ -4,15 +4,17 @@ import { Check, Loader2, X } from "lucide-react";
 import { useFormatter, useTranslations } from "next-intl";
 
 import { Button } from "~/components/ui/button";
+import { useCopyText } from "~/lib/tools/copyText";
 import { useErrorText } from "~/lib/tools/errorText";
 import { cn } from "~/lib/utils";
 
-import { runIsLive, runLabel, useAccelerators } from "../_lib/context";
+import { runIsLive, useAccelerators } from "../_lib/context";
 
 export function RunStatus() {
     const t = useTranslations("accelerators.run");
     const format = useFormatter();
     const errorText = useErrorText();
+    const say = useCopyText();
     const { activeRun: run, pollError, resumePolling } = useAccelerators();
     if (!run && !pollError) return null;
     return (
@@ -31,7 +33,7 @@ export function RunStatus() {
                             ) : (
                                 <X className="text-danger size-4" />
                             )}
-                            <span>{t(runLabel(run.kind))}</span>
+                            <span>{t("programs")}</span>
                             <span className="text-ink-3 font-normal">{t(run.status)}</span>
                         </div>
                         {run.creditsUsed > 0 && (
@@ -63,7 +65,7 @@ export function RunStatus() {
                     )}
                     {run.error && (
                         <p role="alert" className="text-danger text-sm">
-                            {run.error}
+                            {say(run.errorCopy, run.error)}
                         </p>
                     )}
                 </>

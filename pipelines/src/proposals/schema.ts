@@ -36,7 +36,6 @@ import type {
     Review,
     RunInput,
     RunStep,
-    RunResult,
     RunSummary,
 } from "./types";
 import {
@@ -241,7 +240,6 @@ export const proposalRuns = pgTable(
         input: jsonb("input").$type<RunInput>().notNull().default({}),
         steps: jsonb("steps").$type<RunStep[]>().notNull().default([]),
         summary: jsonb("summary").$type<RunSummary>(),
-        result: jsonb("result").$type<RunResult>(),
         error: text("error"),
         creditsUsed: integer("credits_used").notNull().default(0),
         createdAt: timestamp("created_at", { withTimezone: true })
@@ -250,6 +248,7 @@ export const proposalRuns = pgTable(
         startedAt: timestamp("started_at", { withTimezone: true }),
         completedAt: timestamp("completed_at", { withTimezone: true }),
         updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
+        result: jsonb("result").$type<unknown>(),
     },
     table => [
         index("proposal_runs_company_created_idx").on(table.companyId, table.createdAt),

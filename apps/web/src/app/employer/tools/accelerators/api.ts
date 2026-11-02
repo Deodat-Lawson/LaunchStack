@@ -1,30 +1,15 @@
-import type {
-    AcceleratorApplication,
-    AcceleratorSection,
-    AnswerPatch,
-    ApplyEdit,
-    EditSuggestionRequest,
-    HomeResponse,
-    ProgramView,
-    RunView,
-} from "@launchstack/pipelines/accelerators/types";
+import type { HomeResponse, ProgramView, RunView } from "@launchstack/pipelines/accelerators/types";
+
+import type { Copy } from "~/i18n/copy";
 
 export type {
-    AcceleratorApplication,
-    AcceleratorSection,
-    ApplyEdit,
-    EditSuggestion,
-    EditSuggestionRequest,
-    FormField,
     HomeResponse,
     ProgramCycle,
-    ProgramForm,
-    ProgramSource,
     ProgramView,
     SourcedNarrative,
 } from "@launchstack/pipelines/accelerators/types";
 
-export type AcceleratorRunView = RunView;
+export type AcceleratorRunView = RunView & { errorCopy?: Copy };
 export class AcceleratorsApiError extends Error {
     constructor(
         message: string,
@@ -71,48 +56,15 @@ async function call<T>(url: string, init?: RequestInit): Promise<T> {
     return body as T;
 }
 
-function send<T>(url: string, body: unknown, method = "POST"): Promise<T> {
-    return call<T>(url, { method, body: JSON.stringify(body) });
-}
-
-function sectionPath(applicationId: string, sectionId: string): string {
-    return `/api/accelerators/applications/${encodeURIComponent(applicationId)}/sections/${encodeURIComponent(sectionId)}`;
-}
-
 export const acceleratorsApi = {
     home: () => call<HomeResponse>("/api/accelerators"),
     program: (id: string) =>
         call<{ program: ProgramView }>(`/api/accelerators/programs/${encodeURIComponent(id)}`),
-    match: () => send<{ run: AcceleratorRunView }>("/api/accelerators/match", {}),
-    start: (programId: string, cycleId: string) =>
-        send<{ application: AcceleratorApplication }>("/api/accelerators/applications", {
-            programId,
-            cycleId,
+    match: () =>
+        call<{ run: AcceleratorRunView }>("/api/accelerators/match", {
+            method: "POST",
+            body: JSON.stringify({}),
         }),
-    application: (id: string) =>
-        call<{ application: AcceleratorApplication }>(
-            `/api/accelerators/applications/${encodeURIComponent(id)}`
-        ),
-    save: (applicationId: string, sectionId: string, patch: AnswerPatch) =>
-        send<{ section: AcceleratorSection }>(
-            sectionPath(applicationId, sectionId),
-            patch,
-            "PATCH"
-        ),
-    draft: (applicationId: string, sectionId: string, expectedRevision: number) =>
-        send<{ run: AcceleratorRunView }>(`${sectionPath(applicationId, sectionId)}/draft`, {
-            expectedRevision,
-        }),
-    suggest: (applicationId: string, sectionId: string, request: EditSuggestionRequest) =>
-        send<{ run: AcceleratorRunView }>(
-            `${sectionPath(applicationId, sectionId)}/suggest`,
-            request
-        ),
-    apply: (applicationId: string, sectionId: string, edit: ApplyEdit) =>
-        send<{ section: AcceleratorSection }>(
-            `${sectionPath(applicationId, sectionId)}/apply`,
-            edit
-        ),
     run: (id: string) =>
         call<{ run: AcceleratorRunView }>(`/api/accelerators/runs/${encodeURIComponent(id)}`),
 };

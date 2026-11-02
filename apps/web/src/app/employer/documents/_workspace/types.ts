@@ -480,7 +480,7 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         id: "accelerators",
         label: "Accelerators",
         Icon: IconAccelerators,
-        desc: "Match accelerator Programs to your company and save answers from checked application Forms",
+        desc: "Explore accelerator Programs and understand how well they fit your company",
         href: "/employer/documents?feature=accelerators",
     },
     {
@@ -650,7 +650,7 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 id: "accelerators",
                 label: "Accelerators",
                 Icon: IconAccelerators,
-                desc: "Match accelerator Programs to your company and save answers from checked application Forms, with explicit AI drafting and sourced fit results",
+                desc: "Explore accelerator Programs and match them to your company, with sourced Program profiles and explained fit scores",
                 href: "/employer/documents?feature=accelerators",
                 requires: "documents.read",
             },

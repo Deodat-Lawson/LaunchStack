@@ -20,7 +20,7 @@ import {
 import { retrieveCompanySnippets, type SnippetPolicy } from "@launchstack/tools/grounded-retrieval";
 import { fetchReadable } from "@launchstack/tools/web-research";
 import type { ProposalRunContext } from "./run";
-import type { RunRecord, RunResult, RunSummary } from "./types";
+import type { RunRecord, RunSummary } from "./types";
 
 /** One model policy per stage; a route or temperature change is an explicit edit here. */
 export const PROPOSALS_MODELS = {
@@ -42,8 +42,6 @@ export const PROPOSAL_CREDITS = {
     rewrite: 1_000,
     review: 2_000,
     programs: 2_000,
-    accel_draft: 1_500,
-    accel_edit: 1_000,
 } as const;
 
 export interface RetrieveArgs {
@@ -59,8 +57,6 @@ export type ProposalDebitExecutor = Pick<DbClient, "select" | "insert" | "update
 /** Prepared output commits beside the credit debit under the claimed run's lock. */
 export interface PreparedProposalRun {
     summary: RunSummary;
-    /** Delivered to the user with the run, in the same transaction as the debit. */
-    result?: RunResult;
     amount: number;
     description: string;
     commit(executor: ProposalDebitExecutor): Promise<void>;

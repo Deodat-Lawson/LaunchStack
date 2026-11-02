@@ -41,8 +41,6 @@
   },
   "runKind": {
     "programs": "正在匹配加速器项目",
-    "accel_draft": "正在起草加速器申请字段",
-    "accel_edit": "正在修改加速器申请中选中的文字",
     "funders": "正在寻找资助方",
     "extract": "正在读取征集要求",
     "draft": "正在起草",
@@ -107,8 +105,6 @@
     "noRun": "没有运行",
     "doneTitle": {
       "programs": "已匹配加速器项目",
-      "accel_draft": "加速器申请字段已起草",
-      "accel_edit": "已生成加速器申请的修改建议",
       "funders": "已找到资助方",
       "extract": "已读取要求",
       "draft": "草稿已写好",
@@ -520,7 +516,8 @@
       "noSection": "这次运行没有指定章节",
       "sectionNotFound": "找不到这个章节",
       "noDraft": "还没有可改写的草稿。",
-      "profileOrKeywords": "请先建立组织档案，或提供要搜索的关键词。"
+      "profileOrKeywords": "请先建立组织档案，或提供要搜索的关键词。",
+      "insufficientCredits": "额度不足"
     },
     "findings": {
       "missing": "“{question}”还没有回答。",

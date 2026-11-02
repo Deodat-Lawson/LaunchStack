@@ -6,6 +6,11 @@
     "path": "/accelerators/logos/y-combinator.png",
     "sourceId": "official-logo"
   },
+  "location": {
+    "text": "San Francisco, United States",
+    "sourceIds": ["yc-faq-location"],
+    "interpretation": false
+  },
   "websiteUrl": "https://www.ycombinator.com/",
   "applyUrl": "https://apply.ycombinator.com/home",
   "description": {

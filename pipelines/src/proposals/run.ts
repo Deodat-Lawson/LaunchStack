@@ -46,7 +46,6 @@ import {
 } from "./stages";
 import { wordCount } from "./text";
 import {
-    RunResultSchema,
     type LibraryItemRecord,
     type RunInput,
     type RunKind,
@@ -73,8 +72,6 @@ export function stepsFor(kind: RunKind, input: RunInput, sectionLabels: string[]
     });
     switch (kind) {
         case "programs":
-        case "accel_draft":
-        case "accel_edit":
             return [step("generate", "Generating"), step("save", "Saving")];
         case "funders":
             return [
@@ -219,8 +216,6 @@ export async function executeProposalRun(
         let prepared: PreparedProposalRun | undefined;
         switch (run.kind) {
             case "programs":
-            case "accel_draft":
-            case "accel_edit":
                 if (!ports.prepareAcceleratorRun || !ports.assertAcceleratorAccess)
                     throw new Error("Accelerators execution is not configured");
                 await ports.assertAcceleratorAccess();
@@ -262,35 +257,29 @@ export async function executeProposalRun(
                 break;
         }
         summary.durationMs = Date.now() - run.startedAt!.getTime();
-        const finished = await completeRun(
-            ctx.companyId,
-            ctx.runId,
-            summary,
-            async executor => {
-                if (prepared) {
-                    // Gate the final write as well as generation, using current membership.
-                    await ports.assertAcceleratorAccess!();
-                    await prepared.commit(executor);
-                    await executor
-                        .update(proposalRuns)
-                        .set({
-                            steps: run.steps.map(step => ({
-                                ...step,
-                                status: "done" as const,
-                                completedAt: new Date().toISOString(),
-                            })),
-                        })
-                        .where(
-                            and(
-                                eq(proposalRuns.id, ctx.runId),
-                                eq(proposalRuns.companyId, ctx.companyId)
-                            )
-                        );
-                }
-                return debit(ports, ctx, amount, description, executor);
-            },
-            prepared?.result ? RunResultSchema.parse(prepared.result) : null
-        );
+        const finished = await completeRun(ctx.companyId, ctx.runId, summary, async executor => {
+            if (prepared) {
+                // Gate the final write as well as generation, using current membership.
+                await ports.assertAcceleratorAccess!();
+                await prepared.commit(executor);
+                await executor
+                    .update(proposalRuns)
+                    .set({
+                        steps: run.steps.map(step => ({
+                            ...step,
+                            status: "done" as const,
+                            completedAt: new Date().toISOString(),
+                        })),
+                    })
+                    .where(
+                        and(
+                            eq(proposalRuns.id, ctx.runId),
+                            eq(proposalRuns.companyId, ctx.companyId)
+                        )
+                    );
+            }
+            return debit(ports, ctx, amount, description, executor);
+        });
         if (!finished) throw new Error("Run not found");
         return finished;
     } catch (error) {

@@ -11,7 +11,7 @@ import { prepareAcceleratorRun } from "~/server/accelerators/run";
 export function createProposalPorts(companyId: bigint, userId?: string): ProposalPorts {
     const ports = createDefaultPorts({
         debitCredits: async ({ amount, description, referenceId }, executor) => {
-            await debitTokens(
+            const debit = await debitTokens(
                 {
                     companyId,
                     amount,
@@ -21,6 +21,7 @@ export function createProposalPorts(companyId: bigint, userId?: string): Proposa
                 },
                 executor
             );
+            if (debit === null) throw new Error("Insufficient credits");
         },
     });
     if (userId) {

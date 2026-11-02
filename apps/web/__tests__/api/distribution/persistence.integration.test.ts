@@ -384,7 +384,7 @@ describeDb("distribution persistence", () => {
                     domain: "wonfoods.nl",
                     country: "NL",
                     kind: "distributor",
-                    stage: "active",
+                    stage: "won",
                     territoryCountry: "NL",
                     ownerUserId: null,
                 },

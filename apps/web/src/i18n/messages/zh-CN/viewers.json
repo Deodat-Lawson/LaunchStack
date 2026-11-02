@@ -124,12 +124,10 @@
     "onThisPage": "本页内容"
   },
   "pptx": {
-    "needsPublicUrl": "PowerPoint 预览需要可公开访问的 URL",
-    "needsPublicUrlDetail": "此文件存储在本地，无法嵌入 Office Online 查看器。你可以下载后用 PowerPoint 或 Google Slides 打开。",
-    "download": "下载演示文稿",
-    "loading": "正在加载演示文稿…",
-    "loadFailed": "Office Online 查看器加载失败",
-    "loadFailedDetail": "该文件可能无法访问，请尝试下载。"
+    "rendering": "正在渲染幻灯片…",
+    "renderFailed": "无法渲染此演示文稿",
+    "renderFailedDetail": "无法在此处绘制幻灯片。你仍可以下载文件，用 PowerPoint 或 Google Slides 打开。",
+    "download": "下载演示文稿"
   },
   "website": {
     "checkAgain": "重新检查",

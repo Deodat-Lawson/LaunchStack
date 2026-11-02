@@ -104,7 +104,17 @@
       "pink": "pink"
     },
     "highlightMenu": "Highlight",
-    "removeHighlight": "Remove"
+    "removeHighlight": "Remove",
+    "slides": {
+      "label": "Slide",
+      "toolbar": "Slide controls",
+      "previous": "Previous slide",
+      "next": "Next slide",
+      "number": "Slide number",
+      "of": "of {count}",
+      "loading": "Loading slides…",
+      "loadError": "Couldn’t load the slides: {error}"
+    }
   },
   "server": {
     "errors": {

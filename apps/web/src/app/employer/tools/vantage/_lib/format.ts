@@ -15,10 +15,10 @@ function parse(iso: string | null | undefined): Date | null {
 }
 
 /** "12 Sep" */
-export function fmtDate(iso: string | null | undefined): string {
+export function fmtDate(iso: string | null | undefined, locale?: string): string {
     const d = parse(iso);
     if (!d) return "—";
-    return d.toLocaleDateString(undefined, { day: "numeric", month: "short" });
+    return d.toLocaleDateString(locale, { day: "numeric", month: "short" });
 }
 
 /** "12 Sep 2026" */

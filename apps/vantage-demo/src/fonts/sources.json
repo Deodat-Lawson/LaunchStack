@@ -1,0 +1,14 @@
+[
+  {
+    "family": "inter",
+    "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/inter/Inter%5Bopsz,wght%5D.ttf",
+    "license": "https://raw.githubusercontent.com/google/fonts/main/ofl/inter/OFL.txt",
+    "sha256": "29160a80ff49ddcab2c97711247e08b1fab27a484a329ce8b813d820dc559031"
+  },
+  {
+    "family": "jetbrains",
+    "url": "https://raw.githubusercontent.com/google/fonts/main/ofl/jetbrainsmono/JetBrainsMono%5Bwght%5D.ttf",
+    "license": "https://raw.githubusercontent.com/google/fonts/main/ofl/jetbrainsmono/OFL.txt",
+    "sha256": "48715a42ec242c21e9f02692891e147d022299a52e48d5e413e1a942193ffeda"
+  }
+]

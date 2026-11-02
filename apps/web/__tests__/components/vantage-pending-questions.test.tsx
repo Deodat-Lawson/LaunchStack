@@ -31,6 +31,7 @@ jest.mock("~/components/tool-app/ToolLink", () => {
 });
 
 import { VantageApiError } from "~/app/employer/tools/vantage/api";
+import { fmtDate } from "~/app/employer/tools/vantage/_lib/format";
 import { PendingQuestions } from "~/app/employer/tools/vantage/_components/PendingQuestions";
 
 function view(): PendingHistoricalQuestionsViewV1 {
@@ -83,7 +84,17 @@ it("separates the original question, week and past human decision from current t
         name: view().questions[0]!.question,
     });
     expect(mockLoad).toHaveBeenCalledWith("current-report");
-    expect(within(card).getByText("Historical · current status unverified")).toBeVisible();
+    expect(
+        within(card).queryByText("Historical \u00b7 current status unverified")
+    ).not.toBeInTheDocument();
+    expect(within(card).getByRole("link")).toHaveTextContent(
+        `Asked in the week of ${fmtDate("2026-10-05", "en-US")}`
+    );
+    const provenance = within(card).getByText("History & provenance").closest("details")!;
+    expect(provenance).not.toHaveAttribute("open");
+    expect(within(provenance).getByText(/Current progress is unverified/)).not.toBeVisible();
+    fireEvent.click(provenance.querySelector("summary")!);
+    expect(within(provenance).getByText(/Current progress is unverified/)).toBeVisible();
     expect(within(card).getByRole("link").getAttribute("href")).toContain("week=2026-10-05");
     expect(within(card).getByText("Past human decision:")).toBeVisible();
     expect(card).toHaveTextContent("Review the dry-run result before enabling access.");

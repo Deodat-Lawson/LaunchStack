@@ -1,0 +1,21 @@
+{
+  "extends": "../web/tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["../web/src/*"],
+      "react": ["../web/node_modules/@types/react"],
+      "react/*": ["../web/node_modules/@types/react/*"],
+      "react-dom": ["../web/node_modules/@types/react-dom"],
+      "react-dom/*": ["../web/node_modules/@types/react-dom/*"],
+      "vitest": ["../../pipelines/node_modules/vitest"],
+      "next-themes": ["../web/node_modules/next-themes"],
+      "sonner": ["../web/node_modules/sonner"],
+      "lucide-react": ["../web/node_modules/lucide-react"]
+    },
+    "typeRoots": ["../web/node_modules/@types", "../../node_modules/@types"],
+    "incremental": false
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "exclude": ["recorded"]
+}

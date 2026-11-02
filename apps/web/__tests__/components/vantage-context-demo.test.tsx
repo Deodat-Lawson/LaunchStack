@@ -8,6 +8,8 @@ import type { DemoReport, DemoSource, DemoState } from "~/app/employer/tools/van
 import { resolveRoleSelectionV0 } from "@launchstack/pipelines/vantage/role-context-v0";
 import type { DemoPersonalContextView } from "~/app/employer/tools/vantage/demo-personal-client";
 
+const mockToast = jest.fn();
+jest.mock("sonner", () => ({ toast: { success: (...args: unknown[]) => mockToast(...args) } }));
 const mockLoad = jest.fn();
 const mockGenerate = jest.fn();
 const mockReview = jest.fn();
@@ -351,9 +353,10 @@ it("generates only after an explicit click and displays the returned saved repor
         "2026-10-12",
         expect.objectContaining({ aborted: false })
     );
-    expect(
-        screen.getByText("Report saved. Earlier reports, decisions and actions are preserved.")
-    ).toBeVisible();
+    expect(mockToast).toHaveBeenCalledWith(
+        "Report saved. Earlier reports, decisions and actions are preserved.",
+        { duration: 2500 }
+    );
     expect(mockReview).not.toHaveBeenCalled();
 });
 
@@ -384,7 +387,9 @@ it("offers explicitly labeled offline replay before any contextual report exists
     const buttons = await screen.findAllByRole("button", { name: "Replay sample report" });
     expect(buttons).toHaveLength(1);
     expect(screen.queryByRole("button", { name: "Prepare a new report" })).not.toBeInTheDocument();
-    expect(screen.getByText(/Sample report.*recorded replay.*no live AI call/)).toBeVisible();
+    expect(
+        screen.getByText("Sample report \u00b7 recorded replay \u00b7 no live AI call")
+    ).toBeVisible();
     expect(screen.queryByText(/ready to call the configured model/)).not.toBeInTheDocument();
     expect(mockGenerate).not.toHaveBeenCalled();
     fireEvent.click(buttons[0]!);
@@ -461,9 +466,7 @@ it.each(["kept", "dismissed"] as const)(
                 status,
             })
         );
-        expect(
-            await screen.findByText("Review saved. No action or commitment was created.")
-        ).toBeVisible();
+        expect(mockToast).toHaveBeenCalledWith("Review saved.", { duration: 2500 });
         const row = screen.getByRole("article", {
             name: "Compare the recorded sample",
             hidden: true,
@@ -821,7 +824,10 @@ it("keeps context settings and technical generation metadata secondary on initia
     render(<ContextDemoScreen />);
     expect(await screen.findByRole("button", { name: /^My context/ })).toBeVisible();
     expect(screen.queryByRole("dialog", { name: "My context" })).not.toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "Compare the recorded sample" })).toBeVisible();
+    expect(screen.getByRole("heading", { name: "THIS WEEK'S BRIEF" })).toBeVisible();
+    expect(
+        screen.queryByRole("heading", { name: "Compare the recorded sample" })
+    ).not.toBeInTheDocument();
     const fullBrief = screen.getByText(/^Read full brief/).closest("details")!;
     expect(fullBrief).not.toHaveAttribute("open");
     const metadata = screen.getByText("Sources & report details").closest("details")!;
@@ -883,10 +889,48 @@ it("reports source differences and unreviewed context only from matching report 
     render(<ContextDemoScreen />);
     const row = await screen.findByRole("article", { name: topic.title });
     expect(within(row).getByText("2 sources")).toBeVisible();
-    expect(within(row).getByText("Reported differences")).toBeVisible();
-    expect(within(row).getByText("Uses unreviewed context")).toBeVisible();
+    expect(within(row).getByText("Results differ")).toBeVisible();
+    expect(within(row).getByText("Unreviewed context")).toBeVisible();
     expect(row).not.toHaveTextContent(/definitive contradiction|AI suggested/);
     const detail = await openTopic();
-    expect(within(detail).getByText(topic.conflicts[0]!.text)).toBeVisible();
+    const comparison = within(detail).getByText("Comparison & limitations").closest("details")!;
+    expect(comparison).not.toHaveAttribute("open");
+    expect(within(comparison).getByText(topic.conflicts[0]!.text)).not.toBeVisible();
+    fireEvent.click(comparison.querySelector("summary")!);
+    expect(within(comparison).getByText(topic.conflicts[0]!.text)).toBeVisible();
     expect(mockReview).not.toHaveBeenCalled();
+});
+
+it("reloads saved reports while fresh preparation is blocked and uses a short-lived toast", async () => {
+    const context = personalView();
+    context.ready = false;
+    mockLoad.mockResolvedValue(state({ personalContextAvailable: true }));
+    globalThis.fetch = jest.fn().mockResolvedValue({ ok: true, json: async () => context });
+    render(<ContextDemoScreen />);
+    await screen.findByText(/Required context needs attention before a fresh report/);
+    const refresh = screen.getByRole("button", { name: "Refresh saved weekly review" });
+    expect(refresh).toBeEnabled();
+    expect(
+        screen.getByText(/Your saved report is still available; Refresh reloads it/)
+    ).toBeVisible();
+    fireEvent.click(refresh);
+    await waitFor(() =>
+        expect(mockToast).toHaveBeenCalledWith("Reloaded the current saved review.", {
+            duration: 2500,
+        })
+    );
+    expect(screen.queryByText("Reloaded the current saved review.")).not.toBeInTheDocument();
+    expect(mockGenerate).not.toHaveBeenCalled();
+});
+
+it("has no selected recommendation outcome before the reviewer explicitly chooses", async () => {
+    render(<ContextDemoScreen />);
+    const detail = await openTopic();
+    for (const label of ["Go", "No-go", "Needs more evidence"]) {
+        const button = within(detail).getByRole("button", { name: label });
+        expect(button).not.toHaveAttribute("aria-pressed", "true");
+        expect(button).not.toHaveAttribute("data-state", "checked");
+    }
+    expect(mockReview).not.toHaveBeenCalled();
+    expect(screen.queryByRole("dialog", { name: "Record your decision" })).not.toBeInTheDocument();
 });

@@ -6,7 +6,10 @@ import type {
     DemoSourceRef,
     DemoTopic,
 } from "~/app/employer/tools/vantage/demo-contract";
-import { selectWeeklyBrief } from "~/app/employer/tools/vantage/_lib/weekly-brief";
+import {
+    firstSummarySentence,
+    selectWeeklyBrief,
+} from "~/app/employer/tools/vantage/_lib/weekly-brief";
 import { WeeklyBrief } from "~/app/employer/tools/vantage/_components/WeeklyBrief";
 
 const sourceA: DemoSourceRef = { kind: "doc", id: "foreign/a", version: "2" };
@@ -57,274 +60,157 @@ function report(summary: string, topics: DemoTopic[] = [topic()]): DemoReport {
     };
 }
 
-describe("conservative weekly brief selection", () => {
-    it("retains different-sample uncertainty without asserting definite contradiction", () => {
-        const summary =
-            "QA and Operations report different deletion counts, but their account lists may differ.";
-        const view = selectWeeklyBrief(report(summary));
-        expect(view.preview).toBe(summary);
-        expect(view.headline).toBe("Compare sample coverage before deciding");
-        expect(view.headline).not.toMatch(/disagree|contradict/);
-    });
-    it("does not turn a missing approval record into denial or universal absence", () => {
-        const summary =
-            "The supplied document contains no approval; whether approval occurred elsewhere is unknown.";
-        expect(selectWeeklyBrief(report(summary)).preview).toBe(summary);
-    });
-    it("preserves a late negation and qualification in a complete sentence", () => {
-        const summary =
-            "The checks passed after several rounds of account reconciliation and review, but this is not approval and the record may cover a different sample.";
-        expect(selectWeeklyBrief(report(summary)).preview).toBe(summary);
-    });
-    it("does not clip long sentences or discard later-sentence qualifications", () => {
-        const view = selectWeeklyBrief(report(longSummary));
-        expect(view.previewLabel).toBe("Question from saved report");
-        expect(view.fullSummary).toBe(longSummary);
-    });
-    it("selects two complete source-validated facts for a long summary without requiring all facts to fit", () => {
-        const facts = [
-            {
-                text: "QA reports all sampled accounts deleted; this is not a recorded privacy sign-off.",
-                refs: [sourceA],
-            },
-            {
-                text: "Operations reports a remaining record, but its sample may differ and no shared sample was reconciled.",
-                refs: [sourceB],
-            },
-            {
-                text: `${"Other context ".repeat(80)}No conclusion is established.`,
-                refs: [sourceB],
-            },
-        ];
-        const view = selectWeeklyBrief(report(longSummary, [topic({ facts })]));
-        expect(view.preview).toBe(`${facts[0]!.text} ${facts[1]!.text}`);
-        expect(view.previewLabel).toBe("Reported evidence");
-        expect(view.fullSummary).toBe(longSummary);
-        expect(view.evidence).toHaveLength(3);
-    });
-    it("preserves a compact conflict qualifier even when its refs are covered by selected facts", () => {
-        const conflict = {
-            text: "The reports may use different samples; this does not establish a reliable trend.",
-            refs: [sourceA, sourceB],
-        };
-        const view = selectWeeklyBrief(
-            report(longSummary, [
-                topic({
-                    facts: [
-                        { text: "QA reports completion.", refs: [sourceA] },
-                        { text: "Operations reports a remaining record.", refs: [sourceB] },
-                    ],
-                    conflicts: [conflict],
-                }),
-            ])
-        );
-        expect(view.preview).toBe(conflict.text);
-        expect(view.previewLabel).toBe("Reported conflict");
-    });
-    it("uses a compact conflict when it cites an additional valid source", () => {
-        const conflict = {
-            text: "The comparison remains unresolved; the independent review uses a different account list.",
-            refs: [sourceB],
-        };
-        const view = selectWeeklyBrief(
-            report(longSummary, [
-                topic({
-                    facts: [{ text: "QA reports completion.", refs: [sourceA] }],
-                    conflicts: [conflict],
-                }),
-            ])
-        );
-        expect(view.preview).toBe(conflict.text);
-    });
-    it("falls back to a question if an uncovered conflict is too long", () => {
-        const input = report(longSummary, [
-            topic({
-                facts: [{ text: "QA reports completion.", refs: [sourceA] }],
-                conflicts: [
-                    {
-                        text: `${"Account-level context ".repeat(40)}This is not approval.`,
-                        refs: [sourceB],
-                    },
-                ],
-            }),
-        ]);
-        expect(selectWeeklyBrief(input).previewLabel).toBe("Question from saved report");
-    });
-    it.each(
+describe("saved-summary-only weekly brief", () => {
+    it.each([
         [
-            [],
-            [{ ...sourceA, version: "999" }],
-            [{ ...sourceA, kind: "company" as const }],
-            [{ ...sourceA, id: "missing" }],
-        ].map(refs => ({ refs }))
-    )("discards facts without exact known refs: %j", ({ refs }) => {
-        const input = report(longSummary, [
-            topic({
-                facts: [
-                    { text: "Unverified assertion.", refs },
-                    { text: "A source reports uncertainty.", refs: [sourceB] },
-                ],
-            }),
-        ]);
-        expect(selectWeeklyBrief(input).preview).toBe("A source reports uncertainty.");
+            "Invoice No. 1043 was downloaded. Notification is unconfirmed.",
+            "Invoice No. 1043 was downloaded.",
+        ],
+        [
+            "Fig. 2 shows a provisional result. Approval is unknown.",
+            "Fig. 2 shows a provisional result.",
+        ],
+        ["The audit remains incomplete. Approval is unknown.", "The audit remains incomplete."],
+        [
+            "The error rate was 2.5 percent. Its cause is unknown.",
+            "The error rate was 2.5 percent.",
+        ],
+        ["Dr. Reed requested a review. No decision is recorded.", "Dr. Reed requested a review."],
+        [
+            "Ms. Lane asked Operations to check. Progress is unknown.",
+            "Ms. Lane asked Operations to check.",
+        ],
+        ["The review is on Oct. 5, 2026. It has not occurred.", "The review is on Oct. 5, 2026."],
+        [
+            "The check occurred at 5 p.m. on Jan. 12. Approval is unknown.",
+            "The check occurred at 5 p.m. on Jan. 12.",
+        ],
+        [
+            "The U.S. team requested a change. It is unconfirmed.",
+            "The U.S. team requested a change.",
+        ],
+        ["J. Smith requested a check. It is pending.", "J. Smith requested a check."],
+        [
+            "The data is partial, e.g. only one sample. No conclusion is established.",
+            "The data is partial, e.g. only one sample.",
+        ],
+        ["Version v2.1 is planned. It is not deployed.", "Version v2.1 is planned."],
+        [
+            "The check is dated 2026.10.12. Its scope is uncertain.",
+            "The check is dated 2026.10.12.",
+        ],
+        [
+            "The source is example.test/review. Its contents remain unreviewed.",
+            "The source is example.test/review.",
+        ],
+        [
+            'The report says "Approval is unknown." Another report is pending.',
+            'The report says "Approval is unknown."',
+        ],
+        ["Is approval recorded? The supplied evidence does not say.", "Is approval recorded?"],
+        [
+            "The reviewer wrote \u201cNot approved.\u201d Progress remains unknown.",
+            "The reviewer wrote \u201cNot approved.\u201d",
+        ],
+        [
+            "\u5ba1\u67e5\u5c1a\u672a\u5b8c\u6210\u3002\u7ed3\u679c\u4ecd\u4e0d\u786e\u5b9a\u3002",
+            "\u5ba1\u67e5\u5c1a\u672a\u5b8c\u6210\u3002",
+        ],
+        ["The record is incomplete and uncertain", "The record is incomplete and uncertain"],
+        [
+            "The record is incomplete... further review is needed",
+            "The record is incomplete... further review is needed",
+        ],
+        ["1. Review is pending. Progress remains unknown.", "1. Review is pending."],
+        ["  Review is pending.\n\nProgress is unknown.  ", "Review is pending."],
+    ])("retains a reliable complete sentence from %s", (summary, expected) => {
+        expect(firstSummarySentence(summary)).toBe(expected);
     });
-    it("does not publish selected facts when a conflict has invalid references", () => {
-        const input = report(longSummary, [
-            topic({
-                facts: [{ text: "QA reports completion.", refs: [sourceA] }],
-                conflicts: [
-                    {
-                        text: "A later report disputes completion.",
-                        refs: [{ ...sourceB, version: "unknown" }],
-                    },
-                ],
-            }),
-        ]);
-        expect(selectWeeklyBrief(input).previewLabel).toBe("Question from saved report");
+
+    it("preserves every qualification within the first sentence without a character cutoff", () => {
+        const sentence = `${"The sample is uncertain; ".repeat(60)}this does not establish approval.`;
+        expect(firstSummarySentence(`${sentence} More context follows.`)).toBe(sentence);
     });
-    it("uses compact factual evidence when a summary is missing", () => {
-        const facts = [{ text: "The test passed; this is not approval.", refs: [sourceA] }];
-        expect(selectWeeklyBrief(report("", [topic({ facts })]))).toMatchObject({
-            preview: facts[0]!.text,
-            previewLabel: "Reported evidence",
-        });
-    });
-    it("does not promote rationale or proposed actions into facts", () => {
-        const view = selectWeeklyBrief(
-            report("", [
-                topic({
-                    rationale: "All accounts were deleted.",
-                    whyItMatters: "Approval is guaranteed.",
-                    proposedNextStep: "Launch immediately.",
-                    decisionQuestion: "",
-                }),
-            ])
-        );
-        expect(view.preview).toBe(
-            "Read the full brief and review the source evidence before deciding."
-        );
-    });
-    it("works for unrelated companies without matching a fixture", () => {
-        const view = selectWeeklyBrief(
-            report("Cedar Labs reports an uncertain delivery date.", [
-                topic({ title: "Clarify Cedar Labs delivery timing" }),
-            ])
-        );
-        expect(view.headline).toBe("Clarify Cedar Labs delivery timing");
-        expect(view.preview).toBe("Cedar Labs reports an uncertain delivery date.");
-    });
-    it("preserves multilingual summaries and safely handles unpunctuated text", () => {
+    it("preserves different-population and missing-approval qualifications verbatim", () => {
         const summary =
-            "\u5ba1\u67e5\u5c1a\u672a\u5b8c\u6210\u3002\u7ed3\u679c\u4ecd\u4e0d\u786e\u5b9a\u3002";
-        expect(selectWeeklyBrief(report(summary)).preview).toBe(summary);
-        expect(selectWeeklyBrief(report("Review incomplete and uncertain"))).toMatchObject({
-            previewLabel: "Question from saved report",
-            fullSummary: "Review incomplete and uncertain",
-        });
+            "QA and Operations report different deletion counts, but their account lists may differ and approval outside these sources is unknown. More review is planned.";
+        expect(selectWeeklyBrief(report(summary)).preview).toBe(
+            summary.slice(0, summary.indexOf(" More review"))
+        );
     });
-    it("handles a report without topics", () => {
-        expect(selectWeeklyBrief(report("", []))).toMatchObject({
-            headline: "Review this week's report",
-            previewLabel: null,
-            evidence: [],
-        });
+    it("does not create a topic headline, assembled conflict, or extra evidence card", () => {
+        const input = report(longSummary, [
+            topic({
+                facts: [{ text: "A fact that is not the saved summary.", refs: [sourceA] }],
+                conflicts: [{ text: "A separate reported conflict.", refs: [sourceA, sourceB] }],
+                unknowns: ["A separate unknown."],
+            }),
+        ]);
+        const { container } = render(createElement(WeeklyBrief, { report: input }));
+        expect(container.querySelector("h2")?.textContent).toBe("THIS WEEK'S BRIEF");
+        expect(container.querySelector("h3")).toBeNull();
+        expect(screen.queryByText(input.topics[0]!.title)).toBeNull();
+        expect(screen.queryByText("A fact that is not the saved summary.")).toBeNull();
+        expect(screen.queryByText("A separate reported conflict.")).toBeNull();
+        expect(screen.queryByText("A separate unknown.")).toBeNull();
+        expect(container.querySelector("aside")).toBeNull();
+        expect(screen.getByText("The audit passed.")).toBeTruthy();
     });
-    it("does not mutate originals and preserves exact summary, evidence refs and unknowns", () => {
+    it("keeps the full exact original saved summary behind its disclosure", () => {
+        const summary = `  ${longSummary}\n\nA further qualification is recorded.  `;
+        const { container } = render(createElement(WeeklyBrief, { report: report(summary) }));
+        const disclosure = container.querySelector("details")!;
+        expect(disclosure.open).toBe(false);
+        expect(disclosure.querySelector("p")?.textContent).toBe(summary);
+        expect(disclosure.querySelector("summary")?.textContent).toContain("Read full brief");
+        fireEvent.click(disclosure.querySelector("summary")!);
+        expect(disclosure.open).toBe(true);
+        expect(disclosure.querySelector("p")?.textContent).toBe(summary);
+    });
+    it("shows a restrained absence label rather than promoting a topic or suggestion", () => {
+        const input = report("", [
+            topic({
+                rationale: "All work was completed.",
+                proposedNextStep: "Launch immediately.",
+            }),
+        ]);
+        const { container } = render(createElement(WeeklyBrief, { report: input }));
+        expect(selectWeeklyBrief(input)).toEqual({ preview: "", fullSummary: "" });
+        expect(container.textContent).toContain("No saved summary is available.");
+        expect(container.textContent).not.toContain("Launch immediately");
+        expect(container.textContent).not.toContain("All work was completed");
+    });
+    it("does not mutate saved topic, evidence, provenance or summary data", () => {
         const input = report(`  ${longSummary}\n\nMore context.  `, [
             topic({
-                facts: [{ text: "The evidence is uncertain.", refs: [sourceA] }],
-                unknowns: ["Whether the samples overlap is unknown."],
+                facts: [{ text: "Evidence remains uncertain.", refs: [sourceA] }],
+                unknowns: ["Sample overlap is unknown."],
             }),
         ]);
         const before = JSON.stringify(input);
         const view = selectWeeklyBrief(input);
         expect(JSON.stringify(input)).toBe(before);
         expect(view.fullSummary).toBe(input.summary);
-        expect(view.evidence[0]).toBe(input.topics[0]!.facts[0]);
-        expect(view.evidence[0]!.refs[0]).toBe(sourceA);
-        expect(view.unknowns).toEqual(input.topics[0]!.unknowns);
+        expect(view.preview).toBe("The audit passed.");
     });
-    it("renders full summary and unknowns and forwards the exact original source reference", () => {
-        const input = report(longSummary, [
-            topic({
-                facts: [{ text: "A reported observation, not a decision.", refs: [sourceA] }],
-                unknowns: ["Reviewer identity remains unknown."],
-            }),
-        ]);
-        const onSource = jest.fn();
-        const { container } = render(createElement(WeeklyBrief, { report: input, onSource }));
-        expect(container.querySelector("details summary")?.textContent).toContain(
-            "Read full brief"
-        );
-        expect(screen.getByText(longSummary)).toBeTruthy();
-        expect(screen.getByText("Reviewer identity remains unknown.")).toBeTruthy();
-        expect(container.querySelector("details")?.hasAttribute("open")).toBe(false);
-        fireEvent.click(screen.getByRole("button", { name: "foreign/a (v2)", hidden: true }));
-        expect(onSource.mock.calls[0]![0]).toBe(sourceA);
-    });
-});
-
-describe("supplemental recorded evidence", () => {
-    const independent: DemoSourceRef = { kind: "doc", id: "independent-review", version: "5" };
-    const statement =
-        "A human review document asks for a comparison before approval; the document contains no approval record.";
-    function input(extra = { text: statement, refs: [independent] }) {
-        const saved = report(longSummary, [
-            topic({
-                facts: [
-                    { text: "QA reports completion; this is not approval.", refs: [sourceA] },
-                    {
-                        text: "Operations reports a remaining record; the sample may differ.",
-                        refs: [sourceB],
-                    },
-                    extra,
-                ],
-            }),
-        ]);
-        saved.diagnostics.sources.push({
-            source: independent,
-            title: "Human review",
-            contentHash: "saved",
-            reviewState: "unreviewed",
+    it("works without topics and without fixture-specific company wording", () => {
+        expect(
+            selectWeeklyBrief(
+                report("Cedar Labs reports an uncertain delivery date. More detail follows.", [])
+            )
+        ).toEqual({
+            preview: "Cedar Labs reports an uncertain delivery date.",
+            fullSummary: "Cedar Labs reports an uncertain delivery date. More detail follows.",
         });
-        return saved;
-    }
-    it("adds one whole qualified statement with independent exact refs", () => {
-        const saved = input();
-        const view = selectWeeklyBrief(saved);
-        expect(view.highlight).toEqual({ text: statement, refs: [independent], unreviewed: true });
-        expect(view.highlight?.refs).toBe(saved.topics[0]!.facts[2]!.refs);
-        expect(view.previewRefs).toEqual([sourceA, sourceB]);
-        expect(view.preview).not.toContain(statement);
     });
-    it.each([
-        { text: statement, refs: [] },
-        { text: statement, refs: [{ ...independent, version: "missing" }] },
-        { text: "A review remains incomplete without punctuation", refs: [independent] },
-        { text: `${"Review context ".repeat(30)}No approval is recorded.`, refs: [independent] },
-        { text: statement, refs: [sourceA] },
-        { text: "QA reports completion; this is not approval.", refs: [independent] },
-    ])("omits unsupported, partial, overlong or represented highlights: %j", extra => {
-        expect(selectWeeklyBrief(input(extra)).highlight).toBeNull();
-    });
-    it("does not add highlights to whole-summary or question previews", () => {
-        const summary = input();
-        summary.summary = "The review remains uncertain.";
-        expect(selectWeeklyBrief(summary).highlight).toBeNull();
-        const question = input();
-        question.topics[0]!.conflicts = [{ text: "Unresolved source conflict.", refs: [] }];
-        expect(selectWeeklyBrief(question).highlight).toBeNull();
-    });
-    it("renders a review-state label and source button using the exact original ref", () => {
-        const saved = input();
-        const onSource = jest.fn();
-        const { container } = render(createElement(WeeklyBrief, { report: saved, onSource }));
-        const card = container.querySelector('aside[aria-label="Also recorded"]');
-        expect(card?.textContent).toContain(statement);
-        expect(card?.textContent).toContain("unreviewed source");
-        const button = card?.querySelector("button");
-        expect(button).toBeTruthy();
-        fireEvent.click(button!);
-        expect(onSource.mock.calls[0]![0]).toBe(independent);
+    it("renders punctuation as Unicode without replacement characters", () => {
+        const summary =
+            "Operations\u2019 review is pending \u2014 sample overlap is unknown. A recorded replay follows.";
+        const { container } = render(createElement(WeeklyBrief, { report: report(summary) }));
+        expect(container.textContent).toContain(
+            "Operations\u2019 review is pending \u2014 sample overlap is unknown."
+        );
+        expect(container.textContent).not.toContain("\ufffd");
+        expect(container.querySelector("summary")?.textContent).toContain("\u2304");
     });
 });

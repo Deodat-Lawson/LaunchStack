@@ -1,0 +1,55 @@
+{
+  "schemaVersion": "vantage-portable-bundle/v1",
+  "files": [
+    {
+      "path": "app.css",
+      "sha256": "e11e4ddd4671b778f05698f3488452c8226a48abaaac0ca18fb830244ed7c533",
+      "bytes": 10160
+    },
+    {
+      "path": "app.js",
+      "sha256": "5502648ba85221960fdef400a3dc8ebd2688c5dc656ede5b99d7c83abd6d05a5",
+      "bytes": 582203
+    },
+    {
+      "path": "assets/inter-latin-JQFDRXX5.ttf",
+      "sha256": "29160a80ff49ddcab2c97711247e08b1fab27a484a329ce8b813d820dc559031",
+      "bytes": 876576
+    },
+    {
+      "path": "assets/jetbrains-latin-HMN6MYZZ.ttf",
+      "sha256": "48715a42ec242c21e9f02692891e147d022299a52e48d5e413e1a942193ffeda",
+      "bytes": 187208
+    },
+    {
+      "path": "base.css",
+      "sha256": "a124326a19fb1a65648516119a2383d0ad8f3f2a3f58dc1752f5bc94eb56f169",
+      "bytes": 73320
+    },
+    {
+      "path": "icon.svg",
+      "sha256": "b16408f858638efcb4e84f6d598d3627abe09020445b2be2c9ef73b82bdfc918",
+      "bytes": 1878
+    },
+    {
+      "path": "index.html",
+      "sha256": "e7f16d746ccc1c990b0237c7bf49b843e6018782a65fbff45d5c160814e19bf8",
+      "bytes": 450
+    },
+    {
+      "path": "licenses/inter-OFL.txt",
+      "sha256": "5b9321a4298cfeb6b34354164a1c3afc3db114569984c502b9b35d988fd58c57",
+      "bytes": 4377
+    },
+    {
+      "path": "licenses/jetbrains-OFL.txt",
+      "sha256": "b2fe5e8987594e9ffd1d2ca52a2f5d73eb8335243893c5d6254b5ad69269591d",
+      "bytes": 4399
+    },
+    {
+      "path": "licenses/sources.json",
+      "sha256": "518c7b54cf2becd66a1d59d3529ffc74a17a30015832d4ce56bf84a673775f50",
+      "bytes": 644
+    }
+  ]
+}

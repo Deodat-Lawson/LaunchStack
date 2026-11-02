@@ -1,0 +1,370 @@
+{
+  "recordedSyntheticOnly": true,
+  "sourceSnapshot": "source-ui-snapshot.json",
+  "files": [
+    {
+      "path": "apps/vantage-demo/source-ui-snapshot.json",
+      "sha256": "4a127493dee6994d5c4eb6a20fc8eae3d881a77752ed543c389489c5c8b03aab"
+    },
+    {
+      "path": "apps/vantage-demo/src/fonts/inter-OFL.txt",
+      "sha256": "5b9321a4298cfeb6b34354164a1c3afc3db114569984c502b9b35d988fd58c57"
+    },
+    {
+      "path": "apps/vantage-demo/src/fonts/inter-latin.ttf",
+      "sha256": "29160a80ff49ddcab2c97711247e08b1fab27a484a329ce8b813d820dc559031"
+    },
+    {
+      "path": "apps/vantage-demo/src/fonts/jetbrains-OFL.txt",
+      "sha256": "b2fe5e8987594e9ffd1d2ca52a2f5d73eb8335243893c5d6254b5ad69269591d"
+    },
+    {
+      "path": "apps/vantage-demo/src/fonts/jetbrains-latin.ttf",
+      "sha256": "48715a42ec242c21e9f02692891e147d022299a52e48d5e413e1a942193ffeda"
+    },
+    {
+      "path": "apps/vantage-demo/src/fonts/sources.json",
+      "sha256": "518c7b54cf2becd66a1d59d3529ffc74a17a30015832d4ce56bf84a673775f50"
+    },
+    {
+      "path": "apps/vantage-demo/src/main.tsx",
+      "sha256": "abbcc33ca575ed774d2632578d51ed16bd84a13fe5313574a16fdd35776f805b"
+    },
+    {
+      "path": "apps/vantage-demo/src/shell.css",
+      "sha256": "afbd650b1e54d744b67484a11d64c9582fe3fa6c67af9b6239e89abbb8dfa730"
+    },
+    {
+      "path": "apps/vantage-demo/src/transport.ts",
+      "sha256": "b14ea528647f93fe7f4b6115153f52d3fca64705d4f98c7b50801c2c7c0c2763"
+    },
+    {
+      "path": "apps/web/public/icon.svg",
+      "sha256": "b16408f858638efcb4e84f6d598d3627abe09020445b2be2c9ef73b82bdfc918"
+    },
+    {
+      "path": "apps/web/src/app/dev/vantage-action-sample/captured-sample.json",
+      "sha256": "853582f441e41de6d34e3673fb323ab0955e77b992e98dbeead0ee3c904879d8"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/VantageTool.tsx",
+      "sha256": "78544b174afd6c49538aa870e9146681adb073ec34c263a84770fa7cae90a094"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_components/CheckInRow.tsx",
+      "sha256": "9a61c68ed682c851f1a3d073d041eb72c062006e0c562928cb6c69e9faae8fad"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_components/CompactTopicRow.tsx",
+      "sha256": "dd184cf2d707f4b6ff02070dd5e2544993c759a4066378293aff4db6ca52bc49"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_components/ContextSourceDialog.tsx",
+      "sha256": "0b09d8fad4a6d236353f2291efbc9990ab6e719c716406e5a1558b3cc3c62662"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_components/EvidenceDialog.tsx",
+      "sha256": "3ec7f90b3d1861c518be5a0755b2d2d31ce4425255cc80f0ebcc992d57d47295"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_components/MetricSuggestions.tsx",
+      "sha256": "d19f346a5662da55ae13592309169cc9deca58e97442d691f24c63b3393c48c7"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_components/MyContextSheet.tsx",
+      "sha256": "11d360a5277be3147db270c780e310d3d90555a8c5882dd349aee2d9b2390a2e"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_components/NativeTopicDetailSheet.tsx",
+      "sha256": "e0ccd129bd674452d4ca8944872a1c5b640ef11de348d37a00ffdc4c2544454e"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_components/PendingQuestions.tsx",
+      "sha256": "90ef6b6acc4a053387aed186e7c98f5ad64d601d2441bcc20e355d964a723727"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_components/Primitives.tsx",
+      "sha256": "cfb9c38a44094dd62f8ddccb36e61746928aa8ef2265a20ddf67892e99cfbd3c"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_components/SourceDialog.tsx",
+      "sha256": "1b3700faa120731b506b6310b2ec98859232c00d276b4279330eeefb1374118f"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_components/Suggestion.tsx",
+      "sha256": "a6c90c322f397877fb938cd4bdf328be0aaa11b8628703f903235e107b11cd05"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_components/TopicCard.tsx",
+      "sha256": "4ce9f299f051e6e1841d2b00c3f554e37cdfc14093c0fee51632c1c898ecfcb8"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_components/TopicDetailSheet.tsx",
+      "sha256": "83fa64a33315ec0713a4ea3713b0bfecdf0ea5840fabd5394f9536de739849cd"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_components/TopicDialogs.tsx",
+      "sha256": "4e1388b6734ce6cc4c471249d0686c28a2f8f6d93c090dd99a337364b30fec2d"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_components/WeekSuggestions.tsx",
+      "sha256": "5295435ef1212a1e36f14da0e8fbdafdb0964b522e3dc35eac1e72ebd829330f"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_components/WeeklyBrief.tsx",
+      "sha256": "d3cd2cc7e324a48b7c55a751142c1155402c1c283c7cd448532679e17bc311fe"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_components/compact-topic.module.css",
+      "sha256": "8f8d8241c01b1948478a466eab94f9c4924657d566c1f07dedeb76613f04206f"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_components/my-context.module.css",
+      "sha256": "bf1a29adecadcbfdf6036449c19579413c458250bf5140e5c5a866ee4ef20cd7"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_components/weekly-brief.module.css",
+      "sha256": "9e9e4525f24b3dbf981b4159f431ef75f8601dc231741e4d1d3a0f988e92a9eb"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_lib/actions.ts",
+      "sha256": "6706be481f3a4d8281d8df7fcee2aede4ed6ef3784797b2a4851a39eef07ee6f"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_lib/format.ts",
+      "sha256": "567724c6793008480e81753e77654e605167cdf5d74d889bf30c55d6c4ecf473"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_lib/hidden.ts",
+      "sha256": "d572cfdbaafce0a67488ba45d70611eb7869441648e066c32dbaa9539a5c9750"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_lib/paths.ts",
+      "sha256": "05d42dbcdd080796cc0b24e209a65a4a33eaea0413fb57512072c2bbd9c14f4d"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_lib/reporting.ts",
+      "sha256": "650cb28431c35854346f995acd5f8eb6b44a194bfaaca618ccda4e43b3b4a2c4"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_lib/screens.ts",
+      "sha256": "6eec150d374c4c304b84e1b025d06b1e79773d2645d448876de9d21c2398a874"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_lib/submission.ts",
+      "sha256": "4bef66386be8897b34bbc4adb645c17694dedd4e09df284e83201f443ed03183"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_lib/suggestions.ts",
+      "sha256": "5213ab1a01ccbb1f0dfff6e017a64e59623ce1aafcbaa40eeb83e91a25c56d74"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_lib/topic-presentation.ts",
+      "sha256": "8296765ec25a6e9c931608268922a52c948ebb01d7116ce3afa94e67254b81b0"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_lib/use-sheet-focus-recovery.ts",
+      "sha256": "c9fa2e594f5f90924c6b4dea40b5d4124898dab3213fe31e2b4e612c0687da38"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_lib/useDialogFocus.ts",
+      "sha256": "16efcb98329570a6782e139f18be8296c4bfa5d44f123a2a6f0f1a1d22a908ae"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_lib/weekly-brief.ts",
+      "sha256": "c2cb79f9d74cd70dde99504c8a73e10f5332d7a666d8b9107c33cd177b689fd1"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_screens/AgendaScreen.tsx",
+      "sha256": "e3f30900c8e5998d0ac762bb771669d97b0762b8989e5f11ebb2a478302b17e6"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_screens/CommitmentsScreen.tsx",
+      "sha256": "a88b5c851db9ece6f4df567880c7d1b8bea2796e6211947aa436cde9082d1de8"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_screens/ContextDemoScreen.tsx",
+      "sha256": "ab20e83b183170f36be2591966ea1681705b0d8425cacf70ffb087b20dd29d78"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_screens/EvidenceScreen.tsx",
+      "sha256": "305cdb217c301323ca7f845fd091a506c8c1dd32fba82bf521b6d287747c496f"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_screens/MetricsScreen.tsx",
+      "sha256": "7eb4dd5eaad62fa75c32ca2f05fc07165d4e2dc8874665edda23c4ea51170b04"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_screens/unified-review.module.css",
+      "sha256": "87adc54e6bf84d5e69c3542f7d3f23ed98cb8899a261f3a4b79f431bef060730"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/api.ts",
+      "sha256": "7d82221927bf7ab49a0cb6065bd7c3d293de10ab3411412054cdfc854428b7a2"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/demo-api.ts",
+      "sha256": "61802f94e34a6c0ac5b3dfd5b968f033f93247f2a01007f0f4445ee7a6caa43a"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/demo-personal-client.ts",
+      "sha256": "be82773fc2f99ab15504f146f9758245e9aa2ef875d96da908b8dc36e6118820"
+    },
+    {
+      "path": "apps/web/src/components/icons/prospects.tsx",
+      "sha256": "4db086e7be83274e0ba499d817a60cd1debe9d4a909a63a319b3f49c68080ff6"
+    },
+    {
+      "path": "apps/web/src/components/icons/vantage.tsx",
+      "sha256": "b366c41ad13d275d55fcdc75538ef926f5a9c92f583c4385350f0f66bdf731b2"
+    },
+    {
+      "path": "apps/web/src/components/tool-app/ToolFrame.tsx",
+      "sha256": "23d733e18fd70135e237e44937057623024c8c1cd1e117983f76e9c084f50d27"
+    },
+    {
+      "path": "apps/web/src/components/tool-app/ToolLink.tsx",
+      "sha256": "55acda32b13ad0ac9ce14cc38c8423a6e74b44d49cfba376172b776ed7075947"
+    },
+    {
+      "path": "apps/web/src/components/tool-app/nav.tsx",
+      "sha256": "70714f363fe4fa7682bf073d12089d5c1ea1f1ea70eeb4155dca7563e33e9fd9"
+    },
+    {
+      "path": "apps/web/src/components/tools/EmptyState.tsx",
+      "sha256": "8d2490fea863cf39642d9bbf5db373cee1b662a86311d3171f4fadeafafd893b"
+    },
+    {
+      "path": "apps/web/src/components/tools/PageHeader.tsx",
+      "sha256": "148923e6c82e3cd1ea0a041fa02049e5f8cf9fe5ace4cdce686b7c66868d37f6"
+    },
+    {
+      "path": "apps/web/src/components/tools/SkeletonRows.tsx",
+      "sha256": "5b2d94d75e24215e8accc547f61c31e7792531d4ae4b82c1d48828f4c7019157"
+    },
+    {
+      "path": "apps/web/src/components/ui/badge.tsx",
+      "sha256": "6468f38fc175f60fbb23f96eed64d67a3f21ae253138db92fed5de83ccdfba85"
+    },
+    {
+      "path": "apps/web/src/components/ui/button.tsx",
+      "sha256": "e3160f0656054eed498d4a243a906bb75e625c51d4dbfe1b2251c7cff013cc54"
+    },
+    {
+      "path": "apps/web/src/components/ui/checkbox.tsx",
+      "sha256": "19721e70693be9201528a498c1df8ac1b68274dfcecdf012453370c291f74a9a"
+    },
+    {
+      "path": "apps/web/src/components/ui/confirm-dialog.tsx",
+      "sha256": "65aa2051226a0de7e7356d12a49b78133d1bd27d079d196ffcc50001c87b2771"
+    },
+    {
+      "path": "apps/web/src/components/ui/dialog.tsx",
+      "sha256": "c45d4de3e630cf73cb932f0461beb3a8fe3e0df9790af0c0ad90980747f78309"
+    },
+    {
+      "path": "apps/web/src/components/ui/dropdown-menu.tsx",
+      "sha256": "4e931a2d6ceb47306612574e69c007465b17ce8b040cd428cbdfcede1e35f94c"
+    },
+    {
+      "path": "apps/web/src/components/ui/input.tsx",
+      "sha256": "b52ac9b25ff5c863eedc911ce9082c794b2d9c87a88a13b41393c16f824ca480"
+    },
+    {
+      "path": "apps/web/src/components/ui/popover.tsx",
+      "sha256": "7c680f1e762a5b6e5599eddba4fbc920adb572ad7a022b7a0b4173dd0da1f1db"
+    },
+    {
+      "path": "apps/web/src/components/ui/select.tsx",
+      "sha256": "12a827054dece41d6a4885604c1476a3e307a0bfad0678cd42e637fa8764c70e"
+    },
+    {
+      "path": "apps/web/src/components/ui/sheet.tsx",
+      "sha256": "a9f285a6a18c979359bb4056b42b960734fc20a94d8ddb8a325144fd431b114c"
+    },
+    {
+      "path": "apps/web/src/components/ui/skeleton.tsx",
+      "sha256": "f068e0648b3e85946fccda91da9217cf6a9eaaad1befff1b3ee221e96ff35cad"
+    },
+    {
+      "path": "apps/web/src/components/ui/switch.tsx",
+      "sha256": "41a88eb1ea575fe47541879b1cff41d6f52123003770bc486eedf1de1ad187ee"
+    },
+    {
+      "path": "apps/web/src/components/ui/textarea.tsx",
+      "sha256": "27d81a49b9e4603eabec04bea9f3bab9e6b19eace795447233504f4abf557b6e"
+    },
+    {
+      "path": "apps/web/src/components/ui/toggle-group.tsx",
+      "sha256": "0dde042df532964635584ea3dd386f3c11ea603a4de4aca46515c78df88d9af1"
+    },
+    {
+      "path": "apps/web/src/components/ui/toggle.tsx",
+      "sha256": "56171d3bbfaa4bdb41f3e9856d883095a00500ce5866e3ff22dc9074125586a3"
+    },
+    {
+      "path": "apps/web/src/components/ui/tooltip.tsx",
+      "sha256": "885ab5d07b2a51a4ec388f6e3cd96d9336c870c4acb09c7b6e174845f6fbf681"
+    },
+    {
+      "path": "apps/web/src/components/vantage-context/PersonalContextPanel.tsx",
+      "sha256": "6db9e8402464ffb66c7c7075fbca5f17679ed4dd45410ea3920199f4583d1b2e"
+    },
+    {
+      "path": "apps/web/src/lib/tool-app/locations.ts",
+      "sha256": "8c01fd1d19ac2ae332f9995be59571dd894f8d374529ca73586298a67bd97d86"
+    },
+    {
+      "path": "apps/web/src/lib/tools/useResource.ts",
+      "sha256": "b8eeab79d72d1d0984474bee2829ffe03c7630425d990b8f3841238b69bf03d1"
+    },
+    {
+      "path": "apps/web/src/lib/utils.ts",
+      "sha256": "d2d4859038918b428f847c50c9b374d0d4f344e578be3e561e074f46de25d601"
+    },
+    {
+      "path": "apps/web/src/styles/globals.css",
+      "sha256": "b126255df9bcd20f179ac2556853210603e23cff475f8b301a761d6f9671a6c9"
+    },
+    {
+      "path": "apps/web/tailwind.config.ts",
+      "sha256": "d1a5b4c7050162044a5d5b7441060fa577a09646a6e8923df1bdd9e55dc28b0f"
+    },
+    {
+      "path": "packages/design-tokens/tokens.css",
+      "sha256": "54f157e7912939b84cc8525337f63198a16db16747542db6223f13ec863a11ae"
+    },
+    {
+      "path": "pipelines/src/vantage/context-v0/ports.ts",
+      "sha256": "36f27c515f7654f2b6e952eb86867e2150efd8be46c1479566f2aabc7c06e182"
+    },
+    {
+      "path": "pipelines/src/vantage/proposals/context-v0.ts",
+      "sha256": "6e3f6f557ad4183420c14eb18587adcba23773c2b3eac46cab398ca650a96de5"
+    },
+    {
+      "path": "pipelines/src/vantage/role-context-v0/contracts.ts",
+      "sha256": "5c4d9f078581db00eeddf6c8fea3be5f5ebd89741ebeaba952e3e7b601486681"
+    },
+    {
+      "path": "pipelines/src/vantage/role-context-v0/index.ts",
+      "sha256": "24e52a60231552729e26ffe23568d4a2880bd84f72e58e67e03e961eb1659234"
+    },
+    {
+      "path": "pipelines/src/vantage/role-context-v0/provider.ts",
+      "sha256": "3a41cc8381d0795d3b8322b12bcb0f87484577df15915f9028af7f258f20a562"
+    },
+    {
+      "path": "pipelines/src/vantage/role-context-v0/role-map.json",
+      "sha256": "4bcc16b2eadc2d7d17e297765cf70d333d8b933f6e48ff91c50b47e08a0a9fed"
+    },
+    {
+      "path": "pipelines/src/vantage/role-context-v0/roles.ts",
+      "sha256": "da3a01fe36de43afde2e0bbd108bf4ce94d0085886a72674c309479991574f07"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "sha256": "a40ac5df3bd97ba416a2ad5e01646791026afcd410289617afb519e6ddb5cae7"
+    }
+  ]
+}

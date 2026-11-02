@@ -1,0 +1,75 @@
+{
+  "sourceHead": "284a5dc9ed6c5f65e2f9e0620107f7e0d33d1656",
+  "source": "514f polished UI including uncommitted changes",
+  "files": [
+    {
+      "path": "apps/web/__tests__/components/vantage-context-demo.test.tsx",
+      "sha256": "18bf312a418327e7459e0c8d856b544e0c67e0b69dcfed46690d63cfcc6c879a"
+    },
+    {
+      "path": "apps/web/__tests__/components/vantage-pending-questions.test.tsx",
+      "sha256": "4fa3a859c7427101e9619efc5b05d85b3a2d29a6500999884a0c7915dc882dc5"
+    },
+    {
+      "path": "apps/web/__tests__/components/vantage-personal-context.test.tsx",
+      "sha256": "5305ddaf564efd5ed97c2206ffaf709a4cc3f035116c0e90d1729021a53a545b"
+    },
+    {
+      "path": "apps/web/__tests__/vantage/weekly-brief.test.ts",
+      "sha256": "86dc82b5901010c70ea5df4b10fc7cd4c211681a14a7aff54ee1ba2153f45847"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_components/CompactTopicRow.tsx",
+      "sha256": "dd184cf2d707f4b6ff02070dd5e2544993c759a4066378293aff4db6ca52bc49"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_components/PendingQuestions.tsx",
+      "sha256": "90ef6b6acc4a053387aed186e7c98f5ad64d601d2441bcc20e355d964a723727"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_components/TopicDetailSheet.tsx",
+      "sha256": "83fa64a33315ec0713a4ea3713b0bfecdf0ea5840fabd5394f9536de739849cd"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_components/WeeklyBrief.tsx",
+      "sha256": "d3cd2cc7e324a48b7c55a751142c1155402c1c283c7cd448532679e17bc311fe"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_components/compact-topic.module.css",
+      "sha256": "8f8d8241c01b1948478a466eab94f9c4924657d566c1f07dedeb76613f04206f"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_components/weekly-brief.module.css",
+      "sha256": "9e9e4525f24b3dbf981b4159f431ef75f8601dc231741e4d1d3a0f988e92a9eb"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_lib/format.ts",
+      "sha256": "567724c6793008480e81753e77654e605167cdf5d74d889bf30c55d6c4ecf473"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_lib/weekly-brief.ts",
+      "sha256": "c2cb79f9d74cd70dde99504c8a73e10f5332d7a666d8b9107c33cd177b689fd1"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_screens/ContextDemoScreen.tsx",
+      "sha256": "ab20e83b183170f36be2591966ea1681705b0d8425cacf70ffb087b20dd29d78"
+    },
+    {
+      "path": "apps/web/src/app/employer/tools/vantage/_screens/unified-review.module.css",
+      "sha256": "87adc54e6bf84d5e69c3542f7d3f23ed98cb8899a261f3a4b79f431bef060730"
+    },
+    {
+      "path": "apps/web/src/components/vantage-context/PersonalContextPanel.tsx",
+      "sha256": "6db9e8402464ffb66c7c7075fbca5f17679ed4dd45410ea3920199f4583d1b2e"
+    },
+    {
+      "path": "apps/web/__tests__/components/vantage-topic-polish.test.tsx",
+      "sha256": "ad955bc64946003e0f9fbc070383a84de3d22b735da944bed802a8c30a189277"
+    },
+    {
+      "path": "apps/web/__tests__/vantage/ui-copy-encoding.test.ts",
+      "sha256": "27617b4eec288d5482d405d7530cb35c648fbbfbf7321c55487a17b7b82bf45f"
+    }
+  ],
+  "lineEndingNormalization": "LF for text source hashes"
+}

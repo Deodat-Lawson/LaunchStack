@@ -224,4 +224,49 @@ describeDb("distribution pipeline end to end (fixture ports, real database)", ()
         // Without an embedder the run says it matched by words.
         expect(summary.warnings.join(" ")).toMatch(/matched by shared words/);
     }, 120_000);
+
+    it("zeroes a company the fit check rules out once it has read the research", async () => {
+        const world = buildFixtureWorld("specialty coffee");
+        const program = await createProgram({
+            companyId,
+            userId: "user-1",
+            input: {
+                name: "Researched coffee",
+                offering: "Single-origin roasted specialty coffee",
+                categories: ["specialty coffee"],
+                hsCodes: ["0901"],
+                targetTerritories: [{ country: "DE" }],
+                partnerKinds: ["importer", "distributor", "retailer"],
+                constraints: null,
+                knownPartnerDomains: [],
+                customerDomains: [],
+            },
+        });
+        const ports = createFixturePorts({ category: "specialty coffee", world });
+        // The shortlist's check passes everyone; research sees one company at a time.
+        ports.judgeFit = async ({ candidates }) =>
+            new Map(
+                candidates.map(c => [
+                    c.id,
+                    candidates.length === 1 && /nordwind/i.test(c.name)
+                        ? { fit: false, reason: "It closed in June 2025." }
+                        : { fit: true, reason: "Sells coffee." },
+                ])
+            );
+        const run = await createRun({
+            companyId,
+            programId: program.id,
+            userId: "user-1",
+            options: { maxCandidates: 10, mode: "fixture" },
+        });
+        await runDistributionPipeline({ runId: run.id, companyId, programId: program.id }, ports);
+
+        const partners = await listPartners(companyId, { programId: program.id });
+        const nordwind = partners.find(p => p.org.domain === "nordwind-import.example")!;
+        expect(nordwind.relationship.fitScore).toBe(0);
+        expect(nordwind.relationship.riskFlags).toContain("excluded: It closed in June 2025.");
+        expect(nordwind.relationship.fitRationale).toContain("It closed in June 2025.");
+        const others = partners.filter(p => p.org.domain !== "nordwind-import.example");
+        expect(others.some(p => (p.relationship.fitScore ?? 0) > 0)).toBe(true);
+    }, 120_000);
 });

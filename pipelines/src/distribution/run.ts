@@ -688,8 +688,46 @@ export async function enrichCandidate(
         if (measured.method === "semantic")
             relevance = relevanceShare(measured.scores[0] ?? 0, "semantic");
     }
+    // The shortlist was judged on a listing; now judge what research found. A
+    // company that has closed, or turns out not to buy this, must not rank on
+    // its website's evidence.
+    let rejectedBecause: string | null = null;
+    if (ports.judgeFit) {
+        try {
+            const verdicts = await ports.judgeFit({
+                brief: buyerBrief(program, [relationship.kind], args.profile),
+                where: relationship.territory
+                    ? placeLabel(relationship.territory)
+                    : program.targetTerritories.map(placeLabel).join("; "),
+                seller: args.profile,
+                candidates: [
+                    {
+                        id: org.id,
+                        name: org.name,
+                        text: companyText({
+                            name: org.name,
+                            description: org.description,
+                            extra: [
+                                dossier?.summary ?? "",
+                                ...(dossier?.risks.map(r => r.risk) ?? []),
+                                ...evidence.slice(0, 20).map(e => e.claim),
+                            ],
+                        }),
+                    },
+                ],
+            });
+            const verdict = verdicts.get(org.id);
+            if (verdict && !verdict.fit) {
+                rejectedBecause = verdict.reason;
+                console.info(`${LOG_PREFIX} research ruled out ${org.name}: ${verdict.reason}`);
+            }
+        } catch (error) {
+            console.warn(`${LOG_PREFIX} fit check after research failed for ${org.name}:`, error);
+        }
+    }
     const breakdown = computeFit({
         relevance,
+        rejectedBecause,
         program,
         org,
         kind: relationship.kind,

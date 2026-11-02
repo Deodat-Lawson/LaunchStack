@@ -30,6 +30,8 @@ export interface ScoreInput {
      * (./semantic's relevanceShare). Absent: word overlap decides.
      */
     relevance?: number | null;
+    /** The fit check's no after reading the research; the score is zero, with this reason. */
+    rejectedBecause?: string | null;
     /** The seller's own name and known competitor names (lowercased). */
     sellerName: string;
     competitorNames?: string[];
@@ -175,6 +177,7 @@ export function computeFit(input: ScoreInput): FitBreakdown {
         total: 0,
         excludedBecause: why,
     });
+    if (input.rejectedBecause) return zero(input.rejectedBecause);
     if (input.sellerName && orgName === input.sellerName.toLowerCase())
         return zero("This is the seller itself.");
     for (const competitor of input.competitorNames ?? []) {

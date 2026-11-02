@@ -236,6 +236,30 @@ describe("computeFit", () => {
     });
 });
 
+describe("the fit check's no after research", () => {
+    it("zeroes the score and keeps the reason, however well the rest fits", () => {
+        const fit = computeFit({
+            program,
+            org: org(),
+            kind: "importer",
+            territory: { country: "DE" },
+            dossier,
+            evidenceCount: 12,
+            newestEvidenceAt: new Date("2026-09-01T00:00:00Z"),
+            knownEntity: false,
+            sellerName: "Kōhī Roasters",
+            relevance: 1,
+            rejectedBecause: "It closed in June 2025.",
+            now,
+        });
+        expect(fit.total).toBe(0);
+        expect(fit.excludedBecause).toBe("It closed in June 2025.");
+        expect(
+            deriveRiskFlags({ dossier, breakdown: fit, evidenceCount: 12, budgetExhausted: false })
+        ).toContain("excluded: It closed in June 2025.");
+    });
+});
+
 describe("territory points when a city was asked for", () => {
     const score = (over: Partial<PartnerOrgRecord>) =>
         computeFit({

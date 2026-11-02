@@ -24,10 +24,12 @@ const SYSTEM = `You qualify sales prospects. You are given who a seller wants to
 For each company decide: would this kind of business plausibly buy, stock or resell what the seller offers? Go by what the seller's profile and documents say about its products and customers.
 Judge the type of business, not its size or whether it is famous. Software, agencies and other businesses that would not buy the product are not a fit. Articles, lists, directories and publishers are not companies that would buy it, so they are not a fit either.
 Also judge where it is. A company whose text places it somewhere other than where the seller wants, and not right next to it, is not a fit. Naming other countries as sources or markets does not place it there ("beans from Ethiopia"). When the text does not say where a company is, judge only the type of business.
+A business that has closed or stopped trading, or whose website is for sale or parked, is not a fit, however well it once matched.
 Answer for every id. Keep each reason to one short sentence.`;
 
 const BATCH = 20;
 const SELLER_KNOWLEDGE = 1_500;
+const CANDIDATE_TEXT = 2_000;
 
 export function buildJudgePrompt(
     brief: string,
@@ -42,7 +44,7 @@ export function buildJudgePrompt(
         ...(knowledge ? [`What the seller's own documents say:\n${knowledge}`] : []),
         "",
         "Companies:",
-        ...candidates.map(c => `- id ${c.id}: ${c.text.slice(0, 600)}`),
+        ...candidates.map(c => `- id ${c.id}: ${c.text.slice(0, CANDIDATE_TEXT)}`),
     ].join("\n");
 }
 

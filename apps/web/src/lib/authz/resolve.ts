@@ -27,14 +27,18 @@ export interface ResolvedRole {
     custom: boolean;
 }
 
-export async function resolveRole(companyId: bigint, roleSlug: string): Promise<ResolvedRole> {
+export async function resolveRole(
+    companyId: bigint,
+    roleSlug: string,
+    database: Pick<typeof db, "select"> = db
+): Promise<ResolvedRole> {
     const slug = normalizeRoleSlug(roleSlug);
     const builtin = builtinRolePermissions(slug);
     if (builtin) {
         return { slug, name: null, permissions: builtin, custom: false };
     }
 
-    const [row] = await db
+    const [row] = await database
         .select({ name: workspaceRoles.name, permissions: workspaceRoles.permissions })
         .from(workspaceRoles)
         .where(and(eq(workspaceRoles.companyId, companyId), eq(workspaceRoles.slug, slug)))
@@ -54,7 +58,8 @@ export async function resolveRole(companyId: bigint, roleSlug: string): Promise<
 
 export async function resolvePermissionsForRole(
     companyId: bigint,
-    roleSlug: string
+    roleSlug: string,
+    database: Pick<typeof db, "select"> = db
 ): Promise<ReadonlySet<Permission>> {
-    return (await resolveRole(companyId, roleSlug)).permissions;
+    return (await resolveRole(companyId, roleSlug, database)).permissions;
 }

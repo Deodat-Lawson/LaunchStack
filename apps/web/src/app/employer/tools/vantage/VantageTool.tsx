@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarCheck, ChartLine, Handshake, Inbox } from "lucide-react";
+import { CalendarCheck, ChartLine, Handshake, Inbox, UserRound } from "lucide-react";
 import { useMemo } from "react";
 
 import { VantageMark } from "~/components/icons/vantage";
@@ -14,6 +14,7 @@ import { AgendaScreen } from "./_screens/AgendaScreen";
 import { CommitmentsScreen } from "./_screens/CommitmentsScreen";
 import { EvidenceScreen } from "./_screens/EvidenceScreen";
 import { MetricsScreen } from "./_screens/MetricsScreen";
+import { PersonalContextScreen } from "~/components/vantage-context/PersonalContextScreen";
 
 /**
  * Vantage, the evidence-backed weekly meeting loop, as a tab of the
@@ -44,6 +45,7 @@ function screenGroups(): ToolNavGroup[] {
                 { to: vantagePath("/commitments"), label: "Weekly Actions", icon: Handshake },
                 { to: vantagePath("/evidence"), label: "Evidence", icon: Inbox },
                 { to: vantagePath("/metrics"), label: "Metrics", icon: ChartLine },
+                { to: vantagePath("/context"), label: "My context", icon: UserRound },
             ],
         },
     ];
@@ -75,6 +77,8 @@ function Screen({ screen }: { screen: VantageScreen }) {
             return <EvidenceScreen />;
         case "metrics":
             return <MetricsScreen />;
+        case "context":
+            return <PersonalContextScreen />;
         case "triage":
         case "triage-pending":
         case "triage-denied":

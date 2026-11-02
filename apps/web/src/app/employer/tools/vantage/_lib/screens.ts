@@ -14,6 +14,7 @@ export type VantageScreen =
     | { kind: "commitments" }
     | { kind: "evidence" }
     | { kind: "metrics" }
+    | { kind: "context" }
     | { kind: "triage" }
     /** Triage, before the permissions answer has arrived: show nothing yet rather than a refusal. */
     | { kind: "triage-pending" }
@@ -22,7 +23,14 @@ export type VantageScreen =
     | { kind: "not-found" };
 
 /** First path segments that are Vantage screens; the tab's `roots`. */
-export const VANTAGE_ROOTS = ["agenda", "commitments", "evidence", "metrics", "program"] as const;
+export const VANTAGE_ROOTS = [
+    "agenda",
+    "commitments",
+    "evidence",
+    "metrics",
+    "context",
+    "program",
+] as const;
 
 /** Whether the person may open Triage: still loading, yes, or no. */
 export type ProgramAccess = "pending" | "allowed" | "denied";
@@ -45,6 +53,8 @@ export function vantageScreenFor(href: string, program: ProgramAccess = "allowed
             return { kind: "evidence" };
         case "/metrics":
             return { kind: "metrics" };
+        case "/context":
+            return { kind: "context" };
         case "/program":
             return program === "allowed"
                 ? { kind: "triage" }

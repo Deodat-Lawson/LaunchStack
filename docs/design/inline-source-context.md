@@ -290,11 +290,15 @@ What changes is that both ends now **render** it instead of passing it through.
   composer computes it from the thread (`refs` of earlier user messages,
   which the session already stores and `contextSourceIds` summarises) plus
   this message's chips, and sends it as `selectedDocumentIds`, exactly as
-  today. Seeing and editing it moves to what exists: the "asking over N
-  sources" line on each turn (made a button that opens the picker) and the
-  `/sources` picker, whose checked set is the scope. Mentioning a new source
-  adds to the scope; unchecking in the picker removes. Nothing persists in
-  the composer between sends except the draft.
+  today. When the chat carries sources from earlier turns and the words hold
+  no chip for them, the composer shows one line above the text — "Asking
+  over N sources · Change" — where Change opens the `/sources` picker, whose
+  checked set is the scope. It is thread state, not a per-message attachment
+  row: a carried source gets a chip only when it is mentioned again, and
+  deleting a chip never removes a carried source from the scope (the picker
+  does). Mentioning a new source adds to the scope; unchecking in the picker
+  removes. Nothing else persists in the composer between sends except the
+  draft.
 - **Sending chips alone** is allowed (it is today, with the placeholder):
   `text` is the chips' link text, `origin: "attachment"`, and the server
   renders no words line.
@@ -482,7 +486,7 @@ source so it can be cited and kept.
 
 | Question                                                                                                                                                     | Who decides | By when      |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------- | ------------ |
-| Q1 Should a one-line "Sources in this chat: 2 · change" sit above the composer when the scope was carried over from earlier turns, or is the per-turn count plus the picker enough? | Timothy     | before PR 2  |
-| Q2 Rich editor by default for everyone, with plain as the opt-out — or plain by default until the rich editor has had a month in production?                 | Timothy     | before PR 2  |
+| Q1 Should a one-line "Sources in this chat: 2 · change" sit above the composer when the scope was carried over from earlier turns, or is the per-turn count plus the picker enough? — _PR 2 ships the line ("Asking over N sources · Change"); drop it in review if the count alone is enough._ | Timothy     | at review    |
+| Q2 Rich editor by default for everyone, with plain as the opt-out — or plain by default until the rich editor has had a month in production? — _PR 2 makes rich the default; a mode the person picked in the composer's options is kept, an old automatic default is not._ | Timothy     | at review    |
 | Q3 Should a paperclip upload become a workspace source (citable, kept) rather than a one-message attachment?                                                 | Timothy     | after PR 3   |
 | Q4 Mention form in the words: `"Title" (d12)` (matches tool results and citations) — confirmed, or prefer `@Title (d12)`?                                     | Timothy     | at review    |

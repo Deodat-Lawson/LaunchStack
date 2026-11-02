@@ -24,6 +24,8 @@ export interface AIChatRequest {
      * search over exactly those IDs. Required when searchScope === 'selected'.
      */
     selectedDocumentIds?: number[];
+    /** What each source chip in `question` points at (server/chat-mentions.ts). */
+    sourceMentions?: { ref: string; documentId: number }[];
     question: string;
     searchScope: "document" | "company" | "archive" | "selected" | "none";
     style?: string;
@@ -182,6 +184,9 @@ export function useAIChat() {
                         companyId: params.companyId,
                         archiveName: params.archiveName,
                         selectedDocumentIds: params.selectedDocumentIds,
+                        sourceMentions: params.sourceMentions?.length
+                            ? params.sourceMentions
+                            : undefined,
                         question: params.question,
                         searchScope: params.searchScope,
                         style: params.style,

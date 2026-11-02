@@ -1377,3 +1377,40 @@ test("does not reload the sources for an answer that created nothing", async () 
     expect(result.current.thread[1]?.createdSources).toBeUndefined();
     expect(onSourcesCreated).not.toHaveBeenCalled();
 });
+
+test("a chip in the words is sent as a source mention, and earlier chips reach the model by name", async () => {
+    const deck: WorkspaceSource = {
+        id: "d7",
+        documentId: 7,
+        title: "Q3 board deck",
+        type: "doc",
+        size: "12 B",
+        added: "Today",
+        folder: "Board",
+        tags: [],
+        domain: "General",
+    };
+    const { result } = harness([], [deck]);
+    await act(async () => {
+        await result.current.runtime.submit({
+            ...send("Summarise [Source: Deck](#launchstack-source-d7)"),
+            refs: ["d7"],
+        });
+    });
+    await act(async () => {
+        await result.current.runtime.submit({ ...send("And the ask?"), refs: ["d7"] });
+    });
+    const first = mockRequest.mock.calls[0][0];
+    expect(first).toMatchObject({
+        searchScope: "document",
+        documentId: 7,
+        sourceMentions: [{ ref: "d7", documentId: 7 }],
+    });
+    // The transcript keeps the chip's stored form…
+    expect(result.current.thread[0]?.text).toBe("Summarise [Source: Deck](#launchstack-source-d7)");
+    // …and the model reads the next turn's history by the source's title and id.
+    const second = mockRequest.mock.calls[1][0];
+    expect(second.sourceMentions).toBeUndefined();
+    expect(second.conversationHistory).toContain('User: Summarise "Q3 board deck" (d7)');
+    expect(second.conversationHistory).not.toContain("#launchstack-source");
+});

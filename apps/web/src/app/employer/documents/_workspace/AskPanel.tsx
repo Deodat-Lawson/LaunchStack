@@ -1131,6 +1131,8 @@ export interface AskPanelProps {
     sources: WorkspaceSource[];
     selected: string[];
     setSelected: Dispatch<SetStateAction<string[]>>;
+    /** The editor the composer starts in until the person picks one. Rich: chips live in the words. */
+    composerEditor?: "plain" | "rich";
     thread: ThreadMessage[];
     sendMessage: (
         send: ComposerSend
@@ -1246,6 +1248,7 @@ export function AskPanel({
     sources,
     selected,
     setSelected,
+    composerEditor = "rich",
     thread,
     sendMessage,
     isSending,
@@ -1295,6 +1298,12 @@ export function AskPanel({
         useChatTimeline(thread, draftKey, isSending);
     const [visibleCounts, setVisibleCounts] = useState<Record<string, number>>({});
     const visibleCount = visibleCounts[draftKey] ?? 100;
+    // The sources this chat is already over: what earlier turns were asked
+    // over. The composer keeps them in scope without chips for them.
+    const carriedRefs = useMemo(
+        () => [...new Set(thread.filter(m => m.role === "user").flatMap(m => m.refs ?? []))],
+        [thread]
+    );
     const setVisibleCount = useCallback(
         (value: number | ((previous: number) => number)) =>
             setVisibleCounts(previous => ({
@@ -1935,6 +1944,8 @@ export function AskPanel({
                             sources={sources}
                             selected={selected}
                             setSelected={setSelected}
+                            carriedRefs={carriedRefs}
+                            defaultEditorMode={composerEditor}
                             onSend={handleSend}
                             disabled={disabled || allowanceBlocked}
                             draftKey={suppliedDraftKey}

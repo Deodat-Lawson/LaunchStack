@@ -147,3 +147,43 @@ export function folderMentionText(label: string): string {
 export function threadMentionText(label: string): string {
     return `the conversation ${quoteName(label)}`;
 }
+
+/**
+ * The text with every chip removed outright — source, folder and conversation
+ * chips, and the links of the uploads given — so what is left is what the
+ * person typed. Empty when they sent chips alone.
+ */
+export function stripMentions(text: string, uploadUrls: readonly string[] = []): string {
+    const withoutChips = renderMentions(text, () => "");
+    if (uploadUrls.length === 0 || !withoutChips.includes("](")) return withoutChips;
+    const urls = new Set(uploadUrls);
+    return withoutChips.replace(UPLOAD_LINK, (whole, _label: string, url: string) =>
+        urls.has(url) ? "" : whole
+    );
+}
+
+/**
+ * A renderer for the client, which knows the workspace's sources: a source
+ * chip reads `"Title" (d12)` when its source has a document id, else its
+ * label alone; folders and conversations read as everywhere else.
+ */
+export function renderMentionsFor(
+    sources: readonly { id: string; title: string; documentId?: number }[]
+): (text: string) => string {
+    const byId = new Map(sources.map(source => [source.id, source]));
+    return text =>
+        renderMentions(text, mention => {
+            switch (mention.kind) {
+                case "source": {
+                    const source = byId.get(mention.ref);
+                    return source?.documentId
+                        ? sourceMentionText(source.title, `d${source.documentId}`)
+                        : quoteName(source?.title ?? mention.label);
+                }
+                case "folder":
+                    return folderMentionText(mention.label);
+                case "thread":
+                    return threadMentionText(mention.label);
+            }
+        });
+}

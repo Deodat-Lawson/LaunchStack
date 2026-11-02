@@ -225,6 +225,8 @@
     "pasteRefused": "剪贴板访问被拒绝。请使用键盘粘贴。",
     "dropHint": "拖放文件即可附加到这条消息",
     "contextLabel": "上下文",
+    "scopeLine": "将基于 {count, plural, other {# 个来源}}提问",
+    "changeScope": "更改",
     "unavailableSourceTitle": "此来源已被移除或无法再访问。发送前请恢复访问权限或移除此上下文。",
     "unavailableSourceChip": "不可用的来源 · {id}",
     "removeUnavailableSource": "移除不可用的来源 {id}",

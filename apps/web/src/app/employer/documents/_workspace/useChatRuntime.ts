@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { DEFAULT_PASSAGE_QUESTION, toPassagePayload } from "~/lib/chat-passages";
 import { chatStatusKeyword, chatStreamErrorKey } from "~/lib/chat-stream";
 import { conversationContext, priorQuestions } from "~/lib/chat-turns";
+import { mentionedSourceRefs, renderMentionsFor } from "~/lib/source-mentions";
 import { deriveSessionTitle, MAX_SESSION_APPEND } from "~/lib/workspace-history";
 import { useAIChat } from "../hooks/useAIChat";
 import type { AIChatResponse, AIChatStreamEvent } from "../hooks/useAIChat";
@@ -311,6 +312,9 @@ export function useChatRuntime(input: {
         const signal = context.controller.signal;
         const started = performance.now();
         const sourceList = currentInput.current.sources;
+        // Earlier turns reach the model with each chip as "Title" (d12), the
+        // name the route gives this turn's chips (lib/source-mentions.ts).
+        const renderTurn = renderMentionsFor(sourceList);
         const companyId = currentInput.current.companyId;
         const askedAgent = currentInput.current.agents.find(a => a.id === send.agentKey);
         const prior = [...context.messages];
@@ -450,7 +454,7 @@ export function useChatRuntime(input: {
                 if (!referenced) throw new Error(words.current.t("errors.referencedUnavailable"));
                 referencedTitles.push(referenced.title);
                 references.push(
-                    `Referenced conversation: ${referenced.title}\n${conversationContext(referenced.messages ?? []) ?? "(empty)"}`
+                    `Referenced conversation: ${referenced.title}\n${conversationContext(referenced.messages ?? [], undefined, undefined, renderTurn) ?? "(empty)"}`
                 );
             }
             if (threadRefs.length > 0) {
@@ -470,8 +474,16 @@ export function useChatRuntime(input: {
                 .map(id => sourceList.find(s => s.id === id)?.documentId)
                 .filter((id): id is number => typeof id === "number");
             const scope = ids.length > 1 ? "selected" : ids.length === 1 ? "document" : "none";
+            // The chips in the words, each mapped to the document it stands
+            // for, so the route names it by id (server/chat-mentions.ts).
+            const sourceMentions = mentionedSourceRefs(send.text).flatMap(ref => {
+                const documentId = sourceList.find(s => s.id === ref)?.documentId;
+                return typeof documentId === "number" ? [{ ref, documentId }] : [];
+            });
             const response = await requestRef.current(
                 {
+                    // Uploads alone still need a question on the wire; the
+                    // route drops these words when the origin is "attachment".
                     question:
                         send.text ||
                         (send.passages?.length
@@ -481,13 +493,16 @@ export function useChatRuntime(input: {
                     companyId: companyId ?? undefined,
                     documentId: scope === "document" ? ids[0] : undefined,
                     selectedDocumentIds: scope === "selected" ? ids : undefined,
+                    sourceMentions: sourceMentions.length ? sourceMentions : undefined,
                     // All workspace sends share automatic defaults, including old
                     // persisted drafts, queued prompts, edits and retries.
                     enableWebSearch: true,
                     thinkingMode: "auto",
                     conversationHistory: conversationContext(
                         prior,
-                        [context.continuation?.context, ...references].filter(Boolean).join("\n\n")
+                        [context.continuation?.context, ...references].filter(Boolean).join("\n\n"),
+                        undefined,
+                        renderTurn
                     ),
                     // The person's own earlier words, apart from the transcript: links
                     // in them are the only ones a page read may follow from history.

@@ -59,7 +59,8 @@
         "./vantage": "./src/vantage/index.ts",
         "./vantage/schema": "./src/vantage/schema.ts",
         "./vantage/generation-v1": "./src/vantage/generation-v1.ts",
-        "./vantage/context-v0": "./src/vantage/context-v0/index.ts"
+        "./vantage/context-v0": "./src/vantage/context-v0/index.ts",
+        "./vantage/validation": "./src/vantage/validation/index.ts"
     },
     "files": [
         "dist",
@@ -263,6 +264,10 @@
             "./vantage/context-v0": {
                 "types": "./dist/vantage/context-v0/index.d.ts",
                 "default": "./dist/vantage/context-v0/index.js"
+            },
+            "./vantage/validation": {
+                "types": "./dist/vantage/validation/index.d.ts",
+                "default": "./dist/vantage/validation/index.js"
             }
         }
     },
@@ -272,7 +277,12 @@
         "typecheck": "tsc -p tsconfig.json --noEmit",
         "test": "vitest run",
         "test:ai": "vitest run src/vantage/generation-v1.test.ts",
-        "harness:ai": "node --import tsx scripts/vantage-ai-harness.mjs"
+        "harness:ai": "node --import tsx scripts/vantage-ai-harness.mjs",
+        "test:retrieval": "vitest run src/vantage/dynamic-retrieval src/vantage/context-v0 src/vantage/proposals/context-v0.test.ts",
+        "demo:retrieval": "node --import tsx scripts/vantage-retrieval-demo.mjs",
+        "test:validation": "vitest run src/vantage/validation",
+        "evaluate:vantage": "node --import tsx scripts/vantage-validation.mjs",
+        "demo:validation": "node --import tsx scripts/vantage-validation.mjs --demo"
     },
     "dependencies": {
         "@langchain/core": "^0.3.74",

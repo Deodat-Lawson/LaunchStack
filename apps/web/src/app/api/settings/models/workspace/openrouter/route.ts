@@ -7,6 +7,7 @@ import { NextResponse } from "next/server";
 
 import { env } from "~/env";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
+import { workspaceHref } from "~/lib/settings/surfaces";
 import { publicOrigin } from "~/server/public-origin";
 import {
     OPENROUTER_CALLBACK_PATH,
@@ -24,14 +25,18 @@ export async function GET(request: Request) {
     const ctx = await requireWorkspacePermission("settings.manage");
     if (!ctx.success) return ctx.response;
 
+    // Where the admin's browser comes back to: the public origin, never
+    // APP_PUBLIC_URL (the address the app's own services use, which may be
+    // internal) nor `request.url` (the bind address behind the proxy).
+    const origin = publicOrigin(request);
+
     // Without a key to seal it with, the server could not keep what OpenRouter
     // hands back; say so before sending the admin away to approve one.
-    const origin = publicOrigin(request);
     if (!env.server.EMBEDDING_SECRETS_KEY) {
-        const back = new URL("/employer/documents", origin);
-        back.searchParams.set("feature", "settings");
-        back.searchParams.set("openrouter", "unavailable");
-        back.hash = "byok";
+        const back = new URL(
+            workspaceHref("byok", { query: { openrouter: "unavailable" } }),
+            origin
+        );
         return NextResponse.redirect(back);
     }
 

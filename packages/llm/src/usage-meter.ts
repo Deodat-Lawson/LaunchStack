@@ -13,6 +13,9 @@
  * Counting never changes a response and never fails a request. A body that
  * does not parse, a provider that reports nothing, or a stream cut short is
  * simply not counted.
+ *
+ * Work that never passes the chat transport — an embedding request, a paid
+ * web search — reports itself with {@link reportUsage}, to the same recorder.
  */
 
 import { getChatModelsScope } from "./chat-scope";
@@ -20,11 +23,27 @@ import type { ChatModelPricing } from "./types";
 
 type Fetch = typeof globalThis.fetch;
 
-/** One model call, as the provider reported it. */
+/**
+ * What a usage event counts: a chat completion, an embedding request, a paid
+ * web search, or pages a search provider read (Exa's contents endpoint).
+ */
+export type AiUsageKind = "chat" | "embedding" | "web_search" | "web_contents";
+
+/** One model call (or paid search), as the provider reported it. */
 export interface ChatUsageEvent {
+    /** `chat` when absent. */
+    kind?: AiUsageKind;
+    /**
+     * The billable units this event stands for: searches made, pages read.
+     * 1 when absent, which is right for a model call.
+     */
+    calls?: number;
     /** The chat route that served the call; `auxiliary` for ingestion's own models. */
     route?: string;
-    /** The id the call was configured with. For operators; never shown on screen. */
+    /**
+     * The id the call was configured with — for a web search, the provider
+     * (`exa`, `serper`). For operators and pricing; never shown on screen.
+     */
     modelId?: string;
     /** Whose endpoint answered: the deployment's, or one a workspace brought. */
     owner: "deployment" | "workspace";
@@ -37,11 +56,31 @@ export interface ChatUsageEvent {
     cachedInputTokens?: number;
     /** US dollars, when the model declares pricing. */
     costUsd?: number;
+    /**
+     * The price the model declared (the model file, or a workspace's own
+     * settings), so the host can weigh this call against its other models.
+     */
+    pricing?: ChatModelPricing;
 }
 
 /** Where a unit of work's usage goes. Must not throw; it runs on the response path. */
 export interface ChatUsageRecorder {
     record(event: ChatUsageEvent): void;
+}
+
+/**
+ * Count usage that never passes the chat transport (an embedding request, a
+ * paid web search) against the current unit of work. Outside a scope nobody
+ * is listening and it does nothing; it never throws.
+ */
+export function reportUsage(event: ChatUsageEvent): void {
+    const recorder = getChatModelsScope()?.usage;
+    if (!recorder) return;
+    try {
+        recorder.record(event);
+    } catch (error) {
+        console.warn("[llm] usage recorder failed:", error);
+    }
 }
 
 /** What the transport knows about a call before it is made. */
@@ -249,7 +288,9 @@ export function prepareUsageMeter(
                     ...(modelId ? { modelId } : {}),
                     owner: meter?.owner ?? "deployment",
                     ...usage,
-                    ...(meter?.pricing ? { costUsd: priceUsage(usage, meter.pricing) } : {}),
+                    ...(meter?.pricing
+                        ? { costUsd: priceUsage(usage, meter.pricing), pricing: meter.pricing }
+                        : {}),
                 });
             } catch (error) {
                 console.warn("[llm] usage recorder failed:", error);

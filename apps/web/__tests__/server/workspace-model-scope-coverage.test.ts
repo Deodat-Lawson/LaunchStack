@@ -325,7 +325,7 @@ const COVERAGE: Record<string, Coverage> = Object.fromEntries<Coverage>([
     // --- Deliberately unscoped ----------------------------------------------
     [
         "apps/web/src/server/settings/models.ts",
-        { unscoped: "Settings › Models shows the deployment's default models" },
+        { unscoped: "Workspace › Models shows the deployment's default models" },
     ],
     [
         "apps/web/src/server/workspace-models/probe.ts",
@@ -441,8 +441,6 @@ const NO_MODEL_CALL: Record<string, string> = {
         "sample and keyless runs use fixture or keyless ports (no model); live runs queue distribution/run.requested, whose steps scope",
     [`${API}/company/onboarding/route.ts`]:
         "saves profile facts; the reassembly it asks for enters the scope itself in company-profile/service's after()",
-    [`${API}/document-generator/research/route.ts`]:
-        "takes getEmbeddings from the Q&A services barrel; Exa, arXiv and retrieval only, no chat model",
     [`${API}/email-campaigns/[campaignId]/route.ts`]: "getCampaign reads rows",
     [`${API}/email-campaigns/[campaignId]/approve/route.ts`]:
         "approveEmailCampaign records a human approval of an existing version; nothing is generated",

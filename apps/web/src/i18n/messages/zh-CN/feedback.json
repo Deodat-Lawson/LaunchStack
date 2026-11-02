@@ -1,0 +1,233 @@
+{
+  "entry": {
+    "reportBug": "报告问题",
+    "requestFeature": "建议功能",
+    "myReports": "我的反馈"
+  },
+  "launcher": {
+    "label": "反馈：报告问题或建议功能",
+    "button": "反馈",
+    "hide": "隐藏此按钮",
+    "hiddenToast": "已隐藏反馈按钮",
+    "hiddenToastBody": "仍可从账户菜单、{palette} 或 {report} 发送反馈。在“反馈”标签页中可以重新显示按钮。",
+    "undo": "撤销"
+  },
+  "status": {
+    "new": "新提交",
+    "planned": "已计划",
+    "in_progress": "进行中",
+    "done": "已完成",
+    "wont_do": "不予处理"
+  },
+  "severity": {
+    "blocking": "阻碍使用",
+    "annoying": "影响体验",
+    "cosmetic": "外观问题"
+  },
+  "kind": {
+    "bug": "问题",
+    "idea": "功能建议",
+    "bugPlural": "问题",
+    "ideaPlural": "功能建议"
+  },
+  "vote": {
+    "add": "为此投票（目前 {count} 票）",
+    "remove": "取消你的投票（{count} 票）",
+    "failed": "投票未成功，请重试。"
+  },
+  "editor": {
+    "tool": "标注工具",
+    "highlight": "框选",
+    "redact": "遮挡",
+    "undo": "撤销",
+    "clear": "清除",
+    "highlightHint": "拖动以框出问题所在。",
+    "redactHint": "拖动以遮挡隐私内容。",
+    "imageAlt": "正在标注的截图",
+    "cancel": "取消",
+    "done": "完成"
+  },
+  "dialog": {
+    "title": "发送反馈",
+    "description": "LaunchStack 正在测试中。告诉团队哪里出了问题、你还需要什么——每条反馈都会被阅读，回复会显示在“反馈 › 我的反馈”中。",
+    "kindLabel": "反馈类型",
+    "kinds": {
+      "bug": "报告问题",
+      "idea": "建议功能"
+    },
+    "bugTitle": "出了什么问题？",
+    "ideaTitle": "你希望有什么功能？",
+    "bugTitlePlaceholder": "例如：上传大型 PDF 时停在 90%",
+    "ideaTitlePlaceholder": "例如：将对话导出为 Word 文档",
+    "charsLeft": "还可输入 {count} 个字符",
+    "bugBody": "详情",
+    "ideaBody": "它能帮你解决什么？",
+    "optional": "（选填）",
+    "bugBodyPlaceholder": "你做了什么、预期是什么、实际发生了什么？",
+    "ideaBodyPlaceholder": "你想完成什么？现在有什么阻碍？",
+    "severity": "对你的影响有多大？",
+    "sendHint": "按 {send} 发送",
+    "cancel": "取消",
+    "sendBug": "发送报告",
+    "sendIdea": "发送建议",
+    "errors": {
+      "rateLimited": "你在短时间内发送了多条反馈，请几分钟后再试。",
+      "generic": "反馈未发送成功。请检查网络后重试。"
+    },
+    "editor": {
+      "title": "标注截图",
+      "description": "框出问题所在，或遮挡不应离开你屏幕的内容。团队看到的就是这张图。"
+    },
+    "images": {
+      "label": "截图",
+      "optional": "（选填，最多 3 张）",
+      "capture": "截取此页面",
+      "capturing": "正在截取…",
+      "attach": "添加图片",
+      "thumbAlt": "截图 {n}",
+      "markup": "标注",
+      "remove": "移除截图 {n}",
+      "pasteHint": "也可以直接粘贴图片（{paste}）。",
+      "wrongType": "只能添加 PNG、JPEG、WebP 或 GIF 图片。",
+      "tooBig": "每张图片不超过 {mb} MB。",
+      "tooMany": "每条反馈最多 {max} 张截图。",
+      "captureFailed": "无法截取此页面。请自行截图后粘贴或添加。"
+    },
+    "context": {
+      "include": "附带技术信息",
+      "errorsCount": "{count} 条最近的错误",
+      "show": "查看发送内容",
+      "hide": "收起",
+      "page": "页面",
+      "browser": "浏览器",
+      "window": "窗口",
+      "screen": "屏幕",
+      "theme": "主题",
+      "themes": {
+        "light": "浅色",
+        "dark": "深色"
+      },
+      "language": "语言",
+      "timeZone": "时区",
+      "recentErrors": "此页面最近的错误",
+      "origin": {
+        "errorId": "错误 ID",
+        "message": "错误",
+        "jobId": "任务 ID",
+        "document": "来源",
+        "problem": "问题"
+      },
+      "alsoSent": "你的姓名和邮箱会随反馈一起发送，以便团队回复；同时附上应用版本和你当前的工作区。关闭技术信息后，只发送所在页面。"
+    },
+    "similar": {
+      "title": "已有类似建议——要不要投一票？",
+      "vote": "为此建议投票",
+      "unvote": "取消你的投票",
+      "hint": "为已有建议投票，比再提一条相同的建议更有分量。"
+    },
+    "sent": {
+      "titleBug": "谢谢——问题 #{id} 已提交",
+      "titleIdea": "谢谢——建议 #{id} 已加入看板",
+      "body": "团队会看到它。他们回复或更改状态时，你会在铃铛中收到通知，并可在“反馈 › 我的反馈”中继续跟进。",
+      "another": "再发一条",
+      "view": "查看反馈",
+      "done": "完成"
+    }
+  },
+  "list": {
+    "loadFailed": "无法加载反馈。",
+    "reportBug": "报告问题",
+    "requestFeature": "建议功能",
+    "filterPlaceholder": "搜索反馈",
+    "kindLabel": "类型",
+    "allKinds": "问题和建议",
+    "statusLabel": "状态",
+    "allStatuses": "全部状态",
+    "sortLabel": "排序",
+    "sortVotes": "票数最多",
+    "sortRecent": "最新",
+    "emptyFiltered": "没有符合这些筛选条件的反馈。",
+    "awaitingReply": "等待团队回复",
+    "votes": "{count} 票",
+    "replies": "{count} 条回复",
+    "attachments": "{count} 张截图",
+    "mine": {
+      "title": "我的反馈",
+      "sub": "你报告的问题和提出的功能建议，以及团队的回复。",
+      "emptyTitle": "还没有反馈",
+      "emptyBody": "遇到问题，或缺少什么功能？点击角落里的“反馈”按钮，或在任意页面按 {report}。"
+    },
+    "ideas": {
+      "title": "功能建议",
+      "sub": "测试者提出的需求。为你想要的投票——最受欢迎的会排在最前面。",
+      "emptyTitle": "还没有功能建议",
+      "emptyBody": "第一个提出来吧：告诉团队什么能让它对你更有用。"
+    },
+    "triage": {
+      "title": "分诊",
+      "sub": "此实例上的全部反馈。设置状态并回复——提交者都能看到。圆点表示最后一条消息来自提交者。",
+      "emptyTitle": "还没有反馈",
+      "emptyBody": "有人提交问题报告或功能建议时，会出现在这里。"
+    }
+  },
+  "report": {
+    "loadFailed": "无法加载此反馈。",
+    "goneTitle": "找不到此反馈",
+    "goneBody": "它可能已被删除，或你无权查看。",
+    "yours": "你的",
+    "noBody": "未填写详情。",
+    "openImage": "查看原图",
+    "imageAlt": "截图 {n}",
+    "threadTitle": "对话",
+    "threadEmpty": "还没有回复。团队会在这里回复，你也会在铃铛中收到通知。",
+    "threadEmptyTriage": "还没有回复。在这里回复后，提交者会在铃铛中收到通知。",
+    "you": "你",
+    "team": "团队",
+    "requester": "提交者",
+    "replyLabel": "回复",
+    "replyPlaceholder": "补充更多细节，或回答团队的问题…",
+    "replyPlaceholderTeam": "回复提交者…",
+    "replyHint": "团队会立即看到。",
+    "replyHintTeam": "提交者会在铃铛中收到通知。",
+    "replyFailed": "回复未发送成功，请重试。",
+    "send": "发送",
+    "status": "状态",
+    "severity": "严重程度",
+    "noSeverity": "未设置",
+    "statusHint": "更改状态也会通知提交者。",
+    "updated": "已保存",
+    "updateFailed": "无法保存更改。",
+    "copyIssue": "复制为 GitHub 议题",
+    "issueCopied": "已复制为 GitHub 议题——不含提交者姓名和截图",
+    "filed": "提交时间",
+    "reporter": "提交者",
+    "workspace": "工作区",
+    "votesLabel": "票数",
+    "version": "应用版本",
+    "privateNote": "提出者是谁、当时在哪个页面，只有他们和团队知道。",
+    "rateLimited": "你在短时间内发送了多条回复，请几分钟后再试。"
+  },
+  "tool": {
+    "title": "反馈",
+    "about": "产品测试期间报告问题、建议功能，为他人的建议投票，并跟进团队的回复。",
+    "nav": {
+      "mine": "我的反馈",
+      "ideas": "功能建议",
+      "triage": "分诊"
+    },
+    "showButton": "显示反馈按钮",
+    "offTitle": "此实例未开启反馈",
+    "offBody": "此实例尚未指定阅读反馈的人，因此反馈无处可去。运维人员设置 FEEDBACK_ADMIN_EMAILS 后即可开启。",
+    "triageDeniedTitle": "分诊仅供团队使用",
+    "triageDeniedBody": "只有运行此实例的人能看到所有反馈。你的反馈在“我的反馈”中。"
+  },
+  "inbox": {
+    "reply": "{actor} 回复了你的反馈“{name}”",
+    "status": "{actor} 将你的反馈“{name}”标记为{status}",
+    "team": "团队"
+  },
+  "contact": {
+    "title": "发现问题，或缺少什么功能？",
+    "body": "在应用内报告——自动附上页面和截图——并在“反馈”中查看团队的回复。"
+  }
+}

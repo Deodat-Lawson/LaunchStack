@@ -1,7 +1,7 @@
 /**
- * A model test result reaches Settings › Bring your own keys: a classified endpoint
- * failure is worded for the admin's language, without the "fix it in
- * Settings" hint they are already looking at.
+ * A model test result reaches Workspace › Bring your own keys: a classified
+ * endpoint failure is worded for the admin's language, without the "fix it in
+ * Workspace › Bring your own keys" hint they are already looking at.
  */
 
 const mockInvoke = jest.fn();
@@ -9,7 +9,7 @@ jest.mock("@launchstack/llm", () => ({
     ChatConfigurationError: class extends Error {},
     describeChatEndpointError: () => ({
         message:
-            "Your workspace's AI provider rejected its API key. A workspace admin can fix it in Settings › Bring your own keys.",
+            "Your workspace's AI provider rejected its API key. A workspace admin can fix it in Workspace › Bring your own keys.",
     }),
     modelContentToText: (content: unknown) => String(content),
     resolveChatModel: () => ({

@@ -106,9 +106,12 @@ export async function attemptMarketingRun(
             .catch((error: unknown) => console.warn("[marketing-run] event write failed:", error));
     };
     const checkpoints = { ...run.checkpoints };
+    // Counted against whoever started the run, never stopped midway; the route
+    // refuses a person at their allowance before queueing it.
+    const aiUse = { feature: "marketing", userId: run.userId, enforce: false } as const;
 
     try {
-        const result = await withWorkspaceChatModels(companyId, "marketing", () =>
+        const result = await withWorkspaceChatModels(companyId, aiUse, () =>
             deps.runPipeline({
                 companyId: Number(companyId),
                 input: run.input,

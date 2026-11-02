@@ -8,8 +8,17 @@
  * (`@launchstack/llm`, usage-meter.ts), whichever feature made it. The two
  * answer different questions and neither writes the other.
  *
- * One row per workspace, day (UTC), feature, route, model and owner; each
- * call adds to it. `model_id` is kept for operators and never shown on screen.
+ * One row per workspace, day (UTC), feature, route, model, owner, person and
+ * kind; each call adds to it. `kind` is what was used: `chat` completions,
+ * `embedding` requests, paid `web_search`es, or `web_contents` (pages a search
+ * provider read). For a search `calls` counts searches (or pages) and the
+ * token columns stay zero; for an embedding `input_tokens` is what was
+ * embedded. `weighted_tokens` is the row in chat-token equivalents
+ * (~/server/ai-usage/weights), fixed when recorded: chat one for one, the
+ * rest by price. It is what allowances and the usage page add up.
+ * `user_id` is the auth id of the person the work was
+ * for, empty when no one was (a system job) or the call predates per-person
+ * counting; per-person allowances (~/server/ai-usage/quota) sum it. `model_id` is kept for operators and never shown on screen.
  * `cost_usd` sums only the calls whose model declared a price; `priced_calls`
  * says how many those were, so a partly priced row is not read as complete.
  * `owner` separates calls to the deployment's endpoint from calls to one the
@@ -22,6 +31,7 @@ import {
     bigint,
     bigserial,
     date,
+    index,
     integer,
     numeric,
     timestamp,
@@ -58,6 +68,15 @@ export const aiUsageDaily = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
         updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
+        /**
+         * The person the work was for (auth user id); empty when no one was.
+         * Declared last: ADD COLUMN appends, and CI compares column order.
+         */
+        userId: varchar("user_id", { length: 256 }).default("").notNull(),
+        /** chat | embedding | web_search | web_contents. Declared last, like `user_id`. */
+        kind: varchar("kind", { length: 20 }).default("chat").notNull(),
+        /** The row in chat-token equivalents, weighed when each call was recorded. */
+        weightedTokens: bigint("weighted_tokens", { mode: "number" }).default(0).notNull(),
     },
     table => ({
         rowKey: uniqueIndex("ai_usage_daily_row_key").on(
@@ -66,9 +85,46 @@ export const aiUsageDaily = pgTable(
             table.feature,
             table.route,
             table.modelId,
-            table.owner
+            table.owner,
+            table.userId,
+            table.kind
         ),
+        // The server-wide allowance sums one person's calls across every
+        // workspace they belong to.
+        userDate: index("ai_usage_daily_user_date_idx").on(table.userId, table.date),
     })
 );
 
 export type AiUsageDaily = InferSelectModel<typeof aiUsageDaily>;
+
+/**
+ * A workspace admin's monthly AI allowance for one person, overriding the
+ * workspace default (`usage.memberMonthlyTokenLimit`). No row means the
+ * default applies; a row with `monthly_tokens` null means no limit.
+ */
+export const memberAiLimits = pgTable(
+    "member_ai_limits",
+    {
+        id: bigserial("id", { mode: "number" }).primaryKey(),
+        companyId: bigint("company_id", { mode: "bigint" })
+            .notNull()
+            .references(() => company.id, { onDelete: "cascade" }),
+        /** Auth user id, as `ai_usage_daily.user_id` stores it. */
+        userId: varchar("user_id", { length: 256 }).notNull(),
+        /** Tokens (input + output) a month; null means no limit. */
+        monthlyTokens: bigint("monthly_tokens", { mode: "number" }),
+        updatedBy: varchar("updated_by", { length: 256 }),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
+    },
+    table => ({
+        companyUser: uniqueIndex("member_ai_limits_company_user_idx").on(
+            table.companyId,
+            table.userId
+        ),
+    })
+);
+
+export type MemberAiLimit = InferSelectModel<typeof memberAiLimits>;

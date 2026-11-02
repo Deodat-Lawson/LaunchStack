@@ -100,7 +100,7 @@ describe("autonomy enforcement", () => {
         )) as WorkspaceError;
         expect(refused.message).toMatch(/^An agent in this room is set to "Read only"/);
         expect(wordOr(refused.copy, refused.message, "zh-CN")).toBe(
-            "这个会议中有智能体设为“只读”，因此只有有人点击“进行一轮”时才会发言。请在“设置 → 智能体”中提高它的自主程度，让会议自行运行。"
+            "这个会议中有智能体设为“只读”，因此只有有人点击“进行一轮”时才会发言。请在“工作区 › 智能体”中提高它的自主程度，让会议自行运行。"
         );
     });
 });

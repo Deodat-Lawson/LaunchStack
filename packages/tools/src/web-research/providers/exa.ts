@@ -1,3 +1,5 @@
+import { reportUsage } from "@launchstack/llm";
+
 import { getExaApiKey } from "../config";
 import type { RawSearchResult } from "../types";
 
@@ -51,6 +53,15 @@ export async function callExa(query: string): Promise<RawSearchResult[]> {
             `Exa API error: ${response.status} ${response.statusText}${text ? ` - ${text}` : ""}`
         );
     }
+
+    // One news search on the deployment's key (no workspace brings its own).
+    reportUsage({
+        kind: "web_search",
+        modelId: "exa",
+        owner: "deployment",
+        inputTokens: 0,
+        outputTokens: 0,
+    });
 
     const data = (await response.json()) as ExaSearchResponse;
     if (!data.results || !Array.isArray(data.results)) {

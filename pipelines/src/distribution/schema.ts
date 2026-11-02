@@ -61,6 +61,10 @@ export const distributionPrograms = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
         updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
+        // Added by a later migration, so it is last: ADD COLUMN appends, and
+        // CI compares the migrated table with one built from this file.
+        /** Domains of customers the tenant names: lookalike seeds, never prospected themselves. */
+        customerDomains: jsonb("customer_domains").$type<string[]>().notNull().default([]),
     },
     table => ({
         companyIdx: index("distribution_programs_company_idx").on(table.companyId),

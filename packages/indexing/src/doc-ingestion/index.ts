@@ -53,6 +53,7 @@ interface NormalizeSummary {
     provider: NormalizationResult["provider"];
     processingTimeMs: number;
     confidenceScore?: number;
+    ocrRouting?: NormalizationResult["ocrRouting"];
 }
 
 /**
@@ -366,6 +367,7 @@ export interface ExtractionStageSummary {
     pageCount: number;
     processingTimeMs: number;
     confidenceScore?: number;
+    ocrRouting?: NormalizationResult["ocrRouting"];
     usedFastTextPath: boolean;
 }
 
@@ -404,7 +406,8 @@ export async function runExtractionStage(
     if (isPdf && isAzureSupportedFile(documentUrl, routingFilename)) {
         const routerDecision = await runStep(
             "step-a-router",
-            async (): Promise<RouterDecisionResult> => routeDocument(documentUrl, options)
+            async (): Promise<RouterDecisionResult> =>
+                routeDocument(documentUrl, { ...options, mimeType, filename: routingFilename })
         );
 
         if (isInngest) {
@@ -417,6 +420,7 @@ export async function runExtractionStage(
                     provider: result.provider,
                     processingTimeMs: result.processingTimeMs,
                     confidenceScore: result.confidenceScore,
+                    ocrRouting: result.ocrRouting,
                 };
             });
         } else {
@@ -431,6 +435,7 @@ export async function runExtractionStage(
                 provider: result.provider,
                 processingTimeMs: result.processingTimeMs,
                 confidenceScore: result.confidenceScore,
+                ocrRouting: result.ocrRouting,
             };
             await savePipelineState(jobId, "pages", result.pages);
         }
@@ -488,6 +493,7 @@ export async function runExtractionStage(
         pageCount: normSummary.pageCount,
         processingTimeMs: normSummary.processingTimeMs,
         confidenceScore: normSummary.confidenceScore,
+        ocrRouting: normSummary.ocrRouting,
         usedFastTextPath: fastTextPath,
     };
     await savePipelineState(jobId, "extraction", summary);
@@ -628,7 +634,9 @@ export async function runIndexingStage(input: DocIngestionToolInput): Promise<In
                 service: "embedding",
                 description: `Embed ${totalStored} chunks for document ${documentId}`,
                 referenceId: String(documentId),
-                metadata: { estimatedTokens, chunks: totalStored },
+                // The host prices the debit by model (an embedding token costs far
+                // less than a chat token); see its CreditsPort.
+                metadata: { estimatedTokens, chunks: totalStored, model: embeddingIndex.model },
             });
         }
 
@@ -665,6 +673,7 @@ export async function runIndexingStage(input: DocIngestionToolInput): Promise<In
                 processingTimeMs: normSummary.processingTimeMs,
                 confidenceScore: normSummary.confidenceScore,
                 embeddingIndexKey: embeddingIndex.indexKey,
+                ocrRouting: normSummary.ocrRouting,
             },
             pipelineStartTime,
             versionId

@@ -6,7 +6,7 @@
  * Stages are stored in the funnel's own words (lead … won, lost, nurture),
  * so a deal's stage passes straight through. It never invents data
  * the backend does not have: people are the dossier's public mailboxes,
- * sources are the three the gather stage really has, and figures the backend
+ * sources are the ones the gather stage really has, and figures the backend
  * cannot attribute are null rather than zero.
  *
  * Every sentence it writes goes out twice: the English field API readers
@@ -21,8 +21,10 @@ import {
     stageRequirements,
 } from "@launchstack/pipelines/distribution/stages";
 import {
+    MAX_CUSTOMER_DOMAINS,
     RELATIONSHIP_STAGES,
     RUN_STATUSES,
+    SOURCE_IDS,
     TERMINAL_STAGES,
     type EvidenceRecord,
     type PartnerOrgRecord,
@@ -33,6 +35,7 @@ import {
     type RunRecord,
     type SourceCount,
 } from "@launchstack/pipelines/distribution/types";
+import { normalizeDomain } from "@launchstack/tools/org-resolver";
 
 import type {
     Claim,
@@ -761,6 +764,16 @@ export function segmentFields(program: ProgramRecord): SegmentField[] {
             sourcesCopy: [fieldSource("territories")],
         },
         {
+            // The key the Segment screen (and the dev harness) shows as domains.
+            key: "seedDomains",
+            label: "Customers like these",
+            value: program.customerDomains,
+            sources: program.customerDomains.length > 0 ? ["from the program · customers"] : [],
+            editable: true,
+            labelCopy: fieldLabel("seedDomains"),
+            sourcesCopy: program.customerDomains.length > 0 ? [fieldSource("customers")] : [],
+        },
+        {
             key: "disqualifiers",
             label: "Not a fit",
             value: program.constraints ?? "",
@@ -802,6 +815,37 @@ export function toSegment(
     };
 }
 
+/** Labels of letters, digits and inner hyphens; a top-level domain of two or more letters. */
+const DOMAIN_SHAPE =
+    /^(?=.{4,253}$)([a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+(?:[a-z]{2,63}|xn--[a-z0-9-]{2,59})$/;
+
+/** A company website as typed ("https://www.Acme.com/about", "acme.com") to its domain. */
+export function customerDomainOf(input: string): string | null {
+    const domain = normalizeDomain(input);
+    return domain && DOMAIN_SHAPE.test(domain) ? domain : null;
+}
+
+/**
+ * The "Customers like these" list as entered: each entry (or several in one,
+ * split on commas and spaces) to a bare domain, each once, in order. What is
+ * not a website comes back in `invalid` as typed; more than the cap is
+ * `tooMany`.
+ */
+export function parseCustomerDomains(values: readonly string[]): {
+    domains: string[];
+    invalid: string[];
+    tooMany: boolean;
+} {
+    const domains: string[] = [];
+    const invalid: string[] = [];
+    for (const entry of values.flatMap(v => v.split(/[\s,，、;]+/)).filter(Boolean)) {
+        const domain = customerDomainOf(entry);
+        if (!domain) invalid.push(entry);
+        else if (!domains.includes(domain)) domains.push(domain);
+    }
+    return { domains, invalid, tooMany: domains.length > MAX_CUSTOMER_DOMAINS };
+}
+
 export function joinNatural(items: string[]): string {
     if (items.length <= 1) return items.join("");
     return `${items.slice(0, -1).join(", ")} and ${items[items.length - 1]}`;
@@ -810,7 +854,10 @@ export function joinNatural(items: string[]): string {
 // ── Sources (what the gather stage really has) ────────────────────────────
 
 export interface SourceAvailability {
+    /** Exa company search, or Serper web search when it is the only key. */
     web: boolean;
+    /** Lookalikes of the segment's customers: Exa only. */
+    lookalike: boolean;
     place: boolean;
     trade: boolean;
     screening: boolean;
@@ -818,16 +865,19 @@ export interface SourceAvailability {
 
 const SOURCE_LABEL: Record<SourceCount["source"], string> = {
     web: "Web search",
+    lookalike: "Lookalikes",
     place: "Places",
     trade: "Trade data",
 };
 const KEYLESS_LABEL: Record<SourceCount["source"], string> = {
     web: "Web search",
+    lookalike: "Lookalikes",
     place: "OpenStreetMap",
     trade: "Trade data",
 };
 const FIXTURE_LABEL: Record<SourceCount["source"], string> = {
     web: "Sample web search",
+    lookalike: "Lookalikes",
     place: "Sample places",
     trade: "Sample trade data",
 };
@@ -862,12 +912,23 @@ const SOURCE_DETAIL: Record<string, Copy> = {
     "no place queries planned": copy("growth.server.sources.details.noPlaceQueries"),
     "place search not configured": copy("growth.server.sources.details.placeNotConfigured"),
     "trade data not configured": copy("growth.server.sources.details.tradeNotConfigured"),
+    "needs EXA_API_KEY": copy("growth.server.sources.details.lookalikeNeedsExa"),
+    "no customers yet": copy("growth.server.sources.details.noCustomersYet"),
 };
 
 export function sourceDetailCopy(detail: string | null | undefined): Copy | null {
     if (!detail) return null;
     const fixed = SOURCE_DETAIL[detail];
     if (fixed) return fixed;
+    const from = /^from (\d+) customers?$/.exec(detail);
+    if (from)
+        return copy("growth.server.sources.details.fromCustomers", { count: Number(from[1]) });
+    const seedsFailed = /^(\d+) of (\d+) customers failed$/.exec(detail);
+    if (seedsFailed)
+        return copy("growth.server.sources.details.customersFailed", {
+            failed: seedsFailed[1]!,
+            total: seedsFailed[2]!,
+        });
     const failed = /^(\d+) (queries|territories) failed$/.exec(detail);
     if (failed)
         return copy(
@@ -886,6 +947,8 @@ const costCopy = (cost: "free" | "creditsPerRun" | "included" | "providerRates")
 
 export function sourceRows(avail: SourceAvailability, latest: RunRecord | null): SourceRow[] {
     const mode = latest?.options.mode ?? null;
+    // Lookalikes need Exa, so web search without them is Serper's.
+    const serperOnly = avail.web && !avail.lookalike;
     const yieldFor = (id: SourceCount["source"], forMode: RunRecord["options"]["mode"]) => {
         const s = latest?.summary?.sources.find(x => x.source === id);
         if (!latest || mode !== forMode || !s || s.status === "skipped") return null;
@@ -911,18 +974,45 @@ export function sourceRows(avail: SourceAvailability, latest: RunRecord | null):
             locked: true,
             lastYield: yieldFor("place", "keyless"),
         },
+        serperOnly
+            ? {
+                  id: "web",
+                  label: "Web search (Serper)",
+                  kind: "api",
+                  description:
+                      "Serper web search: the site of each result stands for a company. Add an Exa key for Exa's company index and lookalikes. Needs a model for the research agent.",
+                  enabled: true,
+                  available: true,
+                  requires: null,
+                  cost: "credits per run",
+                  locked: true,
+                  lastYield: yieldFor("web", "live"),
+              }
+            : {
+                  id: "web",
+                  label: "Exa company search",
+                  kind: "api",
+                  description:
+                      "Exa's company index: the homepages of companies matching each query in each territory. Serper web search is the fallback when it is the only key. Needs a model for the research agent.",
+                  enabled: avail.web,
+                  available: avail.web,
+                  requires: "EXA_API_KEY",
+                  cost: "credits per run",
+                  locked: true,
+                  lastYield: yieldFor("web", "live"),
+              },
         {
-            id: "web",
-            label: "Web search",
+            id: "lookalike",
+            label: "Lookalikes",
             kind: "api",
             description:
-                "Exa or Serper search for organisations in each territory; needs a model for the research agent.",
-            enabled: avail.web,
-            available: avail.web,
-            requires: "EXA_API_KEY or SERPER_API_KEY",
+                "Companies like your customers: the ones you list on the segment and your won deals, up to five per run, from Exa. Customers are never prospected themselves.",
+            enabled: avail.lookalike,
+            available: avail.lookalike,
+            requires: "EXA_API_KEY",
             cost: "credits per run",
             locked: true,
-            lastYield: yieldFor("web", "live"),
+            lastYield: yieldFor("lookalike", "live"),
         },
         {
             id: "place",
@@ -980,12 +1070,15 @@ export function sourceRows(avail: SourceAvailability, latest: RunRecord | null):
         included: "included",
         "provider rates": "providerRates",
     };
-    return rows.map(row => ({
-        ...row,
-        labelCopy: rowCopy(row.id, "label"),
-        descriptionCopy: rowCopy(row.id, "description"),
-        costCopy: costCopy(COST[row.cost]!),
-    }));
+    return rows.map(row => {
+        const copyId = row.id === "web" && serperOnly ? "webSerper" : row.id;
+        return {
+            ...row,
+            labelCopy: rowCopy(copyId, "label"),
+            descriptionCopy: rowCopy(copyId, "description"),
+            costCopy: costCopy(COST[row.cost]!),
+        };
+    });
 }
 
 export function toYield(s: SourceCount, mode: RunRecord["options"]["mode"] = "live"): SourceYield {
@@ -1025,7 +1118,7 @@ export function toRunDto(run: RunRecord, progress: RunProgress | null = null): R
     const summary = run.summary;
     const sourceChildren: RunStep[] = (
         summary?.sources ??
-        (["web", "place", "trade"] as const).map(source => ({
+        SOURCE_IDS.map(source => ({
             source,
             queries: 0,
             results: 0,

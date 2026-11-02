@@ -327,26 +327,46 @@ function Control({
         case "select": {
             const list = options ?? control.options;
             const index = list.findIndex(option => sameValue(option.value, value));
+            // A closed menu shows only the label; what the chosen option does
+            // (how an answer style answers, say) is said under it.
+            const chosen = index >= 0 ? list[index] : undefined;
+            const chosenDescription = chosen ? copy.option(chosen).description : undefined;
+            const describedBy = chosenDescription ? `${id}-description` : undefined;
             return (
-                <Select
-                    value={index >= 0 ? String(index) : ""}
-                    disabled={disabled}
-                    onValueChange={next => {
-                        const option = list[Number(next)];
-                        if (option) onChange(option.value);
-                    }}
-                >
-                    <SelectTrigger id={id} className="w-full" aria-label={copy.label}>
-                        <SelectValue placeholder={t("choose")} />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {list.map((option, i) => (
-                            <SelectItem key={i} value={String(i)}>
-                                {copy.option(option).label}
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
+                <div>
+                    <Select
+                        value={index >= 0 ? String(index) : ""}
+                        disabled={disabled}
+                        onValueChange={next => {
+                            const option = list[Number(next)];
+                            if (option) onChange(option.value);
+                        }}
+                    >
+                        <SelectTrigger
+                            id={id}
+                            className="w-full"
+                            aria-label={copy.label}
+                            aria-describedby={describedBy}
+                        >
+                            <SelectValue placeholder={t("choose")} />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {list.map((option, i) => (
+                                <SelectItem key={i} value={String(i)}>
+                                    {copy.option(option).label}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                    {chosenDescription && (
+                        <p
+                            id={describedBy}
+                            className="text-ink-3 m-0 mt-1.5 text-[12px] leading-normal"
+                        >
+                            {chosenDescription}
+                        </p>
+                    )}
+                </div>
             );
         }
         case "radio": {

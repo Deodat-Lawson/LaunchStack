@@ -11,6 +11,7 @@ import type { CompanyMetadataJSON } from "@launchstack/pipelines/company-metadat
 import { readFact } from "@launchstack/tools/company-context/facts";
 import { translatorFor, wordEnglish } from "~/i18n/translate";
 import { requireWorkspaceContext, type WorkspaceContext } from "~/lib/require-workspace-context";
+import { refuseAtAiAllowance } from "~/server/ai-usage/refusal";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 import { localeOfRequest, replyLanguageInstruction } from "~/i18n/server";
 
@@ -137,11 +138,16 @@ RULES:
 export async function POST(request: Request) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
+    const aiUse = { feature: "documentWriter", userId: ctx.data.authUserId } as const;
+    const refused = await refuseAtAiAllowance(
+        ctx.data.companyId,
+        aiUse.userId,
+        localeOfRequest(request)
+    );
+    if (refused) return refused;
     // The reply and the wording of its failure both use the workspace's own
     // models when it brought them, so the catch below runs in the scope too.
-    return withWorkspaceChatModels(ctx.data.companyId, "documentWriter", () =>
-        legalChat(request, ctx)
-    );
+    return withWorkspaceChatModels(ctx.data.companyId, aiUse, () => legalChat(request, ctx));
 }
 
 async function legalChat(request: Request, ctx: { data: WorkspaceContext }) {

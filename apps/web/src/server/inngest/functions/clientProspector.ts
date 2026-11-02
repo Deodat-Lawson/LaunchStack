@@ -149,7 +149,13 @@ export const clientProspectorJob = inngest.createFunction(
 
             // A step body runs outside the handler's async context, so the
             // workspace's models are entered here rather than around the handler.
-            return withWorkspaceChatModels(companyId, "prospects", () =>
+            // Counted against whoever asked; a running job is never stopped.
+            const aiUse = {
+                feature: "prospects",
+                userId: eventData.userId,
+                enforce: false,
+            } as const;
+            return withWorkspaceChatModels(companyId, aiUse, () =>
                 runClientProspector(toPipelineInput(eventData), {
                     onStageChange,
                 })

@@ -53,6 +53,7 @@ import {
     type ChatStreamEvent,
 } from "~/lib/chat-stream";
 import { answerWithTools, type ChatTool } from "~/server/chat-tool-loop";
+import { loadChatCompanyProfile } from "~/server/chat-company-profile";
 import {
     citedPassages,
     createSourceTools,
@@ -112,6 +113,7 @@ import {
     resolveChatAgent,
     type ChatAgentResolution,
 } from "~/server/collab/chat-agent";
+import { refuseAtAiAllowance } from "~/server/ai-usage/refusal";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 import { copy, type Copy } from "~/i18n/copy";
 import type { Locale } from "~/i18n/locales";
@@ -165,6 +167,8 @@ interface RespondInput
                 | "documentId"
                 | "embeddingIndexKey"
                 | "conversationHistory"
+                | "priorQuestions"
+                | "questionOrigin"
                 | "aiPersona"
                 | "chatMode"
             >
@@ -608,10 +612,13 @@ export async function POST(request: Request) {
                 return forbiddenForPermission("documents.read", locale);
             }
 
+            const aiUse = { feature: "ask", userId: ctx.data.authUserId } as const;
+            const refused = await refuseAtAiAllowance(ctx.data.companyId, aiUse.userId, locale);
+            if (refused) return refused;
             // Everything the answer runs (route resolution, web search, the model
             // call, a streamed body) resolves against the workspace's own models
             // when it brought them.
-            return await withWorkspaceChatModels(ctx.data.companyId, "ask", () => answer(ctx));
+            return await withWorkspaceChatModels(ctx.data.companyId, aiUse, () => answer(ctx));
         } catch (error) {
             if (request.signal.aborted) {
                 recordResult("error");
@@ -657,6 +664,8 @@ export async function POST(request: Request) {
                 aiModel,
                 provider,
                 conversationHistory,
+                priorQuestions,
+                questionOrigin,
                 embeddingIndexKey,
                 thinkingMode: requestedThinking,
                 attachments: requestedAttachments,
@@ -943,6 +952,8 @@ export async function POST(request: Request) {
                 documentId,
                 embeddingIndexKey,
                 conversationHistory,
+                priorQuestions,
+                questionOrigin,
                 aiPersona,
                 chatMode,
                 userCompanyId,
@@ -1012,6 +1023,8 @@ export async function POST(request: Request) {
                 documentId,
                 embeddingIndexKey,
                 conversationHistory,
+                priorQuestions,
+                questionOrigin,
                 aiPersona,
                 chatMode,
                 userCompanyId,
@@ -1393,13 +1406,22 @@ export async function POST(request: Request) {
                 (resolved.behavior.nativeStructuredOutput ?? []).includes("tool-calling") ||
                 getChatModelsSource() === "workspace";
 
-            // Web search is a tool the model may call, not a step before the
-            // answer: it is offered when the turn's agent may use the web, a
-            // search provider key is configured and the model takes tools. A
-            // question that needs no web pays nothing for it.
+            // The web is a tool the model may call, not a step before the
+            // answer: it is offered when the turn's agent may use the web and
+            // the model takes tools. Reading a page the person linked needs no
+            // key; searching needs a search provider key. A question that needs
+            // no web pays nothing for it.
             const webTools =
-                enableWebSearch && webSearchAvailable() && takesTools
-                    ? createWebTools({}, locale)
+                enableWebSearch && takesTools
+                    ? createWebTools({}, locale, {
+                          search: webSearchAvailable(),
+                          personText: [
+                              // A question the app wrote (a plan) is not the person's.
+                              ...(questionOrigin ? [] : [question]),
+                              ...passages.map(passage => passage.text),
+                              ...(priorQuestions ?? []),
+                          ],
+                      })
                     : null;
 
             // The workspace's sources are tools too, offered whenever the model
@@ -1475,12 +1497,16 @@ export async function POST(request: Request) {
                 conversationContext = `\n\nPrevious conversation context:\n${conversationHistory}\n\nPlease continue the conversation naturally, referencing previous exchanges when relevant.`;
             }
 
-            // Build comprehensive prompts. The agent's standing instructions go
-            // above the style prompt: who is speaking first, then how.
+            // Operating rules precede presentation preferences; a named
+            // agent supplies the role and more specific output contract.
             const stylePrompt = getSystemPrompt(selectedStyle, aiPersona);
             let systemPrompt = agent
-                ? `${agentSystemPromptBlock(agent.persona)}\n\n## Answer format\n${stylePrompt}`
+                ? `${stylePrompt}\n\n## Agent instructions\n${agentSystemPromptBlock(agent.persona)}`
                 : stylePrompt;
+            const companyProfile = sourcesAllowed
+                ? await loadChatCompanyProfile(ctx.data, scope)
+                : "";
+            if (companyProfile) systemPrompt += `\n\n${companyProfile}`;
             if (scopeFiles.length > 0) {
                 systemPrompt += `\n\n${attachedFilesPrompt(scopeFiles, coverage, Boolean(sourceTools))}`;
             }
@@ -1504,7 +1530,8 @@ export async function POST(request: Request) {
             } else if (writeAllowed && !mayUpload) {
                 systemPrompt += `\n\n${noDocumentToolsPrompt()}`;
             }
-            if (webTools) systemPrompt += `\n\n${webToolsPrompt(new Date())}`;
+            if (webTools)
+                systemPrompt += `\n\n${webToolsPrompt(new Date(), { search: webTools.search })}`;
             // Answer in the language the person reads the app in, unless they
             // write in another one (src/i18n/server.ts).
             const replyLanguage = replyLanguageInstruction(locale);
@@ -1616,6 +1643,11 @@ export async function POST(request: Request) {
                     // Checking every file can take a listing, a fan-out and a
                     // second page of it before the answer.
                     maxToolRounds: sourceTools ? 6 : 3,
+                    hasInitialEvidence:
+                        documents.length > 0 ||
+                        passages.length > 0 ||
+                        attachmentTextBlock.length > 0 ||
+                        imageAttachmentUrls.length > 0,
                     signal,
                     stream: emit && {
                         onText: delta => {

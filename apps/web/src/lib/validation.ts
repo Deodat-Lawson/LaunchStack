@@ -138,6 +138,14 @@ export const QuestionSchema = z
         aiModel: z.string().min(1).optional(),
         provider: z.string().min(1).optional(),
         conversationHistory: z.string().max(120_000).optional(),
+        /**
+         * The person's own earlier messages in this chat, apart from the
+         * transcript above. `fetch_page` reads links from these and the
+         * question only (server/chat-web-tools.ts).
+         */
+        priorQuestions: z.array(z.string().max(4_000)).max(20).optional(),
+        /** Who wrote the question when the app did (a plan to carry out): its links open nothing. */
+        questionOrigin: z.enum(["attachment", "plan-implementation"]).optional(),
         modelRoute: z.enum(["default", "fast", "reasoning", "vision"]).optional(),
         reasoningEffort: z.string().min(1).max(64).optional(),
         chatMode: z.enum(["default", "plan"]).optional().default("default"),
@@ -185,6 +193,8 @@ export const QuestionSchema = z
             aiModel: data.aiModel,
             provider: data.provider,
             conversationHistory: data.conversationHistory,
+            priorQuestions: data.priorQuestions,
+            questionOrigin: data.questionOrigin,
             modelRoute: data.modelRoute,
             reasoningEffort: data.reasoningEffort,
             chatMode: data.chatMode,

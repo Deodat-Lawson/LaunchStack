@@ -8,7 +8,8 @@
     "darkTheme": "切换到深色主题",
     "settings": "设置",
     "documentation": "文档",
-    "logOut": "退出登录"
+    "logOut": "退出登录",
+    "feedback": "发送反馈"
   },
   "common": {
     "actionsFor": "{name} 的操作",
@@ -62,6 +63,10 @@
       "label": "知识库",
       "description": "浏览、筛选并扩充工作区可引用的一切内容"
     },
+    "processing": {
+      "label": "处理队列",
+      "description": "查看文件的读取与索引进度——哪些正在处理、哪些在排队、哪些需要重试"
+    },
     "meetings": {
       "label": "会议",
       "description": "智能体在频道中推进一个目标——你可以随时加入"
@@ -88,11 +93,11 @@
     },
     "settings": {
       "label": "设置",
-      "description": "你的账户、外观和快捷键；工作区的成员、处理、智能体和集成"
+      "description": "你的账户、外观、快捷键和隐私"
     },
-    "analytics": {
-      "label": "分析",
-      "description": "整个工作区的文档、查询和活动"
+    "usage": {
+      "label": "用量",
+      "description": "谁在活跃，提了什么问题、添加了什么，用了多少 AI、花了多少钱——以及你自己的数据"
     },
     "mindmap": {
       "label": "思维导图",
@@ -102,9 +107,13 @@
       "label": "工作流",
       "description": "在你的来源之间自动执行重复任务"
     },
-    "metadata": {
-      "label": "公司档案",
-      "description": "工作区对你公司的了解"
+    "workspace": {
+      "label": "工作区",
+      "description": "工作区的名称和详情、成员与权限、公司档案、自带密钥、模型、智能体、集成和归档"
+    },
+    "feedback": {
+      "label": "反馈",
+      "description": "你报告的问题、共享的功能建议看板，以及团队的回复"
     }
   },
   "studioDeniedNotes": {
@@ -114,6 +123,10 @@
     "knowledge": {
       "label": "知识库",
       "description": "浏览并扩充工作区可引用的一切内容"
+    },
+    "processing": {
+      "label": "处理队列",
+      "description": "文件的读取与索引，逐个阶段显示"
     },
     "meetings": {
       "label": "会议",
@@ -179,9 +192,13 @@
       "label": "预测缺口",
       "description": "缺失的附件、附表和合规缺口"
     },
-    "analytics": {
-      "label": "分析",
-      "description": "文档、查询和活动"
+    "usage": {
+      "label": "用量",
+      "description": "你自己的数据；管理员还能看到整个工作区和每个人的数据"
+    },
+    "spending": {
+      "label": "支出与上限",
+      "description": "余额、各项服务的花费、价格和每人 AI 上限"
     },
     "peopleAccess": {
       "label": "成员与权限",
@@ -195,9 +212,21 @@
       "label": "智能体与节点",
       "description": "会议名册，以及运行它的机器"
     },
-    "deploy": {
-      "label": "自托管 / 自带密钥",
-      "description": "Vercel、Docker、你自己的密钥"
+    "workspace": {
+      "label": "工作区",
+      "description": "名称和网址、成员与权限、自带密钥、模型、智能体和集成"
+    },
+    "workspaceGeneral": {
+      "label": "重命名工作区",
+      "description": "名称、网址、描述、行业、团队规模和颜色"
+    },
+    "settings": {
+      "label": "设置",
+      "description": "仅属于你：账户、外观、快捷键和隐私"
+    },
+    "byok": {
+      "label": "自带密钥",
+      "description": "工作区 AI 使用你自己的 API 密钥或 OpenRouter 账户"
     }
   },
   "history": {
@@ -257,7 +286,8 @@
     "noMatches": "没有与<mono>“{query}”</mono>匹配的结果",
     "navigate": "导航",
     "open": "打开",
-    "results": "{count} 个结果"
+    "results": "{count} 个结果",
+    "workspaceSettingSub": "工作区 · {description}"
   },
   "contextMenu": {
     "openLinkInNewTab": "在新标签页中打开链接",
@@ -297,7 +327,9 @@
     "tabTitle": "{label}——{description}",
     "closeTab": "关闭 {label}",
     "openStudioApp": "打开工作台应用",
-    "paneMenuTitle": "拆分、最大化或关闭此窗格"
+    "paneMenuTitle": "拆分、最大化或关闭此窗格",
+    "countActive": "{count, plural, other {# 个文件正在处理}}",
+    "countAttention": "{count, plural, other {# 个文件，有文件需要处理}}"
   },
   "splitView": {
     "tooNarrow": "宽度不足，无法左右拆分。",
@@ -414,6 +446,8 @@
     "uploadingPercent": "正在上传 {percent}%…",
     "indexingVersion": "正在为新版本建立索引…",
     "uploadNewVersion": "上传新版本",
+    "reembedHint": "重新嵌入：重新读取此文件，并用工作区当前的模型嵌入，生成一个新版本",
+    "reembeddedFrom": "由 v{number} 重新嵌入",
     "mustMatch": "必须匹配：{mime}",
     "noVersions": "该来源没有可用的版本历史。",
     "versionLabel": "v{number}",
@@ -428,6 +462,8 @@
     "unfiled": "未归档",
     "metaIndexed": "索引",
     "readyToQuery": "✓ 可供查询",
+    "indexProcessing": "处理中…",
+    "indexFailed": "处理失败",
     "metaEdited": "编辑时间",
     "metaCitable": "可引用",
     "citableYes": "✓ 回答可以引用它",
@@ -443,7 +479,9 @@
     "confirmRestoreBody": "它将成为当前版本，之后的回答都会引用它。其他版本仍保留在历史记录中。",
     "confirmTrashBody": "之后可以立即撤销。",
     "confirmDeleteBody": "此操作无法撤销。",
-    "moveToTrash": "移到回收站"
+    "moveToTrash": "移到回收站",
+    "highlightFailed": "无法保存高亮",
+    "highlightRemoveFailed": "无法移除高亮"
   },
   "documentMenu": {
     "askMindmap": "就此思维导图提问",
@@ -499,6 +537,8 @@
     "clipboardEmpty": "剪贴板为空",
     "retrying": "正在重试",
     "retryProcessingFailed": "无法重试处理",
+    "reembedding": "正在重新嵌入",
+    "reembedFailed": "无法重新嵌入此来源",
     "movedTo": "已移到 {folder}",
     "movedToTop": "已将 {name} 移到顶层",
     "moveFailed": "无法移动",

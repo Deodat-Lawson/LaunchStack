@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
 
 import { SignInNotice } from "~/components/auth/SignInNotice";
+import { FeedbackProvider } from "~/components/feedback/FeedbackProvider";
+import { Toaster } from "~/components/ui/sonner";
 
 export default function WorkspacesLayout({ children }: { children: ReactNode }) {
     return (
@@ -10,8 +12,12 @@ export default function WorkspacesLayout({ children }: { children: ReactNode }) 
                 width: "100%",
             }}
         >
-            {children}
-            <SignInNotice />
+            {/* The picker is signed in too: a bug in joining or switching is reportable here. */}
+            <FeedbackProvider>
+                {children}
+                <SignInNotice />
+            </FeedbackProvider>
+            <Toaster richColors position="top-right" />
         </div>
     );
 }

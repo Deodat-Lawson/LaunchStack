@@ -27,6 +27,8 @@ import type { CompanyEmbeddingConfig } from "@launchstack/llm/embeddings";
 import type { EmbeddingsProvider } from "@launchstack/retrieval/search-types";
 import type { Locale } from "~/i18n/locales";
 import { translatorFor, wordEnglish } from "~/i18n/translate";
+import { isAiAllowanceExceededError } from "~/server/ai-usage/errors";
+import { describeAllowanceReached } from "~/server/ai-usage/words";
 import { configureAppChatModels } from "~/server/chat-models";
 import { wordModels } from "~/server/workspace-models/words";
 import { env } from "~/env";
@@ -67,6 +69,13 @@ export function describeChatResolutionFailure(
         return {
             status: error.status,
             message: wordEnglish(error.message, "errors.chatModels", locale),
+        };
+    }
+    // The person is at an AI limit: say which, when it resets, who can raise it.
+    if (isAiAllowanceExceededError(error)) {
+        return {
+            status: error.status,
+            message: describeAllowanceReached(error.allowance, locale),
         };
     }
     // A workspace's own endpoint that can't be used: its message is written for

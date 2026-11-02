@@ -143,8 +143,14 @@ export async function driveRun(
         if (!run) return;
         const limit = unitCount(run.roundCount) + 2;
         for (let i = 0; i < limit; i++) {
-            // Each unit runs on the workspace's own models when it brings them.
-            const keepGoing = await withWorkspaceChatModels(run.companyId, "scenarios", () =>
+            // Each unit runs on the workspace's own models when it brings them,
+            // counted against whoever started the run and never stopped midway.
+            const aiUse = {
+                feature: "scenarios",
+                userId: run.createdByUserId,
+                enforce: false,
+            } as const;
+            const keepGoing = await withWorkspaceChatModels(run.companyId, aiUse, () =>
                 advanceWithRetries(ports, runId)
             );
             if (!keepGoing) break;
@@ -156,11 +162,17 @@ export async function driveRun(
 }
 
 /** Hand a new run to the executor. */
-export async function dispatchRun(run: Pick<ScenarioRunRecord, "id" | "companyId">): Promise<void> {
+export async function dispatchRun(
+    run: Pick<ScenarioRunRecord, "id" | "companyId" | "createdByUserId">
+): Promise<void> {
     if (readScenariosExecutor() === "worker") {
         await inngest.send({
             name: "scenarios/run.requested",
-            data: { runId: run.id, companyId: run.companyId.toString() },
+            data: {
+                runId: run.id,
+                companyId: run.companyId.toString(),
+                userId: run.createdByUserId,
+            },
         });
         return;
     }

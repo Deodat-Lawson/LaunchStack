@@ -148,12 +148,16 @@ Run the **same checklist** (sections 1–5, and optionally 6) again. Note any di
 | 3.3.6 | Document generator (if present) | Outline/citation/grammar/research/export panels open and behave; export works or shows clear state. |
 | 3.3.7 | Simple query / Agent chat       | Query panel or agent chat returns answers; no infinite loading.                                     |
 
-### 3.3 Statistics (`/employer/statistics`)
+### 3.3 Usage (`/employer/documents?feature=usage`)
 
-| #     | Check      | Expected                                                                                 |
-| ----- | ---------- | ---------------------------------------------------------------------------------------- |
-| 3.4.1 | Page loads | Charts and tables load (employee activity, document stats).                              |
-| 3.4.2 | Data       | Numbers and trends match backend; document details sheet or drill-down works if present. |
+`/employer/statistics` and `?feature=analytics` redirect here (Analytics folded into the Usage tab).
+
+| #     | Check           | Expected                                                                                                                         |
+| ----- | --------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| 3.4.1 | Owner or Admin  | Overview, People, Activity, Documents, You and Spending across the top; tiles, daily chart and tables load for 7/30/90 days.     |
+| 3.4.2 | Data            | Overview totals match the People rows plus "No one person"; a person's page matches their People row; Export CSV holds the rows. |
+| 3.4.3 | Member / Viewer | Only "Your usage", from any link; the workspace median under each tile (from 3 members); `/api/usage/people` answers 403.        |
+| 3.4.4 | Old links       | `/employer/settings#usage.pricePerMillionTokens` opens Usage › Spending with the row in view.                                    |
 
 ### 3.4 People and access (`/employer/settings#people`) (Only if working on access)
 

@@ -19,9 +19,10 @@ import {
 } from "@launchstack/pipelines/distribution/db";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { copy, type Copy } from "~/i18n/copy";
-import { requestTranslator } from "~/i18n/server";
+import { localeOfRequest, requestTranslator } from "~/i18n/server";
 import { englishCopy } from "~/i18n/translate";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { refuseAtAiAllowance } from "~/server/ai-usage/refusal";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 import { error, json, readJsonBody } from "~/server/distribution/http";
 import { distributionRouteError } from "~/server/distribution/stage-errors";
@@ -40,8 +41,15 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export async function POST(request: NextRequest) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
+    const aiUse = { feature: "distribution", userId: ctx.data.authUserId } as const;
+    const refused = await refuseAtAiAllowance(
+        ctx.data.companyId,
+        aiUse.userId,
+        localeOfRequest(request)
+    );
+    if (refused) return refused;
     // The campaign is drafted with the workspace's own models if it brought them.
-    return withWorkspaceChatModels(ctx.data.companyId, "distribution", () =>
+    return withWorkspaceChatModels(ctx.data.companyId, aiUse, () =>
         withRateLimit(
             request,
             {

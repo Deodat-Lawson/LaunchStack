@@ -6,13 +6,20 @@ import { inngest } from "~/server/inngest/client";
 import { TrendSearchInputSchema } from "@launchstack/pipelines/trend-search";
 import { createJob, getJobsByCompanyId } from "@launchstack/pipelines/trend-search/db";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
-import { requestTranslator } from "~/i18n/server";
+import { localeOfRequest, requestTranslator } from "~/i18n/server";
+import { refuseAtAiAllowance } from "~/server/ai-usage/refusal";
 
 // ─── POST /api/trend-search ─────────────────────────────────────────────────
 export async function POST(request: NextRequest) {
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
+        const refused = await refuseAtAiAllowance(
+            ctx.data.companyId,
+            ctx.data.authUserId,
+            localeOfRequest(request)
+        );
+        if (refused) return refused;
 
         // Parse and validate request body
         const body: unknown = await request.json();

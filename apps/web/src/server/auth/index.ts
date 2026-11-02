@@ -251,3 +251,22 @@ export async function getServerSession() {
     const { headers } = await import("next/headers");
     return getAuth().api.getSession({ headers: await headers() });
 }
+
+/**
+ * Whether the request is signed in, for pages anyone can land on (404,
+ * "unavailable") that only choose where a link goes by it. A failed session
+ * read counts as signed out instead of breaking the page.
+ *
+ * The headers are read outside the `try` on purpose: during a build, reading
+ * them is how Next learns the page is per-request, and a catch that swallowed
+ * that signal would bake a signed-out page into the build.
+ */
+export async function isSignedInRequest(): Promise<boolean> {
+    const { headers } = await import("next/headers");
+    const requestHeaders = await headers();
+    try {
+        return Boolean((await getSessionFromHeaders(requestHeaders))?.user);
+    } catch {
+        return false;
+    }
+}

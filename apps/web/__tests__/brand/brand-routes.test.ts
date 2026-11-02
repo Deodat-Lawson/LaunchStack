@@ -576,7 +576,11 @@ describe("the claim gate: unbacked claims don't go out as the company unacknowle
             code: "unsupported_claims",
             claims: [{ claim: "We are SOC 2 certified", support: "unsupported" }],
         });
-        expect(mockClaimGate).toHaveBeenCalledWith(BigInt(5), "We are SOC 2 certified.");
+        expect(mockClaimGate).toHaveBeenCalledWith(
+            BigInt(5),
+            expect.any(String),
+            "We are SOC 2 certified."
+        );
         expect(mockCreateBrandPosts).not.toHaveBeenCalled();
         expect(mockPublishBrandPost).not.toHaveBeenCalled();
     });

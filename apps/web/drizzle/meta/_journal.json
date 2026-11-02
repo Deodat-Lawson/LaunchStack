@@ -264,15 +264,43 @@
     {
       "idx": 37,
       "version": "7",
-      "when": 1793056926317,
-      "tag": "20261026232205_deal_stage_history",
+      "when": 1792973638335,
+      "tag": "20261026001358_feedback",
       "breakpoints": true
     },
     {
       "idx": 38,
       "version": "7",
-      "when": 1793060224491,
-      "tag": "20261027001704_marketing_runs",
+      "when": 1793080045101,
+      "tag": "20261027054725_member_ai_allowances",
+      "breakpoints": true
+    },
+    {
+      "idx": 39,
+      "version": "7",
+      "when": 1793158004541,
+      "tag": "20261028032644_prospects_customer_domains",
+      "breakpoints": true
+    },
+    {
+      "idx": 40,
+      "version": "7",
+      "when": 1793163053692,
+      "tag": "20261028045053_ai_usage_kinds",
+      "breakpoints": true
+    },
+    {
+      "idx": 41,
+      "version": "7",
+      "when": 1793581675751,
+      "tag": "20261102010755_deal_stage_history",
+      "breakpoints": true
+    },
+    {
+      "idx": 42,
+      "version": "7",
+      "when": 1793581690555,
+      "tag": "20261102010810_marketing_runs",
       "breakpoints": true
     }
   ]

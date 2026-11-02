@@ -354,9 +354,6 @@ importers:
       drizzle-orm:
         specifier: ^0.45.1
         version: 0.45.1(@neondatabase/serverless@1.0.1)(@opentelemetry/api@1.9.1)(@types/pg@8.15.6)(postgres@3.4.7)
-      duck-duck-scrape:
-        specifier: ^2.2.7
-        version: 2.2.7
       formdata-node:
         specifier: ^6.0.3
         version: 6.0.3
@@ -396,6 +393,9 @@ importers:
       mermaid:
         specifier: ^11.12.2
         version: 11.13.0
+      modern-screenshot:
+        specifier: ^4.7.0
+        version: 4.7.0
       neo4j-driver:
         specifier: ^6.0.1
         version: 6.0.1
@@ -1076,6 +1076,9 @@ importers:
       drizzle-orm:
         specifier: ^0.45.1
         version: 0.45.1(@neondatabase/serverless@1.0.1)(@opentelemetry/api@1.9.1)(@types/pg@8.15.6)(postgres@3.4.7)
+      undici:
+        specifier: ^7.29.1
+        version: 7.29.1
       zod:
         specifier: ^3.23.8
         version: 3.25.76
@@ -2150,7 +2153,6 @@ packages:
 
   '@browserbasehq/stagehand@1.9.0':
     resolution: {integrity: sha512-0wIFnwOVnUEgVkPKW0RX7NoOt98qaRJ8+l1m9ppk1f5E03GtefDQTMiQwwT9WQn163bpZT5cOhyA1I3jZNfFeA==}
-    deprecated: This version is no longer maintained. Please upgrade to the latest version of @browserbasehq/stagehand.
     peerDependencies:
       '@playwright/test': ^1.42.1
       deepmerge: ^4.3.1
@@ -9872,6 +9874,9 @@ packages:
   mlly@1.8.1:
     resolution: {integrity: sha512-SnL6sNutTwRWWR/vcmCYHSADjiEesp5TGQQ0pXyLhW5IoeibRlF/CbSLailbB3CNqJUk9cVJ9dUDnbD7GrcHBQ==}
 
+  modern-screenshot@4.7.0:
+    resolution: {integrity: sha512-9YxN+ddPSMMlhylOv25VHzXrl9u67QRxoh7+SEewGtgUw7t6hHTrjptSDJUSne9oG4Xk/h2cwG15nIt4Hc9ujg==}
+
   module-details-from-path@1.0.4:
     resolution: {integrity: sha512-EGWKgxALGMgzvxYF1UyGTy0HXX/2vHLkw6+NvDKW2jypWbHpjQuj4UMcqQWXHERJhVGKikolT06G3bcKe4fi7w==}
 
@@ -11629,10 +11634,6 @@ packages:
   undici@6.23.0:
     resolution: {integrity: sha512-VfQPToRA5FZs/qJxLIinmU59u0r7LXqoJkCzinq3ckNJp3vKEh7jTWN589YQ5+aoAC/TGRLyJLCPKcLQbM8r9g==}
     engines: {node: '>=18.17'}
-
-  undici@7.25.0:
-    resolution: {integrity: sha512-xXnp4kTyor2Zq+J1FfPI6Eq3ew5h6Vl0F/8d9XU5zZQf1tX9s2Su1/3PiMmUANFULpmksxkClamIZcaUqryHsQ==}
-    engines: {node: '>=20.18.1'}
 
   undici@7.29.1:
     resolution: {integrity: sha512-RYONW2MeafgYlkVOKYKkA/Ag7BmXqgIWCa8t1m0JcxrQg9pI9lEqRhAOruOBCbAohOa/gkCF+iPi9hrgvTzu6Q==}
@@ -18482,7 +18483,7 @@ snapshots:
       parse5: 7.3.0
       parse5-htmlparser2-tree-adapter: 7.1.0
       parse5-parser-stream: 7.1.2
-      undici: 7.25.0
+      undici: 7.29.1
       whatwg-mimetype: 4.0.0
 
   chevrotain-allstar@0.3.1(chevrotain@11.1.2):
@@ -19044,6 +19045,7 @@ snapshots:
     dependencies:
       html-entities: 2.6.0
       needle: 3.3.1
+    optional: true
 
   duck@0.1.12:
     dependencies:
@@ -20076,7 +20078,8 @@ snapshots:
     transitivePeerDependencies:
       - '@noble/hashes'
 
-  html-entities@2.6.0: {}
+  html-entities@2.6.0:
+    optional: true
 
   html-escaper@2.0.2: {}
 
@@ -20128,7 +20131,7 @@ snapshots:
       isstream: 0.1.2
       jsonwebtoken: 9.0.3
       mime-types: 2.1.35
-      retry-axios: 2.6.0(axios@1.7.4(debug@4.4.3))
+      retry-axios: 2.6.0(axios@1.7.4)
       tough-cookie: 4.1.4
     transitivePeerDependencies:
       - supports-color
@@ -20855,7 +20858,7 @@ snapshots:
       saxes: 6.0.0
       symbol-tree: 3.2.4
       tough-cookie: 6.0.1
-      undici: 7.25.0
+      undici: 7.29.1
       w3c-xmlserializer: 5.0.0
       webidl-conversions: 8.0.1
       whatwg-mimetype: 5.0.0
@@ -21638,6 +21641,8 @@ snapshots:
       pkg-types: 1.3.1
       ufo: 1.6.3
 
+  modern-screenshot@4.7.0: {}
+
   module-details-from-path@1.0.4: {}
 
   motion-dom@12.29.2:
@@ -21703,6 +21708,7 @@ snapshots:
     dependencies:
       iconv-lite: 0.6.3
       sax: 1.4.1
+    optional: true
 
   negotiator@1.1.0:
     dependencies:
@@ -22807,7 +22813,7 @@ snapshots:
       path-parse: 1.0.7
       supports-preserve-symlinks-flag: 1.0.0
 
-  retry-axios@2.6.0(axios@1.7.4(debug@4.4.3)):
+  retry-axios@2.6.0(axios@1.7.4):
     dependencies:
       axios: 1.7.4(debug@4.4.3)
 
@@ -22912,7 +22918,8 @@ snapshots:
 
   safer-buffer@2.1.2: {}
 
-  sax@1.4.1: {}
+  sax@1.4.1:
+    optional: true
 
   saxes@6.0.0:
     dependencies:
@@ -23588,8 +23595,6 @@ snapshots:
     optional: true
 
   undici@6.23.0: {}
-
-  undici@7.25.0: {}
 
   undici@7.29.1: {}
 

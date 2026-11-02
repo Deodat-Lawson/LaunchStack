@@ -179,7 +179,7 @@ export async function POST(request: NextRequest) {
         // A campaign draft is checked the way the generator's Publish is: its
         // claims must be backed by the workspace's documents, or acknowledged.
         if (input.source?.kind === "campaign" && !input.acknowledgeUnsupportedClaims) {
-            const blocked = await claimGate(auth.ctx.companyId, input.body);
+            const blocked = await claimGate(auth.ctx.companyId, auth.ctx.userId, input.body);
             if (blocked) return error(t("unbackedClaims"), 409, { ...blocked });
         }
 

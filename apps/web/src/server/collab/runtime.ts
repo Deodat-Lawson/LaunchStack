@@ -176,20 +176,25 @@ async function persistState(meetingId: string, state: MeetingState): Promise<voi
  * happens to advance (a request, the Slack bridge, a turn chained off the
  * last), so the workspace is entered per turn rather than trusted to the
  * caller. A remote node answers with its own models and is left alone.
+ *
+ * Turns count against the meeting's creator: anyone in the room (or the Slack
+ * channel) can set one off, so no single caller is the right person. A
+ * meeting already under way is never stopped by their allowance.
  */
-function workspaceLocalRuntime(companyId: bigint): AgentRuntime {
+function workspaceLocalRuntime(companyId: bigint, createdBy: string | null): AgentRuntime {
     const local = getLocalRuntime();
+    const aiUse = { feature: "meetings", userId: createdBy, enforce: false } as const;
     return {
         nodeId: local.nodeId,
         serves: persona => local.serves(persona),
         takeTurn: request =>
-            withWorkspaceChatModels(companyId, "meetings", () => local.takeTurn(request)),
+            withWorkspaceChatModels(companyId, aiUse, () => local.takeTurn(request)),
     };
 }
 
-function buildRuntimes(companyId: bigint): AgentRuntime[] {
+function buildRuntimes(companyId: bigint, createdBy: string | null): AgentRuntime[] {
     const hub = getHub();
-    const local = workspaceLocalRuntime(companyId);
+    const local = workspaceLocalRuntime(companyId, createdBy);
     // Remote first: a persona pinned to a connected worker node must not be
     // silently served by the local model just because the local runtime is
     // willing to take any persona.
@@ -249,7 +254,7 @@ export async function getMeetingRuntime(
     const orchestrator = new MeetingOrchestrator({
         store,
         config,
-        runtimes: buildRuntimes(row.companyId),
+        runtimes: buildRuntimes(row.companyId, row.createdByUserId),
         initialState: rowToState(row),
     });
 

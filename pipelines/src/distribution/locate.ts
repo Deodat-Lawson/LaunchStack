@@ -34,11 +34,12 @@ export interface SeenLocation {
  * only breaks ties: when the text names several countries and one is the
  * wanted one, that one; the wanted region counts only when the text names it.
  */
-export function locateFromEvidence(text: string, wanted: Territory): SeenLocation {
+export function locateFromEvidence(text: string, wanted: Territory | null): SeenLocation {
     const countries = countriesMentioned(text);
-    const country = countries.includes(wanted.country) ? wanted.country : (countries[0] ?? null);
+    const country =
+        wanted && countries.includes(wanted.country) ? wanted.country : (countries[0] ?? null);
     const region =
-        wanted.region && country === wanted.country && mentionsPlace(text, wanted.region)
+        wanted?.region && country === wanted.country && mentionsPlace(text, wanted.region)
             ? wanted.region
             : null;
     return { country: country ?? null, region };

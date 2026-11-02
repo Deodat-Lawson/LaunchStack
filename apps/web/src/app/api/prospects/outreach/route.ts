@@ -3,9 +3,10 @@
 import type { NextRequest } from "next/server";
 import { z } from "zod";
 
-import { requestTranslator } from "~/i18n/server";
+import { localeOfRequest, requestTranslator } from "~/i18n/server";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { draftOutreach } from "~/server/prospects/service";
+import { refuseAtAiAllowance } from "~/server/ai-usage/refusal";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
 import { error, handleProspectsError, json, prospectsContext, readBody } from "../_http";
@@ -18,8 +19,15 @@ const Schema = z.object({
 export async function POST(request: NextRequest) {
     const auth = await prospectsContext();
     if (!auth.ok) return auth.response;
+    const aiUse = { feature: "prospects", userId: auth.ctx.userId } as const;
+    const refused = await refuseAtAiAllowance(
+        auth.ctx.companyId,
+        aiUse.userId,
+        localeOfRequest(request)
+    );
+    if (refused) return refused;
     // The campaign is drafted with the workspace's own models if it brought them.
-    return withWorkspaceChatModels(auth.ctx.companyId, "prospects", () =>
+    return withWorkspaceChatModels(auth.ctx.companyId, aiUse, () =>
         withRateLimit(
             request,
             {

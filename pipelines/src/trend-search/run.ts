@@ -43,6 +43,7 @@ export async function runTrendSearch(
     await options.onStageChange?.("searching");
     options.onProgress?.({ type: "step_start", step: "searching", label: STAGE_LABELS.searching });
     const searchStart = Date.now();
+    // News search on purpose: trends are recent events. General web search is searchWeb.
     const { results: rawResults, providerUsed } = await executeSearch(plannedQueries);
     console.log(`[trend-search] Search provider used: ${providerUsed}`);
     options.onProgress?.({

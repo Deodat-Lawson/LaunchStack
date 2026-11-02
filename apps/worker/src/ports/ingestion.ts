@@ -9,6 +9,9 @@
  * calls read the scope, so a workspace on its own model sends its documents
  * to its own provider and none to the server's. The stages run in this
  * worker without Inngest steps, so the scope entered here reaches every call.
+ *
+ * Their model calls count toward the AI allowance of whoever uploaded the
+ * source; indexing is never refused or stopped for it.
  */
 import type {
     ExtractionJob,
@@ -18,14 +21,20 @@ import type {
 import type { LoggerPort } from "@launchstack/runtime";
 import { DocIngestionPipeline } from "@launchstack/indexing";
 
+import { uploaderOfVersion, uploaderOrNull } from "~/server/ai-usage/uploader";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
 export function createIngestionPipelinePort(logger: LoggerPort): ExtractionPipelinePort {
     const pipeline = new DocIngestionPipeline(logger);
     return {
-        extract: (job: ExtractionJob) =>
-            withWorkspaceChatModels(job.companyId, "ingestion", () => pipeline.extract(job)),
-        index: (job: IndexingJob) =>
-            withWorkspaceChatModels(job.companyId, "ingestion", () => pipeline.index(job)),
+        extract: (job: ExtractionJob) => {
+            const aiUse = { feature: "ingestion", userId: job.actorId, enforce: false } as const;
+            return withWorkspaceChatModels(job.companyId, aiUse, () => pipeline.extract(job));
+        },
+        index: async (job: IndexingJob) => {
+            const userId = await uploaderOrNull(uploaderOfVersion(job.sourceVersionId));
+            const aiUse = { feature: "ingestion", userId, enforce: false } as const;
+            return withWorkspaceChatModels(job.companyId, aiUse, () => pipeline.index(job));
+        },
     };
 }

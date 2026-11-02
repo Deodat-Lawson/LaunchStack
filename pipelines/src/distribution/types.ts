@@ -64,6 +64,9 @@ export const LEGACY_STAGE_MAP: Readonly<Record<string, RelationshipStage>> = {
     dormant: "nurture",
 };
 
+/** Stages Prospects shows as a won deal: the program's customers. */
+export const WON_STAGES: readonly RelationshipStage[] = ["won"];
+
 export const RELATIONSHIP_EVENT_TYPES = [
     "stage_changed",
     "outreach_sent",
@@ -126,6 +129,11 @@ export type Territory = z.infer<typeof TerritorySchema>;
 
 // ─── Program ─────────────────────────────────────────────────────────────────
 
+/** Customers a program can name as lookalike seeds. */
+export const MAX_CUSTOMER_DOMAINS = 25;
+/** Seeds one run searches lookalikes for (each is a description plus a company search). */
+export const MAX_LOOKALIKE_SEEDS = 5;
+
 export const ProgramInputSchema = z.object({
     name: z.string().min(1).max(256),
     /** What is being distributed, in the tenant's words. */
@@ -141,6 +149,11 @@ export const ProgramInputSchema = z.object({
     constraints: z.string().max(4000).optional().nullable(),
     /** Domains of partners the tenant already works with — excluded from discovery. */
     knownPartnerDomains: z.array(z.string().min(3).max(256)).max(500).default([]),
+    /**
+     * Domains of customers the tenant names ("customers like these"): they
+     * seed lookalike searches and are never prospected themselves.
+     */
+    customerDomains: z.array(z.string().min(3).max(256)).max(MAX_CUSTOMER_DOMAINS).default([]),
 });
 export type ProgramInput = z.infer<typeof ProgramInputSchema>;
 
@@ -161,6 +174,7 @@ export interface ProgramRecord {
     partnerKinds: PartnerKind[];
     constraints: string | null;
     knownPartnerDomains: string[];
+    customerDomains: string[];
     status: "active" | "archived";
     createdAt: Date;
     updatedAt: Date | null;
@@ -214,8 +228,14 @@ export const DiscoveryPlanSchema = z.object({
 });
 export type DiscoveryPlan = z.infer<typeof DiscoveryPlanSchema>;
 
+/**
+ * The gather stage's sources. `lookalike` is companies like the program's
+ * customers (its won deals and the customers it names), from Exa.
+ */
+export const SOURCE_IDS = ["web", "place", "trade", "lookalike"] as const;
+
 export interface SourceCount {
-    source: "web" | "place" | "trade";
+    source: (typeof SOURCE_IDS)[number];
     queries: number;
     results: number;
     status: "ok" | "degraded" | "skipped" | "failed";

@@ -36,10 +36,17 @@ export interface ClaimGateBlock {
 }
 
 /** Null when every claim in `body` is backed by the workspace's documents. */
-export async function claimGate(companyId: bigint, body: string): Promise<ClaimGateBlock | null> {
+export async function claimGate(
+    companyId: bigint,
+    userId: string,
+    body: string
+): Promise<ClaimGateBlock | null> {
     let result;
+    // Counted as the person's, never refused: an allowance must not read as
+    // "the check could not run" on a post they are publishing.
+    const aiUse = { feature: "marketing", userId, enforce: false } as const;
     try {
-        result = await withWorkspaceChatModels(companyId, "marketing", () =>
+        result = await withWorkspaceChatModels(companyId, aiUse, () =>
             checkClaimSources({ companyId: Number(companyId), message: body })
         );
     } catch (error) {

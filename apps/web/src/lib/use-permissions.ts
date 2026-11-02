@@ -161,6 +161,17 @@ export function invalidatePermissions(): Promise<void> {
     return load(true);
 }
 
+/**
+ * The workspace was renamed from this page (Workspace › General): show the
+ * new name wherever it is drawn from here, without a refetch — which would
+ * un-load the permissions for a moment and hide every gated tab with them.
+ */
+export function setWorkspaceNameLocally(name: string): void {
+    if (!snapshot.loaded || snapshot.workspaceName === name) return;
+    snapshot = { ...snapshot, workspaceName: name };
+    emit();
+}
+
 /** Test seam: return the store to its pristine state. */
 export function resetPermissionsForTests(): void {
     snapshot = INITIAL;

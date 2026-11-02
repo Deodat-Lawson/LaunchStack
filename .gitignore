@@ -89,3 +89,6 @@ test-output/
 # note above for what a pattern that matches at any depth can swallow.
 apps/web/test-results/
 apps/web/playwright-report/
+
+# Tesseract.js downloads language data into the working directory at run time.
+*.traineddata

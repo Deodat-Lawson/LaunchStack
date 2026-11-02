@@ -44,7 +44,7 @@ export async function POST(request: Request) {
 
         const { platform, message, title, acknowledgeUnsupportedClaims } = validation.data;
         if (!acknowledgeUnsupportedClaims) {
-            const blocked = await claimGate(ctx.data.companyId, message);
+            const blocked = await claimGate(ctx.data.companyId, ctx.data.authUserId, message);
             if (blocked) return fail(CLAIM_GATE_MESSAGE, 409, blocked);
         }
         const channel = await defaultChannelFor(ctx.data.companyId, platform);

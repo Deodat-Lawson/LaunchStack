@@ -2,20 +2,22 @@ import Link from "next/link";
 import { ArrowLeft, Check, Construction } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { Button } from "~/components/ui/button";
-import { LandingLogoLink } from "~/components/LandingLogoLink";
+import { LogoLink } from "~/components/LogoLink";
+import { isSignedInRequest } from "~/server/auth";
 import { LaunchstackMark } from "../_components/LaunchstackLogo";
 
 /** A feature that is listed but not shipped. Same frame as the 404 page. */
 export default async function FeatureUnavailable() {
     const t = await getTranslations("errors.unavailable");
+    const signedIn = await isSignedInRequest();
     return (
         <div className="bg-surface text-ink flex min-h-screen flex-col items-center justify-center px-4 py-12">
             <div className="w-full max-w-md text-center">
                 <div className="mb-10 flex justify-center">
-                    <LandingLogoLink className="flex items-center gap-2">
+                    <LogoLink signedIn={signedIn} className="flex items-center gap-2">
                         <LaunchstackMark size={26} title="Launchstack" />
                         <span className="text-lg font-bold">Launchstack</span>
-                    </LandingLogoLink>
+                    </LogoLink>
                 </div>
 
                 <div className="bg-brand-soft text-brand-ink mx-auto mb-6 flex size-14 items-center justify-center rounded-2xl">

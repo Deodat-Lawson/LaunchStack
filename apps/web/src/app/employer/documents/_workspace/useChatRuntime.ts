@@ -6,7 +6,7 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { DEFAULT_PASSAGE_QUESTION, toPassagePayload } from "~/lib/chat-passages";
 import { chatStatusKeyword, chatStreamErrorKey } from "~/lib/chat-stream";
-import { conversationContext } from "~/lib/chat-turns";
+import { conversationContext, priorQuestions } from "~/lib/chat-turns";
 import { deriveSessionTitle, MAX_SESSION_APPEND } from "~/lib/workspace-history";
 import { useAIChat } from "../hooks/useAIChat";
 import type { AIChatResponse, AIChatStreamEvent } from "../hooks/useAIChat";
@@ -489,6 +489,11 @@ export function useChatRuntime(input: {
                         prior,
                         [context.continuation?.context, ...references].filter(Boolean).join("\n\n")
                     ),
+                    // The person's own earlier words, apart from the transcript: links
+                    // in them are the only ones a page read may follow from history.
+                    priorQuestions: priorQuestions(prior),
+                    // A question the app wrote (a plan to carry out) opens no links.
+                    questionOrigin: send.origin && send.origin !== "user" ? send.origin : undefined,
                     agentKey: send.agentKey,
                     modelRoute: send.modelRoute,
                     reasoningEffort: send.reasoningEffort,
@@ -917,6 +922,12 @@ function applyResponse(
 ) {
     answer.status = response.success ? "complete" : "error";
     answer.stage = response.success ? words.t("stages.complete") : words.t("stages.failed");
+    // At an AI limit the server's sentence says which, when it resets and who
+    // can raise it; the panel offers no retry, which could not succeed.
+    answer.failureCode =
+        !response.success && response.code === "ai_allowance_reached"
+            ? "ai_allowance_reached"
+            : undefined;
     const failure = response.message ?? response.error;
     answer.text = response.success
         ? (response.summarizedAnswer ?? answer.text)

@@ -125,6 +125,37 @@ describe("auditSentence", () => {
         ).toBe("Ada disconnected connector slack");
     });
 
+    it("says what Workspace › General changed, the name first", () => {
+        const changed = (changes: Record<string, { from: unknown; to: unknown }>) =>
+            auditSentence(audit, {
+                action: "settings.changed",
+                actor,
+                targetType: "workspace",
+                targetId: "5",
+                detail: { changes },
+            });
+        expect(changed({ name: { from: "Northwind", to: "Northwind Labs" } })).toBe(
+            "Ada renamed the workspace to “Northwind Labs”"
+        );
+        expect(
+            changed({
+                name: { from: "Northwind", to: "Northwind Labs" },
+                slug: { from: "northwind", to: "nw" },
+                swatch: { from: 1, to: 3 },
+            })
+        ).toBe("Ada renamed the workspace to “Northwind Labs” and changed its URL and colour");
+        expect(
+            changed({
+                teamSize: { from: "1", to: "2–5 people" },
+                description: { from: null, to: "Maps" },
+                industry: { from: null, to: "Logistics" },
+            })
+        ).toBe("Ada changed the workspace's team size, description and industry");
+        expect(changed({ auditRetentionDays: { from: null, to: 90 } })).toBe(
+            "Ada changed the workspace's audit log retention"
+        );
+    });
+
     it("names an unknown actor honestly", () => {
         expect(
             auditSentence(audit, {

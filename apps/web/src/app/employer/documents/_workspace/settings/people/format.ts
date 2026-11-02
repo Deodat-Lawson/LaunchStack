@@ -10,6 +10,8 @@ import { useMemo } from "react";
 import { useLocale, useTranslations } from "next-intl";
 
 import { roleLabel } from "~/lib/authz/permissions";
+import type { WorkspaceDetailsPatch } from "~/lib/workspace-details";
+
 import type { AuditEvent } from "./api";
 
 /** `useTranslations("settings.people.format")`. */
@@ -401,6 +403,10 @@ export function auditSentence(
                     ? t("settingSetFolder", { actor, label, folder, value })
                     : t("settingSet", { actor, label, value });
             }
+            // Workspace › General (and the audit retention policy) record
+            // `changes: { field: { from, to } }`.
+            const changed = workspaceChangeSentence(t, actor, detail.changes);
+            if (changed) return changed;
             // A retired setting; its events stay readable in the log.
             const policy = pick(detail, "joinPolicy");
             if (policy === "open") return t("joinPolicyOpen", { actor });
@@ -415,6 +421,52 @@ export function auditSentence(
             ).trim();
         }
     }
+}
+
+/** The workspace's own fields an audit `changes` map can name: `settings.people.audit.workspaceFields`. */
+const WORKSPACE_FIELD_KEYS = {
+    name: "name",
+    slug: "slug",
+    description: "description",
+    industry: "industry",
+    teamSize: "teamSize",
+    swatch: "swatch",
+    auditRetentionDays: "auditRetentionDays",
+} as const satisfies Record<keyof WorkspaceDetailsPatch | "auditRetentionDays", string>;
+
+/**
+ * "Ada renamed the workspace to “Northwind Labs”", "Ada changed the
+ * workspace's URL and colour" — for a `changes` map, or null when there is
+ * none.
+ */
+function workspaceChangeSentence(t: AuditT, actor: string, changes: unknown): string | null {
+    if (!changes || typeof changes !== "object") return null;
+    const fields = Object.keys(changes);
+    if (fields.length === 0) return null;
+    const renamed = str((changes as Record<string, { to?: unknown } | undefined>).name?.to);
+    const others = fields
+        .filter(field => !(field === "name" && renamed))
+        .map(field =>
+            Object.prototype.hasOwnProperty.call(WORKSPACE_FIELD_KEYS, field)
+                ? t(
+                      `workspaceFields.${WORKSPACE_FIELD_KEYS[field as keyof typeof WORKSPACE_FIELD_KEYS]}`
+                  )
+                : field
+        );
+    const last = others[others.length - 1];
+    const list =
+        others.length <= 1
+            ? (last ?? "")
+            : t("workspaceFields.list", {
+                  rest: others.slice(0, -1).join(t("workspaceFields.separator")),
+                  last: last!,
+              });
+    if (renamed) {
+        return others.length > 0
+            ? t("workspaceRenamedAndChanged", { actor, name: renamed, fields: list })
+            : t("workspaceRenamed", { actor, name: renamed });
+    }
+    return t("workspaceChanged", { actor, fields: list });
 }
 
 /** `member.role_changed` → `["member", "roleChanged"]`: the message keys of an action. */

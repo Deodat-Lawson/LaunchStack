@@ -33,12 +33,13 @@ function FieldRow({
     const label = word(field.labelCopy, field.label);
     const [editing, setEditing] = useState(false);
     const isList = Array.isArray(field.value);
+    // Customer websites: lookalike seeds, typed as domains.
+    const isDomains = field.key === "seedDomains";
     // A worded value, for display only: editable fields carry their own words.
     const listCopies = Array.isArray(field.valueCopy) ? field.valueCopy : null;
     const valueCopy = field.valueCopy && !Array.isArray(field.valueCopy) ? field.valueCopy : null;
-    const [draft, setDraft] = useState(
-        isList ? (field.value as string[]).join(", ") : String(field.value)
-    );
+    const current = () => (isList ? (field.value as string[]).join(", ") : String(field.value));
+    const [draft, setDraft] = useState(current);
     const [busy, setBusy] = useState(false);
 
     const save = async () => {
@@ -47,12 +48,14 @@ function FieldRow({
             await onSave(
                 isList
                     ? draft
-                          .split(/[,，、]/)
+                          .split(isDomains ? /[\s,，、;]+/ : /[,，、]/)
                           .map(s => s.trim())
                           .filter(Boolean)
                     : draft.trim()
             );
             setEditing(false);
+        } catch {
+            // The toast says why; the draft stays open to fix.
         } finally {
             setBusy(false);
         }
@@ -69,7 +72,8 @@ function FieldRow({
                                 autoFocus
                                 value={draft}
                                 onChange={e => setDraft(e.target.value)}
-                                className="h-8 text-[13px]"
+                                className={cn("h-8 text-[13px]", isDomains && "font-mono")}
+                                placeholder={isDomains ? t("seedDomainsPlaceholder") : undefined}
                                 aria-label={label}
                             />
                         ) : (
@@ -82,7 +86,11 @@ function FieldRow({
                                 aria-label={label}
                             />
                         )}
-                        {isList && <span className="text-ink-3 text-xs">{t("separateItems")}</span>}
+                        {isList && (
+                            <span className="text-ink-3 text-xs">
+                                {isDomains ? t("separateDomains") : t("separateItems")}
+                            </span>
+                        )}
                         <div className="flex gap-1.5">
                             <Button size="sm" onClick={() => void save()} disabled={busy}>
                                 {tc("actions.save")}
@@ -99,7 +107,7 @@ function FieldRow({
                                 key={v}
                                 className={cn(
                                     "border-line bg-panel rounded-md border px-2 py-0.5 text-[12.5px]",
-                                    field.key === "seedDomains" && "font-mono text-[12px]"
+                                    isDomains && "font-mono text-[12px]"
                                 )}
                             >
                                 {word(listCopies?.[i], v)}
@@ -112,6 +120,7 @@ function FieldRow({
                 ) : (
                     <div className="text-ink text-sm">{word(valueCopy, String(field.value))}</div>
                 )}
+                {isDomains && <p className="text-ink-3 mt-1.5 text-xs">{t("seedDomainsHelp")}</p>}
                 {field.sources.length > 0 && !editing && (
                     <div className="mt-1.5 flex flex-wrap gap-1.5">
                         {field.sources.map((s, i) => (
@@ -129,7 +138,11 @@ function FieldRow({
                 {field.editable && !editing && (
                     <button
                         type="button"
-                        onClick={() => setEditing(true)}
+                        onClick={() => {
+                            // Start from what was saved: the server may have tidied it.
+                            setDraft(current());
+                            setEditing(true);
+                        }}
                         className="text-ink-3 hover:text-ink focus-visible:ring-brand/50 inline-flex items-center gap-1 rounded-md px-1.5 py-1 text-xs outline-none focus-visible:ring-[3px]"
                         aria-label={t("editAria", { label })}
                     >

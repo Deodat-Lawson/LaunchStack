@@ -4,6 +4,7 @@
  * the inbox, the activity feed, and "what we share".
  */
 
+import type { FEEDBACK_NOTIFICATION_TARGET } from "~/lib/feedback/contract";
 import type { ActivityKind } from "~/lib/workspace-activity-kinds";
 
 import { request } from "../settings/people/api";
@@ -15,10 +16,11 @@ export interface InboxEntry {
     kind: string;
     /** Auth subject id of who shared it. */
     actorUserId: string;
-    targetType: ItemType;
+    /** What was shared — or `feedback`: a reply to, or status change on, a report of yours. */
+    targetType: ItemType | typeof FEEDBACK_NOTIFICATION_TARGET;
     targetId: string;
     targetLabel: string;
-    /** `{ level, via: "direct" | "group", groupName?, path? }` */
+    /** `{ level, via: "direct" | "group", groupName?, path? }`; for feedback, `FeedbackNotificationDetail`. */
     detail: Record<string, unknown> | null;
     at: string;
     read: boolean;

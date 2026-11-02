@@ -67,12 +67,16 @@ export const repoExplainerJob = inngest.createFunction(
     },
     { event: "repo-explainer/job.requested" },
     async ({ event, step }) => {
-        const { jobId, workspaceId, companyId } = RepoExplainerJobEventDataSchema.parse(event.data);
+        const { jobId, workspaceId, companyId, userId } = RepoExplainerJobEventDataSchema.parse(
+            event.data
+        );
 
         // A step body runs outside the handler's async context, so the
-        // workspace's models are entered inside the step.
+        // workspace's models are entered inside the step. Counted against
+        // whoever asked (absent on events sent before that was recorded).
+        const aiUse = { feature: "repoExplainer", userId: userId ?? null, enforce: false } as const;
         return step.run("explain", () =>
-            withWorkspaceChatModels(companyId, "repoExplainer", async () => {
+            withWorkspaceChatModels(companyId, aiUse, async () => {
                 const workspace = await getRepoWorkspace(workspaceId, BigInt(companyId));
                 if (!workspace) {
                     await failExplainerJob(jobId, null, "Workspace not found");

@@ -10,7 +10,6 @@
 // Functions
 export { normalizeModelContent } from "./normalizeModelContent";
 export { buildReferences, extractRecommendedPages } from "./references";
-export { performExaSearch } from "./exaSearch";
 export { SYSTEM_PROMPTS, getSystemPrompt } from "./prompts";
 export {
     resolveConfiguredChatModel,
@@ -30,8 +29,6 @@ export type {
     ResponseStyle,
     // Source Reference Types
     SourceReference,
-    // Web Search Types
-    WebSearchResult,
     // Prompt Types
     AIPersona,
     // Search Scope Types

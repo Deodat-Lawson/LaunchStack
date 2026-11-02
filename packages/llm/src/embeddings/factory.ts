@@ -1,9 +1,14 @@
 import { OllamaEmbeddings } from "@langchain/ollama";
 
-import { generateEmbeddings } from "./embeddings";
+import { reportUsage } from "../usage-meter";
+import { estimateEmbeddingTokens, generateEmbeddings } from "./embeddings";
 import type { EmbeddingsProvider } from "./types";
 import type { EmbeddingIndexConfig } from "./index-registry";
-import { resolveEffectiveEmbeddingConfig, type CompanyEmbeddingConfig } from "./company-config";
+import {
+    resolveEffectiveEmbeddingConfig,
+    type CompanyEmbeddingConfig,
+    type EmbeddingOwner,
+} from "./company-config";
 
 // The sidecar embeddings provider was removed (ADR-004 §5): it posted to
 // ${SIDECAR_URL}/embed, a route no service in this repository ever
@@ -61,14 +66,30 @@ class HuggingFaceEmbeddings implements EmbeddingsProvider {
     }
 }
 
+/**
+ * Checks every vector's dimension, and counts each request: Ollama and
+ * Hugging Face report no token counts, so the count is an estimate.
+ */
 class ValidatedEmbeddingsProvider implements EmbeddingsProvider {
     constructor(
         private readonly inner: EmbeddingsProvider,
-        private readonly index: EmbeddingIndexConfig
+        private readonly index: EmbeddingIndexConfig,
+        private readonly meter: { modelId: string; owner: EmbeddingOwner }
     ) {}
+
+    private count(texts: string[]): void {
+        reportUsage({
+            kind: "embedding",
+            modelId: this.meter.modelId,
+            owner: this.meter.owner,
+            inputTokens: estimateEmbeddingTokens(texts),
+            outputTokens: 0,
+        });
+    }
 
     async embedQuery(query: string): Promise<number[]> {
         const vector = await this.inner.embedQuery(query);
+        this.count([query]);
         validateEmbeddingDimension(this.index, vector.length);
         return vector;
     }
@@ -79,6 +100,7 @@ class ValidatedEmbeddingsProvider implements EmbeddingsProvider {
         }
 
         const vectors = await this.inner.embedDocuments(documents);
+        this.count(documents);
         for (const vector of vectors) {
             validateEmbeddingDimension(this.index, vector.length);
         }
@@ -105,6 +127,7 @@ export function createEmbeddingModel(
                 const result = await generateEmbeddings([query], {
                     apiKey: effectiveConfig.openAIApiKey,
                     baseUrl: effectiveConfig.openAIBaseUrl,
+                    owner: effectiveConfig.openAIOwner,
                     model: index.model,
                     dimensions: index.dimension,
                 });
@@ -114,6 +137,7 @@ export function createEmbeddingModel(
                 const result = await generateEmbeddings(documents, {
                     apiKey: effectiveConfig.openAIApiKey,
                     baseUrl: effectiveConfig.openAIBaseUrl,
+                    owner: effectiveConfig.openAIOwner,
                     model: index.model,
                     dimensions: index.dimension,
                 });
@@ -123,14 +147,16 @@ export function createEmbeddingModel(
     }
 
     if (index.provider === "ollama") {
+        const model = effectiveConfig.ollamaModel ?? index.model;
         return new ValidatedEmbeddingsProvider(
-            new OllamaEmbeddings({
-                baseUrl: effectiveConfig.ollamaBaseUrl,
-                model: effectiveConfig.ollamaModel ?? index.model,
-            }),
-            index
+            new OllamaEmbeddings({ baseUrl: effectiveConfig.ollamaBaseUrl, model }),
+            index,
+            { modelId: model, owner: effectiveConfig.ollamaOwner }
         );
     }
 
-    return new ValidatedEmbeddingsProvider(new HuggingFaceEmbeddings(index, config), index);
+    return new ValidatedEmbeddingsProvider(new HuggingFaceEmbeddings(index, config), index, {
+        modelId: index.model,
+        owner: effectiveConfig.huggingFaceOwner,
+    });
 }

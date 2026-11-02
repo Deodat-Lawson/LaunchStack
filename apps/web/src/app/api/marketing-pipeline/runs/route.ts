@@ -9,6 +9,7 @@ import { createMarketingRun, listActiveMarketingRuns } from "@launchstack/pipeli
 import { localeOfRequest } from "~/i18n/server";
 import { translatorFor } from "~/i18n/translate";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { refuseAtAiAllowance } from "~/server/ai-usage/refusal";
 import { fail, ok, readJson } from "~/server/api/responses";
 import { dispatchMarketingRun } from "~/server/marketing/executor";
 import { toRunView } from "~/server/marketing/run-view";
@@ -20,6 +21,8 @@ export async function POST(request: Request) {
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
+        const refused = await refuseAtAiAllowance(ctx.data.companyId, ctx.data.authUserId, locale);
+        if (refused) return refused;
         const validation = MarketingPipelineInputSchema.safeParse(await readJson(request));
         if (!validation.success) {
             return fail(translatorFor(locale, "errors.api")("invalidInput"), 400, {

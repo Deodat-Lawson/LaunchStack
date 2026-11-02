@@ -197,6 +197,16 @@ textarea {
         transform: rotate(360deg);
     }
 }
+/* A stage that is running but can't say how far along it is: a short bar
+   that sweeps across its segment (Processing queue). */
+@keyframes lsw-sweep {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(250%);
+    }
+}
 
 /* Chat: the label of the step an answer is working on sweeps while it works. */
 @keyframes lsw-text-sweep {

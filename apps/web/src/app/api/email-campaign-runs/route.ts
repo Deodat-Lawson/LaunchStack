@@ -1,5 +1,6 @@
 import { resolveAutomationPolicy, runAutomatedEmailCampaign } from "@launchstack/pipelines/email";
 
+import { refuseAtAiAllowance } from "~/server/ai-usage/refusal";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
 import { AutomatedRunSchema } from "../email-campaigns/_lib/schemas";
@@ -13,7 +14,7 @@ import {
     resolveSendingActor,
     unsubscribeBaseUrl,
 } from "../email-campaigns/_lib/context";
-import { requestTranslator } from "~/i18n/server";
+import { localeOfRequest, requestTranslator } from "~/i18n/server";
 
 export const runtime = "nodejs";
 export const maxDuration = 300;
@@ -44,9 +45,16 @@ export async function POST(request: Request) {
         const actor = await resolveSendingActor();
         if (!actor.ok) return actor.response;
 
+        const aiUse = { feature: "emailCampaigns", userId: actor.actor.externalUserId } as const;
+        const refused = await refuseAtAiAllowance(
+            actor.actor.companyId,
+            aiUse.userId,
+            localeOfRequest(request)
+        );
+        if (refused) return refused;
         // Generation and review run under the workspace's own models when it
         // brought them; delivery calls no model.
-        return await withWorkspaceChatModels(actor.actor.companyId, "emailCampaigns", async () => {
+        return await withWorkspaceChatModels(actor.actor.companyId, aiUse, async () => {
             const parsed = AutomatedRunSchema.safeParse(await readJson(request));
             if (!parsed.success) {
                 return fail(requestTranslator(request, "errors.api")("invalidInput"), 400, {

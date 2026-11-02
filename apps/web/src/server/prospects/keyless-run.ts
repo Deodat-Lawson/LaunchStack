@@ -85,7 +85,8 @@ export async function runKeylessProspects(args: KeylessRunArgs): Promise<RunSumm
         judgeFit: await prospectFitJudge(args.companyId),
     });
     // The fit check resolves the workspace's models when it runs.
-    return withWorkspaceChatModels(args.companyId, "prospects", () =>
+    const aiUse = { feature: "prospects", userId: args.userId, enforce: false } as const;
+    return withWorkspaceChatModels(args.companyId, aiUse, () =>
         runDistributionPipeline(
             { runId: args.runId, companyId: args.companyId, programId: args.programId },
             ports

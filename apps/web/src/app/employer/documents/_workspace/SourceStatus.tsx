@@ -3,7 +3,9 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { ChevronRight, CircleAlert, LifeBuoy, Loader2, RotateCw } from "lucide-react";
+import { Bug, ChevronRight, CircleAlert, LifeBuoy, Loader2, RotateCw } from "lucide-react";
+
+import { useFeedback } from "~/components/feedback/FeedbackProvider";
 
 import { Button } from "~/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "~/components/ui/collapsible";
@@ -101,7 +103,9 @@ interface SourceFailureStatusProps {
 export function SourceFailureStatus({ source, onRetry }: SourceFailureStatusProps) {
     const t = useTranslations("sources.sourceStatus");
     const tc = useTranslations("common");
-    const failure = useSourceFailureCopy().describe(source.errorMessage);
+    const failureCopy = useSourceFailureCopy();
+    const failure = failureCopy.describe(source.errorMessage);
+    const feedback = useFeedback();
     const [retrying, setRetrying] = useState(false);
     const [open, setOpen] = useState(false);
     const retryCount = source.processing?.retryCount ?? 0;
@@ -109,6 +113,31 @@ export function SourceFailureStatus({ source, onRetry }: SourceFailureStatusProp
     const canRetry = failure.retryable && onRetry !== undefined;
     // Support is the way forward when a retry can't help, or one already didn't.
     const offerContact = !failure.retryable || retryCount > 0;
+
+    /**
+     * Where the instance takes reports, the failure goes into one — stored,
+     * answered in the Feedback tab — rather than a mail the person has to
+     * send. Same ids either way: the document, the category, the job id.
+     */
+    const reportFailure = () => {
+        const text = failureCopy.reportText({
+            document: source.title,
+            documentId: source.documentId,
+            category: failure.category,
+            jobId,
+        });
+        setOpen(false);
+        feedback.open({
+            kind: "bug",
+            title: text.subject,
+            body: text.details,
+            origin: {
+                document: source.title.slice(0, 300),
+                problem: failure.category,
+                ...(jobId ? { jobId: jobId.slice(0, 300) } : {}),
+            },
+        });
+    };
 
     const retry = async () => {
         if (!onRetry || retrying) return;
@@ -172,7 +201,18 @@ export function SourceFailureStatus({ source, onRetry }: SourceFailureStatusProp
                                     {tc("actions.retry")}
                                 </Button>
                             )}
-                            {offerContact && (
+                            {offerContact && feedback.enabled && (
+                                <Button
+                                    size="sm"
+                                    variant="outline"
+                                    onClick={reportFailure}
+                                    data-testid="source-failure-report"
+                                >
+                                    <Bug aria-hidden />
+                                    {t("reportProblem")}
+                                </Button>
+                            )}
+                            {offerContact && !feedback.enabled && (
                                 <Button size="sm" variant="outline" asChild>
                                     <Link
                                         href={sourceFailureContactHref({

@@ -31,6 +31,7 @@ import {
     requireWorkspaceContext,
     type WorkspaceContext,
 } from "~/lib/require-workspace-context";
+import { refuseAtAiAllowance } from "~/server/ai-usage/refusal";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import type { DocumentScope } from "~/lib/authz/scope-types";
@@ -149,10 +150,15 @@ export async function POST(request: Request) {
         return forbiddenForPermission("documents.read", localeOfRequest(request));
     }
 
-    // The analysis resolves its models against the workspace's own, if it brought them.
-    return withWorkspaceChatModels(ctx.data.companyId, "predictiveAnalysis", () =>
-        analyze(request, ctx)
+    const aiUse = { feature: "predictiveAnalysis", userId: ctx.data.authUserId } as const;
+    const refused = await refuseAtAiAllowance(
+        ctx.data.companyId,
+        aiUse.userId,
+        localeOfRequest(request)
     );
+    if (refused) return refused;
+    // The analysis resolves its models against the workspace's own, if it brought them.
+    return withWorkspaceChatModels(ctx.data.companyId, aiUse, () => analyze(request, ctx));
 }
 
 function analyze(request: Request, ctx: { data: WorkspaceContext }) {

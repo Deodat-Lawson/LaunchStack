@@ -12,7 +12,8 @@ export async function GET(request: NextRequest) {
     if (!auth.ok) return auth.response;
     try {
         // The company profile can be filled in by a model; it runs on the workspace's.
-        const suggestion = await withWorkspaceChatModels(auth.ctx.companyId, "prospects", () =>
+        const aiUse = { feature: "prospects", userId: auth.ctx.userId } as const;
+        const suggestion = await withWorkspaceChatModels(auth.ctx.companyId, aiUse, () =>
             suggestSegment(auth.ctx)
         );
         return json({ suggestion });

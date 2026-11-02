@@ -279,6 +279,8 @@ export interface RunRecord {
 
 /** Inngest payload — bigint serialised as string. */
 export const DistributionRunEventDataSchema = z.object({
+    /** `keyless` runs on public sources and the page profiler; absent means live. */
+    mode: z.enum(["live", "keyless"]).optional(),
     runId: z.string(),
     programId: z.string(),
     companyId: z.string(),

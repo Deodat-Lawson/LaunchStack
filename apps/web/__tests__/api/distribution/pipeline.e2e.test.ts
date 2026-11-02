@@ -214,7 +214,9 @@ describeDb("distribution pipeline end to end (fixture ports, real database)", ()
         );
 
         expect(briefs[0]).toContain("Single-origin roasted specialty coffee");
-        expect(briefs[0]).toMatch(/^Importers, distributors, retailers and shops/);
+        expect(briefs[0]).toContain("As: importer, distributor, retailer.");
+        // The company's own profile goes into the brief.
+        expect(briefs[0]).toContain("Kōhī Roasters");
         const partners = await listPartners(companyId, { programId: program.id });
         expect(partners.length).toBeGreaterThan(0);
         expect(partners.find(p => p.org.domain === "shady-trading.example")).toBeUndefined();

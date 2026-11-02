@@ -236,6 +236,29 @@ describe("computeFit", () => {
     });
 });
 
+describe("territory points when a city was asked for", () => {
+    const score = (over: Partial<PartnerOrgRecord>) =>
+        computeFit({
+            program,
+            org: org({ country: "US", region: null, city: null, ...over }),
+            kind: "importer",
+            territory: { country: "US", region: "Baltimore" },
+            dossier: null,
+            evidenceCount: 3,
+            newestEvidenceAt: null,
+            knownEntity: false,
+            sellerName: "Kōhī Roasters",
+            relevance: 1,
+            now,
+        }).territoryMatch;
+
+    it("gives full points in the city, half for the right country alone, none elsewhere", () => {
+        expect(score({ region: "Baltimore" })).toBe(20);
+        expect(score({})).toBe(10);
+        expect(score({ city: "San Francisco" })).toBe(0);
+    });
+});
+
 describe("relevance scales the score", () => {
     // A readable website in the right country with fresh evidence used to
     // reach ~40-45 with zero topic overlap and sit among real prospects.

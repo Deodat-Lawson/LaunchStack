@@ -26,6 +26,17 @@ import { prospectEmbedder, prospectFitJudge } from "~/server/prospects/matching"
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 import { processDocumentUpload } from "~/server/services/document-upload";
 
+/**
+ * Where a keyless run executes. `inline` (the default) works with nothing else
+ * running; a deployment with the worker attached sets PROSPECTS_EXECUTOR=worker
+ * and it runs as the Inngest job live runs use, durable step by step.
+ */
+export function readProspectsExecutor(
+    env: Record<string, string | undefined> = process.env
+): "inline" | "worker" {
+    return env.PROSPECTS_EXECUTOR?.trim().toLowerCase() === "worker" ? "worker" : "inline";
+}
+
 export interface KeylessRunArgs {
     runId: string;
     companyId: bigint;

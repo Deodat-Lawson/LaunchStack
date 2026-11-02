@@ -18,9 +18,13 @@ const program = {
 };
 
 describe("the buyer brief", () => {
-    it("says who buys, what, and in which categories", () => {
-        expect(buyerBrief(program, ["retailer", "wholesaler"])).toBe(
-            "Retailers and shops, wholesalers that would buy, stock or resell this: Single-origin roasted specialty coffee beans for cafés and shops Categories: specialty coffee."
+    it("says what is sold, who buys it, and who the seller is, from the company's own data", () => {
+        expect(
+            buyerBrief(program, ["retailer", "wholesaler"], {
+                identity: "Kōhī Roasters, a specialty coffee roaster in Baltimore.",
+            })
+        ).toBe(
+            "Businesses that would buy, stock or resell what this seller offers: Single-origin roasted specialty coffee beans for cafés and shops Buyer types or categories: specialty coffee. As: retailer, wholesaler. Seller: Kōhī Roasters, a specialty coffee roaster in Baltimore."
         );
         expect(buyerBrief({ ...program, categories: [] }, [])).toMatch(
             /^Businesses that would buy/
@@ -92,12 +96,19 @@ describe("relevance by meaning", () => {
 });
 
 describe("the fit check's prompt", () => {
-    it("names the buyer and every candidate by id", () => {
-        const prompt = buildJudgePrompt("Cafés that would buy coffee", [
-            { id: "k1", name: "Bean There", text: "Bean There. Coffee shop" },
-            { id: "k2", name: "Mango", text: "Mango. AI notes" },
-        ]);
+    it("names the buyer, the place, the seller's documents and every candidate by id", () => {
+        const prompt = buildJudgePrompt(
+            "Cafés that would buy coffee",
+            "Baltimore, United States",
+            [
+                { id: "k1", name: "Bean There", text: "Bean There. Coffee shop" },
+                { id: "k2", name: "Mango", text: "Mango. AI notes" },
+            ],
+            { identity: "Kōhī", knowledgeContext: "We sell wholesale to independent cafés." }
+        );
         expect(prompt).toContain("Who the seller wants: Cafés that would buy coffee");
+        expect(prompt).toContain("Where the seller wants them: Baltimore, United States");
+        expect(prompt).toContain("We sell wholesale to independent cafés.");
         expect(prompt).toContain("- id k1: Bean There. Coffee shop");
         expect(prompt).toContain("- id k2: Mango. AI notes");
     });

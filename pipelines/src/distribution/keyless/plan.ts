@@ -61,7 +61,7 @@ export interface KeylessPlanOptions {
 
 /** OpenStreetMap categories for the segment: by meaning when an embedder answers. */
 export async function placeCategoriesFor(
-    input: Pick<PlanInput, "program" | "partnerKinds">,
+    input: Pick<PlanInput, "program" | "partnerKinds"> & Partial<Pick<PlanInput, "profile">>,
     options: KeylessPlanOptions = {}
 ): Promise<{ selectors: string[]; method: "semantic" | "lexical" }> {
     const vocabulary = await (options.vocabulary ?? osmVocabulary)();
@@ -69,7 +69,7 @@ export async function placeCategoriesFor(
         try {
             const selectors = await chooseOsmCategories(
                 options.embed,
-                buyerBrief(input.program, input.partnerKinds),
+                buyerBrief(input.program, input.partnerKinds, input.profile),
                 vocabulary
             );
             if (selectors.length > 0) return { selectors, method: "semantic" };

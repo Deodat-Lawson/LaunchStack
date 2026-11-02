@@ -2,8 +2,8 @@
  * Is a company someone who would buy what the segment sells? By meaning, not
  * by shared words.
  *
- * The brief ("cafés and retailers that would buy and resell specialty coffee
- * beans …") and each company's own words (name, directory categories,
+ * The brief (what the segment sells, who buys it, and the company's own
+ * profile) and each company's own words (name, directory categories,
  * description, later its dossier) are embedded. A company's relevance is how
  * much closer it sits to the brief than to a plain "a business": the embedding
  * model's baseline similarity between any two business descriptions cancels
@@ -18,6 +18,7 @@
  * With no embedding model, relevance falls back to word overlap (./score's
  * categoryCoverage) and the run says so.
  */
+import type { SellerProfile } from "./plan";
 import type { PartnerKind, ProgramRecord } from "./types";
 import { categoryCoverage, textTerms } from "./score";
 
@@ -31,32 +32,39 @@ export interface FitVerdict {
 /** A chat-model check of candidates against the brief; ids it leaves out are not judged. */
 export type JudgeFit = (args: {
     brief: string;
+    /** Where the seller wants them: "Baltimore, United States; Netherlands". */
+    where: string;
+    /** The company's profile and knowledge base: what it sells and to whom. */
+    seller?: SellerContext | null;
     candidates: Array<{ id: string; name: string; text: string }>;
 }) => Promise<Map<string, FitVerdict>>;
 
 /** What every company is compared against so the model's baseline cancels out. */
 export const BASELINE_TEXT = "A business.";
 
-const KIND_WORDS: Record<PartnerKind, string> = {
-    importer: "importers",
-    distributor: "distributors",
-    wholesaler: "wholesalers",
-    retailer: "retailers and shops",
-    agent: "sales agents",
-    reseller: "resellers",
-    supplier: "suppliers",
-};
+/** The seller, in its own profile's words: what matching reads about the company. */
+export type SellerContext = Pick<SellerProfile, "identity"> &
+    Partial<Pick<SellerProfile, "knowledgeContext">>;
 
-/** Who the segment wants, in one paragraph: the text companies are matched against. */
+const SELLER_IN_BRIEF = 500;
+
+/**
+ * Who the segment wants, in one paragraph, from the segment and the company's
+ * own profile: the text companies are matched against.
+ */
 export function buyerBrief(
     program: Pick<ProgramRecord, "offering" | "categories" | "constraints">,
-    partnerKinds: readonly PartnerKind[]
+    partnerKinds: readonly PartnerKind[],
+    seller?: SellerContext | null
 ): string {
-    const kinds = partnerKinds.map(k => KIND_WORDS[k] ?? k).join(", ") || "businesses";
     return [
-        `${kinds[0]!.toUpperCase()}${kinds.slice(1)} that would buy, stock or resell this: ${program.offering.trim()}`,
-        program.categories.length > 0 ? `Categories: ${program.categories.join(", ")}.` : "",
+        `Businesses that would buy, stock or resell what this seller offers: ${program.offering.trim()}`,
+        program.categories.length > 0
+            ? `Buyer types or categories: ${program.categories.join(", ")}.`
+            : "",
+        partnerKinds.length > 0 ? `As: ${partnerKinds.join(", ")}.` : "",
         program.constraints ? `Constraints: ${program.constraints}` : "",
+        seller?.identity.trim() ? `Seller: ${seller.identity.trim().slice(0, SELLER_IN_BRIEF)}` : "",
     ]
         .filter(Boolean)
         .join(" ");
@@ -140,13 +148,14 @@ export async function relevanceOf(
     embed: EmbedTexts | null | undefined,
     program: Pick<ProgramRecord, "offering" | "categories" | "constraints">,
     partnerKinds: readonly PartnerKind[],
-    companies: ReadonlyArray<Parameters<typeof companyText>[0]>
+    companies: ReadonlyArray<Parameters<typeof companyText>[0]>,
+    seller?: SellerContext | null
 ): Promise<Relevance> {
     if (embed && companies.length > 0) {
         try {
             const scores = await semanticRelevance(
                 embed,
-                buyerBrief(program, partnerKinds),
+                buyerBrief(program, partnerKinds, seller),
                 companies.map(companyText)
             );
             return { method: "semantic", scores };

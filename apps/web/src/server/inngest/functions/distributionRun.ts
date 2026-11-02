@@ -9,6 +9,7 @@
 import {
     DistributionRunEventDataSchema,
     createDefaultPorts,
+    createKeylessPorts,
     enrichCandidate,
     failRun,
     finalizeRun,
@@ -20,7 +21,8 @@ import {
 import { inngest } from "../client";
 import { uploadFile } from "~/lib/storage";
 import { debitTokens } from "~/lib/credits";
-import { prospectEmbedder } from "~/server/prospects/matching";
+import { canPublishToSources } from "~/server/prospects/keyless-run";
+import { prospectEmbedder, prospectFitJudge } from "~/server/prospects/matching";
 import { processDocumentUpload } from "~/server/services/document-upload";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
@@ -90,10 +92,19 @@ export const distributionRunJob = inngest.createFunction(
         const aiUse = { feature: "distribution", userId: data.userId, enforce: false } as const;
         const inWorkspace = <T>(work: () => Promise<T>) =>
             withWorkspaceChatModels(companyId, aiUse, work);
-        const ports = async () =>
-            createDefaultPorts({
+        const ports = async () => {
+            const embed = await prospectEmbedder(companyId);
+            // Same job, same steps; what differs is where companies come from.
+            if (data.mode === "keyless")
+                return createKeylessPorts({
+                    publishDossier: canPublishToSources() ? publishDossier : null,
+                    debitCredits: null,
+                    embed,
+                    judgeFit: await prospectFitJudge(companyId),
+                });
+            return createDefaultPorts({
                 publishDossier,
-                embed: await prospectEmbedder(companyId),
+                embed,
                 debitCredits: async ({ amount, description, referenceId }) => {
                     await debitTokens({
                         companyId,
@@ -104,6 +115,7 @@ export const distributionRunJob = inngest.createFunction(
                     });
                 },
             });
+        };
 
         const startedAtIso = await step.run("start", async () => new Date().toISOString());
 

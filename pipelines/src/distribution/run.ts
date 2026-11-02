@@ -41,7 +41,7 @@ import {
 } from "./gather";
 import { planDiscovery, type PlanInput, type SellerProfile } from "./plan";
 import { makeDossierCreationKey, makeDossierFilename, renderDossierMarkdown } from "./render";
-import { bestTerritoryFit } from "./locate";
+import { bestTerritoryFit, placeLabel } from "./locate";
 import { buildRationaleInput, computeFit, deriveRiskFlags, templateRationale } from "./score";
 import {
     buyerBrief,
@@ -380,17 +380,20 @@ export async function prepareRun(
             const excluded = before - orgs.length;
 
             // Gates before anyone spends a research turn on a company:
-            // - where it is: out only on evidence (a known country or city
-            //   elsewhere); unknown stays, and is ranked below confirmed;
+            // - where it is: out on evidence (a known country or city
+            //   elsewhere); unknown stays, and is ranked below confirmed. A
+            //   country named in a text is weak evidence ("beans from
+            //   Ethiopia"), so with a fit check, it reads those and decides;
             // - what it is, by meaning: it must read more like the segment's
             //   buyer than like business in general (./semantic);
             // - and, with a chat model, the closest ones are asked "would this
             //   business buy this?"; a no takes a company off the list.
             const fitOf = new Map(orgs.map(o => [o.resolveKey, bestTerritoryFit(o, territories)]));
-            const outOfArea = orgs.filter(o => fitOf.get(o.resolveKey) === "out").length;
-            orgs = orgs.filter(o => fitOf.get(o.resolveKey) !== "out");
+            const isOut = (o: ResolvedOrg) => fitOf.get(o.resolveKey) === "out";
+            let outOfArea = ports.judgeFit ? 0 : orgs.filter(isOut).length;
+            if (!ports.judgeFit) orgs = orgs.filter(o => !isOut(o));
 
-            const relevance = await relevanceOf(ports.embed, program, partnerKinds, orgs);
+            const relevance = await relevanceOf(ports.embed, program, partnerKinds, orgs, profile);
             const scoreOf = new Map(orgs.map((o, i) => [o.resolveKey, relevance.scores[i] ?? 0]));
             if (relevance.method === "lexical")
                 warnings.push(
@@ -399,19 +402,39 @@ export async function prepareRun(
             const offTopic = orgs.filter(o => (scoreOf.get(o.resolveKey) ?? 0) <= 0).length;
             orgs = orgs.filter(o => (scoreOf.get(o.resolveKey) ?? 0) > 0);
 
+            // Rank: confirmed inside the area first, then unknown, then named
+            // elsewhere; within those the most relevant, then a wanted role
+            // the text states, a real domain, and mentions.
+            const wanted = new Set<string>(partnerKinds);
+            const FIT_RANK = { in: 2, unknown: 1, out: 0 };
+            const byRank = (a: ResolvedOrg, b: ResolvedOrg) => {
+                const fitA = FIT_RANK[fitOf.get(a.resolveKey) ?? "unknown"];
+                const fitB = FIT_RANK[fitOf.get(b.resolveKey) ?? "unknown"];
+                if (fitA !== fitB) return fitB - fitA;
+                const relA = scoreOf.get(a.resolveKey) ?? 0;
+                const relB = scoreOf.get(b.resolveKey) ?? 0;
+                if (relA !== relB) return relB - relA;
+                const roleA = a.roles.some(r => wanted.has(r)) ? 1 : 0;
+                const roleB = b.roles.some(r => wanted.has(r)) ? 1 : 0;
+                if (roleA !== roleB) return roleB - roleA;
+                const domA = a.domain ? 1 : 0;
+                const domB = b.domain ? 1 : 0;
+                if (domA !== domB) return domB - domA;
+                return b.mentionCount - a.mentionCount;
+            };
+
             let notBuyers = 0;
             // Companies the fit check saw; past them the shortlist does not reach.
             let checked: Set<string> | null = null;
             if (ports.judgeFit && orgs.length > 0) {
                 const pool = [...orgs]
-                    .sort(
-                        (a, b) =>
-                            (scoreOf.get(b.resolveKey) ?? 0) - (scoreOf.get(a.resolveKey) ?? 0)
-                    )
+                    .sort(byRank)
                     .slice(0, options.maxCandidates * JUDGE_POOL_FACTOR);
                 try {
                     const verdicts = await ports.judgeFit({
-                        brief: buyerBrief(program, partnerKinds),
+                        brief: buyerBrief(program, partnerKinds, profile),
+                        where: territories.map(placeLabel).join("; "),
+                        seller: profile,
                         candidates: pool.map(o => ({
                             id: o.resolveKey,
                             name: o.name,
@@ -424,36 +447,28 @@ export async function prepareRun(
                     notBuyers = rejected.size;
                     orgs = orgs.filter(o => !rejected.has(o.resolveKey));
                     checked = new Set(pool.map(o => o.resolveKey));
+                    // It read the text and kept these: the country named there
+                    // was not where they are.
+                    orgs = orgs.map(o =>
+                        isOut(o) && checked!.has(o.resolveKey)
+                            ? { ...o, country: null, region: null, city: null }
+                            : o
+                    );
                 } catch (error) {
                     console.warn(`${LOG_PREFIX} fit check failed; keeping the ranking:`, error);
                     warnings.push(
                         "The fit check could not run; the list is ranked by meaning only."
                     );
+                    outOfArea = orgs.filter(isOut).length;
+                    orgs = orgs.filter(o => !isOut(o));
                 }
             }
             if (outOfArea + offTopic + notBuyers > 0)
                 warnings.push(
-                    `Left out ${outOfArea} compan${outOfArea === 1 ? "y" : "ies"} outside the segment's area, ${offTopic} unrelated to what you sell${ports.judgeFit ? ` and ${notBuyers} the fit check judged would not buy it` : ""}.`
+                    `Left out ${outOfArea} compan${outOfArea === 1 ? "y" : "ies"} outside the segment's area, ${offTopic} unrelated to what you sell${ports.judgeFit ? ` and ${notBuyers} the fit check judged would not buy it or are elsewhere` : ""}.`
                 );
 
-            // Shortlist: most relevant first; then confirmed inside the area,
-            // a wanted role the text states, a real domain, and mentions.
-            const wanted = new Set<string>(partnerKinds);
-            const ranked = [...orgs].sort((a, b) => {
-                const relA = scoreOf.get(a.resolveKey) ?? 0;
-                const relB = scoreOf.get(b.resolveKey) ?? 0;
-                if (relA !== relB) return relB - relA;
-                const inA = fitOf.get(a.resolveKey) === "in" ? 1 : 0;
-                const inB = fitOf.get(b.resolveKey) === "in" ? 1 : 0;
-                if (inA !== inB) return inB - inA;
-                const roleA = a.roles.some(r => wanted.has(r)) ? 1 : 0;
-                const roleB = b.roles.some(r => wanted.has(r)) ? 1 : 0;
-                if (roleA !== roleB) return roleB - roleA;
-                const domA = a.domain ? 1 : 0;
-                const domB = b.domain ? 1 : 0;
-                if (domA !== domB) return domB - domA;
-                return b.mentionCount - a.mentionCount;
-            });
+            const ranked = [...orgs].sort(byRank);
             const shortlist = ranked
                 .filter(o => !checked || checked.has(o.resolveKey))
                 .slice(0, options.maxCandidates);
@@ -654,7 +669,8 @@ export async function enrichCandidate(
                         ...(dossier?.brandsCarried.map(b => b.brand) ?? []),
                     ],
                 },
-            ]
+            ],
+            args.profile
         );
         if (measured.method === "semantic")
             relevance = relevanceShare(measured.scores[0] ?? 0, "semantic");

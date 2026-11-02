@@ -30,19 +30,19 @@ export interface SeenLocation {
 }
 
 /**
- * The location a result's own words give. The wanted territory
- * only breaks ties: when the text names several countries and one is the
- * wanted one, that one; the wanted region counts only when the text names it.
+ * The location a result's own words give. The wanted territory only breaks
+ * ties. Naming the wanted city or region places a company in the wanted
+ * country, whatever other countries it mentions: "Baltimore, MD" says no
+ * country at all, and "roasted in Baltimore, beans from Ethiopia" is not in
+ * Ethiopia. Otherwise, the wanted country if named, else the first one named.
  */
 export function locateFromEvidence(text: string, wanted: Territory | null): SeenLocation {
+    if (wanted?.region && mentionsPlace(text, wanted.region))
+        return { country: wanted.country, region: wanted.region };
     const countries = countriesMentioned(text);
     const country =
         wanted && countries.includes(wanted.country) ? wanted.country : (countries[0] ?? null);
-    const region =
-        wanted?.region && country === wanted.country && mentionsPlace(text, wanted.region)
-            ? wanted.region
-            : null;
-    return { country: country ?? null, region };
+    return { country, region: null };
 }
 
 export type TerritoryFit = "in" | "out" | "unknown";

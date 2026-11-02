@@ -16,7 +16,7 @@ import { isMeteringEnforced } from "~/server/deployment";
 import { runFixtureDistribution } from "~/server/distribution/fixture-run";
 import { inngest } from "~/server/inngest/client";
 import { toRunDto } from "~/server/prospects/adapter";
-import { runKeylessProspects } from "~/server/prospects/keyless-run";
+import { readProspectsExecutor, runKeylessProspects } from "~/server/prospects/keyless-run";
 import { pickRunMode, readRunEnvironment } from "~/server/prospects/run-mode";
 import { listRunDtos } from "~/server/prospects/service";
 import { loadWorkspaceChatModelsScope } from "~/server/workspace-models/scope";
@@ -131,7 +131,7 @@ export async function POST(request: NextRequest) {
                     const finished = await getRun(run.id, ctx.companyId);
                     return json({ run: toRunDto(finished ?? run) }, 201);
                 }
-                if (mode === "keyless") {
+                if (mode === "keyless" && readProspectsExecutor() === "inline") {
                     // Public sources take tens of seconds: answer now, work after the
                     // response, and let the UI poll the run row as the stages advance.
                     const requestUrl = request.url;
@@ -158,6 +158,7 @@ export async function POST(request: NextRequest) {
                         companyId: ctx.companyId.toString(),
                         userId: ctx.userId,
                         requestUrl: request.url,
+                        mode,
                     },
                 });
                 return json({ run: toRunDto(run) }, 202);

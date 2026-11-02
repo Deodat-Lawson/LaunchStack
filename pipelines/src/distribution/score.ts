@@ -4,6 +4,7 @@
  * may not change it. Competitors of the seller, the seller itself and
  * excluded organisations score zero by rule.
  */
+import { mentionsPlace, territoryFit } from "./locate";
 import type {
     Dossier,
     FitBreakdown,
@@ -200,7 +201,19 @@ export function computeFit(input: ScoreInput): FitBreakdown {
         t.territory.toLowerCase()
     );
     let territoryMatch = 0;
-    if (wanted && input.org.country === wanted) territoryMatch = WEIGHTS.territoryMatch;
+    if (wanted && input.org.country === wanted) {
+        // A city or region was asked for: the right country alone is half of it.
+        const fit = input.territory ? territoryFit(input.org, input.territory) : "in";
+        const confirmed =
+            fit === "in" ||
+            (input.territory?.region !== undefined &&
+                dossierTerritories.some(t => mentionsPlace(t, input.territory!.region!)));
+        territoryMatch = confirmed
+            ? WEIGHTS.territoryMatch
+            : fit === "out"
+              ? 0
+              : Math.round(WEIGHTS.territoryMatch * 0.5);
+    }
     else if (input.org.country && targetCountries.has(input.org.country))
         territoryMatch = Math.round(WEIGHTS.territoryMatch * 0.8);
     else if (wanted && dossierTerritories.some(t => t.includes(wanted.toLowerCase())))

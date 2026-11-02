@@ -36,6 +36,19 @@ describe("locateFromEvidence", () => {
         expect(locateFromEvidence("Roasters in Germany and Austria", baltimore).country).toBe("DE");
     });
 
+    it("takes the wanted city as the wanted country, whatever else the text names", () => {
+        const here = { country: "US", region: "Baltimore" };
+        expect(locateFromEvidence("Fine foods in Baltimore, MD", baltimore)).toEqual(here);
+        expect(
+            locateFromEvidence("Roasted in Baltimore, beans from Ethiopia and Germany", baltimore)
+        ).toEqual(here);
+    });
+
+    it("has no territory to break ties with for a lookalike", () => {
+        expect(locateFromEvidence("Roasters in Germany", null).country).toBe("DE");
+        expect(locateFromEvidence("Roasters", null).country).toBeNull();
+    });
+
     it("prefers the wanted country when the text names several", () => {
         expect(
             locateFromEvidence("Offices in Germany and the United States", baltimore).country

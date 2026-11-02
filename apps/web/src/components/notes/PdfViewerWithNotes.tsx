@@ -4,6 +4,7 @@ import {
     memo,
     useCallback,
     useEffect,
+    useLayoutEffect,
     useMemo,
     useRef,
     useState,
@@ -811,7 +812,14 @@ export function PdfViewerWithNotes({
     // below are the new ones; then the pages near the restored position are
     // drawn. A zoom keeps the point under the pointer still; any other
     // change keeps the current page where it was.
-    useEffect(() => {
+    //
+    // A layout effect, not a passive one: when the pages shrink, the browser
+    // clamps the scroll position to the new, shorter range and fires a
+    // scroll event for it. Run after paint, this restore could lose that
+    // race — the clamped position would be noted as the reader's place and
+    // "restored" to the end of the book. Before paint, the restore comes
+    // first and the clamp's scroll event sees the restored position.
+    useLayoutEffect(() => {
         const container = containerRef.current;
         if (!container) return;
         const anchor = zoomAnchor.current;

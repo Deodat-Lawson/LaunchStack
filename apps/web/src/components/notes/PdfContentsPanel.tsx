@@ -74,8 +74,11 @@ const ITEM_PADDING = 4;
 const MIN_THUMB_WIDTH = 48;
 const INDENT_PX = 12;
 
-function scrollNearest(el: Element | null | undefined): void {
-    if (el && typeof el.scrollIntoView === "function") el.scrollIntoView({ block: "nearest" });
+function scrollNearest(
+    el: Element | null | undefined,
+    block: ScrollLogicalPosition = "nearest"
+): void {
+    if (el && typeof el.scrollIntoView === "function") el.scrollIntoView({ block });
 }
 
 /**
@@ -172,9 +175,18 @@ function ThumbnailStrip({
         return () => observer.disconnect();
     }, [width]);
 
+    // On the page changing, the current row moves the least distance into
+    // view. When the strip has just opened, or its rows change size — the
+    // first thumbnail reporting the real page shape, the strip's width
+    // settling — the row is centred instead: rows above it still shift by a
+    // few pixels as their thumbnails draw, and a row aligned to the edge
+    // was pushed out of view by that.
+    const scrolledToPage = useRef<number | null>(null);
     useEffect(() => {
-        scrollNearest(listRef.current?.querySelector(`[data-page="${currentPage}"]`));
-    }, [currentPage]);
+        const row = listRef.current?.querySelector(`[data-page="${currentPage}"]`);
+        scrollNearest(row, scrolledToPage.current === currentPage ? "center" : "nearest");
+        scrolledToPage.current = currentPage;
+    }, [currentPage, aspect, listWidth]);
 
     const onMeasure = useCallback((ratio: number) => {
         if (measured.current || !Number.isFinite(ratio) || ratio <= 0) return;

@@ -430,7 +430,7 @@ describe("PdfViewerWithNotes pages in view", () => {
         // Every page has a box; only the first screenfuls carry a canvas.
         expect(document.querySelectorAll("[data-pdf-page]")).toHaveLength(30);
         await waitFor(() => expect(drawnPages()).toEqual([1, 2]));
-        const blank = document.querySelector('[data-pdf-page="20"]')!;
+        const blank = document.querySelector<HTMLElement>('[data-pdf-page="20"]')!;
         expect(blank.style.width).toBe("750px");
         expect(blank.style.height).toBe("1000px");
 

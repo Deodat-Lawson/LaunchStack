@@ -186,6 +186,7 @@ describeDb("distribution pipeline end to end (fixture ports, real database)", ()
                 partnerKinds: ["importer", "distributor", "retailer"],
                 constraints: null,
                 knownPartnerDomains: [],
+                customerDomains: [],
             },
         });
         const ports = createFixturePorts({ category: "specialty coffee", world });

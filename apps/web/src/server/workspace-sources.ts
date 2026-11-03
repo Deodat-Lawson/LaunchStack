@@ -56,7 +56,8 @@ export function isSourceOriginFilter(value: unknown): value is SourceOriginFilte
 }
 
 /** The connector that imported a document, or null for one added here. */
-function originColumn() {
+/** The connector a document was imported through, or null for one added here. */
+export function originColumn() {
     return sql<string | null>`${document.ocrMetadata} ->> 'connector'`;
 }
 

@@ -70,21 +70,24 @@ import { createWebTools, webSearchAvailable, webToolsPrompt } from "~/server/cha
 import {
     FULL_READ_TOKEN_BUDGET,
     MAX_CITED_SOURCES,
-    attachedFilesPrompt,
+    answeringPrompt,
+    attachmentsBlock,
     citeSources,
-    excerptsBlock,
+    documentsBlock,
     filesShown,
     fitsFullRead,
-    fullReadBlock,
     labelScopeFiles,
-    manifestBlock,
     onePerSource,
     passageResult,
+    sourcesPrompt,
+    type AttachmentEntry,
     type Coverage,
     type ScopeFile,
     type SourcePassage,
 } from "~/server/chat-sources";
 import { loadScopeFiles, readWholeFiles } from "~/server/chat-source-data";
+import { renderHistoryMentions, renderMessageMentions } from "~/server/chat-mentions";
+import { mentionsAsLabels } from "~/lib/source-mentions";
 import { addTokenUsage } from "@launchstack/llm";
 import { isInternalFileUrl, parseInternalFileId } from "@launchstack/store/crypto";
 import { env } from "~/env";
@@ -164,6 +167,7 @@ interface RespondInput
                 | "searchScope"
                 | "archiveName"
                 | "selectedDocumentIds"
+                | "sourceMentions"
                 | "documentId"
                 | "embeddingIndexKey"
                 | "conversationHistory"
@@ -515,43 +519,60 @@ function truncateUtf8(value: string, limit: number): string {
     return new TextDecoder().decode(Buffer.from(value).subarray(0, limit), { stream: true });
 }
 
-async function buildAttachmentTextBlock(
+/**
+ * The text of each file uploaded with the message, for its `<attachment>`
+ * block (chat-sources.ts): whole when it fits, cut to the budget when not,
+ * and with no text but a reason when there is none to give.
+ */
+async function readAttachmentEntries(
     textAttachments: AttachmentPayload[],
     context: AttachmentReadContext
-): Promise<string> {
-    if (textAttachments.length === 0) return "";
+): Promise<AttachmentEntry[]> {
+    if (textAttachments.length === 0) return [];
     const { signal } = context;
 
     let remainingBudget = ATTACHMENT_TEXT_CAP_BYTES;
     const downloadBudget = { remaining: ATTACHMENT_DOWNLOAD_CAP_BYTES };
-    const blocks: string[] = [];
+    const entries: AttachmentEntry[] = [];
 
     for (const att of textAttachments) {
         throwIfChatAborted(signal);
         if (remainingBudget <= 0 || downloadBudget.remaining <= 0) {
-            blocks.push(
-                `=== User Attachment: ${att.name} ===\n[omitted — prior attachments filled the context budget]`
-            );
+            entries.push({
+                name: att.name,
+                mimeType: att.mimeType,
+                text: "",
+                coverage: "omitted: earlier attachments filled the budget",
+            });
             continue;
         }
 
         try {
             const raw = await extractAttachmentText(att, context, downloadBudget);
             if (!raw.trim()) {
-                blocks.push(
-                    `=== User Attachment: ${att.name} ===\n[no extractable text — if this is a scanned PDF or image-only doc, add it as a Source to run OCR]`
-                );
+                entries.push({
+                    name: att.name,
+                    mimeType: att.mimeType,
+                    text: "",
+                    coverage:
+                        "no text: a scanned PDF or image-only file has to be added as a source to run OCR",
+                });
                 continue;
             }
             const trimmed = truncateUtf8(
                 raw,
                 Math.min(ATTACHMENT_PER_FILE_CAP_BYTES, remainingBudget)
             );
-            const suffix = trimmed.length < raw.length ? "\n[…attachment truncated]" : "";
             remainingBudget -= Buffer.byteLength(trimmed);
-            blocks.push(
-                `=== User Attachment: ${att.name} (${att.mimeType}) ===\n${trimmed}${suffix}`
-            );
+            entries.push({
+                name: att.name,
+                mimeType: att.mimeType,
+                text: trimmed,
+                coverage:
+                    trimmed.length < raw.length
+                        ? `cut at ${trimmed.length.toLocaleString("en-US")} of ${raw.length.toLocaleString("en-US")} characters`
+                        : "complete",
+            });
         } catch (err) {
             throwIfChatAborted(signal);
             if (err instanceof AttachmentReadError) throw err;
@@ -562,7 +583,7 @@ async function buildAttachmentTextBlock(
         }
     }
 
-    return `\n\n${blocks.join("\n\n")}`;
+    return entries;
 }
 
 /**
@@ -659,6 +680,7 @@ export async function POST(request: Request) {
                 searchScope,
                 archiveName,
                 selectedDocumentIds,
+                sourceMentions,
                 enableWebSearch: requestedWebSearch,
                 aiPersona,
                 aiModel,
@@ -685,7 +707,8 @@ export async function POST(request: Request) {
             // which holds only what they typed. Retrieval searches on the
             // question; a bare "explain this" searches on the passage too.
             const passages = requestedPassages ?? [];
-            const retrievalQuery = retrievalQueryFor(question, passages);
+            // A chip's link is noise to an embedding; its label is the name.
+            const retrievalQuery = retrievalQueryFor(mentionsAsLabels(question), passages);
             const automaticThinking = requestedThinking === "auto";
             const wantsThinking =
                 automaticThinking ||
@@ -949,6 +972,7 @@ export async function POST(request: Request) {
                 searchScope,
                 archiveName,
                 selectedDocumentIds,
+                sourceMentions,
                 documentId,
                 embeddingIndexKey,
                 conversationHistory,
@@ -1020,6 +1044,7 @@ export async function POST(request: Request) {
                 searchScope,
                 archiveName,
                 selectedDocumentIds,
+                sourceMentions,
                 documentId,
                 embeddingIndexKey,
                 conversationHistory,
@@ -1072,6 +1097,8 @@ export async function POST(request: Request) {
             // and read whole when they fit the full-read budget.
             let scopeFiles: ScopeFile[] = [];
             let wholeFiles: Map<number, SourcePassage[]> | null = null;
+            // The document ids this turn may read, whether or not their titles loaded.
+            let admittedIds: number[] = [];
             if (searchScope !== "none") {
                 const companyConfig = await getCompanyEmbeddingConfig(numericCompanyId);
 
@@ -1161,6 +1188,7 @@ export async function POST(request: Request) {
                     (searchScope === "document" && authorizedDocument
                         ? [authorizedDocument.id]
                         : []);
+                admittedIds = scopeIds;
                 try {
                     scopeFiles = labelScopeFiles(await loadScopeFiles(scopeIds));
                     if (fitsFullRead(scopeFiles)) {
@@ -1373,9 +1401,11 @@ export async function POST(request: Request) {
                 whole: anchorsRetrieved,
             });
 
-            // What the model is told about the attached files: the list, each
-            // passage under its file's id, and how much of the set it saw
-            // (chat-sources.ts). Without that it reads a sample as the whole.
+            // What the model is told about the sources: each one as a
+            // <document> block under its id, how much of the set it saw, and
+            // the person's chips rendered as "Title" (d12) so a mention and a
+            // block share an id (chat-sources.ts, chat-mentions.ts). Without
+            // that it reads a sample as the whole, and a dead link as a name.
             const coverage: Coverage = wholeFiles
                 ? { mode: "full" }
                 : promptDocuments.length > 0
@@ -1385,16 +1415,32 @@ export async function POST(request: Request) {
                         filesShown: filesShown(promptDocuments, scopeFiles),
                     }
                   : { mode: "passage-only" };
-            const combinedContent = wholeFiles
-                ? fullReadBlock(scopeFiles, wholeFiles)
-                : excerptsBlock(promptDocuments, scopeFiles);
+            const documentsSection = documentsBlock({
+                files: scopeFiles,
+                whole: wholeFiles,
+                results: promptDocuments,
+            });
+            const mentions = renderMessageMentions(question, {
+                mentions: sourceMentions,
+                admitted: new Set([...admittedIds, ...scopeFiles.map(file => file.id)]),
+                files: scopeFiles,
+                uploads: [...textAttachments, ...imageAttachments].map(att => ({
+                    name: att.name,
+                    url: att.url,
+                })),
+            });
+            // A send of chips alone carries the client's placeholder as its
+            // words; the message has no words line and the system prompt says
+            // what the person is asking for.
+            const wordsOmitted = questionOrigin === "attachment";
             console.log(
-                `✅ [AIChat] Context: ${retrievalMethod}, ${scopeFiles.length} attached file(s), ` +
+                `✅ [AIChat] Context: ${retrievalMethod}, ${scopeFiles.length} source(s) in scope, ` +
                     (coverage.mode === "excerpts"
-                        ? `${coverage.passages} passage(s) from ${coverage.filesShown} file(s), pages ${promptDocuments.map(doc => doc.metadata?.page).join(", ")}`
+                        ? `${coverage.passages} passage(s) from ${coverage.filesShown} source(s), pages ${promptDocuments.map(doc => doc.metadata?.page).join(", ")}`
                         : coverage.mode === "full"
-                          ? `${documents.length} section(s) read whole (${combinedContent.length} chars)`
-                          : "selected passage only")
+                          ? `${documents.length} section(s) read whole (${documentsSection.length} chars)`
+                          : "selected passage only") +
+                    `, mentions=${mentions.stats.mentions} resolved=${mentions.stats.resolved} unavailable=${mentions.stats.unavailable}`
             );
 
             // A workspace's own model has no tool-calling answer to read
@@ -1469,7 +1515,7 @@ export async function POST(request: Request) {
             if (attachmentCount > 0)
                 step("attachments", "active", ts("readingAttachments", { count: attachmentCount }));
             const attachmentContext = { request, signal, companyId: userCompanyId, scope };
-            const attachmentTextBlock = await buildAttachmentTextBlock(
+            const attachmentEntries = await readAttachmentEntries(
                 textAttachments,
                 attachmentContext
             );
@@ -1491,11 +1537,14 @@ export async function POST(request: Request) {
 
             const selectedStyle = style satisfies keyof typeof SYSTEM_PROMPTS;
 
-            // Build conversation context
-            let conversationContext = "";
-            if (conversationHistory) {
-                conversationContext = `\n\nPrevious conversation context:\n${conversationHistory}\n\nPlease continue the conversation naturally, referencing previous exchanges when relevant.`;
-            }
+            // Earlier turns open the message as the client serialised them
+            // (lib/chat-turns.ts), their chips rendered like this turn's.
+            const historySection = conversationHistory
+                ? `<history>\n${renderHistoryMentions(conversationHistory, {
+                      mentions: sourceMentions,
+                      files: scopeFiles,
+                  })}\n</history>`
+                : "";
 
             // Operating rules precede presentation preferences; a named
             // agent supplies the role and more specific output contract.
@@ -1507,8 +1556,14 @@ export async function POST(request: Request) {
                 ? await loadChatCompanyProfile(ctx.data, scope)
                 : "";
             if (companyProfile) systemPrompt += `\n\n${companyProfile}`;
-            if (scopeFiles.length > 0) {
-                systemPrompt += `\n\n${attachedFilesPrompt(scopeFiles, coverage, Boolean(sourceTools))}`;
+            if (
+                scopeFiles.length > 0 ||
+                mentions.stats.unavailable > 0 ||
+                attachmentEntries.length > 0
+            ) {
+                systemPrompt += `\n\n${sourcesPrompt(scopeFiles, coverage, Boolean(sourceTools), {
+                    unavailable: mentions.stats.unavailable,
+                })}`;
             }
             if (sourceTools && sourcesOverview) {
                 systemPrompt += `\n\n${sourceToolsPrompt(sourcesOverview, searchScope !== "none")}`;
@@ -1532,26 +1587,36 @@ export async function POST(request: Request) {
             }
             if (webTools)
                 systemPrompt += `\n\n${webToolsPrompt(new Date(), { search: webTools.search })}`;
+            // What to answer from: a rule, so it sits with the rules and the
+            // person's words stay the last thing the model reads.
+            systemPrompt += `\n\n${answeringPrompt({
+                scoped: searchScope !== "none",
+                sourceTools: Boolean(sourceTools),
+                web: Boolean(webTools),
+                history: Boolean(conversationHistory),
+                wordsOmitted,
+            })}`;
             // Answer in the language the person reads the app in, unless they
             // write in another one (src/i18n/server.ts).
             const replyLanguage = replyLanguageInstruction(locale);
             if (replyLanguage) systemPrompt += `\n\n${replyLanguage}`;
 
-            const passageBlock = passageSection ? `${passageSection}\n\n` : "";
-            const documentContent =
-                passageSection && !combinedContent
-                    ? "(nothing beyond the selected passage)"
-                    : combinedContent;
-            const contentHeading =
-                scopeFiles.length === 0
-                    ? "Relevant document content:"
-                    : coverage.mode === "full"
-                      ? "Full text of every attached file:"
-                      : coverage.mode === "excerpts"
-                        ? `Relevant passages (${coverage.passages} from ${coverage.filesShown} of ${scopeFiles.length} attached file${scopeFiles.length === 1 ? "" : "s"}):`
-                        : "Relevant passages:";
-            const manifest = scopeFiles.length > 0 ? `${manifestBlock(scopeFiles)}\n\n` : "";
-            const userPrompt = `User's question: "${question}"${conversationContext}\n\n${passageBlock}${manifest}${contentHeading}\n${documentContent}${attachmentTextBlock}\n\nAnswer ${searchScope !== "none" ? "based primarily on the provided content" : sourceTools ? "using what you find in the workspace's sources when the question is about them, the user attachments when present, and your general knowledge" : "using the user attachments when present and your general knowledge"}.${webTools ? " When using information from web sources, cite them using [Source N] format." : ""} Maintain continuity with any previous conversation.`;
+            // The message: earlier turns, the selected passages, the sources,
+            // the uploads, then the person's words — last, never quoted inside
+            // a template, each chip rendered as "Title" (d12)
+            // (docs/design/inline-source-context.md). A send of chips alone
+            // has no words line. Nothing at all falls back to what was typed.
+            const attachmentsSection = attachmentsBlock(attachmentEntries);
+            const userPrompt =
+                [
+                    historySection,
+                    passageSection,
+                    documentsSection,
+                    attachmentsSection,
+                    wordsOmitted ? "" : mentions.text,
+                ]
+                    .filter(Boolean)
+                    .join("\n\n") || question;
 
             // When images are attached, send a multimodal HumanMessage so the
             // vision model sees the text prompt and the image URLs in one turn.
@@ -1592,7 +1657,7 @@ export async function POST(request: Request) {
             }, 0);
             // A whole-file read has its own budget (FULL_READ_TOKEN_BUDGET);
             // the limit holds for everything else in the prompt.
-            const fullReadCharacters = wholeFiles ? combinedContent.length : 0;
+            const fullReadCharacters = wholeFiles ? documentsSection.length : 0;
             if (promptCharacters - fullReadCharacters > 120_000) {
                 recordResult("error");
                 return refusal(t("query.inputTooLong"), 400);
@@ -1646,7 +1711,7 @@ export async function POST(request: Request) {
                     hasInitialEvidence:
                         documents.length > 0 ||
                         passages.length > 0 ||
-                        attachmentTextBlock.length > 0 ||
+                        attachmentEntries.some(entry => entry.text.length > 0) ||
                         imageAttachmentUrls.length > 0,
                     signal,
                     stream: emit && {

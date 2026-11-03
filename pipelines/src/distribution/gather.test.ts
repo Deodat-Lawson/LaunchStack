@@ -5,7 +5,6 @@ import { createStaticTradeDataProvider } from "@launchstack/tools/trade-data";
 import type { CompanyHit } from "@launchstack/tools/web-research";
 
 import {
-    mentionFromCompanyHit,
     companyName,
     gather,
     lookalikeQuery,
@@ -53,71 +52,8 @@ describe("mentionFromWebResult", () => {
         );
         expect(m.name).toBe("Acme Import GmbH");
         expect(m.roles).toEqual(expect.arrayContaining(["importer", "distributor"]));
-        // The text names no country and a domain ending is not evidence: unknown, not "in".
-        expect(m.country).toBeNull();
+        expect(m.country).toBe("DE");
         expect(m.source).toBe("web:directory");
-    });
-});
-
-describe("mentionFromCompanyHit location", () => {
-    const hit = (description: string): CompanyHit => ({
-        url: "https://charm.example/",
-        domain: "charm.example",
-        title: "Charm City Roasters",
-        description,
-    });
-
-    it("takes the place the homepage states, and the searched one only to break a tie", () => {
-        const baltimore = { country: "US", region: "Baltimore" };
-        const local = mentionFromCompanyHit(hit("Roasting in Baltimore, MD, USA"), baltimore, "s");
-        expect([local.country, local.region]).toEqual(["US", "Baltimore"]);
-        const elsewhere = mentionFromCompanyHit(hit("Roasters in Germany"), baltimore, "s");
-        expect([elsewhere.country, elsewhere.region]).toEqual(["DE", null]);
-        const silent = mentionFromCompanyHit(hit("We roast coffee."), baltimore, "s");
-        expect([silent.country, silent.region]).toEqual([null, null]);
-        expect(silent.roles).toEqual([]);
-    });
-});
-
-describe("mentionFromWebResult location and roles", () => {
-    const baltimore: PlannedSourceQuery = {
-        kind: "web",
-        territory: { country: "US", region: "Baltimore" },
-        partnerKind: "distributor",
-        query: "specialty coffee Baltimore, United States",
-        label: "directories",
-        rationale: "r",
-    };
-
-    it("records where the result says it is, never where we searched", () => {
-        const m = mentionFromWebResult(
-            {
-                url: "https://trymango.example",
-                title: "Mango | B2B, Productivity",
-                content: "AI meeting notes. Located in San Francisco, CA, USA.",
-                score: 0.8,
-            },
-            baltimore
-        );
-        expect(m.country).toBe("US");
-        expect(m.region).toBeNull();
-    });
-
-    it("leaves the location unknown when the result does not state one", () => {
-        const m = mentionFromWebResult(
-            { url: "https://beanly.com", title: "Beanly", content: "Coffee for offices", score: 1 },
-            baltimore
-        );
-        expect(m.country).toBeNull();
-        expect(m.region).toBeNull();
-    });
-
-    it("does not invent a role from the query's partner kind", () => {
-        const m = mentionFromWebResult(
-            { url: "https://beanly.com", title: "Beanly", content: "Coffee for offices", score: 1 },
-            baltimore
-        );
-        expect(m.roles).toEqual([]);
     });
 });
 
@@ -232,8 +168,7 @@ describe("gather with company search", () => {
             expect.arrayContaining(["importer", "distributor"])
         );
         expect(result.mentions[1]!.roles).toEqual(["wholesaler"]);
-        // Neither homepage names a country: unknown, not the country searched.
-        expect(result.mentions.every(m => m.country === null)).toBe(true);
+        expect(result.mentions.every(m => m.country === "DE")).toBe(true);
         const web = result.sources.find(s => s.source === "web")!;
         expect(web).toMatchObject({ status: "ok", results: 2, queries: 1 });
         expect(result.webResults.map(r => r.url)).toEqual([
@@ -365,9 +300,8 @@ describe("lookalikes", () => {
             ["Tulip Post", "lookalike:delta.example"],
             ["Kanaal Fulfilment", "lookalike:pickpoint.example"],
         ]);
-        // Where and what a lookalike is come from its homepage, not the search.
-        expect(lookalikes.every(m => m.country === null)).toBe(true);
-        expect(lookalikes[0]!.roles).toEqual([]);
+        expect(lookalikes.every(m => m.country === "NL")).toBe(true);
+        expect(lookalikes[0]!.roles).toEqual(["distributor"]);
         expect(result.sources.find(s => s.source === "lookalike")).toEqual({
             source: "lookalike",
             queries: 2,

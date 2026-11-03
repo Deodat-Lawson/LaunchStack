@@ -69,18 +69,6 @@ function formatTrendsSummary(research: MarketingResearchResult[]): string {
         .join("\n");
 }
 
-/**
- * Where a run keeps the stages it has finished, so a retry (the worker's, or
- * a stalled inline run picked up again) skips them instead of redoing ten
- * model calls. Only a stage's real success is saved — never a degradable
- * stage's fallback, which deserves another try. Values must survive a JSON
- * round trip (they are stored in a jsonb column).
- */
-export interface StageCheckpoint {
-    get(step: PipelineStepId): unknown;
-    put(step: PipelineStepId, value: unknown): Promise<void>;
-}
-
 function stepLabel(step: PipelineStepId): string {
     return PIPELINE_STEPS.find(s => s.id === step)?.label ?? step;
 }
@@ -100,9 +88,8 @@ export async function runMarketingPipeline(args: {
     debug?: boolean;
     onProgress?: OnPipelineProgress;
     signal?: AbortSignal;
-    checkpoint?: StageCheckpoint;
 }): Promise<MarketingPipelineResult> {
-    const { onProgress, signal, checkpoint } = args;
+    const { onProgress, signal } = args;
     const pipelineStart = Date.now();
 
     /** Shared runner options; every stage adds its own definition on top. */
@@ -112,19 +99,8 @@ export async function runMarketingPipeline(args: {
             "label" | "onProgress" | "signal" | "logPrefix"
         >
     ): Promise<S | F> {
-        const saved = checkpoint?.get(options.id);
-        const run: typeof options.run =
-            saved !== undefined
-                ? // Finished on an earlier attempt: report it again from the saved value.
-                  async () => saved as S
-                : async tools => {
-                      const value = await options.run(tools);
-                      await checkpoint?.put(options.id, value);
-                      return value;
-                  };
         return runStage<S, F, PipelineStepId>({
             ...options,
-            run,
             label: stepLabel(options.id),
             onProgress,
             signal,
@@ -480,7 +456,7 @@ export async function runMarketingPipeline(args: {
         id: "verifying-claims",
         policy: "degradable",
         fallback: {
-            value: { claims: [], totalClaimsFound: 0, unavailable: true },
+            value: { claims: [], totalClaimsFound: 0 },
             detail: "Claim source lookup unavailable",
             narration:
                 "Claim source lookup unavailable — could not cross-reference claims with the knowledge base. Manual review recommended.",
@@ -488,30 +464,26 @@ export async function runMarketingPipeline(args: {
         },
         run: () => checkClaimSources({ companyId: args.companyId, message: bestVariant.message }),
         report: result => {
-            const supported = result.claims.filter(c => c.support === "supported").length;
-            const review = result.claims.length - supported;
+            const sourced = result.claims.filter(c => c.match !== null).length;
             const truncationNote =
                 result.totalClaimsFound > result.claims.length
                     ? ` (checked ${result.claims.length} of ${result.totalClaimsFound} found)`
                     : "";
             return {
-                detail: `${result.claims.length} claim${result.claims.length !== 1 ? "s" : ""}, ${supported} supported by your documents${truncationNote}`,
+                detail: `${result.claims.length} claim${result.claims.length !== 1 ? "s" : ""}, ${sourced} sourced${truncationNote}`,
                 data: {
                     claims: result.claims.map(c => ({
                         claim: c.claim.slice(0, 100),
-                        support: c.support,
                         sourceDoc: c.match?.sourceDoc ?? null,
+                        relevance:
+                            c.match?.relevance != null ? Math.round(c.match.relevance * 100) : null,
                     })),
                 },
-                narration:
-                    review === 0
-                        ? `Checking each claim against the company's documents... all ${result.claims.length} are stated in a document.`
-                        : `Checking each claim against the company's documents... ${supported}/${result.claims.length} are stated in a document; ${review} need${review === 1 ? "s" : ""} a person to check before posting.`,
+                narration: `Cross-referencing claims against the knowledge base... ${sourced}/${result.claims.length} claim${result.claims.length !== 1 ? "s" : ""} have a matching source. ${sourced === result.claims.length ? "Every claim has a source." : "Some claims lack a matching source — review recommended."}`,
             };
         },
     });
     const claimSources = checked.claims;
-    const claimCheckUnavailable = checked.unavailable === true;
 
     // 6) Save to performance history (fire & forget)
     void saveGeneratedContent({
@@ -558,6 +530,5 @@ export async function runMarketingPipeline(args: {
             companyContext: companyContextBase,
         },
         claimSources,
-        ...(claimCheckUnavailable ? { claimCheckUnavailable } : {}),
     };
 }

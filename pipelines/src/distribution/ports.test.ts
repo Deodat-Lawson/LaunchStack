@@ -14,10 +14,6 @@ const search = vi.hoisted(() => ({
 vi.mock("@launchstack/llm", () => ({
     createLangchainAgentPort: () => ({ respond: vi.fn() }),
     modelContentToText: (content: unknown) => String(content),
-    resolveAgentChatModel: () => ({
-        chat: { invoke: vi.fn() },
-        prepareMessages: (m: unknown) => m,
-    }),
     resolveChatModel: () => ({ chat: { invoke: vi.fn() }, prepareMessages: (m: unknown) => m }),
 }));
 

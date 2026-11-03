@@ -384,21 +384,3 @@ export function describeChatError(
     if (!config) return null;
     return describeChatEndpointError(error, config.endpoint, modelId);
 }
-
-/**
- * A model for an agent loop with function tools. A model that does not declare
- * native tool calling but offers a `none` effort asks for it outright: some
- * deployments (see config/chat-models) refuse tools alongside any reasoning,
- * and apply an effort of their own when a request names none.
- */
-export function resolveAgentChatModel(options: ResolveChatModelOptions = {}): ResolvedChatModel {
-    const resolved = resolveChatModel(options);
-    const { reasoning, nativeStructuredOutput } = resolved.behavior;
-    const needsEffortOff =
-        reasoning.mode === "effort" &&
-        reasoning.levels.none !== undefined &&
-        !nativeStructuredOutput.includes("tool-calling");
-    return needsEffortOff
-        ? resolveChatModel({ ...options, reasoningControl: { enabled: true, effort: "none" } })
-        : resolved;
-}

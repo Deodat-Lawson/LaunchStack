@@ -31,7 +31,6 @@ import { brandPublishDueCron } from "~/server/inngest/functions/brandPublishDue"
 import { brandSyncInsightsCron } from "~/server/inngest/functions/brandSyncInsights";
 import { proposalsRunJob } from "~/server/inngest/functions/proposalsRun";
 import { scenarioRunJob } from "~/server/inngest/functions/scenarioRun";
-import { marketingRunJob } from "~/server/inngest/functions/marketingRun";
 import {
     googleDriveSyncCron,
     googleDriveSyncJob,
@@ -67,7 +66,6 @@ export function createInngestHandler() {
             brandSyncInsightsCron,
             proposalsRunJob,
             scenarioRunJob,
-            marketingRunJob,
         ],
     });
 }

@@ -1,25 +1,20 @@
 /**
- * The deal stage machine (design §4.3 "Stages"): one table of allowed moves
- * and the fields each stage requires. Pure — the db layer applies it and
- * writes the event and the stage history; the route reports its errors.
- *
- * Forward is lead → qualified → contacted → meeting → proposal →
- * negotiating → won, one step at a time, with two shortcuts a real sales
- * motion takes: a lead may be contacted before anyone formally qualifies it,
- * and an accepted proposal may close without a negotiation. Every live stage
- * may step back one and may leave for lost or nurture.
+ * The relationship stage machine (design §4.3 "Stages"): one table of
+ * allowed moves and the fields each stage requires. Pure — the db layer
+ * applies it and writes the event; the route reports its errors.
  */
 import type { RelationshipStage } from "./types";
 import { RELATIONSHIP_STAGES, TERMINAL_STAGES } from "./types";
 
 const FORWARD: RelationshipStage[] = [
-    "lead",
-    "qualified",
+    "candidate",
+    "researched",
     "contacted",
-    "meeting",
-    "proposal",
+    "in_conversation",
+    "qualified",
     "negotiating",
-    "won",
+    "contracted",
+    "active",
 ];
 
 const ORDER = new Map<RelationshipStage, number>(FORWARD.map((stage, i) => [stage, i]));
@@ -28,15 +23,16 @@ const ORDER = new Map<RelationshipStage, number>(FORWARD.map((stage, i) => [stag
 export const ALLOWED_TRANSITIONS: Readonly<
     Record<RelationshipStage, readonly RelationshipStage[]>
 > = {
-    lead: ["qualified", "contacted", "lost", "nurture"],
-    qualified: ["contacted", "lead", "lost", "nurture"],
-    contacted: ["meeting", "qualified", "lost", "nurture"],
-    meeting: ["proposal", "contacted", "lost", "nurture"],
-    proposal: ["negotiating", "won", "meeting", "lost", "nurture"],
-    negotiating: ["won", "proposal", "lost", "nurture"],
-    won: ["nurture", "negotiating"],
-    lost: ["lead", "qualified"],
-    nurture: ["lead", "contacted", "meeting", "proposal", "won"],
+    candidate: ["researched", "contacted", "declined", "dormant"],
+    researched: ["contacted", "candidate", "declined", "dormant"],
+    contacted: ["in_conversation", "researched", "declined", "dormant"],
+    in_conversation: ["qualified", "contacted", "declined", "dormant"],
+    qualified: ["negotiating", "in_conversation", "declined", "dormant"],
+    negotiating: ["contracted", "qualified", "declined", "dormant"],
+    contracted: ["active", "negotiating", "dormant"],
+    active: ["dormant", "negotiating"],
+    declined: ["candidate", "researched"],
+    dormant: ["candidate", "contacted", "in_conversation", "qualified", "active"],
 };
 
 export interface StageRequirementContext {
@@ -54,7 +50,7 @@ export interface StageRequirementError {
     message: string;
 }
 
-/** Fields a deal must carry to *enter* a stage. */
+/** Fields a relationship must carry to *enter* a stage. */
 export function stageRequirements(
     target: RelationshipStage,
     context: StageRequirementContext
@@ -69,14 +65,18 @@ export function stageRequirements(
             message: `An owner is required from "contacted" onward (entering "${target}").`,
         });
     }
-    if (rank >= ORDER.get("meeting")! && rank < ORDER.get("won")! && !context.nextAction) {
+    if (
+        rank >= ORDER.get("in_conversation")! &&
+        rank < ORDER.get("contracted")! &&
+        !context.nextAction
+    ) {
         errors.push({
             code: "next_action_required",
             target,
-            message: `A next action is required from "meeting" onward (entering "${target}").`,
+            message: `A next action is required from "in_conversation" onward (entering "${target}").`,
         });
     }
-    if (rank >= ORDER.get("won")! && !context.hasAgreement) {
+    if (rank >= ORDER.get("contracted")! && !context.hasAgreement) {
         errors.push({
             code: "agreement_required",
             target,
@@ -149,36 +149,28 @@ export function isTerminalStage(stage: RelationshipStage): boolean {
     return TERMINAL_STAGES.has(stage);
 }
 
-/** Someone has reached out: the company is engaged and discovery must not propose it again. */
 export function isPastCandidate(stage: RelationshipStage): boolean {
     const rank = ORDER.get(stage);
     return rank !== undefined && rank >= ORDER.get("contacted")!;
 }
 
-/** Stages that count as "in pipeline" for the dashboard: past lead and not terminal. */
+/** Stages that count as "in pipeline" for the dashboard: past candidate and not terminal. */
 export function isInPipeline(stage: RelationshipStage): boolean {
-    return stage !== "lead" && !TERMINAL_STAGES.has(stage);
+    return stage !== "candidate" && stage !== "researched" && !TERMINAL_STAGES.has(stage);
 }
-
-/** Being worked right now: outreach sent, not yet closed. */
-export const IN_MOTION_STAGES: readonly RelationshipStage[] = [
-    "contacted",
-    "meeting",
-    "proposal",
-    "negotiating",
-];
 
 export const STAGE_ORDER = FORWARD;
 
-/** Default days without activity before a live deal counts as stale. */
+/** Default days without activity before a live relationship counts as stale. */
 export const STALE_AFTER_DAYS: Readonly<Record<RelationshipStage, number | null>> = {
-    lead: null,
-    qualified: 14,
+    candidate: null,
+    researched: null,
     contacted: 14,
-    meeting: 14,
-    proposal: 21,
+    in_conversation: 14,
+    qualified: 21,
     negotiating: 21,
-    won: 90,
-    lost: null,
-    nurture: null,
+    contracted: 45,
+    active: 90,
+    declined: null,
+    dormant: null,
 };

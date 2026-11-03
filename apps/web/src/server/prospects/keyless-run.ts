@@ -1,11 +1,9 @@
 /**
  * Run the discovery pipeline in keyless mode for one program, in this
- * process. Keyless mode needs no search key: OpenStreetMap finds real
- * places (shops, cafés, workshops, offices) in the segment's area, each one's
- * own website is read by the page profiler, and persistence, scoring, stages
- * and publishing are the real code. The workspace's embedding model matches
- * companies to the segment by meaning, and its chat model (when there is one)
- * checks the shortlist. It is the path Find companies takes whenever the environment has
+ * process. Keyless mode needs no API key: OpenStreetMap and the YC
+ * directory find organisations, each one's own website is read by the page
+ * profiler, and persistence, scoring, stages and publishing are the real
+ * code. It is the path Find companies takes whenever the environment has
  * no model or search provider configured, which is every fresh dev setup.
  *
  * The route calls this through Next's `after()`, so the request returns the
@@ -22,20 +20,7 @@ import {
 import { getProgram } from "@launchstack/pipelines/distribution/db";
 
 import { uploadFile } from "~/lib/storage";
-import { prospectEmbedder, prospectFitJudge } from "~/server/prospects/matching";
-import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 import { processDocumentUpload } from "~/server/services/document-upload";
-
-/**
- * Where a keyless run executes. `inline` (the default) works with nothing else
- * running; a deployment with the worker attached sets PROSPECTS_EXECUTOR=worker
- * and it runs as the Inngest job live runs use, durable step by step.
- */
-export function readProspectsExecutor(
-    env: Record<string, string | undefined> = process.env
-): "inline" | "worker" {
-    return env.PROSPECTS_EXECUTOR?.trim().toLowerCase() === "worker" ? "worker" : "inline";
-}
 
 export interface KeylessRunArgs {
     runId: string;
@@ -89,18 +74,9 @@ export async function runKeylessProspects(args: KeylessRunArgs): Promise<RunSumm
                   return { documentId: upload.document.id };
               };
 
-    const ports = createKeylessPorts({
-        publishDossier,
-        debitCredits: null,
-        embed: await prospectEmbedder(args.companyId),
-        judgeFit: await prospectFitJudge(args.companyId),
-    });
-    // The fit check resolves the workspace's models when it runs.
-    const aiUse = { feature: "prospects", userId: args.userId, enforce: false } as const;
-    return withWorkspaceChatModels(args.companyId, aiUse, () =>
-        runDistributionPipeline(
-            { runId: args.runId, companyId: args.companyId, programId: args.programId },
-            ports
-        )
+    const ports = createKeylessPorts({ publishDossier, debitCredits: null });
+    return runDistributionPipeline(
+        { runId: args.runId, companyId: args.companyId, programId: args.programId },
+        ports
     );
 }

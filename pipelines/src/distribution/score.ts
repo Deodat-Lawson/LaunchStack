@@ -4,7 +4,6 @@
  * may not change it. Competitors of the seller, the seller itself and
  * excluded organisations score zero by rule.
  */
-import { mentionsPlace, territoryFit } from "./locate";
 import type {
     Dossier,
     FitBreakdown,
@@ -25,13 +24,6 @@ export interface ScoreInput {
     newestEvidenceAt: Date | null;
     /** Organisation is known from the tenant's own documents. */
     knownEntity: boolean;
-    /**
-     * How relevant the organisation is to the segment, as a share in [0, 1]
-     * (./semantic's relevanceShare). Absent: word overlap decides.
-     */
-    relevance?: number | null;
-    /** The fit check's no after reading the research; the score is zero, with this reason. */
-    rejectedBecause?: string | null;
     /** The seller's own name and known competitor names (lowercased). */
     sellerName: string;
     competitorNames?: string[];
@@ -158,11 +150,6 @@ export function categoryCoverage(
     return sum / phrases.length;
 }
 
-/** The words of several texts, for word-overlap relevance (see ./semantic). */
-export function textTerms(values: readonly string[]): Set<string> {
-    return tokens(values);
-}
-
 export function computeFit(input: ScoreInput): FitBreakdown {
     const now = input.now ?? new Date();
     const orgName = input.org.name.toLowerCase();
@@ -177,7 +164,6 @@ export function computeFit(input: ScoreInput): FitBreakdown {
         total: 0,
         excludedBecause: why,
     });
-    if (input.rejectedBecause) return zero(input.rejectedBecause);
     if (input.sellerName && orgName === input.sellerName.toLowerCase())
         return zero("This is the seller itself.");
     for (const competitor of input.competitorNames ?? []) {
@@ -194,8 +180,9 @@ export function computeFit(input: ScoreInput): FitBreakdown {
         ...(input.dossier?.brandsCarried.map(b => b.brand) ?? []),
         input.dossier?.summary ?? "",
     ]);
-    const share = input.relevance ?? Math.min(1, categoryCoverage(input.program, orgTerms) * 1.5);
-    const categoryOverlap = Math.round(WEIGHTS.categoryOverlap * share);
+    const categoryOverlap = Math.round(
+        WEIGHTS.categoryOverlap * Math.min(1, categoryCoverage(input.program, orgTerms) * 1.5)
+    );
 
     // Territory: org country equals the relationship territory (or any program territory).
     const targetCountries = new Set(input.program.targetTerritories.map(t => t.country));
@@ -204,19 +191,8 @@ export function computeFit(input: ScoreInput): FitBreakdown {
         t.territory.toLowerCase()
     );
     let territoryMatch = 0;
-    if (wanted && input.org.country === wanted) {
-        // A city or region was asked for: the right country alone is half of it.
-        const fit = input.territory ? territoryFit(input.org, input.territory) : "in";
-        const confirmed =
-            fit === "in" ||
-            (input.territory?.region !== undefined &&
-                dossierTerritories.some(t => mentionsPlace(t, input.territory!.region!)));
-        territoryMatch = confirmed
-            ? WEIGHTS.territoryMatch
-            : fit === "out"
-              ? 0
-              : Math.round(WEIGHTS.territoryMatch * 0.5);
-    } else if (input.org.country && targetCountries.has(input.org.country))
+    if (wanted && input.org.country === wanted) territoryMatch = WEIGHTS.territoryMatch;
+    else if (input.org.country && targetCountries.has(input.org.country))
         territoryMatch = Math.round(WEIGHTS.territoryMatch * 0.8);
     else if (wanted && dossierTerritories.some(t => t.includes(wanted.toLowerCase())))
         territoryMatch = Math.round(WEIGHTS.territoryMatch * 0.7);
@@ -256,14 +232,19 @@ export function computeFit(input: ScoreInput): FitBreakdown {
 
     const knownSignal = input.knownEntity ? WEIGHTS.knownSignal : 0;
 
-    // Relevance scales the rest: territory, freshness, size and evidence depth
-    // reward any company with a readable website, so one unrelated to what the
-    // segment sells used to reach 40-45 on those alone and sit among the real
-    // prospects. They count in full from half a real buyer's relevance up, and
-    // fade to nothing for a company that reads like business in general.
-    const topicFactor = Math.min(1, share * 2);
-    const rest = territoryMatch + roleMatch + evidenceDepth + freshness + sizeFit + knownSignal;
-    const total = Math.max(0, Math.min(100, Math.round(categoryOverlap + rest * topicFactor)));
+    const total = Math.max(
+        0,
+        Math.min(
+            100,
+            categoryOverlap +
+                territoryMatch +
+                roleMatch +
+                evidenceDepth +
+                freshness +
+                sizeFit +
+                knownSignal
+        )
+    );
     return {
         categoryOverlap,
         territoryMatch,
@@ -290,8 +271,6 @@ export function deriveRiskFlags(input: {
     if (input.budgetExhausted) flags.push("research budget exhausted");
     for (const risk of input.dossier?.risks ?? []) flags.push(risk.risk);
     if (input.breakdown.roleMatch === 0) flags.push("role not confirmed");
-    if (input.breakdown.categoryOverlap === 0) flags.push("nothing in common with what you sell");
-    if (input.breakdown.territoryMatch === 0) flags.push("outside the segment's area");
     return [...new Set(flags)].slice(0, 12);
 }
 

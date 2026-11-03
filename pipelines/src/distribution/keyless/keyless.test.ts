@@ -1,6 +1,6 @@
 /**
  * Keyless mode has to hold up with no key and no model: the plan is built
- * from the program alone, OpenStreetMap maps cleanly onto the
+ * from the program alone, the two public sources map cleanly onto the
  * gather stage's shapes, and the page profiler produces a dossier that
  * passes the same grounding gate as the agent's. Network is stubbed.
  */
@@ -16,17 +16,15 @@ import {
     mapOverpassElements,
     nameRegexFor,
     rolesForOsmCategories,
-    chooseOsmCategories,
-    resetOsmCategoryVectors,
     searchOverpass,
     tagSelectorsFor,
 } from "./osm";
-import { fakeEmbed } from "../semantic.fixture";
 import { searchNominatim } from "./nominatim";
 import { locateCity, photonAreas, photonTagsFor, searchPhoton } from "./photon";
 import { buildKeylessPlan, keywordsFor } from "./plan";
 import { createKeylessPorts } from "./ports";
 import { extractFacts, firstDescription, profileFromPages } from "./profile";
+import { filterYc, resetYcCache, type YcCompany } from "./yc";
 
 const urlOf = (input: RequestInfo | URL): string =>
     typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
@@ -49,32 +47,6 @@ const program: ProgramRecord = {
     updatedAt: null,
 };
 
-/** A few of OpenStreetMap's tags with their wiki descriptions, as taginfo serves them. */
-const VOCABULARY = [
-    {
-        selector: '["shop"="coffee"]',
-        description: "A shop that sells coffee beans, ground coffee and coffee accessories",
-    },
-    {
-        selector: '["craft"="coffee_roaster"]',
-        description: "A coffee roaster: a place where green coffee beans are roasted",
-    },
-    {
-        selector: '["amenity"="cafe"]',
-        description: "A cafe: a place serving coffee, tea and light meals",
-    },
-    {
-        selector: '["shop"="hardware"]',
-        description: "A shop that sells hardware: tools, building supplies and paint",
-    },
-    {
-        selector: '["shop"="wholesale"]',
-        description: "A wholesaler selling goods in bulk to other businesses",
-    },
-    { selector: '["shop"="clothes"]', description: "A shop that primarily sells clothing" },
-];
-const vocabulary = async () => VOCABULARY;
-
 const planInput: PlanInput = {
     program,
     profile: { companyName: "Acme Roasters", industry: "Food", identity: "", knowledgeContext: "" },
@@ -91,61 +63,26 @@ describe("keyless plan", () => {
         ).toEqual(["picking", "robots", "commerce", "warehouses"]);
     });
 
-    it("plans one OpenStreetMap query per territory and no startup directory", async () => {
-        const plan = await buildKeylessPlan(planInput, { vocabulary });
-        expect(plan.queries).toHaveLength(2);
-        expect(plan.queries.every(q => q.kind === "place")).toBe(true);
-        const place = plan.queries;
+    it("plans one OpenStreetMap and one directory query per territory, with tag selectors", () => {
+        const plan = buildKeylessPlan(planInput);
+        expect(plan.queries).toHaveLength(4);
+        const place = plan.queries.filter(q => q.kind === "place");
         expect(place.map(q => q.territory.country)).toEqual(["NL", "DE"]);
         expect(place[0]!.categoryIds).toContain('["shop"="coffee"]');
-        // The segment's own tags fill the budget; partner-kind tags don't crowd them out.
-        expect(place[0]!.categoryIds).not.toContain('["shop"="wholesale"]');
-        expect(plan.strategy).toMatch(/No paid provider/);
-        expect(plan.strategy).toMatch(/shared words/);
-    });
-
-    it("picks place categories by meaning when an embedder is given", async () => {
-        resetOsmCategoryVectors();
-        const plan = await buildKeylessPlan(planInput, { embed: fakeEmbed, vocabulary });
-        expect(plan.queries[0]!.categoryIds).toEqual(
-            expect.arrayContaining(['["shop"="coffee"]', '["craft"="coffee_roaster"]'])
-        );
-        expect(plan.strategy).toMatch(/closest in meaning/);
-    });
-
-    it("falls back to partner-kind tags only when the topic maps to none", async () => {
-        const plan = await buildKeylessPlan(
-            {
-                ...planInput,
-                program: { ...planInput.program, categories: ["quantum widgets"] },
-            },
-            { vocabulary }
-        );
-        const place = plan.queries.find(q => q.kind === "place")!;
-        expect(place.categoryIds).toContain('["shop"="wholesale"]');
+        expect(place[0]!.categoryIds).toContain('["shop"="wholesale"]');
+        const web = plan.queries.filter(q => q.kind === "web");
+        expect(web[1]!.query).toContain("Hamburg, Germany country:DE");
+        expect(plan.strategy).toMatch(/No model/);
     });
 });
 
 describe("OpenStreetMap adapter", () => {
     it("derives selectors and a name regex from the segment's words", () => {
-        expect(tagSelectorsFor(["specialty coffee"], VOCABULARY)).toEqual(
+        expect(tagSelectorsFor(["specialty coffee"])).toEqual(
             expect.arrayContaining(['["shop"="coffee"]', '["craft"="coffee_roaster"]'])
         );
-        expect(tagSelectorsFor(["quantum flux capacitors"], VOCABULARY)).toEqual([]);
-        expect(tagSelectorsFor(["specialty coffee"], [])).toEqual([]);
+        expect(tagSelectorsFor(["quantum flux capacitors"])).toEqual([]);
         expect(nameRegexFor(["specialty coffee", "roaster"])).toBe("specialty|coffee|roaster");
-    });
-
-    it("chooses categories by meaning from OpenStreetMap's own vocabulary", async () => {
-        resetOsmCategoryVectors();
-        const hardware = await chooseOsmCategories(
-            fakeEmbed,
-            "Retailers and shops that would buy, stock or resell this: power tools and building supplies",
-            VOCABULARY
-        );
-        expect(hardware).toContain('["shop"="hardware"]');
-        expect(hardware).not.toContain('["shop"="coffee"]');
-        expect(hardware.length).toBeLessThanOrEqual(4);
     });
 
     it("reads a role from a directory tag only when the tag states one", () => {
@@ -172,7 +109,7 @@ describe("OpenStreetMap adapter", () => {
     it("builds a query that requires a website and honours the city scope", () => {
         const q = buildOverpassQuery(
             { country: "DE", city: "Hamburg" },
-            { country: "DE", keywords: ["coffee"], selectors: ['["shop"="coffee"]'] }
+            { country: "DE", keywords: ["coffee"] }
         );
         expect(q).toContain('area["ISO3166-1"="DE"]');
         expect(q).toContain('area["name"="Hamburg"]');
@@ -524,6 +461,59 @@ describe("Photon + OSM API", () => {
     });
 });
 
+describe("YC directory", () => {
+    const companies: YcCompany[] = [
+        {
+            id: 1,
+            name: "Beanly",
+            slug: "beanly",
+            website: "https://beanly.example",
+            all_locations: "Amsterdam, Netherlands",
+            one_liner: "Subscription coffee for offices",
+            industries: ["Consumer", "Food and Beverage"],
+            status: "Active",
+        },
+        {
+            id: 2,
+            name: "Oldco",
+            slug: "oldco",
+            website: null,
+            all_locations: "Amsterdam, Netherlands",
+            one_liner: "Coffee",
+            industries: [],
+            status: "Inactive",
+        },
+        {
+            id: 3,
+            name: "Berlinbot",
+            slug: "berlinbot",
+            website: "https://berlinbot.example",
+            all_locations: "Berlin, Germany",
+            one_liner: "Coffee robots",
+            industries: ["Hardware"],
+            status: "Active",
+        },
+        {
+            id: 4,
+            name: "Fintechly",
+            slug: "fintechly",
+            website: "https://fintechly.example",
+            all_locations: "Rotterdam, Netherlands",
+            one_liner: "Payments for SMEs",
+            industries: ["Fintech"],
+            status: "Active",
+        },
+    ];
+
+    it("keeps active companies in the country whose blurb matches", () => {
+        resetYcCache();
+        const hits = filterYc(companies, { country: "NL", keywords: ["specialty coffee"] });
+        expect(hits.map(h => h.name)).toEqual(["Beanly"]);
+        const anyNl = filterYc(companies, { country: "NL", keywords: [] });
+        expect(anyNl.map(h => h.name)).toEqual(["Beanly", "Fintechly"]);
+    });
+});
+
 describe("page profiler", () => {
     const page = (url: string, title: string, text: string): ReadablePage => ({
         url,
@@ -739,20 +729,28 @@ describe("keyless ports", () => {
                         ],
                     })
                 );
-            if (u.includes("taginfo"))
-                return new Response(
-                    JSON.stringify({
-                        data: [
-                            { value: "coffee", in_wiki: true, description: "Sells coffee beans" },
-                        ],
-                    })
-                );
             if (u.includes("nominatim")) return new Response(JSON.stringify([]));
             if (u.includes("photon")) return new Response(JSON.stringify({ features: [] }));
             if (u.includes("openstreetmap.org/api"))
                 return new Response(JSON.stringify({ elements: [] }));
+            if (u.includes("yc-oss"))
+                return new Response(
+                    JSON.stringify([
+                        {
+                            id: 1,
+                            name: "Beanly",
+                            slug: "beanly",
+                            website: "https://beanly.example",
+                            all_locations: "Amsterdam, Netherlands",
+                            one_liner: "Coffee subscriptions",
+                            industries: ["Food"],
+                            status: "Active",
+                        },
+                    ])
+                );
             return new Response("not found", { status: 404 });
         };
+        resetYcCache();
         const ports = createKeylessPorts({ fetchImpl });
         expect(ports.creditsPerCandidate).toBe(0);
         expect(ports.compliance).toBeNull();
@@ -775,9 +773,16 @@ describe("keyless ports", () => {
                 roles: ["retailer"],
             }),
         ]);
-        expect(ports.searchWeb).toBeNull();
+        const web = await ports.searchWeb!([
+            {
+                searchQuery: "coffee Netherlands country:NL",
+                category: "directories",
+                rationale: "",
+            },
+        ]);
+        expect(web.map(r => r.title)).toEqual(["Beanly | Food"]);
+        expect(web[0]!.content).toContain("country:NL");
         const { plan } = await ports.plan!(planInput);
         expect(plan.queries.filter(q => q.kind === "place")).toHaveLength(2);
-        // Three stubbed sources in turn, with the profiler's polite pauses.
-    }, 20_000);
+    });
 });

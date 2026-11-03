@@ -38,7 +38,6 @@ import {
     toChannelView,
     type BrandChannelView,
 } from "./channels";
-import { mayUseDeploymentAccounts } from "./deployment-accounts";
 
 export const BRAND_CONNECTION_PROVIDERS = ["linkedin", "bluesky"] as const;
 export type BrandConnectionProvider = (typeof BRAND_CONNECTION_PROVIDERS)[number];
@@ -90,17 +89,8 @@ function redirectUrl(): string {
 const step = (key: string, values?: Copy["values"]) =>
     copy(`growth.server.brand.networks.${key}` as Copy["key"], values);
 
-/**
- * `ownsDeploymentAccounts`: whether this workspace may post through the
- * operator's keys (see deployment-accounts.ts). On a shared server it is
- * false for everyone but the assigned workspace, and X and Reddit read as
- * unavailable rather than as somebody else's account.
- */
-export function listBrandNetworks(ownsDeploymentAccounts = true): BrandNetworkView[] {
+export function listBrandNetworks(): BrandNetworkView[] {
     const config = describePublishConfig();
-    const sharedOnly = !ownsDeploymentAccounts;
-    const notYours =
-        "This server hosts several workspaces and the operator's account is assigned to another one (BRAND_DEPLOYMENT_ACCOUNTS_COMPANY_ID).";
     const secretsKey = Boolean(env.server.EMBEDDING_SECRETS_KEY);
     const pages = linkedInGrantFeatures(linkedInRequestedScopes()).pages;
     const redirect = redirectUrl();
@@ -151,22 +141,16 @@ export function listBrandNetworks(ownsDeploymentAccounts = true): BrandNetworkVi
             platform: "x",
             label: "X",
             connect: "deployment",
-            available: config.x.configured && !sharedOnly,
+            available: config.x.configured,
             pages: false,
             setup: config.x.configured
-                ? sharedOnly
-                    ? [notYours]
-                    : []
+                ? []
                 : [
                       "An X developer account on pay-per-use",
-                      "A token in TWITTER_BEARER_TOKEN, for one workspace (the only one, or BRAND_DEPLOYMENT_ACCOUNTS_COMPANY_ID)",
+                      "A token in TWITTER_BEARER_TOKEN, shared by every workspace",
                   ],
-            setupCopy: config.x.configured
-                ? sharedOnly
-                    ? [step("shared.notYours")]
-                    : []
-                : [step("x.account"), step("x.token")],
-            note: "Pay per post: about $0.015 each, $0.20 when the post carries a link. Set by the operator, for one workspace.",
+            setupCopy: config.x.configured ? [] : [step("x.account"), step("x.token")],
+            note: "Pay per post: about $0.015 each, $0.20 when the post carries a link. Set by the operator for the whole deployment.",
             noteCopy: step("x.note"),
             limit: platformLimit("x"),
         },
@@ -174,22 +158,16 @@ export function listBrandNetworks(ownsDeploymentAccounts = true): BrandNetworkVi
             platform: "reddit",
             label: "Reddit",
             connect: "deployment",
-            available: config.reddit.configured && !sharedOnly,
+            available: config.reddit.configured,
             pages: false,
             setup: config.reddit.configured
-                ? sharedOnly
-                    ? [notYours]
-                    : []
+                ? []
                 : [
                       "A Reddit script app (client id and secret)",
-                      "REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET and REDDIT_USER_AGENT, for one workspace (the only one, or BRAND_DEPLOYMENT_ACCOUNTS_COMPANY_ID)",
+                      "REDDIT_CLIENT_ID, REDDIT_CLIENT_SECRET and REDDIT_USER_AGENT, shared by every workspace",
                   ],
-            setupCopy: config.reddit.configured
-                ? sharedOnly
-                    ? [step("shared.notYours")]
-                    : []
-                : [step("reddit.app"), step("reddit.keys")],
-            note: "Free for this volume. Posts go to the account's own profile. Set by the operator, for one workspace.",
+            setupCopy: config.reddit.configured ? [] : [step("reddit.app"), step("reddit.keys")],
+            note: "Free for this volume. Posts go to the account's own profile. Set by the operator for the whole deployment.",
             noteCopy: step("reddit.note"),
             limit: platformLimit("reddit"),
         },
@@ -213,10 +191,7 @@ export async function listBrandConnections(companyId: bigint): Promise<Connector
         .orderBy(asc(connectorConnections.createdAt));
 }
 
-/**
- * Every channel a workspace can post to, its own first, then the
- * deployment's — and the deployment's only for the workspace that owns them.
- */
+/** Every channel a workspace can post to, its own first, then the deployment's. */
 export async function listBrandChannels(
     companyId: bigint,
     connections?: ConnectorConnection[],
@@ -235,7 +210,6 @@ export async function listBrandChannels(
             locale
         )
     );
-    if (!(await mayUseDeploymentAccounts(companyId))) return own;
     const ownPlatforms = new Set(rows.map(r => r.platform));
     return [...own, ...deploymentChannels(ownPlatforms, platformLimit)];
 }
@@ -294,7 +268,7 @@ export async function listBrandAccounts(
         for (const row of rows) names.set(String(row.id), row.name);
     }
     return {
-        networks: listBrandNetworks(await mayUseDeploymentAccounts(companyId)),
+        networks: listBrandNetworks(),
         connections: connections.map(c => ({
             id: c.id,
             platform: c.provider as BrandConnectionProvider,

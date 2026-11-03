@@ -516,44 +516,16 @@ export async function runDossierAgent(
         usage = run.usage;
         modelId = run.modelId;
     } catch (error) {
-        const outOfTurns = error instanceof AgentStepLimitError;
-        if (!outOfTurns && !(error instanceof AgentBudgetExceededError)) throw error;
-        if (outOfTurns) turns = error.maxTurns;
-        usage = error.usage;
-        const reason = outOfTurns ? ("turns" as const) : ("tokens" as const);
-        const recorded = [...toolset.getEvidence().values()];
-        // Nothing to write from: the budget really did end the research.
-        if (recorded.length === 0)
-            return finish({ status: "budget_exhausted", dossier: null, reason });
-        // What it read is paid for and on record: write the dossier from that,
-        // with a fresh prompt instead of a transcript of every page.
-        try {
-            const wrapUp = await runAgent(ports.model, {
-                system,
-                user:
-                    `Your research budget ran out. Write the dossier now and call submit_result. Use only this evidence; anything it does not establish goes in openQuestions.\n\n` +
-                    `${taskPrompt(input)}\n\nEvidence:\n` +
-                    recorded
-                        .map(e => `${e.id}: ${e.kind} — ${e.claim} (${e.sourceUrl})`)
-                        .join("\n"),
-                tools: [],
-                finalSchema: DossierSchema,
-                maxTurns: 2,
-                tokenBudget: limits.tokenBudget,
-                signal: ports.signal,
-            });
-            turns += wrapUp.turns;
-            usage = addUsage(usage, wrapUp.usage);
-            modelId = wrapUp.modelId ?? modelId;
-            draft = wrapUp.output;
-        } catch (wrapUpError) {
-            if (
-                wrapUpError instanceof AgentStepLimitError ||
-                wrapUpError instanceof AgentBudgetExceededError
-            )
-                return finish({ status: "budget_exhausted", dossier: null, reason });
-            throw wrapUpError;
+        if (error instanceof AgentStepLimitError) {
+            turns = error.maxTurns;
+            usage = error.usage;
+            return finish({ status: "budget_exhausted", dossier: null, reason: "turns" });
         }
+        if (error instanceof AgentBudgetExceededError) {
+            usage = error.usage;
+            return finish({ status: "budget_exhausted", dossier: null, reason: "tokens" });
+        }
+        throw error;
     }
 
     let errors = validateDossierGrounding(draft, toolset.getEvidence(), toolset.getFetched());

@@ -4,8 +4,6 @@
  * database lives here. Tenancy is by the `companyId` on the context, never a
  * value from the request body.
  */
-import { eq } from "drizzle-orm";
-
 import { prepareEmailCampaign, type Recipient } from "@launchstack/pipelines/email";
 import {
     addEvent,
@@ -40,9 +38,6 @@ import type {
     RunRecord,
     Territory,
 } from "@launchstack/pipelines/distribution/types";
-import { geocodePlace } from "@launchstack/pipelines/distribution/geocode";
-import { parsePlace, parsePlaces, placeLabel } from "@launchstack/pipelines/distribution/locate";
-import { getCompanyIdentity, readFact } from "@launchstack/tools/company-context";
 import { resolveComplianceProvider } from "@launchstack/tools/compliance-screen";
 import { isPlaceSearchConfigured } from "@launchstack/tools/place-search";
 import { isTradeDataConfigured } from "@launchstack/tools/trade-data";
@@ -62,24 +57,23 @@ import type {
     RunDto,
     SalesStage,
     SegmentDto,
-    SegmentSuggestion,
     SegmentSummary,
     SourceRow,
     TodoItem,
 } from "~/app/employer/tools/growth/prospects/api";
 import { env } from "~/env";
-import { db } from "~/server/db";
-import { companyMetadata } from "~/server/db/schema";
 import { copy, isCopy, type Copy } from "~/i18n/copy";
 import { englishCopy } from "~/i18n/translate";
 
 import {
     FIT_THRESHOLD,
+    SALES_OF,
     contactPeople,
     excludedBlock,
     inMotion,
     latestCompleted,
     parseCustomerDomains,
+    relationshipTarget,
     searchMatches,
     sortRows,
     sourceRows,
@@ -136,11 +130,11 @@ export function availability(): SourceAvailability {
     };
 }
 
-/** Keyless sources (OpenStreetMap) and sample data are always on; keyed ones when configured. */
+/** Keyless sources (OpenStreetMap, YC) and sample data are always on; keyed ones when configured. */
 function sourcesOn(avail: SourceAvailability): number {
     return (
         [avail.web, avail.lookalike, avail.place, avail.trade, avail.screening].filter(Boolean)
-            .length + 2
+            .length + 3
     );
 }
 
@@ -207,21 +201,12 @@ export async function createSegment(
     ctx: ProspectsCtx,
     input: NewSegmentInput
 ): Promise<SegmentDto> {
-    const home = (await companyHeadquarters(ctx.companyId))?.country ?? null;
-    const territories: Territory[] = [
-        ...(input.countries ?? []).map((c): Territory => ({ country: c.toUpperCase() })),
-        ...(await resolvePlaces(input.places ?? [], home)),
-    ].filter(
-        (t, i, all) => all.findIndex(o => o.country === t.country && o.region === t.region) === i
-    );
-    if (territories.length === 0)
-        throw new ProspectsError(copy("growth.server.errors.sayWhere"), 400);
     const programInput: ProgramInput = {
         name: input.name,
         offering: input.offering,
         categories: input.industries,
         hsCodes: [],
-        targetTerritories: territories.slice(0, 20),
+        targetTerritories: input.countries.map(c => ({ country: c.toUpperCase() })),
         // Until the pipeline reframe, discovery still searches by partner kind;
         // these three are the buyer-shaped ones.
         partnerKinds: ["distributor", "retailer", "wholesaler"],
@@ -235,63 +220,6 @@ export async function createSegment(
         input: programInput,
     });
     return toSegment(program, [], sourcesOn(availability()));
-}
-
-/** Where the company itself is, from its profile's headquarters fact; null when unknown. */
-async function companyHeadquarters(companyId: bigint): Promise<Territory | null> {
-    const [row] = await db
-        .select({ metadata: companyMetadata.metadata })
-        .from(companyMetadata)
-        .where(eq(companyMetadata.companyId, companyId))
-        .limit(1);
-    const hq = row ? readFact(row.metadata.company?.headquarters) : undefined;
-    if (typeof hq !== "string" || !hq.trim()) return null;
-    return (await geocodePlace(hq)) ?? parsePlace(hq);
-}
-
-/** Nominatim's usage policy: at most one request a second. */
-const GEOCODE_PAUSE_MS = 1_100;
-
-/**
- * Places as the member typed them, one per line or ";" ("Baltimore, MD",
- * "Wilmington, DE", "Netherlands"), resolved by OpenStreetMap's geocoder;
- * an entry it cannot resolve (or a geocoder that cannot be reached) is read
- * offline instead.
- */
-async function resolvePlaces(
-    entries: readonly string[],
-    home: string | null
-): Promise<Territory[]> {
-    const out: Territory[] = [];
-    const places = entries
-        .flatMap(e => e.split(/[;\n]+/))
-        .map(e => e.trim())
-        .filter(Boolean);
-    for (const [i, place] of places.entries()) {
-        if (i > 0) await new Promise(resolve => setTimeout(resolve, GEOCODE_PAUSE_MS));
-        const found =
-            (await geocodePlace(place, { homeCountry: home })) ?? parsePlaces(place, home)[0];
-        if (found) out.push(found);
-    }
-    return out;
-}
-
-/**
- * A first segment drafted from the company's profile: what it sells (its
- * description) and where it is (its headquarters). Who buys is left to the
- * member — the seller's own industry says nothing about its customers'.
- */
-export async function suggestSegment(ctx: ProspectsCtx): Promise<SegmentSuggestion> {
-    const [{ data: identity }, hq] = await Promise.all([
-        getCompanyIdentity({ companyId: Number(ctx.companyId) }),
-        companyHeadquarters(ctx.companyId),
-    ]);
-    const offering = identity.description.trim();
-    return {
-        offering,
-        place: hq ? placeLabel(hq) : null,
-        basis: { profile: offering.length > 0, headquarters: hq !== null },
-    };
 }
 
 function parseTerritory(value: string): Territory | null {
@@ -390,7 +318,7 @@ export async function getHome(ctx: ProspectsCtx, programId: string): Promise<Hom
     endOfToday.setHours(23, 59, 59, 999);
     const due = data.items.filter(
         i =>
-            inMotion(i.relationship.stage) &&
+            inMotion(SALES_OF[i.relationship.stage]) &&
             i.relationship.nextActionAt !== null &&
             i.relationship.nextActionAt <= endOfToday
     );
@@ -437,9 +365,8 @@ export async function getHome(ctx: ProspectsCtx, programId: string): Promise<Hom
         stage,
         count: live.filter(r => r.stage === stage).length,
     }));
-    // Finished Contacted stints from the stage history: how long it takes a
-    // contacted company to agree to a meeting (or leave the funnel).
-    const median = dashboard.medianDaysInStage.contacted;
+    const median =
+        dashboard.medianDaysInStage.contacted ?? dashboard.medianDaysInStage.in_conversation;
 
     return {
         segment: toSegmentSummary(data.program, data.rows, sourcesOn(availability())),
@@ -529,7 +456,7 @@ export async function setExcluded(
             else domains.delete(org.domain);
             await updateProgram(program.id, ctx.companyId, { knownPartnerDomains: [...domains] });
         }
-        const target = excluded ? "lost" : "lead";
+        const target = excluded ? "declined" : "candidate";
         if (
             relationship.stage !== target &&
             ALLOWED_TRANSITIONS[relationship.stage].includes(target)
@@ -590,11 +517,23 @@ export async function patchDeal(
     const nextAction =
         patch.nextStep === undefined ? undefined : patch.nextStep === "" ? null : patch.nextStep;
 
-    if (patch.stage && patch.stage !== relationship.stage) {
+    if (patch.stage && patch.stage !== SALES_OF[relationship.stage]) {
+        const target = relationshipTarget(relationship.stage, patch.stage);
+        if (!target)
+            throw new ProspectsError(
+                copy("growth.server.errors.cannotMoveTo", { stage: patch.stage }),
+                409,
+                {
+                    reason:
+                        patch.stage === "proposal"
+                            ? copy("growth.server.moves.notAStage")
+                            : copy("growth.server.moves.notAvailableHere"),
+                }
+            );
         relationship = await transitionStage({
             companyId: ctx.companyId,
             relationshipId,
-            to: patch.stage,
+            to: target,
             actorUserId: ctx.userId,
             ownerUserId,
             nextAction,
@@ -654,9 +593,7 @@ export async function listDeals(ctx: ProspectsCtx, programId: string): Promise<D
         if (row.excluded) continue;
         // Only the won check needs the agreement; skip the query elsewhere.
         const hasAgreement =
-            item.relationship.stage === "negotiating" ||
-            item.relationship.stage === "proposal" ||
-            item.relationship.stage === "nurture"
+            item.relationship.stage === "negotiating"
                 ? (await listAgreements(ctx.companyId, item.relationship.id)).length > 0
                 : false;
         out.push({
@@ -744,10 +681,10 @@ export async function draftOutreach(
             skip(relationshipId, copy("growth.server.outreach.otherSegment"));
             continue;
         }
-        if (relationship.stage === "won" || relationship.stage === "lost") {
+        if (["contracted", "active", "declined"].includes(relationship.stage)) {
             skip(
                 relationshipId,
-                copy("growth.server.outreach.dealIs", { stage: relationship.stage })
+                copy("growth.server.outreach.dealIs", { stage: SALES_OF[relationship.stage] })
             );
             continue;
         }

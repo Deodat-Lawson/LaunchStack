@@ -23,13 +23,6 @@ import { useResource } from "~/lib/tools/useResource";
 import { cn } from "~/lib/utils";
 
 import { useErrorText } from "~/lib/tools/errorText";
-
-import {
-    ClaimGateDialog,
-    isClaimGateBody,
-} from "~/app/employer/documents/components/marketing-pipeline/ClaimGate";
-import type { ClaimGateClaimUI } from "~/app/employer/documents/components/marketing-pipeline/shared";
-
 import { useGrowthFormat } from "../../_lib/format";
 import { useGrowthPaths } from "../../_lib/paths";
 import { ChannelAvatar } from "../_components/ChannelAvatar";
@@ -212,7 +205,7 @@ function ChannelPreview({
                     {firstNonEmpty(title, text.split("\n")[0]) ?? tc("untitled")}
                 </div>
             )}
-            <p className="text-ink-2 px-3 py-2.5 text-[13px] leading-[1.45] break-words whitespace-pre-wrap">
+            <p className="text-ink-2 whitespace-pre-wrap break-words px-3 py-2.5 text-[13px] leading-[1.45]">
                 {!text ? (
                     <span className="text-ink-3">{t("compose.yourPost")}</span>
                 ) : over && channel.limit !== null ? (
@@ -284,10 +277,6 @@ export function ComposeScreen() {
     const [source, setSource] = useState<BrandPostSource | undefined>(undefined);
     const [handoff, setHandoff] = useState<ComposeHandoff | null>(null);
     const [submitting, setSubmitting] = useState(false);
-    const [claimGate, setClaimGate] = useState<{
-        unavailable: boolean;
-        claims: ClaimGateClaimUI[];
-    } | null>(null);
     const [seeded, setSeeded] = useState(false);
     const [attachments, setAttachments] = useState<Attachment[]>([]);
     const [mediaProblem, setMediaProblem] = useState<string | null>(null);
@@ -489,11 +478,10 @@ export function ComposeScreen() {
         }
     };
 
-    const submit = async (acknowledgeUnsupportedClaims = false) => {
+    const submit = async () => {
         setSubmitting(true);
         try {
             const result = await brandApi.compose({
-                ...(acknowledgeUnsupportedClaims ? { acknowledgeUnsupportedClaims } : {}),
                 channels: chosen.map(c => c.id),
                 body: body.trim(),
                 title:
@@ -529,11 +517,6 @@ export function ComposeScreen() {
             if (result.postTest?.stale) toast.warning(t("compose.staleTest"));
             router.push(paths.brand("/calendar"));
         } catch (e) {
-            // A campaign post with claims the documents don't back: ask first.
-            if (e instanceof BrandApiError && e.status === 409 && isClaimGateBody(e.body)) {
-                setClaimGate({ unavailable: e.body.unavailable, claims: e.body.claims });
-                return;
-            }
             toast.error(errorText(e, t("compose.saveFailed")));
         } finally {
             setSubmitting(false);
@@ -573,7 +556,7 @@ export function ComposeScreen() {
                 <InlineError message={accounts.error} onRetry={() => void accounts.reload()} />
             )}
 
-            <div className="grid grid-cols-[minmax(0,1fr)_360px] gap-6 @max-lg:grid-cols-1">
+            <div className="@max-lg:grid-cols-1 grid grid-cols-[minmax(0,1fr)_360px] gap-6">
                 <div className="flex flex-col gap-5">
                     <div>
                         <Label htmlFor="brand-body" className="text-ink-3 text-xs font-normal">
@@ -659,7 +642,7 @@ export function ComposeScreen() {
                                         <Button
                                             size="icon"
                                             variant="secondary"
-                                            className="absolute top-1 right-1 size-6 rounded-full"
+                                            className="absolute right-1 top-1 size-6 rounded-full"
                                             aria-label={t("compose.remove", { name: a.file.name })}
                                             onClick={() => removeAttachment(a.key)}
                                         >
@@ -898,14 +881,6 @@ export function ComposeScreen() {
                             onTestAgain={() => void startTest()}
                         />
                     </div>
-                    <ClaimGateDialog
-                        gate={claimGate}
-                        onConfirm={() => {
-                            setClaimGate(null);
-                            void submit(true);
-                        }}
-                        onCancel={() => setClaimGate(null)}
-                    />
                     <PostTestSheet
                         open={testOpen}
                         onOpenChange={setTestOpen}

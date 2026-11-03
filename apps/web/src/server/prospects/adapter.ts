@@ -3,8 +3,7 @@
  * records (programs, partner organisations, relationships, evidence, runs) to
  * the Prospects contract in `~/app/employer/tools/growth/prospects/api`.
  *
- * Stages are stored in the funnel's own words (lead … won, lost, nurture),
- * so a deal's stage passes straight through. It never invents data
+ * This is the bridge until the pipeline reframe lands. It never invents data
  * the backend does not have: people are the dossier's public mailboxes,
  * sources are the ones the gather stage really has, and figures the backend
  * cannot attribute are null rather than zero.
@@ -14,18 +13,11 @@
  * reader's language.
  */
 import type { PartnerListItem } from "@launchstack/pipelines/distribution/db";
-import {
-    ALLOWED_TRANSITIONS,
-    IN_MOTION_STAGES,
-    STAGE_ORDER,
-    stageRequirements,
-} from "@launchstack/pipelines/distribution/stages";
+import { ALLOWED_TRANSITIONS, stageRequirements } from "@launchstack/pipelines/distribution/stages";
 import {
     MAX_CUSTOMER_DOMAINS,
-    RELATIONSHIP_STAGES,
     RUN_STATUSES,
     SOURCE_IDS,
-    TERMINAL_STAGES,
     type EvidenceRecord,
     type PartnerOrgRecord,
     type ProgramRecord,
@@ -68,15 +60,31 @@ const DAY = 86_400_000;
 
 // ── Stages ────────────────────────────────────────────────────────────────
 
-/** The stored stages are the sales stages; this fails to compile if they drift apart. */
-const SAME_VOCABULARY: [SalesStage] extends [RelationshipStage]
-    ? [RelationshipStage] extends [SalesStage]
-        ? true
-        : never
-    : never = true;
-void SAME_VOCABULARY;
+export const SALES_STAGES: SalesStage[] = [
+    "lead",
+    "qualified",
+    "contacted",
+    "meeting",
+    "proposal",
+    "negotiating",
+    "won",
+    "lost",
+    "nurture",
+];
 
-export const SALES_STAGES: SalesStage[] = [...RELATIONSHIP_STAGES];
+/** The pipeline's ten relationship stages folded onto the sales funnel. */
+export const SALES_OF: Record<RelationshipStage, SalesStage> = {
+    candidate: "lead",
+    researched: "lead",
+    qualified: "qualified",
+    contacted: "contacted",
+    in_conversation: "meeting",
+    negotiating: "negotiating",
+    contracted: "won",
+    active: "won",
+    declined: "lost",
+    dormant: "nurture",
+};
 
 const STAGE_WORD: Record<SalesStage, string> = {
     lead: "Lead",
@@ -90,13 +98,43 @@ const STAGE_WORD: Record<SalesStage, string> = {
     nurture: "Nurture",
 };
 
-const IN_MOTION = new Set<SalesStage>(IN_MOTION_STAGES);
+const IN_MOTION = new Set<SalesStage>(["contacted", "meeting", "proposal", "negotiating"]);
+
+/** Which relationship stage a sales-stage move lands on, from where the deal is now. */
+export function relationshipTarget(
+    current: RelationshipStage,
+    to: SalesStage
+): RelationshipStage | null {
+    switch (to) {
+        case "lead":
+            return (
+                (["researched", "candidate"] as const).find(s =>
+                    ALLOWED_TRANSITIONS[current].includes(s)
+                ) ?? null
+            );
+        case "qualified":
+            return "qualified";
+        case "contacted":
+            return "contacted";
+        case "meeting":
+            return "in_conversation";
+        case "negotiating":
+            return "negotiating";
+        case "won":
+            return "contracted";
+        case "lost":
+            return "declined";
+        case "nurture":
+            return "dormant";
+        case "proposal":
+            return null;
+    }
+}
 
 export const REQUIREMENT_WORDS: Record<string, string> = {
     owner_required: "Needs an owner",
     next_action_required: "Needs a next step",
     agreement_required: "Needs an agreement recorded in Distribution",
-    stage_changed_concurrently: "Someone else moved this deal just now",
 };
 
 /** A stage requirement in plain words, as a copy; null for a code without words. */
@@ -108,8 +146,6 @@ export function requirementCopy(code: string): Copy | null {
             return copy("growth.server.requirements.nextActionRequired");
         case "agreement_required":
             return copy("growth.server.requirements.agreementRequired");
-        case "stage_changed_concurrently":
-            return copy("growth.server.requirements.changedConcurrently");
         default:
             return null;
     }
@@ -121,21 +157,21 @@ export function moveRefusal(
     hasAgreement: boolean,
     to: SalesStage
 ): { reason: string; copy: Copy | null } | null {
-    const current = rel.stage;
+    const current = SALES_OF[rel.stage];
     if (to === current)
         return { reason: "Current stage", copy: copy("growth.server.moves.currentStage") };
-    if (!ALLOWED_TRANSITIONS[current].includes(to)) {
+    if (to === "proposal")
+        return {
+            reason: "Not a stage in this workspace yet",
+            copy: copy("growth.server.moves.notAStage"),
+        };
+    const target = relationshipTarget(rel.stage, to);
+    if (!target || !ALLOWED_TRANSITIONS[rel.stage].includes(target)) {
         if (current === "won")
             return { reason: "Won deals stay won", copy: copy("growth.server.moves.wonStaysWon") };
-        const rank = STAGE_ORDER.indexOf(current);
-        if (rank >= 0 && STAGE_ORDER.includes(to) && STAGE_ORDER.indexOf(to) < rank)
-            return {
-                reason: "Move back one stage at a time",
-                copy: copy("growth.server.moves.backOneStage"),
-            };
-        const nextForward = ALLOWED_TRANSITIONS[current].find(
-            s => STAGE_ORDER.indexOf(s) > rank && !TERMINAL_STAGES.has(s)
-        );
+        const nextForward = ALLOWED_TRANSITIONS[rel.stage]
+            .map(s => SALES_OF[s])
+            .find(s => s !== current && s !== "lost" && s !== "nurture");
         return nextForward
             ? {
                   reason: `Move to ${STAGE_WORD[nextForward]} first`,
@@ -146,7 +182,7 @@ export function moveRefusal(
                   copy: copy("growth.server.moves.notAvailableFrom", { stage: current }),
               };
     }
-    const missing = stageRequirements(to, {
+    const missing = stageRequirements(target, {
         ownerUserId: rel.ownerUserId,
         nextAction: rel.nextAction,
         hasAgreement,
@@ -220,7 +256,7 @@ export function isExcluded(
     rel: Pick<RelationshipRecord, "stage">,
     excludedDomains: ReadonlySet<string>
 ): boolean {
-    return rel.stage === "lost" && org.domain !== null && excludedDomains.has(org.domain);
+    return rel.stage === "declined" && org.domain !== null && excludedDomains.has(org.domain);
 }
 
 // ── Evidence and claims ───────────────────────────────────────────────────
@@ -562,7 +598,7 @@ export function toCompanyRow(item: PartnerListItem, ctx: RowContext): CompanyRow
         why: whyOf(item),
         fit: rel.fitScore,
         fitThreshold: FIT_THRESHOLD,
-        stage: rel.stage,
+        stage: SALES_OF[rel.stage],
         staleDays: staleDays(item, ctx.now),
         people,
         lastActivityAt: iso(rel.lastActivityAt),
@@ -625,7 +661,7 @@ export function toDeal(
     return {
         id: rel.id,
         companyId: rel.id,
-        stage: rel.stage,
+        stage: SALES_OF[rel.stage],
         ownerName: owner,
         ownerIsViewer: rel.ownerUserId !== null && rel.ownerUserId === viewerId,
         ownerInitials: owner ? (owner === "You" ? "ME" : initials(owner)) : null,
@@ -870,7 +906,7 @@ const SOURCE_LABEL: Record<SourceCount["source"], string> = {
     trade: "Trade data",
 };
 const KEYLESS_LABEL: Record<SourceCount["source"], string> = {
-    web: "Web search",
+    web: "Public directories (YC)",
     lookalike: "Lookalikes",
     place: "OpenStreetMap",
     trade: "Trade data",
@@ -966,13 +1002,26 @@ export function sourceRows(avail: SourceAvailability, latest: RunRecord | null):
             label: "OpenStreetMap",
             kind: "api",
             description:
-                "Real places with a website — shops, cafés, workshops, offices — in each city or country, of the kinds closest in meaning to who you sell to. Free, no key; used whenever no search provider is configured.",
+                "Organisations with a website, by country or city and by what they are. Free, no key; used whenever no search provider is configured.",
             enabled: true,
             available: true,
             requires: null,
             cost: "free",
             locked: true,
             lastYield: yieldFor("place", "keyless"),
+        },
+        {
+            id: "yc",
+            label: "Y Combinator directory",
+            kind: "api",
+            description:
+                "Active YC companies in the segment's countries whose blurb matches its words. Free, no key.",
+            enabled: true,
+            available: true,
+            requires: null,
+            cost: "free",
+            locked: true,
+            lastYield: yieldFor("web", "keyless"),
         },
         serperOnly
             ? {

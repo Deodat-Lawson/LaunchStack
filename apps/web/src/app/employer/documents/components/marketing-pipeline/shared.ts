@@ -111,28 +111,15 @@ export interface ContentVariantUI {
 export interface ClaimSourceMatchUI {
     sourceDoc: string;
     excerpt: string;
-    /** Retrieval score of the match — similarity, not a truth judgment. Not shown. */
+    /** Retrieval score of the match — relevance, not a truth judgment. */
     relevance: number | null;
 }
-
-/** Whether a document passage states the claim (claim-evidence's verdict). */
-export type ClaimSupportUI = "supported" | "contradicted" | "unsupported" | "unchecked";
 
 export interface ClaimSourceUI {
     claim: string;
     /** Best knowledge-base match; null when no source was found. */
     match: ClaimSourceMatchUI | null;
     error?: boolean;
-    support: ClaimSupportUI;
-    reason?: string;
-}
-
-/** A claim the publish gate is asking about. */
-export interface ClaimGateClaimUI {
-    claim: string;
-    support: ClaimSupportUI;
-    reason: string | null;
-    sourceDoc: string | null;
 }
 
 export interface StrategyVariantUI {
@@ -198,7 +185,6 @@ export interface PipelineData {
     variants?: ContentVariantUI[];
     pipelineStages?: PipelineStagesUI;
     claimSources?: ClaimSourceUI[];
-    claimCheckUnavailable?: boolean;
 }
 
 export interface PipelineResponse {
@@ -229,6 +215,7 @@ export interface MarketingSession {
     contentType?: ContentType;
 }
 
+export const REDDIT_SNOO_URL = "/images/reddit-snoo.png";
 export const PENDING_REWRITE_STORAGE_KEY = "pdr.pendingRewriteDraft";
 export const MARKETING_SESSIONS_STORAGE_KEY = "pdr.marketingPipeline.sessions";
 export const MARKETING_ACTIVE_SESSION_KEY = "pdr.marketingPipeline.activeSessionId";
@@ -261,6 +248,8 @@ export interface MessageVariant {
 export interface PlatformOption {
     id: MarketingPlatform;
     label: string;
+    logoText: string;
+    logoImg?: string;
     platformFields?: PlatformFieldConfig[];
 }
 
@@ -271,6 +260,8 @@ export const PLATFORM_OPTIONS: PlatformOption[] = [
     {
         id: "reddit",
         label: "Reddit",
+        logoText: "reddit",
+        logoImg: REDDIT_SNOO_URL,
         platformFields: [
             {
                 type: "subreddit",
@@ -290,6 +281,7 @@ export const PLATFORM_OPTIONS: PlatformOption[] = [
     {
         id: "x",
         label: "Twitter / X",
+        logoText: "𝕏",
         platformFields: [
             {
                 type: "hashtags",
@@ -301,6 +293,7 @@ export const PLATFORM_OPTIONS: PlatformOption[] = [
     {
         id: "linkedin",
         label: "LinkedIn",
+        logoText: "in",
         platformFields: [
             {
                 type: "hashtags",
@@ -321,6 +314,7 @@ export const PLATFORM_OPTIONS: PlatformOption[] = [
     {
         id: "bluesky",
         label: "Bluesky",
+        logoText: "🦋",
         platformFields: [
             {
                 type: "hashtags",

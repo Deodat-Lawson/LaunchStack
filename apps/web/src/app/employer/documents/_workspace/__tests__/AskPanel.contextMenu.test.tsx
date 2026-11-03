@@ -74,6 +74,8 @@ function Harness({
                 sources={SOURCES}
                 selected={selected}
                 setSelected={setSelected}
+                // These tests drive the plain textarea; the panel's default is the rich editor.
+                composerEditor="plain"
                 thread={thread}
                 sendMessage={jest.fn()}
                 isSending={false}

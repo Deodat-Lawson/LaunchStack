@@ -225,6 +225,8 @@
     "pasteRefused": "Clipboard access was refused. Paste with your keyboard.",
     "dropHint": "Drop files to attach them to this message",
     "contextLabel": "Context",
+    "scopeLine": "Asking over {count, plural, one {# source} other {# sources}}",
+    "changeScope": "Change",
     "unavailableSourceTitle": "This source was removed or is no longer accessible. Restore access or remove this context before sending.",
     "unavailableSourceChip": "Unavailable source · {id}",
     "removeUnavailableSource": "Remove unavailable source {id}",

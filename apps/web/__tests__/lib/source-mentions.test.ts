@@ -14,6 +14,8 @@ import {
     sourceMentionText,
     threadMentionText,
     unavailableMentionText,
+    renderMentionsFor,
+    stripMentions,
 } from "~/lib/source-mentions";
 
 const SOURCE = "[Source: Q3 board deck](#launchstack-source-d12)";
@@ -107,5 +109,34 @@ describe("rendering chips", () => {
             'Read "notes.txt" (attached) and [the site](https://example.test).'
         );
         expect(renderUploadLinks(text, [])).toBe(text);
+    });
+});
+
+describe("what the person typed, apart from the chips", () => {
+    const url = "https://files.test/u/abc";
+
+    it("removes every chip and the given uploads' links, leaving the words", () => {
+        expect(
+            stripMentions(`Compare ${SOURCE} with ${FOLDER} and [notes.txt](${url}) please`, [url])
+        ).toBe("Compare  with  and  please");
+        expect(stripMentions(`${SOURCE} ${THREAD}`).trim()).toBe("");
+        expect(stripMentions(`See [the site](https://example.test)`, [url])).toBe(
+            "See [the site](https://example.test)"
+        );
+    });
+});
+
+describe("rendering for the client, which knows the sources", () => {
+    const render = renderMentionsFor([
+        { id: "d12", title: "Q3 board deck", documentId: 12 },
+        { id: "s1", title: "Staged upload" },
+    ]);
+
+    it("names a source by its title and document id, a staged one by its title, an unknown one by its label", () => {
+        expect(
+            render(
+                `${SOURCE}, [Source: Upload](#launchstack-source-s1), [Source: Gone](#launchstack-source-d99), ${FOLDER}`
+            )
+        ).toBe('"Q3 board deck" (d12), "Staged upload", "Gone", the folder "Board"');
     });
 });

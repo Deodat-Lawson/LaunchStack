@@ -180,6 +180,12 @@ export interface ComposeInput {
      * posts for the track record, or answers that it was stale.
      */
     postTestId?: number;
+    /**
+     * A campaign post whose claims the documents don't back: the member saw
+     * them and posts anyway. Without it the server answers 409
+     * `unsupported_claims` with the claims.
+     */
+    acknowledgeUnsupportedClaims?: boolean;
 }
 
 export interface PostPatch {

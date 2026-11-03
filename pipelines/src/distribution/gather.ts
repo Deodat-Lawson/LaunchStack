@@ -19,6 +19,7 @@ import type {
     RawSearchResult,
 } from "@launchstack/tools/web-research";
 
+import { locateFromEvidence } from "./locate";
 import {
     MAX_LOOKALIKE_SEEDS,
     type PartnerKind,
@@ -168,12 +169,17 @@ export function mentionFromWebResult(
     const trimmedTitle = result.title?.trim();
     const title = trimmedTitle?.length ? trimmedTitle : (host ?? result.url);
     const roles = guessRolesFromText(`${result.title} ${result.content.slice(0, 400)}`);
+    // Where the result says it is, not where we searched: a query for
+    // Baltimore can return a company in San Francisco, and it must not come
+    // back labelled Baltimore.
+    const seen = locateFromEvidence(`${result.title} ${result.content}`, query.territory);
     return {
         name: firstSegment(title),
         url: result.url,
-        country: query.territory.country,
-        region: query.territory.region ?? null,
-        roles: roles.length > 0 ? roles : [query.partnerKind],
+        country: seen.country,
+        region: seen.region,
+        // Only roles the text states; the query's kind is not evidence.
+        roles,
         categories: [],
         description: result.content.slice(0, 280),
         source: `web:${query.label}`,
@@ -186,16 +192,21 @@ export function mentionFromWebResult(
  */
 export function mentionFromCompanyHit(
     hit: CompanyHit,
-    origin: { country: string | null; region?: string | null; partnerKind: PartnerKind },
+    /** The territory searched, only to break ties in what the homepage says (./locate). */
+    wanted: Territory | null,
     source: string
 ): OrgMention {
     const roles = guessRolesFromText(`${hit.title} ${hit.description.slice(0, 400)}`);
+    const text = `${hit.title} ${hit.description}`;
+    // Where the homepage says it is, not where we searched.
+    const seen = locateFromEvidence(text, wanted);
     return {
         name: companyName(hit.title, hit.domain),
         url: hit.url,
-        country: origin.country,
-        region: origin.region ?? null,
-        roles: roles.length > 0 ? roles : [origin.partnerKind],
+        country: seen.country,
+        region: seen.region,
+        // Only roles the homepage states; the query's kind is not evidence.
+        roles,
         categories: [],
         description: hit.description.slice(0, 280),
         source,
@@ -412,7 +423,9 @@ export async function gather(
                             country: query.territory.country,
                             region: query.territory.region ?? null,
                             city: query.territory.region ?? null,
-                            roles: place.roles?.length ? place.roles : [query.partnerKind],
+                            // A place search is bounded to the territory, so its area is
+                            // real; its role is only what the directory's tags say.
+                            roles: place.roles ?? [],
                             categories: place.categories.map(c => c.name),
                             description: place.formattedAddress,
                             source: `place:${place.fsqId}`,
@@ -562,17 +575,7 @@ async function gatherCompanies(
         }
         for (const hit of result.value) {
             if (excluded.has(hit.url)) continue;
-            found.push(
-                mentionFromCompanyHit(
-                    hit,
-                    {
-                        country: query.territory.country,
-                        region: query.territory.region ?? null,
-                        partnerKind: query.partnerKind,
-                    },
-                    `web:company:${query.label}`
-                )
-            );
+            found.push(mentionFromCompanyHit(hit, query.territory, `web:company:${query.label}`));
             pages.push({
                 url: hit.url,
                 title: hit.title,
@@ -659,7 +662,7 @@ async function gatherLookalikes(
             found.push(
                 mentionFromCompanyHit(
                     hit,
-                    { country: input.country, partnerKind: input.partnerKind },
+                    input.country ? { country: input.country } : null,
                     `lookalike:${seed}`
                 )
             );

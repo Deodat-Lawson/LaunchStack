@@ -3557,9 +3557,11 @@ describe("a message with files attached", () => {
             })
         );
 
+        // The mapped source is read whole first; the search covers the rest.
+        expect(mockReadWholeFiles).toHaveBeenCalledWith([101]);
         expect(multiDocEnsembleSearch).toHaveBeenCalledWith(
             "What does Roadmap say?",
-            expect.objectContaining({ documentIds: IDS }),
+            expect.objectContaining({ documentIds: IDS.filter(id => id !== 101) }),
             expect.anything()
         );
         expect(prompts().user.endsWith('What does "Resume 02.pdf" (d101) say?')).toBe(true);
@@ -3604,5 +3606,36 @@ describe("a message with files attached", () => {
         ).toBe(true);
         expect(user).not.toContain("Previous conversation context");
         expect(system).toContain("<history> holds the earlier turns");
+    });
+    it("reads the sources named in the words whole when the set is too large, and searches the rest", async () => {
+        mockScopeRows = RESUMES.map(row => ({ ...row, tokens: 5_000 }));
+        mockInvoke.mockResolvedValueOnce({ content: "Named first.", response_metadata: {} });
+
+        const response = await POST(
+            queryRequest({
+                question:
+                    "Start with [Source: Resume 1](#launchstack-source-d100), then everyone else.",
+                searchScope: "selected",
+                selectedDocumentIds: IDS,
+            })
+        );
+        const body = (await response.json()) as Record<string, unknown>;
+
+        expect(mockReadWholeFiles).toHaveBeenCalledWith([100]);
+        expect(multiDocEnsembleSearch).toHaveBeenCalledWith(
+            "Start with Resume 1, then everyone else.",
+            expect.objectContaining({ documentIds: IDS.filter(id => id !== 100) }),
+            expect.anything()
+        );
+        const { system, user } = prompts();
+        expect(user).toContain(
+            '<document id="d100" title="Resume 01.pdf" coverage="complete">\n(page 1)\n\nResume of person 100\n</document>'
+        );
+        expect(user).toContain('coverage="excerpts: 1 of 2 sections, chosen by the question"');
+        expect(user.endsWith('Start with "Resume 01.pdf" (d100), then everyone else.')).toBe(true);
+        expect(system).toContain(
+            "complete text of 1 of the 37 sources — the one named in the words"
+        );
+        expect(body).toMatchObject({ retrievalMethod: "selected_mentioned_read" });
     });
 });

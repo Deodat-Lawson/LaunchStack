@@ -156,8 +156,28 @@ function numberOf(value: unknown): number | undefined {
 /** How much of the sources the model was given. */
 export type Coverage =
     | { mode: "full" }
+    /** The sources named in the words read whole; the rest of the set searched. */
+    | { mode: "mixed"; whole: number; passages: number; filesShown: number }
     | { mode: "excerpts"; passages: number; filesShown: number }
     | { mode: "passage-only" };
+
+/**
+ * The sources, in the order given, that fit the full-read budget together:
+ * the ones the person named in their words are read whole first when the
+ * whole set cannot be. One with nothing indexed is skipped.
+ */
+export function filesWithinBudget(files: readonly ScopeFile[]): ScopeFile[] {
+    const picked: ScopeFile[] = [];
+    let tokens = 0;
+    for (const file of files) {
+        if (file.passages === 0) continue;
+        if (picked.length >= FULL_READ_MAX_FILES || tokens + file.tokens > FULL_READ_TOKEN_BUDGET)
+            break;
+        picked.push(file);
+        tokens += file.tokens;
+    }
+    return picked;
+}
 
 /** How every answer cites a source; shared with the source tools' prompt. */
 export const CITE_SOURCES =
@@ -263,12 +283,14 @@ export function documentsBlock({ files, whole, results }: DocumentsInput): strin
     const blocks: string[] = [];
     const shown = new Set<number>();
 
-    if (whole) {
-        for (const file of files) {
-            blocks.push(documentElement(file, "complete", fileText(whole.get(file.id) ?? [])));
-            shown.add(file.id);
-        }
-    } else {
+    // Read whole: every source in `whole`, which is the full set or, when
+    // that is too large, the ones the person named in their words.
+    for (const file of files) {
+        if (!whole?.has(file.id)) continue;
+        blocks.push(documentElement(file, "complete", fileText(whole.get(file.id) ?? [])));
+        shown.add(file.id);
+    }
+    {
         const groups = new Map<number, SourcePassage[]>();
         const titles = new Map<number, string>();
         const loose: string[] = [];
@@ -287,6 +309,8 @@ export function documentsBlock({ files, whole, results }: DocumentsInput): strin
                 continue;
             }
             const id = documentIdOf(result);
+            // A section of a source already read whole adds nothing.
+            if (id !== null && shown.has(id)) continue;
             if (id === null) {
                 const page = numberOf(metadata.page);
                 loose.push(
@@ -397,9 +421,11 @@ export function sourcesPrompt(
     }
     lines.push(
         `${
-            coverage.mode === "excerpts"
-                ? `You were given ${coverage.passages} passage${coverage.passages === 1 ? "" : "s"} from ${coverage.filesShown} of the ${n} sources, chosen by how closely they match the question.`
-                : "You were given only the passage the person selected."
+            coverage.mode === "mixed"
+                ? `You were given the complete text of ${coverage.whole} of the ${n} sources — the ${coverage.whole === 1 ? "one" : "ones"} named in the words — and ${coverage.passages} passage${coverage.passages === 1 ? "" : "s"} from ${coverage.filesShown} of the others, chosen by how closely they match the question.`
+                : coverage.mode === "excerpts"
+                  ? `You were given ${coverage.passages} passage${coverage.passages === 1 ? "" : "s"} from ${coverage.filesShown} of the ${n} sources, chosen by how closely they match the question.`
+                  : "You were given only the passage the person selected."
         } What you weren't shown is unknown, not absent: never say something isn't in the sources, and never present a count or a list as complete, unless every source was checked.`
     );
     if (hasTools) {
@@ -408,7 +434,7 @@ export function sourcesPrompt(
         );
     } else if (n > 1) {
         lines.push(
-            `If the question needs every source, answer from what you were shown and say plainly that it covers ${coverage.mode === "excerpts" ? coverage.filesShown : 0} of the ${n} sources.`
+            `If the question needs every source, answer from what you were shown and say plainly that it covers ${coverage.mode === "excerpts" ? coverage.filesShown : coverage.mode === "mixed" ? coverage.whole + coverage.filesShown : 0} of the ${n} sources.`
         );
     }
     return lines.join("\n");

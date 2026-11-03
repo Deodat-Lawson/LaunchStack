@@ -32,6 +32,9 @@ import { scopedDocumentWhere } from "~/lib/authz/scope";
 import type { DocumentScope } from "~/lib/authz/scope-types";
 import { draftVisibilityWhere } from "~/server/mindmap/access";
 import type { ChatTurnStep } from "~/lib/chat-turns";
+import { HIDDEN_MENTION_LABEL, relabelMentions } from "~/lib/source-mentions";
+
+export { HIDDEN_MENTION_LABEL };
 
 import type { SessionMessage } from "./repository";
 
@@ -164,8 +167,19 @@ export function filterMessagesForReader(
     visible: ReadonlySet<string>
 ): { messages: ReaderMessage[]; hiddenCitations: number } {
     let hiddenCitations = 0;
+    // The asker's words carry their chips as links whose labels are titles.
+    // A source the reader cannot open keeps its ref (the transcript draws an
+    // unavailable chip there) but loses its title; a conversation chip is one
+    // of the owner's other chats and is never named to a reader.
+    const hide = (words: string) =>
+        relabelMentions(words, mention =>
+            mention.kind === "thread" || (mention.kind === "source" && !visible.has(mention.ref))
+                ? HIDDEN_MENTION_LABEL
+                : null
+        );
     const out = messages.map(message => {
         const next: ReaderMessage = { ...message };
+        if (message.role === "user" && message.text) next.text = hide(message.text);
         if (message.refs) next.refs = message.refs.filter(ref => visible.has(ref));
         if (message.citations) {
             const kept = message.citations.filter(citation => {
@@ -186,6 +200,8 @@ export function filterMessagesForReader(
             const readerSend = { ...send };
             delete readerSend.threadRefs;
             if (send.refs) readerSend.refs = send.refs.filter(ref => visible.has(ref));
+            if (typeof send.text === "string") readerSend.text = hide(send.text);
+            if (typeof send.recallText === "string") readerSend.recallText = hide(send.recallText);
             next.metadata = { ...message.metadata, send: readerSend };
         }
         const steps = message.metadata?.steps;

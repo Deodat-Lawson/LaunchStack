@@ -19,6 +19,7 @@ import {
     documentsBlock,
     fileText,
     filesShown,
+    filesWithinBudget,
     fitsFullRead,
     labelScopeFiles,
     onePerSource,
@@ -155,7 +156,15 @@ describe("the sources in scope", () => {
         expect(fileText(passages)).toBe(
             "(page 1)\n\n[Contact]\nrafael@x.test\n\n[Experience › 2025]\nBuilt things.\n\n(page 2)\n\nNo breadcrumb here."
         );
-        const block = documentsBlock({ files, whole: new Map([[40, passages]]), results: [] });
+        const block = documentsBlock({
+            files,
+            whole: new Map([
+                [40, passages],
+                [12, []],
+                [3, []],
+            ]),
+            results: [],
+        });
         expect(block).toContain(
             '<document id="d40" title="Rafael_Chen_Resume (2) - Rafael Chen.pdf" coverage="complete">\n(page 1)'
         );
@@ -376,5 +385,56 @@ describe("citations", () => {
         const many = Array.from({ length: 60 }, (_, i) => result(i + 1, `Person ${i + 1}`));
         const answer = many.map((_, i) => `Person ${i + 1} [d${i + 1}]`).join("\n");
         expect(citeSources(answer, many, []).cited).toHaveLength(50);
+    });
+});
+
+describe("the sources named in the words read whole when the set is too large", () => {
+    const files = labelScopeFiles([
+        row(40, "Rafael Chen.pdf", 30_000),
+        row(12, "Leo Yang.pdf", 30_000),
+        row(9, "Albert Li.pdf", 30_000, 0),
+        row(3, "Ayla Zhang.pdf", 30_000),
+    ]);
+
+    it("takes the named sources in order while they fit the budget, skipping one with nothing indexed", () => {
+        expect(fitsFullRead(files)).toBe(false);
+        const named = [files[3]!, files[2]!, files[1]!, files[0]!]; // d40, d9, d12, d3 by title order index
+        expect(filesWithinBudget(named).map(file => file.id)).toEqual([40, 12]);
+        expect(filesWithinBudget([])).toEqual([]);
+    });
+
+    it("puts the whole sources first, then the passages of the others, then the rest", () => {
+        const whole = new Map([
+            [40, [{ documentId: 40, chunkId: 1, content: "Rafael Chen › All\n\nEverything." }]],
+        ]);
+        const block = documentsBlock({
+            files,
+            whole,
+            results: [
+                // The whole source's own section adds nothing when retrieval finds it too.
+                result(40, "Rafael Chen › All\n\nEverything.", { chunkId: 1 }),
+                result(12, "Leo Yang › Awards\n\nHiMCM", { page: 1 }),
+            ],
+        });
+        expect(block).toContain('<document id="d40" title="Rafael Chen.pdf" coverage="complete">');
+        expect(block).toContain(
+            '<document id="d12" title="Leo Yang.pdf" coverage="excerpts: 1 of 3 sections, chosen by the question">'
+        );
+        expect(block.indexOf('id="d40"')).toBeLessThan(block.indexOf('id="d12"'));
+        expect(block).toContain('<not_shown count="2">\nd9 "Albert Li.pdf", d3 "Ayla Zhang.pdf"');
+        expect(block.match(/Everything\./g)).toHaveLength(1);
+    });
+
+    it("tells the model which sources it has whole and how many passages of the others", () => {
+        const prompt = sourcesPrompt(
+            files,
+            { mode: "mixed", whole: 1, passages: 4, filesShown: 2 },
+            false
+        );
+        expect(prompt).toContain(
+            "You were given the complete text of 1 of the 4 sources — the one named in the words — and 4 passages from 2 of the others"
+        );
+        expect(prompt).toContain("unknown, not absent");
+        expect(prompt).toContain("say plainly that it covers 3 of the 4 sources");
     });
 });

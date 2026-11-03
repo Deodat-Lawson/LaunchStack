@@ -14,6 +14,7 @@ import {
     sourceMentionText,
     threadMentionText,
     unavailableMentionText,
+    relabelMentions,
     renderMentionsFor,
     stripMentions,
 } from "~/lib/source-mentions";
@@ -138,5 +139,22 @@ describe("rendering for the client, which knows the sources", () => {
                 `${SOURCE}, [Source: Upload](#launchstack-source-s1), [Source: Gone](#launchstack-source-d99), ${FOLDER}`
             )
         ).toBe('"Q3 board deck" (d12), "Staged upload", "Gone", the folder "Board"');
+    });
+});
+
+describe("relabelling chips for a reader", () => {
+    it("replaces the label where asked and keeps the link, the ref and everything else", () => {
+        const out = relabelMentions(`See ${SOURCE} and ${THREAD} in ${FOLDER}.`, mention =>
+            mention.kind === "folder" ? null : "unavailable"
+        );
+        expect(out).toBe(
+            "See [Source: unavailable](#launchstack-source-d12) and [Conversation: unavailable](#launchstack-thread-s_9) in [Folder: Board](#launchstack-folder-Board%2F2026)."
+        );
+        expect(parseMentions(out).map(m => m.ref)).toEqual(["d12", "s_9", "Board/2026"]);
+    });
+
+    it("escapes a replacement label so it still parses as one chip", () => {
+        const out = relabelMentions(SOURCE, () => "x [y] z");
+        expect(parseMentions(out)[0]).toMatchObject({ label: "x [y] z", ref: "d12" });
     });
 });

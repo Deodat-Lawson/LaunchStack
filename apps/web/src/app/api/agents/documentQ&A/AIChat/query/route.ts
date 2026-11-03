@@ -75,6 +75,7 @@ import {
     citeSources,
     documentsBlock,
     filesShown,
+    filesWithinBudget,
     fitsFullRead,
     labelScopeFiles,
     onePerSource,
@@ -86,7 +87,11 @@ import {
     type SourcePassage,
 } from "~/server/chat-sources";
 import { loadScopeFiles, readWholeFiles } from "~/server/chat-source-data";
-import { renderHistoryMentions, renderMessageMentions } from "~/server/chat-mentions";
+import {
+    mentionedScopeFiles,
+    renderHistoryMentions,
+    renderMessageMentions,
+} from "~/server/chat-mentions";
 import { mentionsAsLabels } from "~/lib/source-mentions";
 import { addTokenUsage } from "@launchstack/llm";
 import { isInternalFileUrl, parseInternalFileId } from "@launchstack/store/crypto";
@@ -1099,6 +1104,8 @@ export async function POST(request: Request) {
             let wholeFiles: Map<number, SourcePassage[]> | null = null;
             // The document ids this turn may read, whether or not their titles loaded.
             let admittedIds: number[] = [];
+            // Text read whole, in characters: exempt from the prompt limit (it has its own budget).
+            let wholeChars = 0;
             if (searchScope !== "none") {
                 const companyConfig = await getCompanyEmbeddingConfig(numericCompanyId);
 
@@ -1191,8 +1198,17 @@ export async function POST(request: Request) {
                 admittedIds = scopeIds;
                 try {
                     scopeFiles = labelScopeFiles(await loadScopeFiles(scopeIds));
-                    if (fitsFullRead(scopeFiles)) {
-                        const whole = await readWholeFiles(scopeFiles.map(file => file.id));
+                    // The whole set when it fits the budget; otherwise the
+                    // sources the person named in their words, in that order,
+                    // while they fit — the rest of the set is searched
+                    // (docs/design/inline-source-context.md §3.6).
+                    const toRead = fitsFullRead(scopeFiles)
+                        ? scopeFiles
+                        : filesWithinBudget(
+                              mentionedScopeFiles(question, sourceMentions, scopeFiles)
+                          );
+                    if (toRead.length > 0) {
+                        const whole = await readWholeFiles(toRead.map(file => file.id));
                         const chars = [...whole.values()]
                             .flat()
                             .reduce((sum, passage) => sum + passage.content.length, 0);
@@ -1200,9 +1216,10 @@ export async function POST(request: Request) {
                         // is the check that it really fits.
                         if (
                             chars <= FULL_READ_TOKEN_BUDGET * 5 &&
-                            scopeFiles.every(file => (whole.get(file.id)?.length ?? 0) > 0)
+                            toRead.every(file => (whole.get(file.id)?.length ?? 0) > 0)
                         ) {
                             wholeFiles = whole;
+                            wholeChars = chars;
                         }
                     }
                 } catch (scopeError) {
@@ -1214,30 +1231,46 @@ export async function POST(request: Request) {
                 }
 
                 try {
-                    if (wholeFiles) {
+                    const read = wholeFiles;
+                    const readWhole = read
+                        ? scopeFiles
+                              .filter(file => read.has(file.id))
+                              .flatMap(file =>
+                                  (read.get(file.id) ?? []).map(passage =>
+                                      passageResult(passage, file)
+                                  )
+                              )
+                        : [];
+                    if (read && read.size >= scopeFiles.length) {
                         // Small enough to read whole: no ranking, nothing left out.
-                        const read = wholeFiles;
                         retrievalMethod = `${searchScope}_full_read`;
-                        documents = scopeFiles.flatMap(file =>
-                            (read.get(file.id) ?? []).map(passage => passageResult(passage, file))
-                        );
+                        documents = readWhole;
                     } else if (searchDocumentIds?.length) {
                         // One path for every set of ids: from the retriever's
                         // perspective the caller's whole scope, an archive, and a
                         // hand-picked set are identical (`document_id = ANY(...)`).
+                        // A source already read whole is left out of the search.
+                        const remaining = read
+                            ? searchDocumentIds.filter(id => !read.has(id))
+                            : searchDocumentIds;
                         const multiDocOptions: MultiDocSearchOptions = {
                             weights: [0.4, 0.6],
                             topK: 10,
-                            documentIds: searchDocumentIds,
+                            documentIds: remaining,
                             companyId: numericCompanyId,
                             embeddingIndexKey: resolvedEmbeddingIndex.indexKey,
                         };
 
-                        documents = await multiDocEnsembleSearch(
-                            retrievalQuery,
-                            multiDocOptions,
-                            embeddings
-                        );
+                        if (read) retrievalMethod = `${searchScope}_mentioned_read`;
+                        const found =
+                            remaining.length > 0
+                                ? await multiDocEnsembleSearch(
+                                      retrievalQuery,
+                                      multiDocOptions,
+                                      embeddings
+                                  )
+                                : [];
+                        documents = [...readWhole, ...found];
                     } else if (searchScope === "document" && documentId) {
                         const documentOptions: DocumentSearchOptions = {
                             topK: 5,
@@ -1406,15 +1439,29 @@ export async function POST(request: Request) {
             // the person's chips rendered as "Title" (d12) so a mention and a
             // block share an id (chat-sources.ts, chat-mentions.ts). Without
             // that it reads a sample as the whole, and a dead link as a name.
-            const coverage: Coverage = wholeFiles
+            const fullSet = wholeFiles !== null && wholeFiles.size >= scopeFiles.length;
+            const searched = wholeFiles
+                ? promptDocuments.filter(
+                      doc =>
+                          (doc.metadata as { source?: unknown } | undefined)?.source !== "full_read"
+                  )
+                : promptDocuments;
+            const coverage: Coverage = fullSet
                 ? { mode: "full" }
-                : promptDocuments.length > 0
+                : wholeFiles
                   ? {
-                        mode: "excerpts",
-                        passages: promptDocuments.length,
-                        filesShown: filesShown(promptDocuments, scopeFiles),
+                        mode: "mixed",
+                        whole: wholeFiles.size,
+                        passages: searched.length,
+                        filesShown: filesShown(searched, scopeFiles),
                     }
-                  : { mode: "passage-only" };
+                  : promptDocuments.length > 0
+                    ? {
+                          mode: "excerpts",
+                          passages: promptDocuments.length,
+                          filesShown: filesShown(promptDocuments, scopeFiles),
+                      }
+                    : { mode: "passage-only" };
             const documentsSection = documentsBlock({
                 files: scopeFiles,
                 whole: wholeFiles,
@@ -1439,7 +1486,9 @@ export async function POST(request: Request) {
                         ? `${coverage.passages} passage(s) from ${coverage.filesShown} source(s), pages ${promptDocuments.map(doc => doc.metadata?.page).join(", ")}`
                         : coverage.mode === "full"
                           ? `${documents.length} section(s) read whole (${documentsSection.length} chars)`
-                          : "selected passage only") +
+                          : coverage.mode === "mixed"
+                            ? `${coverage.whole} source(s) read whole, ${coverage.passages} passage(s) from ${coverage.filesShown} other(s)`
+                            : "selected passage only") +
                     `, mentions=${mentions.stats.mentions} resolved=${mentions.stats.resolved} unavailable=${mentions.stats.unavailable}`
             );
 
@@ -1657,7 +1706,7 @@ export async function POST(request: Request) {
             }, 0);
             // A whole-file read has its own budget (FULL_READ_TOKEN_BUDGET);
             // the limit holds for everything else in the prompt.
-            const fullReadCharacters = wholeFiles ? documentsSection.length : 0;
+            const fullReadCharacters = wholeFiles ? wholeChars : 0;
             if (promptCharacters - fullReadCharacters > 120_000) {
                 recordResult("error");
                 return refusal(t("query.inputTooLong"), 400);

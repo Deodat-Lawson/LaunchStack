@@ -187,3 +187,37 @@ export function renderMentionsFor(
             }
         });
 }
+
+function escapeLabel(label: string): string {
+    return label.replace(/([\\[\]])/g, "\\$1");
+}
+
+/**
+ * The text with each chip's label replaced where `relabel` gives one; the
+ * link, and so the ref, stays, so the transcript still draws a chip there.
+ * Used before a shared chat leaves the server: a reader who cannot open a
+ * source must not learn its title from the asker's sentence.
+ */
+export function relabelMentions(
+    text: string,
+    relabel: (mention: Mention) => string | null
+): string {
+    return renderMentions(text, mention => {
+        const label = relabel(mention);
+        if (label === null) return text.slice(mention.start, mention.end);
+        const word =
+            mention.kind === "source"
+                ? "Source"
+                : mention.kind === "folder"
+                  ? "Folder"
+                  : "Conversation";
+        return `[${word}: ${escapeLabel(label)}](#launchstack-${mention.kind}-${encodeURIComponent(mention.ref)})`;
+    });
+}
+
+/**
+ * What a chip's label becomes when a shared chat is filtered for a reader who
+ * cannot open the source (server/sessions/visibility.ts); the transcript
+ * shows such a chip as unavailable rather than by this word.
+ */
+export const HIDDEN_MENTION_LABEL = "unavailable";

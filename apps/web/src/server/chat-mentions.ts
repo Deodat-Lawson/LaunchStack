@@ -15,6 +15,7 @@
 
 import {
     folderMentionText,
+    mentionedSourceRefs,
     quoteName,
     renderMentions,
     renderUploadLinks,
@@ -54,6 +55,22 @@ export function mentionDocumentId(
     const mapped = mentions?.find(mention => mention.ref === ref);
     if (mapped) return mapped.documentId;
     return /^d\d{1,12}$/.test(ref) ? labelDocumentId(ref) : null;
+}
+
+/** The sources in scope that the words name, in the order they are named. */
+export function mentionedScopeFiles(
+    text: string,
+    mentions: readonly SourceMention[] | undefined,
+    files: readonly ScopeFile[]
+): ScopeFile[] {
+    const byId = new Map(files.map(file => [file.id, file]));
+    const out: ScopeFile[] = [];
+    for (const ref of mentionedSourceRefs(text)) {
+        const id = mentionDocumentId(ref, mentions);
+        const file = id === null ? undefined : byId.get(id);
+        if (file && !out.includes(file)) out.push(file);
+    }
+    return out;
 }
 
 function titleOf(id: number, files: readonly ScopeFile[], fallback: string): string {

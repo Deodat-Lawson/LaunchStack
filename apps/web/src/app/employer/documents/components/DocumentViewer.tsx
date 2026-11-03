@@ -271,7 +271,13 @@ export function DocumentViewer({
             case "xlsx":
                 return <XlsxViewer url={document.url} title={document.title} />;
             case "pptx":
-                return <PptxViewer url={document.url} title={document.title} />;
+                return (
+                    <PptxViewer
+                        documentId={document.id}
+                        url={document.url}
+                        title={document.title}
+                    />
+                );
             case "markdown":
                 return (
                     <MarkdownViewer

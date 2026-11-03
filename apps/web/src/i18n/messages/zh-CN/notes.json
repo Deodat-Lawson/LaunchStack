@@ -104,7 +104,17 @@
       "pink": "粉色"
     },
     "highlightMenu": "高亮",
-    "removeHighlight": "移除"
+    "removeHighlight": "移除",
+    "slides": {
+      "label": "第",
+      "toolbar": "幻灯片控件",
+      "previous": "上一张幻灯片",
+      "next": "下一张幻灯片",
+      "number": "幻灯片编号",
+      "of": "张，共 {count} 张",
+      "loading": "正在加载幻灯片…",
+      "loadError": "无法加载幻灯片：{error}"
+    }
   },
   "server": {
     "errors": {

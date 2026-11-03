@@ -113,7 +113,7 @@ interface Props {
      * "Add note here" button. Parent is expected to open the note editor
      * with the anchor pre-filled.
      */
-    onCreateAnchoredNote: (anchor: PdfAnchorCapture) => void;
+    onCreateAnchoredNote?: (anchor: PdfAnchorCapture) => void;
     /**
      * When set, the selection popup offers a highlighter in each colour: the
      * passage is marked and kept, with nothing to write.
@@ -150,6 +150,11 @@ interface Props {
     /** The file to offer from the toolbar's Download, and the name to save it under. */
     downloadUrl?: string;
     downloadName?: string;
+    /**
+     * What one page of this PDF is to the reader. A deck rendered to PDF is
+     * still a deck: its toolbar counts slides, and says so.
+     */
+    unit?: "page" | "slide";
 }
 
 /** The floating button row's widest form: + Note, the four highlighters, Ask AI. */
@@ -254,8 +259,21 @@ export function PdfViewerWithNotes({
     citationHighlight,
     downloadUrl,
     downloadName,
+    unit = "page",
 }: Props) {
     const t = useTranslations("notes.pdf");
+    const slides = unit === "slide";
+    const labels = {
+        toolbar: slides ? t("slides.toolbar") : t("toolbar"),
+        previous: slides ? t("slides.previous") : t("previousPage"),
+        next: slides ? t("slides.next") : t("nextPage"),
+        number: slides ? t("slides.number") : t("pageNumber"),
+        loading: slides ? t("slides.loading") : t("loading"),
+    };
+    // With nothing to do with a selection, the viewer is read-only: no
+    // floating button, and no gesture tracking behind it.
+    const offersSelection = Boolean(onCreateAnchoredNote ?? onCreateHighlight ?? onAskAi);
+    const annotatable = offersSelection || Boolean(onSelectionDraft);
     const [numPages, setNumPages] = useState<number | null>(null);
     const [renderedPages, setRenderedPages] = useState<Set<number>>(() => new Set());
     const [selectionDraft, setSelectionDraft] = useState<SelectionDraft | null>(null);
@@ -771,7 +789,7 @@ export function PdfViewerWithNotes({
     // `createSelectionCommitter` for why not on every `selectionchange`.
     useEffect(() => {
         const container = containerRef.current;
-        if (!container) return;
+        if (!container || !annotatable) return;
 
         const handler = () => {
             const sel = window.getSelection();
@@ -845,7 +863,7 @@ export function PdfViewerWithNotes({
             document.removeEventListener("pointercancel", onPointerUp);
             document.removeEventListener("selectionchange", onSelectionChange);
         };
-    }, [renderedPages]);
+    }, [renderedPages, annotatable]);
 
     // Clear the selection draft when the user clicks elsewhere (outside the
     // floating button). Without this, the button lingers after the user's
@@ -868,7 +886,7 @@ export function PdfViewerWithNotes({
     }, []);
 
     const handleCreateFromSelection = () => {
-        if (!selectionDraft) return;
+        if (!selectionDraft || !onCreateAnchoredNote) return;
         onCreateAnchoredNote({
             page: selectionDraft.page,
             quads: selectionDraft.quads,
@@ -980,7 +998,7 @@ export function PdfViewerWithNotes({
             {!loadError && numPages !== null && (
                 <div
                     role="toolbar"
-                    aria-label={t("toolbar")}
+                    aria-label={labels.toolbar}
                     data-testid="pdf-toolbar"
                     className="border-line bg-panel text-ink-2 flex h-10 shrink-0 items-center gap-0.5 border-b px-2 text-xs"
                 >
@@ -989,18 +1007,23 @@ export function PdfViewerWithNotes({
                             variant="ghost"
                             size="icon"
                             className="size-7"
-                            aria-label={t("previousPage")}
-                            title={t("previousPage")}
+                            aria-label={labels.previous}
+                            title={labels.previous}
                             disabled={currentPage <= 1}
                             onClick={() => goToPage(currentPage - 1)}
                         >
                             <ChevronUp />
                         </Button>
                     )}
+                    {slides && (
+                        <span className="text-ink-3 whitespace-nowrap pl-1 pr-0.5">
+                            {t("slides.label")}
+                        </span>
+                    )}
                     <Input
                         value={pageDraft ?? String(currentPage)}
                         inputMode="numeric"
-                        aria-label={t("pageNumber")}
+                        aria-label={labels.number}
                         className="h-7 w-11 px-1 text-center"
                         onFocus={e => e.currentTarget.select()}
                         onChange={e => setPageDraft(e.target.value.replace(/\D/g, ""))}
@@ -1011,15 +1034,17 @@ export function PdfViewerWithNotes({
                         }}
                     />
                     <span className="text-ink-3 whitespace-nowrap px-1">
-                        {t("ofPages", { count: numPages })}
+                        {slides
+                            ? t("slides.of", { count: numPages })
+                            : t("ofPages", { count: numPages })}
                     </span>
                     {!compact && (
                         <Button
                             variant="ghost"
                             size="icon"
                             className="size-7"
-                            aria-label={t("nextPage")}
-                            title={t("nextPage")}
+                            aria-label={labels.next}
+                            title={labels.next}
                             disabled={currentPage >= numPages}
                             onClick={() => goToPage(currentPage + 1)}
                         >
@@ -1231,7 +1256,9 @@ export function PdfViewerWithNotes({
                         // sideways.
                         className="text-ink-3 p-10 text-center [overflow-wrap:anywhere]"
                     >
-                        {t("loadError", { error: loadError })}
+                        {slides
+                            ? t("slides.loadError", { error: loadError })
+                            : t("loadError", { error: loadError })}
                     </div>
                 ) : (
                     // At least as wide as the column, so a page narrower than
@@ -1242,7 +1269,7 @@ export function PdfViewerWithNotes({
                             file={file}
                             onLoadSuccess={onDocumentLoadSuccess}
                             onLoadError={onDocumentLoadError}
-                            loading={<LoadingPlaceholder />}
+                            loading={<LoadingPlaceholder text={labels.loading} />}
                             error={<LoadingPlaceholder text={t("failedToLoad")} />}
                         >
                             {numPages !== null &&
@@ -1274,7 +1301,7 @@ export function PdfViewerWithNotes({
                     </div>
                 )}
 
-                {selectionDraft && (
+                {selectionDraft && offersSelection && (
                     <div
                         data-note-anchor-btn
                         // w-max: near the column's right edge the box would
@@ -1282,13 +1309,15 @@ export function PdfViewerWithNotes({
                         className="border-line bg-panel absolute z-20 flex w-max -translate-x-1/2 items-center gap-1 whitespace-nowrap rounded-[9px] border p-[3px] shadow-[0_6px_18px_oklch(0_0_0/0.18)]"
                         style={{ left: selectionDraft.buttonX, top: selectionDraft.buttonY }}
                     >
-                        <button
-                            type="button"
-                            onClick={handleCreateFromSelection}
-                            className="bg-brand text-brand-fg rounded-md px-2.5 py-[5px] text-xs font-semibold"
-                        >
-                            {t("addNote")}
-                        </button>
+                        {onCreateAnchoredNote && (
+                            <button
+                                type="button"
+                                onClick={handleCreateFromSelection}
+                                className="bg-brand text-brand-fg rounded-md px-2.5 py-[5px] text-xs font-semibold"
+                            >
+                                {t("addNote")}
+                            </button>
+                        )}
                         {onCreateHighlight && (
                             <div
                                 role="group"

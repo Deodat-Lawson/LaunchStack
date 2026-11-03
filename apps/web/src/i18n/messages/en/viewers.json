@@ -124,12 +124,10 @@
     "onThisPage": "On this page"
   },
   "pptx": {
-    "needsPublicUrl": "PowerPoint preview requires a publicly accessible URL",
-    "needsPublicUrlDetail": "This file is stored locally and cannot be embedded in the Office Online viewer. You can download it and open it in PowerPoint or Google Slides.",
-    "download": "Download presentation",
-    "loading": "Loading presentation...",
-    "loadFailed": "Office Online viewer failed to load",
-    "loadFailedDetail": "The file may not be accessible. Try downloading it instead."
+    "rendering": "Rendering slides…",
+    "renderFailed": "Couldn’t render this presentation",
+    "renderFailedDetail": "The slides could not be drawn here. You can still download the file and open it in PowerPoint or Google Slides.",
+    "download": "Download presentation"
   },
   "website": {
     "checkAgain": "Check again",

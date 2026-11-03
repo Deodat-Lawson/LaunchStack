@@ -371,3 +371,64 @@ describe("PdfViewerWithNotes highlights", () => {
         });
     });
 });
+
+/** A drag over the first page's text, as the selection tests above do it. */
+function selectFirstWords(length: number) {
+    const span = document.querySelector('[data-pdf-page="1"] .react-pdf__Page__textContent span')!;
+    const range = document.createRange();
+    range.setStart(span.firstChild!, 0);
+    range.setEnd(span.firstChild!, length);
+    const scroll = screen.getByTestId("pdf-scroll");
+    act(() => {
+        scroll.dispatchEvent(
+            Object.assign(new MouseEvent("pointerdown", { bubbles: true, button: 0 }), {
+                isPrimary: true,
+            })
+        );
+        const selection = window.getSelection()!;
+        selection.removeAllRanges();
+        selection.addRange(range);
+        document.dispatchEvent(new Event("selectionchange"));
+        document.dispatchEvent(new MouseEvent("pointerup", { bubbles: true }));
+    });
+}
+
+describe("PdfViewerWithNotes as a deck", () => {
+    it("counts slides, not pages, when told the PDF is a deck", async () => {
+        renderViewer({ unit: "slide", downloadName: "Pitch.pptx" });
+        const bar = await toolbar();
+
+        expect(screen.getByRole("toolbar", { name: "Slide controls" })).toBeInTheDocument();
+        expect(bar.getByText("Slide")).toBeInTheDocument();
+        expect(bar.getByLabelText("Slide number")).toHaveValue("1");
+        expect(bar.getByText("of 3")).toBeInTheDocument();
+        expect(bar.getByLabelText("Next slide")).toBeEnabled();
+        expect(bar.getByRole("link", { name: "Download" })).toHaveAttribute(
+            "download",
+            "Pitch.pptx"
+        );
+    });
+
+    it("offers nothing for a selection when it has no one to hand it to", async () => {
+        render(<PdfViewerWithNotes url="/api/documents/7/preview" notes={[]} unit="slide" />);
+        await toolbar();
+
+        selectFirstWords("Revenue grew strongly".length);
+        await act(async () => {
+            await Promise.resolve();
+        });
+        expect(screen.queryByRole("button", { name: "+ Note" })).not.toBeInTheDocument();
+        expect(document.querySelector("[data-note-anchor-btn]")).toBeNull();
+    });
+
+    it("still offers Ask AI alone when that is all the parent wires", async () => {
+        const onAskAi = jest.fn();
+        render(<PdfViewerWithNotes url="/api/files/9" notes={[]} onAskAi={onAskAi} />);
+        await toolbar();
+
+        selectFirstWords("Revenue grew strongly".length);
+        fireEvent.click(await screen.findByRole("button", { name: "✦ Ask AI" }));
+        expect(onAskAi).toHaveBeenCalledWith({ text: "Revenue grew strongly", page: 1 });
+        expect(screen.queryByRole("button", { name: "+ Note" })).not.toBeInTheDocument();
+    });
+});

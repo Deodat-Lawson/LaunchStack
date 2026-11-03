@@ -19,6 +19,8 @@ const store = vi.hoisted(() => ({
     won: [] as string[],
     upserted: [] as ResolvedOrg[],
     wonCalls: 0,
+    statuses: [] as string[],
+    relationships: new Map<string, { id: string; orgId: string; kind: string }>(),
 }));
 
 vi.mock("@launchstack/tools/company-context", () => ({
@@ -37,7 +39,9 @@ vi.mock("@launchstack/tools/company-context", () => ({
 vi.mock("./db", () => ({
     getProgram: async () => store.program,
     getRun: async () => store.run,
-    updateRun: async () => undefined,
+    updateRun: async (_id: string, _companyId: bigint, patch: { status?: string }) => {
+        if (patch.status) store.statuses.push(patch.status);
+    },
     listExclusions: async () => store.exclusions,
     listWonDomains: async () => {
         store.wonCalls += 1;
@@ -53,11 +57,35 @@ vi.mock("./db", () => ({
         items,
     }: {
         items: Array<{ orgId: string; kind: string }>;
-    }) => items.map((item, i) => ({ id: `rel-${i}`, ...item, stage: "lead" })),
+    }) => {
+        const rows = items.map((item, i) => ({ id: `rel-${i}`, ...item, stage: "lead" }));
+        for (const row of rows) store.relationships.set(row.id, row);
+        return rows;
+    },
+    getRelationship: async (id: string) => ({
+        ...store.relationships.get(id),
+        territory: { country: "NL" },
+    }),
+    getOrg: async (id: string) => ({
+        id,
+        name: id,
+        domain: `${id}.example`,
+        country: "NL",
+        region: null,
+        city: null,
+        roles: [],
+        categories: [],
+        description: null,
+        sizeBand: null,
+        kgEntityId: 1,
+    }),
+    listEvidenceForOrg: async () => [],
+    setResearchResult: async () => undefined,
+    addEvent: async () => undefined,
 }));
 
 import { createFixturePorts } from "./fixture";
-import { prepareRun, type DistributionPorts } from "./run";
+import { prepareRun, runDistributionPipeline, type DistributionPorts } from "./run";
 
 const program = {
     id: "prog-1",
@@ -178,6 +206,8 @@ beforeEach(() => {
     store.won = ["won.example"];
     store.upserted = [];
     store.wonCalls = 0;
+    store.statuses = [];
+    store.relationships = new Map();
 });
 
 describe("prepareRun discovery", () => {
@@ -315,5 +345,75 @@ describe("prepareRun discovery", () => {
             detail: "needs EXA_API_KEY",
         });
         expect(store.upserted.some(o => o.domain !== null && NEVER.includes(o.domain))).toBe(false);
+    });
+});
+
+describe("runDistributionPipeline research", () => {
+    /** Ports over `count` companies whose research records how many ran at once. */
+    function trackingPorts(
+        count: number,
+        onProfile: (orgId: string) => void = () => undefined
+    ): { ports: DistributionPorts; seen: { peak: number; orgs: string[] } } {
+        const seen = { peak: 0, orgs: [] as string[] };
+        let running = 0;
+        const ports: DistributionPorts = {
+            ...livePorts({ described: [], searches: [] }),
+            searchCompanies: async query =>
+                query.startsWith("Companies similar to")
+                    ? []
+                    : Array.from({ length: count }, (_, i) =>
+                          hit(`firm-${i}.example`, `Fulfilment Firm ${i}`)
+                      ),
+            profile: async (_ports, input) => {
+                running += 1;
+                seen.peak = Math.max(seen.peak, running);
+                seen.orgs.push(input.org.id);
+                await new Promise(resolve => setTimeout(resolve, 1));
+                running -= 1;
+                onProfile(input.org.id);
+                return {
+                    outcome: { status: "gate_failed", dossier: null, errors: [] },
+                    evidence: [],
+                    fetchedUrls: [],
+                    turns: 0,
+                    usage: { inputTokens: 0, outputTokens: 0, totalTokens: 0 },
+                    modelId: "test",
+                    playbookHash: "test",
+                    promptVersion: "test",
+                };
+            },
+        };
+        return { ports, seen };
+    }
+
+    it("researches every candidate once, up to the ports' limit at a time", async () => {
+        const { ports, seen } = trackingPorts(12);
+        const summary = await runDistributionPipeline(ctx, { ...ports, enrichConcurrency: 3 });
+
+        expect(seen.peak).toBe(3);
+        expect(new Set(seen.orgs).size).toBe(12);
+        expect(seen.orgs).toHaveLength(12);
+        expect(summary.shortlisted).toBe(12);
+        expect(summary.gateRejections).toBe(12);
+        expect(store.statuses.at(-1)).toBe("completed");
+    });
+
+    it("stays one at a time when the ports set no limit", async () => {
+        const { ports, seen } = trackingPorts(4);
+        await runDistributionPipeline(ctx, ports);
+        expect(seen.peak).toBe(1);
+        expect(seen.orgs).toHaveLength(4);
+    });
+
+    it("marks the run failed and starts no one else when a candidate throws", async () => {
+        const { ports, seen } = trackingPorts(12, orgId => {
+            if (orgId === seen.orgs[0]) throw new Error("database went away");
+        });
+        await expect(
+            runDistributionPipeline(ctx, { ...ports, enrichConcurrency: 3 })
+        ).rejects.toThrow("database went away");
+
+        expect(seen.orgs.length).toBeLessThan(12);
+        expect(store.statuses.at(-1)).toBe("failed");
     });
 });

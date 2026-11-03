@@ -40,6 +40,7 @@ import {
     type SearchCompaniesPort,
 } from "./gather";
 import { planDiscovery, type PlanInput, type SellerProfile } from "./plan";
+import { mapInPool } from "./pool";
 import { makeDossierCreationKey, makeDossierFilename, renderDossierMarkdown } from "./render";
 import { bestTerritoryFit, placeLabel } from "./locate";
 import { buildRationaleInput, computeFit, deriveRiskFlags, templateRationale } from "./score";
@@ -153,6 +154,12 @@ export interface DistributionPorts {
     embed?: EmbedTexts | null;
     /** Chat-model check of the closest companies; null or absent → none. */
     judgeFit?: JudgeFit | null;
+    /**
+     * Candidates `runDistributionPipeline` researches at once; absent → one at
+     * a time. Each is a different company, so its own site's requests still
+     * come one after another. A durable host schedules its own steps instead.
+     */
+    enrichConcurrency?: number;
 }
 
 /** Companies the model checks per open shortlist place, each round down the ranking. */
@@ -924,13 +931,13 @@ export async function runDistributionPipeline(
     const startedAt = new Date();
     try {
         const prepared = await prepareRun(ctx, ports);
-        const enriched: EnrichCandidateResult[] = [];
-        for (const relationshipId of prepared.candidateRelationshipIds) {
-            if (ctx.signal?.aborted) break;
-            enriched.push(
-                await enrichCandidate(ctx, ports, { relationshipId, profile: prepared.profile })
-            );
-        }
+        const enriched = await mapInPool(
+            prepared.candidateRelationshipIds,
+            ports.enrichConcurrency ?? 1,
+            relationshipId =>
+                enrichCandidate(ctx, ports, { relationshipId, profile: prepared.profile }),
+            () => ctx.signal?.aborted ?? false
+        );
         return await finalizeRun(ctx, prepared, enriched, startedAt);
     } catch (error) {
         await failRun(ctx, error instanceof Error ? error.message : String(error));

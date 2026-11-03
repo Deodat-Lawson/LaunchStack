@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "building-global-innovators",
+  "name": "Building Global Innovators",
+  "logo": {
+    "path": "/accelerators/logos/building-global-innovators.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.bgi.pt/",
+  "applyUrl": "https://www.bgi.pt/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Home About us Programs Ecosystem Reports Contact BGI - Sustainable Ventures The Future Of Innovation Education Fund Innovation Innovation Education Fund Powerhouse Innovation Education Fund Powerhouse Innovation Innovation BGI is a portuguese world-class startup accelerator and venture builder, equipping innovators from all over the world with the right knowledge, tools and networks to succeed, while creating a more sustainable and innovative world for everyone. About us Explore Programs The report provides actionable insights for investors, entrepreneurs, and policymakers who want to understand which ventures are shaping the future of urban mobility in Portugal and how the ecosystem is evolving Name (optional) Email * Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. Sustainable Ventures The Future Of Innovation Education Fund Innovation Innovation Education Fund Powerhouse Innovation Education Fund Powerhouse Innovation Innovation BGI is a portuguese world-class startup accelerator and venture builder, equipping innovators from all over the world with the right knowledge, tools and networks to succeed, while creating a more sustainable and innovative world for everyone. About us Explore Programs No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.bgi.pt/",
+      "title": "Building Global Innovators — official mark on the retrieved page",
+      "quote": "https://cdn.prod.website-files.com/66e2ef9ab6b34ef625f88e98/66e2ef9ab6b34ef625f88ede_BGI%20Logo.svg",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.bgi.pt/",
+      "title": "Building Global Innovators — visible page text",
+      "quote": "Home About us Programs Ecosystem Reports Contact BGI - Sustainable Ventures The Future Of Innovation Education Fund Innovation Innovation Education Fund Powerhouse Innovation Education Fund Powerhouse Innovation Innovation BGI is a portuguese world-class startup accelerator and venture builder, equipping innovators from all over the world with the right knowledge, tools and networks to succeed, while creating a more sustainable and innovative world for everyone. About us Explore Programs The report provides actionable insights for investors, entrepreneurs, and policymakers who want to understand which ventures are shaping the future of urban mobility in Portugal and how the ecosystem is evolving Name (optional) Email * Thank you! Your submission has been received! Oops! Something went wrong while submitting the form. Sustainable Ventures The Future Of Innovation Education Fund Innovation Innovation Education Fund Powerhouse Innovation Education Fund Powerhouse Innovation Innovation BGI is a portuguese world-class startup accelerator and venture builder, equipping innovators from all over the world with the right knowledge, tools and networks to succeed, while creating a more sustainable and innovative world for everyone. About us Explore Programs",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "building-global-innovators-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.bgi.pt/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

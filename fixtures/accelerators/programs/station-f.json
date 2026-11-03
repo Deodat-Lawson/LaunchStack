@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "station-f",
+  "name": "Station F",
+  "logo": {
+    "path": "/accelerators/logos/station-f.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://stationf.co/",
+  "applyUrl": "https://stationf.co/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: STATION F Startups Programs Events News About Contact Home Startups Programs Events News About Contact There's no better place to build: from idea to scale, STATION F gives 1,000+ startups access to a high-impact ecosystem and a network of top-tier partners, entrepreneurs, and funds. Join 9,000 startups €1B+ raised / year 30+ programs 700+ investors From our campus to the global stage — meet some of STATION F's most successful startups. Unicorn Unicorn 70M users globally Raised €50M Series B Raised €26M Series B Raised $73M Series B Acquired by Hugging Face Acquired by H Company Unicorn Acquired by Samsung Medison Raised $31M Series A Raised €25M Series A Previous slide Next slide Our campus is home to over 30 startup programs run by STATION F as well as top-tier partners. Discover all Programs Join our In-house Programs Business is largely relationship-based. If you are looking to meet someone - whether they be CEO or Prime Minister - you have a pretty good chance of meeting them at STATION F. This is one of the most international communities in Europe. Build your startup alongside 1,000 cutting-edge companies and experienced international founders in one of the world's most dynamic innovation hubs. Join the ranks of success stories like Hugging Face and Alan, and surround yourself with the ideas and people shaping tomorrow. No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://stationf.co/",
+      "title": "Station F — official mark on the retrieved page",
+      "quote": "https://stationf.co/icon.png?icon.3k7955_4n5o_p.png",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://stationf.co/",
+      "title": "Station F — visible page text",
+      "quote": "STATION F Startups Programs Events News About Contact Home Startups Programs Events News About Contact There's no better place to build: from idea to scale, STATION F gives 1,000+ startups access to a high-impact ecosystem and a network of top-tier partners, entrepreneurs, and funds. Join 9,000 startups €1B+ raised / year 30+ programs 700+ investors From our campus to the global stage — meet some of STATION F's most successful startups. Unicorn Unicorn 70M users globally Raised €50M Series B Raised €26M Series B Raised $73M Series B Acquired by Hugging Face Acquired by H Company Unicorn Acquired by Samsung Medison Raised $31M Series A Raised €25M Series A Previous slide Next slide Our campus is home to over 30 startup programs run by STATION F as well as top-tier partners. Discover all Programs Join our In-house Programs Business is largely relationship-based. If you are looking to meet someone - whether they be CEO or Prime Minister - you have a pretty good chance of meeting them at STATION F. This is one of the most international communities in Europe. Build your startup alongside 1,000 cutting-edge companies and experienced international founders in one of the world's most dynamic innovation hubs. Join the ranks of success stories like Hugging Face and Alan, and surround yourself with the ideas and people shaping tomorrow.",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "station-f-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://stationf.co/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

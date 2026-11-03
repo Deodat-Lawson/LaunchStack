@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "dmz",
+  "name": "DMZ",
+  "logo": {
+    "path": "/accelerators/logos/dmz.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://dmz.torontomu.ca/",
+  "applyUrl": "https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: World-Leading Tech Incubator & Startup Ecosystem | DMZ Webflow Homepage View dashboard 18-month program to scale and become investor-ready. 9-month program to get your first customers and sell. FOUNDER SUPPORT Learn how we’re advancing and supporting diverse founders. Get legal support tailored to startups at every stage of growth. Real-world experts, advisors, and partners to guide startup growth. PARTNER PROGRAMS No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://dmz.torontomu.ca/",
+      "title": "DMZ — official mark on the retrieved page",
+      "quote": "https://cdn.prod.website-files.com/6807ee25c911fd3e8fed0d2f/6849bf87fc4deefa4ffe754c_Logo.svg",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://dmz.torontomu.ca/",
+      "title": "DMZ — visible page text",
+      "quote": "World-Leading Tech Incubator & Startup Ecosystem | DMZ Webflow Homepage View dashboard 18-month program to scale and become investor-ready. 9-month program to get your first customers and sell. FOUNDER SUPPORT Learn how we’re advancing and supporting diverse founders. Get legal support tailored to startups at every stage of growth. Real-world experts, advisors, and partners to guide startup growth. PARTNER PROGRAMS",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "dmz-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://mydmz.torontomu.ca/portal/apply/student-sponsorship?_gl=1*162b0my*_gcl_au*MjA3MjQ4MzEuMTc0MTcxNDk4OC4xNjIxNTAwMjAxLjE3NDc4Mzk3NzcuMTc0NzgzOTg3Mg",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

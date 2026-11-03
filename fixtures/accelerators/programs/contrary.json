@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "contrary",
+  "name": "Contrary",
+  "logo": {
+    "path": "/accelerators/logos/contrary.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://contrary.com/",
+  "applyUrl": "https://contrary.com/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: We identify and invest in a small number of entrepreneurs and the companies they build, from seed to scale. View Portfolio AI benchmarks no longer just measure models; they shape how models are evaluated in training and the capabilities they are designed to have. Stay updated with Contrary. Subscribe Subscribe Company No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://contrary.com/",
+      "title": "Contrary — official mark on the retrieved page",
+      "quote": "https://contrary.com/favicon.ico",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://contrary.com/",
+      "title": "Contrary — visible page text",
+      "quote": "We identify and invest in a small number of entrepreneurs and the companies they build, from seed to scale. View Portfolio AI benchmarks no longer just measure models; they shape how models are evaluated in training and the capabilities they are designed to have. Stay updated with Contrary. Subscribe Subscribe Company",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "contrary-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://contrary.com/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

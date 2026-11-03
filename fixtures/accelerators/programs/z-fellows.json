@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "z-fellows",
+  "name": "Z Fellows",
+  "logo": {
+    "path": "/accelerators/logos/z-fellows.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.zfellows.com/",
+  "applyUrl": "https://www.zfellows.com/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Z Fellows | Get Fast-Tracked into Silicon Valley Z Fellows About Mentors FAQs Blog Startup Workshop Apply Now 1 week. $10,000. with founders of multi billion dollar companies. Apply Now There's a pattern among the most successful founders. They all started by learning from those who have built multi billion dollar companies. Getting mentored by proven founders is the fastest way to accelerate. Success leaves clues—follow them. Sergey brin & Larry Page (Founders of google) No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.zfellows.com/",
+      "title": "Z Fellows — official mark on the retrieved page",
+      "quote": "https://cdn.prod.website-files.com/638f3177988a2191df92b80b/67f40f0af6a7e8c082cb1048_6390af9097120ae573d056fc_image%252027.webp.png",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.zfellows.com/",
+      "title": "Z Fellows — visible page text",
+      "quote": "Z Fellows | Get Fast-Tracked into Silicon Valley Z Fellows About Mentors FAQs Blog Startup Workshop Apply Now 1 week. $10,000. with founders of multi billion dollar companies. Apply Now There's a pattern among the most successful founders. They all started by learning from those who have built multi billion dollar companies. Getting mentored by proven founders is the fastest way to accelerate. Success leaves clues—follow them. Sergey brin & Larry Page (Founders of google)",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "z-fellows-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.zfellows.com/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

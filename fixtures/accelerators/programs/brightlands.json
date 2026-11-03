@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "brightlands",
+  "name": "Brightlands",
+  "logo": {
+    "path": "/accelerators/logos/brightlands.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.brightlands.com/",
+  "applyUrl": "https://www.brightlands.com/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Brightlands | Waar Limburg vernieuwt zonder grenzen Overslaan en naar de inhoud gaan Brightlands Limburg wint titel 'Intelligent Community of the Year 2026' van het Intelligent Community Forum Lees het volledige bericht Op Brightlands Chemelot Campus ontwikkelt Avantium een volledig plantaardig en recyclebaar kunststofmateriaal voor verpakkingen en textiel. De basis voor een nieuwe generatie industrie. Ontdek deze innovatie MAECONOMY brengt met AI in kaart welke materialen in gebouwen en infrastructuur zijn verwerkt, en wanneer die beschikbaar komen. Zo worden baksteen, staal en hout vindbaar en verhandelbaar. Ontdek deze innovatie Het lekkerste tomaatje begint bij het beste zaadje Op Brightlands Campus Greenport Venlo kijkt Innoveins met geavanceerde analyses diep in het potentieel van zaden. Betere voorspellingen, minder verspilling, hogere opbrengst. Ontdek deze innovatie No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.brightlands.com/",
+      "title": "Brightlands — official mark on the retrieved page",
+      "quote": "https://www.brightlands.com/sites/default/themes/custom/brightlands/favicon.ico",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.brightlands.com/",
+      "title": "Brightlands — visible page text",
+      "quote": "Brightlands | Waar Limburg vernieuwt zonder grenzen Overslaan en naar de inhoud gaan Brightlands Limburg wint titel 'Intelligent Community of the Year 2026' van het Intelligent Community Forum Lees het volledige bericht Op Brightlands Chemelot Campus ontwikkelt Avantium een volledig plantaardig en recyclebaar kunststofmateriaal voor verpakkingen en textiel. De basis voor een nieuwe generatie industrie. Ontdek deze innovatie MAECONOMY brengt met AI in kaart welke materialen in gebouwen en infrastructuur zijn verwerkt, en wanneer die beschikbaar komen. Zo worden baksteen, staal en hout vindbaar en verhandelbaar. Ontdek deze innovatie Het lekkerste tomaatje begint bij het beste zaadje Op Brightlands Campus Greenport Venlo kijkt Innoveins met geavanceerde analyses diep in het potentieel van zaden. Betere voorspellingen, minder verspilling, hogere opbrengst. Ontdek deze innovatie",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "brightlands-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.brightlands.com/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

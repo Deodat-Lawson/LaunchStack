@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "capital-innovators",
+  "name": "Capital Innovators",
+  "logo": {
+    "path": "/accelerators/logos/capital-innovators.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://capitalinnovators.com/",
+  "applyUrl": "https://capitalinnovators.com/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Capital Innovators Home About Startups Corporations Courses Blog Contact Back About CI Why Us Our Story Team Mentors Press Back Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Back Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Back Angel Investor Playbook™ Home About About CI Why Us Our Story Team Mentors Press Startups Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Corporations Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Courses Angel Investor Playbook™ Blog Contact Accelerating Growth Scroll Capital Innovators provides top-ranked Accelerator programs, venture fund management, and corporate innovation. Learn More about Venture Ready Missouri Capital Innovators provides seed funding, mentorship, resources and connections through its unique high-touch Accelerator, which has scaled over 180 startups from around the globe. Learn More Capital Innovators provides Seed and Series A venture investments into attractive high-growth startup companies in verticals including technology and consumer products that are ready to scale through it No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://capitalinnovators.com/",
+      "title": "Capital Innovators — official mark on the retrieved page",
+      "quote": "https://images.squarespace-cdn.com/content/v1/5920bc42579fb390c0074e43/78fb3d34-8de8-4ccd-8754-cf1282184f20/Full%2B-%2BColor.jpg",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://capitalinnovators.com/",
+      "title": "Capital Innovators — visible page text",
+      "quote": "Capital Innovators Home About Startups Corporations Courses Blog Contact Back About CI Why Us Our Story Team Mentors Press Back Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Back Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Back Angel Investor Playbook™ Home About About CI Why Us Our Story Team Mentors Press Startups Venture Ready Missouri Accelerator Program NGA Accelerator NGA Accelerator Press Perks & Partners Venture Investments Portfolio Corporations Corporate Offerings Startup Sourcing Corporate Accelerator Corporate Intrapreneurship Innovation Challenge Corporate Partnership Case Studies Courses Angel Investor Playbook™ Blog Contact Accelerating Growth Scroll Capital Innovators provides top-ranked Accelerator programs, venture fund management, and corporate innovation. Learn More about Venture Ready Missouri Capital Innovators provides seed funding, mentorship, resources and connections through its unique high-touch Accelerator, which has scaled over 180 startups from around the globe. Learn More Capital Innovators provides Seed and Series A venture investments into attractive high-growth startup companies in verticals including technology and consumer products that are ready to scale through it",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "capital-innovators-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://capitalinnovators.com/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

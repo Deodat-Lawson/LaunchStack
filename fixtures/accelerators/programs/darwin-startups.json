@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "darwin-startups",
+  "name": "Darwin Startups",
+  "logo": {
+    "path": "/accelerators/logos/darwin-startups.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.darwinstartups.com/",
+  "applyUrl": "https://www.darwinstartups.com/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Darwin Startups 0 Pular para conteúdo Home A Darwin Para Corporações Para Startups Portfólio Darwin News Contato Abrir menu Fechar menu Home A Darwin Para Corporações Para Startups Portfólio Darwin News Contato Abrir menu Fechar menu Home A Darwin Para Corporações Para Startups Portfólio Darwin News Contato Desenvolvemos relacionamentos estratégicos entre investidores, corporações e startups. Nossa missão é desenvolver o ecossistema empreendedor, transformando a vida de pessoas e empresas. acesso a grandes corporações do mercado com foco em desenvolver negócios de acordo com os objetivos da startup e facilitação dos processos de experimentação, PoCs e/ou novos negócios. fazer parte de uma comunidade de pessoas investidas pela Darwin Startups e que passam ou passaram pelos desafios de empreender. Trocas e conexões com pares para, além de conversar sobre suas experiências, conhecer pessoas estratégicas e fazer muitos negócios. time de especialistas da Darwin Startups com experiência auxiliando mais de 1000 startups a validarem produto e mercado, levantar capital e crescer em vendas. Nosso trabalho é ajudá-los e encontrar as respostas que buscam. No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.darwinstartups.com/",
+      "title": "Darwin Startups — official mark on the retrieved page",
+      "quote": "https://images.squarespace-cdn.com/content/v1/62fea2ef6e5e3825d0424c30/8de04a67-21a7-439e-a59e-3743cab59b5d/Darwin+Startups_LOGO_BRANCO.png?format=1500w",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.darwinstartups.com/",
+      "title": "Darwin Startups — visible page text",
+      "quote": "Darwin Startups 0 Pular para conteúdo Home A Darwin Para Corporações Para Startups Portfólio Darwin News Contato Abrir menu Fechar menu Home A Darwin Para Corporações Para Startups Portfólio Darwin News Contato Abrir menu Fechar menu Home A Darwin Para Corporações Para Startups Portfólio Darwin News Contato Desenvolvemos relacionamentos estratégicos entre investidores, corporações e startups. Nossa missão é desenvolver o ecossistema empreendedor, transformando a vida de pessoas e empresas. acesso a grandes corporações do mercado com foco em desenvolver negócios de acordo com os objetivos da startup e facilitação dos processos de experimentação, PoCs e/ou novos negócios. fazer parte de uma comunidade de pessoas investidas pela Darwin Startups e que passam ou passaram pelos desafios de empreender. Trocas e conexões com pares para, além de conversar sobre suas experiências, conhecer pessoas estratégicas e fazer muitos negócios. time de especialistas da Darwin Startups com experiência auxiliando mais de 1000 startups a validarem produto e mercado, levantar capital e crescer em vendas. Nosso trabalho é ajudá-los e encontrar as respostas que buscam.",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "darwin-startups-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.darwinstartups.com/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

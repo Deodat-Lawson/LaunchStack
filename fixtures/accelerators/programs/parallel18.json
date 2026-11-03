@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "parallel18",
+  "name": "Parallel18",
+  "logo": {
+    "path": "/accelerators/logos/parallel18.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://parallel18.com/",
+  "applyUrl": "https://parallel18.com/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Xpand: Global reach. Sustainable expansion. Learn More We advance Puerto Rico’s economy and its citizens’ well-being​. Learn More Acceleration program for Puerto Rican and international startups. Scale up program designed for growth-stage companies. Explore our parallel18 Alumni! More than 600+ solutions from all over the world. PORTFOLIO E-Commerce & Marketplace See all startups No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://parallel18.com/",
+      "title": "Parallel18 — official mark on the retrieved page",
+      "quote": "https://parallel18.com/wp-content/uploads/2026/04/parallel18-logo-white.svg",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://parallel18.com/",
+      "title": "Parallel18 — visible page text",
+      "quote": "Xpand: Global reach. Sustainable expansion. Learn More We advance Puerto Rico’s economy and its citizens’ well-being​. Learn More Acceleration program for Puerto Rican and international startups. Scale up program designed for growth-stage companies. Explore our parallel18 Alumni! More than 600+ solutions from all over the world. PORTFOLIO E-Commerce & Marketplace See all startups",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "parallel18-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://parallel18.com/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

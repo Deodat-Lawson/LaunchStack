@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "iterative",
+  "name": "Iterative",
+  "logo": {
+    "path": "/accelerators/logos/iterative.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.iterative.vc/",
+  "applyUrl": "https://www.iterative.vc/apply",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Iterative — Founders Supporting Founders Investors, our Demo Day just wrapped up. Meet SEA's most promising startups and watch their pitches here → About What Happens at Iterative Getting Into Iterative What Happens at Orientation FAQ Team Our Story Portfolio Companies Startup Jobs Blog Events Careers Recommend Validate Your Startup Idea Resources Startup Academy Investor Directory SEA Checks Find a Co-founder Demo Day About What Happens at Iterative Getting Into Iterative What Happens at Orientation FAQ Team Our Story Portfolio Companies Startup Jobs Blog Events Careers Recommend Validate Your Startup Idea Demo Day Resources Startup Academy Investor Directory SEA Checks Find a Co-founder Apply for Summer 2025 Apply for Winter 2027 We invest US $150K to $500K each in a batch of startups, twice a year We invest the full amount upon admission. We then work with the founders closely on their idea for 3 months during the cohort. After 3 months, they present to a select group of investors with the goal of raising a larger round of investment. About our program We invest in the world-changing companies of tomorrow See all our companies This is the least important thing we do. We think of our investment as a show of commitment and to align incentives. There is no program fee. Note: We have made exceptions in the past but they are exceedingly rare. As founders, we’ve started 3 companie No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.iterative.vc/",
+      "title": "Iterative — official mark on the retrieved page",
+      "quote": "https://cdn.prod.website-files.com/60b1bd0542d31f178d12f8e5/60b1bf54d2a4d962883ac95d_logo-black-on-white.webp",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.iterative.vc/",
+      "title": "Iterative — visible page text",
+      "quote": "Iterative — Founders Supporting Founders Investors, our Demo Day just wrapped up. Meet SEA's most promising startups and watch their pitches here → About What Happens at Iterative Getting Into Iterative What Happens at Orientation FAQ Team Our Story Portfolio Companies Startup Jobs Blog Events Careers Recommend Validate Your Startup Idea Resources Startup Academy Investor Directory SEA Checks Find a Co-founder Demo Day About What Happens at Iterative Getting Into Iterative What Happens at Orientation FAQ Team Our Story Portfolio Companies Startup Jobs Blog Events Careers Recommend Validate Your Startup Idea Demo Day Resources Startup Academy Investor Directory SEA Checks Find a Co-founder Apply for Summer 2025 Apply for Winter 2027 We invest US $150K to $500K each in a batch of startups, twice a year We invest the full amount upon admission. We then work with the founders closely on their idea for 3 months during the cohort. After 3 months, they present to a select group of investors with the goal of raising a larger round of investment. About our program We invest in the world-changing companies of tomorrow See all our companies This is the least important thing we do. We think of our investment as a show of commitment and to align incentives. There is no program fee. Note: We have made exceptions in the past but they are exceedingly rare. As founders, we’ve started 3 companie",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "iterative-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.iterative.vc/apply",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "sparklabs",
+  "name": "SparkLabs",
+  "logo": {
+    "path": "/accelerators/logos/sparklabs.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://sparklabs.co.kr/kr/",
+  "applyUrl": "https://sparklabs.co.kr/kr/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: 앞으로 10년간의 성장을 위한 사업 기반을 다집니다. 스파크랩은 사업 성패 여부의 핵심인 PMF(Product-Market-Fit)에 집중하는 스타트업 액셀러레이터입니다. 스파크랩의 프로그램에 참여하는 동안 초기 창업자인 당신은 풀어야 할 진짜 문제가 무엇인지, 누구를 위해, 어떻게 풀 것인지 그 어느 때보다도 치열하게 고민하고 해답에 가까워질 것입니다. 비즈니스의 정수만이 남을 때까지 모두 쳐내는 과정을 거치며 단단해진 당신의 팀은 한 가지 목표를 향해 함께 달려가게 될 것이며, 어떤 투자자를 만나도 막히지 않고 사업을 설명할 수 있게 될 것입니다. 스파크랩은 사업 성패 여부의 핵심인 PMF(Product-Market-Fit)에 집중하는 스타트업 액셀러레이터입니다. 스파크랩의 프로그램에 참여하는 동안 초기 창업자인 당신은 풀어야 할 진짜 문제가 무엇인지, 누구를 위해, 어떻게 풀 것인지 그 어느 때보다도 치열하게 고민하고 해답에 가까워질 것입니다. 비즈니스의 정수만이 남을 때까지 모두 쳐내는 과정을 거치며 단단해진 당신의 팀은 한 가지 목표를 향해 함께 달려가게 될 것이며, 어떤 투자자를 만나도 막히지 않고 사업을 설명할 수 있게 될 것입니다. 스파크랩 배치 프로그램 모집 일정 지금 빠르게 이메일로 알림 신청 받아보세요. 신청 소식 받기 What We'll Do Together 15주 동안 사업의 성패를 좌우할 PMF 찾기에 전념합니다. 집요하게 사업의 본질과 고객에 파고들다 어느 순간 맞이하게 되는 아하 모먼트의 희열을 느껴보세요. What We'll Do Together 15주 동안 사업의 성패를 좌우할 PMF 찾기에 전념합니다. No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://sparklabs.co.kr/kr/",
+      "title": "SparkLabs — official mark on the retrieved page",
+      "quote": "https://sparklabs.co.kr/img/logo-white.png",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://sparklabs.co.kr/kr/",
+      "title": "SparkLabs — visible page text",
+      "quote": "앞으로 10년간의 성장을 위한 사업 기반을 다집니다. 스파크랩은 사업 성패 여부의 핵심인 PMF(Product-Market-Fit)에 집중하는 스타트업 액셀러레이터입니다. 스파크랩의 프로그램에 참여하는 동안 초기 창업자인 당신은 풀어야 할 진짜 문제가 무엇인지, 누구를 위해, 어떻게 풀 것인지 그 어느 때보다도 치열하게 고민하고 해답에 가까워질 것입니다. 비즈니스의 정수만이 남을 때까지 모두 쳐내는 과정을 거치며 단단해진 당신의 팀은 한 가지 목표를 향해 함께 달려가게 될 것이며, 어떤 투자자를 만나도 막히지 않고 사업을 설명할 수 있게 될 것입니다. 스파크랩은 사업 성패 여부의 핵심인 PMF(Product-Market-Fit)에 집중하는 스타트업 액셀러레이터입니다. 스파크랩의 프로그램에 참여하는 동안 초기 창업자인 당신은 풀어야 할 진짜 문제가 무엇인지, 누구를 위해, 어떻게 풀 것인지 그 어느 때보다도 치열하게 고민하고 해답에 가까워질 것입니다. 비즈니스의 정수만이 남을 때까지 모두 쳐내는 과정을 거치며 단단해진 당신의 팀은 한 가지 목표를 향해 함께 달려가게 될 것이며, 어떤 투자자를 만나도 막히지 않고 사업을 설명할 수 있게 될 것입니다. 스파크랩 배치 프로그램 모집 일정 지금 빠르게 이메일로 알림 신청 받아보세요. 신청 소식 받기 What We'll Do Together 15주 동안 사업의 성패를 좌우할 PMF 찾기에 전념합니다. 집요하게 사업의 본질과 고객에 파고들다 어느 순간 맞이하게 되는 아하 모먼트의 희열을 느껴보세요. What We'll Do Together 15주 동안 사업의 성패를 좌우할 PMF 찾기에 전념합니다.",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "sparklabs-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://sparklabs.co.kr/kr/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

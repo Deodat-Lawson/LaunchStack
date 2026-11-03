@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "agoranov",
+  "name": "Agoranov",
+  "logo": {
+    "path": "/accelerators/logos/agoranov.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.agoranov.com/",
+  "applyUrl": "https://www.agoranov.com/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Accueil Agoranov Offre Startups Équipe Startups à l'École Se connecter FR EN Vous êtes porteur d'un projet de création d’entreprise innovante ? Rejoignez notre programme d'incubation axé sur trois verticales : ‍ Chez Agoranov, vous intégrez une communauté d'entrepreneurs dans un environnement sécurisé et convivial. Nous facilitons votre accès aux compétences, outils et infrastructures indispensables au succès et à la croissance de votre entreprise ! Un accompagnement personnalisé par une équipe expérimentée. Un chargé d'affaires sera votre interlocuteur privilégié et vous bénéficierez également de l'accès à une équipe aux profils variés. 2300 m² d'infrastructures : bureaux privatifs, open-space, laboratoires secs et humides privatifs, salle froide climatisée, 2 hottes, salles de réunions équipées, espaces de convivialité, cafétéria et terrasse ! No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.agoranov.com/",
+      "title": "Agoranov — official mark on the retrieved page",
+      "quote": "https://cdn.prod.website-files.com/5d1395ae389a341e43c7a0da/6acde6e5b2cfb436b018a14a_Bloomineral%20Logo%20Egean%20Blue.png",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.agoranov.com/",
+      "title": "Agoranov — visible page text",
+      "quote": "Accueil Agoranov Offre Startups Équipe Startups à l'École Se connecter FR EN Vous êtes porteur d'un projet de création d’entreprise innovante ? Rejoignez notre programme d'incubation axé sur trois verticales : ‍ Chez Agoranov, vous intégrez une communauté d'entrepreneurs dans un environnement sécurisé et convivial. Nous facilitons votre accès aux compétences, outils et infrastructures indispensables au succès et à la croissance de votre entreprise ! Un accompagnement personnalisé par une équipe expérimentée. Un chargé d'affaires sera votre interlocuteur privilégié et vous bénéficierez également de l'accès à une équipe aux profils variés. 2300 m² d'infrastructures : bureaux privatifs, open-space, laboratoires secs et humides privatifs, salle froide climatisée, 2 hottes, salles de réunions équipées, espaces de convivialité, cafétéria et terrasse !",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "agoranov-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.agoranov.com/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

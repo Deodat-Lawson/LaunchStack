@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "sheraa",
+  "name": "Sheraa",
+  "logo": {
+    "path": "/accelerators/logos/sheraa.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://sheraa.ae/",
+  "applyUrl": "https://sheraa.ae/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Turn your idea into a venture built for the real world. Build, test and grow your idea through hands-on workshops, mentorship and industry access, using the latest AI tools. Apply Now Applications close 11 November 2026. Apply early. Applications are reviewed on a rolling basis. Whether you're exploring an idea, building a startup, or scaling a business, Sheraa Membership connects you to the right people, opportunities, and support that help your business move forward. Learn more Sheraa supports visionary founders on their journey from early traction to global scale. Since 2016, our founder-first programs, expert mentorship, and ecosystem access have helped startups grow, scale, and compete on a global platform Direct connections to government, corporate partners, investors, and ecosystem leaders No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://sheraa.ae/",
+      "title": "Sheraa — official mark on the retrieved page",
+      "quote": "https://sheraa.ae/storage/settings/sheraa-logo-preloader_1776172630.png",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://sheraa.ae/",
+      "title": "Sheraa — visible page text",
+      "quote": "Turn your idea into a venture built for the real world. Build, test and grow your idea through hands-on workshops, mentorship and industry access, using the latest AI tools. Apply Now Applications close 11 November 2026. Apply early. Applications are reviewed on a rolling basis. Whether you're exploring an idea, building a startup, or scaling a business, Sheraa Membership connects you to the right people, opportunities, and support that help your business move forward. Learn more Sheraa supports visionary founders on their journey from early traction to global scale. Since 2016, our founder-first programs, expert mentorship, and ecosystem access have helped startups grow, scale, and compete on a global platform Direct connections to government, corporate partners, investors, and ecosystem leaders",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "sheraa-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://sheraa.ae/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

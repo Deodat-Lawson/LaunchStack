@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "usc-startup-garage",
+  "name": "USC Viterbi Startup Garage",
+  "logo": {
+    "path": "/accelerators/logos/usc-startup-garage.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://viterbiinnovation.usc.edu/",
+  "applyUrl": "https://viterbiinnovation.usc.edu/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: From Robotron to $2.3 Billion: How William Wang Is Paying It Forward at USC Viterbi A transformational $10 million gift from the Vizio founder and his wife creates the William Wang Technology Innovation and Entrepreneurship Hub - and may establish a new model for engineering entrepreneurship nationwide. Learn More (opens in a new tab) WE ARE THE William W. Wang TECHNOLOGY INNOVATION AND ENTREPRENEURSHIP hub. Explore Our COMPETITIONS PROGRAMS COURSES EVENTS & ACTIVITIES Browse our event calendar to see upcoming competitions, workshops, networking events, and more. See What's Happening This Week View Event Calendar (opens in a new tab) \"This [workshop] has been the single, most valuable hour I've ever spent at USC. I've learned so much about what it takes to launch a company [...]\" \"As an undergrad, I actually did a business degree with an entrepreneurship concentration. That was good, but this competition took me from theoretical knowledge to actually launching a venture. This single program could have easily been a minor in entrepreneurship, and in fact is likely more valuable than any course offerings we have here at USC.\" No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://viterbiinnovation.usc.edu/",
+      "title": "USC Viterbi Startup Garage — official mark on the retrieved page",
+      "quote": "https://viterbiinnovation.usc.edu/wp-content/uploads/2026/07/Untitled-design-7-e1785442059656.png",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://viterbiinnovation.usc.edu/",
+      "title": "USC Viterbi Startup Garage — visible page text",
+      "quote": "From Robotron to $2.3 Billion: How William Wang Is Paying It Forward at USC Viterbi A transformational $10 million gift from the Vizio founder and his wife creates the William Wang Technology Innovation and Entrepreneurship Hub - and may establish a new model for engineering entrepreneurship nationwide. Learn More (opens in a new tab) WE ARE THE William W. Wang TECHNOLOGY INNOVATION AND ENTREPRENEURSHIP hub. Explore Our COMPETITIONS PROGRAMS COURSES EVENTS & ACTIVITIES Browse our event calendar to see upcoming competitions, workshops, networking events, and more. See What's Happening This Week View Event Calendar (opens in a new tab) \"This [workshop] has been the single, most valuable hour I've ever spent at USC. I've learned so much about what it takes to launch a company [...]\" \"As an undergrad, I actually did a business degree with an entrepreneurship concentration. That was good, but this competition took me from theoretical knowledge to actually launching a venture. This single program could have easily been a minor in entrepreneurship, and in fact is likely more valuable than any course offerings we have here at USC.\"",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "usc-startup-garage-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://viterbiinnovation.usc.edu/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

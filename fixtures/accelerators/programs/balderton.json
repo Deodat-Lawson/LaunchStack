@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "balderton",
+  "name": "Balderton",
+  "logo": {
+    "path": "/accelerators/logos/balderton.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.balderton.com/",
+  "applyUrl": "https://www.balderton.com/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Europe’s leading venture firm focused exclusively on backing European-founded tech companies × Market-leading, high-quality games for the casual puzzle game industry Full driving software system for autonomous vehicles. World-leading cyber AI responds to threats in seconds. IPO on London Stock Exchange in 2021 Munich, Germany Delivering clean, cheap electricity to consumers to help solve climate change. No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.balderton.com/",
+      "title": "Balderton — official mark on the retrieved page",
+      "quote": "https://www.balderton.com/wp-content/uploads/2023/10/logo-dark.svg",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.balderton.com/",
+      "title": "Balderton — visible page text",
+      "quote": "Europe’s leading venture firm focused exclusively on backing European-founded tech companies × Market-leading, high-quality games for the casual puzzle game industry Full driving software system for autonomous vehicles. World-leading cyber AI responds to threats in seconds. IPO on London Stock Exchange in 2021 Munich, Germany Delivering clean, cheap electricity to consumers to help solve climate change.",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "balderton-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.balderton.com/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

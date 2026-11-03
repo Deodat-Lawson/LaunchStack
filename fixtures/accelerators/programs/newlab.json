@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "newlab",
+  "name": "Newlab",
+  "logo": {
+    "path": "/accelerators/logos/newlab.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.newlab.com/",
+  "applyUrl": "https://www.newlab.com/apply",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Newlab | Venture Platform for Critical Technology About platform blog team board careers Locations Brooklyn detroit new orleans montevideo riyadh Partners industry economic development investors Events new climate futures host an event about platform blog Press team board careers LOCATIONS Brooklyn DETROIT new orleans RIYADH PARTNERS INDUSTRY ECONOMIC DEVELOPMENT INVESTORS events new mobility futures new climate futures HOST AN EVENT JOIN Startups are building the critical technologies that will define our future economy, but 90% of them never make it to market. Newlab unblocks commercialization for critical technology startups through infrastructure, projects, and capital in the geographies focused on rapid industrialization; so the right ideas don’t just survive, they scale. $ 17B + startup valuation GROWTH 150+ COMMERCIAL PROJECTS $ 9.5B+ EXTERNAL INVESTED CAPITAL $ 13.5B+ LOCAL ECONOMIC IMPACT INFRASTRUCTURE TECHNICAL labs, shops, PILOT SITES, & workspaces PROJECTS STARTUP COMMERCIALIZATION PROJECTS WITH INDUSTRY & GOVERNMENT PARTNERS CAPITAL ALIGNED NETWORK OF VENTURE & NON-DILUTIVE CAPITAL LOCATIONS No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.newlab.com/",
+      "title": "Newlab — official mark on the retrieved page",
+      "quote": "https://cdn.prod.website-files.com/677376e1e97650585235ab96/679478f6890c398e49c3ec2b_Newlab_Logo_Black.svg",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.newlab.com/",
+      "title": "Newlab — visible page text",
+      "quote": "Newlab | Venture Platform for Critical Technology About platform blog team board careers Locations Brooklyn detroit new orleans montevideo riyadh Partners industry economic development investors Events new climate futures host an event about platform blog Press team board careers LOCATIONS Brooklyn DETROIT new orleans RIYADH PARTNERS INDUSTRY ECONOMIC DEVELOPMENT INVESTORS events new mobility futures new climate futures HOST AN EVENT JOIN Startups are building the critical technologies that will define our future economy, but 90% of them never make it to market. Newlab unblocks commercialization for critical technology startups through infrastructure, projects, and capital in the geographies focused on rapid industrialization; so the right ideas don’t just survive, they scale. $ 17B + startup valuation GROWTH 150+ COMMERCIAL PROJECTS $ 9.5B+ EXTERNAL INVESTED CAPITAL $ 13.5B+ LOCAL ECONOMIC IMPACT INFRASTRUCTURE TECHNICAL labs, shops, PILOT SITES, & workspaces PROJECTS STARTUP COMMERCIALIZATION PROJECTS WITH INDUSTRY & GOVERNMENT PARTNERS CAPITAL ALIGNED NETWORK OF VENTURE & NON-DILUTIVE CAPITAL LOCATIONS",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "newlab-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.newlab.com/apply",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

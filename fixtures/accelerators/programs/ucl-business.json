@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "ucl-business",
+  "name": "UCL Business",
+  "logo": {
+    "path": "/accelerators/logos/ucl-business.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.uclventures.com/",
+  "applyUrl": "https://www.uclventures.com/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Bringing brilliant ideas to life - and to market | UCL Ventures Skip to main content Navigate back to homepage Submit search Find your Business Manager We guide UCL academics, researchers and clinicians to get their research to market. Disclose an idea Getting started An introduction to commercialisation and next steps Our collaborative approach How we work with you to get to market What you can expect Demystifying the process of commercialisation Options to move forwards Explore the different pathways to market No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.uclventures.com/",
+      "title": "UCL Business — official mark on the retrieved page",
+      "quote": "https://www.uclventures.com/themes/custom/uclv/images/ucl-logo.svg",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.uclventures.com/",
+      "title": "UCL Business — visible page text",
+      "quote": "Bringing brilliant ideas to life - and to market | UCL Ventures Skip to main content Navigate back to homepage Submit search Find your Business Manager We guide UCL academics, researchers and clinicians to get their research to market. Disclose an idea Getting started An introduction to commercialisation and next steps Our collaborative approach How we work with you to get to market What you can expect Demystifying the process of commercialisation Options to move forwards Explore the different pathways to market",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "ucl-business-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.uclventures.com/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

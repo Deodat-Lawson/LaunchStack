@@ -57,3 +57,9 @@ pnpm --filter @launchstack/web accelerators:import -- --installation local-accel
 Run the import a second time. The second run should report the same identities unchanged rather than inserted again.
 
 Then open `/employer/documents?feature=accelerators&at=/programs` and check logos, sources, dates, and Form state. None of the Forms added in this delivery can start an Application.
+
+## Homepage pass on 2026-11-03
+
+A later pass retrieved public homepages for additional accelerators, incubators, fellowships, and startup programs and kept every page that returned visible text plus a downloadable official image. Pages that were empty, blocked, or had no logo were skipped. Two redirects that landed on a page already kept (Elemental Impact, and Chinaccelerator onto Orbit) were not stored twice.
+
+These records quote that visible text and mark the summary as interpretation. They do not store a deadline, and they do not include application fields. Start Application stays blocked. The catalogue files under `programs/` are the full set; validate and import them together with the command above.

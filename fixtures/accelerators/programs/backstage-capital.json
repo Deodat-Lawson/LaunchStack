@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "backstage-capital",
+  "name": "Backstage Capital",
+  "logo": {
+    "path": "/accelerators/logos/backstage-capital.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://backstagecapital.com/",
+  "applyUrl": "https://backstagecapital.com/apply-2/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Less than 10% of all venture capital deals go to Women, People of Color, and LGBT founders. For years, we have seen it as the biggest opportunity in investment. Backstage Capital has invested in 200 companies led by underrepresented founders. Meet The Headliners \"We invest in the very best founders who identify as women, People of Color, or LGBTQ. I personally identify as all three.\" Arlan Hamilton , The Mixtape – our weekly email newsletter — brings you news, opportunities, and stories to help underrepresented founders succeed. 👊🏾 Email * What best describes your focus at work? No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://backstagecapital.com/",
+      "title": "Backstage Capital — official mark on the retrieved page",
+      "quote": "https://backstagecapital.com/img/favicon.ico",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://backstagecapital.com/",
+      "title": "Backstage Capital — visible page text",
+      "quote": "Less than 10% of all venture capital deals go to Women, People of Color, and LGBT founders. For years, we have seen it as the biggest opportunity in investment. Backstage Capital has invested in 200 companies led by underrepresented founders. Meet The Headliners \"We invest in the very best founders who identify as women, People of Color, or LGBTQ. I personally identify as all three.\" Arlan Hamilton , The Mixtape – our weekly email newsletter — brings you news, opportunities, and stories to help underrepresented founders succeed. 👊🏾 Email * What best describes your focus at work?",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "backstage-capital-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://backstagecapital.com/apply-2/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

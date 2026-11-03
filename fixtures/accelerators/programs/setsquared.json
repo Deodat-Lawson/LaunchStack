@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "setsquared",
+  "name": "SETsquared",
+  "logo": {
+    "path": "/accelerators/logos/setsquared.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.setsquared.co.uk/",
+  "applyUrl": "https://www.setsquared.co.uk/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: SETsquared Partnership | the University Enterprise Collaboration Hydrogen & Sustainable Transport Economy Accelerator Innovation Insights: Accelerate commercialisation: a practical guide to the Deal Readiness Toolkit SETsquared is a unique enterprise partnership and a dynamic collaboration between the six leading research-led UK universities of Bath, Bristol, Cardiff, Exeter, Southampton and Surrey. Discover SETsquared Get early access to 20 of the UK’s most promising deep tech start-ups 24 November 2026, 12:00 – 18:30, CodeNode, London REGISTER YOUR SPACE No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.setsquared.co.uk/",
+      "title": "SETsquared — official mark on the retrieved page",
+      "quote": "https://www.setsquared.co.uk/wp-content/uploads/2021/09/setsquared-partnership-logo-full-colour-rgb-1567px@144ppi.png",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.setsquared.co.uk/",
+      "title": "SETsquared — visible page text",
+      "quote": "SETsquared Partnership | the University Enterprise Collaboration Hydrogen & Sustainable Transport Economy Accelerator Innovation Insights: Accelerate commercialisation: a practical guide to the Deal Readiness Toolkit SETsquared is a unique enterprise partnership and a dynamic collaboration between the six leading research-led UK universities of Bath, Bristol, Cardiff, Exeter, Southampton and Surrey. Discover SETsquared Get early access to 20 of the UK’s most promising deep tech start-ups 24 November 2026, 12:00 – 18:30, CodeNode, London REGISTER YOUR SPACE",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "setsquared-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.setsquared.co.uk/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

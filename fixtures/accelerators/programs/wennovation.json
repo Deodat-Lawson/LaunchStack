@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "wennovation",
+  "name": "Wennovation Hub",
+  "logo": {
+    "path": "/accelerators/logos/wennovation.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://wennovationhub.org/",
+  "applyUrl": "https://wennovationhub.org/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Contact Get Started Your browser does not support the video tag. Support Organization — Enabling Sustainable Ventures Grow businesses. Create jobs. Drive prosperity. Consult with us Book a Space WHO WE ARE We're Dreamers , Doers , and Difference-Makers Innovative ⁠Wennovation Hub is a venture development company that supports early stage startups and growing teams across emerging sectors, giving them access to incubation, acceleration, investment opportunities, market access and mentorship to build thriving startups. \"We are Empowering African Entrepreneurs and building commercially viable businesses.\" Meet Our Team No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://wennovationhub.org/",
+      "title": "Wennovation Hub — official mark on the retrieved page",
+      "quote": "https://wennovationhub.org/images/logo.png",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://wennovationhub.org/",
+      "title": "Wennovation Hub — visible page text",
+      "quote": "Contact Get Started Your browser does not support the video tag. Support Organization — Enabling Sustainable Ventures Grow businesses. Create jobs. Drive prosperity. Consult with us Book a Space WHO WE ARE We're Dreamers , Doers , and Difference-Makers Innovative ⁠Wennovation Hub is a venture development company that supports early stage startups and growing teams across emerging sectors, giving them access to incubation, acceleration, investment opportunities, market access and mentorship to build thriving startups. \"We are Empowering African Entrepreneurs and building commercially viable businesses.\" Meet Our Team",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "wennovation-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://wennovationhub.org/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

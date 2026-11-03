@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "sebrae",
+  "name": "Sebrae",
+  "logo": {
+    "path": "/accelerators/logos/sebrae.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://sebrae.com.br/",
+  "applyUrl": "https://sebrae.com.br/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Sebrae | Abra, Formalize e Faça seu Negócio Crescer O Sebrae é o parceiro do empreendedorismo e dos pequenos negócios. Conte com nossas orientações e capacitações para começar, crescer ou transformar sua empresa. No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://sebrae.com.br/",
+      "title": "Sebrae — official mark on the retrieved page",
+      "quote": "https://static-p134603-e1404735.adobeaemcloud.com/30384eb11dbb909b03a8fb2983151b0406914d5840bebdb899fe9c5803db58a3/favicon-white.svg",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://sebrae.com.br/",
+      "title": "Sebrae — visible page text",
+      "quote": "Sebrae | Abra, Formalize e Faça seu Negócio Crescer O Sebrae é o parceiro do empreendedorismo e dos pequenos negócios. Conte com nossas orientações e capacitações para começar, crescer ou transformar sua empresa.",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "sebrae-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://sebrae.com.br/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

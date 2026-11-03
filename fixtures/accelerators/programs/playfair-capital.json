@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "playfair-capital",
+  "name": "Playfair Capital",
+  "logo": {
+    "path": "/accelerators/logos/playfair-capital.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://playfair.vc/",
+  "applyUrl": "https://playfair.vc/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: London Venture Capital Firm for European Pre-Seed Investment | Playfair Portfolio Thesis Team Story Content Pre-seed Resources Careers Pitch Us Investing exclusively at pre-seed in the UK & Europe from our £57m Fund 3, we give you an unfair advantage, taking you from where you are to where you want to be We partner with visionary founders, with hustle, heart and humility, who see the world not as it is, but as it could be, and together build durable foundations for growth Our pre-seed to Series A graduation rate is 78% - ~4x the industry average Since 2013, our founders have raised >$3bn of follow-on capital from the world's best specialist and multi-stage funds. Most recently: We are highly selective, making 6 investments per year. When we agree to invest, we are all in and will give you as much time and energy as you need to succeed No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://playfair.vc/",
+      "title": "Playfair Capital — official mark on the retrieved page",
+      "quote": "https://playfair.vc/assets/images/logos/playfair-logo.svg",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://playfair.vc/",
+      "title": "Playfair Capital — visible page text",
+      "quote": "London Venture Capital Firm for European Pre-Seed Investment | Playfair Portfolio Thesis Team Story Content Pre-seed Resources Careers Pitch Us Investing exclusively at pre-seed in the UK & Europe from our £57m Fund 3, we give you an unfair advantage, taking you from where you are to where you want to be We partner with visionary founders, with hustle, heart and humility, who see the world not as it is, but as it could be, and together build durable foundations for growth Our pre-seed to Series A graduation rate is 78% - ~4x the industry average Since 2013, our founders have raised >$3bn of follow-on capital from the world's best specialist and multi-stage funds. Most recently: We are highly selective, making 6 investments per year. When we agree to invest, we are all in and will give you as much time and energy as you need to succeed",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "playfair-capital-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://playfair.vc/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "industrifonden",
+  "name": "Industrifonden",
+  "logo": {
+    "path": "/accelerators/logos/industrifonden.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://industrifonden.com/",
+  "applyUrl": "https://industrifonden.com/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Contact WE'RE SWEDEN'S Venture Capital Fund We back unique, scalable innovations with the patient capital and staying power to see them through — from first check to global scale. read more TICKET SIZE - PORTFOLIO COMPANIES ASSETS UNDER MANAGEMENT IPOS NORDIC INNOVATIONS Bringing breakthroughs to the world Industrifonden is an evergreen venture capital fund backing innovative companies with the potential to fundamentally reshape industries and create long-term value for society. We invest with patience and conviction, supporting companies through complexity and critical inflection points, enabling them to scale globally. As an evergreen, fund terms do not dictate our timeline – we're in it for the long run. Our focus is Sweden, but our reach extends across the New Nordics where we participate in strong syndicates alongside local co-investors, backing exceptional companies wherever they're building in the region. OUR STRATEGIES LIFE SCIENCE We are obsessed with the future of human health. We invest in therapeutics and health technologies, backing exceptional founders who turn breakthrough science into treatments and tools that reach patients. Software We back founders who have gone deep into an industry and come back with something that changes it — vertical AI and enterprise software, built on genuine domain conviction. We invest early, at the moment a product is proven and its No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://industrifonden.com/",
+      "title": "Industrifonden — official mark on the retrieved page",
+      "quote": "https://cdn.prod.website-files.com/6a1c836c7682ee1bfc131721/6aafc50209bc9f372814f71e_alixlabs_logo_horizontal_no-claim_black.png",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://industrifonden.com/",
+      "title": "Industrifonden — visible page text",
+      "quote": "Contact WE'RE SWEDEN'S Venture Capital Fund We back unique, scalable innovations with the patient capital and staying power to see them through — from first check to global scale. read more TICKET SIZE - PORTFOLIO COMPANIES ASSETS UNDER MANAGEMENT IPOS NORDIC INNOVATIONS Bringing breakthroughs to the world Industrifonden is an evergreen venture capital fund backing innovative companies with the potential to fundamentally reshape industries and create long-term value for society. We invest with patience and conviction, supporting companies through complexity and critical inflection points, enabling them to scale globally. As an evergreen, fund terms do not dictate our timeline – we're in it for the long run. Our focus is Sweden, but our reach extends across the New Nordics where we participate in strong syndicates alongside local co-investors, backing exceptional companies wherever they're building in the region. OUR STRATEGIES LIFE SCIENCE We are obsessed with the future of human health. We invest in therapeutics and health technologies, backing exceptional founders who turn breakthrough science into treatments and tools that reach patients. Software We back founders who have gone deep into an industry and come back with something that changes it — vertical AI and enterprise software, built on genuine domain conviction. We invest early, at the moment a product is proven and its",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "industrifonden-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://industrifonden.com/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

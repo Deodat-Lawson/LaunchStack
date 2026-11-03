@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "eit-digital",
+  "name": "EIT Digital",
+  "logo": {
+    "path": "/accelerators/logos/eit-digital.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://28digital.eu/",
+  "applyUrl": "https://28digital.eu/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Talent . Tech . Trust . Talent – Tech Skills and Masters Studies Tech – Startup and Scaleup Programmes Tech – Research to Market Trust – Become a Partner Europe's digital skills gap won't be closed by attraction alone Almost 300 participants gathered in Dublin last week for the Digital Talent EU Days, where… 14 October 2026 Scaling From Lab to Market: 28DIGITAL Welcomes First TTO Club International Associate Member Technology now moves faster than any one region can scale it alone. That was the message… 14 October 2026 The Blue Frontier: Why Europe’s Next Deep Tech Revolution is Offshore No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://28digital.eu/",
+      "title": "EIT Digital — official mark on the retrieved page",
+      "quote": "https://28digital.eu/typo3conf/ext/siteway/Resources/Public/images/dgtl-logo-white.svg",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://28digital.eu/",
+      "title": "EIT Digital — visible page text",
+      "quote": "Talent . Tech . Trust . Talent – Tech Skills and Masters Studies Tech – Startup and Scaleup Programmes Tech – Research to Market Trust – Become a Partner Europe's digital skills gap won't be closed by attraction alone Almost 300 participants gathered in Dublin last week for the Digital Talent EU Days, where… 14 October 2026 Scaling From Lab to Market: 28DIGITAL Welcomes First TTO Club International Associate Member Technology now moves faster than any one region can scale it alone. That was the message… 14 October 2026 The Blue Frontier: Why Europe’s Next Deep Tech Revolution is Offshore",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "eit-digital-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://28digital.eu/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "bessemer",
+  "name": "Bessemer Venture Partners",
+  "logo": {
+    "path": "/accelerators/logos/bessemer.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.bvp.com/",
+  "applyUrl": "https://www.bvp.com/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Beyond the capital Portfolio Team Atlas Beyond the capital About News Portfolio careers Search / We exist to back audacious founders through dedicated With two dedicated practices, seed/early and growth, we’re ready to meet you exactly where you are. Explore our portfolio Every sector we back starts with a Roadmap: our thesis on where the market is heading and what it will take to win. AI is reshaping every one of them. Vertical Crypto Fintech Deep Tech & Defense Enterprise Consumer Biotech Developer Vertical Crypto Fintech Deep Tech & Defense Enterprise Consumer Biotech Developer Vertical Crypto Fintech Deep Tech & Defense Enterprise Consumer Biotech Developer AI Infrastructure Marketplaces Physical AI & Robotics Healthcare Data & Cloud Cybersecurity AI Infrastructure Marketplaces Physical AI & Robotics Healthcare Data & Cloud Cybersecurity AI Infrastructure Marketplaces Physical AI & Robotics Healthcare Data & Cloud Cybersecurity Read the roadmaps Bedrock Robotics: Deploying autonomous equipment for the Built World October 26, 2026 Bessemer Venture Partners joins Bedrock Robotics' $600M Series C to scale the use of autonomous machinery across U.S. construction sites. News No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.bvp.com/",
+      "title": "Bessemer Venture Partners — official mark on the retrieved page",
+      "quote": "https://www.bvp.com/favicon.ico?favicon.2rmsoxim8swnj.ico",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.bvp.com/",
+      "title": "Bessemer Venture Partners — visible page text",
+      "quote": "Beyond the capital Portfolio Team Atlas Beyond the capital About News Portfolio careers Search / We exist to back audacious founders through dedicated With two dedicated practices, seed/early and growth, we’re ready to meet you exactly where you are. Explore our portfolio Every sector we back starts with a Roadmap: our thesis on where the market is heading and what it will take to win. AI is reshaping every one of them. Vertical Crypto Fintech Deep Tech & Defense Enterprise Consumer Biotech Developer Vertical Crypto Fintech Deep Tech & Defense Enterprise Consumer Biotech Developer Vertical Crypto Fintech Deep Tech & Defense Enterprise Consumer Biotech Developer AI Infrastructure Marketplaces Physical AI & Robotics Healthcare Data & Cloud Cybersecurity AI Infrastructure Marketplaces Physical AI & Robotics Healthcare Data & Cloud Cybersecurity AI Infrastructure Marketplaces Physical AI & Robotics Healthcare Data & Cloud Cybersecurity Read the roadmaps Bedrock Robotics: Deploying autonomous equipment for the Built World October 26, 2026 Bessemer Venture Partners joins Bedrock Robotics' $600M Series C to scale the use of autonomous machinery across U.S. construction sites. News",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "bessemer-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.bvp.com/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

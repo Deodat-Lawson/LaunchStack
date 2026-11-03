@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "beta-i",
+  "name": "Beta-i",
+  "logo": {
+    "path": "/accelerators/logos/beta-i.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://beta-i.com/",
+  "applyUrl": "https://beta-i.com/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Beta-i | Collaborative, Open & Corporate Innovation Experts • Beta-i • Innovation and São Paulo to the world. We are proud to be the partner of choice for world-class companies to accelerate their innovation journey, drive business growth and create a positive global impact. Always with collaboration at the heart. Beta-i combines over a decade of expertise with a powerful ecosystem of leading partners to deliver corporate innovation from A to Z. Together, we help you test new approaches, solve complex challenges, and drive growth: faster and more efficiently. Improving the lives of patients with dementia and their caregivers Transforming the packaging waste sector All Projects The world’s largest innovation program on energy transition No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://beta-i.com/",
+      "title": "Beta-i — official mark on the retrieved page",
+      "quote": "https://beta-i.com/wp-content/uploads/2024/10/Logo-Positivo-Color_1-8.png",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://beta-i.com/",
+      "title": "Beta-i — visible page text",
+      "quote": "Beta-i | Collaborative, Open & Corporate Innovation Experts • Beta-i • Innovation and São Paulo to the world. We are proud to be the partner of choice for world-class companies to accelerate their innovation journey, drive business growth and create a positive global impact. Always with collaboration at the heart. Beta-i combines over a decade of expertise with a powerful ecosystem of leading partners to deliver corporate innovation from A to Z. Together, we help you test new approaches, solve complex challenges, and drive growth: faster and more efficiently. Improving the lives of patients with dementia and their caregivers Transforming the packaging waste sector All Projects The world’s largest innovation program on energy transition",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "beta-i-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://beta-i.com/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

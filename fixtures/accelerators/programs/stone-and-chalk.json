@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "stone-and-chalk",
+  "name": "Stone & Chalk",
+  "logo": {
+    "path": "/accelerators/logos/stone-and-chalk.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.stoneandchalk.com.au/",
+  "applyUrl": "https://www.stoneandchalk.com.au/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: The home of Australia’s startup community | Stone & Chalk Menu We're not For everyone But we might be for you Learn more Get in touch at every stage of their innovation journey Learn more Sorry, your browser doesn't support embedded videos. Sorry, your browser doesn't support embedded videos. What happens when a solo founder puts AI agents to work? Tribu founder Katie joined the AI Solopreneur Accelerator to find a more structured way to use AI while building a business largely on her own. How Murder at Mine gives your next dinner party a killer twist No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.stoneandchalk.com.au/",
+      "title": "Stone & Chalk — official mark on the retrieved page",
+      "quote": "https://www.stoneandchalk.com.au/_nuxt/logo.DwoXkII7.svg",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.stoneandchalk.com.au/",
+      "title": "Stone & Chalk — visible page text",
+      "quote": "The home of Australia’s startup community | Stone & Chalk Menu We're not For everyone But we might be for you Learn more Get in touch at every stage of their innovation journey Learn more Sorry, your browser doesn't support embedded videos. Sorry, your browser doesn't support embedded videos. What happens when a solo founder puts AI agents to work? Tribu founder Katie joined the AI Solopreneur Accelerator to find a more structured way to use AI while building a business largely on her own. How Murder at Mine gives your next dinner party a killer twist",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "stone-and-chalk-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.stoneandchalk.com.au/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

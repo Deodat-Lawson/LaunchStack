@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "lventure",
+  "name": "LVenture Group",
+  "logo": {
+    "path": "/accelerators/logos/lventure.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://zestgroup.vc/en",
+  "applyUrl": "https://zestgroup.vc/en",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Zest | Venture Capital and Open Innovation in Italy We are the best at discovering top talent and transforming startups into successful businesses, delivering innovation to companies and to the market Discover More We invest in ambitious founders with the courage to disrupt the market, backed by capital, expertise, and a unique network for a 360° perspective Discover More We drive technological transformation and innovation for businesses and institutions through dedicated programs Discover More The Hub Discover More Zest stands for: 1 20 years of innovation 2 Leadership in early-stage venture capital 3 Investments in high-impact technologies 4 Acceleration of top startups 5 Strategic mentorship and resources for founders 6 Corporate technological transformation 7 An international network We are a team of passionate individuals united by a common goal and ambition: to drive growth in the innovation ecosystem through technology . No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://zestgroup.vc/en",
+      "title": "LVenture Group — official mark on the retrieved page",
+      "quote": "https://zestgroup.vc/dist/images/favicon/favicon-32x32.png",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://zestgroup.vc/en",
+      "title": "LVenture Group — visible page text",
+      "quote": "Zest | Venture Capital and Open Innovation in Italy We are the best at discovering top talent and transforming startups into successful businesses, delivering innovation to companies and to the market Discover More We invest in ambitious founders with the courage to disrupt the market, backed by capital, expertise, and a unique network for a 360° perspective Discover More We drive technological transformation and innovation for businesses and institutions through dedicated programs Discover More The Hub Discover More Zest stands for: 1 20 years of innovation 2 Leadership in early-stage venture capital 3 Investments in high-impact technologies 4 Acceleration of top startups 5 Strategic mentorship and resources for founders 6 Corporate technological transformation 7 An international network We are a team of passionate individuals united by a common goal and ambition: to drive growth in the innovation ecosystem through technology .",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "lventure-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://zestgroup.vc/en",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "greentown-labs",
+  "name": "Greentown Labs",
+  "logo": {
+    "path": "/accelerators/logos/greentown-labs.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://greentown.org/",
+  "applyUrl": "https://greentown.org/apply-now",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Greentown - Where entrepreneurs move faster Supporting Startups Startups Industry Engage About Apply for Membership Helping climate & energy startups Transform industries faster Membership Benefits Membership Benefits [ 01 ] How we support founders Entrepreneurs move faster at Greentown Labs Equipment. Workshops. Warm introductions. We connect companies with the people and resources they need to scale, at the pace the world needs. Machine shops, prototyping labs, specialized equipment, and more for rapid R&D. Customer discovery, technical validation, field trials, pilots, and more to bridge tech to market. Investor introductions, pitch coaching, grant support, and fundraising guidance. No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://greentown.org/",
+      "title": "Greentown Labs — official mark on the retrieved page",
+      "quote": "https://greentown.org/_next/image?url=https%3A%2F%2Fstorage.googleapis.com%2Fgreentown-website-assets%2Flogos%2Fcompanies%2F13571.png%3Fv%3D1793613174&w=3840&q=75",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://greentown.org/",
+      "title": "Greentown Labs — visible page text",
+      "quote": "Greentown - Where entrepreneurs move faster Supporting Startups Startups Industry Engage About Apply for Membership Helping climate & energy startups Transform industries faster Membership Benefits Membership Benefits [ 01 ] How we support founders Entrepreneurs move faster at Greentown Labs Equipment. Workshops. Warm introductions. We connect companies with the people and resources they need to scale, at the pace the world needs. Machine shops, prototyping labs, specialized equipment, and more for rapid R&D. Customer discovery, technical validation, field trials, pilots, and more to bridge tech to market. Investor introductions, pitch coaching, grant support, and fundraising guidance.",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "greentown-labs-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://greentown.org/apply-now",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

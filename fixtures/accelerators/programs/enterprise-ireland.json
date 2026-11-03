@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "enterprise-ireland",
+  "name": "Enterprise Ireland",
+  "logo": {
+    "path": "/accelerators/logos/enterprise-ireland.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.enterprise-ireland.com/en/",
+  "applyUrl": "https://www.enterprise-ireland.com/en/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Wherever you are on your journey, we’re here to help Start a business Discover supports for early-stage businesses Get started Expand your business Find the supports you need to grow, scale and drive performance Explore ways to grow Grow internationally Get advice and support to expand into international markets Start exporting Source Irish innovation Located outside Ireland and want to connect with Irish innovation? Enterprise Ireland supported companies employ over 200,000 people around the country. Irish-owned businesses play a vital role in our economy, create sustainable jobs and drive prosperity in communities. From startups to SMEs to multinationals, we support Irish-owned companies on their journey as they scale, develop capabilities and expand their global footprint. People employed in companies supported by Enterprise Ireland No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.enterprise-ireland.com/en/",
+      "title": "Enterprise Ireland — official mark on the retrieved page",
+      "quote": "https://www.enterprise-ireland.com/resource/blob/4702/36703afbf2f4525c847087b940ca9574/enterprise-ireland-logo-picture--data.png",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.enterprise-ireland.com/en/",
+      "title": "Enterprise Ireland — visible page text",
+      "quote": "Wherever you are on your journey, we’re here to help Start a business Discover supports for early-stage businesses Get started Expand your business Find the supports you need to grow, scale and drive performance Explore ways to grow Grow internationally Get advice and support to expand into international markets Start exporting Source Irish innovation Located outside Ireland and want to connect with Irish innovation? Enterprise Ireland supported companies employ over 200,000 people around the country. Irish-owned businesses play a vital role in our economy, create sustainable jobs and drive prosperity in communities. From startups to SMEs to multinationals, we support Irish-owned companies on their journey as they scale, develop capabilities and expand their global footprint. People employed in companies supported by Enterprise Ireland",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "enterprise-ireland-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.enterprise-ireland.com/en/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

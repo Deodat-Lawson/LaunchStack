@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "village-global",
+  "name": "Village Global",
+  "logo": {
+    "path": "/accelerators/logos/village-global.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.villageglobal.com/",
+  "applyUrl": "https://www.villageglobal.com/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Village Global VC | Early-Stage Venture Capital with Top Entrepreneurs Network Investing Portfolio Insights Events Team We're backed by world-class visionaries Reid Hoffman Founder, LinkedIn Bill Gates Founder, Microsoft Anne Wojcicki Founder, 23andMe Jeff Bezos Founder, Amazon Michael Dell Founder, Dell Technologies Mark Zuckerberg Founder & CEO, Meta Abby Johnson CEO, Fidelity Join a network of 400+ founders, operator angels, and luminary LPs We invest in relentlessly resourceful founders Brandon Hill Founder, Vori Feross Aboukhadijeh Founder, Socket Sharath Narayana Co-Founder, Sanas Nick Noone Co-founder, Peregrine Elliot Shmukler Co-founder, Anomalo Viswa Colluru Founder, Enveda Biosciences Tim Thimmaiah Co-founder, Type Five Brad Kittredge Co-founder, Brightside Qasar Younis Co-founder, Applied Intuition Maddie Hall Co-founder & CEO, Living Carbon Peter Briffett Co-founder, Wagestream Ian Cinnamon Co-founder, Apex Space Gavin Uberti Co-founder, Etched Chris Power Founder, Hadrian Automation Santiago Suarez Co-founder & CEO, Addi Tomas Puig Co-founder, Alembic Felix Steinmeyer Founder, Cherry Burkay Gur Co-founder, Fal.AI Xinchen Wang Founder, Waypoint Bio Alex Halliday Founder, AirOps Jack Gardner Founder, Kickoff Jake Cooper Co-founder, Grow Therapy Sam Abbas Founder, SimplyWise Ranjan Reddy Founder, Bureau Lukas Quanstrom Co-founder, Ontic Matthias Hofmann Founder, Eyeb No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.villageglobal.com/",
+      "title": "Village Global — official mark on the retrieved page",
+      "quote": "https://cdn.prod.website-files.com/6a6b7b1087abec0f81984d82/6a6b7b1087abec0f81984e19_Village%20Logo.svg",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.villageglobal.com/",
+      "title": "Village Global — visible page text",
+      "quote": "Village Global VC | Early-Stage Venture Capital with Top Entrepreneurs Network Investing Portfolio Insights Events Team We're backed by world-class visionaries Reid Hoffman Founder, LinkedIn Bill Gates Founder, Microsoft Anne Wojcicki Founder, 23andMe Jeff Bezos Founder, Amazon Michael Dell Founder, Dell Technologies Mark Zuckerberg Founder & CEO, Meta Abby Johnson CEO, Fidelity Join a network of 400+ founders, operator angels, and luminary LPs We invest in relentlessly resourceful founders Brandon Hill Founder, Vori Feross Aboukhadijeh Founder, Socket Sharath Narayana Co-Founder, Sanas Nick Noone Co-founder, Peregrine Elliot Shmukler Co-founder, Anomalo Viswa Colluru Founder, Enveda Biosciences Tim Thimmaiah Co-founder, Type Five Brad Kittredge Co-founder, Brightside Qasar Younis Co-founder, Applied Intuition Maddie Hall Co-founder & CEO, Living Carbon Peter Briffett Co-founder, Wagestream Ian Cinnamon Co-founder, Apex Space Gavin Uberti Co-founder, Etched Chris Power Founder, Hadrian Automation Santiago Suarez Co-founder & CEO, Addi Tomas Puig Co-founder, Alembic Felix Steinmeyer Founder, Cherry Burkay Gur Co-founder, Fal.AI Xinchen Wang Founder, Waypoint Bio Alex Halliday Founder, AirOps Jack Gardner Founder, Kickoff Jake Cooper Co-founder, Grow Therapy Sam Abbas Founder, SimplyWise Ranjan Reddy Founder, Bureau Lukas Quanstrom Co-founder, Ontic Matthias Hofmann Founder, Eyeb",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "village-global-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.villageglobal.com/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

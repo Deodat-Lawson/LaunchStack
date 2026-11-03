@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "startup-health",
+  "name": "StartUp Health",
+  "logo": {
+    "path": "/accelerators/logos/startup-health.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.startuphealth.com/",
+  "applyUrl": "https://www.startuphealth.com/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: StartUp Health is a private global membership for the founders, funders, and health ecosystem leaders going after the world's biggest health challenges — with the network, intros, and access to make real change happen. Join today Access to care Quality care for everyone, regardless of where they live or what they earn. Addiction & opioid crisis Treatment built on evidence rather than stigma. Alzheimer’s & brain health Detection early enough to change the outcome. No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.startuphealth.com/",
+      "title": "StartUp Health — official mark on the retrieved page",
+      "quote": "https://images.squarespace-cdn.com/content/v1/64cd4199037c6118f6aa07fb/7f122b5e-4c27-46be-8d1b-2a4260562dc6/StartupHealth-Logo+large+R.png?format=1500w",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.startuphealth.com/",
+      "title": "StartUp Health — visible page text",
+      "quote": "StartUp Health is a private global membership for the founders, funders, and health ecosystem leaders going after the world's biggest health challenges — with the network, intros, and access to make real change happen. Join today Access to care Quality care for everyone, regardless of where they live or what they earn. Addiction & opioid crisis Treatment built on evidence rather than stigma. Alzheimer’s & brain health Detection early enough to change the outcome.",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "startup-health-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.startuphealth.com/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

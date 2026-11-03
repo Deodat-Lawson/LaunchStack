@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "startupbootcamp",
+  "name": "Startupbootcamp",
+  "logo": {
+    "path": "/accelerators/logos/startupbootcamp.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://startupbootcamp.org/",
+  "applyUrl": "https://startupbootcamp.org/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Startupbootcamp Accelerators Investors Partners Mentors Events About us Contact us Apply now SBC Expand Energy & Climate III Food & AgriTech III Georgia I How it works Learn more about our accelerators. About our programs Learn more about our accelerators. About our Startups Learn more about our STARTUPS. Portfolio companies Discover our network of portfolio companies Relations & Community Check out our community events and ecosystem opportunities. Active Cohorts - Ai & Web3 - Deeptech & Robotics - Agri & Foodtech Investors Discover the opportunities for investors. Overview New Horizons Find out how we facilitate investments with startups Investing in startups Learn more about the opportunity behind startup investments Corporates Discover the opportunities for corporates. Overview The Methodology Find out more about methodology behind how we facilitate collaboration between startups and corporates. How it works Learn more about the services tailored to corporates. Case Studies Check out our case studies. Community A global ecosystem of innovators empowering other innovators. Overview Mentors A global ecosystem of innovators empowering other innovators. Partners Find out more about partner opportunities Events Check out our global events. Startupbootcamp A global network of industry-specific accelerators. Overview About Startupbootcamp Our story and expertise. Events join our ne No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — official mark on the retrieved page",
+      "quote": "https://cdn.prod.website-files.com/63f3e085b054e9e3120238f1/63f3e0ba605c2a218c60f27e_image%201.svg",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://startupbootcamp.org/",
+      "title": "Startupbootcamp — visible page text",
+      "quote": "Startupbootcamp Accelerators Investors Partners Mentors Events About us Contact us Apply now SBC Expand Energy & Climate III Food & AgriTech III Georgia I How it works Learn more about our accelerators. About our programs Learn more about our accelerators. About our Startups Learn more about our STARTUPS. Portfolio companies Discover our network of portfolio companies Relations & Community Check out our community events and ecosystem opportunities. Active Cohorts - Ai & Web3 - Deeptech & Robotics - Agri & Foodtech Investors Discover the opportunities for investors. Overview New Horizons Find out how we facilitate investments with startups Investing in startups Learn more about the opportunity behind startup investments Corporates Discover the opportunities for corporates. Overview The Methodology Find out more about methodology behind how we facilitate collaboration between startups and corporates. How it works Learn more about the services tailored to corporates. Case Studies Check out our case studies. Community A global ecosystem of innovators empowering other innovators. Overview Mentors A global ecosystem of innovators empowering other innovators. Partners Find out more about partner opportunities Events Check out our global events. Startupbootcamp A global network of industry-specific accelerators. Overview About Startupbootcamp Our story and expertise. Events join our ne",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "startupbootcamp-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://startupbootcamp.org/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

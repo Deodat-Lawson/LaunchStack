@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "katapult",
+  "name": "Katapult",
+  "logo": {
+    "path": "/accelerators/logos/katapult.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://katapult.vc/",
+  "applyUrl": "https://katapult.vc/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Katapult — Investing in a thriving world for all Ecosystem Approach Impact Get in touch Katapult — Oslo, est. 2015 We mobilise people, technology and capital, across an ecosystem of funds, accelerators, and platforms, towards a world where all humans thrive in harmony with nature. Explore the ecosystem Our approach Scroll Our story Katapult started in Oslo in 2015 as a single venture fund, founded by Tharald Nustad on a simple conviction: that the companies solving the world's hardest problems would also build the most valuable businesses of this century. A decade on, that single fund has grown into a family of organizations, each tackling a different piece of what it takes to move impact capital from the margins to the mainstream. We invest a systems lens at the intersection of technology and planetary resilience to accelerate the transformation towards a regenerative future. Impact to date A decade building the infrastructure for impact capital. 200 + Portfolio companies backed across our funds and accelerators. 50 + Countries represented by the founders we've invested in. 10 + Years operating at the frontier of impact investing. The ecosystem Each pillar operates with dedicated teams, theory of change, stakeholders, and ecosystem of external partners. Addressing different layers and parts of the system to accelerate change: capital, infrastructure, tools, talent, and communi No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://katapult.vc/",
+      "title": "Katapult — official mark on the retrieved page",
+      "quote": "https://katapult.vc/assets/logo/katapult-logo-blue.svg",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://katapult.vc/",
+      "title": "Katapult — visible page text",
+      "quote": "Katapult — Investing in a thriving world for all Ecosystem Approach Impact Get in touch Katapult — Oslo, est. 2015 We mobilise people, technology and capital, across an ecosystem of funds, accelerators, and platforms, towards a world where all humans thrive in harmony with nature. Explore the ecosystem Our approach Scroll Our story Katapult started in Oslo in 2015 as a single venture fund, founded by Tharald Nustad on a simple conviction: that the companies solving the world's hardest problems would also build the most valuable businesses of this century. A decade on, that single fund has grown into a family of organizations, each tackling a different piece of what it takes to move impact capital from the margins to the mainstream. We invest a systems lens at the intersection of technology and planetary resilience to accelerate the transformation towards a regenerative future. Impact to date A decade building the infrastructure for impact capital. 200 + Portfolio companies backed across our funds and accelerators. 50 + Countries represented by the founders we've invested in. 10 + Years operating at the frontier of impact investing. The ecosystem Each pillar operates with dedicated teams, theory of change, stakeholders, and ecosystem of external partners. Addressing different layers and parts of the system to accelerate change: capital, infrastructure, tools, talent, and communi",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "katapult-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://katapult.vc/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

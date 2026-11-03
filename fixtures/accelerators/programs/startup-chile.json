@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "startup-chile",
+  "name": "Start-Up Chile",
+  "logo": {
+    "path": "/accelerators/logos/startup-chile.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.startupchile.org/",
+  "applyUrl": "https://www.startupchile.org/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Start-Up Chile – We SUPport founders beyond businesses ☰ ESP_ ENG_ Back ESP_ ENG_ ¡POSTULA! Programas_ Build_ Ignite_ Growth_ Programas_ Build_ Ignite_ Growth_ Nosotros_ Nosotros_ Female Founder Factor_ Female Founder Factor_ Blog_ Blog_ ¡POSTULA! /0{{currentSlide + 1}} SAVE THE DATE! El proceso de postulación para la generación BIG 13 comenzará el 3 de noviembre a las 13:00 (GMT-3). Explora nuestros programas! add west east /0{{currentSlide + 1}} Conoce a nuestra generación BIG 12 Estas son las startups seleccionadas para Build, Ignite y Growth. Visita el Blog add west east /0{{currentSlide + 1}} Convocatoria Partners Convocatoria cerrada. add west east /0{{currentSlide + 1}} Lo nuestro es amor del bueno Te entregamos financiamiento equity-free porque entendemos que tu negocio es como un hijo y que no es fácil renunciar a una parte de él aunque sea para verlo crecer. En definitiva, nuestra consigna siempre será apoyar a los fundadores más allá de sus startups. ¡Cuéntenme más! add west east /0{{currentSlide + 1}} La primera aceleradora pública para startups Hace algunos años se pensaba que la innovación sólo ocurría en el sector privado, pero Start-Up Chile demostró lo contrario. Más de 3000 startups ya han pasado por alguno de nuestros programas. ¡Quiero ver ese impacto! add west east /0{{currentSlide + 1}} No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.startupchile.org/",
+      "title": "Start-Up Chile — official mark on the retrieved page",
+      "quote": "https://startupchile.org/content/uploads/logocorfo.png",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.startupchile.org/",
+      "title": "Start-Up Chile — visible page text",
+      "quote": "Start-Up Chile – We SUPport founders beyond businesses ☰ ESP_ ENG_ Back ESP_ ENG_ ¡POSTULA! Programas_ Build_ Ignite_ Growth_ Programas_ Build_ Ignite_ Growth_ Nosotros_ Nosotros_ Female Founder Factor_ Female Founder Factor_ Blog_ Blog_ ¡POSTULA! /0{{currentSlide + 1}} SAVE THE DATE! El proceso de postulación para la generación BIG 13 comenzará el 3 de noviembre a las 13:00 (GMT-3). Explora nuestros programas! add west east /0{{currentSlide + 1}} Conoce a nuestra generación BIG 12 Estas son las startups seleccionadas para Build, Ignite y Growth. Visita el Blog add west east /0{{currentSlide + 1}} Convocatoria Partners Convocatoria cerrada. add west east /0{{currentSlide + 1}} Lo nuestro es amor del bueno Te entregamos financiamiento equity-free porque entendemos que tu negocio es como un hijo y que no es fácil renunciar a una parte de él aunque sea para verlo crecer. En definitiva, nuestra consigna siempre será apoyar a los fundadores más allá de sus startups. ¡Cuéntenme más! add west east /0{{currentSlide + 1}} La primera aceleradora pública para startups Hace algunos años se pensaba que la innovación sólo ocurría en el sector privado, pero Start-Up Chile demostró lo contrario. Más de 3000 startups ya han pasado por alguno de nuestros programas. ¡Quiero ver ese impacto! add west east /0{{currentSlide + 1}}",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "startup-chile-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.startupchile.org/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

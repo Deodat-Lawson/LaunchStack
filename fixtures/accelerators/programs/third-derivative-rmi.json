@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "third-derivative-rmi",
+  "name": "RMI Third Derivative",
+  "logo": {
+    "path": "/accelerators/logos/third-derivative-rmi.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://rmi.org/third-derivative-2/",
+  "applyUrl": "https://rmi.org/third-derivative-2/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Diversity, Equity, and Inclusion Events and News Events and News Internships Contact Us Contact Us Get Updates Get Updates Our Approach Our Solutions Our Insights Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving Investment Climate Finance Market Creation US Policy Technology and Innovation Workforce Development Reducing Energy Waste Methane Carbon Dioxide Removal Energy Efficiency Deploying Globally Africa China India Islands Southeast Asia United States Our Approach Our Solutions Our Insights Get Involved About Us Events and News Careers Contact Us Get Updates Donate Close Menu Our Approach Back to Main Menu Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving Investment Climate Finance Market Creation US Policy Technology and Innovation Workforce Development Reducing Energy Waste Methane Carbon Dioxide Removal Energy Efficiency Deploying Globally Africa China India Islands Southeast Asia United States Back to Main Menu Our Insights Learn how we are working to transform how we use and produce energy. Clean Energy Basics Collections Tools and Applications Explore All Back to Main Menu Get Involved Be part of the energy solution. Donate to RMI Leadership & Legacy Giving No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://rmi.org/third-derivative-2/",
+      "title": "RMI Third Derivative — official mark on the retrieved page",
+      "quote": "https://rmi.org/app/themes/duo/public/build/assets/rmi-logo-white-BVX2NWgd.svg",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://rmi.org/third-derivative-2/",
+      "title": "RMI Third Derivative — visible page text",
+      "quote": "Diversity, Equity, and Inclusion Events and News Events and News Internships Contact Us Contact Us Get Updates Get Updates Our Approach Our Solutions Our Insights Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving Investment Climate Finance Market Creation US Policy Technology and Innovation Workforce Development Reducing Energy Waste Methane Carbon Dioxide Removal Energy Efficiency Deploying Globally Africa China India Islands Southeast Asia United States Our Approach Our Solutions Our Insights Get Involved About Us Events and News Careers Contact Us Get Updates Donate Close Menu Our Approach Back to Main Menu Our Solutions Learn how we are working to transform how we use and produce energy. Scaling Clean Energy Electricity Buildings Transportation Heavy Industry Driving Investment Climate Finance Market Creation US Policy Technology and Innovation Workforce Development Reducing Energy Waste Methane Carbon Dioxide Removal Energy Efficiency Deploying Globally Africa China India Islands Southeast Asia United States Back to Main Menu Our Insights Learn how we are working to transform how we use and produce energy. Clean Energy Basics Collections Tools and Applications Explore All Back to Main Menu Get Involved Be part of the energy solution. Donate to RMI Leadership & Legacy Giving",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "third-derivative-rmi-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://rmi.org/third-derivative-2/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

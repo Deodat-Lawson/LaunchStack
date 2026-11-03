@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "unternehmertum",
+  "name": "UnternehmerTUM",
+  "logo": {
+    "path": "/accelerators/logos/unternehmertum.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.unternehmertum.de/en",
+  "applyUrl": "https://www.unternehmertum.de/en",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Center for Innovation & Business Creation | UnternehmerTUM Search Toggle Search Learning and Exchange Center for Excellent Entrepreneurship Practice Toggle Search Toggle Search Toggle Navigation Find out more As the leading center for innovation and business creation , we bring together a community that creates value for good. Facing challenges of society, we're on a search for solutions, drive technology beyond the status quo and empower people through education to make a difference. Learn more about us Our partners 17,000+ Participants per year 140+ Scaleable startups per year 500+ Corporate innovation partnerships per year We Make Headlines Podcast UnternehmerTUM Backstage Press News No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.unternehmertum.de/en",
+      "title": "UnternehmerTUM — official mark on the retrieved page",
+      "quote": "https://www.unternehmertum.de/assets/images/favicon/apple-icon-57x57.png",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.unternehmertum.de/en",
+      "title": "UnternehmerTUM — visible page text",
+      "quote": "Center for Innovation & Business Creation | UnternehmerTUM Search Toggle Search Learning and Exchange Center for Excellent Entrepreneurship Practice Toggle Search Toggle Search Toggle Navigation Find out more As the leading center for innovation and business creation , we bring together a community that creates value for good. Facing challenges of society, we're on a search for solutions, drive technology beyond the status quo and empower people through education to make a difference. Learn more about us Our partners 17,000+ Participants per year 140+ Scaleable startups per year 500+ Corporate innovation partnerships per year We Make Headlines Podcast UnternehmerTUM Backstage Press News",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "unternehmertum-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.unternehmertum.de/en",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

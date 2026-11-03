@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "flat6labs",
+  "name": "Flat6Labs",
+  "logo": {
+    "path": "/accelerators/logos/flat6labs.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://flat6labs.com/",
+  "applyUrl": "https://flat6labs.com/apply-now/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Programs for Entrepreneur Support Organizations (ESOs) Apply Now Learn More Explore Insights Apply Now arrow_right Latest Flat6Labs Updates Flat6Labs Insights Flat6Labs and IFC Launch StartAlgeria, a Capacity-Building Program Designed to Empower the Organizations Progressing Algeria’s Startup Ecosystem 09 Jul 2026 In a step that reflects both parties’ commitment to supporting the innovation and entrepreneurship ecosystem: Cityscape Egypt 2026 launches the third edition of the Egypt PropTech Challenge in collaboration with Flat6Labs 10 May 2026 close Flat6Labs Flat6Labs is the leading entrepreneurship platform in emerging markets, empowering entrepreneurs to build, launch and grow transformative ideas through acceleration programs, ecosystem development, and tailored innovation services. About Flat6Labs Flat6Labs Since its launch in 2011 by Sawari Ventures, Flat6Labs has been a key player in building and re-shaping the entrepreneurial scene in Egypt, offering young innovators with unique business ideas the opportunity to turn their vision into market-leading startups. Programs Circular Industry Support Program for Egyptian SMEs (Tadweer) Green Growth and Jobs Accelerator Project (GGJAP) Know More KSA No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://flat6labs.com/",
+      "title": "Flat6Labs — official mark on the retrieved page",
+      "quote": "https://flat6labs.com/wp-content/themes/flat6labs/images/F6-New-Icon-Logo-fav.png",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://flat6labs.com/",
+      "title": "Flat6Labs — visible page text",
+      "quote": "Programs for Entrepreneur Support Organizations (ESOs) Apply Now Learn More Explore Insights Apply Now arrow_right Latest Flat6Labs Updates Flat6Labs Insights Flat6Labs and IFC Launch StartAlgeria, a Capacity-Building Program Designed to Empower the Organizations Progressing Algeria’s Startup Ecosystem 09 Jul 2026 In a step that reflects both parties’ commitment to supporting the innovation and entrepreneurship ecosystem: Cityscape Egypt 2026 launches the third edition of the Egypt PropTech Challenge in collaboration with Flat6Labs 10 May 2026 close Flat6Labs Flat6Labs is the leading entrepreneurship platform in emerging markets, empowering entrepreneurs to build, launch and grow transformative ideas through acceleration programs, ecosystem development, and tailored innovation services. About Flat6Labs Flat6Labs Since its launch in 2011 by Sawari Ventures, Flat6Labs has been a key player in building and re-shaping the entrepreneurial scene in Egypt, offering young innovators with unique business ideas the opportunity to turn their vision into market-leading startups. Programs Circular Industry Support Program for Egyptian SMEs (Tadweer) Green Growth and Jobs Accelerator Project (GGJAP) Know More KSA",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "flat6labs-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://flat6labs.com/apply-now/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

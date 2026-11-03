@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "flat6labs-bahrain",
+  "name": "Flat6Labs Bahrain",
+  "logo": {
+    "path": "/accelerators/logos/flat6labs-bahrain.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://flat6labs.com/Location/bahrain/",
+  "applyUrl": "https://flat6labs.com/apply-now/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Programs for Entrepreneur Support Organizations (ESOs) The Kingdom of Bahrain offers startup founders plenty of unique opportunities to grow and tap into new markets. It is among the world’s top five fastest-growing ecosystems with fewer than 1,000 startups. Flat6Labs expanded to Bahrain in 2018 with programs dedicated to serving both local and global entrepreneurs in the kingdom. Bahrain Flat6Labs is the leading entrepreneurship platform in emerging markets, empowering entrepreneurs to build, launch and grow transformative ideas through acceleration programs, ecosystem development, and tailored innovation services. 2026 Copyrights to Flat6Labs Website Design by MitchDesigns No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://flat6labs.com/Location/bahrain/",
+      "title": "Flat6Labs Bahrain — official mark on the retrieved page",
+      "quote": "https://flat6labs.com/wp-content/themes/flat6labs/images/F6-New-Icon-Logo-fav.png",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://flat6labs.com/Location/bahrain/",
+      "title": "Flat6Labs Bahrain — visible page text",
+      "quote": "Programs for Entrepreneur Support Organizations (ESOs) The Kingdom of Bahrain offers startup founders plenty of unique opportunities to grow and tap into new markets. It is among the world’s top five fastest-growing ecosystems with fewer than 1,000 startups. Flat6Labs expanded to Bahrain in 2018 with programs dedicated to serving both local and global entrepreneurs in the kingdom. Bahrain Flat6Labs is the leading entrepreneurship platform in emerging markets, empowering entrepreneurs to build, launch and grow transformative ideas through acceleration programs, ecosystem development, and tailored innovation services. 2026 Copyrights to Flat6Labs Website Design by MitchDesigns",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "flat6labs-bahrain-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://flat6labs.com/apply-now/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

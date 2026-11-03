@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "one-hundred-x",
+  "name": "100X.VC",
+  "logo": {
+    "path": "/accelerators/logos/one-hundred-x.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.100x.vc/",
+  "applyUrl": "https://www.100x.vc/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: 100X.VC | Funding Simplified. Mentoring Unlimited. Home | 100X.VC About Us Team iSafe Menu Funding Simplified. Mentoring Unlimited. 01 / Moonshots We invest in your Moonshot Ideas. 02 / India SAFE Notes Helping founders reach the next round and beyond. The 100X Team We are a lean team with deep operating and investing experience. Meet our Team ↗ 100X Milestones 400+ Founders 180 Companies $90 Mn+ Follow-on Funding 2,010 Jobs Created No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.100x.vc/",
+      "title": "100X.VC — official mark on the retrieved page",
+      "quote": "https://www.100x.vc/assets/hero-art.svg",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.100x.vc/",
+      "title": "100X.VC — visible page text",
+      "quote": "100X.VC | Funding Simplified. Mentoring Unlimited. Home | 100X.VC About Us Team iSafe Menu Funding Simplified. Mentoring Unlimited. 01 / Moonshots We invest in your Moonshot Ideas. 02 / India SAFE Notes Helping founders reach the next round and beyond. The 100X Team We are a lean team with deep operating and investing experience. Meet our Team ↗ 100X Milestones 400+ Founders 180 Companies $90 Mn+ Follow-on Funding 2,010 Jobs Created",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "one-hundred-x-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.100x.vc/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

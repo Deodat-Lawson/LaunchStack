@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "venturelab",
+  "name": "Venturelab",
+  "logo": {
+    "path": "/accelerators/logos/venturelab.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.venturelab.swiss/",
+  "applyUrl": "https://www.venturelab.swiss/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Venturelab - World-class startups. Swiss made. - 20 years sailing the waves of innovation Venturelab News Follow us: Linkedin / Facebook / X / Instagram / Youtube Navigating the waters of entrepreneurship scroll south 21 years sailing the waves of innovation Venturelab set sail in 2004 , and has been designing and operating flagship startup programs to support the best entrepreneurial talents in Switzerland, including Venture Kick , Venture Leaders , the TOP 100 Swiss Startup Award , and Innosuisse Start-up Trainings . Together with successful founders, top academic collaborators, and leading industry partners, we support the best startups on their way to success. 90% of Swiss startups have been supported by Venturelab and our guided startups have attracted over CHF 15 billion in investments and created more than 25,000 active jobs. See how we can help realize your innovative potential and dive into the startup world. For startups For corporates For investors No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.venturelab.swiss/",
+      "title": "Venturelab — official mark on the retrieved page",
+      "quote": "https://www.venturelab.swiss/demandit/files/M_BB941CC4DCEF687AD98/dms/Image/vl2019-beekeeper-logo.png",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.venturelab.swiss/",
+      "title": "Venturelab — visible page text",
+      "quote": "Venturelab - World-class startups. Swiss made. - 20 years sailing the waves of innovation Venturelab News Follow us: Linkedin / Facebook / X / Instagram / Youtube Navigating the waters of entrepreneurship scroll south 21 years sailing the waves of innovation Venturelab set sail in 2004 , and has been designing and operating flagship startup programs to support the best entrepreneurial talents in Switzerland, including Venture Kick , Venture Leaders , the TOP 100 Swiss Startup Award , and Innosuisse Start-up Trainings . Together with successful founders, top academic collaborators, and leading industry partners, we support the best startups on their way to success. 90% of Swiss startups have been supported by Venturelab and our guided startups have attracted over CHF 15 billion in investments and created more than 25,000 active jobs. See how we can help realize your innovative potential and dive into the startup world. For startups For corporates For investors",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "venturelab-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.venturelab.swiss/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

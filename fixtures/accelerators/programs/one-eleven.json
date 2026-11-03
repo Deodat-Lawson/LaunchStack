@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "one-eleven",
+  "name": "OneEleven",
+  "logo": {
+    "path": "/accelerators/logos/one-eleven.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://oneeleven.com/",
+  "applyUrl": "https://oneeleven.com/apply-here/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Member Jobs Home Paris samiei 2026-03-06T17:49:29+00:00 for venture-backed tech companies with a proven track record to scale 5x-10x within 18-24 months. Home to ambitious founders, bold ideas, and big growth, it’s where companies like Wealthsimple, Borrowell, Clio, Koho, and 1Password found the momentum to go global. A community of elite founders who learn from each other, build exceptional teams, and shape the next generation of leaders. It’s where investors and partners gain direct access to Canada’s most promising ventures in a community built on trust, collaboration, and impact. OneEleven is where Canada’s top tech companies grow and scale together. At OneEleven, membership provides more than just workspace — it opens the door to community, resources, and programming designed to help scaling tech companies grow faster. Our ambitious founders and their teams motivate and support one another, leveraging the expertise of a strong peer network as they build something great. Our companies succeed because they don’t just share the same space, they share the same goals and experiences. No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://oneeleven.com/",
+      "title": "OneEleven — official mark on the retrieved page",
+      "quote": "https://oneeleven.com/wp-content/uploads/2021/03/logo.svg",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://oneeleven.com/",
+      "title": "OneEleven — visible page text",
+      "quote": "Member Jobs Home Paris samiei 2026-03-06T17:49:29+00:00 for venture-backed tech companies with a proven track record to scale 5x-10x within 18-24 months. Home to ambitious founders, bold ideas, and big growth, it’s where companies like Wealthsimple, Borrowell, Clio, Koho, and 1Password found the momentum to go global. A community of elite founders who learn from each other, build exceptional teams, and shape the next generation of leaders. It’s where investors and partners gain direct access to Canada’s most promising ventures in a community built on trust, collaboration, and impact. OneEleven is where Canada’s top tech companies grow and scale together. At OneEleven, membership provides more than just workspace — it opens the door to community, resources, and programming designed to help scaling tech companies grow faster. Our ambitious founders and their teams motivate and support one another, leveraging the expertise of a strong peer network as they build something great. Our companies succeed because they don’t just share the same space, they share the same goals and experiences.",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "one-eleven-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://oneeleven.com/apply-here/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

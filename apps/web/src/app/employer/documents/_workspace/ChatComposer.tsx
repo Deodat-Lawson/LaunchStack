@@ -138,6 +138,8 @@ export interface ComposerProps {
     carriedRefs?: string[];
     /** The editor to start in until the person picks one; the chat panel asks for rich. */
     defaultEditorMode?: "plain" | "rich";
+    /** Bump to open the sources picker from outside (a turn's "asking over N sources"). */
+    openSourcesSignal?: number;
     onSend: (send: ComposerSend) => void | ComposerSendResult | Promise<ComposerSendResult>;
     disabled?: boolean;
     active?: boolean;
@@ -208,6 +210,7 @@ export function Composer({
     setSelected,
     carriedRefs = NO_REFS,
     defaultEditorMode = "plain",
+    openSourcesSignal = 0,
     onSend,
     disabled = false,
     active = false,
@@ -266,6 +269,9 @@ export function Composer({
     const [modelSearch, setModelSearch] = useState("");
     const [sourceOpen, setSourceOpen] = useState(false);
     const [sourceSearch, setSourceSearch] = useState("");
+    useEffect(() => {
+        if (openSourcesSignal > 0) setSourceOpen(true);
+    }, [openSourcesSignal]);
     const [stashes, setStashes] = useState<PromptStash[]>([]);
     const [stashOpen, setStashOpen] = useState(false);
     const [sendKey, setSendKey] = useState<ComposerPreferences["sendKey"]>(defaultSendKey);

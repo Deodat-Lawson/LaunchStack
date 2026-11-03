@@ -310,11 +310,13 @@ What changes is that both ends now **render** it instead of passing it through.
   (`AskPanel.tsx:745-757`) shows only sources that are in the turn's scope but
   not mentioned in its words (carried over from earlier turns), so nothing is
   shown twice.
-- A mention of a source the reader cannot open renders as the dashed
-  "Unavailable source" chip. For shared chats this is enforced server-side:
-  `filterMessagesForReader` rewrites the label of every mention whose ref is
-  not visible to a fixed placeholder, so the title never reaches the reader
-  (§6).
+- A mention of a source the reader cannot open renders as a dashed chip. For
+  shared chats this is enforced server-side: `filterMessagesForReader`
+  rewrites the label of every mention whose ref is not visible — and of every
+  conversation chip, which names one of the owner's other chats — to a fixed
+  placeholder, so the title never reaches the reader (§6), and the chip reads
+  "Unavailable source". In the owner's own chat a source that has since been
+  deleted keeps its name on the dashed chip: it was theirs.
 - Edit and Quote keep working on `recallText`, which already strips chips.
 
 ### 3.6 Budgets

@@ -66,6 +66,8 @@
     "askedAgentWithRole": "已向 {name}（{role}）提问",
     "toAgent": "· 发给 @{handle}",
     "askingOver": "· 基于 {count, plural, other {# 个来源}}提问",
+    "askingOverTitle": "更改此对话所基于的来源",
+    "unavailableSource": "不可用的来源",
     "gapCheckTitle": "已对 {domain} 文档运行预测性缺口分析",
     "gapCheck": "缺失 {missing} 项 · 冲突 {conflicts} 项",
     "answerFailed": "此回答未能完成。你的提示词和附件已保留。",

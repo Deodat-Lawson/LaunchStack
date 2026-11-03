@@ -7,13 +7,23 @@ import "@testing-library/jest-dom";
 import { PdfViewerWithNotes, type PdfNoteLite } from "../PdfViewerWithNotes";
 
 /**
- * The viewer's own controls — zoom, page, find, highlights — over a stand-in
- * for react-pdf: three pages whose text layer is plain spans, at whatever
- * scale the viewer asks for. Layout is faked too: jsdom measures nothing, so
- * every box reports a 600×800 page and every text range one small rect.
+ * The viewer's own controls — zoom, page, find, contents, highlights — over
+ * a stand-in for react-pdf: as many pages as a test asks for, whose text
+ * layer is a plain span, at whatever scale the viewer asks for. Layout is
+ * faked too: jsdom measures nothing, so every page box reports 600×800 and
+ * every text range one small rect, and the pages are laid out one under the
+ * other at known offsets so the viewer can tell which are in view.
  */
 
 const mockPageText = "Revenue grew strongly. Net revenue fell in the fourth quarter.";
+let mockNumPages = 3;
+let mockPageLabels: string[] | null = null;
+let mockOutline: Array<{ title: string; dest: unknown; items: unknown[] }> = [];
+/** What a page's text says when it is not the stock sentence. */
+const mockPageTexts = new Map<number, string>();
+const textFor = (page: number) => mockPageTexts.get(page) ?? mockPageText;
+/** Pages whose text arrives only when a test says so, by document URL. */
+const mockTextDelays = new Map<string, Map<number, Promise<string>>>();
 
 interface MockPageProps {
     pageNumber: number;
@@ -29,21 +39,36 @@ jest.mock("react-pdf", () => {
         pdfjs: { GlobalWorkerOptions: { workerSrc: "" } },
         Document: ({
             children,
+            file,
             onLoadSuccess,
         }: {
             children: ReactNode;
+            file: { url: string };
             onLoadSuccess: (pdf: unknown) => void;
         }) => {
+            // Loads once per file, as react-pdf does.
             useEffect(() => {
+                const url = file.url;
                 onLoadSuccess({
-                    numPages: 3,
-                    getPage: () =>
+                    numPages: mockNumPages,
+                    getPage: (n: number) =>
                         Promise.resolve({
-                            getViewport: ({ scale }: { scale: number }) => ({ width: 600 * scale }),
+                            getViewport: ({ scale }: { scale: number }) => ({
+                                width: 600 * scale,
+                                height: 800 * scale,
+                            }),
+                            getTextContent: () =>
+                                (
+                                    mockTextDelays.get(url)?.get(n) ?? Promise.resolve(textFor(n))
+                                ).then(str => ({ items: [{ str, hasEOL: true }] })),
                         }),
+                    getPageLabels: () => Promise.resolve(mockPageLabels),
+                    getOutline: () => Promise.resolve(mockOutline),
+                    getDestination: () => Promise.resolve(null),
+                    getPageIndex: (ref: { num: number }) => Promise.resolve(ref.num - 1),
                 });
                 // eslint-disable-next-line react-hooks/exhaustive-deps
-            }, []);
+            }, [file.url]);
             return <div>{children}</div>;
         },
         Page: ({ pageNumber, scale, onRenderSuccess, onRenderTextLayerSuccess }: MockPageProps) => {
@@ -54,29 +79,67 @@ jest.mock("react-pdf", () => {
                 // eslint-disable-next-line react-hooks/exhaustive-deps
             }, [scale]);
             return (
-                <div className="react-pdf__Page" data-scale={scale}>
+                <div className="react-pdf__Page" data-page={pageNumber} data-scale={scale}>
                     <div className="react-pdf__Page__textContent">
-                        <span>{mockPageText}</span>
+                        <span>{textFor(pageNumber)}</span>
                     </div>
                 </div>
             );
         },
+        Thumbnail: ({ pageNumber }: { pageNumber: number }) => <div data-mock-thumb={pageNumber} />,
     };
 });
 
 /** What the column measures, for "fit to width": 1232px leaves 1200 for a 600pt page. */
 let columnWidth = 1232;
+/** How tall the visible area is: a little under one page. */
+const VIEW_HEIGHT = 700;
+const resizeObservers = new Set<FakeResizeObserver>();
 class FakeResizeObserver {
-    constructor(private readonly callback: ResizeObserverCallback) {}
-    observe() {
+    private readonly targets = new Set<Element>();
+    constructor(private readonly callback: ResizeObserverCallback) {
+        resizeObservers.add(this);
+    }
+    observe(target: Element) {
+        this.targets.add(target);
+        this.fire([target]);
+    }
+    fire(targets: Element[] = Array.from(this.targets)) {
         this.callback(
-            [{ contentRect: { width: columnWidth } } as ResizeObserverEntry],
+            targets.map(
+                target =>
+                    ({
+                        target,
+                        contentRect: { width: columnWidth, height: VIEW_HEIGHT },
+                    }) as ResizeObserverEntry
+            ),
             this as unknown as ResizeObserver
         );
     }
     unobserve() {}
-    disconnect() {}
+    disconnect() {
+        resizeObservers.delete(this);
+    }
 }
+
+/** The column changes width, as dragging a rail would. */
+function resizeColumnTo(width: number) {
+    columnWidth = width;
+    act(() => {
+        for (const observer of resizeObservers) observer.fire();
+    });
+}
+
+/**
+ * Pages sit one under the other: 20px above the first, 800px tall at scale
+ * 1, 16px apart. With `layoutRects` on, a page box is as tall as the viewer
+ * sized it, so a change of scale moves every page the way it does on screen.
+ */
+const PAGE_HEIGHT = 800;
+const PAGE_GAP = 16;
+const FIRST_PAGE_TOP = 20;
+const pageTop = (page: number, scale = 1) =>
+    FIRST_PAGE_TOP + (page - 1) * (Math.floor(PAGE_HEIGHT * scale) + PAGE_GAP);
 
 const PAGE_BOX = {
     x: 0,
@@ -90,20 +153,90 @@ const PAGE_BOX = {
     toJSON: () => ({}),
 };
 
+/**
+ * Whether page boxes report where they really sit (for tests that zoom or
+ * scroll, where "the page under the pointer" matters) or all at the origin
+ * (for tests that click inside a highlight at fixed coordinates).
+ */
+let layoutRects = false;
+
+/** The pages that carry a canvas and text layer right now. */
+const drawnPages = () =>
+    Array.from(document.querySelectorAll(".react-pdf__Page")).map(el =>
+        Number(el.getAttribute("data-page"))
+    );
+
 beforeAll(() => {
     global.ResizeObserver = FakeResizeObserver as unknown as typeof ResizeObserver;
-    Element.prototype.getBoundingClientRect = () => PAGE_BOX as DOMRect;
+    Element.prototype.getBoundingClientRect = function (this: Element) {
+        const page = Number((this as HTMLElement).dataset?.pdfPage ?? 0);
+        if (!page || !layoutRects) return PAGE_BOX as DOMRect;
+        const scroll = document.querySelector('[data-testid="pdf-scroll"]');
+        const top = pageTop(page) - (scroll?.scrollTop ?? 0);
+        return { ...PAGE_BOX, y: top, top, bottom: top + PAGE_HEIGHT } as DOMRect;
+    };
     Range.prototype.getClientRects = () =>
         [
             { left: 60, top: 80, right: 300, bottom: 96, width: 240, height: 16 },
         ] as unknown as DOMRectList;
     Element.prototype.scrollIntoView = () => undefined;
-    Element.prototype.scrollTo = () => undefined;
+    Element.prototype.scrollTo = function (this: Element, options?: ScrollToOptions | number) {
+        if (typeof options === "object" && typeof options.top === "number") {
+            (this as unknown as { __scrollTop: number }).__scrollTop = Math.max(0, options.top);
+        }
+    } as Element["scrollTo"];
+
+    const pageOf = (el: HTMLElement) => Number(el.dataset.pdfPage ?? 0);
+    const boxHeight = (el: HTMLElement) => {
+        const sized = Number.parseFloat(el.style.height);
+        return layoutRects && Number.isFinite(sized) && sized > 0 ? sized : PAGE_HEIGHT;
+    };
+    Object.defineProperty(HTMLElement.prototype, "offsetTop", {
+        configurable: true,
+        get(this: HTMLElement) {
+            const page = pageOf(this);
+            return page ? FIRST_PAGE_TOP + (page - 1) * (boxHeight(this) + PAGE_GAP) : 0;
+        },
+    });
+    Object.defineProperty(HTMLElement.prototype, "offsetHeight", {
+        configurable: true,
+        get(this: HTMLElement) {
+            return pageOf(this) ? boxHeight(this) : 0;
+        },
+    });
+    Object.defineProperty(HTMLElement.prototype, "offsetWidth", {
+        configurable: true,
+        get(this: HTMLElement) {
+            return pageOf(this) ? 600 : 0;
+        },
+    });
+    Object.defineProperty(HTMLElement.prototype, "clientHeight", {
+        configurable: true,
+        get(this: HTMLElement) {
+            return this.dataset.testid === "pdf-scroll" ? VIEW_HEIGHT : 0;
+        },
+    });
+    Object.defineProperty(HTMLElement.prototype, "scrollTop", {
+        configurable: true,
+        get(this: HTMLElement) {
+            return (this as unknown as { __scrollTop?: number }).__scrollTop ?? 0;
+        },
+        set(this: HTMLElement, value: number) {
+            (this as unknown as { __scrollTop: number }).__scrollTop = Math.max(0, value);
+        },
+    });
 });
 
 beforeEach(() => {
     mockPageScales.clear();
+    mockPageTexts.clear();
+    mockTextDelays.clear();
+    mockNumPages = 3;
+    mockPageLabels = null;
+    mockOutline = [];
     columnWidth = 1232;
+    layoutRects = false;
+    window.localStorage.clear();
 });
 
 const NOTE: PdfNoteLite = {
@@ -139,6 +272,13 @@ async function toolbar() {
     return within(await screen.findByTestId("pdf-toolbar"));
 }
 
+/** Scroll the pages to `top` the way a wheel would. */
+function scrollPagesTo(top: number) {
+    const scroll = screen.getByTestId("pdf-scroll");
+    scroll.scrollTop = top;
+    fireEvent.scroll(scroll);
+}
+
 describe("PdfViewerWithNotes toolbar", () => {
     it("shows where the reader is and how big the pages are drawn", async () => {
         renderViewer();
@@ -146,26 +286,27 @@ describe("PdfViewerWithNotes toolbar", () => {
 
         expect(bar.getByLabelText("Page number")).toHaveValue("1");
         expect(bar.getByText("of 3")).toBeInTheDocument();
-        // Automatic: the page's natural size when the column has room for it.
-        expect(bar.getByTestId("pdf-zoom-level")).toHaveTextContent("100%");
-        expect(mockPageScales.get(1)).toBe(1);
+        // Automatic: fills the column, but never more than a quarter larger
+        // than life — the column has room for 200%.
+        expect(bar.getByTestId("pdf-zoom-level")).toHaveTextContent("125%");
+        expect(mockPageScales.get(1)).toBe(1.25);
         expect(bar.getByRole("link", { name: "Download" })).toHaveAttribute(
             "download",
             "Handbook.pdf"
         );
     });
 
-    it("zooms in and out a step at a time, redrawing every page", async () => {
+    it("zooms in and out a step at a time, redrawing the pages in view", async () => {
         renderViewer();
         const bar = await toolbar();
 
         fireEvent.click(bar.getByTestId("pdf-zoom-in"));
-        await waitFor(() => expect(bar.getByTestId("pdf-zoom-level")).toHaveTextContent("110%"));
-        expect([1, 2, 3].map(p => mockPageScales.get(p))).toEqual([1.1, 1.1, 1.1]);
+        await waitFor(() => expect(bar.getByTestId("pdf-zoom-level")).toHaveTextContent("150%"));
+        expect([1, 2, 3].map(p => mockPageScales.get(p))).toEqual([1.5, 1.5, 1.5]);
 
         fireEvent.click(bar.getByTestId("pdf-zoom-out"));
         fireEvent.click(bar.getByTestId("pdf-zoom-out"));
-        await waitFor(() => expect(bar.getByTestId("pdf-zoom-level")).toHaveTextContent("90%"));
+        await waitFor(() => expect(bar.getByTestId("pdf-zoom-level")).toHaveTextContent("110%"));
     });
 
     it("fits the column's width on request, and back to automatic", async () => {
@@ -177,10 +318,10 @@ describe("PdfViewerWithNotes toolbar", () => {
         expect(bar.getByTestId("pdf-fit-width")).toHaveAttribute("aria-pressed", "true");
 
         fireEvent.click(bar.getByTestId("pdf-fit-width"));
-        await waitFor(() => expect(bar.getByTestId("pdf-zoom-level")).toHaveTextContent("100%"));
+        await waitFor(() => expect(bar.getByTestId("pdf-zoom-level")).toHaveTextContent("125%"));
     });
 
-    it("never grows a page past its natural size on its own in a narrow column", async () => {
+    it("shrinks a page to a narrow column on its own", async () => {
         columnWidth = 332; // 300px for a 600pt page
         renderViewer();
         const bar = await toolbar();
@@ -196,11 +337,11 @@ describe("PdfViewerWithNotes toolbar", () => {
         const scroll = screen.getByTestId("pdf-scroll");
 
         fireEvent.keyDown(scroll, { key: "=", metaKey: true });
-        await waitFor(() => expect(bar.getByTestId("pdf-zoom-level")).toHaveTextContent("110%"));
+        await waitFor(() => expect(bar.getByTestId("pdf-zoom-level")).toHaveTextContent("150%"));
         fireEvent.keyDown(scroll, { key: "=", ctrlKey: true });
-        await waitFor(() => expect(bar.getByTestId("pdf-zoom-level")).toHaveTextContent("125%"));
+        await waitFor(() => expect(bar.getByTestId("pdf-zoom-level")).toHaveTextContent("175%"));
         fireEvent.keyDown(scroll, { key: "0", metaKey: true });
-        await waitFor(() => expect(bar.getByTestId("pdf-zoom-level")).toHaveTextContent("100%"));
+        await waitFor(() => expect(bar.getByTestId("pdf-zoom-level")).toHaveTextContent("125%"));
     });
 
     it("zooms on a pinch (a wheel event with ctrlKey) instead of letting the app zoom", async () => {
@@ -224,10 +365,157 @@ describe("PdfViewerWithNotes toolbar", () => {
             act(() => {
                 jest.advanceTimersByTime(120);
             });
-            expect(screen.getByTestId("pdf-zoom-level")).toHaveTextContent("128%");
+            expect(screen.getByTestId("pdf-zoom-level")).toHaveTextContent("161%");
         } finally {
             jest.useRealTimers();
         }
+    });
+
+    it("moves a page with ← and → when the pages fit sideways", async () => {
+        renderViewer();
+        const bar = await toolbar();
+        const scroll = screen.getByTestId("pdf-scroll");
+
+        fireEvent.keyDown(scroll, { key: "ArrowRight" });
+        await waitFor(() => expect(bar.getByLabelText("Page number")).toHaveValue("2"));
+        expect(scroll.scrollTop).toBe(pageTop(2) - 12);
+        fireEvent.keyDown(scroll, { key: "ArrowLeft" });
+        await waitFor(() => expect(bar.getByLabelText("Page number")).toHaveValue("1"));
+    });
+
+    it("shows the document's own page labels and takes one in the box", async () => {
+        mockPageLabels = ["i", "ii", "1"];
+        renderViewer();
+        const bar = await toolbar();
+
+        await waitFor(() => expect(bar.getByLabelText("Page number")).toHaveValue("i"));
+        expect(bar.getByTestId("pdf-page-count")).toHaveTextContent("(1 of 3)");
+
+        const box = bar.getByLabelText("Page number");
+        fireEvent.change(box, { target: { value: "1" } });
+        fireEvent.keyDown(box, { key: "Enter" });
+        await waitFor(() =>
+            expect(bar.getByTestId("pdf-page-count")).toHaveTextContent("(3 of 3)")
+        );
+        expect(box).toHaveValue("1");
+
+        fireEvent.change(box, { target: { value: "ii" } });
+        fireEvent.keyDown(box, { key: "Enter" });
+        await waitFor(() =>
+            expect(bar.getByTestId("pdf-page-count")).toHaveTextContent("(2 of 3)")
+        );
+    });
+
+    it("picks up where the reader left off, and keeps the place", async () => {
+        window.localStorage.setItem(
+            "pdf-view:doc-9",
+            JSON.stringify({ page: 3, zoom: 0.5, contents: false })
+        );
+        renderViewer({ persistKey: "doc-9" });
+        const bar = await toolbar();
+
+        expect(bar.getByTestId("pdf-zoom-level")).toHaveTextContent("50%");
+        await waitFor(() => expect(bar.getByLabelText("Page number")).toHaveValue("3"));
+        expect(screen.getByTestId("pdf-scroll").scrollTop).toBe(pageTop(3) - 12);
+
+        fireEvent.click(bar.getByTestId("pdf-zoom-in"));
+        await waitFor(() =>
+            expect(JSON.parse(window.localStorage.getItem("pdf-view:doc-9")!)).toMatchObject({
+                page: 3,
+                zoom: 0.67,
+            })
+        );
+    });
+    it("applies the view saved under a key that arrives after mount", async () => {
+        window.localStorage.setItem(
+            "pdf-view:doc-9:176",
+            JSON.stringify({ page: 3, zoom: 0.5, contents: true, tab: "outline" })
+        );
+        const props = {
+            url: "/api/files/9",
+            notes: [],
+            onCreateAnchoredNote: jest.fn(),
+        };
+        // The host knows the document before its version, so the viewer
+        // mounts under a provisional key with nothing saved…
+        const { rerender } = render(<PdfViewerWithNotes {...props} persistKey="doc-9:current" />);
+        const bar = await toolbar();
+        expect(bar.getByTestId("pdf-zoom-level")).toHaveTextContent("125%");
+        await waitFor(() => expect(bar.getByLabelText("Page number")).toHaveValue("1"));
+
+        // …and the version's own saved view is applied once its key arrives.
+        rerender(<PdfViewerWithNotes {...props} persistKey="doc-9:176" />);
+        await waitFor(() => expect(bar.getByTestId("pdf-zoom-level")).toHaveTextContent("50%"));
+        await waitFor(() => expect(bar.getByLabelText("Page number")).toHaveValue("3"));
+        const panel = within(await screen.findByTestId("pdf-contents"));
+        expect(panel.getByTestId("pdf-contents-tab-outline")).toHaveAttribute(
+            "aria-pressed",
+            "true"
+        );
+        // Nothing wrote the provisional defaults over it.
+        await waitFor(() =>
+            expect(JSON.parse(window.localStorage.getItem("pdf-view:doc-9:176")!)).toMatchObject({
+                page: 3,
+                zoom: 0.5,
+                contents: true,
+                tab: "outline",
+            })
+        );
+    });
+});
+
+describe("PdfViewerWithNotes pages in view", () => {
+    it("draws only the pages near the view, the rest as blanks of their size", async () => {
+        mockNumPages = 30;
+        layoutRects = true;
+        renderViewer();
+        const bar = await toolbar();
+        expect(bar.getByText("of 30")).toBeInTheDocument();
+
+        // Every page has a box; only the first screenfuls carry a canvas.
+        expect(document.querySelectorAll("[data-pdf-page]")).toHaveLength(30);
+        await waitFor(() => expect(drawnPages()).toEqual([1, 2]));
+        const blank = document.querySelector<HTMLElement>('[data-pdf-page="20"]')!;
+        expect(blank.style.width).toBe("750px");
+        expect(blank.style.height).toBe("1000px");
+
+        // Scrolled to page 21: the pages around it are drawn and the first is not.
+        scrollPagesTo(pageTop(21, 1.25));
+        await waitFor(() => expect(bar.getByLabelText("Page number")).toHaveValue("21"));
+        await waitFor(() => expect(drawnPages()).toEqual([20, 21, 22]));
+    });
+
+    it("keeps the page in view when the column changes width", async () => {
+        mockNumPages = 30;
+        layoutRects = true;
+        renderViewer();
+        const bar = await toolbar();
+        scrollPagesTo(pageTop(21, 1.25));
+        await waitFor(() => expect(bar.getByLabelText("Page number")).toHaveValue("21"));
+
+        // Narrower: 600px for a 600pt page, so the pages shrink to 100% and
+        // every offset moves — the view follows page 21 rather than staying
+        // at a pixel that now belongs to page 26.
+        resizeColumnTo(632);
+        await waitFor(() => expect(bar.getByTestId("pdf-zoom-level")).toHaveTextContent("100%"));
+        const scrollTop = screen.getByTestId("pdf-scroll").scrollTop;
+        expect(scrollTop).toBeGreaterThanOrEqual(pageTop(21) - VIEW_HEIGHT / 3);
+        expect(scrollTop).toBeLessThan(pageTop(22));
+        await waitFor(() => expect(drawnPages()).toContain(21));
+    });
+
+    it("a zoom step redraws only the pages in view", async () => {
+        mockNumPages = 30;
+        layoutRects = true;
+        renderViewer();
+        const bar = await toolbar();
+        await waitFor(() => expect(drawnPages()).toEqual([1, 2]));
+        mockPageScales.clear();
+
+        fireEvent.click(bar.getByTestId("pdf-zoom-in"));
+        await waitFor(() => expect(bar.getByTestId("pdf-zoom-level")).toHaveTextContent("150%"));
+        expect(Array.from(mockPageScales.keys()).sort((a, b) => a - b)).toEqual([1, 2]);
+        expect(mockPageScales.get(2)).toBe(1.5);
     });
 });
 
@@ -270,6 +558,292 @@ describe("PdfViewerWithNotes find", () => {
             expect(screen.getByTestId("pdf-find-count")).toHaveTextContent("No matches")
         );
     });
+
+    it("does not mistake the last query's matches for a new query's", async () => {
+        mockNumPages = 30;
+        mockPageTexts.set(25, "Cash runway stands at nineteen months.");
+        renderViewer();
+        await toolbar();
+        await waitFor(() => expect(drawnPages()).toEqual([1, 2, 3]));
+
+        fireEvent.click(screen.getByTestId("pdf-find-toggle"));
+        const input = await screen.findByTestId("pdf-find-input");
+        fireEvent.change(input, { target: { value: "revenue" } });
+        await waitFor(() =>
+            expect(screen.getByTestId("pdf-find-count")).toHaveTextContent("1 of 58")
+        );
+        await waitFor(() =>
+            expect(document.querySelectorAll('[data-find-hit="current"]')).toHaveLength(1)
+        );
+
+        // A new query whose only match is far away: the old matches must
+        // not be scrolled to under the new query's name, which would mark
+        // its jump as done and leave page 25 undrawn.
+        fireEvent.change(input, { target: { value: "cash runway" } });
+        await waitFor(() =>
+            expect(screen.getByTestId("pdf-find-count")).toHaveTextContent("1 of 1")
+        );
+        await waitFor(() => expect(drawnPages()).toContain(25));
+        await waitFor(() =>
+            expect(
+                document.querySelector('[data-pdf-page="25"] [data-find-hit="current"]')
+            ).toBeInTheDocument()
+        );
+        expect(screen.getByTestId("pdf-toolbar").querySelector("input")).toHaveValue("25");
+    });
+
+    it("finds a word on a page that is not drawn, and goes there", async () => {
+        mockNumPages = 30;
+        mockPageTexts.set(17, "A unicorn appears on this page only.");
+        renderViewer();
+        await toolbar();
+        await waitFor(() => expect(drawnPages()).toEqual([1, 2, 3]));
+
+        fireEvent.click(screen.getByTestId("pdf-find-toggle"));
+        fireEvent.change(await screen.findByTestId("pdf-find-input"), {
+            target: { value: "unicorn" },
+        });
+        await waitFor(() =>
+            expect(screen.getByTestId("pdf-find-count")).toHaveTextContent("1 of 1")
+        );
+        // The viewer went to page 17, which drew and marked the match.
+        await waitFor(() => expect(drawnPages()).toContain(17));
+        await waitFor(() =>
+            expect(document.querySelectorAll('[data-find-hit="current"]')).toHaveLength(1)
+        );
+        const scrollTop = screen.getByTestId("pdf-scroll").scrollTop;
+        expect(scrollTop).toBeGreaterThanOrEqual(pageTop(17) - 12 - VIEW_HEIGHT / 3);
+        expect(scrollTop).toBeLessThan(pageTop(18));
+        expect(screen.getByTestId("pdf-toolbar").querySelector("input")).toHaveValue("17");
+    });
+    it("keeps the reader on the same match while the rest of the text arrives", async () => {
+        mockNumPages = 30;
+        let release!: (text: string) => void;
+        mockTextDelays.set(
+            "/api/files/9",
+            new Map([[1, new Promise<string>(resolve => (release = resolve))]])
+        );
+        mockPageTexts.set(2, "A zebra crossing on page two.");
+        renderViewer();
+        await toolbar();
+
+        fireEvent.click(screen.getByTestId("pdf-find-toggle"));
+        fireEvent.change(await screen.findByTestId("pdf-find-input"), {
+            target: { value: "zebra" },
+        });
+        // Page 1 has not answered: one match so far, and the count says so.
+        await waitFor(() =>
+            expect(screen.getByTestId("pdf-find-count")).toHaveTextContent("1 of 1…")
+        );
+        await waitFor(() =>
+            expect(
+                document.querySelector('[data-pdf-page="2"] [data-find-hit="current"]')
+            ).toBeInTheDocument()
+        );
+
+        // Page 1 answers with two matches that sort before it: the reader
+        // stays on page 2's match, now the third of three.
+        await act(async () => {
+            release("zebra, zebra.");
+            await new Promise(resolve => setTimeout(resolve, 300));
+        });
+        await waitFor(() =>
+            expect(screen.getByTestId("pdf-find-count")).toHaveTextContent("3 of 3")
+        );
+        expect(
+            document.querySelector('[data-pdf-page="2"] [data-find-hit="current"]')
+        ).toBeInTheDocument();
+    });
+
+    it("ignores page text that arrives for a document already replaced", async () => {
+        let release!: (text: string) => void;
+        mockTextDelays.set(
+            "/api/files/9",
+            new Map([[3, new Promise<string>(resolve => (release = resolve))]])
+        );
+        mockPageTexts.set(2, "A zebra on page two.");
+        const props = { notes: [], onCreateAnchoredNote: jest.fn() };
+        const { rerender } = render(<PdfViewerWithNotes {...props} url="/api/files/9" />);
+        await toolbar();
+        fireEvent.click(screen.getByTestId("pdf-find-toggle"));
+        fireEvent.change(await screen.findByTestId("pdf-find-input"), {
+            target: { value: "zebra" },
+        });
+        // Counted once: page 2's match is in, page 3's text is on its way.
+        await waitFor(() =>
+            expect(screen.getByTestId("pdf-find-count")).toHaveTextContent("1 of 1…")
+        );
+
+        // Another document takes the viewer over; its pages all answer at
+        // once, and none of them mentions a zebra.
+        mockPageTexts.clear();
+        rerender(<PdfViewerWithNotes {...props} url="/api/files/10" />);
+        await waitFor(() =>
+            expect(screen.getByTestId("pdf-find-count")).toHaveTextContent("No matches")
+        );
+
+        // The old document's page 3 answers late — and must not be taken
+        // for the new document's page 3.
+        await act(async () => {
+            release("A zebra crossing.");
+            await new Promise(resolve => setTimeout(resolve, 300));
+        });
+        expect(screen.getByTestId("pdf-find-count")).toHaveTextContent("No matches");
+    });
+});
+
+describe("PdfViewerWithNotes contents", () => {
+    it("opens the contents panel from the toolbar and jumps from a thumbnail", async () => {
+        renderViewer();
+        const bar = await toolbar();
+        expect(screen.queryByTestId("pdf-contents")).not.toBeInTheDocument();
+
+        fireEvent.click(bar.getByTestId("pdf-contents-toggle"));
+        const panel = within(await screen.findByTestId("pdf-contents"));
+        expect(bar.getByTestId("pdf-contents-toggle")).toHaveAttribute("aria-pressed", "true");
+        const thumbs = panel.getAllByTestId("pdf-thumb");
+        expect(thumbs).toHaveLength(3);
+        expect(thumbs[0]).toHaveAttribute("aria-current", "page");
+
+        fireEvent.click(thumbs[2]!);
+        await waitFor(() => expect(bar.getByLabelText("Page number")).toHaveValue("3"));
+        expect(panel.getAllByTestId("pdf-thumb")[2]).toHaveAttribute("aria-current", "page");
+        // Beside the pages in a wide column: still open after the jump.
+        expect(screen.getByTestId("pdf-contents")).toBeInTheDocument();
+
+        fireEvent.click(panel.getByTestId("pdf-contents-close"));
+        expect(screen.queryByTestId("pdf-contents")).not.toBeInTheDocument();
+    });
+
+    it("lists the outline and goes to a chapter", async () => {
+        mockOutline = [
+            { title: "Chapter 2", dest: [{ num: 2 }], items: [] },
+            { title: "Chapter 3", dest: [{ num: 3 }], items: [] },
+        ];
+        renderViewer();
+        const bar = await toolbar();
+        fireEvent.click(bar.getByTestId("pdf-contents-toggle"));
+        const panel = within(await screen.findByTestId("pdf-contents"));
+        fireEvent.click(panel.getByTestId("pdf-contents-tab-outline"));
+
+        const items = await panel.findAllByTestId("pdf-outline-item");
+        expect(items.map(el => el.textContent)).toEqual(["Chapter 22", "Chapter 33"]);
+        fireEvent.click(panel.getByText("Chapter 3"));
+        await waitFor(() => expect(bar.getByLabelText("Page number")).toHaveValue("3"));
+        await waitFor(() =>
+            expect(panel.getAllByTestId("pdf-outline-item")[1]).toHaveAttribute(
+                "aria-current",
+                "true"
+            )
+        );
+    });
+
+    it("floats over the pages in a narrow column and closes after a jump", async () => {
+        columnWidth = 560;
+        renderViewer();
+        const bar = await toolbar();
+        fireEvent.click(bar.getByTestId("pdf-contents-toggle"));
+        const dock = await screen.findByTestId("pdf-contents-dock");
+        expect(dock).toHaveAttribute("data-overlay", "true");
+
+        fireEvent.click(within(dock).getAllByTestId("pdf-thumb")[1]!);
+        await waitFor(() => expect(bar.getByLabelText("Page number")).toHaveValue("2"));
+        expect(screen.queryByTestId("pdf-contents")).not.toBeInTheDocument();
+    });
+});
+
+describe("PdfViewerWithNotes citations", () => {
+    it("goes to the page that holds a cited passage, drawn or not", async () => {
+        mockNumPages = 30;
+        mockPageTexts.set(12, "The gross margin improved for the third year running.");
+        const { rerender } = renderViewer();
+        await toolbar();
+        await waitFor(() => expect(drawnPages()).toEqual([1, 2, 3]));
+
+        rerender(
+            <PdfViewerWithNotes
+                url="/api/files/9"
+                notes={[]}
+                onCreateAnchoredNote={jest.fn()}
+                citationHighlight={{
+                    text: "gross margin improved for the third year",
+                    page: null,
+                    nonce: 1,
+                }}
+            />
+        );
+        await waitFor(() => expect(drawnPages()).toContain(12));
+        await waitFor(() =>
+            expect(
+                document.querySelector('[data-pdf-page="12"] [class*="outline"]')
+            ).toBeInTheDocument()
+        );
+        expect(screen.getByTestId("pdf-toolbar").querySelector("input")).toHaveValue("12");
+    });
+    it("lets the whole passage on a far page beat a loose window of it on a drawn page", async () => {
+        mockNumPages = 30;
+        mockPageTexts.set(1, "Intro. The quick brown fox jumps over the lazy dog. More intro.");
+        mockPageTexts.set(
+            12,
+            "Body. The quick brown fox jumps over the lazy dog and then some more unique words follow here. End."
+        );
+        const { rerender } = renderViewer();
+        await toolbar();
+        await waitFor(() => expect(drawnPages()).toEqual([1, 2, 3]));
+
+        rerender(
+            <PdfViewerWithNotes
+                url="/api/files/9"
+                notes={[]}
+                onCreateAnchoredNote={jest.fn()}
+                citationHighlight={{
+                    text: "the quick brown fox jumps over the lazy dog and then some more unique words follow here",
+                    page: null,
+                    nonce: 1,
+                }}
+            />
+        );
+        await waitFor(() =>
+            expect(
+                document.querySelector('[data-pdf-page="12"] [class*="outline-"]')
+            ).toBeInTheDocument()
+        );
+        // Page 1, drawn from the start, holds only the first words.
+        expect(document.querySelector('[data-pdf-page="1"] [class*="outline-"]')).toBeNull();
+        expect(screen.getByTestId("pdf-toolbar").querySelector("input")).toHaveValue("12");
+    });
+    it("searches a citation again in a document that replaces the last", async () => {
+        mockNumPages = 30;
+        mockPageTexts.set(12, "The gross margin improved for the third year running.");
+        const props = {
+            notes: [],
+            onCreateAnchoredNote: jest.fn(),
+            citationHighlight: {
+                text: "gross margin improved for the third year",
+                page: null,
+                nonce: 1,
+            },
+        };
+        const { rerender } = render(<PdfViewerWithNotes {...props} url="/api/files/9" />);
+        await toolbar();
+        await waitFor(() =>
+            expect(
+                document.querySelector('[data-pdf-page="12"] [class*="outline-"]')
+            ).toBeInTheDocument()
+        );
+
+        // The same citation, a new file: the passage is on page 5 now.
+        mockPageTexts.clear();
+        mockPageTexts.set(5, "Elsewhere, the gross margin improved for the third year running.");
+        rerender(<PdfViewerWithNotes {...props} url="/api/files/10" />);
+        await waitFor(() =>
+            expect(
+                document.querySelector('[data-pdf-page="5"] [class*="outline-"]')
+            ).toBeInTheDocument()
+        );
+        expect(document.querySelector('[data-pdf-page="12"] [class*="outline-"]')).toBeNull();
+        expect(screen.getByTestId("pdf-toolbar").querySelector("input")).toHaveValue("5");
+    });
 });
 
 describe("PdfViewerWithNotes highlights", () => {
@@ -291,6 +865,29 @@ describe("PdfViewerWithNotes highlights", () => {
 
         await waitFor(() =>
             expect(document.querySelector('[data-note-id="3"]')).toBeInTheDocument()
+        );
+    });
+
+    it("finds a moved note's quote on a page that is not drawn", async () => {
+        mockNumPages = 30;
+        mockPageTexts.set(25, "Cash runway stands at nineteen months.");
+        const moved: PdfNoteLite = {
+            id: 4,
+            title: null,
+            page: 2,
+            quads: [],
+            quote: "Cash runway stands at nineteen months",
+            highlight: "green",
+        };
+        renderViewer({ notes: [moved], scrollToNoteId: 4 });
+        await toolbar();
+
+        // The note is placed once its page is drawn — here, by scrolling to it.
+        scrollPagesTo(pageTop(25));
+        await waitFor(() =>
+            expect(
+                document.querySelector('[data-pdf-page="25"] [data-note-id="4"]')
+            ).toBeInTheDocument()
         );
     });
 

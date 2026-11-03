@@ -74,10 +74,13 @@
     "askAiTitle": "Ask about this passage in the chat",
     "pinTitle": "Note {ordinal}",
     "toolbar": "PDF controls",
+    "showContents": "Show contents",
+    "hideContents": "Hide contents",
     "previousPage": "Previous page",
     "nextPage": "Next page",
     "pageNumber": "Page number",
     "ofPages": "of {count}",
+    "pageOfLabelled": "({page} of {count})",
     "zoomOut": "Zoom out",
     "zoomOutShortcut": "Zoom out (⌘/Ctrl −)",
     "zoomIn": "Zoom in",
@@ -85,11 +88,13 @@
     "zoomLevel": "Zoom: {level}",
     "zoomAuto": "Automatic (⌘/Ctrl 0)",
     "fitWidth": "Fit to width",
+    "fitPage": "Fit page",
     "actualSize": "Actual size",
     "find": "Find in document",
     "findShortcut": "Find in document (⌘/Ctrl F)",
     "findPlaceholder": "Find in document",
     "findNone": "No matches",
+    "findSearching": "Searching…",
     "findCount": "{current} of {total}",
     "findPrevious": "Previous match (Shift+Enter)",
     "findNext": "Next match (Enter)",
@@ -104,7 +109,18 @@
       "pink": "pink"
     },
     "highlightMenu": "Highlight",
-    "removeHighlight": "Remove"
+    "removeHighlight": "Remove",
+    "contents": {
+      "title": "Contents",
+      "thumbnails": "Thumbnails",
+      "outline": "Outline",
+      "close": "Hide contents",
+      "loadingOutline": "Reading the outline…",
+      "noOutline": "This document has no outline",
+      "pageTitle": "Page {label}",
+      "toggle": "Open {title}",
+      "collapse": "Close {title}"
+    }
   },
   "server": {
     "errors": {

@@ -175,3 +175,51 @@ export function findAllTextRanges(root: Node, query: string, limit = 1000): Rang
     }
     return ranges;
 }
+
+// ---------------------------------------------------------------------------
+// The same matching over plain text
+// ---------------------------------------------------------------------------
+
+/**
+ * `text` in the matching space — lowercased, whitespace and marker characters
+ * dropped — so a search over a page's extracted text (pdf.js `getTextContent`)
+ * agrees with the one over its rendered text layer. A viewer that draws only
+ * the pages in view uses this to find *which* page holds a passage, and the
+ * DOM functions above to find *where* on the page once it is drawn.
+ */
+export function normalizeHaystackText(text: string): string {
+    let out = "";
+    for (const ch of text) {
+        if (MARKER_CHARS.has(ch) || /\s/.test(ch)) continue;
+        const lower = ch.toLowerCase();
+        out += lower.length === 1 ? lower : ch;
+    }
+    return out;
+}
+
+/** How many non-overlapping times `query` occurs in `text`, as `findAllTextRanges` counts. */
+export function countTextMatches(text: string, query: string, limit = 1000): number {
+    const needle = normalizeNeedle(query).replace(/\s+/g, "");
+    if (needle.length === 0 || limit <= 0) return 0;
+    const haystack = normalizeHaystackText(text);
+    let count = 0;
+    let from = 0;
+    while (count < limit) {
+        const idx = haystack.indexOf(needle, from);
+        if (idx < 0) break;
+        count += 1;
+        from = idx + needle.length;
+    }
+    return count;
+}
+
+/** Whether any of `needles` occurs in `text`, as `findTextRange` would match. */
+export function textContainsNeedle(text: string, needles: string[]): boolean {
+    if (needles.length === 0) return false;
+    const haystack = normalizeHaystackText(text);
+    for (const rawNeedle of needles) {
+        const needle = rawNeedle.replace(/\s+/g, "");
+        if (needle.length > 0 && haystack.includes(needle)) return true;
+    }
+    return false;
+}

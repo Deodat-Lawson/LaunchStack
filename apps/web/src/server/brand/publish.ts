@@ -13,10 +13,12 @@ import {
     ChannelUnavailableError,
     getChannelRow,
     markConnectionReconnect,
+    NETWORK_LABELS,
     parseDeploymentChannelId,
     refusedSignInReason,
     resolveChannelTarget,
 } from "./channels";
+import { deploymentAccountRefusal, mayUseDeploymentAccounts } from "./deployment-accounts";
 import { BrandMediaError, loadPublishMedia } from "./media";
 
 export const publishForWorkspace: PublishFn = async post => {
@@ -36,8 +38,13 @@ export const publishForWorkspace: PublishFn = async post => {
         return fail(error instanceof Error ? error.message : String(error), { retryable: true });
     }
 
-    // Posts from before channels, and the deployment's own account.
+    // Posts from before channels, and the deployment's own account — which
+    // belongs to one workspace. Asked again here, not only at compose time:
+    // a post scheduled before a second workspace joined must not go out as
+    // the first one.
     if (post.channelId === null || parseDeploymentChannelId(post.channelId)) {
+        if (!(await mayUseDeploymentAccounts(post.companyId)))
+            return fail(deploymentAccountRefusal(NETWORK_LABELS[post.platform]));
         return publishToPlatform({
             platform: post.platform,
             message: post.body,

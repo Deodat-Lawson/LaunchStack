@@ -1377,6 +1377,14 @@ export function DocumentViewer({
                                     onRemoveHighlight={id => void removeHighlight(id)}
                                     downloadUrl={fullDoc.url}
                                     downloadName={pdfFileName(source.title)}
+                                    // Where the reader was, per document and
+                                    // version: a long book opens where it
+                                    // was left.
+                                    persistKey={
+                                        source.documentId
+                                            ? `${source.documentId}:${activeVersionId ?? "current"}`
+                                            : undefined
+                                    }
                                     onAskAi={
                                         onAskAboutPassage
                                             ? selection => onAskAboutPassage(source, selection)

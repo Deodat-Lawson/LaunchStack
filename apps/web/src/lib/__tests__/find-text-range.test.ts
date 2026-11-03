@@ -1,6 +1,13 @@
 /** @jest-environment jsdom */
 
-import { citationNeedles, findAllTextRanges, findTextRange } from "../find-text-range";
+import {
+    citationNeedles,
+    countTextMatches,
+    findAllTextRanges,
+    findTextRange,
+    normalizeHaystackText,
+    textContainsNeedle,
+} from "../find-text-range";
 
 /**
  * The citation locator turns a retrieval snippet into a DOM Range inside a
@@ -115,5 +122,30 @@ describe("findAllTextRanges", () => {
         const el = root("<p>" + "x ".repeat(50) + "</p>");
         expect(findAllTextRanges(el, "x", 5)).toHaveLength(5);
         expect(findAllTextRanges(el, "   ")).toEqual([]);
+    });
+});
+
+describe("plain-text matching", () => {
+    it("normalizes text the way the DOM haystack is built", () => {
+        expect(normalizeHaystackText("Net **Revenue**\n fell")).toBe("netrevenuefell");
+    });
+
+    it("counts matches like findAllTextRanges does", () => {
+        const text = "Revenue grew. Net revenue fell. revenue, again";
+        const el = root(`<p>${text}</p>`);
+        expect(countTextMatches(text, "revenue")).toBe(findAllTextRanges(el, "revenue").length);
+        expect(countTextMatches(text, "net  REVENUE")).toBe(1);
+        expect(countTextMatches(text, "x", 0)).toBe(0);
+        expect(countTextMatches("x ".repeat(50), "x", 5)).toBe(5);
+        expect(countTextMatches(text, "   ")).toBe(0);
+    });
+
+    it("tells whether a page's text holds a citation", () => {
+        const needles = citationNeedles("the quick brown fox jumps over the lazy dog");
+        expect(textContainsNeedle("The quick\nbrown fox jumps over the lazy dog.", needles)).toBe(
+            true
+        );
+        expect(textContainsNeedle("nothing like it here", needles)).toBe(false);
+        expect(textContainsNeedle("anything", [])).toBe(false);
     });
 });

@@ -256,6 +256,15 @@ function normalizeOutput(raw: unknown, input: GenerationInput, pack: EvidencePac
     return { summary: output.summary, ...protectReviewedTopics(input, topics, enhancements) };
 }
 
+/** Pure independent binding for hosts; uses exactly the existing evidence eligibility, prompt projection and normalization. */
+export function normalizeGenerationV1OutputForInput(raw: unknown, supplied: GenerationInput) {
+    const input = eligibleInput(supplied);
+    const signals = computeGenerationSignals(input);
+    const { pack } = selectGenerationEvidence(input, signals);
+    const prompt = generationPrompt(input, pack);
+    return normalizeOutput(raw, input, { ...pack, items: prompt.payload.items });
+}
+
 class GenerationCancelledError extends Error {
     constructor() {
         super("Agenda generation cancelled.");

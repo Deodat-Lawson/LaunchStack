@@ -41,6 +41,8 @@ export interface CreateCompatibleChatOptions {
     /** Applied only when the model declares streaming support. */
     streaming?: boolean;
     timeoutMs?: number;
+    /** Host-owned HTTP boundary, including durable request metering or injected offline transport. */
+    fetch?: typeof globalThis.fetch;
     /** Operator-declared reasoning fields, already resolved for this request. */
     requestPatch?: ChatRequestPatch;
 }
@@ -78,7 +80,10 @@ export function createOpenAiCompatibleChat(options: CreateCompatibleChatOptions)
     return new ChatOpenAI({
         apiKey: endpoint.apiKey ?? KEYLESS_PLACEHOLDER_API_KEY,
         modelName: modelId,
-        configuration: { baseURL: endpoint.baseUrl },
+        configuration: {
+            baseURL: endpoint.baseUrl,
+            ...(options.fetch ? { fetch: options.fetch } : {}),
+        },
         timeout: options.timeoutMs ?? DEFAULT_TIMEOUT_MS,
         ...(parameters.temperature === "supported" && typeof options.temperature === "number"
             ? { temperature: options.temperature }

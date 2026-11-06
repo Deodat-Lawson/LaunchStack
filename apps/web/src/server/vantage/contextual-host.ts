@@ -35,6 +35,7 @@ import {
 import {
     createPersonalContextProviderV0,
     resolveRoleSelectionV0,
+    roleDirectoryV0,
 } from "@launchstack/pipelines/vantage/role-context-v0";
 import { requireWorkspaceContext, type WorkspaceContext } from "~/lib/require-workspace-context";
 import { db } from "~/server/db";
@@ -95,18 +96,19 @@ interface ReviewRow {
     review_state: "reviewed" | "unknowns-marked";
     reviewed_at: Date;
 }
-interface Saved {
+export interface ContextualSavedPayload {
     schema: "contextual-finance/v1";
     owner: string;
     company: string;
     report: DemoReport;
     envelope: ContextGenerationEnvelopeV0;
     authority: string;
-    semanticAssessment: ReturnType<typeof evaluateFinanceMilestoneReport>;
+    semanticAssessment: unknown;
+    executionPolicy?: { id: string; admission: unknown };
     sources: TrustedContextSourceV0[];
     reviews: { actor: string; at: string; topicId: string; version: number }[];
 }
-interface ReportRow {
+export interface ContextualReportRow {
     id: string;
     company_id: string;
     owner_user_id: string;
@@ -120,16 +122,72 @@ export interface PreparedContextualReport {
     context: ContextPipelineOutputV0;
     records: TrustedContextSourceV0[];
     authority: string;
+    baseline?: unknown;
+    nativeSourceBindings?: { alias: string; ref: TrustedContextSourceV0["source"] }[];
     roleContext: BusinessRoleContextV0;
     sourceRefs: {
         finance: TrustedContextSourceV0["source"];
         sales: TrustedContextSourceV0["source"];
     };
 }
+export interface ContextualHostPolicyInput {
+    prepared: PreparedContextualReport;
+    generated: ContextGenerationResultV0;
+    report: DemoReport;
+    compound: unknown;
+    normalized: ReturnType<typeof normalizeGenerationV2>;
+    admission: unknown;
+}
+/** Trusted server composition only: never construct these functions from request fields. */
+export interface ContextualHostPolicy {
+    id: string;
+    fullSourceMetadataBinding?: boolean;
+    strictRoleMapping?: boolean;
+    assertNative(input: ContextualHostPolicyInput): void;
+    assess(input: ContextualHostPolicyInput): unknown;
+    assertExecution(input: ContextualHostPolicyInput): void;
+    assertCommit?(
+        input: ContextualHostPolicyInput,
+        transaction: CompanyArchitectureTransactionV0
+    ): Promise<void>;
+}
+export interface ContextualPersistenceStrategy {
+    captureBaseline(
+        reader: Pick<CompanyArchitectureTransactionV0, "execute">,
+        ctx: WorkspaceContext,
+        weekStart: string
+    ): Promise<unknown>;
+    read(
+        reader: Pick<CompanyArchitectureTransactionV0, "execute">,
+        ctx: WorkspaceContext,
+        selector: { weekStart?: string; reportId?: string }
+    ): Promise<ContextualReportRow | null>;
+    persist(
+        transaction: CompanyArchitectureTransactionV0,
+        input: {
+            ctx: WorkspaceContext;
+            report: DemoReport;
+            sealed: ReturnType<typeof encryptSecret>;
+            expectedBaseline: unknown;
+        }
+    ): Promise<void>;
+    review(
+        transaction: CompanyArchitectureTransactionV0,
+        input: {
+            ctx: WorkspaceContext;
+            reportId: string;
+            expectedVersion: number;
+            nextVersion: number;
+            sealed: ReturnType<typeof encryptSecret>;
+        }
+    ): Promise<boolean>;
+}
 type Dependencies = {
     database?: typeof db;
     resolveWorkspace?: typeof requireWorkspaceContext;
     now?: () => Date;
+    policy?: ContextualHostPolicy;
+    persistence?: ContextualPersistenceStrategy;
 };
 
 export function createContextualHost(deps: Dependencies = {}) {
@@ -140,7 +198,7 @@ export function createContextualHost(deps: Dependencies = {}) {
     const architecture = createCompanyArchitectureAdapterV0({ database, resolveWorkspace, now });
     const captures = new WeakMap<
         PreparedContextualReport,
-        { architecture: CapturedCompanyArchitectureV0; ctx: WorkspaceContext }
+        { architecture: CapturedCompanyArchitectureV0; ctx: WorkspaceContext; baseline?: unknown }
     >();
     async function auth() {
         const result = await resolveWorkspace();
@@ -196,6 +254,12 @@ export function createContextualHost(deps: Dependencies = {}) {
                 new Date(review.reviewed_at).getTime() > Date.parse(captured.reportWindow.asOf))
         )
             fail("architecture_review_required");
+        if (
+            deps.policy?.strictRoleMapping &&
+            session.state.roles &&
+            session.persistedRoleMappingVersion !== roleDirectoryV0().mapVersion
+        )
+            fail("stale_role_mapping");
         const roleContext = resolveRoleSelectionV0({
             principalRef: ctx.authUserId,
             values: session.state.roles?.roleIds ?? [],
@@ -259,6 +323,7 @@ export function createContextualHost(deps: Dependencies = {}) {
             }
         const nativeEvidence: GenerationInput["data"]["currentEvidence"] = [];
         const nativeRows: unknown[] = [];
+        const nativeSourceBindings: { alias: string; ref: TrustedContextSourceV0["source"] }[] = [];
         for (const item of inventory.filter(
             item => item.logical_key === "finance" || item.logical_key === "sales"
         )) {
@@ -284,6 +349,10 @@ export function createContextualHost(deps: Dependencies = {}) {
             )
                 fail("native_evidence_bridge_invalid");
             nativeRows.push(row);
+            nativeSourceBindings.push({
+                alias: `ev:${row.id}`,
+                ref: structuredClone(record.source),
+            });
             nativeEvidence.push({
                 id: row.id,
                 kind: row.kind,
@@ -299,6 +368,11 @@ export function createContextualHost(deps: Dependencies = {}) {
         }
         if (nativeEvidence.length !== 2 || new Set(nativeEvidence.map(row => row.id)).size !== 2)
             fail("native_evidence_bridge_missing");
+        const stableSourceRecords = records.map(record => {
+            const { checkedAt: _observedAt, ...identity } = record;
+            void _observedAt;
+            return identity;
+        });
         const stamp = digest({
             architecture: captured.snapshotFingerprint,
             personal: session.state,
@@ -307,6 +381,7 @@ export function createContextualHost(deps: Dependencies = {}) {
             inventory,
             review,
             sourceHashes: records.map(r => [r.source, r.contentHash]),
+            ...(deps.policy?.fullSourceMetadataBinding ? { stableSourceRecords } : {}),
             nativeRows,
             documentHeads,
         });
@@ -319,6 +394,7 @@ export function createContextualHost(deps: Dependencies = {}) {
             stamp,
             permissions,
             nativeEvidence,
+            nativeSourceBindings,
         };
     }
     async function reviewArchitecture(input: {
@@ -537,7 +613,12 @@ export function createContextualHost(deps: Dependencies = {}) {
         const finance = a.records.find(r => r.source.id === financeId),
             sales = a.records.find(r => r.source.id === salesId);
         if (!finance || !sales || finance === sales) fail("finance_sources_missing");
+        const baseline = deps.persistence
+            ? await deps.persistence.captureBaseline(database, ctx, period.weekStart)
+            : undefined;
         const prepared = {
+            ...(deps.persistence ? { baseline } : {}),
+            ...(deps.policy ? { nativeSourceBindings: a.nativeSourceBindings } : {}),
             envelope: {
                 v1Input,
                 manifest: context.manifest,
@@ -551,7 +632,7 @@ export function createContextualHost(deps: Dependencies = {}) {
             sourceRefs: { finance: finance.source, sales: sales.source },
         };
         immutable(prepared);
-        captures.set(prepared, { architecture: captured, ctx });
+        captures.set(prepared, { architecture: captured, ctx, baseline });
         return prepared;
     }
     async function fresh<T>(
@@ -574,17 +655,18 @@ export function createContextualHost(deps: Dependencies = {}) {
         selector: { weekStart?: string; reportId?: string },
         tx: Pick<Tx, "execute"> = database
     ) {
-        const rows = toRows<ReportRow>(
+        if (deps.persistence) return deps.persistence.read(tx, ctx, selector);
+        const rows = toRows<ContextualReportRow>(
             await tx.execute(
                 sql`SELECT id::text, company_id::text,owner_user_id::text,week_start::text,version,ciphertext,key_version FROM pdr_ai_v2_vantage_contextual_reports WHERE company_id=${ctx.companyId} AND owner_user_id=${ctx.userPk} AND ${selector.reportId ? sql`id=${selector.reportId}::uuid` : sql`week_start=${selector.weekStart ?? "2026-10-12"}::date`}`
             )
         );
         return rows[0] ?? null;
     }
-    function open(row: ReportRow, ctx: WorkspaceContext): Saved {
-        let saved: Saved;
+    function open(row: ContextualReportRow, ctx: WorkspaceContext): ContextualSavedPayload {
+        let saved: ContextualSavedPayload;
         try {
-            saved = JSON.parse(decryptSecret(row.ciphertext)) as Saved;
+            saved = JSON.parse(decryptSecret(row.ciphertext)) as ContextualSavedPayload;
         } catch {
             return fail("report_decryption_failed");
         }
@@ -603,7 +685,8 @@ export function createContextualHost(deps: Dependencies = {}) {
         prepared: PreparedContextualReport,
         generated: ContextGenerationResultV0,
         report: DemoReport,
-        validatedCompound: unknown
+        validatedCompound: unknown,
+        admission?: unknown
     ) {
         const size = financeMilestoneOutputSize(validatedCompound);
         if (size.outputTokens > 2400) fail("compound_output_budget");
@@ -634,14 +717,29 @@ export function createContextualHost(deps: Dependencies = {}) {
             )
         )
             fail("report_citation_binding_invalid");
-        if (
-            normalized.native.topics.length ||
-            generated.v1Result.draft.topics.length ||
-            normalized.native.summary !== generated.v1Result.draft.summary
-        )
-            fail("native_carrier_binding_invalid");
-        const semantic = evaluateFinanceMilestoneReport(normalized.report, prepared.sourceRefs);
-        if (!semantic.passed) fail("contextual_semantic_failed");
+        const policyInput: ContextualHostPolicyInput = {
+            prepared,
+            generated,
+            report,
+            compound: validatedCompound,
+            normalized,
+            admission,
+        };
+        let semantic: unknown;
+        if (deps.policy) {
+            deps.policy.assertNative(policyInput);
+            semantic = await deps.policy.assess(policyInput);
+        } else {
+            if (
+                normalized.native.topics.length ||
+                generated.v1Result.draft.topics.length ||
+                normalized.native.summary !== generated.v1Result.draft.summary
+            )
+                fail("native_carrier_binding_invalid");
+            const checked = evaluateFinanceMilestoneReport(normalized.report, prepared.sourceRefs);
+            if (!checked.passed) fail("contextual_semantic_failed");
+            semantic = checked;
+        }
         const sourceDiagnostics = prepared.records.map(record => ({
             source: record.source,
             title:
@@ -658,7 +756,8 @@ export function createContextualHost(deps: Dependencies = {}) {
             report.diagnostics.historicalHumanDecisions !== 0
         )
             fail("report_diagnostics_binding_invalid");
-        if (
+        if (deps.policy) deps.policy.assertExecution(policyInput);
+        else if (
             report.execution.mode !== "replay" ||
             report.execution.modelId !== "offline-finance-milestone-replay" ||
             report.execution.promptVersion !== GENERATION_PROMPT_VERSION_V2 ||
@@ -674,9 +773,11 @@ export function createContextualHost(deps: Dependencies = {}) {
         )
             fail("report_binding_invalid");
         return fresh(prepared, async (tx, ctx) => {
-            const row = await readRow(ctx, { weekStart: report.weekStart }, tx);
-            if (row) fail("report_already_exists");
-            const saved: Saved = {
+            if (!deps.persistence) {
+                const row = await readRow(ctx, { weekStart: report.weekStart }, tx);
+                if (row) fail("report_already_exists");
+            }
+            const saved: ContextualSavedPayload = {
                 schema: "contextual-finance/v1",
                 owner: ctx.authUserId,
                 company: String(ctx.companyId),
@@ -684,6 +785,7 @@ export function createContextualHost(deps: Dependencies = {}) {
                 envelope: prepared.envelope,
                 authority: prepared.authority,
                 semanticAssessment: semantic,
+                ...(deps.policy ? { executionPolicy: { id: deps.policy.id, admission } } : {}),
                 sources: prepared.records,
                 reviews: [],
             };
@@ -737,6 +839,16 @@ export function createContextualHost(deps: Dependencies = {}) {
                 {
                     run: async cb => cb(tx as unknown as Record<string, unknown>),
                     persist: async () => {
+                        await deps.policy?.assertCommit?.(policyInput, tx);
+                        if (deps.persistence) {
+                            await deps.persistence.persist(tx, {
+                                ctx,
+                                report: saved.report,
+                                sealed,
+                                expectedBaseline: captures.get(prepared)?.baseline,
+                            });
+                            return saved.report;
+                        }
                         const changed = toRows(
                             await tx.execute(
                                 sql`INSERT INTO pdr_ai_v2_vantage_contextual_reports(id,company_id,owner_user_id,week_start,version,ciphertext,key_version) VALUES(${report.id}::uuid,${ctx.companyId},${ctx.userPk},${report.weekStart}::date,1,${sealed.ciphertext},${sealed.keyVersion}) ON CONFLICT(company_id,owner_user_id,week_start) DO NOTHING RETURNING id`
@@ -810,12 +922,23 @@ export function createContextualHost(deps: Dependencies = {}) {
             const reviewBody = JSON.stringify(saved);
             if (Buffer.byteLength(reviewBody) > 750000) fail("report_budget");
             const sealed = encryptSecret(reviewBody);
-            const changed = toRows(
-                await tx.execute(
-                    sql`UPDATE pdr_ai_v2_vantage_contextual_reports SET version=${saved.report.version},ciphertext=${sealed.ciphertext},key_version=${sealed.keyVersion},updated_at=now() WHERE id=${input.reportId}::uuid AND company_id=${actor.companyId} AND owner_user_id=${actor.userPk} AND version=${input.expectedVersion} RETURNING id`
-                )
-            );
-            if (!changed.length) fail("stale_review");
+            if (deps.persistence) {
+                const changed = await deps.persistence.review(tx, {
+                    ctx: actor,
+                    reportId: input.reportId,
+                    expectedVersion: input.expectedVersion,
+                    nextVersion: saved.report.version,
+                    sealed,
+                });
+                if (!changed) fail("stale_review");
+            } else {
+                const changed = toRows(
+                    await tx.execute(
+                        sql`UPDATE pdr_ai_v2_vantage_contextual_reports SET version=${saved.report.version},ciphertext=${sealed.ciphertext},key_version=${sealed.keyVersion},updated_at=now() WHERE id=${input.reportId}::uuid AND company_id=${actor.companyId} AND owner_user_id=${actor.userPk} AND version=${input.expectedVersion} RETURNING id`
+                    )
+                );
+                if (!changed.length) fail("stale_review");
+            }
         });
         return load({ reportId: input.reportId });
     }

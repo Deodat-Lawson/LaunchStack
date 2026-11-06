@@ -1,0 +1,30 @@
+﻿'use strict';
+// Dormant future-live preload. Default runtime uses the separate loopback-only guard.
+const fs=require('node:fs'),path=require('node:path'),net=require('node:net'),tls=require('node:tls'),dns=require('node:dns'),http=require('node:http'),https=require('node:https');
+const policy=require('./vantage-grounding-live-policy.cjs'),root=path.resolve(__dirname,'../..'),owned=path.join(root,'test-output/vantage-grounding-m3-20261106');
+function local(host){return ['localhost','127.0.0.1','::1','[::1]'].includes(String(host).toLowerCase());}
+function deny(host,transport){const file=process.env.VANTAGE_GROUNDING_NETWORK_LOG;if(file)try{fs.appendFileSync(file,JSON.stringify({at:new Date().toISOString(),pid:process.pid,transport,hostname:/^[a-zA-Z0-9.:[\]-]{1,253}$/.test(String(host))?String(host):'[omitted]',code:'VANTAGE_EXTERNAL_NETWORK_DENIED'})+'\n');}catch{}const error=Error('M3 approved endpoint policy denied transport');error.code='VANTAGE_EXTERNAL_NETWORK_DENIED';throw error;}
+function readOwned(file){const full=fs.realpathSync(file??''),relative=path.relative(fs.realpathSync(owned),full);if(!relative||relative.startsWith('..')||path.isAbsolute(relative))deny('configuration','startup');return JSON.parse(fs.readFileSync(full,'utf8'));}
+if(process.env.VANTAGE_GROUNDING_M3_LIVE!=='true')deny('unapproved-mode','startup');
+const config=readOwned(process.env.VANTAGE_GROUNDING_M3_LIVE_CONFIG),approval=readOwned(process.env.VANTAGE_M3_APPROVAL_MANIFEST);
+if(config.project!=='vantage-grounding-m3-20261106'||approval.project!==config.project||approval.approvalState!=='approved'||approval.planHash!==config.planHash||approval.implementationHash!==config.implementationHash||approval.maxRequests!==2||!approval.authorizationRef)deny('unapproved-manifest','startup');
+policy.assertCurrentInventory(root,approval.sourceInventory);
+const endpoints=policy.reviewedEndpoints(config);
+if(JSON.stringify(endpoints)!==process.env.VANTAGE_M3_LIVE_ENDPOINTS)deny('endpoint-binding','startup');
+const hosts=new Set(endpoints.map(value=>value.hostname.toLowerCase())),resolved=new Map();
+function allowedHost(host){host=String(host).toLowerCase();return hosts.has(host)||resolved.has(host);}
+function socketOptions(args){const first=args[0];return first&&typeof first==='object'?first:typeof first==='number'?{port:first,host:typeof args[1]==='string'?args[1]:'localhost'}:{path:first};}
+function socketGate(args,transport){const options=socketOptions(Array.isArray(args[0])?args[0]:args);if(options.path||options.socketPath)deny('socket',transport);const host=options.host??options.hostname??'localhost';if(local(host))return;if(!allowedHost(host)||Number(options.port)!==443)deny(host,transport);if(transport==='tls'&&(!hosts.has(String(options.servername??host).toLowerCase())||options.rejectUnauthorized===false))deny(host,'tls-identity');}
+const connect=net.Socket.prototype.connect;net.Socket.prototype.connect=function(...args){socketGate(args,'tcp');return connect.apply(this,args);};
+const secure=tls.connect;tls.connect=function(...args){socketGate(args,'tls');return secure.apply(this,args);};
+function remember(host,value){for(const item of Array.isArray(value)?value:[value]){const address=typeof item==='string'?item:item?.address;if(address&&!local(address))resolved.set(String(address).toLowerCase(),String(host).toLowerCase());}}
+const lookup=dns.lookup;dns.lookup=function(host,...args){if(local(host))return lookup.call(this,host,...args);if(!hosts.has(String(host).toLowerCase()))deny(host,'dns');const callback=args.pop();if(typeof callback!=='function')deny(host,'dns-contract');return lookup.call(this,host,...args,function(error,address,...rest){if(!error)remember(host,address);callback(error,address,...rest);});};
+const promiseLookup=dns.promises.lookup;dns.promises.lookup=async function(host,...args){if(!local(host)&&!hosts.has(String(host).toLowerCase()))deny(host,'dns');const value=await promiseLookup.call(this,host,...args);if(!local(host))remember(host,value);return value;};
+function guardResolvers(target,promises){for(const name of Object.getOwnPropertyNames(target))if(/^(?:resolve[A-Za-z0-9]*|reverse|lookupService)$/.test(name)&&typeof target[name]==='function')target[name]=promises?async function(host){deny(host??'DNS','dns');}:function(host){deny(host??'DNS','dns');};}
+guardResolvers(dns,false);guardResolvers(dns.promises,true);for(const[C,promises]of [[dns.Resolver,false],[dns.promises.Resolver,true]])for(let proto=C?.prototype;proto&&proto!==Object.prototype;proto=Object.getPrototypeOf(proto))guardResolvers(proto,promises);
+function requestGate(url,method){if(local(url.hostname))return;if(url.protocol!=='https:'||url.username||url.password||url.hash||String(method).toUpperCase()!=='POST'||!endpoints.some(endpoint=>url.href===endpoint.baseUrl+'/chat/completions'))deny(url.hostname,'http-endpoint');}
+const fetch=globalThis.fetch;if(fetch)globalThis.fetch=function(input,init){const url=new URL(typeof input==='string'||input instanceof URL?input:input.url);requestGate(url,init?.method??input?.method??'GET');return fetch.call(this,input,{...init,redirect:'manual'});};
+for(const module of [http,https]){const request=module.request;module.request=function(input,...args){let url,options;if(typeof input==='string'||input instanceof URL){url=new URL(input);options=args[0]&&typeof args[0]==='object'?args[0]:{};}else{options=input??{};url=new URL((options.protocol??(module===https?'https:':'http:'))+'//'+(options.hostname??options.host??'localhost')+(options.port?':'+options.port:'')+(options.path??'/'));}requestGate(url,options.method??'GET');return request.call(this,input,...args);};module.get=function(...args){const req=module.request(...args);req.end();return req;};}
+const dgram=require('node:dgram'),send=dgram.Socket.prototype.send;dgram.Socket.prototype.send=function(...args){const address=args.find(value=>typeof value==='string'&&(hosts.has(value)||net.isIP(value)));if(!address||!local(address))deny(address??'UDP','udp');return send.apply(this,args);};
+require('node:module').syncBuiltinESMExports();
+module.exports={requestGate,local};

@@ -24,9 +24,8 @@ function resolved(fetch: typeof globalThis.fetch, cap = 800) {
         maxOutputTokens: cap,
         temperature: 0,
         timeoutMs: 12000,
+        fetch,
     });
-    // Install an in-memory HTTP fixture, not a provider mock, before cloning the transport.
-    model.chat.lc_kwargs.configuration = { baseURL: config.endpoint.baseUrl, fetch };
     return model;
 }
 const options = () => ({

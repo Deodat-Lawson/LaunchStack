@@ -259,6 +259,8 @@ export interface ResolveChatModelOptions {
     /** Ignored unless the model declares streaming support. */
     streaming?: boolean;
     timeoutMs?: number;
+    /** Optional host-owned HTTP boundary (metering/preflight); never inferred from request input. */
+    fetch?: typeof globalThis.fetch;
     config?: ChatModelsConfig;
 }
 
@@ -318,6 +320,7 @@ export function resolveChatModel(options: ResolveChatModelOptions = {}): Resolve
             maxOutputTokens: options.maxOutputTokens,
             streaming: options.streaming,
             timeoutMs: options.timeoutMs,
+            fetch: options.fetch,
             requestPatch: reasoning.requestPatch,
         }),
         prepareMessages: messages => applyMessageBehavior(behavior, messages),

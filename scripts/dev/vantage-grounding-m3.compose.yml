@@ -1,0 +1,28 @@
+name: vantage-grounding-m3-20261106
+
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    pull_policy: never
+    container_name: vantage-grounding-m3-20261106-db
+    labels:
+      io.launchstack.grounding-m3: vantage-grounding-m3-20261106
+    environment:
+      POSTGRES_DB: vantage_grounding_m3_20261106
+      POSTGRES_USER: vantage_grounding_m3
+      POSTGRES_PASSWORD: ${VANTAGE_INTEGRATION_PASSWORD:?Use the integration runtime controller}
+    ports:
+      - "127.0.0.1:55448:5432"
+    volumes:
+      - integration-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vantage_grounding_m3 -d vantage_grounding_m3_20261106"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+volumes:
+  integration-data:
+    name: vantage-grounding-m3-20261106-data
+    labels:
+      io.launchstack.grounding-m3: vantage-grounding-m3-20261106

@@ -1,0 +1,3 @@
+# Preserve the original benchmark archive bytes across Windows checkouts.
+historical-C02.input.json -text
+historical-C03.input.json -text

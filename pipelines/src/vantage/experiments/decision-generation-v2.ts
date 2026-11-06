@@ -158,7 +158,41 @@ function fieldLimitsV2() {
         .join("; ");
 }
 /** Native safety/history rules remain verbatim; neither schema nor output is rewritten. */
-function transportPromptV2(envelope: ContextGenerationEnvelopeV0, role?: BusinessRoleContextV0) {
+function transportPromptV2(
+    envelope: ContextGenerationEnvelopeV0,
+    role?: BusinessRoleContextV0,
+    profile: "default" | "role-pair-m2" = "default"
+) {
+    if (profile === "role-pair-m2") {
+        // Calling the existing frame validator retains its actor/map/selected-role binding checks.
+        roleFrameV2(envelope, role);
+        const primary =
+            role &&
+            role.userConfirmed &&
+            !role.fallback &&
+            role.provenance.kind !== "fallback" &&
+            role.mappingVersion === envelope.manifest.roleMapVersion &&
+            role.roleIds.every(id => envelope.manifest.roleIds.includes(id))
+                ? role.roles.find(value => value.roleId === role.primaryRoleId)
+                : undefined;
+        const trustedPrimary =
+            primary && role
+                ? {
+                      primaryRoleId: primary.roleId,
+                      mappingVersion: role.mappingVersion,
+                      description: primary.description,
+                      responsibilities: primary.responsibilities,
+                      priorities: primary.priorities,
+                  }
+                : {
+                      primaryRoleId: null,
+                      mappingVersion: envelope.manifest.roleMapVersion,
+                      fallback: true,
+                      responsibilities: [],
+                      priorities: [],
+                  };
+        return `M2 trustedPrimary=${JSON.stringify(trustedPrimary)}\nNative IDs; context refs exact @version. All sources/states/definitions/uncertainty; copies not corroboration.`;
+    }
     return `CONTEXTUAL V2 ${GENERATION_PROMPT_VERSION_V2}: ${roleFrameV2(envelope, role)}. Return one complete JSON object. native: cite only original native item refs; <=1 topic. experimental: cite only exact context.sources[].ref values, including @version. Review the full authorized contextual source set; copies are not corroboration. Only-supplied claims need full-context support, not citation counts. Preserve definitions; differing values need not conflict. No padding/enhancements. Call/because/wouldChangeIf; seek evidence: what/where/whom/when/implications; next step If A=>X, B=>Y. Headline=situation; brief=why now; figures cite/declare arithmetic. Missing approval !=absence; samples may differ. ${fieldLimitsV2()}. excerptFromNativeItem: exact slice(start,length); cite contextual ref.`;
 }
 export function outputSizeV2(pair: unknown, countTokens: (text: string) => number) {
@@ -178,6 +212,8 @@ export function createDecisionExperimentV2(options: {
     version: typeof GENERATION_PROMPT_VERSION_V2 | "disabled";
     invoke: Invoke;
     countTokens: (text: string) => number;
+    /** M2-only instruction compaction; source payload/schema/native safety/history remain unchanged. */
+    transportProfile?: "default" | "role-pair-m2";
     /** Resolve the authoritative primary role in the trusted host, never from request data. */
     resolvePrimaryRole?: (identity: {
         principalRef: string;
@@ -223,7 +259,7 @@ export function createDecisionExperimentV2(options: {
                     typeof message.content === "string" &&
                     message.content.startsWith("EXPERIMENTAL PAIRED OUTPUT")
                     ? new SystemMessage(
-                          transportPromptV2(envelope, role) +
+                          transportPromptV2(envelope, role, options.transportProfile) +
                               (lastIssues.length
                                   ? `\nRepair these validation failures: ${lastIssues.join("; ").slice(0, 300)}`
                                   : "")

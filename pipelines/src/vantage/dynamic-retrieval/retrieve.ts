@@ -30,6 +30,8 @@ export interface DynamicRetrievalOptionsV0 {
     now?: () => number;
     /** Opt-in: omit unrelated recent updates and explicitly resolved older work. */
     selectionPolicy?: "broad" | "focused";
+    /** Opt-in primary perspective within the already authorized multi-role candidate set. */
+    primaryRolePreference?: boolean;
 }
 
 function metadataIdentity(item: RetrievalMetadataV0): string {
@@ -88,6 +90,15 @@ export function createDynamicRetrievalProviderV0(options: DynamicRetrievalOption
                     ),
                 }))
                 .sort((a, b) => compareText(a.roleId, b.roleId));
+            const preferredPrimary =
+                options.primaryRolePreference &&
+                input.verifiedRoleContext.userConfirmed &&
+                !input.verifiedRoleContext.fallback &&
+                input.verifiedRoleContext.provenance.kind !== "fallback" &&
+                input.verifiedRoleContext.primaryRoleId &&
+                input.verifiedRoleContext.roleIds.includes(input.verifiedRoleContext.primaryRoleId)
+                    ? input.verifiedRoleContext.primaryRoleId
+                    : undefined;
             const output: RankedRetrievalBundleV0 = {
                 contractVersion: "v0-proposed",
                 actor,
@@ -239,6 +250,7 @@ export function createDynamicRetrievalProviderV0(options: DynamicRetrievalOption
                 metadata: RetrievalMetadataV0;
                 roleIds: string[];
                 relevance: number;
+                primaryRoleScore: number;
                 trust: number;
                 recent: boolean;
                 olderOpen: boolean;
@@ -279,6 +291,9 @@ export function createDynamicRetrievalProviderV0(options: DynamicRetrievalOption
                 }));
                 const roleIds = matches.filter(role => role.score > 0).map(role => role.roleId);
                 const relevance = Math.max(0, ...matches.map(role => role.score));
+                const primaryRoleScore = preferredPrimary
+                    ? (matches.find(role => role.roleId === preferredPrimary)?.score ?? 0)
+                    : 0;
                 const relevant =
                     relevance > 0 || meta.ownerPrincipalRefs?.includes(actor.principalRef) === true;
                 const recent = memberships.has("recent") && changedAt >= start && changedAt < end;
@@ -306,6 +321,7 @@ export function createDynamicRetrievalProviderV0(options: DynamicRetrievalOption
                     metadata: meta,
                     roleIds,
                     relevance,
+                    primaryRoleScore,
                     trust: meta.trust ?? 0.5,
                     recent,
                     olderOpen,
@@ -318,6 +334,7 @@ export function createDynamicRetrievalProviderV0(options: DynamicRetrievalOption
             candidates.sort(
                 (a, b) =>
                     Number(b.olderOpen) - Number(a.olderOpen) ||
+                    b.primaryRoleScore - a.primaryRoleScore ||
                     b.relevance - a.relevance ||
                     b.trust - a.trust ||
                     Number(b.recent) - Number(a.recent) ||
@@ -367,7 +384,7 @@ export function createDynamicRetrievalProviderV0(options: DynamicRetrievalOption
                     roleIds: candidate.roleIds,
                     rank: output.sourceRegistry.length + 1,
                     dedupKey: key(entry.source),
-                    selectionReason: `${candidate.olderOpen ? "Older unresolved item; " : ""}lanes=${candidate.lanes.join(",")}; roleRelevance=${candidate.relevance.toFixed(3)}; trust=${candidate.trust.toFixed(3)}; recent=${candidate.recent}`,
+                    selectionReason: `${candidate.olderOpen ? "Older unresolved item; " : ""}lanes=${candidate.lanes.join(",")}; roleRelevance=${candidate.relevance.toFixed(3)}; trust=${candidate.trust.toFixed(3)}; recent=${candidate.recent}${options.primaryRolePreference ? `; primaryRole=${preferredPrimary ?? "neutral"}; primaryRoleScore=${candidate.primaryRoleScore.toFixed(3)}` : ""}`,
                 };
                 output[category].push(item);
                 output.sourceRegistry.push(entry);
@@ -377,6 +394,13 @@ export function createDynamicRetrievalProviderV0(options: DynamicRetrievalOption
                 output.diagnostics.scores.push({
                     source: entry.source,
                     relevance: candidate.relevance,
+                    ...(options.primaryRolePreference
+                        ? {
+                              primaryRoleScore: candidate.primaryRoleScore,
+                              primaryRoleMatched: candidate.primaryRoleScore > 0,
+                              primaryRoleId: preferredPrimary ?? null,
+                          }
+                        : {}),
                     trust: candidate.trust,
                     recent: candidate.recent,
                     olderOpen: candidate.olderOpen,

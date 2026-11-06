@@ -58,6 +58,10 @@ export interface RetrievalDiagnosticsV0 {
     scores: {
         source: ContextSourceRefV0;
         relevance: number;
+        /** Present only for the explicit primary-role preference condition. */
+        primaryRoleScore?: number;
+        primaryRoleMatched?: boolean;
+        primaryRoleId?: string | null;
         trust: number;
         recent: boolean;
         olderOpen: boolean;

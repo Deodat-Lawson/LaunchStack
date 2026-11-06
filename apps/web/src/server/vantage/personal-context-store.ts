@@ -278,6 +278,7 @@ export async function personalContextSession(
         actor,
         state,
         profileTitle: membership.profileTitle ?? person.title,
+        persistedRoleMappingVersion: membership.businessContextV0?.mappingVersion ?? null,
         visibleVersion,
         readDocument,
         listDocuments,

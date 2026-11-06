@@ -1,0 +1,181 @@
+{
+  "version": "vantage-role-pair-milestone/v1",
+  "syntheticOnly": true,
+  "asOf": "2026-11-02T14:00:00.000Z",
+  "reportWindow": {
+    "startInclusive": "2026-10-26T04:00:00Z",
+    "endExclusive": "2026-11-02T05:00:00Z",
+    "asOf": "2026-11-02T14:00:00Z"
+  },
+  "historicalInputs": {
+    "C02": {
+      "path": "test-output/vantage-quality-2026-10-29/run-002/inputs/C02.json",
+      "sha256": "e93ea3713868107dc1ff99a0a82b0b1f3ea9815058bd11123b2042648ff44cb3"
+    },
+    "C03": {
+      "path": "test-output/vantage-quality-2026-10-29/run-002/inputs/C03.json",
+      "sha256": "923004a3e16ff9b558f2193c20491ba04256eccc54ab543b355942317f693df3"
+    }
+  },
+  "documents": [
+    {
+      "logicalKey": "D06",
+      "originalSource": {
+        "kind": "doc",
+        "id": "D06",
+        "version": "v1"
+      },
+      "text": "The pitch-deck outline is complete, but the impact and budget slides remain unfinished. The team also recorded an open shared-admin access review for the following week.",
+      "sourceDate": "2026-10-26",
+      "sourceType": "Previous meeting record",
+      "title": "D06 Previous meeting record",
+      "contentSha256": "cdafda5fb1f8701c43dd2bab88ee29fbfb89f40864f2cabca7850c27cf8fce2a",
+      "required": false,
+      "roleIds": [
+        "partnerships-lead",
+        "security-engineer"
+      ]
+    },
+    {
+      "logicalKey": "D02",
+      "originalSource": {
+        "kind": "doc",
+        "id": "D02",
+        "version": "v1"
+      },
+      "text": "Marketing uploaded six new photographs from the campus fair to the shared media folder.",
+      "sourceDate": "2026-10-29",
+      "sourceType": "Document",
+      "title": "D02 Document",
+      "contentSha256": "36898cf06d979043eb452ffd13c6678ec653f0f61932671885351e6a9f97051d",
+      "required": false,
+      "roleIds": []
+    },
+    {
+      "logicalKey": "D09",
+      "originalSource": {
+        "kind": "doc",
+        "id": "D09",
+        "version": "v1"
+      },
+      "text": "The team updated volunteer T-shirt sizes for an event planned later in November.",
+      "sourceDate": "2026-10-28",
+      "sourceType": "Document",
+      "title": "D09 Document",
+      "contentSha256": "926c134a5d85af37c18e0fb24df8bc11d469874503fe6aeacaf91e198e32595a",
+      "required": false,
+      "roleIds": []
+    },
+    {
+      "logicalKey": "D01",
+      "originalSource": {
+        "kind": "doc",
+        "id": "D01",
+        "version": "v1"
+      },
+      "text": "\"I plan to present our pitch deck to Lakeview Innovation Fund on Wednesday, November 4, at 3 PM. We still need to finish the impact and budget slides.\" The document remains marked Draft; no accepted calendar invitation is attached.",
+      "sourceDate": "2026-10-31",
+      "sourceType": "Sponsorship draft",
+      "title": "D01 Sponsorship draft",
+      "contentSha256": "b2118b2480373ad413ed9ffa56adf0abb2242302a67d028f876484880cbe6714",
+      "required": false,
+      "roleIds": [
+        "partnerships-lead"
+      ]
+    },
+    {
+      "logicalKey": "D08",
+      "originalSource": {
+        "kind": "doc",
+        "id": "D08",
+        "version": "v1"
+      },
+      "text": "The shared-admin access review is due Thursday, November 5, at 5 PM. The current checklist does not include a completed review or final sign-off.",
+      "sourceDate": "2026-10-30",
+      "sourceType": "Security checklist",
+      "title": "D08 Security checklist",
+      "contentSha256": "879de43ebd0ccb4484790a744ab2f89a76595f3e77a549ab0040d4d080f1422f",
+      "required": false,
+      "roleIds": [
+        "security-engineer"
+      ]
+    },
+    {
+      "logicalKey": "D03",
+      "originalSource": {
+        "kind": "public",
+        "id": "D03",
+        "version": "v1"
+      },
+      "text": "The fictional Lakeview Innovation Fund says its sponsorship program evaluates measurable student impact, realistic delivery plans, and budget transparency. The application does not guarantee sponsorship or funding.",
+      "sourceDate": "2026-11-01",
+      "sourceType": "Research",
+      "title": "D03 Research",
+      "contentSha256": "1b5fd30634f6c73ce8068edcf65a40deaad7f7b373fda2646a3850a5aedb3c5a",
+      "required": false,
+      "roleIds": [
+        "partnerships-lead"
+      ]
+    },
+    {
+      "logicalKey": "D07",
+      "originalSource": {
+        "kind": "doc",
+        "id": "D07",
+        "version": "v1"
+      },
+      "text": "The marketing team changed the pitch-deck template font and updated the cover illustration.",
+      "sourceDate": "2026-10-31",
+      "sourceType": "Document",
+      "title": "D07 Document",
+      "contentSha256": "0a3a88285ed8f325ccab734924fc178f04a1e19fd5a555898b7a1757d9e6dae7",
+      "required": false,
+      "roleIds": []
+    },
+    {
+      "logicalKey": "D05",
+      "originalSource": {
+        "kind": "doc",
+        "id": "D05",
+        "version": "v1"
+      },
+      "text": "A volunteer submitted a reimbursement receipt for a subway ticket purchased after a student outreach event.",
+      "sourceDate": "2026-10-30",
+      "sourceType": "Document",
+      "title": "D05 Document",
+      "contentSha256": "630ca43885887f37f0aca82196c9e13beb5b7014c3a2428cdaf1ae7243ab5d51",
+      "required": false,
+      "roleIds": []
+    },
+    {
+      "logicalKey": "D04",
+      "originalSource": {
+        "kind": "company",
+        "id": "D04",
+        "version": "v1"
+      },
+      "text": "CampusLoop develops event-registration tools for student organizations and has records from three pilot campuses. Its Partnerships Lead handles sponsor outreach, while its Security Engineer handles internal access reviews.",
+      "sourceDate": "2026-10-30",
+      "sourceType": "Company Architecture",
+      "title": "D04 Company Architecture",
+      "contentSha256": "c97472539751b5be6b73a08f56d1b4e46180018bbf905e4261be99c0f5b28f7a",
+      "required": false,
+      "roleIds": []
+    },
+    {
+      "logicalKey": "D10",
+      "originalSource": {
+        "kind": "doc",
+        "id": "D10",
+        "version": "v1"
+      },
+      "text": "The internal campus-location map was updated to correct a mislabeled classroom.",
+      "sourceDate": "2026-10-31",
+      "sourceType": "Document",
+      "title": "D10 Document",
+      "contentSha256": "cbd38c38fdc232be10fbc6e1a12780b94f1877c66ad408243027e8b162d441c6",
+      "required": false,
+      "roleIds": []
+    }
+  ]
+}

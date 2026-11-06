@@ -1,0 +1,33 @@
+import assert from 'node:assert/strict';
+import {createRequire} from 'node:module';import {pathToFileURL} from 'node:url';import {resolve} from 'node:path';import {readFileSync,writeFileSync} from 'node:fs';import {createHash} from 'node:crypto';
+import {ROOT,RUNTIME_DIR,readRuntime,PROJECT,DATABASE,assertDatabaseUrl} from './vantage-role-runtime.mjs';
+const config=readRuntime();assertDatabaseUrl(config.databaseUrl);const fixture=JSON.parse(readFileSync(resolve(RUNTIME_DIR,'role-fixture.json'),'utf8'));
+const load=createRequire(resolve(ROOT,'packages/store/package.json'));const {default:postgres}=await import(pathToFileURL(load.resolve('postgres')).href);const sql=postgres(config.databaseUrl,{max:1,connect_timeout:5,onnotice:()=>{}});
+try {
+ const [identity]=await sql`SELECT current_database() AS database,(SELECT marker FROM _vantage_integration_identity) AS marker`;assert.equal(identity.database,DATABASE);assert.equal(identity.marker,PROJECT);
+ const [{count:engine}]=await sql`SELECT count(*)::int AS count FROM _launchstack_migrations`;const [{count:product}]=await sql`SELECT count(*)::int AS count FROM _launchstack_web_migrations`;assert.equal(engine,4);assert.equal(product,28);
+ for(const account of config.accounts){const [row]=await sql`SELECT a.provider_id,u.email FROM pdr_ai_v2_auth_account a JOIN pdr_ai_v2_auth_user u ON u.id=a.user_id WHERE u.id=${account.id}`;assert.equal(row.provider_id,'credential');assert.equal(row.email,account.email);}
+ const [membership]=await sql`SELECT role,business_context_v0,vantage_context_revision FROM pdr_ai_v2_user_company_memberships WHERE company_id=${config.companyId} AND user_id=${config.accounts[0].userPk}`;assert.equal(membership.role,'role-reviewer');
+ const [custom]=await sql`SELECT permissions FROM pdr_ai_v2_workspace_roles WHERE company_id=${config.companyId} AND slug='role-reviewer'`;assert.deepEqual([...custom.permissions].sort(),['documents.edit','documents.read','settings.manage']);
+ if(membership.business_context_v0){assert.deepEqual([...membership.business_context_v0.roleIds].sort(),['partnerships-lead','security-engineer']);assert.ok(membership.business_context_v0.roleIds.includes(membership.business_context_v0.primaryRoleId));}
+ const inventory=await sql`SELECT document_id::text,logical_key,required,native_evidence_id FROM pdr_ai_v2_vantage_contextual_inventory WHERE company_id=${config.companyId} ORDER BY logical_key`;
+ assert.deepEqual(inventory.map(i=>i.logical_key),Array.from({length:10},(_,i)=>`D${String(i+1).padStart(2,'0')}`));assert.ok(inventory.every(i=>i.required===false));
+ for(const [key,doc] of Object.entries(fixture.docs)) {
+  const [row]=await sql`SELECT d.company_id::text,d.current_version_id::text,v.created_at,s.content,s.embedding FROM pdr_ai_v2_document d JOIN pdr_ai_v2_document_versions v ON v.id=d.current_version_id JOIN pdr_ai_v2_document_context_chunks s ON s.document_id=d.id AND s.version_id=v.id WHERE d.id=${doc.id}`;
+  assert.equal(row.company_id,config.companyId);assert.equal(row.current_version_id,doc.versionId);assert.equal(row.content,doc.text);assert.equal(createHash('sha256').update(row.content).digest('hex'),doc.hash);assert.equal(row.embedding,null);assert.ok(new Date(row.created_at)<=new Date(fixture.domainClock));
+  const i=inventory.find(i=>i.logical_key===key);assert.equal(i.document_id,doc.id);
+  if(['D01','D08'].includes(key)){assert.ok(i.native_evidence_id);const [e]=await sql`SELECT body,source_url,created_by_user_id FROM pdr_ai_v2_vantage_evidence WHERE id=${i.native_evidence_id} AND company_id=${config.companyId}`;assert.equal(e.body,doc.text);assert.equal(e.source_url,`local://workspace-document/${doc.id}/version/${doc.versionId}`);assert.equal(e.created_by_user_id,config.accounts[0].id);}else assert.equal(i.native_evidence_id,null);
+ }
+ for(const canary of Object.values(fixture.canaries??{})){
+  const[row]=await sql`SELECT d.company_id::text,s.content,s.embedding FROM pdr_ai_v2_document d JOIN pdr_ai_v2_document_context_chunks s ON s.document_id=d.id AND s.version_id=d.current_version_id WHERE d.id=${canary.id} AND d.current_version_id=${canary.versionId}`;
+  assert.equal(row.company_id,canary.companyId);assert.equal(row.content,canary.text);assert.equal(row.embedding,null);assert.equal(createHash('sha256').update(row.content).digest('hex'),canary.hash);
+  const grants=await sql`SELECT principal_type,principal_id FROM pdr_ai_v2_document_grants WHERE document_id=${canary.id}`;assert.equal(grants.length,1);assert.equal(grants[0].principal_id,canary.ownerUserPk);assert.notEqual(canary.ownerUserPk,config.accounts[0].userPk);
+  assert.ok(!inventory.some(i=>i.document_id===canary.id));
+  const[{count:profile}]=await sql`SELECT count(*)::int AS count FROM pdr_ai_v2_company_profile_sources WHERE document_id=${canary.id}`;assert.equal(profile,0);
+ }
+ const counts={};for(const table of ['vantage_evidence','vantage_metric_definitions','vantage_metric_observations','vantage_agendas','vantage_agenda_topics','vantage_commitments','vantage_contextual_architecture_review','vantage_role_contextual_runs']){const [row]=await sql.unsafe('SELECT count(*)::int AS count FROM pdr_ai_v2_'+table+' WHERE company_id=$1',[config.companyId]);counts[table]=row.count;}
+ assert.equal(counts.vantage_evidence,2);for(const key of ['vantage_metric_definitions','vantage_metric_observations','vantage_agendas','vantage_agenda_topics','vantage_commitments'])assert.equal(counts[key],0);
+ const sourceAuthority=Object.entries(fixture.docs).sort().map(([logicalKey,d])=>({logicalKey,documentId:d.id,versionId:d.versionId,hash:d.hash,originalSource:d.originalSource,sourceDate:d.sourceDate,required:d.required}));
+ const result={checkedAt:new Date().toISOString(),project:PROJECT,engineMigrations:engine,productMigrations:product,accounts:3,documentVersions:10,documentVersionsScope:"ten admitted benchmark sources",canaryDocumentVersions:Object.keys(fixture.canaries??{}).length,embeddingValues:0,domainClock:fixture.domainClock,reportWindow:fixture.reportWindow,counts,permissionRole:membership.role,businessRoles:membership.business_context_v0,roleRevision:membership.vantage_context_revision,sourceAuthorityHash:createHash('sha256').update(JSON.stringify(sourceAuthority)).digest('hex'),sourceAuthority,interpretation:'Exact cached synthetic source materialization and real local auth/ACL/storage; no connector, model, research or embedding calls.'};
+ writeFileSync(resolve(RUNTIME_DIR,'runtime-verification.json'),JSON.stringify(result,null,2));console.log(JSON.stringify({...result,sourceAuthority:undefined}));
+}finally{await sql.end({timeout:5});}

@@ -1,0 +1,28 @@
+name: vantage-role-m2-20261106
+
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    pull_policy: never
+    container_name: vantage-role-m2-20261106-db
+    labels:
+      io.launchstack.role-m2: vantage-role-m2-20261106
+    environment:
+      POSTGRES_DB: vantage_role_m2_20261106
+      POSTGRES_USER: vantage_role_m2
+      POSTGRES_PASSWORD: ${VANTAGE_INTEGRATION_PASSWORD:?Use the integration runtime controller}
+    ports:
+      - "127.0.0.1:55447:5432"
+    volumes:
+      - integration-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vantage_role_m2 -d vantage_role_m2_20261106"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+volumes:
+  integration-data:
+    name: vantage-role-m2-20261106-data
+    labels:
+      io.launchstack.role-m2: vantage-role-m2-20261106

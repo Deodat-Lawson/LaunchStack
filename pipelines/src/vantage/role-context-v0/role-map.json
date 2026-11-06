@@ -1,5 +1,5 @@
 {
-  "mapVersion": "joseph-roles-2026-10-26-v0",
+  "mapVersion": "joseph-roles-2026-11-06-v1",
   "roles": [
     {
       "id": "founder",
@@ -32,6 +32,34 @@
       "description": "Owns positioning, acquisition and customer conversion",
       "responsibilities": ["positioning", "channels", "sales funnel"],
       "agendaPriorities": ["pipeline evidence", "conversion tests", "channel performance"]
+    },
+    {
+      "id": "partnerships-lead",
+      "label": "Partnerships Lead",
+      "aliases": ["partnerships-lead", "partnerships lead", "partnership lead"],
+      "description": "Owns sponsor outreach and partner preparation",
+      "responsibilities": ["sponsor outreach", "partner preparation", "pitch deck readiness"],
+      "agendaPriorities": [
+        "sponsorship preparation",
+        "partner meeting readiness",
+        "impact and budget evidence"
+      ]
+    },
+    {
+      "id": "security-engineer",
+      "label": "Security Engineer",
+      "aliases": ["security-engineer", "security engineer"],
+      "description": "Owns internal access reviews and security controls",
+      "responsibilities": [
+        "shared-admin access controls",
+        "security review completion",
+        "access risk assessment"
+      ],
+      "agendaPriorities": [
+        "access review readiness",
+        "security controls",
+        "unresolved access findings"
+      ]
     }
   ],
   "fallback": {

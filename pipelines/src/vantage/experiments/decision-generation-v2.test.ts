@@ -43,6 +43,59 @@ const run = (
 ) => createDecisionExperimentV2({ version, invoke: invoke as Invoke, countTokens: () => 100 });
 
 describe("isolated Phase 1 decision experiment (synthetic transports)", () => {
+    it("keeps implicit/default transport bytes identical and compacts only M2 instructions", async () => {
+        const implicit = vi.fn().mockResolvedValue(response(pair()));
+        const explicit = vi.fn().mockResolvedValue(response(pair()));
+        const compact = vi.fn().mockResolvedValue(response(pair()));
+        const a = await createDecisionExperimentV2({
+            version: GENERATION_PROMPT_VERSION_V2,
+            invoke: implicit as Invoke,
+            countTokens: () => 100,
+        })(envelope(), runtime());
+        const b = await createDecisionExperimentV2({
+            version: GENERATION_PROMPT_VERSION_V2,
+            transportProfile: "default",
+            invoke: explicit as Invoke,
+            countTokens: () => 100,
+        })(envelope(), runtime());
+        const c = await createDecisionExperimentV2({
+            version: GENERATION_PROMPT_VERSION_V2,
+            transportProfile: "role-pair-m2",
+            invoke: compact as Invoke,
+            countTokens: () => 100,
+        })(envelope(), runtime());
+        expect(a.outcome).toBe("v2-first-pass");
+        expect(b.outcome).toBe("v2-first-pass");
+        expect(c.outcome).toBe("v2-first-pass");
+        const capture = (call: typeof implicit) =>
+            call.mock.calls[0]![2].map(coerceMessageLikeToMessage).map(
+                (m: ReturnType<typeof coerceMessageLikeToMessage>) => ({
+                    type: m.getType(),
+                    content: m.content,
+                })
+            );
+        expect(capture(implicit)).toEqual(capture(explicit));
+        expect(capture(compact).filter((m: { type: string }) => m.type === "human")).toEqual(
+            capture(implicit).filter((m: { type: string }) => m.type === "human")
+        );
+        expect(
+            capture(compact).filter(
+                (m: { type: string; content: unknown }) =>
+                    m.type === "system" &&
+                    typeof m.content === "string" &&
+                    m.content.startsWith(GENERATION_SYSTEM_PROMPT)
+            )
+        ).toEqual(
+            capture(implicit).filter(
+                (m: { type: string; content: unknown }) =>
+                    m.type === "system" &&
+                    typeof m.content === "string" &&
+                    m.content.startsWith(GENERATION_SYSTEM_PROMPT)
+            )
+        );
+        expect(c.attempts[0]!.promptBytes).toBeLessThan(a.attempts[0]!.promptBytes);
+    });
+
     it.each([
         { id: "C02", input: c02Input, golden: c02Golden },
         { id: "V2-04", input: orbitInput, golden: orbitGolden },
@@ -53,6 +106,55 @@ describe("isolated Phase 1 decision experiment (synthetic transports)", () => {
             runtime()
         );
         expect(result.outcome, JSON.stringify(result)).toBe("v2-first-pass");
+    });
+    it("keeps the legacy default Partnerships persona generic while M2 carries the exact trusted primary snapshot", async () => {
+        const e = envelope();
+        e.manifest.roleIds = ["partnerships-lead"];
+        const role: BusinessRoleContextV0 = {
+            contractVersion: "v0-proposed",
+            authenticatedPrincipalRef: e.manifest.actor.principalRef,
+            roleIds: ["partnerships-lead"],
+            primaryRoleId: "partnerships-lead",
+            mappingVersion: e.manifest.roleMapVersion,
+            roles: [
+                {
+                    roleId: "partnerships-lead",
+                    description: "Owns sponsor outreach and partner preparation",
+                    responsibilities: ["sponsor outreach"],
+                    priorities: ["partner readiness"],
+                },
+            ],
+            provenance: { kind: "server", source: "synthetic-host" },
+            userConfirmed: true,
+            fallback: false,
+        };
+        expect(roleFrameV2(e, role)).toBe("a decision assistant");
+        const invoke = vi.fn().mockResolvedValue(response(pair()));
+        const result = await createDecisionExperimentV2({
+            version: GENERATION_PROMPT_VERSION_V2,
+            transportProfile: "role-pair-m2",
+            resolvePrimaryRole: () => role,
+            invoke: invoke as Invoke,
+            countTokens: () => 100,
+        })(e, runtime());
+        expect(result.outcome).toBe("v2-first-pass");
+        const marker = invoke.mock.calls[0]![2].map(coerceMessageLikeToMessage).find(
+            (m: ReturnType<typeof coerceMessageLikeToMessage>) =>
+                m.getType() === "system" &&
+                typeof m.content === "string" &&
+                m.content.startsWith("M2 trustedPrimary=")
+        )!;
+        expect(
+            JSON.parse(
+                (marker.content as string).split("\n")[0]!.slice("M2 trustedPrimary=".length)
+            )
+        ).toEqual({
+            primaryRoleId: role.primaryRoleId,
+            mappingVersion: role.mappingVersion,
+            description: role.roles[0]!.description,
+            responsibilities: role.roles[0]!.responsibilities,
+            priorities: role.roles[0]!.priorities,
+        });
     });
     it("uses the verified primary rather than the first role ID", () => {
         const e = envelope();

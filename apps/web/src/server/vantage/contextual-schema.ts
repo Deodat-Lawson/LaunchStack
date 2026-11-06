@@ -15,3 +15,14 @@ CREATE TABLE IF NOT EXISTS pdr_ai_v2_vantage_contextual_reports (
  updated_at timestamptz NOT NULL DEFAULT now(), UNIQUE(company_id,owner_user_id,week_start),
  FOREIGN KEY(owner_user_id,company_id) REFERENCES pdr_ai_v2_user_company_memberships(user_id,company_id) ON DELETE CASCADE);
 `;
+
+/** Additive role-pair storage, applied only by the new owned M2 database harness. */
+export const ROLE_CONTEXTUAL_SCHEMA_SQL = `
+CREATE TABLE IF NOT EXISTS pdr_ai_v2_vantage_role_contextual_runs (
+ id uuid PRIMARY KEY, company_id bigint NOT NULL, owner_user_id bigint NOT NULL, week_start date NOT NULL,
+ scenario_id text NOT NULL, context_key text NOT NULL, source_authority text NOT NULL,
+ version integer NOT NULL CHECK(version>0), ciphertext text NOT NULL, key_version integer NOT NULL,
+ created_at timestamptz NOT NULL DEFAULT now(), updated_at timestamptz NOT NULL DEFAULT now(),
+ UNIQUE(company_id,owner_user_id,week_start,scenario_id,context_key),
+ FOREIGN KEY(owner_user_id,company_id) REFERENCES pdr_ai_v2_user_company_memberships(user_id,company_id) ON DELETE CASCADE);
+`;

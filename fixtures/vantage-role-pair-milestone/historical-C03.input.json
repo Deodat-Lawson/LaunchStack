@@ -1,0 +1,1192 @@
+{
+  "syntheticOnly": true,
+  "caseId": "C03",
+  "fixtureSha256": "484ed06f79ebdc48a844ab5a6019657f08ae736d0c152487884f3fd27ba78e8e",
+  "envelope": {
+    "v1Input": {
+      "contractVersion": "v1",
+      "runId": "quality-C02",
+      "inputVersion": "quality-v0.1",
+      "generationMode": "configured-model",
+      "reportPeriod": {
+        "startInclusive": "2026-10-26T04:00:00Z",
+        "endExclusive": "2026-11-02T05:00:00Z",
+        "asOf": "2026-11-02T14:00:00Z",
+        "weekStart": "2026-10-26",
+        "timeZone": "America/New_York",
+        "kind": "completed-week"
+      },
+      "data": {
+        "metricDefinitions": [],
+        "currentObservations": [],
+        "comparisonObservations": [],
+        "resolvedCommitments": [],
+        "carryForwardCommitments": [],
+        "currentEvidence": [
+          {
+            "id": "D06",
+            "kind": "document",
+            "title": "D06 Previous meeting record",
+            "body": "The pitch-deck outline is complete, but the impact and budget slides remain unfinished. The team also recorded an open shared-admin access review for the following week.",
+            "source": "Previous meeting record · Oct 26",
+            "sourceUrl": null,
+            "observedAt": "2026-10-26",
+            "visibility": "private",
+            "tags": [],
+            "createdAt": "2026-10-26"
+          },
+          {
+            "id": "D02",
+            "kind": "document",
+            "title": "D02 Document",
+            "body": "Marketing uploaded six new photographs from the campus fair to the shared media folder.",
+            "source": "Document · Oct 29",
+            "sourceUrl": null,
+            "observedAt": "2026-10-29",
+            "visibility": "private",
+            "tags": [],
+            "createdAt": "2026-10-29"
+          },
+          {
+            "id": "D09",
+            "kind": "document",
+            "title": "D09 Document",
+            "body": "The team updated volunteer T-shirt sizes for an event planned later in November.",
+            "source": "Document · Oct 28",
+            "sourceUrl": null,
+            "observedAt": "2026-10-28",
+            "visibility": "private",
+            "tags": [],
+            "createdAt": "2026-10-28"
+          },
+          {
+            "id": "D01",
+            "kind": "document",
+            "title": "D01 Sponsorship draft",
+            "body": "\"I plan to present our pitch deck to Lakeview Innovation Fund on Wednesday, November 4, at 3 PM. We still need to finish the impact and budget slides.\" The document remains marked Draft; no accepted calendar invitation is attached.",
+            "source": "Sponsorship draft · Oct 31",
+            "sourceUrl": null,
+            "observedAt": "2026-10-31",
+            "visibility": "private",
+            "tags": [],
+            "createdAt": "2026-10-31"
+          },
+          {
+            "id": "D08",
+            "kind": "document",
+            "title": "D08 Security checklist",
+            "body": "The shared-admin access review is due Thursday, November 5, at 5 PM. The current checklist does not include a completed review or final sign-off.",
+            "source": "Security checklist · Oct 30",
+            "sourceUrl": null,
+            "observedAt": "2026-10-30",
+            "visibility": "private",
+            "tags": [],
+            "createdAt": "2026-10-30"
+          },
+          {
+            "id": "D07",
+            "kind": "document",
+            "title": "D07 Document",
+            "body": "The marketing team changed the pitch-deck template font and updated the cover illustration.",
+            "source": "Document · Oct 31",
+            "sourceUrl": null,
+            "observedAt": "2026-10-31",
+            "visibility": "private",
+            "tags": [],
+            "createdAt": "2026-10-31"
+          },
+          {
+            "id": "D05",
+            "kind": "document",
+            "title": "D05 Document",
+            "body": "A volunteer submitted a reimbursement receipt for a subway ticket purchased after a student outreach event.",
+            "source": "Document · Oct 30",
+            "sourceUrl": null,
+            "observedAt": "2026-10-30",
+            "visibility": "private",
+            "tags": [],
+            "createdAt": "2026-10-30"
+          },
+          {
+            "id": "D10",
+            "kind": "document",
+            "title": "D10 Document",
+            "body": "The internal campus-location map was updated to correct a mislabeled classroom.",
+            "source": "Document · Oct 31",
+            "sourceUrl": null,
+            "observedAt": "2026-10-31",
+            "visibility": "private",
+            "tags": [],
+            "createdAt": "2026-10-31"
+          }
+        ]
+      },
+      "reviewedTopics": []
+    },
+    "manifest": {
+      "contractVersion": "v0-proposed",
+      "runId": "quality-C02",
+      "inputVersion": "quality-v0.1",
+      "actor": {
+        "principalRef": "quality-user-C02",
+        "companyId": "quality-company-C02",
+        "audience": {
+          "kind": "actor",
+          "principalRef": "quality-user-C02"
+        },
+        "aclDigest": "quality-acl-C02-v1"
+      },
+      "reportWindow": {
+        "startInclusive": "2026-10-26T04:00:00Z",
+        "endExclusive": "2026-11-02T05:00:00Z",
+        "asOf": "2026-11-02T14:00:00Z"
+      },
+      "roleMapVersion": "quality-role-map-v0.1",
+      "roleIds": [
+        "security-engineer"
+      ],
+      "roleProfileVersions": {
+        "security-engineer": "quality-role-profile-v0.1"
+      },
+      "companyArchitectureVersion": "v1",
+      "personalStarVersions": {},
+      "sourceVersions": {
+        "company:D04@v1": "v1",
+        "doc:D01@v1": "v1",
+        "doc:D02@v1": "v1",
+        "doc:D05@v1": "v1",
+        "doc:D06@v1": "v1",
+        "doc:D07@v1": "v1",
+        "doc:D08@v1": "v1",
+        "doc:D09@v1": "v1",
+        "doc:D10@v1": "v1",
+        "public:D03@v1": "v1"
+      },
+      "sourceRegistry": [
+        {
+          "source": {
+            "kind": "company",
+            "id": "D04",
+            "version": "v1",
+            "companyId": "quality-company-C02",
+            "canonical": true,
+            "reviewState": "unreviewed"
+          },
+          "companyId": "quality-company-C02",
+          "access": "allowed",
+          "aclDigest": "quality-acl-C02-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "quality-company-C02"
+          },
+          "sourceDate": "2026-10-30",
+          "checkedAt": "2026-11-02T14:00:00Z",
+          "excerpt": "CampusLoop develops event-registration tools for student organizations and has records from three pilot campuses. Its Partnerships Lead handles sponsor outreach, while its Security Engineer handles internal access reviews.",
+          "contentHash": "c97472539751b5be6b73a08f56d1b4e46180018bbf905e4261be99c0f5b28f7a",
+          "provenance": {
+            "connector": "approved-synthetic-fixture",
+            "locator": "D04",
+            "retrievedAt": "2026-11-02T14:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "D01",
+            "version": "v1"
+          },
+          "companyId": "quality-company-C02",
+          "access": "allowed",
+          "aclDigest": "quality-acl-C02-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "quality-company-C02"
+          },
+          "sourceDate": "2026-10-31",
+          "checkedAt": "2026-11-02T14:00:00Z",
+          "excerpt": "\"I plan to present our pitch deck to Lakeview Innovation Fund on Wednesday, November 4, at 3 PM. We still need to finish the impact and budget slides.\" The document remains marked Draft; no accepted calendar invitation is attached.",
+          "contentHash": "b2118b2480373ad413ed9ffa56adf0abb2242302a67d028f876484880cbe6714",
+          "provenance": {
+            "connector": "approved-synthetic-fixture",
+            "locator": "D01",
+            "retrievedAt": "2026-11-02T14:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "D02",
+            "version": "v1"
+          },
+          "companyId": "quality-company-C02",
+          "access": "allowed",
+          "aclDigest": "quality-acl-C02-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "quality-company-C02"
+          },
+          "sourceDate": "2026-10-29",
+          "checkedAt": "2026-11-02T14:00:00Z",
+          "excerpt": "Marketing uploaded six new photographs from the campus fair to the shared media folder.",
+          "contentHash": "36898cf06d979043eb452ffd13c6678ec653f0f61932671885351e6a9f97051d",
+          "provenance": {
+            "connector": "approved-synthetic-fixture",
+            "locator": "D02",
+            "retrievedAt": "2026-11-02T14:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "D05",
+            "version": "v1"
+          },
+          "companyId": "quality-company-C02",
+          "access": "allowed",
+          "aclDigest": "quality-acl-C02-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "quality-company-C02"
+          },
+          "sourceDate": "2026-10-30",
+          "checkedAt": "2026-11-02T14:00:00Z",
+          "excerpt": "A volunteer submitted a reimbursement receipt for a subway ticket purchased after a student outreach event.",
+          "contentHash": "630ca43885887f37f0aca82196c9e13beb5b7014c3a2428cdaf1ae7243ab5d51",
+          "provenance": {
+            "connector": "approved-synthetic-fixture",
+            "locator": "D05",
+            "retrievedAt": "2026-11-02T14:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "D06",
+            "version": "v1"
+          },
+          "companyId": "quality-company-C02",
+          "access": "allowed",
+          "aclDigest": "quality-acl-C02-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "quality-company-C02"
+          },
+          "sourceDate": "2026-10-26",
+          "checkedAt": "2026-11-02T14:00:00Z",
+          "excerpt": "The pitch-deck outline is complete, but the impact and budget slides remain unfinished. The team also recorded an open shared-admin access review for the following week.",
+          "contentHash": "cdafda5fb1f8701c43dd2bab88ee29fbfb89f40864f2cabca7850c27cf8fce2a",
+          "provenance": {
+            "connector": "approved-synthetic-fixture",
+            "locator": "D06",
+            "retrievedAt": "2026-11-02T14:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "D07",
+            "version": "v1"
+          },
+          "companyId": "quality-company-C02",
+          "access": "allowed",
+          "aclDigest": "quality-acl-C02-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "quality-company-C02"
+          },
+          "sourceDate": "2026-10-31",
+          "checkedAt": "2026-11-02T14:00:00Z",
+          "excerpt": "The marketing team changed the pitch-deck template font and updated the cover illustration.",
+          "contentHash": "0a3a88285ed8f325ccab734924fc178f04a1e19fd5a555898b7a1757d9e6dae7",
+          "provenance": {
+            "connector": "approved-synthetic-fixture",
+            "locator": "D07",
+            "retrievedAt": "2026-11-02T14:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "D08",
+            "version": "v1"
+          },
+          "companyId": "quality-company-C02",
+          "access": "allowed",
+          "aclDigest": "quality-acl-C02-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "quality-company-C02"
+          },
+          "sourceDate": "2026-10-30",
+          "checkedAt": "2026-11-02T14:00:00Z",
+          "excerpt": "The shared-admin access review is due Thursday, November 5, at 5 PM. The current checklist does not include a completed review or final sign-off.",
+          "contentHash": "879de43ebd0ccb4484790a744ab2f89a76595f3e77a549ab0040d4d080f1422f",
+          "provenance": {
+            "connector": "approved-synthetic-fixture",
+            "locator": "D08",
+            "retrievedAt": "2026-11-02T14:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "D09",
+            "version": "v1"
+          },
+          "companyId": "quality-company-C02",
+          "access": "allowed",
+          "aclDigest": "quality-acl-C02-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "quality-company-C02"
+          },
+          "sourceDate": "2026-10-28",
+          "checkedAt": "2026-11-02T14:00:00Z",
+          "excerpt": "The team updated volunteer T-shirt sizes for an event planned later in November.",
+          "contentHash": "926c134a5d85af37c18e0fb24df8bc11d469874503fe6aeacaf91e198e32595a",
+          "provenance": {
+            "connector": "approved-synthetic-fixture",
+            "locator": "D09",
+            "retrievedAt": "2026-11-02T14:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "D10",
+            "version": "v1"
+          },
+          "companyId": "quality-company-C02",
+          "access": "allowed",
+          "aclDigest": "quality-acl-C02-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "quality-company-C02"
+          },
+          "sourceDate": "2026-10-31",
+          "checkedAt": "2026-11-02T14:00:00Z",
+          "excerpt": "The internal campus-location map was updated to correct a mislabeled classroom.",
+          "contentHash": "cbd38c38fdc232be10fbc6e1a12780b94f1877c66ad408243027e8b162d441c6",
+          "provenance": {
+            "connector": "approved-synthetic-fixture",
+            "locator": "D10",
+            "retrievedAt": "2026-11-02T14:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "public",
+            "id": "D03",
+            "version": "v1"
+          },
+          "companyId": "quality-company-C02",
+          "access": "allowed",
+          "aclDigest": "quality-acl-C02-v1",
+          "audience": {
+            "kind": "public"
+          },
+          "sourceDate": "2026-11-01",
+          "checkedAt": "2026-11-02T14:00:00Z",
+          "excerpt": "The fictional Lakeview Innovation Fund says its sponsorship program evaluates measurable student impact, realistic delivery plans, and budget transparency. The application does not guarantee sponsorship or funding.",
+          "contentHash": "1b5fd30634f6c73ce8068edcf65a40deaad7f7b373fda2646a3850a5aedb3c5a",
+          "provenance": {
+            "connector": "approved-synthetic-fixture",
+            "locator": "D03",
+            "retrievedAt": "2026-11-02T14:00:00Z"
+          },
+          "citation": {
+            "title": "Research",
+            "url": "https://synthetic.invalid/C02/D03",
+            "sourceDate": "2026-11-01",
+            "accessedAt": "2026-11-02T14:00:00Z",
+            "provenance": "Approved fictional mock research; synthetic locator, no network retrieval"
+          }
+        }
+      ],
+      "coverage": {
+        "checked": [
+          {
+            "kind": "company",
+            "id": "D04",
+            "version": "v1",
+            "companyId": "quality-company-C02",
+            "canonical": true,
+            "reviewState": "unreviewed"
+          },
+          {
+            "kind": "doc",
+            "id": "D01",
+            "version": "v1"
+          },
+          {
+            "kind": "doc",
+            "id": "D02",
+            "version": "v1"
+          },
+          {
+            "kind": "doc",
+            "id": "D05",
+            "version": "v1"
+          },
+          {
+            "kind": "doc",
+            "id": "D06",
+            "version": "v1"
+          },
+          {
+            "kind": "doc",
+            "id": "D07",
+            "version": "v1"
+          },
+          {
+            "kind": "doc",
+            "id": "D08",
+            "version": "v1"
+          },
+          {
+            "kind": "doc",
+            "id": "D09",
+            "version": "v1"
+          },
+          {
+            "kind": "doc",
+            "id": "D10",
+            "version": "v1"
+          },
+          {
+            "kind": "public",
+            "id": "D03",
+            "version": "v1"
+          }
+        ],
+        "used": [
+          {
+            "kind": "company",
+            "id": "D04",
+            "version": "v1",
+            "companyId": "quality-company-C02",
+            "canonical": true,
+            "reviewState": "unreviewed"
+          },
+          {
+            "kind": "doc",
+            "id": "D01",
+            "version": "v1"
+          },
+          {
+            "kind": "doc",
+            "id": "D02",
+            "version": "v1"
+          },
+          {
+            "kind": "doc",
+            "id": "D05",
+            "version": "v1"
+          },
+          {
+            "kind": "doc",
+            "id": "D06",
+            "version": "v1"
+          },
+          {
+            "kind": "doc",
+            "id": "D07",
+            "version": "v1"
+          },
+          {
+            "kind": "doc",
+            "id": "D08",
+            "version": "v1"
+          },
+          {
+            "kind": "doc",
+            "id": "D09",
+            "version": "v1"
+          },
+          {
+            "kind": "doc",
+            "id": "D10",
+            "version": "v1"
+          },
+          {
+            "kind": "public",
+            "id": "D03",
+            "version": "v1"
+          }
+        ],
+        "missing": [],
+        "revoked": [],
+        "omitted": [],
+        "researchOmitted": []
+      },
+      "omissions": [],
+      "research": {
+        "mode": "public",
+        "status": "complete",
+        "citationRefs": [
+          {
+            "kind": "public",
+            "id": "D03",
+            "version": "v1"
+          }
+        ],
+        "failures": []
+      },
+      "status": "complete",
+      "selectedRefs": [
+        {
+          "kind": "company",
+          "id": "D04",
+          "version": "v1",
+          "companyId": "quality-company-C02",
+          "canonical": true,
+          "reviewState": "unreviewed"
+        },
+        {
+          "kind": "doc",
+          "id": "D01",
+          "version": "v1"
+        },
+        {
+          "kind": "doc",
+          "id": "D02",
+          "version": "v1"
+        },
+        {
+          "kind": "doc",
+          "id": "D05",
+          "version": "v1"
+        },
+        {
+          "kind": "doc",
+          "id": "D06",
+          "version": "v1"
+        },
+        {
+          "kind": "doc",
+          "id": "D07",
+          "version": "v1"
+        },
+        {
+          "kind": "doc",
+          "id": "D08",
+          "version": "v1"
+        },
+        {
+          "kind": "doc",
+          "id": "D09",
+          "version": "v1"
+        },
+        {
+          "kind": "doc",
+          "id": "D10",
+          "version": "v1"
+        },
+        {
+          "kind": "public",
+          "id": "D03",
+          "version": "v1"
+        }
+      ],
+      "retrievalState": {
+        "status": "complete",
+        "selectedRefs": [
+          {
+            "kind": "doc",
+            "id": "D01",
+            "version": "v1"
+          },
+          {
+            "kind": "doc",
+            "id": "D02",
+            "version": "v1"
+          },
+          {
+            "kind": "doc",
+            "id": "D05",
+            "version": "v1"
+          },
+          {
+            "kind": "doc",
+            "id": "D06",
+            "version": "v1"
+          },
+          {
+            "kind": "doc",
+            "id": "D07",
+            "version": "v1"
+          },
+          {
+            "kind": "doc",
+            "id": "D08",
+            "version": "v1"
+          },
+          {
+            "kind": "doc",
+            "id": "D09",
+            "version": "v1"
+          },
+          {
+            "kind": "doc",
+            "id": "D10",
+            "version": "v1"
+          }
+        ],
+        "omissions": [],
+        "failures": [],
+        "laneProvenance": [
+          {
+            "source": {
+              "kind": "doc",
+              "id": "D01",
+              "version": "v1"
+            },
+            "lanes": [
+              "recentChanges"
+            ],
+            "reasons": [
+              "Approved complete fixture source set; seeded order only"
+            ]
+          },
+          {
+            "source": {
+              "kind": "doc",
+              "id": "D02",
+              "version": "v1"
+            },
+            "lanes": [
+              "recentChanges"
+            ],
+            "reasons": [
+              "Approved complete fixture source set; seeded order only"
+            ]
+          },
+          {
+            "source": {
+              "kind": "doc",
+              "id": "D05",
+              "version": "v1"
+            },
+            "lanes": [
+              "recentChanges"
+            ],
+            "reasons": [
+              "Approved complete fixture source set; seeded order only"
+            ]
+          },
+          {
+            "source": {
+              "kind": "doc",
+              "id": "D06",
+              "version": "v1"
+            },
+            "lanes": [
+              "recentChanges"
+            ],
+            "reasons": [
+              "Approved complete fixture source set; seeded order only"
+            ]
+          },
+          {
+            "source": {
+              "kind": "doc",
+              "id": "D07",
+              "version": "v1"
+            },
+            "lanes": [
+              "recentChanges"
+            ],
+            "reasons": [
+              "Approved complete fixture source set; seeded order only"
+            ]
+          },
+          {
+            "source": {
+              "kind": "doc",
+              "id": "D08",
+              "version": "v1"
+            },
+            "lanes": [
+              "recentChanges"
+            ],
+            "reasons": [
+              "Approved complete fixture source set; seeded order only"
+            ]
+          },
+          {
+            "source": {
+              "kind": "doc",
+              "id": "D09",
+              "version": "v1"
+            },
+            "lanes": [
+              "recentChanges"
+            ],
+            "reasons": [
+              "Approved complete fixture source set; seeded order only"
+            ]
+          },
+          {
+            "source": {
+              "kind": "doc",
+              "id": "D10",
+              "version": "v1"
+            },
+            "lanes": [
+              "recentChanges"
+            ],
+            "reasons": [
+              "Approved complete fixture source set; seeded order only"
+            ]
+          }
+        ]
+      },
+      "contextFingerprint": "d4924c2102623d5776ae30cfa4cc84ec08b485ad9e7dac4cf49ece3823956d1a"
+    },
+    "evidenceSnapshot": {
+      "contractVersion": "v0-assembly-1",
+      "asOf": "2026-11-02T14:00:00Z",
+      "entries": [
+        {
+          "source": {
+            "kind": "company",
+            "id": "D04",
+            "version": "v1",
+            "companyId": "quality-company-C02",
+            "canonical": true,
+            "reviewState": "unreviewed"
+          },
+          "contentHash": "c97472539751b5be6b73a08f56d1b4e46180018bbf905e4261be99c0f5b28f7a",
+          "excerpt": "CampusLoop develops event-registration tools for student organizations and has records from three pilot campuses. Its Partnerships Lead handles sponsor outreach, while its Security Engineer handles internal access reviews.",
+          "provenance": {
+            "connector": "approved-synthetic-fixture",
+            "locator": "D04",
+            "retrievedAt": "2026-11-02T14:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "D01",
+            "version": "v1"
+          },
+          "contentHash": "b2118b2480373ad413ed9ffa56adf0abb2242302a67d028f876484880cbe6714",
+          "excerpt": "\"I plan to present our pitch deck to Lakeview Innovation Fund on Wednesday, November 4, at 3 PM. We still need to finish the impact and budget slides.\" The document remains marked Draft; no accepted calendar invitation is attached.",
+          "provenance": {
+            "connector": "approved-synthetic-fixture",
+            "locator": "D01",
+            "retrievedAt": "2026-11-02T14:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "D02",
+            "version": "v1"
+          },
+          "contentHash": "36898cf06d979043eb452ffd13c6678ec653f0f61932671885351e6a9f97051d",
+          "excerpt": "Marketing uploaded six new photographs from the campus fair to the shared media folder.",
+          "provenance": {
+            "connector": "approved-synthetic-fixture",
+            "locator": "D02",
+            "retrievedAt": "2026-11-02T14:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "D05",
+            "version": "v1"
+          },
+          "contentHash": "630ca43885887f37f0aca82196c9e13beb5b7014c3a2428cdaf1ae7243ab5d51",
+          "excerpt": "A volunteer submitted a reimbursement receipt for a subway ticket purchased after a student outreach event.",
+          "provenance": {
+            "connector": "approved-synthetic-fixture",
+            "locator": "D05",
+            "retrievedAt": "2026-11-02T14:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "D06",
+            "version": "v1"
+          },
+          "contentHash": "cdafda5fb1f8701c43dd2bab88ee29fbfb89f40864f2cabca7850c27cf8fce2a",
+          "excerpt": "The pitch-deck outline is complete, but the impact and budget slides remain unfinished. The team also recorded an open shared-admin access review for the following week.",
+          "provenance": {
+            "connector": "approved-synthetic-fixture",
+            "locator": "D06",
+            "retrievedAt": "2026-11-02T14:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "D07",
+            "version": "v1"
+          },
+          "contentHash": "0a3a88285ed8f325ccab734924fc178f04a1e19fd5a555898b7a1757d9e6dae7",
+          "excerpt": "The marketing team changed the pitch-deck template font and updated the cover illustration.",
+          "provenance": {
+            "connector": "approved-synthetic-fixture",
+            "locator": "D07",
+            "retrievedAt": "2026-11-02T14:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "D08",
+            "version": "v1"
+          },
+          "contentHash": "879de43ebd0ccb4484790a744ab2f89a76595f3e77a549ab0040d4d080f1422f",
+          "excerpt": "The shared-admin access review is due Thursday, November 5, at 5 PM. The current checklist does not include a completed review or final sign-off.",
+          "provenance": {
+            "connector": "approved-synthetic-fixture",
+            "locator": "D08",
+            "retrievedAt": "2026-11-02T14:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "D09",
+            "version": "v1"
+          },
+          "contentHash": "926c134a5d85af37c18e0fb24df8bc11d469874503fe6aeacaf91e198e32595a",
+          "excerpt": "The team updated volunteer T-shirt sizes for an event planned later in November.",
+          "provenance": {
+            "connector": "approved-synthetic-fixture",
+            "locator": "D09",
+            "retrievedAt": "2026-11-02T14:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "D10",
+            "version": "v1"
+          },
+          "contentHash": "cbd38c38fdc232be10fbc6e1a12780b94f1877c66ad408243027e8b162d441c6",
+          "excerpt": "The internal campus-location map was updated to correct a mislabeled classroom.",
+          "provenance": {
+            "connector": "approved-synthetic-fixture",
+            "locator": "D10",
+            "retrievedAt": "2026-11-02T14:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "public",
+            "id": "D03",
+            "version": "v1"
+          },
+          "contentHash": "1b5fd30634f6c73ce8068edcf65a40deaad7f7b373fda2646a3850a5aedb3c5a",
+          "excerpt": "The fictional Lakeview Innovation Fund says its sponsorship program evaluates measurable student impact, realistic delivery plans, and budget transparency. The application does not guarantee sponsorship or funding.",
+          "provenance": {
+            "connector": "approved-synthetic-fixture",
+            "locator": "D03",
+            "retrievedAt": "2026-11-02T14:00:00Z"
+          },
+          "citation": {
+            "title": "Research",
+            "url": "https://synthetic.invalid/C02/D03",
+            "sourceDate": "2026-11-01",
+            "accessedAt": "2026-11-02T14:00:00Z",
+            "provenance": "Approved fictional mock research; synthetic locator, no network retrieval"
+          }
+        }
+      ],
+      "totalExcerptChars": 1425,
+      "contentFingerprint": "53615ac419d1b0ea98ff654d2ac3580a4ad11271040b75232abd3b222450ccc7",
+      "manifestFingerprint": "d4924c2102623d5776ae30cfa4cc84ec08b485ad9e7dac4cf49ece3823956d1a"
+    },
+    "freeze": {
+      "contractVersion": "v0-assembly-1",
+      "actorACL": {
+        "principalRef": "quality-user-C02",
+        "companyId": "quality-company-C02",
+        "audience": {
+          "kind": "actor",
+          "principalRef": "quality-user-C02"
+        },
+        "aclDigest": "quality-acl-C02-v1"
+      },
+      "roleMapVersion": "quality-role-map-v0.1",
+      "roleProfileVersions": {
+        "security-engineer": "quality-role-profile-v0.1"
+      },
+      "companyArchitecture": {
+        "ref": {
+          "kind": "company",
+          "id": "D04",
+          "version": "v1",
+          "companyId": "quality-company-C02",
+          "canonical": true,
+          "reviewState": "unreviewed"
+        },
+        "contentHash": "c97472539751b5be6b73a08f56d1b4e46180018bbf905e4261be99c0f5b28f7a",
+        "aclDigest": "quality-acl-C02-v1",
+        "audience": {
+          "kind": "company",
+          "companyId": "quality-company-C02"
+        },
+        "access": "allowed"
+      },
+      "personalStars": [],
+      "sources": [
+        {
+          "ref": {
+            "kind": "company",
+            "id": "D04",
+            "version": "v1",
+            "companyId": "quality-company-C02",
+            "canonical": true,
+            "reviewState": "unreviewed"
+          },
+          "contentHash": "c97472539751b5be6b73a08f56d1b4e46180018bbf905e4261be99c0f5b28f7a",
+          "aclDigest": "quality-acl-C02-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "quality-company-C02"
+          },
+          "access": "allowed"
+        },
+        {
+          "ref": {
+            "kind": "doc",
+            "id": "D01",
+            "version": "v1"
+          },
+          "contentHash": "b2118b2480373ad413ed9ffa56adf0abb2242302a67d028f876484880cbe6714",
+          "aclDigest": "quality-acl-C02-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "quality-company-C02"
+          },
+          "access": "allowed"
+        },
+        {
+          "ref": {
+            "kind": "doc",
+            "id": "D02",
+            "version": "v1"
+          },
+          "contentHash": "36898cf06d979043eb452ffd13c6678ec653f0f61932671885351e6a9f97051d",
+          "aclDigest": "quality-acl-C02-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "quality-company-C02"
+          },
+          "access": "allowed"
+        },
+        {
+          "ref": {
+            "kind": "doc",
+            "id": "D05",
+            "version": "v1"
+          },
+          "contentHash": "630ca43885887f37f0aca82196c9e13beb5b7014c3a2428cdaf1ae7243ab5d51",
+          "aclDigest": "quality-acl-C02-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "quality-company-C02"
+          },
+          "access": "allowed"
+        },
+        {
+          "ref": {
+            "kind": "doc",
+            "id": "D06",
+            "version": "v1"
+          },
+          "contentHash": "cdafda5fb1f8701c43dd2bab88ee29fbfb89f40864f2cabca7850c27cf8fce2a",
+          "aclDigest": "quality-acl-C02-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "quality-company-C02"
+          },
+          "access": "allowed"
+        },
+        {
+          "ref": {
+            "kind": "doc",
+            "id": "D07",
+            "version": "v1"
+          },
+          "contentHash": "0a3a88285ed8f325ccab734924fc178f04a1e19fd5a555898b7a1757d9e6dae7",
+          "aclDigest": "quality-acl-C02-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "quality-company-C02"
+          },
+          "access": "allowed"
+        },
+        {
+          "ref": {
+            "kind": "doc",
+            "id": "D08",
+            "version": "v1"
+          },
+          "contentHash": "879de43ebd0ccb4484790a744ab2f89a76595f3e77a549ab0040d4d080f1422f",
+          "aclDigest": "quality-acl-C02-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "quality-company-C02"
+          },
+          "access": "allowed"
+        },
+        {
+          "ref": {
+            "kind": "doc",
+            "id": "D09",
+            "version": "v1"
+          },
+          "contentHash": "926c134a5d85af37c18e0fb24df8bc11d469874503fe6aeacaf91e198e32595a",
+          "aclDigest": "quality-acl-C02-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "quality-company-C02"
+          },
+          "access": "allowed"
+        },
+        {
+          "ref": {
+            "kind": "doc",
+            "id": "D10",
+            "version": "v1"
+          },
+          "contentHash": "cbd38c38fdc232be10fbc6e1a12780b94f1877c66ad408243027e8b162d441c6",
+          "aclDigest": "quality-acl-C02-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "quality-company-C02"
+          },
+          "access": "allowed"
+        },
+        {
+          "ref": {
+            "kind": "public",
+            "id": "D03",
+            "version": "v1"
+          },
+          "contentHash": "1b5fd30634f6c73ce8068edcf65a40deaad7f7b373fda2646a3850a5aedb3c5a",
+          "aclDigest": "quality-acl-C02-v1",
+          "audience": {
+            "kind": "public"
+          },
+          "access": "allowed"
+        }
+      ],
+      "contentFingerprint": "e2f76be2766847683c376229553c65e1698938c3286eea58de929402e83f520f"
+    }
+  },
+  "roleProfile": {
+    "primaryRole": "Security Engineer",
+    "mainResponsibility": "Internal access reviews and security controls",
+    "sourceAccess": "Same authorized source set"
+  },
+  "records": [
+    {
+      "id": "D06",
+      "version": "v1",
+      "sourceType": "Previous meeting record",
+      "sourceDisplay": "Previous meeting record · Oct 26",
+      "sourceDateDisplay": "Oct 26",
+      "sourceDate": "2026-10-26",
+      "kind": "doc",
+      "content": "The pitch-deck outline is complete, but the impact and budget slides remain unfinished. The team also recorded an open shared-admin access review for the following week."
+    },
+    {
+      "id": "D02",
+      "version": "v1",
+      "sourceType": "Document",
+      "sourceDisplay": "Document · Oct 29",
+      "sourceDateDisplay": "Oct 29",
+      "sourceDate": "2026-10-29",
+      "kind": "doc",
+      "content": "Marketing uploaded six new photographs from the campus fair to the shared media folder."
+    },
+    {
+      "id": "D09",
+      "version": "v1",
+      "sourceType": "Document",
+      "sourceDisplay": "Document · Oct 28",
+      "sourceDateDisplay": "Oct 28",
+      "sourceDate": "2026-10-28",
+      "kind": "doc",
+      "content": "The team updated volunteer T-shirt sizes for an event planned later in November."
+    },
+    {
+      "id": "D01",
+      "version": "v1",
+      "sourceType": "Sponsorship draft",
+      "sourceDisplay": "Sponsorship draft · Oct 31",
+      "sourceDateDisplay": "Oct 31",
+      "sourceDate": "2026-10-31",
+      "kind": "doc",
+      "content": "\"I plan to present our pitch deck to Lakeview Innovation Fund on Wednesday, November 4, at 3 PM. We still need to finish the impact and budget slides.\" The document remains marked Draft; no accepted calendar invitation is attached."
+    },
+    {
+      "id": "D08",
+      "version": "v1",
+      "sourceType": "Security checklist",
+      "sourceDisplay": "Security checklist · Oct 30",
+      "sourceDateDisplay": "Oct 30",
+      "sourceDate": "2026-10-30",
+      "kind": "doc",
+      "content": "The shared-admin access review is due Thursday, November 5, at 5 PM. The current checklist does not include a completed review or final sign-off."
+    },
+    {
+      "id": "D03",
+      "version": "v1",
+      "sourceType": "Research",
+      "sourceDisplay": "Research · Nov 1",
+      "sourceDateDisplay": "Nov 1",
+      "sourceDate": "2026-11-01",
+      "kind": "public",
+      "content": "The fictional Lakeview Innovation Fund says its sponsorship program evaluates measurable student impact, realistic delivery plans, and budget transparency. The application does not guarantee sponsorship or funding."
+    },
+    {
+      "id": "D07",
+      "version": "v1",
+      "sourceType": "Document",
+      "sourceDisplay": "Document · Oct 31",
+      "sourceDateDisplay": "Oct 31",
+      "sourceDate": "2026-10-31",
+      "kind": "doc",
+      "content": "The marketing team changed the pitch-deck template font and updated the cover illustration."
+    },
+    {
+      "id": "D05",
+      "version": "v1",
+      "sourceType": "Document",
+      "sourceDisplay": "Document · Oct 30",
+      "sourceDateDisplay": "Oct 30",
+      "sourceDate": "2026-10-30",
+      "kind": "doc",
+      "content": "A volunteer submitted a reimbursement receipt for a subway ticket purchased after a student outreach event."
+    },
+    {
+      "id": "D04",
+      "version": "v1",
+      "sourceType": "Company Architecture",
+      "sourceDisplay": "Company Architecture · Oct 30",
+      "sourceDateDisplay": "Oct 30",
+      "sourceDate": "2026-10-30",
+      "kind": "company",
+      "content": "CampusLoop develops event-registration tools for student organizations and has records from three pilot campuses. Its Partnerships Lead handles sponsor outreach, while its Security Engineer handles internal access reviews."
+    },
+    {
+      "id": "D10",
+      "version": "v1",
+      "sourceType": "Document",
+      "sourceDisplay": "Document · Oct 31",
+      "sourceDateDisplay": "Oct 31",
+      "sourceDate": "2026-10-31",
+      "kind": "doc",
+      "content": "The internal campus-location map was updated to correct a mislabeled classroom."
+    }
+  ]
+}

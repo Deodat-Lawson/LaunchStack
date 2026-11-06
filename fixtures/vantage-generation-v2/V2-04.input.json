@@ -1,0 +1,523 @@
+{
+  "syntheticOnly": true,
+  "provenance": "Orbit revision fixture-revision-1 excerpts, rebound to normal fixture source IDs; QA and Operations share one synthetic document.",
+  "envelope": {
+    "v1Input": {
+      "contractVersion": "v1",
+      "runId": "orbit-v2-golden",
+      "inputVersion": "orbit-v2-fixture",
+      "reportPeriod": {
+        "weekStart": "2026-10-12",
+        "timeZone": "America/New_York",
+        "startInclusive": "2026-10-12T00:00:00Z",
+        "endExclusive": "2026-10-19T00:00:00Z",
+        "asOf": "2026-10-19T12:00:00Z",
+        "kind": "completed-week"
+      },
+      "generationMode": "configured-model",
+      "data": {
+        "metricDefinitions": [
+          {
+            "id": "metric-demo-1",
+            "key": "demo_signups",
+            "name": "Demo signups",
+            "definition": "Distinct synthetic accounts completing signup, excluding duplicate and internal accounts.",
+            "unit": "count",
+            "createdAt": "2026-10-05T12:00:00.000Z"
+          }
+        ],
+        "currentEvidence": [
+          {
+            "id": "ev-demo-1",
+            "kind": "interview",
+            "title": "Onboarding feedback",
+            "body": "The tester could not find the create-project action.",
+            "source": "Synthetic onboarding interview",
+            "sourceUrl": null,
+            "observedAt": "2026-10-16",
+            "visibility": "private",
+            "tags": [
+              "synthetic"
+            ],
+            "createdAt": "2026-10-16T15:00:00.000Z"
+          }
+        ],
+        "currentObservations": [
+          {
+            "id": "obs-demo-1",
+            "metricId": "metric-demo-1",
+            "metricKey": "demo_signups",
+            "metricName": "Demo signups",
+            "value": 120,
+            "periodStart": "2026-10-12",
+            "periodEnd": "2026-10-17",
+            "source": "Synthetic analytics export",
+            "note": "Partial-week observation available at the captured cutoff.",
+            "createdAt": "2026-10-17T13:00:00.000Z"
+          }
+        ],
+        "comparisonObservations": [
+          {
+            "id": "obs-demo-previous",
+            "metricId": "metric-demo-1",
+            "metricKey": "demo_signups",
+            "metricName": "Demo signups",
+            "value": 100,
+            "periodStart": "2026-10-05",
+            "periodEnd": "2026-10-10",
+            "source": "Synthetic analytics export",
+            "note": "Comparable previous-period observation; comparison context only.",
+            "createdAt": "2026-10-10T13:00:00.000Z"
+          }
+        ],
+        "resolvedCommitments": [],
+        "carryForwardCommitments": []
+      },
+      "reviewedTopics": []
+    },
+    "manifest": {
+      "contractVersion": "v0-proposed",
+      "runId": "orbit-v2-golden",
+      "inputVersion": "orbit-v2-fixture",
+      "actor": {
+        "principalRef": "user-joseph",
+        "companyId": "company-tilde",
+        "audience": {
+          "kind": "actor",
+          "principalRef": "user-joseph"
+        },
+        "aclDigest": "acl-tilde-user-joseph-1"
+      },
+      "reportWindow": {
+        "startInclusive": "2026-10-12T00:00:00Z",
+        "endExclusive": "2026-10-19T00:00:00Z",
+        "asOf": "2026-10-19T12:00:00Z"
+      },
+      "roleMapVersion": "roles-2026-10-20.1",
+      "roleIds": [
+        "founder"
+      ],
+      "roleProfileVersions": {
+        "founder": "profile-founder-v1"
+      },
+      "companyArchitectureVersion": "company-v3",
+      "personalStarVersions": {
+        "doc-starred-roadmap": "doc-v4"
+      },
+      "sourceVersions": {
+        "company:architecture-tilde@company-v3": "company-v3",
+        "doc:doc-starred-roadmap@doc-v4": "doc-v4",
+        "doc:doc-weekly-plan@doc-v7": "doc-v7",
+        "ev:evidence-risk-1@ev-v2": "ev-v2"
+      },
+      "sourceRegistry": [
+        {
+          "source": {
+            "kind": "company",
+            "id": "architecture-tilde",
+            "version": "company-v3"
+          },
+          "companyId": "company-tilde",
+          "access": "allowed",
+          "aclDigest": "acl-tilde-company-1",
+          "audience": {
+            "kind": "company",
+            "companyId": "company-tilde"
+          },
+          "sourceDate": "2026-10-18T08:00:00Z",
+          "checkedAt": "2026-10-19T11:00:00Z",
+          "excerpt": "Reviewed architecture with unknowns marked.",
+          "contentHash": "fa1375108dececdf0cec1d68d3706f52b2762893316cabdef0832dcd1543b5da",
+          "provenance": {
+            "connector": "fixture",
+            "locator": "architecture-tilde",
+            "retrievedAt": "2026-10-19T11:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "doc-starred-roadmap",
+            "version": "doc-v4"
+          },
+          "companyId": "company-tilde",
+          "access": "allowed",
+          "aclDigest": "acl-tilde-user-joseph-1",
+          "audience": {
+            "kind": "actor",
+            "principalRef": "user-joseph"
+          },
+          "sourceDate": "2026-10-16T09:00:00Z",
+          "checkedAt": "2026-10-19T11:00:00Z",
+          "excerpt": "Human privacy review record: retain the deletion go/no-go question until a named privacy reviewer compares QA and operations samples and records approval. This document contains no approval record.",
+          "contentHash": "adb403a7f345786408373e8a3273d78e1fe8a6079ae4b49a71ab1e8963492ca3",
+          "provenance": {
+            "connector": "fixture",
+            "locator": "doc-starred-roadmap",
+            "retrievedAt": "2026-10-19T11:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "doc-weekly-plan",
+            "version": "doc-v7"
+          },
+          "companyId": "company-tilde",
+          "access": "allowed",
+          "aclDigest": "acl-tilde-company-1",
+          "audience": {
+            "kind": "company",
+            "companyId": "company-tilde"
+          },
+          "sourceDate": "2026-10-17T09:00:00Z",
+          "checkedAt": "2026-10-19T11:00:00Z",
+          "excerpt": "QA deletion verification for synthetic run-17: 3 of 3 sample accounts were deleted. QA reports its sample passed. This sample result is not a recorded privacy sign-off. Independent operations audit of synthetic run-17: 2 of 3 sample accounts were fully deleted; one record remained. The account list may differ from QA's. No reconciled shared sample was supplied.",
+          "contentHash": "494e62d025b0b784c60fc888896dccb3b69bbc1b2fee8c4918226a812a1a2f20",
+          "provenance": {
+            "connector": "fixture",
+            "locator": "doc-weekly-plan",
+            "retrievedAt": "2026-10-19T11:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "ev",
+            "id": "evidence-risk-1",
+            "version": "ev-v2"
+          },
+          "companyId": "company-tilde",
+          "access": "allowed",
+          "aclDigest": "acl-tilde-company-1",
+          "audience": {
+            "kind": "company",
+            "companyId": "company-tilde"
+          },
+          "sourceDate": "2026-10-18T13:00:00Z",
+          "checkedAt": "2026-10-19T11:00:00Z",
+          "excerpt": "Evidence of an unresolved weekly risk.",
+          "contentHash": "b6c56ba3442106ac7d4735fafa38ff0e7eb3d6a1f98ea684d832884845c8e910",
+          "provenance": {
+            "connector": "fixture",
+            "locator": "evidence-risk-1",
+            "retrievedAt": "2026-10-19T11:00:00Z"
+          }
+        }
+      ],
+      "coverage": {
+        "checked": [
+          {
+            "kind": "company",
+            "id": "architecture-tilde",
+            "version": "company-v3"
+          },
+          {
+            "kind": "doc",
+            "id": "doc-starred-roadmap",
+            "version": "doc-v4"
+          },
+          {
+            "kind": "doc",
+            "id": "doc-weekly-plan",
+            "version": "doc-v7"
+          },
+          {
+            "kind": "ev",
+            "id": "evidence-risk-1",
+            "version": "ev-v2"
+          }
+        ],
+        "used": [
+          {
+            "kind": "company",
+            "id": "architecture-tilde",
+            "version": "company-v3"
+          },
+          {
+            "kind": "doc",
+            "id": "doc-starred-roadmap",
+            "version": "doc-v4"
+          },
+          {
+            "kind": "doc",
+            "id": "doc-weekly-plan",
+            "version": "doc-v7"
+          },
+          {
+            "kind": "ev",
+            "id": "evidence-risk-1",
+            "version": "ev-v2"
+          }
+        ],
+        "missing": [],
+        "revoked": [],
+        "omitted": [],
+        "researchOmitted": []
+      },
+      "omissions": [],
+      "research": {
+        "mode": "STOP",
+        "status": "stopped",
+        "citationRefs": [],
+        "failures": []
+      },
+      "status": "partial",
+      "selectedRefs": [
+        {
+          "kind": "company",
+          "id": "architecture-tilde",
+          "version": "company-v3"
+        },
+        {
+          "kind": "doc",
+          "id": "doc-starred-roadmap",
+          "version": "doc-v4"
+        },
+        {
+          "kind": "doc",
+          "id": "doc-weekly-plan",
+          "version": "doc-v7"
+        },
+        {
+          "kind": "ev",
+          "id": "evidence-risk-1",
+          "version": "ev-v2"
+        }
+      ],
+      "retrievalState": {
+        "status": "complete",
+        "selectedRefs": [
+          {
+            "kind": "doc",
+            "id": "doc-starred-roadmap",
+            "version": "doc-v4"
+          },
+          {
+            "kind": "doc",
+            "id": "doc-weekly-plan",
+            "version": "doc-v7"
+          },
+          {
+            "kind": "ev",
+            "id": "evidence-risk-1",
+            "version": "ev-v2"
+          }
+        ],
+        "omissions": [],
+        "failures": [],
+        "laneProvenance": [
+          {
+            "source": {
+              "kind": "doc",
+              "id": "doc-starred-roadmap",
+              "version": "doc-v4"
+            },
+            "lanes": [
+              "unresolvedOlderItems"
+            ],
+            "reasons": [
+              "Older unresolved roadmap context."
+            ]
+          },
+          {
+            "source": {
+              "kind": "doc",
+              "id": "doc-weekly-plan",
+              "version": "doc-v7"
+            },
+            "lanes": [
+              "recentChanges"
+            ],
+            "reasons": [
+              "Recent mandatory workspace change."
+            ]
+          },
+          {
+            "source": {
+              "kind": "ev",
+              "id": "evidence-risk-1",
+              "version": "ev-v2"
+            },
+            "lanes": [
+              "roleMatches"
+            ],
+            "reasons": [
+              "Matches founder risk priority."
+            ]
+          }
+        ]
+      },
+      "contextFingerprint": "c32037820d924cb47cdd7a9f7e94173d0ba566964b5560b66c22ba0de55c57a0"
+    },
+    "evidenceSnapshot": {
+      "contractVersion": "v0-assembly-1",
+      "asOf": "2026-10-19T12:00:00Z",
+      "entries": [
+        {
+          "source": {
+            "kind": "company",
+            "id": "architecture-tilde",
+            "version": "company-v3"
+          },
+          "contentHash": "fa1375108dececdf0cec1d68d3706f52b2762893316cabdef0832dcd1543b5da",
+          "excerpt": "Reviewed architecture with unknowns marked.",
+          "provenance": {
+            "connector": "fixture",
+            "locator": "architecture-tilde",
+            "retrievedAt": "2026-10-19T11:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "doc-starred-roadmap",
+            "version": "doc-v4"
+          },
+          "contentHash": "adb403a7f345786408373e8a3273d78e1fe8a6079ae4b49a71ab1e8963492ca3",
+          "excerpt": "Human privacy review record: retain the deletion go/no-go question until a named privacy reviewer compares QA and operations samples and records approval. This document contains no approval record.",
+          "provenance": {
+            "connector": "fixture",
+            "locator": "doc-starred-roadmap",
+            "retrievedAt": "2026-10-19T11:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "doc-weekly-plan",
+            "version": "doc-v7"
+          },
+          "contentHash": "494e62d025b0b784c60fc888896dccb3b69bbc1b2fee8c4918226a812a1a2f20",
+          "excerpt": "QA deletion verification for synthetic run-17: 3 of 3 sample accounts were deleted. QA reports its sample passed. This sample result is not a recorded privacy sign-off. Independent operations audit of synthetic run-17: 2 of 3 sample accounts were fully deleted; one record remained. The account list may differ from QA's. No reconciled shared sample was supplied.",
+          "provenance": {
+            "connector": "fixture",
+            "locator": "doc-weekly-plan",
+            "retrievedAt": "2026-10-19T11:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "ev",
+            "id": "evidence-risk-1",
+            "version": "ev-v2"
+          },
+          "contentHash": "b6c56ba3442106ac7d4735fafa38ff0e7eb3d6a1f98ea684d832884845c8e910",
+          "excerpt": "Evidence of an unresolved weekly risk.",
+          "provenance": {
+            "connector": "fixture",
+            "locator": "evidence-risk-1",
+            "retrievedAt": "2026-10-19T11:00:00Z"
+          }
+        }
+      ],
+      "totalExcerptChars": 641,
+      "contentFingerprint": "6fb694610432bf78dcfd54749d5efd0a05449223b6057c76156f2af0f2765b08",
+      "manifestFingerprint": "c32037820d924cb47cdd7a9f7e94173d0ba566964b5560b66c22ba0de55c57a0"
+    },
+    "freeze": {
+      "contractVersion": "v0-assembly-1",
+      "actorACL": {
+        "principalRef": "user-joseph",
+        "companyId": "company-tilde",
+        "audience": {
+          "kind": "actor",
+          "principalRef": "user-joseph"
+        },
+        "aclDigest": "acl-tilde-user-joseph-1"
+      },
+      "roleMapVersion": "roles-2026-10-20.1",
+      "roleProfileVersions": {
+        "founder": "profile-founder-v1"
+      },
+      "companyArchitecture": {
+        "ref": {
+          "kind": "company",
+          "id": "architecture-tilde",
+          "version": "company-v3"
+        },
+        "contentHash": "fa1375108dececdf0cec1d68d3706f52b2762893316cabdef0832dcd1543b5da",
+        "aclDigest": "acl-tilde-company-1",
+        "audience": {
+          "kind": "company",
+          "companyId": "company-tilde"
+        },
+        "access": "allowed"
+      },
+      "personalStars": [
+        {
+          "ref": {
+            "kind": "doc",
+            "id": "doc-starred-roadmap",
+            "version": "doc-v4"
+          },
+          "contentHash": "adb403a7f345786408373e8a3273d78e1fe8a6079ae4b49a71ab1e8963492ca3",
+          "aclDigest": "acl-tilde-user-joseph-1",
+          "audience": {
+            "kind": "actor",
+            "principalRef": "user-joseph"
+          },
+          "access": "allowed"
+        }
+      ],
+      "sources": [
+        {
+          "ref": {
+            "kind": "company",
+            "id": "architecture-tilde",
+            "version": "company-v3"
+          },
+          "contentHash": "fa1375108dececdf0cec1d68d3706f52b2762893316cabdef0832dcd1543b5da",
+          "aclDigest": "acl-tilde-company-1",
+          "audience": {
+            "kind": "company",
+            "companyId": "company-tilde"
+          },
+          "access": "allowed"
+        },
+        {
+          "ref": {
+            "kind": "doc",
+            "id": "doc-starred-roadmap",
+            "version": "doc-v4"
+          },
+          "contentHash": "adb403a7f345786408373e8a3273d78e1fe8a6079ae4b49a71ab1e8963492ca3",
+          "aclDigest": "acl-tilde-user-joseph-1",
+          "audience": {
+            "kind": "actor",
+            "principalRef": "user-joseph"
+          },
+          "access": "allowed"
+        },
+        {
+          "ref": {
+            "kind": "doc",
+            "id": "doc-weekly-plan",
+            "version": "doc-v7"
+          },
+          "contentHash": "494e62d025b0b784c60fc888896dccb3b69bbc1b2fee8c4918226a812a1a2f20",
+          "aclDigest": "acl-tilde-company-1",
+          "audience": {
+            "kind": "company",
+            "companyId": "company-tilde"
+          },
+          "access": "allowed"
+        },
+        {
+          "ref": {
+            "kind": "ev",
+            "id": "evidence-risk-1",
+            "version": "ev-v2"
+          },
+          "contentHash": "b6c56ba3442106ac7d4735fafa38ff0e7eb3d6a1f98ea684d832884845c8e910",
+          "aclDigest": "acl-tilde-company-1",
+          "audience": {
+            "kind": "company",
+            "companyId": "company-tilde"
+          },
+          "access": "allowed"
+        }
+      ],
+      "contentFingerprint": "b62ce023f1e2126cb0a12af40925930c6cfd3e9e5795df51e1734e6fc6b8b09d"
+    }
+  }
+}

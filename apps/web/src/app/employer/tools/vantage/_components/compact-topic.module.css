@@ -40,21 +40,39 @@
     line-height: 1.5;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    max-width: 100%;
 }
 .metadata {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 8px 12px;
+    gap: 6px;
     color: var(--ink-3);
     font-size: 11px;
     line-height: 1.4;
 }
-.differenceBadge {
+.chip {
+    display: inline-flex;
+    align-items: center;
     border: 1px solid var(--line);
-    border-radius: 4px;
+    border-radius: 5px;
     padding: 2px 6px;
+    background: var(--panel-2);
+    color: var(--ink-2);
+    font-weight: 500;
+}
+.chip[data-tone="warning"] {
+    background: var(--warn-soft);
+    border-color: transparent;
+    color: var(--ink-2);
+}
+.chip[data-tone="info"] {
+    background: var(--info-soft);
+    border-color: transparent;
     color: var(--ink-2);
 }
 .sheet.sheet {
@@ -118,6 +136,10 @@
     letter-spacing: 0.045em;
     color: var(--ink-3);
 }
+.factList {
+    display: grid;
+    gap: 10px;
+}
 .factGrid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -168,8 +190,9 @@
     color: var(--ink-3);
 }
 .nextStep {
-    color: var(--ink);
-    font-weight: 500;
+    color: var(--ink-2);
+    font-weight: 400;
+    line-height: 1.65;
     display: grid;
     gap: 8px;
 }
@@ -207,7 +230,7 @@
 }
 .decisionChoices {
     display: grid;
-    grid-template-columns: 1fr 1fr 1.25fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 8px;
 }
 .decisionChoices > button {
@@ -215,7 +238,7 @@
     padding-inline: 8px;
     white-space: normal;
     height: auto;
-    min-height: 38px;
+    min-height: 44px;
 }
 .secondaryActions {
     display: flex;

@@ -1,0 +1,10 @@
+{
+  "syntheticOnly": true,
+  "source": "apps/web/src/server/vantage/experiments/sophia-fixture-v0.ts",
+  "revision": "fixture-revision-1",
+  "bindings": {
+    "doc:doc-weekly-plan@doc-v7": "Combined QA and Operations excerpts",
+    "doc:doc-starred-roadmap@doc-v4": "Privacy review record"
+  },
+  "note": "Rebound synthetic normal fixture identities, not captured Orbit database IDs; see V2-04.input.json for assembled envelope."
+}

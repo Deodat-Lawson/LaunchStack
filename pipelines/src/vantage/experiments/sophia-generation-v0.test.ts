@@ -269,6 +269,20 @@ describe("opt-in paired Sophia context model experiment", () => {
             input.manifest.coverage.checked.map(contextSourceKeyV0)
         );
         expect(context).not.toHaveProperty("requiredRefs");
+        expect(context.sources[context.sourceUseByIndex.company].ref).toBe(
+            contextSourceKeyV0(input.freeze.companyArchitecture.ref)
+        );
+        expect(
+            context.sourceUseByIndex.stars.map((index: number) => context.sources[index].ref)
+        ).toEqual(input.freeze.personalStars.map(entry => contextSourceKeyV0(entry.ref)));
+        expect(context.sourceUseByIndex.otherMandatory).toBe("not-retained");
+        expect(output.diagnostics.sourceUsage).toMatchObject({
+            version: "source-citation-use/v1",
+            scope: "topic-facts-and-conflicts",
+            suppliedSourceKeys: input.evidenceSnapshot.entries
+                .map(entry => contextSourceKeyV0(entry.source))
+                .sort(),
+        });
         expect(invoke.mock.calls[0]![3]).toMatchObject({ maxOutputTokens: 2400, timeoutMs: 20000 });
         expect(output.generated.contextMode).toBe("aware-v0");
         expect(output.generated.v1Result.draft.summary).toBe(pair().native.summary);
@@ -291,6 +305,23 @@ describe("opt-in paired Sophia context model experiment", () => {
             SOPHIA_EXPERIMENT_MAX_PROMPT_BYTES
         );
         expect(input).toEqual(before);
+    });
+    it("keeps source omission and an exclusivity signal diagnostic rather than forcing unrelated context into topics", async () => {
+        const input = await envelope();
+        const value = pair();
+        value.experimental.topics[0]!.rationale =
+            "This is the only current planning evidence supplied.";
+        const invoke = vi.fn().mockResolvedValue(response(value));
+        const result = await run(invoke)(input, runtime());
+        expect(result.diagnostics.sourceUsage?.uncitedSourceKeys).toContain(
+            "doc:doc-starred-roadmap@doc-v4"
+        );
+        expect(result.diagnostics.sourceUsage?.supplyExclusivityReview).toMatchObject([
+            { reason: "scope-and-source-equivalence-require-semantic-review" },
+        ]);
+        expect(result.report.topics).toHaveLength(1);
+        expect(result.report.topics[0]!.rationale).toBe(value.experimental.topics[0]!.rationale);
+        expect(invoke).toHaveBeenCalledTimes(1);
     });
     it("compacts repeated company provenance only in transport, retaining the full guarded snapshot", async () => {
         const provenance = {

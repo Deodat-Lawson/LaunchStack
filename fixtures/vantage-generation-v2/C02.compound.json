@@ -1,0 +1,80 @@
+{
+  "native": {
+    "summary": "A draft plans a November 4 pitch and says the impact and budget slides remain unfinished.",
+    "topics": [
+      {
+        "title": "Prepare the pitch deck",
+        "facts": [
+          {
+            "text": "A draft plans a November 4 pitch and says the impact and budget slides remain unfinished.",
+            "refs": [
+              "ev:D01"
+            ]
+          }
+        ],
+        "whyItMatters": "The source indicates a question to review.",
+        "decisionQuestion": "Can the team finish the slides in time for the planned presentation?",
+        "proposedNextStep": "If slides can be finished, prepare them; otherwise discuss a revised plan.",
+        "proposedOwner": null,
+        "proposedDueInDays": null,
+        "helpRequested": null,
+        "unknowns": [
+          "Whether the meeting is confirmed."
+        ],
+        "conflicts": [],
+        "rationale": "The source describes an upcoming issue."
+      }
+    ],
+    "enhancements": []
+  },
+  "experimental": {
+    "summary": "The draft plans a November 4 presentation, but impact and budget slides are unfinished and the meeting is unconfirmed.",
+    "topics": [
+      {
+        "title": "Prepare the pitch deck",
+        "facts": [
+          {
+            "text": "A draft plans a November 4 pitch and says the impact and budget slides remain unfinished.",
+            "refs": [
+              "doc:D01@v1"
+            ]
+          }
+        ],
+        "whyItMatters": "The draft plans a November 4 presentation, but impact and budget slides are unfinished and the meeting is unconfirmed.",
+        "decisionQuestion": "Can the team finish the slides in time for the planned presentation?",
+        "proposedNextStep": "If the authors can finish before the planned pitch, prepare the slides. Otherwise suggest a smaller scope or a different date, after confirming the invitation with the organizer.",
+        "proposedOwner": null,
+        "proposedDueInDays": null,
+        "helpRequested": null,
+        "unknowns": [
+          "Whether the meeting is confirmed."
+        ],
+        "conflicts": [],
+        "rationale": "The draft plans a November 4 presentation, but impact and budget slides are unfinished and the meeting is unconfirmed.",
+        "whyNow": "The draft plans a November 4 presentation, but impact and budget slides are unfinished and the meeting is unconfirmed.",
+        "recommendation": {
+          "call": "Ask slide authors for remaining work and timing now; confirm the meeting with the organizer.",
+          "confidence": "medium",
+          "because": "The presentation is planned in a draft, the slides remain unfinished, and no accepted invitation is attached.",
+          "refs": [
+            "doc:D01@v1"
+          ],
+          "wouldChangeIf": "The organizer confirms the meeting and authors establish a credible completion time."
+        }
+      }
+    ],
+    "enhancements": [],
+    "headline": "The planned pitch needs unfinished slides.",
+    "brief": "The draft plans a November 4 presentation, but impact and budget slides are unfinished and the meeting is unconfirmed.",
+    "keyFigures": [
+      {
+        "label": "Planned pitch",
+        "value": "November 4",
+        "tone": "neutral",
+        "refs": [
+          "doc:D01@v1"
+        ]
+      }
+    ]
+  }
+}

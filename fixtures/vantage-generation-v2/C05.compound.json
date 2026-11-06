@@ -1,0 +1,102 @@
+{
+  "native": {
+    "summary": "An order for 200 cups has a paid deposit and is due November 7.",
+    "topics": [
+      {
+        "title": "Check stock for the order",
+        "facts": [
+          {
+            "text": "An order for 200 cups has a paid deposit and is due November 7.",
+            "refs": [
+              "ev:D03"
+            ]
+          }
+        ],
+        "whyItMatters": "The source indicates a question to review.",
+        "decisionQuestion": "Can stock cover the order, and what backup is needed if it cannot?",
+        "proposedNextStep": "If stock covers the order, proceed; otherwise ask about expediting and consider a backup.",
+        "proposedOwner": null,
+        "proposedDueInDays": null,
+        "helpRequested": null,
+        "unknowns": [
+          "Current stock and backup availability."
+        ],
+        "conflicts": [],
+        "rationale": "The source describes an upcoming issue."
+      }
+    ],
+    "enhancements": []
+  },
+  "experimental": {
+    "summary": "The order is due November 7; the supplier estimates November 9 delivery and the stock estimate is stale.",
+    "topics": [
+      {
+        "title": "Check stock for the order",
+        "facts": [
+          {
+            "text": "An order for 200 cups has a paid deposit and is due November 7.",
+            "refs": [
+              "doc:D03@v1"
+            ]
+          },
+          {
+            "text": "The supplier estimates delivery November 9.",
+            "refs": [
+              "doc:D01@v1"
+            ]
+          },
+          {
+            "text": "The last inventory estimate covered about 125 cups; current stock is unverified.",
+            "refs": [
+              "obs:D06@v1"
+            ]
+          }
+        ],
+        "whyItMatters": "The order is due November 7; the supplier estimates November 9 delivery and the stock estimate is stale.",
+        "decisionQuestion": "Can stock cover the order, and what backup is needed if it cannot?",
+        "proposedNextStep": "If stock covers the order, proceed as planned. Otherwise ask the supplier about expediting and consider a backup source; availability is unknown. If neither is confirmed, notify the customer early.",
+        "proposedOwner": null,
+        "proposedDueInDays": null,
+        "helpRequested": null,
+        "unknowns": [
+          "Current stock and backup availability."
+        ],
+        "conflicts": [],
+        "rationale": "The order is due November 7; the supplier estimates November 9 delivery and the stock estimate is stale.",
+        "whyNow": "The order is due November 7; the supplier estimates November 9 delivery and the stock estimate is stale.",
+        "recommendation": {
+          "call": "Count usable stock now; if it cannot cover the order, explore backups the same day.",
+          "confidence": "medium",
+          "because": "The order is due before estimated delivery, while the last inventory estimate is old.",
+          "refs": [
+            "doc:D03@v1",
+            "doc:D01@v1",
+            "obs:D06@v1"
+          ],
+          "wouldChangeIf": "A current count covers 200 cups, or the supplier confirms arrival before November 7."
+        }
+      }
+    ],
+    "enhancements": [],
+    "headline": "The coffee order may need a backup supply.",
+    "brief": "The order is due November 7; the supplier estimates November 9 delivery and the stock estimate is stale.",
+    "keyFigures": [
+      {
+        "label": "Order",
+        "value": "200 cups",
+        "tone": "neutral",
+        "refs": [
+          "doc:D03@v1"
+        ]
+      },
+      {
+        "label": "Last inventory",
+        "value": "125 cups",
+        "tone": "neutral",
+        "refs": [
+          "obs:D06@v1"
+        ]
+      }
+    ]
+  }
+}

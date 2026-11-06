@@ -1,0 +1,86 @@
+{
+  "native": {
+    "summary": "QA and Operations report different results for samples that may differ. The privacy document contains no approval record.",
+    "topics": [],
+    "enhancements": []
+  },
+  "experimental": {
+    "summary": "QA and Operations report different results for samples that may differ. The privacy document contains no approval record.",
+    "topics": [
+      {
+        "title": "Reconcile deletion samples",
+        "facts": [
+          {
+            "text": "QA reports 3 of 3 sampled accounts deleted.",
+            "refs": [
+              "doc:doc-weekly-plan@doc-v7"
+            ]
+          },
+          {
+            "text": "Operations reports 2 of 3 sampled accounts fully deleted; its sample may differ.",
+            "refs": [
+              "doc:doc-weekly-plan@doc-v7"
+            ]
+          },
+          {
+            "text": "The privacy review document contains no approval record.",
+            "refs": [
+              "doc:doc-starred-roadmap@doc-v4"
+            ]
+          }
+        ],
+        "whyItMatters": "QA and Operations report different results for samples that may differ. The privacy document contains no approval record.",
+        "decisionQuestion": "What must the sample comparison show before a privacy go/no-go?",
+        "proposedNextStep": "If samples overlap and the remaining record persists, consider a targeted repeat deletion check before review. If they do not overlap, agree a shared sample. Ask the privacy reviewer to compare and record the result.",
+        "proposedOwner": null,
+        "proposedDueInDays": null,
+        "helpRequested": null,
+        "unknowns": [
+          "Whether samples overlap and approval exists elsewhere."
+        ],
+        "conflicts": [],
+        "rationale": "QA and Operations report different results for samples that may differ. The privacy document contains no approval record.",
+        "whyNow": "QA and Operations report different results for samples that may differ. The privacy document contains no approval record.",
+        "recommendation": {
+          "call": "Hold the go/no-go and ask the privacy reviewer to compare the account lists.",
+          "confidence": "medium",
+          "because": "QA and Operations report different results, the samples may differ, and the privacy document records no approval.",
+          "refs": [
+            "doc:doc-weekly-plan@doc-v7",
+            "doc:doc-starred-roadmap@doc-v4"
+          ],
+          "wouldChangeIf": "The reviewer compares the account lists and records a decision based on the results."
+        }
+      }
+    ],
+    "enhancements": [],
+    "headline": "Deletion reports differ; privacy review remains open.",
+    "brief": "QA and Operations report different results for samples that may differ. The privacy document contains no approval record.",
+    "keyFigures": [
+      {
+        "label": "QA sample",
+        "value": "3 of 3",
+        "tone": "neutral",
+        "refs": [
+          "doc:doc-weekly-plan@doc-v7"
+        ]
+      },
+      {
+        "label": "Operations sample",
+        "value": "2 of 3",
+        "tone": "concern",
+        "refs": [
+          "doc:doc-weekly-plan@doc-v7"
+        ]
+      },
+      {
+        "label": "Privacy record",
+        "value": "No approval recorded",
+        "tone": "neutral",
+        "refs": [
+          "doc:doc-starred-roadmap@doc-v4"
+        ]
+      }
+    ]
+  }
+}

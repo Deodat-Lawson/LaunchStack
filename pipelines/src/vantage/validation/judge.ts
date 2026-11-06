@@ -4,9 +4,14 @@ import {
     systemMessageFor,
     type ResolvedChatModel,
 } from "@launchstack/llm";
-import { JudgmentSchema, RUBRIC_VERSION, type Judgment, type ValidationJudge } from "./contracts";
+import { RUBRIC_VERSION, type Judgment, type ValidationJudge } from "./contracts";
 import { fingerprint } from "./input";
 import { VALIDATION_SYSTEM_PROMPT } from "./rubric";
+import {
+    judgmentSchemaFor,
+    JUDGE_EVIDENCE_INSTRUCTIONS,
+    JUDGE_EVIDENCE_TRANSPORT_VERSION,
+} from "./judge-evidence";
 
 /** No model is selected implicitly; use the host's reviewed model configuration. One call, no retries. */
 export function createModelValidationJudge(
@@ -28,13 +33,16 @@ export function createModelValidationJudge(
         throw new Error("Invalid validation judge limits or configuration identity.");
     return {
         kind: "model",
-        id: `${model.modelId}/${options.configurationId}/${RUBRIC_VERSION}`,
+        id: `${model.modelId}/${options.configurationId}/${RUBRIC_VERSION}/${JUDGE_EVIDENCE_TRANSPORT_VERSION}`,
         async evaluate(request, signal) {
             const result = await invoke(
                 model,
-                JudgmentSchema,
+                judgmentSchemaFor(request),
                 [
-                    ...systemMessageFor(model.behavior, VALIDATION_SYSTEM_PROMPT),
+                    ...systemMessageFor(
+                        model.behavior,
+                        `${VALIDATION_SYSTEM_PROMPT}\n${JUDGE_EVIDENCE_INSTRUCTIONS}`
+                    ),
                     new HumanMessage(
                         JSON.stringify({
                             scenario: request.input.scenario,

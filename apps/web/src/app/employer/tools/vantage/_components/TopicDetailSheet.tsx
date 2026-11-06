@@ -8,6 +8,7 @@ import { Sheet, SheetContent, SheetDescription, SheetTitle } from "~/components/
 import { demoSourceKey, demoSourceName } from "../demo-api";
 import type { DemoHumanDecision, DemoReport, DemoSourceRef, DemoTopic } from "../demo-contract";
 import { topicPresentation, type TopicPresentation } from "../_lib/topic-presentation";
+import { hasReportedComparison } from "./CompactTopicRow";
 import styles from "./compact-topic.module.css";
 
 export interface TopicDetailSheetProps {
@@ -110,7 +111,14 @@ export function TopicDetailSheet({
                     <section aria-label="Source evidence">
                         <h3 className={styles.sectionTitle}>What the sources report</h3>
                         {topic.facts.length ? (
-                            <div className={styles.factGrid}>
+                            <div
+                                className={
+                                    hasReportedComparison(topic) ? styles.factGrid : styles.factList
+                                }
+                                data-evidence-layout={
+                                    hasReportedComparison(topic) ? "comparison" : "stacked"
+                                }
+                            >
                                 {topic.facts.map((fact, index) => (
                                     <div className={styles.factCard} key={index}>
                                         <p>{fact.text}</p>
@@ -123,9 +131,9 @@ export function TopicDetailSheet({
                         )}
                     </section>
                     {topic.conflicts.length > 0 ? (
-                        <section>
-                            <h3 className={styles.sectionTitle}>Reported differences</h3>
-                            <div className="space-y-4">
+                        <details className={styles.disclosure}>
+                            <summary>Comparison &amp; limitations</summary>
+                            <div className="mt-4 space-y-4">
                                 {topic.conflicts.map((conflict, index) => (
                                     <div key={index}>
                                         <p>{conflict.text}</p>
@@ -133,7 +141,7 @@ export function TopicDetailSheet({
                                     </div>
                                 ))}
                             </div>
-                        </section>
+                        </details>
                     ) : null}
                     <section>
                         <h3 className={styles.sectionTitle}>Not known yet</h3>
@@ -200,9 +208,7 @@ export function TopicDetailSheet({
                         {choices.map(choice => (
                             <Button
                                 key={choice.value}
-                                variant={
-                                    choice.value === "needs-more-evidence" ? "default" : "outline"
-                                }
+                                variant="outline"
                                 size="sm"
                                 disabled={busy}
                                 onClick={() => onDecision(choice.value)}

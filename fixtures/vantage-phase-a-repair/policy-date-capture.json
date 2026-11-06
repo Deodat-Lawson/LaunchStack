@@ -1,0 +1,719 @@
+{
+  "version": "vantage-phase-a-captured-policy-date/v1",
+  "origin": {
+    "contextPath": "test-output/vantage-live-e2e-20261102/20261102T194837Z/freeze/negation-and-old-mandatory-policy/generation-context-gold-free.json",
+    "contextSha256": "65b870ad6cf9ec773f98272afbb47bd44e2e76ad35fc0b19fdb8d0500d35b978",
+    "responsePath": "test-output/vantage-live-e2e-20261102/20261102T194837Z/calls/A-generation-negation-and-old-mandatory-policy/response.json",
+    "responseSha256": "49259336cc52609d02796cecde7f3ea8f64bdd3f3ec5a0afe18da3d672df768b",
+    "historicalResult": "rejected: brief: ungrounded date:2026-10-18",
+    "purpose": "Exact synthetic capture for offline date-attribution regression, not a regraded Pilot"
+  },
+  "envelope": {
+    "v1Input": {
+      "contractVersion": "v1",
+      "runId": "live-pilot-negation-and-old-mandatory-policy",
+      "inputVersion": "d1b2b50cfbcd87f1eb901c257f9ced1a90d57c59935349908d67531b4fb91fd5",
+      "reportPeriod": {
+        "weekStart": "2026-10-12",
+        "timeZone": "America/New_York",
+        "startInclusive": "2026-10-12T00:00:00.000Z",
+        "endExclusive": "2026-10-19T00:00:00.000Z",
+        "asOf": "2026-10-19T12:00:00.000Z",
+        "kind": "week-to-date"
+      },
+      "generationMode": "configured-model",
+      "data": {
+        "metricDefinitions": [],
+        "currentEvidence": [
+          {
+            "id": "pilot-intake-negation-and-old-mandatory-policy",
+            "kind": "note",
+            "title": "Intake copy: january-policy",
+            "body": "Intake copy of joseph-semantic/negation-and-old-mandatory-policy/january-policy@synthetic-v1: Do not ship without a rollback owner. This copies the same source and is not independent corroboration.",
+            "source": "Explicit synthetic intake copy; not independent corroboration",
+            "sourceUrl": null,
+            "observedAt": "2026-10-18",
+            "visibility": "private",
+            "tags": ["synthetic", "intake-copy"],
+            "createdAt": "2026-10-18T12:00:00.000Z"
+          }
+        ],
+        "currentObservations": [],
+        "comparisonObservations": [],
+        "resolvedCommitments": [],
+        "carryForwardCommitments": []
+      },
+      "reviewedTopics": []
+    },
+    "manifest": {
+      "contractVersion": "v0-proposed",
+      "runId": "live-pilot-negation-and-old-mandatory-policy",
+      "inputVersion": "d1b2b50cfbcd87f1eb901c257f9ced1a90d57c59935349908d67531b4fb91fd5",
+      "actor": {
+        "companyId": "synthetic-joseph-evaluation",
+        "principalRef": "synthetic-joseph-actor",
+        "audience": {
+          "kind": "actor",
+          "principalRef": "synthetic-joseph-actor"
+        },
+        "aclDigest": "synthetic-joseph-acl-v1"
+      },
+      "reportWindow": {
+        "startInclusive": "2026-10-12T00:00:00.000Z",
+        "endExclusive": "2026-10-19T00:00:00.000Z",
+        "asOf": "2026-10-19T12:00:00.000Z"
+      },
+      "roleMapVersion": "joseph-roles-2026-10-26-v0",
+      "roleIds": ["engineering", "product"],
+      "roleProfileVersions": {
+        "engineering": "synthetic-profile-v1",
+        "product": "synthetic-profile-v1"
+      },
+      "companyArchitectureVersion": "company-v3",
+      "personalStarVersions": {
+        "doc-starred-roadmap": "doc-v4"
+      },
+      "sourceVersions": {
+        "company:architecture-tilde@company-v3": "company-v3",
+        "doc:doc-starred-roadmap@doc-v4": "doc-v4",
+        "doc:doc-weekly-plan@doc-v7": "doc-v7",
+        "doc:joseph-semantic/negation-and-old-mandatory-policy/january-policy@synthetic-v1": "synthetic-v1",
+        "doc:joseph-semantic/negation-and-old-mandatory-policy/release-update@synthetic-v1": "synthetic-v1",
+        "ev:pilot-intake-negation-and-old-mandatory-policy@synthetic-intake-v1": "synthetic-intake-v1"
+      },
+      "sourceRegistry": [
+        {
+          "source": {
+            "kind": "company",
+            "id": "architecture-tilde",
+            "version": "company-v3",
+            "reviewState": "unknowns-marked"
+          },
+          "companyId": "synthetic-joseph-evaluation",
+          "access": "allowed",
+          "aclDigest": "synthetic-joseph-acl-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "synthetic-joseph-evaluation"
+          },
+          "sourceDate": "2026-10-18T08:00:00Z",
+          "checkedAt": "2026-10-19T11:00:00Z",
+          "excerpt": "Reviewed architecture with unknowns marked.",
+          "contentHash": "fa1375108dececdf0cec1d68d3706f52b2762893316cabdef0832dcd1543b5da",
+          "provenance": {
+            "connector": "synthetic-live-pilot-fixture",
+            "locator": "architecture-tilde",
+            "retrievedAt": "2026-10-19T12:00:00.000Z",
+            "reason": "Server-owned synthetic test catalog; not production authorization."
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "doc-starred-roadmap",
+            "version": "doc-v4"
+          },
+          "companyId": "synthetic-joseph-evaluation",
+          "access": "allowed",
+          "aclDigest": "synthetic-joseph-acl-v1",
+          "audience": {
+            "kind": "actor",
+            "principalRef": "synthetic-joseph-actor"
+          },
+          "sourceDate": "2026-10-16T09:00:00Z",
+          "checkedAt": "2026-10-19T11:00:00Z",
+          "excerpt": "Personal Vantage star with current roadmap context.",
+          "contentHash": "dc4e353e8ad8902fa2c0117c05eca4b580657209043cfaf2d49fbdde57fc8c70",
+          "provenance": {
+            "connector": "synthetic-live-pilot-fixture",
+            "locator": "doc-starred-roadmap",
+            "retrievedAt": "2026-10-19T12:00:00.000Z",
+            "reason": "Server-owned synthetic test catalog; not production authorization."
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "doc-weekly-plan",
+            "version": "doc-v7"
+          },
+          "companyId": "synthetic-joseph-evaluation",
+          "access": "allowed",
+          "aclDigest": "synthetic-joseph-acl-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "synthetic-joseph-evaluation"
+          },
+          "sourceDate": "2026-10-17T09:00:00Z",
+          "checkedAt": "2026-10-19T11:00:00Z",
+          "excerpt": "Mandatory weekly planning constraints.",
+          "contentHash": "543435da098646bf2313e477d4e8ef97186c7c49c5bb601123e88ebcca0c220f",
+          "provenance": {
+            "connector": "synthetic-live-pilot-fixture",
+            "locator": "doc-weekly-plan",
+            "retrievedAt": "2026-10-19T12:00:00.000Z",
+            "reason": "Server-owned synthetic test catalog; not production authorization."
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "joseph-semantic/negation-and-old-mandatory-policy/january-policy",
+            "version": "synthetic-v1"
+          },
+          "companyId": "synthetic-joseph-evaluation",
+          "access": "allowed",
+          "aclDigest": "synthetic-joseph-acl-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "synthetic-joseph-evaluation"
+          },
+          "sourceDate": "2026-01-15T00:00:00.000Z",
+          "checkedAt": "2026-10-19T12:00:00.000Z",
+          "excerpt": "Do not ship without a rollback owner.",
+          "contentHash": "46ca1034a23228c44f29db2a1f929389d20b19658da313912ad304b2d99778ac",
+          "provenance": {
+            "connector": "synthetic-live-pilot-fixture",
+            "locator": "joseph-semantic/negation-and-old-mandatory-policy/january-policy",
+            "retrievedAt": "2026-10-19T12:00:00.000Z",
+            "reason": "Server-owned synthetic test catalog; not production authorization."
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "joseph-semantic/negation-and-old-mandatory-policy/release-update",
+            "version": "synthetic-v1"
+          },
+          "companyId": "synthetic-joseph-evaluation",
+          "access": "allowed",
+          "aclDigest": "synthetic-joseph-acl-v1",
+          "audience": {
+            "kind": "actor",
+            "principalRef": "synthetic-joseph-actor"
+          },
+          "sourceDate": "2026-10-18T00:00:00.000Z",
+          "checkedAt": "2026-10-19T12:00:00.000Z",
+          "excerpt": "The candidate is NOT approved. Rollback owner is still unassigned.",
+          "contentHash": "c8cb220da5f90b59de92cf2bf81bb54c3a6eb7ce0a543be9a30dc09d1d7d458d",
+          "provenance": {
+            "connector": "synthetic-live-pilot-fixture",
+            "locator": "joseph-semantic/negation-and-old-mandatory-policy/release-update",
+            "retrievedAt": "2026-10-19T12:00:00.000Z",
+            "reason": "Server-owned synthetic test catalog; not production authorization."
+          }
+        },
+        {
+          "source": {
+            "kind": "ev",
+            "id": "pilot-intake-negation-and-old-mandatory-policy",
+            "version": "synthetic-intake-v1"
+          },
+          "companyId": "synthetic-joseph-evaluation",
+          "access": "allowed",
+          "aclDigest": "synthetic-joseph-acl-v1",
+          "audience": {
+            "kind": "actor",
+            "principalRef": "synthetic-joseph-actor"
+          },
+          "sourceDate": "2026-10-18T12:00:00.000Z",
+          "checkedAt": "2026-10-19T12:00:00.000Z",
+          "excerpt": "Intake copy of joseph-semantic/negation-and-old-mandatory-policy/january-policy@synthetic-v1: Do not ship without a rollback owner. This copies the same source and is not independent corroboration.",
+          "contentHash": "f09b8e2b67c6257e18473741857ca47ac4bfb0891767323161d2841317396cac",
+          "provenance": {
+            "connector": "synthetic-live-pilot-fixture",
+            "locator": "pilot-intake-negation-and-old-mandatory-policy",
+            "retrievedAt": "2026-10-19T12:00:00.000Z",
+            "reason": "Explicit intake copy of doc:joseph-semantic/negation-and-old-mandatory-policy/january-policy@synthetic-v1; not independent corroboration."
+          }
+        }
+      ],
+      "coverage": {
+        "checked": [
+          {
+            "kind": "company",
+            "id": "architecture-tilde",
+            "version": "company-v3",
+            "reviewState": "unknowns-marked"
+          },
+          {
+            "kind": "doc",
+            "id": "doc-starred-roadmap",
+            "version": "doc-v4"
+          },
+          {
+            "kind": "doc",
+            "id": "doc-weekly-plan",
+            "version": "doc-v7"
+          },
+          {
+            "kind": "doc",
+            "id": "joseph-semantic/negation-and-old-mandatory-policy/january-policy",
+            "version": "synthetic-v1"
+          },
+          {
+            "kind": "doc",
+            "id": "joseph-semantic/negation-and-old-mandatory-policy/release-update",
+            "version": "synthetic-v1"
+          },
+          {
+            "kind": "ev",
+            "id": "pilot-intake-negation-and-old-mandatory-policy",
+            "version": "synthetic-intake-v1"
+          }
+        ],
+        "used": [
+          {
+            "kind": "company",
+            "id": "architecture-tilde",
+            "version": "company-v3",
+            "reviewState": "unknowns-marked"
+          },
+          {
+            "kind": "doc",
+            "id": "doc-starred-roadmap",
+            "version": "doc-v4"
+          },
+          {
+            "kind": "doc",
+            "id": "doc-weekly-plan",
+            "version": "doc-v7"
+          },
+          {
+            "kind": "doc",
+            "id": "joseph-semantic/negation-and-old-mandatory-policy/january-policy",
+            "version": "synthetic-v1"
+          },
+          {
+            "kind": "doc",
+            "id": "joseph-semantic/negation-and-old-mandatory-policy/release-update",
+            "version": "synthetic-v1"
+          },
+          {
+            "kind": "ev",
+            "id": "pilot-intake-negation-and-old-mandatory-policy",
+            "version": "synthetic-intake-v1"
+          }
+        ],
+        "missing": [],
+        "revoked": [],
+        "omitted": [],
+        "researchOmitted": []
+      },
+      "omissions": [],
+      "research": {
+        "mode": "STOP",
+        "status": "stopped",
+        "citationRefs": [],
+        "failures": []
+      },
+      "status": "partial",
+      "selectedRefs": [
+        {
+          "kind": "company",
+          "id": "architecture-tilde",
+          "version": "company-v3",
+          "reviewState": "unknowns-marked"
+        },
+        {
+          "kind": "doc",
+          "id": "doc-starred-roadmap",
+          "version": "doc-v4"
+        },
+        {
+          "kind": "doc",
+          "id": "doc-weekly-plan",
+          "version": "doc-v7"
+        },
+        {
+          "kind": "doc",
+          "id": "joseph-semantic/negation-and-old-mandatory-policy/january-policy",
+          "version": "synthetic-v1"
+        },
+        {
+          "kind": "doc",
+          "id": "joseph-semantic/negation-and-old-mandatory-policy/release-update",
+          "version": "synthetic-v1"
+        },
+        {
+          "kind": "ev",
+          "id": "pilot-intake-negation-and-old-mandatory-policy",
+          "version": "synthetic-intake-v1"
+        }
+      ],
+      "retrievalState": {
+        "status": "complete",
+        "selectedRefs": [
+          {
+            "kind": "doc",
+            "id": "joseph-semantic/negation-and-old-mandatory-policy/release-update",
+            "version": "synthetic-v1"
+          },
+          {
+            "kind": "ev",
+            "id": "pilot-intake-negation-and-old-mandatory-policy",
+            "version": "synthetic-intake-v1"
+          }
+        ],
+        "omissions": [],
+        "failures": [],
+        "laneProvenance": [
+          {
+            "source": {
+              "kind": "doc",
+              "id": "joseph-semantic/negation-and-old-mandatory-policy/release-update",
+              "version": "synthetic-v1"
+            },
+            "lanes": ["recentChanges"],
+            "reasons": ["lanes=role,recent; roleRelevance=1.000; trust=0.500; recent=true"]
+          },
+          {
+            "source": {
+              "kind": "ev",
+              "id": "pilot-intake-negation-and-old-mandatory-policy",
+              "version": "synthetic-intake-v1"
+            },
+            "lanes": ["recentChanges"],
+            "reasons": ["lanes=role,recent; roleRelevance=1.000; trust=0.500; recent=true"]
+          }
+        ]
+      },
+      "contextFingerprint": "3982a8eec5ab815277e70d330858d04d7de0d426e5f95327e7ce50161fb47aac"
+    },
+    "evidenceSnapshot": {
+      "contractVersion": "v0-assembly-1",
+      "asOf": "2026-10-19T12:00:00.000Z",
+      "entries": [
+        {
+          "source": {
+            "kind": "company",
+            "id": "architecture-tilde",
+            "version": "company-v3",
+            "reviewState": "unknowns-marked"
+          },
+          "contentHash": "fa1375108dececdf0cec1d68d3706f52b2762893316cabdef0832dcd1543b5da",
+          "excerpt": "Reviewed architecture with unknowns marked.",
+          "provenance": {
+            "connector": "synthetic-live-pilot-fixture",
+            "locator": "architecture-tilde",
+            "retrievedAt": "2026-10-19T12:00:00.000Z",
+            "reason": "Server-owned synthetic test catalog; not production authorization."
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "doc-starred-roadmap",
+            "version": "doc-v4"
+          },
+          "contentHash": "dc4e353e8ad8902fa2c0117c05eca4b580657209043cfaf2d49fbdde57fc8c70",
+          "excerpt": "Personal Vantage star with current roadmap context.",
+          "provenance": {
+            "connector": "synthetic-live-pilot-fixture",
+            "locator": "doc-starred-roadmap",
+            "retrievedAt": "2026-10-19T12:00:00.000Z",
+            "reason": "Server-owned synthetic test catalog; not production authorization."
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "doc-weekly-plan",
+            "version": "doc-v7"
+          },
+          "contentHash": "543435da098646bf2313e477d4e8ef97186c7c49c5bb601123e88ebcca0c220f",
+          "excerpt": "Mandatory weekly planning constraints.",
+          "provenance": {
+            "connector": "synthetic-live-pilot-fixture",
+            "locator": "doc-weekly-plan",
+            "retrievedAt": "2026-10-19T12:00:00.000Z",
+            "reason": "Server-owned synthetic test catalog; not production authorization."
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "joseph-semantic/negation-and-old-mandatory-policy/january-policy",
+            "version": "synthetic-v1"
+          },
+          "contentHash": "46ca1034a23228c44f29db2a1f929389d20b19658da313912ad304b2d99778ac",
+          "excerpt": "Do not ship without a rollback owner.",
+          "provenance": {
+            "connector": "synthetic-live-pilot-fixture",
+            "locator": "joseph-semantic/negation-and-old-mandatory-policy/january-policy",
+            "retrievedAt": "2026-10-19T12:00:00.000Z",
+            "reason": "Server-owned synthetic test catalog; not production authorization."
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "joseph-semantic/negation-and-old-mandatory-policy/release-update",
+            "version": "synthetic-v1"
+          },
+          "contentHash": "c8cb220da5f90b59de92cf2bf81bb54c3a6eb7ce0a543be9a30dc09d1d7d458d",
+          "excerpt": "The candidate is NOT approved. Rollback owner is still unassigned.",
+          "provenance": {
+            "connector": "synthetic-live-pilot-fixture",
+            "locator": "joseph-semantic/negation-and-old-mandatory-policy/release-update",
+            "retrievedAt": "2026-10-19T12:00:00.000Z",
+            "reason": "Server-owned synthetic test catalog; not production authorization."
+          }
+        },
+        {
+          "source": {
+            "kind": "ev",
+            "id": "pilot-intake-negation-and-old-mandatory-policy",
+            "version": "synthetic-intake-v1"
+          },
+          "contentHash": "f09b8e2b67c6257e18473741857ca47ac4bfb0891767323161d2841317396cac",
+          "excerpt": "Intake copy of joseph-semantic/negation-and-old-mandatory-policy/january-policy@synthetic-v1: Do not ship without a rollback owner. This copies the same source and is not independent corroboration.",
+          "provenance": {
+            "connector": "synthetic-live-pilot-fixture",
+            "locator": "pilot-intake-negation-and-old-mandatory-policy",
+            "retrievedAt": "2026-10-19T12:00:00.000Z",
+            "reason": "Explicit intake copy of doc:joseph-semantic/negation-and-old-mandatory-policy/january-policy@synthetic-v1; not independent corroboration."
+          }
+        }
+      ],
+      "totalExcerptChars": 432,
+      "contentFingerprint": "3b1e6590ecd2a71ad4e2995af0fe3187b09411b3e6d45bedbd1389725c1b65ee",
+      "manifestFingerprint": "3982a8eec5ab815277e70d330858d04d7de0d426e5f95327e7ce50161fb47aac"
+    },
+    "freeze": {
+      "contractVersion": "v0-assembly-1",
+      "actorACL": {
+        "companyId": "synthetic-joseph-evaluation",
+        "principalRef": "synthetic-joseph-actor",
+        "audience": {
+          "kind": "actor",
+          "principalRef": "synthetic-joseph-actor"
+        },
+        "aclDigest": "synthetic-joseph-acl-v1"
+      },
+      "roleMapVersion": "joseph-roles-2026-10-26-v0",
+      "roleProfileVersions": {
+        "engineering": "synthetic-profile-v1",
+        "product": "synthetic-profile-v1"
+      },
+      "companyArchitecture": {
+        "ref": {
+          "kind": "company",
+          "id": "architecture-tilde",
+          "version": "company-v3",
+          "reviewState": "unknowns-marked"
+        },
+        "contentHash": "fa1375108dececdf0cec1d68d3706f52b2762893316cabdef0832dcd1543b5da",
+        "aclDigest": "synthetic-joseph-acl-v1",
+        "audience": {
+          "kind": "company",
+          "companyId": "synthetic-joseph-evaluation"
+        },
+        "access": "allowed"
+      },
+      "personalStars": [
+        {
+          "ref": {
+            "kind": "doc",
+            "id": "doc-starred-roadmap",
+            "version": "doc-v4"
+          },
+          "contentHash": "dc4e353e8ad8902fa2c0117c05eca4b580657209043cfaf2d49fbdde57fc8c70",
+          "aclDigest": "synthetic-joseph-acl-v1",
+          "audience": {
+            "kind": "actor",
+            "principalRef": "synthetic-joseph-actor"
+          },
+          "access": "allowed"
+        }
+      ],
+      "sources": [
+        {
+          "ref": {
+            "kind": "company",
+            "id": "architecture-tilde",
+            "version": "company-v3",
+            "reviewState": "unknowns-marked"
+          },
+          "contentHash": "fa1375108dececdf0cec1d68d3706f52b2762893316cabdef0832dcd1543b5da",
+          "aclDigest": "synthetic-joseph-acl-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "synthetic-joseph-evaluation"
+          },
+          "access": "allowed"
+        },
+        {
+          "ref": {
+            "kind": "doc",
+            "id": "doc-starred-roadmap",
+            "version": "doc-v4"
+          },
+          "contentHash": "dc4e353e8ad8902fa2c0117c05eca4b580657209043cfaf2d49fbdde57fc8c70",
+          "aclDigest": "synthetic-joseph-acl-v1",
+          "audience": {
+            "kind": "actor",
+            "principalRef": "synthetic-joseph-actor"
+          },
+          "access": "allowed"
+        },
+        {
+          "ref": {
+            "kind": "doc",
+            "id": "doc-weekly-plan",
+            "version": "doc-v7"
+          },
+          "contentHash": "543435da098646bf2313e477d4e8ef97186c7c49c5bb601123e88ebcca0c220f",
+          "aclDigest": "synthetic-joseph-acl-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "synthetic-joseph-evaluation"
+          },
+          "access": "allowed"
+        },
+        {
+          "ref": {
+            "kind": "doc",
+            "id": "joseph-semantic/negation-and-old-mandatory-policy/january-policy",
+            "version": "synthetic-v1"
+          },
+          "contentHash": "46ca1034a23228c44f29db2a1f929389d20b19658da313912ad304b2d99778ac",
+          "aclDigest": "synthetic-joseph-acl-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "synthetic-joseph-evaluation"
+          },
+          "access": "allowed"
+        },
+        {
+          "ref": {
+            "kind": "doc",
+            "id": "joseph-semantic/negation-and-old-mandatory-policy/release-update",
+            "version": "synthetic-v1"
+          },
+          "contentHash": "c8cb220da5f90b59de92cf2bf81bb54c3a6eb7ce0a543be9a30dc09d1d7d458d",
+          "aclDigest": "synthetic-joseph-acl-v1",
+          "audience": {
+            "kind": "actor",
+            "principalRef": "synthetic-joseph-actor"
+          },
+          "access": "allowed"
+        },
+        {
+          "ref": {
+            "kind": "ev",
+            "id": "pilot-intake-negation-and-old-mandatory-policy",
+            "version": "synthetic-intake-v1"
+          },
+          "contentHash": "f09b8e2b67c6257e18473741857ca47ac4bfb0891767323161d2841317396cac",
+          "aclDigest": "synthetic-joseph-acl-v1",
+          "audience": {
+            "kind": "actor",
+            "principalRef": "synthetic-joseph-actor"
+          },
+          "access": "allowed"
+        }
+      ],
+      "contentFingerprint": "21e760aff86691e54896481c6a3ca8ec75cd4bffc9c7511be1b019db15ac04c7"
+    },
+    "research": {
+      "contractVersion": "v0-proposed",
+      "mode": "STOP",
+      "gapPurpose": "Prepared context covers the configured questions.",
+      "publicSafeQueryProjection": [],
+      "internalSourceRefs": [],
+      "citations": [],
+      "failures": [],
+      "status": "stopped",
+      "asOf": "2026-10-19T12:00:00.000Z"
+    }
+  },
+  "compound": {
+    "native": {
+      "summary": "The supplied intake repeats a January policy stating that shipping requires a rollback owner, and explicitly says it is not independent corroboration. It provides no current release status, so whether that policy applies to a present decision remains unknown.",
+      "topics": [
+        {
+          "title": "Clarify whether the rollback-owner requirement applies to a current release",
+          "facts": [
+            {
+              "text": "The January policy copy says, “Do not ship without a rollback owner.”",
+              "refs": ["ev:pilot-intake-negation-and-old-mandatory-policy"]
+            },
+            {
+              "text": "The intake identifies itself as a copy of the same source and says it is not independent corroboration.",
+              "refs": ["ev:pilot-intake-negation-and-old-mandatory-policy"]
+            }
+          ],
+          "whyItMatters": "If this policy is still applicable, an unassigned rollback owner could affect a shipping decision; the supplied evidence does not establish that there is a current release or whether the policy remains in force.",
+          "decisionQuestion": "Does the January rollback-owner requirement apply to a current release, and, if so, is an owner assigned?",
+          "proposedNextStep": "Check the current release decision and rollback-owner assignment; establish whether the January policy remains applicable before drawing conclusions about shipping.",
+          "proposedOwner": null,
+          "proposedDueInDays": null,
+          "helpRequested": null,
+          "unknowns": [
+            "Whether a current release decision is underway.",
+            "Whether the January policy is still applicable.",
+            "Whether a rollback owner is assigned."
+          ],
+          "conflicts": [],
+          "rationale": "This is the only supplied evidence, and it explicitly disclaims independent corroboration; a focused applicability check is more useful than treating the copied policy as a current release status."
+        }
+      ],
+      "enhancements": []
+    },
+    "experimental": {
+      "summary": "The contextual excerpts include a report that a candidate was not approved and its rollback owner was still unassigned. The January policy says not to ship without a rollback owner, but its current applicability is unconfirmed. Clarify whether the policy governs this candidate and whether its approval and owner status have changed.",
+      "topics": [
+        {
+          "title": "Confirm the candidate’s current approval and rollback-owner status",
+          "facts": [
+            {
+              "text": "A release update dated October 18 says the candidate is not approved and the rollback owner is still unassigned.",
+              "refs": [
+                "doc:joseph-semantic/negation-and-old-mandatory-policy/release-update@synthetic-v1"
+              ]
+            },
+            {
+              "text": "The January policy says, “Do not ship without a rollback owner.”",
+              "refs": [
+                "doc:joseph-semantic/negation-and-old-mandatory-policy/january-policy@synthetic-v1"
+              ]
+            },
+            {
+              "text": "The intake copy identifies the January policy as copied from the same source, not independent corroboration.",
+              "refs": ["ev:pilot-intake-negation-and-old-mandatory-policy@synthetic-intake-v1"]
+            }
+          ],
+          "whyItMatters": "The reported lack of approval and unassigned owner could matter if the January policy applies to this candidate; the excerpts do not establish current status beyond the release update or confirm the policy’s applicability.",
+          "decisionQuestion": "Does the January rollback-owner policy apply to this candidate, and have its approval or owner status changed since the October 18 update?",
+          "proposedNextStep": "Check the candidate’s current approval record, owner assignment, and applicable policy. If the policy applies and the owner remains unassigned, clarify the required next decision; if either status differs, establish the current state before considering another step.",
+          "proposedOwner": null,
+          "proposedDueInDays": null,
+          "helpRequested": null,
+          "unknowns": [
+            "Whether the January policy applies to this candidate.",
+            "Whether approval or rollback-owner status changed after the October 18 update.",
+            "Whether the supplied release update reflects the candidate’s current status."
+          ],
+          "conflicts": [],
+          "rationale": "The dated release update gives a specific reported status, while the policy is older and its applicability is not established; checking both avoids treating a copied policy as current confirmation.",
+          "whyNow": "The October 18 update reports both non-approval and an unassigned rollback owner, while the older policy makes the owner condition potentially relevant.",
+          "recommendation": {
+            "call": "Verify current status and policy applicability before drawing a shipping conclusion.",
+            "confidence": "medium",
+            "because": "The release update reports non-approval and no assigned rollback owner, but the excerpts do not establish whether that status has changed or whether the January policy governs this candidate.",
+            "refs": [
+              "doc:joseph-semantic/negation-and-old-mandatory-policy/release-update@synthetic-v1",
+              "doc:joseph-semantic/negation-and-old-mandatory-policy/january-policy@synthetic-v1"
+            ],
+            "wouldChangeIf": "A current approval record, owner assignment, or explicit policy applicability finding differs from the October 18 report or clarifies the policy’s scope."
+          }
+        }
+      ],
+      "enhancements": [],
+      "headline": "Candidate reported not approved; rollback owner unassigned",
+      "brief": "The October 18 release update reports both conditions; check current status and whether the January policy applies.",
+      "keyFigures": []
+    }
+  }
+}

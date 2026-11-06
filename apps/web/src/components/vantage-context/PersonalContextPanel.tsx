@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { toast } from "sonner";
 import { Star, ShieldCheck, FileText } from "lucide-react";
 import type { BusinessRoleContextV0 } from "@launchstack/pipelines/vantage/context-v0";
 import {
@@ -99,7 +100,8 @@ export function PersonalContextPanel({ client }: { client: PersonalContextClient
             const next = await client.load();
             if (version !== request.current) return;
             apply(next);
-            setMessage(mutate ? "Your context choices were saved." : "Context refreshed.");
+            if (mutate) setMessage("Your context choices were saved.");
+            else toast.success("Context refreshed.", { duration: 2500 });
         } catch {
             if (version !== request.current) return;
             setNeedsReload(true);

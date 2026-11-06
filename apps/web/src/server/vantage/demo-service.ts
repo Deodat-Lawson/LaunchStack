@@ -1,4 +1,4 @@
-/** Development-only synthetic UI adapter. Importing it never changes the V1 generator. */
+﻿/** Development-only synthetic UI adapter. Importing it never changes the V1 generator. */
 import { createHash, randomUUID } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { isAbsolute, resolve, sep } from "node:path";
@@ -28,6 +28,7 @@ import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { resolveConfiguredChatModel } from "~/lib/models";
 import { getEngine } from "~/server/engine";
 import { canUseVantage } from "./access";
+import { extractDemoV2Fields } from "./demo-v2-fields";
 import { captureDemoGeneration } from "./demo-capture";
 import {
     createSophiaCompositionExperimentV0,
@@ -156,7 +157,9 @@ async function readDescriptor(): Promise<unknown> {
         fail("The local synthetic fixture exceeds its budget.", 503, "demo_unavailable");
     return JSON.parse(body) as unknown;
 }
-function openPayload(row: MetadataRow): SavedPayload | null {
+export function openPayload(
+    row: Pick<MetadataRow, "id" | "companyId" | "modelMetadata">
+): SavedPayload | null {
     const envelope = row.modelMetadata?.[DEMO_METADATA_KEY] as CipherEnvelope | undefined;
     if (!envelope) return null;
     if (
@@ -186,9 +189,15 @@ function openPayload(row: MetadataRow): SavedPayload | null {
             409,
             "demo_payload_unavailable"
         );
+    try {
+        for (const run of [payload.active, ...payload.history]) extractDemoV2Fields(run.report);
+    } catch {
+        fail("The saved demonstration report cannot be opened.", 409, "demo_payload_unavailable");
+    }
     return payload;
 }
-function sealPayload(payload: SavedPayload): CipherEnvelope {
+export function sealPayload(payload: SavedPayload): CipherEnvelope {
+    for (const run of [payload.active, ...payload.history]) extractDemoV2Fields(run.report);
     const text = JSON.stringify(payload);
     if (Buffer.byteLength(text) > MAX_PAYLOAD_BYTES || payload.history.length > MAX_HISTORY)
         fail(
@@ -634,6 +643,7 @@ export function createVantageContextDemoService(deps: Dependencies = {}) {
                 generatedAt: new Date().toISOString(),
                 version: (previous?.version ?? 0) + 1,
                 summary: output.report.summary,
+                ...extractDemoV2Fields(output.report),
                 topics: output.report.topics.map(topic => ({
                     ...topic,
                     id: randomUUID(),

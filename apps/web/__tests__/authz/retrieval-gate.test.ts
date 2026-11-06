@@ -16,8 +16,13 @@ import { multiDocEnsembleSearch } from "~/server/rag/ensemble";
 import { makeWorkspaceContext } from "../helpers/workspace-context";
 
 jest.mock("~/lib/require-workspace-context", () => {
-    const actual = jest.requireActual("~/lib/require-workspace-context");
-    return { ...actual, requireWorkspaceContext: jest.fn() };
+    // This is a retrieval-gate unit test. Keep its existing controlled context
+    // without importing the unrelated live Better Auth/database module graph.
+    const resolve = jest.fn();
+    const { workspaceContextModuleMock } = jest.requireActual(
+        "../helpers/mock-require-workspace-context"
+    );
+    return { ...workspaceContextModuleMock(() => resolve()), requireWorkspaceContext: resolve };
 });
 
 let mockQueuedRows: Record<string, unknown>[][] = [];

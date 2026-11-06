@@ -1,0 +1,219 @@
+.page {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 48px 28px 80px;
+    color: var(--ink);
+}
+.header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 26px;
+}
+.eyebrow {
+    color: var(--ink-3);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+.heading {
+    margin-top: 8px;
+    font-size: clamp(27px, 4vw, 38px);
+    font-weight: 650;
+    letter-spacing: -0.04em;
+    line-height: 1.12;
+}
+.subheading {
+    margin-top: 10px;
+    color: var(--ink-2);
+    font-size: 14px;
+    line-height: 1.6;
+}
+.banner {
+    margin-bottom: 24px;
+    padding: 15px 18px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--accent-soft);
+    font-size: 13px;
+    line-height: 1.6;
+}
+.banner strong {
+    display: block;
+    color: var(--ink);
+}
+.banner p {
+    color: var(--ink-2);
+}
+.status,
+.error,
+.empty {
+    margin: 18px 0;
+    padding: 18px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    font-size: 14px;
+    line-height: 1.6;
+}
+.error {
+    color: var(--danger, #a4262c);
+}
+.empty h2 {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--ink);
+}
+.empty p {
+    margin: 8px 0 16px;
+    color: var(--ink-2);
+}
+.content {
+    display: grid;
+    gap: 28px;
+}
+.sectionHeading {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+.sectionHeading h2 {
+    font-size: 17px;
+    font-weight: 650;
+}
+.sectionHeading p {
+    color: var(--ink-3);
+    font-size: 12px;
+}
+.figureGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+}
+.figure {
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 18px;
+    background: var(--panel);
+}
+.figureLabel {
+    color: var(--ink-2);
+    font-size: 13px;
+    line-height: 1.4;
+}
+.figureValue {
+    margin-top: 8px;
+    font-size: 22px;
+    font-weight: 650;
+    letter-spacing: -0.03em;
+}
+.sourceButton {
+    display: inline-block;
+    margin: 10px 10px 0 0;
+    color: var(--brand-ink, var(--ink-2));
+    font-size: 12px;
+    text-align: left;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+.sourceButton:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+.topicList {
+    border-top: 1px solid var(--line);
+}
+.details {
+    color: var(--ink-2);
+    font-size: 13px;
+    line-height: 1.6;
+}
+.details summary {
+    cursor: pointer;
+    color: var(--ink);
+    font-weight: 600;
+}
+.details ul {
+    margin-top: 8px;
+}
+.footer {
+    padding-top: 6px;
+    color: var(--ink-3);
+    font-size: 12px;
+    line-height: 1.6;
+}
+@media (max-width: 600px) {
+    .page {
+        padding: 30px 18px 60px;
+    }
+    .header {
+        flex-direction: column;
+        gap: 16px;
+    }
+}
+
+.context {
+    margin-bottom: 24px;
+    padding: 20px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--panel);
+    color: var(--ink-2);
+    font-size: 13px;
+    line-height: 1.6;
+}
+.context summary {
+    color: var(--ink);
+    cursor: pointer;
+    font-weight: 600;
+}
+.contextIntro {
+    margin: 10px 0 14px;
+}
+.contextError {
+    margin: 10px 0;
+    color: var(--danger, #a4262c);
+}
+.contextNotice {
+    margin: 12px 0;
+}
+.facts {
+    display: grid;
+    gap: 12px;
+    margin-top: 14px;
+}
+.fact {
+    border-left: 2px solid var(--line);
+    padding-left: 12px;
+}
+.fact dt {
+    color: var(--ink);
+    font-weight: 600;
+}
+.fact dd {
+    margin-top: 3px;
+    overflow-wrap: anywhere;
+}
+.provenance {
+    color: var(--ink-3);
+    font-size: 12px;
+}
+.provenance blockquote {
+    margin: 5px 0 0;
+    padding-left: 8px;
+    border-left: 2px solid var(--line);
+}
+.contextSubheading {
+    margin-top: 16px;
+    color: var(--ink);
+    font-weight: 600;
+}
+.unknownList {
+    margin-top: 6px;
+    padding-left: 20px;
+    list-style: disc;
+    overflow-wrap: anywhere;
+}

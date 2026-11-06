@@ -1101,6 +1101,9 @@ importers:
       drizzle-orm:
         specifier: ^0.45.1
         version: 0.45.1(@neondatabase/serverless@1.0.1)(@opentelemetry/api@1.9.1)(@types/pg@8.15.6)(postgres@3.4.7)
+      js-tiktoken:
+        specifier: 1.0.21
+        version: 1.0.21
       openai:
         specifier: ^4.62.1
         version: 4.104.0(ws@8.21.1)(zod@3.25.76)

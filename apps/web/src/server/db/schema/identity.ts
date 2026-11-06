@@ -18,6 +18,7 @@ import {
     customType,
     index,
     integer,
+    jsonb,
     timestamp,
     uniqueIndex,
     varchar,
@@ -143,6 +144,16 @@ export const userCompanyMemberships = pgTable(
         // (user, company). Removed with the membership.
         profileDisplayName: varchar("profile_display_name", { length: 80 }),
         profileTitle: varchar("profile_title", { length: 100 }),
+        /** Personal business responsibilities. Never used for authorization. */
+        businessContextV0: jsonb("business_context_v0").$type<{
+            roleIds: string[];
+            primaryRoleId?: string;
+            confirmedAt: string;
+            mappingVersion: string;
+        }>(),
+        vantageContextRevision: bigint("vantage_context_revision", { mode: "number" })
+            .notNull()
+            .default(0),
     },
     table => ({
         uniqUserCompany: uniqueIndex("user_company_memberships_user_company_unique").on(

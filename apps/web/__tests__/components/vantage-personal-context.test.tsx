@@ -8,12 +8,16 @@ import {
 // Joseph's standalone page is deliberately not ported over the integrated demo.
 import { createPreviewClientV0 } from "../fixtures/vantage-personal-client";
 
+const mockToast = jest.fn();
+jest.mock("sonner", () => ({ toast: { success: (...args: unknown[]) => mockToast(...args) } }));
+
 beforeAll(() => {
     if (!globalThis.structuredClone)
         globalThis.structuredClone = value => JSON.parse(JSON.stringify(value));
 });
 beforeEach(() => {
     localStorage.clear();
+    mockToast.mockClear();
 });
 it("confirms multiple roles and a primary perspective, persisting after a remount", async () => {
     const client = createPreviewClientV0("normal");
@@ -114,7 +118,10 @@ it("distinguishes acknowledged save from a failed refresh and blocks stale edits
     );
     fail = false;
     fireEvent.click(screen.getByRole("button", { name: "Reload context" }));
-    await screen.findByText("Context refreshed.");
+    await waitFor(() =>
+        expect(mockToast).toHaveBeenCalledWith("Context refreshed.", { duration: 2500 })
+    );
+    expect(screen.queryByText("Context refreshed.")).toBeNull();
     expect(screen.getByRole<HTMLButtonElement>("button", { name: "Save roles" }).disabled).toBe(
         false
     );

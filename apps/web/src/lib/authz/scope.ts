@@ -64,7 +64,10 @@ function principalMatches(
     }
 }
 
-export async function resolveDocumentScope(subject: ScopeSubject): Promise<DocumentScope> {
+export async function resolveDocumentScope(
+    subject: ScopeSubject,
+    database: Pick<typeof db, "select"> = db
+): Promise<DocumentScope> {
     if (!subject.permissions.has("documents.read")) return SCOPE_NOTHING;
 
     const role = normalizeRoleSlug(subject.role);
@@ -73,7 +76,7 @@ export async function resolveDocumentScope(subject: ScopeSubject): Promise<Docum
 
     // 1. What is restricted in this workspace?
     const [restrictedFolders, restrictedDocuments] = await Promise.all([
-        db
+        database
             .select({ categoryId: folderSettings.categoryId, name: category.name })
             .from(folderSettings)
             .innerJoin(category, eq(category.id, folderSettings.categoryId))
@@ -83,7 +86,7 @@ export async function resolveDocumentScope(subject: ScopeSubject): Promise<Docum
                     eq(folderSettings.visibility, "restricted")
                 )
             ),
-        db
+        database
             .select({ documentId: documentSettings.documentId, category: document.category })
             .from(documentSettings)
             .innerJoin(document, eq(document.id, documentSettings.documentId))
@@ -100,7 +103,7 @@ export async function resolveDocumentScope(subject: ScopeSubject): Promise<Docum
     }
 
     // 2. Which principals is the caller?
-    const groupRows = await db
+    const groupRows = await database
         .select({ groupId: workspaceGroupMembers.groupId })
         .from(workspaceGroupMembers)
         .where(eq(workspaceGroupMembers.userId, subject.userPk));
@@ -118,7 +121,7 @@ export async function resolveDocumentScope(subject: ScopeSubject): Promise<Docum
     const [folderGrantRows, documentGrantRows] = await Promise.all([
         folderIds.length === 0
             ? Promise.resolve<FolderGrantRow[]>([])
-            : db
+            : database
                   .select({
                       categoryId: folderGrants.categoryId,
                       principalType: folderGrants.principalType,
@@ -133,7 +136,7 @@ export async function resolveDocumentScope(subject: ScopeSubject): Promise<Docum
                   ),
         documentIds.length === 0
             ? Promise.resolve<DocumentGrantRow[]>([])
-            : db
+            : database
                   .select({
                       documentId: documentGrants.documentId,
                       principalType: documentGrants.principalType,

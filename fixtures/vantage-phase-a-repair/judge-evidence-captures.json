@@ -1,0 +1,1134 @@
+{
+  "version": "vantage-pilot-judge-capture/v1",
+  "captures": [
+    {
+      "caseId": "negation-and-old-mandatory-policy",
+      "observed": "invalid-id",
+      "input": {
+        "version": "vantage-evaluation/v1",
+        "scenario": {
+          "id": "negation-and-old-mandatory-policy",
+          "version": "joseph-to-sophia-evaluation/v1",
+          "title": "Joseph synthetic semantic scenario: negation-and-old-mandatory-policy. Evaluation-only role context: roles=product,engineering; primary=none; directory=joseph-roles-2026-10-26-v0; humanConfirmed=false; fallback=false; roleDeclaration=pinned-joseph-fixture. Synthetic fixture declaration, not production authentication or authorization.",
+          "asOf": "2026-10-19T12:00:00.000Z",
+          "contextCompleteness": "excerpted",
+          "documents": [
+            {
+              "id": "doc:joseph-semantic/negation-and-old-mandatory-policy/january-policy@synthetic-v1",
+              "version": "synthetic-v1",
+              "availableAt": "2026-01-15T00:00:00.000Z",
+              "text": "Do not ship without a rollback owner."
+            },
+            {
+              "id": "doc:joseph-semantic/negation-and-old-mandatory-policy/release-update@synthetic-v1",
+              "version": "synthetic-v1",
+              "availableAt": "2026-10-18T00:00:00.000Z",
+              "text": "The candidate is NOT approved. Rollback owner is still unassigned."
+            },
+            {
+              "id": "company:architecture-tilde@company-v3",
+              "version": "company-v3",
+              "availableAt": "2026-10-18T08:00:00Z",
+              "text": "Reviewed architecture with unknowns marked."
+            },
+            {
+              "id": "doc:doc-starred-roadmap@doc-v4",
+              "version": "doc-v4",
+              "availableAt": "2026-10-16T09:00:00Z",
+              "text": "Personal Vantage star with current roadmap context."
+            },
+            {
+              "id": "doc:doc-weekly-plan@doc-v7",
+              "version": "doc-v7",
+              "availableAt": "2026-10-17T09:00:00Z",
+              "text": "Mandatory weekly planning constraints."
+            },
+            {
+              "id": "ev:pilot-intake-negation-and-old-mandatory-policy@synthetic-intake-v1",
+              "version": "synthetic-intake-v1",
+              "availableAt": "2026-10-18T12:00:00.000Z",
+              "text": "Intake copy of joseph-semantic/negation-and-old-mandatory-policy/january-policy@synthetic-v1: Do not ship without a rollback owner. This copies the same source and is not independent corroboration."
+            }
+          ],
+          "expectations": [
+            {
+              "id": "negation-and-old-mandatory-policy/expected-1/a",
+              "description": "Retain the old required policy despite its age.",
+              "kind": "must_include",
+              "importance": "critical",
+              "evidence": [
+                {
+                  "sourceId": "doc:joseph-semantic/negation-and-old-mandatory-policy/january-policy@synthetic-v1",
+                  "quote": "Do not ship without a rollback owner."
+                }
+              ]
+            },
+            {
+              "id": "negation-and-old-mandatory-policy/expected-2/a",
+              "description": "State that the candidate is not approved and the rollback owner remains unassigned.",
+              "kind": "must_include",
+              "importance": "critical",
+              "evidence": [
+                {
+                  "sourceId": "doc:joseph-semantic/negation-and-old-mandatory-policy/release-update@synthetic-v1",
+                  "quote": "The candidate is NOT approved. Rollback owner is still unassigned."
+                }
+              ]
+            },
+            {
+              "id": "negation-and-old-mandatory-policy/expected-2/b",
+              "description": "Do not infer approval from the word approved.",
+              "kind": "must_not_claim",
+              "importance": "critical",
+              "evidence": [
+                {
+                  "sourceId": "doc:joseph-semantic/negation-and-old-mandatory-policy/release-update@synthetic-v1",
+                  "quote": "The candidate is NOT approved. Rollback owner is still unassigned."
+                }
+              ]
+            }
+          ]
+        },
+        "actual": {
+          "id": "diagnostic-invalid-v21-negation-and-old-mandatory-policy",
+          "pipelineVersion": "live-v21-invalid-delivery-diagnostic/v1",
+          "summary": "The contextual excerpts include a report that a candidate was not approved and its rollback owner was still unassigned. The January policy says not to ship without a rollback owner, but its current applicability is unconfirmed. Clarify whether the policy governs this candidate and whether its approval and owner status have changed.",
+          "enhancements": [
+            {
+              "id": "v21-observed-headline",
+              "topicId": "topic-1",
+              "kind": "idea",
+              "text": "Candidate reported not approved; rollback owner unassigned",
+              "rationale": "",
+              "sourceIds": []
+            },
+            {
+              "id": "v21-observed-brief",
+              "topicId": "topic-1",
+              "kind": "idea",
+              "text": "The October 18 release update reports both conditions; check current status and whether the January policy applies.",
+              "rationale": "",
+              "sourceIds": []
+            },
+            {
+              "id": "v21-observed-topics-0--whyNow",
+              "topicId": "topic-1",
+              "kind": "idea",
+              "text": "The October 18 update reports both non-approval and an unassigned rollback owner, while the older policy makes the owner condition potentially relevant.",
+              "rationale": "",
+              "sourceIds": []
+            },
+            {
+              "id": "v21-observed-topics-0--recommendation-call",
+              "topicId": "topic-1",
+              "kind": "idea",
+              "text": "Verify current status and policy applicability before drawing a shipping conclusion.",
+              "rationale": "",
+              "sourceIds": [
+                "doc:joseph-semantic/negation-and-old-mandatory-policy/release-update@synthetic-v1",
+                "doc:joseph-semantic/negation-and-old-mandatory-policy/january-policy@synthetic-v1"
+              ]
+            },
+            {
+              "id": "v21-observed-topics-0--recommendation-confidence",
+              "topicId": "topic-1",
+              "kind": "idea",
+              "text": "medium",
+              "rationale": "",
+              "sourceIds": [
+                "doc:joseph-semantic/negation-and-old-mandatory-policy/release-update@synthetic-v1",
+                "doc:joseph-semantic/negation-and-old-mandatory-policy/january-policy@synthetic-v1"
+              ]
+            },
+            {
+              "id": "v21-observed-topics-0--recommendation-because",
+              "topicId": "topic-1",
+              "kind": "idea",
+              "text": "The release update reports non-approval and no assigned rollback owner, but the excerpts do not establish whether that status has changed or whether the January policy governs this candidate.",
+              "rationale": "",
+              "sourceIds": [
+                "doc:joseph-semantic/negation-and-old-mandatory-policy/release-update@synthetic-v1",
+                "doc:joseph-semantic/negation-and-old-mandatory-policy/january-policy@synthetic-v1"
+              ]
+            },
+            {
+              "id": "v21-observed-topics-0--recommendation-wouldChangeIf",
+              "topicId": "topic-1",
+              "kind": "idea",
+              "text": "A current approval record, owner assignment, or explicit policy applicability finding differs from the October 18 report or clarifies the policy’s scope.",
+              "rationale": "",
+              "sourceIds": [
+                "doc:joseph-semantic/negation-and-old-mandatory-policy/release-update@synthetic-v1",
+                "doc:joseph-semantic/negation-and-old-mandatory-policy/january-policy@synthetic-v1"
+              ]
+            }
+          ],
+          "tasks": [
+            {
+              "id": "topic-1",
+              "title": "Confirm the candidate’s current approval and rollback-owner status",
+              "facts": [
+                {
+                  "text": "A release update dated October 18 says the candidate is not approved and the rollback owner is still unassigned.",
+                  "sourceIds": [
+                    "doc:joseph-semantic/negation-and-old-mandatory-policy/release-update@synthetic-v1"
+                  ]
+                },
+                {
+                  "text": "The January policy says, “Do not ship without a rollback owner.”",
+                  "sourceIds": [
+                    "doc:joseph-semantic/negation-and-old-mandatory-policy/january-policy@synthetic-v1"
+                  ]
+                },
+                {
+                  "text": "The intake copy identifies the January policy as copied from the same source, not independent corroboration.",
+                  "sourceIds": [
+                    "ev:pilot-intake-negation-and-old-mandatory-policy@synthetic-intake-v1"
+                  ]
+                }
+              ],
+              "whyItMatters": "The reported lack of approval and unassigned owner could matter if the January policy applies to this candidate; the excerpts do not establish current status beyond the release update or confirm the policy’s applicability.",
+              "decisionQuestion": "Does the January rollback-owner policy apply to this candidate, and have its approval or owner status changed since the October 18 update?",
+              "nextStep": "Check the candidate’s current approval record, owner assignment, and applicable policy. If the policy applies and the owner remains unassigned, clarify the required next decision; if either status differs, establish the current state before considering another step.",
+              "rationale": "The dated release update gives a specific reported status, while the policy is older and its applicability is not established; checking both avoids treating a copied policy as current confirmation.",
+              "owner": null,
+              "dueOn": null,
+              "dueInDays": null,
+              "helpRequested": null,
+              "unknowns": [
+                "Whether the January policy applies to this candidate.",
+                "Whether approval or rollback-owner status changed after the October 18 update.",
+                "Whether the supplied release update reflects the candidate’s current status."
+              ],
+              "conflicts": []
+            }
+          ]
+        }
+      },
+      "judgment": {
+        "expectations": [
+          {
+            "expectationId": "negation-and-old-mandatory-policy/expected-1/a",
+            "verdict": "partial",
+            "reason": "The output preserves the old policy as a reported requirement, but qualifies its applicability as unconfirmed rather than retaining it as a required policy. The source gives the policy directly; the intake copy is explicitly not independent corroboration.",
+            "evidence": [
+              {
+                "kind": "source",
+                "id": "negation-and-old-mandatory-policy/expected-1/a",
+                "quote": "Do not ship without a rollback owner."
+              },
+              {
+                "kind": "output",
+                "id": "summary",
+                "quote": "The January policy says not to ship without a rollback owner, but its current applicability is unconfirmed."
+              },
+              {
+                "kind": "source",
+                "id": "negation-and-old-mandatory-policy/expected-1/a",
+                "quote": "This copies the same source and is not independent corroboration."
+              }
+            ]
+          },
+          {
+            "expectationId": "negation-and-old-mandatory-policy/expected-2/a",
+            "verdict": "met",
+            "reason": "The report accurately preserves both the negative approval status and unassigned rollback-owner status from the October 18 update, while distinguishing the report from verified current status.",
+            "evidence": [
+              {
+                "kind": "source",
+                "id": "negation-and-old-mandatory-policy/expected-2/a",
+                "quote": "The candidate is NOT approved. Rollback owner is still unassigned."
+              },
+              {
+                "kind": "output",
+                "id": "task/topic-1/fact/0",
+                "quote": "A release update dated October 18 says the candidate is not approved and the rollback owner is still unassigned."
+              },
+              {
+                "kind": "output",
+                "id": "task/topic-1/unknown/2",
+                "quote": "Whether the supplied release update reflects the candidate’s current status."
+              }
+            ]
+          },
+          {
+            "expectationId": "negation-and-old-mandatory-policy/expected-2/b",
+            "verdict": "met",
+            "reason": "No output asserts approval; the report explicitly says the candidate was not approved and treats later status as unknown.",
+            "evidence": [
+              {
+                "kind": "source",
+                "id": "negation-and-old-mandatory-policy/expected-2/b",
+                "quote": "The candidate is NOT approved. Rollback owner is still unassigned."
+              },
+              {
+                "kind": "output",
+                "id": "summary",
+                "quote": "The contextual excerpts include a report that a candidate was not approved and its rollback owner was still unassigned."
+              }
+            ]
+          }
+        ],
+        "ratings": [
+          {
+            "criterion": "grounding",
+            "score": 4,
+            "reason": "Factual claims are carefully attributed to the dated release update or January policy. The report does not treat the copied policy as corroboration, and it preserves uncertainty about policy applicability and later status.",
+            "evidence": [
+              {
+                "kind": "source",
+                "id": "negation-and-old-mandatory-policy/expected-2/a",
+                "quote": "The candidate is NOT approved. Rollback owner is still unassigned."
+              },
+              {
+                "kind": "output",
+                "id": "task/topic-1/fact/0",
+                "quote": "A release update dated October 18 says the candidate is not approved and the rollback owner is still unassigned."
+              },
+              {
+                "kind": "source",
+                "id": "negation-and-old-mandatory-policy/expected-1/a",
+                "quote": "Do not ship without a rollback owner."
+              },
+              {
+                "kind": "output",
+                "id": "task/topic-1/fact/1",
+                "quote": "The January policy says, “Do not ship without a rollback owner.”"
+              },
+              {
+                "kind": "source",
+                "id": "negation-and-old-mandatory-policy/expected-1/a",
+                "quote": "This copies the same source and is not independent corroboration."
+              },
+              {
+                "kind": "output",
+                "id": "task/topic-1/fact/2",
+                "quote": "The intake copy identifies the January policy as copied from the same source, not independent corroboration."
+              }
+            ]
+          },
+          {
+            "criterion": "temporal",
+            "score": 4,
+            "reason": "The October 18 update is presented as a dated report, not as guaranteed current state. The older January policy is retained rather than discarded, with its applicability correctly left unresolved.",
+            "evidence": [
+              {
+                "kind": "source",
+                "id": "negation-and-old-mandatory-policy/expected-2/a",
+                "quote": "The candidate is NOT approved. Rollback owner is still unassigned."
+              },
+              {
+                "kind": "output",
+                "id": "task/topic-1/fact/0",
+                "quote": "A release update dated October 18 says the candidate is not approved and the rollback owner is still unassigned."
+              },
+              {
+                "kind": "source",
+                "id": "negation-and-old-mandatory-policy/expected-1/a",
+                "quote": "Do not ship without a rollback owner."
+              },
+              {
+                "kind": "output",
+                "id": "task/topic-1/unknown/1",
+                "quote": "Whether approval or rollback-owner status changed after the October 18 update."
+              }
+            ]
+          },
+          {
+            "criterion": "relevance",
+            "score": 4,
+            "reason": "The output focuses on the critical approval and rollback-owner conditions and whether the January policy applies. It avoids unrelated material and does not duplicate the same-source intake copy as corroboration.",
+            "evidence": [
+              {
+                "kind": "output",
+                "id": "task/topic-1/title",
+                "quote": "Confirm the candidate’s current approval and rollback-owner status"
+              },
+              {
+                "kind": "output",
+                "id": "task/topic-1/decisionQuestion",
+                "quote": "Does the January rollback-owner policy apply to this candidate, and have its approval or owner status changed since the October 18 update?"
+              },
+              {
+                "kind": "output",
+                "id": "task/topic-1/fact/2",
+                "quote": "The intake copy identifies the January policy as copied from the same source, not independent corroboration."
+              }
+            ]
+          },
+          {
+            "criterion": "actionability",
+            "score": 4,
+            "reason": "The next step names concrete records and questions to check, then conditions any further decision on the findings. It does not invent an owner, deadline, approval, or shipping action.",
+            "evidence": [
+              {
+                "kind": "output",
+                "id": "task/topic-1/nextStep",
+                "quote": "Check the candidate’s current approval record, owner assignment, and applicable policy. If the policy applies and the owner remains unassigned, clarify the required next decision; if either status differs, establish the current state before considering another step."
+              },
+              {
+                "kind": "output",
+                "id": "task/topic-1/unknown/0",
+                "quote": "Whether the January policy applies to this candidate."
+              }
+            ]
+          },
+          {
+            "criterion": "readability",
+            "score": 4,
+            "reason": "The report is concise and organized, clearly separates reported facts from unknowns, and uses readable task and rationale wording without distracting repetition.",
+            "evidence": [
+              {
+                "kind": "output",
+                "id": "summary",
+                "quote": "The contextual excerpts include a report that a candidate was not approved and its rollback owner was still unassigned."
+              },
+              {
+                "kind": "output",
+                "id": "task/topic-1/whyItMatters",
+                "quote": "The reported lack of approval and unassigned owner could matter if the January policy applies to this candidate; the excerpts do not establish current status beyond the release update or confirm the policy’s applicability."
+              }
+            ]
+          }
+        ]
+      },
+      "provenance": {
+        "evaluationInputPath": "test-output/vantage-live-e2e-20261102/20261102T194837Z/judge-amendment-1/negation-and-old-mandatory-policy/initial/evaluation-input-with-gold.json",
+        "evaluationInputSha256": "d591d9032787f2369d7c7044364f328fa940d1d4dc5dbaaa9db8889854957f02",
+        "responsePath": "test-output/vantage-live-e2e-20261102/20261102T194837Z/calls/A-judge-negation-and-old-mandatory-policy/response.json",
+        "responseSha256": "e3da5bd9dee72a96642e42679a49434a1ef1d2849f6e48c834a87ed758c852a6",
+        "contentSha256": "1792f6803d1575d23e3fe9709b393580a22b33ee5b05b6a72c34d76da8df1221",
+        "syntheticSources": true,
+        "actualProviderOutput": true,
+        "historicalOutcomeUnchanged": true
+      }
+    },
+    {
+      "caseId": "missing-denominator",
+      "observed": "non-verbatim-quote",
+      "input": {
+        "version": "vantage-evaluation/v1",
+        "scenario": {
+          "id": "missing-denominator",
+          "version": "joseph-to-sophia-evaluation/v1",
+          "title": "Joseph synthetic semantic scenario: missing-denominator. Evaluation-only role context: roles=growth-sales; primary=none; directory=joseph-roles-2026-10-26-v0; humanConfirmed=false; fallback=false; roleDeclaration=pinned-joseph-fixture. Synthetic fixture declaration, not production authentication or authorization.",
+          "asOf": "2026-10-19T12:00:00.000Z",
+          "contextCompleteness": "excerpted",
+          "documents": [
+            {
+              "id": "doc:joseph-semantic/missing-denominator/experiment@synthetic-v1",
+              "version": "synthetic-v1",
+              "availableAt": "2026-10-18T12:00:00.000Z",
+              "text": "Variant B had 12 signups; variant A had 8. Visitor counts and allocation are unknown."
+            },
+            {
+              "id": "company:architecture-tilde@company-v3",
+              "version": "company-v3",
+              "availableAt": "2026-10-18T08:00:00Z",
+              "text": "Reviewed architecture with unknowns marked."
+            },
+            {
+              "id": "doc:doc-starred-roadmap@doc-v4",
+              "version": "doc-v4",
+              "availableAt": "2026-10-16T09:00:00Z",
+              "text": "Personal Vantage star with current roadmap context."
+            },
+            {
+              "id": "doc:doc-weekly-plan@doc-v7",
+              "version": "doc-v7",
+              "availableAt": "2026-10-17T09:00:00Z",
+              "text": "Mandatory weekly planning constraints."
+            },
+            {
+              "id": "ev:pilot-intake-missing-denominator@synthetic-intake-v1",
+              "version": "synthetic-intake-v1",
+              "availableAt": "2026-10-18T12:00:00.000Z",
+              "text": "Intake copy of joseph-semantic/missing-denominator/experiment@synthetic-v1: Variant B had 12 signups; variant A had 8. Visitor counts and allocation are unknown. This copies the same source and is not independent corroboration."
+            }
+          ],
+          "expectations": [
+            {
+              "id": "missing-denominator/expected-1/a",
+              "description": "Do not claim a 50% conversion-rate improvement.",
+              "kind": "must_not_claim",
+              "importance": "critical",
+              "evidence": [
+                {
+                  "sourceId": "doc:joseph-semantic/missing-denominator/experiment@synthetic-v1",
+                  "quote": "Variant B had 12 signups; variant A had 8. Visitor counts and allocation are unknown."
+                }
+              ]
+            },
+            {
+              "id": "missing-denominator/expected-1/b",
+              "description": "Do not claim statistical significance.",
+              "kind": "must_not_claim",
+              "importance": "important",
+              "evidence": [
+                {
+                  "sourceId": "doc:joseph-semantic/missing-denominator/experiment@synthetic-v1",
+                  "quote": "Variant B had 12 signups; variant A had 8. Visitor counts and allocation are unknown."
+                }
+              ]
+            },
+            {
+              "id": "missing-denominator/expected-2/a",
+              "description": "Request visitor counts, allocation, and experiment window.",
+              "kind": "must_include",
+              "importance": "important",
+              "evidence": [
+                {
+                  "sourceId": "doc:joseph-semantic/missing-denominator/experiment@synthetic-v1",
+                  "quote": "Variant B had 12 signups; variant A had 8. Visitor counts and allocation are unknown."
+                }
+              ]
+            }
+          ]
+        },
+        "actual": {
+          "id": "pilot-v21-missing-denominator",
+          "pipelineVersion": "live-v21-pilot/citation-clarification-native-json.2",
+          "summary": "The intake copy reports 12 signups for B and 8 for A, but visitor counts and allocation are unknown, so this is not evidence that B had a higher signup rate. The copy says it is not independent corroboration. First clarify whether the experiment record has denominators and allocation; without them, the comparison remains inconclusive.",
+          "enhancements": [
+            {
+              "id": "v21-headline",
+              "topicId": "v21-report",
+              "kind": "idea",
+              "text": "Signup counts are not yet comparable",
+              "rationale": "",
+              "sourceIds": []
+            },
+            {
+              "id": "v21-brief",
+              "topicId": "v21-report",
+              "kind": "idea",
+              "text": "The intake copy reports more signups for B, but missing visitor counts and allocation prevent a supported performance comparison.",
+              "rationale": "",
+              "sourceIds": []
+            },
+            {
+              "id": "v21-keyFigures-0-",
+              "topicId": "v21-report",
+              "kind": "evidence",
+              "text": "{\"label\":\"B signups\",\"value\":\"12\",\"tone\":\"neutral\"}",
+              "rationale": "",
+              "sourceIds": ["doc:joseph-semantic/missing-denominator/experiment@synthetic-v1"]
+            },
+            {
+              "id": "v21-keyFigures-1-",
+              "topicId": "v21-report",
+              "kind": "evidence",
+              "text": "{\"label\":\"A signups\",\"value\":\"8\",\"tone\":\"neutral\"}",
+              "rationale": "",
+              "sourceIds": ["doc:joseph-semantic/missing-denominator/experiment@synthetic-v1"]
+            },
+            {
+              "id": "v21-topics-0--whyNow",
+              "topicId": "topic-1",
+              "kind": "idea",
+              "text": "The current intake copy reports the counts but explicitly leaves visitor counts and allocation unknown.",
+              "rationale": "",
+              "sourceIds": []
+            },
+            {
+              "id": "v21-topics-0--recommendation-call",
+              "topicId": "topic-1",
+              "kind": "idea",
+              "text": "Clarify denominators before interpreting the counts.",
+              "rationale": "",
+              "sourceIds": ["ev:pilot-intake-missing-denominator@synthetic-intake-v1"]
+            },
+            {
+              "id": "v21-topics-0--recommendation-because",
+              "topicId": "topic-1",
+              "kind": "idea",
+              "text": "The source reports signup counts without visitor counts or allocation, so a rate comparison is unsupported.",
+              "rationale": "",
+              "sourceIds": ["ev:pilot-intake-missing-denominator@synthetic-intake-v1"]
+            },
+            {
+              "id": "v21-topics-0--recommendation-wouldChangeIf",
+              "topicId": "topic-1",
+              "kind": "idea",
+              "text": "If denominators and allocation are established, compare rates; otherwise keep the result inconclusive.",
+              "rationale": "",
+              "sourceIds": ["ev:pilot-intake-missing-denominator@synthetic-intake-v1"]
+            },
+            {
+              "id": "v21-topics-0--recommendation-confidence",
+              "topicId": "topic-1",
+              "kind": "idea",
+              "text": "high",
+              "rationale": "",
+              "sourceIds": ["ev:pilot-intake-missing-denominator@synthetic-intake-v1"]
+            }
+          ],
+          "tasks": [
+            {
+              "id": "topic-1",
+              "title": "Signup counts do not establish which variant performed better",
+              "facts": [
+                {
+                  "text": "The experiment excerpt reports 12 signups for B and 8 for A; visitor counts and allocation are unknown.",
+                  "sourceIds": [
+                    "doc:joseph-semantic/missing-denominator/experiment@synthetic-v1",
+                    "ev:pilot-intake-missing-denominator@synthetic-intake-v1"
+                  ]
+                },
+                {
+                  "text": "The intake copy states that it copies the same experiment source and is not independent corroboration.",
+                  "sourceIds": ["ev:pilot-intake-missing-denominator@synthetic-intake-v1"]
+                }
+              ],
+              "whyItMatters": "The counts are an observation; without denominators and allocation, interpreting them as a difference in signup performance would be unsupported.",
+              "decisionQuestion": "Can the experiment record establish visitor counts and allocation for both variants?",
+              "nextStep": "Check the experiment record for visitor counts and allocation by variant. If both are available, compare signup rates; if either is unavailable, treat the result as inconclusive and consider a follow-up test that records them.",
+              "rationale": "This is the only supplied current experiment observation, and its stated missing denominator is central to interpreting the counts.",
+              "owner": null,
+              "dueOn": null,
+              "helpRequested": null,
+              "unknowns": [
+                "Visitor counts and allocation by variant are not supplied.",
+                "No independent corroborating evidence is supplied."
+              ],
+              "conflicts": []
+            }
+          ]
+        }
+      },
+      "judgment": {
+        "expectations": [
+          {
+            "expectationId": "missing-denominator/expected-1/a",
+            "verdict": "met",
+            "reason": "The output avoids claiming a 50% conversion-rate improvement and explicitly says the signup counts do not establish a higher signup rate. The source states the counts and that visitor counts and allocation are unknown.",
+            "evidence": [
+              {
+                "kind": "source",
+                "id": "doc:joseph-semantic/missing-denominator/experiment@synthetic-v1",
+                "quote": "Variant B had 12 signups; variant A had 8. Visitor counts and allocation are unknown."
+              },
+              {
+                "kind": "output",
+                "id": "summary",
+                "quote": "so this is not evidence that B had a higher signup rate."
+              }
+            ]
+          },
+          {
+            "expectationId": "missing-denominator/expected-1/b",
+            "verdict": "met",
+            "reason": "The output makes no claim of statistical significance. The supplied source provides signup counts but says visitor counts and allocation are unknown, supporting caution rather than a significance claim.",
+            "evidence": [
+              {
+                "kind": "source",
+                "id": "doc:joseph-semantic/missing-denominator/experiment@synthetic-v1",
+                "quote": "Variant B had 12 signups; variant A had 8. Visitor counts and allocation are unknown."
+              }
+            ]
+          },
+          {
+            "expectationId": "missing-denominator/expected-2/a",
+            "verdict": "partial",
+            "reason": "The output asks to establish visitor counts and allocation and proposes checking the experiment record, but does not request the experiment window.",
+            "evidence": [
+              {
+                "kind": "source",
+                "id": "doc:joseph-semantic/missing-denominator/experiment@synthetic-v1",
+                "quote": "Variant B had 12 signups; variant A had 8. Visitor counts and allocation are unknown."
+              },
+              {
+                "kind": "output",
+                "id": "task/topic-1/nextStep",
+                "quote": "Check the experiment record for visitor counts and allocation by variant."
+              },
+              {
+                "kind": "output",
+                "id": "task/topic-1/decisionQuestion",
+                "quote": "Can the experiment record establish visitor counts and allocation for both variants?"
+              }
+            ]
+          }
+        ],
+        "ratings": [
+          {
+            "criterion": "grounding",
+            "score": 3,
+            "reason": "The core claims about the counts, missing denominators, and lack of independent corroboration are supported, and the output preserves uncertainty. Minor grounding concern: it labels its recommendation confidence as \"high\" despite missing denominators and no independent corroboration.",
+            "evidence": [
+              {
+                "kind": "source",
+                "id": "doc:joseph-semantic/missing-denominator/experiment@synthetic-v1",
+                "quote": "Variant B had 12 signups; variant A had 8. Visitor counts and allocation are unknown."
+              },
+              {
+                "kind": "source",
+                "id": "ev:pilot-intake-missing-denominator@synthetic-intake-v1",
+                "quote": "This copies the same source and is not independent corroboration."
+              },
+              {
+                "kind": "output",
+                "id": "task/topic-1/fact/0",
+                "quote": "The experiment excerpt reports 12 signups for B and 8 for A; visitor counts and allocation are unknown."
+              },
+              {
+                "kind": "output",
+                "id": "enhancement/v21-topics-0--recommendation-confidence/idea",
+                "quote": "high"
+              }
+            ]
+          },
+          {
+            "criterion": "temporal",
+            "score": 3,
+            "reason": "The output treats the supplied experiment observation as current evidence and does not invent execution, approval, or resolution. Its conditional next steps preserve the unresolved state. The record does not specify an experiment window, which the output also fails to request.",
+            "evidence": [
+              {
+                "kind": "source",
+                "id": "doc:joseph-semantic/missing-denominator/experiment@synthetic-v1",
+                "quote": "Variant B had 12 signups; variant A had 8. Visitor counts and allocation are unknown."
+              },
+              {
+                "kind": "output",
+                "id": "task/topic-1/nextStep",
+                "quote": "If both are available, compare signup rates; if either is unavailable, treat the result as inconclusive"
+              },
+              {
+                "kind": "output",
+                "id": "task/topic-1/decisionQuestion",
+                "quote": "Can the experiment record establish visitor counts and allocation for both variants?"
+              }
+            ]
+          },
+          {
+            "criterion": "relevance",
+            "score": 4,
+            "reason": "The output stays focused on the central interpretation risk: signup counts without visitor counts and allocation cannot establish comparative performance. It avoids unrelated topics and distinguishes the intake copy from independent corroboration.",
+            "evidence": [
+              {
+                "kind": "output",
+                "id": "summary",
+                "quote": "First clarify whether the experiment record has denominators and allocation; without them, the comparison remains inconclusive."
+              },
+              {
+                "kind": "output",
+                "id": "task/topic-1/fact/1",
+                "quote": "The intake copy states that it copies the same experiment source and is not independent corroboration."
+              }
+            ]
+          },
+          {
+            "criterion": "actionability",
+            "score": 3,
+            "reason": "The task gives a concrete check and an observable decision rule for comparing rates or treating the result as inconclusive. It does not specify an experiment window, so the evidence request is incomplete against the expected follow-up.",
+            "evidence": [
+              {
+                "kind": "output",
+                "id": "task/topic-1/nextStep",
+                "quote": "Check the experiment record for visitor counts and allocation by variant. If both are available, compare signup rates; if either is unavailable, treat the result as inconclusive and consider a follow-up test that records them."
+              },
+              {
+                "kind": "source",
+                "id": "doc:joseph-semantic/missing-denominator/experiment@synthetic-v1",
+                "quote": "Variant B had 12 signups; variant A had 8. Visitor counts and allocation are unknown."
+              }
+            ]
+          },
+          {
+            "criterion": "readability",
+            "score": 4,
+            "reason": "The summary and task are concise and understandable, with the limitation and conditional next steps stated plainly. The output clearly separates observed counts from interpretation.",
+            "evidence": [
+              {
+                "kind": "output",
+                "id": "summary",
+                "quote": "Variant B had 12 signups for B and 8 for A, but visitor counts and allocation are unknown, so this is not evidence that B had a higher signup rate."
+              },
+              {
+                "kind": "output",
+                "id": "task/topic-1/nextStep",
+                "quote": "If both are available, compare signup rates; if either is unavailable, treat the result as inconclusive"
+              }
+            ]
+          }
+        ]
+      },
+      "provenance": {
+        "evaluationInputPath": "test-output/vantage-live-e2e-20261102/20261102T194837Z/judge-amendment-1/missing-denominator/initial/evaluation-input-with-gold.json",
+        "evaluationInputSha256": "27caa9d52b0f581779e8063c675e8916171beab3944639f7faf45889e2393156",
+        "responsePath": "test-output/vantage-live-e2e-20261102/20261102T194837Z/calls/A-judge-missing-denominator/response.json",
+        "responseSha256": "1830ab927aa1d71ddf33aa9a6d93ed7c3c184c3ace927e913966f8b71476705d",
+        "contentSha256": "0f27f89c15f07ec7def03fa519607aa901878004ffe154763380d070006d9f99",
+        "syntheticSources": true,
+        "actualProviderOutput": true,
+        "historicalOutcomeUnchanged": true
+      }
+    },
+    {
+      "caseId": "missing-denominator",
+      "observed": "valid-recovery",
+      "input": {
+        "version": "vantage-evaluation/v1",
+        "scenario": {
+          "id": "missing-denominator",
+          "version": "joseph-to-sophia-evaluation/v1",
+          "title": "Joseph synthetic semantic scenario: missing-denominator. Evaluation-only role context: roles=growth-sales; primary=none; directory=joseph-roles-2026-10-26-v0; humanConfirmed=false; fallback=false; roleDeclaration=pinned-joseph-fixture. Synthetic fixture declaration, not production authentication or authorization.",
+          "asOf": "2026-10-19T12:00:00.000Z",
+          "contextCompleteness": "excerpted",
+          "documents": [
+            {
+              "id": "doc:joseph-semantic/missing-denominator/experiment@synthetic-v1",
+              "version": "synthetic-v1",
+              "availableAt": "2026-10-18T12:00:00.000Z",
+              "text": "Variant B had 12 signups; variant A had 8. Visitor counts and allocation are unknown."
+            },
+            {
+              "id": "company:architecture-tilde@company-v3",
+              "version": "company-v3",
+              "availableAt": "2026-10-18T08:00:00Z",
+              "text": "Reviewed architecture with unknowns marked."
+            },
+            {
+              "id": "doc:doc-starred-roadmap@doc-v4",
+              "version": "doc-v4",
+              "availableAt": "2026-10-16T09:00:00Z",
+              "text": "Personal Vantage star with current roadmap context."
+            },
+            {
+              "id": "doc:doc-weekly-plan@doc-v7",
+              "version": "doc-v7",
+              "availableAt": "2026-10-17T09:00:00Z",
+              "text": "Mandatory weekly planning constraints."
+            },
+            {
+              "id": "ev:pilot-intake-missing-denominator@synthetic-intake-v1",
+              "version": "synthetic-intake-v1",
+              "availableAt": "2026-10-18T12:00:00.000Z",
+              "text": "Intake copy of joseph-semantic/missing-denominator/experiment@synthetic-v1: Variant B had 12 signups; variant A had 8. Visitor counts and allocation are unknown. This copies the same source and is not independent corroboration."
+            }
+          ],
+          "expectations": [
+            {
+              "id": "missing-denominator/expected-1/a",
+              "description": "Do not claim a 50% conversion-rate improvement.",
+              "kind": "must_not_claim",
+              "importance": "critical",
+              "evidence": [
+                {
+                  "sourceId": "doc:joseph-semantic/missing-denominator/experiment@synthetic-v1",
+                  "quote": "Variant B had 12 signups; variant A had 8. Visitor counts and allocation are unknown."
+                }
+              ]
+            },
+            {
+              "id": "missing-denominator/expected-1/b",
+              "description": "Do not claim statistical significance.",
+              "kind": "must_not_claim",
+              "importance": "important",
+              "evidence": [
+                {
+                  "sourceId": "doc:joseph-semantic/missing-denominator/experiment@synthetic-v1",
+                  "quote": "Variant B had 12 signups; variant A had 8. Visitor counts and allocation are unknown."
+                }
+              ]
+            },
+            {
+              "id": "missing-denominator/expected-2/a",
+              "description": "Request visitor counts, allocation, and experiment window.",
+              "kind": "must_include",
+              "importance": "important",
+              "evidence": [
+                {
+                  "sourceId": "doc:joseph-semantic/missing-denominator/experiment@synthetic-v1",
+                  "quote": "Variant B had 12 signups; variant A had 8. Visitor counts and allocation are unknown."
+                }
+              ]
+            }
+          ]
+        },
+        "actual": {
+          "id": "pilot-v21-missing-denominator",
+          "pipelineVersion": "live-v21-pilot/citation-clarification-native-json.2",
+          "summary": "The intake copy reports 12 signups for B and 8 for A, but visitor counts and allocation are unknown, so this is not evidence that B had a higher signup rate. The copy says it is not independent corroboration. First clarify whether the experiment record has denominators and allocation; without them, the comparison remains inconclusive.",
+          "enhancements": [
+            {
+              "id": "v21-headline",
+              "topicId": "v21-report",
+              "kind": "idea",
+              "text": "Signup counts are not yet comparable",
+              "rationale": "",
+              "sourceIds": []
+            },
+            {
+              "id": "v21-brief",
+              "topicId": "v21-report",
+              "kind": "idea",
+              "text": "The intake copy reports more signups for B, but missing visitor counts and allocation prevent a supported performance comparison.",
+              "rationale": "",
+              "sourceIds": []
+            },
+            {
+              "id": "v21-keyFigures-0-",
+              "topicId": "v21-report",
+              "kind": "evidence",
+              "text": "{\"label\":\"B signups\",\"value\":\"12\",\"tone\":\"neutral\"}",
+              "rationale": "",
+              "sourceIds": ["doc:joseph-semantic/missing-denominator/experiment@synthetic-v1"]
+            },
+            {
+              "id": "v21-keyFigures-1-",
+              "topicId": "v21-report",
+              "kind": "evidence",
+              "text": "{\"label\":\"A signups\",\"value\":\"8\",\"tone\":\"neutral\"}",
+              "rationale": "",
+              "sourceIds": ["doc:joseph-semantic/missing-denominator/experiment@synthetic-v1"]
+            },
+            {
+              "id": "v21-topics-0--whyNow",
+              "topicId": "topic-1",
+              "kind": "idea",
+              "text": "The current intake copy reports the counts but explicitly leaves visitor counts and allocation unknown.",
+              "rationale": "",
+              "sourceIds": []
+            },
+            {
+              "id": "v21-topics-0--recommendation-call",
+              "topicId": "topic-1",
+              "kind": "idea",
+              "text": "Clarify denominators before interpreting the counts.",
+              "rationale": "",
+              "sourceIds": ["ev:pilot-intake-missing-denominator@synthetic-intake-v1"]
+            },
+            {
+              "id": "v21-topics-0--recommendation-because",
+              "topicId": "topic-1",
+              "kind": "idea",
+              "text": "The source reports signup counts without visitor counts or allocation, so a rate comparison is unsupported.",
+              "rationale": "",
+              "sourceIds": ["ev:pilot-intake-missing-denominator@synthetic-intake-v1"]
+            },
+            {
+              "id": "v21-topics-0--recommendation-wouldChangeIf",
+              "topicId": "topic-1",
+              "kind": "idea",
+              "text": "If denominators and allocation are established, compare rates; otherwise keep the result inconclusive.",
+              "rationale": "",
+              "sourceIds": ["ev:pilot-intake-missing-denominator@synthetic-intake-v1"]
+            },
+            {
+              "id": "v21-topics-0--recommendation-confidence",
+              "topicId": "topic-1",
+              "kind": "idea",
+              "text": "high",
+              "rationale": "",
+              "sourceIds": ["ev:pilot-intake-missing-denominator@synthetic-intake-v1"]
+            }
+          ],
+          "tasks": [
+            {
+              "id": "topic-1",
+              "title": "Signup counts do not establish which variant performed better",
+              "facts": [
+                {
+                  "text": "The experiment excerpt reports 12 signups for B and 8 for A; visitor counts and allocation are unknown.",
+                  "sourceIds": [
+                    "doc:joseph-semantic/missing-denominator/experiment@synthetic-v1",
+                    "ev:pilot-intake-missing-denominator@synthetic-intake-v1"
+                  ]
+                },
+                {
+                  "text": "The intake copy states that it copies the same experiment source and is not independent corroboration.",
+                  "sourceIds": ["ev:pilot-intake-missing-denominator@synthetic-intake-v1"]
+                }
+              ],
+              "whyItMatters": "The counts are an observation; without denominators and allocation, interpreting them as a difference in signup performance would be unsupported.",
+              "decisionQuestion": "Can the experiment record establish visitor counts and allocation for both variants?",
+              "nextStep": "Check the experiment record for visitor counts and allocation by variant. If both are available, compare signup rates; if either is unavailable, treat the result as inconclusive and consider a follow-up test that records them.",
+              "rationale": "This is the only supplied current experiment observation, and its stated missing denominator is central to interpreting the counts.",
+              "owner": null,
+              "dueOn": null,
+              "helpRequested": null,
+              "unknowns": [
+                "Visitor counts and allocation by variant are not supplied.",
+                "No independent corroborating evidence is supplied."
+              ],
+              "conflicts": []
+            }
+          ]
+        }
+      },
+      "judgment": {
+        "expectations": [
+          {
+            "expectationId": "missing-denominator/expected-1/a",
+            "verdict": "met",
+            "reason": "The output does not claim a 50% conversion-rate improvement; it explicitly says signup counts do not establish a higher rate or supported performance comparison.",
+            "evidence": [
+              {
+                "kind": "source",
+                "id": "doc:joseph-semantic/missing-denominator/experiment@synthetic-v1",
+                "quote": "Variant B had 12 signups; variant A had 8. Visitor counts and allocation are unknown."
+              },
+              {
+                "kind": "output",
+                "id": "summary",
+                "quote": "so this is not evidence that B had a higher signup rate."
+              }
+            ]
+          },
+          {
+            "expectationId": "missing-denominator/expected-1/b",
+            "verdict": "met",
+            "reason": "The output makes no claim of statistical significance and treats the comparison as inconclusive without the missing information.",
+            "evidence": [
+              {
+                "kind": "source",
+                "id": "doc:joseph-semantic/missing-denominator/experiment@synthetic-v1",
+                "quote": "Variant B had 12 signups; variant A had 8. Visitor counts and allocation are unknown."
+              },
+              {
+                "kind": "output",
+                "id": "summary",
+                "quote": "without them, the comparison remains inconclusive."
+              }
+            ]
+          },
+          {
+            "expectationId": "missing-denominator/expected-2/a",
+            "verdict": "partial",
+            "reason": "The output requests visitor counts and allocation, but it does not request the experiment window.",
+            "evidence": [
+              {
+                "kind": "source",
+                "id": "doc:joseph-semantic/missing-denominator/experiment@synthetic-v1",
+                "quote": "Variant B had 12 signups; variant A had 8. Visitor counts and allocation are unknown."
+              },
+              {
+                "kind": "output",
+                "id": "task/topic-1/nextStep",
+                "quote": "Check the experiment record for visitor counts and allocation by variant."
+              }
+            ]
+          }
+        ],
+        "ratings": [
+          {
+            "criterion": "grounding",
+            "score": 3,
+            "reason": "The core claims about signup counts, unknown visitor counts and allocation, and the intake copy's lack of independent corroboration are supported. However, the output labels the intake copy as current even though the source only identifies it as a copy, and its high confidence is not clearly justified by the inconclusive evidence.",
+            "evidence": [
+              {
+                "kind": "source",
+                "id": "ev:pilot-intake-missing-denominator@synthetic-intake-v1",
+                "quote": "This copies the same source and is not independent corroboration."
+              },
+              {
+                "kind": "output",
+                "id": "enhancement/v21-topics-0--whyNow/idea",
+                "quote": "The current intake copy reports the counts but explicitly leaves visitor counts and allocation unknown."
+              },
+              {
+                "kind": "output",
+                "id": "enhancement/v21-topics-0--recommendation-confidence/idea",
+                "quote": "high"
+              }
+            ]
+          },
+          {
+            "criterion": "temporal",
+            "score": 3,
+            "reason": "The output does not infer a resolved experiment result or implementation progress, and keeps the comparison inconclusive pending denominators and allocation. Calling the intake copy current is a minor temporal overstatement; the supplied evidence dates it but does not establish that status.",
+            "evidence": [
+              {
+                "kind": "source",
+                "id": "ev:pilot-intake-missing-denominator@synthetic-intake-v1",
+                "quote": "Intake copy of joseph-semantic/missing-denominator/experiment@synthetic-v1: Variant B had 12 signups; variant A had 8. Visitor counts and allocation are unknown."
+              },
+              {
+                "kind": "output",
+                "id": "summary",
+                "quote": "First clarify whether the experiment record has denominators and allocation; without them, the comparison remains inconclusive."
+              },
+              {
+                "kind": "output",
+                "id": "enhancement/v21-topics-0--whyNow/idea",
+                "quote": "The current intake copy reports the counts but explicitly leaves visitor counts and allocation unknown."
+              }
+            ]
+          },
+          {
+            "criterion": "relevance",
+            "score": 4,
+            "reason": "The output centers the missing denominator and allocation, avoids claiming a performance win, and accurately notes that the intake copy is not independent corroboration. The request omits the experiment window, but otherwise stays tightly focused on the expected issue.",
+            "evidence": [
+              {
+                "kind": "output",
+                "id": "task/topic-1/title",
+                "quote": "Signup counts do not establish which variant performed better"
+              },
+              {
+                "kind": "output",
+                "id": "task/topic-1/fact/1",
+                "quote": "The intake copy states that it copies the same experiment source and is not independent corroboration."
+              },
+              {
+                "kind": "output",
+                "id": "enhancement/v21-brief/idea",
+                "quote": "The intake copy reports more signups for B, but missing visitor counts and allocation prevent a supported performance comparison."
+              }
+            ]
+          },
+          {
+            "criterion": "actionability",
+            "score": 3,
+            "reason": "The task gives a concrete check and a conditional next step, with an observable outcome of comparing rates if the missing data exists or treating the result as inconclusive if it does not. It omits the requested experiment window and does not provide an owner or due date, which are not established by the sources.",
+            "evidence": [
+              {
+                "kind": "output",
+                "id": "task/topic-1/nextStep",
+                "quote": "Check the experiment record for visitor counts and allocation by variant. If both are available, compare signup rates; if either is unavailable, treat the result as inconclusive and consider a follow-up test that records them."
+              },
+              {
+                "kind": "output",
+                "id": "task/topic-1/decisionQuestion",
+                "quote": "Can the experiment record establish visitor counts and allocation for both variants?"
+              }
+            ]
+          },
+          {
+            "criterion": "readability",
+            "score": 4,
+            "reason": "The output is clearly organized across summary, task, facts, unknowns, and recommendation fields. Its concise language distinguishes observed signup counts from unsupported rate comparisons and states the uncertainty plainly.",
+            "evidence": [
+              {
+                "kind": "output",
+                "id": "summary",
+                "quote": "The intake copy reports 12 signups for B and 8 for A, but visitor counts and allocation are unknown, so this is not evidence that B had a higher signup rate."
+              },
+              {
+                "kind": "output",
+                "id": "task/topic-1/unknown/0",
+                "quote": "Visitor counts and allocation by variant are not supplied."
+              },
+              {
+                "kind": "output",
+                "id": "enhancement/v21-topics-0--recommendation-wouldChangeIf/idea",
+                "quote": "If denominators and allocation are established, compare rates; otherwise keep the result inconclusive."
+              }
+            ]
+          }
+        ]
+      },
+      "provenance": {
+        "evaluationInputPath": "test-output/vantage-live-e2e-20261102/20261102T194837Z/judge-evidence-repair-1/missing-denominator/recovery-1/evaluation-input-with-gold.json",
+        "evaluationInputSha256": "27caa9d52b0f581779e8063c675e8916171beab3944639f7faf45889e2393156",
+        "responsePath": "test-output/vantage-live-e2e-20261102/20261102T194837Z/calls/A-recovery-judge-missing-denominator-1/response.json",
+        "responseSha256": "ca5b29502384783f7f63f15f2773562a72634a22e90f885e7c5420cc277d295e",
+        "contentSha256": "a7ad72c010dfff04de561af4258884f19acde55c62341ee573862b511c502c69",
+        "syntheticSources": true,
+        "actualProviderOutput": true,
+        "historicalOutcomeUnchanged": true
+      }
+    }
+  ]
+}

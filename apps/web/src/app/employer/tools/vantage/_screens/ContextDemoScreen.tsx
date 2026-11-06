@@ -1,6 +1,7 @@
 "use client";
 
 import {
+    TriangleAlert,
     ChevronLeft,
     ChevronRight,
     Loader2,
@@ -9,6 +10,7 @@ import {
     Sparkles,
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { toast } from "sonner";
 import { ToolLink } from "~/components/tool-app/ToolLink";
 import { useToolNav } from "~/components/tool-app/nav";
 import { EmptyState, InlineError } from "~/components/tools/EmptyState";
@@ -156,7 +158,8 @@ function ContextDemoWeek({
             if (alive.current) {
                 state.mutate(() => next);
                 setWithheld(false);
-                if (announce) setNotice("Reloaded the current saved review.");
+                if (announce)
+                    toast.success("Reloaded the current saved review.", { duration: 2500 });
             }
             return true;
         } catch {
@@ -184,13 +187,18 @@ function ContextDemoWeek({
                 state.mutate(() => next);
                 setWithheld(false);
                 setDecision(null);
-                setNotice(
-                    !next.report
-                        ? "The request finished, but contextual content is unavailable with the current evidence or access."
-                        : label === "generate"
-                          ? "Report saved. Earlier reports, decisions and actions are preserved."
-                          : "Review saved. No action or commitment was created."
-                );
+                if (!next.report) {
+                    setNotice(
+                        "The request finished, but contextual content is unavailable with the current evidence or access."
+                    );
+                } else {
+                    toast.success(
+                        label === "generate"
+                            ? "Report saved. Earlier reports, decisions and actions are preserved."
+                            : "Review saved.",
+                        { duration: 2500 }
+                    );
+                }
             }
         } catch (reason) {
             if (alive.current) {
@@ -324,11 +332,16 @@ function ContextDemoWeek({
                 </div>
             </header>
             {personalReady === false && personalEnabled && (
-                <p role="status" className={ui.contextNotice}>
-                    Context needs attention before a new review can be prepared. Your saved report
-                    is still available.{" "}
-                    <button onClick={() => setPersonalOpen(true)}>Inspect My context</button>
-                </p>
+                <div role="status" className={ui.contextNotice}>
+                    <TriangleAlert size={16} aria-hidden="true" />
+                    <p>
+                        Required context needs attention before a fresh report can be prepared.
+                        {report
+                            ? " Your saved report is still available; Refresh reloads it."
+                            : " Refresh checks for an available saved report."}{" "}
+                        <button onClick={() => setPersonalOpen(true)}>Inspect My context</button>
+                    </p>
+                </div>
             )}
             {(state.error ?? error) && (
                 <InlineError message={error ?? state.error!} onRetry={() => void reloadSaved()} />
@@ -400,10 +413,6 @@ function ContextDemoWeek({
                                             ))}
                                         </div>
                                     </div>
-                                    <p className={ui.listNote}>
-                                        Suggestions for your review. Keeping a topic or recording a
-                                        decision does not create an action.
-                                    </p>
                                     <div className={ui.decisionList}>
                                         {visibleTopics.map(topic => (
                                             <CompactTopicRow
@@ -463,8 +472,8 @@ function ContextDemoWeek({
                         <footer className={ui.reportFooter}>
                             <p>
                                 {replayMode
-                                    ? "Sample report ? recorded replay ? no live AI call"
-                                    : "Saved report ? suggestions for human review"}
+                                    ? "Sample report \u00b7 recorded replay \u00b7 no live AI call"
+                                    : "Saved report \u00b7 suggestions for human review"}
                             </p>
                             <ToolLink
                                 href={`/agenda?week=${data.selectedWeek}&report=rules`}
@@ -787,8 +796,10 @@ function DecisionReviewDialog({
     onClose: () => void;
     onSave: (decision: NonNullable<DemoTopicReview["decision"]>) => void;
 }) {
-    const [value, setValue] = useState<DemoHumanDecision["value"]>(
-        initialValue ?? topic.decision?.value ?? "needs-more-evidence"
+    // Only an explicit click by this reviewer or an existing saved decision supplies a value.
+    // There is no AI-derived or default human outcome.
+    const [value, setValue] = useState<DemoHumanDecision["value"] | undefined>(
+        initialValue ?? topic.decision?.value
     );
     const [note, setNote] = useState(topic.decision?.text ?? "");
     return (
@@ -836,10 +847,11 @@ function DecisionReviewDialog({
                         Cancel
                     </Button>
                     <Button
-                        disabled={busy}
-                        onClick={() =>
-                            onSave({ value, ...(note.trim() ? { text: note.trim() } : {}) })
-                        }
+                        disabled={busy || !value}
+                        onClick={() => {
+                            if (value)
+                                onSave({ value, ...(note.trim() ? { text: note.trim() } : {}) });
+                        }}
                     >
                         {busy && <Loader2 className="animate-spin" aria-hidden="true" />}Save
                         decision

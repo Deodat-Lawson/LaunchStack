@@ -1,0 +1,1180 @@
+{
+  "syntheticOnly": true,
+  "caseId": "C05",
+  "fixtureSha256": "9c0bcde52a185b38776ae84eec3557f30e714fde5543fa39a1517a7e657a8ae2",
+  "envelope": {
+    "v1Input": {
+      "contractVersion": "v1",
+      "runId": "quality-C05",
+      "inputVersion": "quality-v0.1",
+      "generationMode": "configured-model",
+      "reportPeriod": {
+        "startInclusive": "2026-10-26T04:00:00Z",
+        "endExclusive": "2026-11-02T05:00:00Z",
+        "asOf": "2026-11-02T14:00:00Z",
+        "weekStart": "2026-10-26",
+        "timeZone": "America/New_York",
+        "kind": "completed-week"
+      },
+      "data": {
+        "metricDefinitions": [],
+        "currentObservations": [],
+        "comparisonObservations": [],
+        "resolvedCommitments": [],
+        "carryForwardCommitments": [],
+        "currentEvidence": [
+          {
+            "id": "D02",
+            "kind": "document",
+            "title": "D02 Document",
+            "body": "The café updated the font size on its printed pastry menu.",
+            "source": "Document · Oct 30",
+            "sourceUrl": null,
+            "observedAt": "2026-10-30",
+            "visibility": "private",
+            "tags": [],
+            "createdAt": "2026-10-30"
+          },
+          {
+            "id": "D09",
+            "kind": "document",
+            "title": "D09 Document",
+            "body": "The café ordered additional decorations for its December holiday display.",
+            "source": "Document · Oct 31",
+            "sourceUrl": null,
+            "observedAt": "2026-10-31",
+            "visibility": "private",
+            "tags": [],
+            "createdAt": "2026-10-31"
+          },
+          {
+            "id": "D01",
+            "kind": "document",
+            "title": "D01 Supplier email",
+            "body": "The coffee-bean supplier has delayed its shipment from Friday, November 6, to Monday, November 9. The delivery date is an estimate, not a guaranteed arrival.",
+            "source": "Supplier email · Nov 1",
+            "sourceUrl": null,
+            "observedAt": "2026-11-01",
+            "visibility": "private",
+            "tags": [],
+            "createdAt": "2026-11-01"
+          },
+          {
+            "id": "D03",
+            "kind": "document",
+            "title": "D03 Order record",
+            "body": "A university club has placed and paid a deposit for an order of 200 cups of the café's signature coffee for Saturday, November 7, at 10 AM.",
+            "source": "Order record · Oct 31",
+            "sourceUrl": null,
+            "observedAt": "2026-10-31",
+            "visibility": "private",
+            "tags": [],
+            "createdAt": "2026-10-31"
+          },
+          {
+            "id": "D07",
+            "kind": "document",
+            "title": "D07 Daily note",
+            "body": "A customer left an umbrella at the counter and returned later to collect it.",
+            "source": "Daily note · Oct 31",
+            "sourceUrl": null,
+            "observedAt": "2026-10-31",
+            "visibility": "private",
+            "tags": [],
+            "createdAt": "2026-10-31"
+          },
+          {
+            "id": "D05",
+            "kind": "document",
+            "title": "D05 Marketing note",
+            "body": "The social-media caption for the café's pumpkin muffin photograph was rewritten.",
+            "source": "Marketing note · Oct 30",
+            "sourceUrl": null,
+            "observedAt": "2026-10-30",
+            "visibility": "private",
+            "tags": [],
+            "createdAt": "2026-10-30"
+          },
+          {
+            "id": "D10",
+            "kind": "document",
+            "title": "D10 Staff note",
+            "body": "The team updated its music playlist for the weekend shift.",
+            "source": "Staff note · Oct 28",
+            "sourceUrl": null,
+            "observedAt": "2026-10-28",
+            "visibility": "private",
+            "tags": [],
+            "createdAt": "2026-10-28"
+          }
+        ]
+      },
+      "reviewedTopics": []
+    },
+    "manifest": {
+      "contractVersion": "v0-proposed",
+      "runId": "quality-C05",
+      "inputVersion": "quality-v0.1",
+      "actor": {
+        "principalRef": "quality-user-C05",
+        "companyId": "quality-company-C05",
+        "audience": {
+          "kind": "actor",
+          "principalRef": "quality-user-C05"
+        },
+        "aclDigest": "quality-acl-C05-v1"
+      },
+      "reportWindow": {
+        "startInclusive": "2026-10-26T04:00:00Z",
+        "endExclusive": "2026-11-02T05:00:00Z",
+        "asOf": "2026-11-02T14:00:00Z"
+      },
+      "roleMapVersion": "quality-role-map-v0.1",
+      "roleIds": [
+        "owner-manager"
+      ],
+      "roleProfileVersions": {
+        "owner-manager": "quality-role-profile-v0.1"
+      },
+      "companyArchitectureVersion": "v1",
+      "personalStarVersions": {},
+      "sourceVersions": {
+        "cm:D08@v1": "v1",
+        "company:D04@v1": "v1",
+        "doc:D01@v1": "v1",
+        "doc:D02@v1": "v1",
+        "doc:D03@v1": "v1",
+        "doc:D05@v1": "v1",
+        "doc:D07@v1": "v1",
+        "doc:D09@v1": "v1",
+        "doc:D10@v1": "v1",
+        "obs:D06@v1": "v1"
+      },
+      "sourceRegistry": [
+        {
+          "source": {
+            "kind": "cm",
+            "id": "D08",
+            "version": "v1"
+          },
+          "companyId": "quality-company-C05",
+          "access": "allowed",
+          "aclDigest": "quality-acl-C05-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "quality-company-C05"
+          },
+          "sourceDate": "2026-10-29",
+          "checkedAt": "2026-11-02T14:00:00Z",
+          "excerpt": "The promotional poster for the university event was completed and approved. No outstanding poster-related work remains in the recorded commitment.",
+          "contentHash": "00cdf021988f6b2f20e35fab9357802bbf078b25f743e7ae959cbe2b199abd32",
+          "provenance": {
+            "connector": "approved-synthetic-fixture",
+            "locator": "D08",
+            "retrievedAt": "2026-11-02T14:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "company",
+            "id": "D04",
+            "version": "v1",
+            "companyId": "quality-company-C05",
+            "canonical": true,
+            "reviewState": "unreviewed"
+          },
+          "companyId": "quality-company-C05",
+          "access": "allowed",
+          "aclDigest": "quality-acl-C05-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "quality-company-C05"
+          },
+          "sourceDate": "2026-10-30",
+          "checkedAt": "2026-11-02T14:00:00Z",
+          "excerpt": "Harbor Cup has one owner and two part-time employees. The owner manages purchasing and large orders; there is no dedicated procurement department.",
+          "contentHash": "15f53cf92042095ca3ec7deff2fbed113d641b38b5d6e2ba8430efea7e2b5725",
+          "provenance": {
+            "connector": "approved-synthetic-fixture",
+            "locator": "D04",
+            "retrievedAt": "2026-11-02T14:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "D01",
+            "version": "v1"
+          },
+          "companyId": "quality-company-C05",
+          "access": "allowed",
+          "aclDigest": "quality-acl-C05-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "quality-company-C05"
+          },
+          "sourceDate": "2026-11-01",
+          "checkedAt": "2026-11-02T14:00:00Z",
+          "excerpt": "The coffee-bean supplier has delayed its shipment from Friday, November 6, to Monday, November 9. The delivery date is an estimate, not a guaranteed arrival.",
+          "contentHash": "bf903a8f7217f6d2e95ce9a9fb6ae984d5ba757124b3417a681bf97bd607a841",
+          "provenance": {
+            "connector": "approved-synthetic-fixture",
+            "locator": "D01",
+            "retrievedAt": "2026-11-02T14:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "D02",
+            "version": "v1"
+          },
+          "companyId": "quality-company-C05",
+          "access": "allowed",
+          "aclDigest": "quality-acl-C05-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "quality-company-C05"
+          },
+          "sourceDate": "2026-10-30",
+          "checkedAt": "2026-11-02T14:00:00Z",
+          "excerpt": "The café updated the font size on its printed pastry menu.",
+          "contentHash": "18ab94525b3a4b937a084c9e26ae8e9da2d111a5c26e5bbe8e1c814a840147af",
+          "provenance": {
+            "connector": "approved-synthetic-fixture",
+            "locator": "D02",
+            "retrievedAt": "2026-11-02T14:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "D03",
+            "version": "v1"
+          },
+          "companyId": "quality-company-C05",
+          "access": "allowed",
+          "aclDigest": "quality-acl-C05-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "quality-company-C05"
+          },
+          "sourceDate": "2026-10-31",
+          "checkedAt": "2026-11-02T14:00:00Z",
+          "excerpt": "A university club has placed and paid a deposit for an order of 200 cups of the café's signature coffee for Saturday, November 7, at 10 AM.",
+          "contentHash": "94637795bfddd4fabecdfb4dd8f7853d148c1843966b90bb70d4017ee85b84ff",
+          "provenance": {
+            "connector": "approved-synthetic-fixture",
+            "locator": "D03",
+            "retrievedAt": "2026-11-02T14:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "D05",
+            "version": "v1"
+          },
+          "companyId": "quality-company-C05",
+          "access": "allowed",
+          "aclDigest": "quality-acl-C05-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "quality-company-C05"
+          },
+          "sourceDate": "2026-10-30",
+          "checkedAt": "2026-11-02T14:00:00Z",
+          "excerpt": "The social-media caption for the café's pumpkin muffin photograph was rewritten.",
+          "contentHash": "4cf42115d77f34e474873e51f8acfafe5dabea714de2c4260163602a6c2c51fb",
+          "provenance": {
+            "connector": "approved-synthetic-fixture",
+            "locator": "D05",
+            "retrievedAt": "2026-11-02T14:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "D07",
+            "version": "v1"
+          },
+          "companyId": "quality-company-C05",
+          "access": "allowed",
+          "aclDigest": "quality-acl-C05-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "quality-company-C05"
+          },
+          "sourceDate": "2026-10-31",
+          "checkedAt": "2026-11-02T14:00:00Z",
+          "excerpt": "A customer left an umbrella at the counter and returned later to collect it.",
+          "contentHash": "8674ead27b9d6aa5415e268c2f4711c1cf92bec5699c8f4a034c810d915dc5e0",
+          "provenance": {
+            "connector": "approved-synthetic-fixture",
+            "locator": "D07",
+            "retrievedAt": "2026-11-02T14:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "D09",
+            "version": "v1"
+          },
+          "companyId": "quality-company-C05",
+          "access": "allowed",
+          "aclDigest": "quality-acl-C05-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "quality-company-C05"
+          },
+          "sourceDate": "2026-10-31",
+          "checkedAt": "2026-11-02T14:00:00Z",
+          "excerpt": "The café ordered additional decorations for its December holiday display.",
+          "contentHash": "5287731e2a0c9220d8ac681f849cf82fbb69d304aaae85e64e0abbd6cd736fad",
+          "provenance": {
+            "connector": "approved-synthetic-fixture",
+            "locator": "D09",
+            "retrievedAt": "2026-11-02T14:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "D10",
+            "version": "v1"
+          },
+          "companyId": "quality-company-C05",
+          "access": "allowed",
+          "aclDigest": "quality-acl-C05-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "quality-company-C05"
+          },
+          "sourceDate": "2026-10-28",
+          "checkedAt": "2026-11-02T14:00:00Z",
+          "excerpt": "The team updated its music playlist for the weekend shift.",
+          "contentHash": "6b9afa96493c51e40f67dfabc7b15e704efa34bbd9abb037731cc6fd1a5a7074",
+          "provenance": {
+            "connector": "approved-synthetic-fixture",
+            "locator": "D10",
+            "retrievedAt": "2026-11-02T14:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "obs",
+            "id": "D06",
+            "version": "v1"
+          },
+          "companyId": "quality-company-C05",
+          "access": "allowed",
+          "aclDigest": "quality-acl-C05-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "quality-company-C05"
+          },
+          "sourceDate": "2026-10-30",
+          "checkedAt": "2026-11-02T14:00:00Z",
+          "excerpt": "The last recorded bean inventory was estimated to cover approximately 125 cups of signature coffee. Current stock has not been verified, and subsequent purchases or sales are not fully captured.",
+          "contentHash": "32a1ab49da25f1ffcecf132a303432cce50998ed3a8217bebb5f5caf5ecffd5a",
+          "provenance": {
+            "connector": "approved-synthetic-fixture",
+            "locator": "D06",
+            "retrievedAt": "2026-11-02T14:00:00Z"
+          }
+        }
+      ],
+      "coverage": {
+        "checked": [
+          {
+            "kind": "cm",
+            "id": "D08",
+            "version": "v1"
+          },
+          {
+            "kind": "company",
+            "id": "D04",
+            "version": "v1",
+            "companyId": "quality-company-C05",
+            "canonical": true,
+            "reviewState": "unreviewed"
+          },
+          {
+            "kind": "doc",
+            "id": "D01",
+            "version": "v1"
+          },
+          {
+            "kind": "doc",
+            "id": "D02",
+            "version": "v1"
+          },
+          {
+            "kind": "doc",
+            "id": "D03",
+            "version": "v1"
+          },
+          {
+            "kind": "doc",
+            "id": "D05",
+            "version": "v1"
+          },
+          {
+            "kind": "doc",
+            "id": "D07",
+            "version": "v1"
+          },
+          {
+            "kind": "doc",
+            "id": "D09",
+            "version": "v1"
+          },
+          {
+            "kind": "doc",
+            "id": "D10",
+            "version": "v1"
+          },
+          {
+            "kind": "obs",
+            "id": "D06",
+            "version": "v1"
+          }
+        ],
+        "used": [
+          {
+            "kind": "cm",
+            "id": "D08",
+            "version": "v1"
+          },
+          {
+            "kind": "company",
+            "id": "D04",
+            "version": "v1",
+            "companyId": "quality-company-C05",
+            "canonical": true,
+            "reviewState": "unreviewed"
+          },
+          {
+            "kind": "doc",
+            "id": "D01",
+            "version": "v1"
+          },
+          {
+            "kind": "doc",
+            "id": "D02",
+            "version": "v1"
+          },
+          {
+            "kind": "doc",
+            "id": "D03",
+            "version": "v1"
+          },
+          {
+            "kind": "doc",
+            "id": "D05",
+            "version": "v1"
+          },
+          {
+            "kind": "doc",
+            "id": "D07",
+            "version": "v1"
+          },
+          {
+            "kind": "doc",
+            "id": "D09",
+            "version": "v1"
+          },
+          {
+            "kind": "doc",
+            "id": "D10",
+            "version": "v1"
+          },
+          {
+            "kind": "obs",
+            "id": "D06",
+            "version": "v1"
+          }
+        ],
+        "missing": [],
+        "revoked": [],
+        "omitted": [],
+        "researchOmitted": []
+      },
+      "omissions": [],
+      "research": {
+        "mode": "STOP",
+        "status": "stopped",
+        "citationRefs": [],
+        "failures": []
+      },
+      "status": "complete",
+      "selectedRefs": [
+        {
+          "kind": "cm",
+          "id": "D08",
+          "version": "v1"
+        },
+        {
+          "kind": "company",
+          "id": "D04",
+          "version": "v1",
+          "companyId": "quality-company-C05",
+          "canonical": true,
+          "reviewState": "unreviewed"
+        },
+        {
+          "kind": "doc",
+          "id": "D01",
+          "version": "v1"
+        },
+        {
+          "kind": "doc",
+          "id": "D02",
+          "version": "v1"
+        },
+        {
+          "kind": "doc",
+          "id": "D03",
+          "version": "v1"
+        },
+        {
+          "kind": "doc",
+          "id": "D05",
+          "version": "v1"
+        },
+        {
+          "kind": "doc",
+          "id": "D07",
+          "version": "v1"
+        },
+        {
+          "kind": "doc",
+          "id": "D09",
+          "version": "v1"
+        },
+        {
+          "kind": "doc",
+          "id": "D10",
+          "version": "v1"
+        },
+        {
+          "kind": "obs",
+          "id": "D06",
+          "version": "v1"
+        }
+      ],
+      "retrievalState": {
+        "status": "complete",
+        "selectedRefs": [
+          {
+            "kind": "cm",
+            "id": "D08",
+            "version": "v1"
+          },
+          {
+            "kind": "doc",
+            "id": "D01",
+            "version": "v1"
+          },
+          {
+            "kind": "doc",
+            "id": "D02",
+            "version": "v1"
+          },
+          {
+            "kind": "doc",
+            "id": "D03",
+            "version": "v1"
+          },
+          {
+            "kind": "doc",
+            "id": "D05",
+            "version": "v1"
+          },
+          {
+            "kind": "doc",
+            "id": "D07",
+            "version": "v1"
+          },
+          {
+            "kind": "doc",
+            "id": "D09",
+            "version": "v1"
+          },
+          {
+            "kind": "doc",
+            "id": "D10",
+            "version": "v1"
+          },
+          {
+            "kind": "obs",
+            "id": "D06",
+            "version": "v1"
+          }
+        ],
+        "omissions": [],
+        "failures": [],
+        "laneProvenance": [
+          {
+            "source": {
+              "kind": "cm",
+              "id": "D08",
+              "version": "v1"
+            },
+            "lanes": [
+              "recentChanges"
+            ],
+            "reasons": [
+              "Approved complete fixture source set; seeded order only"
+            ]
+          },
+          {
+            "source": {
+              "kind": "doc",
+              "id": "D01",
+              "version": "v1"
+            },
+            "lanes": [
+              "recentChanges"
+            ],
+            "reasons": [
+              "Approved complete fixture source set; seeded order only"
+            ]
+          },
+          {
+            "source": {
+              "kind": "doc",
+              "id": "D02",
+              "version": "v1"
+            },
+            "lanes": [
+              "recentChanges"
+            ],
+            "reasons": [
+              "Approved complete fixture source set; seeded order only"
+            ]
+          },
+          {
+            "source": {
+              "kind": "doc",
+              "id": "D03",
+              "version": "v1"
+            },
+            "lanes": [
+              "recentChanges"
+            ],
+            "reasons": [
+              "Approved complete fixture source set; seeded order only"
+            ]
+          },
+          {
+            "source": {
+              "kind": "doc",
+              "id": "D05",
+              "version": "v1"
+            },
+            "lanes": [
+              "recentChanges"
+            ],
+            "reasons": [
+              "Approved complete fixture source set; seeded order only"
+            ]
+          },
+          {
+            "source": {
+              "kind": "doc",
+              "id": "D07",
+              "version": "v1"
+            },
+            "lanes": [
+              "recentChanges"
+            ],
+            "reasons": [
+              "Approved complete fixture source set; seeded order only"
+            ]
+          },
+          {
+            "source": {
+              "kind": "doc",
+              "id": "D09",
+              "version": "v1"
+            },
+            "lanes": [
+              "recentChanges"
+            ],
+            "reasons": [
+              "Approved complete fixture source set; seeded order only"
+            ]
+          },
+          {
+            "source": {
+              "kind": "doc",
+              "id": "D10",
+              "version": "v1"
+            },
+            "lanes": [
+              "recentChanges"
+            ],
+            "reasons": [
+              "Approved complete fixture source set; seeded order only"
+            ]
+          },
+          {
+            "source": {
+              "kind": "obs",
+              "id": "D06",
+              "version": "v1"
+            },
+            "lanes": [
+              "recentChanges"
+            ],
+            "reasons": [
+              "Approved complete fixture source set; seeded order only"
+            ]
+          }
+        ]
+      },
+      "contextFingerprint": "2675b750be577089671a73656a4b126fd22e622b2eef31daa70bb6eb97c81e78"
+    },
+    "evidenceSnapshot": {
+      "contractVersion": "v0-assembly-1",
+      "asOf": "2026-11-02T14:00:00Z",
+      "entries": [
+        {
+          "source": {
+            "kind": "cm",
+            "id": "D08",
+            "version": "v1"
+          },
+          "contentHash": "00cdf021988f6b2f20e35fab9357802bbf078b25f743e7ae959cbe2b199abd32",
+          "excerpt": "The promotional poster for the university event was completed and approved. No outstanding poster-related work remains in the recorded commitment.",
+          "provenance": {
+            "connector": "approved-synthetic-fixture",
+            "locator": "D08",
+            "retrievedAt": "2026-11-02T14:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "company",
+            "id": "D04",
+            "version": "v1",
+            "companyId": "quality-company-C05",
+            "canonical": true,
+            "reviewState": "unreviewed"
+          },
+          "contentHash": "15f53cf92042095ca3ec7deff2fbed113d641b38b5d6e2ba8430efea7e2b5725",
+          "excerpt": "Harbor Cup has one owner and two part-time employees. The owner manages purchasing and large orders; there is no dedicated procurement department.",
+          "provenance": {
+            "connector": "approved-synthetic-fixture",
+            "locator": "D04",
+            "retrievedAt": "2026-11-02T14:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "D01",
+            "version": "v1"
+          },
+          "contentHash": "bf903a8f7217f6d2e95ce9a9fb6ae984d5ba757124b3417a681bf97bd607a841",
+          "excerpt": "The coffee-bean supplier has delayed its shipment from Friday, November 6, to Monday, November 9. The delivery date is an estimate, not a guaranteed arrival.",
+          "provenance": {
+            "connector": "approved-synthetic-fixture",
+            "locator": "D01",
+            "retrievedAt": "2026-11-02T14:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "D02",
+            "version": "v1"
+          },
+          "contentHash": "18ab94525b3a4b937a084c9e26ae8e9da2d111a5c26e5bbe8e1c814a840147af",
+          "excerpt": "The café updated the font size on its printed pastry menu.",
+          "provenance": {
+            "connector": "approved-synthetic-fixture",
+            "locator": "D02",
+            "retrievedAt": "2026-11-02T14:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "D03",
+            "version": "v1"
+          },
+          "contentHash": "94637795bfddd4fabecdfb4dd8f7853d148c1843966b90bb70d4017ee85b84ff",
+          "excerpt": "A university club has placed and paid a deposit for an order of 200 cups of the café's signature coffee for Saturday, November 7, at 10 AM.",
+          "provenance": {
+            "connector": "approved-synthetic-fixture",
+            "locator": "D03",
+            "retrievedAt": "2026-11-02T14:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "D05",
+            "version": "v1"
+          },
+          "contentHash": "4cf42115d77f34e474873e51f8acfafe5dabea714de2c4260163602a6c2c51fb",
+          "excerpt": "The social-media caption for the café's pumpkin muffin photograph was rewritten.",
+          "provenance": {
+            "connector": "approved-synthetic-fixture",
+            "locator": "D05",
+            "retrievedAt": "2026-11-02T14:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "D07",
+            "version": "v1"
+          },
+          "contentHash": "8674ead27b9d6aa5415e268c2f4711c1cf92bec5699c8f4a034c810d915dc5e0",
+          "excerpt": "A customer left an umbrella at the counter and returned later to collect it.",
+          "provenance": {
+            "connector": "approved-synthetic-fixture",
+            "locator": "D07",
+            "retrievedAt": "2026-11-02T14:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "D09",
+            "version": "v1"
+          },
+          "contentHash": "5287731e2a0c9220d8ac681f849cf82fbb69d304aaae85e64e0abbd6cd736fad",
+          "excerpt": "The café ordered additional decorations for its December holiday display.",
+          "provenance": {
+            "connector": "approved-synthetic-fixture",
+            "locator": "D09",
+            "retrievedAt": "2026-11-02T14:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "doc",
+            "id": "D10",
+            "version": "v1"
+          },
+          "contentHash": "6b9afa96493c51e40f67dfabc7b15e704efa34bbd9abb037731cc6fd1a5a7074",
+          "excerpt": "The team updated its music playlist for the weekend shift.",
+          "provenance": {
+            "connector": "approved-synthetic-fixture",
+            "locator": "D10",
+            "retrievedAt": "2026-11-02T14:00:00Z"
+          }
+        },
+        {
+          "source": {
+            "kind": "obs",
+            "id": "D06",
+            "version": "v1"
+          },
+          "contentHash": "32a1ab49da25f1ffcecf132a303432cce50998ed3a8217bebb5f5caf5ecffd5a",
+          "excerpt": "The last recorded bean inventory was estimated to cover approximately 125 cups of signature coffee. Current stock has not been verified, and subsequent purchases or sales are not fully captured.",
+          "provenance": {
+            "connector": "approved-synthetic-fixture",
+            "locator": "D06",
+            "retrievedAt": "2026-11-02T14:00:00Z"
+          }
+        }
+      ],
+      "totalExcerptChars": 1127,
+      "contentFingerprint": "f251965096651acb3e1b5c3587e61ab710fb1178fbcc759a738fdc6b90896a42",
+      "manifestFingerprint": "2675b750be577089671a73656a4b126fd22e622b2eef31daa70bb6eb97c81e78"
+    },
+    "freeze": {
+      "contractVersion": "v0-assembly-1",
+      "actorACL": {
+        "principalRef": "quality-user-C05",
+        "companyId": "quality-company-C05",
+        "audience": {
+          "kind": "actor",
+          "principalRef": "quality-user-C05"
+        },
+        "aclDigest": "quality-acl-C05-v1"
+      },
+      "roleMapVersion": "quality-role-map-v0.1",
+      "roleProfileVersions": {
+        "owner-manager": "quality-role-profile-v0.1"
+      },
+      "companyArchitecture": {
+        "ref": {
+          "kind": "company",
+          "id": "D04",
+          "version": "v1",
+          "companyId": "quality-company-C05",
+          "canonical": true,
+          "reviewState": "unreviewed"
+        },
+        "contentHash": "15f53cf92042095ca3ec7deff2fbed113d641b38b5d6e2ba8430efea7e2b5725",
+        "aclDigest": "quality-acl-C05-v1",
+        "audience": {
+          "kind": "company",
+          "companyId": "quality-company-C05"
+        },
+        "access": "allowed"
+      },
+      "personalStars": [],
+      "sources": [
+        {
+          "ref": {
+            "kind": "cm",
+            "id": "D08",
+            "version": "v1"
+          },
+          "contentHash": "00cdf021988f6b2f20e35fab9357802bbf078b25f743e7ae959cbe2b199abd32",
+          "aclDigest": "quality-acl-C05-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "quality-company-C05"
+          },
+          "access": "allowed"
+        },
+        {
+          "ref": {
+            "kind": "company",
+            "id": "D04",
+            "version": "v1",
+            "companyId": "quality-company-C05",
+            "canonical": true,
+            "reviewState": "unreviewed"
+          },
+          "contentHash": "15f53cf92042095ca3ec7deff2fbed113d641b38b5d6e2ba8430efea7e2b5725",
+          "aclDigest": "quality-acl-C05-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "quality-company-C05"
+          },
+          "access": "allowed"
+        },
+        {
+          "ref": {
+            "kind": "doc",
+            "id": "D01",
+            "version": "v1"
+          },
+          "contentHash": "bf903a8f7217f6d2e95ce9a9fb6ae984d5ba757124b3417a681bf97bd607a841",
+          "aclDigest": "quality-acl-C05-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "quality-company-C05"
+          },
+          "access": "allowed"
+        },
+        {
+          "ref": {
+            "kind": "doc",
+            "id": "D02",
+            "version": "v1"
+          },
+          "contentHash": "18ab94525b3a4b937a084c9e26ae8e9da2d111a5c26e5bbe8e1c814a840147af",
+          "aclDigest": "quality-acl-C05-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "quality-company-C05"
+          },
+          "access": "allowed"
+        },
+        {
+          "ref": {
+            "kind": "doc",
+            "id": "D03",
+            "version": "v1"
+          },
+          "contentHash": "94637795bfddd4fabecdfb4dd8f7853d148c1843966b90bb70d4017ee85b84ff",
+          "aclDigest": "quality-acl-C05-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "quality-company-C05"
+          },
+          "access": "allowed"
+        },
+        {
+          "ref": {
+            "kind": "doc",
+            "id": "D05",
+            "version": "v1"
+          },
+          "contentHash": "4cf42115d77f34e474873e51f8acfafe5dabea714de2c4260163602a6c2c51fb",
+          "aclDigest": "quality-acl-C05-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "quality-company-C05"
+          },
+          "access": "allowed"
+        },
+        {
+          "ref": {
+            "kind": "doc",
+            "id": "D07",
+            "version": "v1"
+          },
+          "contentHash": "8674ead27b9d6aa5415e268c2f4711c1cf92bec5699c8f4a034c810d915dc5e0",
+          "aclDigest": "quality-acl-C05-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "quality-company-C05"
+          },
+          "access": "allowed"
+        },
+        {
+          "ref": {
+            "kind": "doc",
+            "id": "D09",
+            "version": "v1"
+          },
+          "contentHash": "5287731e2a0c9220d8ac681f849cf82fbb69d304aaae85e64e0abbd6cd736fad",
+          "aclDigest": "quality-acl-C05-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "quality-company-C05"
+          },
+          "access": "allowed"
+        },
+        {
+          "ref": {
+            "kind": "doc",
+            "id": "D10",
+            "version": "v1"
+          },
+          "contentHash": "6b9afa96493c51e40f67dfabc7b15e704efa34bbd9abb037731cc6fd1a5a7074",
+          "aclDigest": "quality-acl-C05-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "quality-company-C05"
+          },
+          "access": "allowed"
+        },
+        {
+          "ref": {
+            "kind": "obs",
+            "id": "D06",
+            "version": "v1"
+          },
+          "contentHash": "32a1ab49da25f1ffcecf132a303432cce50998ed3a8217bebb5f5caf5ecffd5a",
+          "aclDigest": "quality-acl-C05-v1",
+          "audience": {
+            "kind": "company",
+            "companyId": "quality-company-C05"
+          },
+          "access": "allowed"
+        }
+      ],
+      "contentFingerprint": "a4252ad8490095fa2ddb42c4fede6aa428ddae09b6821a947908fee3774f83b3"
+    }
+  },
+  "roleProfile": {
+    "primaryRole": "Owner / Manager",
+    "mainResponsibility": "Owner / Manager",
+    "sourceAccess": "Same authorized source set"
+  },
+  "records": [
+    {
+      "id": "D06",
+      "version": "v1",
+      "sourceType": "Inventory count",
+      "sourceDisplay": "Inventory count · Oct 30",
+      "sourceDateDisplay": "Oct 30",
+      "sourceDate": "2026-10-30",
+      "kind": "obs",
+      "content": "The last recorded bean inventory was estimated to cover approximately 125 cups of signature coffee. Current stock has not been verified, and subsequent purchases or sales are not fully captured."
+    },
+    {
+      "id": "D02",
+      "version": "v1",
+      "sourceType": "Document",
+      "sourceDisplay": "Document · Oct 30",
+      "sourceDateDisplay": "Oct 30",
+      "sourceDate": "2026-10-30",
+      "kind": "doc",
+      "content": "The café updated the font size on its printed pastry menu."
+    },
+    {
+      "id": "D09",
+      "version": "v1",
+      "sourceType": "Document",
+      "sourceDisplay": "Document · Oct 31",
+      "sourceDateDisplay": "Oct 31",
+      "sourceDate": "2026-10-31",
+      "kind": "doc",
+      "content": "The café ordered additional decorations for its December holiday display."
+    },
+    {
+      "id": "D01",
+      "version": "v1",
+      "sourceType": "Supplier email",
+      "sourceDisplay": "Supplier email · Nov 1",
+      "sourceDateDisplay": "Nov 1",
+      "sourceDate": "2026-11-01",
+      "kind": "doc",
+      "content": "The coffee-bean supplier has delayed its shipment from Friday, November 6, to Monday, November 9. The delivery date is an estimate, not a guaranteed arrival."
+    },
+    {
+      "id": "D08",
+      "version": "v1",
+      "sourceType": "Previous commitment",
+      "sourceDisplay": "Previous commitment · Oct 29",
+      "sourceDateDisplay": "Oct 29",
+      "sourceDate": "2026-10-29",
+      "kind": "cm",
+      "content": "The promotional poster for the university event was completed and approved. No outstanding poster-related work remains in the recorded commitment."
+    },
+    {
+      "id": "D03",
+      "version": "v1",
+      "sourceType": "Order record",
+      "sourceDisplay": "Order record · Oct 31",
+      "sourceDateDisplay": "Oct 31",
+      "sourceDate": "2026-10-31",
+      "kind": "doc",
+      "content": "A university club has placed and paid a deposit for an order of 200 cups of the café's signature coffee for Saturday, November 7, at 10 AM."
+    },
+    {
+      "id": "D07",
+      "version": "v1",
+      "sourceType": "Daily note",
+      "sourceDisplay": "Daily note · Oct 31",
+      "sourceDateDisplay": "Oct 31",
+      "sourceDate": "2026-10-31",
+      "kind": "doc",
+      "content": "A customer left an umbrella at the counter and returned later to collect it."
+    },
+    {
+      "id": "D05",
+      "version": "v1",
+      "sourceType": "Marketing note",
+      "sourceDisplay": "Marketing note · Oct 30",
+      "sourceDateDisplay": "Oct 30",
+      "sourceDate": "2026-10-30",
+      "kind": "doc",
+      "content": "The social-media caption for the café's pumpkin muffin photograph was rewritten."
+    },
+    {
+      "id": "D04",
+      "version": "v1",
+      "sourceType": "Company Architecture",
+      "sourceDisplay": "Company Architecture · Oct 30",
+      "sourceDateDisplay": "Oct 30",
+      "sourceDate": "2026-10-30",
+      "kind": "company",
+      "content": "Harbor Cup has one owner and two part-time employees. The owner manages purchasing and large orders; there is no dedicated procurement department."
+    },
+    {
+      "id": "D10",
+      "version": "v1",
+      "sourceType": "Staff note",
+      "sourceDisplay": "Staff note · Oct 28",
+      "sourceDateDisplay": "Oct 28",
+      "sourceDate": "2026-10-28",
+      "kind": "doc",
+      "content": "The team updated its music playlist for the weekend shift."
+    }
+  ]
+}

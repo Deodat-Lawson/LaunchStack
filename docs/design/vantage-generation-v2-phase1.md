@@ -1,0 +1,61 @@
+﻿# Vantage Generation v2.1 Phase 1
+
+## Pre-implementation storage trace (2026-11-01)
+
+Inspected local product HEAD 284a5dc9 (proposal base 5463407f), clean. Original checkout is a separate dirty older branch and is preserved. Implementation uses a new managed worktree from 284a5dc9.
+
+Actual compound schema: SophiaCompoundOutputSchemaV0 (pipelines/src/vantage/experiments/sophia-generation-v0.ts:41), native and experimental each use GenerationOutputSchema. Runtime additionally requires native <=1 topic, experimental <=3, no enhancements and null experimental owner/due/help. Exact experimental refs pass assertRegisteredCitations; eventStateContradictions checks both branches; createGenerationPort normalizes native. Shared output cap remains 2400 tokens.
+
+ExperimentalReportV0 construction explicitly maps accepted fields. demo-service.ts:631 constructs DemoReport, then SavedPayload active/history. sealPayload (:191) JSON serializes and encrypts via encryptSecret. Encrypted envelope goes into vantage_agendas.model_metadata[vantageContextDemoV1] using company/id and whole-metadata optimistic compare-and-swap (:714-737), under commitGenerated/withFreshState. model_metadata is jsonb (pipelines/src/vantage/schema.ts:191); additive JSON fields require no migration. Native agenda/topic columns and frozen V1 contract are outside this change.
+
+openPayload (:159) decrypts and checks envelope version, payload version, report ID and company. Currently it casts JSON rather than schema-validating all report fields. load (:502-516) checks source freshness and authorization before return. Mutations require expectedVersion, same freshness checks and CAS. Sophia composition verifies actor ACL, current versions and cutoff (sophia-composition-v0.ts:201-275,426-490).
+
+Readback returns DemoReport through demo-api.ts and demo-contract.ts to frontend; replay goes through demo-replay.ts and captured-sample.json. Report-level fields require explicit preservation during construction; topic spreading preserves extras. New read fields must be optional; historical/replay artifacts remain unmodified. Offline verification will exercise encryption, readback and DTO with mocked persistence, retaining freshness/permission checks.
+
+## Implementation and isolation
+
+The proposal and the user's amendments are the design authority. No generation transport is selected by product code. The isolated decision-generation-v2 module requires an explicit version and injected transport; disabled mode refuses invocation. Native generation-v1, frozen contract-v1, the Sophia default, candidate-D scripts/results, stable demo artifacts and schemas are unchanged. The only existing product files extended are the optional demo DTO types and the demo service's additive field copying/shape validation.
+
+The contextual schema retains all old required fields; topics remain at most three and must retain nonempty citations under the existing runtime. Owner, due and help remain null. Rationale is shortened to 240 characters for V2. Recommendation and figure references are canonicalized to object refs only after exact registered-version checks. Mechanical checks cover arithmetic, citation subsets, event-state promotion in the new fields and the existing runtime topic/enhancement limits. Question shape is diagnostic, not a hard gate. Outcome is exactly one of v2-first-pass, v2-after-repair, v1.5-fallback or failed. One existing bounded attempt can repair a rejected attempt; no third request is added.
+
+Fallback requires an already available result for the exact frozen context/source set, then revalidates its native carrier, contextual shape, refs and narrow event-state rules. It makes no new request. Without that result the run fails and retains existing saved data. This is intentionally not an automatic second V1.5 generation after spending the V2 retry budget.
+
+The actual V2 base instructions are compact to fit the unchanged 23,500-byte Sophia preflight and 24,000-byte transport limit. Both history appendices remain verbatim in the original native system message. The exported prompt uses the same base instructions. Input sizing includes the real V2 compound schema, repaired message and provider message preparation. Identical contextual excerpts already present in the unchanged native payload may use an exact ref/start/length transport binding. It requires unique native refs, one matching native item and a byte-equivalent reconstructed string. The original frozen excerpts remain the validator's evidence. This transport representation is untested with a model; it is a potential experiment confound and requires reviewer attention before Phase 2.
+
+The trusted host supplies a primary-role resolver bound to actor/company. No role resolver means a generic decision assistant. Role shape/principal, mapping version and membership are checked; founder/CEO, security engineer and solo operator frames are available. The generation envelope itself does not bind a primary preference, so a future host must resolve the authoritative current role through its authenticated adapter, under the existing freshness checks.
+
+## Corrected hand-authored examples
+
+Complete files are under fixtures/vantage-generation-v2. These are synthetic review targets, not generated results.
+
+- C02: the planned pitch is not a confirmed meeting. Ask slide authors now about remaining work/completion time and ask the organizer to confirm the invitation. Use conditional scope/date suggestions if preparation cannot finish.
+- C05: doc:D03@v1 is the 200-cup order with a paid deposit; doc:D01@v1 is the estimated delayed delivery; obs:D06@v1 is the older stock observation. The golden does not assert an existing shortage, full payment or an available backup.
+- V2-04: differing QA/Operations reported results do not prove a same-sample conflict; the privacy document lacks a recorded approval without establishing no approval elsewhere. Its full envelope is assembled offline using the existing mock context pipeline. Rebound synthetic refs combine QA/Operations in doc:doc-weekly-plan@doc-v7 and privacy in doc:doc-starred-roadmap@doc-v4. They are not captured database IDs or independent-source provenance. The README and sources note disclose the rebinding.
+
+C02/C05 inputs are verbatim copies from the separate run-002 experiment inputs; copied SHA256 values were checked. Existing C01-C05 and H01-H05 archives were not edited. Candidate-D remains separate under the original checkout's test-output/vantage-quality-2026-10-29/run-002. Reviewer identity for the historical scores remains unverified.
+
+## Offline verification and token projection
+
+The final raw logs and reviewable patch are in test-output/vantage-v2-phase1. pipelines-tests.log covers the V1/Sophia generation, event-state, context binding, role provider and V2 suites. web-tests.log covers storage, legacy replay, API permissions and existing rendering tests. typecheck.log and eslint.log record package type and focused lint results. These are mocked/synthetic service and component checks, not PostgreSQL concurrency, live provider or browser acceptance. The storage tests use real encryption and all three real normalized fixtures, plus the captured legacy report, then decrypt and JSON-serialize the DTO. No database was read, migrated, reseeded or written.
+
+Reproduce sizing from repository root with: pnpm exec tsx pipelines/scripts/vantage-v2-token-projection.ts. It counts the whole compact native+experimental JSON, not just the contextual report. js-tiktoken/o200k_base proxy counts are C02 548, C05 641, V2-04 552. The distinct three-topic sizing stress uses 1,459 tokens (60.8% of 2,400), below the 2,040 warning threshold. It mixes cases only for sizing and is not a coherent or evidence-validated report. These are projections, not observed p95 or maximum-field guarantees. No token cap was raised.
+
+Exact provider tokenization is unresolved: local evidence identifies the experimental model as gpt-6-luna, but does not establish its tokenizer mapping. The script explicitly records providerMappingVerified=false. Provider-tokenizer confirmation is outstanding before treating this projection as the requested exact provider measurement.
+
+Numeric validation is a necessary lexical/arithmetic filter. It normalizes ISO/named dates atomically, numeric words, grouped/decimal numbers and percent notation, and prevents identifier digits/date components from supplying unrelated quantity support. Each derivation input must be present in its exact source, with finite checked arithmetic and matching output. It does not establish semantic entailment, sample comparability, temporal freshness of a stock quantity or correct units. Native computed signals without an exact contextual source/version bridge are rejected; use explicit grounded derivations. The event-state checker retains its existing narrow recognized predicates, not general claim-evidence reasoning. Human/independent-family review remains required.
+
+Legacy rendering is verified using existing component tests and an unchanged captured fixture. V2 visual presentation, sentence fallback UI, quietWeek, alsoNoted, suggestedOwnerRole and decisionBy remain deferred. Optional fields add no native persistence or user actions.
+
+## Phase 2 budget proposal - not authorized or executed
+
+Freeze C01-C05, H01-H05 and V2-01..04: 14 cases, no extra role variant, 2 arms, 3 runs each = 84 initial generations and 42 blind comparison pairs. Before any calls, write expected behavior for each new case, freeze manifests, record reviewer identity and randomization seed, and confirm the actual provider tokenizer, transport representation and prices.
+
+Preserve the recorded candidate-D experiment's one actual request per slot and SDK retries=0: 42 control requests, no added repairs. V2 has 42 initial requests and at most one bounded repair/retry each: <=42 additional requests. The proposed maximum is therefore 126 generation requests. Reuse the already available same-envelope control result for V1.5 fallback; make no separate fallback request. This differs from the specification's conservative allowance of 84 repairs across both arms, which would require changing the control policy and is not included here.
+
+Add exactly 42 independent-model-family pair reviews with no reviewer retries and a proposed 2,000-output-token cap; human spot-check at least 9 of 42 pairs (21.4%). Total proposal ceiling: 168 provider requests (126 generation + 42 review). Generation output ceilings total <=302,400 tokens at the unchanged 2,400 cap; reviewer ceilings add <=84,000, giving <=386,400 output tokens. Input usage and currency cost need actual provider/model pricing and measured prompts; no exact dollar claim or credit reservation is made. Record actual usage and estimate cost after requests, separately from delivery outcomes.
+
+If one extra role variant is approved, totals become 90 initial generations, <=45 V2 repairs, 45 pair reviews: <=180 provider requests and >=9 human pair checks. No variant is included by default. Delivery gates must count only successful V2, never fallback. With 42 V2 slots, >=40 must be first-pass/repair successes to clear 95%; fallback can be at most 2. Decision Quality, grounding, warranted vigilance, precision, pairwise sign test and output p95 gates remain those in the proposal. No Phase 2 or Phase 3 work is activated by this handoff.
+
+Final verification: 15 pipeline files / 274 tests passed; 5 web suites / 71 tests passed; pipelines and web typechecks exited 0; focused ESLint exited 0 with no source errors or warnings. CLI environment notices about pnpm settings, React detection/pages and React act warnings remain in the raw logs. No production build or database integration was run. The native contracts/generator/Sophia module, schema, captured sample and recorded rich replay have an empty Git diff against 284a5dc9.
+
+A final readback found new uncommitted UI-polish work in the separate source worktree at 514f while this task was running. Those concurrent changes were left untouched and are not included in this implementation, which stays based on the initially inspected clean 284a5dc9. Integrate/retest against that ongoing work later; this handoff makes no claim about its current validation.

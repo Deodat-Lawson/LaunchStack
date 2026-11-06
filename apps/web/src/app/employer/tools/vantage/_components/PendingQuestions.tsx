@@ -67,17 +67,6 @@ export function PendingQuestions({
     return (
         <section aria-label={TITLE}>
             {!compact && <SectionHeading title={TITLE} />}
-            <p className="text-ink-3 mb-3 max-w-[76ch] text-[12.5px] leading-relaxed">
-                {compact ? (
-                    "Historical questions. Progress remains unverified; reviewing one does not change an action."
-                ) : (
-                    <>
-                        These questions come from earlier reviews. Their current status is
-                        unverified; keeping them visible does not mean the issue is still open. Your
-                        review does not change any existing commitment.
-                    </>
-                )}
-            </p>
             {pending.loading && (
                 <p className="text-ink-3 text-[13px]" aria-live="polite">
                     Loading pending questions…
@@ -100,14 +89,12 @@ export function PendingQuestions({
                             className="px-4 py-4"
                         >
                             <div className="text-ink-3 mb-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11.5px]">
-                                <span className="border-line rounded border border-dashed px-1.5 py-0.5">
-                                    Historical · current status unverified
-                                </span>
                                 <ToolLink
                                     href={vantagePath(`/agenda?week=${question.originWeekStart}`)}
                                     className="hover:text-ink underline underline-offset-2"
                                 >
-                                    Review week of {fmtDate(question.originWeekStart)}
+                                    Asked in the week of{" "}
+                                    {fmtDate(question.originWeekStart, "en-US")}
                                 </ToolLink>
                             </div>
                             <p className="text-ink text-[14px] font-medium leading-relaxed">
@@ -121,10 +108,30 @@ export function PendingQuestions({
                             )}
                             {question.suggestedDue && (
                                 <p className="text-ink-3 mt-2 text-[12px]">
-                                    Original suggested date: {fmtDate(question.suggestedDue)}. Its
-                                    current relevance is unverified.
+                                    Original suggested date:{" "}
+                                    {fmtDate(question.suggestedDue, "en-US")}. Its current relevance
+                                    is unverified.
                                 </p>
                             )}
+                            <details className="text-ink-3 mt-3 text-[12px] leading-relaxed">
+                                <summary className="cursor-pointer">
+                                    History &amp; provenance
+                                </summary>
+                                <p className="mt-2">
+                                    Current progress is unverified. Keeping this question visible
+                                    does not mean the issue is still open. Reviewing it does not
+                                    change an existing commitment.
+                                </p>
+                                <p>
+                                    {question.origin === "ai"
+                                        ? "Original content: AI-generated."
+                                        : "Original content: human-authored."}
+                                </p>
+                                <p>
+                                    Original review: {question.humanReview.kind};{" "}
+                                    {question.humanReview.status}.
+                                </p>
+                            </details>
                             <div className="mt-3 flex flex-wrap items-center gap-2">
                                 <Button
                                     size="sm"

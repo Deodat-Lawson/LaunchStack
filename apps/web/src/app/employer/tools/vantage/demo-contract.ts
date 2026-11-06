@@ -9,6 +9,23 @@ export interface DemoHumanDecision {
     text?: string;
     recordedAt: string;
 }
+export interface DemoV2Recommendation {
+    call: string;
+    confidence: "low" | "medium" | "high";
+    because: string;
+    refs: DemoSourceRef[];
+    wouldChangeIf: string;
+}
+export interface DemoV2KeyFigure {
+    label: string;
+    value: string;
+    tone: "neutral" | "concern" | "positive";
+    refs: DemoSourceRef[];
+    derivation?: {
+        op: "difference" | "sum" | "ratio" | "count";
+        inputs: { value: number; ref: DemoSourceRef }[];
+    };
+}
 export interface DemoTopic {
     id: string;
     title: string;
@@ -16,6 +33,8 @@ export interface DemoTopic {
     conflicts: { text: string; refs: DemoSourceRef[] }[];
     whyItMatters: string;
     decisionQuestion: string;
+    whyNow?: string;
+    recommendation?: DemoV2Recommendation | null;
     proposedNextStep: string;
     unknowns: string[];
     rationale: string;
@@ -28,6 +47,9 @@ export interface DemoReport {
     generatedAt: string;
     version: number;
     summary: string;
+    headline?: string;
+    brief?: string;
+    keyFigures?: DemoV2KeyFigure[];
     topics: DemoTopic[];
     execution: {
         mode: "ai" | "replay";
@@ -49,6 +71,11 @@ export interface DemoReport {
         contextFingerprint: string;
         persisted: true;
         historicalHumanDecisions: number;
+        semanticAssessment?: {
+            kind: "deterministic-manual-checklist";
+            passed: boolean;
+            modelJudgeUsed: false;
+        };
         promptBytes?: number;
         promptOmissions?: {
             previousSummary: boolean;

@@ -58,6 +58,8 @@ implicit repair or retry. The existing shared structured-output API is unchanged
 The current OpenAI-compatible transport is cloned with zero SDK retries and a
 bounded timeout; the original model is not mutated. Custom BaseChatModel transports
 must declare zero retries in their constructor configuration and honor cancellation.
+Inherited per-request SDK retry and timeout settings are overridden too, so they
+cannot silently multiply requests or extend an attempt beyond its assigned limit.
 
 The adapter permits at most two attempts, including schema/citation repair. Each
 attempt is at most 20 seconds; transient HTTP 408/429/5xx, temporary network failures,

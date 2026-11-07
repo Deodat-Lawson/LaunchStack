@@ -235,10 +235,9 @@ export function rulesGeneration(
             topic.rationale = `Selected because “${short(e.title, 100)}” offers a specific observation that can be checked this week, not because its wider impact is established.`;
             // Only specialize an explicit navigation difficulty in the supplied excerpt.
             // Other feedback keeps a general follow-up check; no task is invented.
-            const navigation = e.body
-                .slice(0, 450)
-                .match(
-                    /\b(?:could not|couldn't|cannot|can't|unable to) find (?:the |a |an )?([^.!?\n]{1,70}?\b(?:action|button|link))(?=[.!?,;\s]|$)/i
+            const navigation =
+                /\b(?:could not|couldn't|cannot|can't|unable to) find (?:the |a |an )?([^.!?\n]{1,70}?\b(?:action|button|link))(?=[.!?,;\s]|$)/i.exec(
+                    e.body.slice(0, 450)
                 );
             if (e.kind === "interview" && navigation) {
                 const task = navigation[1]!;
@@ -257,7 +256,7 @@ export function rulesGeneration(
                 topic,
                 `${hasMetricChange ? "Separately, the" : "The"} ${e.kind} reports: ${short(e.body, 150)}`
             );
-            if (!focus) focus = topic;
+            focus ??= topic;
         }
     }
     if (!topics.length) {
@@ -295,7 +294,7 @@ export function rulesGeneration(
     const highlights = topics.slice(0, 2).map(t => highlight(t, 180));
     if (focus && !topics.slice(0, 2).includes(focus)) highlights.push(highlight(focus, 110));
     const summary = focus
-        ? `${highlights.join(" ")}\n\nSuggested weekly focus: ${short(focus.proposedNextStep!.replace(/^Suggested check for /, "Investigate "), 310)} Why this focus: ${short(focus.rationale, 130)}\n\nUncertainty: ${short(focus.unknowns[0]!, 125)}${hasMetricChange && focus.facts.some(f => f.refs.some(r => r.ref.startsWith("ev:"))) ? " Monitor the metric separately; the evidence does not establish a link or explain its change." : ""}${reviewedMatch(focus, input) ? " Consider this separately without changing the existing decision." : ""}`
+        ? `${highlights.join(" ")}\n\nSuggested weekly focus: ${short(focus.proposedNextStep.replace(/^Suggested check for /, "Investigate "), 310)} Why this focus: ${short(focus.rationale, 130)}\n\nUncertainty: ${short(focus.unknowns[0]!, 125)}${hasMetricChange && focus.facts.some(f => f.refs.some(r => r.ref.startsWith("ev:"))) ? " Monitor the metric separately; the evidence does not establish a link or explain its change." : ""}${reviewedMatch(focus, input) ? " Consider this separately without changing the existing decision." : ""}`
         : pack.items.length
           ? "Only prior context is available in the selected sources. It does not establish a current-week change. Suggested weekly focus: collect a current observation with matching coverage before interpreting a trend."
           : "No eligible evidence is available for this period.";

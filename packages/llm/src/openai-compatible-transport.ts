@@ -177,10 +177,26 @@ export function singleAttemptChat(
         typeof originalCap === "number" && originalCap > 0
             ? Math.min(originalCap, limits.maxOutputTokens)
             : limits.maxOutputTokens;
+    const inheritedConfiguration: unknown = chat.lc_kwargs.configuration;
+    const configuration =
+        inheritedConfiguration !== null && typeof inheritedConfiguration === "object"
+            ? (inheritedConfiguration as Record<string, unknown>)
+            : {};
+    const configuredTimeout = configuration.timeout;
+    const timeout = Math.min(
+        limits.timeoutMs,
+        chat.timeout && chat.timeout > 0 ? chat.timeout : limits.timeoutMs,
+        typeof configuredTimeout === "number" && configuredTimeout > 0
+            ? configuredTimeout
+            : limits.timeoutMs
+    );
     return new ChatOpenAI({
         ...chat.lc_kwargs,
         maxRetries: 0,
-        timeout: Math.min(chat.timeout ?? limits.timeoutMs, limits.timeoutMs),
+        timeout,
+        // LangChain also forwards configuration as per-request SDK options,
+        // which can override the client's retry and timeout defaults.
+        configuration: { ...configuration, maxRetries: 0, timeout },
         streaming: false,
         ...(supported && field === DEFAULT_MAX_OUTPUT_TOKENS_FIELD ? { maxTokens: cap } : {}),
         modelKwargs: {

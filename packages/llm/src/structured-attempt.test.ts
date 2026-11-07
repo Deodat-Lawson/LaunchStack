@@ -96,6 +96,61 @@ describe("single-attempt structured transport", () => {
         expect(fetch).toHaveBeenCalledTimes(1);
         expect(model.chat.lc_kwargs).toEqual(before);
     });
+    it("overrides inherited per-request SDK retries", async () => {
+        const fetch = vi.fn<typeof globalThis.fetch>().mockImplementation(
+            async () =>
+                new Response(JSON.stringify({ error: { message: "rate limit" } }), {
+                    status: 429,
+                    headers: { "Content-Type": "application/json", "retry-after-ms": "1" },
+                })
+        );
+        const model = resolved(fetch);
+        model.chat.lc_kwargs.configuration = {
+            ...model.chat.lc_kwargs.configuration,
+            maxRetries: 2,
+        };
+        const before = { ...model.chat.lc_kwargs.configuration };
+        await expect(
+            invokeStructuredAttempt(model, z.object({ answer: z.string() }), [], options())
+        ).rejects.toMatchObject({ status: 429 });
+        expect(fetch).toHaveBeenCalledTimes(1);
+        expect(model.chat.lc_kwargs.configuration).toEqual(before);
+    });
+    it("caps an inherited SDK request timeout and cancels the actual HTTP request", async () => {
+        vi.useFakeTimers();
+        const controller = new AbortController();
+        let requestSignal: AbortSignal | null | undefined;
+        const fetch = vi.fn<typeof globalThis.fetch>().mockImplementation((_url, init) => {
+            requestSignal = init?.signal;
+            return new Promise((_resolve, reject) => {
+                requestSignal?.addEventListener(
+                    "abort",
+                    () => reject(new DOMException("Aborted", "AbortError")),
+                    { once: true }
+                );
+            });
+        });
+        const model = resolved(fetch);
+        model.chat.lc_kwargs.configuration = {
+            ...model.chat.lc_kwargs.configuration,
+            timeout: 50000,
+        };
+        const pending = invokeStructuredAttempt(model, z.object({ answer: z.string() }), [], {
+            signal: controller.signal,
+            timeoutMs: 10,
+            maxOutputTokens: 2400,
+        });
+        const rejection = expect(pending).rejects.toThrow();
+        try {
+            await vi.advanceTimersByTimeAsync(15);
+            expect(fetch).toHaveBeenCalledTimes(1);
+            expect(requestSignal?.aborted).toBe(true);
+        } finally {
+            controller.abort();
+            await rejection;
+            vi.useRealTimers();
+        }
+    });
     it("does not perform an implicit repair call on malformed JSON", async () => {
         const fetch = vi.fn<typeof globalThis.fetch>().mockResolvedValue(response("not JSON"));
         await expect(

@@ -56,6 +56,7 @@ import {
     buildSourceMenuItems,
     canChangeSource,
 } from "./sourceContextMenu";
+import { useOpenOutside } from "./externalLink";
 import {
     RAIL_SECTION_ORDER,
     audienceLabel,
@@ -944,6 +945,7 @@ export function SourceRail({
     const t = useTranslations("sources.sourceRail");
     const tr = useTranslations("sources.railCommands");
     const tm = useTranslations("sources.contextMenu");
+    const openOutside = useOpenOutside();
     const ta = useTranslations("sources.audience");
     const [tab, setTab] = useState<RailTab>("sources");
     const tabReady = useRef(false);
@@ -1140,6 +1142,7 @@ export function SourceRail({
                         );
                     }
                 },
+                onOpenOutside: openOutside,
                 onShowInKnowledge: onOpenKnowledge ? () => onOpenKnowledge() : undefined,
                 onRename: onRenameSource,
                 onMoveToFolder,
@@ -1159,6 +1162,7 @@ export function SourceRail({
         },
         [
             tm,
+            openOutside,
             sources,
             folders,
             selected,

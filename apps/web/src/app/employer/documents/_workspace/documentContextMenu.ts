@@ -1,4 +1,5 @@
 import type { ActionMenuItem } from "~/components/ui/action-menu";
+import type { SourceExternalLink } from "~/lib/source-external-link";
 import type { WorkspaceSource, WorkspaceTranslator } from "./types";
 
 /**
@@ -25,12 +26,15 @@ export interface DocumentMenuState {
     editable?: boolean;
     /** The original file's URL, when it is loaded. */
     originalUrl: string | null;
+    /** Where it opens outside LaunchStack, worded: "Open in Notion", "Open file". */
+    outside?: { link: SourceExternalLink; label: string } | null;
 }
 
 export interface DocumentMenuHandlers {
     onAskAbout: () => void;
     onRename: () => void;
     onOpenInNewTab?: () => void;
+    onOpenOutside?: (link: SourceExternalLink) => void;
     onDownload?: () => void;
     onCopyLink: () => void;
     onShowVersions?: () => void;
@@ -83,6 +87,16 @@ export function buildDocumentMenuItems(
             disabled: !state.persisted,
             disabledReason: state.persisted ? undefined : indexingReason,
             onSelect: () => handlers.onOpenInNewTab?.(),
+        });
+    }
+    const outside = state.outside;
+    if (handlers.onOpenOutside && outside && !state.isMindmap) {
+        items.push({
+            type: "item",
+            id: "open-outside",
+            label: outside.label,
+            icon: "external",
+            onSelect: () => handlers.onOpenOutside?.(outside.link),
         });
     }
     if (handlers.onDownload && !state.isMindmap) {

@@ -808,6 +808,27 @@
     "deleteSelection": "{count, plural, one {Delete # source…} other {Delete # sources…}}",
     "deleteSelectionSome": "{count, plural, one {Delete {movable} of # source…} other {Delete {movable} of # sources…}}"
   },
+  "externalLink": {
+    "openGoogleDrive": "Open in Google Drive",
+    "openNotion": "Open in Notion",
+    "openGmail": "Open in Gmail",
+    "openObsidian": "Open in Obsidian",
+    "openGithub": "Open on GitHub",
+    "openYoutube": "Open on YouTube",
+    "openClaude": "Open on claude.ai",
+    "openWeb": "Open original",
+    "openFile": "Open file",
+    "hintSite": "Opens {host} in a new tab",
+    "hintObsidian": "Opens this note in your Obsidian vault",
+    "hintFile": "Opens the file itself in a new browser tab",
+    "detailsLabel": "Opens in",
+    "placeGoogleDrive": "Google Drive",
+    "placeNotion": "Notion",
+    "placeGmail": "Gmail",
+    "placeObsidian": "Obsidian",
+    "placeYoutube": "YouTube",
+    "placeFile": "Your browser"
+  },
   "connectorSync": {
     "syncing": "Syncing…",
     "starting": "Starting sync…",

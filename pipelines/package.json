@@ -1,7 +1,7 @@
 {
   "name": "@launchstack/pipelines",
   "version": "0.1.0",
-  "description": "The compositions — level two: chains of LaunchStack bricks toward business outcomes. Thirteen verticals: marketing, email outreach, founder weekly review, legal templates, company metadata, client prospector, trend search, knowledge connectors, repo workspaces, the repo explainer, the distribution pipeline, and proposals, and Vantage (the weekly founder-meeting loop).",
+  "description": "The compositions \u2014 level two: chains of LaunchStack bricks toward business outcomes. Thirteen verticals: marketing, email outreach, founder weekly review, legal templates, company metadata, client prospector, trend search, knowledge connectors, repo workspaces, the repo explainer, the distribution pipeline, and proposals, and Vantage (the weekly founder-meeting loop).",
   "license": "Apache-2.0",
   "type": "module",
   "sideEffects": false,
@@ -66,7 +66,9 @@
     "./scenarios/db": "./src/scenarios/db.ts",
     "./scenarios/schema": "./src/scenarios/schema.ts",
     "./vantage": "./src/vantage/index.ts",
-    "./vantage/schema": "./src/vantage/schema.ts"
+    "./vantage/schema": "./src/vantage/schema.ts",
+    "./accelerators/schema": "./src/proposals/accelerators/schema.ts",
+    "./accelerators/types": "./src/proposals/accelerators/types.ts"
   },
   "files": [
     "dist",
@@ -298,6 +300,14 @@
       "./vantage/schema": {
         "types": "./dist/vantage/schema.d.ts",
         "default": "./dist/vantage/schema.js"
+      },
+      "./accelerators/schema": {
+        "types": "./dist/proposals/accelerators/schema.d.ts",
+        "default": "./dist/proposals/accelerators/schema.js"
+      },
+      "./accelerators/types": {
+        "types": "./dist/proposals/accelerators/types.d.ts",
+        "default": "./dist/proposals/accelerators/types.js"
       }
     }
   },

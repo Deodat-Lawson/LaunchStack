@@ -1,5 +1,15 @@
 # Marketing Pipeline — Current-State Process Document
 
+> **2026-10 update — runs moved off the request.** The SSE route
+> `apps/web/src/app/api/marketing-pipeline/route.ts` cited below is gone. A run
+> is now queued by `POST /api/marketing-pipeline/runs` into `marketing_runs`,
+> executed by `apps/web/src/server/marketing/executor.ts` (after the response,
+> or on the worker with `MARKETING_EXECUTOR=worker`), and polled through
+> `GET /api/marketing-pipeline/runs/[id]?after=<cursor>`. Progress events are
+> stored on the row; each finished stage is checkpointed through
+> `runMarketingPipeline`'s `checkpoint` port so a retry resumes after it. Line
+> references to the old route below describe the previous design.
+
 > **Deliverable 1.** Evidence-backed map of how the Launchstack marketing (campaign
 > planner) pipeline works **today**, in the MAIN checkout (`kien-ship-it/wizzard`,
 > monorepo layout), **reviewed 2026-10-12**. Code references describe current

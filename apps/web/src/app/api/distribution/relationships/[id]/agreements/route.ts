@@ -1,5 +1,5 @@
 // GET  /api/distribution/relationships/[id]/agreements
-// POST /api/distribution/relationships/[id]/agreements — terms; required to enter "contracted"
+// POST /api/distribution/relationships/[id]/agreements — terms; required to enter "won"
 import type { NextRequest } from "next/server";
 
 import { AgreementInputSchema } from "@launchstack/pipelines/distribution/types";

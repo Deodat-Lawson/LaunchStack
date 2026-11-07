@@ -362,6 +362,52 @@ describe("runDossierAgent", () => {
         );
     });
 
+    it("writes the dossier from what it recorded when the budget runs out", async () => {
+        const store: RecordedEvidence[] = [];
+        const prompts: string[] = [];
+        const fetchIt = () => ({
+            text: "",
+            toolCalls: [
+                { id: "f", name: "fetch_page", arguments: { url: "https://acme-import.de/" } },
+            ],
+        });
+        const script = scriptedPort([
+            fetchIt,
+            () => ({
+                text: "",
+                toolCalls: [
+                    {
+                        id: "r",
+                        name: "record_evidence",
+                        arguments: {
+                            kind: "brands_carried",
+                            claim: "Acme carries Beta Roasters",
+                            sourceUrl: "https://acme-import.de/",
+                            quote: "Our brands: Beta Roasters",
+                        },
+                    },
+                ],
+            }),
+            fetchIt,
+            transcript => {
+                prompts.push(JSON.stringify(transcript[0]));
+                const recorded = dossierCiting(store.length ? [1] : []);
+                return {
+                    text: "",
+                    toolCalls: [{ id: "s", name: SUBMIT_TOOL_NAME, arguments: recorded }],
+                };
+            },
+        ]);
+        const result = await runDossierAgent(makePorts(script, store), {
+            ...input,
+            limits: { maxTurns: 3 },
+        });
+        expect(prompts[0]).toContain("research budget ran out");
+        expect(prompts[0]).toContain("Acme carries Beta Roasters");
+        expect(result.outcome.status).toBe("ok");
+        expect(result.turns).toBe(4);
+    });
+
     it("reports budget exhaustion instead of throwing when the model never submits", async () => {
         const port = scriptedPort([
             () => ({

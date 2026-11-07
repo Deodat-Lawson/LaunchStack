@@ -133,6 +133,21 @@ export const QuestionSchema = z
         // the sidebar. The route handler verifies every ID belongs to the caller's
         // company before running the multi-doc search.
         selectedDocumentIds: z.array(z.number().int().positive()).optional(),
+        /**
+         * What each source chip in the question points at: its ref (the
+         * source id the transcript stores, `d12` or `m7`) and the document it
+         * maps to. The route admits a document only through the caller's
+         * scope; this just names it (server/chat-mentions.ts).
+         */
+        sourceMentions: z
+            .array(
+                z.object({
+                    ref: z.string().min(1).max(64),
+                    documentId: z.number().int().positive(),
+                })
+            )
+            .max(100)
+            .optional(),
         enableWebSearch: z.boolean().optional().default(false),
         aiPersona: z.enum(aiPersonaOptions).optional(),
         aiModel: z.string().min(1).optional(),
@@ -188,6 +203,7 @@ export const QuestionSchema = z
             searchScope: data.searchScope ?? "document",
             archiveName: data.archiveName,
             selectedDocumentIds: data.selectedDocumentIds,
+            sourceMentions: data.sourceMentions,
             enableWebSearch: data.enableWebSearch ?? false,
             aiPersona: data.aiPersona ?? "general",
             aiModel: data.aiModel,

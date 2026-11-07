@@ -292,8 +292,22 @@
     {
       "idx": 41,
       "version": "7",
-      "when": 1793649411551,
-      "tag": "20261102195651_accelerator_catalogue",
+      "when": 1793581675751,
+      "tag": "20261102010755_deal_stage_history",
+      "breakpoints": true
+    },
+    {
+      "idx": 42,
+      "version": "7",
+      "when": 1793581690555,
+      "tag": "20261102010810_marketing_runs",
+      "breakpoints": true
+    },
+    {
+      "idx": 43,
+      "version": "7",
+      "when": 1794029861620,
+      "tag": "20261107053741_accelerator_catalogue",
       "breakpoints": true
     }
   ]

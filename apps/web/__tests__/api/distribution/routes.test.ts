@@ -289,18 +289,18 @@ describe("relationship transitions", () => {
     it("maps an illegal stage move to 409 with the code", async () => {
         mockDb.getRelationship.mockResolvedValue({
             id: "rel-1",
-            stage: "candidate",
+            stage: "lead",
             ownerUserId: null,
             nextAction: null,
             nextActionAt: null,
         });
-        const err = Object.assign(new Error('Cannot move from "candidate" to "qualified".'), {
+        const err = Object.assign(new Error('Cannot move from "lead" to "meeting".'), {
             code: "transition_not_allowed",
             status: 409,
         });
         mockDb.transitionStage.mockRejectedValue(err);
         const res = await PATCH_RELATIONSHIP(
-            req("/api/distribution/relationships/rel-1", "PATCH", { stage: "qualified" }),
+            req("/api/distribution/relationships/rel-1", "PATCH", { stage: "meeting" }),
             { params: Promise.resolve({ id: "rel-1" }) }
         );
         expect(res.status).toBe(409);
@@ -327,7 +327,7 @@ describe("in the reader's language", () => {
     it("says a refused stage move in Chinese, and keeps the code", async () => {
         mockDb.getRelationship.mockResolvedValue({
             id: "rel-1",
-            stage: "candidate",
+            stage: "lead",
             ownerUserId: null,
             nextAction: null,
             nextActionAt: null,
@@ -335,8 +335,8 @@ describe("in the reader's language", () => {
         let refused: unknown;
         try {
             assertTransition({
-                from: "candidate",
-                to: "qualified",
+                from: "lead",
+                to: "meeting",
                 context: { ownerUserId: null, nextAction: null, hasAgreement: false },
             });
         } catch (e) {
@@ -344,21 +344,21 @@ describe("in the reader's language", () => {
         }
         mockDb.transitionStage.mockRejectedValue(refused);
         const res = await PATCH_RELATIONSHIP(
-            zh("/api/distribution/relationships/rel-1", "PATCH", { stage: "qualified" }),
+            zh("/api/distribution/relationships/rel-1", "PATCH", { stage: "meeting" }),
             { params: Promise.resolve({ id: "rel-1" }) }
         );
         expect(res.status).toBe(409);
         expect(await res.json()).toEqual({
-            error: "无法从“candidate”移至“qualified”。允许的阶段：researched、contacted、declined、dormant。",
+            error: "无法从“lead”移至“meeting”。允许的阶段：qualified、contacted、lost、nurture。",
             code: "transition_not_allowed",
         });
 
         const english = await PATCH_RELATIONSHIP(
-            req("/api/distribution/relationships/rel-1", "PATCH", { stage: "qualified" }),
+            req("/api/distribution/relationships/rel-1", "PATCH", { stage: "meeting" }),
             { params: Promise.resolve({ id: "rel-1" }) }
         );
         expect((await english.json()).error).toBe(
-            'Cannot move from "candidate" to "qualified". Allowed: researched, contacted, declined, dormant.'
+            'Cannot move from "lead" to "meeting". Allowed: qualified, contacted, lost, nurture.'
         );
     });
 
@@ -375,7 +375,7 @@ describe("in the reader's language", () => {
 });
 
 describe("outreach — the worst-failure check", () => {
-    const relationship = (id: string, orgId: string, stage = "researched") => ({
+    const relationship = (id: string, orgId: string, stage = "lead") => ({
         id,
         programId: "prog-1",
         orgId,
@@ -399,7 +399,7 @@ describe("outreach — the worst-failure check", () => {
         mockDb.getRelationship.mockImplementation(async (id: string) => {
             if (id === "rel-existing") return relationship(id, "existing-importer.de");
             if (id === "rel-engaged") return relationship(id, "engaged.example");
-            if (id === "rel-active") return relationship(id, "active.example", "active");
+            if (id === "rel-active") return relationship(id, "active.example", "won");
             if (id === "rel-fresh") return relationship(id, "fresh.example");
             return null;
         });

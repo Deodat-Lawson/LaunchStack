@@ -793,11 +793,13 @@ describe("POST /api/agents/documentQ&A/AIChat/query", () => {
             ]);
         });
 
-        it("leaves the answer's length to the style, not the question wrapper", async () => {
+        it("sends the person's words as the message, unwrapped, and leaves length to the style", async () => {
             await POST(queryRequest({ question: "what is this?", searchScope: "none" }));
 
-            expect(userPrompt()).toContain(`User's question: "what is this?"`);
+            expect(userPrompt()).toBe("what is this?");
             expect(userPrompt()).not.toMatch(/conversational/i);
+            const [messages] = mockInvoke.mock.calls[0] as [{ content: unknown }[]];
+            expect(String(messages[0]?.content)).toContain("## Answering");
         });
     });
 
@@ -1864,7 +1866,10 @@ describe("chat attachment limits and ownership", () => {
         expect(response.status).toBe(200);
         const [messages] = mockInvoke.mock.calls[0] as [{ content: string }[]];
         const prompt = messages[1]!.content;
-        expect(prompt).toContain("[…attachment truncated]");
+        expect(prompt).toContain(
+            '<attachment name="note.txt" type="text/plain" coverage="cut at 15,000 of 20,000 characters">'
+        );
+        expect(prompt.endsWith("</attachments>\n\nReview")).toBe(true);
         expect((prompt.match(/é/g) ?? []).length).toBe(15_000);
     });
 
@@ -2041,19 +2046,17 @@ describe("selected passages", () => {
             expect.anything()
         );
         const prompt = userPrompt();
-        expect(prompt).toContain(
-            `User's question: "How does this compare with the FY25 forecast?"`
-        );
+        // The words come last, unwrapped; the passage precedes the documents.
+        expect(prompt.endsWith("\n\nHow does this compare with the FY25 forecast?")).toBe(true);
+        expect(prompt).not.toContain("User's question");
         expect(prompt).toContain(
             `Selected passage 1 — "Owned Report", page 2:\n"""\n${PASSAGE}\n"""\nSurrounding text:\n${ANCHOR}`
         );
-        expect(prompt.indexOf("Selected passage 1")).toBeLessThan(
-            prompt.indexOf("Relevant document content")
-        );
+        expect(prompt.indexOf("Selected passage 1")).toBeLessThan(prompt.indexOf("<documents>"));
         // The passage's section is sent once, not again as a retrieved chunk.
         expect(prompt.split(ANCHOR)).toHaveLength(2);
         expect(prompt).toContain(
-            "=== Passage #1, page 7 ===\nThe FY25 forecast assumes 45% margin."
+            '<passage index="1" page="7">\nThe FY25 forecast assumes 45% margin.\n</passage>'
         );
         expect(info).toHaveBeenCalledWith("[AIChat] passages", {
             count: 1,
@@ -3419,10 +3422,16 @@ describe("a message with files attached", () => {
         expect(multiDocEnsembleSearch).not.toHaveBeenCalled();
         expect(mockReadWholeFiles).toHaveBeenCalledWith(IDS);
         const { system, user } = prompts();
-        expect(user).toContain("Attached files (37):\nd100 · Resume 01.pdf");
-        expect(user).toContain("Full text of every attached file:");
-        expect(user).toContain("=== [d136] Resume 37.pdf ===\n(page 1)\n\nResume of person 136");
-        expect(system).toContain("complete text of all 37 files");
+        expect(user.startsWith("<documents>\n")).toBe(true);
+        expect(user).toContain(
+            '<document id="d100" title="Resume 01.pdf" coverage="complete">\n(page 1)\n\nResume of person 100\n</document>'
+        );
+        expect(user).toContain(
+            '<document id="d136" title="Resume 37.pdf" coverage="complete">\n(page 1)\n\nResume of person 136'
+        );
+        expect(user).not.toContain("<not_shown");
+        expect(user.endsWith("</documents>\n\nList everyone across these files")).toBe(true);
+        expect(system).toContain("complete text of all 37 sources");
         expect(body).toMatchObject({ retrievalMethod: "selected_full_read", chunksAnalyzed: 37 });
     });
 
@@ -3439,11 +3448,12 @@ describe("a message with files attached", () => {
         );
         expect(mockReadWholeFiles).not.toHaveBeenCalled();
         const { system, user } = prompts();
-        expect(user).toContain("Attached files (37):");
-        expect(user).toContain("Relevant passages (10 from 10 of 37 attached files):");
-        expect(user).toContain("=== [d100] Resume 01.pdf · page 1 ===\nPerson 100");
+        expect(user).toContain(
+            '<document id="d100" title="Resume 01.pdf" coverage="excerpts: 1 of 2 sections, chosen by the question">\n(page 1)\n\nPerson 100\n</document>'
+        );
+        expect(user).toContain('<not_shown count="27">\nd110 "Resume 11.pdf", ');
         expect(user).not.toContain("Chunk #");
-        expect(system).toContain("You were given 10 passages from 10 of the 37 files");
+        expect(system).toContain("You were given 10 passages from 10 of the 37 sources");
         expect(system).toContain("What you weren't shown is unknown, not absent");
         expect(system).toContain("call `ask_each`");
         const [, , , options] = mockCreateSourceTools.mock.calls[0] as [
@@ -3507,6 +3517,125 @@ describe("a message with files attached", () => {
 
         expect(response.status).toBe(200);
         expect(multiDocEnsembleSearch).toHaveBeenCalled();
-        expect(prompts().user).toContain("Relevant document content:");
+        expect(prompts().user).toContain(
+            '<document id="d100" title="Resume 100" coverage="excerpts: 1 section, chosen by the question">'
+        );
+    });
+
+    it("names a chip in the words by the source's title and id, and one the person cannot open as unavailable", async () => {
+        mockInvoke.mockResolvedValueOnce({ content: "Compared.", response_metadata: {} });
+
+        await POST(
+            queryRequest({
+                question:
+                    "Compare [Source: Deck](#launchstack-source-d100) with [Source: Gone](#launchstack-source-d999)",
+                searchScope: "selected",
+                selectedDocumentIds: IDS,
+            })
+        );
+
+        const { system, user } = prompts();
+        expect(
+            user.endsWith(
+                '</documents>\n\nCompare "Resume 01.pdf" (d100) with "Gone" (unavailable)'
+            )
+        ).toBe(true);
+        expect(user).not.toContain("#launchstack-source");
+        expect(system).toContain("One source in their words reads (unavailable)");
+    });
+
+    it("searches on the chips' labels, never their links, and maps a mindmap's ref through sourceMentions", async () => {
+        mockScopeRows = RESUMES.map(row => ({ ...row, tokens: 5_000 }));
+        mockInvoke.mockResolvedValueOnce({ content: "Mapped.", response_metadata: {} });
+
+        await POST(
+            queryRequest({
+                question: "What does [Source: Roadmap](#launchstack-source-m7) say?",
+                searchScope: "selected",
+                selectedDocumentIds: IDS,
+                sourceMentions: [{ ref: "m7", documentId: 101 }],
+            })
+        );
+
+        // The mapped source is read whole first; the search covers the rest.
+        expect(mockReadWholeFiles).toHaveBeenCalledWith([101]);
+        expect(multiDocEnsembleSearch).toHaveBeenCalledWith(
+            "What does Roadmap say?",
+            expect.objectContaining({ documentIds: IDS.filter(id => id !== 101) }),
+            expect.anything()
+        );
+        expect(prompts().user.endsWith('What does "Resume 02.pdf" (d101) say?')).toBe(true);
+    });
+
+    it("sends chips alone with no words line, and tells the model what that asks for", async () => {
+        mockInvoke.mockResolvedValueOnce({ content: "Here they are.", response_metadata: {} });
+
+        await POST(
+            queryRequest({
+                question: "Please review the attached files.",
+                questionOrigin: "attachment",
+                searchScope: "selected",
+                selectedDocumentIds: IDS,
+            })
+        );
+
+        const { system, user } = prompts();
+        expect(user).not.toContain("Please review");
+        expect(user.endsWith("</documents>")).toBe(true);
+        expect(system).toContain("no words of the person's own");
+    });
+
+    it("opens with the earlier turns, their chips rendered the same way", async () => {
+        mockInvoke.mockResolvedValueOnce({ content: "Still true.", response_metadata: {} });
+
+        await POST(
+            queryRequest({
+                question: "Is that still true?",
+                searchScope: "selected",
+                selectedDocumentIds: IDS,
+                conversationHistory:
+                    "User: Summarise [Source: Deck](#launchstack-source-d100)\nAssistant: It says hello.",
+            })
+        );
+
+        const { system, user } = prompts();
+        expect(
+            user.startsWith(
+                '<history>\nUser: Summarise "Resume 01.pdf" (d100)\nAssistant: It says hello.\n</history>\n\n<documents>'
+            )
+        ).toBe(true);
+        expect(user).not.toContain("Previous conversation context");
+        expect(system).toContain("<history> holds the earlier turns");
+    });
+    it("reads the sources named in the words whole when the set is too large, and searches the rest", async () => {
+        mockScopeRows = RESUMES.map(row => ({ ...row, tokens: 5_000 }));
+        mockInvoke.mockResolvedValueOnce({ content: "Named first.", response_metadata: {} });
+
+        const response = await POST(
+            queryRequest({
+                question:
+                    "Start with [Source: Resume 1](#launchstack-source-d100), then everyone else.",
+                searchScope: "selected",
+                selectedDocumentIds: IDS,
+            })
+        );
+        const body = (await response.json()) as Record<string, unknown>;
+
+        expect(mockReadWholeFiles).toHaveBeenCalledWith([100]);
+        expect(multiDocEnsembleSearch).toHaveBeenCalledWith(
+            "Start with Resume 1, then everyone else.",
+            expect.objectContaining({ documentIds: IDS.filter(id => id !== 100) }),
+            expect.anything()
+        );
+        const { system, user } = prompts();
+        expect(user).toContain(
+            '<document id="d100" title="Resume 01.pdf" coverage="complete">\n(page 1)\n\nResume of person 100\n</document>'
+        );
+        expect(user).toContain('coverage="excerpts: 1 of 2 sections, chosen by the question"');
+        expect(user.endsWith('Start with "Resume 01.pdf" (d100), then everyone else.')).toBe(true);
+        expect(system).toContain(
+            "complete text of 1 of the 37 sources — the one named in the words"
+        );
+        expect(body).toMatchObject({ retrievalMethod: "selected_mentioned_read" });
     });
 });

@@ -1,4 +1,4 @@
-export { runMarketingPipeline } from "./run";
+export { runMarketingPipeline, type StageCheckpoint } from "./run";
 export { publishContent, type PublishResult } from "./publish";
 export { generateVariants, refineContent } from "./generator";
 // Moved to @launchstack/tools (unification PR-2); re-exported so existing

@@ -1,0 +1,253 @@
+/**
+ * A member's own connections (`connector_connections.owner_user_id`, Gmail
+ * today) and what becomes of them when the member is gone.
+ *
+ * A personal connection belongs to its member, not to the workspace, so it
+ * lasts exactly as long as their membership:
+ *
+ * - **Removed, or left.** The connection row goes (its sync state and scope
+ *   cascade) and its Google grant is revoked once the transaction commits.
+ *   The mail it brought in goes too: every document still inside the
+ *   member's Gmail folder, and the folder. A mailbox was private to its owner
+ *   (ADR-014 kept the `Gmail` subtree out of the admin carry-over), so nobody
+ *   inherits it. Mail the member moved out of that folder was put in front of
+ *   the team on purpose and is handed over like their other files.
+ * - **Suspended, or moved to a role that can't add files.** The sync pauses
+ *   (`personalSyncStanding`) and picks up again if they are reinstated.
+ *
+ * A sync that finds its owner already gone, removed before this rule
+ * existed, applies the departure rule itself (`closePersonalConnectionsNow`).
+ */
+
+import { and, eq, inArray, like } from "drizzle-orm";
+
+import { decryptSecret } from "@launchstack/store/crypto";
+import { category, document } from "@launchstack/store/schema";
+import { resolvePermissionsForRole } from "~/lib/authz/resolve";
+import { UNFILED_FOLDER, isFolderOrDescendant, normalizeFolderPath } from "~/lib/folders/path";
+import { db } from "~/server/db";
+import {
+    connectorConnections,
+    folderGrants,
+    mindmaps,
+    userCompanyMemberships,
+    users,
+} from "~/server/db/schema";
+import { descendantPattern } from "~/server/folders";
+import { deleteDocumentCore } from "~/server/services/document-delete";
+import type { Tx } from "~/server/workspace/db-types";
+
+import {
+    GMAIL_PROVIDER,
+    GMAIL_ROOT_FOLDER,
+    gmailFolderFor,
+    isPersonalMailboxPath,
+} from "./gmail/config";
+import { revokeGoogleToken } from "./gmail/connections";
+
+/** Personal providers whose grants are Google's, revoked at Google's endpoint. */
+const GOOGLE_PERSONAL_PROVIDERS: ReadonlySet<string> = new Set([GMAIL_PROVIDER]);
+
+export interface ClosedPersonalConnections {
+    readonly connections: number;
+    readonly documents: number;
+    readonly folders: number;
+    /** Refresh tokens to revoke at Google once the transaction has committed. */
+    readonly googleTokensToRevoke: readonly string[];
+}
+
+/**
+ * The mailbox folders that are this member's: the folder each of their
+ * Gmail connections syncs into (the sync's own naming), plus any Gmail
+ * folder carrying the manage grant they gave themselves when it was made
+ * (the owner signature `folderOwner` reads), so a mailbox whose connection
+ * was already disconnected is found too.
+ */
+async function ownedMailboxPaths(
+    tx: Tx,
+    companyId: bigint,
+    userPk: bigint,
+    authUserId: string | null,
+    accountEmails: readonly string[]
+): Promise<string[]> {
+    const paths = new Set(accountEmails.map(email => gmailFolderFor(email)));
+    if (authUserId) {
+        const signed = await tx
+            .select({ name: category.name })
+            .from(folderGrants)
+            .innerJoin(category, eq(category.id, folderGrants.categoryId))
+            .where(
+                and(
+                    eq(folderGrants.companyId, companyId),
+                    eq(folderGrants.principalType, "user"),
+                    eq(folderGrants.principalId, userPk.toString()),
+                    eq(folderGrants.level, "manage"),
+                    eq(folderGrants.grantedBy, authUserId)
+                )
+            );
+        for (const row of signed) {
+            const path = normalizeFolderPath(row.name);
+            if (isPersonalMailboxPath(path)) paths.add(path);
+        }
+    }
+    return [...paths];
+}
+
+/**
+ * Ends every personal connection `userPk` holds in `companyId`, inside the
+ * caller's transaction: the rows, the mail still in their mailbox folders,
+ * and those folders. Revoking the grants at Google is network work, so the
+ * tokens come back for `revokeGoogleGrants` to send after the commit.
+ */
+export async function closePersonalConnections(
+    tx: Tx,
+    companyId: bigint,
+    userPk: bigint
+): Promise<ClosedPersonalConnections> {
+    const [user] = await tx
+        .select({ authUserId: users.userId, email: users.email })
+        .from(users)
+        .where(eq(users.id, Number(userPk)))
+        .limit(1);
+    const connections = await tx
+        .select()
+        .from(connectorConnections)
+        .where(
+            and(
+                eq(connectorConnections.companyId, companyId),
+                eq(connectorConnections.ownerUserId, userPk)
+            )
+        );
+
+    const googleTokensToRevoke: string[] = [];
+    for (const row of connections) {
+        if (!GOOGLE_PERSONAL_PROVIDERS.has(row.provider) || !row.refreshTokenCiphertext) continue;
+        try {
+            googleTokensToRevoke.push(decryptSecret(row.refreshTokenCiphertext));
+        } catch {
+            // A key-rotation casualty can't be revoked; the row goes regardless.
+        }
+    }
+
+    // The sync names the folder after the connected account, falling back
+    // to the member's own address (gmail/sync-service.ts).
+    const accountEmails = connections
+        .filter(row => row.provider === GMAIL_PROVIDER)
+        .map(row => row.providerAccountEmail ?? user?.email ?? null)
+        .filter((email): email is string => Boolean(email));
+    const mailboxes = await ownedMailboxPaths(
+        tx,
+        companyId,
+        userPk,
+        user?.authUserId ?? null,
+        accountEmails
+    );
+    const inMailbox = (path: string | null) =>
+        mailboxes.some(mailbox => isFolderOrDescendant(normalizeFolderPath(path), mailbox));
+
+    let documents = 0;
+    let folders = 0;
+    if (mailboxes.length > 0) {
+        const underRoot = like(document.category, descendantPattern(GMAIL_ROOT_FOLDER));
+        const mail = await tx
+            .select({ id: document.id, category: document.category })
+            .from(document)
+            .where(and(eq(document.companyId, companyId), underRoot));
+        for (const doc of mail) {
+            if (!inMailbox(doc.category)) continue;
+            await deleteDocumentCore(tx, Number(doc.id));
+            documents++;
+        }
+
+        // A draft filed in a mailbox goes back to its maker's Unfiled.
+        const drafts = await tx
+            .select({ id: mindmaps.id, folder: mindmaps.folder })
+            .from(mindmaps)
+            .where(
+                and(
+                    eq(mindmaps.companyId, companyId),
+                    like(mindmaps.folder, descendantPattern(GMAIL_ROOT_FOLDER))
+                )
+            );
+        const strayDrafts = drafts.filter(draft => inMailbox(draft.folder)).map(d => d.id);
+        if (strayDrafts.length > 0) {
+            await tx
+                .update(mindmaps)
+                .set({ folder: UNFILED_FOLDER })
+                .where(inArray(mindmaps.id, strayDrafts));
+        }
+
+        // Folder settings and grants cascade with the category rows.
+        const folderRows = await tx
+            .select({ id: category.id, name: category.name })
+            .from(category)
+            .where(
+                and(
+                    eq(category.companyId, companyId),
+                    like(category.name, descendantPattern(GMAIL_ROOT_FOLDER))
+                )
+            );
+        const doomed = folderRows.filter(row => inMailbox(row.name)).map(row => row.id);
+        if (doomed.length > 0) {
+            await tx.delete(category).where(inArray(category.id, doomed));
+            folders = doomed.length;
+        }
+    }
+
+    if (connections.length > 0) {
+        await tx.delete(connectorConnections).where(
+            inArray(
+                connectorConnections.id,
+                connections.map(row => row.id)
+            )
+        );
+    }
+
+    return { connections: connections.length, documents, folders, googleTokensToRevoke };
+}
+
+/** Best effort, after the commit: a copied refresh token dies with its connection. */
+export async function revokeGoogleGrants(tokens: readonly string[]): Promise<void> {
+    await Promise.all(tokens.map(token => revokeGoogleToken(token)));
+}
+
+/** `closePersonalConnections` in a transaction of its own, then the revocations. */
+export async function closePersonalConnectionsNow(
+    companyId: bigint,
+    userPk: bigint
+): Promise<ClosedPersonalConnections> {
+    const closed = await db.transaction(tx => closePersonalConnections(tx, companyId, userPk));
+    await revokeGoogleGrants(closed.googleTokensToRevoke);
+    return closed;
+}
+
+/**
+ * Whether a personal connection's owner may still sync into this workspace.
+ *
+ * - `active`: an active member whose role may add files (`documents.upload`,
+ *   the same permission that let them connect).
+ * - `paused`: still a member, but suspended or pending, or their role no
+ *   longer adds files. Nothing is deleted; reinstating them resumes the sync.
+ * - `departed`: no membership at all. They were removed or left.
+ */
+export type PersonalSyncStanding = "active" | "paused" | "departed";
+
+export async function personalSyncStanding(
+    companyId: bigint,
+    ownerUserPk: bigint
+): Promise<PersonalSyncStanding> {
+    const [membership] = await db
+        .select({ role: userCompanyMemberships.role, status: userCompanyMemberships.status })
+        .from(userCompanyMemberships)
+        .where(
+            and(
+                eq(userCompanyMemberships.companyId, companyId),
+                eq(userCompanyMemberships.userId, ownerUserPk)
+            )
+        )
+        .limit(1);
+    if (!membership) return "departed";
+    if (membership.status !== "active") return "paused";
+    const permissions = await resolvePermissionsForRole(companyId, membership.role);
+    return permissions.has("documents.upload") ? "active" : "paused";
+}

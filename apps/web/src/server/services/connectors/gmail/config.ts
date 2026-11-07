@@ -13,7 +13,7 @@
  * connection row, so a Drive admin is never asked for mailbox access.
  */
 import { env } from "~/env";
-import { MAX_FOLDER_NAME_CHARS } from "~/lib/folders/path";
+import { MAX_FOLDER_NAME_CHARS, isFolderDescendant, normalizeFolderPath } from "~/lib/folders/path";
 
 export const GMAIL_PROVIDER = "gmail" as const;
 
@@ -30,6 +30,14 @@ export const GMAIL_SCOPES = [GMAIL_READONLY_SCOPE, "openid", "email"];
 
 /** Every member's mailbox folder nests under this restricted root. */
 export const GMAIL_ROOT_FOLDER = "Gmail";
+
+/**
+ * True for a member's mailbox folder or anything beneath it, not the shared
+ * `Gmail` root. A mailbox is private to its owner and is never handed on.
+ */
+export function isPersonalMailboxPath(path: string | null | undefined): boolean {
+    return isFolderDescendant(normalizeFolderPath(path), GMAIL_ROOT_FOLDER);
+}
 
 function flagEnabled(raw: string | undefined): boolean {
     return raw === "true" || raw === "1";

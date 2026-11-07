@@ -9,9 +9,12 @@ export type {
     BinaryInput,
     ChromiumPageProperties,
     GotenbergConfig,
+    HtmlScreenshotParams,
     HtmlToPdfParams,
     MarkdownToPdfParams,
     OfficeToPdfParams,
     RenderAsset,
+    RenderedImage,
     RenderedPdf,
+    ScreenshotFormat,
 } from "./types";

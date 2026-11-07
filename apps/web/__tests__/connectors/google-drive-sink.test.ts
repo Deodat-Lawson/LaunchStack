@@ -2,7 +2,8 @@
  * The Drive sink's blob upload. With the database storage backend the
  * upload becomes a `file_uploads` row, and `/api/files/[id]` denies every
  * session read of a row with no company stamp — so a synced file nobody
- * stamped could only ever be read by the OCR worker.
+ * stamped could only ever be read by the OCR worker. A file deleted here
+ * after the run began is refused before anything is uploaded.
  */
 
 jest.mock("~/env", () => ({ env: { server: { APP_PUBLIC_URL: undefined } } }));
@@ -15,13 +16,16 @@ jest.mock("~/server/services/document-creation", () => ({
     findDocumentByCreationKey: jest.fn(),
 }));
 jest.mock("~/server/workspace/ownership", () => ({ applyDocumentCreationDefaults: jest.fn() }));
+jest.mock("~/server/services/connectors/deleted-items", () => ({
+    isSourceDeleted: jest.fn(),
+}));
 
 const mockUpdateWhere = jest.fn();
 jest.mock("~/server/db", () => ({
     db: { update: () => ({ set: () => ({ where: mockUpdateWhere }) }) },
 }));
 
-import type { KnowledgeItem } from "@launchstack/pipelines/connectors";
+import { SourceDeletedError, type KnowledgeItem } from "@launchstack/pipelines/connectors";
 import { resolveIngestIndexKey } from "@launchstack/llm/embeddings";
 
 import { uploadFile } from "~/lib/storage";
@@ -30,6 +34,7 @@ import {
     createDocumentVersionLifecycle,
     findDocumentByCreationKey,
 } from "~/server/services/document-creation";
+import { isSourceDeleted } from "~/server/services/connectors/deleted-items";
 import { createGoogleDriveSink } from "~/server/services/connectors/google-drive/sink";
 
 const mockUploadFile = uploadFile as jest.Mock;
@@ -61,6 +66,7 @@ beforeEach(() => {
     (resolveIngestIndexKey as jest.Mock).mockResolvedValue("openai-small");
     mockUploadFile.mockResolvedValue({ url: "https://blob.test/plan.md" });
     (findDocumentByCreationKey as jest.Mock).mockResolvedValue(null);
+    jest.mocked(isSourceDeleted).mockResolvedValue(false);
     (createDocumentLifecycle as jest.Mock).mockResolvedValue({
         documentId: 11,
         versionId: 21,
@@ -112,5 +118,29 @@ describe("createGoogleDriveSink — upload stamp", () => {
 
         expect(result.revised).toBe(true);
         expect(mockUploadFile).toHaveBeenCalledWith(expect.objectContaining({ companyId: 7n }));
+    });
+});
+
+describe("createGoogleDriveSink — deleted here", () => {
+    it("refuses a file deleted here after the run began, before uploading anything", async () => {
+        jest.mocked(isSourceDeleted).mockResolvedValue(true);
+        const sink = await createGoogleDriveSink(context);
+
+        await expect(sink.store(driveItem())).rejects.toBeInstanceOf(SourceDeletedError);
+        expect(isSourceDeleted).toHaveBeenCalledWith(3, "drive-file-1");
+        expect(mockUploadFile).not.toHaveBeenCalled();
+        expect(createDocumentLifecycle).not.toHaveBeenCalled();
+    });
+
+    it("doesn't ask about a file that still has its document", async () => {
+        (findDocumentByCreationKey as jest.Mock).mockResolvedValue({
+            id: 11,
+            category: "Google Drive",
+            ocrMetadata: { contentHash: "rev-1" },
+        });
+        const sink = await createGoogleDriveSink(context);
+        await sink.store(driveItem());
+
+        expect(isSourceDeleted).not.toHaveBeenCalled();
     });
 });

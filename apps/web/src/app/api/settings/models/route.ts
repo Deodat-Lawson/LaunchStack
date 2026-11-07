@@ -1,7 +1,8 @@
 /**
- * The chat model configuration, made legible. Gated on `models.manage`.
- * It names routes and capabilities only; the endpoint and model ids stay on
- * the server (see `~/server/settings/models`).
+ * The chat model configuration and the web search engine, made legible.
+ * Gated on `models.manage`. It names routes, capabilities and the search
+ * engine only; the endpoint, model ids and every key stay on the server (see
+ * `~/server/settings/models`).
  */
 
 import { NextResponse } from "next/server";

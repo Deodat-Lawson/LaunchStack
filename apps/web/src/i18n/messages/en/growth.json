@@ -1261,16 +1261,20 @@
           "description": "Real places with a website — shops, cafés, workshops, offices — in each city or country, of the kinds closest in meaning to who you sell to. Free, no key; used whenever no search provider is configured."
         },
         "web": {
-          "label": "Exa company search",
-          "description": "Exa's company index: the homepages of companies matching each query in each territory. Serper web search is the fallback when it is the only key. Needs a model for the research agent."
+          "label": "Company search ({engine})",
+          "description": "{engine}'s company index: the homepages of companies matching each query in each territory. Needs a model for the research agent."
         },
-        "webSerper": {
-          "label": "Web search (Serper)",
-          "description": "Serper web search: the site of each result stands for a company. Add an Exa key for Exa's company index and lookalikes. Needs a model for the research agent."
+        "webSearch": {
+          "label": "Web search ({engine})",
+          "description": "{engine} web search: the site of each result stands for a company. A company index and lookalikes need Exa as the search engine. Needs a model for the research agent."
+        },
+        "webOff": {
+          "label": "Web search",
+          "description": "Companies found through the server's web search engine. Needs a model for the research agent."
         },
         "lookalike": {
           "label": "Lookalikes",
-          "description": "Companies like your customers: the ones you list on the segment and your won deals, up to five per run, from Exa. Customers are never prospected themselves."
+          "description": "Companies like your customers: the ones you list on the segment and your won deals, up to five per run, from the search engine's company index (Exa). Customers are never prospected themselves."
         },
         "place": {
           "label": "Places",
@@ -1304,7 +1308,7 @@
         "tradeNotConfigured": "trade data not configured",
         "queriesFailed": "{count} queries failed",
         "territoriesFailed": "{count} territories failed",
-        "lookalikeNeedsExa": "needs EXA_API_KEY",
+        "lookalikeNeedsExa": "needs Exa as the search engine",
         "noCustomersYet": "no customers yet",
         "fromCustomers": "{count, plural, one {from # customer} other {from # customers}}",
         "customersFailed": "{failed} of {total} customers failed"

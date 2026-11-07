@@ -361,6 +361,48 @@ export const notionSyncState = pgTable("notion_sync_state", {
     syncLockedAt: timestamp("sync_locked_at", { withTimezone: true }),
 });
 
+/**
+ * Synced files someone deleted in LaunchStack, so the sync leaves them
+ * deleted. Drive and Notion sync what a pick or a share reaches, not a list
+ * of documents: without this, a deleted file is simply "new" to the next
+ * run and comes straight back. The file in Drive or Notion is never
+ * touched. Deleting the row (Settings › "Sync again", or picking the file or
+ * its folder again) lets the next sync import it like any new file.
+ */
+export const connectorDeletedItem = pgTable(
+    "connector_deleted_item",
+    {
+        id: bigserial("id", { mode: "bigint" }).primaryKey(),
+        connectionId: bigint("connection_id", { mode: "number" })
+            .notNull()
+            .references(() => connectorConnections.id, { onDelete: "cascade" }),
+        /** The connector's own id for the file: a Drive file id, a Notion page id. */
+        sourceId: varchar("source_id", { length: 128 }).notNull(),
+        /**
+         * Drive only: the pick that brought the file in. Picking that folder
+         * again brings its deleted files back; a file whose own pick was
+         * removed with it comes back by being picked again.
+         */
+        pickedRootId: varchar("picked_root_id", { length: 128 }),
+        /** The document's title when it was deleted, for Settings to name it. */
+        title: text("title").notNull(),
+        /** Who deleted it. Settings names a file only to whoever deleted it (ADR-014). */
+        deletedByUserPk: bigint("deleted_by_user_pk", { mode: "number" }).references(
+            () => users.id,
+            { onDelete: "set null" }
+        ),
+        deletedAt: timestamp("deleted_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
+    },
+    table => ({
+        connectionSourceUnique: uniqueIndex("connector_deleted_item_conn_source_idx").on(
+            table.connectionId,
+            table.sourceId
+        ),
+    })
+);
+
 export const connectorConnectionsRelations = relations(connectorConnections, ({ one, many }) => ({
     company: one(company, {
         fields: [connectorConnections.companyId],
@@ -395,3 +437,4 @@ export type GoogleDrivePickedItem = InferSelectModel<typeof googleDrivePickedIte
 export type GmailSyncState = InferSelectModel<typeof gmailSyncState>;
 export type GmailSyncScope = InferSelectModel<typeof gmailSyncScope>;
 export type NotionSyncState = InferSelectModel<typeof notionSyncState>;
+export type ConnectorDeletedItem = InferSelectModel<typeof connectorDeletedItem>;

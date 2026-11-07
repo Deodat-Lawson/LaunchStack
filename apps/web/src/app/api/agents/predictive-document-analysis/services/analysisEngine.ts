@@ -197,8 +197,8 @@ function createAnalysisPrompt(content: string, specification: AnalysisSpecificat
 }
 
 /**
- * Suggested links through the app's web search (Exa first, Serper as the
- * fallback). No search key means no suggestions; a failed search too.
+ * Suggested links through the app's web search (the server's engine,
+ * SEARCH_PROVIDER). No engine means no suggestions; a failed search too.
  */
 async function performWebSearch(query: string, maxResults = 5): Promise<SearchResult[]> {
     if (configuredWebSearchProvider() === null) return [];

@@ -50,15 +50,20 @@ export const EMBEDDING_LIST_PRICES: Readonly<Record<string, number>> = {
 export const DEFAULT_EMBEDDING_PRICE_PER_MTOK = 0.13;
 
 /**
- * Search list prices, USD per 1,000. Exa: search with contents (up to ten
- * results) $7; contents with a summary $1 + $1 a page. Serper: $1 on its
- * entry pack. Checked 2026-10-28.
+ * Search list prices, USD per 1,000, one entry per SEARCH_PROVIDER engine.
+ * Exa: search with contents (up to ten results) $7; contents with a summary
+ * $1 + $1 a page. Serper: $1 on its entry pack. Brave Search: $5. Tavily: a
+ * basic search is one credit, $0.008 pay-as-you-go. SearXNG runs on the
+ * operator's own server, so nothing. Checked 2026-11-01.
  */
 export const WEB_LIST_PRICES_PER_1K: Readonly<
     Record<string, { search: number; contents?: number }>
 > = {
     exa: { search: 7, contents: 2 },
     serper: { search: 1 },
+    brave: { search: 5 },
+    tavily: { search: 8 },
+    searxng: { search: 0 },
 };
 
 /** For a provider not listed above. */

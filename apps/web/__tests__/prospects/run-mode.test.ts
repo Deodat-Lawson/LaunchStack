@@ -20,21 +20,58 @@ describe("run mode", () => {
     });
 
     it("counts a workspace's own model where the server has none", () => {
-        expect(readRunEnvironment({ EXA_API_KEY: "y" }, true)).toEqual({
+        expect(readRunEnvironment({}, true, true)).toEqual({
             hasModel: true,
             hasSearch: true,
         });
-        expect(pickRunMode("auto", readRunEnvironment({ EXA_API_KEY: "y" }, true))).toBe("live");
-        expect(pickRunMode("auto", readRunEnvironment({ EXA_API_KEY: "y" }, false))).toBe(
-            "keyless"
+        expect(pickRunMode("auto", readRunEnvironment({}, true, true))).toBe("live");
+        expect(pickRunMode("auto", readRunEnvironment({}, false, true))).toBe("keyless");
+    });
+
+    it("counts the server's search engine, whichever it is, and Foursquare", () => {
+        expect(readRunEnvironment({}, false, false)).toEqual({ hasModel: false, hasSearch: false });
+        expect(readRunEnvironment({}, false, true).hasSearch).toBe(true);
+        expect(readRunEnvironment({ FOURSQUARE_SERVICE_KEY: "z" }, false, false).hasSearch).toBe(
+            true
         );
     });
 
-    it("reads search availability from the environment", () => {
-        expect(readRunEnvironment({})).toEqual({ hasModel: false, hasSearch: false });
-        expect(readRunEnvironment({ EXA_API_KEY: "y" }).hasSearch).toBe(true);
-        expect(readRunEnvironment({ SERPER_API_KEY: "y" }).hasSearch).toBe(true);
-        expect(readRunEnvironment({ FOURSQUARE_SERVICE_KEY: "z" }).hasSearch).toBe(true);
+    describe("asks the search layer by default", () => {
+        const names = [
+            "SEARCH_PROVIDER",
+            "EXA_API_KEY",
+            "SERPER_API_KEY",
+            "BRAVE_SEARCH_API_KEY",
+            "TAVILY_API_KEY",
+            "SEARXNG_URL",
+        ] as const;
+        const saved: Partial<Record<(typeof names)[number], string>> = {};
+        beforeEach(() => {
+            for (const name of names) {
+                saved[name] = process.env[name];
+                delete process.env[name];
+            }
+        });
+        afterEach(() => {
+            for (const name of names) {
+                if (saved[name] === undefined) delete process.env[name];
+                else process.env[name] = saved[name];
+            }
+        });
+
+        it.each([
+            ["no engine", {}, false],
+            ["SearXNG alone", { SEARXNG_URL: "http://searxng:8080" }, true],
+            ["Brave alone", { BRAVE_SEARCH_API_KEY: "b" }, true],
+            [
+                "Serper chosen without its key",
+                { SEARCH_PROVIDER: "serper", EXA_API_KEY: "e" },
+                false,
+            ],
+        ] as const)("%s", (_label, vars, hasSearch) => {
+            Object.assign(process.env, vars);
+            expect(readRunEnvironment({}).hasSearch).toBe(hasSearch);
+        });
     });
 
     // The model is whatever chat talks to: same resolution, no key list of its own.
@@ -72,26 +109,23 @@ describe("run mode", () => {
 
     const gemini: Env = { GOOGLE_AI_API_KEY: "g" };
     const endpoint: Env = { CHAT_BASE_URL: "https://llm.example/v1", CHAT_API_KEY: "k" };
-    const autoCases: Array<[label: string, env: Env, mode: RunMode]> = [
-        ["neither a model nor a search key", {}, "keyless"],
-        ["a Gemini key and no search key", gemini, "keyless"],
-        ["a CHAT_BASE_URL endpoint and no search key", endpoint, "keyless"],
-        ["a search key and no model", { EXA_API_KEY: "e" }, "keyless"],
-        [
-            "a bare vendor key and a search key",
-            { OPENAI_API_KEY: "k", EXA_API_KEY: "e" },
-            "keyless",
-        ],
-        ["a Gemini key and Exa", { ...gemini, EXA_API_KEY: "e" }, "live"],
-        ["a Gemini key and Serper", { ...gemini, SERPER_API_KEY: "s" }, "live"],
+    const autoCases: Array<[label: string, env: Env, search: boolean, mode: RunMode]> = [
+        ["neither a model nor search", {}, false, "keyless"],
+        ["a Gemini key and no search", gemini, false, "keyless"],
+        ["a CHAT_BASE_URL endpoint and no search", endpoint, false, "keyless"],
+        ["search and no model", {}, true, "keyless"],
+        ["a bare vendor key and search", { OPENAI_API_KEY: "k" }, true, "keyless"],
+        ["a Gemini key and search", gemini, true, "live"],
+        ["a CHAT_BASE_URL endpoint and search", endpoint, true, "live"],
         [
             "a CHAT_BASE_URL endpoint and Foursquare",
             { ...endpoint, FOURSQUARE_SERVICE_KEY: "f" },
+            false,
             "live",
         ],
     ];
-    it.each(autoCases)("auto with %s", (_label, env, mode) => {
-        expect(pickRunMode("auto", readRunEnvironment(env))).toBe(mode);
+    it.each(autoCases)("auto with %s", (_label, env, search, mode) => {
+        expect(pickRunMode("auto", readRunEnvironment(env, false, search))).toBe(mode);
     });
 
     it("falls back to keyless whenever a fresh dev environment lacks keys", () => {

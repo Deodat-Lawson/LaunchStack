@@ -3,7 +3,7 @@
  *
  * Unified research endpoint combining:
  * - Document Research (RAG): Search uploaded company documents
- * - Web Research: Search the web (Exa, or Serper when it is the only key)
+ * - Web Research: Search the web (the server's engine, SEARCH_PROVIDER)
  * - arXiv Research: Search academic papers from arXiv.org
  */
 

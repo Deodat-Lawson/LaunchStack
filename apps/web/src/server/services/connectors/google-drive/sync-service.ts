@@ -10,6 +10,7 @@ import {
     syncGoogleDrive,
     type GoogleDriveSyncResult,
 } from "@launchstack/pipelines/connectors/google-drive";
+import { DELETED_HERE_DETAIL } from "@launchstack/pipelines/connectors";
 import { GoogleAuthError } from "@launchstack/google-drive";
 
 import { and, eq, inArray, sql } from "drizzle-orm";
@@ -29,6 +30,7 @@ import {
     resetSyncCursor,
 } from "./store";
 import { ensureCategoryRow } from "../../folder-access";
+import { listDeletedSourceIds } from "../deleted-items";
 import {
     createDriveDestinations,
     missingToMark,
@@ -54,6 +56,7 @@ function reportCounts(report: GoogleDriveSyncResult): Record<string, unknown> {
         stored: report.stored.length,
         skipped: report.skipped.length,
         unchanged: report.skipped.filter(skip => skip.reason === "unchanged").length,
+        deletedHere: report.skipped.filter(skip => skip.detail === DELETED_HERE_DETAIL).length,
         failed: report.failed.length,
         missing: report.missingSourceIds.length,
         accessLost: report.accessLost.length,
@@ -138,10 +141,11 @@ export async function runGoogleDriveSync(
         // can be restricted like any other folder.
         await ensureCategoryRow(connection.companyId, GOOGLE_DRIVE_CATEGORY);
 
-        const [syncState, pickedRows, knownSources] = await Promise.all([
+        const [syncState, pickedRows, knownSources, deletedSourceIds] = await Promise.all([
             getSyncState(connectionId),
             listPickedItems(connectionId),
             listKnownSources(connection.companyId, connectionId),
+            listDeletedSourceIds(connectionId),
         ]);
 
         // What a pick brings in belongs to whoever picked it (ADR-014) — a
@@ -187,6 +191,7 @@ export async function runGoogleDriveSync(
             })),
             startPageToken: syncState?.startPageToken ?? undefined,
             knownSourceIds: knownSources.map(known => known.sourceId),
+            deletedSourceIds,
             force: options?.force,
         });
 

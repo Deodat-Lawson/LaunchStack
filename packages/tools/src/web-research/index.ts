@@ -1,34 +1,39 @@
 /**
- * web-research — provider-pluggable web search with retry, URL dedup, and
- * strategy selection.
+ * web-research — web search through one provider-agnostic layer, plus page
+ * reading and a shared TTL cache.
+ *
+ * `SEARCH_PROVIDER` picks the engine (Exa, Serper, Brave, Tavily or SearXNG;
+ * see ./setup) and every search goes to it: `searchWeb` for the whole web,
+ * `executeSearch` below for news (trend research, with retry and URL dedup),
+ * `searchCompanies` / `describeCompanies` where the engine has a company index.
  *
  * Moved down from packages/features/src/trend-search (unification PR-3): this
  * is the capability; the trend-search vertical keeps its query planning,
  * synthesis, job store, and Inngest orchestration and imports this tool.
- * Second consumer: marketing's competitor analysis, which previously
- * deep-imported trend-search internals and hand-rolled its own cache.
  */
 
-import { getExaApiKey, getSearchStrategyFromEnv, getSerperApiKey } from "./config";
-import { providerRegistry } from "./providers/registry";
-import type {
-    PlannedQuery,
-    ProviderStrategy,
-    RawSearchResult,
-    SearchExecutionResult,
-    SearchProviderFn,
-    SearchProviderUsed,
-} from "./types";
+import { resolveSearchSetup } from "./setup";
+import type { PlannedQuery, RawSearchResult, SearchExecutionResult, SearchProvider } from "./types";
 
 export * from "./types";
 export { createTtlCache, type TtlCache } from "./cache";
-export { providerRegistry } from "./providers/registry";
-export { callExa } from "./providers/exa";
-export { callSerper } from "./providers/serper";
+export { SEARCH_PROVIDERS } from "./providers/registry";
+export {
+    activeSearchProvider,
+    describeSearchSetup,
+    isSearchProviderId,
+    resolveSearchSetup,
+    type SearchSetup,
+    type SearchSetupProblem,
+    type SearchSetupView,
+} from "./setup";
 export * from "./fetch";
 export * from "./web-search";
 
 const MAX_RETRIES = 2;
+const RESULTS_PER_QUERY = 10;
+/** News articles are the evidence trend synthesis reads, so keep most of each. */
+const NEWS_TEXT_CHARS = 4_000;
 
 /** Normalize URL for deduplication; falls back to trim if invalid. */
 function normalizeUrl(url: string): string {
@@ -45,13 +50,26 @@ function normalizeUrl(url: string): string {
  */
 async function runSubQueryWithRetry(
     query: string,
-    provider: SearchProviderFn
+    provider: SearchProvider
 ): Promise<RawSearchResult[]> {
     let lastError: Error | null = null;
 
     for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
         try {
-            return await provider(query);
+            const hits = await provider.search(query, {
+                kind: "news",
+                maxResults: RESULTS_PER_QUERY,
+                snippetChars: NEWS_TEXT_CHARS,
+                timeoutMs: 20_000,
+            });
+            // Engines score on different scales; rank within the answer is comparable.
+            return hits.map((hit, index) => ({
+                url: hit.url,
+                title: hit.title,
+                content: hit.snippet,
+                score: Math.max(0, 1 - index / hits.length),
+                ...(hit.publishedDate ? { publishedDate: hit.publishedDate } : {}),
+            }));
         } catch (err) {
             lastError = err instanceof Error ? err : new Error(String(err));
             if (attempt < MAX_RETRIES) {
@@ -80,7 +98,7 @@ async function runSubQueryWithRetry(
 
 async function executeWithProvider(
     subQueries: PlannedQuery[],
-    provider: SearchProviderFn
+    provider: SearchProvider
 ): Promise<RawSearchResult[]> {
     const perQueryResults = await Promise.all(
         subQueries.map(sub => runSubQueryWithRetry(sub.searchQuery, provider))
@@ -102,146 +120,14 @@ async function executeWithProvider(
     return combined;
 }
 
-function resolveStrategy(override?: ProviderStrategy): ProviderStrategy {
-    return override ?? getSearchStrategyFromEnv();
-}
-
-function getProvider(name: string): SearchProviderFn | null {
-    const provider = providerRegistry[name];
-    if (!provider) {
-        console.warn(`[web-search] Unknown provider "${name}", skipping.`);
-        return null;
-    }
-    return provider;
-}
-
-export async function executeSearch(
-    subQueries: PlannedQuery[],
-    strategyOverride?: ProviderStrategy
-): Promise<SearchExecutionResult> {
-    const hasExaKey = Boolean(getExaApiKey());
-    const hasSerperKey = Boolean(getSerperApiKey());
-
-    // Exa is the default engine; with only a Serper key, Serper is the engine
-    // (an explicit override is left as asked).
-    let strategy = resolveStrategy(strategyOverride);
-    if (!strategyOverride && strategy === "exa" && !hasExaKey && hasSerperKey) strategy = "serper";
-
-    const useSerper =
-        hasSerperKey &&
-        (strategy === "serper" || strategy === "fallback" || strategy === "parallel");
-
-    if (!useSerper && strategy === "serper") {
-        console.warn("[web-search] SERPER_API_KEY not set; downgrading strategy to exa.");
-    }
-
-    const exaProvider = getProvider("exa");
-    const serperProvider = getProvider("serper");
-
-    // Basic single-provider strategies (exa default, or Serper strategies downgraded without key)
-    if (strategy === "exa" || !useSerper) {
-        if (!exaProvider) {
-            return { results: [], providerUsed: "none" };
-        }
-        const results = await executeWithProvider(subQueries, exaProvider);
-        return {
-            results,
-            providerUsed: hasExaKey ? "exa" : "none",
-        };
-    }
-
-    if (strategy === "serper") {
-        if (!serperProvider) {
-            return { results: [], providerUsed: "none" };
-        }
-        const results = await executeWithProvider(subQueries, serperProvider);
-        return { results, providerUsed: "serper" };
-    }
-
-    // Fallback: try Serper first, then Exa if Serper yields nothing
-    if (strategy === "fallback") {
-        if (!serperProvider) {
-            console.warn("[web-search] Serper provider not available; using Exa only.");
-            if (!exaProvider) {
-                return { results: [], providerUsed: "none" };
-            }
-            const results = await executeWithProvider(subQueries, exaProvider);
-            return {
-                results,
-                providerUsed: hasExaKey ? "exa" : "none",
-            };
-        }
-
-        const primaryResults = await executeWithProvider(subQueries, serperProvider);
-        if (primaryResults.length > 0) {
-            return { results: primaryResults, providerUsed: "serper" };
-        }
-
-        console.warn(
-            "[web-search] Serper returned no results for all sub-queries, falling back to Exa."
-        );
-        if (!exaProvider) {
-            return { results: [], providerUsed: "none" };
-        }
-
-        const fallbackResults = await executeWithProvider(subQueries, exaProvider);
-        return {
-            results: fallbackResults,
-            providerUsed: hasExaKey ? "exa" : "none",
-        };
-    }
-
-    // Parallel: query both providers and merge results
-    if (strategy === "parallel") {
-        const providers: Array<{ name: string; fn: SearchProviderFn }> = [];
-        if (serperProvider) providers.push({ name: "serper", fn: serperProvider });
-        if (exaProvider) providers.push({ name: "exa", fn: exaProvider });
-
-        if (providers.length === 0) {
-            return { results: [], providerUsed: "none" };
-        }
-
-        const resultsPerProvider = await Promise.all(
-            providers.map(async p => ({
-                name: p.name,
-                results: await executeWithProvider(subQueries, p.fn),
-            }))
-        );
-
-        // First URL wins per provider order (Serper then Exa). Do not compare
-        // `score` across providers — Exa and Serper use different scales.
-        const byUrl = new Map<string, RawSearchResult>();
-
-        for (const { results } of resultsPerProvider) {
-            for (const r of results) {
-                const normalizedUrl = normalizeUrl(r.url);
-                if (normalizedUrl && !byUrl.has(normalizedUrl)) {
-                    byUrl.set(normalizedUrl, r);
-                }
-            }
-        }
-
-        const merged: RawSearchResult[] = [...byUrl.values()];
-
-        let providerUsed: SearchProviderUsed;
-        if (hasExaKey && hasSerperKey) {
-            providerUsed = "exa+serper";
-        } else if (hasSerperKey) {
-            providerUsed = "serper";
-        } else {
-            providerUsed = "none";
-        }
-
-        return { results: merged, providerUsed };
-    }
-
-    // Fallback safety – should not reach here
-    const defaultProvider = exaProvider ?? serperProvider;
-    if (!defaultProvider) {
-        return { results: [], providerUsed: "none" };
-    }
-    const defaultResults = await executeWithProvider(subQueries, defaultProvider);
-    const providerUsed: SearchProviderUsed =
-        defaultProvider === exaProvider ? (hasExaKey ? "exa" : "none") : "serper";
-    return { results: defaultResults, providerUsed };
+/**
+ * News search for trend research: every sub-query through the configured
+ * provider's news search, with retry, merged and de-duplicated by URL.
+ * Searches nothing (providerUsed "none") when web search is off.
+ */
+export async function executeSearch(subQueries: PlannedQuery[]): Promise<SearchExecutionResult> {
+    const { provider } = resolveSearchSetup();
+    if (!provider) return { results: [], providerUsed: "none" };
+    const results = await executeWithProvider(subQueries, provider);
+    return { results, providerUsed: provider.id };
 }

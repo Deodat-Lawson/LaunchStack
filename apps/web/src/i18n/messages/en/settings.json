@@ -680,6 +680,36 @@
       "limits": "Limits",
       "context": "{count} context",
       "output": "{count} output"
+    },
+    "webSearch": {
+      "title": "Web search",
+      "description": "The engine every feature searches the web with: Ask, competitor analysis, grant search, document research, trend search and Prospects. It’s set on the server, so nothing here changes it.",
+      "on": "On",
+      "pickedSetting": "Chosen with <code>SEARCH_PROVIDER</code>.",
+      "pickedAuto": "The first configured engine; set <code>SEARCH_PROVIDER</code> to choose.",
+      "pickedRetired": "<code>SEARCH_PROVIDER={requested}</code> is no longer a choice, so this is the first configured engine. Set <code>SEARCH_PROVIDER</code> to an engine below to choose.",
+      "setting": "Setting",
+      "webNews": "Web and news",
+      "webNewsEverywhere": "Web and news search for every feature.",
+      "companies": "Companies",
+      "companiesIndexed": "Company search and lookalikes in Prospects.",
+      "companiesByWebSearch": "Prospects finds companies through ordinary web search; lookalikes need {engines}.",
+      "missingCredentials": "<code>SEARCH_PROVIDER={requested}</code> needs <code>{credential}</code>. Web search is off until it’s set.",
+      "unknownProvider": "<code>SEARCH_PROVIDER={requested}</code> isn’t a search engine, so web search is off. Set it to one of <code>{values}</code>.",
+      "notConfigured": "Web search is off: no engine is configured. To turn it on, set <code>SEARCH_PROVIDER</code> to one of the engines below and give it that engine’s setting on the server, then restart.",
+      "engines": {
+        "title": "Engines",
+        "description": "Set SEARCH_PROVIDER to one of these values in the server’s environment, along with that engine’s setting. Unset, the first configured engine in this order is used. Keys are never shown here.",
+        "engine": "Engine",
+        "needs": "Needs",
+        "status": "On this server",
+        "webNews": "Web and news search",
+        "webNewsCompanies": "Web, news and company search, with lookalikes",
+        "inUse": "In use",
+        "configured": "Configured",
+        "chosenMissing": "Chosen, not set",
+        "notSet": "Not set"
+      }
     }
   },
   "oauthClients": {

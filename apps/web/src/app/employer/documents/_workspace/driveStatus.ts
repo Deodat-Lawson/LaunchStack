@@ -9,6 +9,7 @@
 import type { useTranslations } from "next-intl";
 
 import { displayFolderPath } from "~/lib/folders/path";
+import type { DeletedHereSummary } from "./DeletedHereList";
 
 /** `useTranslations("sources.driveConnect")`. */
 export type DriveTranslator = ReturnType<typeof useTranslations<"sources.driveConnect">>;
@@ -45,6 +46,8 @@ export interface DriveStatus {
     };
     /** `enabled`: the server may ask for folder access. `granted`: this connection holds it. */
     readonly folderAccess?: { readonly enabled: boolean; readonly granted: boolean };
+    /** Files deleted here, which the sync leaves out (see DeletedHereList). */
+    readonly deletedHere?: DeletedHereSummary;
 }
 
 /**

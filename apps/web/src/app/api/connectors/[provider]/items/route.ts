@@ -5,7 +5,9 @@
  * resolved against Drive here (it needs folder access), plus the
  * `destination` folder Add source picked — checked like an upload into it;
  * either way the changes-feed cursor is reset so the next sync walks the new
- * pick. DELETE removes by file id. Drive-only.
+ * pick, and anything deleted here that the pick reaches (the file itself, or
+ * what came in through the folder) is let back in. DELETE removes by file
+ * id. Drive-only.
  */
 
 import { z } from "zod";
@@ -26,6 +28,7 @@ import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { isConnectorConfigured } from "~/server/services/connectors/config";
 import { listConnectionsForCompany } from "~/server/services/connectors/connection-store";
+import { forgetDeletedUnderPicks } from "~/server/services/connectors/deleted-items";
 import { resolveDriveLink } from "~/server/services/connectors/google-drive/resolve-link";
 import {
     addPickedItems,
@@ -177,6 +180,11 @@ export async function POST(
             }
 
             await addPickedItems(connection.id, added, Number(guard.ctx.userPk), destination);
+            // Picking it again asks for it again, including what was deleted here.
+            await forgetDeletedUnderPicks(
+                connection.id,
+                added.map(item => item.fileId)
+            );
             await resetSyncCursor(connection.id);
 
             const items = await listPickedItems(connection.id);

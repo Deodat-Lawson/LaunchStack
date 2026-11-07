@@ -1,15 +1,17 @@
 {
   "tool": {
-    "title": "Usage",
-    "about": "How this workspace uses LaunchStack and its AI: who is active, what they ask, add and open, the AI that takes and what it costs, for everyone and for each person. Your own numbers are under You.",
-    "aboutSelf": "Your own numbers in this workspace: the days you were active, what you asked, added and opened, and the AI that took, beside the workspace median.",
+    "title": "Models & usage",
+    "about": "This workspace's AI and how it is used: the API keys it brings, the models people can pick in Ask, who is active, what they ask, add and open, the AI that takes and what it costs, for everyone and for each person. Your own numbers are under You.",
+    "aboutSelf": "Your own numbers in this workspace — the days you were active, what you asked, added and opened, and the AI that took, beside the workspace median — and the models you can pick in Ask.",
     "nav": {
       "overview": "Overview",
       "people": "People",
       "activity": "Activity",
       "documents": "Documents",
       "you": "You",
-      "spending": "Spending"
+      "spending": "Spending",
+      "models": "Models",
+      "keys": "API keys"
     }
   },
   "window": {

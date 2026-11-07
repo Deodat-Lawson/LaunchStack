@@ -63,7 +63,7 @@ export async function GET(request: Request) {
     const state = params.get("state") ?? "";
     if (!flow || !timingSafeStringEqual(flow.s, state)) return backToSettings(request, "expired");
 
-    const ctx = await requireWorkspacePermission("settings.manage");
+    const ctx = await requireWorkspacePermission("models.manage");
     if (!ctx.success) return backToSettings(request, "error");
     if (ctx.data.companyId.toString() !== flow.c) return backToSettings(request, "expired");
 

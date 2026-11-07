@@ -1,6 +1,7 @@
 import { SHORTCUT_COMMANDS_BY_ID, formatKeys } from "~/lib/shortcuts/commands";
 import { useMemo, type ComponentType } from "react";
 import { useTranslations } from "next-intl";
+import type { OfferedModelPick } from "~/lib/ai/model-picks";
 import type { Permission } from "~/lib/authz/permissions";
 import type { ChatPassage } from "~/lib/chat-passages";
 import type { ChatCreatedSource, ChatTurnStep } from "~/lib/chat-turns";
@@ -324,10 +325,13 @@ export interface ComposerSend {
     /** The agent this turn is addressed to; null = the workspace's default assistant. */
     agentKey: string | null;
     modelRoute?: "default" | "fast" | "reasoning" | "vision";
+    /** An offered workspace model answering on the main route (`~/lib/ai/model-picks`). */
+    modelKey?: string;
     reasoningEffort?: string;
     chatMode?: "default" | "plan";
     followUp?: "queue" | "interrupt";
-    modelRoutes?: ("default" | "fast" | "reasoning" | "vision")[];
+    /** Compare mode: routes, and `model:<key>` picks, answered side by side. */
+    modelRoutes?: ("default" | "fast" | "reasoning" | "vision" | OfferedModelPick)[];
     threadRefs?: string[];
     /** Passages selected in a document and asked about; never pasted into `text`. */
     passages?: ChatPassage[];

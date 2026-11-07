@@ -7,9 +7,10 @@
 
 import { z } from "zod";
 
+import { MAX_OFFERED_LABEL_CHARS, MAX_OFFERED_MODELS } from "~/lib/ai/model-picks";
 import { MODEL_PROVIDER_IDS } from "~/lib/ai/model-providers";
 
-import type { SelectionDraft } from "./config";
+import type { OfferedDraft, SelectionDraft } from "./config";
 import { assertEndpointUrlAllowed } from "./endpoint-url";
 import type { EndpointCandidate } from "./probe";
 import { getWorkspaceEndpointRow, readWorkspaceEndpointKey } from "./store";
@@ -38,14 +39,41 @@ const choiceSchema = z
     })
     .strict();
 
+/**
+ * A model offered in Ask. Loose on length and count for the same reason as
+ * prices: `offeredListProblem` says what is wrong in words. The bounds here
+ * only stop a request nobody's form would send.
+ */
+const offeredSchema = z
+    .object({
+        id: z.string().trim().min(1).max(200),
+        key: z.string().max(40).optional(),
+        label: z.string().max(MAX_OFFERED_LABEL_CHARS * 4),
+        vision: z.boolean(),
+        reasoning: z.boolean(),
+        structuredOutput: z.boolean().optional(),
+        pricing: pricingSchema.nullable().optional(),
+    })
+    .strict() satisfies z.ZodType<OfferedDraft>;
+
+const offeredListSchema = z.array(offeredSchema).max(MAX_OFFERED_MODELS * 4);
+
+/**
+ * `offered` absent keeps what is offered: the API keys screen saves the four
+ * routes and knows nothing of the list Models keeps.
+ */
 export const selectionSchema = z
     .object({
         default: choiceSchema,
         fast: choiceSchema.optional(),
         reasoning: choiceSchema.optional(),
         vision: choiceSchema.optional(),
+        offered: offeredListSchema.optional(),
     })
     .strict() satisfies z.ZodType<SelectionDraft>;
+
+/** Models & usage › Models saves the offered list on its own. */
+export const saveOfferedSchema = z.object({ offered: offeredListSchema }).strict();
 
 /** `apiKey` absent = keep or reuse the stored key; `null` = keyless. */
 const endpointFields = {

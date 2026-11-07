@@ -22,7 +22,7 @@ export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 export async function GET(request: Request) {
-    const ctx = await requireWorkspacePermission("settings.manage");
+    const ctx = await requireWorkspacePermission("models.manage");
     if (!ctx.success) return ctx.response;
 
     // Where the admin's browser comes back to: the public origin, never

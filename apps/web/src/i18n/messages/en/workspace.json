@@ -96,8 +96,8 @@
       "description": "Your account, appearance, shortcuts and privacy"
     },
     "usage": {
-      "label": "Usage",
-      "description": "Who is active, what they ask and add, the AI it takes and what it costs — and your own numbers"
+      "label": "Models & usage",
+      "description": "The workspace's API keys and the models people can pick, who is active, what they ask and add, the AI it takes and what it costs — and your own numbers"
     },
     "mindmap": {
       "label": "Mindmap",
@@ -109,7 +109,7 @@
     },
     "workspace": {
       "label": "Workspace",
-      "description": "The workspace's name and details, its people and access, company profile, your own keys, models, agents, integrations and archive"
+      "description": "The workspace's name and details, its people and access, company profile, agents, integrations and archive"
     },
     "feedback": {
       "label": "Feedback",
@@ -193,8 +193,8 @@
       "description": "Missing exhibits, schedules, and compliance gaps"
     },
     "usage": {
-      "label": "Usage",
-      "description": "Your numbers, and for admins the workspace's and each person's"
+      "label": "Models & usage",
+      "description": "Your numbers, and for admins the workspace's and each person's, its models and API keys"
     },
     "spending": {
       "label": "Spending and limits",
@@ -214,7 +214,7 @@
     },
     "workspace": {
       "label": "Workspace",
-      "description": "Its name and URL, people and access, your own keys, models, agents and integrations"
+      "description": "Its name and URL, people and access, company profile, agents and integrations"
     },
     "workspaceGeneral": {
       "label": "Rename the workspace",
@@ -225,8 +225,8 @@
       "description": "Yours alone: account, appearance, shortcuts and privacy"
     },
     "byok": {
-      "label": "Bring your own keys",
-      "description": "Your own API key or OpenRouter account for the workspace's AI"
+      "label": "API keys",
+      "description": "Your own API key or OpenRouter account for the workspace's AI, in Models & usage"
     }
   },
   "history": {

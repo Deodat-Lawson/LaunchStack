@@ -1,5 +1,5 @@
 /**
- * The chat model configuration, made legible. Gated on `settings.manage`.
+ * The chat model configuration, made legible. Gated on `models.manage`.
  * It names routes and capabilities only; the endpoint and model ids stay on
  * the server (see `~/server/settings/models`).
  */
@@ -13,7 +13,7 @@ import { requestTranslator } from "~/i18n/server";
 export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
-    const ctx = await requireWorkspacePermission("settings.manage");
+    const ctx = await requireWorkspacePermission("models.manage");
     if (!ctx.success) return ctx.response;
     try {
         return NextResponse.json(modelsOverview());

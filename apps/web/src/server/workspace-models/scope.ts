@@ -18,8 +18,11 @@
 import {
     ChatConfigurationError,
     ChatScopeUnavailableError,
+    getChatModelsScope,
+    getPublicChatConfig,
     runWithChatModelsScope,
     type ChatModelsScope,
+    type PublicChatRouteInfo,
 } from "@launchstack/llm";
 import { createSlot } from "@launchstack/runtime";
 
@@ -28,7 +31,7 @@ import { AiAllowanceExceededError } from "~/server/ai-usage/errors";
 import { getAiAllowance, type AiAllowance } from "~/server/ai-usage/quota";
 import { aiUsageRecorder } from "~/server/ai-usage/record";
 
-import { buildWorkspaceChatModelsConfig } from "./config";
+import { buildWorkspaceChatModelsConfig, configWithOfferedModel } from "./config";
 import { WorkspaceEndpointUrlError, assertEndpointUrlAllowed } from "./endpoint-url";
 import { getWorkspaceEndpointRow, readWorkspaceEndpointKey } from "./store";
 
@@ -41,11 +44,25 @@ const DEPLOYMENT_SCOPE: ChatModelsScope = Object.freeze({ source: "deployment" }
  * other processes (the worker) catch up within the TTL.
  */
 const CACHE_TTL_MS = 10_000;
-const cacheSlot = createSlot<Map<number, { at: number; scope: ChatModelsScope }>>(
-    "workspace-models/scopeCache"
-);
+/** A model offered in Ask, as the scope cache keeps it: its handle and its name. */
+interface OfferedName {
+    key: string;
+    label: string;
+}
 
-function cache(): Map<number, { at: number; scope: ChatModelsScope }> {
+interface Loaded {
+    scope: ChatModelsScope;
+    /** Empty unless the scope is the workspace's own and usable. */
+    offered: readonly OfferedName[];
+}
+
+interface CacheEntry extends Loaded {
+    at: number;
+}
+
+const cacheSlot = createSlot<Map<number, CacheEntry>>("workspace-models/scopeCache");
+
+function cache(): Map<number, CacheEntry> {
     let map = cacheSlot.get();
     if (!map) {
         map = new Map();
@@ -63,19 +80,24 @@ export function resetWorkspaceChatModelsCache(): void {
     cache().clear();
 }
 
-function unusable(reason: string): ChatModelsScope {
+const NOTHING_OFFERED: readonly OfferedName[] = Object.freeze([]);
+
+function unusable(reason: string): Loaded {
     return {
-        source: "workspace",
-        error: new ChatScopeUnavailableError(
-            `Your workspace's own model can't be used: ${reason} A workspace admin can fix it in Workspace › Bring your own keys.`
-        ),
+        scope: {
+            source: "workspace",
+            error: new ChatScopeUnavailableError(
+                `Your workspace's own model can't be used: ${reason} A workspace admin can fix it in Models & usage › API keys.`
+            ),
+        },
+        offered: NOTHING_OFFERED,
     };
 }
 
-async function loadScope(companyId: number): Promise<ChatModelsScope> {
+async function loadScope(companyId: number): Promise<Loaded> {
     const row = await getWorkspaceEndpointRow(companyId);
     // Connected but no model chosen yet: nothing has switched over.
-    if (!row?.models?.default?.id) return DEPLOYMENT_SCOPE;
+    if (!row?.models?.default?.id) return { scope: DEPLOYMENT_SCOPE, offered: NOTHING_OFFERED };
 
     let baseUrl: string;
     try {
@@ -102,7 +124,10 @@ async function loadScope(companyId: number): Promise<ChatModelsScope> {
             apiKey,
             selection: row.models,
         });
-        return { source: "workspace", config };
+        return {
+            scope: { source: "workspace", config },
+            offered: (row.models.offered ?? []).map(({ key, label }) => ({ key, label })),
+        };
     } catch (error) {
         if (error instanceof ChatConfigurationError) {
             // The detail can quote model ids, and this reason reaches every
@@ -117,20 +142,71 @@ async function loadScope(companyId: number): Promise<ChatModelsScope> {
     }
 }
 
+async function loadWorkspace(
+    companyId: bigint | number | string | null | undefined
+): Promise<Loaded> {
+    const none = { scope: DEPLOYMENT_SCOPE, offered: NOTHING_OFFERED };
+    if (companyId === null || companyId === undefined || companyId === "") return none;
+    const id = Number(companyId);
+    if (!Number.isSafeInteger(id) || id <= 0) return none;
+
+    const hit = cache().get(id);
+    if (hit && Date.now() - hit.at < CACHE_TTL_MS) return hit;
+
+    const loaded = await loadScope(id);
+    cache().set(id, { at: Date.now(), ...loaded });
+    return loaded;
+}
+
 /** The scope a workspace's work should run in. Cached briefly; see above. */
 export async function loadWorkspaceChatModelsScope(
     companyId: bigint | number | string | null | undefined
 ): Promise<ChatModelsScope> {
-    if (companyId === null || companyId === undefined || companyId === "") return DEPLOYMENT_SCOPE;
-    const id = Number(companyId);
-    if (!Number.isSafeInteger(id) || id <= 0) return DEPLOYMENT_SCOPE;
+    return (await loadWorkspace(companyId)).scope;
+}
 
-    const hit = cache().get(id);
-    if (hit && Date.now() - hit.at < CACHE_TTL_MS) return hit.scope;
+/**
+ * A model offered in Ask, as the browser may see it: the handle to send back,
+ * the admin's name for it, and what it can do. Never the provider's id.
+ */
+export type OfferedModelInfo = { key: string; label: string } & PublicChatRouteInfo;
 
-    const scope = await loadScope(id);
-    cache().set(id, { at: Date.now(), scope });
-    return scope;
+/**
+ * The models a workspace offers in Ask, described for the menu. Empty for a
+ * workspace on the deployment's models, and for one whose own setup can't be
+ * used (its chat says why on the next turn).
+ */
+export async function loadWorkspaceOfferedModels(
+    companyId: bigint | number | string | null | undefined
+): Promise<OfferedModelInfo[]> {
+    const { scope, offered } = await loadWorkspace(companyId);
+    if (!scope.config || scope.error) return [];
+    const config = scope.config;
+    return offered.flatMap(({ key, label }) => {
+        const picked = configWithOfferedModel(config, key);
+        if (!picked) return [];
+        return [{ key, label, ...getPublicChatConfig(picked).routes.default }];
+    });
+}
+
+/**
+ * Run `fn` on the offered model `key` in place of the workspace's main model,
+ * inside the scope the caller is already in (so its usage counter and its
+ * allowance still apply). Resolves to `{ offered: false }` without running
+ * `fn` when the current scope offers no model by that key — a deployment
+ * scope never does — so the caller can say so instead of answering with
+ * another model.
+ */
+export async function withOfferedChatModel<T>(
+    key: string,
+    fn: () => T | Promise<T>
+): Promise<{ offered: true; value: T } | { offered: false }> {
+    const scope = getChatModelsScope();
+    if (!scope?.config || scope.error || scope.source !== "workspace") return { offered: false };
+    const picked = configWithOfferedModel(scope.config, key);
+    if (!picked) return { offered: false };
+    const value = await runWithChatModelsScope({ ...scope, config: picked }, fn);
+    return { offered: true, value };
 }
 
 /**

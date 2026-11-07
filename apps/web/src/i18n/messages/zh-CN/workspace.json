@@ -96,8 +96,8 @@
       "description": "你的账户、外观、快捷键和隐私"
     },
     "usage": {
-      "label": "用量",
-      "description": "谁在活跃，提了什么问题、添加了什么，用了多少 AI、花了多少钱——以及你自己的数据"
+      "label": "模型与用量",
+      "description": "工作区的 API 密钥和大家可选的模型、谁在活跃、提了什么问题和添加了什么、用了多少 AI、花了多少钱——以及你自己的数据"
     },
     "mindmap": {
       "label": "思维导图",
@@ -109,7 +109,7 @@
     },
     "workspace": {
       "label": "工作区",
-      "description": "工作区的名称和详情、成员与权限、公司档案、自带密钥、模型、智能体、集成和归档"
+      "description": "工作区的名称和详情、成员与权限、公司档案、智能体、集成和归档"
     },
     "feedback": {
       "label": "反馈",
@@ -193,8 +193,8 @@
       "description": "缺失的附件、附表和合规缺口"
     },
     "usage": {
-      "label": "用量",
-      "description": "你自己的数据；管理员还能看到整个工作区和每个人的数据"
+      "label": "模型与用量",
+      "description": "你的数据；管理员还能看到整个工作区和每个人的数据、模型和 API 密钥"
     },
     "spending": {
       "label": "支出与上限",
@@ -214,7 +214,7 @@
     },
     "workspace": {
       "label": "工作区",
-      "description": "名称和网址、成员与权限、自带密钥、模型、智能体和集成"
+      "description": "名称和网址、成员与权限、公司档案、智能体和集成"
     },
     "workspaceGeneral": {
       "label": "重命名工作区",
@@ -225,8 +225,8 @@
       "description": "仅属于你：账户、外观、快捷键和隐私"
     },
     "byok": {
-      "label": "自带密钥",
-      "description": "工作区 AI 使用你自己的 API 密钥或 OpenRouter 账户"
+      "label": "API 密钥",
+      "description": "工作区 AI 使用你自己的 API 密钥或 OpenRouter 账户，位于“模型与用量”"
     }
   },
   "history": {

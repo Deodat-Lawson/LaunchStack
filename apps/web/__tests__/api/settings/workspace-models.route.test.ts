@@ -1,8 +1,9 @@
 /**
- * Workspace › Bring your own keys. What must not regress: only
- * `settings.manage` reaches any of it, the key goes in and never comes back
- * out, a stored key is never re-aimed at a new address, and the OpenRouter
- * return leg refuses anything but the flow it started.
+ * Models & usage › API keys (Workspace › Bring your own keys until November
+ * 2026). What must not regress: only `models.manage` reaches any of it (not
+ * `settings.manage`), the key goes in and never comes back out, a stored key
+ * is never re-aimed at a new address, and the OpenRouter return leg refuses
+ * anything but the flow it started and comes back to API keys.
  */
 
 import type * as MockRequireWorkspaceContext from "../../helpers/mock-require-workspace-context";
@@ -85,6 +86,19 @@ import {
 
 const admin = { success: true, data: makeWorkspaceContext({ role: "admin" }) };
 const member = { success: true, data: makeWorkspaceContext({ role: "member" }) };
+/** A custom role that manages the workspace's settings, but not its models. */
+const settingsManager = {
+    success: true,
+    data: makeWorkspaceContext({
+        role: "custom",
+        permissions: ["settings.manage", "analytics.view", "members.view", "documents.read"],
+    }),
+};
+/** A custom role that manages the models and nothing else. */
+const modelsManager = {
+    success: true,
+    data: makeWorkspaceContext({ role: "custom", permissions: ["models.manage"] }),
+};
 
 const selection = { default: { id: "acme/chat", vision: false, reasoning: false } };
 
@@ -127,12 +141,21 @@ describe("permission gate", () => {
                 ),
         ],
         ["openrouter", () => startOpenRouter(new Request("http://localhost/x"))],
-    ])("%s refuses a member", async (_name, call) => {
-        mockRequireWorkspaceContext.mockResolvedValue(member);
-        const response = await call();
-        expect(response.status).toBe(403);
+    ])("%s refuses a member, and a role that manages only the settings", async (_name, call) => {
+        for (const caller of [member, settingsManager]) {
+            mockRequireWorkspaceContext.mockResolvedValue(caller);
+            const response = await call();
+            expect(response.status).toBe(403);
+            expect(await response.json()).toMatchObject({ permission: "models.manage" });
+        }
         expect(mockStore.save).not.toHaveBeenCalled();
         expect(mockStore.remove).not.toHaveBeenCalled();
+    });
+
+    it("lets a role that manages only the models read the key's view", async () => {
+        mockRequireWorkspaceContext.mockResolvedValue(modelsManager);
+        const response = await GET();
+        expect(response.status).toBe(200);
     });
 });
 
@@ -516,8 +539,8 @@ describe("Connect OpenRouter", () => {
             const target = new URL(response.headers.get("location")!);
             expect(target.origin).toBe("http://localhost:3000");
             expect(target.searchParams.get("openrouter")).toBe("unavailable");
-            expect(target.searchParams.get("feature")).toBe("workspace");
-            expect(target.searchParams.get("at")).toBe("/byok");
+            expect(target.searchParams.get("feature")).toBe("usage");
+            expect(target.searchParams.get("at")).toBe("/keys");
         } finally {
             mockServerEnv.EMBEDDING_SECRETS_KEY = "sealed";
         }
@@ -553,7 +576,7 @@ describe("Connect OpenRouter", () => {
             expect(response.cookies.get(OPENROUTER_COOKIE)!.secure).toBe(true);
         });
 
-        it("lands the return leg on Workspace › Bring your own keys at the public origin", async () => {
+        it("lands the return leg on Models & usage › API keys at the public origin", async () => {
             const response = await openRouterCallback(
                 new Request(
                     `${BEHIND_PROXY}/api/settings/models/workspace/openrouter/callback?state=s`
@@ -562,8 +585,8 @@ describe("Connect OpenRouter", () => {
             const target = new URL(response.headers.get("location")!);
             expect(target.origin).toBe("https://launchstack.example");
             expect(target.pathname).toBe("/employer/documents");
-            expect(target.searchParams.get("feature")).toBe("workspace");
-            expect(target.searchParams.get("at")).toBe("/byok");
+            expect(target.searchParams.get("feature")).toBe("usage");
+            expect(target.searchParams.get("at")).toBe("/keys");
             expect(target.searchParams.get("openrouter")).toBe("denied");
         });
     });
@@ -611,8 +634,8 @@ describe("Connect OpenRouter", () => {
 
         expect(outcome(response)).toBe("connected");
         const back = new URL(response.headers.get("location")!);
-        expect(back.searchParams.get("feature")).toBe("workspace");
-        expect(back.searchParams.get("at")).toBe("/byok");
+        expect(back.searchParams.get("feature")).toBe("usage");
+        expect(back.searchParams.get("at")).toBe("/keys");
         const [url, init] = fetchSpy.mock.calls[0]!;
         expect(url).toBe("https://openrouter.ai/api/v1/auth/keys");
         expect(JSON.parse(init?.body as string)).toEqual({

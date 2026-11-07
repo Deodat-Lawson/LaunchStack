@@ -12,9 +12,10 @@
  * one header, one action area and one read-only rule for both.
  *
  * Deep links: every `/employer/settings#…` that ever worked still lands —
- * `#appearance.theme` on its row here, `#people` or `#byok` on their screen
- * of the Workspace tab, and `#usage.pricePerMillionTokens` on the Usage
- * tab's Spending screen (`~/lib/settings/surfaces` decides which).
+ * `#appearance.theme` on its row here, `#people` on its screen of the
+ * Workspace tab, and `#byok`, `#models` and `#usage.pricePerMillionTokens`
+ * on Models & usage › API keys, Models and Spending
+ * (`~/lib/settings/surfaces` decides which).
  */
 
 import React, { useCallback, useEffect, useState } from "react";
@@ -37,8 +38,8 @@ import {
     PERSONAL_SECTION_IDS,
     WORKSPACE_TOOL_ID,
     isPersonalSection,
+    modelsUsageHref,
     settingsDestination,
-    workspaceHref,
     type PersonalSectionId,
 } from "~/lib/settings/surfaces";
 import { toolTabHref } from "~/lib/tool-app/locations";
@@ -78,12 +79,12 @@ export function SettingsHub({ embedded = false, initialSection }: SettingsHubPro
             const hash = window.location.hash.replace(/^#/, "");
             if (!hash) {
                 // OpenRouter's old return leg (`?feature=settings&openrouter=…`)
-                // belongs on Workspace › Bring your own keys, which reads the
+                // belongs on Models & usage › API keys, which reads the
                 // outcome. In the shell, the shell routes it before this hub
                 // mounts.
                 const outcome = new URLSearchParams(window.location.search).get("openrouter");
                 if (outcome && !embedded) {
-                    router.replace(workspaceHref("byok", { query: { openrouter: outcome } }));
+                    router.replace(modelsUsageHref("keys", { query: { openrouter: outcome } }));
                 }
                 return;
             }

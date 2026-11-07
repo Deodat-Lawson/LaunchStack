@@ -1,7 +1,8 @@
 "use client";
 
 /**
- * Workspace › Bring your own keys › API key.
+ * Models & usage › API keys › API key (Workspace › Bring your own keys until
+ * November 2026).
  *
  * A workspace admin points the workspace's AI — chat, drafting, meetings,
  * background work — at their own provider account: OpenRouter in one click,

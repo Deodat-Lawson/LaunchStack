@@ -9,6 +9,7 @@ import React, {
     type SetStateAction,
     useCallback,
     useEffect,
+    useId,
     useMemo,
     useRef,
     useState,
@@ -30,6 +31,7 @@ import {
 import { useFormatter, useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
+import { Checkbox } from "~/components/ui/checkbox";
 import { Input } from "~/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "~/components/ui/dialog";
@@ -45,6 +47,19 @@ import {
 } from "~/lib/chat-passages";
 import type { ChatSendResult } from "~/lib/chat-turns";
 import {
+    PICKER_ROUTES,
+    isModelKey,
+    isModelPick,
+    isPickerRoute,
+    modelKeyOfPick,
+    pickOfModel,
+    pickOfRequest,
+    requestOfPick,
+    routeOfPick,
+    type ModelPick,
+    type PickerRoute,
+} from "~/lib/ai/model-picks";
+import {
     mentionQueryAt,
     mentionedAgentKeys,
     resolveChatTurn,
@@ -53,7 +68,12 @@ import {
 } from "~/lib/agents/definition";
 import { turnNote } from "~/lib/agents/i18n";
 import { cn } from "~/lib/utils";
-import { useChatRoutes, type ChatRouteName } from "../hooks/useChatRoutes";
+import {
+    useChatRoutes,
+    type ChatRouteInfo,
+    type ChatRouteName,
+    type OfferedModelInfo,
+} from "../hooks/useChatRoutes";
 import { SourceChip, type ComposerSeed } from "./AskPanel";
 import { AgentAvatar } from "./collab/AgentAvatar";
 import type { ChatAgentOption } from "./collab/types";
@@ -174,20 +194,34 @@ interface UploadRow {
     progress: number;
     error?: string;
 }
-const ROUTES = ["default", "fast"] as const satisfies readonly ChatRouteName[];
-type PickerRoute = (typeof ROUTES)[number];
-const isPickerRoute = (route: unknown): route is PickerRoute =>
-    ROUTES.some(option => option === route);
-/** Old drafts and preferences may name a route the picker no longer offers. */
-const pickerRoute = (route: unknown): PickerRoute => (isPickerRoute(route) ? route : "default");
 /*
- * What each route is called on screen is `chat.composer.routes.<route>`. The
- * picker chooses a route, never a model: which model serves it is the
- * operator's configuration and the screen does not name it. It offers two
- * tiers only. Images go to a route that reads them on their own, and how hard
- * the model thinks is the reasoning effort, not a separate tier — so the
- * `reasoning` and `vision` routes stay server-side and are never picked here.
+ * The picker holds a `ModelPick` (`~/lib/ai/model-picks`): one of the two
+ * tiers, or a model the workspace's admins offer. What each tier is called on
+ * screen is `chat.composer.routes.<route>`; which model serves it is the
+ * operator's configuration and the screen never names it. An offered model
+ * shows under the name its admin gave it, never a provider model id. Images
+ * go to a route that reads them on their own, and how hard the model thinks
+ * is the reasoning effort, not a separate tier — so the `reasoning` and
+ * `vision` routes stay server-side and are never picked here.
  */
+const NO_OFFERED_MODELS: OfferedModelInfo[] = [];
+/** What a draft, a stash or the preferences hold for a pick (a tier clears the key). */
+const storedPick = (pick: ModelPick) => ({
+    modelRoute: routeOfPick(pick),
+    modelKey: modelKeyOfPick(pick),
+});
+/**
+ * Compare picks from a draft, a seed or a failed comparison. Old drafts may
+ * list a route the picker no longer offers; those are dropped.
+ */
+const comparePicksOf = (routes: readonly unknown[] | undefined): ModelPick[] => [
+    ...new Set((routes ?? []).filter(isModelPick)),
+];
+/** Whether a saved pick still names something the menu offers. */
+const stillOffered = (pick: ModelPick, offered: readonly OfferedModelInfo[]) => {
+    const key = modelKeyOfPick(pick);
+    return !key || offered.some(model => model.key === key);
+};
 function defaultSendKey(): ComposerPreferences["sendKey"] {
     return typeof window !== "undefined" &&
         typeof window.matchMedia === "function" &&
@@ -258,8 +292,8 @@ export function Composer({
     const [attachError, setAttachError] = useState<string | null>(null);
     const [storageError, setStorageError] = useState(false);
     const [failedPromptAvailable, setFailedPromptAvailable] = useState(false);
-    const [modelRoute, setModelRoute] = useState<PickerRoute>("default");
-    const [modelRoutes, setModelRoutes] = useState<PickerRoute[]>([]);
+    const [modelPick, setModelPick] = useState<ModelPick>("default");
+    const [comparePicks, setComparePicks] = useState<ModelPick[]>([]);
     const [threadRefs, setThreadRefs] = useState<string[]>([]);
     const [passages, setPassages] = useState<ChatPassage[]>([]);
     const [inspectedThread, setInspectedThread] = useState<string | null>(null);
@@ -267,6 +301,7 @@ export function Composer({
     const [chatMode, setChatMode] = useState<"default" | "plan">("default");
     const [modelOpen, setModelOpen] = useState(false);
     const [modelSearch, setModelSearch] = useState("");
+    const offeredHeadingId = useId();
     const [sourceOpen, setSourceOpen] = useState(false);
     const [sourceSearch, setSourceSearch] = useState("");
     useEffect(() => {
@@ -275,7 +310,7 @@ export function Composer({
     const [stashes, setStashes] = useState<PromptStash[]>([]);
     const [stashOpen, setStashOpen] = useState(false);
     const [sendKey, setSendKey] = useState<ComposerPreferences["sendKey"]>(defaultSendKey);
-    const [favorites, setFavorites] = useState<string[]>([]);
+    const [favorites, setFavorites] = useState<ModelPick[]>([]);
     const [followUp, setFollowUp] = useState<"queue" | "interrupt">("queue");
     const [editorMode, setEditorMode] = useState<"plain" | "rich">(defaultEditorMode);
     const [editorModeChosen, setEditorModeChosen] = useState(false);
@@ -347,6 +382,28 @@ export function Composer({
             },
         },
     };
+    const offeredModels = configuredRoutes.offeredModels ?? NO_OFFERED_MODELS;
+    // Only a configuration that loaded says which models are offered: while it
+    // loads, or when it couldn't be read, a saved pick of one is kept.
+    const offeredKnown = !configuredRoutes.loading && !configuredRoutes.failed;
+    const offeredModelOf = (pick: ModelPick) => {
+        const key = modelKeyOfPick(pick);
+        return key ? offeredModels.find(model => model.key === key) : undefined;
+    };
+    /** What a pick can do: an offered model's own capabilities, or its tier's. */
+    const pickInfo = (pick: ModelPick): ChatRouteInfo | undefined =>
+        isPickerRoute(pick) ? chatRoutes.config.routes[pick] : offeredModelOf(pick);
+    const pickLabel = (pick: ModelPick) =>
+        isPickerRoute(pick)
+            ? routeLabel(pick)
+            : (offeredModelOf(pick)?.label ?? t("offered.unknown"));
+    const offeredDetail = (model: OfferedModelInfo) => {
+        const reads = model.vision?.supported ? [t("offered.readsImages")] : [];
+        const reasons =
+            model.reasoning && model.reasoning.mode !== "none" ? [t("offered.reasons")] : [];
+        const can = [...reads, ...reasons];
+        return can.length ? can.join(" · ") : t("offered.textOnly");
+    };
     const uploading = uploads.some(row => row.status === "uploading");
     const uploadBlocked = uploads.length > 0 || preparingFiles || missingFiles.length > 0;
     const unavailableSources = selected.filter(id => !sources.some(source => source.id === id));
@@ -390,8 +447,8 @@ export function Composer({
         text,
         attachments,
         refs: selected,
-        modelRoute,
-        modelRoutes,
+        ...storedPick(modelPick),
+        modelRoutes: comparePicks,
         threadRefs,
         passages,
         reasoningEffort,
@@ -421,14 +478,17 @@ export function Composer({
         turnAgent ? { tools: turnAgent.tools, route: null, style: null, temperature: null } : null,
         { webSearch, thinking, hasAttachments: attachments.length > 0 }
     );
-    const routeInfo = chatRoutes.config.routes[modelRoute];
-    // Images are always on: a picked tier that can't read them hands the turn
-    // to the vision route rather than asking the reader to switch.
-    const effectiveRoute: ChatRouteName =
-        attachments.some(item => item.kind === "image") && !routeInfo?.vision?.supported
-            ? "vision"
-            : modelRoute;
-    const effortInfo = chatRoutes.config.routes[effectiveRoute]?.reasoning;
+    const routeInfo = pickInfo(modelPick);
+    // Images are always on: a picked tier or offered model that can't read
+    // them hands the turn to the vision route rather than asking the reader to
+    // switch. One that reads them keeps the turn (the server sends the images
+    // to it).
+    const toVision =
+        attachments.some(item => item.kind === "image") && !routeInfo?.vision?.supported;
+    const effectiveRoute: ChatRouteName = toVision ? "vision" : routeOfPick(modelPick);
+    const effortInfo = toVision ? chatRoutes.config.routes.vision?.reasoning : routeInfo?.reasoning;
+    /** Who reads an image attached now: the picked offered model if it can, else the vision route. */
+    const pickedReadsImages = Boolean(modelKeyOfPick(modelPick) && routeInfo?.vision?.supported);
     const effortOptions =
         effortInfo?.controllable && effortInfo.mode === "effort" ? (effortInfo.efforts ?? []) : [];
     const mentionMatches = mention
@@ -601,8 +661,8 @@ export function Composer({
                     : null
             );
             updateAttachments(draft.attachments);
-            setModelRoute(pickerRoute(draft.modelRoute));
-            setModelRoutes((draft.modelRoutes ?? []).filter(isPickerRoute));
+            setModelPick(pickOfRequest(draft));
+            setComparePicks(comparePicksOf(draft.modelRoutes));
             setThreadRefs((draft.threadRefs ?? []).filter(id => typeof id === "string"));
             setPassages((draft.passages ?? []).filter(isChatPassage));
             setMissingFiles(draft.pendingFiles ?? []);
@@ -643,8 +703,8 @@ export function Composer({
             setText("");
             setRichContent(null);
             updateAttachments([]);
-            setModelRoute("default");
-            setModelRoutes([]);
+            setModelPick("default");
+            setComparePicks([]);
             setThreadRefs([]);
             setPassages([]);
             setMissingFiles([]);
@@ -672,7 +732,7 @@ export function Composer({
                 : defaultSendKey()
         );
         setFavorites(
-            Array.isArray(preferences?.favorites) ? preferences.favorites.filter(isPickerRoute) : []
+            Array.isArray(preferences?.favorites) ? preferences.favorites.filter(isModelPick) : []
         );
         setFollowUp(preferences?.followUp === "interrupt" ? "interrupt" : "queue");
         // Only a mode the person picked counts: the mode is written back on
@@ -684,7 +744,8 @@ export function Composer({
         setEditorModeChosen(chosen);
         setEditorMode(chosen ? preferences.editorMode! : defaultEditorMode);
         if (!isComposerDraft(stored)) {
-            if (isPickerRoute(preferences.modelRoute)) setModelRoute(preferences.modelRoute);
+            if (isPickerRoute(preferences.modelRoute) || isModelKey(preferences.modelKey))
+                setModelPick(pickOfRequest(preferences));
             if (typeof preferences?.reasoningEffort === "string")
                 setReasoningEffort(preferences.reasoningEffort);
         }
@@ -705,8 +766,8 @@ export function Composer({
             text,
             attachments,
             refs: selected,
-            modelRoute,
-            modelRoutes,
+            ...storedPick(modelPick),
+            modelRoutes: comparePicks,
             threadRefs,
             passages,
             reasoningEffort,
@@ -728,8 +789,8 @@ export function Composer({
         text,
         attachments,
         selected,
-        modelRoute,
-        modelRoutes,
+        modelPick,
+        comparePicks,
         threadRefs,
         passages,
         reasoningEffort,
@@ -750,9 +811,9 @@ export function Composer({
                 followUp,
                 editorMode,
                 editorModeChosen,
-                modelRoute,
+                ...storedPick(modelPick),
                 reasoningEffort,
-            });
+            } satisfies ComposerPreferences);
     }, [
         loadedKey,
         scopedKey,
@@ -762,9 +823,18 @@ export function Composer({
         followUp,
         editorMode,
         editorModeChosen,
-        modelRoute,
+        modelPick,
         reasoningEffort,
     ]);
+    // A saved pick of a model the workspace no longer offers (an admin removed
+    // it) falls back to Standard once the menu has loaded; never while it loads.
+    useEffect(() => {
+        if (!offeredKnown) return;
+        const offered = (pick: ModelPick) => stillOffered(pick, offeredModels);
+        if (!offered(modelPick)) setModelPick("default");
+        if (!comparePicks.every(offered)) setComparePicks(previous => previous.filter(offered));
+        if (!favorites.every(offered)) setFavorites(previous => previous.filter(offered));
+    }, [offeredKnown, offeredModels, modelPick, comparePicks, favorites]);
     useEffect(() => {
         const currentRequests = requests.current;
         const currentPreparationGeneration = preparationGeneration;
@@ -810,8 +880,8 @@ export function Composer({
                 text,
                 attachments,
                 refs: selected,
-                modelRoute,
-                modelRoutes,
+                ...storedPick(modelPick),
+                modelRoutes: comparePicks,
                 threadRefs,
                 passages,
                 reasoningEffort,
@@ -876,8 +946,8 @@ export function Composer({
             updateAttachments(seed.attachments);
         }
         if (seed.refs) callbacks.current.setSelected(seed.refs);
-        if (seed.modelRoute) setModelRoute(pickerRoute(seed.modelRoute));
-        if (seed.modelRoutes) setModelRoutes(seed.modelRoutes.filter(isPickerRoute));
+        if (seed.modelRoute || seed.modelKey) setModelPick(pickOfRequest(seed));
+        if (seed.modelRoutes) setComparePicks(comparePicksOf(seed.modelRoutes));
         if (seed.threadRefs) setThreadRefs(seed.threadRefs);
         if (seed.reasoningEffort) setReasoningEffort(seed.reasoningEffort);
         if (seed.chatMode) setChatMode(seed.chatMode);
@@ -1012,8 +1082,11 @@ export function Composer({
             webSearch,
             thinking,
             agentKey: mentionedKey ?? agentKey,
-            modelRoute: effectiveRoute,
-            ...(modelRoutes.length >= 2 ? { modelRoutes } : {}),
+            // An offered model travels as the main route plus its key; one
+            // that can't read an attached image gives the turn to the vision
+            // route instead, without its key.
+            ...(toVision ? { modelRoute: effectiveRoute } : requestOfPick(modelPick)),
+            ...(comparePicks.length >= 2 ? { modelRoutes: comparePicks } : {}),
             ...(threadRefs.length ? { threadRefs } : {}),
             ...(passages.length ? { passages } : {}),
             ...(reasoningEffort && effortOptions.includes(reasoningEffort)
@@ -1030,15 +1103,18 @@ export function Composer({
                   }
                 : {}),
         };
-        const retryDraft = (failedModelRoutes?: ChatRouteName[]): ComposerDraft =>
-            failedModelRoutes?.length
+        type FailedPicks = ChatSendResult["failedModelRoutes"];
+        const retryDraft = (failedModelRoutes?: FailedPicks): ComposerDraft => {
+            const failed = comparePicksOf(failedModelRoutes);
+            return failed.length
                 ? {
                       ...snapshot,
-                      modelRoute: failedModelRoutes[0],
-                      modelRoutes: failedModelRoutes.length >= 2 ? failedModelRoutes : [],
+                      ...storedPick(failed[0]!),
+                      modelRoutes: failed.length >= 2 ? failed : [],
                   }
                 : snapshot;
-        const recover = (failedModelRoutes?: ChatRouteName[]) => {
+        };
+        const recover = (failedModelRoutes?: FailedPicks) => {
             const failedDraft = retryDraft(failedModelRoutes);
             if (currentScopeKey.current !== originKey) {
                 const stored = readComposerStorage<unknown>(originKey, null);
@@ -1326,11 +1402,15 @@ export function Composer({
                 continue;
             }
             if (kind === "image") {
-                if (!chatRoutes.visionEnabled) {
+                // The picked offered model reads the image itself when it can;
+                // otherwise the vision route does.
+                if (!pickedReadsImages && !chatRoutes.visionEnabled) {
                     errors.push(chatRoutes.visionDisabledReason ?? t("errors.visionUnavailable"));
                     continue;
                 }
-                const vision = chatRoutes.config.routes.vision.vision;
+                const vision = pickedReadsImages
+                    ? routeInfo?.vision
+                    : chatRoutes.config.routes.vision.vision;
                 if (vision?.mimeTypes?.length && !vision.mimeTypes.includes(file.type)) {
                     errors.push(
                         t("errors.imageTypeUnsupported", {
@@ -1386,8 +1466,8 @@ export function Composer({
                 ? stash
                 : {
                       ...stash,
-                      modelRoute,
-                      modelRoutes,
+                      ...storedPick(modelPick),
+                      modelRoutes: comparePicks,
                       reasoningEffort,
                       chatMode,
                       webSearch,
@@ -1442,8 +1522,8 @@ export function Composer({
                     webSearch,
                     thinking,
                     agentKey,
-                    modelRoute,
-                    modelRoutes,
+                    ...storedPick(modelPick),
+                    modelRoutes: comparePicks,
                     threadRefs,
                     passages,
                     reasoningEffort,
@@ -1658,6 +1738,110 @@ export function Composer({
                 tMenu
             ),
     });
+
+    const choosePick = (pick: ModelPick) => {
+        setModelPick(pick);
+        setReasoningEffort(undefined);
+        setModelOpen(false);
+    };
+    const byFavorite = (a: ModelPick, b: ModelPick) =>
+        Number(favorites.includes(b)) - Number(favorites.includes(a));
+    type ModelChoice = {
+        pick: ModelPick;
+        label: string;
+        detail: string;
+        info: ChatRouteInfo | undefined;
+        favoriteLabel: string;
+    };
+    // Standard and Fast first, then the workspace's own models under their
+    // admin-given names; favourites lead within each.
+    const tierChoices: ModelChoice[] = [...PICKER_ROUTES]
+        .sort(byFavorite)
+        .filter(route =>
+            modelSearchMatches(`${route} ${routeLabel(route)} ${routeBlurb(route)}`, modelSearch)
+        )
+        .map(route => ({
+            pick: route,
+            label: routeLabel(route),
+            detail: routeBlurb(route),
+            info: chatRoutes.config.routes[route],
+            favoriteLabel: favorites.includes(route)
+                ? t("unfavoriteModel", { label: routeLabel(route) })
+                : t("favoriteModel", { label: routeLabel(route) }),
+        }));
+    const offeredChoices: ModelChoice[] = offeredModels
+        .map(model => ({ model, pick: pickOfModel(model.key) }))
+        .sort((a, b) => byFavorite(a.pick, b.pick))
+        .filter(({ model }) => modelSearchMatches(model.label, modelSearch))
+        .map(({ model, pick }) => ({
+            pick,
+            label: model.label,
+            detail: offeredDetail(model),
+            info: model,
+            favoriteLabel: favorites.includes(pick)
+                ? t("unfavoriteModel", { label: model.label })
+                : t("favoriteModel", { label: model.label }),
+        }));
+    const compareChoices = [
+        ...PICKER_ROUTES.filter(route => chatRoutes.config.routes[route]?.available).map(route => ({
+            pick: route as ModelPick,
+            label: routeLabel(route),
+            ariaLabel: t("compareModel", { label: routeLabel(route) }),
+        })),
+        ...offeredModels.map(model => ({
+            pick: pickOfModel(model.key),
+            label: model.label,
+            ariaLabel: t("compareModel", { label: model.label }),
+        })),
+    ];
+    /** Alt+1… in a fixed order: the two tiers, then the offered models as the admin listed them. */
+    const shortcutPicks: ModelPick[] = [
+        ...PICKER_ROUTES,
+        ...offeredModels.map(model => pickOfModel(model.key)),
+    ].slice(0, 9);
+    const renderModelChoice = (choice: ModelChoice) => (
+        <div key={choice.pick} className="flex items-center gap-1">
+            <Button
+                role="option"
+                aria-selected={modelPick === choice.pick}
+                variant="ghost"
+                disabled={!choice.info?.available}
+                title={choice.info?.unavailableReason}
+                // The kit button doesn't wrap; a long line here would run under the star.
+                className="h-auto min-w-0 flex-1 justify-start whitespace-normal px-2 py-2 text-left text-xs"
+                onClick={() => choosePick(choice.pick)}
+            >
+                <span className="min-w-0 flex-1">
+                    <span className="block truncate font-medium">{choice.label}</span>
+                    <span className="text-ink-3 block leading-snug">
+                        {choice.detail}
+                        {!choice.info?.available ? ` · ${t("unavailable")}` : ""}
+                    </span>
+                </span>
+                {modelPick === choice.pick && <Check className="size-3" />}
+            </Button>
+            <Button
+                variant="ghost"
+                size="icon"
+                className="size-7"
+                aria-label={choice.favoriteLabel}
+                onClick={() =>
+                    setFavorites(previous =>
+                        previous.includes(choice.pick)
+                            ? previous.filter(value => value !== choice.pick)
+                            : [...previous, choice.pick]
+                    )
+                }
+            >
+                <Star
+                    className={cn(
+                        "size-3",
+                        favorites.includes(choice.pick) && "text-brand fill-current"
+                    )}
+                />
+            </Button>
+        </div>
+    );
 
     return (
         <div
@@ -2289,16 +2473,18 @@ export function Composer({
                             className="text-ink-2 @max-sm:max-w-[130px] h-9 min-w-0 max-w-[200px] shrink gap-1.5 rounded-lg px-2 text-xs"
                         >
                             <span className="truncate">
-                                {modelRoutes.length >= 2
-                                    ? t("modelCount", { count: modelRoutes.length })
-                                    : routeLabel(modelRoute)}
+                                {comparePicks.length >= 2
+                                    ? t("modelCount", { count: comparePicks.length })
+                                    : pickLabel(modelPick)}
                             </span>
                             <ChevronDown className="size-3 shrink-0" />
                         </Button>
                     </PopoverTrigger>
                     <PopoverContent
                         align="start"
-                        className="w-[min(340px,calc(100vw-2rem))] p-2"
+                        // Up to twenty offered models beside the tiers: the menu
+                        // scrolls rather than running off the screen.
+                        className="max-h-(--radix-popover-content-available-height) w-[min(340px,calc(100vw-2rem))] overflow-y-auto p-2"
                         onKeyDown={event => {
                             if (event.key === "ArrowDown" || event.key === "ArrowUp") {
                                 const choices = Array.from(
@@ -2327,14 +2513,10 @@ export function Composer({
                             const number = Number(
                                 event.code?.startsWith("Digit") ? event.code.slice(5) : event.key
                             );
-                            if (event.altKey && number >= 1 && number <= ROUTES.length) {
-                                const route = ROUTES[number - 1]!;
-                                if (chatRoutes.config.routes[route]?.available) {
-                                    event.preventDefault();
-                                    setModelRoute(route);
-                                    setReasoningEffort(undefined);
-                                    setModelOpen(false);
-                                }
+                            const pick = event.altKey ? shortcutPicks[number - 1] : undefined;
+                            if (pick && pickInfo(pick)?.available) {
+                                event.preventDefault();
+                                choosePick(pick);
                             }
                         }}
                     >
@@ -2346,107 +2528,48 @@ export function Composer({
                             className="mb-2 text-xs"
                         />
                         <div role="listbox" aria-label={t("configuredModels")}>
-                            {[...ROUTES]
-                                .sort(
-                                    (a, b) =>
-                                        Number(favorites.includes(b)) -
-                                        Number(favorites.includes(a))
-                                )
-                                .filter(route =>
-                                    modelSearchMatches(
-                                        `${route} ${routeLabel(route)} ${routeBlurb(route)}`,
-                                        modelSearch
-                                    )
-                                )
-                                .map(route => {
-                                    const info = chatRoutes.config.routes[route];
-                                    return (
-                                        <div key={route} className="flex items-center gap-1">
-                                            <Button
-                                                role="option"
-                                                aria-selected={modelRoute === route}
-                                                variant="ghost"
-                                                disabled={!info?.available}
-                                                title={info?.unavailableReason}
-                                                className="h-auto min-w-0 flex-1 justify-start px-2 py-2 text-left text-xs"
-                                                onClick={() => {
-                                                    setModelRoute(route);
-                                                    setReasoningEffort(undefined);
-                                                    setModelOpen(false);
-                                                }}
-                                            >
-                                                <span className="min-w-0 flex-1">
-                                                    <span className="block truncate font-medium">
-                                                        {routeLabel(route)}
-                                                    </span>
-                                                    <span className="text-ink-3 block">
-                                                        {routeBlurb(route)}
-                                                        {!info?.available
-                                                            ? ` · ${t("unavailable")}`
-                                                            : ""}
-                                                    </span>
-                                                </span>
-                                                {modelRoute === route && (
-                                                    <Check className="size-3" />
-                                                )}
-                                            </Button>
-                                            <Button
-                                                variant="ghost"
-                                                size="icon"
-                                                className="size-7"
-                                                aria-label={
-                                                    favorites.includes(route)
-                                                        ? t("unfavorite", { route })
-                                                        : t("favorite", { route })
-                                                }
-                                                onClick={() =>
-                                                    setFavorites(previous =>
-                                                        previous.includes(route)
-                                                            ? previous.filter(
-                                                                  value => value !== route
-                                                              )
-                                                            : [...previous, route]
-                                                    )
-                                                }
-                                            >
-                                                <Star
-                                                    className={cn(
-                                                        "size-3",
-                                                        favorites.includes(route) &&
-                                                            "text-brand fill-current"
-                                                    )}
-                                                />
-                                            </Button>
-                                        </div>
-                                    );
-                                })}
+                            {tierChoices.map(renderModelChoice)}
+                            {offeredChoices.length > 0 && (
+                                <div
+                                    role="group"
+                                    aria-labelledby={offeredHeadingId}
+                                    className="border-line mt-1 border-t pt-1"
+                                >
+                                    <p
+                                        id={offeredHeadingId}
+                                        className="text-ink-3 px-2 py-1 text-[11px] font-medium"
+                                    >
+                                        {t("offered.heading")}
+                                    </p>
+                                    {offeredChoices.map(renderModelChoice)}
+                                </div>
+                            )}
                         </div>
                         <fieldset className="border-line mt-2 border-t pt-2">
                             <legend className="text-ink-2 px-1 text-xs">
                                 {t("compareLegend")}
                             </legend>
-                            {ROUTES.filter(route => chatRoutes.config.routes[route]?.available).map(
-                                route => (
-                                    <label
-                                        key={route}
-                                        className="text-ink-2 flex items-center gap-2 px-2 py-1.5 text-xs"
-                                    >
-                                        <input
-                                            type="checkbox"
-                                            aria-label={t("compareRoute", { route })}
-                                            checked={modelRoutes.includes(route)}
-                                            onChange={event =>
-                                                setModelRoutes(previous =>
-                                                    event.target.checked
-                                                        ? [...previous, route]
-                                                        : previous.filter(item => item !== route)
-                                                )
-                                            }
-                                        />
-                                        <span>{routeLabel(route)}</span>
-                                    </label>
-                                )
-                            )}
+                            {compareChoices.map(choice => (
+                                <label
+                                    key={choice.pick}
+                                    className="text-ink-2 flex min-w-0 items-center gap-2 px-2 py-1.5 text-xs"
+                                >
+                                    <Checkbox
+                                        aria-label={choice.ariaLabel}
+                                        checked={comparePicks.includes(choice.pick)}
+                                        onCheckedChange={checked =>
+                                            setComparePicks(previous =>
+                                                checked === true
+                                                    ? previous.includes(choice.pick)
+                                                        ? previous
+                                                        : [...previous, choice.pick]
+                                                    : previous.filter(item => item !== choice.pick)
+                                            )
+                                        }
+                                    />
+                                    <span className="truncate">{choice.label}</span>
+                                </label>
+                            ))}
                             <p className="text-ink-3 px-2 py-1 text-[11px]">{t("compareHint")}</p>
                         </fieldset>
                         {chatRoutes.loading && (

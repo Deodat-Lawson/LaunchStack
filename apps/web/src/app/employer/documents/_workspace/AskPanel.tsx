@@ -123,6 +123,8 @@ export interface ComposerSeed {
     attachments?: EphemeralAttachment[];
     refs?: string[];
     modelRoute?: ComposerSend["modelRoute"];
+    /** An offered workspace model, by key (`~/lib/ai/model-picks`). */
+    modelKey?: string;
     modelRoutes?: ComposerSend["modelRoutes"];
     threadRefs?: string[];
     /** Passages to ask about; appended alongside any typed text, never into it. */

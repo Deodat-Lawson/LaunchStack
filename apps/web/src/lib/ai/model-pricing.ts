@@ -1,6 +1,7 @@
 /**
- * What a model a workspace brings costs, as its admin says in Workspace ›
- * Bring your own keys: US dollars per 1M tokens, what their provider charges.
+ * What a model a workspace brings costs, as its admin says in Models & usage
+ * (API keys, and Models for the ones offered in Ask): US dollars per 1M
+ * tokens, what their provider charges.
  * A priced model's calls show a cost and weigh against the Standard model's
  * price in usage and limits; an unpriced one counts its tokens one for one.
  *

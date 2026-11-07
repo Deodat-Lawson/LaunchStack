@@ -1,6 +1,6 @@
 /**
  * The chat model configuration and the web search engine, made legible.
- * Gated on `settings.manage`. It names routes, capabilities and the search
+ * Gated on `models.manage`. It names routes, capabilities and the search
  * engine only; the endpoint, model ids and every key stay on the server (see
  * `~/server/settings/models`).
  */
@@ -14,7 +14,7 @@ import { requestTranslator } from "~/i18n/server";
 export const dynamic = "force-dynamic";
 
 export async function GET(request: Request) {
-    const ctx = await requireWorkspacePermission("settings.manage");
+    const ctx = await requireWorkspacePermission("models.manage");
     if (!ctx.success) return ctx.response;
     try {
         return NextResponse.json(modelsOverview());

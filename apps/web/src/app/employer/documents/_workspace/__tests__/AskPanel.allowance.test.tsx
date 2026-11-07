@@ -145,7 +145,7 @@ describe("AskPanel AI allowance", () => {
         expect(notice).toHaveAttribute("data-tone", "danger");
         expect(notice).toHaveAttribute("role", "alert");
         expect(notice).toHaveTextContent(
-            "You've reached your AI limit in this workspace for this month, so new questions can't be sent. It resets on Nov 1. A workspace admin can raise it in Usage › Spending."
+            "You've reached your AI limit in this workspace for this month, so new questions can't be sent. It resets on Nov 1. A workspace admin can raise it in Models & usage › Spending."
         );
 
         const box = screen.getByRole("textbox", { name: "Chat message" });
@@ -195,7 +195,7 @@ describe("AskPanel AI allowance", () => {
     it("shows a refused answer's own sentence and offers no retry", async () => {
         current = allowance({ used: 100, percent: 10 });
         const refusal =
-            "You've reached your AI limit in this workspace for this month (1,000,400 of 1,000,000 tokens). It resets on November 1, 2026. A workspace admin can raise it in Usage › Spending.";
+            "You've reached your AI limit in this workspace for this month (1,000,400 of 1,000,000 tokens). It resets on November 1, 2026. A workspace admin can raise it in Models & usage › Spending.";
         const thread: ThreadMessage[] = [
             { id: "q1", role: "user", text: "Summarise the MSA" },
             {

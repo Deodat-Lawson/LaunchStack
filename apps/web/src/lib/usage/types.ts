@@ -102,6 +102,42 @@ export interface UsageRouteRow {
     costUsd: number | null;
 }
 
+/**
+ * One model's chat use in a window (`GET /api/usage/models`). A `workspace`
+ * row is a model on the workspace's own key: its admins chose it, so it
+ * carries the id, the name it is offered under in Ask (when it is) and the
+ * routes it serves. A `server` row is the deployment's model on one route,
+ * never named.
+ */
+export interface UsageModelRow {
+    kind: "workspace" | "server";
+    /** Workspace rows: the id the workspace's endpoint serves. */
+    modelId?: string;
+    /** Workspace rows offered in Ask: the handle and the admin's name for it. */
+    key?: string;
+    label?: string;
+    /** Workspace rows: the routes it serves now (`default`, `fast`, …). */
+    routes?: string[];
+    /** Workspace rows used in the window but neither offered nor on a route now. */
+    retired?: boolean;
+    /** Server rows: the `AiUsageRoute` it served. */
+    route?: string;
+    calls: number;
+    inputTokens: number;
+    outputTokens: number;
+    /** Chat-token equivalents, as everywhere else on the tab. */
+    aiTokens: number;
+    pricedCalls: number;
+    /** The priced calls' cost; null when none was priced. */
+    costUsd: number | null;
+}
+
+export interface UsageModels {
+    window: UsageWindow;
+    /** The workspace's own models first, busiest first; then the server's routes. */
+    rows: UsageModelRow[];
+}
+
 export type UsageScope =
     | { kind: "workspace" }
     | { kind: "person"; memberId: number; displayName: string }

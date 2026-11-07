@@ -3,9 +3,9 @@
  * it started in) and the admin's permission, trades the code for a key, and
  * stores it. A workspace that was already on OpenRouter keeps its chosen
  * models; otherwise none is chosen yet, so nothing switches over until an
- * admin picks one in Workspace › Bring your own keys.
+ * admin picks one in Models & usage › API keys.
  *
- * Every exit is a redirect back to Workspace › Bring your own keys with an
+ * Every exit is a redirect back to Models & usage › API keys with an
  * `openrouter=` code the page turns into a message: this runs as a top-level
  * navigation, where a JSON error would strand the admin on a blank page. The
  * redirect is built on the public origin — behind the proxy `request.url` is
@@ -17,7 +17,7 @@ import { NextResponse } from "next/server";
 import { MissingSecretsKeyError, timingSafeStringEqual } from "@launchstack/store/crypto";
 
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
-import { workspaceHref } from "~/lib/settings/surfaces";
+import { modelsUsageHref } from "~/lib/settings/surfaces";
 import { publicOrigin } from "~/server/public-origin";
 import {
     OPENROUTER_BASE_URL,
@@ -37,7 +37,7 @@ type Outcome = "connected" | "denied" | "expired" | "unavailable" | "error";
 
 function backToSettings(request: Request, outcome: Outcome): NextResponse {
     const url = new URL(
-        workspaceHref("byok", { query: { openrouter: outcome } }),
+        modelsUsageHref("keys", { query: { openrouter: outcome } }),
         publicOrigin(request)
     );
     const response = NextResponse.redirect(url);
@@ -63,7 +63,7 @@ export async function GET(request: Request) {
     const state = params.get("state") ?? "";
     if (!flow || !timingSafeStringEqual(flow.s, state)) return backToSettings(request, "expired");
 
-    const ctx = await requireWorkspacePermission("settings.manage");
+    const ctx = await requireWorkspacePermission("models.manage");
     if (!ctx.success) return backToSettings(request, "error");
     if (ctx.data.companyId.toString() !== flow.c) return backToSettings(request, "expired");
 

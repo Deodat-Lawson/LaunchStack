@@ -1,29 +1,41 @@
 /**
- * Settings is yours alone; the Workspace tab is everything about the
- * workspace; the Usage tab's Spending screen holds what the workspace spends.
- * Every `/employer/settings#…` link that ever worked must still land, on
- * whichever of them now holds what it named. This table is the contract a
- * reviewer reads.
+ * Settings is yours alone; the Workspace tab is everything else about the
+ * workspace; Models & usage (the Usage tab) holds what the workspace spends
+ * (Spending), its own API keys and its models. Every `/employer/settings#…`
+ * link that ever worked, and every link to a Workspace screen that moved,
+ * must still land, on whichever of them now holds what it named. This table
+ * is the contract a reviewer reads.
  */
 
 import { SETTINGS } from "~/lib/settings/registry";
 import {
     PERSONAL_SECTION_IDS,
+    USAGE_SECTION_PATHS,
     WORKSPACE_SCREEN_IDS,
+    modelsUsageHref,
     settingsDestination,
     settingsSectionOfHref,
     workspaceHref,
     workspaceScreenFromPath,
 } from "~/lib/settings/surfaces";
 import { SETTINGS_SECTION_IDS } from "~/lib/settings/types";
-import { TOOL_ALIASES, toolTargetFromHref } from "~/lib/tool-app/locations";
+import { TOOL_ALIASES, movedToolScreen, toolTargetFromHref } from "~/lib/tool-app/locations";
 import { WORKSPACE_SCREEN_GROUPS } from "~/app/employer/documents/_workspace/WorkspaceTool";
 import { DEMOTED_FEATURES } from "~/app/employer/documents/_workspace/types";
 
 describe("the two surfaces", () => {
     it("split every section between them, once", () => {
-        // Usage is the third place: the Usage tab's Spending screen.
-        const all = [...PERSONAL_SECTION_IDS, ...WORKSPACE_SCREEN_IDS, "usage"];
+        // Models & usage is the third place: Spending, API keys and Models.
+        expect(USAGE_SECTION_PATHS).toEqual({
+            usage: "/spending",
+            byok: "/keys",
+            models: "/models",
+        });
+        const all = [
+            ...PERSONAL_SECTION_IDS,
+            ...WORKSPACE_SCREEN_IDS,
+            ...Object.keys(USAGE_SECTION_PATHS),
+        ];
         expect(new Set(all).size).toBe(all.length);
         expect([...all].sort()).toEqual([...SETTINGS_SECTION_IDS].sort());
         expect(PERSONAL_SECTION_IDS).toEqual(["account", "appearance", "shortcuts", "privacy"]);
@@ -41,9 +53,15 @@ describe("the two surfaces", () => {
         expect(grouped).toEqual([...WORKSPACE_SCREEN_IDS]);
         expect(WORKSPACE_SCREEN_GROUPS.map(group => [group.id, [...group.screens]])).toEqual([
             ["basics", ["general", "people", "company"]],
-            ["setup", ["byok", "models", "agents", "integrations"]],
+            ["setup", ["agents", "integrations"]],
             ["data", ["archive", "labs"]],
         ]);
+    });
+
+    it("no longer lists API keys or Models among the Workspace tab's screens", () => {
+        for (const gone of ["byok", "models", "usage"]) {
+            expect(WORKSPACE_SCREEN_IDS).not.toContain(gone);
+        }
     });
 });
 
@@ -56,20 +74,12 @@ describe("settingsDestination", () => {
     it.each([
         ["#people", "/people"],
         ["#company", "/company"],
-        ["#models", "/models"],
         ["#agents", "/agents"],
         ["#integrations", "/integrations"],
         ["#archive", "/archive"],
         ["#labs", "/labs"],
         // The company profile's old page.
         ["#metadata", "/company"],
-        // The workspace's own model key; Processing was its name once, and the
-        // embedding key it also held is gone.
-        ["#byok", "/byok"],
-        ["#processing", "/byok"],
-        ["#embedding", "/byok"],
-        ["#openrouter", "/byok"],
-        ["#keys", "/byok"],
         // Document defaults is gone; its links open where the tab opens.
         ["#documents", "/general"],
         ["#documents.defaultProcessingMethod", "/general"],
@@ -147,6 +157,27 @@ describe("settingsDestination", () => {
         }
     });
 
+    it.each([
+        // The workspace's own model key; Processing was its name once, and the
+        // embedding key it also held is gone.
+        ["#byok", "/keys"],
+        ["#processing", "/keys"],
+        ["#embedding", "/keys"],
+        ["#openrouter", "/keys"],
+        ["#keys", "/keys"],
+        ["#api key", "/keys"],
+        ["#models", "/models"],
+        ["#routes", "/models"],
+        ["#llm", "/models"],
+    ])("opens %s on Models & usage at %s", (hash, location) => {
+        expect(settingsDestination(hash)).toEqual({
+            kind: "app",
+            featureId: "usage",
+            href: `/employer/documents?feature=usage&at=${encodeURIComponent(location)}`,
+            at: location,
+        });
+    });
+
     it("guesses nothing for a hash nobody knows", () => {
         expect(settingsDestination("#nope")).toBeNull();
     });
@@ -166,6 +197,45 @@ describe("settingsDestination", () => {
             toolId: "usage",
             at: "/spending?focus=usage.pricePerMillionTokens",
         });
+    });
+
+    it("sends links to the Workspace tab's old API keys and Models screens to Models & usage", () => {
+        expect(toolTargetFromHref("/employer/documents?feature=workspace&at=%2Fbyok")).toEqual({
+            toolId: "usage",
+            at: "/keys",
+        });
+        expect(toolTargetFromHref("/employer/documents?feature=workspace&at=%2Fmodels")).toEqual({
+            toolId: "usage",
+            at: "/models",
+        });
+        // The page's own query (OpenRouter's outcome) is not the tab's.
+        expect(
+            toolTargetFromHref(
+                "/employer/documents?feature=workspace&at=%2Fbyok&openrouter=connected"
+            )
+        ).toEqual({ toolId: "usage", at: "/keys" });
+        // The palette's old row id.
+        expect(toolTargetFromHref("/employer/documents?feature=byok")).toEqual({
+            toolId: "usage",
+            at: "/keys",
+        });
+    });
+
+    it("says where a moved screen is now, its query kept, and nothing for one that stayed", () => {
+        expect(movedToolScreen("workspace", "/byok?focus=byok")).toEqual({
+            toolId: "usage",
+            at: "/keys?focus=byok",
+        });
+        expect(movedToolScreen("workspace", "/models/")).toEqual({
+            toolId: "usage",
+            at: "/models",
+        });
+        expect(movedToolScreen("workspace", "/usage")).toEqual({
+            toolId: "usage",
+            at: "/spending",
+        });
+        expect(movedToolScreen("workspace", "/agents")).toBeNull();
+        expect(movedToolScreen("usage", "/models")).toBeNull();
     });
 
     it("sends a link to the Workspace tab's old Usage screen to Spending, its focus kept", () => {
@@ -189,14 +259,28 @@ describe("Workspace tab links", () => {
     it("reads a screen out of a path inside the tab", () => {
         expect(workspaceScreenFromPath("/")).toBe("general");
         expect(workspaceScreenFromPath("/people?focus=audit")).toBe("people");
-        expect(workspaceScreenFromPath("/models/")).toBe("models");
+        expect(workspaceScreenFromPath("/agents/")).toBe("agents");
+        // Moved to Models & usage.
+        expect(workspaceScreenFromPath("/models")).toBeNull();
+        expect(workspaceScreenFromPath("/byok")).toBeNull();
         expect(workspaceScreenFromPath("/processing")).toBeNull();
         expect(workspaceScreenFromPath("/people/8")).toBeNull();
     });
 
     it("rides the page's own query along, for OpenRouter's outcome", () => {
-        expect(workspaceHref("byok", { query: { openrouter: "connected" } })).toBe(
-            "/employer/documents?feature=workspace&at=%2Fbyok&openrouter=connected"
+        expect(modelsUsageHref("keys", { query: { openrouter: "connected" } })).toBe(
+            "/employer/documents?feature=usage&at=%2Fkeys&openrouter=connected"
+        );
+        expect(toolTargetFromHref(modelsUsageHref("keys"))).toEqual({
+            toolId: "usage",
+            at: "/keys",
+        });
+        expect(modelsUsageHref("models")).toBe("/employer/documents?feature=usage&at=%2Fmodels");
+        expect(modelsUsageHref("keys", { focus: "byok" })).toBe(
+            "/employer/documents?feature=usage&at=%2Fkeys%3Ffocus%3Dbyok"
+        );
+        expect(workspaceHref("people", { focus: "audit", query: { x: "1" } })).toBe(
+            "/employer/documents?feature=workspace&at=%2Fpeople%3Ffocus%3Daudit&x=1"
         );
     });
 
@@ -215,9 +299,21 @@ describe("Workspace tab links", () => {
         );
         expect(settingsSectionOfHref("/employer/documents?feature=spending")).toBe("usage");
         expect(settingsSectionOfHref("/employer/documents?feature=usage&at=%2Fpeople")).toBeNull();
+        // API keys and Models are its screens too, however the link is written.
+        expect(settingsSectionOfHref(modelsUsageHref("keys"))).toBe("byok");
+        expect(settingsSectionOfHref(modelsUsageHref("models"))).toBe("models");
+        expect(settingsSectionOfHref("/employer/documents?feature=byok")).toBe("byok");
+        expect(settingsSectionOfHref("/employer/documents?feature=workspace&at=%2Fbyok")).toBe(
+            "byok"
+        );
+        expect(settingsSectionOfHref("/employer/documents?feature=workspace&at=%2Fmodels")).toBe(
+            "models"
+        );
+        expect(settingsSectionOfHref("/employer/documents?feature=usage&at=%2Fyou")).toBeNull();
     });
 
-    it("opens the old company-profile pane and the palette's workspace rows on their screens", () => {
+    it("opens the old company-profile pane and the palette's settings rows on their screens", () => {
+        expect(TOOL_ALIASES.byok).toEqual({ toolId: "usage", at: "/keys" });
         expect(TOOL_ALIASES.metadata).toEqual({ toolId: "workspace", at: "/company" });
         for (const id of ["people-access", "profile", "agents-nodes", "byok"]) {
             const row = DEMOTED_FEATURES.find(feature => feature.id === id)!;

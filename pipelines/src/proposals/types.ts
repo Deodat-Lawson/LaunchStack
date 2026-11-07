@@ -84,6 +84,25 @@ export const EvidenceSchema = z.object({
 });
 export type Evidence = z.infer<typeof EvidenceSchema>;
 
+/** Separate from citation evidence: all document inputs behind stored prose. */
+export const SourceProvenanceSchema = z.discriminatedUnion("kind", [
+    z.object({ kind: z.literal("manual") }),
+    z.object({
+        kind: z.literal("sources"),
+        sourceDocumentIds: z.array(z.number().int().positive()),
+    }),
+    z.object({ kind: z.literal("unknown") }),
+]);
+export type SourceProvenance = z.infer<typeof SourceProvenanceSchema>;
+
+export interface LibraryEvidenceEnvelope {
+    version: 1;
+    evidence: Evidence[];
+    provenance: SourceProvenance;
+}
+/** Legacy arrays retain unknown provenance; the SQL column remains JSONB. */
+export type StoredLibraryEvidence = Evidence[] | LibraryEvidenceEnvelope;
+
 // ─── Organisation profile ────────────────────────────────────────────────────
 
 export const ProfileFactSchema = z.object({
@@ -103,6 +122,8 @@ export const OrgProfileSchema = z.object({
     geography: z.array(z.string()).max(8).default([]),
     facts: z.array(ProfileFactSchema).max(40).default([]),
     evidence: z.array(EvidenceSchema).default([]),
+    /** Complete profile dependencies, including facts without numbered quotes. */
+    sourceDocumentIds: z.array(z.number().int().positive()).optional(),
     builtFrom: z.object({ documents: z.number().int(), snippets: z.number().int() }),
     builtAt: z.string(),
     modelId: z.string().optional(),
@@ -207,6 +228,8 @@ export const DraftMetaSchema = z.object({
     modelId: z.string().optional(),
     promptVersion: z.string().optional(),
     draftedAt: z.string().optional(),
+    /** Absent on legacy/unknown generations; [] explicitly proves source-free input. */
+    sourceDocumentIds: z.array(z.number().int().positive()).optional(),
 });
 export type DraftMeta = z.infer<typeof DraftMetaSchema>;
 
@@ -375,6 +398,7 @@ export interface LibraryItemRecord {
     answer: string;
     tags: string[];
     evidence: Evidence[];
+    provenance: SourceProvenance;
     sourceApplicationId: string | null;
     sourceSectionKey: string | null;
     uses: number;

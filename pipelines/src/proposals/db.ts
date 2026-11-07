@@ -8,8 +8,10 @@ import { randomUUID } from "node:crypto";
 import { and, asc, desc, eq, inArray, sql } from "drizzle-orm";
 
 import { getDb } from "@launchstack/store/client";
+import { document } from "@launchstack/store/schema";
+import { documentScopeSql, type DocumentScope } from "@launchstack/retrieval";
 
-import { getProfileRow, profileView } from "../company-metadata";
+import { flattenFacts, getProfileRow, profileView } from "../company-metadata";
 import { orgProfileFromView } from "./profile";
 import type { ProposalDebitExecutor } from "./ports";
 
@@ -25,6 +27,7 @@ import {
     type ProposalRunRow,
     type ProposalSectionRow,
 } from "./schema";
+import { SourceProvenanceSchema } from "./types";
 import type {
     ApplicationRecord,
     ApplicationStatus,
@@ -46,6 +49,7 @@ import type {
     RunSummary,
     SectionRecord,
     SectionStatus,
+    SourceProvenance,
 } from "./types";
 
 // ─── Mappers ─────────────────────────────────────────────────────────────────
@@ -121,13 +125,19 @@ function toSection(row: ProposalSectionRow): SectionRecord {
 }
 
 function toLibraryItem(row: ProposalLibraryItemRow): LibraryItemRecord {
+    const stored = row.evidence;
+    const parsed =
+        Array.isArray(stored) || stored.version !== 1
+            ? null
+            : SourceProvenanceSchema.safeParse(stored.provenance);
     return {
         id: row.id,
         companyId: row.companyId,
         question: row.question,
         answer: row.answer,
         tags: row.tags ?? [],
-        evidence: row.evidence ?? [],
+        evidence: Array.isArray(stored) ? stored : stored.evidence,
+        provenance: parsed?.success ? parsed.data : { kind: "unknown" },
         sourceApplicationId: row.sourceApplicationId ?? null,
         sourceSectionKey: row.sourceSectionKey ?? null,
         uses: row.uses,
@@ -161,15 +171,54 @@ const newId = () => randomUUID();
 
 // ─── Profile ─────────────────────────────────────────────────────────────────
 
+/** Existing, same-workspace source documents the run's writer may read. */
+export async function loadReadableDocumentIds(
+    companyId: bigint,
+    scope: DocumentScope,
+    documentIds: readonly number[]
+): Promise<Set<number>> {
+    const ids = [...new Set(documentIds.filter(id => Number.isSafeInteger(id) && id > 0))];
+    if (ids.length === 0) return new Set();
+    const rows = await getDb()
+        .select({ id: document.id })
+        .from(document)
+        .where(
+            and(
+                eq(document.companyId, companyId),
+                inArray(document.id, ids),
+                documentScopeSql(scope)
+            )
+        );
+    return new Set(rows.map(row => row.id));
+}
+
 /**
  * The organisation profile the stages write from: the company profile
  * (Settings › Company), read through the same view the profile page uses so
- * excerpt numbers match. Null until it has been built.
+ * excerpt numbers match. Only readable sources contribute facts and derived
+ * profile text. Null until it has been built.
  */
-export async function loadOrgProfile(companyId: bigint): Promise<OrgProfile | null> {
+export async function loadOrgProfile(
+    companyId: bigint,
+    scope: DocumentScope
+): Promise<OrgProfile | null> {
     const row = await getProfileRow(companyId);
     if (!row?.builtAt || !row.metadata) return null;
-    return orgProfileFromView(profileView(row.metadata), row.builtAt);
+    const facts = [
+        ...flattenFacts(row.metadata).map(entry => entry.fact),
+        row.metadata.profile?.summary,
+        row.metadata.profile?.applicant_type,
+        ...(row.metadata.profile?.focus_areas ?? []),
+    ];
+    const readable = await loadReadableDocumentIds(
+        companyId,
+        scope,
+        facts.flatMap(fact => fact?.sources.map(source => source.doc_id) ?? [])
+    );
+    return orgProfileFromView(
+        profileView(row.metadata, { canSee: documentId => readable.has(documentId) }),
+        row.builtAt
+    );
 }
 
 // ─── Opportunities ───────────────────────────────────────────────────────────
@@ -622,12 +671,18 @@ export async function deleteSection(companyId: bigint, id: string): Promise<bool
 
 export async function listLibraryItems(
     companyId: bigint,
-    options: { limit?: number } = {}
+    options: { limit?: number; ids?: string[] } = {}
 ): Promise<LibraryItemRecord[]> {
+    if (options.ids?.length === 0) return [];
     const rows = await getDb()
         .select()
         .from(proposalLibraryItems)
-        .where(eq(proposalLibraryItems.companyId, companyId))
+        .where(
+            and(
+                eq(proposalLibraryItems.companyId, companyId),
+                options.ids ? inArray(proposalLibraryItems.id, options.ids) : undefined
+            )
+        )
         .orderBy(desc(proposalLibraryItems.updatedAt), desc(proposalLibraryItems.createdAt))
         .limit(options.limit ?? 500);
     return rows.map(toLibraryItem);
@@ -652,22 +707,25 @@ export async function createLibraryItem(input: {
     answer: string;
     tags: string[];
     evidence: Evidence[];
+    provenance: SourceProvenance;
     sourceApplicationId: string | null;
     sourceSectionKey: string | null;
 }): Promise<LibraryItemRecord> {
     const id = newId();
-    await getDb().insert(proposalLibraryItems).values({
-        id,
-        companyId: input.companyId,
-        question: input.question,
-        answer: input.answer,
-        tags: input.tags,
-        evidence: input.evidence,
-        sourceApplicationId: input.sourceApplicationId,
-        sourceSectionKey: input.sourceSectionKey,
-        uses: 0,
-        createdByUserId: input.createdByUserId,
-    });
+    await getDb()
+        .insert(proposalLibraryItems)
+        .values({
+            id,
+            companyId: input.companyId,
+            question: input.question,
+            answer: input.answer,
+            tags: input.tags,
+            evidence: { version: 1, evidence: input.evidence, provenance: input.provenance },
+            sourceApplicationId: input.sourceApplicationId,
+            sourceSectionKey: input.sourceSectionKey,
+            uses: 0,
+            createdByUserId: input.createdByUserId,
+        });
     const created = await getLibraryItem(input.companyId, id);
     if (!created) throw new Error("Library item vanished after insert");
     return created;

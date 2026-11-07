@@ -27,11 +27,7 @@ import {
 } from "@launchstack/llm";
 
 import { ASSISTANT_IDENTITY_RULE } from "~/lib/ai/assistant-identity";
-import {
-    MAX_OFFERED_LABEL_CHARS,
-    MAX_OFFERED_MODELS,
-    isModelKey,
-} from "~/lib/ai/model-picks";
+import { MAX_OFFERED_LABEL_CHARS, MAX_OFFERED_MODELS, isModelKey } from "~/lib/ai/model-picks";
 import { MAX_PRICE_TEXT, isPlausiblePrice } from "~/lib/ai/model-pricing";
 import type {
     WorkspaceModelChoice,

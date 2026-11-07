@@ -685,8 +685,10 @@ export async function POST(request: Request) {
             // refused, never answered by some other model.
             const offeredKey = validation.data.modelKey;
             if (offeredKey) {
+                // It answers on the main route whatever route the request
+                // names, so a key is never quietly answered by the fast model.
                 const picked = await withOfferedChatModel(offeredKey, () =>
-                    answerQuestion(ctx, validation.data)
+                    answerQuestion(ctx, { ...validation.data, modelRoute: "default" })
                 );
                 if (picked.offered) return picked.value;
                 recordResult("error");

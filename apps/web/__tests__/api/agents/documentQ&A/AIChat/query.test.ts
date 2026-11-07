@@ -1127,6 +1127,26 @@ describe("chat transport and general scope", () => {
             );
         });
 
+        it("answers a picked model on the main route even when the request names another", async () => {
+            mockOfferedKeys.add("a1b2c3d4");
+            const response = await POST(
+                queryRequest({
+                    question: "hi",
+                    searchScope: "none",
+                    modelRoute: "fast",
+                    modelKey: "a1b2c3d4",
+                })
+            );
+            expect(response.status).toBe(200);
+            expect(mockOfferedRuns).toEqual(["a1b2c3d4"]);
+            expect(resolveConfiguredChatModel).toHaveBeenCalledWith(
+                expect.objectContaining({ route: "default" })
+            );
+            expect(resolveConfiguredChatModel).not.toHaveBeenCalledWith(
+                expect.objectContaining({ route: "fast" })
+            );
+        });
+
         it("refuses a key the workspace doesn't offer, before any model runs", async () => {
             const response = await POST(
                 queryRequest({ question: "hi", searchScope: "none", modelKey: "gone1234" })

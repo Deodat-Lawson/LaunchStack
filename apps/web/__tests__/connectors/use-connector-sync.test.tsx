@@ -7,6 +7,9 @@
  * synced yet" for a sync no runner ever picked up (2026-10-17).
  */
 import { act, renderHook } from "@testing-library/react";
+import { createFormatter, createTranslator } from "use-intl";
+
+import { englishMessages } from "~/i18n/messages";
 
 import {
     SYNC_POLL_MS,
@@ -15,6 +18,13 @@ import {
     useConnectorSync,
     type SyncStatusFields,
 } from "~/app/employer/documents/_workspace/useConnectorSync";
+
+const t = createTranslator({
+    locale: "en",
+    messages: englishMessages,
+    namespace: "sources.connectorSync",
+});
+const format = createFormatter({ locale: "en" });
 
 const SYNC_URL = "/api/connectors/google-drive/sync";
 
@@ -137,10 +147,12 @@ describe("useConnectorSync", () => {
 
 describe("syncStatusLabel", () => {
     it("names each phase", () => {
-        expect(syncStatusLabel("running", null)).toBe("Syncing…");
-        expect(syncStatusLabel("starting", null)).toBe("Starting sync…");
-        expect(syncStatusLabel("idle", null)).toBe("Not synced yet");
-        expect(syncStatusLabel("stalled", null)).toBe("Not synced yet");
-        expect(syncStatusLabel("idle", "2026-10-17T16:00:00.000Z")).toMatch(/^Last sync /);
+        expect(syncStatusLabel(t, format, "running", null)).toBe("Syncing…");
+        expect(syncStatusLabel(t, format, "starting", null)).toBe("Starting sync…");
+        expect(syncStatusLabel(t, format, "idle", null)).toBe("Not synced yet");
+        expect(syncStatusLabel(t, format, "stalled", null)).toBe("Not synced yet");
+        expect(syncStatusLabel(t, format, "idle", "2026-10-17T16:00:00.000Z")).toMatch(
+            /^Last sync /
+        );
     });
 });

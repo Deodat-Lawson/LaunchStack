@@ -1,13 +1,16 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useLocale } from "next-intl";
 import type { AskStartersPayload } from "~/lib/ask-starters/contract";
 
 /**
  * Loads the workspace's starter questions for the Ask panel's empty state.
  *
  * `revisionKey` names the evidence the caller can see (workspace id, source
- * count): when it changes the set is fetched again; the server's own cache
+ * count), and the interface language is part of it too — the server writes
+ * the questions in the reader's language: when either changes the set is
+ * fetched again; the server's own cache
  * decides whether that costs a model call. The last payload per key is kept
  * in module scope so "New chat" — which remounts the empty state — paints the
  * same four cards instantly instead of a skeleton.
@@ -46,7 +49,8 @@ async function fetchStarters(refresh: boolean, signal: AbortSignal): Promise<Ask
     return body.data;
 }
 
-export function useAskStarters(revisionKey: string): AskStartersState {
+export function useAskStarters(evidenceKey: string): AskStartersState {
+    const revisionKey = `${evidenceKey}:${useLocale()}`;
     const [data, setData] = useState<AskStartersPayload | null>(
         () => memo.get(revisionKey) ?? null
     );

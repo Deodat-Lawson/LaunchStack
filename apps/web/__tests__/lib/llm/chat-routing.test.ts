@@ -4,6 +4,7 @@ import {
     createChatModelsConfig,
     getPublicChatConfig,
     isChatRequestError,
+    resolveAgentChatModel,
     resolveChatModel,
     resolveChatRoute,
     selectChatRoute,
@@ -460,5 +461,51 @@ routes:
             mode: "always",
             controllable: false,
         });
+    });
+});
+
+describe("resolveAgentChatModel", () => {
+    const deployment = (native: string, levels: string) =>
+        config(`
+version: 1
+models:
+  primary:
+    id: model-a
+    behavior:
+      input: [text]
+      reasoning:
+        mode: effort
+        default: medium
+        levels: ${levels}
+      nativeStructuredOutput: ${native}
+      parameters:
+        temperature: unsupported
+        systemMessages: supported
+        streaming: supported
+        maxOutputTokens: supported
+routes:
+  default: primary
+`);
+    const WITH_NONE = `{ none: { reasoning_effort: "none" }, medium: { reasoning_effort: "medium" } }`;
+
+    it("turns the effort off outright for a model without native tool calling", () => {
+        const resolved = resolveAgentChatModel({
+            config: deployment("[json-schema]", WITH_NONE),
+        });
+        expect(resolved.reasoning.requestPatch).toEqual({ reasoning_effort: "none" });
+    });
+
+    it("leaves a model that declares tool calling as it is", () => {
+        const resolved = resolveAgentChatModel({
+            config: deployment("[json-schema, tool-calling]", WITH_NONE),
+        });
+        expect(resolved.reasoning.requestPatch).toEqual({});
+    });
+
+    it("leaves a model with no `none` level to refuse on its own terms", () => {
+        const resolved = resolveAgentChatModel({
+            config: deployment("[json-schema]", `{ medium: { reasoning_effort: "medium" } }`),
+        });
+        expect(resolved.reasoning.requestPatch).toEqual({});
     });
 });

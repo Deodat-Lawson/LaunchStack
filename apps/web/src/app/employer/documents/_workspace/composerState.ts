@@ -91,6 +91,12 @@ export interface ComposerPreferences {
     favorites: string[];
     followUp?: "queue" | "interrupt";
     editorMode?: "plain" | "rich";
+    /**
+     * Whether the person picked the editor themselves. The mode is written
+     * back on every change, so without this an old automatic default would
+     * pass for a choice and keep a new default from ever applying.
+     */
+    editorModeChosen?: boolean;
     modelRoute?: ComposerSend["modelRoute"];
     reasoningEffort?: string;
 }

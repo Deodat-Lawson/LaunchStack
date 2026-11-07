@@ -53,9 +53,15 @@ jest.mock("~/app/employer/tools/vantage/api", () => ({
 import { OverviewScreen } from "~/app/employer/tools/vantage/_screens/OverviewScreen";
 import { resetAutoDraftForTests } from "~/app/employer/tools/vantage/_lib/useAutoDraft";
 
-import { weekRange } from "~/app/employer/tools/vantage/_lib/format";
-
-import { WEEK, WEEK_END, agenda, overview, signals, topic } from "../vantage/factories";
+import {
+    WEEK,
+    WEEK_END,
+    agenda,
+    englishFormat,
+    overview,
+    signals,
+    topic,
+} from "../vantage/factories";
 
 function deferred<T>() {
     let resolve!: (value: T) => void;
@@ -183,7 +189,7 @@ describe("OverviewScreen", () => {
 
         render(<OverviewScreen />);
 
-        const title = `No agenda for ${weekRange(WEEK, WEEK_END)} yet`;
+        const title = `No agenda for ${englishFormat.weekRange(WEEK, WEEK_END)} yet`;
         expect(await screen.findByText(title)).toBeInTheDocument();
         expect(mockPrepare).toHaveBeenCalledTimes(1);
         expect(screen.queryByText("You're all caught up")).toBeNull();

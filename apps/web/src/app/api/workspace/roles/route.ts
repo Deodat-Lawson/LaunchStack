@@ -5,13 +5,13 @@ import { CreateRoleSchema } from "~/lib/validation";
 import { parseJsonBody, workspaceErrorResponse } from "~/server/workspace/http";
 import { createRole, listRoles } from "~/server/workspace/roles";
 
-export async function GET() {
+export async function GET(request: Request) {
     const ctx = await requireWorkspacePermission("members.view");
     if (!ctx.success) return ctx.response;
     try {
         return NextResponse.json(await listRoles(ctx.data));
     } catch (error) {
-        return workspaceErrorResponse(error, "[workspace/roles GET]");
+        return workspaceErrorResponse(error, "[workspace/roles GET]", request);
     }
 }
 
@@ -23,6 +23,6 @@ export async function POST(request: Request) {
     try {
         return NextResponse.json({ role: await createRole(ctx.data, body.data) }, { status: 201 });
     } catch (error) {
-        return workspaceErrorResponse(error, "[workspace/roles POST]");
+        return workspaceErrorResponse(error, "[workspace/roles POST]", request);
     }
 }

@@ -74,7 +74,8 @@ describe("agent file", () => {
         expect(definition.key).toBe("security-reviewer");
         expect(definition.mode).toBe("subagent");
         expect(definition.route).toBe("reasoning");
-        expect(definition.tools).toEqual(["retrieval", "reasoning"]);
+        // A deny map keeps every tool it does not name.
+        expect(definition.tools).toEqual(["retrieval", "reasoning", "write"]);
         expect(definition.displayName).toBe("security-reviewer");
         expect(definition.role).toBe("security-reviewer");
         expect(definition.systemPrompt).toBe(

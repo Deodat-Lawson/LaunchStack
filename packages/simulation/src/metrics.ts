@@ -12,6 +12,17 @@ export function stanceCounts(world: World): [number, number, number, number, num
     return counts;
 }
 
+/** Agents whose last answer to "would you pay?" was yes, maybe and no; those yet to answer aren't counted. */
+export function wouldPayCounts(world: World): [number, number, number] {
+    const counts: [number, number, number] = [0, 0, 0];
+    for (const a of world.agents) {
+        if (a.wouldPay === "yes") counts[0] += 1;
+        else if (a.wouldPay === "maybe") counts[1] += 1;
+        else if (a.wouldPay === "no") counts[2] += 1;
+    }
+    return counts;
+}
+
 export function meanStance(world: World): number {
     if (world.agents.length === 0) return 0;
     const sum = world.agents.reduce((s, a) => s + a.stance, 0);
@@ -39,6 +50,7 @@ export function summarizeRound(
         follows: count("follow"),
         meanStance: meanStance(world),
         stanceCounts: stanceCounts(world),
+        wouldPayCounts: wouldPayCounts(world),
         usage,
     };
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useFormatter, useTranslations } from "next-intl";
 import {
     Search,
     FileText,
@@ -71,24 +72,27 @@ interface ResearchPanelProps {
 }
 
 // arXiv category options
+// `key` names the label: `generator.research.categories.<key>`.
 const arxivCategories = [
-    { value: "", label: "All Categories" },
-    { value: "cs.AI", label: "AI" },
-    { value: "cs.LG", label: "Machine Learning" },
-    { value: "cs.CL", label: "NLP" },
-    { value: "cs.CV", label: "Computer Vision" },
-    { value: "stat.ML", label: "Statistics ML" },
-    { value: "physics", label: "Physics" },
-    { value: "math", label: "Mathematics" },
-    { value: "q-bio", label: "Biology" },
-    { value: "econ", label: "Economics" },
-];
+    { value: "", key: "all" },
+    { value: "cs.AI", key: "ai" },
+    { value: "cs.LG", key: "machineLearning" },
+    { value: "cs.CL", key: "nlp" },
+    { value: "cs.CV", key: "computerVision" },
+    { value: "stat.ML", key: "statisticsMl" },
+    { value: "physics", key: "physics" },
+    { value: "math", key: "mathematics" },
+    { value: "q-bio", key: "biology" },
+    { value: "econ", key: "economics" },
+] as const;
 
 export function ResearchPanel({
     onInsertContent,
     onClose,
     initialMode = "documents",
 }: ResearchPanelProps) {
+    const t = useTranslations("generator.research");
+    const format = useFormatter();
     const [query, setQuery] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [results, setResults] = useState<ResearchResult[]>([]);
@@ -138,10 +142,10 @@ export function ResearchPanel({
             if (data.success) {
                 setResults(data.results ?? []);
             } else {
-                setError(data.message ?? "Failed to search");
+                setError(data.message ?? t("errors.failed"));
             }
         } catch (err) {
-            setError("An error occurred while searching");
+            setError(t("errors.generic"));
             console.error("Research error:", err);
         } finally {
             setIsLoading(false);
@@ -152,7 +156,7 @@ export function ResearchPanel({
         if (result.source === "document") {
             const docResult = result;
             onInsertContent(docResult.content, {
-                title: docResult.documentTitle ?? "Document",
+                title: docResult.documentTitle ?? t("documentFallback"),
             });
         } else if (result.source === "arxiv") {
             const arxivResult = result;
@@ -185,7 +189,7 @@ export function ResearchPanel({
 
     const formatDate = (dateStr: string) => {
         try {
-            return new Date(dateStr).toLocaleDateString("en-US", {
+            return format.dateTime(new Date(dateStr), {
                 year: "numeric",
                 month: "short",
                 day: "numeric",
@@ -197,7 +201,7 @@ export function ResearchPanel({
 
     const formatAuthors = (authors: string[], max = 3) => {
         if (authors.length <= max) return authors.join(", ");
-        return `${authors.slice(0, max).join(", ")} et al.`;
+        return t("etAl", { authors: authors.slice(0, max).join(", ") });
     };
 
     return (
@@ -207,7 +211,7 @@ export function ResearchPanel({
                 <div className="mb-3 flex items-center justify-between">
                     <h3 className="text-ink flex items-center gap-2 font-semibold">
                         <Search className="h-4 w-4" />
-                        Research
+                        {t("title")}
                     </h3>
                     <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onClose}>
                         <X className="h-4 w-4" />
@@ -218,9 +222,7 @@ export function ResearchPanel({
                 <div className="flex gap-2">
                     <Input
                         placeholder={
-                            activeTab === "arxiv"
-                                ? "Search arXiv papers..."
-                                : "Search documents and web..."
+                            activeTab === "arxiv" ? t("placeholderArxiv") : t("placeholder")
                         }
                         value={query}
                         onChange={e => setQuery(e.target.value)}
@@ -251,7 +253,7 @@ export function ResearchPanel({
                                 onClick={() => setSearchType("general")}
                             >
                                 <Globe className="mr-1 h-3 w-3" />
-                                General
+                                {t("searchType.general")}
                             </Button>
                             <Button
                                 variant={searchType === "academic" ? "secondary" : "ghost"}
@@ -260,7 +262,7 @@ export function ResearchPanel({
                                 onClick={() => setSearchType("academic")}
                             >
                                 <BookOpen className="mr-1 h-3 w-3" />
-                                Academic
+                                {t("searchType.academic")}
                             </Button>
                             <Button
                                 variant={searchType === "news" ? "secondary" : "ghost"}
@@ -269,7 +271,7 @@ export function ResearchPanel({
                                 onClick={() => setSearchType("news")}
                             >
                                 <Newspaper className="mr-1 h-3 w-3" />
-                                News
+                                {t("searchType.news")}
                             </Button>
                         </>
                     ) : (
@@ -282,7 +284,7 @@ export function ResearchPanel({
                                     className="h-7 text-xs"
                                     onClick={() => setArxivCategory(cat.value)}
                                 >
-                                    {cat.label}
+                                    {t(`categories.${cat.key}`)}
                                 </Button>
                             ))}
                         </div>
@@ -295,19 +297,19 @@ export function ResearchPanel({
                 <div className="border-line border-b px-4 py-2">
                     <TabsList className="grid h-9 w-full grid-cols-4">
                         <TabsTrigger value="all" className="px-2 text-xs">
-                            All ({results.length})
+                            {t("tabs.all", { count: results.length })}
                         </TabsTrigger>
                         <TabsTrigger value="documents" className="px-2 text-xs">
                             <FileText className="@max-xl:hidden mr-1 inline h-3 w-3" />
-                            Docs ({documentResults.length})
+                            {t("tabs.documents", { count: documentResults.length })}
                         </TabsTrigger>
                         <TabsTrigger value="web" className="px-2 text-xs">
                             <Globe className="@max-xl:hidden mr-1 inline h-3 w-3" />
-                            Web ({webResults.length})
+                            {t("tabs.web", { count: webResults.length })}
                         </TabsTrigger>
                         <TabsTrigger value="arxiv" className="px-2 text-xs">
                             <GraduationCap className="@max-xl:hidden mr-1 inline h-3 w-3" />
-                            arXiv ({arxivResults.length})
+                            {t("tabs.arxiv", { count: arxivResults.length })}
                         </TabsTrigger>
                     </TabsList>
                 </div>
@@ -327,23 +329,25 @@ export function ResearchPanel({
                                     <>
                                         <GraduationCap className="mb-4 h-12 w-12 opacity-20" />
                                         <p className="text-center text-sm">
-                                            Search for academic papers from <br />
-                                            <a
-                                                href="https://arxiv.org"
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="text-brand-ink hover:underline"
-                                            >
-                                                arXiv.org
-                                            </a>
+                                            {t.rich("emptyArxiv", {
+                                                br: () => <br />,
+                                                link: chunks => (
+                                                    <a
+                                                        href="https://arxiv.org"
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        className="text-brand-ink hover:underline"
+                                                    >
+                                                        {chunks}
+                                                    </a>
+                                                ),
+                                            })}
                                         </p>
                                     </>
                                 ) : (
                                     <>
                                         <Search className="mb-4 h-12 w-12 opacity-20" />
-                                        <p className="text-sm">
-                                            Search for information to include in your document
-                                        </p>
+                                        <p className="text-sm">{t("empty")}</p>
                                     </>
                                 )}
                             </div>
@@ -352,7 +356,7 @@ export function ResearchPanel({
                         {isLoading && (
                             <div className="flex flex-col items-center justify-center py-12">
                                 <Loader2 className="text-brand-ink mb-4 h-8 w-8 animate-spin" />
-                                <p className="text-ink-3 text-sm">Searching...</p>
+                                <p className="text-ink-3 text-sm">{t("searching")}</p>
                             </div>
                         )}
 
@@ -382,6 +386,8 @@ interface ResultCardProps {
 }
 
 function ResultCard({ result, onInsert, formatDate, formatAuthors }: ResultCardProps) {
+    const t = useTranslations("generator.research");
+    const tc = useTranslations("common");
     if (result.source === "arxiv") {
         const arxivResult = result;
         return (
@@ -437,7 +443,7 @@ function ResultCard({ result, onInsert, formatDate, formatAuthors }: ResultCardP
                         onClick={onInsert}
                     >
                         <Plus className="mr-1 h-3 w-3" />
-                        Insert & Cite
+                        {t("insertCite")}
                     </Button>
                     <Button
                         size="sm"
@@ -470,7 +476,7 @@ function ResultCard({ result, onInsert, formatDate, formatAuthors }: ResultCardP
                     <div className="flex items-center gap-2">
                         <FileText className="h-4 w-4 text-blue-500" />
                         <span className="line-clamp-1 text-sm font-medium">
-                            {docResult.documentTitle ?? "Document"}
+                            {docResult.documentTitle ?? t("documentFallback")}
                         </span>
                     </div>
                     <Badge variant="secondary" className="text-[10px]">
@@ -481,13 +487,15 @@ function ResultCard({ result, onInsert, formatDate, formatAuthors }: ResultCardP
                 <p className="text-ink-3 mb-2 line-clamp-3 text-xs">{docResult.content}</p>
 
                 {docResult.page && (
-                    <p className="text-ink-3 mb-2 text-[10px]">Page {docResult.page}</p>
+                    <p className="text-ink-3 mb-2 text-[10px]">
+                        {t("page", { page: docResult.page })}
+                    </p>
                 )}
 
                 <div className="flex gap-2 opacity-0 transition-opacity group-hover:opacity-100">
                     <Button size="sm" variant="outline" className="h-7 text-xs" onClick={onInsert}>
                         <Plus className="mr-1 h-3 w-3" />
-                        Insert
+                        {t("insert")}
                     </Button>
                 </div>
             </div>
@@ -513,7 +521,7 @@ function ResultCard({ result, onInsert, formatDate, formatAuthors }: ResultCardP
             <div className="flex gap-2 opacity-0 transition-opacity group-hover:opacity-100">
                 <Button size="sm" variant="outline" className="h-7 text-xs" onClick={onInsert}>
                     <Plus className="mr-1 h-3 w-3" />
-                    Insert
+                    {t("insert")}
                 </Button>
                 <Button
                     size="sm"
@@ -522,7 +530,7 @@ function ResultCard({ result, onInsert, formatDate, formatAuthors }: ResultCardP
                     onClick={() => window.open(webResult.url, "_blank")}
                 >
                     <ExternalLink className="mr-1 h-3 w-3" />
-                    Open
+                    {tc("actions.open")}
                 </Button>
             </div>
         </div>

@@ -246,6 +246,30 @@ describeDb("proposal export audience (integration)", () => {
         });
     }
 
+    async function generatedApplication(sourceDocumentIds?: number[]) {
+        const application = await draftApplication([], []);
+        const section = await addSection(companyId, application.id, {
+            key: "generated-capacity",
+            question: "Describe the delivery reserve",
+            guidance: null,
+            wordLimit: null,
+            required: true,
+        });
+        await updateSection(companyId, section.id, {
+            status: "drafted",
+            draft: PRIVATE_QUOTE,
+            draftMeta: {
+                cites: [],
+                gaps: [],
+                libraryItemIds: [],
+                evidence: [],
+                modelId: "export-provenance-fixture",
+                sourceDocumentIds,
+            },
+        });
+        return application;
+    }
+
     async function expectAllowed(application: ApplicationRecord) {
         const exported = await exportApplication(ctx(), application.id, ORIGIN);
         expect(uploadFile).toHaveBeenCalledTimes(1);
@@ -605,5 +629,96 @@ describeDb("proposal export audience (integration)", () => {
         expect(jest.mocked(processDocumentUpload).mock.calls[0]?.[0].creationKey).toBe(
             makeApplicationCreationKey(application.id, new Date())
         );
+    });
+
+    it("refuses generated prose with uncited private source dependencies before upload", async () => {
+        const cited = await source();
+        await restrictDocument(cited, userGrants("writer"));
+        const application = await generatedApplication([cited.id]);
+        expect((await renderProposalMarkdown(ctx(), application.id)).markdown).toContain(
+            PRIVATE_QUOTE
+        );
+        await expectDenied(application);
+    });
+
+    it("allows generated prose when its uncited source and destination policies match", async () => {
+        const cited = await source();
+        await restrictDocument(cited, userGrants("writer"));
+        await restrictFolder("Proposals", userGrants("writer"));
+        await expectAllowed(await generatedApplication([cited.id]));
+    });
+
+    it("refuses legacy generated prose without complete source provenance", async () => {
+        await expectDenied(await generatedApplication());
+    });
+
+    it("allows a source-free generated answer with an explicit empty dependency list", async () => {
+        await expectAllowed(await generatedApplication([]));
+    });
+
+    it.each([false, true])(
+        "checks request-source content against the destination (matching policy: %s)",
+        async matches => {
+            const request = await source();
+            await restrictDocument(request, userGrants("writer"));
+            if (matches) await restrictFolder("Proposals", userGrants("writer"));
+            const application = await draftApplication([], []);
+            await updateApplication(companyId, application.id, {
+                requestDocumentId: request.id,
+                extracted: {
+                    title: null,
+                    funder: null,
+                    summary: PRIVATE_QUOTE,
+                    deadline: null,
+                    amountMin: null,
+                    amountMax: null,
+                    eligibility: [],
+                    sections: [],
+                    attachments: [],
+                    format: [],
+                },
+            });
+            expect((await renderProposalMarkdown(ctx(), application.id)).markdown).toContain(
+                PRIVATE_QUOTE
+            );
+            if (matches) await expectAllowed(application);
+            else await expectDenied(application);
+        }
+    );
+
+    it.each(["missing", "foreign"])("denies %s uncited generated dependencies", async kind => {
+        let id = 987654321;
+        if (kind === "foreign") {
+            const [other] = await test.db
+                .insert(company)
+                .values({ name: "Other export workspace", numberOfEmployees: "1" })
+                .returning();
+            id = (await source("Research", BigInt(other!.id))).id;
+        }
+        await expectDenied(await generatedApplication([id]));
+    });
+
+    it("requires writer access to uncited generated dependencies", async () => {
+        const privateSource = await source();
+        await restrictDocument(privateSource, userGrants("reader"));
+        await restrictFolder("Proposals", userGrants("writer"));
+        await expectDenied(await generatedApplication([privateSource.id]));
+    });
+
+    it("allows a manually written answer before approval", async () => {
+        const application = await draftApplication([], []);
+        const section = await addSection(companyId, application.id, {
+            key: "manual-plan",
+            question: "Describe the plan",
+            guidance: null,
+            wordLimit: null,
+            required: true,
+        });
+        await updateSection(companyId, section.id, {
+            status: "drafted",
+            draft: "A manually supplied delivery plan.",
+            draftMeta: null,
+        });
+        await expectAllowed(application);
     });
 });

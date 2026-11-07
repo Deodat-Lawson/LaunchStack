@@ -15,6 +15,8 @@ import { scopeAllowsCategory, type DocumentScope } from "~/lib/authz/scope-types
 import { and, eq, inArray, like, or, sql } from "drizzle-orm";
 import { category, document } from "@launchstack/store/schema";
 
+import type { Copy } from "~/i18n/copy";
+import { englishCopy } from "~/i18n/translate";
 import { db } from "~/server/db";
 import type { AccessSubject } from "~/server/workspace/item-access";
 import {
@@ -28,23 +30,30 @@ import {
     UNFILED_FOLDER,
     expandFolderPaths,
     folderAncestors,
+    folderIssueCopy,
     folderParentPath,
+    folderPathIssue,
     isFolderOrDescendant,
     isUnfiledFolder,
     normalizeFolderPath,
-    validateFolderPath,
 } from "~/lib/folders/path";
 
-/** An expected outcome with its own HTTP status — the route reports it as-is. */
+/**
+ * An expected outcome with its own HTTP status — the route reports it as-is.
+ * The sentence may be a `Copy`: `message` is its English, and the route words
+ * it in the reader's language (`folderErrorText`, ./words).
+ */
 export class FolderError extends Error {
     override readonly name = "FolderError";
     readonly code: string;
     readonly status: number;
+    readonly copy: Copy | null;
 
-    constructor(code: string, status: number, message: string) {
-        super(message);
+    constructor(code: string, status: number, message: string | Copy) {
+        super(typeof message === "string" ? message : englishCopy(message));
         this.code = code;
         this.status = status;
+        this.copy = typeof message === "string" ? null : message;
     }
 }
 
@@ -234,8 +243,8 @@ async function ensureFolderRows(tx: Tx, companyId: bigint, path: string): Promis
 }
 
 function assertAcceptablePath(path: string): void {
-    const problem = validateFolderPath(path);
-    if (problem) throw new FolderError("invalid_folder", 400, problem);
+    const issue = folderPathIssue(path);
+    if (issue) throw new FolderError("invalid_folder", 400, folderIssueCopy(issue));
 }
 
 export async function createFolder(
@@ -281,26 +290,26 @@ export async function renameFolder(
     const to = normalizeFolderPath(rawTo);
 
     if (isUnfiledFolder(from)) {
-        throw new FolderError(
-            "unfiled_reserved",
-            400,
-            `"${UNFILED_FOLDER}" can't be renamed or moved.`
-        );
+        throw new FolderError("unfiled_reserved", 400, {
+            key: "sources.server.folders.unfiledCantMove",
+            values: { unfiled: UNFILED_FOLDER },
+        });
     }
     assertAcceptablePath(to);
     if (from === to) return { from, to, movedDocuments: 0, renamedFolders: 0 };
     if (isFolderOrDescendant(to, from)) {
-        throw new FolderError("folder_cycle", 400, "A folder can't be moved into itself.");
+        throw new FolderError("folder_cycle", 400, { key: "sources.server.folders.cycle" });
     }
 
     const existing = await existingPaths(companyId);
-    if (!existing.has(from)) throw new FolderError("folder_not_found", 404, "Folder not found.");
+    if (!existing.has(from)) {
+        throw new FolderError("folder_not_found", 404, { key: "sources.server.folders.notFound" });
+    }
     if (existing.has(to)) {
-        throw new FolderError(
-            "folder_exists",
-            409,
-            `A folder named "${to.split(FOLDER_SEPARATOR).pop()}" already exists there.`
-        );
+        throw new FolderError("folder_exists", 409, {
+            key: "sources.folderDialog.alreadyExists",
+            values: { name: to.split(FOLDER_SEPARATOR).pop() ?? to },
+        });
     }
 
     return db.transaction(async tx => {
@@ -353,10 +362,15 @@ export async function deleteFolder(
 ): Promise<DeleteFolderResult> {
     const path = normalizeFolderPath(rawPath);
     if (isUnfiledFolder(path)) {
-        throw new FolderError("unfiled_reserved", 400, `"${UNFILED_FOLDER}" can't be deleted.`);
+        throw new FolderError("unfiled_reserved", 400, {
+            key: "sources.server.folders.unfiledCantDelete",
+            values: { unfiled: UNFILED_FOLDER },
+        });
     }
     const existing = await existingPaths(companyId);
-    if (!existing.has(path)) throw new FolderError("folder_not_found", 404, "Folder not found.");
+    if (!existing.has(path)) {
+        throw new FolderError("folder_not_found", 404, { key: "sources.server.folders.notFound" });
+    }
 
     const destination = folderParentPath(path) ?? UNFILED_FOLDER;
 

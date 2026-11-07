@@ -4,6 +4,8 @@
  * nothing late, nothing missing — so a test spells out only the fields its
  * rule reads.
  */
+import { createTranslator } from "use-intl";
+
 import type {
     AgendaDto,
     CommitmentDto,
@@ -12,6 +14,14 @@ import type {
     VantageEvidenceRef,
     WeeklySignals,
 } from "~/app/employer/tools/vantage/api";
+import { vantageFormat } from "~/app/employer/tools/vantage/_lib/format";
+import { englishMessages } from "~/i18n/messages";
+
+/** Vantage's words and formats in English, for helpers that take a `VantageFormat`. */
+export const englishFormat = vantageFormat(
+    createTranslator({ locale: "en", messages: englishMessages, namespace: "vantage" }),
+    "en"
+);
 
 /** A Saturday: the next meeting is the week of Monday 5 October. */
 export const TODAY = "2026-10-03";

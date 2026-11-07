@@ -15,6 +15,7 @@ import {
     type HistoryEntry,
     type HistoryKind,
 } from "~/lib/workspace-history";
+import type { Locale } from "~/i18n/locales";
 import { PIPELINE_LOADERS, type HistoryLoaderContext } from "~/server/history/loaders";
 import type { SessionActor } from "~/server/sessions/access";
 import { listChatFeed, type ChatFeedRow } from "~/server/sessions/feed";
@@ -33,6 +34,8 @@ export interface LoadHistoryInput {
     kinds?: readonly HistoryKind[];
     /** Only this person's archived chats. Runs have no archive, so none come back. */
     archived?: boolean;
+    /** The reader's language for the titles a loader makes up (`workspace.server.history`). */
+    locale?: Locale;
 }
 
 export interface HistoryPage {
@@ -67,7 +70,12 @@ export async function loadWorkspaceHistory(input: LoadHistoryInput): Promise<His
     const wanted = new Set<HistoryKind>(input.kinds ?? HISTORY_KINDS);
 
     const jobs: { kind: HistoryKind; run: () => Promise<HistoryEntry[]> }[] = [];
-    const ctx: HistoryLoaderContext = { companyId: input.companyId, userId: input.userId, limit };
+    const ctx: HistoryLoaderContext = {
+        companyId: input.companyId,
+        userId: input.userId,
+        limit,
+        locale: input.locale,
+    };
     let archivedCount: number | null = null;
 
     if (wanted.has("chat")) {

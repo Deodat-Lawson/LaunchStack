@@ -6,7 +6,7 @@ import { parseJsonBody, requestOrigin, workspaceErrorResponse } from "~/server/w
 import { createInvitation, listInvitations } from "~/server/workspace/invitations";
 import { authEmailDelivers } from "~/server/auth/email";
 
-export async function GET() {
+export async function GET(request: Request) {
     const ctx = await requireWorkspacePermission("members.invite");
     if (!ctx.success) return ctx.response;
     try {
@@ -16,7 +16,7 @@ export async function GET() {
             emailDelivery: authEmailDelivers(),
         });
     } catch (error) {
-        return workspaceErrorResponse(error, "[workspace/invitations GET]");
+        return workspaceErrorResponse(error, "[workspace/invitations GET]", request);
     }
 }
 
@@ -29,6 +29,6 @@ export async function POST(request: Request) {
         const result = await createInvitation(ctx.data, body.data, requestOrigin(request));
         return NextResponse.json(result, { status: 201 });
     } catch (error) {
-        return workspaceErrorResponse(error, "[workspace/invitations POST]");
+        return workspaceErrorResponse(error, "[workspace/invitations POST]", request);
     }
 }

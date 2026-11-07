@@ -164,6 +164,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   provenance fails closed. Group/role membership coincidence is not treated
   as a durable audience guarantee, and later ACL changes do not synchronize
   previously exported copies.
+  Export checks also include complete generated-answer dependencies and the
+  request Source, even without visible citations. Legacy model answers whose
+  complete dependencies are unknown need a fresh draft before publication;
+  manually written answers remain exportable.
 - A fresh checkout's `next dev --turbo` answered 500 on every route,
   `/api/auth/*` included, whenever Google Fonts served its extensionless
   `l/font?kit=…&skey=…` URLs, which Next 15.5 rejects; the same response failed

@@ -185,7 +185,32 @@ describe("POST /api/documents/[id]/versions", () => {
         setupAuthenticatedRequest();
     });
 
-    it("persists and dispatches the effective provider with a canonical internal URL", async () => {
+    it("routes a version with no chosen provider like a first upload, not pinned to the default", async () => {
+        (validateRequestBody as jest.Mock).mockResolvedValue({
+            success: true,
+            data: {
+                documentUrl: "https://app.example/api/files/123/?source=upload",
+                mimeType: "application/pdf",
+                originalFilename: "contract.pdf",
+            },
+        });
+
+        const response = await POST(request(), routeContext());
+
+        expect(response.status).toBe(202);
+        // The default still decides how the file is authorized...
+        expect(authorizeInternalFileRef).toHaveBeenCalledWith(
+            "https://app.example/api/files/123/?source=upload",
+            BigInt(10),
+            "DOCLING"
+        );
+        // ...but is not persisted as if the uploader had chosen it.
+        expect(createDocumentVersionLifecycle).toHaveBeenCalledWith(
+            expect.objectContaining({ preferredProvider: undefined })
+        );
+    });
+
+    it("persists and dispatches the chosen provider with a canonical internal URL", async () => {
         const response = await POST(request(), routeContext());
 
         expect(response.status).toBe(202);

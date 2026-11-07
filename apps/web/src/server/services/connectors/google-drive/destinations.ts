@@ -10,8 +10,13 @@
  *   " (2)" instead of mixing two imports. A folder picked again after "Stop
  *   syncing" (which forgets the row) finds its old home through the
  *   documents it already brought in.
- * - A picked **file** keeps today's behaviour: the workspace's "Google Drive"
- *   folder.
+ * - A picked **file** lands in the folder chosen in Add source's destination
+ *   bar, as the picker's own upload would. Picked before Drive moved into
+ *   Add source (no destination), it goes to the workspace's "Google Drive"
+ *   folder as a workspace import, as it always did.
+ * - With a destination, a picked folder is rebuilt *inside* it rather than
+ *   at the top; a folder made inside a shared folder is as open as its
+ *   parent, the way a folder someone makes there by hand would be.
  *
  * Folder creation is serialized for the whole run: the sink stores four files
  * at once, and two of them reaching the same new subfolder must not both
@@ -27,6 +32,7 @@ import {
     MAX_FOLDER_NAME_CHARS,
     MAX_FOLDER_PATH_CHARS,
     UNFILED_FOLDER,
+    isUnfiledFolder,
     normalizeFolderPath,
     splitFolderPath,
 } from "~/lib/folders/path";
@@ -47,6 +53,8 @@ export interface PickedRoot {
     readonly kind: string;
     readonly name: string;
     readonly folderCategoryId: number | null;
+    /** The folder chosen in Add source; null for picks made before it offered Drive. */
+    readonly destination: string | null;
     /** The person who picked it; null when they have since left. */
     readonly owner: OwnerRef | null;
 }
@@ -126,16 +134,40 @@ export function placementPath(rootPath: string, subfolders: readonly string[]): 
     return path;
 }
 
-/** The first of `Name`, `Name (2)`, `Name (3)`, … that no folder uses yet. */
-export function freeTopLevelPath(name: string, taken: ReadonlySet<string>): string {
-    const base = folderSegmentFor(name);
-    if (!taken.has(base)) return base;
+/** Below this many characters left for a name, a folder is rebuilt at the top instead. */
+const MIN_NAME_ROOM = 16;
+
+/**
+ * The first of `Name`, `Name (2)`, `Name (3)`, … that no folder uses yet —
+ * inside `parent` while LaunchStack's depth and length limits leave room for
+ * a name there, at the top otherwise. `Unfiled` is no parent: its folders
+ * are top-level ones.
+ */
+export function freeFolderPath(
+    parent: string | null,
+    name: string,
+    taken: ReadonlySet<string>
+): string {
+    const inside = parent === null || isUnfiledFolder(parent) ? null : normalizeFolderPath(parent);
+    const nested =
+        inside !== null &&
+        splitFolderPath(inside).length < MAX_FOLDER_DEPTH &&
+        MAX_FOLDER_PATH_CHARS - inside.length - 1 >= MIN_NAME_ROOM;
+    const prefix = nested ? `${inside}${FOLDER_SEPARATOR}` : "";
+    const room = Math.min(MAX_FOLDER_NAME_CHARS, MAX_FOLDER_PATH_CHARS - prefix.length);
+    const base = folderSegmentFor(name).slice(0, room).trim();
+    if (!taken.has(`${prefix}${base}`)) return `${prefix}${base}`;
     for (let n = 2; n < 1000; n++) {
         const suffix = ` (${n})`;
-        const candidate = `${base.slice(0, MAX_FOLDER_NAME_CHARS - suffix.length).trim()}${suffix}`;
+        const candidate = `${prefix}${base.slice(0, room - suffix.length).trim()}${suffix}`;
         if (!taken.has(candidate)) return candidate;
     }
     throw new Error(`No free folder name for "${base}"`);
+}
+
+/** {@link freeFolderPath} at the top level. */
+export function freeTopLevelPath(name: string, taken: ReadonlySet<string>): string {
+    return freeFolderPath(null, name, taken);
 }
 
 export interface DriveDestinations {
@@ -227,7 +259,7 @@ export function createDriveDestinations(params: {
 
     async function createRootFolder(root: PickedRoot): Promise<string> {
         const taken = new Set((await listFolders(companyId)).map(folder => folder.path));
-        const path = freeTopLevelPath(root.name, taken);
+        const path = freeFolderPath(root.destination, root.name, taken);
         await createFolder(companyId, path, async (tx, created) => {
             if (root.owner) await applyFolderCreationDefaults(tx, root.owner, created);
         });
@@ -270,7 +302,11 @@ export function createDriveDestinations(params: {
             const rootId = item.metadata.pickedRootId;
             const root = typeof rootId === "string" ? rootsByFileId.get(rootId) : undefined;
             if (!root || root.kind !== "folder") {
-                return { category: GOOGLE_DRIVE_CATEGORY, owner: null };
+                // Picked into a folder: the picker's upload. Otherwise the
+                // workspace import it always was.
+                return root?.destination
+                    ? { category: normalizeFolderPath(root.destination), owner: root.owner }
+                    : { category: GOOGLE_DRIVE_CATEGORY, owner: null };
             }
             const rootPath = await rootPathFor(root);
             const subfolders = Array.isArray(item.metadata.folderPath)

@@ -1,6 +1,13 @@
 /** @jest-environment jsdom */
 
-import { citationNeedles, findTextRange } from "../find-text-range";
+import {
+    citationNeedles,
+    countTextMatches,
+    findAllTextRanges,
+    findTextRange,
+    normalizeHaystackText,
+    textContainsNeedle,
+} from "../find-text-range";
 
 /**
  * The citation locator turns a retrieval snippet into a DOM Range inside a
@@ -87,5 +94,58 @@ describe("findTextRange", () => {
     it("returns null when nothing matches", () => {
         const el = root("<p>completely unrelated content</p>");
         expect(findTextRange(el, citationNeedles("the quick brown fox jumps"))).toBeNull();
+    });
+});
+
+describe("findAllTextRanges", () => {
+    it("finds every match in reading order, ignoring case", () => {
+        const el = root("<p>Revenue grew. revenue fell.</p><p>REVENUE held.</p>");
+        const ranges = findAllTextRanges(el, "revenue");
+        expect(ranges.map(r => r.toString())).toEqual(["Revenue", "revenue", "REVENUE"]);
+    });
+
+    it("matches a phrase that a PDF text layer splits across spans and lines", () => {
+        const el = root("<span>net </span><span>operating</span><br><span>income</span>");
+        const ranges = findAllTextRanges(el, "net operating income");
+        expect(ranges).toHaveLength(1);
+        // From the first span's text to the last's; a <br> carries no text.
+        expect(ranges[0]!.startContainer.textContent).toBe("net ");
+        expect(ranges[0]!.endContainer.textContent).toBe("income");
+        expect(ranges[0]!.toString().replace(/\s+/g, "")).toBe("netoperatingincome");
+    });
+
+    it("does not count overlapping matches twice", () => {
+        expect(findAllTextRanges(root("<p>aaaa</p>"), "aa")).toHaveLength(2);
+    });
+
+    it("stops at the limit, and finds nothing for a blank query", () => {
+        const el = root("<p>" + "x ".repeat(50) + "</p>");
+        expect(findAllTextRanges(el, "x", 5)).toHaveLength(5);
+        expect(findAllTextRanges(el, "   ")).toEqual([]);
+    });
+});
+
+describe("plain-text matching", () => {
+    it("normalizes text the way the DOM haystack is built", () => {
+        expect(normalizeHaystackText("Net **Revenue**\n fell")).toBe("netrevenuefell");
+    });
+
+    it("counts matches like findAllTextRanges does", () => {
+        const text = "Revenue grew. Net revenue fell. revenue, again";
+        const el = root(`<p>${text}</p>`);
+        expect(countTextMatches(text, "revenue")).toBe(findAllTextRanges(el, "revenue").length);
+        expect(countTextMatches(text, "net  REVENUE")).toBe(1);
+        expect(countTextMatches(text, "x", 0)).toBe(0);
+        expect(countTextMatches("x ".repeat(50), "x", 5)).toBe(5);
+        expect(countTextMatches(text, "   ")).toBe(0);
+    });
+
+    it("tells whether a page's text holds a citation", () => {
+        const needles = citationNeedles("the quick brown fox jumps over the lazy dog");
+        expect(textContainsNeedle("The quick\nbrown fox jumps over the lazy dog.", needles)).toBe(
+            true
+        );
+        expect(textContainsNeedle("nothing like it here", needles)).toBe(false);
+        expect(textContainsNeedle("anything", [])).toBe(false);
     });
 });

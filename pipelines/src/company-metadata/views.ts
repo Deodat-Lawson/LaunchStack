@@ -75,6 +75,8 @@ export interface ProfileView {
     evidence: ViewEvidence[];
     /** Documents the shown facts rest on. */
     documents: number;
+    /** Every visible contributing source, including sources without an excerpt quote. */
+    sourceDocumentIds: number[];
 }
 
 export interface ProfileViewOptions {
@@ -182,6 +184,7 @@ export function profileView(
             legal: [],
             evidence: [],
             documents: 0,
+            sourceDocumentIds: [],
         };
 
     // Facts first, so the excerpt numbers follow reading order down the page.
@@ -291,6 +294,7 @@ export function profileView(
         legal,
         evidence,
         documents: documents.size,
+        sourceDocumentIds: [...documents],
     };
 }
 

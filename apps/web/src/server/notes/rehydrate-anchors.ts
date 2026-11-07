@@ -167,7 +167,7 @@ async function fetchChunksForVersion(documentId: number, versionId: number): Pro
     return rows;
 }
 
-type MatchOutcome =
+export type MatchOutcome =
     | { kind: "resolved"; chunk: ChunkRow; index: number }
     | { kind: "drifted"; chunk: ChunkRow; index: number }
     | { kind: "orphaned" };
@@ -206,18 +206,23 @@ function normalize(text: string): string {
  * chunk's page (quads require the viewer; we recompute them when the
  * user next opens the note in a PDF.js-capable renderer).
  */
-function rebuildAnchor(anchor: NoteAnchor, outcome: MatchOutcome): NoteAnchor {
+export function rebuildAnchor(anchor: NoteAnchor, outcome: MatchOutcome): NoteAnchor {
     if (outcome.kind === "orphaned") {
         // Drop primary — it no longer points anywhere truthful.
-        const { primary: _primary, ...rest } = anchor;
-        return rest as NoteAnchor;
+        const rest: NoteAnchor = { ...anchor };
+        delete rest.primary;
+        return rest;
     }
 
     const page = outcome.chunk.pageNumber ?? undefined;
     if (anchor.type === "pdf" && typeof page === "number") {
+        // Everything else the primary carries rides along — a highlight's
+        // colour is stored there, and a re-embed turned every pink one
+        // yellow when this rebuilt the primary from nothing.
+        const previous = anchor.primary?.kind === "pdf" ? anchor.primary : undefined;
         return {
             ...anchor,
-            primary: { kind: "pdf", page, quads: [] },
+            primary: { ...previous, kind: "pdf", page, quads: [] },
         };
     }
     return anchor;

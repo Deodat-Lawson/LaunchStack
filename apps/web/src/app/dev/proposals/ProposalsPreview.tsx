@@ -57,7 +57,7 @@ export function ProposalsPreview({ at, reset }: { at: string; reset: boolean }) 
     if (!ready) return null;
     return (
         <div data-preview="proposals" className="flex h-dvh flex-col">
-            <div className="bg-warn-soft text-warn border-warn/40 shrink-0 border-b px-4 py-1.5 text-center text-xs">
+            <div className="bg-warn-soft text-warn-ink border-warn/40 shrink-0 border-b px-4 py-1.5 text-center text-xs">
                 Preview harness — no login, in-memory data. Runs finish in a few seconds and change
                 what you see. Add <span className="font-mono">?reset=1</span> to start over.
             </div>

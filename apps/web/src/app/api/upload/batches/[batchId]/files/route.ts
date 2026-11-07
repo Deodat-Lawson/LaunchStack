@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import { and, eq, inArray, isNull } from "drizzle-orm";
 import { z } from "zod";
 
+import { requestTranslator } from "~/i18n/server";
+import { V } from "~/i18n/validation";
+
 import { db } from "~/server/db";
 import { uploadBatchFiles } from "@launchstack/store/schema";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
@@ -21,26 +24,27 @@ const RegisterFilesSchema = z.object({
         .array(
             z.object({
                 fileId: z.number().int().positive().optional(),
-                filename: z.string().min(1, "Filename is required"),
+                filename: z.string().min(1, V.filenameRequired),
                 relativePath: z.string().optional(),
-                storageUrl: z.string().min(1, "storageUrl is required"),
+                storageUrl: z.string().min(1, V.storageUrlRequired),
                 storageType: z.enum(["s3", "database"]).optional(),
                 mimeType: z.string().optional(),
                 size: z.number().int().nonnegative().optional(),
                 metadata: z.record(z.any()).optional(),
             })
         )
-        .min(1, "At least one file must be registered"),
+        .min(1, V.fileRegistrationRequired),
 });
 
 export async function POST(request: Request, { params }: { params: Promise<{ batchId: string }> }) {
+    const t = requestTranslator(request, "upload.server.errors");
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
 
     return withRateLimit(request, RateLimitPresets.standard, async () => {
         const { batchId } = await params;
         if (!batchId) {
-            return NextResponse.json({ error: "Batch ID is required" }, { status: 400 });
+            return NextResponse.json({ error: t("batchIdRequired") }, { status: 400 });
         }
 
         const validation = await validateRequestBody(request, RegisterFilesSchema);
@@ -52,7 +56,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ bat
 
         const batch = await findBatchOwnedByUser(batchId, ctx.data.authUserId);
         if (!batch) {
-            return NextResponse.json({ error: "Batch not found" }, { status: 404 });
+            return NextResponse.json({ error: t("batchNotFound") }, { status: 404 });
         }
 
         const failedUpdates: { filename: string; relativePath?: string; reason: string }[] = [];
@@ -104,7 +108,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ bat
                 failedUpdates.push({
                     filename: file.filename,
                     relativePath: file.relativePath,
-                    reason: "File row not found",
+                    reason: t("fileRowNotFound"),
                 });
             }
         }
@@ -112,7 +116,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ bat
         if (failedUpdates.length > 0) {
             return NextResponse.json(
                 {
-                    error: "One or more files could not be registered",
+                    error: t("filesNotRegistered"),
                     failures: failedUpdates,
                 },
                 { status: 404 }
@@ -127,7 +131,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ bat
 
         const refreshedBatch = await findBatchOwnedByUser(batchId, ctx.data.authUserId, true);
         if (!refreshedBatch) {
-            return NextResponse.json({ error: "Batch not found after update" }, { status: 404 });
+            return NextResponse.json({ error: t("batchNotFoundAfterUpdate") }, { status: 404 });
         }
 
         return NextResponse.json({ success: true, batch: serializeBatch(refreshedBatch) });

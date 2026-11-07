@@ -74,11 +74,15 @@ export const doclingConvertFile: DoclingConvert = async (config, file, filename)
     return typeof md === "string" ? md : "";
 };
 
-/** Used by /readyz. Short timeout — this is a liveness probe, not a job. */
+/**
+ * Used by /readyz, /capabilities and routing (through the cached probe in
+ * providers.ts). Short timeout — this is a liveness probe, not a job, and
+ * routing waits on it at most once per cache window.
+ */
 export const doclingHealthCheck: DoclingHealth = async config => {
     if (!config.doclingServeUrl) return true;
     const response = await fetch(`${config.doclingServeUrl}/health`, {
-        signal: AbortSignal.timeout(3000),
+        signal: AbortSignal.timeout(2000),
     });
     return response.ok;
 };

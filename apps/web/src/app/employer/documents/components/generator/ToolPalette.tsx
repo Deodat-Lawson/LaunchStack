@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import {
     Sparkles,
     FileSearch,
@@ -56,9 +57,16 @@ interface ToolPaletteProps {
 
 interface ToolItem {
     id: ToolType;
-    name: string;
-    shortName: string;
-    description: string;
+    /** Its name and description: `generator.toolPalette.tools.<key>`. */
+    key:
+        | "aiGenerate"
+        | "docResearch"
+        | "webResearch"
+        | "arxivResearch"
+        | "grammar"
+        | "outline"
+        | "citation"
+        | "export";
     icon: React.ReactNode;
     color: string;
     bgColor: string;
@@ -67,72 +75,56 @@ interface ToolItem {
 const tools: ToolItem[] = [
     {
         id: "ai-generate",
-        name: "AI Content",
-        shortName: "AI",
-        description: "Generate, expand, or rewrite content",
+        key: "aiGenerate",
         icon: <Sparkles className="h-4 w-4" />,
         color: "text-brand-ink",
         bgColor: "bg-brand/10",
     },
     {
         id: "doc-research",
-        name: "Document Research",
-        shortName: "Docs",
-        description: "Search your uploaded documents",
+        key: "docResearch",
         icon: <FileSearch className="h-4 w-4" />,
         color: "text-blue-500",
         bgColor: "bg-blue-500/10",
     },
     {
         id: "web-research",
-        name: "Web Research",
-        shortName: "Web",
-        description: "Find information from the web",
+        key: "webResearch",
         icon: <Globe className="h-4 w-4" />,
         color: "text-green-500",
         bgColor: "bg-green-500/10",
     },
     {
         id: "arxiv-research",
-        name: "arXiv Papers",
-        shortName: "arXiv",
-        description: "Search academic papers from arXiv",
+        key: "arxivResearch",
         icon: <GraduationCap className="h-4 w-4" />,
         color: "text-rose-500",
         bgColor: "bg-rose-500/10",
     },
     {
         id: "grammar",
-        name: "Grammar & Style",
-        shortName: "Grammar",
-        description: "Check grammar and improve writing",
+        key: "grammar",
         icon: <SpellCheck className="h-4 w-4" />,
         color: "text-orange-500",
         bgColor: "bg-orange-500/10",
     },
     {
         id: "outline",
-        name: "Outline",
-        shortName: "Outline",
-        description: "Generate or view document structure",
+        key: "outline",
         icon: <ListTree className="h-4 w-4" />,
         color: "text-cyan-500",
         bgColor: "bg-cyan-500/10",
     },
     {
         id: "citation",
-        name: "Citations",
-        shortName: "Cite",
-        description: "Manage references and bibliography",
+        key: "citation",
         icon: <Quote className="h-4 w-4" />,
         color: "text-pink-500",
         bgColor: "bg-pink-500/10",
     },
     {
         id: "export",
-        name: "Export",
-        shortName: "Export",
-        description: "Download as PDF, DOCX, or Markdown",
+        key: "export",
         icon: <Download className="h-4 w-4" />,
         color: "text-slate-500",
         bgColor: "bg-slate-500/10",
@@ -140,34 +132,30 @@ const tools: ToolItem[] = [
 ];
 
 const quickActions: {
-    label: string;
-    shortLabel: string;
+    /** Its label and short label: `generator.toolPalette.quick.<key>`. */
+    key: "generateSection" | "continue" | "expand" | "rewrite";
     action: AIAction;
     icon: React.ReactNode;
     requiresSelection?: boolean;
 }[] = [
     {
-        label: "Generate Section",
-        shortLabel: "Generate",
+        key: "generateSection",
         action: "generate_section",
         icon: <FileText className="h-3.5 w-3.5" />,
     },
     {
-        label: "Continue Writing",
-        shortLabel: "Continue",
+        key: "continue",
         action: "continue",
         icon: <Wand2 className="h-3.5 w-3.5" />,
     },
     {
-        label: "Expand",
-        shortLabel: "Expand",
+        key: "expand",
         action: "expand",
         icon: <Lightbulb className="h-3.5 w-3.5" />,
         requiresSelection: true,
     },
     {
-        label: "Rewrite",
-        shortLabel: "Rewrite",
+        key: "rewrite",
         action: "rewrite",
         icon: <RefreshCw className="h-3.5 w-3.5" />,
         requiresSelection: true,
@@ -183,6 +171,8 @@ export function ToolPalette({
     isCollapsed = false,
     onToggleCollapse,
 }: ToolPaletteProps) {
+    const t = useTranslations("generator.toolPalette");
+    const tc = useTranslations("common");
     const [isQuickActionsOpen, setIsQuickActionsOpen] = useState(true);
 
     return (
@@ -203,8 +193,8 @@ export function ToolPalette({
                 >
                     {!isCollapsed && (
                         <div>
-                            <h3 className="text-ink text-sm font-semibold">Tools</h3>
-                            <p className="text-ink-3 mt-0.5 text-xs">Enhance your document</p>
+                            <h3 className="text-ink text-sm font-semibold">{t("title")}</h3>
+                            <p className="text-ink-3 mt-0.5 text-xs">{t("subtitle")}</p>
                         </div>
                     )}
                     {onToggleCollapse && (
@@ -224,7 +214,7 @@ export function ToolPalette({
                                 </Button>
                             </TooltipTrigger>
                             <TooltipContent side="right">
-                                {isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+                                {isCollapsed ? t("expandSidebar") : t("collapseSidebar")}
                             </TooltipContent>
                         </Tooltip>
                     )}
@@ -244,7 +234,7 @@ export function ToolPalette({
                             >
                                 <span className="flex items-center gap-2 text-sm font-medium">
                                     <Sparkles className="text-brand-ink h-4 w-4" />
-                                    Quick Actions
+                                    {t("quickActions")}
                                 </span>
                                 {isQuickActionsOpen ? (
                                     <ChevronDown className="text-ink-3 h-4 w-4" />
@@ -273,15 +263,15 @@ export function ToolPalette({
                                                 >
                                                     {qa.icon}
                                                     <span className="truncate">
-                                                        {qa.shortLabel}
+                                                        {t(`quick.${qa.key}.short`)}
                                                     </span>
                                                 </Button>
                                             </TooltipTrigger>
                                             <TooltipContent side="bottom">
-                                                {qa.label}
+                                                {t(`quick.${qa.key}.label`)}
                                                 {qa.requiresSelection && !hasSelection && (
                                                     <span className="text-ink-3 ml-1">
-                                                        (select text)
+                                                        {t("selectText")}
                                                     </span>
                                                 )}
                                             </TooltipContent>
@@ -317,7 +307,7 @@ export function ToolPalette({
                                                     className={cn(
                                                         "rounded-lg p-2 transition-colors",
                                                         isActive
-                                                            ? "bg-brand text-white"
+                                                            ? "bg-brand text-brand-fg"
                                                             : tool.bgColor
                                                     )}
                                                 >
@@ -334,9 +324,11 @@ export function ToolPalette({
                                             side="right"
                                             className="flex flex-col gap-0.5"
                                         >
-                                            <span className="font-medium">{tool.name}</span>
+                                            <span className="font-medium">
+                                                {t(`tools.${tool.key}.name`)}
+                                            </span>
                                             <span className="text-ink-3 text-xs">
-                                                {tool.description}
+                                                {t(`tools.${tool.key}.description`)}
                                             </span>
                                         </TooltipContent>
                                     </Tooltip>
@@ -357,7 +349,7 @@ export function ToolPalette({
                                     <div
                                         className={cn(
                                             "shrink-0 rounded-md p-1.5",
-                                            isActive ? "bg-brand text-white" : tool.bgColor
+                                            isActive ? "bg-brand text-brand-fg" : tool.bgColor
                                         )}
                                     >
                                         <span className={cn(!isActive && tool.color)}>
@@ -366,10 +358,10 @@ export function ToolPalette({
                                     </div>
                                     <div className="min-w-0 flex-1 text-left">
                                         <div className="truncate text-sm font-medium">
-                                            {tool.name}
+                                            {t(`tools.${tool.key}.name`)}
                                         </div>
                                         <div className="text-ink-3 truncate text-xs">
-                                            {tool.description}
+                                            {t(`tools.${tool.key}.description`)}
                                         </div>
                                     </div>
                                 </Button>
@@ -382,14 +374,15 @@ export function ToolPalette({
                 {!isCollapsed && (
                     <div className="border-line border-t p-3">
                         <div className="text-ink-3 bg-panel-2/50 rounded-lg p-2.5 text-xs">
-                            <p className="mb-1 font-medium">Shortcuts</p>
+                            <p className="mb-1 font-medium">{t("shortcuts")}</p>
                             <div className="grid grid-cols-2 gap-x-2 gap-y-0.5">
                                 <p>
-                                    <kbd className="bg-surface rounded px-1 text-[10px]">⌘K</kbd> AI
+                                    <kbd className="bg-surface rounded px-1 text-[10px]">⌘K</kbd>{" "}
+                                    {t("shortcutAi")}
                                 </p>
                                 <p>
                                     <kbd className="bg-surface rounded px-1 text-[10px]">⌘S</kbd>{" "}
-                                    Save
+                                    {tc("actions.save")}
                                 </p>
                             </div>
                         </div>

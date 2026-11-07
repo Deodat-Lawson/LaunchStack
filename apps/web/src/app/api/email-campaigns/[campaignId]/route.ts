@@ -7,6 +7,7 @@ import {
 } from "@launchstack/pipelines/email";
 
 import { fail, handleRouteError, ok, parseCampaignId, resolveActor } from "../_lib/context";
+import { requestTranslator } from "~/i18n/server";
 
 export const runtime = "nodejs";
 
@@ -16,7 +17,7 @@ export const runtime = "nodejs";
  * (including revoked ones), the frozen audience, and every send attempt.
  */
 export async function GET(
-    _request: Request,
+    request: Request,
     { params }: { params: Promise<{ campaignId: string }> }
 ) {
     try {
@@ -24,10 +25,15 @@ export async function GET(
         if (!actor.ok) return actor.response;
 
         const campaignId = parseCampaignId((await params).campaignId);
-        if (campaignId === null) return fail("Invalid campaign ID", 400);
+        if (campaignId === null)
+            return fail(
+                requestTranslator(request, "growth.server.email")("invalidCampaignId"),
+                400
+            );
 
         const campaign = await getCampaign(actor.actor.companyId, campaignId);
-        if (!campaign) return fail("Campaign not found", 404);
+        if (!campaign)
+            return fail(requestTranslator(request, "growth.server.email")("campaignNotFound"), 404);
 
         const [versions, approvals, recipients, attempts] = await Promise.all([
             listTemplateVersions(campaign.id),
@@ -45,6 +51,6 @@ export async function GET(
             approvedVersion: versions.find(v => v.id === campaign.approvedVersionId) ?? null,
         });
     } catch (error) {
-        return handleRouteError("email-campaigns/get", error);
+        return handleRouteError("email-campaigns/get", error, request);
     }
 }

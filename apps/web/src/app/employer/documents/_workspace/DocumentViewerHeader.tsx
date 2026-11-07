@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { useTranslations } from "next-intl";
 import { ChevronLeft, Ellipsis, PanelRightClose, PanelRightOpen } from "lucide-react";
 
 import { Button } from "~/components/ui/button";
@@ -71,7 +72,9 @@ export function headerWidthFor(
     tier: HeaderTier,
     actions: HeaderAction[],
     hasBack: boolean,
-    measure: (label: string) => number = measureLabel
+    measure: (label: string) => number = measureLabel,
+    /** The back button's label as drawn — its width is what is measured. */
+    backLabel = "Library"
 ): number {
     const tight = tier === "compact" || tier === "tiny";
     const gap = tight ? 8 : 12;
@@ -83,7 +86,7 @@ export function headerWidthFor(
     if (overflow.length > 0 || !toggleInline) buttons.push(ICON_BUTTON_PX);
     if (toggleInline) buttons.push(ICON_BUTTON_PX);
     const back = hasBack
-        ? (tight ? ICON_BUTTON_PX : labelledButtonPx("Library", measure)) + gap
+        ? (tight ? ICON_BUTTON_PX : labelledButtonPx(backLabel, measure)) + gap
         : 0;
     const title = tier === "full" ? MIN_TITLE_WITH_META_PX : MIN_TITLE_PX;
     return (
@@ -100,10 +103,14 @@ export function headerTier(
     width: number,
     actions: HeaderAction[],
     hasBack: boolean,
-    measure?: (label: string) => number
+    measure?: (label: string) => number,
+    backLabel?: string
 ): HeaderTier {
     if (width <= 0) return "full";
-    return TIERS.find(tier => headerWidthFor(tier, actions, hasBack, measure) <= width) ?? "tiny";
+    return (
+        TIERS.find(tier => headerWidthFor(tier, actions, hasBack, measure, backLabel) <= width) ??
+        "tiny"
+    );
 }
 
 export interface HeaderAction {
@@ -173,10 +180,12 @@ export function DocumentViewerHeader({
     actions,
     details,
 }: DocumentViewerHeaderProps) {
-    const tier = headerTier(width, actions, Boolean(onBack));
+    const t = useTranslations("workspace.documentViewerHeader");
+    const tc = useTranslations("common");
+    const tier = headerTier(width, actions, Boolean(onBack), undefined, t("library"));
     const { inline, overflow, labelled, toggleInline } = placeHeaderActions(actions, tier);
     const tight = tier === "compact" || tier === "tiny";
-    const detailsLabel = details.visible ? "Hide versions and notes" : "Show versions and notes";
+    const detailsLabel = details.visible ? t("hideDetails") : t("showDetails");
     const DetailsIcon = details.visible ? PanelRightClose : PanelRightOpen;
 
     return (
@@ -196,12 +205,12 @@ export function DocumentViewerHeader({
                     variant="outline"
                     size="sm"
                     onClick={onBack}
-                    aria-label="Back to Library"
-                    title="Back to Library"
+                    aria-label={t("backToLibrary")}
+                    title={t("backToLibrary")}
                     className={cn("text-ink-2 h-8 shrink-0 text-xs font-normal", tight && "px-2")}
                 >
                     <ChevronLeft className="size-3.5" />
-                    {!tight && "Library"}
+                    {!tight && t("library")}
                 </Button>
             )}
 
@@ -271,8 +280,8 @@ export function DocumentViewerHeader({
                         <Button
                             variant="outline"
                             size="icon"
-                            aria-label="More actions"
-                            title="More actions"
+                            aria-label={tc("actions.moreActions")}
+                            title={tc("actions.moreActions")}
                             data-testid="viewer-more"
                             className="text-ink-2 size-8 shrink-0"
                         >

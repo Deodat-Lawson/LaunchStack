@@ -1,5 +1,7 @@
 "use client";
 
+import { useLocale, useTranslations } from "next-intl";
+
 import { ToolLink } from "~/components/tool-app/ToolLink";
 import { InlineError } from "~/components/tools/EmptyState";
 import { SectionHeading } from "~/components/tools/PageHeader";
@@ -14,10 +16,10 @@ import {
     TableRow,
 } from "~/components/ui/table";
 import type { TrackRecord, TrackRecordRow } from "~/lib/scenarios/types";
-import { percent } from "~/lib/scenarios/words";
-import { plural, shortDate } from "~/lib/tools/format";
+import { formatPercent } from "~/lib/scenarios/words";
 import { useResource } from "~/lib/tools/useResource";
 
+import { useGrowthFormat } from "../../_lib/format";
 import { useGrowthPaths } from "../../_lib/paths";
 import { brandApi, type BrandPlatform } from "../api";
 import { NETWORK_LABEL } from "./NetworkMark";
@@ -35,11 +37,12 @@ function networkName(network: string): string {
  * enough tested posts have real numbers, and then only what the numbers say.
  */
 export function TrackRecordSection() {
+    const t = useTranslations("growth.brand.trackRecord");
     const res = useResource("brand:post-tests:track-record", () => brandApi.trackRecord());
     const record = res.data?.record ?? null;
     return (
         <section>
-            <SectionHeading title="Post tests" aside="Simulated against real engagement" />
+            <SectionHeading title={t("title")} aside={t("aside")} />
             {res.error ? (
                 <InlineError message={res.error} onRetry={() => void res.reload()} />
             ) : !record ? (
@@ -61,47 +64,57 @@ export function TrackRecordSection() {
 }
 
 function NotEnough({ record }: { record: TrackRecord }) {
+    const t = useTranslations("growth.brand");
     const paths = useGrowthPaths();
     const waiting = record.tested - record.withResults;
     return (
         <div className="flex flex-col items-start gap-2">
             <div className="text-ink text-sm font-medium">
-                Not enough tested posts with results yet ({record.withResults} of {record.minimum})
+                {t("trackRecord.notEnough", {
+                    count: record.withResults,
+                    minimum: record.minimum,
+                })}
             </div>
             <p className="text-ink-2 max-w-[70ch] text-[13px] leading-relaxed">
-                Test a draft in Compose, then publish that same text. Once {record.minimum} tested
-                posts have real numbers from their network, this shows whether the posts the
-                simulation liked also did better for real.
+                {t("trackRecord.notEnoughBody", { minimum: record.minimum })}
                 {record.tested > 0 &&
-                    ` ${plural(record.tested, "tested post")} so far${waiting > 0 ? `, ${waiting} waiting for impressions` : ""}.`}
+                    ` ${
+                        waiting > 0
+                            ? t("trackRecord.soFarWaiting", { count: record.tested, waiting })
+                            : t("trackRecord.soFar", { count: record.tested })
+                    }`}
             </p>
             <Button asChild size="sm" variant="outline">
-                <ToolLink href={paths.brand("/compose")}>Compose a post</ToolLink>
+                <ToolLink href={paths.brand("/compose")}>{t("common.composeAPost")}</ToolLink>
             </Button>
         </div>
     );
 }
 
 function Agreement({ record, spearman }: { record: TrackRecord; spearman: number }) {
+    const t = useTranslations("growth.brand.trackRecord");
+    const locale = useLocale();
     const agrees = spearman >= AGREES;
     return (
         <div className="flex flex-col gap-1.5">
             <div className="text-ink text-sm font-medium">
-                {agrees
-                    ? "Posts the simulation ranked higher also did better for real."
-                    : "Posts the simulation ranked higher did not do better for real."}
+                {agrees ? t("agrees") : t("disagrees")}
             </div>
             <p className="text-ink-2 max-w-[75ch] text-[13px] leading-relaxed">
-                Rank agreement <span className="font-mono tabular-nums">{spearman.toFixed(2)}</span>{" "}
-                across {plural(record.withResults, "post")}: 1 would mean the same order, 0 no
-                relation, below 0 the opposite order. The simulation put {record.hits} of{" "}
-                {record.total} on the right side of the median — above it for real when it expected
-                above, below when it expected below.
+                {t.rich("agreement", {
+                    value: spearman.toLocaleString(locale, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                    }),
+                    count: record.withResults,
+                    hits: record.hits,
+                    total: record.total,
+                    mono: chunks => <span className="font-mono tabular-nums">{chunks}</span>,
+                })}
             </p>
             {record.withResults < 15 && (
                 <p className="text-ink-3 text-xs">
-                    {plural(record.withResults, "post")} is a small sample: read this as a hint, not
-                    proof.
+                    {t("smallSample", { count: record.withResults })}
                 </p>
             )}
         </div>
@@ -109,19 +122,28 @@ function Agreement({ record, spearman }: { record: TrackRecord; spearman: number
 }
 
 function Rows({ rows }: { rows: TrackRecordRow[] }) {
+    const t = useTranslations("growth.brand");
+    const locale = useLocale();
+    const { shortDate } = useGrowthFormat();
     return (
         <div className="border-line-2 overflow-x-auto border-t">
             <Table className="min-w-[620px] text-[13px]">
                 <TableHeader>
                     <TableRow className="hover:bg-transparent">
-                        <TableHead className="text-ink-3 pl-4 text-xs font-medium">Post</TableHead>
-                        <TableHead className="text-ink-3 text-xs font-medium">Network</TableHead>
-                        <TableHead className="text-ink-3 text-xs font-medium">Published</TableHead>
+                        <TableHead className="text-ink-3 pl-4 text-xs font-medium">
+                            {t("common.post")}
+                        </TableHead>
+                        <TableHead className="text-ink-3 text-xs font-medium">
+                            {t("trackRecord.network")}
+                        </TableHead>
+                        <TableHead className="text-ink-3 text-xs font-medium">
+                            {t("common.published")}
+                        </TableHead>
                         <TableHead className="text-ink-3 text-right text-xs font-medium">
-                            Simulated
+                            {t("trackRecord.simulated")}
                         </TableHead>
                         <TableHead className="text-ink-3 pr-4 text-right text-xs font-medium">
-                            Real
+                            {t("trackRecord.real")}
                         </TableHead>
                     </TableRow>
                 </TableHeader>
@@ -136,18 +158,22 @@ function Rows({ rows }: { rows: TrackRecordRow[] }) {
                             </TableCell>
                             <TableCell className="text-ink-2">{networkName(row.network)}</TableCell>
                             <TableCell className="text-ink-2 tabular-nums">
-                                {row.publishedAt ? shortDate(row.publishedAt) : "not yet"}
+                                {row.publishedAt
+                                    ? shortDate(row.publishedAt)
+                                    : t("trackRecord.notYet")}
                             </TableCell>
                             <TableCell className="text-ink-2 text-right font-mono tabular-nums">
-                                {percent(row.predicted)}
+                                {formatPercent(row.predicted, locale)}
                             </TableCell>
                             <TableCell className="pr-4 text-right font-mono tabular-nums">
                                 {row.actual === null ? (
                                     <span className="text-ink-3 font-sans text-xs">
-                                        waiting for impressions
+                                        {t("trackRecord.waiting")}
                                     </span>
                                 ) : (
-                                    <span className="text-ink">{percent(row.actual)}</span>
+                                    <span className="text-ink">
+                                        {formatPercent(row.actual, locale)}
+                                    </span>
                                 )}
                             </TableCell>
                         </TableRow>

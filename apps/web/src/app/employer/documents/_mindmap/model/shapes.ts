@@ -126,6 +126,7 @@ export interface ShapeGeometry {
 
 export interface ShapeDef {
     id: ShapeId;
+    /** English. The screen shows `mindmap.shapes.<id>`; search matches both. */
     name: string;
     category: ShapeCategory;
     /** Extra search terms for the palette's filter box. */
@@ -1572,6 +1573,16 @@ export const SHAPE_CATEGORIES: readonly ShapeCategory[] = [
     "Containers",
 ];
 
+/** Each category's key under `mindmap.shapeCategories`. */
+export const SHAPE_CATEGORY_KEYS = {
+    Nodes: "nodes",
+    Annotate: "annotate",
+    Standard: "standard",
+    "UML & ERD": "umlErd",
+    Containers: "containers",
+    Arrows: "arrows",
+} as const satisfies Record<ShapeCategory, string>;
+
 /** Never throws: an unknown shape id degrades to a plain rectangle. */
 export function shapeDef(id: string): ShapeDef {
     return SHAPE_BY_ID[id] ?? SHAPE_BY_ID.rectangle!;
@@ -1605,8 +1616,10 @@ export function isContainer(id: string): boolean {
 }
 
 /** Free-text search over name + keywords, used by the palette filter.
- *  Hidden duplicates never match: their keywords live on the offered tile. */
-export function searchShapes(query: string): ShapeDef[] {
+ *  Hidden duplicates never match: their keywords live on the offered tile.
+ *  `localName` adds the name the reader sees, so a search in their own
+ *  language finds the tile as well as the English one does. */
+export function searchShapes(query: string, localName?: (shape: ShapeDef) => string): ShapeDef[] {
     const offered = SHAPES.filter(s => !s.paletteHidden);
     const q = query.trim().toLowerCase();
     if (!q) return offered;
@@ -1614,6 +1627,7 @@ export function searchShapes(query: string): ShapeDef[] {
         s =>
             s.name.toLowerCase().includes(q) ||
             s.id.includes(q) ||
-            s.keywords.some(k => k.includes(q))
+            s.keywords.some(k => k.includes(q)) ||
+            (localName?.(s).toLowerCase().includes(q) ?? false)
     );
 }

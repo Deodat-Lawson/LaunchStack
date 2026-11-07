@@ -21,6 +21,10 @@ import {
     createSuccessResponse,
     handleApiError,
 } from "~/lib/api-utils";
+import type { Locale } from "~/i18n/locales";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor, wordEnglish } from "~/i18n/translate";
+import { zodIssueText } from "~/i18n/zod";
 import { requireConnectorAdmin } from "~/server/services/connectors/workspace-guard";
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
 import {
@@ -80,10 +84,23 @@ async function resolveCaller(): Promise<CallerResult> {
     };
 }
 
-function disabledResponse(): NextResponse {
-    return createForbiddenError(
-        "The agent-knowledge connector is disabled. Set AGENT_KNOWLEDGE_CONNECTOR_ENABLED=true on the server that hosts your Claude Code / Codex folders."
-    );
+function disabledResponse(locale: Locale): NextResponse {
+    return createForbiddenError(translatorFor(locale, "agents.server.knowledge")("disabled"));
+}
+
+/** `Invalid request data: path: message, …` in the reader's language. */
+function invalidRequestData(error: z.ZodError, locale: Locale): string {
+    const detail = error.errors
+        .map(
+            issue =>
+                `${issue.path.join(".")}: ${wordEnglish(
+                    zodIssueText(issue, locale),
+                    "agents.server.sessions.validation",
+                    locale
+                )}`
+        )
+        .join(locale === "en" ? ", " : "；");
+    return translatorFor(locale, "errors.api")("invalidRequestData", { detail });
 }
 
 /**
@@ -113,13 +130,14 @@ function parseListParam(value: string | null): string[] | undefined {
 
 export async function GET(request: Request) {
     return withRateLimit(request, RateLimitPresets.permissive, async () => {
+        const locale = localeOfRequest(request);
         try {
             const enabled = isAgentKnowledgeConnectorEnabled(
                 env.server.AGENT_KNOWLEDGE_CONNECTOR_ENABLED
             );
             const callerResult = await resolveCaller();
             if (!callerResult.ok) return callerResult.response;
-            if (!enabled) return disabledResponse();
+            if (!enabled) return disabledResponse(locale);
 
             const { searchParams } = new URL(request.url);
             const roots = configuredProjectRoots(env.server.AGENT_KNOWLEDGE_PROJECT_ROOTS);
@@ -156,29 +174,27 @@ export async function GET(request: Request) {
                 skipped: scan.skipped,
             });
         } catch (error) {
-            return handleApiError(error);
+            return handleApiError(error, request);
         }
     });
 }
 
 export async function POST(request: Request) {
     return withRateLimit(request, RateLimitPresets.strict, async () => {
+        const locale = localeOfRequest(request);
+        const t = translatorFor(locale, "agents.server");
         try {
             const enabled = isAgentKnowledgeConnectorEnabled(
                 env.server.AGENT_KNOWLEDGE_CONNECTOR_ENABLED
             );
             const callerResult = await resolveCaller();
             if (!callerResult.ok) return callerResult.response;
-            if (!enabled) return disabledResponse();
+            if (!enabled) return disabledResponse(locale);
 
             const parsed = await parseSyncBody(request);
-            if (!parsed) return createValidationError("Invalid JSON body.");
+            if (!parsed) return createValidationError(t("connectors.invalidJsonBody"));
             if (!parsed.success) {
-                return createValidationError(
-                    `Invalid request data: ${parsed.error.errors
-                        .map(issue => `${issue.path.join(".")}: ${issue.message}`)
-                        .join(", ")}`
-                );
+                return createValidationError(invalidRequestData(parsed.error, locale));
             }
 
             const body = parsed.data;
@@ -187,7 +203,7 @@ export async function POST(request: Request) {
 
             if (decision.rejected.length > 0) {
                 return createForbiddenError(
-                    `Project directories outside AGENT_KNOWLEDGE_PROJECT_ROOTS: ${decision.rejected.join(", ")}`
+                    t("knowledge.outsideRoots", { dirs: decision.rejected.join(", ") })
                 );
             }
 
@@ -225,11 +241,14 @@ export async function POST(request: Request) {
                     skipped: report.skipped,
                     failed: report.failed,
                 },
-                `Synced ${report.stored.length} of ${report.discovered} knowledge files.`,
+                t("knowledge.synced", {
+                    stored: String(report.stored.length),
+                    discovered: String(report.discovered),
+                }),
                 202
             );
         } catch (error) {
-            return handleApiError(error);
+            return handleApiError(error, request);
         }
     });
 }

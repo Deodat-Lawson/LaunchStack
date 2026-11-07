@@ -8,9 +8,12 @@ import { randomUUID } from "node:crypto";
 import { and, asc, desc, eq, inArray, sql } from "drizzle-orm";
 
 import { getDb } from "@launchstack/store/client";
+import { document } from "@launchstack/store/schema";
+import { documentScopeSql, type DocumentScope } from "@launchstack/retrieval";
 
-import { getProfileRow, profileView } from "../company-metadata";
+import { flattenFacts, getProfileRow, profileView } from "../company-metadata";
 import { orgProfileFromView } from "./profile";
+import type { ProposalDebitExecutor } from "./ports";
 
 import {
     proposalApplications,
@@ -24,6 +27,7 @@ import {
     type ProposalRunRow,
     type ProposalSectionRow,
 } from "./schema";
+import { SourceProvenanceSchema } from "./types";
 import type {
     ApplicationRecord,
     ApplicationStatus,
@@ -41,11 +45,11 @@ import type {
     RunInput,
     RunKind,
     RunRecord,
-    RunStatus,
     RunStep,
     RunSummary,
     SectionRecord,
     SectionStatus,
+    SourceProvenance,
 } from "./types";
 
 // ─── Mappers ─────────────────────────────────────────────────────────────────
@@ -121,13 +125,19 @@ function toSection(row: ProposalSectionRow): SectionRecord {
 }
 
 function toLibraryItem(row: ProposalLibraryItemRow): LibraryItemRecord {
+    const stored = row.evidence;
+    const parsed =
+        Array.isArray(stored) || stored.version !== 1
+            ? null
+            : SourceProvenanceSchema.safeParse(stored.provenance);
     return {
         id: row.id,
         companyId: row.companyId,
         question: row.question,
         answer: row.answer,
         tags: row.tags ?? [],
-        evidence: row.evidence ?? [],
+        evidence: Array.isArray(stored) ? stored : stored.evidence,
+        provenance: parsed?.success ? parsed.data : { kind: "unknown" },
         sourceApplicationId: row.sourceApplicationId ?? null,
         sourceSectionKey: row.sourceSectionKey ?? null,
         uses: row.uses,
@@ -161,15 +171,54 @@ const newId = () => randomUUID();
 
 // ─── Profile ─────────────────────────────────────────────────────────────────
 
+/** Existing, same-workspace source documents the run's writer may read. */
+export async function loadReadableDocumentIds(
+    companyId: bigint,
+    scope: DocumentScope,
+    documentIds: readonly number[]
+): Promise<Set<number>> {
+    const ids = [...new Set(documentIds.filter(id => Number.isSafeInteger(id) && id > 0))];
+    if (ids.length === 0) return new Set();
+    const rows = await getDb()
+        .select({ id: document.id })
+        .from(document)
+        .where(
+            and(
+                eq(document.companyId, companyId),
+                inArray(document.id, ids),
+                documentScopeSql(scope)
+            )
+        );
+    return new Set(rows.map(row => row.id));
+}
+
 /**
  * The organisation profile the stages write from: the company profile
  * (Settings › Company), read through the same view the profile page uses so
- * excerpt numbers match. Null until it has been built.
+ * excerpt numbers match. Only readable sources contribute facts and derived
+ * profile text. Null until it has been built.
  */
-export async function loadOrgProfile(companyId: bigint): Promise<OrgProfile | null> {
+export async function loadOrgProfile(
+    companyId: bigint,
+    scope: DocumentScope
+): Promise<OrgProfile | null> {
     const row = await getProfileRow(companyId);
     if (!row?.builtAt || !row.metadata) return null;
-    return orgProfileFromView(profileView(row.metadata), row.builtAt);
+    const facts = [
+        ...flattenFacts(row.metadata).map(entry => entry.fact),
+        row.metadata.profile?.summary,
+        row.metadata.profile?.applicant_type,
+        ...(row.metadata.profile?.focus_areas ?? []),
+    ];
+    const readable = await loadReadableDocumentIds(
+        companyId,
+        scope,
+        facts.flatMap(fact => fact?.sources.map(source => source.doc_id) ?? [])
+    );
+    return orgProfileFromView(
+        profileView(row.metadata, { canSee: documentId => readable.has(documentId) }),
+        row.builtAt
+    );
 }
 
 // ─── Opportunities ───────────────────────────────────────────────────────────
@@ -622,12 +671,18 @@ export async function deleteSection(companyId: bigint, id: string): Promise<bool
 
 export async function listLibraryItems(
     companyId: bigint,
-    options: { limit?: number } = {}
+    options: { limit?: number; ids?: string[] } = {}
 ): Promise<LibraryItemRecord[]> {
+    if (options.ids?.length === 0) return [];
     const rows = await getDb()
         .select()
         .from(proposalLibraryItems)
-        .where(eq(proposalLibraryItems.companyId, companyId))
+        .where(
+            and(
+                eq(proposalLibraryItems.companyId, companyId),
+                options.ids ? inArray(proposalLibraryItems.id, options.ids) : undefined
+            )
+        )
         .orderBy(desc(proposalLibraryItems.updatedAt), desc(proposalLibraryItems.createdAt))
         .limit(options.limit ?? 500);
     return rows.map(toLibraryItem);
@@ -652,22 +707,25 @@ export async function createLibraryItem(input: {
     answer: string;
     tags: string[];
     evidence: Evidence[];
+    provenance: SourceProvenance;
     sourceApplicationId: string | null;
     sourceSectionKey: string | null;
 }): Promise<LibraryItemRecord> {
     const id = newId();
-    await getDb().insert(proposalLibraryItems).values({
-        id,
-        companyId: input.companyId,
-        question: input.question,
-        answer: input.answer,
-        tags: input.tags,
-        evidence: input.evidence,
-        sourceApplicationId: input.sourceApplicationId,
-        sourceSectionKey: input.sourceSectionKey,
-        uses: 0,
-        createdByUserId: input.createdByUserId,
-    });
+    await getDb()
+        .insert(proposalLibraryItems)
+        .values({
+            id,
+            companyId: input.companyId,
+            question: input.question,
+            answer: input.answer,
+            tags: input.tags,
+            evidence: { version: 1, evidence: input.evidence, provenance: input.provenance },
+            sourceApplicationId: input.sourceApplicationId,
+            sourceSectionKey: input.sourceSectionKey,
+            uses: 0,
+            createdByUserId: input.createdByUserId,
+        });
     const created = await getLibraryItem(input.companyId, id);
     if (!created) throw new Error("Library item vanished after insert");
     return created;
@@ -718,6 +776,46 @@ export async function noteLibraryUses(companyId: bigint, ids: string[]): Promise
 
 // ─── Runs ────────────────────────────────────────────────────────────────────
 
+const expiredRunCondition = sql`${proposalRuns.startedAt} < clock_timestamp() - interval '15 minutes'`;
+const freshRunCondition = sql`not (${expiredRunCondition})`;
+const expiredRunError = "The run timed out after 15 minutes. Start a new run to try again.";
+const expiredRunPatch = {
+    status: "failed" as const,
+    error: expiredRunError,
+    completedAt: sql`clock_timestamp()`,
+    updatedAt: sql`clock_timestamp()`,
+    steps: sql`coalesce((
+        select jsonb_agg(
+            case step.value ->> 'status'
+                when 'running' then step.value || jsonb_build_object(
+                    'status', 'failed',
+                    'detail', ${expiredRunError}::text,
+                    'completedAt', clock_timestamp()
+                )
+                when 'waiting' then step.value || '{"status":"skipped"}'::jsonb
+                else step.value
+            end order by step.ordinality
+        )
+        from jsonb_array_elements(${proposalRuns.steps})
+            with ordinality as step(value, ordinality)
+    ), '[]'::jsonb)`,
+};
+
+/** Expiry is absolute from startedAt; queued work and recent step writes do not affect it. */
+async function expireRuns(companyId: bigint, id?: string): Promise<void> {
+    await getDb()
+        .update(proposalRuns)
+        .set(expiredRunPatch)
+        .where(
+            and(
+                eq(proposalRuns.companyId, companyId),
+                id !== undefined ? eq(proposalRuns.id, id) : undefined,
+                eq(proposalRuns.status, "running"),
+                expiredRunCondition
+            )
+        );
+}
+
 export async function createRun(input: {
     companyId: bigint;
     userId: string;
@@ -744,6 +842,7 @@ export async function createRun(input: {
 }
 
 export async function getRun(id: string, companyId: bigint): Promise<RunRecord | null> {
+    await expireRuns(companyId, id);
     const [row] = await getDb()
         .select()
         .from(proposalRuns)
@@ -756,6 +855,7 @@ export async function listRuns(
     companyId: bigint,
     options: { applicationId?: string; limit?: number } = {}
 ): Promise<RunRecord[]> {
+    await expireRuns(companyId);
     const where = options.applicationId
         ? and(
               eq(proposalRuns.companyId, companyId),
@@ -773,6 +873,7 @@ export async function listRuns(
 
 /** The run in progress, if any: one at a time per workspace keeps the credits story simple. */
 export async function findLiveRun(companyId: bigint): Promise<RunRecord | null> {
+    await expireRuns(companyId);
     const [row] = await getDb()
         .select()
         .from(proposalRuns)
@@ -787,32 +888,147 @@ export async function findLiveRun(companyId: bigint): Promise<RunRecord | null> 
     return row ? toRun(row) : null;
 }
 
-export async function updateRun(
+/** Only the delivery that changes queued to running may execute or debit this run. */
+export async function claimRun(companyId: bigint, id: string): Promise<RunRecord | null> {
+    await expireRuns(companyId, id);
+    const [row] = await getDb()
+        .update(proposalRuns)
+        .set({ status: "running", startedAt: new Date(), updatedAt: new Date() })
+        .where(
+            and(
+                eq(proposalRuns.id, id),
+                eq(proposalRuns.companyId, companyId),
+                eq(proposalRuns.status, "queued")
+            )
+        )
+        .returning();
+    return row ? toRun(row) : null;
+}
+
+export async function isRunActive(companyId: bigint, id: string): Promise<boolean> {
+    await expireRuns(companyId, id);
+    const [row] = await getDb()
+        .select({ id: proposalRuns.id })
+        .from(proposalRuns)
+        .where(
+            and(
+                eq(proposalRuns.id, id),
+                eq(proposalRuns.companyId, companyId),
+                eq(proposalRuns.status, "running"),
+                freshRunCondition
+            )
+        )
+        .limit(1);
+    return row !== undefined;
+}
+
+export async function updateRunSteps(
     companyId: bigint,
     id: string,
-    patch: {
-        status?: RunStatus;
-        steps?: RunStep[];
-        summary?: RunSummary | null;
-        error?: string | null;
-        creditsUsed?: number;
-        startedAt?: Date;
-        completedAt?: Date | null;
-    }
+    steps: RunStep[]
+): Promise<boolean> {
+    await expireRuns(companyId, id);
+    const rows = await getDb()
+        .update(proposalRuns)
+        .set({ steps, updatedAt: new Date() })
+        .where(
+            and(
+                eq(proposalRuns.id, id),
+                eq(proposalRuns.companyId, companyId),
+                eq(proposalRuns.status, "running"),
+                freshRunCondition
+            )
+        )
+        .returning({ id: proposalRuns.id });
+    return rows.length > 0;
+}
+
+/**
+ * Serialize expiry/failure with metering and completion. The host receives
+ * this transaction so its ledger writes share the run's connection and commit.
+ * A genuinely external sink still cannot be rolled back by Postgres.
+ */
+export async function completeRun(
+    companyId: bigint,
+    id: string,
+    summary: RunSummary,
+    debit: (executor: ProposalDebitExecutor) => Promise<number>
 ): Promise<RunRecord | null> {
-    const set: Partial<typeof proposalRuns.$inferInsert> = { updatedAt: new Date() };
-    if (patch.status !== undefined) set.status = patch.status;
-    if (patch.steps !== undefined) set.steps = patch.steps;
-    if (patch.summary !== undefined) set.summary = patch.summary;
-    if (patch.error !== undefined) set.error = patch.error;
-    if (patch.creditsUsed !== undefined) set.creditsUsed = patch.creditsUsed;
-    if (patch.startedAt !== undefined) set.startedAt = patch.startedAt;
-    if (patch.completedAt !== undefined) set.completedAt = patch.completedAt;
-    await getDb()
+    return getDb().transaction(async tx => {
+        const [row] = await tx
+            .select()
+            .from(proposalRuns)
+            .where(and(eq(proposalRuns.id, id), eq(proposalRuns.companyId, companyId)))
+            .for("update");
+        if (!row) return null;
+        if (row.status !== "running") return toRun(row);
+
+        // Recheck with the database clock after acquiring the lock, not with
+        // a timestamp captured before a potentially blocking SELECT.
+        const [expired] = await tx
+            .update(proposalRuns)
+            .set(expiredRunPatch)
+            .where(
+                and(
+                    eq(proposalRuns.id, id),
+                    eq(proposalRuns.companyId, companyId),
+                    eq(proposalRuns.status, "running"),
+                    expiredRunCondition
+                )
+            )
+            .returning();
+        if (expired) return toRun(expired);
+
+        const creditsUsed = await debit(tx);
+        const [completed] = await tx
+            .update(proposalRuns)
+            .set({
+                status: "completed",
+                summary,
+                creditsUsed,
+                completedAt: new Date(),
+                updatedAt: new Date(),
+            })
+            .where(
+                and(
+                    eq(proposalRuns.id, id),
+                    eq(proposalRuns.companyId, companyId),
+                    eq(proposalRuns.status, "running")
+                )
+            )
+            .returning();
+        return completed ? toRun(completed) : null;
+    });
+}
+
+/** Restrict failure to the caller's expected state, without replacing terminal results. */
+export async function failRun(
+    companyId: bigint,
+    id: string,
+    error: string,
+    steps: RunStep[] | undefined,
+    expectedStatus: "queued" | "running"
+): Promise<RunRecord | null> {
+    await expireRuns(companyId, id);
+    const set: Partial<typeof proposalRuns.$inferInsert> = {
+        status: "failed",
+        error,
+        completedAt: new Date(),
+        updatedAt: new Date(),
+    };
+    if (steps !== undefined) set.steps = steps;
+    const [row] = await getDb()
         .update(proposalRuns)
         .set(set)
-        .where(and(eq(proposalRuns.id, id), eq(proposalRuns.companyId, companyId)));
-    return getRun(id, companyId);
+        .where(
+            and(
+                eq(proposalRuns.id, id),
+                eq(proposalRuns.companyId, companyId),
+                eq(proposalRuns.status, expectedStatus)
+            )
+        )
+        .returning();
+    return row ? toRun(row) : getRun(id, companyId);
 }
 
 export async function deleteRun(companyId: bigint, id: string): Promise<boolean> {

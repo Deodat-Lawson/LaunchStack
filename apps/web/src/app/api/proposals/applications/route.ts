@@ -7,7 +7,7 @@ import { z } from "zod";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { loadApplications, newApplication } from "~/server/proposals/service";
 
-import { error, proposalsContext, handleProposalsError, json, readBody } from "../_http";
+import { error, proposalsContext, handleProposalsError, json, readBody, say } from "../_http";
 
 const NewApplicationSchema = z.object({
     title: z.string().max(512).default(""),
@@ -23,13 +23,13 @@ const NewApplicationSchema = z.object({
     requestDocumentId: z.number().int().positive().optional().nullable(),
 });
 
-export async function GET() {
+export async function GET(request: Request) {
     const auth = await proposalsContext();
     if (!auth.ok) return auth.response;
     try {
         return json({ applications: await loadApplications(auth.ctx) });
     } catch (err) {
-        return handleProposalsError("GET applications", err);
+        return handleProposalsError("GET applications", err, request);
     }
 }
 
@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
         async () => {
             try {
                 const parsed = NewApplicationSchema.safeParse(await readBody(request));
-                if (!parsed.success) return error("Check the application and try again", 400);
+                if (!parsed.success) return error(say(request, "checkApplication"), 400);
                 const input = parsed.data;
                 if (
                     !input.title.trim() &&
@@ -55,13 +55,10 @@ export async function POST(request: NextRequest) {
                     !input.requestText &&
                     !input.requestUrl
                 )
-                    return error(
-                        "Give the application a title, or paste the funder's request",
-                        400
-                    );
+                    return error(say(request, "titleOrRequest"), 400);
                 return json(await newApplication(ctx, input), 201);
             } catch (err) {
-                return handleProposalsError("POST applications", err);
+                return handleProposalsError("POST applications", err, request);
             }
         }
     );

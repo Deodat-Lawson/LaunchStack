@@ -2,11 +2,12 @@
 
 import { ArrowLeftRight } from "lucide-react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 
 import { cn } from "~/lib/utils";
 
 import { useEmployerWorkspaceSwitcher } from "./EmployerWorkspaceSwitcherContext";
-import pill from "./WorkspaceSwitcherPill.module.css";
+import { WorkspaceMark } from "./WorkspaceMark";
 
 /**
  * Which workspace these settings belong to, and the way to a different one.
@@ -18,30 +19,32 @@ import pill from "./WorkspaceSwitcherPill.module.css";
  * this belongs (the avatar menu keeps its quick row as well).
  */
 export function WorkspaceSwitchCard({ className }: { className?: string }) {
+    const t = useTranslations("chrome.switchCard");
     const workspace = useEmployerWorkspaceSwitcher();
     if (!workspace) return null;
-    const swatch = pill[`gradient${workspace.swatch ?? 1}`] ?? pill.gradient1;
     const others = Math.max(0, workspace.membershipCount - 1);
 
     return (
         <Link
             href="/workspaces"
             data-testid="settings-switch-workspace"
-            title="Switch to another workspace"
+            title={t("title")}
             className={cn(
                 "border-line bg-surface hover:bg-line-2 focus-visible:ring-brand/50 group flex items-center gap-2.5 rounded-lg border px-2.5 py-2 outline-none transition-colors focus-visible:ring-[3px]",
                 className
             )}
         >
-            <span className={cn(pill.mark, swatch, "shrink-0")}>{workspace.initials}</span>
+            <WorkspaceMark
+                swatch={workspace.swatch}
+                initials={workspace.initials}
+                className="shrink-0"
+            />
             <span className="min-w-0 flex-1">
                 <span className="text-ink block truncate text-[12.5px] font-semibold">
                     {workspace.name}
                 </span>
                 <span className="text-ink-3 block truncate text-[11px]">
-                    {others > 0
-                        ? `Switch workspace · ${others} other${others === 1 ? "" : "s"}`
-                        : "Switch workspace"}
+                    {others > 0 ? t("labelOthers", { count: others }) : t("label")}
                 </span>
             </span>
             <ArrowLeftRight

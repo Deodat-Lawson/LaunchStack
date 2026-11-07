@@ -2,6 +2,7 @@
 
 import React from "react";
 import { diffWords } from "diff";
+import { useTranslations } from "next-intl";
 import { Check, X, RotateCw, Sparkles } from "lucide-react";
 import { legalTheme as s } from "../LegalGeneratorTheme";
 
@@ -20,6 +21,8 @@ const REMOVAL_DECORATION = "oklch(0.55 0.16 25 / 0.7)";
 const ADDITION_BG = "oklch(0.92 0.10 145 / 0.4)";
 const PROPOSED_PANE_TINT = "color-mix(in oklch, oklch(0.78 0.10 145) 4%, transparent)";
 
+type PreviewT = ReturnType<typeof useTranslations<"generator.rewritePreview">>;
+
 interface DiffPart {
     value: string;
     added?: boolean;
@@ -34,15 +37,14 @@ export function RewritePreviewPanel({
     onTryAgain,
     isRetrying = false,
 }: RewritePreviewProps) {
+    const t = useTranslations("generator.rewritePreview");
+    const tc = useTranslations("common");
     const safeOriginal = typeof originalText === "string" ? originalText : "";
     const safeProposed = typeof proposedText === "string" ? proposedText : "";
     const parts: DiffPart[] = diffWords(safeOriginal, safeProposed);
 
     const changeCount = parts.filter(p => p.added === true || p.removed === true).length;
-    const subtitle =
-        changeCount === 0
-            ? "no edits · matches source"
-            : `${changeCount} change${changeCount === 1 ? "" : "s"} · pending review`;
+    const subtitle = changeCount === 0 ? t("noEdits") : t("pending", { count: changeCount });
 
     return (
         <div
@@ -80,10 +82,13 @@ export function RewritePreviewPanel({
                             letterSpacing: "-0.015em",
                         }}
                     >
-                        Rewrite{" "}
-                        <em className={s.accentWord} style={{ fontStyle: "normal" }}>
-                            preview
-                        </em>
+                        {t.rich("title", {
+                            em: chunks => (
+                                <em className={s.accentWord} style={{ fontStyle: "normal" }}>
+                                    {chunks}
+                                </em>
+                            ),
+                        })}
                     </h1>
                     <p
                         style={{
@@ -110,7 +115,7 @@ export function RewritePreviewPanel({
                         disabled={isRetrying}
                     >
                         <RotateCw className={`h-3.5 w-3.5${isRetrying ? "animate-spin" : ""}`} />
-                        Regenerate
+                        {tc("actions.regenerate")}
                     </button>
                     <span
                         aria-hidden
@@ -128,7 +133,7 @@ export function RewritePreviewPanel({
                         disabled={isRetrying}
                     >
                         <X className="h-3.5 w-3.5" />
-                        Reject section
+                        {t("rejectSection")}
                     </button>
                     <button
                         type="button"
@@ -137,7 +142,7 @@ export function RewritePreviewPanel({
                         disabled={isRetrying}
                     >
                         <Check className="h-3.5 w-3.5" />
-                        Accept section
+                        {t("acceptSection")}
                     </button>
                 </div>
             </div>
@@ -160,13 +165,9 @@ export function RewritePreviewPanel({
                     }}
                 >
                     <div className={s.eyebrow} style={{ marginBottom: 14 }}>
-                        Original
+                        {t("original")}
                     </div>
-                    <DiffProse
-                        parts={parts}
-                        mode="original"
-                        emptyHint="No source text to compare."
-                    />
+                    <DiffProse parts={parts} mode="original" emptyHint={t("emptyOriginal")} />
                 </div>
 
                 {/* Proposed · v-next */}
@@ -185,9 +186,9 @@ export function RewritePreviewPanel({
                         }}
                     >
                         <span aria-hidden style={{ background: "var(--success)" }} />
-                        Proposed
+                        {t("proposed")}
                     </div>
-                    <DiffProse parts={parts} mode="proposed" emptyHint="The rewrite is empty." />
+                    <DiffProse parts={parts} mode="proposed" emptyHint={t("emptyProposed")} />
 
                     {/* "Why this change" card — exact redesign treatment */}
                     {changeCount > 0 && (
@@ -215,9 +216,9 @@ export function RewritePreviewPanel({
                                 }}
                             >
                                 <Sparkles className="h-3 w-3" />
-                                <span>Why this change</span>
+                                <span>{t("why")}</span>
                             </div>
-                            {summarizeRewrite(parts)}
+                            {summarizeRewrite(parts, t)}
                         </div>
                     )}
                 </div>
@@ -303,7 +304,7 @@ function DiffProse({
     );
 }
 
-function summarizeRewrite(parts: DiffPart[]): string {
+function summarizeRewrite(parts: DiffPart[], t: PreviewT): string {
     let added = 0;
     let removed = 0;
     for (const part of parts) {
@@ -314,14 +315,8 @@ function summarizeRewrite(parts: DiffPart[]): string {
     const delta = added - removed;
     const editCount = parts.filter(p => p.added === true || p.removed === true).length;
 
-    if (editCount === 0) {
-        return "No edits proposed — the rewrite matches the source word-for-word.";
-    }
-    if (delta > 0) {
-        return `Expanded by ${delta} word${delta === 1 ? "" : "s"} across ${editCount} edit${editCount === 1 ? "" : "s"}. Review the highlighted spans before accepting.`;
-    }
-    if (delta < 0) {
-        return `Tightened by ${Math.abs(delta)} word${Math.abs(delta) === 1 ? "" : "s"} across ${editCount} edit${editCount === 1 ? "" : "s"}. Review the highlighted spans before accepting.`;
-    }
-    return `${editCount} edit${editCount === 1 ? "" : "s"} proposed without changing the overall length. Review the highlighted spans before accepting.`;
+    if (editCount === 0) return t("summary.none");
+    if (delta > 0) return t("summary.expanded", { words: delta, edits: editCount });
+    if (delta < 0) return t("summary.tightened", { words: Math.abs(delta), edits: editCount });
+    return t("summary.same", { edits: editCount });
 }

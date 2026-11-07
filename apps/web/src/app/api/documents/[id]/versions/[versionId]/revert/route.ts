@@ -19,7 +19,8 @@ import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
-import { DOCUMENT_EDIT_DENIED } from "~/server/services/folder-access";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { canEditDocument } from "~/server/workspace/item-access";
 import { getActiveDriveLink } from "~/server/services/google-drive/links";
 
@@ -27,6 +28,9 @@ export async function POST(
     request: Request,
     context: { params: Promise<{ id: string; versionId: string }> }
 ) {
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "sources.server.versions");
+    const s = translatorFor(locale, "sources.server.errors");
     return withRateLimit(request, RateLimitPresets.strict, async () => {
         try {
             const { id: rawDocId, versionId: rawVersionId } = await context.params;
@@ -34,10 +38,10 @@ export async function POST(
             const documentId = Number(rawDocId);
             const versionId = Number(rawVersionId);
             if (!Number.isInteger(documentId) || documentId <= 0) {
-                return NextResponse.json({ error: "Invalid document id" }, { status: 400 });
+                return NextResponse.json({ error: s("invalidDocumentId") }, { status: 400 });
             }
             if (!Number.isInteger(versionId) || versionId <= 0) {
-                return NextResponse.json({ error: "Invalid version id" }, { status: 400 });
+                return NextResponse.json({ error: t("invalidVersionId") }, { status: 400 });
             }
 
             const ctx = await requireWorkspacePermission("documents.edit");
@@ -56,12 +60,15 @@ export async function POST(
                 );
 
             if (!doc) {
-                return NextResponse.json({ error: "Document not found" }, { status: 404 });
+                return NextResponse.json(
+                    { error: translatorFor(locale, "errors.api")("documentNotFound") },
+                    { status: 404 }
+                );
             }
 
             // Changing which version is live is changing the file (ADR-014).
             if (!(await canEditDocument(ctx.data, { id: documentId, category: doc.category }))) {
-                return NextResponse.json({ error: DOCUMENT_EDIT_DENIED }, { status: 403 });
+                return NextResponse.json({ error: s("documentEditDenied") }, { status: 403 });
             }
 
             // Phase 1 of Drive-linked files: reverting a linked document
@@ -71,9 +78,7 @@ export async function POST(
                 return NextResponse.json(
                     {
                         error: "linked_to_google_drive",
-                        details:
-                            "This document is linked to Google Drive and edited there. " +
-                            "Sync or unlink it before restoring a version in-app.",
+                        details: translatorFor(locale, "sources.server.drive")("linkedRestore"),
                         driveUrl: driveLink.driveWebViewLink,
                     },
                     { status: 409 }
@@ -102,10 +107,7 @@ export async function POST(
                 );
 
             if (!targetVersion) {
-                return NextResponse.json(
-                    { error: "Version not found for this document" },
-                    { status: 404 }
-                );
+                return NextResponse.json({ error: t("versionNotFound") }, { status: 404 });
             }
 
             // No-op if the target is already current — return 200 rather than an
@@ -161,7 +163,7 @@ export async function POST(
             console.error("[Versions] revert failed:", error);
             return NextResponse.json(
                 {
-                    error: "Failed to revert document version",
+                    error: t("revertFailed"),
                     details: error instanceof Error ? error.message : String(error),
                 },
                 { status: 500 }

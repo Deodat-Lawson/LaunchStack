@@ -8,6 +8,7 @@ import { users, userCompanyMemberships } from "~/server/db/schema";
 import { ensureTokenAccount } from "~/lib/credits";
 import { setActiveWorkspaceCookie, getActiveCompanyId } from "~/lib/active-workspace";
 import { requireAuthIdentity } from "~/lib/require-workspace-context";
+import { requestTranslator } from "~/i18n/server";
 
 const SLUG_RE = /^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?$/;
 
@@ -25,7 +26,8 @@ const CreateWorkspaceSchema = z.object({
     description: z.string().max(2000).optional(),
 });
 
-export async function GET() {
+export async function GET(request: Request) {
+    const t = requestTranslator(request, "auth.server.errors");
     try {
         const identity = await requireAuthIdentity();
         if (!identity.success) return identity.response;
@@ -37,7 +39,7 @@ export async function GET() {
             .where(eq(users.userId, authUserId));
 
         if (!user) {
-            return NextResponse.json({ error: "User not found" }, { status: 404 });
+            return NextResponse.json({ error: t("userNotFound") }, { status: 404 });
         }
 
         const memberCountSubquery = db
@@ -91,11 +93,15 @@ export async function GET() {
         });
     } catch (err) {
         console.error("[workspaces] GET error:", err);
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+        return NextResponse.json(
+            { error: requestTranslator(request, "errors.api")("internal") },
+            { status: 500 }
+        );
     }
 }
 
 export async function POST(request: Request) {
+    const t = requestTranslator(request, "auth.server.errors");
     try {
         const identity = await requireAuthIdentity();
         if (!identity.success) return identity.response;
@@ -105,7 +111,10 @@ export async function POST(request: Request) {
         const parsed = CreateWorkspaceSchema.safeParse(json);
         if (!parsed.success) {
             return NextResponse.json(
-                { error: "Invalid input", issues: parsed.error.flatten() },
+                {
+                    error: requestTranslator(request, "errors.api")("invalidInput"),
+                    issues: parsed.error.flatten(),
+                },
                 { status: 400 }
             );
         }
@@ -116,7 +125,7 @@ export async function POST(request: Request) {
             .from(company)
             .where(eq(company.slug, slug));
         if (existingSlug) {
-            return NextResponse.json({ error: "Slug already taken" }, { status: 409 });
+            return NextResponse.json({ error: t("slugTaken") }, { status: 409 });
         }
 
         const [user] = await db
@@ -124,7 +133,7 @@ export async function POST(request: Request) {
             .from(users)
             .where(eq(users.userId, authUserId));
         if (!user) {
-            return NextResponse.json({ error: "User not found" }, { status: 404 });
+            return NextResponse.json({ error: t("userNotFound") }, { status: 404 });
         }
 
         // A brand-new account may open its first workspace; an account whose
@@ -135,12 +144,7 @@ export async function POST(request: Request) {
             .from(userCompanyMemberships)
             .where(eq(userCompanyMemberships.userId, BigInt(user.id)));
         if (memberships.length > 0 && !memberships.some(m => m.status === "active")) {
-            return NextResponse.json(
-                {
-                    error: "Your workspace memberships are awaiting approval or suspended. Ask an owner to approve you before creating a workspace.",
-                },
-                { status: 403 }
-            );
+            return NextResponse.json({ error: t("membershipsPending") }, { status: 403 });
         }
 
         const teamSizeForCompany = (teamSize?.trim() ?? "") || "1";
@@ -157,7 +161,7 @@ export async function POST(request: Request) {
             .returning({ id: company.id });
 
         if (!newCompany) {
-            return NextResponse.json({ error: "Could not create workspace" }, { status: 500 });
+            return NextResponse.json({ error: t("createWorkspaceFailed") }, { status: 500 });
         }
 
         const newCompanyId = BigInt(newCompany.id);
@@ -192,6 +196,9 @@ export async function POST(request: Request) {
         return response;
     } catch (err) {
         console.error("[workspaces] POST error:", err);
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+        return NextResponse.json(
+            { error: requestTranslator(request, "errors.api")("internal") },
+            { status: 500 }
+        );
     }
 }

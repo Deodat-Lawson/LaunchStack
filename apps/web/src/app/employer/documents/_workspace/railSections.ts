@@ -14,6 +14,8 @@
  * Pure, so the sorting and the wording are pinned by tests.
  */
 
+import type { useTranslations } from "next-intl";
+
 import { UNFILED_FOLDER, type FolderTree, type FolderTreeNode } from "~/lib/folders/path";
 
 import type { ItemAccessView, SourceAudience, WorkspaceSource } from "./types";
@@ -22,14 +24,8 @@ export type RailSectionId = SourceAudience;
 
 export const RAIL_SECTION_ORDER: readonly RailSectionId[] = ["workspace", "shared", "private"];
 
-export const RAIL_SECTION_LABELS: Record<RailSectionId, string> = {
-    workspace: "Workspace",
-    shared: "Shared",
-    private: "Private",
-};
-
-/** Shown in an empty Private section: where new things land, and what to do next. */
-export const PRIVATE_EMPTY_HINT = "Files you add start here. Share them when you're ready.";
+/** `useTranslations("sources.audience")` — the words for who can see a row. */
+export type AudienceTranslator = ReturnType<typeof useTranslations<"sources.audience">>;
 
 type SourceNode = FolderTreeNode<WorkspaceSource>;
 
@@ -134,8 +130,24 @@ export function splitRailSections(
  */
 export function audienceLabel(
     access: Pick<ItemAccessView, "audience" | "principalCount">,
-    workspaceName: string | null | undefined
+    workspaceName: string | null | undefined,
+    /** The reader's language; without it, English. */
+    t?: AudienceTranslator
 ): string {
+    if (t) {
+        switch (access.audience) {
+            case "private":
+                return t("onlyYou");
+            case "shared":
+                return access.principalCount > 0
+                    ? t("sharedWith", { count: access.principalCount })
+                    : t("sharedWithSpecific");
+            case "workspace":
+                return workspaceName
+                    ? t("everyoneAt", { workspace: workspaceName })
+                    : t("everyoneInWorkspace");
+        }
+    }
     switch (access.audience) {
         case "private":
             return "Only you";
@@ -166,8 +178,22 @@ export function showsAudienceGlyph(
 /** What a move did to a file's audience, in words for a toast; null when nothing changed. */
 export function moveOutcomeMessage(
     outcome: "inherits_folder" | "made_private" | "kept_audience" | "unchanged" | null | undefined,
-    folderLeaf: string
+    folderLeaf: string,
+    /** The reader's language; without it, English. */
+    t?: AudienceTranslator
 ): string | null {
+    if (t) {
+        switch (outcome) {
+            case "inherits_folder":
+                return t("moveInherits", { folder: folderLeaf });
+            case "made_private":
+                return t("moveMadePrivate");
+            case "kept_audience":
+                return t("moveKeptAudience");
+            default:
+                return null;
+        }
+    }
     switch (outcome) {
         case "inherits_folder":
             return `Now visible to everyone who can open ${folderLeaf}`;

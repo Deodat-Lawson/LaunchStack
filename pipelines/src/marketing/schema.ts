@@ -2,6 +2,7 @@ import { sql, type InferSelectModel } from "drizzle-orm";
 import {
     bigint,
     bigserial,
+    boolean,
     index,
     integer,
     jsonb,
@@ -9,6 +10,7 @@ import {
     timestamp,
     varchar,
 } from "drizzle-orm/pg-core";
+import { company } from "@launchstack/store/schema";
 import { pgTable } from "@launchstack/store/schema/helpers";
 
 export const marketingContentHistory = pgTable(
@@ -137,3 +139,49 @@ export const brandPosts = pgTable(
     ]
 );
 export type BrandPostRow = InferSelectModel<typeof brandPosts>;
+
+// ─── Post-writer runs ────────────────────────────────────────────────────────
+
+/**
+ * A post-writer run kept on the server instead of in one web request: queued
+ * by the route, executed off the request path (after the response, or on the
+ * worker), polled by the screen. `events` is the same progress stream the
+ * screen used to read over SSE, appended as it happens, so a reload replays
+ * it; `checkpoints` holds each finished stage's output so a retry resumes
+ * where the last attempt stopped; `heartbeat_at` tells a poll whether an
+ * inline run's process died and it should be picked up again.
+ */
+export const MARKETING_RUN_STATUSES = ["queued", "running", "completed", "failed"] as const;
+export type MarketingRunStatus = (typeof MARKETING_RUN_STATUSES)[number];
+
+export const marketingRuns = pgTable(
+    "marketing_runs",
+    {
+        id: varchar("id", { length: 64 }).primaryKey(),
+        companyId: bigint("company_id", { mode: "bigint" })
+            .notNull()
+            .references(() => company.id, { onDelete: "cascade" }),
+        userId: varchar("user_id", { length: 256 }).notNull(),
+        status: varchar("status", { length: 16, enum: MARKETING_RUN_STATUSES })
+            .notNull()
+            .default("queued"),
+        input: jsonb("input").$type<Record<string, unknown>>().notNull(),
+        debug: boolean("debug").notNull().default(false),
+        events: jsonb("events").$type<unknown[]>().notNull().default([]),
+        checkpoints: jsonb("checkpoints").$type<Record<string, unknown>>().notNull().default({}),
+        result: jsonb("result").$type<Record<string, unknown>>(),
+        errorMessage: text("error_message"),
+        attempts: integer("attempts").notNull().default(0),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
+        startedAt: timestamp("started_at", { withTimezone: true }),
+        heartbeatAt: timestamp("heartbeat_at", { withTimezone: true }),
+        completedAt: timestamp("completed_at", { withTimezone: true }),
+    },
+    table => [
+        index("marketing_runs_company_status_idx").on(table.companyId, table.status),
+        index("marketing_runs_user_created_idx").on(table.userId, table.createdAt),
+    ]
+);
+export type MarketingRunRow = InferSelectModel<typeof marketingRuns>;

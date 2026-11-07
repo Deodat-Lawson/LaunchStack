@@ -10,6 +10,7 @@
 
 import type * as MockRequireWorkspaceContext from "../helpers/mock-require-workspace-context";
 import type * as Zod from "zod";
+import type * as UsageParams from "~/server/usage/params";
 
 import type { Permission } from "~/lib/authz/permissions";
 import type { WorkspaceContextResult } from "~/lib/require-workspace-context";
@@ -106,6 +107,12 @@ jest.mock("~/lib/rate-limiter", () => ({
     RateLimitPresets: { permissive: {}, standard: {}, strict: {} },
 }));
 jest.mock("~/server/engine", () => ({ getEngine: jest.fn() }));
+jest.mock("~/server/ocr-availability", () => ({
+    ocrOverview: jest.fn().mockResolvedValue({
+        availableProviders: { azure: false, datalab: false, landingAI: false, docling: false },
+        order: [],
+    }),
+}));
 jest.mock("~/server/inngest/client", () => ({ inngest: { send: jest.fn() } }));
 jest.mock("~/lib/authz/audit", () => ({ recordAuditEvent: jest.fn() }));
 jest.mock("~/lib/storage", () => ({
@@ -211,6 +218,19 @@ jest.mock("~/server/collab/personas", () => ({
 jest.mock("~/server/collab/runtime", () => ({ getHub: jest.fn(), listKnownNodes: jest.fn() }));
 jest.mock("~/server/collab/slack", () => ({ getSlackStatus: jest.fn() }));
 jest.mock("~/server/settings/store", () => ({ readWorkspaceSetting: jest.fn() }));
+// The Usage tab's services are past the gate; `/me` reaches its stub.
+jest.mock("~/server/usage", () => {
+    const params = jest.requireActual<typeof UsageParams>("~/server/usage/params");
+    return {
+        readUsageQuery: params.readUsageQuery,
+        DOCUMENTS_PAGE: params.DOCUMENTS_PAGE,
+        usageSummary: jest.fn(),
+        usagePeople: jest.fn(),
+        usageActivity: jest.fn(),
+        usageDocuments: jest.fn(),
+        usageMe: jest.fn().mockResolvedValue({ mine: true }),
+    };
+});
 
 // ---------------------------------------------------------------------------
 // Handlers
@@ -232,6 +252,8 @@ import { DELETE as deleteVersion } from "~/app/api/documents/[id]/versions/[vers
 import { PATCH as patchDocument } from "~/app/api/documents/[id]/route";
 import { POST as revertVersion } from "~/app/api/documents/[id]/versions/[versionId]/revert/route";
 import { POST as createVersion } from "~/app/api/documents/[id]/versions/route";
+import { POST as retryProcessing } from "~/app/api/documents/[id]/retry/route";
+import { POST as reembedSource } from "~/app/api/documents/[id]/reembed/route";
 import { POST as uploadDocument } from "~/app/api/uploadDocument/route";
 import { POST as uploadWebsite } from "~/app/api/upload/website/route";
 import { POST as uploadVideoUrl } from "~/app/api/upload/video-url/route";
@@ -257,7 +279,6 @@ import {
     GET as previewAgentSessions,
     POST as syncAgentSessions,
 } from "~/app/api/connectors/agent-sessions/route";
-import { GET as analysisDashboard } from "~/app/api/company/analysis-dashboard/route";
 import { GET as documentStats } from "~/app/api/company/documents/[documentId]/stats/route";
 import { POST as approveCampaign } from "~/app/api/email-campaigns/[campaignId]/approve/route";
 import { POST as sendCampaign } from "~/app/api/email-campaigns/[campaignId]/send/route";
@@ -270,6 +291,13 @@ import {
     PATCH as editAgent,
 } from "~/app/api/collab/agents/[personaId]/route";
 import { POST as resetAgent } from "~/app/api/collab/agents/[personaId]/reset/route";
+import { GET as memberAllowances } from "~/app/api/settings/usage/members/route";
+import { PUT as setMemberLimit } from "~/app/api/settings/usage/members/[userId]/route";
+import { GET as usageSummary } from "~/app/api/usage/summary/route";
+import { GET as usagePeople } from "~/app/api/usage/people/route";
+import { GET as usageActivity } from "~/app/api/usage/activity/route";
+import { GET as usageDocuments } from "~/app/api/usage/documents/route";
+import { GET as usageMe } from "~/app/api/usage/me/route";
 
 // ---------------------------------------------------------------------------
 // Table
@@ -319,6 +347,16 @@ const GATES: readonly Gate[] = [
     },
     // settings.manage
     {
+        route: "PUT /api/settings/usage/members/[userId] (one person's AI limit)",
+        permission: "settings.manage",
+        deniedRole: "member",
+        call: () =>
+            setMemberLimit(
+                json("/api/settings/usage/members/u-1", "PUT", { mode: "none" }),
+                params({ userId: "u-1" })
+            ),
+    },
+    {
         route: "POST /api/updateUploadPreference",
         permission: "settings.manage",
         deniedRole: "member",
@@ -343,13 +381,14 @@ const GATES: readonly Gate[] = [
         route: "GET /api/company/metadata (raw export, excerpts from every folder)",
         permission: "settings.manage",
         deniedRole: "member",
-        call: () => getCompanyMetadata(),
+        call: () => getCompanyMetadata(new Request("http://localhost/api/company/metadata")),
     },
     {
         route: "GET /api/company/metadata/history",
         permission: "settings.manage",
         deniedRole: "member",
-        call: () => getCompanyMetadataHistory(),
+        call: () =>
+            getCompanyMetadataHistory(new Request("http://localhost/api/company/metadata/history")),
     },
     {
         route: "PATCH /api/company/profile/facts",
@@ -380,13 +419,13 @@ const GATES: readonly Gate[] = [
         route: "GET /api/employer/upload/bootstrap",
         permission: "settings.manage",
         deniedRole: "member",
-        call: () => uploadBootstrap(),
+        call: () => uploadBootstrap(new Request("http://localhost/api/employer/upload/bootstrap")),
     },
     {
         route: "GET /api/fetchCompany (key tails, Ollama endpoint)",
         permission: "settings.manage",
         deniedRole: "member",
-        call: () => fetchCompany(),
+        call: () => fetchCompany(new Request("http://localhost/api/fetchCompany")),
     },
     // The agent roster: adding, retiring and restoring are the managers', and
     // so are an agent's policy fields; what an agent says is any editor's.
@@ -476,6 +515,22 @@ const GATES: readonly Gate[] = [
         deniedRole: "viewer",
         call: () =>
             createVersion(json("/api/documents/1/versions", "POST", {}), params({ id: "1" })),
+    },
+    // Retrying re-runs processing for the file, like a new version does.
+    {
+        route: "POST /api/documents/[id]/retry",
+        permission: "documents.upload",
+        deniedRole: "viewer",
+        call: () =>
+            retryProcessing(json("/api/documents/1/retry", "POST", {}), params({ id: "1" })),
+    },
+    // Re-embedding re-runs processing too, as a new version of the same file.
+    {
+        route: "POST /api/documents/[id]/reembed",
+        permission: "documents.upload",
+        deniedRole: "viewer",
+        call: () =>
+            reembedSource(json("/api/documents/1/reembed", "POST", {}), params({ id: "1" })),
     },
     {
         route: "POST /api/uploadDocument",
@@ -627,10 +682,34 @@ const GATES: readonly Gate[] = [
     },
     // analytics.view
     {
-        route: "GET /api/company/analysis-dashboard",
+        route: "GET /api/settings/usage/members (who used how much AI)",
         permission: "analytics.view",
         deniedRole: "member",
-        call: () => analysisDashboard(),
+        call: () => memberAllowances(new Request("http://localhost/api/settings/usage/members")),
+    },
+    {
+        route: "GET /api/usage/summary (the workspace's usage)",
+        permission: "analytics.view",
+        deniedRole: "member",
+        call: () => usageSummary(new Request("http://localhost/api/usage/summary?days=7")),
+    },
+    {
+        route: "GET /api/usage/people (who used how much)",
+        permission: "analytics.view",
+        deniedRole: "member",
+        call: () => usagePeople(new Request("http://localhost/api/usage/people")),
+    },
+    {
+        route: "GET /api/usage/activity (AI use by person)",
+        permission: "analytics.view",
+        deniedRole: "member",
+        call: () => usageActivity(new Request("http://localhost/api/usage/activity")),
+    },
+    {
+        route: "GET /api/usage/documents (what was opened)",
+        permission: "analytics.view",
+        deniedRole: "member",
+        call: () => usageDocuments(new Request("http://localhost/api/usage/documents")),
     },
     {
         route: "GET /api/company/documents/[documentId]/stats",
@@ -769,6 +848,16 @@ describe("permission gates", () => {
             if (saved.app === undefined) delete process.env.APP_PUBLIC_URL;
             else process.env.APP_PUBLIC_URL = saved.app;
         }
+    });
+
+    // A member's own usage is theirs to read: the one Usage route without the gate.
+    it.each(["member", "viewer"])("GET /api/usage/me answers a %s", async role => {
+        signInAs(role);
+
+        const response = await usageMe(new Request("http://localhost/api/usage/me"));
+
+        expect(response.status).toBe(200);
+        await expect(response.json()).resolves.toEqual({ mine: true });
     });
 
     it("lets an admin through the same gate (the harness is not refusing everyone)", async () => {

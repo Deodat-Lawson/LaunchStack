@@ -17,6 +17,7 @@
  */
 
 import React, { useCallback, useEffect, useSyncExternalStore } from "react";
+import { useTranslations } from "next-intl";
 import {
     isMembershipStatus,
     permissionsFromList,
@@ -38,6 +39,13 @@ export interface PermissionsSnapshot {
     permissions: ReadonlySet<Permission>;
     /** Why the load failed, in words. Null when it succeeded. */
     error: string | null;
+    /**
+     * Set when `error` is this module's own sentence rather than the
+     * server's, so `usePermissions` can say it in the reader's language.
+     */
+    errorKind?: "signedOut" | "status" | "failed";
+    /** The HTTP status behind an `errorKind: "status"`. */
+    errorStatus?: number;
 }
 
 const NO_PERMISSIONS: ReadonlySet<Permission> = new Set<Permission>();
@@ -124,6 +132,8 @@ async function load(force = false): Promise<void> {
                         (res.status === 401
                             ? "You are signed out."
                             : `Could not load your permissions (${res.status}).`),
+                    errorKind: body.error ? undefined : res.status === 401 ? "signedOut" : "status",
+                    errorStatus: res.status,
                 };
                 return;
             }
@@ -134,6 +144,7 @@ async function load(force = false): Promise<void> {
                 ...INITIAL,
                 loaded: true,
                 error: err instanceof Error ? err.message : "Could not load your permissions.",
+                errorKind: err instanceof Error ? undefined : "failed",
             };
         } finally {
             inflight = null;
@@ -148,6 +159,17 @@ export function invalidatePermissions(): Promise<void> {
     snapshot = { ...snapshot, loaded: false };
     emit();
     return load(true);
+}
+
+/**
+ * The workspace was renamed from this page (Workspace › General): show the
+ * new name wherever it is drawn from here, without a refetch — which would
+ * un-load the permissions for a moment and hide every gated tab with them.
+ */
+export function setWorkspaceNameLocally(name: string): void {
+    if (!snapshot.loaded || snapshot.workspaceName === name) return;
+    snapshot = { ...snapshot, workspaceName: name };
+    emit();
 }
 
 /** Test seam: return the store to its pristine state. */
@@ -170,6 +192,7 @@ export interface UsePermissionsResult extends PermissionsSnapshot {
 
 export function usePermissions(): UsePermissionsResult {
     const snap = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+    const t = useTranslations("settings.permissionsStore");
 
     useEffect(() => {
         void load();
@@ -184,7 +207,17 @@ export function usePermissions(): UsePermissionsResult {
         [snap]
     );
 
-    return { ...snap, can, refresh: invalidatePermissions };
+    // This module's own sentences in the reader's language; the server's as they came.
+    const error =
+        snap.errorKind === "signedOut"
+            ? t("signedOut")
+            : snap.errorKind === "status"
+              ? t("loadFailedStatus", { status: snap.errorStatus ?? 0 })
+              : snap.errorKind === "failed"
+                ? t("loadFailed")
+                : snap.error;
+
+    return { ...snap, error, can, refresh: invalidatePermissions };
 }
 
 /**

@@ -11,49 +11,32 @@
 
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import { SCOPE_EVERYTHING, type DocumentScope } from "~/lib/authz/scope-types";
-import { MEDIA_MIME_BY_EXTENSION } from "~/lib/media-document";
-import { and, count, desc, eq, isNull, max, not, or, sql } from "drizzle-orm";
+import { and, count, desc, eq, isNull, max, not, or } from "drizzle-orm";
 import { formatMetadataContext } from "@launchstack/tools/company-context";
 import { company, document, documentVersions } from "@launchstack/store/schema";
 
 import { db } from "~/server/db";
 import { companyMetadata } from "~/server/db/schema";
 import { listConnectionsForCompany } from "~/server/services/connectors/connection-store";
+import { originalMediaDocument } from "~/server/workspace-sources";
 import { relativeAge, type BriefDocument, type BriefFolder, type WorkspaceBrief } from "./starters";
 
 /** Newest titles the model may reference (and pin) — enough variety, small prompt. */
 const RECENT_DOCUMENT_LIMIT = 16;
 const FOLDER_LIMIT = 8;
-const MEDIA_FILE_PATTERN = `\\.(${Object.keys(MEDIA_MIME_BY_EXTENSION).join("|")})([?#].*)?$`;
 
 export async function buildWorkspaceBrief(
     companyId: bigint,
     scope: DocumentScope = SCOPE_EVERYTHING
 ): Promise<WorkspaceBrief> {
     const now = new Date();
-    // A recording is stored for playback; only its separate text transcript is
-    // indexed/cited. The creation key identifies current uploads even when the
-    // filename/MIME was omitted. Non-OCR media rows retain that rule for legacy uploads.
-    const originalMediaWhere = or(
-        sql`coalesce(${document.creationKey} like '%:audio-source', false)`,
-        and(
-            eq(document.ocrEnabled, false),
-            sql`coalesce(${document.ocrMetadata}->>'source', '') not in ('transcription', 'sidecar-ytdlp')`,
-            sql`${document.title} not ilike '%(transcription)%'`,
-            or(
-                sql`btrim(coalesce(${document.mimeType}, '')) ~* '^(audio|video)/'`,
-                sql`${document.title} ~* ${MEDIA_FILE_PATTERN}`,
-                sql`${document.url} ~* ${MEDIA_FILE_PATTERN}`
-            )
-        )
-    );
     const processedDocumentsWhere = and(
         scopedDocumentWhere(companyId, scope),
         or(
             and(isNull(document.currentVersionId), eq(document.ocrProcessed, true)),
             eq(documentVersions.ocrProcessed, true)
         ),
-        not(originalMediaWhere!)
+        not(originalMediaDocument())
     );
 
     const [companyRows, metadataRows, folderRows, recentRows, totalRows, connections] =
@@ -143,6 +126,7 @@ export async function buildWorkspaceBrief(
         title: row.title,
         folder: row.category || "Unfiled",
         ageLabel: relativeAge(row.createdAt, now),
+        createdAt: row.createdAt,
     }));
 
     const activeConnections = [

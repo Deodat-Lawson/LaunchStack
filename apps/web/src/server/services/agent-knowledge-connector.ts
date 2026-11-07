@@ -195,6 +195,8 @@ export async function createAgentKnowledgeSink(
                 data: Buffer.from(body, "utf-8"),
                 contentType: item.mimeType,
                 userId: context.userId,
+                // Stamps the workspace, so a member opening the source can read the file.
+                companyId: context.companyId,
             });
             const processingUrl = toProcessingUrl(blob.url, context.requestUrl);
 

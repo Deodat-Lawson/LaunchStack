@@ -8,16 +8,19 @@
  */
 
 import React, { useCallback, useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 
 import { ProfileAvatar } from "~/components/ProfileAvatar";
 import { ToolLink } from "~/components/tool-app/ToolLink";
 import { Badge } from "~/components/ui/badge";
+import { useRoleLabel } from "~/lib/authz/i18n";
 import { displayFolderPath } from "~/lib/folders/path";
 
-import { errorMessage, type Member } from "../settings/people/api";
+import { type Member } from "../settings/people/api";
+import { useErrorText } from "../settings/people/ui";
 import { ActivityList } from "./ActivityList";
 import { teamApi, type SharedItem } from "./api";
-import { itemTarget, LEVEL_LABEL, shortAgo } from "./format";
+import { itemTarget, shortAgo, useTeamFormat } from "./format";
 import { teamPaths } from "./screens";
 import { SharePicker } from "./SharePicker";
 import type { TeamTarget } from "./types";
@@ -36,6 +39,10 @@ export function PersonPage({
     onShare?: (target: TeamTarget & { name: string }) => void;
     onOpenGroup: (groupId: number) => void;
 }) {
+    const t = useTranslations("team.personPage");
+    const errorText = useErrorText();
+    const tTeam = useTranslations("team");
+    const roleLabel = useRoleLabel();
     const name = member.displayName;
     const [shared, setShared] = useState<{
         sharedWithMe: SharedItem[];
@@ -48,9 +55,9 @@ export function PersonPage({
         try {
             setShared(await teamApi.sharedWith(member.id));
         } catch (err) {
-            setError(errorMessage(err, "Couldn't load what you share."));
+            setError(errorText(err, t("loadError")));
         }
-    }, [member.id]);
+    }, [member.id, t, errorText]);
 
     useEffect(() => {
         if (member.isSelf) return;
@@ -61,15 +68,14 @@ export function PersonPage({
     const subtitle = [member.title, member.pronouns].filter(Boolean).join(" · ");
 
     const activity = (
-        <Panel title={member.isSelf ? "Your activity" : "Activity"} testId="team-person-activity">
+        <Panel
+            title={member.isSelf ? t("yourActivity") : t("activity")}
+            testId="team-person-activity"
+        >
             <ActivityList
                 actor={member.authUserId}
                 pageSize={15}
-                emptyText={
-                    member.isSelf
-                        ? "Nothing yet. What you add, share and move shows up here."
-                        : `Nothing from ${name} that you can see yet.`
-                }
+                emptyText={member.isSelf ? t("emptySelf") : t("emptyOther", { name })}
                 onOpenTarget={onOpenTarget}
                 onOpenGroup={onOpenGroup}
             />
@@ -79,7 +85,7 @@ export function PersonPage({
     return (
         <div className="mx-auto flex max-w-[1100px] flex-col gap-5" data-testid="team-person">
             <div>
-                <BackButton label="People" onClick={onBack} />
+                <BackButton label={t("back")} onClick={onBack} />
             </div>
 
             <header className="@max-md:flex-col flex items-start gap-4">
@@ -93,12 +99,14 @@ export function PersonPage({
                 <div className="min-w-0 flex-1">
                     <h1 className="display text-ink m-0 text-[26px] leading-[1.15] tracking-[-0.02em]">
                         {member.displayName}
-                        {member.isSelf && <span className="text-ink-3 font-normal"> (you)</span>}
+                        {member.isSelf && (
+                            <span className="text-ink-3 font-normal">{tTeam("you")}</span>
+                        )}
                     </h1>
                     {subtitle && <p className="text-ink-2 m-0 mt-1 text-[13px]">{subtitle}</p>}
                     <div className="mt-2 flex flex-wrap items-center gap-1.5">
                         <Badge variant="secondary" className="px-1.5 text-[11px]">
-                            {member.roleName}
+                            {roleLabel(member.role, member.roleName)}
                         </Badge>
                         {member.groups.map(g => (
                             <Badge key={g.id} variant="outline" asChild className="text-[11.5px]">
@@ -132,13 +140,13 @@ export function PersonPage({
             ) : (
                 <div className="@max-lg:grid-cols-1 grid grid-cols-2 items-start gap-4">
                     <div className="flex min-w-0 flex-col gap-4">
-                        <Panel title={`Shared with you by ${name}`} testId="team-shared-with-me">
+                        <Panel title={t("sharedWithYou", { name })} testId="team-shared-with-me">
                             {error ? (
                                 <ErrorLine message={error} onRetry={() => void load()} />
                             ) : shared === null ? (
                                 <LoadingRows rows={2} />
                             ) : shared.sharedWithMe.length === 0 ? (
-                                <EmptyLine>Nothing {name} has shared reaches you yet.</EmptyLine>
+                                <EmptyLine>{t("nothingShared", { name })}</EmptyLine>
                             ) : (
                                 <SharedList
                                     items={shared.sharedWithMe}
@@ -146,13 +154,11 @@ export function PersonPage({
                                 />
                             )}
                         </Panel>
-                        <Panel title={`You shared with ${name}`} testId="team-i-shared">
+                        <Panel title={t("youShared", { name })} testId="team-i-shared">
                             {error ? null : shared === null ? (
                                 <LoadingRows rows={2} />
                             ) : shared.iShared.length === 0 ? (
-                                <EmptyLine>
-                                    You haven&apos;t shared anything with {name} yet.
-                                </EmptyLine>
+                                <EmptyLine>{t("nothingYouShared", { name })}</EmptyLine>
                             ) : (
                                 <SharedList items={shared.iShared} onOpenTarget={onOpenTarget} />
                             )}
@@ -172,6 +178,9 @@ function SharedList({
     items: SharedItem[];
     onOpenTarget: (target: TeamTarget) => void;
 }) {
+    const t = useTranslations("team.personPage");
+    const tTeam = useTranslations("team");
+    const f = useTeamFormat();
     return (
         <ul className="m-0 list-none p-0" data-testid="team-shared-list">
             {items.map(item => (
@@ -189,9 +198,9 @@ function SharedList({
                                     : item.name}
                             </span>
                             <span className="text-ink-3 block truncate text-[11px]">
-                                {LEVEL_LABEL[item.level]}
-                                {item.viaGroup ? ` · via ${item.viaGroup}` : ""}
-                                {` · ${shortAgo(item.at)}`}
+                                {tTeam(`levels.${item.level}`)}
+                                {item.viaGroup ? ` · ${t("via", { group: item.viaGroup })}` : ""}
+                                {` · ${shortAgo(f, item.at)}`}
                             </span>
                         </span>
                     </button>

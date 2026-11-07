@@ -4,14 +4,15 @@
  * this assistant, person and workspace. See ~/server/mcp.
  */
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 
 import { resolveMemberContext } from "~/lib/require-workspace-context";
 import { getServerSession } from "~/server/auth";
 import { db } from "~/server/db";
 import {
     activeWorkspaceOptions,
-    describeScopes,
     loadConnectRequest,
+    scopeLines,
     workspaceName,
 } from "~/server/mcp/connect-request";
 import { flowKeyOf, resolveGrantWorkspace } from "~/server/mcp/oauth-workspace";
@@ -37,6 +38,7 @@ export default async function OAuthConsentPage({
 }) {
     const session = await getServerSession();
     if (!session) redirect("/signin");
+    const t = await getTranslations("auth.oauth");
     const params = await searchParams;
     const [request, workspaceId, workspaces] = await Promise.all([
         loadConnectRequest(params, session.user.id),
@@ -56,13 +58,19 @@ export default async function OAuthConsentPage({
     return (
         <ConnectShell
             client={request.client}
-            step={workspaces.length > 1 ? "Step 2 of 2 · Allow access" : "Allow access"}
+            step={workspaces.length > 1 ? t("stepAccessOfTwo") : t("stepAccess")}
         >
             {request.client ? (
                 <ConsentForm
                     assistant={request.client.name}
                     workspace={workspace}
-                    lines={workspace ? describeScopes(request.scopes, workspace, access) : []}
+                    lines={
+                        workspace
+                            ? scopeLines(request.scopes, access).map(line =>
+                                  t(`scopes.${line}`, { workspace })
+                              )
+                            : []
+                    }
                     email={session.user.email}
                 />
             ) : (

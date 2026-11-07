@@ -6,6 +6,8 @@
  * restricted so the picker can badge it.
  */
 import { NextResponse } from "next/server";
+
+import { requestTranslator } from "~/i18n/server";
 import { db } from "~/server/db";
 import { category } from "@launchstack/store/schema";
 import { folderSettings } from "~/server/db/schema";
@@ -13,7 +15,7 @@ import { eq } from "drizzle-orm";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { scopeAllowsCategory } from "~/lib/authz/scope-types";
 
-export async function GET(_request: Request) {
+export async function GET(request: Request) {
     try {
         const ctx = await requireWorkspacePermission("documents.read");
         if (!ctx.success) return ctx.response;
@@ -49,6 +51,9 @@ export async function GET(_request: Request) {
         return NextResponse.json(serializedCategories, { status: 200 });
     } catch (error: unknown) {
         console.error("Error fetching categories:", error);
-        return NextResponse.json({ error: "Unable to fetch categories" }, { status: 500 });
+        return NextResponse.json(
+            { error: requestTranslator(request, "sources.server.errors")("fetchCategoriesFailed") },
+            { status: 500 }
+        );
     }
 }

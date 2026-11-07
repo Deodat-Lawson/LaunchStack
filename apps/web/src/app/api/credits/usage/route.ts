@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getUsageHistory, getTransactionHistory, getBalance } from "~/lib/credits";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requestTranslator } from "~/i18n/server";
 
 export async function GET(request: Request) {
     try {
@@ -31,7 +32,10 @@ export async function GET(request: Request) {
         return NextResponse.json({ balanceTokens, usage: usage.map(withStringCompanyId) });
     } catch (error) {
         console.error("[Tokens] Error fetching usage:", error);
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+        return NextResponse.json(
+            { error: requestTranslator(request, "errors.api")("internal") },
+            { status: 500 }
+        );
     }
 }
 

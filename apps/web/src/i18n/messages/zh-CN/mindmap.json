@@ -1,0 +1,881 @@
+{
+  "shapes": {
+    "rectangle": "矩形",
+    "rounded-rectangle": "圆角矩形",
+    "ellipse": "椭圆",
+    "circle": "圆形",
+    "diamond": "菱形",
+    "triangle": "三角形",
+    "right-triangle": "直角三角形",
+    "pentagon": "五边形",
+    "hexagon": "六边形",
+    "octagon": "八边形",
+    "trapezoid": "梯形",
+    "parallelogram": "平行四边形",
+    "star": "星形",
+    "cross": "十字形",
+    "cylinder": "圆柱",
+    "cloud": "云形",
+    "callout": "标注框",
+    "chevron": "V 形箭头",
+    "bracket-pair": "括号",
+    "arrow-right": "右箭头",
+    "arrow-left": "左箭头",
+    "arrow-up": "上箭头",
+    "arrow-down": "下箭头",
+    "arrow-double": "双向箭头",
+    "process": "过程",
+    "decision": "判断",
+    "terminator": "开始/结束",
+    "data": "数据",
+    "document": "文档",
+    "multi-document": "多文档",
+    "predefined-process": "预定义过程",
+    "internal-storage": "内部存储",
+    "manual-input": "手动输入",
+    "manual-operation": "手动操作",
+    "preparation": "准备",
+    "off-page-connector": "离页连接符",
+    "connector-dot": "连接符",
+    "database": "数据库",
+    "direct-data": "直接访问存储",
+    "stored-data": "存储数据",
+    "display": "显示",
+    "delay": "延迟",
+    "merge": "合并",
+    "extract": "提取",
+    "or-junction": "或",
+    "summing-junction": "汇总连接",
+    "sort": "排序",
+    "collate": "对照",
+    "loop-limit": "循环限值",
+    "mind-root": "中心主题",
+    "mind-branch": "主题",
+    "mind-leaf": "子主题",
+    "sticky": "便签",
+    "text": "文本",
+    "image": "图片",
+    "ink": "墨迹",
+    "line": "直线",
+    "uml-class": "类",
+    "uml-actor": "参与者",
+    "uml-note": "注释",
+    "uml-package": "包",
+    "uml-component": "组件",
+    "uml-interface": "接口",
+    "erd-entity": "实体",
+    "group": "分组",
+    "frame": "框架",
+    "swimlane-h": "泳道（横向）",
+    "swimlane-v": "泳道（纵向）"
+  },
+  "shapeCategories": {
+    "nodes": "节点",
+    "annotate": "标注",
+    "standard": "基础图形",
+    "umlErd": "UML 与 ERD",
+    "containers": "容器",
+    "arrows": "箭头"
+  },
+  "colors": {
+    "slate": "石板灰",
+    "graphite": "石墨灰",
+    "violet": "紫罗兰",
+    "indigo": "靛蓝",
+    "blue": "蓝色",
+    "cyan": "青色",
+    "teal": "蓝绿",
+    "green": "绿色",
+    "lime": "青柠",
+    "amber": "琥珀",
+    "orange": "橙色",
+    "red": "红色",
+    "pink": "粉色",
+    "magenta": "品红"
+  },
+  "themes": {
+    "default": "Launchstack",
+    "mono": "单色",
+    "ocean": "海洋",
+    "sunset": "日落",
+    "forest": "森林",
+    "midnight": "午夜",
+    "carbon": "碳黑",
+    "abyss": "深海",
+    "ember": "余烬",
+    "pine": "松林"
+  },
+  "arrows": {
+    "none": "无",
+    "arrow": "实心箭头",
+    "arrow-open": "开放箭头",
+    "triangle-hollow": "空心三角",
+    "diamond": "实心菱形",
+    "diamond-hollow": "空心菱形",
+    "circle": "实心圆",
+    "circle-hollow": "空心圆",
+    "bar": "竖线",
+    "crowfoot-one": "ERD — 一",
+    "crowfoot-many": "ERD — 多",
+    "crowfoot-one-many": "ERD — 一或多",
+    "crowfoot-zero-one": "ERD — 零或一",
+    "crowfoot-zero-many": "ERD — 零或多"
+  },
+  "templates": {
+    "blank": {
+      "name": "空白画布",
+      "description": "从零开始"
+    },
+    "mindmap": {
+      "name": "思维导图",
+      "description": "一个中心想法，分支向外发散"
+    },
+    "brainstorm": {
+      "name": "头脑风暴板",
+      "description": "四列便签"
+    },
+    "concept-map": {
+      "name": "概念图",
+      "description": "想法之间带标注的关系"
+    },
+    "flowchart": {
+      "name": "流程图",
+      "description": "开始、步骤、一个判断和两种结果"
+    },
+    "user-flow": {
+      "name": "用户流程",
+      "description": "各个页面及页面之间的路径"
+    },
+    "swimlane": {
+      "name": "泳道流程",
+      "description": "按泳道划分谁做什么"
+    },
+    "fishbone": {
+      "name": "因果图",
+      "description": "用于根因分析的鱼骨图"
+    },
+    "org-chart": {
+      "name": "组织架构图",
+      "description": "汇报关系，自动排布整齐"
+    },
+    "kanban": {
+      "name": "看板",
+      "description": "四列卡片"
+    },
+    "timeline": {
+      "name": "时间线",
+      "description": "沿主轴排列的里程碑"
+    },
+    "swot": {
+      "name": "SWOT 分析",
+      "description": "四个象限"
+    },
+    "customer-journey": {
+      "name": "客户旅程",
+      "description": "按阶段梳理行为、触点和感受"
+    },
+    "architecture": {
+      "name": "系统架构",
+      "description": "服务、存储及其间的调用"
+    },
+    "erd": {
+      "name": "实体关系图",
+      "description": "用鸦脚符号标注基数的数据表"
+    }
+  },
+  "templateCategories": {
+    "mindmap": "思维导图",
+    "flowchart": "流程图",
+    "planning": "规划",
+    "technical": "技术"
+  },
+  "starter": {
+    "page": "第 1 页",
+    "yes": "是",
+    "no": "否",
+    "mindmap": {
+      "centre": "中心想法",
+      "first": "第一个分支",
+      "second": "第二个分支",
+      "third": "第三个分支",
+      "fourth": "第四个分支",
+      "detail": "细节 {branch}.{index}"
+    },
+    "brainstorm": {
+      "prompt": "我们要解决什么问题？",
+      "ideas": "想法",
+      "questions": "问题",
+      "risks": "风险",
+      "nextSteps": "下一步"
+    },
+    "flowchart": {
+      "start": "开始",
+      "step": "执行步骤",
+      "decision": "结果正确吗？",
+      "ship": "发布",
+      "fix": "修复后重试",
+      "end": "结束",
+      "retry": "重试"
+    },
+    "orgChart": {
+      "name": "姓名",
+      "ceo": "首席执行官",
+      "engineering": "工程",
+      "product": "产品",
+      "goToMarket": "市场拓展",
+      "team": "{team} 组"
+    },
+    "swimlane": {
+      "customer": "客户",
+      "support": "支持",
+      "engineering": "工程",
+      "reports": "报告问题",
+      "triages": "分派工单",
+      "reproduces": "复现缺陷",
+      "ships": "发布修复",
+      "confirms": "确认已修复"
+    },
+    "erd": {
+      "places": "下单",
+      "contains": "包含"
+    },
+    "architecture": {
+      "client": "Web 客户端",
+      "api": "API",
+      "worker": "后台任务",
+      "queue": "队列",
+      "storage": "对象存储",
+      "enqueue": "入队",
+      "consume": "消费",
+      "artifacts": "产物"
+    },
+    "userFlow": {
+      "landing": "落地页",
+      "signUp": "注册",
+      "onboarding": "新手引导",
+      "workspace": "工作区",
+      "hasAccount": "已有账号？",
+      "signIn": "登录"
+    },
+    "swot": {
+      "strengths": "优势",
+      "weaknesses": "劣势",
+      "opportunities": "机会",
+      "threats": "威胁"
+    },
+    "kanban": {
+      "backlog": "待办",
+      "inProgress": "进行中",
+      "review": "评审",
+      "done": "已完成"
+    },
+    "timeline": {
+      "kickoff": "启动",
+      "alpha": "Alpha 版",
+      "beta": "Beta 版",
+      "launch": "发布",
+      "review": "复盘"
+    },
+    "journey": {
+      "awareness": "认知",
+      "consideration": "考虑",
+      "decision": "决策",
+      "onboarding": "上手",
+      "advocacy": "推荐",
+      "actions": "行为",
+      "touchpoints": "触点",
+      "feelings": "感受",
+      "opportunities": "机会"
+    },
+    "fishbone": {
+      "problem": "问题",
+      "people": "人员",
+      "process": "流程",
+      "tools": "工具",
+      "data": "数据",
+      "environment": "环境",
+      "measurement": "测量"
+    },
+    "conceptMap": {
+      "core": "核心概念",
+      "a": "概念 A",
+      "b": "概念 B",
+      "c": "概念 C",
+      "leadsTo": "导致",
+      "requires": "需要",
+      "supports": "支持",
+      "constrains": "制约"
+    }
+  },
+  "toolbar": {
+    "tools": {
+      "select": "选择",
+      "hand": "平移",
+      "topic": "主题",
+      "connector": "连线",
+      "text": "文本",
+      "sticky": "便签",
+      "frame": "框架",
+      "ink": "画笔",
+      "eraser": "橡皮擦",
+      "rectangle": "矩形",
+      "ellipse": "椭圆",
+      "diamond": "菱形"
+    },
+    "hints": {
+      "hand": "H · 按住 Space",
+      "topic": "可输入文字的方框"
+    },
+    "allShapes": "全部形状"
+  },
+  "shapePalette": {
+    "search": "搜索形状…",
+    "noMatch": "没有与“{query}”匹配的形状。",
+    "blurbs": {
+      "nodes": "在里面输入文字、相互连线，交给自动布局排列。",
+      "annotate": "画布上的标记，不属于图的结构。"
+    }
+  },
+  "topBar": {
+    "backToLibrary": "返回文档库",
+    "untitled": "未命名思维导图",
+    "titleLabel": "思维导图标题",
+    "saveOptions": "保存选项",
+    "saveVersion": "保存一个版本",
+    "versionHistory": "版本历史记录",
+    "undoTip": "撤销 ⌘Z",
+    "redo": "重做",
+    "redoTip": "重做 ⇧⌘Z",
+    "layout": "布局",
+    "arrangeNow": "立即整理",
+    "autoArrange": "输入时自动整理",
+    "arrangeAs": "排列方式",
+    "layouts": {
+      "mindmap": "思维导图 — 两侧展开",
+      "treeRight": "树形 — 从左到右",
+      "treeDown": "树形 — 从上到下",
+      "org": "组织架构图",
+      "radial": "放射状",
+      "grid": "按网格排列"
+    },
+    "commandPalette": "命令面板",
+    "commandsTip": "命令 ⌘K",
+    "shortcuts": "键盘快捷键",
+    "shortcutsTip": "快捷键 ?",
+    "toggleLeft": "显示/隐藏左侧面板",
+    "leftTip": "形状与大纲",
+    "toggleRight": "显示/隐藏右侧面板",
+    "rightTip": "属性",
+    "appearance": "外观",
+    "appearanceTip": "外观 — 主题、画布、吸附",
+    "chromeDepth": "界面详略",
+    "simple": "简洁",
+    "everything": "完整",
+    "present": "演示",
+    "export": "导出…",
+    "import": "导入…",
+    "copyPresentLink": "复制演示链接",
+    "addToSources": "添加到来源",
+    "unsaved": "有未保存的更改",
+    "upToDate": "已是最新"
+  },
+  "bottomBar": {
+    "pageOptions": "“{name}”选项",
+    "duplicatePage": "创建页面副本",
+    "deletePage": "删除页面",
+    "addPage": "添加页面",
+    "showMinimap": "显示小地图",
+    "hideMinimap": "隐藏小地图",
+    "minimap": "小地图"
+  },
+  "pages": {
+    "numbered": "第 {number} 页",
+    "copy": "{name}（副本）"
+  },
+  "zoom": {
+    "in": "放大",
+    "inTip": "放大（+ 或 ⌘=）",
+    "out": "缩小",
+    "outTip": "缩小（− 或 ⌘-）",
+    "fit": "适应屏幕",
+    "fitTip": "适应屏幕（⌘1）",
+    "actual": "缩放至 100%",
+    "selection": "缩放至所选内容"
+  },
+  "controls": {
+    "mixed": "多个值",
+    "value": "数值",
+    "presets": "{name}预设",
+    "none": "无",
+    "custom": "自定义",
+    "customColour": "自定义颜色",
+    "paper": "纸面（{theme}）"
+  },
+  "inspector": {
+    "arrange": "排列",
+    "alignLeft": "左对齐",
+    "alignCentre": "水平居中",
+    "alignRight": "右对齐",
+    "alignTop": "顶端对齐",
+    "alignMiddle": "垂直居中",
+    "alignBottom": "底端对齐",
+    "distributeH": "水平均匀分布",
+    "distributeV": "垂直均匀分布",
+    "matchSize": "统一尺寸",
+    "flipH": "水平翻转",
+    "flipV": "垂直翻转",
+    "front": "置于顶层",
+    "back": "置于底层",
+    "group": "组合（⌘G）",
+    "ungroup": "取消组合（⇧⌘G）",
+    "lock": "锁定 / 解锁（⌘L）",
+    "shape": "形状",
+    "shapesCount": "{count, plural, other {# 个形状}}",
+    "mixedShapes": "多种形状",
+    "colour": "颜色",
+    "fillColour": "填充颜色",
+    "fill": "填充",
+    "strokeColour": "描边颜色",
+    "stroke": "描边",
+    "textColour": "文字颜色",
+    "text": "文字",
+    "shapeStyle": "形状样式",
+    "weight": "粗细",
+    "strokeWidth": "描边宽度",
+    "weights": {
+      "hairline": "极细",
+      "thin": "细",
+      "regular": "常规",
+      "medium": "中等",
+      "bold": "粗",
+      "heavy": "特粗"
+    },
+    "strokeStyles": {
+      "solid": "实线",
+      "dashed": "虚线",
+      "dotted": "点线"
+    },
+    "corner": "圆角",
+    "cornerRadius": "圆角半径",
+    "shadow": "阴影",
+    "dropShadow": "投影",
+    "opacity": "不透明度",
+    "size": "字号",
+    "fontSize": "字号",
+    "fontSizes": {
+      "small": "小",
+      "body": "正文",
+      "emphasis": "强调",
+      "subheading": "副标题",
+      "heading": "标题",
+      "display": "大标题"
+    },
+    "families": {
+      "sans": "无衬线",
+      "serif": "衬线",
+      "mono": "等宽"
+    },
+    "bold": "加粗",
+    "italic": "斜体",
+    "underline": "下划线",
+    "strikethrough": "删除线",
+    "textAlign": {
+      "left": "左对齐",
+      "center": "居中",
+      "right": "右对齐",
+      "top": "顶部",
+      "middle": "中部",
+      "bottom": "底部"
+    },
+    "fitToText": "形状适应文字",
+    "positionSize": "位置与尺寸",
+    "widthHeight": "宽 / 高",
+    "width": "宽度",
+    "height": "高度",
+    "rotate": "旋转",
+    "rotation": "旋转角度",
+    "connector": "连线",
+    "connectorsCount": "{count, plural, other {# 条连线}}",
+    "route": "路径",
+    "routes": {
+      "straight": "直线",
+      "elbow": "折线",
+      "curved": "曲线"
+    },
+    "connectorColour": "连线颜色",
+    "connectorWidth": "连线宽度",
+    "start": "起点",
+    "end": "终点",
+    "startArrow": "起点箭头",
+    "endArrow": "终点箭头",
+    "reverse": "反转方向",
+    "resetRoute": "重置路径",
+    "labelHint": "双击连线可添加标签",
+    "theme": "主题",
+    "canvas": "画布",
+    "background": "背景",
+    "backgroundColour": "背景颜色",
+    "pattern": "图案",
+    "patterns": {
+      "plain": "无",
+      "dots": "圆点",
+      "grid": "网格",
+      "lines": "横线"
+    },
+    "spacing": "间距",
+    "gridSpacing": "网格间距",
+    "snapping": "吸附",
+    "showGrid": "显示网格",
+    "showRulers": "显示标尺",
+    "snapToGrid": "吸附到网格",
+    "snapToObjects": "吸附到对象",
+    "gridSize": "网格大小",
+    "newConnectors": "新建连线"
+  },
+  "themePicker": {
+    "light": "浅色",
+    "dark": "深色",
+    "lightBoard": "{theme} — 浅色画布",
+    "darkBoard": "{theme} — 深色画布",
+    "boardIsLight": "此画布为浅色。切换为“<theme>{name}</theme>”，与应用保持一致。",
+    "boardIsDark": "此画布为深色。切换为“<theme>{name}</theme>”，与应用保持一致。"
+  },
+  "selectionToolbar": {
+    "label": "所选内容",
+    "addChild": "添加子主题",
+    "addChildTopic": "添加子主题",
+    "colour": "颜色",
+    "smaller": "缩小文字",
+    "larger": "放大文字",
+    "everythingElse": "更多设置",
+    "moreOptions": "更多选项"
+  },
+  "contextMenu": {
+    "label": "画布操作",
+    "addSibling": "添加同级主题",
+    "addConnected": "添加相连形状",
+    "more": "更多",
+    "paste": "粘贴",
+    "autoLayout": "自动布局",
+    "layouts": {
+      "mindmap": "思维导图",
+      "tree": "树形 — 从左到右",
+      "org": "组织架构图 — 从上到下",
+      "radial": "放射状",
+      "grid": "网格"
+    },
+    "cut": "剪切",
+    "copy": "复制",
+    "duplicate": "创建副本",
+    "delete": "删除",
+    "ask": "在对话中提问",
+    "addChild": "添加子主题",
+    "expandBranch": "展开分支",
+    "collapseBranch": "折叠分支",
+    "deleteReconnect": "删除并重新连接",
+    "deleteBranch": "删除整个分支",
+    "colour": "颜色",
+    "changeShape": "更改形状",
+    "fitText": "形状适应文字",
+    "connectorRoute": "连线路径",
+    "reverse": "反转方向",
+    "resetRoute": "重置路径",
+    "order": "层级",
+    "orders": {
+      "front": "置于顶层",
+      "forward": "上移一层",
+      "backward": "下移一层",
+      "back": "置于底层"
+    },
+    "group": "组合",
+    "ungroup": "取消组合",
+    "lock": "锁定 / 解锁",
+    "selectShape": "选择所有同类形状",
+    "selectConnected": "选择相连项"
+  },
+  "commands": {
+    "groups": {
+      "file": "文件",
+      "edit": "编辑",
+      "arrange": "排列",
+      "connectors": "连线",
+      "layout": "布局",
+      "theme": "主题",
+      "view": "视图"
+    },
+    "layoutMindmap": "自动布局：思维导图",
+    "layoutTree": "自动布局：树形（从左到右）",
+    "layoutTreeDown": "自动布局：树形（从上到下）",
+    "layoutOrg": "自动布局：组织架构图",
+    "layoutRadial": "自动布局：放射状",
+    "layoutGrid": "自动布局：网格",
+    "theme": "主题：{name}",
+    "save": "立即保存",
+    "export": "导出…",
+    "import": "导入…",
+    "publish": "添加到来源",
+    "present": "演示",
+    "newPage": "新建页面",
+    "undo": "撤销",
+    "redo": "重做",
+    "selectAll": "全选",
+    "duplicate": "为所选内容创建副本",
+    "group": "组合",
+    "ungroup": "取消组合",
+    "lock": "锁定 / 解锁",
+    "expandAll": "展开所有分支",
+    "edgeStraight": "连线样式：直线",
+    "edgeElbow": "连线样式：折线",
+    "edgeCurved": "连线样式：曲线",
+    "description": "按名称搜索操作",
+    "placeholder": "输入命令…",
+    "noMatch": "没有与“{query}”匹配的命令。"
+  },
+  "help": {
+    "title": "键盘快捷键",
+    "description": "在 Windows 和 Linux 上，⌘ 即 Ctrl。",
+    "groups": {
+      "tools": "工具",
+      "topics": "主题",
+      "editing": "编辑",
+      "arrange": "排列",
+      "view": "视图"
+    },
+    "keys": {
+      "arrows": "方向键",
+      "doubleClick": "双击",
+      "type": "直接输入",
+      "altArrow": "⌥ + 方向键",
+      "shiftCmdArrow": "⇧⌘ + 方向键",
+      "cmdScroll": "⌘ + 滚动",
+      "scroll": "滚动",
+      "find": "⌘F 或 /"
+    },
+    "rows": {
+      "select": "选择",
+      "toolPan": "平移",
+      "connector": "连线",
+      "text": "文本",
+      "sticky": "便签",
+      "frame": "框架",
+      "pen": "画笔",
+      "eraser": "橡皮擦",
+      "quickShapes": "矩形 / 椭圆 / 菱形 / 圆角矩形",
+      "finishNext": "完成输入 · 再按一次添加下一个主题",
+      "topicBefore": "在此主题之前新建主题",
+      "addChild": "添加子主题",
+      "outdent": "主题升级",
+      "nearest": "跳到该方向上最近的主题",
+      "moveTopic": "上移 / 下移主题",
+      "collapse": "折叠 / 展开分支",
+      "deleteBranch": "删除主题及其分支",
+      "deleteKeep": "删除主题，保留其子主题",
+      "editText": "编辑文字 · 在空白处新建主题",
+      "replaceText": "替换所选形状的文字",
+      "editSelected": "编辑所选形状的文字",
+      "newLine": "输入时换行",
+      "finishTyping": "完成输入",
+      "clipboard": "复制 / 剪切 / 粘贴",
+      "duplicate": "创建副本",
+      "deleteSelection": "删除所选内容",
+      "undoRedo": "撤销 / 重做",
+      "textStyle": "加粗 / 斜体 / 下划线",
+      "groupUngroup": "组合 / 取消组合",
+      "forwardBackward": "上移一层 / 下移一层",
+      "frontBack": "置于顶层 / 置于底层",
+      "lock": "锁定 / 解锁",
+      "tidy": "整理（自动布局）",
+      "nudge": "微移 · 按住 ⇧ 移动更多",
+      "nudgeTopic": "微移主题",
+      "align": "对齐所选内容",
+      "zoomActual": "缩放至 100%",
+      "fit": "适应屏幕",
+      "zoomSelection": "缩放至所选内容",
+      "zoomInOut": "放大 / 缩小",
+      "zoomCursor": "以光标为中心缩放",
+      "scrollPan": "平移 · 按住 ⇧ 横向平移",
+      "find": "在画布中查找",
+      "palette": "命令面板",
+      "save": "立即保存",
+      "export": "导出",
+      "thisDialog": "打开本窗口"
+    }
+  },
+  "editor": {
+    "autoArrangePaused": "自动整理已暂停",
+    "autoArrangePausedBody": "你手动放置了内容，导图将保持现在的布局。",
+    "presentLinkCopied": "已复制演示链接",
+    "presentLinkBody": "工作区中的任何人打开后都会直接进入演示。",
+    "copyLinkFailed": "无法复制链接",
+    "tabs": {
+      "shapes": "形状",
+      "outline": "大纲",
+      "comments": "评论",
+      "history": "历史记录"
+    },
+    "previousPage": "上一页",
+    "nextPage": "下一页",
+    "exitPresent": "退出 · Esc"
+  },
+  "clipboard": {
+    "readFailed": "无法读取 {name}",
+    "imported": "已导入 {name}",
+    "notMindmap": "{name} 不是可读取的思维导图文件"
+  },
+  "errors": {
+    "notImage": "该文件不是可读取的图片",
+    "noCanvas": "此浏览器不支持 Canvas 2D",
+    "encodePng": "PNG 编码失败",
+    "rasterise": "图表栅格化失败",
+    "notReady": "画布尚未就绪",
+    "noImageClipboard": "此浏览器无法将图片复制到剪贴板",
+    "requestFailed": "请求失败（HTTP {status}）"
+  },
+  "export": {
+    "title": "导出“{title}”",
+    "description": "图片格式导出当前页面；文本格式涵盖整个文档。",
+    "hints": {
+      "png": "位图，适合放进幻灯片和聊天",
+      "svg": "矢量图 — 可缩放，仍可编辑",
+      "pdf": "单页，尺寸贴合图表",
+      "json": "无损 — 可重新导入思维导图",
+      "markdown": "包含所有主题的缩进大纲",
+      "mermaid": "可放进 README 的流程图代码"
+    },
+    "exported": "已导出为 {format}",
+    "failed": "导出失败",
+    "copied": "已复制到剪贴板",
+    "clipboardDenied": "剪贴板访问被拒绝",
+    "copiedImage": "已将图片复制到剪贴板",
+    "copyFailed": "复制失败",
+    "resolution": "分辨率",
+    "transparent": "透明",
+    "transparentLabel": "透明背景",
+    "selectionOnly": "仅所选内容",
+    "selectionOnlyLabel": "仅导出所选内容",
+    "nothingSelected": "未选择任何内容",
+    "copyImage": "复制图片",
+    "copyText": "复制文本"
+  },
+  "import": {
+    "description": "将替换当前文档。撤销（⌘Z）可以恢复。",
+    "outline": "大纲",
+    "imported": "已导入",
+    "parseFailed": "无法解析 — 请检查格式后重试",
+    "placeholders": {
+      "outline": "# 产品计划\n- 调研\n  - 访谈\n  - 问卷\n- 构建\n  - MVP",
+      "mermaid": "flowchart LR\n  A[\"开始\"] --> B'{'\"准备好了？\"'}'\n  B -->|是| C[\"发布\"]",
+      "csv": "parent,child\n首席执行官,工程\n首席执行官,产品\n工程,平台"
+    }
+  },
+  "publish": {
+    "title": "添加到来源",
+    "description": "将“{title}”发布为来源，工作区中的回答便可引用它。将索引 {count} 个主题。",
+    "folder": "保存到文件夹",
+    "unfiled": "未归类",
+    "alreadyPublished": "已在你的来源中 — 再次发布会直接更新那份副本。",
+    "published": "已添加到你的来源 — 稍后即可完成索引",
+    "failed": "无法发布此思维导图"
+  },
+  "find": {
+    "placeholder": "在画布中查找…",
+    "label": "在画布中查找",
+    "previous": "上一个匹配项",
+    "next": "下一个匹配项",
+    "close": "关闭查找"
+  },
+  "comments": {
+    "noComments": "还没有评论。",
+    "thisShape": "此形状",
+    "onShape": "关于“{name}”",
+    "emptyShape": "这里还没有评论 — 在上方输入框发表的评论会关联到此形状。",
+    "elsewhere": "本页其他位置",
+    "placeholderShape": "评论“{name}”…",
+    "placeholderPage": "评论此页面…",
+    "postHint": "按 ⌘↵ 发布",
+    "comment": "评论",
+    "threads": "{count, plural, other {# 条评论}}",
+    "hideResolved": "隐藏已解决",
+    "showResolved": "显示已解决",
+    "reopen": "重新打开",
+    "resolve": "标记为已解决",
+    "deleteThread": "删除评论",
+    "jumpToShape": "跳转到形状",
+    "replyPlaceholder": "回复…",
+    "reply": "回复",
+    "minutesAgo": "{count} 分钟前",
+    "hoursAgo": "{count} 小时前"
+  },
+  "outline": {
+    "lock": "锁定",
+    "unlock": "解锁",
+    "empty": "此页面还没有内容。双击画布即可开始。",
+    "unlinked": "未连接"
+  },
+  "history": {
+    "versions": "版本",
+    "loadFailed": "无法加载版本历史记录",
+    "restored": "已恢复版本 {revision}",
+    "restoreFailed": "无法恢复该版本",
+    "empty": "还没有快照。按 ⌘S 保存即可记录一个。",
+    "version": "版本 {revision}",
+    "createdFromTemplate": "由模板创建",
+    "restoredFrom": "从 v{revision} 恢复",
+    "meta": "{when} · {count, plural, other {# 个形状}}",
+    "restore": "恢复版本 {revision}"
+  },
+  "emptyCanvas": {
+    "start": "输入你的想法",
+    "enter": "<key>Enter</key> 完成 / 下一个",
+    "tab": "<key>Tab</key> 子主题",
+    "palette": "<key>⌘K</key> 其他所有操作",
+    "paste": "改为粘贴大纲"
+  },
+  "presenter": {
+    "overview": "概览",
+    "wholeMap": "完整导图",
+    "branch": "分支 {step} / {total}",
+    "exit": "退出演示"
+  },
+  "presence": {
+    "someone": "某位成员",
+    "people": "正在查看此思维导图的成员",
+    "separator": "、",
+    "staleConflict": "其他人保存了更新的版本 — 你的更改将产生冲突。",
+    "stale": "有更新的版本可用。"
+  },
+  "autosave": {
+    "conflict": "此思维导图已在另一个标签页中被修改",
+    "conflictBody": "请重新加载以获取最新版本，然后再继续编辑。",
+    "failed": "保存失败 — 稍后将自动重试"
+  },
+  "canvas": {
+    "dropImage": "拖入图片"
+  },
+  "viewer": {
+    "opening": "正在打开…"
+  },
+  "server": {
+    "errors": {
+      "notFound": "未找到该思维导图",
+      "listFailed": "思维导图加载失败",
+      "createFailed": "创建思维导图失败",
+      "loadFailed": "思维导图加载失败",
+      "saveFailed": "保存思维导图失败",
+      "deleteFailed": "删除思维导图失败",
+      "changedElsewhere": "此思维导图已在别处被修改。请重新加载以获取最新版本。",
+      "duplicateFailed": "复制思维导图失败",
+      "historyLoadFailed": "版本历史记录加载失败",
+      "revisionIdRequired": "缺少 revisionId",
+      "revisionNotFound": "未找到该版本",
+      "restoreFailed": "恢复版本失败",
+      "presenceFailed": "更新在线状态失败",
+      "leaveFailed": "离开失败",
+      "publishFailed": "发布思维导图失败",
+      "editDenied": "你可以查看此思维导图，但不能修改它。",
+      "deleteDenied": "只有创建此思维导图的人，或管理其所在文件夹的人，才能删除它。",
+      "unfiledDenied": "只有创建此思维导图的人才能将它移到“未归档”：那里的草稿仅对其创建者可见。",
+      "moveWidens": "把此思维导图移到那里，会让目前看不到它的人看到它。草稿沿用所在文件夹的访问权限，因此如需共享，请发布它，或更改该文件夹的可见范围。"
+    }
+  }
+}

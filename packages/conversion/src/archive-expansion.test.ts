@@ -8,7 +8,7 @@ import JSZip from "jszip";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const lifecycleCalls: Array<Record<string, unknown>> = [];
-const uploads: Array<{ filename: string; contentType?: string }> = [];
+const uploads: Array<{ filename: string; contentType?: string; companyId?: bigint }> = [];
 const deletions: Array<{ table: string }> = [];
 
 vi.mock("@launchstack/orchestration", () => ({
@@ -39,14 +39,20 @@ vi.mock("@launchstack/runtime", async importOriginal => ({
     ...(await importOriginal<object>()),
     getStoragePort: () => ({
         provider: "test",
-        upload: vi.fn(async (input: { filename: string; contentType?: string }) => {
-            uploads.push({ filename: input.filename, contentType: input.contentType });
-            return {
-                url: `stored://${input.filename}`,
-                pathname: input.filename,
-                provider: "test",
-            };
-        }),
+        upload: vi.fn(
+            async (input: { filename: string; contentType?: string; companyId?: bigint }) => {
+                uploads.push({
+                    filename: input.filename,
+                    contentType: input.contentType,
+                    companyId: input.companyId,
+                });
+                return {
+                    url: `stored://${input.filename}`,
+                    pathname: input.filename,
+                    provider: "test",
+                };
+            }
+        ),
         download: vi.fn(),
         delete: vi.fn(),
     }),
@@ -175,6 +181,26 @@ describe("expandArchive", () => {
 
         // Original ZIP job + document rows are deleted (two delete calls).
         expect(deletions).toHaveLength(2);
+    });
+
+    it("stamps the archive's workspace on every entry and the summary upload", async () => {
+        // The database backend's /api/files/[id] serves an unstamped upload to
+        // no member session, so an entry's document would open to a 404.
+        const buffer = await makeZip({
+            "README.md": "# Project",
+            "src/app.py": "print('hi')",
+        });
+
+        await expandArchive(archiveInput(buffer));
+
+        expect(uploads.map(u => u.filename).sort()).toEqual([
+            "README.md",
+            "_summary_archive.zip.md",
+            "app.py",
+        ]);
+        for (const upload of uploads) {
+            expect(upload.companyId, upload.filename).toBe(BigInt(42));
+        }
     });
 
     it("uses legacy string keys when no archiveIdentity was provided", async () => {

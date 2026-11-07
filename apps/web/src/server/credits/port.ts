@@ -7,22 +7,40 @@
  * Bookkeeping errors are already non-blocking in core's creditsDebitSafe
  * helper, but we also defensively wrap debitTokens here so that any
  * unexpected throw surfaces as a warning rather than breaking the caller.
+ *
+ * Embedding debits arrive as tokens embedded. This host charges them in
+ * chat-token equivalents (by price, ~/server/ai-usage/weights), the unit the
+ * usage page and allowances use, so a cheap embedding no longer drains the
+ * balance like the same number of chat tokens. What was embedded stays in the
+ * entry's metadata.
  */
 
 import type { CreditsPort, DebitInput } from "@launchstack/store/credits";
 import { debitTokens } from "~/lib/credits";
+import { embeddingTokensAsChat } from "~/server/ai-usage/weights";
+
+/** The amount to charge and the metadata to keep, in this host's units. */
+function priced(input: DebitInput): { amount: number; metadata: DebitInput["metadata"] } {
+    if (input.service !== "embedding") return { amount: input.tokens, metadata: input.metadata };
+    const model = typeof input.metadata?.model === "string" ? input.metadata.model : undefined;
+    return {
+        amount: embeddingTokensAsChat(input.tokens, model),
+        metadata: { ...input.metadata, embeddedTokens: input.tokens },
+    };
+}
 
 export function createAppCreditsPort(): CreditsPort {
     return {
         async debit(input: DebitInput): Promise<void> {
             try {
+                const { amount, metadata } = priced(input);
                 await debitTokens({
                     companyId: input.companyId,
-                    amount: input.tokens,
+                    amount,
                     service: input.service,
                     description: input.description ?? `${input.service} usage`,
                     referenceId: input.referenceId,
-                    metadata: input.metadata,
+                    metadata,
                     // allowNegative is deliberately not passed: debitTokens defaults it
                     // from the deployment's own policy, so this port and the routes that
                     // debit directly cannot drift apart on whether recording may

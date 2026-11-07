@@ -18,9 +18,17 @@ import {
     listExclusions,
 } from "@launchstack/pipelines/distribution/db";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
+import { copy, type Copy } from "~/i18n/copy";
+import { localeOfRequest, requestTranslator } from "~/i18n/server";
+import { englishCopy } from "~/i18n/translate";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { refuseAtAiAllowance } from "~/server/ai-usage/refusal";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
-import { error, handleRouteError, json, readJsonBody } from "~/server/distribution/http";
+import { error, json, readJsonBody } from "~/server/distribution/http";
+import { distributionRouteError } from "~/server/distribution/stage-errors";
+
+const api = (request: Request) => requestTranslator(request, "errors.api");
+const growth = (request: Request) => requestTranslator(request, "growth.server.errors");
 
 const OutreachSchema = z.object({
     programId: z.string().min(1),
@@ -33,8 +41,15 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export async function POST(request: NextRequest) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
+    const aiUse = { feature: "distribution", userId: ctx.data.authUserId } as const;
+    const refused = await refuseAtAiAllowance(
+        ctx.data.companyId,
+        aiUse.userId,
+        localeOfRequest(request)
+    );
+    if (refused) return refused;
     // The campaign is drafted with the workspace's own models if it brought them.
-    return withWorkspaceChatModels(ctx.data.companyId, () =>
+    return withWorkspaceChatModels(ctx.data.companyId, aiUse, () =>
         withRateLimit(
             request,
             {
@@ -46,36 +61,50 @@ export async function POST(request: NextRequest) {
                 try {
                     const parsed = OutreachSchema.safeParse(await readJsonBody(request));
                     if (!parsed.success)
-                        return error("Validation failed", 400, { details: parsed.error.flatten() });
+                        return error(api(request)("validationFailed"), 400, {
+                            details: parsed.error.flatten(),
+                        });
                     const companyId = ctx.data.companyId;
                     const program = await getProgram(parsed.data.programId, companyId);
-                    if (!program) return error("Program not found", 404);
+                    if (!program) return error(growth(request)("programNotFound"), 404);
                     const exclusions = await listExclusions(companyId, program.id);
                     const excludedDomains = new Set(exclusions.domains);
 
                     const recipients: Recipient[] = [];
                     const included: string[] = [];
-                    const skipped: Array<{ relationshipId: string; reason: string }> = [];
+                    const skipped: Array<{
+                        relationshipId: string;
+                        reason: string;
+                        reasonCopy: Copy;
+                    }> = [];
+                    const skip = (relationshipId: string, reasonCopy: Copy) =>
+                        skipped.push({
+                            relationshipId,
+                            reason: englishCopy(reasonCopy),
+                            reasonCopy,
+                        });
                     for (const relationshipId of parsed.data.relationshipIds) {
                         const relationship = await getRelationship(relationshipId, companyId);
                         if (!relationship || relationship.programId !== program.id) {
-                            skipped.push({ relationshipId, reason: "not found in this program" });
+                            skip(relationshipId, copy("growth.server.outreach.notInProgram"));
                             continue;
                         }
-                        if (["contracted", "active", "declined"].includes(relationship.stage)) {
-                            skipped.push({
+                        if (relationship.stage === "won" || relationship.stage === "lost") {
+                            skip(
                                 relationshipId,
-                                reason: `stage is ${relationship.stage}`,
-                            });
+                                copy("growth.server.outreach.stageIs", {
+                                    stage: relationship.stage,
+                                })
+                            );
                             continue;
                         }
                         const org = await getOrg(relationship.orgId, companyId);
                         if (!org) {
-                            skipped.push({ relationshipId, reason: "organisation missing" });
+                            skip(relationshipId, copy("growth.server.outreach.orgMissing"));
                             continue;
                         }
                         if (org.domain && excludedDomains.has(org.domain)) {
-                            skipped.push({ relationshipId, reason: "existing partner (excluded)" });
+                            skip(relationshipId, copy("growth.server.outreach.existingPartner"));
                             continue;
                         }
                         const emails = (relationship.dossier?.contactChannels ?? [])
@@ -90,10 +119,7 @@ export async function POST(request: NextRequest) {
                                     )
                             );
                         if (emails.length === 0) {
-                            skipped.push({
-                                relationshipId,
-                                reason: "no public mailbox in dossier",
-                            });
+                            skip(relationshipId, copy("growth.server.outreach.noDossierMailbox"));
                             continue;
                         }
                         recipients.push({
@@ -109,7 +135,7 @@ export async function POST(request: NextRequest) {
                         included.push(relationshipId);
                     }
                     if (recipients.length === 0)
-                        return error("No eligible recipients", 422, { skipped });
+                        return error(growth(request)("noEligibleRecipients"), 422, { skipped });
 
                     const prepared = await prepareEmailCampaign({
                         companyId: Number(companyId),
@@ -145,7 +171,7 @@ export async function POST(request: NextRequest) {
                         201
                     );
                 } catch (err) {
-                    return handleRouteError("POST outreach", err);
+                    return distributionRouteError("POST outreach", err, request);
                 }
             }
         )

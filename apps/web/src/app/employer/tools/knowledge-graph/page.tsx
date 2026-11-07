@@ -8,10 +8,13 @@
  * surface. Chat answers entity questions from the company-facts leg instead.
  */
 
+import { useTranslations } from "next-intl";
+
 import { ToolsStudioShell } from "~/app/employer/_chrome/ToolsStudioShell";
 import { GraphView } from "./GraphView";
 
 export default function KnowledgeGraphPage() {
+    const t = useTranslations("tools.registry.knowledgeGraph");
     return (
         <ToolsStudioShell>
             <header
@@ -26,12 +29,9 @@ export default function KnowledgeGraphPage() {
                 }}
             >
                 <span style={{ fontSize: 13, fontWeight: 600, color: "var(--ink)" }}>
-                    Knowledge graph
+                    {t("name")}
                 </span>
-                <span style={{ fontSize: 11, color: "var(--ink-3)" }}>
-                    Index health — entities extracted at upload, joined by co-occurrence. Chat
-                    answers entity questions from company facts, not from this graph.
-                </span>
+                <span style={{ fontSize: 11, color: "var(--ink-3)" }}>{t("description")}</span>
             </header>
             <div style={{ flex: 1, minHeight: 0, position: "relative" }}>
                 <GraphView />

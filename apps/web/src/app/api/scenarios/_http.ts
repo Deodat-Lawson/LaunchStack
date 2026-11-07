@@ -5,6 +5,8 @@
  */
 import type { NextResponse } from "next/server";
 
+import { localeOfRequest, requestTranslator } from "~/i18n/server";
+import { wordOr } from "~/i18n/translate";
 import { parseNumericId } from "~/server/api/responses";
 import { error, handleRouteError, json, readJsonBody } from "~/server/distribution/http";
 import { requireWorkspaceContext, type WorkspaceContext } from "~/lib/require-workspace-context";
@@ -31,8 +33,22 @@ export async function readBody(request: Request): Promise<Record<string, unknown
         : {};
 }
 
-export function handleScenarioError(scope: string, err: unknown): NextResponse {
-    if (err instanceof ScenarioError)
-        return error(err.message, err.status, { code: err.code, ...err.extra });
-    return handleRouteError(`scenarios ${scope}`, err);
+/**
+ * A thrown error as a response. With the request, its sentence is in the
+ * reader's language (`code` stays as it is); without it, English.
+ */
+export function handleScenarioError(scope: string, err: unknown, request?: Request): NextResponse {
+    if (err instanceof ScenarioError) {
+        const locale = request ? localeOfRequest(request) : "en";
+        return error(wordOr(err.copy, err.message, locale), err.status, {
+            code: err.code,
+            ...err.extra,
+        });
+    }
+    return handleRouteError(`scenarios ${scope}`, err, request);
+}
+
+/** "Scenario not found" in the language of the person behind `request`, for a malformed id. */
+export function scenarioNotFound(request: Request): NextResponse {
+    return error(requestTranslator(request, "scenarios.server.errors")("notFound"), 404);
 }

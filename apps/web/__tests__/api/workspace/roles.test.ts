@@ -130,7 +130,7 @@ describe("GET /api/workspace/roles", () => {
             { role: "reviewer" },
         ]);
 
-        const res = await GET();
+        const res = await GET(new Request("http://localhost/api/workspace/roles"));
 
         const body = (await res.json()) as {
             roles: { slug: string; memberCount: number; assignable: boolean; editable: boolean }[];

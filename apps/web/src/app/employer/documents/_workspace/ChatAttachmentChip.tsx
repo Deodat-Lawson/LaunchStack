@@ -2,6 +2,7 @@
 
 import React, { Component, useEffect, useRef, useState, type ReactNode } from "react";
 import dynamic from "next/dynamic";
+import { useTranslations } from "next-intl";
 import { FileText, X } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "~/components/ui/dialog";
@@ -15,15 +16,27 @@ import { toast } from "sonner";
 import { delimitedPreview, fencedPreview } from "./attachmentPreview";
 import type { ComposerAttachmentAvailability } from "./composerState";
 
+function PdfViewerLoading({ error }: { error?: unknown }) {
+    const t = useTranslations("chat.attachmentChip");
+    return (
+        <p role={error ? "alert" : "status"} className="text-ink-3 p-3 text-sm">
+            {error ? t("pdfLoadFailed") : t("pdfLoading")}
+        </p>
+    );
+}
+
+function PdfViewerFailed() {
+    const t = useTranslations("chat.attachmentChip");
+    return (
+        <p role="alert" className="text-danger text-sm">
+            {t("pdfLoadFailed")}
+        </p>
+    );
+}
+
 const PdfAttachmentPreview = dynamic(() => import("./PdfAttachmentPreview"), {
     ssr: false,
-    loading: ({ error }) => (
-        <p role={error ? "alert" : "status"} className="text-ink-3 p-3 text-sm">
-            {error
-                ? "The PDF viewer could not load. Open the original or download the file."
-                : "Loading PDF viewer…"}
-        </p>
-    ),
+    loading: ({ error }) => <PdfViewerLoading error={error} />,
 });
 
 class PdfPreviewBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
@@ -32,13 +45,7 @@ class PdfPreviewBoundary extends Component<{ children: ReactNode }, { failed: bo
         return { failed: true };
     }
     override render() {
-        return this.state.failed ? (
-            <p role="alert" className="text-danger text-sm">
-                The PDF viewer could not load. Open the original or download the file.
-            </p>
-        ) : (
-            this.props.children
-        );
+        return this.state.failed ? <PdfViewerFailed /> : this.props.children;
     }
 }
 
@@ -55,6 +62,8 @@ export function ChatAttachmentChip({
     availability?: ComposerAttachmentAvailability;
     onReattach?: () => void;
 }) {
+    const t = useTranslations("chat.attachmentChip");
+    const tMenu = useTranslations("chat.contextMenu");
     const [open, setOpen] = useState(false);
     const [preview, setPreview] = useState<string | null>(null);
     const [error, setError] = useState(false);
@@ -111,10 +120,10 @@ export function ChatAttachmentChip({
     const ctxTarget = useContextTarget({
         kind: "attachment",
         id: attachment.id,
-        label: `Actions for ${attachment.name}`,
+        label: t("actionsFor", { name: attachment.name }),
         data: attachment,
         items: () =>
-            buildAttachmentMenuItems(attachment, { onOpen: () => setOpen(true), onRemove }),
+            buildAttachmentMenuItems(attachment, { onOpen: () => setOpen(true), onRemove }, tMenu),
     });
     useEffect(() => {
         if (!open || !safeUrl || unavailable || !canReadText || isImage) return;
@@ -131,7 +140,7 @@ export function ChatAttachmentChip({
                     setPreview(
                         value.slice(0, 30_000) +
                             (value.length > 30_000
-                                ? "\n… Preview limited to 30,000 characters. Save the file to read it in full."
+                                ? `\n${t("previewTruncated", { limit: 30_000 })}`
                                 : "")
                     );
                 }
@@ -140,7 +149,7 @@ export function ChatAttachmentChip({
                 if (!controller.signal.aborted) setError(true);
             });
         return () => controller.abort();
-    }, [open, safeUrl, unavailable, isImage, canReadText]);
+    }, [open, safeUrl, unavailable, isImage, canReadText, t]);
     return (
         <>
             <span
@@ -152,7 +161,8 @@ export function ChatAttachmentChip({
                     size="sm"
                     className="h-7 min-w-0 justify-start gap-1.5 px-1.5 text-xs"
                     onClick={() => setOpen(true)}
-                    aria-label={`Preview ${attachment.name}`}
+                    aria-label={t("preview", { name: attachment.name })}
+                    data-attachment-preview={attachment.id}
                 >
                     {isImage && safeUrl && !unavailable ? (
                         // eslint-disable-next-line @next/next/no-img-element
@@ -161,17 +171,17 @@ export function ChatAttachmentChip({
                         <FileText className="size-3.5" />
                     )}
                     <span className="truncate">{attachment.name}</span>
-                    {unavailable && <span className="text-ink-3">Unavailable</span>}
+                    {unavailable && <span className="text-ink-3">{t("unavailable")}</span>}
                 </Button>
                 {unavailable && onReattach && (
                     <Button
                         variant="ghost"
                         size="sm"
                         className="h-7 px-1.5 text-xs"
-                        aria-label={`Reattach ${attachment.name}`}
+                        aria-label={t("reattach", { name: attachment.name })}
                         onClick={onReattach}
                     >
-                        Attach again
+                        {t("attachAgain")}
                     </Button>
                 )}
                 {onRemove && (
@@ -179,8 +189,8 @@ export function ChatAttachmentChip({
                         variant="ghost"
                         size="icon"
                         className="size-6"
-                        aria-label={`Remove ${attachment.name}`}
-                        title="Remove attachment"
+                        aria-label={t("remove", { name: attachment.name })}
+                        title={t("removeAttachment")}
                         onClick={onRemove}
                     >
                         <X className="size-3" />
@@ -201,11 +211,11 @@ export function ChatAttachmentChip({
                 <DialogContent className="border-line bg-panel max-h-[85vh] min-w-0 sm:max-w-3xl">
                     <DialogTitle className="text-ink break-all pr-6">{attachment.name}</DialogTitle>
                     <DialogDescription>
-                        {(attachment.size / 1024).toFixed(1)} KiB · Attached to this message
+                        {t("description", { size: (attachment.size / 1024).toFixed(1) })}
                     </DialogDescription>
                     {unavailable || error ? (
                         <p role="alert" className="text-danger text-sm">
-                            This file is unavailable. Attach it again or remove it before sending.
+                            {t("fileUnavailable")}
                         </p>
                     ) : canReadText ? (
                         <>
@@ -216,7 +226,7 @@ export function ChatAttachmentChip({
                                     onClick={() => setRaw(previous => !previous)}
                                     disabled={!preview}
                                 >
-                                    {raw ? "Rendered view" : "Raw view"}
+                                    {raw ? t("renderedView") : t("rawView")}
                                 </Button>
                                 <Button
                                     variant="outline"
@@ -226,17 +236,17 @@ export function ChatAttachmentChip({
                                         if (fullText.current !== null)
                                             void copyText(fullText.current).then(ok =>
                                                 ok
-                                                    ? toast.success("File contents copied")
-                                                    : toast.error("Couldn't copy file contents")
+                                                    ? toast.success(t("contentsCopied"))
+                                                    : toast.error(t("contentsCopyFailed"))
                                             );
                                     }}
                                 >
-                                    Copy contents
+                                    {t("copyContents")}
                                 </Button>
                             </div>
                             <div className="border-line bg-line-2 text-ink-2 max-h-[55vh] overflow-auto rounded-md border p-3 text-xs">
                                 {preview === null ? (
-                                    "Loading preview…"
+                                    t("loadingPreview")
                                 ) : raw ? (
                                     <pre className="whitespace-pre-wrap break-words">{preview}</pre>
                                 ) : isMarkdown || isHtml ? (
@@ -245,7 +255,12 @@ export function ChatAttachmentChip({
                                     <ChatMarkdown
                                         text={delimitedPreview(
                                             preview,
-                                            /\.tsv$/i.test(attachment.name) ? "\t" : ","
+                                            /\.tsv$/i.test(attachment.name) ? "\t" : ",",
+                                            100,
+                                            {
+                                                empty: t("csvEmpty"),
+                                                limited: max => t("csvLimited", { max }),
+                                            }
                                         )}
                                     />
                                 ) : (
@@ -258,16 +273,14 @@ export function ChatAttachmentChip({
                             <PdfAttachmentPreview url={safeUrl} name={attachment.name} />
                         </PdfPreviewBoundary>
                     ) : (
-                        <p className="text-ink-3 text-sm">
-                            Save this document to open it in your document viewer.
-                        </p>
+                        <p className="text-ink-3 text-sm">{t("saveToOpen")}</p>
                     )}
                     {safeUrl && (
                         <div className="flex flex-wrap gap-2">
                             {isPdf && (
                                 <Button variant="outline" asChild>
                                     <a href={safeUrl} target="_blank" rel="noopener noreferrer">
-                                        Open original
+                                        {t("openOriginal")}
                                     </a>
                                 </Button>
                             )}
@@ -278,7 +291,7 @@ export function ChatAttachmentChip({
                                     rel="noopener noreferrer"
                                     download={attachment.name}
                                 >
-                                    {isPdf ? "Download PDF" : "Save file"}
+                                    {isPdf ? t("downloadPdf") : t("saveFile")}
                                 </a>
                             </Button>
                         </div>

@@ -9,7 +9,12 @@ jest.mock("~/server/db", () => ({ db: {} }));
 import type { SessionMessage } from "~/server/sessions/repository";
 import { forkTitle } from "~/server/sessions/fork";
 import { chatAudience } from "~/server/sessions/sharing";
-import { filterMessagesForReader, parseSourceId, sourceIdsIn } from "~/server/sessions/visibility";
+import {
+    HIDDEN_MENTION_LABEL,
+    filterMessagesForReader,
+    parseSourceId,
+    sourceIdsIn,
+} from "~/server/sessions/visibility";
 
 function message(over: Partial<SessionMessage>): SessionMessage {
     return { seq: 0, role: "assistant", text: "", createdAt: "2026-10-10T00:00:00Z", ...over };
@@ -112,6 +117,89 @@ describe("filterMessagesForReader", () => {
         expect(JSON.stringify(messages)).not.toContain("owner-private-chat");
     });
 
+    it("keeps an answer's steps and timings but never the names in them", () => {
+        const { messages } = filterMessagesForReader(
+            [
+                message({
+                    metadata: {
+                        steps: [
+                            {
+                                id: "thread-refs",
+                                label: "Read a referenced chat",
+                                state: "done",
+                                detail: "Owner's private chat: layoffs plan",
+                                startMs: 10,
+                                endMs: 90,
+                            },
+                            {
+                                id: "search",
+                                label: "Found 2 passages in 1 source",
+                                state: "done",
+                                detail: "Acquisition LOI - CONFIDENTIAL.pdf",
+                                startMs: 100,
+                                endMs: 700,
+                            },
+                            {
+                                id: "attachments",
+                                label: "Read 1 attachment",
+                                state: "done",
+                                detail: "salaries.xlsx",
+                            },
+                            {
+                                id: "source-1",
+                                label: "Reading “Acquisition LOI - CONFIDENTIAL.pdf”",
+                                state: "done",
+                            },
+                            {
+                                id: "web-2",
+                                label: "Searching the web for “layoffs at our biggest client”",
+                                state: "done",
+                            },
+                        ],
+                    },
+                }),
+                message({
+                    metadata: {
+                        status: "stopped",
+                        steps: [
+                            {
+                                id: "search",
+                                label: "Searching Acquisition LOI - CONFIDENTIAL.pdf",
+                                state: "active",
+                                startMs: 40,
+                                endMs: 300,
+                            },
+                        ],
+                    },
+                }),
+            ],
+            new Set()
+        );
+        expect(messages[0]!.metadata?.steps).toEqual([
+            {
+                id: "thread-refs",
+                label: "Read a referenced chat",
+                state: "done",
+                startMs: 10,
+                endMs: 90,
+            },
+            {
+                id: "search",
+                label: "Found 2 passages in 1 source",
+                state: "done",
+                startMs: 100,
+                endMs: 700,
+            },
+            { id: "attachments", label: "Read 1 attachment", state: "done" },
+            { id: "source-1", label: "", state: "done" },
+            { id: "web-2", label: "", state: "done" },
+        ]);
+        expect(messages[1]!.metadata?.steps).toEqual([
+            { id: "search", label: "", state: "active", startMs: 40, endMs: 300 },
+        ]);
+        expect(JSON.stringify(messages)).not.toMatch(/CONFIDENTIAL|layoffs|salaries/);
+    });
+
     it("collects every source id a transcript mentions", () => {
         const ids = sourceIdsIn(
             [
@@ -177,5 +265,48 @@ describe("forkTitle", () => {
         const long = forkTitle("x".repeat(300));
         expect(long.length).toBeLessThanOrEqual(300);
         expect(long.endsWith("… (copy)")).toBe(true);
+    });
+});
+
+describe("what a reader sees of the asker's chips", () => {
+    const chip = (label: string, ref: string) => `[Source: ${label}](#launchstack-source-${ref})`;
+
+    it("keeps a visible source's title, hides a hidden one's and every conversation's, on the turn and its send", () => {
+        const text = `Compare ${chip("Handbook", "d1")} with ${chip("Secret plan", "d9")} as in [Conversation: Pricing call](#launchstack-thread-t1)`;
+        const { messages } = filterMessagesForReader(
+            [
+                message({
+                    role: "user",
+                    text,
+                    refs: ["d1", "d9"],
+                    metadata: {
+                        send: {
+                            text,
+                            recallText: text,
+                            refs: ["d1", "d9"],
+                            attachments: [],
+                            webSearch: false,
+                            thinking: false,
+                            agentKey: null,
+                        },
+                    },
+                }),
+            ],
+            new Set(["d1"])
+        );
+        const expected = `Compare ${chip("Handbook", "d1")} with ${chip(HIDDEN_MENTION_LABEL, "d9")} as in [Conversation: ${HIDDEN_MENTION_LABEL}](#launchstack-thread-t1)`;
+        expect(messages[0]!.text).toBe(expected);
+        expect(messages[0]!.metadata?.send?.text).toBe(expected);
+        expect(messages[0]!.metadata?.send?.recallText).toBe(expected);
+        expect(messages[0]!.text).not.toContain("Secret plan");
+        expect(messages[0]!.text).not.toContain("Pricing call");
+    });
+
+    it("leaves an answer's words alone", () => {
+        const { messages } = filterMessagesForReader(
+            [message({ role: "assistant", text: `Echo ${chip("Secret plan", "d9")}` })],
+            new Set(["d1"])
+        );
+        expect(messages[0]!.text).toBe(`Echo ${chip("Secret plan", "d9")}`);
     });
 });

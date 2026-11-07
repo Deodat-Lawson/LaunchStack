@@ -14,7 +14,12 @@
  * what keeps the wire shape from drifting between them.
  */
 
+import type { useTranslations } from "next-intl";
+
 import { QUOTE_MARKER, withoutQuotedContext } from "~/lib/chat-passages";
+
+/** `t` for `workspace.history` — what the label lookups in this module take. */
+export type HistoryTranslator = ReturnType<typeof useTranslations<"workspace.history">>;
 
 export const HISTORY_KINDS = [
     "chat",
@@ -118,6 +123,29 @@ export const HISTORY_STATUS_LABEL: Record<HistoryStatus, string> = {
     done: "Done",
     failed: "Failed",
 };
+
+/** Where each kind's name lives in `workspace.history.kinds`. */
+const HISTORY_KIND_MESSAGE_KEYS = {
+    chat: "chat",
+    "trend-search": "trendSearch",
+    prospector: "prospector",
+    "repo-explainer": "repoExplainer",
+    distribution: "distribution",
+    email: "email",
+    "weekly-review": "weeklyReview",
+    vantage: "vantage",
+    proposals: "proposals",
+} as const satisfies Record<HistoryKind, string>;
+
+/** A kind's name in the reader's language — what `HISTORY_KIND_META[kind].label` says in English. */
+export function historyKindLabel(t: HistoryTranslator, kind: HistoryKind): string {
+    return t(`kinds.${HISTORY_KIND_MESSAGE_KEYS[kind]}`);
+}
+
+/** A status in the reader's language — what `HISTORY_STATUS_LABEL[status]` says in English. */
+export function historyStatusLabel(t: HistoryTranslator, status: HistoryStatus): string {
+    return t(`status.${status}`);
+}
 
 // ---------------------------------------------------------------------------
 // Storage bounds
@@ -245,6 +273,16 @@ export function groupHistoryByRecency(
         .map(({ id, label, entries: grouped }) => ({ id, label, entries: grouped }));
 }
 
+const HISTORY_GROUP_IDS = ["today", "yesterday", "week", "month", "older"] as const;
+type HistoryGroupId = (typeof HISTORY_GROUP_IDS)[number];
+
+/** A date heading from `groupHistoryByRecency` in the reader's language. */
+export function historyGroupLabel(t: HistoryTranslator, group: Pick<HistoryGroup, "id" | "label">) {
+    return (HISTORY_GROUP_IDS as readonly string[]).includes(group.id)
+        ? t(`groups.${group.id as HistoryGroupId}`)
+        : group.label;
+}
+
 /**
  * Sidebar-width relative time: `now`, `12m`, `5h`, `3d`, then a date.
  *
@@ -266,6 +304,27 @@ export function relativeTime(iso: string, now: Date = new Date()): string {
     if (days === 0) return `${Math.floor(delta / (60 * 60_000))}h`;
     if (days < 7) return `${days}d`;
     return new Date(at).toLocaleDateString(undefined, { day: "numeric", month: "short" });
+}
+
+/**
+ * `relativeTime` in the reader's language: the same compact scale — now,
+ * minutes, hours, days, then a short date in `locale`.
+ */
+export function localizedRelativeTime(
+    t: HistoryTranslator,
+    locale: string,
+    iso: string,
+    now: Date = new Date()
+): string {
+    const at = Date.parse(iso);
+    if (Number.isNaN(at)) return "";
+    const delta = now.getTime() - at;
+    if (delta < 60_000) return t("relative.now");
+    if (delta < 60 * 60_000) return t("relative.minutes", { count: Math.floor(delta / 60_000) });
+    const days = Math.round((startOfDay(now) - startOfDay(new Date(at))) / DAY_MS);
+    if (days === 0) return t("relative.hours", { count: Math.floor(delta / (60 * 60_000)) });
+    if (days < 7) return t("relative.days", { count: days });
+    return new Intl.DateTimeFormat(locale, { day: "numeric", month: "short" }).format(at);
 }
 
 // ---------------------------------------------------------------------------
@@ -347,12 +406,20 @@ export function applyPinOrder(entries: HistoryEntry[], order: readonly string[])
 // Filtering
 // ---------------------------------------------------------------------------
 
-/** Case-insensitive match over the three fields a row actually shows. */
-export function matchesHistoryQuery(entry: HistoryEntry, query: string): boolean {
+/**
+ * Case-insensitive match over the three fields a row actually shows. Pass
+ * the kind's name as the reader sees it (`historyKindLabel`) so it matches
+ * too; the English name always does.
+ */
+export function matchesHistoryQuery(
+    entry: HistoryEntry,
+    query: string,
+    kindLabel?: string
+): boolean {
     const q = query.trim().toLowerCase();
     if (q === "") return true;
     const hay =
-        `${entry.title} ${entry.subtitle ?? ""} ${HISTORY_KIND_META[entry.kind].label}`.toLowerCase();
+        `${entry.title} ${entry.subtitle ?? ""} ${HISTORY_KIND_META[entry.kind].label} ${kindLabel ?? ""}`.toLowerCase();
     return hay.includes(q);
 }
 

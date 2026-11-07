@@ -15,7 +15,10 @@ import { createUserNotesRetriever } from "~/server/notes/notes-retriever";
 import { createNotesEmbeddingsProvider } from "~/server/notes/embedding-config";
 import { normalizeModelContent } from "../services";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { refuseAtAiAllowance } from "~/server/ai-usage/refusal";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
+import { localeOfRequest, replyLanguageInstruction } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 
 export const runtime = "nodejs";
 export const maxDuration = 120;
@@ -37,16 +40,24 @@ Rules:
 
 export async function POST(request: Request) {
     return withRateLimit(request, RateLimitPresets.strict, async () => {
+        const locale = localeOfRequest(request);
+        const t = translatorFor(locale, "chat.server.askMyNotes");
         try {
             const ctx = await requireWorkspaceContext();
             if (!ctx.success) return ctx.response;
 
-            return await withWorkspaceChatModels(ctx.data.companyId, async () => {
+            const aiUse = { feature: "notes", userId: ctx.data.authUserId } as const;
+            const refused = await refuseAtAiAllowance(ctx.data.companyId, aiUse.userId, locale);
+            if (refused) return refused;
+            return await withWorkspaceChatModels(ctx.data.companyId, aiUse, async () => {
                 const body = (await request.json().catch(() => ({}))) as Body;
                 const question = (body.question ?? "").trim();
                 if (!question) {
                     return NextResponse.json(
-                        { success: false, message: "Question is required" },
+                        {
+                            success: false,
+                            message: translatorFor(locale, "errors.validation")("questionRequired"),
+                        },
                         { status: 400 }
                     );
                 }
@@ -57,8 +68,7 @@ export async function POST(request: Request) {
                     return NextResponse.json(
                         {
                             success: false,
-                            message:
-                                "Notes search isn't configured — add an embedding API key to enable Ask My Notes.",
+                            message: t("notConfigured"),
                         },
                         { status: 503 }
                     );
@@ -76,7 +86,7 @@ export async function POST(request: Request) {
                     return NextResponse.json(
                         {
                             success: true,
-                            answer: "I couldn't find any relevant notes. Try a different phrasing, or capture some notes first.",
+                            answer: t("noNotes"),
                             citations: [],
                         },
                         { status: 200 }
@@ -93,7 +103,11 @@ export async function POST(request: Request) {
                 const resolved = resolveConfiguredChatModel();
                 const reply = await resolved.chat.invoke(
                     resolved.prepareMessages([
-                        new SystemMessage(SYSTEM_PROMPT),
+                        new SystemMessage(
+                            [SYSTEM_PROMPT, replyLanguageInstruction(locale)]
+                                .filter(Boolean)
+                                .join("\n\n")
+                        ),
                         new HumanMessage(`Notes:\n\n${numbered}\n\n---\n\nQuestion: ${question}`),
                     ])
                 );
@@ -111,10 +125,7 @@ export async function POST(request: Request) {
             });
         } catch (err) {
             console.error("[AskMyNotes] failed:", err);
-            return NextResponse.json(
-                { success: false, message: "Ask My Notes failed" },
-                { status: 500 }
-            );
+            return NextResponse.json({ success: false, message: t("failed") }, { status: 500 });
         }
     });
 }

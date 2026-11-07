@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { Upload, ClipboardPaste, Globe } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { IconGithub, IconYoutube } from "~/components/icons/brand";
 import type { IconComponent } from "~/components/icons/types";
 
@@ -77,6 +78,7 @@ function SourceCard({
 }
 
 export function SourceGrid({ onSelectSource, onFileClick, onFolderClick }: SourceGridProps) {
+    const t = useTranslations("upload.sourceGrid");
     return (
         <div
             style={{
@@ -89,8 +91,8 @@ export function SourceGrid({ onSelectSource, onFileClick, onFolderClick }: Sourc
         >
             <SourceCard
                 Icon={Upload}
-                title="Files & folders"
-                subtitle="PDF, DOCX, images, ZIP"
+                title={t("files.title")}
+                subtitle={t("files.subtitle")}
                 onClick={onFileClick}
             >
                 <span
@@ -108,38 +110,38 @@ export function SourceGrid({ onSelectSource, onFileClick, onFolderClick }: Sourc
                         cursor: "pointer",
                     }}
                 >
-                    or select folder
+                    {t("files.folder")}
                 </span>
             </SourceCard>
 
             <SourceCard
                 Icon={IconGithub}
                 iconColor="var(--ink)"
-                title="GitHub repo"
-                subtitle="Clone & index a repository"
+                title={t("github.title")}
+                subtitle={t("github.subtitle")}
                 onClick={() => onSelectSource("github")}
             />
 
             <SourceCard
                 Icon={ClipboardPaste}
-                title="Paste text"
-                subtitle="Markdown or plain text"
+                title={t("paste.title")}
+                subtitle={t("paste.subtitle")}
                 onClick={() => onSelectSource("paste")}
             />
 
             <SourceCard
                 Icon={Globe}
                 iconColor="oklch(0.55 0.18 240)"
-                title="Website"
-                subtitle="Fetch a single web page"
+                title={t("website.title")}
+                subtitle={t("website.subtitle")}
                 onClick={() => onSelectSource("website")}
             />
 
             <SourceCard
                 Icon={IconYoutube}
                 iconColor="oklch(0.58 0.2 25)"
-                title="YouTube & video"
-                subtitle="Transcribe a video URL"
+                title={t("youtube.title")}
+                subtitle={t("youtube.subtitle")}
                 onClick={() => onSelectSource("youtube")}
             />
         </div>

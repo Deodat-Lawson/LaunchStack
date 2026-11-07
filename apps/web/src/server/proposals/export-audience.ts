@@ -21,6 +21,7 @@ interface ExportAudienceInput {
     companyId: bigint;
     userId: string;
     creationKey: string;
+    requestDocumentId: number | null;
     sections: readonly SectionRecord[];
 }
 
@@ -60,28 +61,44 @@ function audienceIsSubset(destination: Audience, source: Audience): boolean {
 }
 
 /**
- * Publication must not widen the cited Sources' effective audience. This is a
+ * Publication must not widen the rendered content's source audience. This is a
  * policy comparison, not a census of today's readers: equal user/group/role
  * grants remain equal as membership changes, but user→group and group→role
  * implications are deliberately not inferred. Later independent ACL changes
  * are not synchronized with an already-published copy.
  */
 export async function canExportApplication(input: ExportAudienceInput): Promise<boolean> {
-    const citedIds = new Set<number>();
+    const sourceIds = new Set<number>();
+    const addSource = (id: number | null): boolean => {
+        if (id === null || !Number.isSafeInteger(id) || id <= 0) return false;
+        sourceIds.add(id);
+        return true;
+    };
+    // Request-derived summaries, questions and checklist text are rendered too.
+    if (input.requestDocumentId !== null && !addSource(input.requestDocumentId)) return false;
     for (const section of input.sections) {
         if (!section.draft?.trim()) continue;
+        const meta = section.draftMeta;
+        // Generation can use uncited retrieval, profile and library inputs.
+        // A legacy model answer with no complete dependency list is not proven
+        // safe to publish. Manual answers need no fabricated model provenance.
+        if (
+            meta?.sourceDocumentIds === undefined &&
+            (meta?.modelId ||
+                meta?.promptVersion ||
+                meta?.draftedAt ||
+                (meta?.libraryItemIds?.length ?? 0) > 0)
+        )
+            return false;
+        for (const id of meta?.sourceDocumentIds ?? []) {
+            if (!addSource(id)) return false;
+        }
         for (const n of section.draftMeta?.cites ?? []) {
             // Match renderApplicationMarkdown: an unresolved citation is not
             // rendered; uncited evidence and unwritten sections are omitted.
             const evidence = section.draftMeta?.evidence.find(item => item.n === n);
             if (!evidence) continue;
-            if (
-                evidence.documentId === null ||
-                !Number.isSafeInteger(evidence.documentId) ||
-                evidence.documentId <= 0
-            )
-                return false;
-            citedIds.add(evidence.documentId);
+            if (!addSource(evidence.documentId)) return false;
         }
     }
 
@@ -97,11 +114,11 @@ export async function canExportApplication(input: ExportAudienceInput): Promise<
             : !scopeAllowsCategory(scope, PROPOSALS_EXPORT_CATEGORY)
     )
         return false;
-    if (citedIds.size === 0) return true;
+    if (sourceIds.size === 0) return true;
 
-    const sourceIds = [...citedIds];
-    const documentIds = sourceIds.map(BigInt);
-    if (existingDestination && !citedIds.has(existingDestination.id))
+    const sourceDocumentIds = [...sourceIds];
+    const documentIds = sourceDocumentIds.map(BigInt);
+    if (existingDestination && !sourceIds.has(existingDestination.id))
         documentIds.push(BigInt(existingDestination.id));
     const [sources, restrictedFolders, grantsOnFolders, restrictedDocuments, grantsOnDocuments] =
         await Promise.all([
@@ -109,7 +126,10 @@ export async function canExportApplication(input: ExportAudienceInput): Promise<
                 .select({ id: document.id, category: document.category })
                 .from(document)
                 .where(
-                    and(eq(document.companyId, input.companyId), inArray(document.id, sourceIds))
+                    and(
+                        eq(document.companyId, input.companyId),
+                        inArray(document.id, sourceDocumentIds)
+                    )
                 ),
             db
                 .select({ id: folderSettings.categoryId, name: category.name })
@@ -164,7 +184,7 @@ export async function canExportApplication(input: ExportAudienceInput): Promise<
     // Tenant-scoped lookup deliberately makes missing and foreign Sources the
     // same denial. A readable title/quote in saved metadata is not provenance.
     if (
-        sources.length !== citedIds.size ||
+        sources.length !== sourceIds.size ||
         sources.some(source => !scopeAllowsDocument(scope, source))
     )
         return false;

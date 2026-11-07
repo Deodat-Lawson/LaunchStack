@@ -1,0 +1,39 @@
+{
+  "details": {
+    "viewsSeries": "浏览量",
+    "justNow": "刚刚",
+    "minutesAgo": "{count} 分钟前",
+    "hoursAgo": "{count} 小时前",
+    "daysAgo": "{count} 天前",
+    "created": "创建于 {date}",
+    "viewDoc": "查看文档",
+    "loadFailed": "详情加载失败：{error}",
+    "loadFailedFallback": "获取文档详情失败",
+    "loading": "正在加载统计数据…",
+    "tiles": {
+      "views": "浏览量",
+      "allTime": "全部时间",
+      "unique": "独立",
+      "viewers": "访问者",
+      "thirtyDays": "30 天",
+      "recent": "近期"
+    },
+    "activity": "30 天活动",
+    "recentViewers": "最近访问者",
+    "shown": "显示 {count, number} 位",
+    "columns": {
+      "user": "用户",
+      "when": "时间"
+    },
+    "noViews": "还没有浏览记录"
+  },
+  "server": {
+    "errors": {
+      "internal": "服务器内部错误"
+    },
+    "viewers": {
+      "unknownUser": "未知用户",
+      "noEmail": "无邮箱"
+    }
+  }
+}

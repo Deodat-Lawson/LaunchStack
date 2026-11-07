@@ -1,13 +1,15 @@
 "use client";
 
 import { CornerDownRight } from "lucide-react";
+import { useFormatter, useLocale, useTranslations } from "next-intl";
 
 import { SectionHeading } from "~/components/tools/PageHeader";
 import { SkeletonBlock } from "~/components/tools/SkeletonRows";
 import type { ScenarioDetail, ScenarioPost } from "~/lib/scenarios/types";
 import { cn } from "~/lib/utils";
 
-import { FACTION_BG, isLive, moodWords, percent, signed } from "~/lib/scenarios/words";
+import { FACTION_BG, formatPercent, formatSigned, isLive, moodLabel } from "~/lib/scenarios/words";
+import { PersonHoverCard, Portrait } from "./Portrait";
 import { StanceChart } from "./StanceChart";
 
 /** A link to a post in the Feed: "@mayabooks, round 3". */
@@ -18,18 +20,26 @@ export function PostRef({
     post: ScenarioPost | undefined;
     onJump: (postId: string) => void;
 }) {
+    const t = useTranslations("scenarios.report");
     if (!post) return null;
-    const who = post.authorKind === "narrator" ? "the narrator" : `@${post.authorHandle}`;
-    const when = post.round === 0 ? "opening" : `round ${post.round}`;
+    const who = post.authorKind === "narrator" ? t("narrator") : `@${post.authorHandle}`;
+    const when = post.round === 0 ? t("opening") : t("round", { round: post.round });
     return (
         <button
             type="button"
             onClick={() => onJump(post.id)}
-            className="border-line text-ink-2 hover:bg-panel-2 hover:text-ink focus-visible:ring-brand/50 inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11.5px] outline-none focus-visible:ring-2"
-            aria-label={`See the post by ${who} in ${when}`}
+            className={cn(
+                "border-line text-ink-2 hover:bg-panel-2 hover:text-ink focus-visible:ring-brand/50 inline-flex items-center gap-1 rounded-full border py-0.5 pr-2 text-[11.5px] outline-none focus-visible:ring-2",
+                post.authorKind === "agent" ? "pl-0.5" : "pl-2"
+            )}
+            aria-label={t("postRefAria", { who, when })}
         >
-            <CornerDownRight className="size-3" aria-hidden />
-            {who}, {when}
+            {post.authorKind === "agent" ? (
+                <Portrait handle={post.authorHandle} size={18} />
+            ) : (
+                <CornerDownRight className="size-3" aria-hidden />
+            )}
+            {t("postRef", { who, when })}
         </button>
     );
 }
@@ -48,10 +58,15 @@ export function ReportTab({
     onJump: (postId: string) => void;
     onPerson: (personId: string) => void;
 }) {
+    const t = useTranslations("scenarios.report");
+    const tw = useTranslations("scenarios.words");
+    const locale = useLocale();
     const report = run.report;
     const postById = new Map(run.posts.map(p => [p.id, p]));
     const people = new Map(run.people.map(p => [p.id, p]));
     const live = isLive(run.status);
+    const format = useFormatter();
+    const lastRound = run.roundStats[run.roundStats.length - 1];
 
     return (
         <div className="flex flex-col gap-8">
@@ -63,35 +78,37 @@ export function ReportTab({
                     <p className="text-ink-2 mt-3 text-[14px] leading-relaxed">{report.summary}</p>
                 </section>
             ) : live ? (
-                <p className="text-ink-2 max-w-[72ch] text-[13px]">
-                    The report is written after the last round. Until then, here is how opinion is
-                    moving and what each round looked like.
-                </p>
+                <p className="text-ink-2 max-w-[72ch] text-[13px]">{t("liveIntro")}</p>
             ) : (
                 <p className="text-ink-2 max-w-[72ch] text-[13px]">
-                    {run.round > 0
-                        ? "This scenario stopped before its report was written. What happened up to then is below and in the Feed."
-                        : "This scenario stopped before the first round finished, so there is nothing to report."}
+                    {run.round > 0 ? t("stoppedAfter") : t("stoppedBefore")}
                 </p>
             )}
 
             {run.reception && (
                 <section>
-                    <SectionHeading title="How the draft was received" />
+                    <SectionHeading title={t("receptionTitle")} />
                     <div className="border-line bg-panel grid grid-cols-[repeat(auto-fit,minmax(120px,1fr))] overflow-hidden rounded-lg border">
                         {(
                             [
                                 [
-                                    "Engaged",
-                                    `${run.reception.engaged} of ${run.reception.exposed} (${percent(run.reception.engagementRate)})`,
+                                    t("engaged"),
+                                    t("engagedValue", {
+                                        engaged: run.reception.engaged,
+                                        exposed: run.reception.exposed,
+                                        rate: formatPercent(run.reception.engagementRate, locale),
+                                    }),
                                 ],
-                                ["Likes", String(run.reception.likes)],
-                                ["Comments", String(run.reception.comments)],
-                                ["Shares", String(run.reception.shares)],
-                                ["Dislikes", String(run.reception.dislikes)],
+                                [t("likes"), format.number(run.reception.likes)],
+                                [t("comments"), format.number(run.reception.comments)],
+                                [t("shares"), format.number(run.reception.shares)],
+                                [t("dislikes"), format.number(run.reception.dislikes)],
                                 [
-                                    "Mood",
-                                    `${signed(run.reception.startingSentiment)} → ${signed(run.reception.sentiment)}`,
+                                    t("mood"),
+                                    t("moodValue", {
+                                        from: formatSigned(run.reception.startingSentiment, locale),
+                                        to: formatSigned(run.reception.sentiment, locale),
+                                    }),
                                 ],
                             ] as const
                         ).map(([label, value]) => (
@@ -109,10 +126,14 @@ export function ReportTab({
 
             <section>
                 <SectionHeading
-                    title="How opinion moved"
+                    title={t("opinionTitle")}
                     aside={
-                        run.roundStats.length > 0
-                            ? `mean ${signed(run.roundStats[run.roundStats.length - 1]!.meanStance)} after round ${run.roundStats.length} · ${moodWords(run.roundStats[run.roundStats.length - 1]!.meanStance)}`
+                        lastRound
+                            ? t("opinionAside", {
+                                  mean: formatSigned(lastRound.meanStance, locale),
+                                  round: run.roundStats.length,
+                                  mood: moodLabel(tw, lastRound.meanStance),
+                              })
                             : undefined
                     }
                 />
@@ -123,25 +144,23 @@ export function ReportTab({
                 ) : live ? (
                     <div className="border-line bg-panel rounded-lg border p-4">
                         <SkeletonBlock lines={3} />
-                        <p className="text-ink-3 mt-3 text-xs">
-                            The chart starts when the first round finishes.
-                        </p>
+                        <p className="text-ink-3 mt-3 text-xs">{t("chartPending")}</p>
                     </div>
                 ) : (
-                    <p className="text-ink-3 text-[13px]">No round finished.</p>
+                    <p className="text-ink-3 text-[13px]">{t("noRound")}</p>
                 )}
             </section>
 
             {(live || !report) && run.roundStats.length > 0 && (
                 <section>
-                    <SectionHeading title="Round by round" />
+                    <SectionHeading title={t("roundByRound")} />
                     <RoundTable run={run} />
                 </section>
             )}
 
             {report && report.factions.length > 0 && (
                 <section>
-                    <SectionHeading title="Where people ended up" />
+                    <SectionHeading title={t("factionsTitle")} />
                     <div className="border-line bg-panel overflow-hidden rounded-lg border">
                         {report.factions.map(f => (
                             <div
@@ -154,13 +173,15 @@ export function ReportTab({
                                             {f.label}
                                         </span>
                                         <span className="text-ink-2 font-mono text-xs tabular-nums">
-                                            {percent(f.share)}
+                                            {formatPercent(f.share, locale)}
                                         </span>
                                     </div>
                                     <div
                                         className="bg-panel-2 mt-1.5 h-1.5 overflow-hidden rounded-full"
                                         role="img"
-                                        aria-label={`${percent(f.share)} of people`}
+                                        aria-label={t("factionShare", {
+                                            share: formatPercent(f.share, locale),
+                                        })}
                                     >
                                         <div
                                             className={cn(
@@ -170,27 +191,29 @@ export function ReportTab({
                                             style={{ width: `${Math.max(2, f.share * 100)}%` }}
                                         />
                                     </div>
-                                    <div className="text-ink-3 mt-1 text-xs capitalize">
-                                        {f.stance}
+                                    <div className="text-ink-3 mt-1 text-xs">
+                                        {t(`faction.${f.stance}`)}
                                     </div>
                                 </div>
                                 <div className="min-w-0">
                                     <p className="text-ink-2 text-[13px] leading-relaxed">
                                         {f.text}
                                     </p>
-                                    <div className="mt-1.5 flex flex-wrap gap-x-2 gap-y-1">
+                                    <div className="mt-2 flex flex-wrap gap-1.5">
                                         {f.agentIds.map(id => {
                                             const person = people.get(id);
                                             if (!person) return null;
                                             return (
-                                                <button
-                                                    key={id}
-                                                    type="button"
-                                                    onClick={() => onPerson(id)}
-                                                    className="text-ink-2 hover:text-ink focus-visible:ring-brand/50 decoration-line rounded-sm text-xs underline underline-offset-2 outline-none focus-visible:ring-2"
-                                                >
-                                                    {person.name}
-                                                </button>
+                                                <PersonHoverCard key={id} person={person}>
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => onPerson(id)}
+                                                        className="border-line text-ink-2 hover:bg-panel-2 hover:text-ink focus-visible:ring-brand/50 inline-flex items-center gap-1.5 rounded-full border py-0.5 pl-0.5 pr-2.5 text-xs outline-none focus-visible:ring-2"
+                                                    >
+                                                        <Portrait handle={person.handle} size={20} />
+                                                        {person.name}
+                                                    </button>
+                                                </PersonHoverCard>
                                             );
                                         })}
                                     </div>
@@ -203,7 +226,7 @@ export function ReportTab({
 
             {report && report.dynamics.length > 0 && (
                 <section className="max-w-[80ch]">
-                    <SectionHeading title="What drove it" />
+                    <SectionHeading title={t("drivers")} />
                     <ul className="flex flex-col gap-3">
                         {report.dynamics.map((d, i) => (
                             <li key={i} className="text-ink-2 text-[13.5px] leading-relaxed">
@@ -227,23 +250,23 @@ export function ReportTab({
 
             {report && report.turningPoints.length > 0 && (
                 <section className="max-w-[80ch]">
-                    <SectionHeading title="Turning points" />
+                    <SectionHeading title={t("turningPoints")} />
                     <ol className="border-line bg-panel overflow-hidden rounded-lg border">
-                        {report.turningPoints.map((t, i) => (
+                        {report.turningPoints.map((point, i) => (
                             <li
                                 key={i}
                                 className="border-line-2 grid grid-cols-[72px_minmax(0,1fr)] gap-3 border-t px-4 py-3 first:border-t-0"
                             >
                                 <span className="text-ink-3 font-mono text-xs tabular-nums">
-                                    Round {t.round}
+                                    {t("turningRound", { round: point.round })}
                                 </span>
                                 <div className="min-w-0">
                                     <p className="text-ink-2 text-[13.5px] leading-relaxed">
-                                        {t.text}
+                                        {point.text}
                                     </p>
-                                    {t.postIds.length > 0 && (
+                                    {point.postIds.length > 0 && (
                                         <div className="mt-1.5 flex flex-wrap gap-1.5">
-                                            {t.postIds.map(id => (
+                                            {point.postIds.map(id => (
                                                 <PostRef
                                                     key={id}
                                                     post={postById.get(id)}
@@ -261,7 +284,7 @@ export function ReportTab({
 
             {report && report.watchFor.length > 0 && (
                 <section className="max-w-[80ch]">
-                    <SectionHeading title="Watch for in the real world" />
+                    <SectionHeading title={t("watchFor")} />
                     <ul className="text-ink-2 flex list-disc flex-col gap-1.5 pl-5 text-[13.5px] leading-relaxed">
                         {report.watchFor.map((w, i) => (
                             <li key={i}>{w}</li>
@@ -273,7 +296,7 @@ export function ReportTab({
             {report && run.roundStats.length > 0 && (
                 <details className="group">
                     <summary className="text-ink-2 hover:text-ink focus-visible:ring-brand/50 w-fit cursor-pointer rounded-sm text-[13px] outline-none focus-visible:ring-2">
-                        Numbers per round
+                        {t("numbersPerRound")}
                     </summary>
                     <div className="mt-3">
                         <RoundTable run={run} />
@@ -282,27 +305,33 @@ export function ReportTab({
             )}
 
             <p className="text-ink-3 text-xs tabular-nums">
-                {live ? "Used so far" : "Used"}: about {run.usage.calls.toLocaleString()} model
-                calls · {run.usage.credits.toLocaleString()} credits (estimated{" "}
-                {run.estimate.credits.toLocaleString()}).
+                {t(live ? "usageLive" : "usage", {
+                    calls: run.usage.calls,
+                    credits: run.usage.credits,
+                    estimate: run.estimate.credits,
+                })}
             </p>
         </div>
     );
 }
 
 function RoundTable({ run }: { run: ScenarioDetail }) {
+    const t = useTranslations("scenarios.report");
+    const tw = useTranslations("scenarios.words");
+    const locale = useLocale();
+    const format = useFormatter();
     return (
         <div className="border-line bg-panel overflow-x-auto rounded-lg border">
             <table className="w-full min-w-[560px] text-[13px]">
                 <thead>
                     <tr className="text-ink-3 text-left text-xs">
-                        <th className="px-4 py-2 font-medium">Round</th>
-                        <th className="px-2 py-2 text-right font-medium">Active</th>
-                        <th className="px-2 py-2 text-right font-medium">Posts</th>
-                        <th className="px-2 py-2 text-right font-medium">Comments</th>
-                        <th className="px-2 py-2 text-right font-medium">Likes</th>
-                        <th className="px-2 py-2 text-right font-medium">Shares</th>
-                        <th className="px-4 py-2 text-right font-medium">Mood</th>
+                        <th className="px-4 py-2 font-medium">{t("table.round")}</th>
+                        <th className="px-2 py-2 text-right font-medium">{t("table.active")}</th>
+                        <th className="px-2 py-2 text-right font-medium">{t("table.posts")}</th>
+                        <th className="px-2 py-2 text-right font-medium">{t("table.comments")}</th>
+                        <th className="px-2 py-2 text-right font-medium">{t("table.likes")}</th>
+                        <th className="px-2 py-2 text-right font-medium">{t("table.shares")}</th>
+                        <th className="px-4 py-2 text-right font-medium">{t("table.mood")}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -310,22 +339,25 @@ function RoundTable({ run }: { run: ScenarioDetail }) {
                         <tr key={r.round} className="border-line-2 border-t">
                             <td className="text-ink px-4 py-2 tabular-nums">{r.round}</td>
                             <td className="text-ink-2 px-2 py-2 text-right tabular-nums">
-                                {r.active}
+                                {format.number(r.active)}
                             </td>
                             <td className="text-ink-2 px-2 py-2 text-right tabular-nums">
-                                {r.posts}
+                                {format.number(r.posts)}
                             </td>
                             <td className="text-ink-2 px-2 py-2 text-right tabular-nums">
-                                {r.comments}
+                                {format.number(r.comments)}
                             </td>
                             <td className="text-ink-2 px-2 py-2 text-right tabular-nums">
-                                {r.likes}
+                                {format.number(r.likes)}
                             </td>
                             <td className="text-ink-2 px-2 py-2 text-right tabular-nums">
-                                {r.shares}
+                                {format.number(r.shares)}
                             </td>
                             <td className="text-ink-2 whitespace-nowrap px-4 py-2 text-right tabular-nums">
-                                {signed(r.meanStance)} · {moodWords(r.meanStance)}
+                                {t("roundMood", {
+                                    mean: formatSigned(r.meanStance, locale),
+                                    mood: moodLabel(tw, r.meanStance),
+                                })}
                             </td>
                         </tr>
                     ))}

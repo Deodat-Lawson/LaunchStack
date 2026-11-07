@@ -24,6 +24,9 @@ import {
     createValidationError,
     handleApiError,
 } from "~/lib/api-utils";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
+import { refuseAtAiAllowance } from "~/server/ai-usage/refusal";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
@@ -35,11 +38,18 @@ const CreateJobSchema = z.object({
 });
 
 export async function POST(request: Request) {
+    const t = translatorFor(localeOfRequest(request), "agents.server.repoExplainer");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
+        const refused = await refuseAtAiAllowance(
+            ctx.data.companyId,
+            ctx.data.authUserId,
+            localeOfRequest(request)
+        );
+        if (refused) return refused;
         if (!ctx.data.can("settings.manage")) {
-            return createForbiddenError("Only management roles can run the repo explainer");
+            return createForbiddenError(t("managersOnlyRun"));
         }
 
         const validation = await validateRequestBody(request, CreateJobSchema);
@@ -49,11 +59,10 @@ export async function POST(request: Request) {
 
         const companyId = BigInt(ctx.data.companyId);
         const workspace = await getRepoWorkspace(workspaceId, companyId);
-        if (!workspace) return createNotFoundError("Repository workspace");
+        if (!workspace) return createNotFoundError(t("workspaceNotFound"));
         if (workspace.status !== "active" || !workspace.headSha) {
             return createValidationError(
-                `Workspace is ${workspace.status}${workspace.headSha ? "" : " and has never synced"}. ` +
-                    "Wait for the first sync to complete."
+                t(workspace.headSha ? "notReady" : "neverSynced", { status: workspace.status })
             );
         }
 
@@ -66,12 +75,17 @@ export async function POST(request: Request) {
         });
         await inngest.send({
             name: "repo-explainer/job.requested",
-            data: { jobId: job.id, workspaceId, companyId: companyId.toString() },
+            data: {
+                jobId: job.id,
+                workspaceId,
+                companyId: companyId.toString(),
+                userId: ctx.data.authUserId,
+            },
         });
 
         return createSuccessResponse({ job: serializeExplainerJob(job) }, undefined, 202);
     } catch (error) {
-        return handleApiError(error);
+        return handleApiError(error, request);
     }
 }
 
@@ -89,6 +103,6 @@ export async function GET(request: Request) {
         });
         return createSuccessResponse({ jobs: jobs.map(serializeExplainerJob) });
     } catch (error) {
-        return handleApiError(error);
+        return handleApiError(error, request);
     }
 }

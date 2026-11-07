@@ -4,6 +4,8 @@ import { TEMPLATE_REGISTRY, buildEditorSections } from "@launchstack/pipelines/l
 import { generateDocument } from "@launchstack/pipelines/legal-templates/template-service";
 import { RenderingServiceError } from "@launchstack/document-conversion-engine";
 import { getGotenbergClient } from "~/server/rendering";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = "nodejs";
@@ -27,6 +29,9 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "generator.server.errors");
+    const tApi = translatorFor(locale, "errors.api");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
@@ -36,7 +41,7 @@ export async function POST(request: Request) {
 
         if (!parsed.success) {
             return NextResponse.json(
-                { success: false, error: "Invalid request", details: parsed.error.errors },
+                { success: false, error: tApi("invalidRequest"), details: parsed.error.errors },
                 { status: 400 }
             );
         }
@@ -46,7 +51,7 @@ export async function POST(request: Request) {
         const template = TEMPLATE_REGISTRY[templateId];
         if (!template) {
             return NextResponse.json(
-                { success: false, error: `Unknown template: ${templateId}` },
+                { success: false, error: t("unknownTemplate", { templateId }) },
                 { status: 400 }
             );
         }
@@ -57,7 +62,7 @@ export async function POST(request: Request) {
             return NextResponse.json(
                 {
                     success: false,
-                    error: "Validation failed",
+                    error: tApi("validationFailed"),
                     details: result.errors,
                     fieldErrors: result.fieldErrors ?? {},
                 },
@@ -82,7 +87,7 @@ export async function POST(request: Request) {
         if (format === "pdf") {
             if (!result.document) {
                 return NextResponse.json(
-                    { success: false, error: "Template produced no document" },
+                    { success: false, error: t("templateNoDocument") },
                     { status: 500 }
                 );
             }
@@ -92,9 +97,7 @@ export async function POST(request: Request) {
                     {
                         success: false,
                         error: "service_not_configured",
-                        message:
-                            "PDF rendering is not configured. Set GOTENBERG_SERVICE_URL (and " +
-                            "its basic-auth pair), or download the document as DOCX instead.",
+                        message: t("legalPdfNotConfigured"),
                     },
                     { status: 503 }
                 );
@@ -146,8 +149,8 @@ export async function POST(request: Request) {
         return NextResponse.json(
             {
                 success: false,
-                error: "Internal server error",
-                message: "Failed to generate legal document",
+                error: tApi("internal"),
+                message: t("legalGenerateFailed"),
             },
             { status: 500 }
         );

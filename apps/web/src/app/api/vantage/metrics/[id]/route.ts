@@ -17,7 +17,7 @@ export async function PATCH(request: NextRequest, { params }: Params) {
         const parsed = MetricDefinitionSchema.omit({ key: true })
             .partial()
             .safeParse(await readBody(request));
-        if (!parsed.success) return error(firstIssue(parsed.error.issues), 400);
+        if (!parsed.success) return error(firstIssue(parsed.error.issues, request), 400);
         const definition = await updateMetricDefinition({
             companyId: auth.ctx.companyId,
             id,
@@ -25,11 +25,11 @@ export async function PATCH(request: NextRequest, { params }: Params) {
         });
         return json({ definition });
     } catch (err) {
-        return handleVantageError("PATCH metric", err);
+        return handleVantageError("PATCH metric", err, request);
     }
 }
 
-export async function DELETE(_request: NextRequest, { params }: Params) {
+export async function DELETE(request: NextRequest, { params }: Params) {
     const auth = await vantageContext();
     if (!auth.ok) return auth.response;
     try {
@@ -37,6 +37,6 @@ export async function DELETE(_request: NextRequest, { params }: Params) {
         await deleteMetricDefinition({ companyId: auth.ctx.companyId, id });
         return json({ ok: true });
     } catch (err) {
-        return handleVantageError("DELETE metric", err);
+        return handleVantageError("DELETE metric", err, request);
     }
 }

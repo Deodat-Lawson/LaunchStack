@@ -220,6 +220,15 @@ function jsonRequest(body: unknown, url = "http://localhost/api/collab/meetings"
     });
 }
 
+/** The same request from someone reading the app in Simplified Chinese. */
+function chineseRequest(body: unknown, url = "http://localhost/api/collab/meetings") {
+    return new Request(url, {
+        method: "POST",
+        headers: { "content-type": "application/json", cookie: "ls-locale=zh-CN.1" },
+        body: JSON.stringify(body),
+    });
+}
+
 function params(meetingId: string) {
     return { params: Promise.resolve({ meetingId }) };
 }
@@ -300,6 +309,31 @@ describe("collab meeting routes", () => {
             expect((await response.json()) as { error: string }).toEqual({
                 error: 'Unknown participant "ghost"',
             });
+        });
+
+        it("words a refused plan in the reader's language", async () => {
+            const unknown = await createMeetingRoute(
+                chineseRequest({ title: "T", objective: "O", participantKeys: ["pm", "ghost"] })
+            );
+            expect(((await unknown.json()) as { error: string }).error).toBe("未知的参与者“ghost”");
+
+            const plan = {
+                title: "T",
+                objective: "O",
+                participantKeys: ["pm"],
+                phases: [
+                    { id: "a", title: "Diverge", goal: "Ideas", turns: 2, speakerIds: ["eng"] },
+                    { id: "b", title: " ", goal: "Close", turns: 1 },
+                ],
+            };
+            const english = await createMeetingRoute(jsonRequest(plan));
+            expect(((await english.json()) as { error: string }).error).toBe(
+                '"Diverge" names speakers who are not in the room. Phase 2 needs a title.'
+            );
+            const chinese = await createMeetingRoute(chineseRequest(plan));
+            expect(((await chinese.json()) as { error: string }).error).toBe(
+                "“Diverge”指定的发言者不在会议中。第 2 阶段需要标题。"
+            );
         });
 
         it("rejects a moderator who is not on the roster", async () => {
@@ -467,6 +501,21 @@ describe("collab meeting routes", () => {
             );
             expect(response.status).toBe(400);
             expect(((await response.json()) as { error: string }).error).toMatch(/Unknown persona/);
+        });
+
+        it("words the engine's refusal in the reader's language", async () => {
+            const { meeting } = await startMeeting();
+            const response = await control(
+                chineseRequest(
+                    { action: "takeover", asPersonaId: "not-in-this-meeting" },
+                    "http://localhost/x"
+                ),
+                params(meeting.id)
+            );
+            expect(response.status).toBe(400);
+            expect(((await response.json()) as { error: string }).error).toBe(
+                "未知的智能体“not-in-this-meeting”"
+            );
         });
 
         it("rejects an unknown action", async () => {

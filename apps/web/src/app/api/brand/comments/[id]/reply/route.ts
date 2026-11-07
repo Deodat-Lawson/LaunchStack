@@ -4,17 +4,24 @@ import { z } from "zod";
 
 import { replyToComment } from "~/server/brand/comments";
 
-import { brandPublishContext, error, handleBrandError, json, readBody } from "../../../_http";
+import {
+    brandPublishContext,
+    brandT,
+    error,
+    handleBrandError,
+    json,
+    readBody,
+} from "../../../_http";
 
 const ReplySchema = z.object({ text: z.string().min(1).max(5000) });
 
 export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-    const auth = await brandPublishContext();
+    const auth = await brandPublishContext(request);
     if (!auth.ok) return auth.response;
     try {
         const { id } = await params;
         const parsed = ReplySchema.safeParse(await readBody(request));
-        if (!parsed.success) return error("Write a reply first", 400);
+        if (!parsed.success) return error(brandT(request)("writeReply"), 400);
         const comment = await replyToComment({
             companyId: auth.ctx.companyId,
             userId: auth.ctx.userId,
@@ -23,6 +30,6 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
         });
         return json({ comment }, 201);
     } catch (err) {
-        return handleBrandError("POST reply", err);
+        return handleBrandError("POST reply", err, request);
     }
 }

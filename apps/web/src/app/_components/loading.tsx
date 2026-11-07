@@ -1,3 +1,5 @@
+import { useTranslations } from "next-intl";
+
 import { Spinner } from "~/components/ui/spinner";
 import { cn } from "~/lib/utils";
 import { LaunchstackMark } from "./LaunchstackLogo";
@@ -9,7 +11,7 @@ interface LoadingPageProps {
      * is still arriving, or the body under a page's own chrome.
      */
     variant?: "screen" | "pane";
-    /** Shown beside the spinner, and what a screen reader announces. */
+    /** Shown beside the spinner, and what a screen reader announces. "Loading…" by default. */
     label?: string;
     className?: string;
 }
@@ -24,15 +26,12 @@ interface LoadingPageProps {
  * ring, a bar, bouncing dots and a gradient heading that vanished in dark
  * mode, and it filled the whole viewport even inside a split pane.
  */
-export default function LoadingPage({
-    variant = "screen",
-    label = "Loading…",
-    className,
-}: LoadingPageProps) {
+export default function LoadingPage({ variant = "screen", label, className }: LoadingPageProps) {
+    const t = useTranslations("common.status");
     const status = (
         <span className="text-ink-3 flex items-center gap-2 text-[13px]">
             <Spinner aria-hidden="true" className="text-brand" />
-            {label}
+            {label ?? t("loading")}
         </span>
     );
 

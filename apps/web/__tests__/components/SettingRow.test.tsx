@@ -140,3 +140,46 @@ describe("SettingRow — who set it", () => {
         expect(container).not.toHaveTextContent(ADA);
     });
 });
+
+describe("SettingRow — a select says what the chosen option does", () => {
+    const fetchMock = jest.fn();
+
+    beforeEach(() => {
+        fetchMock.mockReset();
+        global.fetch = fetchMock as unknown as typeof fetch;
+        resetSettingsForTests();
+        act(() => resetPeopleCache());
+        fetchMock.mockImplementation(async (input: string) => {
+            const url = String(input);
+            if (url.startsWith("/api/settings")) {
+                return json({
+                    settings: {
+                        "chat.responseStyle": {
+                            key: "chat.responseStyle",
+                            value: "concise",
+                            source: "member",
+                            sourceId: VIEWER,
+                            updatedBy: VIEWER,
+                            updatedAt: null,
+                            canEdit: { workspace: true, folder: false, member: true },
+                            stored: { member: "concise" },
+                        },
+                    },
+                    viewer: { authUserId: VIEWER, permissions: ["settings.manage"] },
+                    folder: null,
+                } satisfies SettingsPayload);
+            }
+            throw new Error(`unexpected fetch ${url}`);
+        });
+    });
+
+    it("shows the chosen option's description under the closed menu, tied to it", async () => {
+        render(<SettingRow settingKey="chat.responseStyle" scope="member" />);
+
+        // In the reader's words: the answer styles' own messages.
+        const note = await screen.findByText("Short and direct: the answer first, no filler.");
+        const trigger = screen.getByRole("combobox", { name: /answer style/i });
+        expect(trigger).toHaveTextContent("Concise");
+        expect(trigger).toHaveAttribute("aria-describedby", note.id);
+    });
+});

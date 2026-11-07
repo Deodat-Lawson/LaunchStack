@@ -2,6 +2,7 @@
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import {
     capPassageText,
@@ -17,6 +18,8 @@ import { useMyProfile } from "~/lib/profile/use-my-profile";
 import { Button } from "~/components/ui/button";
 import { Sheet, SheetContent, SheetTitle } from "~/components/ui/sheet";
 import { useRegisterActions } from "~/components/context-menu";
+import { useFeedback } from "~/components/feedback/FeedbackProvider";
+import { feedbackReportHref } from "~/lib/feedback/contract";
 import {
     APP_TARGET_KIND,
     SELECTION_TARGET_KIND,
@@ -50,7 +53,7 @@ import {
     resolveBindings,
     type ShortcutBindings,
 } from "~/lib/shortcuts/commands";
-import type { ShortcutHints } from "./ShortcutHint";
+import { withShortcut, type ShortcutHints } from "./ShortcutHint";
 import { deriveRecallPrompt } from "~/lib/chat-turns";
 import { useChatRuntime } from "./useChatRuntime";
 import { backupChatEdit, removeChatEditBackup } from "./chatEditBackup";
@@ -63,7 +66,7 @@ import type { ChatAgentOption } from "./collab/types";
 import { AddSourceModal } from "./AddSourceModal";
 import { AskPanel, type ComposerSeed } from "./AskPanel";
 import type { DocumentTargetData } from "./documentContextMenu";
-import { citationWithSource, transcriptMarkdown } from "./transcript";
+import { citationWithSource, transcriptLabels, transcriptMarkdown } from "./transcript";
 import { CommandPalette } from "./CommandPalette";
 import { ConfirmActionDialog } from "./ConfirmActionDialog";
 import { DocumentViewer } from "./DocumentViewer";
@@ -76,6 +79,7 @@ import { RailResizeHandle, useRailWidth } from "./RailResizeHandle";
 import { PaneLauncher } from "./PaneLauncher";
 import { useLayoutPersistence } from "./useLayoutPersistence";
 import * as sessionApi from "./sessionApi";
+import { sessionErrorMessage } from "./sessionApi";
 import { useWorkspaceHistory } from "./useWorkspaceHistory";
 import { useSharedChatLive } from "./useSharedChatLive";
 import { StudioDrawer } from "./StudioDrawer";
@@ -93,9 +97,29 @@ import {
     useStudioLayout,
 } from "./paneLayout";
 import * as sourceApi from "./sourceApi";
-import { SOURCE_META, demotedFeatureHref, resolveStudioFeature, settingsSectionOf } from "./types";
+import { sourceApiErrorMessage } from "./sourceApi";
+import {
+    SOURCE_META,
+    demotedFeatureHref,
+    localizedStudioFeature,
+    resolveStudioFeature,
+    settingsSectionOf,
+    sourceTypeLabel,
+    studioFeatureDeniedNote,
+    studioFeatureLabel,
+    useStudioText,
+    type WorkspaceTranslator,
+} from "./types";
 import { TOOL_ALIASES, toolTargetFromHref } from "~/lib/tool-app/locations";
+import { WORKSPACE_TOOL_ID, settingsDestination, workspaceHref } from "~/lib/settings/surfaces";
 import { useWorkspaceData } from "./useWorkspaceData";
+import { refreshProcessingQueue, useProcessingQueue } from "./processing/queueStore";
+import {
+    hasUnfinishedLocalTasks,
+    onLocalTaskHandedOff,
+    useLocalTasks,
+} from "./processing/uploadTasks";
+import { queueBadge } from "./processing/viewModel";
 import type {
     PassageSelection,
     CitationHighlight,
@@ -127,10 +151,10 @@ const LEGACY_VIEW_REDIRECTS: Record<string, string> = {
     rewrite: "/employer/documents?feature=rewrite",
     upload: "/employer/documents?add=1",
     dashboard: "/employer/home",
-    analytics: "/employer/documents?feature=analytics",
-    employees: "/employer/settings#people",
+    analytics: "/employer/documents?feature=usage",
+    employees: workspaceHref("people"),
     settings: "/employer/settings",
-    metadata: "/employer/documents?feature=metadata",
+    metadata: workspaceHref("company"),
     "marketing-pipeline": "/employer/documents?feature=growth&at=%2Fbrand%2Fcampaigns",
     "repo-explainer": "/employer/tools/repo-explainer",
     distribution: "/employer/documents?feature=growth&at=%2Fprospects",
@@ -153,6 +177,8 @@ const LAUNCHER_APPS = ["chat", "knowledge", "meetings"] as const;
  * nobody is looking at. Once shown, a tool stays mounted like any tab.
  */
 const MOUNT_ON_FIRST_SHOW = new Set([
+    "workspace",
+    "usage",
     "growth",
     "proposals",
     "vantage",
@@ -183,10 +209,12 @@ const RETIRED_FEATURE_HREFS: Record<string, string> = {
 };
 
 /**
- * Points the Settings hub at a section. The hub follows the hash, mounted or
- * not. Setting the hash it already has fires no `hashchange`, so announce it
- * instead: picking a section again, after moving to another inside the hub,
- * would otherwise leave the hub where it was.
+ * Points the Settings hub at one of its sections. The hub follows the hash,
+ * mounted or not. Setting the hash it already has fires no `hashchange`, so
+ * announce it instead: picking a section again, after moving to another
+ * inside the hub, would otherwise leave the hub where it was. (A hash that
+ * belongs to the Workspace tab never comes through here; see
+ * `openSettingsPlace`.)
  */
 function showSettingsSection(section: string) {
     if (!section) return;
@@ -205,6 +233,20 @@ function showSettingsSection(section: string) {
  */
 export function WorkspaceShell() {
     const router = useRouter();
+    const t = useTranslations("workspace");
+    const tc = useTranslations("common");
+    const studio = useStudioText();
+    const tSourceTypes = useTranslations("sources.sourceTypes");
+    const tAudience = useTranslations("sources.audience");
+    const tSourceApi = useTranslations("sources.sourceApi");
+    const tSession = useTranslations("chat.sessionErrors");
+    const tTranscript = useTranslations("chat.transcript");
+    /**
+     * For effects that only report with it: a language switch must not re-run
+     * them — the session load's cleanup would drop a fetch still in flight.
+     */
+    const tRef = useRef(t);
+    tRef.current = t;
     const searchParams = useSearchParams();
     const { isLoaded, isSignedIn, userId, signOut } = useAuth();
     const { user } = useUser();
@@ -391,9 +433,9 @@ export function WorkspaceShell() {
     /** Why the focused pane cannot be split right now, or false when it can. */
     const splitRefusal = () =>
         layout.groups.length >= MAX_GROUPS
-            ? "Every pane is taken."
+            ? t("common.everyPaneTaken")
             : !activeFeatureId
-              ? "This pane is empty: open something in it first."
+              ? t("shell.splitEmptyPane")
               : false;
     /** Close a tab wherever it happens to be. */
     const closeTab = useCallback(
@@ -711,6 +753,7 @@ export function WorkspaceShell() {
         agents: chatAgents,
         companyId: companyId ?? null,
         refreshHistory,
+        onSourcesCreated: refresh,
     });
     const {
         busy: isSending,
@@ -742,7 +785,7 @@ export function WorkspaceShell() {
                     // Drop the param rather than sitting on a link to nothing.
                     hydratedSession.current = null;
                     setSessionParam(null);
-                    toast.error("That chat is no longer available");
+                    toast.error(tRef.current("shell.chatGone"));
                     return;
                 }
                 const access = stored.access;
@@ -759,7 +802,7 @@ export function WorkspaceShell() {
                 if (stored.agentKey !== undefined) setComposerAgentKey(stored.agentKey ?? null);
                 setActiveFeatureId("chat");
             } catch {
-                if (!cancelled) toast.error("Couldn't reopen that chat");
+                if (!cancelled) toast.error(tRef.current("shell.chatReopenFailed"));
             }
         })();
         return () => {
@@ -801,11 +844,11 @@ export function WorkspaceShell() {
         (id: string, title: string) => {
             renameHistoryEntry(`chat:${id}`, title);
             sessionApi.renameSession(id, title).catch(() => {
-                toast.error("Couldn't rename that chat");
+                toast.error(t("shell.chatRenameFailed"));
                 void refreshHistory();
             });
         },
-        [renameHistoryEntry, refreshHistory]
+        [renameHistoryEntry, refreshHistory, t]
     );
 
     const handleDeleteSession = useCallback(
@@ -813,11 +856,11 @@ export function WorkspaceShell() {
             removeHistoryEntry(`chat:${id}`);
             if (id === sessionIdRef.current) startNewChat();
             sessionApi.deleteSession(id).catch(() => {
-                toast.error("Couldn't delete that chat");
+                toast.error(t("shell.chatDeleteFailed"));
                 void refreshHistory();
             });
         },
-        [removeHistoryEntry, refreshHistory, startNewChat]
+        [removeHistoryEntry, refreshHistory, startNewChat, t]
     );
 
     /**
@@ -833,14 +876,14 @@ export function WorkspaceShell() {
                 // first, so the new chat never opens as "New chat".
                 await refreshHistory();
                 resumeSession(fork.id);
-                toast.success("Continued in a new chat", {
-                    description: "This copy is yours and private. The original is unchanged.",
+                toast.success(t("shell.chatContinued"), {
+                    description: t("shell.chatContinuedDescription"),
                 });
             } catch (err) {
-                toast.error(err instanceof Error ? err.message : "Couldn't continue that chat");
+                toast.error(sessionErrorMessage(err, tSession, t("shell.chatContinueFailed")));
             }
         },
-        [refreshHistory, resumeSession]
+        [refreshHistory, resumeSession, t, tSession]
     );
 
     /** The open chat is someone else's: whose, so the panel can say so; undefined when it's mine. */
@@ -873,7 +916,7 @@ export function WorkspaceShell() {
         },
         onGone: id => {
             if (sessionIdRef.current !== id) return;
-            toast.info("That chat is no longer shared with you");
+            toast.info(t("shell.chatNoLongerShared"));
             startNewChat();
             void refreshHistory();
         },
@@ -892,14 +935,14 @@ export function WorkspaceShell() {
             })
                 .then(res => {
                     if (!res.ok) throw new Error(String(res.status));
-                    toast.success("Deleted");
+                    toast.success(t("shell.runDeleted"));
                 })
                 .catch(() => {
-                    toast.error("Couldn't delete that");
+                    toast.error(t("shell.runDeleteFailed"));
                     void refreshHistory();
                 });
         },
-        [removeHistoryEntry, refreshHistory]
+        [removeHistoryEntry, refreshHistory, t]
     );
 
     /**
@@ -934,24 +977,22 @@ export function WorkspaceShell() {
                     ...prev,
                     {
                         role: "assistant",
-                        text: `Continuing **${title}** — the imported transcript is pinned as a source and I have the tail of that conversation in context. Pick up wherever you left off.`,
+                        text: t("shell.continuationMessage", { title }),
                         refs: [`d${docId}`],
                     },
                 ]);
             } catch {
-                toast.error("Couldn't load the imported session to continue it");
+                toast.error(t("shell.continuationFailed"));
             }
         },
-        [setActiveFeatureId]
+        [setActiveFeatureId, t]
     );
 
     const sendMessage = useCallback(
         async (send: ComposerSend) => {
             if (editingQueued) {
                 if (!chatRuntime.queue.items.some(item => item.id === editingQueued)) {
-                    toast.error(
-                        "That queued message was already sent or removed. Your edits remain in the composer."
-                    );
+                    toast.error(t("shell.queuedEditGone"));
                     return false;
                 }
                 const saved = await chatRuntime.modifyQueue(
@@ -964,7 +1005,7 @@ export function WorkspaceShell() {
             }
             return chatRuntime.submit(send);
         },
-        [chatRuntime, editingQueued]
+        [chatRuntime, editingQueued, t]
     );
 
     const editQueuedMessage = useCallback(
@@ -1018,11 +1059,11 @@ export function WorkspaceShell() {
             setSessionParam(null);
             setActiveFeatureId("chat");
             if (await saving)
-                toast.success("Fork saved as a new chat", {
-                    description: "The turns up to here come along; the original chat is untouched.",
+                toast.success(t("shell.forkSaved"), {
+                    description: t("shell.forkSavedDescription"),
                 });
         },
-        [setSessionParam, setActiveFeatureId, forkRuntime, thread]
+        [setSessionParam, setActiveFeatureId, forkRuntime, thread, t]
     );
 
     /**
@@ -1053,20 +1094,15 @@ export function WorkspaceShell() {
             try {
                 const send = payloadForMessage(question);
                 const backup = backupChatEdit(composerDraftKey, send);
-                if (!backup)
-                    throw new Error(
-                        "Couldn't save prompt recovery. Free browser storage before retrying; the original conversation is intact."
-                    );
+                if (!backup) throw new Error(t("shell.recoveryRetryFailed"));
                 const result = await chatRuntime.retry(questionIndex, send);
                 if (result === true || (typeof result === "object" && result.success))
                     removeChatEditBackup(composerDraftKey, backup);
             } catch (error) {
-                toast.error(
-                    error instanceof Error ? error.message : "Couldn't retry this response"
-                );
+                toast.error(sessionErrorMessage(error, tSession, t("shell.retryFailed")));
             }
         },
-        [thread, payloadForMessage, chatRuntime, composerDraftKey]
+        [thread, payloadForMessage, chatRuntime, composerDraftKey, t, tSession]
     );
 
     const editFromHere = useCallback(
@@ -1076,9 +1112,7 @@ export function WorkspaceShell() {
             try {
                 const send = payloadForMessage(question);
                 if (!backupChatEdit(composerDraftKey, send))
-                    throw new Error(
-                        "Couldn't save prompt recovery. Free browser storage before editing; the original conversation is intact."
-                    );
+                    throw new Error(t("shell.recoveryEditFailed"));
                 await chatRuntime.rewind(index);
                 if (activeComposerKey.current === composerDraftKey)
                     setComposerSeed({
@@ -1087,37 +1121,37 @@ export function WorkspaceShell() {
                         nonce: Date.now(),
                         draftKey: composerDraftKey,
                     });
-                else
-                    toast.success(
-                        "The edited question is saved with prompts in its original conversation."
-                    );
+                else toast.success(t("shell.editedSaved"));
             } catch (error) {
-                toast.error(error instanceof Error ? error.message : "Couldn't edit this message");
+                toast.error(sessionErrorMessage(error, tSession, t("shell.editFailed")));
             }
         },
-        [thread, payloadForMessage, chatRuntime, composerDraftKey]
+        [thread, payloadForMessage, chatRuntime, composerDraftKey, t, tSession]
     );
 
-    const saveAnswerAsNote = useCallback(async (text: string) => {
-        const title =
-            text
-                .split("\n")
-                .find(line => line.trim())
-                ?.replace(/[#*_>`]/g, "")
-                .trim()
-                .slice(0, 80) ?? "Chat answer";
-        try {
-            const res = await fetch("/api/notes", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ title, contentMarkdown: text, tags: ["chat"] }),
-            });
-            if (!res.ok) throw new Error(`Failed (${res.status})`);
-            toast.success("Saved to your notebook", { description: title });
-        } catch {
-            toast.error("Couldn't save that note");
-        }
-    }, []);
+    const saveAnswerAsNote = useCallback(
+        async (text: string) => {
+            const title =
+                text
+                    .split("\n")
+                    .find(line => line.trim())
+                    ?.replace(/[#*_>`]/g, "")
+                    .trim()
+                    .slice(0, 80) ?? t("shell.noteDefaultTitle");
+            try {
+                const res = await fetch("/api/notes", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ title, contentMarkdown: text, tags: ["chat"] }),
+                });
+                if (!res.ok) throw new Error(`Failed (${res.status})`);
+                toast.success(t("shell.noteSaved"), { description: title });
+            } catch {
+                toast.error(t("shell.noteSaveFailed"));
+            }
+        },
+        [t]
+    );
 
     const handleOpenSource = useCallback(
         (source: WorkspaceSource) => openSourceTab(source.id),
@@ -1170,21 +1204,21 @@ export function WorkspaceShell() {
             await refresh();
             if (outcome.restore) {
                 const restore = outcome.restore;
-                toast("Moved to trash", {
+                toast(t("shell.movedToTrash"), {
                     description: source.title,
                     duration: 8000,
                     action: {
-                        label: "Undo",
+                        label: tc("actions.undo"),
                         onClick: () => {
                             restore()
                                 .then(refresh)
-                                .catch(() => toast.error("Couldn't restore that mindmap"));
+                                .catch(() => toast.error(t("shell.restoreMindmapFailed")));
                         },
                     },
                 });
             }
         },
-        [closeSource, refresh, sourceParam]
+        [closeSource, refresh, sourceParam, t, tc]
     );
 
     const handleDeleteSource = useCallback(
@@ -1192,10 +1226,10 @@ export function WorkspaceShell() {
             try {
                 await removeSource(source);
             } catch (err) {
-                alert(err instanceof Error ? err.message : "Failed to delete source");
+                alert(sourceApiErrorMessage(err, tSourceApi, t("shell.deleteSourceFailed")));
             }
         },
-        [removeSource]
+        [removeSource, t, tSourceApi]
     );
 
     const confirmDeleteSource = useCallback(async () => {
@@ -1206,11 +1240,11 @@ export function WorkspaceShell() {
             for (const source of deleteTargets) await removeSource(source);
             setDeleteTargets(null);
         } catch (err) {
-            setDeleteError(err instanceof Error ? err.message : "Failed to delete source");
+            setDeleteError(sourceApiErrorMessage(err, tSourceApi, t("shell.deleteSourceFailed")));
         } finally {
             setDeleteBusy(false);
         }
-    }, [deleteTargets, removeSource]);
+    }, [deleteTargets, removeSource, t, tSourceApi]);
 
     const requestDelete = useCallback((targets: WorkspaceSource[]) => {
         setDeleteError(null);
@@ -1251,19 +1285,19 @@ export function WorkspaceShell() {
      */
     const askAboutPassage = useCallback(
         (source: WorkspaceSource, selection: PassageSelection) => {
-            const passage = passageFromSource(source, selection);
+            const passage = passageFromSource(source, selection, t);
             if (!passage) return;
             handleAskAbout(source);
             seedComposer("", "append", [passage]);
         },
-        [handleAskAbout, seedComposer]
+        [handleAskAbout, seedComposer, t]
     );
 
     /** Send a question about a selected passage, scoped to the document it came from. */
     const askAboutSelection = useCallback(
         (question: string, target: ContextTarget, ctx: MenuOpenContext) => {
             const home = selectionHome(ctx);
-            const passage = passageFromSelection(target.data as TextSelectionInfo, home);
+            const passage = passageFromSelection(target.data as TextSelectionInfo, home, t);
             if (!passage) return;
             if (home?.kind === "document") handleAskAbout(home.source);
             setActiveFeatureId("chat");
@@ -1277,7 +1311,7 @@ export function WorkspaceShell() {
                 passages: [passage],
             });
         },
-        [handleAskAbout, sendMessage, selected, composerAgentKey, setActiveFeatureId]
+        [handleAskAbout, sendMessage, selected, composerAgentKey, setActiveFeatureId, t]
     );
 
     const openAdd = useCallback((tabId?: string) => {
@@ -1293,13 +1327,13 @@ export function WorkspaceShell() {
     const pasteToCreateSource = useCallback(async () => {
         const text = (await readClipboardText())?.trim() ?? null;
         if (text === null) {
-            toast.info("Clipboard access was refused — paste with ⌘V instead");
+            toast.info(t("shell.clipboardRefused"));
             setAddPrefill(null);
             openAdd("paste");
             return;
         }
         if (!text) {
-            toast.info("The clipboard is empty");
+            toast.info(t("shell.clipboardEmpty"));
             return;
         }
         if (/^https?:\/\/\S+$/i.test(text)) {
@@ -1309,7 +1343,35 @@ export function WorkspaceShell() {
             setAddPrefill({ text });
             openAdd("paste");
         }
-    }, [openAdd]);
+    }, [openAdd, t]);
+
+    const handleRetrySource = useCallback(
+        async (source: WorkspaceSource) => {
+            try {
+                await sourceApi.retrySourceProcessing(source);
+                toast.success(t("shell.retrying"), { description: source.title });
+            } catch (err) {
+                toast.error(
+                    sourceApiErrorMessage(err, tSourceApi, t("shell.retryProcessingFailed"))
+                );
+            }
+            await refresh();
+        },
+        [refresh, t, tSourceApi]
+    );
+
+    const handleReembedSource = useCallback(
+        async (source: WorkspaceSource) => {
+            try {
+                await sourceApi.reembedSource(source);
+                toast.success(t("shell.reembedding"), { description: source.title });
+            } catch (err) {
+                toast.error(sourceApiErrorMessage(err, tSourceApi, t("shell.reembedFailed")));
+            }
+            await refresh();
+        },
+        [refresh, t, tSourceApi]
+    );
 
     const handleMoveToFolder = useCallback(
         async (sourceId: string, folderName: string) => {
@@ -1323,14 +1385,14 @@ export function WorkspaceShell() {
                 // private to you takes the folder's audience; Unfiled makes
                 // it yours alone).
                 const leaf = folderLeafName(folderName);
-                toast.success(`Moved to ${leaf}`, {
-                    description: moveOutcomeMessage(moved.access, leaf) ?? undefined,
+                toast.success(t("shell.movedTo", { folder: leaf }), {
+                    description: moveOutcomeMessage(moved.access, leaf, tAudience) ?? undefined,
                 });
             } catch (err) {
-                toast.error(err instanceof Error ? err.message : "Couldn't move that");
+                toast.error(sourceApiErrorMessage(err, tSourceApi, t("shell.moveFailed")));
             }
         },
-        [sources, refresh]
+        [sources, refresh, t, tAudience, tSourceApi]
     );
 
     const openFolderAccess = useCallback((folder: WorkspaceFolder) => {
@@ -1341,13 +1403,16 @@ export function WorkspaceShell() {
         });
     }, []);
 
-    const openDocumentAccess = useCallback((source: WorkspaceSource) => {
-        if (!source.documentId) {
-            toast.info("This source is still being indexed.");
-            return;
-        }
-        setAccessTarget({ kind: "document", id: source.documentId, name: source.title });
-    }, []);
+    const openDocumentAccess = useCallback(
+        (source: WorkspaceSource) => {
+            if (!source.documentId) {
+                toast.info(t("common.indexingReason"));
+                return;
+            }
+            setAccessTarget({ kind: "document", id: source.documentId, name: source.title });
+        },
+        [t]
+    );
 
     /**
      * Open what a notification or an activity row points at. A file that was
@@ -1392,8 +1457,12 @@ export function WorkspaceShell() {
 
     /** The sidebar's inbox bell; the rail itself shows where the item lives. */
     const inboxRail = useMemo(
-        () => ({ onOpenTarget: (target: TeamTarget) => void openTeamTarget(target) }),
-        [openTeamTarget]
+        () => ({
+            onOpenTarget: (target: TeamTarget) => void openTeamTarget(target),
+            // Through the URL, like any tool link: the `?feature=` effect opens the tab there.
+            onOpenFeedback: (reportId: number) => router.push(feedbackReportHref(reportId, "mine")),
+        }),
+        [openTeamTarget, router]
     );
 
     /**
@@ -1437,6 +1506,8 @@ export function WorkspaceShell() {
     // on the folder; the rail checks both per row.
     const canAddFolders = can("documents.upload");
     const canFileSources = can("documents.edit");
+    // Retrying re-runs processing, which takes what uploading a version does.
+    const canRetrySources = can("documents.upload");
     const folderPaths = useMemo(() => folders.map(f => f.name), [folders]);
     /** Where an upload may land: folders the caller can add to (and Unfiled). */
     const uploadFolderPaths = useMemo(
@@ -1473,16 +1544,16 @@ export function WorkspaceShell() {
                     data?: Record<string, unknown>;
                 };
                 if (!res.ok || !json.success) {
-                    return json.message ?? `Request failed (${res.status})`;
+                    return json.message ?? t("shell.requestFailed", { status: res.status });
                 }
                 onData?.(json.data ?? {});
                 await refresh();
                 return null;
             } catch (err) {
-                return err instanceof Error ? err.message : "Request failed";
+                return err instanceof Error ? err.message : t("shell.requestFailedGeneric");
             }
         },
-        [refresh]
+        [refresh, t]
     );
 
     /**
@@ -1496,14 +1567,16 @@ export function WorkspaceShell() {
             const failure = await folderRequest("POST", { path }, data => {
                 if (typeof data.renamedTo === "string" && data.renamedTo) {
                     actual = data.renamedTo;
-                    toast.info(`Created “${folderLeafName(actual)}”`, {
-                        description: `This workspace already has a folder called “${folderLeafName(path)}”.`,
+                    toast.info(t("shell.folderCreated", { name: folderLeafName(actual) }), {
+                        description: t("shell.folderCreatedDescription", {
+                            name: folderLeafName(path),
+                        }),
                     });
                 }
             });
             return { failure, path: actual };
         },
-        [folderRequest]
+        [folderRequest, t]
     );
 
     const handleCreateFolder = useCallback(
@@ -1523,10 +1596,16 @@ export function WorkspaceShell() {
                 const where = folderParentPath(newPath);
                 const description =
                     access === "kept_audience" || access === "inherits_folder"
-                        ? moveOutcomeMessage(access, where ? folderLeafName(where) : leaf)
+                        ? moveOutcomeMessage(
+                              access,
+                              where ? folderLeafName(where) : leaf,
+                              tAudience
+                          )
                         : null;
                 toast.success(
-                    where ? `Moved to ${folderLeafName(where)}` : `Moved ${leaf} to the top level`,
+                    where
+                        ? t("shell.movedTo", { folder: folderLeafName(where) })
+                        : t("shell.movedToTop", { name: leaf }),
                     {
                         description: description ?? undefined,
                     }
@@ -1537,7 +1616,7 @@ export function WorkspaceShell() {
             }
             return failure;
         },
-        [folderRequest, activeFolder]
+        [folderRequest, activeFolder, t, tAudience]
     );
 
     /** Drag-and-drop and the folder menu: the move is a rename to a new parent. */
@@ -1575,6 +1654,32 @@ export function WorkspaceShell() {
     const openFeature = useCallback(() => setStudioOpen(true), []);
 
     /**
+     * Where a `/employer/settings#<hash>` link goes inside the workspace:
+     * Settings on one of its own sections, the Workspace tab on the screen a
+     * workspace section moved to (with the row or People tab the hash named
+     * as its `focus`), or the Usage tab (Spending, for `#usage…`). Never a
+     * page leave.
+     */
+    const openSettingsPlace = useCallback(
+        (hash: string) => {
+            const destination = settingsDestination(hash);
+            if (destination?.kind === "workspace") {
+                requestToolLocation(WORKSPACE_TOOL_ID, destination.at);
+                expandFeatureRef.current(WORKSPACE_TOOL_ID);
+                return;
+            }
+            if (destination?.kind === "app") {
+                if (destination.at) requestToolLocation(destination.featureId, destination.at);
+                expandFeatureRef.current(destination.featureId);
+                return;
+            }
+            showSettingsSection(destination?.kind === "settings" ? destination.hash : hash);
+            expandFeatureRef.current("settings");
+        },
+        [requestToolLocation]
+    );
+
+    /**
      * Every way of picking an app ends here: the picker, the Studio menu, the
      * command palette, a keyboard shortcut and `?feature=`. The app opens in
      * a tab — every Studio app does, tools with screens of their own
@@ -1594,11 +1699,10 @@ export function WorkspaceShell() {
                 if (!href) return;
                 const section = settingsSectionOf(href);
                 if (section !== undefined) {
-                    // "Agents & nodes", "Workspace" and the like are sections
-                    // of Settings, which is a tab here. Following the link
+                    // A link into Settings opens a tab here — Settings, or the
+                    // Workspace tab for what moved there. Following the link
                     // would leave the workspace and close every open tab.
-                    showSettingsSection(section);
-                    expandFeatureRef.current("settings");
+                    openSettingsPlace(section);
                     return;
                 }
                 setStudioOpen(false);
@@ -1612,10 +1716,11 @@ export function WorkspaceShell() {
                 // the chat otherwise, with no word. One toast per app. Not
                 // when the answer failed: an owner would be told the app
                 // isn't part of their role.
-                if (permissionsLoaded && !permissionsError && feature.deniedNote) {
-                    toast.info(`${feature.label} isn't part of your role`, {
+                const deniedNote = studioFeatureDeniedNote(studio, feature);
+                if (permissionsLoaded && !permissionsError && deniedNote) {
+                    toast.info(t("shell.deniedApp", { app: studioFeatureLabel(studio, feature) }), {
                         id: `denied:${feature.id}`,
-                        description: feature.deniedNote,
+                        description: deniedNote,
                     });
                 }
                 return;
@@ -1623,9 +1728,57 @@ export function WorkspaceShell() {
             setActiveFeatureId(featureId, groupId);
             setStudioOpen(false);
         },
-        [can, permissionsLoaded, permissionsError, router, setActiveFeatureId, requestToolLocation]
+        [
+            can,
+            permissionsLoaded,
+            permissionsError,
+            router,
+            setActiveFeatureId,
+            requestToolLocation,
+            openSettingsPlace,
+            t,
+            studio,
+        ]
     );
     expandFeatureRef.current = expandFeature;
+
+    /**
+     * Something was added (an upload, a folder, a link, a Drive or Gmail
+     * import): show the Processing tab, which follows it from its first byte
+     * to "ready". Asks the queue at once so the file is there when the tab is.
+     */
+    const openProcessing = useCallback(() => {
+        expandFeature("processing");
+        void refreshProcessingQueue();
+    }, [expandFeature]);
+
+    // An upload the dialog handed off reached the server: the library gains
+    // its row now, and the queue picks up its job.
+    useEffect(
+        () =>
+            onLocalTaskHandedOff(() => {
+                void refresh();
+                void refreshProcessingQueue();
+            }),
+        [refresh]
+    );
+
+    // Adding something opens the Processing tab: fetch its code while the
+    // dialog is up, so the tab draws the moment the dialog hands over.
+    useEffect(() => {
+        if (addOpen) void import("./processing/ProcessingQueuePane");
+    }, [addOpen]);
+
+    // Leaving the page drops a file whose bytes are still going up.
+    useEffect(() => {
+        const warn = (event: BeforeUnloadEvent) => {
+            if (!hasUnfinishedLocalTasks()) return;
+            event.preventDefault();
+            event.returnValue = "";
+        };
+        window.addEventListener("beforeunload", warn);
+        return () => window.removeEventListener("beforeunload", warn);
+    }, []);
 
     /** A tool's tab, at a place inside it: "/prospects/companies/12". */
     const openTool = useCallback(
@@ -1672,17 +1825,15 @@ export function WorkspaceShell() {
      * if the permission does.
      */
     /**
-     * Where the chat panel's own chrome sends people. Settings is a Studio app
-     * now, so following the link would leave the workspace and close every
-     * open tab to reach something that is one tab away. The hash is how the
-     * settings panel picks its section, mounted or not.
+     * Where the chat panel's own chrome sends people. Settings and Workspace
+     * are Studio apps now, so following the link would leave the workspace
+     * and close every open tab to reach something that is one tab away.
      */
     const navigateStudio = useCallback(
         (href: string) => {
             const section = settingsSectionOf(href);
             if (section !== undefined) {
-                showSettingsSection(section);
-                expandFeature("settings");
+                openSettingsPlace(section);
                 return;
             }
             // A tool's screen — its old `/employer/tools/…` URL included —
@@ -1694,7 +1845,17 @@ export function WorkspaceShell() {
             }
             router.push(href);
         },
-        [expandFeature, openTool, router]
+        [openSettingsPlace, openTool, router]
+    );
+
+    // The Processing tab says how many files are still moving beside its
+    // name — polled only while that tab is open somewhere.
+    const processingOpen = layout.groups.some(group => group.tabIds.includes("processing"));
+    const processingQueue = useProcessingQueue(processingOpen);
+    const localTasks = useLocalTasks();
+    const processingBadge = useMemo(
+        () => (processingOpen ? queueBadge(processingQueue.data?.items ?? [], localTasks) : null),
+        [processingOpen, processingQueue.data, localTasks]
     );
 
     /**
@@ -1709,13 +1870,27 @@ export function WorkspaceShell() {
             if (id.startsWith(SOURCE_TAB_PREFIX)) {
                 const source = sources.find(item => item.id === sourceIdOfTab(id));
                 if (!source) return undefined;
-                const meta = SOURCE_META[source.type] ?? SOURCE_META.doc;
-                return { id, label: source.title, Icon: meta.Icon, desc: meta.label };
+                const type = SOURCE_META[source.type] ? source.type : "doc";
+                return {
+                    id,
+                    label: source.title,
+                    Icon: SOURCE_META[type].Icon,
+                    desc: sourceTypeLabel(tSourceTypes, type),
+                };
             }
             const feature = resolveStudioFeature(id);
-            return feature && can(feature.requires) ? feature : undefined;
+            if (!feature || !can(feature.requires)) return undefined;
+            const localized = localizedStudioFeature(studio, feature);
+            if (id === "processing" && processingBadge) {
+                return {
+                    ...localized,
+                    count: processingBadge.count,
+                    countTone: processingBadge.tone,
+                };
+            }
+            return localized;
         },
-        [sources, can]
+        [sources, can, studio, tSourceTypes, processingBadge]
     );
 
     /**
@@ -1818,7 +1993,13 @@ export function WorkspaceShell() {
             router.replace(RETIRED_FEATURE_HREFS[featureParam]);
             return;
         }
-        if (featureParam) {
+        if (featureParam === "settings" && !atParam) {
+            // `?feature=settings#models` and the old OpenRouter return leg
+            // (`?feature=settings&openrouter=…`) name what is the Workspace
+            // tab now; the hash goes with the cleanup below, so read it first.
+            const hash = window.location.hash;
+            openSettingsPlace(searchParams.has("openrouter") && !hash ? "byok" : hash);
+        } else if (featureParam) {
             const feature = resolveStudioFeature(featureParam);
             // A gated app must not be dropped just because permissions have
             // not landed. Wait for them — the effect re-runs — but only for
@@ -1837,11 +2018,14 @@ export function WorkspaceShell() {
         }
         if (askParam?.trim()) seedComposer(askParam.trim().slice(0, 4_000), "replace");
         if (connectorParam) {
+            // Drive has no tab of its own: it is picked from Files, or from
+            // Folder when the callback says folder access was being granted.
             const tabByProvider: Record<string, string> = {
-                "google-drive": "drive",
+                "google-drive": tabParam === "folder" ? "folder" : "files",
                 slack: "slack",
                 github: "github",
                 gmail: "gmail",
+                notion: "notion",
             };
             // LinkedIn returns into Growth › Brand › Accounts (`feature=growth`
             // above), so it has no Add-source tab to reopen.
@@ -1850,6 +2034,7 @@ export function WorkspaceShell() {
                 slack: "Slack",
                 github: "GitHub",
                 gmail: "Gmail",
+                notion: "Notion",
                 linkedin: "LinkedIn",
                 bluesky: "Bluesky",
             };
@@ -1860,19 +2045,15 @@ export function WorkspaceShell() {
                 setAddOpen(true);
             }
             if (connectorResultParam === "connected") {
-                toast.success(`${name} connected`);
+                toast.success(tRef.current("shell.connectorConnected", { name }));
             } else if (connectorResultParam === "no-channels") {
-                toast.warning(
-                    `${name} connected, but the sign-in gave no permission to post. Check the scopes under Accounts.`
-                );
+                toast.warning(tRef.current("shell.connectorNoChannels", { name }));
             } else if (connectorResultParam === "partial") {
-                toast.warning(
-                    `${name} connected, but its Pages could not be read. Use Refresh Pages under Accounts.`
-                );
+                toast.warning(tRef.current("shell.connectorPartial", { name }));
             } else if (connectorResultParam === "denied") {
-                toast.info(`${name} connection was cancelled`);
+                toast.info(tRef.current("shell.connectorCancelled", { name }));
             } else {
-                toast.error(`${name} connection failed — try again`);
+                toast.error(tRef.current("shell.connectorFailed", { name }));
             }
         }
         const params = new URLSearchParams(searchParams.toString());
@@ -1898,6 +2079,7 @@ export function WorkspaceShell() {
         legacyRedirect,
         permissionsLoaded,
         expandFeature,
+        openSettingsPlace,
         requestToolLocation,
         startContinuation,
         seedComposer,
@@ -1910,7 +2092,7 @@ export function WorkspaceShell() {
     useRegisterActions([
         {
             id: "workspace.new-chat",
-            label: "New chat",
+            label: t("shell.actions.newChat"),
             icon: "newChat",
             order: 0,
             appliesTo: target => target.kind === APP_TARGET_KIND,
@@ -1918,7 +2100,7 @@ export function WorkspaceShell() {
         },
         {
             id: "workspace.add-knowledge",
-            label: "Add knowledge",
+            label: t("shell.actions.addKnowledge"),
             icon: "plus",
             shortcut: "⌘U",
             order: 1,
@@ -1927,7 +2109,7 @@ export function WorkspaceShell() {
         },
         {
             id: "workspace.paste-source",
-            label: "Paste to create a source",
+            label: t("shell.actions.pasteSource"),
             icon: "paste",
             order: 2,
             appliesTo: target => target.kind === APP_TARGET_KIND,
@@ -1935,7 +2117,7 @@ export function WorkspaceShell() {
         },
         {
             id: "workspace.palette",
-            label: "Command palette",
+            label: t("shell.actions.palette"),
             icon: "command",
             shortcut: "⌘K",
             order: 3,
@@ -1946,7 +2128,7 @@ export function WorkspaceShell() {
         },
         {
             id: "workspace.split",
-            label: "Split right",
+            label: t("common.splitRight"),
             icon: "split",
             shortcut: formatKeys("Mod+Alt+\\"),
             order: 5,
@@ -1956,7 +2138,7 @@ export function WorkspaceShell() {
         },
         {
             id: "workspace.split-down",
-            label: "Split down",
+            label: t("common.splitDown"),
             icon: "splitDown",
             shortcut: formatKeys("Mod+Alt+Shift+\\"),
             order: 5,
@@ -1966,29 +2148,27 @@ export function WorkspaceShell() {
         },
         {
             id: "workspace.zoom",
-            label: layout.zoomedGroupId ? "Restore the other panes" : "Maximize this pane",
+            label: layout.zoomedGroupId ? t("common.restorePanes") : t("common.maximizePane"),
             icon: "expand",
             shortcut: formatKeys("Mod+Shift+Enter"),
             order: 6,
             appliesTo: target => target.kind === APP_TARGET_KIND,
             disabled: () =>
-                layout.groups.length < 2 && !layout.zoomedGroupId
-                    ? "The workspace is not split."
-                    : false,
+                layout.groups.length < 2 && !layout.zoomedGroupId ? t("common.notSplit") : false,
             run: () => toggleZoom(),
         },
         {
             id: "workspace.focus-next-column",
-            label: "Focus the next pane",
+            label: t("shell.actions.focusNext"),
             icon: "move",
             order: 6,
             appliesTo: target => target.kind === APP_TARGET_KIND,
-            disabled: () => (layout.groups.length < 2 ? "The workspace is not split." : false),
+            disabled: () => (layout.groups.length < 2 ? t("common.notSplit") : false),
             run: () => focusAdjacentGroup(1),
         },
         {
             id: "workspace.toggle-rail",
-            label: railVisible ? "Hide sidebar" : "Show sidebar",
+            label: railVisible ? t("shell.actions.hideSidebar") : t("shell.actions.showSidebar"),
             icon: "sidebar",
             shortcut: "⌘\\",
             order: 4,
@@ -2003,17 +2183,17 @@ export function WorkspaceShell() {
     useRegisterActions([
         {
             id: "chat.message.ask-again",
-            label: "Ask again",
+            label: t("shell.actions.askAgain"),
             icon: "retry",
             order: 10,
             // Someone else's chat is read-only here; it is continued as a fork.
             appliesTo: target => target.kind === "chat-message" && !readOnlyChatRef.current,
-            disabled: () => (isSending ? "Wait for the current answer." : false),
+            disabled: () => (isSending ? t("shell.actions.waitForAnswer") : false),
             run: target => void askAgain((target.data as { index: number }).index),
         },
         {
             id: "chat.message.branch",
-            label: "Branch a new chat from here",
+            label: t("shell.actions.branch"),
             icon: "branch",
             order: 11,
             appliesTo: target =>
@@ -2023,7 +2203,7 @@ export function WorkspaceShell() {
         },
         {
             id: "chat.message.save-note",
-            label: "Save answer as a note",
+            label: t("shell.actions.saveNote"),
             icon: "note",
             order: 12,
             appliesTo: target => target.kind === "chat-message",
@@ -2031,7 +2211,7 @@ export function WorkspaceShell() {
         },
         {
             id: "chat.message.save-source",
-            label: "Save answer as a source",
+            label: t("shell.actions.saveSource"),
             icon: "plus",
             order: 13,
             appliesTo: target => target.kind === "chat-message",
@@ -2042,23 +2222,29 @@ export function WorkspaceShell() {
         },
         {
             id: "chat.save-transcript-source",
-            label: "Save transcript as a source",
+            label: t("shell.actions.saveTranscript"),
             icon: "plus",
             order: 10,
             appliesTo: target => target.kind === "chat",
             disabled: target =>
                 (target.data as { thread: ThreadMessage[] }).thread.length === 0
-                    ? "Nothing to save yet."
+                    ? t("shell.actions.nothingToSave")
                     : false,
             run: target => {
                 const data = target.data as { thread: ThreadMessage[]; sources: WorkspaceSource[] };
-                setAddPrefill({ text: transcriptMarkdown(data.thread, data.sources) });
+                setAddPrefill({
+                    text: transcriptMarkdown(
+                        data.thread,
+                        data.sources,
+                        transcriptLabels(tTranscript)
+                    ),
+                });
                 openAdd("paste");
             },
         },
         {
             id: "selection.ask",
-            label: "Ask about this",
+            label: t("shell.actions.askAboutThis"),
             icon: "ask",
             order: 0,
             appliesTo: (target, ctx) =>
@@ -2072,32 +2258,34 @@ export function WorkspaceShell() {
                         page: pageOfSelection(selection),
                     });
                 else {
-                    const passage = passageFromSelection(selection, home);
+                    const passage = passageFromSelection(selection, home, t);
                     if (passage) seedComposer("", "append", [passage]);
                 }
             },
         },
         {
             id: "selection.explain",
-            label: "Explain this",
+            label: t("shell.actions.explain"),
             icon: "explain",
             order: 1,
             appliesTo: (target, ctx) =>
                 target.kind === SELECTION_TARGET_KIND && selectionHome(ctx) !== null,
-            run: (target, ctx) => askAboutSelection("Explain this passage.", target, ctx),
+            // The question is the reader's own turn in the chat, so it is
+            // asked in their language — and the answer comes back in it.
+            run: (target, ctx) => askAboutSelection(t("shell.questions.explain"), target, ctx),
         },
         {
             id: "selection.summarise",
-            label: "Summarise this",
+            label: t("shell.actions.summarise"),
             icon: "transcript",
             order: 2,
             appliesTo: (target, ctx) =>
                 target.kind === SELECTION_TARGET_KIND && selectionHome(ctx) !== null,
-            run: (target, ctx) => askAboutSelection("Summarise this passage.", target, ctx),
+            run: (target, ctx) => askAboutSelection(t("shell.questions.summarise"), target, ctx),
         },
         {
             id: "selection.copy-cited",
-            label: "Copy with citation",
+            label: t("shell.actions.copyCited"),
             icon: "quote",
             order: 3,
             appliesTo: (target, ctx) =>
@@ -2109,12 +2297,12 @@ export function WorkspaceShell() {
                     (target.data as TextSelectionInfo).text,
                     home.source
                 );
-                if (await copyText(text)) toast.success("Copied with citation");
+                if (await copyText(text)) toast.success(t("shell.actions.copiedCited"));
             },
         },
         {
             id: "selection.note",
-            label: "Add a note with this",
+            label: t("shell.actions.addNote"),
             icon: "note",
             order: 4,
             appliesTo: (target, ctx) => {
@@ -2138,6 +2326,9 @@ export function WorkspaceShell() {
     const shortcutOverrides = useSettingValue<ShortcutBindings>("shortcuts.bindings");
     const bindings = useMemo(() => resolveBindings(shortcutOverrides), [shortcutOverrides]);
     const bindingsRef = useRef(bindings);
+    const feedback = useFeedback();
+    const feedbackRef = useRef(feedback);
+    feedbackRef.current = feedback;
     bindingsRef.current = bindings;
     /** The member's keys, formatted for the controls that show them. */
     const shortcutHints = useMemo<ShortcutHints>(() => {
@@ -2221,6 +2412,9 @@ export function WorkspaceShell() {
                 case "pane.close":
                     paneVerbsRef.current.close();
                     break;
+                case "feedback.report":
+                    feedbackRef.current.open({ kind: "bug" });
+                    break;
                 default:
                     if (command.id.startsWith("feature.")) {
                         expandFeatureRef.current(command.id.slice("feature.".length));
@@ -2279,11 +2473,11 @@ export function WorkspaceShell() {
         ]
     );
 
-    if (!isLoaded) return <LoadingPage label="Opening your workspace…" />;
-    if (!isSignedIn) return <LoadingPage label="Opening your workspace…" />;
+    if (!isLoaded) return <LoadingPage label={t("shell.loading")} />;
+    if (!isSignedIn) return <LoadingPage label={t("shell.loading")} />;
 
     // While a legacy `?view=X` redirect is in flight, avoid flashing the workspace.
-    if (legacyRedirect) return <LoadingPage label="Opening your workspace…" />;
+    if (legacyRedirect) return <LoadingPage label={t("shell.loading")} />;
 
     // How this workspace sees you; the session's name until the profile loads.
     const me = myProfile?.effective;
@@ -2331,7 +2525,7 @@ export function WorkspaceShell() {
                             if (isInsideActionMenu(e.target)) e.preventDefault();
                         }}
                     >
-                        <SheetTitle className="sr-only">Sources</SheetTitle>
+                        <SheetTitle className="sr-only">{t("shell.sources")}</SheetTitle>
                         <SourceRail
                             sources={sources}
                             folders={folders}
@@ -2381,6 +2575,12 @@ export function WorkspaceShell() {
                             onRenameSource={source => setRenameSource(source)}
                             onDeleteSource={source => requestDelete([source])}
                             onDeleteSources={requestDelete}
+                            onRetrySource={canRetrySources ? handleRetrySource : undefined}
+                            onReembedSource={
+                                canRetrySources
+                                    ? source => void handleReembedSource(source)
+                                    : undefined
+                            }
                             onAddToFolder={path => {
                                 setAddFolder(path);
                                 openAdd();
@@ -2456,6 +2656,10 @@ export function WorkspaceShell() {
                         onRenameSource={source => setRenameSource(source)}
                         onDeleteSource={source => requestDelete([source])}
                         onDeleteSources={requestDelete}
+                        onRetrySource={canRetrySources ? handleRetrySource : undefined}
+                        onReembedSource={
+                            canRetrySources ? source => void handleReembedSource(source) : undefined
+                        }
                         onAddToFolder={path => {
                             setAddFolder(path);
                             openAdd();
@@ -2536,8 +2740,8 @@ export function WorkspaceShell() {
                             variant="ghost"
                             size="icon"
                             className="text-ink-3 hover:bg-line-2 hover:text-ink size-7 shrink-0 rounded-md"
-                            title={"Show sidebar  ⌘\\"}
-                            aria-label="Show sidebar"
+                            title={withShortcut(t("shell.actions.showSidebar"), "⌘\\")}
+                            aria-label={t("shell.actions.showSidebar")}
                             onClick={toggleRail}
                         >
                             <PanelLeftOpen className="size-4" />
@@ -2548,13 +2752,13 @@ export function WorkspaceShell() {
                     <PaneLauncher
                         title={
                             layout.groups.length > 1
-                                ? "Open something here"
-                                : "Your workspace, ready when you are"
+                                ? t("shell.launcher.titleSplit")
+                                : t("shell.launcher.titleEmpty")
                         }
                         hint={
                             layout.groups.length > 1
-                                ? "Pick an app, or drag a tab or a source from the sidebar here."
-                                : "Open an app to get started. Later, drag a tab or a source to any edge to split, or ⌘-click one to open it beside."
+                                ? t("shell.launcher.hintSplit")
+                                : t("shell.launcher.hintEmpty")
                         }
                         apps={LAUNCHER_APPS.flatMap(id => {
                             const feature = resolveStudioFeature(id);
@@ -2659,7 +2863,7 @@ export function WorkspaceShell() {
                                               name:
                                                   history.entries.find(
                                                       entry => entry.refId === sessionParam
-                                                  )?.title ?? "This chat",
+                                                  )?.title ?? t("shell.thisChat"),
                                           })
                                     : undefined
                             }
@@ -2683,7 +2887,7 @@ export function WorkspaceShell() {
                             title={
                                 [...history.entries, ...history.archived.entries].find(
                                     entry => entry.refId === sessionParam
-                                )?.title ?? "New chat"
+                                )?.title ?? t("shell.actions.newChat")
                             }
                             onRename={
                                 sessionParam && !openChatSharer
@@ -2712,6 +2916,7 @@ export function WorkspaceShell() {
                             onAskAbout={handleAskAbout}
                             onAskAboutPassage={askAboutPassage}
                             onVersionChanged={() => void refresh()}
+                            onReembed={canRetrySources ? handleReembedSource : undefined}
                             onEdit={source => openSource(source.id, true)}
                             onPublished={() => void refresh()}
                             highlight={
@@ -2752,7 +2957,7 @@ export function WorkspaceShell() {
                                     // so pin only — a preview beside it would
                                     // show the same map twice.
                                     pinSource(editedMindmap);
-                                    const passage = passageFromSource(editedMindmap, { text });
+                                    const passage = passageFromSource(editedMindmap, { text }, t);
                                     if (passage) seedComposer("", "append", [passage]);
                                 }}
                             />
@@ -2786,7 +2991,11 @@ export function WorkspaceShell() {
                                         setComposerAgentKey(agentKey);
                                         setActiveFeatureId("chat");
                                         toast.success(
-                                            `${chatAgents.find(a => a.id === agentKey)?.displayName ?? agentKey} will answer your next message`
+                                            t("shell.agentWillAnswer", {
+                                                name:
+                                                    chatAgents.find(a => a.id === agentKey)
+                                                        ?.displayName ?? agentKey,
+                                            })
                                         );
                                     },
                                     onStartMeeting: agentKey => {
@@ -2801,6 +3010,20 @@ export function WorkspaceShell() {
                                     openAgentRequest,
                                 },
                                 team: teamTab,
+                                processing: {
+                                    viewerId: userId ?? null,
+                                    storageScope: layoutScope ?? undefined,
+                                    onOpenDocument: documentId => {
+                                        const id = `d${documentId}`;
+                                        if (sources.some(source => source.id === id)) {
+                                            openSource(id);
+                                        } else {
+                                            void refresh().then(() => openSource(id));
+                                        }
+                                    },
+                                    onAddSource: () => openAdd(),
+                                    onSettled: () => void refresh(),
+                                },
                                 investors: {
                                     onDraftInChat: prompt => seedComposer(prompt, "replace"),
                                     onSaveAsSource: markdown => {
@@ -2871,6 +3094,7 @@ export function WorkspaceShell() {
                 onUploaded={() => {
                     void refresh();
                 }}
+                onQueued={openProcessing}
                 sessions={{
                     onImported: refresh,
                     onOpenDocument: id => openSource(`d${id}`),
@@ -2917,10 +3141,9 @@ export function WorkspaceShell() {
                 }}
                 onPickSetting={key => {
                     setPalOpen(false);
-                    // The hub reads the hash on mount and on change; the row
-                    // scrolls itself into view.
-                    showSettingsSection(key);
-                    setTimeout(() => expandFeature("settings"), 100);
+                    // Settings or the Workspace tab, on the row's section;
+                    // the row scrolls itself into view.
+                    setTimeout(() => openSettingsPlace(key), 100);
                 }}
             />
 
@@ -2952,9 +3175,9 @@ export function WorkspaceShell() {
 
             <ConfirmActionDialog
                 open={Boolean(deleteTargets?.length)}
-                title={deleteDialogCopy(deleteTargets).title}
-                body={deleteDialogCopy(deleteTargets).body}
-                confirmLabel="Delete"
+                title={deleteDialogCopy(deleteTargets, t).title}
+                body={deleteDialogCopy(deleteTargets, t).body}
+                confirmLabel={tc("actions.delete")}
                 busy={deleteBusy}
                 error={deleteError}
                 onConfirm={() => void confirmDeleteSource()}
@@ -3025,20 +3248,23 @@ function EmbeddedSourcePane({
     onAskAbout: (source: WorkspaceSource) => void;
     onAskAboutPassage: (source: WorkspaceSource, selection: PassageSelection) => void;
     onVersionChanged: () => void;
+    onReembed?: (source: WorkspaceSource) => Promise<void>;
     onEdit: (source: WorkspaceSource) => void;
     onPublished: () => void;
     highlight: CitationHighlight | null;
     present: boolean;
     onExitPresent: () => void;
 }) {
+    const t = useTranslations("workspace.shell");
+    const tc = useTranslations("common");
     const source = sources.find(item => item.id === sourceId);
 
     if (!source) {
         return (
             <div className="text-ink-3 flex h-full flex-col items-center justify-center gap-3 p-6 text-center text-[13px]">
-                <p>This source is no longer in the library.</p>
+                <p>{t("sourceGone")}</p>
                 <Button variant="outline" size="sm" onClick={onClose}>
-                    Close
+                    {tc("actions.close")}
                 </Button>
             </div>
         );
@@ -3060,6 +3286,7 @@ interface ExpandedFeatureViewProps {
  * own chrome, aligned with the AskPanel header (jump, Studio, avatar).
  */
 function ExpandedFeatureView({ featureId, onPaneExit, paneContext }: ExpandedFeatureViewProps) {
+    const t = useTranslations("workspace.shell");
     const feature = resolveStudioFeature(featureId);
 
     // No header bar of its own: the tab above already names the app, with its
@@ -3072,7 +3299,7 @@ function ExpandedFeatureView({ featureId, onPaneExit, paneContext }: ExpandedFea
                     renderStudioPane(feature, onPaneExit, paneContext)
                 ) : (
                     <div className="text-ink-3 flex h-full items-center justify-center text-[13px]">
-                        This app is not available.
+                        {t("appUnavailable")}
                     </div>
                 )}
             </div>
@@ -3081,36 +3308,33 @@ function ExpandedFeatureView({ featureId, onPaneExit, paneContext }: ExpandedFea
 }
 
 /** Title and body for the delete dialog: one source by name, several by count. */
-function deleteDialogCopy(targets: WorkspaceSource[] | null): { title: string; body: string } {
+function deleteDialogCopy(
+    targets: WorkspaceSource[] | null,
+    t: WorkspaceTranslator
+): { title: string; body: string } {
     if (!targets?.length) return { title: "", body: "" };
     if (targets.length === 1) {
         const source = targets[0]!;
         return sourceApi.isMindmapSource(source)
             ? {
-                  title: "Move this mindmap to the trash?",
-                  body: `“${source.title}” will leave the library. You can undo this right after.`,
+                  title: t("shell.deleteDialog.mindmapTitle"),
+                  body: t("shell.deleteDialog.mindmapBody", { title: source.title }),
               }
             : {
-                  title: "Delete this source?",
-                  body: `“${source.title}” will be removed from this workspace. This cannot be undone.`,
+                  title: t("shell.deleteDialog.sourceTitle"),
+                  body: t("shell.deleteDialog.sourceBody", { title: source.title }),
               };
     }
     const mindmaps = targets.filter(sourceApi.isMindmapSource).length;
     const documents = targets.length - mindmaps;
-    const parts: string[] = [];
-    if (documents > 0) {
-        parts.push(
-            `${documents} ${documents === 1 ? "document" : "documents"} will be removed from this workspace — this cannot be undone`
-        );
-    }
-    if (mindmaps > 0) {
-        parts.push(
-            `${mindmaps} ${mindmaps === 1 ? "mindmap goes" : "mindmaps go"} to the trash, where you can undo`
-        );
-    }
     return {
-        title: `Delete ${targets.length} sources?`,
-        body: `${parts.join("; ")}.`,
+        title: t("shell.deleteDialog.manyTitle", { count: targets.length }),
+        body:
+            documents > 0 && mindmaps > 0
+                ? t("shell.deleteDialog.manyBodyBoth", { documents, mindmaps })
+                : documents > 0
+                  ? t("shell.deleteDialog.manyBodyDocuments", { documents })
+                  : t("shell.deleteDialog.manyBodyMindmaps", { mindmaps }),
     };
 }
 
@@ -3121,23 +3345,28 @@ type SelectionHome =
 /** A selection in a source as a passage to ask about. */
 function passageFromSource(
     source: WorkspaceSource,
-    selection: PassageSelection
+    selection: PassageSelection,
+    t: WorkspaceTranslator
 ): ChatPassage | null {
-    return notedPassage({
-        sourceId: source.id,
-        documentId: source.documentId,
-        title: source.title,
-        page: selection.page,
-        text: selection.text,
-    });
+    return notedPassage(
+        {
+            sourceId: source.id,
+            documentId: source.documentId,
+            title: source.title,
+            page: selection.page,
+            text: selection.text,
+        },
+        t
+    );
 }
 
 /** `makePassage`, saying so when a long selection had to be cut. */
-function notedPassage(input: Parameters<typeof makePassage>[0]): ChatPassage | null {
+function notedPassage(
+    input: Parameters<typeof makePassage>[0],
+    t: WorkspaceTranslator
+): ChatPassage | null {
     if (capPassageText(cleanSelectionText(input.text)).truncated)
-        toast.info(
-            `Long selection: the first ${MAX_PASSAGE_CHARS.toLocaleString()} characters were kept.`
-        );
+        toast.info(t("shell.longSelection", { count: MAX_PASSAGE_CHARS }));
     return makePassage(input);
 }
 
@@ -3155,14 +3384,22 @@ function pageOfSelection(selection: TextSelectionInfo): number | undefined {
 /** A right-click selection as a passage: from its document, or from this chat. */
 function passageFromSelection(
     selection: TextSelectionInfo,
-    home: SelectionHome | null
+    home: SelectionHome | null,
+    t: WorkspaceTranslator
 ): ChatPassage | null {
     if (home?.kind === "document")
-        return passageFromSource(home.source, {
-            text: selection.text,
-            page: pageOfSelection(selection),
-        });
-    return notedPassage({ sourceId: "chat", title: "This conversation", text: selection.text });
+        return passageFromSource(
+            home.source,
+            {
+                text: selection.text,
+                page: pageOfSelection(selection),
+            },
+            t
+        );
+    return notedPassage(
+        { sourceId: "chat", title: t("shell.thisConversation"), text: selection.text },
+        t
+    );
 }
 
 /** Where a text selection lives — the open document, or the chat — read off the target chain. */

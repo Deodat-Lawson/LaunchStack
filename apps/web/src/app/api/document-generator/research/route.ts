@@ -3,7 +3,7 @@
  *
  * Unified research endpoint combining:
  * - Document Research (RAG): Search uploaded company documents
- * - Web Research: Search the web using Exa
+ * - Web Research: Search the web (Exa, or Serper when it is the only key)
  * - arXiv Research: Search academic papers from arXiv.org
  */
 
@@ -12,12 +12,16 @@ import { z } from "zod";
 import { multiDocEnsembleSearch } from "~/server/rag/ensemble";
 import type { MultiDocSearchOptions, SearchResult } from "@launchstack/retrieval/search-types";
 import { document } from "@launchstack/store/schema";
+import { configuredWebSearchProvider, searchWeb } from "@launchstack/tools/web-research";
 import { db } from "~/server/db";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import { gateChunksByScope } from "~/server/rag/gate";
-import { performExaSearch } from "~/app/api/agents/documentQ&A/services/exaSearch";
 import { getEmbeddings } from "~/app/api/agents/documentQ&A/services";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { refuseAtAiAllowance } from "~/server/ai-usage/refusal";
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -219,11 +223,14 @@ function extractXmlValue(xml: string, tag: string): string | null {
 }
 
 export async function POST(request: Request) {
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "generator.server.errors");
+    const tApi = translatorFor(locale, "errors.api");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
         if (!ctx.data.can("documents.read")) {
-            return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+            return NextResponse.json({ error: tApi("forbidden") }, { status: 403 });
         }
 
         const body = (await request.json()) as unknown;
@@ -231,176 +238,193 @@ export async function POST(request: Request) {
 
         if (!validation.success) {
             return NextResponse.json(
-                { success: false, message: "Invalid request", errors: validation.error.errors },
+                {
+                    success: false,
+                    message: tApi("invalidRequest"),
+                    errors: validation.error.errors,
+                },
                 { status: 400 }
             );
         }
 
         const { query, sources, options } = validation.data;
-        const startTime = Date.now();
-        const maxResults = options?.maxResults ?? 10;
+        // Embedding the query and any web search count toward the person's AI use.
+        const aiUse = { feature: "documentWriter", userId: ctx.data.authUserId } as const;
+        const refused = await refuseAtAiAllowance(ctx.data.companyId, aiUse.userId, locale);
+        if (refused) return refused;
 
-        const results: ResearchResult[] = [];
-        const searchPromises: Promise<void>[] = [];
+        return await withWorkspaceChatModels(ctx.data.companyId, aiUse, async () => {
+            const startTime = Date.now();
+            const maxResults = options?.maxResults ?? 10;
 
-        // Document search
-        if (sources.includes("documents")) {
-            const documentSearchPromise = (async () => {
-                try {
-                    const embeddings = getEmbeddings();
+            const results: ResearchResult[] = [];
+            const searchPromises: Promise<void>[] = [];
 
-                    // There is no company-wide search: research runs over
-                    // the set of documents the caller may read, through the
-                    // same multi-document path every other question uses.
-                    const scope = await ctx.data.documentScope();
-                    const readable = await db
-                        .select({ id: document.id })
-                        .from(document)
-                        .where(scopedDocumentWhere(ctx.data.companyId, scope));
-                    const documentIds = readable.map(row => Number(row.id));
-                    if (documentIds.length === 0) {
-                        console.log("📚 [Research] No readable documents for this member");
-                        return;
-                    }
+            // Document search
+            if (sources.includes("documents")) {
+                const documentSearchPromise = (async () => {
+                    try {
+                        const embeddings = getEmbeddings();
 
-                    const searchOptions: MultiDocSearchOptions = {
-                        weights: [0.4, 0.6],
-                        topK: Math.min(maxResults, 10),
-                        documentIds,
-                        companyId: Number(ctx.data.companyId),
-                    };
+                        // There is no company-wide search: research runs over
+                        // the set of documents the caller may read, through the
+                        // same multi-document path every other question uses.
+                        const scope = await ctx.data.documentScope();
+                        const readable = await db
+                            .select({ id: document.id })
+                            .from(document)
+                            .where(scopedDocumentWhere(ctx.data.companyId, scope));
+                        const documentIds = readable.map(row => Number(row.id));
+                        if (documentIds.length === 0) {
+                            console.log("📚 [Research] No readable documents for this member");
+                            return;
+                        }
 
-                    const retrieved: SearchResult[] = await multiDocEnsembleSearch(
-                        query,
-                        searchOptions,
-                        embeddings
-                    );
-                    const searchResults = await gateChunksByScope(retrieved, {
-                        companyId: ctx.data.companyId,
-                        scope,
-                        searchScope: "research",
-                    });
+                        const searchOptions: MultiDocSearchOptions = {
+                            weights: [0.4, 0.6],
+                            topK: Math.min(maxResults, 10),
+                            documentIds,
+                            companyId: Number(ctx.data.companyId),
+                        };
 
-                    for (let i = 0; i < searchResults.length; i++) {
-                        const result = searchResults[i];
-                        if (!result) continue;
-
-                        const distance = Number(result.metadata?.distance ?? 0);
-                        const metadata = result.metadata as unknown as
-                            | Record<string, unknown>
-                            | undefined;
-                        results.push({
-                            id: `doc-${i}-${Date.now()}`,
-                            content: result.pageContent,
-                            page: metadata?.page as number | undefined,
-                            documentTitle: metadata?.documentTitle as string | undefined,
-                            documentId: metadata?.documentId as number | undefined,
-                            relevanceScore: Math.round((1 - distance) * 100) / 100,
-                            source: "document" as const,
+                        const retrieved: SearchResult[] = await multiDocEnsembleSearch(
+                            query,
+                            searchOptions,
+                            embeddings
+                        );
+                        const searchResults = await gateChunksByScope(retrieved, {
+                            companyId: ctx.data.companyId,
+                            scope,
+                            searchScope: "research",
                         });
+
+                        for (let i = 0; i < searchResults.length; i++) {
+                            const result = searchResults[i];
+                            if (!result) continue;
+
+                            const distance = Number(result.metadata?.distance ?? 0);
+                            const metadata = result.metadata as unknown as
+                                | Record<string, unknown>
+                                | undefined;
+                            results.push({
+                                id: `doc-${i}-${Date.now()}`,
+                                content: result.pageContent,
+                                page: metadata?.page as number | undefined,
+                                documentTitle: metadata?.documentTitle as string | undefined,
+                                documentId: metadata?.documentId as number | undefined,
+                                relevanceScore: Math.round((1 - distance) * 100) / 100,
+                                source: "document" as const,
+                            });
+                        }
+
+                        console.log(`📚 [Research] Found ${searchResults.length} document results`);
+                    } catch (error) {
+                        console.error("❌ [Research] Document search error:", error);
                     }
+                })();
+                searchPromises.push(documentSearchPromise);
+            }
 
-                    console.log(`📚 [Research] Found ${searchResults.length} document results`);
-                } catch (error) {
-                    console.error("❌ [Research] Document search error:", error);
-                }
-            })();
-            searchPromises.push(documentSearchPromise);
-        }
+            // Web search
+            if (sources.includes("web")) {
+                const webSearchPromise = (async () => {
+                    try {
+                        if (configuredWebSearchProvider() === null) {
+                            console.warn(
+                                "🌐 [Research] No search key configured; web search skipped"
+                            );
+                            return;
+                        }
 
-        // Web search
-        if (sources.includes("web")) {
-            const webSearchPromise = (async () => {
-                try {
-                    // Adjust query based on search type
-                    let adjustedQuery = query;
-                    const searchType = options?.searchType ?? "general";
+                        // Adjust query based on search type
+                        let adjustedQuery = query;
+                        const searchType = options?.searchType ?? "general";
 
-                    if (searchType === "academic") {
-                        adjustedQuery = `academic research: ${query}`;
-                    } else if (searchType === "news") {
-                        adjustedQuery = `latest news: ${query}`;
-                    }
+                        if (searchType === "academic") {
+                            adjustedQuery = `academic research: ${query}`;
+                        } else if (searchType === "news") {
+                            adjustedQuery = `latest news: ${query}`;
+                        }
 
-                    const webResults = await performExaSearch(
-                        adjustedQuery,
-                        Math.min(maxResults, 5)
-                    );
-
-                    for (let i = 0; i < webResults.length; i++) {
-                        const result = webResults[i];
-                        if (!result) continue;
-
-                        results.push({
-                            id: `web-${i}-${Date.now()}`,
-                            title: result.title,
-                            url: result.url,
-                            snippet: result.snippet,
-                            relevanceScore: Math.round((1 - i * 0.1) * 100) / 100, // Decay by position
-                            source: "web" as const,
+                        const { results: webResults } = await searchWeb(adjustedQuery, {
+                            maxResults: Math.min(maxResults, 5),
                         });
+
+                        for (let i = 0; i < webResults.length; i++) {
+                            const result = webResults[i];
+                            if (!result) continue;
+
+                            results.push({
+                                id: `web-${i}-${Date.now()}`,
+                                title: result.title,
+                                url: result.url,
+                                snippet: result.snippet,
+                                relevanceScore: Math.round((1 - i * 0.1) * 100) / 100, // Decay by position
+                                source: "web" as const,
+                            });
+                        }
+
+                        console.log(`🌐 [Research] Found ${webResults.length} web results`);
+                    } catch (error) {
+                        console.error("❌ [Research] Web search error:", error);
                     }
+                })();
+                searchPromises.push(webSearchPromise);
+            }
 
-                    console.log(`🌐 [Research] Found ${webResults.length} web results`);
-                } catch (error) {
-                    console.error("❌ [Research] Web search error:", error);
-                }
-            })();
-            searchPromises.push(webSearchPromise);
-        }
+            // arXiv search
+            if (sources.includes("arxiv")) {
+                const arxivSearchPromise = (async () => {
+                    try {
+                        const arxivResults = await searchArxiv(query, Math.min(maxResults, 10), {
+                            category: options?.arxivCategory,
+                            sortBy: options?.sortBy,
+                        });
 
-        // arXiv search
-        if (sources.includes("arxiv")) {
-            const arxivSearchPromise = (async () => {
-                try {
-                    const arxivResults = await searchArxiv(query, Math.min(maxResults, 10), {
-                        category: options?.arxivCategory,
-                        sortBy: options?.sortBy,
-                    });
+                        results.push(...arxivResults);
+                        console.log(`📄 [Research] Found ${arxivResults.length} arXiv papers`);
+                    } catch (error) {
+                        console.error("❌ [Research] arXiv search error:", error);
+                    }
+                })();
+                searchPromises.push(arxivSearchPromise);
+            }
 
-                    results.push(...arxivResults);
-                    console.log(`📄 [Research] Found ${arxivResults.length} arXiv papers`);
-                } catch (error) {
-                    console.error("❌ [Research] arXiv search error:", error);
-                }
-            })();
-            searchPromises.push(arxivSearchPromise);
-        }
+            // Wait for all searches to complete
+            await Promise.all(searchPromises);
 
-        // Wait for all searches to complete
-        await Promise.all(searchPromises);
+            // Sort results by relevance score
+            results.sort((a, b) => b.relevanceScore - a.relevanceScore);
 
-        // Sort results by relevance score
-        results.sort((a, b) => b.relevanceScore - a.relevanceScore);
+            // Limit total results
+            const limitedResults = results.slice(0, maxResults);
 
-        // Limit total results
-        const limitedResults = results.slice(0, maxResults);
+            const processingTimeMs = Date.now() - startTime;
 
-        const processingTimeMs = Date.now() - startTime;
+            console.log(
+                `✅ [Research] Completed in ${processingTimeMs}ms with ${limitedResults.length} total results`
+            );
 
-        console.log(
-            `✅ [Research] Completed in ${processingTimeMs}ms with ${limitedResults.length} total results`
-        );
-
-        return NextResponse.json({
-            success: true,
-            query,
-            results: limitedResults,
-            stats: {
-                documentResults: limitedResults.filter(r => r.source === "document").length,
-                webResults: limitedResults.filter(r => r.source === "web").length,
-                arxivResults: limitedResults.filter(r => r.source === "arxiv").length,
-                totalResults: limitedResults.length,
-            },
-            processingTimeMs,
+            return NextResponse.json({
+                success: true,
+                query,
+                results: limitedResults,
+                stats: {
+                    documentResults: limitedResults.filter(r => r.source === "document").length,
+                    webResults: limitedResults.filter(r => r.source === "web").length,
+                    arxivResults: limitedResults.filter(r => r.source === "arxiv").length,
+                    totalResults: limitedResults.length,
+                },
+                processingTimeMs,
+            });
         });
     } catch (error) {
         console.error("❌ [Research] Error:", error);
         return NextResponse.json(
             {
                 success: false,
-                message: "Failed to perform research",
-                error: "Failed to perform research",
+                message: t("researchFailed"),
+                error: t("researchFailed"),
             },
             { status: 500 }
         );

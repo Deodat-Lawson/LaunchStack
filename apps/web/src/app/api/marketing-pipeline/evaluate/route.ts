@@ -5,7 +5,9 @@ import { REFERENCE_POSTS } from "@launchstack/tools/platform-profiles";
 import { buildCompanyKnowledgeContext } from "@launchstack/pipelines/marketing";
 import { scorePost, type ReferencePlatform } from "@launchstack/pipelines/marketing/benchmark";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { refuseAtAiAllowance } from "~/server/ai-usage/refusal";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
+import { localeOfRequest, requestTranslator } from "~/i18n/server";
 import { fail, handleRouteError, ok, readJson } from "~/server/api/responses";
 
 export const runtime = "nodejs";
@@ -54,17 +56,29 @@ export async function POST(request: Request) {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
-        return await withWorkspaceChatModels(ctx.data.companyId, async () => {
+        const aiUse = { feature: "marketing", userId: ctx.data.authUserId } as const;
+        const refused = await refuseAtAiAllowance(
+            ctx.data.companyId,
+            aiUse.userId,
+            localeOfRequest(request)
+        );
+        if (refused) return refused;
+        return await withWorkspaceChatModels(ctx.data.companyId, aiUse, async () => {
             const parsed = EvaluateBodySchema.safeParse(await readJson(request));
             if (!parsed.success) {
-                return fail("Invalid input", 400, { errors: parsed.error.flatten() });
+                return fail(requestTranslator(request, "errors.api")("invalidInput"), 400, {
+                    errors: parsed.error.flatten(),
+                });
             }
             const body = parsed.data;
 
             const message = body.message.trim();
             const platform = body.platform ?? "";
             if (!message) {
-                return fail("message is required", 400);
+                return fail(
+                    requestTranslator(request, "growth.server.marketing")("messageRequired"),
+                    400
+                );
             }
 
             // The judge is typed for x/linkedin/reddit; bluesky falls back to the x
@@ -74,7 +88,10 @@ export async function POST(request: Request) {
 
             const companyId = Number(ctx.data.companyId);
             if (Number.isNaN(companyId)) {
-                return fail("Invalid company ID", 400);
+                return fail(
+                    requestTranslator(request, "growth.server.marketing")("invalidCompanyId"),
+                    400
+                );
             }
 
             // Prefer the exact knowledge context the generator used (passed from the
@@ -108,6 +125,6 @@ export async function POST(request: Request) {
             return ok(scored);
         });
     } catch (error) {
-        return handleRouteError("marketing-pipeline/evaluate", error);
+        return handleRouteError("marketing-pipeline/evaluate", error, request);
     }
 }

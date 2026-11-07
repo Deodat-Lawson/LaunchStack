@@ -1,3 +1,5 @@
+import { reportUsage } from "@launchstack/llm";
+
 import { getSerperApiKey } from "../config";
 import type { RawSearchResult } from "../types";
 
@@ -49,6 +51,15 @@ export async function callSerper(query: string): Promise<RawSearchResult[]> {
             `Serper API error: ${response.status} ${response.statusText}${text ? ` - ${text}` : ""}`
         );
     }
+
+    // One news search on the deployment's key (no workspace brings its own).
+    reportUsage({
+        kind: "web_search",
+        modelId: "serper",
+        owner: "deployment",
+        inputTokens: 0,
+        outputTokens: 0,
+    });
 
     const data = (await response.json()) as SerperNewsResponse;
     const items = Array.isArray(data.news) ? data.news : [];

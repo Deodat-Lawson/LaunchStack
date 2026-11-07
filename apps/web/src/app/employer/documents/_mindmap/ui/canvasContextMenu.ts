@@ -36,6 +36,7 @@ import { SWATCHES } from "../model/palette";
 import { SHAPE_CATEGORIES, SHAPES } from "../model/shapes";
 import type { EditorState, EditorStore } from "../model/store";
 import type { EdgeKind } from "../model/types";
+import { categoryName, shapeName, swatchName, type MindmapT } from "./EditorContext";
 
 /**
  * The canvas's right-click menu as data. Read off the store at open time —
@@ -62,16 +63,19 @@ export interface CanvasMenuExtras {
  */
 export function buildCanvasMenuItems(
     store: EditorStore,
+    /** `useTranslations("mindmap")` from the component that opens the menu. */
+    t: MindmapT,
     extras: CanvasMenuExtras = {}
 ): ActionMenuItem[] {
     const state = store.getState();
-    const everything = buildEverything(store, extras, state);
+    const everything = buildEverything(store, t, extras, state);
     if (state.chromeDepth !== "focus") return everything;
-    return focusTier(store, state, everything);
+    return focusTier(store, t, state, everything);
 }
 
 function focusTier(
     store: EditorStore,
+    t: MindmapT,
     state: EditorState,
     everything: ActionMenuItem[]
 ): ActionMenuItem[] {
@@ -92,7 +96,7 @@ function focusTier(
         ? {
               type: "item",
               id: "add-sibling",
-              label: "Add sibling topic",
+              label: t("contextMenu.addSibling"),
               icon: "plus",
               shortcut: "↩",
               onSelect: () => addSiblingTopic(store, singleNode.id),
@@ -101,7 +105,7 @@ function focusTier(
     const addChild = pick("add-child");
     const connected: ActionMenuItem | undefined =
         addChild && addChild.type === "item"
-            ? { ...addChild, label: "Add connected shape" }
+            ? { ...addChild, label: t("contextMenu.addConnected") }
             : addChild;
 
     const promoted: (ActionMenuItem | undefined)[] = flow
@@ -122,12 +126,13 @@ function focusTier(
     return tidyMenuItems([
         ...top,
         { type: "separator", id: "sep-more" },
-        { type: "submenu", id: "more", label: "More", items: rest },
+        { type: "submenu", id: "more", label: t("contextMenu.more"), items: rest },
     ]);
 }
 
 function buildEverything(
     store: EditorStore,
+    t: MindmapT,
     extras: CanvasMenuExtras,
     state: EditorState
 ): ActionMenuItem[] {
@@ -149,7 +154,7 @@ function buildEverything(
             {
                 type: "item",
                 id: "paste",
-                label: "Paste",
+                label: t("contextMenu.paste"),
                 icon: "paste",
                 shortcut: "⌘V",
                 onSelect: () => void pasteClipboard(store),
@@ -158,30 +163,34 @@ function buildEverything(
             {
                 type: "submenu",
                 id: "layout",
-                label: "Auto-layout",
+                label: t("contextMenu.autoLayout"),
                 icon: "mindmap",
                 items: [
                     {
                         id: "mindmap",
-                        label: "Mindmap",
+                        label: t("contextMenu.layouts.mindmap"),
                         run: () => runLayout(store, { kind: "mindmap" }),
                     },
                     {
                         id: "tree",
-                        label: "Tree — left to right",
+                        label: t("contextMenu.layouts.tree"),
                         run: () => runLayout(store, { kind: "tree", direction: "right" }),
                     },
                     {
                         id: "org",
-                        label: "Org chart — top down",
+                        label: t("contextMenu.layouts.org"),
                         run: () => runLayout(store, { kind: "org" }),
                     },
                     {
                         id: "radial",
-                        label: "Radial",
+                        label: t("contextMenu.layouts.radial"),
                         run: () => runLayout(store, { kind: "radial" }),
                     },
-                    { id: "grid", label: "Grid", run: () => runLayout(store, { kind: "grid" }) },
+                    {
+                        id: "grid",
+                        label: t("contextMenu.layouts.grid"),
+                        run: () => runLayout(store, { kind: "grid" }),
+                    },
                 ].map(entry => ({
                     type: "item" as const,
                     id: `layout-${entry.id}`,
@@ -197,7 +206,7 @@ function buildEverything(
         {
             type: "item",
             id: "cut",
-            label: "Cut",
+            label: t("contextMenu.cut"),
             icon: "cut",
             shortcut: "⌘X",
             onSelect: () => void cutSelection(store),
@@ -205,7 +214,7 @@ function buildEverything(
         {
             type: "item",
             id: "copy",
-            label: "Copy",
+            label: t("contextMenu.copy"),
             icon: "copy",
             shortcut: "⌘C",
             onSelect: () => void copySelection(store),
@@ -213,7 +222,7 @@ function buildEverything(
         {
             type: "item",
             id: "duplicate",
-            label: "Duplicate",
+            label: t("contextMenu.duplicate"),
             icon: "plus",
             shortcut: "⌘D",
             onSelect: () => duplicateSelection(store),
@@ -223,7 +232,7 @@ function buildEverything(
             // go with their branch, anything else on its own.
             type: "item",
             id: "delete",
-            label: "Delete",
+            label: t("contextMenu.delete"),
             icon: "delete",
             shortcut: "⌫",
             danger: true,
@@ -238,7 +247,7 @@ function buildEverything(
             items.push({
                 type: "item",
                 id: "ask",
-                label: "Ask about this in chat",
+                label: t("contextMenu.ask"),
                 icon: "ask",
                 onSelect: () => extras.onAskAboutNode?.(text),
             });
@@ -246,7 +255,7 @@ function buildEverything(
         items.push({
             type: "item",
             id: "add-child",
-            label: "Add child topic",
+            label: t("contextMenu.addChild"),
             icon: "plus",
             shortcut: "⇥",
             onSelect: () => addChildTopic(store, singleNode.id),
@@ -256,7 +265,9 @@ function buildEverything(
                 {
                     type: "item",
                     id: "collapse",
-                    label: singleNode.collapsed ? "Expand branch" : "Collapse branch",
+                    label: singleNode.collapsed
+                        ? t("contextMenu.expandBranch")
+                        : t("contextMenu.collapseBranch"),
                     icon: singleNode.collapsed ? "open" : "hide",
                     shortcut: "⌘/",
                     onSelect: () => toggleCollapse(store, singleNode.id),
@@ -269,7 +280,7 @@ function buildEverything(
                           {
                               type: "item" as const,
                               id: "delete-reconnect",
-                              label: "Delete and reconnect",
+                              label: t("contextMenu.deleteReconnect"),
                               icon: "move" as const,
                               // ⌥⌫ is the topic binding; other shapes have no key for it.
                               shortcut: singleTopic ? "⌥⌫" : undefined,
@@ -282,7 +293,7 @@ function buildEverything(
                 items.push({
                     type: "item",
                     id: "delete-branch",
-                    label: "Delete whole branch",
+                    label: t("contextMenu.deleteBranch"),
                     icon: "delete",
                     danger: true,
                     onSelect: () => deleteBranch(store, singleNode.id),
@@ -297,12 +308,12 @@ function buildEverything(
             {
                 type: "submenu",
                 id: "colour",
-                label: "Colour",
+                label: t("contextMenu.colour"),
                 icon: "palette",
                 items: SWATCHES.map(swatch => ({
                     type: "item" as const,
                     id: `colour-${swatch.id}`,
-                    label: swatch.name,
+                    label: swatchName(t, swatch),
                     swatch: swatch.stroke,
                     onSelect: () => applySwatch(store, swatch.id),
                 })),
@@ -310,18 +321,18 @@ function buildEverything(
             {
                 type: "submenu",
                 id: "shape",
-                label: "Change shape",
+                label: t("contextMenu.changeShape"),
                 icon: "shapes",
                 items: SHAPE_CATEGORIES.map(category => ({
                     type: "submenu" as const,
                     id: `shape-${category}`,
-                    label: category,
+                    label: categoryName(t, category),
                     items: SHAPES.filter(
                         def => def.category === category && !def.paletteHidden
                     ).map(def => ({
                         type: "item" as const,
                         id: `shape-${def.id}`,
-                        label: def.name,
+                        label: shapeName(t, def.id),
                         onSelect: () => setShapeType(store, def.id),
                     })),
                 })),
@@ -329,7 +340,7 @@ function buildEverything(
             {
                 type: "item",
                 id: "fit-text",
-                label: "Fit shape to text",
+                label: t("contextMenu.fitText"),
                 icon: "expand",
                 onSelect: () => fitNodeToText(store, nodeIds),
             },
@@ -342,26 +353,26 @@ function buildEverything(
             {
                 type: "submenu",
                 id: "route",
-                label: "Connector route",
+                label: t("contextMenu.connectorRoute"),
                 icon: "move",
                 items: (["straight", "elbow", "curved"] as EdgeKind[]).map(kind => ({
                     type: "item" as const,
                     id: `route-${kind}`,
-                    label: kind[0]!.toUpperCase() + kind.slice(1),
+                    label: t(`inspector.routes.${kind}`),
                     onSelect: () => setEdgeKind(store, kind),
                 })),
             },
             {
                 type: "item",
                 id: "reverse",
-                label: "Reverse direction",
+                label: t("contextMenu.reverse"),
                 icon: "retry",
                 onSelect: () => reverseEdges(store),
             },
             {
                 type: "item",
                 id: "reset-route",
-                label: "Reset route",
+                label: t("contextMenu.resetRoute"),
                 icon: "eraser",
                 onSelect: () => clearWaypoints(store),
             },
@@ -373,26 +384,28 @@ function buildEverything(
         {
             type: "submenu",
             id: "order",
-            label: "Order",
+            label: t("contextMenu.order"),
             icon: "group",
             items: [
-                { id: "front", label: "Bring to front", shortcut: "⇧⌘]" },
-                { id: "forward", label: "Bring forward", shortcut: "⌘]" },
-                { id: "backward", label: "Send backward", shortcut: "⌘[" },
-                { id: "back", label: "Send to back", shortcut: "⇧⌘[" },
-            ].map(entry => ({
-                type: "item" as const,
-                id: `order-${entry.id}`,
-                label: entry.label,
-                shortcut: entry.shortcut,
-                onSelect: () =>
-                    reorder(store, entry.id as "front" | "forward" | "backward" | "back"),
-            })),
+                { id: "front", shortcut: "⇧⌘]" },
+                { id: "forward", shortcut: "⌘]" },
+                { id: "backward", shortcut: "⌘[" },
+                { id: "back", shortcut: "⇧⌘[" },
+            ].map(entry => {
+                const move = entry.id as "front" | "forward" | "backward" | "back";
+                return {
+                    type: "item" as const,
+                    id: `order-${entry.id}`,
+                    label: t(`contextMenu.orders.${move}`),
+                    shortcut: entry.shortcut,
+                    onSelect: () => reorder(store, move),
+                };
+            }),
         },
         {
             type: "item",
             id: "group",
-            label: "Group",
+            label: t("contextMenu.group"),
             icon: "group",
             shortcut: "⌘G",
             onSelect: () => groupSelection(store),
@@ -400,14 +413,14 @@ function buildEverything(
         {
             type: "item",
             id: "ungroup",
-            label: "Ungroup",
+            label: t("contextMenu.ungroup"),
             shortcut: "⇧⌘G",
             onSelect: () => ungroupSelection(store),
         },
         {
             type: "item",
             id: "lock",
-            label: "Lock / unlock",
+            label: t("contextMenu.lock"),
             icon: "lock",
             shortcut: "⌘L",
             onSelect: () => toggleLock(store),
@@ -416,14 +429,14 @@ function buildEverything(
         {
             type: "item",
             id: "select-shape",
-            label: "Select all of this shape",
+            label: t("contextMenu.selectShape"),
             icon: "select",
             onSelect: () => selectSameShape(store),
         },
         {
             type: "item",
             id: "select-connected",
-            label: "Select connected",
+            label: t("contextMenu.selectConnected"),
             icon: "select",
             onSelect: () => selectConnected(store),
         }

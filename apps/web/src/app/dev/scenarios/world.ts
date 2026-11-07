@@ -13,6 +13,7 @@
 import { toolTabHref } from "~/lib/tool-app/locations";
 import type {
     ScenarioComment,
+    ScenarioFileOption,
     ScenarioKind,
     ScenarioPerson,
     ScenarioPost,
@@ -139,34 +140,67 @@ function factionsOf(people: ScenarioPerson[]): ScenarioReport["factions"] {
 
 // ── The sources the form can offer ────────────────────────────────────────
 
+const DAY_MS = 86_400_000;
+
+/** A file the form offers, added `days` ago; ready and not the company's unless said. */
+function file(
+    id: number,
+    title: string,
+    folder: string | null,
+    days: number,
+    more: Partial<ScenarioFileOption> = {}
+): ScenarioFileOption {
+    return {
+        id,
+        title,
+        folder,
+        mimeType: null,
+        addedAt: new Date(Date.now() - days * DAY_MS).toISOString(),
+        status: "ready",
+        aboutCompany: false,
+        ...more,
+    };
+}
+
 export const SOURCE_OPTIONS: ScenarioSourceOptions = {
     documents: [
-        { id: 212, title: "Customer interviews — September.pdf", folder: "Research" },
-        { id: 198, title: "Churn notes Q3.docx", folder: "Research" },
-        { id: 240, title: "Pricing page copy v4.md", folder: "Marketing" },
-        { id: 251, title: "Board update — October.pdf", folder: "Company" },
-        { id: 263, title: "Support tickets export (Sept).csv", folder: "Support" },
-        { id: 271, title: "Onboarding survey results.xlsx", folder: "Research" },
-        { id: 288, title: "Competitor teardown — Tallybook.md", folder: "Marketing" },
-        { id: 290, title: "Partner programme terms.pdf", folder: "Partners" },
-        { id: 301, title: "Roadmap spring 2027.md", folder: "Product" },
-        { id: 305, title: "Sales call notes — accounting firms.docx", folder: "Sales" },
-        { id: 312, title: "Press kit.pdf", folder: "Marketing" },
-        { id: 318, title: "Customer advisory board minutes.docx", folder: "Research" },
-        { id: 322, title: "Website analytics summary.pdf", folder: null },
-        { id: 330, title: "Brand voice guide.md", folder: "Marketing" },
+        file(340, "Q4 plan — draft.docx", "Company", 0.02, {
+            status: "processing",
+            aboutCompany: false,
+        }),
+        file(336, "Pricing & plans 2026.pdf", "Company", 1, { aboutCompany: true }),
+        file(334, "Pitch deck — seed extension.pptx", "Company", 3, { aboutCompany: true }),
+        file(330, "Brand voice guide.md", "Marketing", 4),
+        file(322, "Website analytics summary.pdf", null, 6),
+        file(318, "Customer advisory board minutes.docx", "Research", 8),
+        file(312, "Press kit.pdf", "Marketing", 9, { aboutCompany: true }),
+        file(305, "Sales call notes — accounting firms.docx", "Sales", 11),
+        file(301, "Roadmap spring 2027.md", "Product", 12, { aboutCompany: true }),
+        file(299, "Scanned lease agreement.pdf", "Legal", 13, { status: "failed" }),
+        file(290, "Partner programme terms.pdf", "Partners", 15),
+        file(288, "Competitor teardown — Tallybook.md", "Marketing", 18),
+        file(271, "Onboarding survey results.xlsx", "Research", 21),
+        file(263, "Support tickets export (Sept).csv", "Support", 25),
+        file(251, "Board update — October.pdf", "Company", 27, { aboutCompany: true }),
+        file(240, "Pricing page copy v4.md", "Marketing", 30),
+        file(212, "Customer interviews — September.pdf", "Research", 34),
+        file(198, "Churn notes Q3.docx", "Research", 40),
     ],
     prospects: 42,
     brandComments: 18,
     companyProfile: true,
+    canUpload: true,
 };
 
 /** The evidence rows a new run is built from, as the server would list them. */
-export function sourcesFor(input: ScenarioSources): ScenarioSource[] {
+export function sourcesFor(
+    input: ScenarioSources,
+    documents: readonly ScenarioFileOption[] = SOURCE_OPTIONS.documents
+): ScenarioSource[] {
     const out: ScenarioSource[] = [];
     const next = () => `E${out.length + 1}`;
     for (const id of input.documentIds) {
-        const doc = SOURCE_OPTIONS.documents.find(d => d.id === id);
+        const doc = documents.find(d => d.id === id);
         if (!doc) continue;
         out.push({
             id: next(),
@@ -345,15 +379,41 @@ const PRICE_SOURCES: ScenarioSource[] = [
 const PRICE_BRIEF =
     "Ledgerline sells bookkeeping and invoicing to small businesses: Starter at $29 a month and Growth at $79 [E7]. Most paying workspaces are on Starter [E7]. Café and shop owners compare it with spreadsheets rather than other software, and some named $30 as their limit [E1]. Early cancellations rarely cite price; onboarding comes up far more [E3]. A competitor has just launched a $25 tier capped at 20 invoices a month [E8], and some customers are wary of per-invoice charges [E6].";
 
+/** What a person spends and would pay; a seed without one leaves it all null. */
+type Wallet = Pick<
+    ScenarioPerson,
+    | "currentSolution"
+    | "budget"
+    | "buyingRole"
+    | "switchingCost"
+    | "firstObjection"
+    | "wouldPay"
+    | "objection"
+>;
+
 type PersonSeed = Omit<
     ScenarioPerson,
-    "stance" | "startStance" | "posts" | "comments" | "activity" | "followers" | "following"
-> & { activity?: number };
+    | "stance"
+    | "startStance"
+    | "posts"
+    | "comments"
+    | "activity"
+    | "followers"
+    | "following"
+    | keyof Wallet
+> & { activity?: number } & Partial<Wallet>;
 
 function person(seed: PersonSeed, index: number): ScenarioPerson {
     const history = seed.stanceHistory;
     return {
         ...seed,
+        currentSolution: seed.currentSolution ?? null,
+        budget: seed.budget ?? null,
+        buyingRole: seed.buyingRole ?? null,
+        switchingCost: seed.switchingCost ?? null,
+        firstObjection: seed.firstObjection ?? null,
+        wouldPay: seed.wouldPay ?? null,
+        objection: seed.objection ?? null,
         startStance: history[0]!,
         stance: history[history.length - 1]!,
         activity: seed.activity ?? 0.4 + ((index * 7) % 5) / 10,
@@ -363,6 +423,118 @@ function person(seed: PersonSeed, index: number): ScenarioPerson {
         comments: 0,
     };
 }
+
+/** What each person in the price-rise run spends and would pay, after the last round. */
+const PRICE_WALLETS: Record<string, Wallet> = {
+    a1: {
+        currentSolution: "Ledgerline Growth for her own practice",
+        budget: "funded",
+        buyingRole: "influences",
+        switchingCost: "high",
+        firstObjection: "My clients will ask me why they're paying more for the same thing.",
+        wouldPay: "maybe",
+        objection: "I can't recommend Starter to clients who send ten invoices a month.",
+    },
+    a2: {
+        currentSolution: "Ledgerline Starter",
+        budget: "tight",
+        buyingRole: "decides",
+        switchingCost: "medium",
+        firstObjection: "Thirty dollars was my line.",
+        wouldPay: "maybe",
+        objection: "Thirty-five is over my line once the price hold ends.",
+    },
+    a3: {
+        currentSolution: "Ledgerline Growth across four startups",
+        budget: "funded",
+        buyingRole: "decides",
+        switchingCost: "high",
+        firstObjection: "Will the extra money go into the product?",
+        wouldPay: "yes",
+        objection: null,
+    },
+    a4: {
+        currentSolution: "Ledgerline Growth",
+        budget: "funded",
+        buyingRole: "decides",
+        switchingCost: "high",
+        firstObjection: "Is Growth next?",
+        wouldPay: "yes",
+        objection: null,
+    },
+    a5: {
+        currentSolution: "Ledgerline Starter, one workspace per store",
+        budget: "tight",
+        buyingRole: "influences",
+        switchingCost: "high",
+        firstObjection: "Paying more before multi-entity invoicing ships.",
+        wouldPay: "maybe",
+        objection: "Only worth it if multi-entity invoicing ships in spring.",
+    },
+    a6: {
+        currentSolution: "nothing",
+        budget: "none",
+        buyingRole: "uses",
+        switchingCost: "low",
+        firstObjection: "Is this a price rise or a push onto the capped plan?",
+        wouldPay: "no",
+        objection: null,
+    },
+    a7: {
+        currentSolution: "Recommends Ledgerline or a spreadsheet",
+        budget: "none",
+        buyingRole: "influences",
+        switchingCost: "low",
+        firstObjection: "New businesses watch every dollar.",
+        wouldPay: "maybe",
+        objection: null,
+    },
+    a8: {
+        currentSolution: "Tallybook",
+        budget: "tight",
+        buyingRole: "decides",
+        switchingCost: "medium",
+        firstObjection: "Why switch when the capped plan is cheaper?",
+        wouldPay: "no",
+        objection: "The capped plan covers everything I send.",
+    },
+    a9: {
+        currentSolution: "Ledgerline Growth",
+        budget: "funded",
+        buyingRole: "influences",
+        switchingCost: "medium",
+        firstObjection: "Price isn't why people leave.",
+        wouldPay: "maybe",
+        objection: "Fix onboarding before charging more.",
+    },
+    a10: {
+        currentSolution: "A spreadsheet and PDF invoices",
+        budget: "tight",
+        buyingRole: "decides",
+        switchingCost: "low",
+        firstObjection: "Ten dollars a month for six invoices?",
+        wouldPay: "no",
+        objection: "Ten dollars is ten dollars.",
+    },
+    a11: {
+        currentSolution: "Ledgerline, as a partner",
+        budget: "funded",
+        buyingRole: "uses",
+        switchingCost: "high",
+        firstObjection: "Will customers blame us for the increase?",
+        wouldPay: "yes",
+        objection: null,
+    },
+    a12: {
+        currentSolution: "nothing",
+        budget: "none",
+        buyingRole: "uses",
+        switchingCost: "low",
+        firstObjection: "Is there a story here?",
+        wouldPay: "no",
+        objection: null,
+    },
+};
 
 const PRICE_PEOPLE: ScenarioPerson[] = [
     {
@@ -514,7 +686,7 @@ const PRICE_PEOPLE: ScenarioPerson[] = [
         stanceHistory: [0, 0, 0, 0, 0, 0, 0, 0, 0],
         lastThought: "The first day looked like a revolt. It wasn't.",
     },
-].map((seed, i) => person(seed as PersonSeed, i));
+].map((seed, i) => person({ ...seed, ...PRICE_WALLETS[seed.id] } as PersonSeed, i));
 
 const byId = new Map(PRICE_PEOPLE.map(p => [p.id, p]));
 
@@ -1205,6 +1377,14 @@ export function generateScript(o: GenerateOptions): Script {
             posts: 0,
             comments: 0,
             lastThought: null,
+            // Set from the index and stance, not `rand`, so the rest of the script draws the same.
+            currentSolution: i % 4 === 0 ? "nothing" : "A spreadsheet",
+            budget: (["tight", "none", "funded"] as const)[i % 3]!,
+            buyingRole: (["decides", "influences", "uses"] as const)[i % 3]!,
+            switchingCost: (["medium", "low", "high"] as const)[i % 3]!,
+            firstObjection: null,
+            wouldPay: history[history.length - 1]! > 0 ? "maybe" : "no",
+            objection: null,
         });
     }
 

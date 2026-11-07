@@ -1,0 +1,1 @@
+ALTER TABLE "pdr_ai_v2_distribution_programs" ADD COLUMN "customer_domains" jsonb DEFAULT '[]'::jsonb NOT NULL;

@@ -12,6 +12,8 @@
  */
 
 import { NextResponse } from "next/server";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { and, eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
@@ -56,6 +58,9 @@ export async function GET(
     request: Request,
     context: { params: Promise<{ id: string; versionId: string }> }
 ) {
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "sources.server.versions");
+    const s = translatorFor(locale, "sources.server.errors");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
@@ -64,10 +69,10 @@ export async function GET(
         const documentId = Number(rawDocId);
         const versionId = Number(rawVersionId);
         if (!Number.isInteger(documentId) || documentId <= 0) {
-            return NextResponse.json({ error: "Invalid document id" }, { status: 400 });
+            return NextResponse.json({ error: s("invalidDocumentId") }, { status: 400 });
         }
         if (!Number.isInteger(versionId) || versionId <= 0) {
-            return NextResponse.json({ error: "Invalid version id" }, { status: 400 });
+            return NextResponse.json({ error: t("invalidVersionId") }, { status: 400 });
         }
 
         // Scoped in SQL: the document must be in the caller's workspace and
@@ -83,7 +88,10 @@ export async function GET(
             );
 
         if (!doc) {
-            return NextResponse.json({ error: "Document not found" }, { status: 404 });
+            return NextResponse.json(
+                { error: translatorFor(locale, "errors.api")("documentNotFound") },
+                { status: 404 }
+            );
         }
 
         const [version] = await db
@@ -101,10 +109,7 @@ export async function GET(
             );
 
         if (!version) {
-            return NextResponse.json(
-                { error: "Version not found for this document" },
-                { status: 404 }
-            );
+            return NextResponse.json({ error: t("versionNotFound") }, { status: 404 });
         }
 
         // Public cloud URL — redirect the browser directly and let the CDN serve.
@@ -121,10 +126,7 @@ export async function GET(
             return new NextResponse(null, relayed);
         }
         if (!blobRes.ok) {
-            return NextResponse.json(
-                { error: "Failed to retrieve version file from storage" },
-                { status: 502 }
-            );
+            return NextResponse.json({ error: t("storageReadFailed") }, { status: 502 });
         }
 
         const mimeType =
@@ -150,7 +152,7 @@ export async function GET(
         console.error("[Versions] content fetch failed:", error);
         return NextResponse.json(
             {
-                error: "Failed to serve version content",
+                error: t("serveFailed"),
                 details: error instanceof Error ? error.message : String(error),
             },
             { status: 500 }

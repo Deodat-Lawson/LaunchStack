@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { and, eq } from "drizzle-orm";
 import { db } from "~/server/db";
 import { document } from "@launchstack/store/schema";
@@ -43,6 +45,8 @@ interface RouteParams {
 }
 
 export async function GET(request: Request, { params }: RouteParams) {
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "sources.server.errors");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
@@ -50,7 +54,10 @@ export async function GET(request: Request, { params }: RouteParams) {
         const { id } = await params;
         const docId = parseInt(id, 10);
         if (isNaN(docId)) {
-            return NextResponse.json({ error: "Invalid document ID" }, { status: 400 });
+            return NextResponse.json(
+                { error: translatorFor(locale, "errors.api")("invalidDocumentId") },
+                { status: 400 }
+            );
         }
 
         const [doc] = await db
@@ -66,7 +73,10 @@ export async function GET(request: Request, { params }: RouteParams) {
         // Out of scope reads exactly like missing — the distinction would leak
         // which ids exist in folders the caller cannot see.
         if (!doc) {
-            return NextResponse.json({ error: "Document not found" }, { status: 404 });
+            return NextResponse.json(
+                { error: translatorFor(locale, "errors.api")("documentNotFound") },
+                { status: 404 }
+            );
         }
 
         if (!isS3Storage() && !isPrivateBlobUrl(doc.url)) {
@@ -87,10 +97,7 @@ export async function GET(request: Request, { params }: RouteParams) {
             return new NextResponse(null, relayed);
         }
         if (!blobRes.ok) {
-            return NextResponse.json(
-                { error: "Failed to retrieve document from storage" },
-                { status: 502 }
-            );
+            return NextResponse.json({ error: t("storageReadFailed") }, { status: 502 });
         }
 
         const mimeType = blobRes.headers.get("content-type") ?? inferMime(doc.title);
@@ -107,6 +114,6 @@ export async function GET(request: Request, { params }: RouteParams) {
         });
     } catch (error) {
         console.error("Error serving document content:", error);
-        return NextResponse.json({ error: "Failed to serve document" }, { status: 500 });
+        return NextResponse.json({ error: t("serveDocumentFailed") }, { status: 500 });
     }
 }

@@ -1,8 +1,15 @@
 import { describe, expect, it } from "vitest";
 
-import { buildBriefRequest, parseBrief, stripCitations } from "../brief";
+import {
+    buildBriefRequest,
+    parseBrief,
+    stripCitations,
+    TURN_SUBJECT_CHARS,
+    turnSituation,
+} from "../brief";
 import { directionHits, ranks, spearman } from "../calibration";
 import { buildCastRequest, parseCast } from "../cast";
+import { buildDecisionRequest } from "../decide";
 import { estimateRun, MAX_AGENTS } from "../estimate";
 import { buildReportRequest, parseReport } from "../report";
 import { runRound } from "../round";
@@ -130,6 +137,57 @@ describe("brief", () => {
         expect(stripCitations(parsed.brief)).toBe("Churn is about price. Renewals annoy people.");
         expect(buildBriefRequest({ subject: "s", evidence, mode: "post_test" }).system).toContain(
             'openingPost: ""'
+        );
+    });
+});
+
+describe("a long situation", () => {
+    const plan = [
+        "We launch the Pro plan at $49 a month in March.",
+        `The plan: ${"bundle onboarding with priority support for small firms, ".repeat(15)}`,
+        "Current cases: three pilots renewed; one churned over price.",
+    ].join("\n\n");
+
+    it("is read in full by the brief, which restates it for the turns", () => {
+        expect(plan.length).toBeGreaterThan(TURN_SUBJECT_CHARS);
+        const req = buildBriefRequest({ subject: plan, evidence, mode: "scenario" });
+        expect(req.prompt).toContain(plan);
+        expect(req.system).toContain("situation: the subject restated");
+        expect(
+            buildBriefRequest({ subject: "We raise prices.", evidence, mode: "scenario" }).system
+        ).toContain('situation: "".');
+
+        const parsed = parseBrief(
+            JSON.stringify({
+                brief: "Small firms churn on price [E1].",
+                openingPost: "Acme launches Pro at $49.",
+                situation: "Acme launches Pro at $49 in March, bundling onboarding [E1].",
+                evidenceIds: ["E1"],
+            }),
+            new Set(["E1"])
+        )!;
+        expect(parsed.situation).toBe("Acme launches Pro at $49 in March, bundling onboarding.");
+        expect(turnSituation(plan, parsed)).toBe(parsed.situation);
+        expect(turnSituation("We raise prices.", parsed)).toBeUndefined();
+        // Without a restatement, turns get the start of the subject.
+        expect(turnSituation(plan, null)!.length).toBe(TURN_SUBJECT_CHARS);
+        expect(
+            parseBrief(
+                JSON.stringify({ brief: "b", openingPost: "", situation: "", evidenceIds: [] }),
+                new Set()
+            )
+        ).not.toHaveProperty("situation");
+    });
+
+    it("goes to people's turns as the restatement, not the whole plan", () => {
+        const world = smallWorld();
+        world.subject = plan;
+        world.situation = "Acme launches Pro at $49 in March.";
+        const req = buildDecisionRequest(world, world.agents[0]!, []);
+        expect(req.system).toContain("Subject everyone is reacting to: Acme launches Pro");
+        expect(req.system).not.toContain("Current cases");
+        expect(buildDecisionRequest(smallWorld(), smallWorld().agents[0]!, []).system).toContain(
+            "Subject everyone is reacting to: Acme raises prices by 20%"
         );
     });
 });

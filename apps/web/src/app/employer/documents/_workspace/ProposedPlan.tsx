@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import { Clipboard, Download, Pencil, Play } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
@@ -19,10 +20,11 @@ export function ProposedPlan({
     onImplement?: (text: string) => void;
     active?: boolean;
 }) {
+    const t = useTranslations("chat.plan");
     const [expanded, setExpanded] = useState(true);
     return (
         <section
-            aria-label="Proposed plan"
+            aria-label={t("title")}
             className="my-3 min-w-0 rounded-xl border border-[var(--line)] bg-[var(--panel)]"
         >
             <Button
@@ -33,7 +35,7 @@ export function ProposedPlan({
                 onClick={() => setExpanded(v => !v)}
                 className="flex w-full items-center justify-between px-4 py-3 text-left text-sm font-semibold"
             >
-                <span>Proposed plan</span>
+                <span>{t("title")}</span>
                 <span aria-hidden>{expanded ? "−" : "+"}</span>
             </Button>
             {expanded && (
@@ -49,12 +51,12 @@ export function ProposedPlan({
                     className="flex items-center gap-1 rounded p-1"
                     onClick={() =>
                         void copyText(text).then(ok =>
-                            ok ? toast.success("Plan copied") : toast.error("Couldn't copy plan")
+                            ok ? toast.success(t("copied")) : toast.error(t("copyFailed"))
                         )
                     }
                 >
                     <Clipboard size={13} />
-                    Copy plan
+                    {t("copy")}
                 </Button>
                 <Button
                     variant="ghost"
@@ -64,7 +66,7 @@ export function ProposedPlan({
                     onClick={() => downloadTextFile("proposed-plan.md", text)}
                 >
                     <Download size={13} />
-                    Download plan
+                    {t("download")}
                 </Button>
                 <Button
                     variant="ghost"
@@ -76,7 +78,7 @@ export function ProposedPlan({
                     }
                 >
                     <Pencil size={13} />
-                    Refine
+                    {t("refine")}
                 </Button>
                 {onImplement && (
                     <Button
@@ -88,7 +90,7 @@ export function ProposedPlan({
                         onClick={() => onImplement(text)}
                     >
                         <Play size={13} />
-                        Implement in new chat
+                        {t("implement")}
                     </Button>
                 )}
             </div>

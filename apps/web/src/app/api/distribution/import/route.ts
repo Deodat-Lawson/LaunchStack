@@ -7,8 +7,13 @@ import type { NextRequest } from "next/server";
 
 import { ImportPartnersSchema } from "@launchstack/pipelines/distribution/types";
 import { getProgram, importPartners } from "@launchstack/pipelines/distribution/db";
+import { requestTranslator } from "~/i18n/server";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
-import { error, handleRouteError, json, readJsonBody } from "~/server/distribution/http";
+import { error, json, readJsonBody } from "~/server/distribution/http";
+import { distributionRouteError } from "~/server/distribution/stage-errors";
+
+const api = (request: Request) => requestTranslator(request, "errors.api");
+const growth = (request: Request) => requestTranslator(request, "growth.server.errors");
 
 export async function POST(request: NextRequest) {
     try {
@@ -16,9 +21,11 @@ export async function POST(request: NextRequest) {
         if (!ctx.success) return ctx.response;
         const parsed = ImportPartnersSchema.safeParse(await readJsonBody(request));
         if (!parsed.success)
-            return error("Validation failed", 400, { details: parsed.error.flatten() });
+            return error(api(request)("validationFailed"), 400, {
+                details: parsed.error.flatten(),
+            });
         const program = await getProgram(parsed.data.programId, ctx.data.companyId);
-        if (!program) return error("Program not found", 404);
+        if (!program) return error(growth(request)("programNotFound"), 404);
         const result = await importPartners({
             companyId: ctx.data.companyId,
             programId: program.id,
@@ -27,6 +34,6 @@ export async function POST(request: NextRequest) {
         });
         return json({ created: result.created, existing: result.existing }, 201);
     } catch (err) {
-        return handleRouteError("POST import", err);
+        return distributionRouteError("POST import", err, request);
     }
 }

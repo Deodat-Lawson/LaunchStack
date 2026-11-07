@@ -1,5 +1,25 @@
 import { composerFileMime, IMAGE_MAX_BYTES } from "./composerState";
 
+/** Why an image could not be prepared; the composer words it as `chat.composer.imageErrors.<code>`. */
+export type ComposerImageErrorCode =
+    | "heicConvert"
+    | "cannotResize"
+    | "resizeUnavailable"
+    | "resizeFailed"
+    | "tooLarge";
+
+/** An image the composer could not prepare. The message is the English, for callers without a translator. */
+export class ComposerImageError extends Error {
+    constructor(
+        readonly code: ComposerImageErrorCode,
+        readonly fileName: string,
+        message: string
+    ) {
+        super(message);
+        this.name = "ComposerImageError";
+    }
+}
+
 export function normalizeComposerFile(file: File): File {
     const type = composerFileMime(file);
     return type === file.type
@@ -33,7 +53,9 @@ export async function resizeComposerImage(file: File): Promise<File> {
                 : `${file.name}.jpg`;
             file = new File([jpeg], name, { type: "image/jpeg", lastModified: file.lastModified });
         } catch {
-            throw new Error(
+            throw new ComposerImageError(
+                "heicConvert",
+                file.name,
                 `“${file.name}” could not be converted from HEIC. Export it as JPEG or PNG, then attach it again.`
             );
         }
@@ -44,7 +66,9 @@ export async function resizeComposerImage(file: File): Promise<File> {
     )
         return file;
     if (typeof createImageBitmap !== "function")
-        throw new Error(
+        throw new ComposerImageError(
+            "cannotResize",
+            file.name,
             `“${file.name}” exceeds 10 MiB and this browser cannot resize it. Resize it before attaching.`
         );
     const bitmap = await createImageBitmap(file);
@@ -55,12 +79,25 @@ export async function resizeComposerImage(file: File): Promise<File> {
             canvas.width = Math.max(1, Math.round(bitmap.width * ratio));
             canvas.height = Math.max(1, Math.round(bitmap.height * ratio));
             const context = canvas.getContext("2d");
-            if (!context) throw new Error("Image resizing is unavailable in this browser.");
+            if (!context)
+                throw new ComposerImageError(
+                    "resizeUnavailable",
+                    file.name,
+                    "Image resizing is unavailable in this browser."
+                );
             context.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
             const blob = await new Promise<Blob>((resolve, reject) =>
                 canvas.toBlob(
                     result =>
-                        result ? resolve(result) : reject(new Error("Image resizing failed.")),
+                        result
+                            ? resolve(result)
+                            : reject(
+                                  new ComposerImageError(
+                                      "resizeFailed",
+                                      file.name,
+                                      "Image resizing failed."
+                                  )
+                              ),
                     file.type,
                     Math.max(0.55, 0.9 - attempt * 0.08)
                 )
@@ -72,7 +109,9 @@ export async function resizeComposerImage(file: File): Promise<File> {
                 });
             ratio *= 0.7;
         }
-        throw new Error(
+        throw new ComposerImageError(
+            "tooLarge",
+            file.name,
             `“${file.name}” could not be resized below 10 MiB. Resize it before attaching.`
         );
     } finally {

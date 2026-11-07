@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 
 import { fitToScreen, focusNode } from "../model/commands";
@@ -30,6 +31,8 @@ export function Presenter({
     isActive?: () => boolean;
     onExit: () => void;
 }) {
+    const t = useTranslations("mindmap.presenter");
+    const tc = useTranslations("common");
     const store = useStore();
     const doc = useCommittedDoc();
 
@@ -117,10 +120,10 @@ export function Presenter({
     const last = branches.length + 1;
     const label =
         step === 0
-            ? "Overview"
+            ? t("overview")
             : step === last
-              ? "Whole map"
-              : `Branch ${step} of ${branches.length}`;
+              ? t("wholeMap")
+              : t("branch", { step, total: branches.length });
 
     return (
         <>
@@ -133,7 +136,7 @@ export function Presenter({
                     type="button"
                     onClick={() => go(step - 1)}
                     disabled={step === 0}
-                    aria-label="Previous"
+                    aria-label={tc("actions.previous")}
                     className="text-ink-2 hover:bg-panel-2 flex size-7 items-center justify-center rounded-full disabled:opacity-40"
                 >
                     <ChevronLeft className="size-4" />
@@ -145,7 +148,7 @@ export function Presenter({
                     type="button"
                     onClick={() => go(step + 1)}
                     disabled={step === last}
-                    aria-label="Next"
+                    aria-label={tc("actions.next")}
                     className="text-ink-2 hover:bg-panel-2 flex size-7 items-center justify-center rounded-full disabled:opacity-40"
                 >
                     <ChevronRight className="size-4" />
@@ -154,7 +157,7 @@ export function Presenter({
                 <button
                     type="button"
                     onClick={onExit}
-                    aria-label="Exit presentation"
+                    aria-label={t("exit")}
                     className="text-ink-2 hover:bg-panel-2 flex h-7 items-center gap-1 rounded-full px-2 text-[11px]"
                 >
                     <X className="size-3.5" />

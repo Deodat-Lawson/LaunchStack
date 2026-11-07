@@ -17,6 +17,8 @@ import { NextResponse } from "next/server";
 import { and, eq, sql } from "drizzle-orm";
 import { z } from "zod";
 
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor, wordEnglish } from "~/i18n/translate";
 import { db } from "~/server/db";
 import { document } from "@launchstack/store/schema";
 import {
@@ -49,6 +51,8 @@ const BodySchema = z.object({ language: z.string().min(2).max(20) });
 
 export async function POST(request: Request, { params }: RouteParams) {
     // A cache hit costs nothing, but a miss is a paid model call per batch.
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "viewers.server.errors");
     return withRateLimit(request, RateLimitPresets.standard, async () => {
         try {
             const ctx = await requireWorkspaceContext();
@@ -57,7 +61,10 @@ export async function POST(request: Request, { params }: RouteParams) {
             const { id } = await params;
             const docId = Number(id);
             if (!Number.isInteger(docId) || docId <= 0) {
-                return NextResponse.json({ error: "Invalid document ID" }, { status: 400 });
+                return NextResponse.json(
+                    { error: translatorFor(locale, "errors.api")("invalidDocumentId") },
+                    { status: 400 }
+                );
             }
 
             const validation = await validateRequestBody(request, BodySchema);
@@ -67,7 +74,7 @@ export async function POST(request: Request, { params }: RouteParams) {
             const language = canonicalLanguage(validation.data.language);
             if (!language || !isTranslationLanguage(language)) {
                 return NextResponse.json(
-                    { error: "Translation into that language isn't offered" },
+                    { error: t("translationLanguageNotOffered") },
                     { status: 400 }
                 );
             }
@@ -84,15 +91,15 @@ export async function POST(request: Request, { params }: RouteParams) {
                 .where(and(eq(document.id, docId), inScope));
             // Out of scope reads exactly like missing.
             if (!doc) {
-                return NextResponse.json({ error: "Document not found" }, { status: 404 });
+                return NextResponse.json(
+                    { error: translatorFor(locale, "errors.api")("documentNotFound") },
+                    { status: 404 }
+                );
             }
 
             const marker = transcriptMarkerOf(doc.ocrMetadata);
             if (!marker && !hasTranscriptTitle(doc.title)) {
-                return NextResponse.json(
-                    { error: "This document is not a transcript" },
-                    { status: 400 }
-                );
+                return NextResponse.json({ error: t("notTranscript") }, { status: 400 });
             }
 
             // The unit of translation is the line the viewer shows: a segment
@@ -103,15 +110,12 @@ export async function POST(request: Request, { params }: RouteParams) {
             } else {
                 const res = await fetchFile(doc.url);
                 if (!res.ok) {
-                    return NextResponse.json(
-                        { error: "Couldn't read the transcript from storage" },
-                        { status: 502 }
-                    );
+                    return NextResponse.json({ error: t("transcriptReadFailed") }, { status: 502 });
                 }
                 lines = (await res.text()).trim().split(/\r?\n/);
             }
             if (lines.every(l => l.trim() === "")) {
-                return NextResponse.json({ error: "This transcript is empty" }, { status: 400 });
+                return NextResponse.json({ error: t("transcriptEmpty") }, { status: 400 });
             }
 
             const stored = storedTranslationOf(doc.ocrMetadata, language, lines.length);
@@ -153,10 +157,19 @@ export async function POST(request: Request, { params }: RouteParams) {
         } catch (error) {
             if (isTranscriptionError(error)) {
                 console.error(`[TranscriptTranslation] ${error.message}`);
-                return NextResponse.json({ error: error.userMessage }, { status: error.status });
+                return NextResponse.json(
+                    {
+                        error: wordEnglish(
+                            error.userMessage,
+                            "chat.server.voice.transcription",
+                            locale
+                        ),
+                    },
+                    { status: error.status }
+                );
             }
             console.error("[TranscriptTranslation] Failed:", error);
-            return NextResponse.json({ error: "Translation failed" }, { status: 500 });
+            return NextResponse.json({ error: t("translationFailed") }, { status: 500 });
         }
     });
 }

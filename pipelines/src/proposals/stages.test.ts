@@ -148,6 +148,7 @@ const PROFILE: OrgProfile = {
     geography: ["Portland, Oregon"],
     facts: [{ key: "founded", label: "Founded", value: "2014", cites: [1], source: "documents" }],
     evidence: [],
+    sourceDocumentIds: [11, 99],
     builtFrom: { documents: 1, snippets: 1 },
     builtAt: NOW.toISOString(),
     promptVersion: "test",
@@ -312,7 +313,8 @@ describe("draftSection", () => {
         });
         const result = await draftSection(p, {
             companyId: 1,
-            application: application(),
+            scope: { kind: "everything" },
+            application: application({ requestDocumentId: 14 }),
             section: section({
                 key: "outcomes",
                 question: "Describe your outcomes",
@@ -327,6 +329,7 @@ describe("draftSection", () => {
                     answer: "Last year 70% gained a level.",
                     tags: [],
                     evidence: [],
+                    provenance: { kind: "sources", sourceDocumentIds: [13] },
                     sourceApplicationId: null,
                     sourceSectionKey: null,
                     uses: 0,
@@ -340,6 +343,7 @@ describe("draftSection", () => {
         expect(result.meta.gaps).toEqual(["2026 figures"]);
         expect(result.meta.libraryItemIds).toEqual(["lib1"]);
         expect(result.meta.evidence).toHaveLength(2);
+        expect(result.meta.sourceDocumentIds?.sort((a, b) => a - b)).toEqual([11, 12, 13, 14, 99]);
     });
 });
 
@@ -367,7 +371,7 @@ describe("rewriteSection", () => {
             };
         });
         const result = await rewriteSection(p, {
-            application: application(),
+            application: application({ requestDocumentId: 14 }),
             section: section({
                 key: "history",
                 question: "History",
@@ -378,6 +382,7 @@ describe("rewriteSection", () => {
                     gaps: ["staff count"],
                     evidence,
                     libraryItemIds: ["lib1"],
+                    sourceDocumentIds: [11, 15],
                 },
             }),
             profile: PROFILE,
@@ -386,6 +391,7 @@ describe("rewriteSection", () => {
         expect(result.meta.cites).toEqual([1]);
         expect(result.meta.gaps).toEqual(["staff count", "the 2026 target"]);
         expect(result.meta.libraryItemIds).toEqual(["lib1"]);
+        expect(result.meta.sourceDocumentIds?.sort((a, b) => a - b)).toEqual([11, 14, 15, 99]);
         expect(p.calls).toEqual(["structured:rewrite"]);
         await expect(
             rewriteSection(p, {
@@ -395,6 +401,29 @@ describe("rewriteSection", () => {
                 preset: "plainer",
             })
         ).rejects.toThrow(/no draft/);
+    });
+
+    it("does not promote unknown legacy draft inputs to complete proof after a rewrite", async () => {
+        const p = ports(() => ({ draft: "Reworded legacy answer.", cites: [], gaps: [] }));
+        const result = await rewriteSection(p, {
+            application: application(),
+            section: section({
+                key: "legacy",
+                status: "drafted",
+                draft: "Legacy generated answer.",
+                draftMeta: {
+                    cites: [],
+                    gaps: [],
+                    evidence: [],
+                    libraryItemIds: [],
+                    modelId: "legacy-model",
+                },
+            }),
+            profile: PROFILE,
+            preset: "plainer",
+        });
+        expect(result.meta.sourceDocumentIds).toBeUndefined();
+        expect(p.calls).toEqual(["structured:rewrite"]);
     });
 
     it("spells out each preset, using the person's words for custom", () => {

@@ -15,6 +15,7 @@ import { NextResponse } from "next/server";
 import type { PersonLook } from "~/lib/profile/resolve";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { LOOKS_MAX_IDS, workspaceLooks } from "~/server/profile/store";
+import { requestTranslator } from "~/i18n/server";
 
 export const dynamic = "force-dynamic";
 
@@ -28,7 +29,11 @@ export async function GET(request: Request) {
         .filter(id => id.length > 0 && id.length <= 256);
     if (ids.length > LOOKS_MAX_IDS) {
         return NextResponse.json(
-            { error: `Ask for at most ${LOOKS_MAX_IDS} people at once.` },
+            {
+                error: requestTranslator(request, "settings.server.errors")("lookupTooMany", {
+                    max: LOOKS_MAX_IDS,
+                }),
+            },
             { status: 400 }
         );
     }
@@ -44,6 +49,9 @@ export async function GET(request: Request) {
         return NextResponse.json({ people });
     } catch (error) {
         console.error("[profile/people GET] failed:", error);
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+        return NextResponse.json(
+            { error: requestTranslator(request, "errors.api")("internal") },
+            { status: 500 }
+        );
     }
 }

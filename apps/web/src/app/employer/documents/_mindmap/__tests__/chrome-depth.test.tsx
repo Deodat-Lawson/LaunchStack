@@ -10,6 +10,11 @@ import { MindmapEditor } from "../ui/MindmapEditor";
 import { buildTemplate } from "../model/templates";
 import { EditorStore } from "../model/store";
 import type { ChromeDepth } from "../model/store";
+import { createTranslator } from "use-intl";
+
+import { englishMessages } from "~/i18n/messages";
+
+const t = createTranslator({ locale: "en", messages: englishMessages, namespace: "mindmap" });
 
 /**
  * Guardrails for the disclosure plan.
@@ -165,9 +170,9 @@ describe("command parity", () => {
     test("⌘K offers the same commands in both depths", () => {
         const store = new EditorStore(buildTemplate("mindmap", "Parity"));
         store.setChromeDepth("focus");
-        const focus = buildCommands(store, host).map(c => c.id);
+        const focus = buildCommands(store, host, t).map(c => c.id);
         store.setChromeDepth("everything");
-        const everything = buildCommands(store, host).map(c => c.id);
+        const everything = buildCommands(store, host, t).map(c => c.id);
         expect(focus).toEqual(everything);
         expect(focus.length).toBeGreaterThan(20);
     });

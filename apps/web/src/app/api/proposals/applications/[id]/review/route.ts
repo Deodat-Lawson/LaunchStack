@@ -22,7 +22,7 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
                 const { id } = await params;
                 return json({ run: await reviewRun(ctx, id) }, 202);
             } catch (err) {
-                return handleProposalsError("POST review", err);
+                return handleProposalsError("POST review", err, request);
             }
         }
     );

@@ -172,24 +172,24 @@ export function ArrowHead({ at, direction, kind, color, strokeWidth }: ArrowProp
     return <g transform={transform}>{shape}</g>;
 }
 
+/** An arrowhead the inspector offers; its name is `mindmap.arrows.<id>`. */
 export interface ArrowOption {
     id: ArrowId;
-    label: string;
 }
 
 export const ARROW_OPTIONS: readonly ArrowOption[] = [
-    { id: "none", label: "None" },
-    { id: "arrow", label: "Filled arrow" },
-    { id: "arrow-open", label: "Open arrow" },
-    { id: "triangle-hollow", label: "Hollow triangle" },
-    { id: "diamond", label: "Filled diamond" },
-    { id: "diamond-hollow", label: "Hollow diamond" },
-    { id: "circle", label: "Filled circle" },
-    { id: "circle-hollow", label: "Hollow circle" },
-    { id: "bar", label: "Bar" },
-    { id: "crowfoot-one", label: "ERD — one" },
-    { id: "crowfoot-many", label: "ERD — many" },
-    { id: "crowfoot-one-many", label: "ERD — one or many" },
-    { id: "crowfoot-zero-one", label: "ERD — zero or one" },
-    { id: "crowfoot-zero-many", label: "ERD — zero or many" },
+    { id: "none" },
+    { id: "arrow" },
+    { id: "arrow-open" },
+    { id: "triangle-hollow" },
+    { id: "diamond" },
+    { id: "diamond-hollow" },
+    { id: "circle" },
+    { id: "circle-hollow" },
+    { id: "bar" },
+    { id: "crowfoot-one" },
+    { id: "crowfoot-many" },
+    { id: "crowfoot-one-many" },
+    { id: "crowfoot-zero-one" },
+    { id: "crowfoot-zero-many" },
 ];

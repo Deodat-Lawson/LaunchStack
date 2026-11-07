@@ -1867,7 +1867,7 @@
     gap: 8px;
 }
 .rwsPaneEyebrowProposed {
-    color: var(--success);
+    color: var(--success-ink);
 }
 .rwsPaneText {
     font-size: 14px;
@@ -2088,7 +2088,7 @@
     height: 13px;
 }
 .rwsIconBtnSuccess {
-    color: var(--success);
+    color: var(--success-ink);
 }
 
 /* Final review block */
@@ -2123,7 +2123,7 @@
     font-size: 10px;
     background: var(--panel);
     border: 1px solid oklch(from var(--success) l c h / 0.5);
-    color: var(--success);
+    color: var(--success-ink);
 }
 .rwsFinalScore::before {
     content: "";
@@ -2494,14 +2494,14 @@
     padding: 2px 7px;
     border-radius: 999px;
     background: oklch(from var(--success) l c h / 0.18);
-    color: var(--success);
+    color: var(--success-ink);
     letter-spacing: 0.04em;
     flex-shrink: 0;
     white-space: nowrap;
 }
 .rdDocBadgeWarn {
     background: oklch(from var(--warn) l c h / 0.18);
-    color: var(--warn);
+    color: var(--warn-ink);
 }
 .rdDocBadgeDanger {
     background: oklch(from var(--danger) l c h / 0.18);
@@ -2660,7 +2660,7 @@
     padding: 1px 6px;
     border-radius: 999px;
     background: oklch(from var(--warn) l c h / 0.16);
-    color: var(--warn);
+    color: var(--warn-ink);
     flex-shrink: 0;
 }
 
@@ -2747,7 +2747,7 @@
     margin-left: 4px;
 }
 .rdPaneTabCountWarn {
-    color: var(--warn);
+    color: var(--warn-ink);
 }
 .rdPaneTabCountDanger {
     color: var(--danger);
@@ -2783,7 +2783,7 @@
     color: var(--ink-3);
 }
 .rdFieldGroupCountWarn {
-    color: var(--warn);
+    color: var(--warn-ink);
 }
 
 .rdField {
@@ -2923,7 +2923,7 @@ textarea.rdFieldInput {
     border-color: oklch(from var(--warn) l c h / 0.4);
 }
 .rdIssueWarn .rdIssueIcon {
-    color: var(--warn);
+    color: var(--warn-ink);
 }
 .rdIssueErr {
     border-color: oklch(from var(--danger) l c h / 0.4);
@@ -2935,7 +2935,7 @@ textarea.rdFieldInput {
     border-color: oklch(from var(--success) l c h / 0.3);
 }
 .rdIssueOk .rdIssueIcon {
-    color: var(--success);
+    color: var(--success-ink);
 }
 .rdIssueTitle {
     color: var(--ink);
@@ -3483,12 +3483,12 @@ textarea.rdFieldInput {
 }
 .rdStatusPillApproved {
     background: oklch(from var(--success) l c h / 0.16);
-    color: var(--success);
+    color: var(--success-ink);
     border-color: oklch(from var(--success) l c h / 0.4);
 }
 .rdStatusPillPending {
     background: oklch(from var(--warn) l c h / 0.16);
-    color: var(--warn);
+    color: var(--warn-ink);
     border-color: oklch(from var(--warn) l c h / 0.4);
 }
 
@@ -3983,7 +3983,7 @@ textarea.rdFieldInput {
     padding: 3px 9px;
     border-radius: 999px;
     background: var(--warn-soft);
-    color: var(--warn);
+    color: var(--warn-ink);
 }
 
 .assistPreviewBody {
@@ -4045,7 +4045,7 @@ textarea.rdFieldInput {
     border-radius: 4px;
     background: var(--warn-soft);
     border: 1px dashed color-mix(in oklch, var(--warn) 55%, transparent);
-    color: var(--warn);
+    color: var(--warn-ink);
     font-family: var(--font-mono);
     font-size: 12px;
     font-style: normal;

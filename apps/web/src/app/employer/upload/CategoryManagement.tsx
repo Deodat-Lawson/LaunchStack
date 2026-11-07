@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Trash2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface Category {
     id: string;
@@ -41,6 +42,7 @@ function ConfirmDialog({
     onCancel: () => void;
     onConfirm: () => void;
 }) {
+    const tc = useTranslations("common");
     useEffect(() => {
         if (!open) return;
         const onKey = (e: KeyboardEvent) => {
@@ -112,7 +114,7 @@ function ConfirmDialog({
                             cursor: "pointer",
                         }}
                     >
-                        Cancel
+                        {tc("actions.cancel")}
                     </button>
                     <button
                         onClick={onConfirm}
@@ -140,6 +142,8 @@ const CategoryManagement: React.FC<CategoryManagementProps> = ({
     onAddCategory,
     onRemoveCategory,
 }) => {
+    const t = useTranslations("upload.categories");
+    const tc = useTranslations("common");
     const [newCategory, setNewCategory] = useState("");
     const [categoryToDelete, setCategoryToDelete] = useState<Category | null>(null);
 
@@ -185,7 +189,7 @@ const CategoryManagement: React.FC<CategoryManagementProps> = ({
                     marginBottom: 12,
                 }}
             >
-                Manage categories
+                {t("title")}
             </div>
 
             <form
@@ -194,7 +198,7 @@ const CategoryManagement: React.FC<CategoryManagementProps> = ({
             >
                 <input
                     type="text"
-                    placeholder="New category name"
+                    placeholder={t("namePlaceholder")}
                     value={newCategory}
                     onChange={e => setNewCategory(e.target.value)}
                     style={inputStyle}
@@ -215,7 +219,7 @@ const CategoryManagement: React.FC<CategoryManagementProps> = ({
                         whiteSpace: "nowrap",
                     }}
                 >
-                    Add category
+                    {t("add")}
                 </button>
             </form>
 
@@ -230,10 +234,10 @@ const CategoryManagement: React.FC<CategoryManagementProps> = ({
                     }}
                 >
                     <div style={{ fontSize: 13.5, color: "var(--ink-2)", fontWeight: 600 }}>
-                        No categories yet
+                        {t("emptyTitle")}
                     </div>
                     <div style={{ fontSize: 12.5, color: "var(--ink-3)", marginTop: 4 }}>
-                        Add one above, or create one while uploading.
+                        {t("emptyBody")}
                     </div>
                 </div>
             ) : (
@@ -253,7 +257,7 @@ const CategoryManagement: React.FC<CategoryManagementProps> = ({
                             <span style={{ fontSize: 13.5, color: "var(--ink)" }}>{cat.name}</span>
                             <button
                                 onClick={() => setCategoryToDelete(cat)}
-                                aria-label={`Delete ${cat.name} category`}
+                                aria-label={t("deleteLabel", { name: cat.name })}
                                 style={{
                                     background: "transparent",
                                     border: "none",
@@ -283,9 +287,9 @@ const CategoryManagement: React.FC<CategoryManagementProps> = ({
 
             <ConfirmDialog
                 open={!!categoryToDelete}
-                title="Delete category"
-                description={`Are you sure you want to delete "${categoryToDelete?.name ?? ""}"? This action cannot be undone.`}
-                confirmLabel="Delete"
+                title={t("deleteTitle")}
+                description={t("deleteBody", { name: categoryToDelete?.name ?? "" })}
+                confirmLabel={tc("actions.delete")}
                 onCancel={() => setCategoryToDelete(null)}
                 onConfirm={() => void confirmDeleteCategory()}
             />

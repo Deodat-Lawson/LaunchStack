@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
+import { requestTranslator } from "~/i18n/server";
+import { V } from "~/i18n/validation";
+
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
@@ -8,7 +11,7 @@ import { validateRequestBody } from "~/lib/validation";
 import { createUploadBatch, serializeBatch } from "~/server/services/upload-batches";
 
 const FileEntrySchema = z.object({
-    filename: z.string().min(1, "Filename is required"),
+    filename: z.string().min(1, V.filenameRequired),
     relativePath: z.string().optional(),
     mimeType: z.string().optional(),
     size: z.number().int().nonnegative().optional(),
@@ -17,7 +20,7 @@ const FileEntrySchema = z.object({
 
 const CreateBatchSchema = z.object({
     metadata: z.record(z.any()).optional(),
-    files: z.array(FileEntrySchema).min(1, "At least one file entry is required"),
+    files: z.array(FileEntrySchema).min(1, V.fileEntryRequired),
 });
 
 export async function POST(request: Request) {
@@ -51,7 +54,10 @@ export async function POST(request: Request) {
             );
         } catch (error) {
             console.error("[UploadBatches] Failed to create batch", error);
-            return NextResponse.json({ error: "Failed to create upload batch" }, { status: 500 });
+            return NextResponse.json(
+                { error: requestTranslator(request, "upload.server.errors")("createBatchFailed") },
+                { status: 500 }
+            );
         }
     });
 }

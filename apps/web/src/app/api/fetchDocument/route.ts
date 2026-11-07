@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 // The second postgres pool (~/server/db/core) was removed — hot routes use
 // the engine's shared Drizzle client like everything else.
+import { requestTranslator } from "~/i18n/server";
 import { db } from "~/server/db";
 import { document, documentVersions, fileUploads } from "@launchstack/store/schema";
 import { documentSettings } from "~/server/db/schema";
@@ -12,6 +13,7 @@ import { scopedDocumentWhere } from "~/lib/authz/scope";
 import { mediaMimeFromName } from "~/lib/media-document";
 import { accessSubject } from "~/server/workspace/item-access";
 import { describeDocumentAccess } from "~/server/workspace/source-access";
+import { loadSourceProcessing } from "~/server/workspace/source-processing";
 
 /** Extract file id from /api/files/{id} URL so we can look up mimeType from file_uploads */
 const FILE_API_ID_REGEX = /\/api\/files\/(\d+)/;
@@ -88,7 +90,7 @@ function inferMimeFromName(name: string): string | undefined {
     return EXTENSION_TO_MIME[match[1].toLowerCase()] ?? mediaMimeFromName(name);
 }
 
-export async function POST(_request: Request) {
+export async function POST(request: Request) {
     try {
         const ctx = await requireWorkspacePermission("documents.read");
         if (!ctx.success) return ctx.response;
@@ -105,6 +107,7 @@ export async function POST(_request: Request) {
                 restricted: documentSettings.restricted,
                 currentVersionOcrProcessed: documentVersions.ocrProcessed,
                 currentVersionOcrMetadata: documentVersions.ocrMetadata,
+                currentVersionOcrJobId: documentVersions.ocrJobId,
             })
             .from(document)
             .leftJoin(documentSettings, eq(documentSettings.documentId, document.id))
@@ -147,6 +150,20 @@ export async function POST(_request: Request) {
             docs.map(doc => ({ id: Number(doc.id), category: doc.category }))
         );
 
+        // Where each source that is not ready yet stands in the pipeline —
+        // the rail's progress bar, and the job id a failure report carries.
+        // Readiness follows the current version, as the rail's does.
+        const pendingJobId = (doc: (typeof docs)[number]): string | null => {
+            const versioned = doc.currentVersionId !== null;
+            const processed = versioned ? doc.currentVersionOcrProcessed : doc.ocrProcessed;
+            if (processed === true) return null;
+            return versioned ? doc.currentVersionOcrJobId : doc.ocrJobId;
+        };
+        const processing = await loadSourceProcessing(
+            companyId,
+            docs.map(pendingJobId).filter((id): id is string => id !== null)
+        );
+
         // Convert BigInt fields to numbers for JSON serialization; attach mimeType for viewer
         const serializedDocs = docs.map(doc => {
             const fileId = FILE_API_ID_REGEX.exec(doc.url)?.[1];
@@ -173,6 +190,7 @@ export async function POST(_request: Request) {
                 restricted: doc.restricted === true,
                 access: described.access.get(Number(doc.id)) ?? null,
                 addedBy: described.addedBy.get(Number(doc.id)) ?? null,
+                processing: processing.get(pendingJobId(doc) ?? "") ?? null,
                 ...(mimeType && { mimeType }),
             };
         });
@@ -180,6 +198,9 @@ export async function POST(_request: Request) {
         return NextResponse.json(serializedDocs, { status: 200 });
     } catch (error: unknown) {
         console.error("Error fetching documents:", error);
-        return NextResponse.json({ error: "Unable to fetch documents" }, { status: 500 });
+        return NextResponse.json(
+            { error: requestTranslator(request, "sources.server.errors")("fetchDocumentsFailed") },
+            { status: 500 }
+        );
     }
 }

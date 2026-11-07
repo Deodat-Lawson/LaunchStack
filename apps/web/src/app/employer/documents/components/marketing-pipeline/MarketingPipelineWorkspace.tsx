@@ -1,9 +1,9 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import Image from "next/image";
+import { useCallback, useEffect, useId, useRef, useState, type ReactNode } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { useFormatter, useTranslations } from "next-intl";
 import {
     AlertTriangle,
     Brain,
@@ -17,9 +17,13 @@ import {
     FileText,
     Gauge,
     Hash,
+    History,
     Loader2,
     Megaphone,
     MessageSquareText,
+    MoreHorizontal,
+    SlidersHorizontal,
+    Eye,
     Pencil,
     Plus,
     Send,
@@ -28,12 +32,21 @@ import {
     Target,
     X,
 } from "lucide-react";
+import { cn } from "~/lib/utils";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "~/components/ui/sheet";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
 import { RewriteWorkflow } from "~/app/employer/documents/components/generator/RewriteWorkflow";
 import styles from "~/styles/Employer/MarketingPipeline.module.css";
 import {
+    PIPELINE_STEP_KEY,
     PLATFORM_OPTIONS,
-    REDDIT_SNOO_URL,
+    PROMPT_TEMPLATE_KEYS,
     type ClaimSourceUI,
     type ContentType,
     type FormalityLevel,
@@ -45,6 +58,10 @@ import {
     type PlatformMeta,
     type ThinkingEntry,
 } from "./shared";
+import { ClaimGateDialog, SUPPORT_TONE, claimVerdict } from "./ClaimGate";
+import { NETWORK_MARKS } from "~/components/icons/brand";
+
+import { PlatformLogo } from "./PlatformLogo";
 import { useMarketingPipelineController } from "./useMarketingPipelineController";
 
 export interface MarketingPipelineWorkspaceProps {
@@ -59,36 +76,32 @@ export interface MarketingPipelineWorkspaceProps {
     onSchedule?: (draft: { platform: MarketingPlatform; message: string }) => void;
 }
 
-function usePlatformLogoClassNames() {
-    return useMemo(
-        () => ({
-            reddit: styles.platformLogoReddit,
-            x: styles.platformLogoX,
-            linkedin: styles.platformLogoLinkedin,
-            bluesky: styles.platformLogoBluesky,
-        }),
-        []
-    );
+/** The network's mark inside the preview badge (the same glyphs as everywhere else). */
+function PreviewBadgeMark({ platform }: { platform: MarketingPlatform }) {
+    const { Mark, fill } = NETWORK_MARKS[platform];
+    // The badge is 1.75rem (28px) square.
+    return <Mark size={Math.round(28 * fill)} />;
 }
 
 /* ─── How-it-works explainer (Fix 1) ─── */
 
 function HowItWorks() {
+    const t = useTranslations("growth.marketingPipeline.howItWorks");
     return (
         <div className={styles.howItWorks}>
             <div className={styles.howItWorksStep}>
                 <span className={styles.howItWorksNumber}>1</span>
-                <span className={styles.howItWorksText}>Pick a platform</span>
+                <span className={styles.howItWorksText}>{t("pick")}</span>
             </div>
             <div className={styles.howItWorksDivider} />
             <div className={styles.howItWorksStep}>
                 <span className={styles.howItWorksNumber}>2</span>
-                <span className={styles.howItWorksText}>Describe what to promote</span>
+                <span className={styles.howItWorksText}>{t("describe")}</span>
             </div>
             <div className={styles.howItWorksDivider} />
             <div className={styles.howItWorksStep}>
                 <span className={styles.howItWorksNumber}>3</span>
-                <span className={styles.howItWorksText}>Get a campaign-ready draft in ~30s</span>
+                <span className={styles.howItWorksText}>{t("get")}</span>
             </div>
         </div>
     );
@@ -123,6 +136,7 @@ function stepStatusClass(status: PipelineStepState["status"]): string {
 }
 
 function StepDataPreview({ data }: { data: Record<string, unknown> }) {
+    const t = useTranslations("growth.marketingPipeline.stepper");
     const entries = Object.entries(data).slice(0, 6);
     if (entries.length === 0) return null;
 
@@ -138,7 +152,7 @@ function StepDataPreview({ data }: { data: Record<string, unknown> }) {
                                       : String(v)
                               )
                               .join(", ")
-                        : `${value.length} items`
+                        : t("items", { count: value.length })
                     : typeof value === "object" && value !== null
                       ? JSON.stringify(value).slice(0, 100)
                       : String(value);
@@ -170,6 +184,7 @@ function PipelineStepper({
     generationStartTime: number | null;
     isComplete: boolean;
 }) {
+    const t = useTranslations("growth.marketingPipeline");
     const [elapsed, setElapsed] = useState(0);
     const [expandedSteps, setExpandedSteps] = useState<Set<string>>(new Set());
 
@@ -207,14 +222,23 @@ function PipelineStepper({
             <div className={styles.stepperHeader}>
                 <span className={styles.stepperProgress}>
                     {isComplete
-                        ? `Completed in ${(totalDurationMs / 1000).toFixed(1)}s`
+                        ? t("stepper.completedIn", {
+                              seconds: (totalDurationMs / 1000).toFixed(1),
+                          })
                         : activeCount > 1
-                          ? `${activeCount} steps running · ${finishedCount}/${totalSteps} done`
-                          : `Step ${Math.min(finishedCount + 1, totalSteps)} of ${totalSteps}`}
+                          ? t("stepper.parallelRunning", {
+                                active: activeCount,
+                                done: finishedCount,
+                                total: totalSteps,
+                            })
+                          : t("stepper.stepOf", {
+                                current: Math.min(finishedCount + 1, totalSteps),
+                                total: totalSteps,
+                            })}
                 </span>
                 {!isComplete && (
                     <span className={styles.stepperElapsed}>
-                        {elapsed}s elapsed · {progressPct}%
+                        {t("stepper.elapsed", { seconds: elapsed, pct: progressPct })}
                     </span>
                 )}
                 {isComplete && <span className={styles.stepperElapsed}>{progressPct}%</span>}
@@ -239,7 +263,9 @@ function PipelineStepper({
                     step.status === "skipped" ||
                     step.status === "failed"
                         ? step.durationMs != null
-                            ? `${(step.durationMs / 1000).toFixed(1)}s`
+                            ? t("stepper.seconds", {
+                                  seconds: (step.durationMs / 1000).toFixed(1),
+                              })
                             : "—"
                         : step.status === "active"
                           ? null
@@ -271,9 +297,13 @@ function PipelineStepper({
                                     flexWrap: "wrap",
                                 }}
                             >
-                                <span className={styles.stepperLabel}>{step.label}</span>
+                                <span className={styles.stepperLabel}>
+                                    {t(`steps.${PIPELINE_STEP_KEY[step.id]}`)}
+                                </span>
                                 {isParallel && (
-                                    <span className={styles.stepperParallelTag}>∥ parallel</span>
+                                    <span className={styles.stepperParallelTag}>
+                                        {t("stepper.parallel")}
+                                    </span>
                                 )}
                                 {isClickable && (
                                     <span
@@ -341,6 +371,7 @@ function ThinkingStream({
     entries: ThinkingEntry[];
     isGenerating: boolean;
 }) {
+    const t = useTranslations("growth.marketingPipeline.thinking");
     const [collapsed, setCollapsed] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -363,10 +394,10 @@ function ThinkingStream({
             <button type="button" className={styles.thinkingHeader} onClick={toggleCollapsed}>
                 <Brain size={14} className={isGenerating ? styles.thinkingPulse : undefined} />
                 <span className={styles.thinkingHeaderLabel}>
-                    {isGenerating ? "Thinking..." : "Thought process"}
+                    {isGenerating ? t("thinking") : t("thought")}
                 </span>
                 <span className={styles.thinkingEntryCount}>
-                    {entries.length} step{entries.length !== 1 ? "s" : ""}
+                    {t("steps", { count: entries.length })}
                 </span>
                 {collapsed ? <ChevronRight size={14} /> : <ChevronDown size={14} />}
             </button>
@@ -402,6 +433,7 @@ function StrategyInsights({
     strategyUsed?: { angle: string; keyProof: string[]; humanHook: string; avoidList: string[] };
     competitiveAngle?: string;
 }) {
+    const t = useTranslations("growth.marketingPipeline.strategy");
     const [open, setOpen] = useState(false);
 
     if (!strategyUsed && !competitiveAngle) return null;
@@ -414,18 +446,18 @@ function StrategyInsights({
                 onClick={() => setOpen(prev => !prev)}
             >
                 <Target size={14} />
-                <span>Strategy used</span>
+                <span>{t("used")}</span>
                 {open ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
             </button>
             {open && strategyUsed && (
                 <div className={styles.strategyContent}>
                     <div className={styles.strategySection}>
-                        <div className={styles.strategySectionLabel}>Positioning angle</div>
+                        <div className={styles.strategySectionLabel}>{t("angle")}</div>
                         <p className={styles.strategySectionText}>{strategyUsed.angle}</p>
                     </div>
                     {strategyUsed.keyProof.length > 0 && (
                         <div className={styles.strategySection}>
-                            <div className={styles.strategySectionLabel}>Key proof points</div>
+                            <div className={styles.strategySectionLabel}>{t("proof")}</div>
                             <ul className={styles.strategyList}>
                                 {strategyUsed.keyProof.map((proof, i) => (
                                     <li key={i}>{proof}</li>
@@ -434,12 +466,12 @@ function StrategyInsights({
                         </div>
                     )}
                     <div className={styles.strategySection}>
-                        <div className={styles.strategySectionLabel}>Human hook</div>
+                        <div className={styles.strategySectionLabel}>{t("hook")}</div>
                         <p className={styles.strategySectionText}>{strategyUsed.humanHook}</p>
                     </div>
                     {strategyUsed.avoidList.length > 0 && (
                         <div className={styles.strategySection}>
-                            <div className={styles.strategySectionLabel}>What to avoid</div>
+                            <div className={styles.strategySectionLabel}>{t("avoid")}</div>
                             <ul className={styles.strategyList}>
                                 {strategyUsed.avoidList.map((item, i) => (
                                     <li key={i}>{item}</li>
@@ -456,6 +488,7 @@ function StrategyInsights({
 /* ─── Pipeline transparency panels ─── */
 
 function PipelineStagesPanel({ stages }: { stages: PipelineStagesUI }) {
+    const t = useTranslations("growth.marketingPipeline.stages");
     const [openSections, setOpenSections] = useState<Record<string, boolean>>({});
 
     const toggle = (key: string) => setOpenSections(prev => ({ ...prev, [key]: !prev[key] }));
@@ -464,7 +497,7 @@ function PipelineStagesPanel({ stages }: { stages: PipelineStagesUI }) {
         <div className={styles.strategyCard}>
             <button type="button" className={styles.strategyToggle} onClick={() => toggle("_root")}>
                 <Sparkles size={14} />
-                <span>Pipeline thought process</span>
+                <span>{t("title")}</span>
                 {openSections._root ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
             </button>
             {openSections._root && (
@@ -479,7 +512,7 @@ function PipelineStagesPanel({ stages }: { stages: PipelineStagesUI }) {
                                 style={{ padding: 0, marginBottom: "0.25rem" }}
                             >
                                 <span className={styles.strategySectionLabel} style={{ margin: 0 }}>
-                                    Brand voice
+                                    {t("brandVoice")}
                                 </span>
                                 {openSections.voice ? (
                                     <ChevronDown size={12} />
@@ -490,18 +523,20 @@ function PipelineStagesPanel({ stages }: { stages: PipelineStagesUI }) {
                             {openSections.voice && (
                                 <div style={{ fontSize: "0.8125rem", lineHeight: 1.5 }}>
                                     <p>
-                                        <strong>Tone:</strong> {stages.brandVoice.toneDescriptor}
+                                        <strong>{t("tone")}</strong>{" "}
+                                        {stages.brandVoice.toneDescriptor}
                                     </p>
                                     <p>
-                                        <strong>Formality:</strong>{" "}
+                                        <strong>{t("formality")}</strong>{" "}
                                         {stages.brandVoice.formalityLevel}
                                     </p>
                                     <p>
-                                        <strong>Style:</strong> {stages.brandVoice.sentenceStyle}
+                                        <strong>{t("style")}</strong>{" "}
+                                        {stages.brandVoice.sentenceStyle}
                                     </p>
                                     {stages.brandVoice.vocabularyExamples.length > 0 && (
                                         <p>
-                                            <strong>Vocabulary:</strong>{" "}
+                                            <strong>{t("vocabulary")}</strong>{" "}
                                             {stages.brandVoice.vocabularyExamples.join(", ")}
                                         </p>
                                     )}
@@ -520,7 +555,7 @@ function PipelineStagesPanel({ stages }: { stages: PipelineStagesUI }) {
                                 style={{ padding: 0, marginBottom: "0.25rem" }}
                             >
                                 <span className={styles.strategySectionLabel} style={{ margin: 0 }}>
-                                    Target persona
+                                    {t("persona")}
                                 </span>
                                 {openSections.persona ? (
                                     <ChevronDown size={12} />
@@ -531,18 +566,18 @@ function PipelineStagesPanel({ stages }: { stages: PipelineStagesUI }) {
                             {openSections.persona && (
                                 <div style={{ fontSize: "0.8125rem", lineHeight: 1.5 }}>
                                     <p>
-                                        <strong>Role:</strong> {stages.targetPersona.role}
+                                        <strong>{t("role")}</strong> {stages.targetPersona.role}
                                     </p>
                                     <p>
-                                        <strong>Pain points:</strong>{" "}
+                                        <strong>{t("painPoints")}</strong>{" "}
                                         {stages.targetPersona.painPoints.join("; ")}
                                     </p>
                                     <p>
-                                        <strong>Priorities:</strong>{" "}
+                                        <strong>{t("priorities")}</strong>{" "}
                                         {stages.targetPersona.priorities.join("; ")}
                                     </p>
                                     <p>
-                                        <strong>Language:</strong>{" "}
+                                        <strong>{t("language")}</strong>{" "}
                                         {stages.targetPersona.languageStyle}
                                     </p>
                                 </div>
@@ -560,7 +595,9 @@ function PipelineStagesPanel({ stages }: { stages: PipelineStagesUI }) {
                                 style={{ padding: 0, marginBottom: "0.25rem" }}
                             >
                                 <span className={styles.strategySectionLabel} style={{ margin: 0 }}>
-                                    Competitors ({stages.competitors.competitors.length})
+                                    {t("competitors", {
+                                        count: stages.competitors.competitors.length,
+                                    })}
                                 </span>
                                 {openSections.competitors ? (
                                     <ChevronDown size={12} />
@@ -580,20 +617,22 @@ function PipelineStagesPanel({ stages }: { stages: PipelineStagesUI }) {
                                                         marginLeft: "0.5rem",
                                                     }}
                                                 >
-                                                    Weaknesses: {c.weaknesses.join(", ")}
+                                                    {t("weaknesses", {
+                                                        list: c.weaknesses.join(", "),
+                                                    })}
                                                 </div>
                                             )}
                                         </div>
                                     ))}
                                     {stages.competitors.ourAdvantages.length > 0 && (
                                         <p>
-                                            <strong>Our advantages:</strong>{" "}
+                                            <strong>{t("advantages")}</strong>{" "}
                                             {stages.competitors.ourAdvantages.join("; ")}
                                         </p>
                                     )}
                                     {stages.competitors.marketGaps.length > 0 && (
                                         <p>
-                                            <strong>Market gaps:</strong>{" "}
+                                            <strong>{t("gaps")}</strong>{" "}
                                             {stages.competitors.marketGaps.join("; ")}
                                         </p>
                                     )}
@@ -612,7 +651,7 @@ function PipelineStagesPanel({ stages }: { stages: PipelineStagesUI }) {
                                 style={{ padding: 0, marginBottom: "0.25rem" }}
                             >
                                 <span className={styles.strategySectionLabel} style={{ margin: 0 }}>
-                                    Strategy variants ({stages.strategies.length})
+                                    {t("strategies", { count: stages.strategies.length })}
                                 </span>
                                 {openSections.strategies ? (
                                     <ChevronDown size={12} />
@@ -646,13 +685,14 @@ function PipelineStagesPanel({ stages }: { stages: PipelineStagesUI }) {
                                                 {s.angleRationale}
                                             </p>
                                             <p>
-                                                <strong>Angle:</strong> {s.angle}
+                                                <strong>{t("angle")}</strong> {s.angle}
                                             </p>
                                             <p>
-                                                <strong>Key proof:</strong> {s.keyProof.join("; ")}
+                                                <strong>{t("keyProof")}</strong>{" "}
+                                                {s.keyProof.join("; ")}
                                             </p>
                                             <p>
-                                                <strong>Hook:</strong> {s.humanHook}
+                                                <strong>{t("hook")}</strong> {s.humanHook}
                                             </p>
                                         </div>
                                     ))}
@@ -664,7 +704,7 @@ function PipelineStagesPanel({ stages }: { stages: PipelineStagesUI }) {
                     {/* Performance Insights */}
                     {stages.performanceInsights && stages.performanceInsights.length > 0 && (
                         <div className={styles.strategySection}>
-                            <div className={styles.strategySectionLabel}>Performance insights</div>
+                            <div className={styles.strategySectionLabel}>{t("performance")}</div>
                             <ul className={styles.strategyList}>
                                 {stages.performanceInsights.map((insight, i) => (
                                     <li key={i}>{insight}</li>
@@ -678,12 +718,34 @@ function PipelineStagesPanel({ stages }: { stages: PipelineStagesUI }) {
     );
 }
 
-function ClaimSourcesPanel({ claims }: { claims: ClaimSourceUI[] }) {
-    const [open, setOpen] = useState(false);
+/**
+ * Each claim with its verdict: stated in a document, contradicted by one,
+ * not stated, or not checked. It used to show a similarity percentage and a
+ * green tick for anything similar, which read as "verified" and was not.
+ */
+function ClaimSourcesPanel({
+    claims,
+    unavailable,
+    defaultOpen = false,
+}: {
+    claims: ClaimSourceUI[];
+    unavailable?: boolean;
+    /** Open on its own tab, where the claims are the point; collapsed elsewhere. */
+    defaultOpen?: boolean;
+}) {
+    const t = useTranslations("growth.marketingPipeline.claims");
+    const [open, setOpen] = useState(defaultOpen);
 
+    if (unavailable) {
+        return (
+            <div className="bg-warn-soft text-ink-2 rounded-md p-3 text-[0.8125rem]">
+                {t("unavailable")}
+            </div>
+        );
+    }
     if (claims.length === 0) return null;
 
-    const sourced = claims.filter(c => c.match !== null);
+    const supported = claims.filter(c => c.support === "supported");
 
     return (
         <div className={styles.strategyCard}>
@@ -693,55 +755,32 @@ function ClaimSourcesPanel({ claims }: { claims: ClaimSourceUI[] }) {
                 onClick={() => setOpen(prev => !prev)}
             >
                 <FileText size={14} />
-                <span>
-                    Claim sources ({sourced.length}/{claims.length} sourced)
-                </span>
+                <span>{t("title", { supported: supported.length, total: claims.length })}</span>
                 {open ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
             </button>
             {open && (
                 <div className={styles.strategyContent}>
+                    <p className="text-ink-3 mb-2 text-xs">{t("explainer")}</p>
                     {claims.map((claim, i) => (
                         <div
                             key={i}
-                            style={{
-                                marginBottom: "0.5rem",
-                                padding: "0.5rem",
-                                borderRadius: "0.375rem",
-                                background: claim.match
-                                    ? "var(--success-soft)"
-                                    : "var(--warn-soft)",
-                                fontSize: "0.8125rem",
-                            }}
+                            className={cn(
+                                "border-line-2 bg-panel-2 mb-2 rounded-md border border-l-[3px] px-3 py-2 text-[0.8125rem]",
+                                SUPPORT_TONE[claim.support]
+                            )}
                         >
-                            <div style={{ fontWeight: 600, marginBottom: "0.125rem" }}>
-                                {claim.match ? "✓" : "?"} {claim.claim}
+                            <div className="mb-0.5 font-semibold">{claim.claim}</div>
+                            <div className="text-ink-3">
+                                {claimVerdict(t, {
+                                    support: claim.support,
+                                    sourceDoc: claim.match?.sourceDoc ?? null,
+                                })}
                             </div>
-                            <div style={{ color: "var(--ink-3)" }}>
-                                {claim.match ? (
-                                    <>
-                                        Source: {claim.match.sourceDoc}
-                                        {claim.match.relevance != null && (
-                                            <span style={{ marginLeft: "0.5rem" }}>
-                                                ({Math.round(claim.match.relevance * 100)}%
-                                                relevance)
-                                            </span>
-                                        )}
-                                    </>
-                                ) : claim.error ? (
-                                    "Source lookup failed — review manually"
-                                ) : (
-                                    "No matching source found in the knowledge base"
-                                )}
-                            </div>
+                            {claim.reason && (
+                                <div className="text-ink-3 mt-1 text-xs">{claim.reason}</div>
+                            )}
                             {claim.match?.excerpt && (
-                                <div
-                                    style={{
-                                        marginTop: "0.25rem",
-                                        fontStyle: "italic",
-                                        color: "var(--ink-3)",
-                                        fontSize: "0.75rem",
-                                    }}
-                                >
+                                <div className="text-ink-3 mt-1 text-xs italic">
                                     &ldquo;{claim.match.excerpt}&rdquo;
                                 </div>
                             )}
@@ -755,18 +794,18 @@ function ClaimSourcesPanel({ claims }: { claims: ClaimSourceUI[] }) {
 
 /* ─── Customization controls ─── */
 
-const TONE_OPTIONS: { id: FormalityLevel; label: string }[] = [
-    { id: "conversational", label: "Conversational" },
-    { id: "formal", label: "Formal" },
-    { id: "technical", label: "Technical" },
-    { id: "bold", label: "Bold" },
-];
+/** Each tone's name is `growth.marketingPipeline.tones.<id>`. */
+const TONE_OPTIONS: readonly FormalityLevel[] = ["conversational", "formal", "technical", "bold"];
 
-const CONTENT_TYPE_OPTIONS: { id: ContentType; label: string; hint: string }[] = [
-    { id: "post", label: "Single post", hint: "Standard social post" },
-    { id: "thread", label: "Thread", hint: "Multi-part narrative" },
-    { id: "ad_copy", label: "Ad copy", hint: "Conversion-focused" },
-    { id: "email", label: "Email", hint: "Marketing email" },
+/** Each content type's name and hint are `growth.marketingPipeline.contentTypes.<key>`. */
+const CONTENT_TYPE_OPTIONS: ReadonlyArray<{
+    id: ContentType;
+    key: "post" | "thread" | "adCopy" | "email";
+}> = [
+    { id: "post", key: "post" },
+    { id: "thread", key: "thread" },
+    { id: "ad_copy", key: "adCopy" },
+    { id: "email", key: "email" },
 ];
 
 function CustomizationControls({
@@ -776,6 +815,7 @@ function CustomizationControls({
     onTargetAudienceChange,
     contentType,
     onContentTypeChange,
+    children,
 }: {
     toneOverride?: FormalityLevel;
     onToneChange: (v: FormalityLevel | undefined) => void;
@@ -783,165 +823,69 @@ function CustomizationControls({
     onTargetAudienceChange: (v: string) => void;
     contentType?: ContentType;
     onContentTypeChange: (v: ContentType | undefined) => void;
+    children?: ReactNode;
 }) {
-    const [expanded, setExpanded] = useState(false);
-
+    const t = useTranslations("growth.marketingPipeline");
+    const audienceId = useId();
     return (
-        <div style={{ marginTop: "0.75rem" }}>
-            <button
-                type="button"
-                onClick={() => setExpanded(p => !p)}
-                style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "0.375rem",
-                    background: "none",
-                    border: "none",
-                    cursor: "pointer",
-                    padding: 0,
-                    fontSize: "0.8125rem",
-                    fontWeight: 600,
-                    color: "var(--ink-3)",
-                }}
-            >
-                <Target size={14} />
-                Customize generation
-                {expanded ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
-            </button>
-            {expanded && (
-                <div
-                    style={{
-                        marginTop: "0.5rem",
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "0.75rem",
-                    }}
-                >
-                    <div>
-                        <label
-                            style={{
-                                display: "block",
-                                fontSize: "0.75rem",
-                                fontWeight: 600,
-                                marginBottom: "0.25rem",
-                                color: "var(--ink-3)",
-                            }}
-                        >
-                            Tone
-                        </label>
-                        <div style={{ display: "flex", gap: "0.375rem", flexWrap: "wrap" }}>
-                            {TONE_OPTIONS.map(t => (
-                                <button
-                                    key={t.id}
-                                    type="button"
-                                    onClick={() =>
-                                        onToneChange(toneOverride === t.id ? undefined : t.id)
-                                    }
-                                    style={{
-                                        padding: "0.25rem 0.625rem",
-                                        borderRadius: "9999px",
-                                        fontSize: "0.75rem",
-                                        fontWeight: 500,
-                                        border:
-                                            toneOverride === t.id
-                                                ? "1.5px solid var(--accent)"
-                                                : "1px solid var(--line)",
-                                        background:
-                                            toneOverride === t.id
-                                                ? "var(--accent-soft)"
-                                                : "transparent",
-                                        color:
-                                            toneOverride === t.id
-                                                ? "var(--accent)"
-                                                : "var(--ink-2)",
-                                        cursor: "pointer",
-                                    }}
-                                >
-                                    {t.label}
-                                </button>
-                            ))}
-                        </div>
+        <details className={styles.postSettings}>
+            <summary>
+                <SlidersHorizontal size={15} aria-hidden="true" />
+                <span>{t("studio.settings")}</span>
+                <ChevronDown size={14} aria-hidden="true" />
+            </summary>
+            <div className={styles.settingsContent}>
+                <fieldset className={styles.settingsField}>
+                    <legend>{t("customize.tone")}</legend>
+                    <div className={styles.settingChoices}>
+                        {TONE_OPTIONS.map(tone => (
+                            <button
+                                key={tone}
+                                type="button"
+                                aria-pressed={toneOverride === tone}
+                                onClick={() =>
+                                    onToneChange(toneOverride === tone ? undefined : tone)
+                                }
+                            >
+                                {t(`tones.${tone}`)}
+                            </button>
+                        ))}
                     </div>
-
-                    <div>
-                        <label
-                            style={{
-                                display: "block",
-                                fontSize: "0.75rem",
-                                fontWeight: 600,
-                                marginBottom: "0.25rem",
-                                color: "var(--ink-3)",
-                            }}
-                        >
-                            Target audience (optional)
-                        </label>
-                        <input
-                            type="text"
-                            value={targetAudience}
-                            onChange={e => onTargetAudienceChange(e.target.value)}
-                            placeholder="e.g., CTOs at mid-stage SaaS companies"
-                            style={{
-                                width: "100%",
-                                padding: "0.375rem 0.5rem",
-                                borderRadius: "0.375rem",
-                                border: "1px solid var(--line)",
-                                fontSize: "0.8125rem",
-                                background: "var(--panel)",
-                            }}
-                        />
-                    </div>
-
-                    <div>
-                        <label
-                            style={{
-                                display: "block",
-                                fontSize: "0.75rem",
-                                fontWeight: 600,
-                                marginBottom: "0.25rem",
-                                color: "var(--ink-3)",
-                            }}
-                        >
-                            Content type
-                        </label>
-                        <div style={{ display: "flex", gap: "0.375rem", flexWrap: "wrap" }}>
-                            {CONTENT_TYPE_OPTIONS.map(ct => (
-                                <button
-                                    key={ct.id}
-                                    type="button"
-                                    onClick={() =>
-                                        onContentTypeChange(
-                                            contentType === ct.id ? undefined : ct.id
-                                        )
-                                    }
-                                    title={ct.hint}
-                                    style={{
-                                        padding: "0.25rem 0.625rem",
-                                        borderRadius: "9999px",
-                                        fontSize: "0.75rem",
-                                        fontWeight: 500,
-                                        border:
-                                            contentType === ct.id
-                                                ? "1.5px solid var(--accent)"
-                                                : "1px solid var(--line)",
-                                        background:
-                                            contentType === ct.id
-                                                ? "var(--accent-soft)"
-                                                : "transparent",
-                                        color:
-                                            contentType === ct.id
-                                                ? "var(--accent)"
-                                                : "var(--ink-2)",
-                                        cursor: "pointer",
-                                    }}
-                                >
-                                    {ct.label}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
+                </fieldset>
+                <div className={styles.settingsField}>
+                    <label htmlFor={audienceId}>{t("customize.audience")}</label>
+                    <input
+                        id={audienceId}
+                        name="targetAudience"
+                        autoComplete="off"
+                        type="text"
+                        value={targetAudience}
+                        maxLength={200}
+                        onChange={e => onTargetAudienceChange(e.target.value)}
+                        placeholder={t("customize.audiencePlaceholder")}
+                    />
                 </div>
-            )}
-        </div>
+                <fieldset className={styles.settingsField}>
+                    <legend>{t("customize.contentType")}</legend>
+                    <div className={styles.settingChoices}>
+                        {CONTENT_TYPE_OPTIONS.map(ct => (
+                            <button
+                                key={ct.id}
+                                type="button"
+                                aria-pressed={contentType === ct.id}
+                                onClick={() =>
+                                    onContentTypeChange(contentType === ct.id ? undefined : ct.id)
+                                }
+                                title={t(`contentTypes.${ct.key}.hint`)}
+                            >
+                                {t(`contentTypes.${ct.key}.label`)}
+                            </button>
+                        ))}
+                    </div>
+                </fieldset>
+                {children}
+            </div>
+        </details>
     );
 }
 
@@ -956,6 +900,8 @@ function SubredditField({
     value: string;
     onChange: (v: string) => void;
 }) {
+    const t = useTranslations("growth.marketingPipeline.fields");
+    const fieldId = useId();
     const [open, setOpen] = useState(false);
     const [inputValue, setInputValue] = useState(value.replace(/^r\//, ""));
 
@@ -972,10 +918,16 @@ function SubredditField({
 
     return (
         <div className={styles.platformFieldGroup}>
-            <label className={styles.platformFieldLabel}>{config.label}</label>
+            <label htmlFor={fieldId} className={styles.platformFieldLabel}>
+                {t(config.type)}
+            </label>
             <div className={styles.subredditInputWrapper}>
                 <span className={styles.subredditPrefix}>r/</span>
                 <input
+                    id={fieldId}
+                    name="subreddit"
+                    autoComplete="off"
+                    spellCheck={false}
                     type="text"
                     className={styles.subredditInput}
                     value={inputValue}
@@ -1017,6 +969,8 @@ function HashtagField({
     values: string[];
     onChange: (v: string[]) => void;
 }) {
+    const t = useTranslations("growth.marketingPipeline.fields");
+    const fieldId = useId();
     const [inputValue, setInputValue] = useState("");
     const atLimit = values.length >= config.maxItems;
 
@@ -1037,8 +991,8 @@ function HashtagField({
 
     return (
         <div className={styles.platformFieldGroup}>
-            <label className={styles.platformFieldLabel}>
-                {config.label}
+            <label htmlFor={fieldId} className={styles.platformFieldLabel}>
+                {t(config.type)}
                 <span className={styles.platformFieldCount}>
                     {values.length}/{config.maxItems}
                 </span>
@@ -1051,7 +1005,7 @@ function HashtagField({
                             type="button"
                             className={styles.hashtagTagRemove}
                             onClick={() => removeTag(tag)}
-                            aria-label={`Remove ${tag}`}
+                            aria-label={t("removeTag", { tag })}
                         >
                             <X size={10} />
                         </button>
@@ -1059,10 +1013,14 @@ function HashtagField({
                 ))}
                 {!atLimit && (
                     <input
+                        id={fieldId}
+                        name="hashtags"
+                        autoComplete="off"
+                        spellCheck={false}
                         type="text"
                         className={styles.hashtagInput}
                         value={inputValue}
-                        placeholder={values.length === 0 ? "Add a hashtag..." : ""}
+                        placeholder={values.length === 0 ? t("addHashtag") : ""}
                         onChange={e => setInputValue(e.target.value)}
                         onKeyDown={e => {
                             if (e.key === "Enter" || e.key === ",") {
@@ -1133,9 +1091,9 @@ function PlatformFields({
     );
 }
 
-/* ─── Stacked rewrite variants ─── */
+/* ─── Draft variants ─── */
 
-function VariantStack({
+function VariantSelector({
     variants,
     activeVariantId,
     onSelect,
@@ -1144,42 +1102,28 @@ function VariantStack({
     activeVariantId: string | null;
     onSelect: (id: string) => void;
 }) {
+    const t = useTranslations("growth.marketingPipeline.variants");
     if (variants.length < 2) return null;
-
     return (
-        <div className={styles.variantStack}>
-            <div className={styles.variantStackHeader}>Variants ({variants.length})</div>
-            {variants.map(v => {
-                const isActive = v.id === activeVariantId;
-                return (
-                    <div
+        <fieldset className={styles.variantStack}>
+            <legend className={styles.variantStackHeader}>
+                {t("header", { count: variants.length })}
+            </legend>
+            <div className={styles.variantChoices}>
+                {variants.map(v => (
+                    <button
                         key={v.id}
-                        className={`${styles.variantCard} ${isActive ? styles.variantCardActive : ""}`}
+                        type="button"
+                        className={styles.variantChoice}
+                        aria-pressed={v.id === activeVariantId}
+                        onClick={() => onSelect(v.id)}
                     >
-                        <div className={styles.variantCardHeader}>
-                            <span className={styles.variantLabel}>{v.label}</span>
-                            {isActive ? (
-                                <span className={styles.variantActiveBadge}>
-                                    <Check size={10} />
-                                    Active
-                                </span>
-                            ) : (
-                                <button
-                                    type="button"
-                                    className={styles.variantUseButton}
-                                    onClick={() => onSelect(v.id)}
-                                >
-                                    Use this
-                                </button>
-                            )}
-                        </div>
-                        <p className={styles.variantPreview}>
-                            {v.text.length > 140 ? `${v.text.slice(0, 140)}...` : v.text}
-                        </p>
-                    </div>
-                );
-            })}
-        </div>
+                        <span>{v.label}</span>
+                        {v.id === activeVariantId && <Check size={14} aria-hidden="true" />}
+                    </button>
+                ))}
+            </div>
+        </fieldset>
     );
 }
 
@@ -1191,9 +1135,15 @@ export function MarketingPipelineWorkspace({
     embedded = false,
     onSchedule,
 }: MarketingPipelineWorkspaceProps) {
+    const t = useTranslations("growth.marketingPipeline");
+    const tc = useTranslations("common.actions");
+    const format = useFormatter();
+    const promptId = useId();
     const [debugOpen, setDebugOpen] = useState(false);
+    // Which part of a finished run is showing. A new result opens on the draft.
+    const [resultTab, setResultTab] = useState("draft");
+    const [historyOpen, setHistoryOpen] = useState(false);
     const [confirmNewCampaign, setConfirmNewCampaign] = useState(false);
-    const logoClassNames = usePlatformLogoClassNames();
 
     const {
         platform,
@@ -1228,6 +1178,9 @@ export function MarketingPipelineWorkspace({
         publishing,
         publishResult,
         publishPost,
+        claimGate,
+        confirmClaimGate,
+        dismissClaimGate,
         evaluating,
         evalResult,
         evalError,
@@ -1248,7 +1201,14 @@ export function MarketingPipelineWorkspace({
         setContentType,
     } = useMarketingPipelineController({ debug });
 
+    useEffect(() => {
+        setResultTab("draft");
+    }, [result]);
+
     const hasSessions = sessions.length > 0;
+    const platformLabel = result
+        ? PLATFORM_OPTIONS.find(p => p.id === result.platform)?.label
+        : undefined;
 
     const handleNewCampaignClick = () => {
         if (result) {
@@ -1263,22 +1223,46 @@ export function MarketingPipelineWorkspace({
         handleStartNewSession();
     };
 
+    // What the run is doing (and did): the live progress while it runs, and the
+    // "Process" tab afterwards, so the steps stay one click away instead of
+    // pushing the draft down the page.
+    const progressView = (
+        <>
+            {thinkingLog.length > 0 && (
+                <ThinkingStream entries={thinkingLog} isGenerating={loading} />
+            )}
+            {pipelineSteps.length > 0 && (
+                <PipelineStepper
+                    steps={pipelineSteps}
+                    generationStartTime={generationStartTime}
+                    isComplete={!loading && pipelineSteps.some(s => s.status !== "pending")}
+                />
+            )}
+        </>
+    );
+    const claimsToReview = result
+        ? (result.claimSources ?? []).filter(c => c.support !== "supported").length +
+          (result.claimCheckUnavailable ? 1 : 0)
+        : 0;
+
     return (
         <div
             className={embedded ? styles.embeddedRoot : undefined}
             style={embedded ? undefined : { display: "contents" }}
         >
+            <ClaimGateDialog
+                gate={claimGate}
+                onConfirm={() => void confirmClaimGate()}
+                onCancel={dismissClaimGate}
+            />
             {!embedded && (
                 <div className={styles.pageHeaderRow}>
                     <div className={styles.pageTitleIcon}>
                         <Megaphone className={styles.pageTitleIconInner} />
                     </div>
                     <div>
-                        <h1 className={styles.pageTitle}>Marketing Pipeline</h1>
-                        <p className={styles.pageSubtitle}>
-                            Create campaign-ready posts for Reddit, X, LinkedIn & Bluesky from your
-                            company knowledge base
-                        </p>
+                        <h1 className={styles.pageTitle}>{t("title")}</h1>
+                        <p className={styles.pageSubtitle}>{t("subtitle")}</p>
                     </div>
                 </div>
             )}
@@ -1286,7 +1270,9 @@ export function MarketingPipelineWorkspace({
             {!platform ? (
                 <section className={styles.mainContent}>
                     <section className={styles.platformShell}>
-                        <h2 className={styles.platformShellTitle}>Choose platform</h2>
+                        <h2 className={styles.platformShellTitle}>
+                            {t("workspace.choosePlatform")}
+                        </h2>
                         <HowItWorks />
                         <div className={styles.platformGrid}>
                             {PLATFORM_OPTIONS.map(option => (
@@ -1300,30 +1286,16 @@ export function MarketingPipelineWorkspace({
                                         setResult(null);
                                     }}
                                 >
-                                    <span
-                                        className={`${styles.platformLogo} ${logoClassNames[option.id]} ${
-                                            option.logoImg ? styles.platformLogoImgContainer : ""
-                                        }`}
-                                    >
-                                        {option.logoImg ? (
-                                            <Image
-                                                src={option.logoImg}
-                                                alt=""
-                                                width={64}
-                                                height={64}
-                                                className={styles.platformLogoImg}
-                                            />
-                                        ) : (
-                                            option.logoText
-                                        )}
-                                    </span>
+                                    <PlatformLogo platform={option.id} />
                                     <span className={styles.platformName}>{option.label}</span>
                                     <span className={styles.platformSubtitle}>
-                                        {option.subtitle}
+                                        {t(`platforms.${option.id}.subtitle`)}
                                     </span>
-                                    <span className={styles.platformBestFor}>{option.bestFor}</span>
+                                    <span className={styles.platformBestFor}>
+                                        {t(`platforms.${option.id}.bestFor`)}
+                                    </span>
                                     <span className={styles.platformCharLimit}>
-                                        {option.charLimit}
+                                        {t(`platforms.${option.id}.charLimit`)}
                                     </span>
                                 </button>
                             ))}
@@ -1333,24 +1305,33 @@ export function MarketingPipelineWorkspace({
                 </section>
             ) : (
                 <section className={styles.mainContent}>
-                    <div
-                        className={
-                            hasSessions ? styles.workspaceLayout : styles.workspaceLayoutSingle
-                        }
-                    >
-                        {/* Fix 5: Only show sidebar when sessions exist */}
-                        {hasSessions && (
-                            <aside className={styles.sessionSidebar}>
+                    <div className={styles.workspaceLayoutSingle}>
+                        {/* Past campaigns live in a drawer opened from the header, not a
+                            permanent column: the column took 270px from the draft on every
+                            visit to help on the few where you go back to an old one. */}
+                        <Sheet open={historyOpen} onOpenChange={setHistoryOpen}>
+                            <SheetContent
+                                side="left"
+                                className="flex w-full flex-col gap-0 overflow-hidden p-0 sm:max-w-sm"
+                            >
+                                <SheetHeader className="sr-only">
+                                    <SheetTitle>{t("workspace.sessions")}</SheetTitle>
+                                </SheetHeader>
                                 <div className={styles.sessionPanel}>
                                     <div className={styles.sessionPanelHeader}>
-                                        <h3 className={styles.sessionPanelTitle}>Sessions</h3>
+                                        <h3 className={styles.sessionPanelTitle}>
+                                            {t("workspace.sessions")}
+                                        </h3>
                                         <button
                                             type="button"
                                             className={styles.newSessionButton}
-                                            onClick={handleNewCampaignClick}
+                                            onClick={() => {
+                                                setHistoryOpen(false);
+                                                handleNewCampaignClick();
+                                            }}
                                         >
                                             <Plus size={12} />
-                                            New
+                                            {t("workspace.new")}
                                         </button>
                                     </div>
                                     <div className={styles.sessionList}>
@@ -1363,70 +1344,77 @@ export function MarketingPipelineWorkspace({
                                                         ? styles.sessionItemActive
                                                         : ""
                                                 }`}
-                                                onClick={() => handleSelectSession(session)}
+                                                onClick={() => {
+                                                    handleSelectSession(session);
+                                                    setHistoryOpen(false);
+                                                }}
                                             >
                                                 <span className={styles.sessionItemTitle}>
                                                     {session.prompt
                                                         ? session.prompt.length > 80
                                                             ? `${session.prompt.slice(0, 80)}...`
                                                             : session.prompt
-                                                        : "Untitled session"}
+                                                        : t("workspace.untitledSession")}
                                                 </span>
                                                 <span className={styles.sessionItemMeta}>
                                                     {session.platform
                                                         ? (PLATFORM_OPTIONS.find(
                                                               p => p.id === session.platform
                                                           )?.label ?? session.platform)
-                                                        : "No platform"}{" "}
+                                                        : t("workspace.noPlatform")}{" "}
                                                     &bull;{" "}
-                                                    {new Date(session.updatedAt).toLocaleString()}
+                                                    {format.dateTime(session.updatedAt, {
+                                                        dateStyle: "short",
+                                                        timeStyle: "medium",
+                                                    })}
                                                 </span>
                                             </button>
                                         ))}
                                     </div>
                                 </div>
-                            </aside>
-                        )}
+                            </SheetContent>
+                        </Sheet>
 
                         <section className={styles.workspaceShell}>
-                            <div
-                                className={`${styles.workspaceMain} ${styles.workspaceMainSingle}`}
-                            >
+                            <div className={styles.studio}>
                                 {!embedded && (
                                     <div className={styles.workspaceMainHeader}>
                                         <MessageSquareText
                                             size={18}
                                             className={styles.assistantIcon}
                                         />
-                                        <h2 className={styles.workspaceMainTitle}>AI Assistant</h2>
+                                        <h2 className={styles.workspaceMainTitle}>
+                                            {t("workspace.assistant")}
+                                        </h2>
                                     </div>
                                 )}
-                                <div className={styles.workspaceLeft}>
-                                    <header className={styles.workspaceLeftHeader}>
-                                        <div className={styles.selectedPlatformPill}>
-                                            <span
-                                                className={`${styles.selectedPlatformLogo} ${
-                                                    selectedPlatform
-                                                        ? logoClassNames[selectedPlatform.id]
-                                                        : ""
-                                                } ${selectedPlatform?.logoImg ? styles.platformLogoImgContainer : ""}`}
+                                <header className={styles.studioHeader}>
+                                    <div className={styles.selectedPlatformPill}>
+                                        {selectedPlatform && (
+                                            <PlatformLogo
+                                                platform={selectedPlatform.id}
+                                                size={28}
+                                                className={styles.selectedPlatformLogo}
+                                            />
+                                        )}
+                                        <span className={styles.selectedPlatformLabel}>
+                                            {selectedPlatform?.label}
+                                        </span>
+                                    </div>
+                                    <div className={styles.workspaceHeaderActions}>
+                                        {hasSessions && (
+                                            <button
+                                                type="button"
+                                                className={styles.changePlatformButton}
+                                                onClick={() => setHistoryOpen(true)}
+                                                aria-haspopup="dialog"
                                             >
-                                                {selectedPlatform?.logoImg ? (
-                                                    <Image
-                                                        src={selectedPlatform.logoImg}
-                                                        alt=""
-                                                        width={64}
-                                                        height={64}
-                                                        className={styles.platformLogoImg}
-                                                    />
-                                                ) : (
-                                                    selectedPlatform?.logoText
-                                                )}
-                                            </span>
-                                            <span className={styles.selectedPlatformLabel}>
-                                                {selectedPlatform?.label}
-                                            </span>
-                                        </div>
+                                                <History size={14} />
+                                                {t("workspace.history", {
+                                                    count: sessions.length,
+                                                })}
+                                            </button>
+                                        )}
                                         {/* Fix 7: Renamed to "New campaign" with confirmation */}
                                         <button
                                             type="button"
@@ -1434,31 +1422,29 @@ export function MarketingPipelineWorkspace({
                                             onClick={handleNewCampaignClick}
                                         >
                                             <Plus size={14} />
-                                            New campaign
+                                            {t("workspace.newCampaign")}
                                         </button>
-                                    </header>
-
+                                    </div>
+                                </header>
+                                <div className={styles.studioControls}>
                                     {/* Fix 7: Confirmation dialog */}
                                     {confirmNewCampaign && (
                                         <div className={styles.confirmBar}>
-                                            <span>
-                                                Start a new campaign? Your current draft is saved in
-                                                sessions.
-                                            </span>
+                                            <span>{t("workspace.confirmNew")}</span>
                                             <div className={styles.confirmBarActions}>
                                                 <button
                                                     type="button"
                                                     className={styles.confirmBarYes}
                                                     onClick={confirmAndStartNew}
                                                 >
-                                                    Yes, start new
+                                                    {t("workspace.yesStartNew")}
                                                 </button>
                                                 <button
                                                     type="button"
                                                     className={styles.confirmBarNo}
                                                     onClick={() => setConfirmNewCampaign(false)}
                                                 >
-                                                    Cancel
+                                                    {tc("cancel")}
                                                 </button>
                                             </div>
                                         </div>
@@ -1467,43 +1453,52 @@ export function MarketingPipelineWorkspace({
                                     <div className={styles.promptCard}>
                                         <div className={styles.promptHeaderRow}>
                                             <h2 className={styles.promptTitle}>
-                                                Describe what you want to promote
+                                                <label htmlFor={promptId}>
+                                                    {t("workspace.promptTitle")}
+                                                </label>
                                             </h2>
-                                            <span className={styles.promptHint}>
-                                                1-3 sentences is perfect.
+                                            <span
+                                                id={`${promptId}-hint`}
+                                                className={styles.promptHint}
+                                            >
+                                                {t("workspace.promptHint")}
                                             </span>
                                         </div>
                                         <textarea
+                                            id={promptId}
+                                            name="campaignBrief"
+                                            aria-describedby={`${promptId}-hint`}
+                                            maxLength={2000}
                                             className={styles.textarea}
                                             value={prompt}
                                             onChange={e => setPrompt(e.target.value)}
                                             placeholder={
-                                                selectedPlatform?.placeholder ??
-                                                "Example: Promote our AI-powered document workflow for startup operations teams this month."
+                                                selectedPlatform
+                                                    ? t(
+                                                          `platforms.${selectedPlatform.id}.placeholder`
+                                                      )
+                                                    : t("workspace.promptPlaceholder")
                                             }
                                         />
 
-                                        {!prompt.trim() && selectedPlatform?.promptTemplates && (
+                                        {!prompt.trim() && selectedPlatform && (
                                             <div className={styles.promptChips}>
-                                                {selectedPlatform.promptTemplates.map(template => (
-                                                    <button
-                                                        key={template}
-                                                        type="button"
-                                                        className={styles.promptChip}
-                                                        onClick={() => setPrompt(template)}
-                                                    >
-                                                        {template}
-                                                    </button>
-                                                ))}
+                                                {PROMPT_TEMPLATE_KEYS.map(key => {
+                                                    const template = t(
+                                                        `platforms.${selectedPlatform.id}.templates.${key}`
+                                                    );
+                                                    return (
+                                                        <button
+                                                            key={key}
+                                                            type="button"
+                                                            className={styles.promptChip}
+                                                            onClick={() => setPrompt(template)}
+                                                        >
+                                                            {template}
+                                                        </button>
+                                                    );
+                                                })}
                                             </div>
-                                        )}
-
-                                        {selectedPlatform?.platformFields && (
-                                            <PlatformFields
-                                                fields={selectedPlatform.platformFields}
-                                                meta={platformMeta}
-                                                onMetaChange={setPlatformMeta}
-                                            />
                                         )}
 
                                         <CustomizationControls
@@ -1513,7 +1508,15 @@ export function MarketingPipelineWorkspace({
                                             onTargetAudienceChange={setTargetAudience}
                                             contentType={contentType}
                                             onContentTypeChange={setContentType}
-                                        />
+                                        >
+                                            {selectedPlatform?.platformFields && (
+                                                <PlatformFields
+                                                    fields={selectedPlatform.platformFields}
+                                                    meta={platformMeta}
+                                                    onMetaChange={setPlatformMeta}
+                                                />
+                                            )}
+                                        </CustomizationControls>
 
                                         {error && (
                                             <div className={styles.inlineAlert}>
@@ -1535,12 +1538,12 @@ export function MarketingPipelineWorkspace({
                                                             size={16}
                                                             className={styles.spinIcon}
                                                         />
-                                                        Generating campaign...
+                                                        {t("workspace.generating")}
                                                     </>
                                                 ) : (
                                                     <>
                                                         <Sparkles size={16} />
-                                                        Generate campaign draft
+                                                        {t("workspace.generate")}
                                                     </>
                                                 )}
                                             </button>
@@ -1551,614 +1554,639 @@ export function MarketingPipelineWorkspace({
                                                     onClick={cancelPipeline}
                                                 >
                                                     <X size={14} />
-                                                    Cancel
+                                                    {tc("cancel")}
                                                 </button>
                                             )}
                                         </div>
                                     </div>
-                                    <div className={styles.assistantContent}>
-                                        {thinkingLog.length > 0 && (
-                                            <ThinkingStream
-                                                entries={thinkingLog}
-                                                isGenerating={loading}
-                                            />
-                                        )}
-                                        {pipelineSteps.length > 0 && (
-                                            <PipelineStepper
-                                                steps={pipelineSteps}
-                                                generationStartTime={generationStartTime}
-                                                isComplete={
-                                                    !loading &&
-                                                    pipelineSteps.some(s => s.status !== "pending")
-                                                }
-                                            />
-                                        )}
-
-                                        {result && !loading && (
-                                            <div className={styles.assistantResult}>
-                                                <div className={styles.assistantSectionHeader}>
-                                                    Campaign draft
-                                                </div>
-                                                <div className={styles.platformPreviewCard}>
-                                                    <div className={styles.platformPreviewHeader}>
-                                                        <span
-                                                            className={`${styles.platformPreviewBadge} ${
-                                                                result.platform === "reddit"
-                                                                    ? styles.platformPreviewBadgeReddit
-                                                                    : result.platform === "x"
-                                                                      ? styles.platformPreviewBadgeX
-                                                                      : result.platform ===
-                                                                          "linkedin"
-                                                                        ? styles.platformPreviewBadgeLinkedin
-                                                                        : styles.platformPreviewBadgeBluesky
-                                                            }`}
-                                                        >
-                                                            {result.platform === "reddit" ? (
-                                                                <Image
-                                                                    src={REDDIT_SNOO_URL}
-                                                                    alt=""
-                                                                    width={18}
-                                                                    height={18}
-                                                                    className={
-                                                                        styles.platformPreviewBadgeImg
-                                                                    }
-                                                                />
-                                                            ) : result.platform === "x" ? (
-                                                                "𝕏"
-                                                            ) : result.platform === "linkedin" ? (
-                                                                "in"
-                                                            ) : (
-                                                                "🦋"
-                                                            )}
+                                </div>
+                                <div className={styles.studioOutput}>
+                                    {result && !loading ? (
+                                        <Tabs
+                                            value={resultTab}
+                                            onValueChange={setResultTab}
+                                            className={styles.resultTabs}
+                                        >
+                                            <div className={styles.resultTabBar}>
+                                                <TabsList className={styles.resultTabList}>
+                                                    <TabsTrigger value="draft">
+                                                        {t("workspace.tabs.draft")}
+                                                    </TabsTrigger>
+                                                    <TabsTrigger value="claims">
+                                                        {t("workspace.tabs.claims")}
+                                                        {claimsToReview > 0 && (
+                                                            <span className={styles.tabBadge}>
+                                                                {claimsToReview}
+                                                            </span>
+                                                        )}
+                                                    </TabsTrigger>
+                                                    <TabsTrigger value="strategy">
+                                                        {t("workspace.tabs.strategy")}
+                                                    </TabsTrigger>
+                                                    <TabsTrigger value="research">
+                                                        {t("workspace.tabs.research")}
+                                                        <span className={styles.tabCount}>
+                                                            {(result.research ?? []).length}
                                                         </span>
-                                                        <span
-                                                            className={styles.platformPreviewLabel}
+                                                    </TabsTrigger>
+                                                    <TabsTrigger value="process">
+                                                        {t("workspace.tabs.process")}
+                                                    </TabsTrigger>
+                                                    {showDnaDebugSection && result.dnaDebug && (
+                                                        <TabsTrigger value="debug">
+                                                            {t("workspace.tabs.debug")}
+                                                        </TabsTrigger>
+                                                    )}
+                                                </TabsList>
+                                            </div>
+                                            <TabsContent
+                                                value="draft"
+                                                className={styles.resultPanel}
+                                            >
+                                                <div className={styles.assistantResult}>
+                                                    <VariantSelector
+                                                        variants={messageVariants}
+                                                        activeVariantId={activeVariantId}
+                                                        onSelect={selectVariant}
+                                                    />
+                                                    <div className={styles.platformPreviewCard}>
+                                                        <div
+                                                            className={styles.platformPreviewHeader}
                                                         >
-                                                            {PLATFORM_OPTIONS.find(
-                                                                p => p.id === result.platform
-                                                            )?.label ?? result.platform}{" "}
-                                                            preview
-                                                        </span>
-                                                        <button
-                                                            type="button"
-                                                            className={styles.viewModeToggle}
-                                                            onClick={() =>
-                                                                setViewMode(m =>
-                                                                    m === "preview"
-                                                                        ? "edit"
-                                                                        : "preview"
-                                                                )
-                                                            }
-                                                            title={
-                                                                viewMode === "preview"
-                                                                    ? "Edit"
-                                                                    : "Preview"
-                                                            }
-                                                        >
-                                                            <Pencil size={14} />
-                                                        </button>
-                                                    </div>
-                                                    <div className={styles.platformPreviewBody}>
-                                                        {viewMode === "preview" ? (
-                                                            <ReactMarkdown
-                                                                remarkPlugins={[remarkGfm]}
+                                                            <span
+                                                                className={`${styles.platformPreviewBadge} ${
+                                                                    result.platform === "reddit"
+                                                                        ? styles.platformPreviewBadgeReddit
+                                                                        : result.platform === "x"
+                                                                          ? styles.platformPreviewBadgeX
+                                                                          : result.platform ===
+                                                                              "linkedin"
+                                                                            ? styles.platformPreviewBadgeLinkedin
+                                                                            : styles.platformPreviewBadgeBluesky
+                                                                }`}
                                                             >
-                                                                {editableMessage}
-                                                            </ReactMarkdown>
-                                                        ) : (
-                                                            <textarea
+                                                                <PreviewBadgeMark
+                                                                    platform={result.platform}
+                                                                />
+                                                            </span>
+                                                            <span
                                                                 className={
-                                                                    styles.editableMessageTextarea
+                                                                    styles.platformPreviewLabel
                                                                 }
-                                                                value={editableMessage}
-                                                                onChange={e =>
-                                                                    setEditableMessage(
-                                                                        e.target.value
+                                                            >
+                                                                {t("workspace.preview", {
+                                                                    platform:
+                                                                        PLATFORM_OPTIONS.find(
+                                                                            p =>
+                                                                                p.id ===
+                                                                                result.platform
+                                                                        )?.label ?? result.platform,
+                                                                })}
+                                                            </span>
+                                                            <span className={styles.characterCount}>
+                                                                {t("studio.characters", {
+                                                                    count: Array.from(
+                                                                        editableMessage
+                                                                    ).length,
+                                                                })}
+                                                            </span>
+                                                            <button
+                                                                type="button"
+                                                                className={styles.viewModeToggle}
+                                                                onClick={() =>
+                                                                    setViewMode(m =>
+                                                                        m === "preview"
+                                                                            ? "edit"
+                                                                            : "preview"
                                                                     )
                                                                 }
-                                                                placeholder="Your campaign message..."
-                                                            />
-                                                        )}
+                                                                title={
+                                                                    viewMode === "preview"
+                                                                        ? tc("edit")
+                                                                        : tc("preview")
+                                                                }
+                                                            >
+                                                                {viewMode === "preview" ? (
+                                                                    <Pencil
+                                                                        size={14}
+                                                                        aria-hidden="true"
+                                                                    />
+                                                                ) : (
+                                                                    <Eye
+                                                                        size={14}
+                                                                        aria-hidden="true"
+                                                                    />
+                                                                )}
+                                                                {viewMode === "preview"
+                                                                    ? tc("edit")
+                                                                    : tc("preview")}
+                                                            </button>
+                                                        </div>
+                                                        <div className={styles.platformPreviewBody}>
+                                                            {viewMode === "preview" ? (
+                                                                <ReactMarkdown
+                                                                    remarkPlugins={[remarkGfm]}
+                                                                >
+                                                                    {editableMessage}
+                                                                </ReactMarkdown>
+                                                            ) : (
+                                                                <textarea
+                                                                    className={
+                                                                        styles.editableMessageTextarea
+                                                                    }
+                                                                    aria-label={t(
+                                                                        "studio.postText"
+                                                                    )}
+                                                                    name="postText"
+                                                                    value={editableMessage}
+                                                                    onChange={e =>
+                                                                        setEditableMessage(
+                                                                            e.target.value
+                                                                        )
+                                                                    }
+                                                                    placeholder={t(
+                                                                        "workspace.messagePlaceholder"
+                                                                    )}
+                                                                />
+                                                            )}
+                                                        </div>
                                                     </div>
-                                                </div>
 
-                                                {/* Fix 4: Button hierarchy -- tertiary / secondary / primary */}
-                                                <div className={styles.draftActions}>
-                                                    <button
-                                                        type="button"
-                                                        className={styles.actionTertiary}
-                                                        onClick={handlePushToRewriteDocument}
-                                                        disabled={!editableMessage.trim()}
-                                                        title="Save this draft to your documents workspace for further editing"
-                                                    >
-                                                        <FileText size={14} />
-                                                        Save as document
-                                                    </button>
-                                                    <button
-                                                        type="button"
-                                                        className={styles.actionSecondary}
-                                                        onClick={() =>
-                                                            setShowRewriteSheet(open => !open)
-                                                        }
-                                                        disabled={!editableMessage.trim()}
-                                                    >
-                                                        <Sparkles size={14} />
-                                                        {showRewriteSheet
-                                                            ? "Hide Rewrite"
-                                                            : "Refine with AI"}
-                                                    </button>
-                                                    <button
-                                                        type="button"
-                                                        className={styles.actionSecondary}
-                                                        onClick={handleCopy}
-                                                        disabled={!editableMessage.trim()}
-                                                    >
-                                                        <Copy size={14} />
-                                                        {copySuccess
-                                                            ? "Copied!"
-                                                            : `Copy to ${PLATFORM_OPTIONS.find(p => p.id === result.platform)?.label ?? "platform"}`}
-                                                    </button>
-                                                    <button
-                                                        type="button"
-                                                        className={styles.actionSecondary}
-                                                        onClick={() => void evaluatePost()}
-                                                        disabled={
-                                                            !editableMessage.trim() || evaluating
-                                                        }
-                                                        title="Score this post's quality with the evaluation pipeline"
-                                                    >
-                                                        {evaluating ? (
-                                                            <Loader2
-                                                                size={14}
-                                                                className={styles.spinIcon}
+                                                    {claimsToReview > 0 && (
+                                                        <button
+                                                            type="button"
+                                                            className={styles.reviewNotice}
+                                                            onClick={() => setResultTab("claims")}
+                                                        >
+                                                            <AlertTriangle
+                                                                size={15}
+                                                                aria-hidden="true"
                                                             />
-                                                        ) : (
-                                                            <Gauge size={14} />
-                                                        )}
-                                                        {evaluating
-                                                            ? "Scoring…"
-                                                            : "Evaluate quality"}
-                                                    </button>
-                                                    {onSchedule && result.platform && (
+                                                            <span>
+                                                                {result.claimCheckUnavailable
+                                                                    ? t("studio.reviewUnavailable")
+                                                                    : t("studio.claimsToReview", {
+                                                                          count: claimsToReview,
+                                                                      })}
+                                                            </span>
+                                                            <ChevronRight
+                                                                size={15}
+                                                                aria-hidden="true"
+                                                            />
+                                                        </button>
+                                                    )}
+                                                    {/* Fix 4: Button hierarchy -- tertiary / secondary / primary */}
+                                                    <div className={styles.draftActions}>
+                                                        <DropdownMenu>
+                                                            <DropdownMenuTrigger asChild>
+                                                                <button
+                                                                    type="button"
+                                                                    className={styles.moreActions}
+                                                                    aria-label={t(
+                                                                        "studio.moreActions"
+                                                                    )}
+                                                                >
+                                                                    <MoreHorizontal
+                                                                        size={18}
+                                                                        aria-hidden="true"
+                                                                    />
+                                                                </button>
+                                                            </DropdownMenuTrigger>
+                                                            <DropdownMenuContent align="start">
+                                                                <DropdownMenuItem
+                                                                    onSelect={
+                                                                        handlePushToRewriteDocument
+                                                                    }
+                                                                    disabled={
+                                                                        !editableMessage.trim()
+                                                                    }
+                                                                >
+                                                                    <FileText
+                                                                        size={14}
+                                                                        aria-hidden="true"
+                                                                    />
+                                                                    {t("workspace.saveAsDoc")}
+                                                                </DropdownMenuItem>
+                                                                <DropdownMenuItem
+                                                                    onSelect={() =>
+                                                                        void evaluatePost()
+                                                                    }
+                                                                    disabled={
+                                                                        !editableMessage.trim() ||
+                                                                        evaluating
+                                                                    }
+                                                                >
+                                                                    <Gauge
+                                                                        size={14}
+                                                                        aria-hidden="true"
+                                                                    />
+                                                                    {evaluating
+                                                                        ? t("workspace.scoring")
+                                                                        : t("workspace.evaluate")}
+                                                                </DropdownMenuItem>
+                                                            </DropdownMenuContent>
+                                                        </DropdownMenu>
+
                                                         <button
                                                             type="button"
                                                             className={styles.actionSecondary}
                                                             onClick={() =>
-                                                                onSchedule({
-                                                                    platform: result.platform,
-                                                                    message: editableMessage,
-                                                                })
+                                                                setShowRewriteSheet(open => !open)
                                                             }
                                                             disabled={!editableMessage.trim()}
-                                                            title="Put this post on the Brand calendar"
                                                         >
-                                                            <CalendarClock size={14} />
-                                                            Schedule…
+                                                            <Sparkles size={14} />
+                                                            {showRewriteSheet
+                                                                ? t("workspace.hideRewrite")
+                                                                : t("workspace.refine")}
                                                         </button>
-                                                    )}
-                                                    <button
-                                                        type="button"
-                                                        className={styles.actionPrimary}
-                                                        onClick={() => void publishPost()}
-                                                        disabled={
-                                                            !editableMessage.trim() || publishing
-                                                        }
-                                                        title={`Publish this post directly to ${PLATFORM_OPTIONS.find(p => p.id === result.platform)?.label ?? "the platform"}`}
-                                                    >
-                                                        {publishing ? (
-                                                            <Loader2
-                                                                size={14}
-                                                                className={styles.spinIcon}
-                                                            />
-                                                        ) : (
-                                                            <Send size={14} />
+                                                        <button
+                                                            type="button"
+                                                            className={styles.actionPrimary}
+                                                            onClick={handleCopy}
+                                                            disabled={!editableMessage.trim()}
+                                                        >
+                                                            <Copy size={14} />
+                                                            {copySuccess
+                                                                ? t("workspace.copied")
+                                                                : t("workspace.copyTo", {
+                                                                      platform:
+                                                                          platformLabel ??
+                                                                          t("workspace.platform"),
+                                                                  })}
+                                                        </button>
+                                                        {onSchedule && result.platform && (
+                                                            <button
+                                                                type="button"
+                                                                className={styles.actionSecondary}
+                                                                onClick={() =>
+                                                                    onSchedule({
+                                                                        platform: result.platform,
+                                                                        message: editableMessage,
+                                                                    })
+                                                                }
+                                                                disabled={!editableMessage.trim()}
+                                                                title={t("workspace.scheduleTitle")}
+                                                            >
+                                                                <CalendarClock size={14} />
+                                                                {t("workspace.schedule")}
+                                                            </button>
                                                         )}
-                                                        {publishing
-                                                            ? "Publishing…"
-                                                            : `Publish to ${PLATFORM_OPTIONS.find(p => p.id === result.platform)?.label ?? "platform"}`}
-                                                    </button>
-                                                </div>
-
-                                                {evalError && (
-                                                    <div
-                                                        role="status"
-                                                        style={{
-                                                            marginTop: 10,
-                                                            display: "flex",
-                                                            alignItems: "center",
-                                                            gap: 8,
-                                                            fontSize: 13,
-                                                            color: "var(--danger)",
-                                                        }}
-                                                    >
-                                                        <AlertCircle size={15} />
-                                                        <span>{evalError}</span>
+                                                        <button
+                                                            type="button"
+                                                            className={styles.actionSecondary}
+                                                            onClick={() => void publishPost()}
+                                                            disabled={
+                                                                !editableMessage.trim() ||
+                                                                publishing
+                                                            }
+                                                            title={t("workspace.publishTitle", {
+                                                                platform:
+                                                                    platformLabel ??
+                                                                    t("workspace.thePlatform"),
+                                                            })}
+                                                        >
+                                                            {publishing ? (
+                                                                <Loader2
+                                                                    size={14}
+                                                                    className={styles.spinIcon}
+                                                                />
+                                                            ) : (
+                                                                <Send size={14} />
+                                                            )}
+                                                            {publishing
+                                                                ? t("workspace.publishing")
+                                                                : t("workspace.publishTo", {
+                                                                      platform:
+                                                                          platformLabel ??
+                                                                          t("workspace.platform"),
+                                                                  })}
+                                                        </button>
                                                     </div>
-                                                )}
 
-                                                {evalResult && (
-                                                    <div
-                                                        style={{
-                                                            marginTop: 12,
-                                                            padding: 14,
-                                                            borderRadius: 10,
-                                                            border: "1px solid var(--line)",
-                                                            background: "var(--panel-2)",
-                                                        }}
-                                                    >
+                                                    {evalError && (
                                                         <div
+                                                            role="status"
                                                             style={{
+                                                                marginTop: 10,
                                                                 display: "flex",
-                                                                alignItems: "baseline",
-                                                                justifyContent: "space-between",
-                                                                marginBottom: 10,
+                                                                alignItems: "center",
+                                                                gap: 8,
+                                                                fontSize: 13,
+                                                                color: "var(--danger)",
                                                             }}
                                                         >
-                                                            <span
+                                                            <AlertCircle size={15} />
+                                                            <span>{evalError}</span>
+                                                        </div>
+                                                    )}
+
+                                                    {evalResult && (
+                                                        <div
+                                                            style={{
+                                                                marginTop: 12,
+                                                                padding: 14,
+                                                                borderRadius: 10,
+                                                                border: "1px solid var(--line)",
+                                                                background: "var(--panel-2)",
+                                                            }}
+                                                        >
+                                                            <div
                                                                 style={{
-                                                                    display: "inline-flex",
-                                                                    alignItems: "center",
-                                                                    gap: 8,
-                                                                    fontSize: 14,
-                                                                    fontWeight: 700,
+                                                                    display: "flex",
+                                                                    alignItems: "baseline",
+                                                                    justifyContent: "space-between",
+                                                                    marginBottom: 10,
                                                                 }}
                                                             >
-                                                                <Gauge size={16} />
-                                                                Quality score
-                                                            </span>
-                                                            <span
-                                                                style={{
-                                                                    fontSize: 22,
-                                                                    fontWeight: 800,
-                                                                    color: "var(--ink)",
-                                                                }}
-                                                            >
-                                                                {Math.round(evalResult.overall)}
                                                                 <span
                                                                     style={{
-                                                                        fontSize: 13,
-                                                                        fontWeight: 600,
-                                                                        color: "var(--ink-3)",
-                                                                    }}
-                                                                >
-                                                                    /100
-                                                                </span>
-                                                            </span>
-                                                        </div>
-                                                        <div
-                                                            style={{
-                                                                display: "grid",
-                                                                gap: 6,
-                                                                marginBottom: 10,
-                                                            }}
-                                                        >
-                                                            {evalResult.scores.map(s => (
-                                                                <div
-                                                                    key={s.criterion}
-                                                                    title={s.rationale}
-                                                                    style={{
-                                                                        display: "grid",
-                                                                        gridTemplateColumns:
-                                                                            "150px 1fr 34px",
+                                                                        display: "inline-flex",
                                                                         alignItems: "center",
                                                                         gap: 8,
-                                                                        fontSize: 12,
+                                                                        fontSize: 14,
+                                                                        fontWeight: 700,
                                                                     }}
                                                                 >
+                                                                    <Gauge size={16} />
+                                                                    {t("workspace.qualityScore")}
+                                                                </span>
+                                                                <span
+                                                                    style={{
+                                                                        fontSize: 22,
+                                                                        fontWeight: 800,
+                                                                        color: "var(--ink)",
+                                                                    }}
+                                                                >
+                                                                    {Math.round(evalResult.overall)}
                                                                     <span
                                                                         style={{
+                                                                            fontSize: 13,
+                                                                            fontWeight: 600,
                                                                             color: "var(--ink-3)",
                                                                         }}
                                                                     >
-                                                                        {s.criterion.replace(
-                                                                            /_/g,
-                                                                            " "
-                                                                        )}
+                                                                        /100
                                                                     </span>
-                                                                    <span
+                                                                </span>
+                                                            </div>
+                                                            <div
+                                                                style={{
+                                                                    display: "grid",
+                                                                    gap: 6,
+                                                                    marginBottom: 10,
+                                                                }}
+                                                            >
+                                                                {evalResult.scores.map(s => (
+                                                                    <div
+                                                                        key={s.criterion}
+                                                                        title={s.rationale}
                                                                         style={{
-                                                                            height: 6,
-                                                                            borderRadius: 3,
-                                                                            background:
-                                                                                "var(--line)",
-                                                                            position: "relative",
-                                                                            overflow: "hidden",
+                                                                            display: "grid",
+                                                                            gridTemplateColumns:
+                                                                                "150px 1fr 34px",
+                                                                            alignItems: "center",
+                                                                            gap: 8,
+                                                                            fontSize: 12,
                                                                         }}
                                                                     >
                                                                         <span
                                                                             style={{
-                                                                                position:
-                                                                                    "absolute",
-                                                                                inset: 0,
-                                                                                width: `${Math.max(0, Math.min(100, s.score))}%`,
-                                                                                background:
-                                                                                    "var(--accent)",
-                                                                                borderRadius: 3,
+                                                                                color: "var(--ink-3)",
                                                                             }}
-                                                                        />
-                                                                    </span>
-                                                                    <span
-                                                                        className="mono"
-                                                                        style={{
-                                                                            textAlign: "right",
-                                                                            fontSize: 11,
-                                                                            color: "var(--ink)",
-                                                                        }}
-                                                                    >
-                                                                        {Math.round(s.score)}
-                                                                    </span>
+                                                                        >
+                                                                            {s.criterion.replace(
+                                                                                /_/g,
+                                                                                " "
+                                                                            )}
+                                                                        </span>
+                                                                        <span
+                                                                            style={{
+                                                                                height: 6,
+                                                                                borderRadius: 3,
+                                                                                background:
+                                                                                    "var(--line)",
+                                                                                position:
+                                                                                    "relative",
+                                                                                overflow: "hidden",
+                                                                            }}
+                                                                        >
+                                                                            <span
+                                                                                style={{
+                                                                                    position:
+                                                                                        "absolute",
+                                                                                    inset: 0,
+                                                                                    width: `${Math.max(0, Math.min(100, s.score))}%`,
+                                                                                    background:
+                                                                                        "var(--accent)",
+                                                                                    borderRadius: 3,
+                                                                                }}
+                                                                            />
+                                                                        </span>
+                                                                        <span
+                                                                            className="mono"
+                                                                            style={{
+                                                                                textAlign: "right",
+                                                                                fontSize: 11,
+                                                                                color: "var(--ink)",
+                                                                            }}
+                                                                        >
+                                                                            {Math.round(s.score)}
+                                                                        </span>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                            {evalResult.summary && (
+                                                                <div
+                                                                    style={{
+                                                                        fontSize: 12.5,
+                                                                        color: "var(--ink-3)",
+                                                                        lineHeight: 1.5,
+                                                                        marginBottom: 6,
+                                                                    }}
+                                                                >
+                                                                    {evalResult.summary}
                                                                 </div>
-                                                            ))}
-                                                        </div>
-                                                        {evalResult.summary && (
+                                                            )}
                                                             <div
                                                                 style={{
-                                                                    fontSize: 12.5,
+                                                                    fontSize: 11,
                                                                     color: "var(--ink-3)",
-                                                                    lineHeight: 1.5,
-                                                                    marginBottom: 6,
                                                                 }}
                                                             >
-                                                                {evalResult.summary}
+                                                                {t("workspace.judge", {
+                                                                    model: evalResult.judgeModel,
+                                                                    version:
+                                                                        evalResult.rubricVersion,
+                                                                })}
                                                             </div>
-                                                        )}
+                                                        </div>
+                                                    )}
+
+                                                    {publishResult && (
                                                         <div
+                                                            role="status"
                                                             style={{
-                                                                fontSize: 11,
-                                                                color: "var(--ink-3)",
+                                                                marginTop: 10,
+                                                                display: "flex",
+                                                                alignItems: "center",
+                                                                gap: 8,
+                                                                fontSize: 13,
+                                                                color: publishResult.success
+                                                                    ? "var(--success)"
+                                                                    : "var(--danger)",
                                                             }}
                                                         >
-                                                            judge {evalResult.judgeModel} · rubric{" "}
-                                                            {evalResult.rubricVersion}
+                                                            {publishResult.success ? (
+                                                                <>
+                                                                    <Check size={15} />
+                                                                    <span>
+                                                                        {publishResult.channel
+                                                                            ? t(
+                                                                                  "workspace.publishedToAs",
+                                                                                  {
+                                                                                      platform:
+                                                                                          platformLabel ??
+                                                                                          t(
+                                                                                              "workspace.thePlatform"
+                                                                                          ),
+                                                                                      channel:
+                                                                                          publishResult.channel,
+                                                                                  }
+                                                                              )
+                                                                            : t(
+                                                                                  "workspace.publishedTo",
+                                                                                  {
+                                                                                      platform:
+                                                                                          platformLabel ??
+                                                                                          t(
+                                                                                              "workspace.thePlatform"
+                                                                                          ),
+                                                                                  }
+                                                                              )}
+                                                                    </span>
+                                                                    {publishResult.postUrl && (
+                                                                        <a
+                                                                            href={
+                                                                                publishResult.postUrl
+                                                                            }
+                                                                            target="_blank"
+                                                                            rel="noopener noreferrer"
+                                                                            style={{
+                                                                                display:
+                                                                                    "inline-flex",
+                                                                                alignItems:
+                                                                                    "center",
+                                                                                gap: 4,
+                                                                                color: "inherit",
+                                                                                textDecoration:
+                                                                                    "underline",
+                                                                            }}
+                                                                        >
+                                                                            {t(
+                                                                                "workspace.viewPost"
+                                                                            )}{" "}
+                                                                            <ExternalLink
+                                                                                size={12}
+                                                                            />
+                                                                        </a>
+                                                                    )}
+                                                                </>
+                                                            ) : (
+                                                                <>
+                                                                    <AlertCircle size={15} />
+                                                                    <span>
+                                                                        {publishResult.error}
+                                                                    </span>
+                                                                </>
+                                                            )}
                                                         </div>
-                                                    </div>
-                                                )}
+                                                    )}
 
-                                                {publishResult && (
-                                                    <div
-                                                        role="status"
-                                                        style={{
-                                                            marginTop: 10,
-                                                            display: "flex",
-                                                            alignItems: "center",
-                                                            gap: 8,
-                                                            fontSize: 13,
-                                                            color: publishResult.success
-                                                                ? "var(--success)"
-                                                                : "var(--danger)",
-                                                        }}
+                                                    <Sheet
+                                                        open={showRewriteSheet}
+                                                        onOpenChange={setShowRewriteSheet}
                                                     >
-                                                        {publishResult.success ? (
-                                                            <>
-                                                                <Check size={15} />
-                                                                <span>
-                                                                    Published to{" "}
-                                                                    {PLATFORM_OPTIONS.find(
-                                                                        p =>
-                                                                            p.id === result.platform
-                                                                    )?.label ?? "the platform"}
-                                                                    {publishResult.channel
-                                                                        ? ` as ${publishResult.channel}`
-                                                                        : ""}
-                                                                    .
-                                                                </span>
-                                                                {publishResult.postUrl && (
-                                                                    <a
-                                                                        href={publishResult.postUrl}
-                                                                        target="_blank"
-                                                                        rel="noopener noreferrer"
-                                                                        style={{
-                                                                            display: "inline-flex",
-                                                                            alignItems: "center",
-                                                                            gap: 4,
-                                                                            color: "inherit",
-                                                                            textDecoration:
-                                                                                "underline",
-                                                                        }}
-                                                                    >
-                                                                        View post{" "}
-                                                                        <ExternalLink size={12} />
-                                                                    </a>
-                                                                )}
-                                                            </>
-                                                        ) : (
-                                                            <>
-                                                                <AlertCircle size={15} />
-                                                                <span>{publishResult.error}</span>
-                                                            </>
-                                                        )}
-                                                    </div>
-                                                )}
-
-                                                <Sheet
-                                                    open={showRewriteSheet}
-                                                    onOpenChange={setShowRewriteSheet}
-                                                >
-                                                    <SheetContent
-                                                        forceMount
-                                                        side="right"
-                                                        className="flex w-full flex-col overflow-y-auto p-0 sm:max-w-2xl"
-                                                    >
-                                                        <SheetHeader className="shrink-0 border-b px-6 pb-4 pt-6">
-                                                            <SheetTitle className="text-lg font-semibold">
-                                                                Refine your campaign
-                                                            </SheetTitle>
-                                                            <p className="text-ink-3 text-sm">
-                                                                Use tone, length, and audience
-                                                                options to refine the message —
-                                                                grounded in your company context and
-                                                                brand voice. Preview and accept when
-                                                                you&apos;re happy.
-                                                            </p>
-                                                        </SheetHeader>
-                                                        <div className="flex-1 overflow-y-auto px-6 py-4">
-                                                            <RewriteWorkflow
-                                                                rewrite={refineWithCompanyContext}
-                                                                initialText={editableMessage}
-                                                                persistedState={
-                                                                    activeSession?.rewriteWorkflowState
-                                                                }
-                                                                onStateChange={
-                                                                    handleRewriteWorkflowStateChange
-                                                                }
-                                                                onComplete={handleRewriteComplete}
-                                                                onCancel={() =>
-                                                                    setShowRewriteSheet(false)
-                                                                }
-                                                            />
-                                                        </div>
-                                                    </SheetContent>
-                                                </Sheet>
-
-                                                <VariantStack
-                                                    variants={messageVariants}
-                                                    activeVariantId={activeVariantId}
-                                                    onSelect={selectVariant}
-                                                />
-
-                                                <StrategyInsights
-                                                    strategyUsed={result.strategyUsed}
-                                                    competitiveAngle={result.competitiveAngle}
-                                                />
-
-                                                {result.pipelineStages && (
-                                                    <PipelineStagesPanel
-                                                        stages={result.pipelineStages}
+                                                        <SheetContent
+                                                            forceMount
+                                                            side="right"
+                                                            className="flex w-full flex-col overflow-y-auto p-0 sm:max-w-2xl"
+                                                        >
+                                                            <SheetHeader className="shrink-0 border-b px-6 pb-4 pt-6">
+                                                                <SheetTitle className="text-lg font-semibold">
+                                                                    {t("workspace.refineTitle")}
+                                                                </SheetTitle>
+                                                                <p className="text-ink-3 text-sm">
+                                                                    {t("workspace.refineBody")}
+                                                                </p>
+                                                            </SheetHeader>
+                                                            <div className="flex-1 overflow-y-auto px-6 py-4">
+                                                                <RewriteWorkflow
+                                                                    rewrite={
+                                                                        refineWithCompanyContext
+                                                                    }
+                                                                    initialText={editableMessage}
+                                                                    persistedState={
+                                                                        activeSession?.rewriteWorkflowState
+                                                                    }
+                                                                    onStateChange={
+                                                                        handleRewriteWorkflowStateChange
+                                                                    }
+                                                                    onComplete={
+                                                                        handleRewriteComplete
+                                                                    }
+                                                                    onCancel={() =>
+                                                                        setShowRewriteSheet(false)
+                                                                    }
+                                                                />
+                                                            </div>
+                                                        </SheetContent>
+                                                    </Sheet>
+                                                </div>
+                                            </TabsContent>
+                                            <TabsContent
+                                                value="claims"
+                                                className={styles.resultPanel}
+                                            >
+                                                {(result.claimCheckUnavailable === true ||
+                                                    (result.claimSources?.length ?? 0) > 0) && (
+                                                    <ClaimSourcesPanel
+                                                        claims={result.claimSources ?? []}
+                                                        unavailable={result.claimCheckUnavailable}
+                                                        defaultOpen
                                                     />
                                                 )}
 
-                                                {result.claimSources &&
-                                                    result.claimSources.length > 0 && (
-                                                        <ClaimSourcesPanel
-                                                            claims={result.claimSources}
+                                                {!result.claimCheckUnavailable &&
+                                                    (result.claimSources ?? []).length === 0 && (
+                                                        <p className={styles.resultEmptyInline}>
+                                                            {t("workspace.noClaims")}
+                                                        </p>
+                                                    )}
+                                            </TabsContent>
+                                            <TabsContent
+                                                value="strategy"
+                                                className={styles.resultPanel}
+                                            >
+                                                <div className={styles.assistantResult}>
+                                                    <StrategyInsights
+                                                        strategyUsed={result.strategyUsed}
+                                                        competitiveAngle={result.competitiveAngle}
+                                                    />
+
+                                                    {result.pipelineStages && (
+                                                        <PipelineStagesPanel
+                                                            stages={result.pipelineStages}
                                                         />
                                                     )}
-
-                                                {showDnaDebugSection && result.dnaDebug && (
-                                                    <div
-                                                        style={{
-                                                            marginTop: "1rem",
-                                                            borderTop: "1px solid var(--line)",
-                                                            paddingTop: "0.75rem",
-                                                        }}
-                                                    >
-                                                        <button
-                                                            type="button"
-                                                            onClick={() =>
-                                                                setDebugOpen(prev => !prev)
-                                                            }
-                                                            style={{
-                                                                display: "flex",
-                                                                alignItems: "center",
-                                                                gap: "0.375rem",
-                                                                background: "none",
-                                                                border: "none",
-                                                                cursor: "pointer",
-                                                                padding: 0,
-                                                                fontSize: "0.75rem",
-                                                                fontWeight: 600,
-                                                                color: "var(--ink-3)",
-                                                            }}
-                                                        >
-                                                            {debugOpen ? (
-                                                                <ChevronDown size={14} />
-                                                            ) : (
-                                                                <ChevronRight size={14} />
-                                                            )}
-                                                            Debug: DNA Source
-                                                            <span
-                                                                style={{
-                                                                    marginLeft: "0.5rem",
-                                                                    padding: "0.125rem 0.5rem",
-                                                                    borderRadius: "9999px",
-                                                                    fontSize: "0.625rem",
-                                                                    fontWeight: 700,
-                                                                    textTransform: "uppercase",
-                                                                    letterSpacing: "0.05em",
-                                                                    background:
-                                                                        result.dnaDebug.source ===
-                                                                        "metadata"
-                                                                            ? "#dcfce7"
-                                                                            : "#fef3c7",
-                                                                    color:
-                                                                        result.dnaDebug.source ===
-                                                                        "metadata"
-                                                                            ? "#166534"
-                                                                            : "#92400e",
-                                                                }}
-                                                            >
-                                                                {result.dnaDebug.source}
-                                                            </span>
-                                                        </button>
-
-                                                        {debugOpen && (
-                                                            <div
-                                                                style={{
-                                                                    marginTop: "0.5rem",
-                                                                    fontSize: "0.75rem",
-                                                                }}
-                                                            >
-                                                                <div
-                                                                    style={{
-                                                                        fontWeight: 600,
-                                                                        marginBottom: "0.25rem",
-                                                                        color: "var(--ink-3)",
-                                                                    }}
-                                                                >
-                                                                    CompanyDNA
-                                                                </div>
-                                                                <pre
-                                                                    style={{
-                                                                        background:
-                                                                            "var(--panel-2)",
-                                                                        padding: "0.5rem",
-                                                                        borderRadius: "0.375rem",
-                                                                        overflow: "auto",
-                                                                        maxHeight: "12rem",
-                                                                        fontSize: "0.6875rem",
-                                                                        lineHeight: 1.5,
-                                                                    }}
-                                                                >
-                                                                    {JSON.stringify(
-                                                                        result.dnaDebug.dna,
-                                                                        null,
-                                                                        2
-                                                                    )}
-                                                                </pre>
-
-                                                                <div
-                                                                    style={{
-                                                                        fontWeight: 600,
-                                                                        marginTop: "0.5rem",
-                                                                        marginBottom: "0.25rem",
-                                                                        color: "var(--ink-3)",
-                                                                    }}
-                                                                >
-                                                                    Raw context sent to LLM
-                                                                </div>
-                                                                <pre
-                                                                    style={{
-                                                                        background:
-                                                                            "var(--panel-2)",
-                                                                        padding: "0.5rem",
-                                                                        borderRadius: "0.375rem",
-                                                                        overflow: "auto",
-                                                                        maxHeight: "16rem",
-                                                                        fontSize: "0.6875rem",
-                                                                        lineHeight: 1.5,
-                                                                        whiteSpace: "pre-wrap",
-                                                                        wordBreak: "break-word",
-                                                                    }}
-                                                                >
-                                                                    {result.dnaDebug.contextUsed}
-                                                                </pre>
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                )}
-
+                                                </div>
+                                            </TabsContent>
+                                            <TabsContent
+                                                value="research"
+                                                className={styles.resultPanel}
+                                            >
                                                 <div className={styles.assistantSectionHeader}>
-                                                    Trend references
+                                                    {t("workspace.trendRefs")}
                                                 </div>
                                                 <div className={styles.researchList}>
                                                     {(result.research ?? []).length > 0 ? (
@@ -2197,14 +2225,164 @@ export function MarketingPipelineWorkspace({
                                                         )
                                                     ) : (
                                                         <p className={styles.sessionEmpty}>
-                                                            No trend references available for this
-                                                            campaign.
+                                                            {t("workspace.noTrends")}
                                                         </p>
                                                     )}
                                                 </div>
-                                            </div>
-                                        )}
-                                    </div>
+                                            </TabsContent>
+                                            <TabsContent
+                                                value="process"
+                                                className={styles.resultPanel}
+                                            >
+                                                {progressView}
+                                            </TabsContent>
+                                            {showDnaDebugSection && result.dnaDebug && (
+                                                <TabsContent
+                                                    value="debug"
+                                                    className={styles.resultPanel}
+                                                >
+                                                    {showDnaDebugSection && result.dnaDebug && (
+                                                        <div
+                                                            style={{
+                                                                marginTop: "1rem",
+                                                                borderTop: "1px solid var(--line)",
+                                                                paddingTop: "0.75rem",
+                                                            }}
+                                                        >
+                                                            <button
+                                                                type="button"
+                                                                onClick={() =>
+                                                                    setDebugOpen(prev => !prev)
+                                                                }
+                                                                style={{
+                                                                    display: "flex",
+                                                                    alignItems: "center",
+                                                                    gap: "0.375rem",
+                                                                    background: "none",
+                                                                    border: "none",
+                                                                    cursor: "pointer",
+                                                                    padding: 0,
+                                                                    fontSize: "0.75rem",
+                                                                    fontWeight: 600,
+                                                                    color: "var(--ink-3)",
+                                                                }}
+                                                            >
+                                                                {debugOpen ? (
+                                                                    <ChevronDown size={14} />
+                                                                ) : (
+                                                                    <ChevronRight size={14} />
+                                                                )}
+                                                                {t("workspace.debugDna")}
+                                                                <span
+                                                                    style={{
+                                                                        marginLeft: "0.5rem",
+                                                                        padding: "0.125rem 0.5rem",
+                                                                        borderRadius: "9999px",
+                                                                        fontSize: "0.625rem",
+                                                                        fontWeight: 700,
+                                                                        textTransform: "uppercase",
+                                                                        letterSpacing: "0.05em",
+                                                                        background:
+                                                                            result.dnaDebug
+                                                                                .source ===
+                                                                            "metadata"
+                                                                                ? "var(--success-soft)"
+                                                                                : "var(--warn-soft)",
+                                                                        color:
+                                                                            result.dnaDebug
+                                                                                .source ===
+                                                                            "metadata"
+                                                                                ? "var(--success)"
+                                                                                : "var(--warn)",
+                                                                    }}
+                                                                >
+                                                                    {result.dnaDebug.source}
+                                                                </span>
+                                                            </button>
+
+                                                            {debugOpen && (
+                                                                <div
+                                                                    style={{
+                                                                        marginTop: "0.5rem",
+                                                                        fontSize: "0.75rem",
+                                                                    }}
+                                                                >
+                                                                    <div
+                                                                        style={{
+                                                                            fontWeight: 600,
+                                                                            marginBottom: "0.25rem",
+                                                                            color: "var(--ink-3)",
+                                                                        }}
+                                                                    >
+                                                                        CompanyDNA
+                                                                    </div>
+                                                                    <pre
+                                                                        style={{
+                                                                            background:
+                                                                                "var(--panel-2)",
+                                                                            padding: "0.5rem",
+                                                                            borderRadius:
+                                                                                "0.375rem",
+                                                                            overflow: "auto",
+                                                                            maxHeight: "12rem",
+                                                                            fontSize: "0.6875rem",
+                                                                            lineHeight: 1.5,
+                                                                        }}
+                                                                    >
+                                                                        {JSON.stringify(
+                                                                            result.dnaDebug.dna,
+                                                                            null,
+                                                                            2
+                                                                        )}
+                                                                    </pre>
+
+                                                                    <div
+                                                                        style={{
+                                                                            fontWeight: 600,
+                                                                            marginTop: "0.5rem",
+                                                                            marginBottom: "0.25rem",
+                                                                            color: "var(--ink-3)",
+                                                                        }}
+                                                                    >
+                                                                        {t("workspace.rawContext")}
+                                                                    </div>
+                                                                    <pre
+                                                                        style={{
+                                                                            background:
+                                                                                "var(--panel-2)",
+                                                                            padding: "0.5rem",
+                                                                            borderRadius:
+                                                                                "0.375rem",
+                                                                            overflow: "auto",
+                                                                            maxHeight: "16rem",
+                                                                            fontSize: "0.6875rem",
+                                                                            lineHeight: 1.5,
+                                                                            whiteSpace: "pre-wrap",
+                                                                            wordBreak: "break-word",
+                                                                        }}
+                                                                    >
+                                                                        {
+                                                                            result.dnaDebug
+                                                                                .contextUsed
+                                                                        }
+                                                                    </pre>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    )}
+                                                </TabsContent>
+                                            )}
+                                        </Tabs>
+                                    ) : loading || pipelineSteps.length > 0 ? (
+                                        <div className={styles.assistantContent}>
+                                            {progressView}
+                                        </div>
+                                    ) : (
+                                        <div className={styles.resultEmpty}>
+                                            <MessageSquareText size={18} />
+                                            <p>{t("workspace.emptyResult")}</p>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </section>

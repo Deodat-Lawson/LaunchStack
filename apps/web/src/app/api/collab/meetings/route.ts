@@ -6,6 +6,8 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 
 import { phasePlanProblems, type AgentPersona, type MeetingPhase } from "@launchstack/collab";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor, wordEnglish, wordOr } from "~/i18n/translate";
 import { meetingWorkflow } from "~/lib/agents/meeting-workflows";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { assertMeetingPlanAllowed } from "~/server/collab/autonomy";
@@ -102,11 +104,16 @@ export async function GET() {
 export async function POST(request: Request) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "collab.server.errors");
 
     const parsed = CreateMeetingSchema.safeParse(await request.json().catch(() => null));
     if (!parsed.success) {
         return NextResponse.json(
-            { error: "Invalid request", details: parsed.error.flatten() },
+            {
+                error: translatorFor(locale, "errors.api")("invalidRequest"),
+                details: parsed.error.flatten(),
+            },
             { status: 400 }
         );
     }
@@ -122,14 +129,14 @@ export async function POST(request: Request) {
     for (const key of input.participantKeys) {
         const persona = byKey.get(key);
         if (!persona) {
-            return NextResponse.json({ error: `Unknown participant "${key}"` }, { status: 400 });
+            return NextResponse.json({ error: t("unknownParticipant", { key }) }, { status: 400 });
         }
         participants.push(personaToParticipant(persona));
     }
 
     if (input.moderatorKey && !byKey.has(input.moderatorKey)) {
         return NextResponse.json(
-            { error: `Unknown moderator "${input.moderatorKey}"` },
+            { error: t("unknownModerator", { key: input.moderatorKey }) },
             { status: 400 }
         );
     }
@@ -147,7 +154,14 @@ export async function POST(request: Request) {
     }));
     const planProblems = phasePlanProblems(phases, participants);
     if (planProblems.length > 0) {
-        return NextResponse.json({ error: planProblems.join(" ") }, { status: 400 });
+        // The engine words its problems in English; `collab.server.phaseProblems` has the reader's.
+        const worded = planProblems.map(problem =>
+            wordEnglish(problem, "collab.server.phaseProblems", locale)
+        );
+        return NextResponse.json(
+            { error: worded.join(locale === "en" ? " " : "") },
+            { status: 400 }
+        );
     }
     if (
         input.workflowKey &&
@@ -155,21 +169,28 @@ export async function POST(request: Request) {
         !meetingWorkflow(input.workflowKey)
     ) {
         return NextResponse.json(
-            { error: `Unknown workflow "${input.workflowKey}"` },
+            { error: t("unknownWorkflow", { key: input.workflowKey }) },
             { status: 400 }
         );
     }
 
     // What the room may do is decided by its least autonomous agent.
     try {
-        await assertMeetingPlanAllowed(companyId, {
-            participantKeys: input.participantKeys,
-            slackMirrorEnabled: input.slackMirrorEnabled,
-            slackUseAgentIdentity: input.slackUseAgentIdentity,
-        });
+        await assertMeetingPlanAllowed(
+            companyId,
+            {
+                participantKeys: input.participantKeys,
+                slackMirrorEnabled: input.slackMirrorEnabled,
+                slackUseAgentIdentity: input.slackUseAgentIdentity,
+            },
+            locale
+        );
     } catch (err) {
         if (isWorkspaceError(err)) {
-            return NextResponse.json({ error: err.message }, { status: err.status });
+            return NextResponse.json(
+                { error: wordOr(err.copy, err.message, locale) },
+                { status: err.status }
+            );
         }
         throw err;
     }

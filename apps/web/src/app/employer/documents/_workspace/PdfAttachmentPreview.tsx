@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Document, Page, pdfjs } from "react-pdf";
 import "react-pdf/dist/Page/TextLayer.css";
 import { Button } from "~/components/ui/button";
@@ -16,6 +17,8 @@ if (typeof window !== "undefined") {
 const PDF_OPTIONS = { isEvalSupported: false, enableXfa: false };
 
 export default function PdfAttachmentPreview({ url, name }: { url: string; name: string }) {
+    const t = useTranslations("chat.pdfPreview");
+    const tc = useTranslations("common");
     const safeUrl = safeChatUri(url, true);
     const file = useMemo(() => (safeUrl ? { url: safeUrl } : undefined), [safeUrl]);
     const [pages, setPages] = useState(0);
@@ -39,10 +42,7 @@ export default function PdfAttachmentPreview({ url, name }: { url: string; name:
         observer.observe(element);
         return () => observer.disconnect();
     }, []);
-    const fail = () =>
-        setError(
-            "The PDF preview could not load. Open the original or download the file to view it."
-        );
+    const fail = () => setError(t("loadFailed"));
     const retry = () => {
         setError(null);
         setPages(0);
@@ -57,12 +57,11 @@ export default function PdfAttachmentPreview({ url, name }: { url: string; name:
             {error || !safeUrl ? (
                 <div className="space-y-2 p-3">
                     <p role="alert" className="text-danger text-sm">
-                        {error ??
-                            "This PDF URL is unavailable. Attach the file again or remove it."}
+                        {error ?? t("urlUnavailable")}
                     </p>
                     {safeUrl && (
                         <Button variant="outline" size="sm" onClick={retry}>
-                            Retry PDF preview
+                            {t("retry")}
                         </Button>
                     )}
                 </div>
@@ -73,43 +72,50 @@ export default function PdfAttachmentPreview({ url, name }: { url: string; name:
                             <Button
                                 variant="outline"
                                 size="sm"
-                                aria-label="Previous PDF page"
+                                aria-label={t("previousPage")}
                                 disabled={page <= 1}
                                 onClick={() => setPage(value => value - 1)}
                             >
-                                Previous
+                                {tc("actions.previous")}
                             </Button>
                             <label className="text-ink-2 flex items-center gap-1">
-                                Page{" "}
-                                <Input
-                                    aria-label="PDF page"
-                                    type="number"
-                                    min={1}
-                                    max={pages}
-                                    value={page}
-                                    className="h-7 w-16 text-xs"
-                                    onChange={event => {
-                                        const value = Number(event.target.value);
-                                        if (Number.isInteger(value) && value >= 1 && value <= pages)
-                                            setPage(value);
-                                    }}
-                                />{" "}
-                                of {pages}
+                                {t.rich("pageOf", {
+                                    pages,
+                                    input: () => (
+                                        <Input
+                                            aria-label={t("pageInput")}
+                                            type="number"
+                                            min={1}
+                                            max={pages}
+                                            value={page}
+                                            className="h-7 w-16 text-xs"
+                                            onChange={event => {
+                                                const value = Number(event.target.value);
+                                                if (
+                                                    Number.isInteger(value) &&
+                                                    value >= 1 &&
+                                                    value <= pages
+                                                )
+                                                    setPage(value);
+                                            }}
+                                        />
+                                    ),
+                                })}
                             </label>
                             <Button
                                 variant="outline"
                                 size="sm"
-                                aria-label="Next PDF page"
+                                aria-label={t("nextPage")}
                                 disabled={page >= pages}
                                 onClick={() => setPage(value => value + 1)}
                             >
-                                Next
+                                {tc("actions.next")}
                             </Button>
                         </div>
                     )}
                     <div
                         className="max-h-[55vh] w-full min-w-0 max-w-full overflow-auto p-2"
-                        aria-label={`PDF preview ${name}`}
+                        aria-label={t("previewLabel", { name })}
                     >
                         <Document
                             key={`${safeUrl}:${attempt}`}
@@ -118,13 +124,12 @@ export default function PdfAttachmentPreview({ url, name }: { url: string; name:
                             options={PDF_OPTIONS}
                             loading={
                                 <p role="status" className="text-ink-3 p-3 text-sm">
-                                    Loading PDF…
+                                    {t("loading")}
                                 </p>
                             }
                             error={
                                 <p role="alert" className="text-danger p-3 text-sm">
-                                    The PDF preview could not load. Open the original or download
-                                    the file.
+                                    {t("documentError")}
                                 </p>
                             }
                             onLoadSuccess={pdf => {
@@ -133,11 +138,7 @@ export default function PdfAttachmentPreview({ url, name }: { url: string; name:
                             }}
                             onLoadError={fail}
                             onSourceError={fail}
-                            onPassword={() =>
-                                setError(
-                                    "This PDF requires a password. Open the original or download it to enter the password."
-                                )
-                            }
+                            onPassword={() => setError(t("password"))}
                         >
                             {pages > 0 && (
                                 <Page
@@ -149,13 +150,12 @@ export default function PdfAttachmentPreview({ url, name }: { url: string; name:
                                     onRenderError={fail}
                                     loading={
                                         <p role="status" className="text-ink-3 p-3 text-sm">
-                                            Loading page {page}…
+                                            {t("loadingPage", { page })}
                                         </p>
                                     }
                                     error={
                                         <p role="alert" className="text-danger p-3 text-sm">
-                                            This PDF page could not render. Open the original or
-                                            download the file.
+                                            {t("pageError")}
                                         </p>
                                     }
                                 />

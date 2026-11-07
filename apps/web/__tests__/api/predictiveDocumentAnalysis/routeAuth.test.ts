@@ -10,6 +10,13 @@
 
 const mockRequireWorkspaceContext = jest.fn();
 
+// The AI-allowance gate reads the meter; these tests don't model limits.
+jest.mock("~/server/ai-usage/refusal", () => ({
+    refuseAtAiAllowance: jest.fn(async () => null),
+}));
+jest.mock("~/server/ai-usage/quota", () => ({
+    getAiAllowance: jest.fn(async () => ({ blocked: false })),
+}));
 jest.mock("~/lib/require-workspace-context", () => ({
     ...jest.requireActual("~/lib/require-workspace-context"),
     requireWorkspaceContext: () => mockRequireWorkspaceContext(),

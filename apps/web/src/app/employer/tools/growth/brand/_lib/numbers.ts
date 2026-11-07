@@ -5,20 +5,38 @@ import type { BrandPostMetrics } from "../api";
  * not report it), never 0, which would claim nobody looked.
  */
 
-const FULL = new Intl.NumberFormat("en-US");
-const COMPACT = new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 });
+const FULL = new Map<string, Intl.NumberFormat>();
+const COMPACT = new Map<string, Intl.NumberFormat>();
+
+/** One formatter per locale, made the first time that locale asks. */
+function formatter(
+    cache: Map<string, Intl.NumberFormat>,
+    locale: string,
+    options?: Intl.NumberFormatOptions
+): Intl.NumberFormat {
+    let f = cache.get(locale);
+    if (!f) {
+        f = new Intl.NumberFormat(locale, options);
+        cache.set(locale, f);
+    }
+    return f;
+}
 
 export const NONE = "—";
 
-/** "1,284"; "—" for null. */
-export function count(n: number | null | undefined): string {
-    return n === null || n === undefined || Number.isNaN(n) ? NONE : FULL.format(n);
+/** "1,284"; "—" for null. `locale` is the interface language (`useLocale()`). */
+export function count(n: number | null | undefined, locale = "en-US"): string {
+    return n === null || n === undefined || Number.isNaN(n)
+        ? NONE
+        : formatter(FULL, locale).format(n);
 }
 
 /** "1,284" under ten thousand, then "12.4K", "1.2M": for stat tiles and compact rows. */
-export function compact(n: number | null | undefined): string {
+export function compact(n: number | null | undefined, locale = "en-US"): string {
     if (n === null || n === undefined || Number.isNaN(n)) return NONE;
-    return Math.abs(n) < 10_000 ? FULL.format(n) : COMPACT.format(n);
+    return Math.abs(n) < 10_000
+        ? formatter(FULL, locale).format(n)
+        : formatter(COMPACT, locale, { notation: "compact", maximumFractionDigits: 1 }).format(n);
 }
 
 /** A 0..1 rate as "4.2%"; "—" for null. */

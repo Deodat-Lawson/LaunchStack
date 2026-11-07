@@ -74,6 +74,16 @@ One typeface system across apps/web and apps/landing:
   components-layer rule in `src/styles/globals.css`, not a kit class
   (`__tests__/brand/field-font-size.test.tsx`).
 
+## Words
+
+Every word a person reads comes from a message catalogue — English and
+Simplified Chinese today, one JSON file per feature namespace in
+`src/i18n/messages/<locale>/` — through next-intl's `useTranslations` /
+`getTranslations`. Keys are type-checked against English; `npx jest src/i18n`
+checks every language says the same things with the same placeholders. How
+the language is chosen, how to add one, and the rules for plurals, dates and
+server-written text: `src/i18n/README.md`.
+
 ## Icons
 
 `lucide-react` for every glyph, in both apps; its defaults (24-unit grid,
@@ -191,8 +201,8 @@ the next visit.
   nested pages, so it keeps `external: true` and Studio navigates to it.
 - **Every id the shell can open must resolve** through `resolveStudioFeature`,
   because a tab needs a label and an icon. Panes reachable only by link —
-  Workflows, Analytics, Company profile — are named there rather than in
-  `STUDIO_GROUPS`, which keeps them out of the picker but able to open. A
+  Workflows, Mindmap — are named there rather than in `STUDIO_GROUPS`, which
+  keeps them out of the picker but able to open. A
   source opened to the side is a tab too, under the `source:` prefix.
 - **Chrome lives in the first pane's strip, not in a pane.** The first pane in
   reading order is always the top-left one. The workspace's controls go there

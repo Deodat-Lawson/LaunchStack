@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowDown, ArrowUp, ExternalLink } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -30,9 +31,11 @@ import {
     type PersonRow,
     type SalesStage,
 } from "../api";
+import { useCopyText } from "~/lib/tools/copyText";
+import { useGrowthFormat } from "../../_lib/format";
 import { useProspects } from "../_lib/context";
+import { useErrorText } from "~/lib/tools/errorText";
 import { neighbours } from "../_lib/listOrder";
-import { relativeTime, shortDate } from "~/lib/tools/format";
 import { useResource } from "~/lib/tools/useResource";
 import { ClaimText, evidenceAnchorId } from "../_components/Citation";
 import { EmailStatus, canOutreach } from "../_components/EmailStatus";
@@ -83,6 +86,12 @@ function Side({
 }
 
 export function CompanyScreen({ id }: { id: string }) {
+    const t = useTranslations("growth.prospects");
+    const tc = useTranslations("common.actions");
+    const { relativeTime, shortDate, joinList } = useGrowthFormat();
+    const ts = useTranslations("growth.server");
+    const word = useCopyText();
+    const errorText = useErrorText();
     const { href } = useProspects();
     const router = useToolRouter();
     const active = useToolActive();
@@ -135,9 +144,7 @@ export function CompanyScreen({ id }: { id: string }) {
                     typeof e.body === "object" &&
                     "reason" in e.body
                     ? String((e.body as { reason: unknown }).reason)
-                    : e instanceof Error
-                      ? e.message
-                      : "Could not update the deal"
+                    : errorText(e, t("company.updateDealFailed"))
             );
         }
     };
@@ -149,9 +156,9 @@ export function CompanyScreen({ id }: { id: string }) {
         try {
             await prospectsApi.setExcluded([c.id], !c.excluded);
             await res.reload();
-            toast.success(c.excluded ? "Back in the segment" : "Excluded from future runs");
+            toast.success(c.excluded ? t("company.backInSegment") : t("company.excludedToast"));
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : "Could not update");
+            toast.error(errorText(e, t("common.updateFailed")));
         }
     };
 
@@ -161,9 +168,9 @@ export function CompanyScreen({ id }: { id: string }) {
         return (
             <ToolNotFound
                 home={href("/companies")}
-                homeLabel="Companies"
-                title="This company is no longer here"
-                body="It may have been removed from the segment, or the link is from another workspace."
+                homeLabel={t("common.companies")}
+                title={t("company.goneTitle")}
+                body={t("company.goneBody")}
             />
         );
     }
@@ -180,7 +187,7 @@ export function CompanyScreen({ id }: { id: string }) {
         <div className="mx-auto max-w-[1100px]">
             <div className="text-ink-3 mb-3 flex items-center gap-3 text-xs">
                 <ToolLink href={href("/companies")} className="hover:text-ink">
-                    Companies
+                    {t("common.companies")}
                 </ToolLink>
                 <span aria-hidden>/</span>
                 <span className="text-ink font-medium">
@@ -194,7 +201,7 @@ export function CompanyScreen({ id }: { id: string }) {
                             className="size-7"
                             disabled={!nav.prev}
                             onClick={() => nav.prev && router.push(href(`/companies/${nav.prev}`))}
-                            aria-label="Previous company"
+                            aria-label={t("company.previous")}
                         >
                             <ArrowUp className="size-3.5" />
                         </Button>
@@ -204,7 +211,7 @@ export function CompanyScreen({ id }: { id: string }) {
                             className="size-7"
                             disabled={!nav.next}
                             onClick={() => nav.next && router.push(href(`/companies/${nav.next}`))}
-                            aria-label="Next company"
+                            aria-label={t("company.next")}
                         >
                             <ArrowDown className="size-3.5" />
                         </Button>
@@ -231,9 +238,13 @@ export function CompanyScreen({ id }: { id: string }) {
                                 </a>
                             )}
                             <span>{c.hq}</span>
-                            {c.sizeBand && <span>{c.sizeBand} staff</span>}
+                            {c.sizeBand && <span>{t("company.staff", { size: c.sizeBand })}</span>}
                             <span>{c.archetype}</span>
-                            <FitMeter value={c.fit} threshold={c.fitThreshold} label="Fit" />
+                            <FitMeter
+                                value={c.fit}
+                                threshold={c.fitThreshold}
+                                label={t("common.fit")}
+                            />
                         </div>
                     )}
                 </div>
@@ -246,15 +257,15 @@ export function CompanyScreen({ id }: { id: string }) {
                             disabled={c.excluded}
                         />
                         <Button variant="outline" size="sm" onClick={() => void toggleExcluded()}>
-                            {c.excluded ? "Include again" : "Exclude"}
+                            {c.excluded ? t("common.includeAgain") : t("common.exclude")}
                         </Button>
                         <Button
                             size="sm"
                             onClick={() => setOutreachOpen(true)}
                             disabled={c.excluded || c.people.length === 0}
-                            title={c.people.length === 0 ? "No people found yet" : undefined}
+                            title={c.people.length === 0 ? t("company.noPeopleYet") : undefined}
                         >
-                            Add people to outreach
+                            {t("company.addPeople")}
                         </Button>
                     </div>
                 )}
@@ -262,8 +273,11 @@ export function CompanyScreen({ id }: { id: string }) {
 
             {c?.excluded && (
                 <p className="border-line bg-panel-2 text-ink-2 mb-6 rounded-md border px-3 py-2 text-[13px]">
-                    Excluded{c.excludedReason ? `: ${c.excludedReason}` : ""}. It will not appear in
-                    future runs and cannot be added to outreach.
+                    {c.excludedReason
+                        ? t("company.excludedNoteReason", {
+                              reason: word(c.excludedReasonCopy, c.excludedReason),
+                          })
+                        : t("company.excludedNote")}
                 </p>
             )}
 
@@ -277,12 +291,12 @@ export function CompanyScreen({ id }: { id: string }) {
                         </>
                     ) : c.about.length === 0 ? (
                         <EmptyState
-                            title="Not profiled yet"
-                            body="This company was found but the profile step has not run for it. It will be profiled in the next run if it stays above the fit threshold."
+                            title={t("company.notProfiled")}
+                            body={t("company.notProfiledBody")}
                         />
                     ) : (
                         <>
-                            <Block title="About">
+                            <Block title={t("company.about")}>
                                 <p className="text-ink max-w-[70ch] text-sm leading-relaxed">
                                     {c.about.map((claim, i) => (
                                         <span key={i}>
@@ -291,7 +305,7 @@ export function CompanyScreen({ id }: { id: string }) {
                                     ))}
                                 </p>
                             </Block>
-                            <Block title="Why they fit">
+                            <Block title={t("company.whyFit")}>
                                 <ul className="text-ink marker:text-ink-4 max-w-[70ch] list-disc space-y-1.5 pl-5 text-sm leading-relaxed">
                                     {c.whyFit.map((claim, i) => (
                                         <li key={i}>
@@ -300,13 +314,13 @@ export function CompanyScreen({ id }: { id: string }) {
                                     ))}
                                     {c.openQuestions.map((q, i) => (
                                         <li key={`q-${i}`} className="text-ink-2">
-                                            Open question: {q}
+                                            {t("company.openQuestion", { question: q })}
                                         </li>
                                     ))}
                                 </ul>
                             </Block>
                             {c.signals.length > 0 && (
-                                <Block title="Signals">
+                                <Block title={t("company.signals")}>
                                     <div className="max-w-[70ch]">
                                         {c.signals.map((s, i) => (
                                             <div
@@ -314,11 +328,15 @@ export function CompanyScreen({ id }: { id: string }) {
                                                 className="grid grid-cols-[84px_1fr] gap-3 py-1.5 text-sm"
                                             >
                                                 <span className="text-ink-3 pt-px text-xs">
-                                                    {s.when}
+                                                    {s.at ? shortDate(s.at) : s.when}
                                                 </span>
                                                 <span className="text-ink">
                                                     <ClaimText
-                                                        claim={{ text: s.text, cites: s.cites }}
+                                                        claim={{
+                                                            text: s.text,
+                                                            cites: s.cites,
+                                                            copy: s.copy,
+                                                        }}
                                                         evidence={c.evidence}
                                                     />
                                                 </span>
@@ -328,8 +346,15 @@ export function CompanyScreen({ id }: { id: string }) {
                                 </Block>
                             )}
                             <Block
-                                title="Evidence"
-                                aside={`${c.evidence.length} sources${c.profiledAt ? `, fetched ${relativeTime(c.profiledAt)}` : ""}`}
+                                title={t("company.evidence")}
+                                aside={
+                                    c.profiledAt
+                                        ? t("company.evidenceAsideFetched", {
+                                              count: c.evidence.length,
+                                              when: relativeTime(c.profiledAt),
+                                          })
+                                        : t("company.evidenceAside", { count: c.evidence.length })
+                                }
                             >
                                 <ol className="max-w-[70ch]">
                                     {c.evidence.map(e => (
@@ -374,19 +399,21 @@ export function CompanyScreen({ id }: { id: string }) {
                         </>
                     ) : (
                         <>
-                            <Side title="Deal">
+                            <Side title={t("company.deal")}>
                                 <dl className="grid grid-cols-[78px_1fr] gap-x-3 gap-y-2 text-[13px]">
-                                    <dt className="text-ink-3">Stage</dt>
+                                    <dt className="text-ink-3">{t("common.stage")}</dt>
                                     <dd>
                                         <StagePill
                                             stage={c.deal.stage}
                                             staleDays={c.deal.staleDays}
                                         />
                                         <span className="text-ink-3 ml-1.5 text-xs">
-                                            since {shortDate(c.deal.stageChangedAt)}
+                                            {t("company.since", {
+                                                date: shortDate(c.deal.stageChangedAt),
+                                            })}
                                         </span>
                                     </dd>
-                                    <dt className="text-ink-3">Owner</dt>
+                                    <dt className="text-ink-3">{t("company.owner")}</dt>
                                     <dd className="flex items-center gap-2">
                                         {c.deal.ownerName ? (
                                             <>
@@ -395,27 +422,33 @@ export function CompanyScreen({ id }: { id: string }) {
                                                         {c.deal.ownerInitials}
                                                     </AvatarFallback>
                                                 </Avatar>
-                                                <span className="text-ink">{c.deal.ownerName}</span>
+                                                <span className="text-ink">
+                                                    {c.deal.ownerIsViewer
+                                                        ? ts("you")
+                                                        : c.deal.ownerName}
+                                                </span>
                                             </>
                                         ) : (
                                             <>
-                                                <span className="text-ink-3">Unassigned</span>
+                                                <span className="text-ink-3">
+                                                    {t("company.unassigned")}
+                                                </span>
                                                 <button
                                                     type="button"
                                                     className="text-brand-ink text-xs hover:underline"
                                                     onClick={() =>
                                                         void patchDeal(
                                                             { ownerName: "You" },
-                                                            "You own this deal"
+                                                            t("company.youOwn")
                                                         )
                                                     }
                                                 >
-                                                    Take it
+                                                    {t("company.takeIt")}
                                                 </button>
                                             </>
                                         )}
                                     </dd>
-                                    <dt className="text-ink-3">Next step</dt>
+                                    <dt className="text-ink-3">{t("company.nextStep")}</dt>
                                     <dd>
                                         {editingNext ? (
                                             <form
@@ -433,7 +466,7 @@ export function CompanyScreen({ id }: { id: string }) {
                                                                   ).toISOString()
                                                                 : null,
                                                         },
-                                                        "Next step saved"
+                                                        t("company.nextStepSaved")
                                                     ).then(() => setEditingNext(false));
                                                 }}
                                             >
@@ -441,7 +474,7 @@ export function CompanyScreen({ id }: { id: string }) {
                                                     autoFocus
                                                     value={nextStep}
                                                     onChange={e => setNextStep(e.target.value)}
-                                                    placeholder="Call after the intro email"
+                                                    placeholder={t("company.nextStepPlaceholder")}
                                                     className="h-8 text-[13px]"
                                                 />
                                                 <div className="flex items-center gap-1.5">
@@ -452,10 +485,10 @@ export function CompanyScreen({ id }: { id: string }) {
                                                             setNextStepAt(e.target.value)
                                                         }
                                                         className="h-8 text-[13px]"
-                                                        aria-label="Due date"
+                                                        aria-label={t("company.dueDate")}
                                                     />
                                                     <Button type="submit" size="sm">
-                                                        Save
+                                                        {tc("save")}
                                                     </Button>
                                                     <Button
                                                         type="button"
@@ -463,7 +496,7 @@ export function CompanyScreen({ id }: { id: string }) {
                                                         variant="ghost"
                                                         onClick={() => setEditingNext(false)}
                                                     >
-                                                        Cancel
+                                                        {tc("cancel")}
                                                     </Button>
                                                 </div>
                                             </form>
@@ -485,7 +518,7 @@ export function CompanyScreen({ id }: { id: string }) {
                                                     </span>
                                                 ) : (
                                                     <span className="text-ink-3">
-                                                        None yet · set one
+                                                        {t("company.noneYet")}
                                                     </span>
                                                 )}
                                             </button>
@@ -495,20 +528,19 @@ export function CompanyScreen({ id }: { id: string }) {
                             </Side>
 
                             <Side
-                                title="People"
+                                title={t("common.people")}
                                 aside={
                                     <span
                                         className="text-ink-4 text-xs"
-                                        title="People search runs after the profile step"
+                                        title={t("company.findMoreTitle")}
                                     >
-                                        Find more
+                                        {t("company.findMore")}
                                     </span>
                                 }
                             >
                                 {c.people.length === 0 ? (
                                     <p className="text-ink-3 text-[13px]">
-                                        No people found yet. They are looked up for the top
-                                        companies after each run.
+                                        {t("company.noPeople")}
                                     </p>
                                 ) : (
                                     <ul>
@@ -518,17 +550,16 @@ export function CompanyScreen({ id }: { id: string }) {
                                     </ul>
                                 )}
                                 <p className="text-ink-3 mt-2 text-xs">
-                                    Verified and Found emails can go to outreach. A guess needs
-                                    confirming first.
+                                    {t("company.outreachRule")}
                                 </p>
                             </Side>
 
-                            <Side title="Found via">
+                            <Side title={t("company.foundVia")}>
                                 <div className="flex flex-wrap gap-1.5">
                                     {c.foundVia.map(f => (
                                         <SourceChip
                                             key={f.sourceId}
-                                            label={f.label}
+                                            label={word(f.labelCopy, f.label)}
                                             kind={f.kind}
                                             url={f.url}
                                             at={f.at}
@@ -537,42 +568,45 @@ export function CompanyScreen({ id }: { id: string }) {
                                 </div>
                                 {c.profileDocumentTitle && (
                                     <p className="text-ink-3 mt-2 text-xs">
-                                        Profile saved to Sources as “{c.profileDocumentTitle}”.
+                                        {t("company.profileSaved", {
+                                            title: c.profileDocumentTitle,
+                                        })}
                                     </p>
                                 )}
                             </Side>
 
                             {c.fitBreakdown && c.fit !== null && (
-                                <Side title={`Fit ${c.fit}`}>
+                                <Side title={t("company.fitTitle", { fit: c.fit })}>
                                     <dl className="grid grid-cols-[92px_1fr] gap-x-3 gap-y-1.5 text-[13px] tabular-nums">
-                                        <dt className="text-ink-3">Buyer type</dt>
+                                        <dt className="text-ink-3">{t("company.buyerType")}</dt>
                                         <dd>
                                             {c.fitBreakdown.archetype[0]} /{" "}
                                             {c.fitBreakdown.archetype[1]}
                                         </dd>
-                                        <dt className="text-ink-3">Size</dt>
+                                        <dt className="text-ink-3">{t("company.size")}</dt>
                                         <dd>
                                             {c.fitBreakdown.size[0]} / {c.fitBreakdown.size[1]}
                                         </dd>
-                                        <dt className="text-ink-3">Geography</dt>
+                                        <dt className="text-ink-3">{t("company.geography")}</dt>
                                         <dd>
                                             {c.fitBreakdown.geography[0]} /{" "}
                                             {c.fitBreakdown.geography[1]}
                                         </dd>
-                                        <dt className="text-ink-3">Signals</dt>
+                                        <dt className="text-ink-3">{t("company.signals")}</dt>
                                         <dd>
                                             {c.fitBreakdown.signals[0]} /{" "}
                                             {c.fitBreakdown.signals[1]}
                                         </dd>
-                                        <dt className="text-ink-3">Not a fit</dt>
+                                        <dt className="text-ink-3">{t("company.notAFit")}</dt>
                                         <dd
                                             className={cn(
-                                                c.fitBreakdown.disqualifiers.length && "text-warn"
+                                                c.fitBreakdown.disqualifiers.length &&
+                                                    "text-warn-ink"
                                             )}
                                         >
                                             {c.fitBreakdown.disqualifiers.length
-                                                ? c.fitBreakdown.disqualifiers.join(", ")
-                                                : "none"}
+                                                ? joinList(c.fitBreakdown.disqualifiers)
+                                                : t("company.none")}
                                         </dd>
                                     </dl>
                                 </Side>
@@ -588,14 +622,19 @@ export function CompanyScreen({ id }: { id: string }) {
 }
 
 function PersonLine({ p }: { p: PersonRow }) {
+    const word = useCopyText();
     return (
         <li className="border-line-2 grid grid-cols-[28px_1fr_auto] items-center gap-2.5 border-t py-2 text-[13px] first:border-t-0">
             <Avatar className="size-7">
                 <AvatarFallback>{p.initials}</AvatarFallback>
             </Avatar>
             <span className="min-w-0">
-                <span className="text-ink block truncate font-medium">{p.name}</span>
-                <span className="text-ink-3 block truncate text-xs">{p.title}</span>
+                <span className="text-ink block truncate font-medium">
+                    {word(p.nameCopy, p.name)}
+                </span>
+                <span className="text-ink-3 block truncate text-xs">
+                    {word(p.titleCopy, p.title)}
+                </span>
             </span>
             <EmailStatus status={p.emailStatus} />
         </li>
@@ -611,6 +650,10 @@ function OutreachDialog({
     onOpenChange: (open: boolean) => void;
     company: CompanyDetail;
 }) {
+    const t = useTranslations("growth.prospects");
+    const tc = useTranslations("common.actions");
+    const word = useCopyText();
+    const errorText = useErrorText();
     const eligible = company.people.filter(p => canOutreach(p.emailStatus) && !p.blockedReason);
     const hasInbox = company.people.some(p => p.emailStatus === "generic" && !p.blockedReason);
     const [chosen, setChosen] = useState<Set<string>>(() => new Set(eligible.map(p => p.id)));
@@ -627,12 +670,10 @@ function OutreachDialog({
                 chosen.size > 0
                     ? await prospectsApi.outreach({ personIds: [...chosen] })
                     : await prospectsApi.outreach({ companyIds: [company.id] });
-            toast.success(
-                `Campaign drafted in Email with ${result.people} ${result.people === 1 ? "person" : "people"}. Approve it there; nothing is sent from here.`
-            );
+            toast.success(t("company.drafted", { count: result.people }));
             onOpenChange(false);
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : "Could not draft outreach");
+            toast.error(errorText(e, t("common.outreachFailed")));
         } finally {
             setBusy(false);
         }
@@ -642,9 +683,9 @@ function OutreachDialog({
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-md">
                 <DialogHeader>
-                    <DialogTitle>Add people to outreach</DialogTitle>
+                    <DialogTitle>{t("company.dialogTitle")}</DialogTitle>
                     <DialogDescription>
-                        Drafts a campaign in Email for {company.name}. You approve it there.
+                        {t("company.dialogDescription", { company: company.name })}
                     </DialogDescription>
                 </DialogHeader>
                 <ul className="border-line divide-line-2 divide-y rounded-md border">
@@ -673,10 +714,10 @@ function OutreachDialog({
                                     className="min-w-0 flex-1 cursor-pointer"
                                 >
                                     <span className="text-ink block truncate font-medium">
-                                        {p.name}
+                                        {word(p.nameCopy, p.name)}
                                     </span>
                                     <span className="text-ink-3 block truncate text-xs">
-                                        {p.title}
+                                        {word(p.titleCopy, p.title)}
                                         {p.email && (
                                             <>
                                                 {" "}
@@ -686,10 +727,11 @@ function OutreachDialog({
                                     </span>
                                     {!ok && (
                                         <span className="text-ink-3 block text-xs">
-                                            {p.blockedReason ??
+                                            {(p.blockedReason &&
+                                                word(p.blockedReasonCopy, p.blockedReason)) ??
                                                 (p.emailStatus === "guess"
-                                                    ? "Guessed address, confirm it first"
-                                                    : "Shared inbox, not for a personal note")}
+                                                    ? t("company.guessed")
+                                                    : t("company.sharedInbox"))}
                                         </span>
                                     )}
                                 </label>
@@ -700,15 +742,15 @@ function OutreachDialog({
                 </ul>
                 <DialogFooter>
                     <Button variant="ghost" onClick={() => onOpenChange(false)}>
-                        Cancel
+                        {tc("cancel")}
                     </Button>
                     <Button
                         onClick={() => void submit()}
                         disabled={busy || (chosen.size === 0 && !hasInbox)}
                     >
                         {chosen.size > 0
-                            ? `Draft campaign for ${chosen.size}`
-                            : "Draft to the public inbox"}
+                            ? t("company.draftFor", { count: chosen.size })
+                            : t("company.draftInbox")}
                     </Button>
                 </DialogFooter>
             </DialogContent>

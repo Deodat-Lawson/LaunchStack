@@ -144,8 +144,9 @@ export async function runGoogleDriveSync(
             listKnownSources(connection.companyId, connectionId),
         ]);
 
-        // A picked folder belongs to whoever picked it (ADR-014); files
-        // picked one by one stay a workspace import, as before.
+        // What a pick brings in belongs to whoever picked it (ADR-014) — a
+        // folder always, a file when it was picked into a folder from Add
+        // source; files picked before that stay a workspace import.
         const pickers = await ownersByUserPk(
             connection.companyId,
             pickedRows.map(row => row.addedByUserPk)
@@ -162,6 +163,7 @@ export async function runGoogleDriveSync(
             kind: row.kind,
             name: row.name,
             folderCategoryId: row.folderCategoryId,
+            destination: row.destination,
             owner: ownerForPick(row.addedByUserPk, pickers, granterOwner),
         }));
         const destinations = createDriveDestinations({

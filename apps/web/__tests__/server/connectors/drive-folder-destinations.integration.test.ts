@@ -4,7 +4,10 @@
  * to whoever picked it, its subfolders are rebuilt beneath it with a manage
  * grant for them, a sync storing four files at once never makes a folder
  * twice, the folder is remembered by id so a rename in LaunchStack is
- * followed, and a name someone else already uses gets " (2)".
+ * followed, and a name someone else already uses gets " (2)". Picked into a
+ * folder from Add source, it is rebuilt inside that folder, as open as it;
+ * and deleting the document of a file picked on its own drops the pick, so
+ * the next sync doesn't bring it back.
  *
  * Gated like the other integration suites: runs only when
  * LAUNCHSTACK_TEST_DATABASE_URL (or DATABASE_URL) points at a local server.
@@ -58,11 +61,23 @@ describeDb("Drive folder destinations (integration)", () => {
             .sort();
     }
 
-    async function pickRow(fileId: string, kind: "file" | "folder", name: string) {
+    async function pickRow(
+        fileId: string,
+        kind: "file" | "folder",
+        name: string,
+        destination: string | null = null
+    ) {
         const { googleDrivePickedItem } = await import("~/server/db/schema/connectors");
         const [row] = await test.db
             .insert(googleDrivePickedItem)
-            .values({ connectionId, fileId, kind, name, addedByUserPk: Number(pk.ada) })
+            .values({
+                connectionId,
+                fileId,
+                kind,
+                name,
+                addedByUserPk: Number(pk.ada),
+                destination,
+            })
             .returning();
         return row!;
     }
@@ -292,5 +307,84 @@ describeDb("Drive folder destinations (integration)", () => {
             .from(category)
             .where(and(eq(category.companyId, companyId), eq(category.name, "Acme deal room")));
         expect(row?.folderCategoryId).toBe(Number(folder!.id));
+    });
+
+    it("rebuilds a folder picked into a shared folder inside it, as open as its parent", async () => {
+        const { createDriveDestinations } = await import(
+            "~/server/services/connectors/google-drive/destinations"
+        );
+        const { createFolder } = await import("~/server/folders");
+        const { folderSettings } = await import("~/server/db/schema");
+        // A workspace-wide folder someone made earlier.
+        await createFolder(companyId, "Deals");
+        const room = await pickRow("seed", "folder", "Seed room", "Deals");
+
+        const destinations = createDriveDestinations({
+            companyId,
+            connectionId,
+            roots: [{ ...room, owner: owner() }],
+        });
+        const placed = await destinations.placeFor({
+            metadata: { pickedRootId: "seed", folderPath: ["Legal"] },
+        });
+
+        expect(placed).toEqual({ category: "Deals/Seed room/Legal", owner: owner() });
+        const [made] = await test.db
+            .select({ id: category.id })
+            .from(category)
+            .where(and(eq(category.companyId, companyId), eq(category.name, "Deals/Seed room")));
+        const restricted = await test.db
+            .select()
+            .from(folderSettings)
+            .where(eq(folderSettings.categoryId, BigInt(made!.id)));
+        expect(restricted).toEqual([]);
+        expect(await visibleFolders("ben")).toContain("Deals/Seed room/Legal");
+    });
+
+    it("drops the pick of a file picked on its own when its document is deleted", async () => {
+        const { deleteDocumentCore } = await import("~/server/services/document-delete");
+        const { googleDrivePickedItem } = await import("~/server/db/schema/connectors");
+        await pickRow("deck", "file", "Board deck", "Deals");
+        const drive = (fileId: string, pickedRootId: string) => ({
+            connector: "google-drive",
+            connectionId: String(connectionId),
+            sourceId: fileId,
+            driveFileId: fileId,
+            pickedRootId,
+            folderPath: [],
+        });
+        const [deck, inner] = await test.db
+            .insert(document)
+            .values([
+                {
+                    companyId,
+                    url: "local://deck",
+                    category: "Deals",
+                    title: "Board deck",
+                    ocrMetadata: drive("deck", "deck"),
+                },
+                {
+                    companyId,
+                    url: "local://inner",
+                    category: "Deals/Seed room",
+                    title: "Cap table",
+                    // Reached through the picked "Seed room" folder.
+                    ocrMetadata: drive("inner", "seed"),
+                },
+            ])
+            .returning();
+
+        await test.db.transaction(async tx => {
+            await deleteDocumentCore(tx, deck!.id);
+            await deleteDocumentCore(tx, inner!.id);
+        });
+
+        const left = await test.db
+            .select({ fileId: googleDrivePickedItem.fileId })
+            .from(googleDrivePickedItem)
+            .where(eq(googleDrivePickedItem.connectionId, connectionId));
+        const fileIds = left.map(row => row.fileId);
+        expect(fileIds).not.toContain("deck");
+        expect(fileIds).toContain("seed");
     });
 });

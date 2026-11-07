@@ -18,6 +18,10 @@ import { and, eq } from "drizzle-orm";
 import { normalizeFolderPath } from "~/lib/folders/path";
 import { z } from "zod";
 
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
+import { V } from "~/i18n/validation";
+
 import { db } from "~/server/db";
 import { document } from "@launchstack/store/schema";
 import { validateRequestBody } from "~/lib/validation";
@@ -25,49 +29,46 @@ import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
-import {
-    DOCUMENT_EDIT_DENIED,
-    FOLDER_EDIT_DENIED,
-    canEditFolder,
-} from "~/server/services/folder-access";
+import { canEditFolder } from "~/server/services/folder-access";
 import { recordActivity } from "~/server/workspace/activity";
 import { canEditDocument } from "~/server/workspace/item-access";
 import { applyDocumentMoveDefaults } from "~/server/workspace/ownership";
 
 // `title` and `category` columns are both varchar(256) — match schema.
 const PatchDocumentSchema = z.object({
-    title: z
-        .string()
-        .trim()
-        .min(1, "Title cannot be empty")
-        .max(256, "Title is too long (max 256 characters)")
-        .optional(),
-    category: z
-        .string()
-        .trim()
-        .min(1, "Category cannot be empty")
-        .max(256, "Category is too long (max 256 characters)")
-        .optional(),
+    title: z.string().trim().min(1, V.titleEmpty).max(256, V.titleTooLong).optional(),
+    category: z.string().trim().min(1, V.categoryEmpty).max(256, V.categoryTooLong).optional(),
 });
 
 function parseDocumentId(
-    rawId: string
+    rawId: string,
+    request: Request
 ): { ok: true; documentId: number } | { ok: false; response: NextResponse } {
     const documentId = Number(rawId);
     if (!Number.isInteger(documentId) || documentId <= 0) {
         return {
             ok: false,
-            response: NextResponse.json({ error: "Invalid document id" }, { status: 400 }),
+            response: NextResponse.json(
+                {
+                    error: translatorFor(
+                        localeOfRequest(request),
+                        "sources.server.errors"
+                    )("invalidDocumentId"),
+                },
+                { status: 400 }
+            ),
         };
     }
     return { ok: true, documentId };
 }
 
 export async function PATCH(request: Request, context: { params: Promise<{ id: string }> }) {
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "sources.server.errors");
     return withRateLimit(request, RateLimitPresets.strict, async () => {
         try {
             const { id: rawId } = await context.params;
-            const parsed = parseDocumentId(rawId);
+            const parsed = parseDocumentId(rawId, request);
             if (!parsed.ok) return parsed.response;
 
             const ctx = await requireWorkspacePermission("documents.edit");
@@ -86,7 +87,10 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
                 );
 
             if (!doc) {
-                return NextResponse.json({ error: "Document not found" }, { status: 404 });
+                return NextResponse.json(
+                    { error: translatorFor(locale, "errors.api")("documentNotFound") },
+                    { status: 404 }
+                );
             }
 
             const validation = await validateRequestBody(request, PatchDocumentSchema);
@@ -101,7 +105,7 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
             if (category !== undefined) patch.category = normalizeFolderPath(category);
 
             if (Object.keys(patch).length === 0) {
-                return NextResponse.json({ error: "No mutable fields provided" }, { status: 400 });
+                return NextResponse.json({ error: t("noMutableFields") }, { status: 400 });
             }
 
             if (
@@ -110,7 +114,7 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
                     category: doc.category,
                 }))
             ) {
-                return NextResponse.json({ error: DOCUMENT_EDIT_DENIED }, { status: 403 });
+                return NextResponse.json({ error: t("documentEditDenied") }, { status: 403 });
             }
 
             const fromFolder = normalizeFolderPath(doc.category);
@@ -118,7 +122,7 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
             const moving = toFolder !== undefined && toFolder !== fromFolder;
             const renaming = patch.title !== undefined && patch.title !== doc.title;
             if (moving && !(await canEditFolder(ctx.data, toFolder))) {
-                return NextResponse.json({ error: FOLDER_EDIT_DENIED }, { status: 403 });
+                return NextResponse.json({ error: t("folderEditDenied") }, { status: 403 });
             }
 
             const owner = {
@@ -186,7 +190,7 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
             });
         } catch (error) {
             console.error("[PATCH /api/documents/[id]] error:", error);
-            return NextResponse.json({ error: "Failed to update document" }, { status: 500 });
+            return NextResponse.json({ error: t("updateDocumentFailed") }, { status: 500 });
         }
     });
 }

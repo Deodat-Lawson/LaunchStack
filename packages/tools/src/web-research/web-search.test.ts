@@ -1,5 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { runWithChatModelsScope, type ChatUsageEvent } from "@launchstack/llm";
 
+import { executeSearch } from "./index";
 import {
     companySearchAvailable,
     configuredWebSearchProvider,
@@ -297,5 +299,160 @@ describe("describeCompanies", () => {
         const fetchImpl = vi.fn();
         expect(await describeCompanies([], { fetchImpl })).toEqual([]);
         expect(fetchImpl).not.toHaveBeenCalled();
+    });
+});
+
+describe("counting searches", () => {
+    beforeEach(() => {
+        for (const name of SEARCH_ENV) vi.stubEnv(name, "");
+        vi.stubEnv("EXA_API_KEY", "exa-test");
+        vi.stubEnv("SERPER_API_KEY", "serper-test");
+        vi.stubEnv("BRAVE_SEARCH_API_KEY", "brave-test");
+        vi.stubEnv("TAVILY_API_KEY", "tvly-test");
+        vi.stubEnv("SEARXNG_URL", "http://searxng:8080");
+    });
+    afterEach(() => {
+        vi.unstubAllEnvs();
+        vi.unstubAllGlobals();
+    });
+
+    /** Run `fn` in a chat scope whose recorder keeps what was reported. */
+    async function counting(fn: () => Promise<unknown>) {
+        const events: ChatUsageEvent[] = [];
+        let error: unknown;
+        await runWithChatModelsScope(
+            { source: "deployment", usage: { record: event => events.push(event) } },
+            async () => {
+                try {
+                    await fn();
+                } catch (caught) {
+                    error = caught;
+                }
+            }
+        );
+        return { events, error };
+    }
+
+    const searched = (provider: string): ChatUsageEvent => ({
+        kind: "web_search",
+        calls: 1,
+        modelId: provider,
+        owner: "deployment",
+        inputTokens: 0,
+        outputTokens: 0,
+    });
+
+    it("counts one search per answered request, on whichever engine is chosen", async () => {
+        const fetchImpl = vi.fn(async () =>
+            jsonResponse({ results: [], organic: [], web: { results: [] } })
+        );
+
+        const { events, error } = await counting(async () => {
+            for (const engine of ["exa", "serper", "brave", "tavily", "searxng"]) {
+                vi.stubEnv("SEARCH_PROVIDER", engine);
+                await searchWeb("q", { fetchImpl });
+            }
+            vi.stubEnv("SEARCH_PROVIDER", "exa");
+            await searchCompanies("roasters", { fetchImpl });
+        });
+
+        expect(error).toBeUndefined();
+        expect(events).toEqual([
+            searched("exa"),
+            searched("serper"),
+            searched("brave"),
+            searched("tavily"),
+            searched("searxng"),
+            searched("exa"),
+        ]);
+    });
+
+    it("counts each page Exa was asked to read, once per distinct URL", async () => {
+        const fetchImpl = vi.fn(async () =>
+            // Exa bills the pages asked for, whether or not it could read them.
+            jsonResponse({ results: [{ url: "https://acme.example/", text: "Acme." }] })
+        );
+
+        const { events } = await counting(() =>
+            describeCompanies(
+                [
+                    "https://acme.example/",
+                    "https://acme.example/",
+                    "https://beta.example/",
+                    "https://gamma.example/",
+                ],
+                { fetchImpl }
+            )
+        );
+
+        expect(events).toEqual([
+            {
+                kind: "web_contents",
+                calls: 3,
+                modelId: "exa",
+                owner: "deployment",
+                inputTokens: 0,
+                outputTokens: 0,
+            },
+        ]);
+    });
+
+    it("counts nothing for a request the engine refused", async () => {
+        const fetchImpl = vi.fn(async () => jsonResponse({ error: "over quota" }, 429));
+
+        const results = await Promise.all([
+            counting(() => searchWeb("q", { fetchImpl })),
+            counting(() => searchCompanies("roasters", { fetchImpl })),
+            counting(() => describeCompanies(["https://acme.example/"], { fetchImpl })),
+        ]);
+
+        for (const { events, error } of results) {
+            expect(error).toBeInstanceOf(Error);
+            expect(events).toEqual([]);
+        }
+    });
+
+    it("searches outside any scope without counting or failing", async () => {
+        const fetchImpl = vi.fn(async () => jsonResponse({ results: [] }));
+        await expect(searchWeb("q", { fetchImpl })).resolves.toMatchObject({ provider: "exa" });
+    });
+
+    it("counts one news search per sub-query answered, on the chosen engine", async () => {
+        vi.stubGlobal(
+            "fetch",
+            vi.fn(async () => jsonResponse({ results: [], news: [] }))
+        );
+        const news = [
+            { searchQuery: "launch news", category: "news", rationale: "t" },
+            { searchQuery: "pricing news", category: "news", rationale: "t" },
+        ];
+
+        const { events } = await counting(async () => {
+            await executeSearch(news);
+            vi.stubEnv("SEARCH_PROVIDER", "serper");
+            await executeSearch(news);
+        });
+
+        expect(events).toEqual([
+            searched("exa"),
+            searched("exa"),
+            searched("serper"),
+            searched("serper"),
+        ]);
+    });
+
+    it("counts no news search the engine refused, retries included", async () => {
+        vi.stubGlobal(
+            "fetch",
+            vi.fn(async () => new Response("over quota", { status: 429 }))
+        );
+        vi.spyOn(console, "warn").mockImplementation(() => undefined);
+        vi.spyOn(console, "error").mockImplementation(() => undefined);
+
+        const { events } = await counting(() =>
+            executeSearch([{ searchQuery: "launch news", category: "news", rationale: "t" }])
+        );
+
+        expect(events).toEqual([]);
     });
 });

@@ -1,7 +1,8 @@
 /**
- * The model ids an endpoint lists, to fill the model pickers. Optional for
- * the admin: a server that doesn't list its models still works with a typed
- * id. Gated on `settings.manage`.
+ * The model ids an endpoint lists, to fill the model pickers, and the prices
+ * its catalogue carries (OpenRouter's), to fill a chosen model's empty price.
+ * Optional for the admin: a server that doesn't list its models still works
+ * with a typed id. Gated on `settings.manage`.
  */
 
 import { NextResponse } from "next/server";
@@ -34,7 +35,8 @@ export async function POST(request: Request) {
 
     try {
         const candidate = await resolveCandidate(ctx.data.companyId, parsed.data);
-        return NextResponse.json({ models: await listEndpointModels(candidate) });
+        const { models, prices } = await listEndpointModels(candidate);
+        return NextResponse.json({ models, prices });
     } catch (error) {
         if (error instanceof WorkspaceEndpointUrlError || error instanceof StoredKeyMismatchError) {
             return NextResponse.json({ error: wordModels(error.message, locale) }, { status: 400 });

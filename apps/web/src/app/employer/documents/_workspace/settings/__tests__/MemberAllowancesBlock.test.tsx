@@ -41,6 +41,7 @@ function allowance(over: Partial<AiAllowance> = {}): AiAllowance {
         ...PERIOD,
         used: 0,
         workspace: { limit: 1_000_000, source: "default" },
+        split: { chat: 0, embedding: 0, search: 0 },
         server: null,
         binding: "workspace",
         percent: 0,
@@ -205,7 +206,11 @@ describe("MemberAllowancesBlock", () => {
                         displayName: "Sam",
                         allowance: allowance({
                             used: 400_000,
-                            server: { limit: 3_000_000, used: 2_700_000 },
+                            server: {
+                                limit: 3_000_000,
+                                used: 2_700_000,
+                                split: { chat: 2_700_000, embedding: 0, search: 0 },
+                            },
                             binding: "server",
                             percent: 90,
                         }),
@@ -220,6 +225,28 @@ describe("MemberAllowancesBlock", () => {
         expect(
             screen.getByText(/This server caps each person at 3,000,000 tokens a month across all/)
         ).toBeInTheDocument();
+    });
+
+    it("shows each person's use split by kind, under the total", async () => {
+        const mixed = row({
+            authUserId: "kai",
+            displayName: "Kai Moreno",
+            allowance: allowance({
+                used: 1_500_000,
+                split: { chat: 1_000_000, embedding: 200_000, search: 300_000 },
+                percent: 150,
+                blocked: true,
+            }),
+        });
+        listReply = { status: 200, body: payload({ members: [mixed, ADA] }) };
+        render(<MemberAllowancesBlock />);
+        const kai = await screen.findByTestId("member-allowance-kai");
+        expect(within(kai).getByTestId("usage-split")).toHaveTextContent(
+            "Chat 1M · Web search 300K · Embeddings 200K"
+        );
+        // All chat: the total says it already.
+        const ada = await screen.findByTestId("member-allowance-ada");
+        expect(within(ada).queryByTestId("usage-split")).not.toBeInTheDocument();
     });
 
     it("offers no edit action without settings.manage", async () => {

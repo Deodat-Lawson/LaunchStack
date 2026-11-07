@@ -1,6 +1,7 @@
 /**
  * Per-person AI allowances, the pure half: which month counts, which limit
- * binds, when work is refused, and how the server cap is read from the
+ * binds, when work is refused, how each person's chat-token equivalents are
+ * added up and split by kind, and how the server cap is read from the
  * environment. The database half is ai-allowance.integration.test.ts.
  */
 
@@ -15,15 +16,40 @@ jest.mock("~/env", () => ({
         return mockEnv;
     },
 }));
-jest.mock("~/server/db", () => ({ db: {} }));
-jest.mock("~/server/settings/store", () => ({ readWorkspaceSetting: jest.fn() }));
+/**
+ * A stand-in for the few queries getAiAllowances makes: each `from(table)`
+ * answers with the next rows queued for that table, whether the query ends at
+ * `where` or goes on to `groupBy`.
+ */
+const mockRows = new Map<unknown, unknown[][]>();
+jest.mock("~/server/db", () => ({
+    db: {
+        select: () => ({
+            from: (table: unknown) => {
+                const rows = mockRows.get(table)?.shift() ?? [];
+                return {
+                    where: () =>
+                        Object.assign(Promise.resolve(rows), {
+                            groupBy: () => Promise.resolve(rows),
+                        }),
+                };
+            },
+        }),
+    },
+}));
+const mockReadWorkspaceSetting = jest.fn();
+jest.mock("~/server/settings/store", () => ({
+    readWorkspaceSetting: (...args: unknown[]) => mockReadWorkspaceSetting(...args) as unknown,
+}));
 
 import {
     allowancePeriod,
     evaluateAllowance,
+    getAiAllowances,
     isExemptFromServerLimit,
     serverMonthlyLimit,
 } from "~/server/ai-usage/quota";
+import { aiUsageDaily, memberAiLimits, users } from "~/server/db/schema";
 
 const period = allowancePeriod(new Date("2026-10-25T12:00:00Z"));
 
@@ -100,6 +126,40 @@ describe("evaluateAllowance", () => {
         expect(allowance).toMatchObject({ binding: "server", percent: 105, blocked: true });
     });
 
+    it("counts a bare total as chat, for the workspace and the server", () => {
+        const allowance = evaluateAllowance({
+            ...base,
+            used: 800_000,
+            workspaceLimit: 1_000_000,
+            server: { limit: 2_000_000, used: 1_500_000 },
+        });
+        expect(allowance.split).toEqual({ chat: 800_000, embedding: 0, search: 0 });
+        expect(allowance.server).toEqual({
+            limit: 2_000_000,
+            used: 1_500_000,
+            split: { chat: 1_500_000, embedding: 0, search: 0 },
+        });
+    });
+
+    it("keeps the split it is given, and binds on the total", () => {
+        const split = { chat: 600_000, embedding: 130_000, search: 14_000 };
+        const serverSplit = { chat: 1_100_000, embedding: 130_000, search: 14_000 };
+        const allowance = evaluateAllowance({
+            ...base,
+            used: 744_000,
+            split,
+            workspaceLimit: 1_000_000,
+            server: { limit: 2_000_000, used: 1_244_000, split: serverSplit },
+        });
+        expect(allowance).toMatchObject({
+            used: 744_000,
+            split,
+            server: { used: 1_244_000, split: serverSplit },
+            binding: "workspace",
+            percent: 74.4,
+        });
+    });
+
     it("keeps where the workspace limit came from", () => {
         const allowance = evaluateAllowance({
             ...base,
@@ -108,6 +168,72 @@ describe("evaluateAllowance", () => {
             workspaceSource: "member",
         });
         expect(allowance.workspace).toEqual({ limit: null, source: "member" });
+    });
+});
+
+describe("getAiAllowances", () => {
+    beforeEach(() => {
+        mockRows.clear();
+        mockReadWorkspaceSetting.mockReset();
+        mockReadWorkspaceSetting.mockResolvedValue(1_000_000);
+    });
+
+    it("adds up each person's chat-token equivalents and splits them by kind", async () => {
+        mockEnv.server.AI_MONTHLY_TOKEN_LIMIT_PER_USER = "2000000";
+        mockRows.set(aiUsageDaily, [
+            // This workspace (asked first), as (person, kind, weighted sum); sums arrive as strings.
+            [
+                { userId: "alice", kind: "chat", tokens: "600000" },
+                { userId: "alice", kind: "embedding", tokens: "130000" },
+                { userId: "alice", kind: "web_search", tokens: "14000" },
+                { userId: "alice", kind: "web_contents", tokens: "2000" },
+                { userId: "bob", kind: "chat", tokens: 100_000 },
+            ],
+            // Every workspace, on the server's own models and keys.
+            [
+                { userId: "alice", kind: "chat", tokens: "1100000" },
+                { userId: "alice", kind: "embedding", tokens: "130000" },
+                { userId: "alice", kind: "web_search", tokens: "14000" },
+                { userId: "alice", kind: "web_contents", tokens: "2000" },
+                { userId: "bob", kind: "chat", tokens: "100000" },
+            ],
+        ]);
+        mockRows.set(memberAiLimits, [[]]);
+        mockRows.set(users, [
+            [
+                { userId: "alice", email: "alice@example.com" },
+                { userId: "bob", email: "bob@example.com" },
+                { userId: "carol", email: "carol@example.com" },
+            ],
+        ]);
+
+        const allowances = await getAiAllowances(1n, ["alice", "bob", "carol"], {
+            serverCapApplies: true,
+            at: new Date("2026-10-25T12:00:00Z"),
+        });
+
+        expect(allowances.get("alice")).toMatchObject({
+            used: 746_000,
+            split: { chat: 600_000, embedding: 130_000, search: 16_000 },
+            workspace: { limit: 1_000_000, source: "default" },
+            server: {
+                limit: 2_000_000,
+                used: 1_246_000,
+                split: { chat: 1_100_000, embedding: 130_000, search: 16_000 },
+            },
+            binding: "workspace",
+            percent: 74.6,
+            blocked: false,
+        });
+        expect(allowances.get("bob")).toMatchObject({
+            used: 100_000,
+            split: { chat: 100_000, embedding: 0, search: 0 },
+        });
+        expect(allowances.get("carol")).toMatchObject({
+            used: 0,
+            split: { chat: 0, embedding: 0, search: 0 },
+            server: { used: 0, split: { chat: 0, embedding: 0, search: 0 } },
+        });
     });
 });
 

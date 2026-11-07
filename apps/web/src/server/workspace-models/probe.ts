@@ -11,10 +11,13 @@ import {
     describeChatEndpointError,
     modelContentToText,
     resolveChatModel,
+    type ChatModelPricing,
 } from "@launchstack/llm";
 
 import type { Locale } from "~/i18n/locales";
 import { wordEnglish } from "~/i18n/translate";
+import { isPlausiblePrice } from "~/lib/ai/model-pricing";
+import { getModelProvider } from "~/lib/ai/model-providers";
 import type { WorkspaceModelSelection } from "~/server/db/schema/workspace-models";
 import { fetchPublicUrl } from "~/server/security/url-guard";
 
@@ -41,12 +44,61 @@ export class EndpointProbeError extends Error {
     }
 }
 
+/** What an endpoint lists at `GET {baseUrl}/models`. */
+export interface EndpointCatalogue {
+    /** Model ids, sorted. */
+    models: string[];
+    /**
+     * What the catalogue says a model costs, US dollars per 1M tokens, by id.
+     * Only OpenRouter's catalogue is read for prices: its `pricing` is what it
+     * bills, per token. Other servers list no prices, or list them in units
+     * nobody has checked, so they get none.
+     */
+    prices: Record<string, ChatModelPricing>;
+}
+
+const OPENROUTER_HOST = new URL(getModelProvider("openrouter").baseUrl).hostname;
+
+function listsOpenRouterPrices(baseUrl: string): boolean {
+    try {
+        return new URL(baseUrl).hostname === OPENROUTER_HOST;
+    } catch {
+        return false;
+    }
+}
+
+/** A per-token price as OpenRouter writes it ("0.000003"), per 1M tokens; null if unusable. */
+function perMillion(raw: unknown): number | null {
+    if (typeof raw !== "string" && typeof raw !== "number") return null;
+    if (typeof raw === "string" && raw.trim() === "") return null;
+    const value = Number(raw);
+    if (!Number.isFinite(value) || value < 0) return null;
+    // 0.000003 × 1e6 is 2.9999999999999996 in floating point; the catalogue meant 3.
+    const price = Number((value * 1_000_000).toPrecision(12));
+    return isPlausiblePrice(price) ? price : null;
+}
+
 /**
- * Model ids the endpoint lists at `GET {baseUrl}/models`, sorted. Google's
- * compatibility layer prefixes ids with `models/` but takes them bare in chat,
- * so the prefix is dropped.
+ * OpenRouter's price for one entry. Free models (both sides 0) and routers
+ * with no fixed price (listed as -1) get none: blank counts one for one,
+ * which is what the admin should choose to change, not find prefilled.
  */
-export async function listEndpointModels(candidate: EndpointCandidate): Promise<string[]> {
+function catalogPrice(pricing: unknown): ChatModelPricing | null {
+    if (!pricing || typeof pricing !== "object") return null;
+    const listed = pricing as Record<string, unknown>;
+    const input = perMillion(listed.prompt);
+    const output = perMillion(listed.completion);
+    if (input === null || output === null || (input === 0 && output === 0)) return null;
+    const cachedInput = perMillion(listed.input_cache_read);
+    return { input, output, ...(cachedInput ? { cachedInput } : {}) };
+}
+
+/**
+ * What the endpoint lists at `GET {baseUrl}/models`: ids, sorted, and the
+ * prices its catalogue carries. Google's compatibility layer prefixes ids
+ * with `models/` but takes them bare in chat, so the prefix is dropped.
+ */
+export async function listEndpointModels(candidate: EndpointCandidate): Promise<EndpointCatalogue> {
     const url = `${candidate.baseUrl}/models`;
     const init: RequestInit = {
         headers: {
@@ -81,14 +133,29 @@ export async function listEndpointModels(candidate: EndpointCandidate): Promise<
     }
 
     const body = (await response.json().catch(() => null)) as {
-        data?: Array<{ id?: unknown }>;
+        data?: Array<{ id?: unknown; pricing?: unknown }>;
     } | null;
-    const ids = (body?.data ?? [])
-        .map(entry => (typeof entry?.id === "string" ? entry.id.replace(/^models\//, "") : null))
-        .filter((id): id is string => Boolean(id));
-    return Array.from(new Set(ids))
+    const withPrices = listsOpenRouterPrices(candidate.baseUrl);
+    const listedPrices = new Map<string, ChatModelPricing>();
+    const ids: string[] = [];
+    for (const entry of body?.data ?? []) {
+        if (typeof entry?.id !== "string") continue;
+        const id = entry.id.replace(/^models\//, "");
+        if (!id) continue;
+        ids.push(id);
+        const price = withPrices ? catalogPrice(entry.pricing) : null;
+        if (price) listedPrices.set(id, price);
+    }
+    const models = Array.from(new Set(ids))
         .sort((a, b) => a.localeCompare(b))
         .slice(0, MAX_LISTED_MODELS);
+    const prices = Object.fromEntries(
+        models.flatMap(id => {
+            const price = listedPrices.get(id);
+            return price ? [[id, price] as const] : [];
+        })
+    );
+    return { models, prices };
 }
 
 export interface ModelTestResult {

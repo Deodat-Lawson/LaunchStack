@@ -6,7 +6,7 @@
 
 import { getTavilyApiKey } from "../config";
 import type { SearchProvider } from "../types";
-import { clip, requestJson, titleOf, withUrl } from "./http";
+import { clip, requestJson, searchBilling, titleOf, withUrl } from "./http";
 
 const TAVILY_SEARCH_URL = "https://api.tavily.com/search";
 
@@ -38,7 +38,8 @@ export const tavily: SearchProvider = {
                 },
             },
             options,
-            "Tavily"
+            "Tavily",
+            searchBilling("tavily")
         )) as { results?: TavilyItem[] };
         return withUrl(data.results)
             .slice(0, options.maxResults)

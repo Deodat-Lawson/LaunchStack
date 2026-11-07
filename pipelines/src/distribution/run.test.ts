@@ -53,7 +53,7 @@ vi.mock("./db", () => ({
         items,
     }: {
         items: Array<{ orgId: string; kind: string }>;
-    }) => items.map((item, i) => ({ id: `rel-${i}`, ...item, stage: "candidate" })),
+    }) => items.map((item, i) => ({ id: `rel-${i}`, ...item, stage: "lead" })),
 }));
 
 import { createFixturePorts } from "./fixture";
@@ -181,6 +181,89 @@ beforeEach(() => {
 });
 
 describe("prepareRun discovery", () => {
+    it("keeps checking down the ranking when the fit check rejects a whole batch", async () => {
+        const calls = { described: [] as string[][], searches: [] };
+        const companies = Array.from({ length: 80 }, (_, i) =>
+            hit(`firm-${i}.example`, `Fulfilment Firm ${i}`)
+        );
+        const rounds: number[] = [];
+        const ports: DistributionPorts = {
+            ...livePorts(calls),
+            searchCompanies: async query =>
+                query.startsWith("Companies similar to") ? [] : companies,
+            // The first batch is all no's; everyone after it is a yes.
+            judgeFit: async ({ candidates }) => {
+                rounds.push(candidates.length);
+                const no = rounds.length === 1;
+                return new Map(
+                    candidates.map(c => [c.id, { fit: !no, reason: no ? "No." : "Yes." }])
+                );
+            },
+        };
+        const prepared = await prepareRun(ctx, ports);
+
+        expect(rounds.length).toBeGreaterThan(1);
+        expect(prepared.candidateRelationshipIds.length).toBeGreaterThan(0);
+        expect(prepared.warnings.join(" ")).toContain(`${rounds[0]} the fit check judged`);
+    });
+
+    it("ranks confirmed local first, and lets the fit check decide on a country a text names", async () => {
+        const calls = { described: [] as string[][], searches: [] };
+        const about = (domain: string, title: string, description: string): CompanyHit => ({
+            ...hit(domain, title),
+            description,
+        });
+        const asked: Array<{ where: string; seller: unknown; ids: string[] }> = [];
+        const ports: DistributionPorts = {
+            ...livePorts(calls),
+            searchCompanies: async query =>
+                query.startsWith("Companies similar to")
+                    ? []
+                    : [
+                          about("silent.example", "Silent Fulfilment", "Fulfilment for webshops."),
+                          about("berlin.example", "Berlin Fulfilment", "Fulfilment in Germany."),
+                          about(
+                              "sourcing.example",
+                              "Sourcing Fulfilment",
+                              "Fulfilment with parts from Germany."
+                          ),
+                          about(
+                              "local.example",
+                              "Local Fulfilment",
+                              "Fulfilment in the Netherlands."
+                          ),
+                      ],
+            judgeFit: async ({ where, seller, candidates }) => {
+                asked.push({ where, seller, ids: candidates.map(c => c.name) });
+                return new Map(
+                    candidates.map(c => [
+                        c.id,
+                        c.name === "Berlin Fulfilment"
+                            ? { fit: false, reason: "It is in Germany." }
+                            : { fit: true, reason: "Fulfilment." },
+                    ])
+                );
+            },
+        };
+        const prepared = await prepareRun(ctx, ports);
+
+        expect(asked[0]!.where).toBe("Netherlands");
+        expect(asked[0]!.seller).toBeTruthy();
+        // Everything goes to the fit check: confirmed first, named elsewhere last.
+        expect(asked[0]!.ids[0]).toBe("Local Fulfilment");
+        expect(asked[0]!.ids.slice(-2).sort()).toEqual([
+            "Berlin Fulfilment",
+            "Sourcing Fulfilment",
+        ]);
+        const names = store.upserted.map(o => o.name);
+        expect(names[0]).toBe("Local Fulfilment");
+        expect(names).not.toContain("Berlin Fulfilment");
+        // Kept by the fit check: the country its text named was not where it is.
+        const sourcing = store.upserted.find(o => o.name === "Sourcing Fulfilment")!;
+        expect(sourcing.country).toBeNull();
+        expect(prepared.warnings.join(" ")).toMatch(/1 the fit check judged/);
+    });
+
     it("seeds lookalikes from named customers and won deals, and never shortlists them", async () => {
         const calls = {
             described: [] as string[][],

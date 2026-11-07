@@ -12,7 +12,7 @@ import type {
     RequestOptions,
     SearchProvider,
 } from "../types";
-import { clip, domainOf, requestJson, titleOf, withUrl } from "./http";
+import { clip, domainOf, requestJson, searchBilling, titleOf, withUrl } from "./http";
 
 const EXA_SEARCH_URL = "https://api.exa.ai/search";
 const EXA_CONTENTS_URL = "https://api.exa.ai/contents";
@@ -76,7 +76,8 @@ async function searchCompanies(
             },
         },
         { ...options, timeoutMs: options.timeoutMs ?? 20_000 },
-        "Exa company"
+        "Exa company",
+        searchBilling("exa")
     )) as { results?: ExaItem[] };
 
     const skip = new Set(excluded);
@@ -113,7 +114,9 @@ async function describeCompanies(
             body: { urls, summary: { query: DESCRIBE_PROMPT }, text: { maxCharacters: 400 } },
         },
         { ...options, timeoutMs: options.timeoutMs ?? 30_000 },
-        "Exa contents"
+        "Exa contents",
+        // Exa bills the pages asked for, whether or not it could read them.
+        { provider: "exa", kind: "web_contents", units: urls.length }
     )) as { results?: ExaItem[] };
 
     const described: CompanyDescription[] = [];
@@ -156,7 +159,8 @@ export const exa: SearchProvider = {
                 },
             },
             options,
-            "Exa"
+            "Exa",
+            searchBilling("exa")
         )) as { results?: ExaItem[] };
         return withUrl(data.results)
             .slice(0, options.maxResults)

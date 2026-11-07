@@ -6,7 +6,7 @@
 
 import { getBraveSearchApiKey } from "../config";
 import type { SearchProvider } from "../types";
-import { clip, requestJson, stripTags, titleOf, withUrl } from "./http";
+import { clip, requestJson, searchBilling, stripTags, titleOf, withUrl } from "./http";
 
 const BRAVE_WEB_URL = "https://api.search.brave.com/res/v1/web/search";
 const BRAVE_NEWS_URL = "https://api.search.brave.com/res/v1/news/search";
@@ -34,7 +34,8 @@ export const brave: SearchProvider = {
             `${news ? BRAVE_NEWS_URL : BRAVE_WEB_URL}?${params}`,
             { method: "GET", headers: { "X-Subscription-Token": apiKey } },
             options,
-            "Brave"
+            "Brave",
+            searchBilling("brave")
         )) as { web?: { results?: BraveItem[] }; results?: BraveItem[] };
         const items = news ? data.results : data.web?.results;
         return withUrl(items)

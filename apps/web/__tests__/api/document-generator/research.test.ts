@@ -2,10 +2,28 @@
  * /api/document-generator/research: the web leg is general web search
  * (@launchstack/tools/web-research `searchWeb`, on the server's engine,
  * SEARCH_PROVIDER), not a hand-rolled Exa call — and with no engine it is
- * skipped, leaving documents and arXiv to answer.
+ * skipped, leaving documents and arXiv to answer. The work runs in the
+ * person's workspace scope, so each paid search is counted against them.
  */
+import type * as Llm from "@launchstack/llm";
 
 const mockRequireWorkspaceContext = jest.fn();
+// The allowance gate reads the meter; this test doesn't model limits.
+jest.mock("~/server/ai-usage/refusal", () => ({ refuseAtAiAllowance: jest.fn(async () => null) }));
+// Runs the work in a chat scope whose recorder the test reads, as the real
+// scope hands usage to the meter.
+const mockScopes: unknown[][] = [];
+const mockUsage: Llm.ChatUsageEvent[] = [];
+jest.mock("~/server/workspace-models/scope", () => ({
+    withWorkspaceChatModels: (companyId: unknown, use: unknown, fn: () => unknown) => {
+        mockScopes.push([companyId, use]);
+        const { runWithChatModelsScope } = jest.requireActual<typeof Llm>("@launchstack/llm");
+        return runWithChatModelsScope(
+            { source: "deployment", usage: { record: event => mockUsage.push(event) } },
+            fn
+        );
+    },
+}));
 
 jest.mock("~/lib/require-workspace-context", () => ({
     requireWorkspaceContext: () => mockRequireWorkspaceContext(),
@@ -48,6 +66,8 @@ const mockFetch = jest.fn<Promise<Response>, Parameters<typeof fetch>>();
 
 beforeEach(() => {
     jest.clearAllMocks();
+    mockScopes.length = 0;
+    mockUsage.length = 0;
     for (const name of SEARCH_ENV) delete process.env[name];
     global.fetch = mockFetch as unknown as typeof fetch;
     jest.spyOn(console, "log").mockImplementation(() => undefined);
@@ -112,6 +132,19 @@ describe("POST /api/document-generator/research — web", () => {
             url: "https://papers.example/rag",
             snippet: "A survey of retrieval-augmented generation.",
         });
+
+        // One Exa search, counted against the person who asked.
+        expect(mockScopes).toEqual([[BigInt(5), { feature: "documentWriter", userId: "user-a" }]]);
+        expect(mockUsage).toEqual([
+            {
+                kind: "web_search",
+                calls: 1,
+                modelId: "exa",
+                owner: "deployment",
+                inputTokens: 0,
+                outputTokens: 0,
+            },
+        ]);
     });
 
     it("falls back to Serper's general search when it is the only key", async () => {
@@ -154,5 +187,7 @@ describe("POST /api/document-generator/research — web", () => {
         expect(res.status).toBe(200);
         const body = (await res.json()) as ResearchBody;
         expect(body.stats.webResults).toBe(0);
+        // A refused search is not a paid one.
+        expect(mockUsage).toEqual([]);
     });
 });

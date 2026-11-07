@@ -1,12 +1,34 @@
 /** What every provider adapter shares: one JSON request helper and the text tidying. */
 
-import type { RequestOptions } from "../types";
+import { reportUsage } from "@launchstack/llm";
 
+import type { RequestOptions, SearchProviderId } from "../types";
+
+/** What one answered request is billed as: a search, or `units` pages read. */
+export interface Billing {
+    provider: SearchProviderId;
+    kind: "web_search" | "web_contents";
+    units: number;
+}
+
+/** One search on `provider`. */
+export const searchBilling = (provider: SearchProviderId): Billing => ({
+    provider,
+    kind: "web_search",
+    units: 1,
+});
+
+/**
+ * The request, as JSON. Each request the engine answers is counted against
+ * the current unit of work (`reportUsage`, a no-op outside one); a refused
+ * request counts nothing.
+ */
 export async function requestJson(
     url: string,
     init: { method: "GET" | "POST"; headers?: Record<string, string>; body?: unknown },
     options: RequestOptions,
-    vendor: string
+    vendor: string,
+    billing: Billing
 ): Promise<unknown> {
     const timeout = AbortSignal.timeout(options.timeoutMs ?? 10_000);
     const response = await (options.fetchImpl ?? fetch)(url, {
@@ -24,6 +46,15 @@ export async function requestJson(
         // The status only: a vendor's error body is not shown to a model.
         throw new Error(`${vendor} search failed (HTTP ${response.status})`);
     }
+    // Search keys are always the deployment's: no workspace brings its own.
+    reportUsage({
+        kind: billing.kind,
+        calls: billing.units,
+        modelId: billing.provider,
+        owner: "deployment",
+        inputTokens: 0,
+        outputTokens: 0,
+    });
     return response.json();
 }
 

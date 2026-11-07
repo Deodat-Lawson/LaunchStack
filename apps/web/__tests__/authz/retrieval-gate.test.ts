@@ -238,12 +238,14 @@ async function droppedCount(scope: string): Promise<number> {
 function promptOf(call: unknown[]): string {
     const messages = call[0] as Array<{ content: unknown }>;
     // A transient evidence-review reminder now follows the original user
-    // message. Inspect the actual retrieved context, not its array position.
-    const message = messages.find(
-        candidate =>
-            typeof candidate.content === "string" &&
-            candidate.content.startsWith("User's question:")
-    );
+    // message. The person's message is the one that opens with the retrieved
+    // context (<documents>) or, on a general turn, the first after the system
+    // message — never the reminder.
+    const message =
+        messages.find(
+            candidate =>
+                typeof candidate.content === "string" && candidate.content.includes("<documents>")
+        ) ?? messages[1];
     return typeof message?.content === "string" ? message.content : "";
 }
 

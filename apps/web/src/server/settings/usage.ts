@@ -163,18 +163,17 @@ export async function workspacePricePerMillionTokens(companyId: bigint): Promise
 }
 
 /**
- * The tokens of one meter row whose calls declared no price. A row mixes
- * priced and unpriced calls only on the day a price was added; its tokens are
- * split by calls rather than pretending either way.
+ * The chat-token equivalents of one meter row whose calls declared no price.
+ * A row mixes priced and unpriced calls only on the day a price was added;
+ * its tokens are split by calls rather than pretending either way.
  */
 export function unpricedTokensOf(row: {
     calls: number;
     pricedCalls: number;
-    inputTokens: number;
-    outputTokens: number;
+    weightedTokens: number;
 }): number {
     if (row.calls <= 0 || row.pricedCalls >= row.calls) return 0;
-    return (row.inputTokens + row.outputTokens) * ((row.calls - row.pricedCalls) / row.calls);
+    return row.weightedTokens * ((row.calls - row.pricedCalls) / row.calls);
 }
 
 /**

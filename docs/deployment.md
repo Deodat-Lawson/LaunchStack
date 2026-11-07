@@ -11,9 +11,10 @@ unset). In that mode:
   and `token_usage_daily` answer "which document burned 400k embedding tokens" —
   but nothing is ever refused for want of balance. Only `DEPLOYMENT_MODE=cloud`
   enforces a balance, because only a billing deployment has a way to add credits.
-- **No AI limit per person unless you set one.** Every model call is recorded
-  against the person it was for. To cap what one person can run on your models,
-  set `AI_MONTHLY_TOKEN_LIMIT_PER_USER` (see [AI allowances](#ai-allowances-per-person));
+- **No AI limit per person unless you set one.** Every model call, embedding
+  request and paid web search is recorded against the person it was for. To cap
+  what one person can run on your models, set `AI_MONTHLY_TOKEN_LIMIT_PER_USER`
+  (see [AI allowances](#ai-allowances-per-person));
   workspace admins can also set their own limits. Unlike a credit balance, a
   limit can always be raised, so it applies in either mode.
 - **No telemetry and no phone-home.** Vercel Analytics is mounted only on cloud
@@ -262,8 +263,12 @@ modes, and migration from the pre-PR variables.
 | `DATALAB_API_KEY`                                                                   | Optional    | Alternative OCR                                                                                                                                                                                                                                                         |
 | `LANDING_AI_API_KEY`                                                                | Optional    | Fallback OCR                                                                                                                                                                                                                                                            |
 | `DEPLOYMENT_MODE`                                                                   | Optional    | `self-hosted` (default when unset) or `cloud` — see [Self-hosting defaults](#self-hosting-defaults)                                                                                                                                                                     |
-| `AI_MONTHLY_TOKEN_LIMIT_PER_USER`                                                   | Optional    | Monthly cap on one person's AI tokens (in + out) on this server's models, across all their workspaces; unset or `0` = none — see [AI allowances](#ai-allowances-per-person)                                                                                             |
+| `AI_MONTHLY_TOKEN_LIMIT_PER_USER`                                                   | Optional    | Monthly cap on one person's AI use on this server's models and search keys, in chat-token equivalents, across all their workspaces; unset or `0` = none — see [AI allowances](#ai-allowances-per-person)                                                                |
 | `AI_TOKEN_LIMIT_EXEMPT_EMAILS`                                                      | Optional    | Comma-separated emails the server-wide cap never applies to (yours, say)                                                                                                                                                                                                |
+| `AI_USAGE_CHAT_PRICE_PER_MTOK`                                                      | Optional    | US dollars per 1M standard chat tokens, the price embeddings and web searches are converted against. Default: the Standard model's declared price (three input tokens to one output), else `1.00` — see [AI allowances](#ai-allowances-per-person)                      |
+| `AI_USAGE_EMBEDDING_PRICE_PER_MTOK`                                                 | Optional    | US dollars per 1M embedding tokens, for every embedding model. Default: the model's list price (`text-embedding-3-large` $0.13, `-3-small` $0.02, `ada-002` $0.10, `gemini-embedding-001` $0.15; anything else $0.13)                                                   |
+| `AI_USAGE_WEB_SEARCH_PRICE_PER_1K`                                                  | Optional    | US dollars per 1,000 web searches, for every search provider. Default: the provider's list price (Exa $7, Serper $1, Brave Search $5, Tavily $8, SearXNG $0). Pages Exa reads for company descriptions stay at $2 per 1,000                                             |
+| `AI_USAGE_PRICES`                                                                   | Optional    | Your own price table for chat, embedding and search models the built-in list doesn't know: inline JSON or a path to a JSON file. Entries are dollar prices or `{ "ratio": n }` — see [Prices for new and self-hosted models](#prices-for-new-and-self-hosted-models)    |
 | `LANDING_PUBLIC_URL`                                                                | Optional    | Origin the public site (`apps/landing`) is served from, read per request. The logo, sign-out, Help, `/privacy` and `/terms` redirect there; set it when you run a prebuilt image                                                                                        |
 | `NEXT_PUBLIC_SITE_URL`                                                              | Optional    | The same origin, inlined at build time; the fallback when `LANDING_PUBLIC_URL` is unset                                                                                                                                                                                 |
 | `NEXT_PUBLIC_APP_URL`                                                               | Optional    | Origin this app is served from; where the public site's sign-in links point                                                                                                                                                                                             |
@@ -280,21 +285,96 @@ being picked up.
 
 ## AI allowances per person
 
-Two limits can apply to a person; the tighter one binds. Both count AI tokens
-in plus out, as the Usage tab reports them, by calendar month in
-UTC, and reset on the 1st.
+Two limits can apply to a person; the tighter one binds. Both count
+chat-token equivalents, as the Usage tab reports them, by
+calendar month in UTC, and reset on the 1st.
+
+A chat-token equivalent puts chat, embeddings and paid web searches in one
+unit. A chat token, in or out, counts as one, times its model's price over the
+Standard model's when that model has a price, so the Standard model itself
+counts one for one and a model at four times its price counts four. An
+embedding token or a web search counts what it costs divided by what one
+standard chat token costs, so cheap, bulky work (embedding a whole document)
+and expensive, small work (one search) each weigh what they cost. At the
+defaults, against a chat token at $1.00 per 1M:
+
+| Work                                                | Price  | Counts as |
+| --------------------------------------------------- | ------ | --------- |
+| 1M tokens embedded with `text-embedding-3-large`    | $0.13  | 130,000   |
+| 1M tokens embedded with `text-embedding-3-small`    | $0.02  | 20,000    |
+| One Exa search                                      | $0.007 | 7,000     |
+| One Serper search                                   | $0.001 | 1,000     |
+| One page Exa reads (Prospects company descriptions) | $0.002 | 2,000     |
+
+The standard chat token's price is `AI_USAGE_CHAT_PRICE_PER_MTOK` if set, else
+the Standard (`default` route) model's declared `pricing` blended three input
+tokens to one output (see [docs/chat-models.md](./chat-models.md#pricing)), else
+$1.00 per 1M. It is the unit embeddings and searches convert into; chat is
+always weighed against the Standard model's own price, so setting
+`AI_USAGE_CHAT_PRICE_PER_MTOK` never takes the Standard model off one for one.
+`AI_USAGE_EMBEDDING_PRICE_PER_MTOK` and `AI_USAGE_WEB_SEARCH_PRICE_PER_1K`
+replace the embedding and search list prices for every model and provider.
+
+### Prices for new and self-hosted models
+
+The built-in list knows a handful of hosted models. For anything else (a new
+release, a model you serve with Ollama or vLLM, another search engine), set
+`AI_USAGE_PRICES` to a JSON price table, inline or as a path to a JSON file
+(relative to the app's working directory, so mount it as you mount the model
+file):
+
+```json
+{
+  "chat": {
+    "gpt-5-mini": { "input": 0.25, "output": 2 },
+    "llama3.1:8b": { "ratio": 0 }
+  },
+  "embedding": { "voyage-3": 0.06, "nomic-embed-text": 0 },
+  "search": { "brave": 5, "searxng": 0 }
+}
+```
+
+- **chat** — US dollars per 1M tokens: `input`, `output`, optional
+  `cachedInput`. It prices the model's calls and sets its weight. A model's
+  own `pricing` in the model file wins over its entry here.
+- **embedding** — US dollars per 1M tokens embedded.
+- **search** — US dollars per 1,000 searches, keyed by provider (`exa`,
+  `serper`, …).
+- **`{ "ratio": n }`** — instead of a price, anywhere: chat-token equivalents
+  per token (chat, embedding) or per search. Use it when a model has no dollar
+  price: `0` makes a local model free toward limits. A ratio weighs usage but
+  never shows a cost.
+
+Keys match model ids and providers without case, with or without a vendor
+prefix (`openai/gpt-5-mini` matches `gpt-5-mini`). Entries win over
+`AI_USAGE_EMBEDDING_PRICE_PER_MTOK` and `AI_USAGE_WEB_SEARCH_PRICE_PER_1K`. An
+entry for the Standard model's id also sets the standard chat token's price
+when the model file declares none. The table is read on start; a table that
+doesn't parse is reported once in the server log, naming the bad entry, and
+ignored, so AI keeps working on the built-in prices.
+
+A workspace that brings its own models (Settings › Bring your own keys) can
+give each one a price there. That price counts toward that workspace's limits
+and shows its cost; the server cap never counts a workspace's own models.
+
+Each call is weighed when it is recorded, so a
+price change applies from then on and never rewrites past usage. When a
+provider reports no embedding token count (Gemini, Ollama, Hugging Face), it is
+estimated at four characters a token. Embedding debits in the credit ledger are
+charged at the same weight.
 
 - **The server's** — `AI_MONTHLY_TOKEN_LIMIT_PER_USER`. It protects your model
-  bill: it sums one person's calls on this server's own models across every
-  workspace they belong to. Calls to an endpoint a workspace brought itself
-  (Settings › Bring your own keys) never count toward it, and it does not apply
-  while that workspace runs on its own models. People listed in
-  `AI_TOKEN_LIMIT_EXEMPT_EMAILS` are never capped. Because anyone who creates a
-  workspace owns it, this is the only limit an individual can't lift themselves.
+  and search bill: it sums one person's use of this server's own models,
+  embedding endpoint and search keys across every workspace they belong to.
+  Calls to an endpoint a workspace brought itself (Settings › Bring your own
+  keys) never count toward it, and it does not apply while that workspace runs
+  on its own models. People listed in `AI_TOKEN_LIMIT_EXEMPT_EMAILS` are never
+  capped. Because anyone who creates a workspace owns it, this is the only limit
+  an individual can't lift themselves.
 - **The workspace's** — set in Usage › Spending › AI limits per person
   by anyone with _settings.manage_: a default for everyone, and an override per
-  person (no limit, or a number of tokens). It counts all of the person's calls
-  in that workspace, whoever's endpoint served them.
+  person (no limit, or a number of tokens). It counts all of the person's use
+  in that workspace, whoever's endpoint served it.
 
 At a limit, new AI work is refused with a message that says which limit, when it
 resets and who can raise it (HTTP 429, `code: "ai_allowance_reached"`). Work

@@ -222,6 +222,150 @@ describe("PUT", () => {
     });
 });
 
+describe("a model's price", () => {
+    const put = (models: unknown, cookie?: string) =>
+        PUT(
+            new Request("http://localhost/api/settings/models/workspace", {
+                method: "PUT",
+                headers: {
+                    "content-type": "application/json",
+                    ...(cookie ? { cookie } : {}),
+                },
+                body: JSON.stringify({ provider: "openrouter", baseUrl: "https://a.b/v1", models }),
+            })
+        );
+
+    it("is saved with the model, and read back as saved", async () => {
+        const models = {
+            default: {
+                id: "acme/chat",
+                vision: false,
+                reasoning: false,
+                pricing: { input: 3, output: 15, cachedInput: 0.3 },
+            },
+            fast: {
+                id: "acme/small",
+                vision: false,
+                reasoning: false,
+                pricing: { input: 0.15, output: 0.6 },
+            },
+        };
+        const response = await put(models);
+        expect(response.status).toBe(200);
+        expect(mockStore.save).toHaveBeenCalledWith(expect.objectContaining({ models }));
+
+        const view = toEndpointView(
+            {
+                companyId: 5,
+                provider: "openrouter",
+                baseUrl: "https://openrouter.ai/api/v1",
+                apiKeyCiphertext: "c",
+                apiKeyLast4: "9xyz",
+                encryptionKeyVersion: 1,
+                models,
+                connectedVia: "openrouter",
+                updatedByUserId: null,
+                createdAt: new Date("2026-11-01T00:00:00Z"),
+                updatedAt: new Date("2026-11-01T00:00:00Z"),
+            },
+            null
+        );
+        expect(view.models).toEqual(models);
+    });
+
+    it("is removed when its fields are cleared", async () => {
+        const response = await put({
+            default: {
+                id: "acme/chat",
+                vision: false,
+                reasoning: false,
+                pricing: { input: null, output: null },
+            },
+            fast: { id: "acme/small", vision: false, reasoning: false, pricing: null },
+        });
+        expect(response.status).toBe(200);
+        expect(mockStore.save).toHaveBeenCalledWith(
+            expect.objectContaining({
+                models: {
+                    default: { id: "acme/chat", vision: false, reasoning: false },
+                    fast: { id: "acme/small", vision: false, reasoning: false },
+                },
+            })
+        );
+    });
+
+    it.each([
+        [
+            "one side only",
+            { input: 3 },
+            'Give "acme/chat" both an input and an output price, or leave both empty.',
+        ],
+        [
+            "a negative price",
+            { input: -1, output: 15 },
+            'Prices for "acme/chat" have to be between 0 and 10,000 US dollars per 1M tokens.',
+        ],
+        [
+            "an absurd price",
+            { input: 3, output: 15, cachedInput: 20_000 },
+            'Prices for "acme/chat" have to be between 0 and 10,000 US dollars per 1M tokens.',
+        ],
+    ])("refuses %s in one sentence", async (_name, pricing, error) => {
+        const response = await put({
+            default: { id: "acme/chat", vision: false, reasoning: false, pricing },
+        });
+        expect(response.status).toBe(400);
+        await expect(response.json()).resolves.toEqual({ error });
+        expect(mockStore.save).not.toHaveBeenCalled();
+    });
+
+    it("refuses in the reader's language", async () => {
+        const half = await put(
+            {
+                default: {
+                    id: "acme/chat",
+                    vision: false,
+                    reasoning: false,
+                    pricing: { output: 1 },
+                },
+            },
+            "ls-locale=zh-CN.1"
+        );
+        await expect(half.json()).resolves.toEqual({
+            error: "请为“acme/chat”同时填写输入和输出价格，或两者都留空。",
+        });
+        const absurd = await put(
+            {
+                default: {
+                    id: "acme/chat",
+                    vision: false,
+                    reasoning: false,
+                    pricing: { input: 3, output: 1e9 },
+                },
+            },
+            "ls-locale=zh-CN.1"
+        );
+        await expect(absurd.json()).resolves.toEqual({
+            error: "“acme/chat”的价格必须在 0 到 10,000 美元/百万 token 之间。",
+        });
+    });
+
+    it("refuses a price that isn't a number as a setup that isn't valid", async () => {
+        const response = await put({
+            default: {
+                id: "acme/chat",
+                vision: false,
+                reasoning: false,
+                pricing: { input: "3", output: 15 },
+            },
+        });
+        expect(response.status).toBe(400);
+        await expect(response.json()).resolves.toEqual({
+            error: "That isn't a valid model setup.",
+        });
+    });
+});
+
 describe("a server with no key to seal credentials", () => {
     it("says so instead of a bare 500 when saving", async () => {
         const { MissingSecretsKeyError } = jest.requireActual<typeof CryptoModule>(
@@ -267,6 +411,60 @@ describe("test and list", () => {
         expect(response.status).toBe(400);
         expect(mockStore.readKey).not.toHaveBeenCalled();
         expect(mockProbe.list).not.toHaveBeenCalled();
+    });
+
+    it("passes the catalogue's prices along with the ids", async () => {
+        const catalogue = {
+            models: ["acme/chat", "acme/small"],
+            prices: { "acme/chat": { input: 3, output: 15 } },
+        };
+        mockProbe.list.mockResolvedValue(catalogue);
+        const response = await listModels(
+            json({ provider: "openrouter", baseUrl: "https://a.b/v1", apiKey: "sk-typed-1234" })
+        );
+        expect(response.status).toBe(200);
+        await expect(response.json()).resolves.toEqual(catalogue);
+    });
+
+    it("tests without a price it couldn't use", async () => {
+        mockProbe.test.mockResolvedValue([
+            { route: "default", modelId: "acme/chat", ok: true, latencyMs: 12 },
+        ]);
+        const response = await testModels(
+            json({
+                provider: "custom",
+                baseUrl: "https://a.b/v1",
+                apiKey: "sk-typed-1234",
+                models: {
+                    default: {
+                        id: "acme/chat",
+                        vision: false,
+                        reasoning: false,
+                        pricing: { input: 3 },
+                    },
+                    fast: {
+                        id: "acme/small",
+                        vision: false,
+                        reasoning: false,
+                        pricing: { input: 0.15, output: 0.6 },
+                    },
+                },
+            })
+        );
+        expect(response.status).toBe(200);
+        expect(mockProbe.test).toHaveBeenCalledWith(
+            { baseUrl: "https://a.b/v1", apiKey: "sk-typed-1234" },
+            {
+                default: { id: "acme/chat", vision: false, reasoning: false },
+                fast: {
+                    id: "acme/small",
+                    vision: false,
+                    reasoning: false,
+                    pricing: { input: 0.15, output: 0.6 },
+                },
+            },
+            "en"
+        );
     });
 
     it("tests with a typed key", async () => {

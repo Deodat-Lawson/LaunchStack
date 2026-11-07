@@ -281,6 +281,27 @@
       "when": 1793158004541,
       "tag": "20261028032644_prospects_customer_domains",
       "breakpoints": true
+    },
+    {
+      "idx": 40,
+      "version": "7",
+      "when": 1793163053692,
+      "tag": "20261028045053_ai_usage_kinds",
+      "breakpoints": true
+    },
+    {
+      "idx": 41,
+      "version": "7",
+      "when": 1793581675751,
+      "tag": "20261102010755_deal_stage_history",
+      "breakpoints": true
+    },
+    {
+      "idx": 42,
+      "version": "7",
+      "when": 1793581690555,
+      "tag": "20261102010810_marketing_runs",
+      "breakpoints": true
     }
   ]
 }

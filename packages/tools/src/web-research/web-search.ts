@@ -12,7 +12,9 @@
  * News search for trend research is `executeSearch` in ./index.
  *
  * All throw on failure so the caller can say the search failed rather than
- * that nothing exists.
+ * that nothing exists. Each request the engine answers is counted against the
+ * current unit of work (`reportUsage`, in ./providers/http): a search, or the
+ * pages Exa read.
  */
 
 import { activeSearchProvider, resolveSearchSetup, searchOffReason } from "./setup";

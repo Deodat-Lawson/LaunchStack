@@ -7,7 +7,7 @@
 
 import { getSearxngUrl } from "../config";
 import type { SearchProvider } from "../types";
-import { clip, requestJson, titleOf, withUrl } from "./http";
+import { clip, requestJson, searchBilling, titleOf, withUrl } from "./http";
 
 interface SearxngItem {
     title?: string;
@@ -41,7 +41,9 @@ export const searxng: SearchProvider = {
                 `${searxngSearchUrl(base)}?${params}`,
                 { method: "GET" },
                 options,
-                "SearXNG"
+                "SearXNG",
+                // Free to run, but counted so usage shows it; its price is zero.
+                searchBilling("searxng")
             )) as { results?: SearxngItem[] };
         } catch (error) {
             if (error instanceof Error && error.message.endsWith("(HTTP 403)")) {

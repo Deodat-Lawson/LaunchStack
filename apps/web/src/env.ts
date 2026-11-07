@@ -146,6 +146,10 @@ const serverSchema = z.object({
     LINKEDIN_ACCESS_TOKEN: optionalString(),
     BLUESKY_HANDLE: optionalString(),
     BLUESKY_APP_PASSWORD: optionalString(),
+    // Which workspace (company id) the keys above post for. Unset, they belong
+    // to the only workspace on the server; with two or more workspaces and
+    // nothing set, no workspace may post through them (each connects its own).
+    BRAND_DEPLOYMENT_ACCOUNTS_COMPANY_ID: optionalString(),
     // Azure Document Intelligence (for OCR pipeline)
     AZURE_DOC_INTELLIGENCE_ENDPOINT: optionalString(),
     AZURE_DOC_INTELLIGENCE_KEY: optionalString(),
@@ -429,6 +433,18 @@ const serverSchema = z.object({
     AI_MONTHLY_TOKEN_LIMIT_PER_USER: optionalString(),
     // Comma-separated emails the server-wide allowance never applies to.
     AI_TOKEN_LIMIT_EXEMPT_EMAILS: optionalString(),
+    // Converting embeddings and web searches into chat-token equivalents (by
+    // what they cost) for usage and allowances; see ~/server/ai-usage/weights.
+    // USD per 1M standard chat tokens (default: the Standard model's declared
+    // price, else 1.00), per 1M embedding tokens (default: the model's list
+    // price) and per 1,000 web searches (default: the provider's list price).
+    AI_USAGE_CHAT_PRICE_PER_MTOK: optionalString(),
+    AI_USAGE_EMBEDDING_PRICE_PER_MTOK: optionalString(),
+    AI_USAGE_WEB_SEARCH_PRICE_PER_1K: optionalString(),
+    // The operator's own prices for models and search providers the built-in
+    // list doesn't know: inline JSON or a path to a JSON file. See
+    // ~/server/ai-usage/price-table for the shape.
+    AI_USAGE_PRICES: optionalString(),
     // Collaboration: meetings held in channels, with agents that may run on
     // other machines. COLLAB_HUB_SECRET is the shared secret every remote agent
     // worker signs its requests with — without it the hub refuses to accept any
@@ -604,6 +620,7 @@ function parseServerEnv() {
         LINKEDIN_ACCESS_TOKEN: process.env.LINKEDIN_ACCESS_TOKEN,
         BLUESKY_HANDLE: process.env.BLUESKY_HANDLE,
         BLUESKY_APP_PASSWORD: process.env.BLUESKY_APP_PASSWORD,
+        BRAND_DEPLOYMENT_ACCOUNTS_COMPANY_ID: process.env.BRAND_DEPLOYMENT_ACCOUNTS_COMPANY_ID,
         AZURE_DOC_INTELLIGENCE_ENDPOINT: process.env.AZURE_DOC_INTELLIGENCE_ENDPOINT,
         AZURE_DOC_INTELLIGENCE_KEY: process.env.AZURE_DOC_INTELLIGENCE_KEY,
         AZURE_DOC_INTELLIGENCE_MODEL: process.env.AZURE_DOC_INTELLIGENCE_MODEL,
@@ -691,6 +708,10 @@ function parseServerEnv() {
         TOKEN_SIGNUP_BONUS: process.env.TOKEN_SIGNUP_BONUS,
         AI_MONTHLY_TOKEN_LIMIT_PER_USER: process.env.AI_MONTHLY_TOKEN_LIMIT_PER_USER,
         AI_TOKEN_LIMIT_EXEMPT_EMAILS: process.env.AI_TOKEN_LIMIT_EXEMPT_EMAILS,
+        AI_USAGE_CHAT_PRICE_PER_MTOK: process.env.AI_USAGE_CHAT_PRICE_PER_MTOK,
+        AI_USAGE_EMBEDDING_PRICE_PER_MTOK: process.env.AI_USAGE_EMBEDDING_PRICE_PER_MTOK,
+        AI_USAGE_WEB_SEARCH_PRICE_PER_1K: process.env.AI_USAGE_WEB_SEARCH_PRICE_PER_1K,
+        AI_USAGE_PRICES: process.env.AI_USAGE_PRICES,
         GOOGLE_DOCS_EDITING_ENABLED: process.env.GOOGLE_DOCS_EDITING_ENABLED,
         GOOGLE_OAUTH_CLIENT_ID: process.env.GOOGLE_OAUTH_CLIENT_ID,
         GOOGLE_OAUTH_CLIENT_SECRET: process.env.GOOGLE_OAUTH_CLIENT_SECRET,

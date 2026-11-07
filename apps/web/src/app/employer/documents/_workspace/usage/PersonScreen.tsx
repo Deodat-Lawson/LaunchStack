@@ -23,6 +23,7 @@ import { usePermissions } from "~/lib/use-permissions";
 import { AllowanceBar, useAllowanceFormat } from "../settings/aiAllowance";
 import { useTimeFormat } from "../settings/people/format";
 import { BackButton, LoadingRows, Panel } from "../team/ui";
+import { ByKindPanel } from "./ByKindPanel";
 import { DailyChart } from "./DailyChart";
 import { FeatureTable } from "./FeatureTable";
 import { useUsageFilters, useUsageLoad, windowQuery } from "./data";
@@ -75,9 +76,13 @@ export function PersonScreen({ memberId }: { memberId: number }) {
                 "questions",
                 "files_added",
                 "documents_opened",
-                "ai_calls",
-                "ai_input_tokens",
-                "ai_output_tokens",
+                "ai_requests",
+                "ai_usage_chat_token_equivalents",
+                "ai_chat_input_tokens",
+                "ai_chat_output_tokens",
+                "ai_embedded_tokens",
+                "ai_web_searches",
+                "ai_pages_read",
                 "estimated_cost_usd",
             ],
             data.daily.map(day => [
@@ -86,8 +91,12 @@ export function PersonScreen({ memberId }: { memberId: number }) {
                 day.filesAdded,
                 day.docsOpened,
                 day.aiCalls,
+                day.aiTokens,
                 day.inputTokens,
                 day.outputTokens,
+                day.embeddedTokens,
+                day.searches,
+                day.pages,
                 day.costUsd,
             ])
         );
@@ -187,6 +196,7 @@ export function PersonScreen({ memberId }: { memberId: number }) {
                             previousDays={data.totals.costUsd === null ? undefined : days}
                         />
                     </TileGrid>
+                    <ByKindPanel totals={data.totals} rates={data.rates} />
 
                     <DailyChart
                         title={t("daily")}

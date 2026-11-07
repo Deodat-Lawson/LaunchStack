@@ -34,7 +34,12 @@ import { csvFileName, downloadCsv, toCsv } from "~/lib/usage/csv";
 import type { UsageCounts, UsagePeople, UsagePersonRow } from "~/lib/usage/types";
 import { cn } from "~/lib/utils";
 
-import { AllowanceBar, allowanceTone, useAllowanceFormat } from "../settings/aiAllowance";
+import {
+    AllowanceBar,
+    allowanceTone,
+    useAllowanceFormat,
+    useUsageSplitText,
+} from "../settings/aiAllowance";
 import { useTimeFormat } from "../settings/people/format";
 import { EmptyLine, FilterInput, LoadingRows } from "../team/ui";
 import { useUsageFilters, useUsageLoad, windowQuery } from "./data";
@@ -82,6 +87,7 @@ export function PeopleScreen() {
     const t = useTranslations("usage.people");
     const tm = useTranslations("usage.metrics");
     const format = useUsageFormat();
+    const splitText = useUsageSplitText();
     // Rounded down, as Spending and Your usage round a limit: 99.6% never reads as 100.
     const allowance = useAllowanceFormat();
     const time = useTimeFormat();
@@ -129,6 +135,9 @@ export function PeopleScreen() {
                           counts.docsOpened,
                           counts.aiCalls,
                           counts.aiTokens,
+                          counts.aiSplit.chat,
+                          counts.aiSplit.embedding,
+                          counts.aiSplit.search,
                           counts.costUsd,
                           "",
                           "",
@@ -147,11 +156,14 @@ export function PeopleScreen() {
                 "questions",
                 "files_added",
                 "documents_opened",
-                "ai_calls",
-                "ai_tokens",
+                "ai_requests",
+                "ai_usage_chat_token_equivalents",
+                "ai_usage_chat",
+                "ai_usage_embeddings",
+                "ai_usage_web_search",
                 "estimated_cost_usd",
                 "top_feature",
-                "month_tokens_used",
+                "month_usage_chat_token_equivalents",
                 "month_limit",
                 "last_active",
             ],
@@ -167,6 +179,9 @@ export function PeopleScreen() {
                     person.totals.docsOpened,
                     person.totals.aiCalls,
                     person.totals.aiTokens,
+                    person.totals.aiSplit.chat,
+                    person.totals.aiSplit.embedding,
+                    person.totals.aiSplit.search,
                     person.totals.costUsd,
                     person.topFeature ? format.feature(person.topFeature) : "",
                     person.allowance.used,
@@ -364,7 +379,14 @@ export function PeopleScreen() {
                                             <TableCell className="@max-xl:hidden text-right tabular-nums">
                                                 {format.num(person.totals.docsOpened)}
                                             </TableCell>
-                                            <TableCell className="text-ink text-right font-medium tabular-nums">
+                                            <TableCell
+                                                className="text-ink text-right font-medium tabular-nums"
+                                                // The split on hover: a line under each total would widen
+                                                // the table past its panel. Each person's page shows it in full.
+                                                title={
+                                                    splitText(person.totals.aiSplit) ?? undefined
+                                                }
+                                            >
                                                 {format.compact(person.totals.aiTokens)}
                                             </TableCell>
                                             <TableCell className="@max-md:hidden text-right tabular-nums">

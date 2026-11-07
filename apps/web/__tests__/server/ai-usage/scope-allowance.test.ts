@@ -41,6 +41,7 @@ function allowance(overrides: Partial<AiAllowance> = {}): AiAllowance {
         start: "2026-10-01",
         resetsAt: "2026-11-01T00:00:00.000Z",
         used: 1_200_000,
+        split: { chat: 1_200_000, embedding: 0, search: 0 },
         workspace: { limit: 1_000_000, source: "default" },
         server: null,
         binding: "workspace",
@@ -96,7 +97,14 @@ it("words the refusal for the screen, in the reader's language", () => {
 
     const server = describeChatResolutionFailure(
         new AiAllowanceExceededError(
-            allowance({ binding: "server", server: { limit: 2_000_000, used: 2_000_000 } })
+            allowance({
+                binding: "server",
+                server: {
+                    limit: 2_000_000,
+                    used: 2_000_000,
+                    split: { chat: 2_000_000, embedding: 0, search: 0 },
+                },
+            })
         ),
         "zh-CN"
     );

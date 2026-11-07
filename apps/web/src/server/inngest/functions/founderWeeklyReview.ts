@@ -255,21 +255,29 @@ export const founderWeeklyReviewGenerationJob = inngest.createFunction(
                         status: collecting.status,
                         retryCount: collecting.retryCount,
                     });
+                    // Embedding the evidence queries counts toward whoever asked for the review.
+                    const collectUse = {
+                        feature: "vantage",
+                        userId: collecting.collectionInput?.actorExternalUserId ?? null,
+                        enforce: false,
+                    } as const;
                     const snapshot = await step.run("collect-evidence", () =>
-                        canonicalFounderWeeklyReviewEvidenceCollector.collectFounderWeeklyReviewEvidence(
-                            {
-                                companyId: collecting.companyId,
-                                reportingPeriod: collecting.reportingPeriod,
-                                workspaceTimezone:
-                                    collecting.collectionInput?.workspaceTimezone ?? "UTC",
-                                founderContext: collecting.collectionInput?.founderContext,
-                                actor: {
-                                    externalUserId:
-                                        collecting.collectionInput?.actorExternalUserId ??
-                                        "unknown",
-                                },
-                                requestKey: collecting.requestKey,
-                            }
+                        withWorkspaceChatModels(collecting.companyId, collectUse, () =>
+                            canonicalFounderWeeklyReviewEvidenceCollector.collectFounderWeeklyReviewEvidence(
+                                {
+                                    companyId: collecting.companyId,
+                                    reportingPeriod: collecting.reportingPeriod,
+                                    workspaceTimezone:
+                                        collecting.collectionInput?.workspaceTimezone ?? "UTC",
+                                    founderContext: collecting.collectionInput?.founderContext,
+                                    actor: {
+                                        externalUserId:
+                                            collecting.collectionInput?.actorExternalUserId ??
+                                            "unknown",
+                                    },
+                                    requestKey: collecting.requestKey,
+                                }
+                            )
                         )
                     );
                     await step.run("persist-evidence", () =>

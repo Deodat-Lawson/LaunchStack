@@ -142,8 +142,10 @@ export function ActivityScreen() {
                     "person",
                     "feature",
                     "route",
+                    "kind",
                     "own_endpoint",
-                    "calls",
+                    "requests_or_pages",
+                    "ai_usage_chat_token_equivalents",
                     "input_tokens",
                     "output_tokens",
                     "cached_input_tokens",
@@ -154,9 +156,11 @@ export function ActivityScreen() {
                     row.date,
                     personName(row),
                     format.feature(row.feature),
-                    format.route(row.route || "default"),
+                    row.kind === "chat" ? format.route(row.route || "default") : "",
+                    row.kind,
                     row.owner === "workspace" ? "yes" : "no",
                     row.calls,
+                    row.aiTokens,
                     row.inputTokens,
                     row.outputTokens,
                     row.cachedInputTokens,
@@ -263,6 +267,7 @@ export function ActivityScreen() {
                                             {t("route")}
                                         </TableHead>
                                         <TableHead className="text-right">{t("calls")}</TableHead>
+                                        <TableHead className="text-right">{t("usage")}</TableHead>
                                         <TableHead className="@max-lg:hidden text-right">
                                             {t("input")}
                                         </TableHead>
@@ -317,10 +322,15 @@ export function ActivityScreen() {
                                                 )}
                                             </TableCell>
                                             <TableCell className="@max-md:hidden text-ink-3">
-                                                {format.route(row.route || "default")}
+                                                {row.kind === "chat"
+                                                    ? format.route(row.route || "default")
+                                                    : t(`kinds.${row.kind}`)}
                                             </TableCell>
                                             <TableCell className="text-right tabular-nums">
                                                 {format.num(row.calls)}
+                                            </TableCell>
+                                            <TableCell className="text-right tabular-nums">
+                                                {format.num(row.aiTokens)}
                                             </TableCell>
                                             <TableCell className="@max-lg:hidden text-right tabular-nums">
                                                 {format.num(row.inputTokens)}

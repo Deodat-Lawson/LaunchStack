@@ -8,11 +8,25 @@
 import { z } from "zod";
 
 import { MODEL_PROVIDER_IDS } from "~/lib/ai/model-providers";
-import type { WorkspaceModelSelection } from "~/server/db/schema/workspace-models";
 
+import type { SelectionDraft } from "./config";
 import { assertEndpointUrlAllowed } from "./endpoint-url";
 import type { EndpointCandidate } from "./probe";
 import { getWorkspaceEndpointRow, readWorkspaceEndpointKey } from "./store";
+
+/**
+ * A price as typed, US dollars per 1M tokens. Loose on purpose: a missing
+ * side or a number out of bounds is refused by `selectionProblem`, which says
+ * which in words; a schema refusal can only say the setup isn't valid. Null
+ * or absent fields are empty ones, and a price left all empty is no price.
+ */
+const pricingSchema = z
+    .object({
+        input: z.number().nullable().optional(),
+        output: z.number().nullable().optional(),
+        cachedInput: z.number().nullable().optional(),
+    })
+    .strict();
 
 const choiceSchema = z
     .object({
@@ -20,6 +34,7 @@ const choiceSchema = z
         vision: z.boolean(),
         reasoning: z.boolean(),
         structuredOutput: z.boolean().optional(),
+        pricing: pricingSchema.nullable().optional(),
     })
     .strict();
 
@@ -30,7 +45,7 @@ export const selectionSchema = z
         reasoning: choiceSchema.optional(),
         vision: choiceSchema.optional(),
     })
-    .strict() satisfies z.ZodType<WorkspaceModelSelection>;
+    .strict() satisfies z.ZodType<SelectionDraft>;
 
 /** `apiKey` absent = keep or reuse the stored key; `null` = keyless. */
 const endpointFields = {

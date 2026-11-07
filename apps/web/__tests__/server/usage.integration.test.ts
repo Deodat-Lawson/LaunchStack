@@ -145,6 +145,9 @@ describeDb("Usage tab", () => {
             pricedCalls: 0,
             costUsd: "0",
             ...row,
+            // Chat rows, as the recorder writes them: a chat token counts one.
+            kind: "chat",
+            weightedTokens: row.inputTokens + (row.outputTokens ?? 0),
         });
         await db.insert(aiUsageDaily).values([
             meter({
@@ -192,12 +195,61 @@ describeDb("Usage tab", () => {
             }),
             // This month, for the allowance; outside the window.
             meter({ date: isoDay(new Date()), userId: alice, calls: 1, inputTokens: 7 }),
+            // A July week with every kind, read back by the kinds test.
+            meter({
+                date: "2026-07-03",
+                userId: alice,
+                calls: 1,
+                inputTokens: 1000,
+                outputTokens: 200,
+            }),
             meter({
                 companyId: elsewhere,
                 date: "2026-09-02",
                 userId: alice,
                 calls: 9,
                 inputTokens: 9,
+            }),
+        ]);
+
+        // Embeddings, searches and pages read, as the recorder writes them.
+        const other = (kind: string, row: Record<string, unknown>) => ({
+            companyId: workspace,
+            date: "2026-07-03",
+            userId: alice,
+            feature: "ask",
+            route: "",
+            owner: "deployment",
+            kind,
+            outputTokens: 0,
+            ...row,
+        });
+        await db.insert(aiUsageDaily).values([
+            other("embedding", {
+                feature: "ingestion",
+                modelId: "text-embedding-3-large",
+                calls: 2,
+                inputTokens: 1_000_000,
+                weightedTokens: 130_000,
+                pricedCalls: 2,
+                costUsd: "0.13",
+            }),
+            other("web_search", {
+                modelId: "exa",
+                calls: 2,
+                inputTokens: 0,
+                weightedTokens: 14_000,
+                pricedCalls: 2,
+                costUsd: "0.014",
+            }),
+            other("web_contents", {
+                feature: "prospects",
+                modelId: "exa",
+                calls: 3,
+                inputTokens: 0,
+                weightedTokens: 6_000,
+                pricedCalls: 3,
+                costUsd: "0.006",
             }),
         ]);
 
@@ -276,11 +328,14 @@ describeDb("Usage tab", () => {
 
         const docs = await db
             .insert(document)
-            .values([
-                { url: "u1", category: "General", title: "Plan", companyId: workspace },
-                { url: "u2", category: "General", title: "Notes", companyId: workspace },
-                { url: "u3", category: "General", title: "Other", companyId: elsewhere },
-            ])
+            .values(
+                // Added before the window: the documents list counts those that existed by its end.
+                [
+                    { url: "u1", category: "General", title: "Plan", companyId: workspace },
+                    { url: "u2", category: "General", title: "Notes", companyId: workspace },
+                    { url: "u3", category: "General", title: "Other", companyId: elsewhere },
+                ].map(row => ({ ...row, createdAt: at("2026-08-01T00:00:00Z") }))
+            )
             .returning({ id: document.id });
         doc1 = Number(docs[0]!.id);
         doc2 = Number(docs[1]!.id);
@@ -437,6 +492,33 @@ describeDb("Usage tab", () => {
         });
         expect(ask).toMatchObject({ total: 2, offset: 1, limit: 1 });
         expect(ask.rows.map(r => r.date)).toEqual(["2026-09-02"]);
+    });
+
+    it("reads every kind back in chat-token equivalents, with each kind's own units", async () => {
+        const july = parseUsageWindow(new URLSearchParams("from=2026-07-01&to=2026-07-07"));
+        if (!july.ok) throw new Error(july.error);
+        const summary = await usageSummary(ctx(), july.window, { person: null, group: null });
+        expect(summary.totals).toMatchObject({
+            aiTokens: 1_200 + 130_000 + 14_000 + 6_000,
+            aiSplit: { chat: 1_200, embedding: 130_000, search: 20_000 },
+            // One chat call, two embedding requests, two searches; pages read aren't requests.
+            aiCalls: 5,
+            chatCalls: 1,
+            inputTokens: 1000,
+            outputTokens: 200,
+            embeddedTokens: 1_000_000,
+            searches: 2,
+            pages: 3,
+        });
+        // The priced rows' own cost, plus the unpriced chat call's 1,200 at the workspace's $10 per 1M.
+        expect(summary.totals.costUsd).toBeCloseTo(0.13 + 0.014 + 0.006 + 0.012, 9);
+        expect(summary.byRoute.map(r => r.route)).toEqual(["default"]);
+        expect(summary.byFeature.map(f => [f.feature, f.aiTokens])).toEqual([
+            ["ingestion", 130_000],
+            ["ask", 15_200],
+            ["prospects", 6_000],
+        ]);
+        expect(summary.rates).toMatchObject({ embeddingPerMillion: 130_000, perSearch: 7_000 });
     });
 
     it("lists the documents in scope, most opened first", async () => {

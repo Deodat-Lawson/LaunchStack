@@ -20,6 +20,7 @@ import { resolveConfiguredChatModel } from "~/lib/models";
 import { db } from "~/server/db";
 
 import type { ScopeFileRow, SourcePassage } from "./chat-sources";
+import { originColumn, originLabel } from "./workspace-sources";
 
 /** A section of the document's current version. */
 function currentVersion() {
@@ -37,7 +38,12 @@ export async function loadScopeFiles(ids: readonly number[]): Promise<ScopeFileR
     if (ids.length === 0) return [];
     const [titles, sizes] = await Promise.all([
         db
-            .select({ id: document.id, title: document.title })
+            .select({
+                id: document.id,
+                title: document.title,
+                folder: document.category,
+                origin: originColumn(),
+            })
             .from(document)
             .where(inArray(document.id, [...ids])),
         db
@@ -65,6 +71,8 @@ export async function loadScopeFiles(ids: readonly number[]): Promise<ScopeFileR
     return titles.map(row => ({
         id: Number(row.id),
         title: row.title,
+        folder: row.folder ?? null,
+        from: originLabel(row.origin),
         passages: sizeOf.get(Number(row.id))?.passages ?? 0,
         tokens: sizeOf.get(Number(row.id))?.tokens ?? 0,
     }));

@@ -21,6 +21,7 @@ import {
     bindingLimit,
     useAiAllowance,
     useAllowanceFormat,
+    UsageSplitLine,
     type AiAllowance,
     type AllowanceTone,
 } from "./aiAllowance";
@@ -82,6 +83,7 @@ function AllowanceSummary({ allowance }: { allowance: AiAllowance }) {
                 <p className="text-ink-3 m-0 mt-1.5 text-[12.5px] leading-normal">
                     {t("noLimitBody", { used: format.tokens(allowance.used) })}
                 </p>
+                <UsageSplitLine split={allowance.split} className="mt-1.5 block" />
             </div>
         );
     }
@@ -140,6 +142,14 @@ function AllowanceSummary({ allowance }: { allowance: AiAllowance }) {
                 blocked={allowance.blocked}
                 label={t("progressLabel", { percent: format.percent(percent) })}
                 className="mt-3"
+            />
+            <UsageSplitLine
+                split={
+                    binding.source === "server" && allowance.server
+                        ? allowance.server.split
+                        : allowance.split
+                }
+                className="mt-2 block"
             />
             <div className="text-ink-2 mt-3 flex flex-col gap-1 text-[12.5px] leading-normal">
                 <span>{t("resets", { date: format.longDate(allowance.resetsAt) })}</span>

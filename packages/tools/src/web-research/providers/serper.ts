@@ -2,7 +2,7 @@
 
 import { getSerperApiKey } from "../config";
 import type { SearchProvider } from "../types";
-import { clip, requestJson, titleOf, withUrl } from "./http";
+import { clip, requestJson, searchBilling, titleOf, withUrl } from "./http";
 
 const SERPER_SEARCH_URL = "https://google.serper.dev/search";
 const SERPER_NEWS_URL = "https://google.serper.dev/news";
@@ -34,7 +34,8 @@ export const serper: SearchProvider = {
                     : { q: query, num: options.maxResults },
             },
             options,
-            "Serper"
+            "Serper",
+            searchBilling("serper")
         )) as { organic?: SerperItem[]; news?: SerperItem[] };
         const items = (news ? data.news : data.organic) ?? [];
         return withUrl(items.map(item => ({ ...item, url: item.link })))

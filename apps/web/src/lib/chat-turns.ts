@@ -96,7 +96,13 @@ export function conversationContext(
         send?: { passages?: ChatPassage[] };
     }[],
     imported?: string,
-    maxChars = 60_000
+    maxChars = 60_000,
+    /**
+     * Applied to each of the person's turns: the composer stores a source
+     * chip as a machine link, and the model should read its name instead
+     * (lib/source-mentions.ts `renderMentionsFor`).
+     */
+    renderUserText: (text: string) => string = text => text
 ): string | undefined {
     const context = [
         imported,
@@ -104,7 +110,8 @@ export function conversationContext(
             .filter(m => m.status !== "error")
             .map(m => {
                 const passages = m.role === "user" ? (m.send?.passages ?? []) : [];
-                const text = passages.length ? `${passagesAsText(passages)}\n\n${m.text}` : m.text;
+                const words = m.role === "user" ? renderUserText(m.text) : m.text;
+                const text = passages.length ? `${passagesAsText(passages)}\n\n${words}` : words;
                 return `${m.role === "user" ? "User" : "Assistant"}: ${text}`;
             }),
     ]

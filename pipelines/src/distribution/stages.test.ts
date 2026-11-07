@@ -7,7 +7,7 @@ import {
     stageRequirements,
     type StageTransitionError,
 } from "./stages";
-import { RELATIONSHIP_STAGES, type RelationshipStage } from "./types";
+import { LEGACY_STAGE_MAP, RELATIONSHIP_STAGES, type RelationshipStage } from "./types";
 
 const full = { ownerUserId: "u1", nextAction: "call", hasAgreement: true };
 const empty = { ownerUserId: null, nextAction: null, hasAgreement: false };
@@ -21,16 +21,29 @@ describe("stage transition table", () => {
         }
     });
 
-    it("allows the forward path with the fields filled in", () => {
-        const path = [
-            "candidate",
-            "researched",
-            "contacted",
-            "in_conversation",
+    it("stores the same words the screens show, Proposal included", () => {
+        expect([...RELATIONSHIP_STAGES]).toEqual([
+            "lead",
             "qualified",
+            "contacted",
+            "meeting",
+            "proposal",
             "negotiating",
-            "contracted",
-            "active",
+            "won",
+            "lost",
+            "nurture",
+        ]);
+    });
+
+    it("allows the forward path, through Proposal, with the fields filled in", () => {
+        const path = [
+            "lead",
+            "qualified",
+            "contacted",
+            "meeting",
+            "proposal",
+            "negotiating",
+            "won",
         ] as const;
         for (let i = 0; i < path.length - 1; i++) {
             expect(() =>
@@ -39,50 +52,80 @@ describe("stage transition table", () => {
         }
     });
 
-    it("forbids skipping and unknown moves", () => {
+    it("Lead → Qualified works (it was refused when Qualified was stored after Meeting)", () => {
         expect(() =>
-            assertTransition({ from: "candidate", to: "qualified", context: full })
-        ).toThrow(/Cannot move/);
-        expect(() => assertTransition({ from: "active", to: "candidate", context: full })).toThrow(
+            assertTransition({ from: "lead", to: "qualified", context: empty })
+        ).not.toThrow();
+    });
+
+    it("takes the two real shortcuts and no others", () => {
+        expect(() =>
+            assertTransition({ from: "lead", to: "contacted", context: full })
+        ).not.toThrow();
+        expect(() =>
+            assertTransition({ from: "proposal", to: "won", context: full })
+        ).not.toThrow();
+        expect(() => assertTransition({ from: "meeting", to: "won", context: full })).toThrow(
             /Cannot move/
         );
         expect(() =>
-            assertTransition({ from: "candidate", to: "candidate", context: full })
-        ).toThrow(/already/);
+            assertTransition({ from: "contacted", to: "proposal", context: full })
+        ).toThrow(/Cannot move/);
+        expect(() => assertTransition({ from: "won", to: "lead", context: full })).toThrow(
+            /Cannot move/
+        );
+        expect(() => assertTransition({ from: "lead", to: "lead", context: full })).toThrow(
+            /already/
+        );
     });
 
     it("enforces per-stage required fields", () => {
         expect(() =>
-            assertTransition({ from: "researched", to: "contacted", context: empty })
+            assertTransition({ from: "qualified", to: "contacted", context: empty })
         ).toThrow(/owner/);
         expect(() =>
             assertTransition({
                 from: "contacted",
-                to: "in_conversation",
+                to: "meeting",
                 context: { ...empty, ownerUserId: "u" },
             })
         ).toThrow(/next action/);
+        // Negotiating with nobody owning it is exactly what the gate exists to stop.
+        expect(() =>
+            assertTransition({
+                from: "proposal",
+                to: "negotiating",
+                context: { ...full, ownerUserId: null },
+            })
+        ).toThrow(/owner/);
         expect(() =>
             assertTransition({
                 from: "negotiating",
-                to: "contracted",
+                to: "won",
                 context: { ...full, hasAgreement: false },
             })
         ).toThrow(/agreement/);
-        expect(stageRequirements("declined", empty)).toEqual([]);
-        expect(stageRequirements("active", empty).map(e => e.code)).toEqual([
+        expect(stageRequirements("lost", empty)).toEqual([]);
+        expect(stageRequirements("qualified", empty)).toEqual([]);
+        expect(stageRequirements("proposal", empty).map(e => e.code)).toEqual([
+            "owner_required",
+            "next_action_required",
+        ]);
+        expect(stageRequirements("won", empty).map(e => e.code)).toEqual([
             "owner_required",
             "agreement_required",
         ]);
     });
 
-    it("side-exits are reachable from every live stage and come back", () => {
-        for (const from of ["candidate", "contacted", "qualified", "active"] as const) {
-            expect(() => assertTransition({ from, to: "dormant", context: empty })).not.toThrow();
+    it("side-exits are reachable from every open stage and come back", () => {
+        for (const from of ["lead", "contacted", "proposal", "negotiating"] as const) {
+            expect(() => assertTransition({ from, to: "nurture", context: empty })).not.toThrow();
+            expect(() => assertTransition({ from, to: "lost", context: empty })).not.toThrow();
         }
         expect(() =>
-            assertTransition({ from: "declined", to: "candidate", context: empty })
+            assertTransition({ from: "won", to: "nurture", context: empty })
         ).not.toThrow();
+        expect(() => assertTransition({ from: "lost", to: "lead", context: empty })).not.toThrow();
     });
 
     it("carries what a refusal was beside its English, for the app to word", () => {
@@ -94,25 +137,47 @@ describe("stage transition table", () => {
             }
             throw new Error("expected a refusal");
         };
-        expect(refusal("candidate", "qualified").details).toEqual({
-            from: "candidate",
-            to: "qualified",
-            allowed: ["researched", "contacted", "declined", "dormant"],
+        expect(refusal("lead", "meeting").details).toEqual({
+            from: "lead",
+            to: "meeting",
+            allowed: ["qualified", "contacted", "lost", "nurture"],
         });
-        const missing = refusal("negotiating", "contracted").details?.missing;
+        const missing = refusal("negotiating", "won").details?.missing;
         expect(missing?.map(m => [m.code, m.target])).toEqual([
-            ["owner_required", "contracted"],
-            ["agreement_required", "contracted"],
+            ["owner_required", "won"],
+            ["agreement_required", "won"],
         ]);
-        expect(refusal("candidate", "candidate").details).toEqual({
-            from: "candidate",
-            to: "candidate",
-        });
+        expect(refusal("lead", "lead").details).toEqual({ from: "lead", to: "lead" });
     });
 
     it("knows what counts as in-pipeline", () => {
-        expect(isInPipeline("candidate")).toBe(false);
+        expect(isInPipeline("lead")).toBe(false);
         expect(isInPipeline("contacted")).toBe(true);
-        expect(isInPipeline("declined")).toBe(false);
+        expect(isInPipeline("proposal")).toBe(true);
+        expect(isInPipeline("lost")).toBe(false);
+    });
+});
+
+describe("legacy vocabulary", () => {
+    it("maps every retired stage onto a stored one, the way the screens showed it", () => {
+        expect(Object.keys(LEGACY_STAGE_MAP).sort()).toEqual(
+            [
+                "active",
+                "candidate",
+                "contacted",
+                "contracted",
+                "declined",
+                "dormant",
+                "in_conversation",
+                "negotiating",
+                "qualified",
+                "researched",
+            ].sort()
+        );
+        for (const stage of Object.values(LEGACY_STAGE_MAP))
+            expect(RELATIONSHIP_STAGES).toContain(stage);
+        expect(LEGACY_STAGE_MAP.in_conversation).toBe("meeting");
+        expect(LEGACY_STAGE_MAP.contracted).toBe("won");
+        expect(LEGACY_STAGE_MAP.dormant).toBe("nurture");
     });
 });

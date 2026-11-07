@@ -197,10 +197,9 @@ export async function saveOfferedModels(input: {
     const companyId = toNumericId(input.companyId);
     const existing = await getWorkspaceEndpointRow(companyId);
     if (!existing?.models?.default?.id) return false;
-    const { offered: _previous, ...routes } = existing.models;
-    const models: WorkspaceModelSelection = input.offered.length
-        ? { ...routes, offered: input.offered }
-        : routes;
+    const models: WorkspaceModelSelection = { ...existing.models };
+    if (input.offered.length) models.offered = input.offered;
+    else delete models.offered;
     await db
         .update(workspaceModelEndpoints)
         .set({

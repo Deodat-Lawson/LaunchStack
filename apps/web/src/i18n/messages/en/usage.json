@@ -197,5 +197,76 @@
     "allowanceTitle": "Your AI limit this month",
     "longestStreak": "Longest streak",
     "inThisWindow": "In this window"
+  },
+  "models": {
+    "title": "Models",
+    "sub": "What people can pick in Ask, and what each model used · {range}",
+    "subSelf": "What you can pick in Ask's model menu",
+    "menu": {
+      "title": "In Ask's model menu",
+      "intro": "Standard and Fast are always there. Add models from your workspace's own API key and give each a name: everyone sees the name in the model menu under the question box, never the provider's model id.",
+      "introSelf": "Pick one in the model menu under the question box. Standard and Fast are always there; your workspace's admins can add more.",
+      "ownMain": "Your main model · {id}",
+      "ownFast": "Your fast model · {id}",
+      "sameAsMain": "Same as Standard · {id}",
+      "serverMain": "The server's main model",
+      "serverFast": "The server's fast model",
+      "always": "Always offered",
+      "connectFirst": "Connect your workspace's own API key to offer more models. Until then everyone picks Standard or Fast.",
+      "chooseMainFirst": "Your API key is connected but has no main model yet. Choose one on API keys, then offer more models here.",
+      "openKeys": "Open API keys",
+      "fromWorkspace": "Offered by your workspace",
+      "unavailable": "Unavailable",
+      "noneOfferedSelf": "Your workspace offers Standard and Fast only."
+    },
+    "caps": {
+      "vision": "Reads images",
+      "reasoning": "Reasons"
+    },
+    "editor": {
+      "none": "No other models yet. Add one from your key's list.",
+      "name": "Name people see",
+      "namePlaceholder": "e.g. Team writer",
+      "model": "Model id",
+      "modelPlaceholder": "Pick or type the id your provider lists",
+      "vision": "Reads images",
+      "reasoning": "Reasons",
+      "structured": "Follows a JSON schema",
+      "priceIn": "In $/1M",
+      "priceOut": "Out $/1M",
+      "remove": "Remove {name}",
+      "untitled": "Model {n}",
+      "add": "Add a model",
+      "full": "At most {max} models.",
+      "listing": "Loading the models your key can reach…",
+      "listFailed": "Couldn't list your key's models; type the id yourself.",
+      "listed": "{count, plural, =0 {Your key lists no models; type the id yourself.} one {# model on your key to pick from} other {# models on your key to pick from}}",
+      "discard": "Discard changes",
+      "save": "Save",
+      "saving": "Saving…",
+      "saved": "Saved. Everyone sees these in Ask's model menu.",
+      "saveFailed": "Couldn't save the models.",
+      "problems": {
+        "id": "Enter the model id exactly as your provider lists it.",
+        "name": "Give it a name people will see.",
+        "nameLong": "Keep the name to {max} characters.",
+        "sameName": "Another model already has this name.",
+        "price": "Give both prices, from 0 to {max} US dollars per 1M tokens, or leave both empty."
+      }
+    },
+    "usage": {
+      "title": "Usage by model",
+      "empty": "No chat use in this window.",
+      "model": "Model",
+      "calls": "Calls",
+      "input": "Input",
+      "output": "Output",
+      "usage": "Usage",
+      "cost": "Cost",
+      "serverDefault": "Server default",
+      "inAsk": "In Ask",
+      "retired": "No longer set up",
+      "partlyPriced": "{priced} of {calls} calls priced"
+    }
   }
 }

@@ -18,11 +18,13 @@ jest.mock("~/lib/require-workspace-context", () => ({
 
 // Records whose models the route read under; runs the work as-is.
 const mockScopes: unknown[] = [];
+const mockOffered = jest.fn();
 jest.mock("~/server/workspace-models/scope", () => ({
     withWorkspaceChatModels: (companyId: unknown, _feature: unknown, fn: () => unknown) => {
         mockScopes.push(companyId);
         return fn();
     },
+    loadWorkspaceOfferedModels: (...args: unknown[]) => mockOffered(...args),
 }));
 
 import { GET } from "~/app/api/config/ai-models/route";
@@ -62,6 +64,23 @@ describe("GET /api/config/ai-models", () => {
         mockPublicChatConfig.mockReset();
         mockWorkspaceContext.mockResolvedValue({ success: true, data: { companyId: 42n } });
         mockScopes.length = 0;
+        mockOffered.mockReset().mockResolvedValue([]);
+    });
+
+    it("lists the models the workspace offers in Ask, by name and ability only", async () => {
+        mockPublicChatConfig.mockReturnValue(SANITIZED);
+        const writer = {
+            key: "a1b2c3d4",
+            label: "Team writer",
+            available: true,
+            vision: { supported: false },
+            reasoning: { mode: "always", controllable: false },
+        };
+        mockOffered.mockResolvedValue([writer]);
+
+        const response = await GET(new Request("http://localhost/api/config/ai-models"));
+        expect(mockOffered).toHaveBeenCalledWith(42n);
+        expect(await response.json()).toEqual({ ...SANITIZED, models: [writer] });
     });
 
     it("reads the routes under the caller's workspace models", async () => {
@@ -85,7 +104,7 @@ describe("GET /api/config/ai-models", () => {
 
         const response = await GET(new Request("http://localhost/api/config/ai-models"));
         expect(response.status).toBe(200);
-        expect(await response.json()).toEqual(SANITIZED);
+        expect(await response.json()).toEqual({ ...SANITIZED, models: [] });
     });
 
     it("never exposes endpoints, credentials, or request patches", async () => {

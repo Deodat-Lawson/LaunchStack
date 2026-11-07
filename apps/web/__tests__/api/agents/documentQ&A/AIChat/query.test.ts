@@ -391,10 +391,18 @@ jest.mock("@launchstack/llm", () => ({
 // Whose models the answer ran under; the work itself runs as-is.
 let mockChatSource: "deployment" | "workspace" = "deployment";
 const mockScopes: unknown[] = [];
+/** Keys the mocked workspace offers in Ask; a turn naming one runs inside it. */
+const mockOfferedKeys = new Set<string>();
+const mockOfferedRuns: string[] = [];
 jest.mock("~/server/workspace-models/scope", () => ({
     withWorkspaceChatModels: (companyId: unknown, _feature: unknown, fn: () => unknown) => {
         mockScopes.push(companyId);
         return fn();
+    },
+    withOfferedChatModel: async (key: string, fn: () => unknown) => {
+        if (!mockOfferedKeys.has(key)) return { offered: false };
+        mockOfferedRuns.push(key);
+        return { offered: true, value: await fn() };
     },
 }));
 
@@ -1093,6 +1101,55 @@ describe("chat transport and general scope", () => {
         );
         const [messages] = mockInvoke.mock.calls[0] as [{ content: string }[]];
         expect(messages[0]?.content).toContain("PLAN MODE");
+    });
+
+    describe("a model the workspace offers in Ask", () => {
+        beforeEach(() => {
+            mockOfferedKeys.clear();
+            mockOfferedRuns.length = 0;
+        });
+
+        it("answers inside that model's scope, on the main route", async () => {
+            mockOfferedKeys.add("a1b2c3d4");
+            const response = await POST(
+                queryRequest({
+                    question: "hi",
+                    searchScope: "none",
+                    modelRoute: "default",
+                    modelKey: "a1b2c3d4",
+                })
+            );
+            expect(response.status).toBe(200);
+            expect(mockOfferedRuns).toEqual(["a1b2c3d4"]);
+            expect(mockScopes).toEqual([BigInt(5)]);
+            expect(resolveConfiguredChatModel).toHaveBeenCalledWith(
+                expect.objectContaining({ route: "default" })
+            );
+        });
+
+        it("refuses a key the workspace doesn't offer, before any model runs", async () => {
+            const response = await POST(
+                queryRequest({ question: "hi", searchScope: "none", modelKey: "gone1234" })
+            );
+            expect(response.status).toBe(400);
+            expect(await response.json()).toMatchObject({
+                success: false,
+                message:
+                    "That model isn't offered in this workspace any more. Pick another in the model menu.",
+            });
+            expect(resolveConfiguredChatModel).not.toHaveBeenCalled();
+            expect(mockInvoke).not.toHaveBeenCalled();
+        });
+
+        it("rejects a key that isn't a key at all", async () => {
+            for (const modelKey of ["Bad Key", "openai/gpt-5", "x".repeat(41)]) {
+                const response = await POST(
+                    queryRequest({ question: "hi", searchScope: "none", modelKey })
+                );
+                expect(response.status).toBe(400);
+            }
+            expect(mockOfferedRuns).toEqual([]);
+        });
     });
 
     it("keeps an explicit fast model when thinking is requested and requires reasoning on that model", async () => {

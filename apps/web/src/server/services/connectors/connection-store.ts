@@ -1,6 +1,6 @@
 /**
  * The connection row: encrypted token lifecycle for the generic providers
- * (Slack, GitHub). Tokens are AES-256-GCM ciphertext via secret-box; the
+ * (Slack, GitHub, LinkedIn, Notion). Tokens are AES-256-GCM ciphertext via secret-box; the
  * plaintext never leaves this module except as a live access token. Google
  * rows live in the same table but their token lifecycle belongs to
  * `~/server/services/google-drive/connections` — this module delegates to it
@@ -11,13 +11,14 @@
  * acceptable until a deployment actually enables rotation.
  */
 
-import { and, asc, eq } from "drizzle-orm";
+import { and, asc, eq, isNull, or } from "drizzle-orm";
 
 import { decryptSecret, encryptSecret } from "@launchstack/store/crypto";
 
 import { db } from "~/server/db";
 import {
     connectorConnections,
+    isPerUserProvider,
     type ConnectorConnection,
     type ConnectorProvider,
 } from "~/server/db/schema/connectors";
@@ -42,6 +43,25 @@ export async function listConnectionsForCompany(
                       eq(connectorConnections.provider, provider)
                   )
                 : eq(connectorConnections.companyId, companyId)
+        )
+        .orderBy(asc(connectorConnections.createdAt));
+}
+
+/** One member's connections to a per-user provider (Notion), oldest first. */
+export async function listConnectionsForOwner(
+    companyId: bigint,
+    provider: ConnectorProvider,
+    ownerUserId: bigint
+): Promise<ConnectorConnection[]> {
+    return db
+        .select()
+        .from(connectorConnections)
+        .where(
+            and(
+                eq(connectorConnections.companyId, companyId),
+                eq(connectorConnections.provider, provider),
+                eq(connectorConnections.ownerUserId, ownerUserId)
+            )
         )
         .orderBy(asc(connectorConnections.createdAt));
 }
@@ -83,18 +103,60 @@ export interface UpsertConnectionParams {
     readonly companyId: bigint;
     readonly provider: ConnectorProvider;
     readonly grantedByUserId: bigint | null;
+    /**
+     * The member a per-user connection (Notion) belongs to; null for a
+     * workspace connection. Required exactly when the provider is per-user.
+     */
+    readonly ownerUserId?: bigint | null;
     readonly grant: ProviderGrant;
 }
 
+/** Another member of this workspace already connected that provider account. */
+export class ConnectorAccountClaimedError extends Error {
+    constructor(readonly provider: ConnectorProvider) {
+        super(`That ${provider} account is already connected by another member of this workspace.`);
+        this.name = "ConnectorAccountClaimedError";
+    }
+}
+
 /**
- * Create the workspace's connection to this provider account, or replace its
- * grant on re-auth — the (company, provider, account) key makes re-connecting
- * the same account converge on its existing row.
+ * Create the connection to this provider account, or replace its grant on
+ * re-auth — the (company, provider, account) key makes re-connecting the same
+ * account converge on its existing row. A per-user connection is its owner's:
+ * re-connecting an account another member owns is refused rather than taking
+ * their row (and the folder its pages live in) over. The refusal is enforced
+ * in the write itself, so two members racing for one new grant cannot both
+ * win; a per-user row left with no owner (written by an older build) is
+ * adopted by whoever re-authorizes it.
  */
 export async function upsertConnection(
     params: UpsertConnectionParams
 ): Promise<ConnectorConnection> {
     getEngine(); // populates the secret-box slot
+
+    const ownerUserId = params.ownerUserId ?? null;
+    if (isPerUserProvider(params.provider) !== (ownerUserId != null)) {
+        throw new Error(
+            `A ${params.provider} connection ${ownerUserId == null ? "needs" : "takes no"} owner`
+        );
+    }
+    if (ownerUserId != null) {
+        const [claimed] = await db
+            .select({ ownerUserId: connectorConnections.ownerUserId })
+            .from(connectorConnections)
+            .where(
+                and(
+                    eq(connectorConnections.companyId, params.companyId),
+                    eq(connectorConnections.provider, params.provider),
+                    eq(connectorConnections.providerAccountId, params.grant.providerAccountId)
+                )
+            )
+            .limit(1);
+        // The friendly early answer; the write below is what guarantees it.
+        if (claimed?.ownerUserId != null && claimed.ownerUserId !== ownerUserId) {
+            throw new ConnectorAccountClaimedError(params.provider);
+        }
+    }
 
     const access = encryptSecret(params.grant.accessToken);
     const refresh = params.grant.refreshToken ? encryptSecret(params.grant.refreshToken) : null;
@@ -103,6 +165,7 @@ export async function upsertConnection(
         companyId: params.companyId,
         provider: params.provider,
         grantedByUserId: params.grantedByUserId,
+        ownerUserId,
         providerAccountId: params.grant.providerAccountId,
         providerAccountEmail: params.grant.displayName,
         scopes: params.grant.scopes,
@@ -124,9 +187,22 @@ export async function upsertConnection(
                 connectorConnections.providerAccountId,
             ],
             set: { ...values, updatedAt: new Date() },
+            // A per-user row is only ever rewritten for its own owner.
+            ...(ownerUserId != null
+                ? {
+                      setWhere: or(
+                          isNull(connectorConnections.ownerUserId),
+                          eq(connectorConnections.ownerUserId, ownerUserId)
+                      ),
+                  }
+                : {}),
         })
         .returning();
-    if (!row) throw new Error("Failed to upsert connection");
+    if (!row) {
+        // ON CONFLICT … WHERE false returns nothing: someone else owns it.
+        if (ownerUserId != null) throw new ConnectorAccountClaimedError(params.provider);
+        throw new Error("Failed to upsert connection");
+    }
     return row;
 }
 
@@ -155,18 +231,19 @@ export async function deleteConnection(
     const connection = await getConnectionById(connectionId);
     if (!connection) return null;
     await db.delete(connectorConnections).where(eq(connectorConnections.id, connectionId));
-    const tryDecrypt = (ciphertext: string | null): string | null => {
-        if (!ciphertext) return null;
-        try {
-            return decryptSecret(ciphertext);
-        } catch {
-            return null;
-        }
-    };
     return {
         accessToken: tryDecrypt(connection.accessTokenCiphertext),
         refreshToken: tryDecrypt(connection.refreshTokenCiphertext),
     };
+}
+
+function tryDecrypt(ciphertext: string | null): string | null {
+    if (!ciphertext) return null;
+    try {
+        return decryptSecret(ciphertext);
+    } catch {
+        return null; // key-rotation casualty; the row is gone either way
+    }
 }
 
 /**
@@ -269,9 +346,10 @@ export async function getCompanyAccessToken(
     companyId: bigint,
     provider: ConnectorProvider
 ): Promise<string | null> {
-    // A Gmail connection is one member's mailbox, never the workspace's
-    // credential — nothing company-scoped may borrow it.
-    if (provider === "gmail") return null;
+    // A per-user connection (a Gmail mailbox, someone's Notion) is one
+    // member's, never the workspace's credential — nothing company-scoped
+    // may borrow it.
+    if (isPerUserProvider(provider)) return null;
     const connection = await getActiveConnection(companyId, provider);
     if (!connection) return null;
     try {

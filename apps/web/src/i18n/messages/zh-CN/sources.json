@@ -480,7 +480,6 @@
     "disconnected": "已断开“{name}”。已同步的页面已保留。",
     "disconnectFailed": "无法断开“{name}”",
     "revoked": "访问权限已被撤销，重新连接即可继续同步",
-    "connectedBy": "由 {name} 连接",
     "reconnect": "重新连接",
     "syncNow": "立即同步",
     "choosePages": "选择页面",
@@ -488,10 +487,13 @@
     "connectTitle": "连接 Notion",
     "oneClick": "一键 OAuth 授权，可随时撤销。",
     "checking": "正在检查 Notion…",
-    "forbidden": "只有工作区管理员可以连接 Notion。请让管理员连接，他们选择的页面会出现在来源中。",
+    "forbidden": "连接 Notion 需要向此工作区添加文件的权限。请向工作区管理员申请。",
     "loadError": "无法加载 Notion 连接，请稍后再试。",
     "notConfigured": "此服务器尚未配置 Notion。LaunchStack 的运维人员需要添加 NOTION_OAUTH_CLIENT_ID 和 NOTION_OAUTH_CLIENT_SECRET，具体步骤见 .env.example。",
-    "connectAnother": "连接另一个 Notion 工作区"
+    "connectAnother": "连接另一个 Notion 工作区",
+    "paused": {
+      "noUpload": "已暂停：你已无法在此工作区添加文件。请向管理员申请上传权限。"
+    }
   },
   "obsidianImport": {
     "noNotes": "所选内容中没有找到 Markdown 笔记。请选择仓库本身的文件夹。",

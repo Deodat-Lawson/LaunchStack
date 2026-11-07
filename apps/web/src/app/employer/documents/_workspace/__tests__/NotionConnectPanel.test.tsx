@@ -15,7 +15,8 @@ import { ADD_TABS } from "../types";
  * The Notion panel: one consent on Notion's screen connects a workspace, its
  * picked pages sync into Sources, and every connected workspace gets Sync
  * now, Choose pages (the same consent again) and Disconnect, plus Sync again
- * for a page deleted here.
+ * for a page deleted here. Connections are per-user, so the panel only ever
+ * lists the caller's own.
  */
 
 jest.mock("sonner", () => ({ toast: { success: jest.fn(), error: jest.fn() } }));
@@ -40,7 +41,6 @@ function connection(overrides: Record<string, unknown> = {}) {
         workspaceName: "Acme HQ",
         status: "active",
         statusDetail: null,
-        connectedBy: "Ada Admin",
         folderPath: "Notion/Acme HQ",
         lastSyncAt: "2026-10-22T12:00:00.000Z",
         lastSyncStatus: "ok",
@@ -88,12 +88,13 @@ describe("NotionConnectPanel", () => {
         expect(screen.queryByRole("link", { name: /connect notion/i })).not.toBeInTheDocument();
     });
 
-    it("tells a member that connecting is for admins", async () => {
+    it("tells someone who cannot add files that connecting needs that permission", async () => {
         statusCode = 403;
         statusBody = null;
         render(<NotionConnectPanel tab={notionTab} />);
 
-        expect(await screen.findByText(/for workspace admins/i)).toBeInTheDocument();
+        expect(await screen.findByText(/needs permission to add files/i)).toBeInTheDocument();
+        expect(screen.queryByRole("link", { name: /connect notion/i })).not.toBeInTheDocument();
     });
 
     it("shows a connected workspace with its folder and last sync", async () => {
@@ -103,6 +104,8 @@ describe("NotionConnectPanel", () => {
         expect(await screen.findByText("Acme HQ")).toBeInTheDocument();
         expect(screen.getByText("Notion/Acme HQ")).toBeInTheDocument();
         expect(screen.getByText("12 pages · 3 updated")).toBeInTheDocument();
+        // The connection is the caller's own; there is no one else to credit.
+        expect(screen.queryByText(/connected by/i)).not.toBeInTheDocument();
         expect(screen.getByRole("link", { name: /choose pages/i })).toHaveAttribute(
             "href",
             NOTION_CONNECT_URL
@@ -140,6 +143,38 @@ describe("NotionConnectPanel", () => {
             })
         );
         expect(await screen.findByRole("link", { name: /connect notion/i })).toBeInTheDocument();
+    });
+
+    it("leaves someone without upload access only Disconnect on their own cards", async () => {
+        statusBody = { configured: true, canConnect: false, connections: [connection()] };
+        render(<NotionConnectPanel tab={notionTab} />);
+
+        expect(await screen.findByText("Acme HQ")).toBeInTheDocument();
+        expect(screen.getByText(/needs permission to add files/i)).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: /^disconnect$/i })).toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: /sync now/i })).not.toBeInTheDocument();
+        expect(screen.queryByRole("link", { name: /choose pages/i })).not.toBeInTheDocument();
+        expect(screen.queryByRole("link", { name: /connect/i })).not.toBeInTheDocument();
+    });
+
+    it("words a paused sync from the catalogue, not the stored English", async () => {
+        statusBody = {
+            configured: true,
+            canConnect: false,
+            connections: [
+                connection({
+                    lastSyncStatus: "error",
+                    lastSyncError: "stored text the card should not show",
+                    paused: "noUpload",
+                }),
+            ],
+        };
+        render(<NotionConnectPanel tab={notionTab} />);
+
+        expect(
+            await screen.findByText(/^Paused: you can no longer add files in this workspace/)
+        ).toBeInTheDocument();
+        expect(screen.queryByText("stored text the card should not show")).not.toBeInTheDocument();
     });
 
     it("offers reconnect for a revoked connection", async () => {

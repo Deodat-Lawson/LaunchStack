@@ -43,6 +43,8 @@ export interface GetAskStartersArgs {
     companyId: bigint;
     /** The caller's readable documents; starters never mention what they cannot open. */
     scope?: DocumentScope;
+    /** The caller; someone else's Gmail or Notion is never theirs to ask about. */
+    viewerUserPk?: bigint;
     /** Bypass the cached set and ask for a different one. */
     refresh?: boolean;
     /** The reader's interface language; the questions are written in it. */
@@ -52,7 +54,7 @@ export interface GetAskStartersArgs {
 export async function getAskStarters(args: GetAskStartersArgs): Promise<AskStartersPayload> {
     const scope = args.scope ?? SCOPE_EVERYTHING;
     const locale = args.locale ?? DEFAULT_LOCALE;
-    const brief = await buildWorkspaceBrief(args.companyId, scope);
+    const brief = await buildWorkspaceBrief(args.companyId, scope, args.viewerUserPk ?? null);
     const key = `${args.companyId}:${scopeFingerprint(scope)}:${brief.fingerprint}:${locale}`;
 
     const cached = cache.get(key);

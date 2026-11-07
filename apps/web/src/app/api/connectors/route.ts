@@ -4,9 +4,9 @@
  * GET — which providers this deployment has OAuth clients for, and the
  * workspace's connections (redacted: names and status only, tokens never
  * leave the server). Any verified member may look; connecting and
- * disconnecting stay management-gated. Gmail rows are personal: a member
- * sees their own and nobody else's, so one colleague's address never shows
- * up in another's settings.
+ * disconnecting a workspace connection stay management-gated. Gmail and
+ * Notion rows are personal: a member sees their own and nobody else's, so
+ * one colleague's mailbox or Notion never shows up in another's settings.
  */
 
 import { inArray } from "drizzle-orm";
@@ -61,7 +61,7 @@ export async function GET(request: Request) {
                         row.grantedByUserId != null
                             ? (grantorById.get(Number(row.grantedByUserId))?.name ?? null)
                             : null,
-                    /** True for a per-user connection (Gmail): it is the caller's own. */
+                    /** True for a per-user connection (Gmail, Notion): it is the caller's own. */
                     personal: row.ownerUserId != null,
                     createdAt: row.createdAt.toISOString(),
                 })),

@@ -1,6 +1,6 @@
 # Notion connector
 
-**Status:** Implemented
+**Status:** Implemented; connections made per-user on 2026-11-07
 **Date:** 2026-10-23
 
 ## The decision
@@ -23,27 +23,45 @@ The trade: an operator registers one public connection in Notion's developer
 portal (see the [runbook](../runbooks/azure-lean-deploy.md#connecting-notion)),
 which Notion reviews before anyone can authorize it.
 
-The connection belongs to the **workspace**, as Drive's does: holders of
-`connectors.manage` connect it, and what it syncs is company knowledge. Each
-connection lands in a `Notion/<workspace>` folder of its own (a second
-workspace with the same name gets `(2)`), restricted to whoever connected it
-with a manage grant, so they decide who else sees it: the Gmail model,
-through `connectors/private-folder.ts`, shared with the Obsidian import. An
-admin who re-authorizes an existing connection is the same Notion account,
-so the folder is kept and they are granted access to it.
+The connection belongs to the **member** who made it, as Gmail's does
+(`ownerUserId` on the row; `PER_USER_CONNECTOR_PROVIDERS`). Anyone with
+`documents.upload` may connect — connecting fills their own folder, which is
+what uploading does — and only they see the connection in the Notion panel,
+Settings › Integrations, Ask's account of connected apps, or the Ask
+starters' list of connected systems. A member may
+connect several Notion workspaces. Each connection lands in a
+`Notion/<workspace>` folder of its own (a second folder with the same name
+gets `(2)`), restricted to its owner with a manage grant, so they decide who
+else sees it, through `connectors/private-folder.ts`, shared with the
+Obsidian import. The grant is keyed on `bot_id`, which belongs to one Notion
+user, so a member re-authorizing converges on their own row; a member whose
+Notion login another member already connected is refused (`claimed`) rather
+than taking that row and its folder over — enforced in the upsert itself,
+so two members racing for one grant cannot both win. The owner disconnects
+their own connection whatever their role (someone who lost upload access
+still sees their cards, with Disconnect only), and `connectors.manage` can
+still remove anyone's through `/api/connectors/connections/:id`; both are
+audited as `connector.disconnected`. When a member leaves or is removed,
+`closePersonalConnections` (connectors/personal-connections.ts, shared with
+Gmail) deletes their Notion and Gmail connections in the same transaction and
+the grants are revoked once it commits; their Notion folders pass on with the
+rest of their sole-managed items (ADR-014), while Gmail mailboxes are deleted.
+The sync checks the same `personalSyncStanding` Gmail does: it pauses — with a
+reason on the card — when its owner is suspended or can no longer add files,
+and closes the connection itself if its owner has already gone.
 
 ## Shape
 
 ```
-admin ──connect──▶ /api/connectors/notion/oauth/start        (generic provider layer)
+member ─connect──▶ /api/connectors/notion/oauth/start        (generic provider layer)
                         │  owner=user · Notion's page picker
                         ▼
-                  [provider]/oauth/callback  upsert row (bot_id) · queue first sync
+                  [provider]/oauth/callback  upsert row (bot_id, owner) · queue first sync
                         │
  NotionConnectPanel ──▶ /api/connectors/notion/status          workspaces · folder · last run
                         /api/connectors/notion/sync?connectionId=   "Sync now" → Inngest event
                         /api/connectors/notion/oauth/start     "Choose pages" (same consent, again)
-                        /api/connectors/connections/:id        disconnect + revoke
+                        /api/connectors/connections/:id        disconnect + revoke (owner or admin)
                                     │
                     worker: notionSyncJob (per connection, serialized)
                             notionSyncCron (every 15 min, fan-out)
@@ -108,8 +126,12 @@ followed rather than recreated.
   nothing in Sources, and no citations.
 - **A recursive block walk.** The Markdown endpoint returns the same content
   in one call per page instead of one call per block level.
-- **Per-member connections, like Gmail.** Notion workspaces hold team
-  knowledge, and the consent screen already limits reach to what the person
-  picks.
+- **Workspace connections, like Drive** (the first version, until
+  2026-11-07). An admin connected Notion for everyone, but the pages already
+  landed in a folder private to that admin, so the connection was shared
+  while its content was not, and members had to ask an admin to bring in
+  their own pages. Per-user makes both the member's: they connect, they own
+  the folder, they share it. The cost is that two members connecting the
+  same Notion workspace each hold a copy of the pages they picked.
 - **A picked-items table, like Drive's.** Notion's search is the picked set,
   and keeping a copy would only drift from it.

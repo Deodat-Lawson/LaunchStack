@@ -5,8 +5,9 @@
  * to a personal Gmail connection, and the mail it brought in, when its owner
  * is removed, leaves, is suspended, or was removed before this rule existed.
  *
- * Cast, all in Acme: Oli is the Owner, Ben an Admin. Ada, Cai, Dee and Fay
- * are Members with Gmail connected; Eve is a Viewer with Gmail connected.
+ * Cast, all in Acme: Oli is the Owner, Ben an Admin. Ada, Cai, Dee, Fay,
+ * Ivy, Jo and Kim are Members with Gmail connected; Eve is a Viewer with
+ * Gmail connected.
  *
  * The bug this pins down: removing Ada used to leave her Gmail connection
  * syncing, and handed her `Gmail/<address>` folder to Ben, the Admin who
@@ -36,6 +37,20 @@ const mockRevokeGoogleToken = jest.fn(async (_token: string) => true);
 jest.mock("~/server/services/connectors/gmail/connections", () => ({
     ...jest.requireActual("~/server/services/connectors/gmail/connections"),
     revokeGoogleToken: (token: string) => mockRevokeGoogleToken(token),
+    getGmailAccessToken: async () => "access-token",
+}));
+
+// Stands in for the mailbox walk, so a test can act while a run is in flight.
+// The real sink writes through the engine's own connection, which the stub
+// walk never uses, so it is stubbed too.
+const mockSyncGmail = jest.fn();
+jest.mock("@launchstack/pipelines/connectors/gmail", () => ({
+    ...jest.requireActual("@launchstack/pipelines/connectors/gmail"),
+    syncGmail: (...args: unknown[]) => mockSyncGmail(...args),
+}));
+jest.mock("~/server/services/connectors/gmail/sink", () => ({
+    ...jest.requireActual("~/server/services/connectors/gmail/sink"),
+    createGmailSink: async () => ({}),
 }));
 
 const describeDb =
@@ -43,7 +58,7 @@ const describeDb =
         ? describe
         : describe.skip;
 
-type Person = "oli" | "ben" | "ada" | "cai" | "dee" | "eve" | "fay";
+type Person = "oli" | "ben" | "ada" | "cai" | "dee" | "eve" | "fay" | "ivy" | "jo" | "kim";
 const ROLES: Record<Person, string> = {
     oli: "owner",
     ben: "admin",
@@ -52,6 +67,9 @@ const ROLES: Record<Person, string> = {
     dee: "member",
     eve: "viewer",
     fay: "member",
+    ivy: "member",
+    jo: "member",
+    kim: "member",
 };
 
 describeDb("departing members' own connections (integration)", () => {
@@ -82,7 +100,7 @@ describeDb("departing members' own connections (integration)", () => {
     }
 
     /** A Gmail connection, sync state, scope and private folder, as connecting makes them. */
-    async function connectGmail(who: Person): Promise<number> {
+    async function connectGmail(who: Person, account = email(who)): Promise<number> {
         const { connectorConnections, gmailSyncScope, gmailSyncState } = await schema();
         const { ciphertext, keyVersion } = encryptSecret(`refresh-${who}`);
         const [row] = await test.db
@@ -90,8 +108,8 @@ describeDb("departing members' own connections (integration)", () => {
             .values({
                 companyId,
                 provider: "gmail",
-                providerAccountId: `google-${who}`,
-                providerAccountEmail: email(who),
+                providerAccountId: `google-${account}`,
+                providerAccountEmail: account,
                 grantedByUserId: pk[who],
                 ownerUserId: pk[who],
                 refreshTokenCiphertext: ciphertext,
@@ -111,7 +129,7 @@ describeDb("departing members' own connections (integration)", () => {
             companyId,
             ownerUserPk: pk[who],
             ownerAuthUserId: `auth_${who}`,
-            accountEmail: email(who),
+            accountEmail: account,
         });
         return row!.id;
     }
@@ -205,8 +223,13 @@ describeDb("departing members' own connections (integration)", () => {
         return (await listVisibleFolders(companyId, await ctx.documentScope())).map(f => f.path);
     }
 
-    beforeAll(async () => {
+    /** The engine registers the environment's key when it starts; tests use their own. */
+    function useTestSecretsKey() {
         configureSecretBox({ key: Buffer.alloc(32, 7).toString("base64") });
+    }
+
+    beforeAll(async () => {
+        useTestSecretsKey();
         test = await createFounderWeeklyReviewTestDatabase();
         mockActiveDb = test.db;
         const { users, userCompanyMemberships } = await schema();
@@ -231,7 +254,11 @@ describeDb("departing members' own connections (integration)", () => {
         }
     });
 
-    beforeEach(() => mockRevokeGoogleToken.mockClear());
+    beforeEach(() => {
+        useTestSecretsKey();
+        mockRevokeGoogleToken.mockClear();
+        mockSyncGmail.mockReset();
+    });
 
     afterAll(async () => {
         mockActiveDb = null;
@@ -445,5 +472,73 @@ describeDb("departing members' own connections (integration)", () => {
         expect(await existingDocuments([gusMail])).toEqual([gusMail]);
         expect(await folderExists(hal)).toBe(false);
         expect(await existingDocuments([halMail])).toEqual([]);
+    });
+    it("keeps a mailbox someone else has since connected, though the departing member made it", async () => {
+        const { deleteGmailConnection } = await import(
+            "~/server/services/connectors/gmail/connections"
+        );
+        const shared = "Gmail/support@acme.test";
+        // Jo connected the support inbox and disconnected it again: the folder
+        // and her own grant on it stay, as a disconnect leaves them.
+        await deleteGmailConnection(await connectGmail("jo", "support@acme.test"));
+        useTestSecretsKey();
+        // Kim then connected the same account, into the same folder.
+        const kimConnection = await connectGmail("kim", "support@acme.test");
+        const kimsMail = await addDocument("Refund request", shared, kimConnection);
+
+        const { removeMember } = await import("~/server/workspace/members");
+        await removeMember(await ctxFor("oli"), pk.jo);
+
+        expect(await connectionsOf("kim")).toHaveLength(1);
+        expect(await folderExists(shared)).toBe(true);
+        expect(await existingDocuments([kimsMail])).toEqual([kimsMail]);
+        expect(await visibleFolderPaths("kim")).toContain(shared);
+        expect(await mailboxGrantsOf("jo")).toEqual([]);
+        expect(await mailboxGrantsOf("oli")).toEqual([]);
+    });
+
+    it("sweeps what a sync already running writes after its owner is removed", async () => {
+        const connectionId = await connectGmail("ivy");
+        const { ensurePrivateGmailFolder } = await import(
+            "~/server/services/connectors/gmail/folder"
+        );
+        let lateMail = 0;
+        mockSyncGmail.mockImplementationOnce(async () => {
+            // Ivy is removed while this run is reading her mailbox...
+            const { removeMember } = await import("~/server/workspace/members");
+            await removeMember(await ctxFor("oli"), pk.ivy);
+            // ...and the run carries on: it makes the folder again and stores a thread.
+            await ensurePrivateGmailFolder({
+                companyId,
+                ownerUserPk: pk.ivy,
+                ownerAuthUserId: "auth_ivy",
+                accountEmail: email("ivy"),
+            });
+            lateMail = await addDocument("Late thread", mailbox("ivy"), connectionId);
+            return {
+                dirty: true,
+                discovered: 1,
+                stored: [],
+                skipped: [],
+                failed: [],
+                missingSourceIds: [],
+                notFound: [],
+                nextHistoryId: "2",
+                historyExpired: false,
+                truncated: false,
+                changedThreads: 1,
+                accountEmail: email("ivy"),
+                durationMs: 1,
+            };
+        });
+
+        const { runGmailSync } = await import("~/server/services/connectors/gmail/sync-service");
+        await runGmailSync(connectionId);
+
+        expect(mockSyncGmail).toHaveBeenCalledTimes(1);
+        expect(lateMail).toBeGreaterThan(0);
+        expect(await connectionsOf("ivy")).toEqual([]);
+        expect(await existingDocuments([lateMail])).toEqual([]);
+        expect(await folderExists(mailbox("ivy"))).toBe(false);
     });
 });

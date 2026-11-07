@@ -15,11 +15,19 @@
  * - **Suspended, or moved to a role that can't add files.** The sync pauses
  *   (`personalSyncStanding`) and picks up again if they are reinstated.
  *
+ * Two things keep the cleanup to what is theirs, and complete:
+ *
+ * - Disconnecting keeps a mailbox's folder, so someone else may since have
+ *   connected the same Google account into it. A mailbox another connection
+ *   syncs into belongs to that connection and stays.
+ * - A sync already running when its owner goes can write after the cleanup.
+ *   It sweeps its mailbox when it ends (`sweepMailboxOfClosedConnection`).
+ *
  * A sync that finds its owner already gone, removed before this rule
  * existed, applies the departure rule itself (`closePersonalConnectionsNow`).
  */
 
-import { and, eq, inArray, like } from "drizzle-orm";
+import { and, eq, inArray, like, sql } from "drizzle-orm";
 
 import { decryptSecret } from "@launchstack/store/crypto";
 import { category, document } from "@launchstack/store/schema";
@@ -94,10 +102,107 @@ async function ownedMailboxPaths(
 }
 
 /**
+ * Mailbox folders a Gmail connection still syncs into, leaving out
+ * `exceptOwner`'s own. Disconnecting keeps a mailbox's folder and grants, so
+ * someone else may since have connected the same Google account into it;
+ * that mailbox is theirs now, whatever older grants still say.
+ */
+async function mailboxesStillConnected(
+    tx: Tx,
+    companyId: bigint,
+    exceptOwner: bigint | null
+): Promise<Set<string>> {
+    const rows = await tx
+        .select({
+            ownerUserId: connectorConnections.ownerUserId,
+            accountEmail: connectorConnections.providerAccountEmail,
+            ownerEmail: users.email,
+        })
+        .from(connectorConnections)
+        .leftJoin(users, sql`${users.id} = ${connectorConnections.ownerUserId}`)
+        .where(
+            and(
+                eq(connectorConnections.companyId, companyId),
+                eq(connectorConnections.provider, GMAIL_PROVIDER)
+            )
+        );
+    const paths = new Set<string>();
+    for (const row of rows) {
+        if (exceptOwner !== null && row.ownerUserId === exceptOwner) continue;
+        const email = row.accountEmail ?? row.ownerEmail;
+        if (email) paths.add(gmailFolderFor(email));
+    }
+    return paths;
+}
+
+/** Deletes the mail in `mailboxes` (and beneath them), then the folders themselves. */
+async function deleteMailboxes(
+    tx: Tx,
+    companyId: bigint,
+    mailboxes: readonly string[]
+): Promise<{ documents: number; folders: number }> {
+    if (mailboxes.length === 0) return { documents: 0, folders: 0 };
+    const inMailbox = (path: string | null) =>
+        mailboxes.some(mailbox => isFolderOrDescendant(normalizeFolderPath(path), mailbox));
+
+    let documents = 0;
+    const mail = await tx
+        .select({ id: document.id, category: document.category })
+        .from(document)
+        .where(
+            and(
+                eq(document.companyId, companyId),
+                like(document.category, descendantPattern(GMAIL_ROOT_FOLDER))
+            )
+        );
+    for (const doc of mail) {
+        if (!inMailbox(doc.category)) continue;
+        await deleteDocumentCore(tx, Number(doc.id));
+        documents++;
+    }
+
+    // A draft filed in a mailbox goes back to its maker's Unfiled.
+    const drafts = await tx
+        .select({ id: mindmaps.id, folder: mindmaps.folder })
+        .from(mindmaps)
+        .where(
+            and(
+                eq(mindmaps.companyId, companyId),
+                like(mindmaps.folder, descendantPattern(GMAIL_ROOT_FOLDER))
+            )
+        );
+    const strayDrafts = drafts.filter(draft => inMailbox(draft.folder)).map(d => d.id);
+    if (strayDrafts.length > 0) {
+        await tx
+            .update(mindmaps)
+            .set({ folder: UNFILED_FOLDER })
+            .where(inArray(mindmaps.id, strayDrafts));
+    }
+
+    // Folder settings and grants cascade with the category rows.
+    const folderRows = await tx
+        .select({ id: category.id, name: category.name })
+        .from(category)
+        .where(
+            and(
+                eq(category.companyId, companyId),
+                like(category.name, descendantPattern(GMAIL_ROOT_FOLDER))
+            )
+        );
+    const doomed = folderRows.filter(row => inMailbox(row.name)).map(row => row.id);
+    if (doomed.length > 0) await tx.delete(category).where(inArray(category.id, doomed));
+    return { documents, folders: doomed.length };
+}
+
+/**
  * Ends every personal connection `userPk` holds in `companyId`, inside the
  * caller's transaction: the rows, the mail still in their mailbox folders,
  * and those folders. Revoking the grants at Google is network work, so the
  * tokens come back for `revokeGoogleGrants` to send after the commit.
+ *
+ * The rows are locked first, so a sync finishing at the same moment waits
+ * for this to commit before it checks what it left behind
+ * (`sweepMailboxOfClosedConnection`).
  */
 export async function closePersonalConnections(
     tx: Tx,
@@ -117,7 +222,8 @@ export async function closePersonalConnections(
                 eq(connectorConnections.companyId, companyId),
                 eq(connectorConnections.ownerUserId, userPk)
             )
-        );
+        )
+        .for("update");
 
     const googleTokensToRevoke: string[] = [];
     for (const row of connections) {
@@ -135,64 +241,19 @@ export async function closePersonalConnections(
         .filter(row => row.provider === GMAIL_PROVIDER)
         .map(row => row.providerAccountEmail ?? user?.email ?? null)
         .filter((email): email is string => Boolean(email));
-    const mailboxes = await ownedMailboxPaths(
+    const owned = await ownedMailboxPaths(
         tx,
         companyId,
         userPk,
         user?.authUserId ?? null,
         accountEmails
     );
-    const inMailbox = (path: string | null) =>
-        mailboxes.some(mailbox => isFolderOrDescendant(normalizeFolderPath(path), mailbox));
-
-    let documents = 0;
-    let folders = 0;
-    if (mailboxes.length > 0) {
-        const underRoot = like(document.category, descendantPattern(GMAIL_ROOT_FOLDER));
-        const mail = await tx
-            .select({ id: document.id, category: document.category })
-            .from(document)
-            .where(and(eq(document.companyId, companyId), underRoot));
-        for (const doc of mail) {
-            if (!inMailbox(doc.category)) continue;
-            await deleteDocumentCore(tx, Number(doc.id));
-            documents++;
-        }
-
-        // A draft filed in a mailbox goes back to its maker's Unfiled.
-        const drafts = await tx
-            .select({ id: mindmaps.id, folder: mindmaps.folder })
-            .from(mindmaps)
-            .where(
-                and(
-                    eq(mindmaps.companyId, companyId),
-                    like(mindmaps.folder, descendantPattern(GMAIL_ROOT_FOLDER))
-                )
-            );
-        const strayDrafts = drafts.filter(draft => inMailbox(draft.folder)).map(d => d.id);
-        if (strayDrafts.length > 0) {
-            await tx
-                .update(mindmaps)
-                .set({ folder: UNFILED_FOLDER })
-                .where(inArray(mindmaps.id, strayDrafts));
-        }
-
-        // Folder settings and grants cascade with the category rows.
-        const folderRows = await tx
-            .select({ id: category.id, name: category.name })
-            .from(category)
-            .where(
-                and(
-                    eq(category.companyId, companyId),
-                    like(category.name, descendantPattern(GMAIL_ROOT_FOLDER))
-                )
-            );
-        const doomed = folderRows.filter(row => inMailbox(row.name)).map(row => row.id);
-        if (doomed.length > 0) {
-            await tx.delete(category).where(inArray(category.id, doomed));
-            folders = doomed.length;
-        }
-    }
+    const others = await mailboxesStillConnected(tx, companyId, userPk);
+    const { documents, folders } = await deleteMailboxes(
+        tx,
+        companyId,
+        owned.filter(path => !others.has(path))
+    );
 
     if (connections.length > 0) {
         await tx.delete(connectorConnections).where(
@@ -219,6 +280,36 @@ export async function closePersonalConnectionsNow(
     const closed = await db.transaction(tx => closePersonalConnections(tx, companyId, userPk));
     await revokeGoogleGrants(closed.googleTokensToRevoke);
     return closed;
+}
+
+/**
+ * A sync already running when its connection was closed can still write
+ * after the cleanup: it may make the folder again and store mail in it. The
+ * sync calls this when it ends, however it ends. If its connection is gone,
+ * the mailbox it wrote into goes too, unless another connection now syncs
+ * into it. Null when there was nothing to sweep.
+ *
+ * The connection is read with a row lock, so a removal still in progress is
+ * waited for, not raced: this sees either the live row or everything the
+ * removal left.
+ */
+export async function sweepMailboxOfClosedConnection(
+    companyId: bigint,
+    connectionId: number,
+    mailbox: string
+): Promise<{ documents: number; folders: number } | null> {
+    return db.transaction(async tx => {
+        const [live] = await tx
+            .select({ id: connectorConnections.id })
+            .from(connectorConnections)
+            .where(eq(connectorConnections.id, connectionId))
+            .for("update");
+        if (live) return null;
+        const path = normalizeFolderPath(mailbox);
+        if (!isPersonalMailboxPath(path)) return null;
+        if ((await mailboxesStillConnected(tx, companyId, null)).has(path)) return null;
+        return deleteMailboxes(tx, companyId, [path]);
+    });
 }
 
 /**

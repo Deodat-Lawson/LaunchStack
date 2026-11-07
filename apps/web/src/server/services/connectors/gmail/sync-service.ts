@@ -19,7 +19,11 @@ import { db } from "~/server/db";
 import { users } from "~/server/db/schema";
 import { markConnectionRevoked } from "~/server/services/google-drive/connections";
 import { getConnectionById } from "../connection-store";
-import { closePersonalConnectionsNow, personalSyncStanding } from "../personal-connections";
+import {
+    closePersonalConnectionsNow,
+    personalSyncStanding,
+    sweepMailboxOfClosedConnection,
+} from "../personal-connections";
 import { GMAIL_PROVIDER } from "./config";
 import { getGmailAccessToken } from "./connections";
 import { ensurePrivateGmailFolder } from "./folder";
@@ -91,6 +95,9 @@ export async function runGmailSync(
         return { outcome: "skipped", reason: "another sync holds the lease" };
     }
 
+    // Set once this run has (re)made the mailbox folder: from then on it may
+    // have written there, and the sweep below needs to know where.
+    let mailbox: string | null = null;
     try {
         const [owner] = await db
             .select({ authUserId: users.userId, email: users.email })
@@ -118,6 +125,7 @@ export async function runGmailSync(
             ownerAuthUserId: owner.authUserId,
             accountEmail: connection.providerAccountEmail ?? owner.email,
         });
+        mailbox = folder.path;
 
         const [syncState, knownSourceIds, sink] = await Promise.all([
             getSyncState(connectionId),
@@ -170,5 +178,16 @@ export async function runGmailSync(
         }
         await releaseSyncLease(connectionId, { status: "error", error: message });
         throw error;
+    } finally {
+        // The owner may have been removed while this run was going: the
+        // removal cleared the mailbox, and this run may have written to it
+        // since. If the connection is gone, what is there now goes too.
+        if (mailbox) {
+            try {
+                await sweepMailboxOfClosedConnection(connection.companyId, connectionId, mailbox);
+            } catch (sweepError) {
+                console.error("[gmail] sweeping a closed connection's mailbox failed:", sweepError);
+            }
+        }
     }
 }

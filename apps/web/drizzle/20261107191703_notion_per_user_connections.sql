@@ -1,4 +1,12 @@
 DROP INDEX "connector_connections_company_provider_owner_unique";--> statement-breakpoint
+-- launchstack:allow-dml — these two statements must ship atomically with the
+-- code that makes Notion per-user: it lists, syncs and lets people disconnect
+-- only rows with an owner. As a separate backfill, every existing Notion
+-- connection would be invisible and refuse to sync between deploy and the
+-- backfill run. The UPDATE also has to sit between the index swap below.
+-- Bounded by the number of Notion connections, idempotent, and a no-op on a
+-- clean database.
+--
 -- Notion connections become per-user: each belongs to the member who
 -- connected it. Done after the old index is gone, which allowed one per-user
 -- row per member per provider and so would refuse a member's second Notion

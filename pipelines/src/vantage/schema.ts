@@ -22,6 +22,7 @@ import {
     boolean,
     date,
     doublePrecision,
+    foreignKey,
     index,
     integer,
     jsonb,
@@ -321,19 +322,31 @@ export const vantageProgramDeadlines = pgTable(
 );
 
 /** Version/review/submission metadata; canonical content stays in Vantage tables. */
-export const vantageContractState = pgTable("vantage_contract_state", {
-    agendaId: varchar("agenda_id", { length: 64 })
-        .primaryKey()
-        .references(() => vantageAgendas.id, { onDelete: "cascade" }),
-    companyId: bigint("company_id", { mode: "bigint" })
-        .notNull()
-        .references(() => company.id, { onDelete: "cascade" }),
-    version: integer("version").notNull().default(0),
-    payload: jsonb("payload")
-        .$type<Record<string, unknown>>()
-        .notNull()
-        .default(sql`'{}'::jsonb`),
-});
+export const vantageContractState = pgTable(
+    "vantage_contract_state",
+    {
+        agendaId: varchar("agenda_id", { length: 64 }).primaryKey(),
+        companyId: bigint("company_id", { mode: "bigint" }).notNull(),
+        version: integer("version").notNull().default(0),
+        payload: jsonb("payload")
+            .$type<Record<string, unknown>>()
+            .notNull()
+            .default(sql`'{}'::jsonb`),
+    },
+    table => [
+        // Match the already-committed migration's PostgreSQL constraint names.
+        foreignKey({
+            name: "pdr_ai_v2_vantage_contract_state_agenda_id_fkey",
+            columns: [table.agendaId],
+            foreignColumns: [vantageAgendas.id],
+        }).onDelete("cascade"),
+        foreignKey({
+            name: "pdr_ai_v2_vantage_contract_state_company_id_fkey",
+            columns: [table.companyId],
+            foreignColumns: [company.id],
+        }).onDelete("cascade"),
+    ]
+);
 
 export type VantageEvidenceRow = InferSelectModel<typeof vantageEvidence>;
 export type VantageMetricDefinitionRow = InferSelectModel<typeof vantageMetricDefinitions>;

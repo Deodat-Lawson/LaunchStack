@@ -54,11 +54,13 @@ import {
 import { DocumentViewerHeader, type HeaderAction } from "./DocumentViewerHeader";
 import {
     downloadStoredFile,
+    driveLinkKey,
     externalLinkHint,
     externalLinkLabel,
     externalLinkPlace,
     openExternalLink,
     opensAnApp,
+    useDriveChangedOutsideLink,
 } from "./externalLink";
 import { DocumentNotesPanel, type PrefilledAnchor } from "~/components/notes/DocumentNotesPanel";
 import type { DocumentNote } from "~/server/db/schema";
@@ -461,11 +463,21 @@ export function DocumentViewer({
     const driveLink = drive.status?.link ?? null;
     /**
      * Where this opens outside LaunchStack — its origin, or the stored file.
-     * The fetched row is the fresher answer (a Drive link made while it is
-     * open); the rail's row stands in until it arrives. A map has none: it
-     * is drawn here, and its published copy is a by-product.
+     * A Drive copy linked or unlinked here changes it, so the server's word
+     * after that comes first; then the fetched row; the rail's row stands
+     * in until that arrives. A map has none: it is drawn here, and its
+     * published copy is a by-product.
      */
-    const outsideLink = isMindmap ? null : (fullDoc?.externalLink ?? source.externalLink ?? null);
+    const relinkedOutsideLink = useDriveChangedOutsideLink(
+        driveDocumentId,
+        driveLinkKey(drive.status),
+        fullDoc
+    );
+    const outsideLink = isMindmap
+        ? null
+        : relinkedOutsideLink !== undefined
+          ? relinkedOutsideLink
+          : (fullDoc?.externalLink ?? source.externalLink ?? null);
     /**
      * Bring the rail into view for something that happens in it — a new
      * note's draft, a pin's card. Not remembered: it is shown for this, and

@@ -1,10 +1,11 @@
 "use client";
 
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 
 import {
     externalLinkHost,
+    isSourceExternalLink,
     type ExternalLinkKind,
     type SourceExternalLink,
 } from "~/lib/source-external-link";
@@ -110,4 +111,76 @@ export function useOpenOutside(): OpenOutside {
         () => ({ label: link => externalLinkLabel(t, link), open: openExternalLink }),
         [t]
     );
+}
+
+/**
+ * What the viewer's Drive line knows about the document's Drive copy, as one
+ * comparable value: null before it has loaded, "none" without a live copy,
+ * "linked:<url>" with one. An orphaned copy (trashed in Drive) counts as none,
+ * as it does on the server.
+ */
+export function driveLinkKey(
+    status: { link: { status: string; url: string | null } | null } | null
+): string | null {
+    if (status === null) return null;
+    return status.link?.status === "linked" ? `linked:${status.link.url ?? ""}` : "none";
+}
+
+/**
+ * The outside link as the server words it after the document's Drive copy
+ * was linked or unlinked while the viewer was open, or `undefined` until
+ * that happens. The viewer reads the link once with the document; without
+ * this, unlinking left "Open in Google Drive" pointing at a trashed copy,
+ * and a new link kept offering "Open file", until the viewer was reopened.
+ * Only the link is read again: the loaded document, and the preview made
+ * from it, are left alone. A fresher load of the document (`loaded`
+ * changing) supersedes the answer.
+ */
+export function useDriveChangedOutsideLink(
+    documentId: number | null,
+    driveKey: string | null,
+    loaded: unknown
+): SourceExternalLink | null | undefined {
+    const [answer, setAnswer] = useState<{
+        documentId: number;
+        link: SourceExternalLink | null;
+    } | null>(null);
+    const last = useRef({ documentId, driveKey });
+
+    useEffect(() => {
+        setAnswer(null);
+    }, [loaded, documentId]);
+
+    useEffect(() => {
+        const previous = last.current;
+        last.current = { documentId, driveKey };
+        // Only a change seen on this document, from one known state to
+        // another: its first status arriving is not a change.
+        if (documentId === null || driveKey === null) return;
+        if (previous.documentId !== documentId || previous.driveKey === null) return;
+        if (previous.driveKey === driveKey) return;
+
+        let cancelled = false;
+        void (async () => {
+            try {
+                const res = await fetch("/api/fetchDocument", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: "{}",
+                });
+                if (!res.ok) return;
+                const rows = (await res.json()) as Array<{ id: number; externalLink?: unknown }>;
+                if (cancelled) return;
+                const link = rows.find(row => row.id === documentId)?.externalLink;
+                setAnswer({ documentId, link: isSourceExternalLink(link) ? link : null });
+            } catch {
+                // Unreachable: the earlier link stands.
+            }
+        })();
+        return () => {
+            cancelled = true;
+        };
+    }, [documentId, driveKey]);
+
+    return answer && answer.documentId === documentId ? answer.link : undefined;
 }

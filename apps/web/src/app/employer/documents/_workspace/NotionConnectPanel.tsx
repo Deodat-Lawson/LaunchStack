@@ -41,8 +41,8 @@ interface NotionConnection {
     readonly lastSyncAt: string | null;
     readonly lastSyncStatus: string | null;
     readonly lastSyncError: string | null;
-    /** The last run paused (owner left, or lost upload access); worded here. */
-    readonly paused?: "ownerLeft" | "noUpload" | null;
+    /** The last run paused (the owner lost upload access); worded here. */
+    readonly paused?: "noUpload" | null;
     readonly lastSyncReport: Record<string, unknown> | null;
     readonly deletedHere?: DeletedHereSummary;
 }

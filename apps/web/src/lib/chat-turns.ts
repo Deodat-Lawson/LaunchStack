@@ -1,3 +1,4 @@
+import type { OfferedModelPick } from "~/lib/ai/model-picks";
 import { passagesAsText, type ChatPassage } from "~/lib/chat-passages";
 import type { ChatStep } from "~/lib/chat-stream";
 
@@ -31,17 +32,20 @@ export interface ChatSendPayload {
     thinking: boolean;
     agentKey: string | null;
     modelRoute?: "default" | "fast" | "reasoning" | "vision";
+    /** An offered workspace model answering on the main route (`~/lib/ai/model-picks`). */
+    modelKey?: string;
     reasoningEffort?: string;
     chatMode?: "default" | "plan";
     followUp?: "queue" | "interrupt";
-    modelRoutes?: ("default" | "fast" | "reasoning" | "vision")[];
+    /** Compare mode: routes, and `model:<key>` picks, answered side by side. */
+    modelRoutes?: ("default" | "fast" | "reasoning" | "vision" | OfferedModelPick)[];
     threadRefs?: string[];
     passages?: ChatPassage[];
 }
 
 export interface ChatSendResult {
     success: boolean;
-    failedModelRoutes?: ("default" | "fast" | "reasoning" | "vision")[];
+    failedModelRoutes?: ("default" | "fast" | "reasoning" | "vision" | OfferedModelPick)[];
 }
 
 export interface ChatTurnMetadata {

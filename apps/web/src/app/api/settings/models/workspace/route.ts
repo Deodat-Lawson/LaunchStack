@@ -1,6 +1,6 @@
 /**
  * The workspace's own model endpoint: read it, save it, disconnect it.
- * Gated on `settings.manage`, like the deployment's model overview next door.
+ * Gated on `models.manage`, like the deployment's model overview next door.
  *
  * The key goes in and never comes back out: reads return `hasKey` and the last
  * four characters. The address and model ids the admin entered are theirs and
@@ -23,6 +23,7 @@ import {
     KeyNeededForNewAddressError,
     NO_SECRETS_KEY_MESSAGE,
     deleteWorkspaceEndpoint,
+    getWorkspaceEndpointRow,
     getWorkspaceEndpointView,
     saveWorkspaceEndpoint,
 } from "~/server/workspace-models/store";
@@ -34,13 +35,13 @@ export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 export async function GET() {
-    const ctx = await requireWorkspacePermission("settings.manage");
+    const ctx = await requireWorkspacePermission("models.manage");
     if (!ctx.success) return ctx.response;
     return NextResponse.json({ endpoint: await getWorkspaceEndpointView(ctx.data.companyId) });
 }
 
 export async function PUT(request: Request) {
-    const ctx = await requireWorkspacePermission("settings.manage");
+    const ctx = await requireWorkspacePermission("models.manage");
     if (!ctx.success) return ctx.response;
     const locale = localeOfRequest(request);
     const t = translatorFor(locale, "settings.server.models");
@@ -57,7 +58,13 @@ export async function PUT(request: Request) {
             return NextResponse.json({ error: wordModels(problem, locale) }, { status: 400 });
     }
     // Saving replaces the whole selection, so a price left empty is removed.
-    const models = body.models ? settledSelection(body.models) : null;
+    // The models offered in Ask are Models' to change: a save that doesn't
+    // name them (the API keys screen) keeps them.
+    let models = body.models ? settledSelection(body.models) : null;
+    if (models && body.models && body.models.offered === undefined) {
+        const stored = (await getWorkspaceEndpointRow(ctx.data.companyId))?.models?.offered;
+        if (stored?.length) models = { ...models, offered: stored };
+    }
 
     try {
         const baseUrl = await assertEndpointUrlAllowed(body.baseUrl);
@@ -92,7 +99,7 @@ export async function PUT(request: Request) {
 }
 
 export async function DELETE() {
-    const ctx = await requireWorkspacePermission("settings.manage");
+    const ctx = await requireWorkspacePermission("models.manage");
     if (!ctx.success) return ctx.response;
     await deleteWorkspaceEndpoint(ctx.data.companyId);
     invalidateWorkspaceChatModels(ctx.data.companyId);

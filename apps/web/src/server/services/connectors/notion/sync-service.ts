@@ -18,11 +18,10 @@ import {
 
 import { DELETED_HERE_DETAIL } from "@launchstack/pipelines/connectors";
 
-import { and, eq } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 
-import { resolvePermissionsForRole } from "~/lib/authz/resolve";
 import { db } from "~/server/db";
-import { userCompanyMemberships, users } from "~/server/db/schema";
+import { users } from "~/server/db/schema";
 import type { OwnerRef } from "~/server/workspace/ownership";
 import {
     getConnectionAccessToken,
@@ -31,6 +30,7 @@ import {
     refreshConnectionAccessToken,
 } from "../connection-store";
 import { listDeletedSourceIds } from "../deleted-items";
+import { closePersonalConnectionsNow, personalSyncStanding } from "../personal-connections";
 import { ConnectorGrantRevokedError } from "../providers/types";
 import { NOTION_PAUSED, NOTION_PROVIDER } from "./config";
 import { ensureNotionFolder } from "./folder";
@@ -63,21 +63,6 @@ export function reportCounts(report: NotionSyncResult): Record<string, unknown> 
     };
 }
 
-/** Why the owner can't sync now (one of NOTION_PAUSED); null when they can. */
-async function pauseReason(
-    companyId: bigint,
-    owner: { readonly role: string | null; readonly status: string | null }
-): Promise<string | null> {
-    if (owner.role == null || (owner.status != null && owner.status !== "active")) {
-        return NOTION_PAUSED.ownerLeft;
-    }
-    const permissions = await resolvePermissionsForRole(companyId, owner.role);
-    if (!permissions.has("documents.upload")) {
-        return NOTION_PAUSED.noUpload;
-    }
-    return null;
-}
-
 export async function runNotionSync(
     connectionId: number,
     options?: { readonly force?: boolean }
@@ -103,33 +88,31 @@ export async function runNotionSync(
         if (connection.ownerUserId == null) {
             throw new Error("This Notion connection has no owner — reconnect required");
         }
+        // Syncing adds documents on the owner's behalf, so it runs only while
+        // they could add one themselves (the same rule as Gmail's). One whose
+        // owner has left was missed when they went, so it is closed now,
+        // exactly as removal would; one who lost upload access, or is
+        // suspended, pauses with the reason on the card — nothing to retry
+        // until someone changes their role.
+        const standing = await personalSyncStanding(connection.companyId, connection.ownerUserId);
+        if (standing === "departed") {
+            await closePersonalConnectionsNow(connection.companyId, connection.ownerUserId);
+            return { outcome: "skipped", reason: "owner left the workspace — connection closed" };
+        }
+        if (standing === "paused") {
+            await releaseSyncLease(connectionId, {
+                status: "error",
+                error: NOTION_PAUSED.noUpload,
+            });
+            return { outcome: "skipped", reason: NOTION_PAUSED.noUpload };
+        }
+
         const [ownerRow] = await db
-            .select({
-                authUserId: users.userId,
-                role: userCompanyMemberships.role,
-                status: userCompanyMemberships.status,
-            })
+            .select({ authUserId: users.userId })
             .from(users)
-            .leftJoin(
-                userCompanyMemberships,
-                and(
-                    eq(userCompanyMemberships.userId, users.id),
-                    eq(userCompanyMemberships.companyId, connection.companyId)
-                )
-            )
             .where(eq(users.id, Number(connection.ownerUserId)))
             .limit(1);
         if (!ownerRow) throw new Error("The member who connected Notion no longer exists");
-
-        // Syncing adds documents on the owner's behalf, so it stops when they
-        // could no longer add one themselves: they left (leaving deletes the
-        // connection too; this is the backstop) or lost upload access. Paused,
-        // not failed — nothing to retry until someone changes the role.
-        const paused = await pauseReason(connection.companyId, ownerRow);
-        if (paused) {
-            await releaseSyncLease(connectionId, { status: "error", error: paused });
-            return { outcome: "skipped", reason: paused };
-        }
         const owner: OwnerRef = {
             companyId: connection.companyId,
             userPk: BigInt(connection.ownerUserId),

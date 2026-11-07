@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * Usage › Spending › AI limits per person.
+ * Models & usage › Spending › AI limits per person.
  *
  * Three things, top to bottom: the workspace default (a registry row, drawn
  * here beside the overrides it is the default for), the server's cap when the

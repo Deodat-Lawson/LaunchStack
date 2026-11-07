@@ -122,7 +122,7 @@ import {
     type ChatAgentResolution,
 } from "~/server/collab/chat-agent";
 import { refuseAtAiAllowance } from "~/server/ai-usage/refusal";
-import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
+import { withOfferedChatModel, withWorkspaceChatModels } from "~/server/workspace-models/scope";
 import { copy, type Copy } from "~/i18n/copy";
 import type { Locale } from "~/i18n/locales";
 import { localeOfRequest, replyLanguageInstruction } from "~/i18n/server";
@@ -678,6 +678,33 @@ export async function POST(request: Request) {
                 return validation.response;
             }
 
+            // A model the workspace offers in Ask answers in place of its main
+            // model, inside the scope this request already runs in (its usage
+            // counter and allowance still apply). A key it doesn't offer — one
+            // an admin removed, or any key on the deployment's models — is
+            // refused, never answered by some other model.
+            const offeredKey = validation.data.modelKey;
+            if (offeredKey) {
+                // It answers on the main route whatever route the request
+                // names, so a key is never quietly answered by the fast model.
+                const picked = await withOfferedChatModel(offeredKey, () =>
+                    answerQuestion(ctx, { ...validation.data, modelRoute: "default" })
+                );
+                if (picked.offered) return picked.value;
+                recordResult("error");
+                return NextResponse.json(
+                    { success: false, message: t("query.modelNotOffered") },
+                    { status: 400 }
+                );
+            }
+            return await answerQuestion(ctx, validation.data);
+        }
+
+        async function answerQuestion(
+            ctx: { data: WorkspaceContext },
+            // What `validateRequestBody` hands back for this schema.
+            data: z.input<typeof QuestionSchema>
+        ) {
             const {
                 documentId,
                 question,
@@ -702,7 +729,7 @@ export async function POST(request: Request) {
                 reasoningEffort,
                 chatMode,
                 stream: bodyStreaming,
-            } = validation.data;
+            } = data;
 
             const userCompanyId = ctx.data.companyId;
             const numericCompanyId = Number(userCompanyId);

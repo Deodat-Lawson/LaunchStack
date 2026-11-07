@@ -60,6 +60,24 @@ describe("useAIChat", () => {
         }
     );
 
+    it("sends an offered workspace model by key on the main route", async () => {
+        fetchMock.mockResolvedValue({ ok: true, json: async () => ({ success: true }) });
+        const { result } = renderHook(() => useAIChat());
+        await act(async () => {
+            await result.current.sendQuery({
+                question: "hi",
+                searchScope: "none",
+                modelRoute: "default",
+                modelKey: "team-writer",
+            });
+        });
+        const [, request] = fetchMock.mock.calls[0] as [string, RequestInit];
+        expect(JSON.parse(request.body as string)).toMatchObject({
+            modelRoute: "default",
+            modelKey: "team-writer",
+        });
+    });
+
     it("returns the endpoint error so the workspace can display it", async () => {
         fetchMock.mockResolvedValue({
             ok: false,

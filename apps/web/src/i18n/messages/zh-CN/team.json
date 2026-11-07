@@ -45,6 +45,9 @@
     "settings": {
       "manage": "工作区设置、处理流程、公司资料和智能体名册（添加、停用、自主程度、工具、节点）"
     },
+    "models": {
+      "manage": "接入工作区自己的 API 密钥，选择工作区使用的模型以及大家在“提问”中可选的模型，并查看每个模型的用量"
+    },
     "connectors": {
       "manage": "连接和断开 Google Drive、Slack、GitHub 以及智能体连接器"
     },

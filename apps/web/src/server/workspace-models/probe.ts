@@ -168,14 +168,14 @@ export interface ModelTestResult {
 }
 
 /**
- * The admin is already on Bring your own keys, so "fix it in … › Bring your
- * own keys" is noise on a test result — in English, and in the words
- * `chat.server.endpoint` gives it. Either surface's name: the sentence comes
- * from `@launchstack/llm`, which names Workspace now and named Settings in
- * older builds; both are stripped.
+ * The admin is already on API keys, so "fix it in … › API keys" is noise on a
+ * test result — in English, and in the words `chat.server.endpoint` gives it.
+ * Any surface's name: the sentence comes from `@launchstack/llm`, which names
+ * Models & usage › API keys now, and named Workspace (or Settings) › Bring
+ * your own keys in older builds; all are stripped.
  */
 const SETTINGS_HINT =
-    /\s*(?:A workspace admin can fix it in (?:Settings|Workspace) › Bring your own keys\.|工作区管理员可以在“(?:设置|工作区) › 自带密钥”中修复。)$/;
+    /\s*(?:A workspace admin can fix it in (?:(?:Settings|Workspace) › Bring your own keys|Models & usage › API keys)\.|工作区管理员可以在“(?:(?:设置|工作区) › 自带密钥|模型与用量 › API 密钥)”中修复。)$/;
 
 /**
  * Send each distinct chosen model "Reply with OK." and report per route.

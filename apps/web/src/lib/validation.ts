@@ -7,6 +7,11 @@ import { V, v } from "~/i18n/validation";
 import { zodErrorText } from "~/i18n/zod";
 import type { Locale } from "~/i18n/locales";
 import { AGENT_STYLE_IDS } from "~/lib/agents/definition";
+import {
+    MODEL_KEY_PATTERN,
+    OFFERED_MODEL_PICK_PATTERN,
+    type OfferedModelPick,
+} from "~/lib/ai/model-picks";
 import { ARTIFACT_TYPES, MAX_ARTIFACT_BYTES } from "~/lib/artifact-content";
 import { MAX_PASSAGES, MAX_PASSAGE_CHARS, MAX_PASSAGE_TITLE_CHARS } from "~/lib/chat-passages";
 import { MAX_TURN_STEPS } from "~/lib/chat-turns";
@@ -162,6 +167,12 @@ export const QuestionSchema = z
         /** Who wrote the question when the app did (a plan to carry out): its links open nothing. */
         questionOrigin: z.enum(["attachment", "plan-implementation"]).optional(),
         modelRoute: z.enum(["default", "fast", "reasoning", "vision"]).optional(),
+        /**
+         * One of the models the workspace offers in Ask, by its key
+         * (`~/lib/ai/model-picks`). It answers on the main route in place of
+         * the workspace's main model; the route refuses a key it doesn't offer.
+         */
+        modelKey: z.string().regex(MODEL_KEY_PATTERN).optional(),
         reasoningEffort: z.string().min(1).max(64).optional(),
         chatMode: z.enum(["default", "plan"]).optional().default("default"),
         stream: z.boolean().optional().default(false),
@@ -212,6 +223,7 @@ export const QuestionSchema = z
             priorQuestions: data.priorQuestions,
             questionOrigin: data.questionOrigin,
             modelRoute: data.modelRoute,
+            modelKey: data.modelKey,
             reasoningEffort: data.reasoningEffort,
             chatMode: data.chatMode,
             stream: data.stream,
@@ -878,11 +890,19 @@ export const ChatSendPayloadSchema = z.object({
     thinking: z.boolean(),
     agentKey: z.string().max(64).nullable(),
     modelRoute: z.enum(["default", "fast", "reasoning", "vision"]).optional(),
+    /** An offered workspace model answering in place of the route's (`~/lib/ai/model-picks`). */
+    modelKey: z.string().regex(MODEL_KEY_PATTERN).optional(),
     reasoningEffort: z.string().max(64).optional(),
     chatMode: z.enum(["default", "plan"]).optional(),
     followUp: z.enum(["queue", "interrupt"]).optional(),
+    /** Compare mode: the routes, and `model:<key>` picks, to answer side by side. */
     modelRoutes: z
-        .array(z.enum(["default", "fast", "reasoning", "vision"]))
+        .array(
+            z.union([
+                z.enum(["default", "fast", "reasoning", "vision"]),
+                z.string().regex(OFFERED_MODEL_PICK_PATTERN) as z.ZodType<OfferedModelPick>,
+            ])
+        )
         .max(4)
         .optional(),
     threadRefs: z.array(z.string().min(1).max(64)).max(20).optional(),

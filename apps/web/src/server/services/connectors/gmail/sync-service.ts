@@ -19,6 +19,11 @@ import { db } from "~/server/db";
 import { users } from "~/server/db/schema";
 import { markConnectionRevoked } from "~/server/services/google-drive/connections";
 import { getConnectionById } from "../connection-store";
+import {
+    closePersonalConnectionsNow,
+    personalSyncStanding,
+    sweepMailboxOfClosedConnection,
+} from "../personal-connections";
 import { GMAIL_PROVIDER } from "./config";
 import { getGmailAccessToken } from "./connections";
 import { ensurePrivateGmailFolder } from "./folder";
@@ -70,11 +75,29 @@ export async function runGmailSync(
         return { outcome: "skipped", reason: "gmail connection has no owner" };
     }
 
+    // A mailbox syncs only for an active member who may add files. One whose
+    // owner has left was missed when they went (removed before the rule
+    // existed), so it is closed now, mail and all, exactly as removal would.
+    const standing = await personalSyncStanding(connection.companyId, connection.ownerUserId);
+    if (standing === "departed") {
+        await closePersonalConnectionsNow(connection.companyId, connection.ownerUserId);
+        return { outcome: "skipped", reason: "owner left the workspace — connection closed" };
+    }
+    if (standing === "paused") {
+        return {
+            outcome: "skipped",
+            reason: "owner is suspended or can no longer add files — paused",
+        };
+    }
+
     await ensureSyncState(connectionId);
     if (!(await claimSyncLease(connectionId))) {
         return { outcome: "skipped", reason: "another sync holds the lease" };
     }
 
+    // Set once this run has (re)made the mailbox folder: from then on it may
+    // have written there, and the sweep below needs to know where.
+    let mailbox: string | null = null;
     try {
         const [owner] = await db
             .select({ authUserId: users.userId, email: users.email })
@@ -102,6 +125,7 @@ export async function runGmailSync(
             ownerAuthUserId: owner.authUserId,
             accountEmail: connection.providerAccountEmail ?? owner.email,
         });
+        mailbox = folder.path;
 
         const [syncState, knownSourceIds, sink] = await Promise.all([
             getSyncState(connectionId),
@@ -154,5 +178,16 @@ export async function runGmailSync(
         }
         await releaseSyncLease(connectionId, { status: "error", error: message });
         throw error;
+    } finally {
+        // The owner may have been removed while this run was going: the
+        // removal cleared the mailbox, and this run may have written to it
+        // since. If the connection is gone, what is there now goes too.
+        if (mailbox) {
+            try {
+                await sweepMailboxOfClosedConnection(connection.companyId, connectionId, mailbox);
+            } catch (sweepError) {
+                console.error("[gmail] sweeping a closed connection's mailbox failed:", sweepError);
+            }
+        }
     }
 }

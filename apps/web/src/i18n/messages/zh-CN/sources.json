@@ -492,7 +492,6 @@
     "notConfigured": "此服务器尚未配置 Notion。LaunchStack 的运维人员需要添加 NOTION_OAUTH_CLIENT_ID 和 NOTION_OAUTH_CLIENT_SECRET，具体步骤见 .env.example。",
     "connectAnother": "连接另一个 Notion 工作区",
     "paused": {
-      "ownerLeft": "已暂停：连接此 Notion 的成员已不在此工作区。",
       "noUpload": "已暂停：你已无法在此工作区添加文件。请向管理员申请上传权限。"
     }
   },

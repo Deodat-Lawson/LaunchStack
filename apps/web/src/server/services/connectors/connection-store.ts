@@ -11,7 +11,7 @@
  * acceptable until a deployment actually enables rotation.
  */
 
-import { and, asc, eq, inArray, isNull, or } from "drizzle-orm";
+import { and, asc, eq, isNull, or } from "drizzle-orm";
 
 import { decryptSecret, encryptSecret } from "@launchstack/store/crypto";
 
@@ -23,7 +23,6 @@ import {
     type ConnectorProvider,
 } from "~/server/db/schema/connectors";
 import { getEngine } from "~/server/engine";
-import type { Executor } from "~/server/workspace/db-types";
 import { getConnectorConfig, isOAuthProvider, PROVIDER_MODULES } from "./config";
 import { ConnectorGrantRevokedError, type ProviderGrant } from "./providers/types";
 
@@ -236,49 +235,6 @@ export async function deleteConnection(
         accessToken: tryDecrypt(connection.accessTokenCiphertext),
         refreshToken: tryDecrypt(connection.refreshTokenCiphertext),
     };
-}
-
-export interface RemovedConnection {
-    readonly id: number;
-    readonly provider: ConnectorProvider;
-    readonly accessToken: string | null;
-    readonly refreshToken: string | null;
-}
-
-/**
- * Delete every per-user connection (Gmail, Notion) a member owns in this
- * workspace — they leave with the member — inside the caller's transaction,
- * and hand back the tokens so the caller can revoke them once it commits.
- * Sync state cascades; the documents and folders they imported stay.
- */
-export async function deleteOwnedConnections(
-    executor: Executor,
-    companyId: bigint,
-    ownerUserId: bigint
-): Promise<RemovedConnection[]> {
-    getEngine();
-    const rows = await executor
-        .select()
-        .from(connectorConnections)
-        .where(
-            and(
-                eq(connectorConnections.companyId, companyId),
-                eq(connectorConnections.ownerUserId, ownerUserId)
-            )
-        );
-    if (rows.length === 0) return [];
-    await executor.delete(connectorConnections).where(
-        inArray(
-            connectorConnections.id,
-            rows.map(row => row.id)
-        )
-    );
-    return rows.map(row => ({
-        id: row.id,
-        provider: row.provider as ConnectorProvider,
-        accessToken: tryDecrypt(row.accessTokenCiphertext),
-        refreshToken: tryDecrypt(row.refreshTokenCiphertext),
-    }));
 }
 
 function tryDecrypt(ciphertext: string | null): string | null {

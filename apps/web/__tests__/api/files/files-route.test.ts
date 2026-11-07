@@ -1,5 +1,8 @@
 import type * as MockRequireWorkspaceContext from "../../helpers/mock-require-workspace-context";
 
+import type { SQL } from "drizzle-orm";
+import { PgDialect } from "drizzle-orm/pg-core";
+
 import { GET } from "~/app/api/files/[id]/route";
 import { signFileAccessToken } from "@launchstack/store/crypto";
 import { fetchFile } from "~/lib/storage";
@@ -88,6 +91,7 @@ function setupBackingDocumentsQuery(rows: { id: number; category: string }[]) {
     const leftJoin = jest.fn().mockReturnValue({ where });
     const from = jest.fn().mockReturnValue({ leftJoin });
     mockDbSelect.mockReturnValueOnce({ from });
+    return where;
 }
 
 const HIDES_BOARD = {
@@ -174,6 +178,23 @@ describe("GET /api/files/[id]", () => {
         const response = await GET(request("/api/files/123"), params("123"));
 
         expect(response.status).toBe(200);
+    });
+
+    it("counts a website source's stored preview as part of that document", async () => {
+        mockAuthenticated({ role: "member", scope: HIDES_BOARD });
+        setupFileQuery([DB_FILE]);
+        const where = setupBackingDocumentsQuery([{ id: 9, category: "Board" }]);
+
+        const response = await GET(request("/api/files/123"), params("123"));
+
+        // The lookup matches the preview URL recorded on the document, so the
+        // picture of a Board page stays behind the Board folder.
+        expect(response.status).toBe(404);
+        const { sql: text, params: values } = new PgDialect().sqlToQuery(
+            where.mock.calls[0]![0] as SQL
+        );
+        expect(text).toContain(`"ocr_metadata" -> 'websitePreview' ->> 'url'`);
+        expect(values).toContain("%/api/files/123");
     });
 
     it("serves a file no document references yet (mid-upload) on company scope alone", async () => {

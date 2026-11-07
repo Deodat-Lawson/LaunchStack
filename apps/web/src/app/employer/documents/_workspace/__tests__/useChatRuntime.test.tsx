@@ -1090,6 +1090,65 @@ test("mixed model comparison reports only failed route selections for restoratio
     });
 });
 
+test("a single send of an offered workspace model carries its key on the main route", async () => {
+    const { result } = harness();
+    await act(async () => {
+        await result.current.runtime.submit({
+            ...send("Draft the update"),
+            modelRoute: "default",
+            modelKey: "team-writer",
+        });
+    });
+    expect(mockRequest).toHaveBeenCalledTimes(1);
+    expect(mockRequest.mock.calls[0][0]).toMatchObject({
+        modelRoute: "default",
+        modelKey: "team-writer",
+    });
+});
+
+test("comparing a tier with an offered model runs each as its own request", async () => {
+    const { result } = harness();
+    await act(async () => {
+        await result.current.runtime.submit({
+            ...send("Compare"),
+            modelRoute: "default",
+            modelKey: "team-writer",
+            reasoningEffort: "high",
+            modelRoutes: ["fast", "model:team-writer"],
+        });
+    });
+    expect(mockRequest).toHaveBeenCalledTimes(2);
+    const requests = mockRequest.mock.calls.map(call => call[0]);
+    const fast = requests.find(request => request.modelRoute === "fast");
+    const offered = requests.find(request => request.modelKey === "team-writer");
+    expect(fast).toBeDefined();
+    expect(fast?.modelKey).toBeUndefined();
+    expect(fast?.reasoningEffort).toBeUndefined();
+    // The effort was chosen for the offered pick, so only its turn carries it.
+    expect(offered).toMatchObject({ modelRoute: "default", reasoningEffort: "high" });
+    expect(sessions.createSession).toHaveBeenCalledTimes(2);
+});
+
+test("a comparison reports a failed offered model as its pick", async () => {
+    mockRequest.mockImplementation(async params =>
+        params.modelKey
+            ? {
+                  success: false,
+                  message: "That model isn't offered in this workspace any more.",
+              }
+            : answer("Standard result")
+    );
+    const { result } = harness();
+    await act(async () => {
+        expect(
+            await result.current.runtime.submit({
+                ...send("Compare"),
+                modelRoutes: ["default", "model:retired-writer"],
+            })
+        ).toEqual({ success: false, failedModelRoutes: ["model:retired-writer"] });
+    });
+});
+
 test("an overlapping queue edit keeps its captured revision instead of resurrecting a claimed item", async () => {
     const { result } = harness();
     const item = { id: "q", send: send("Claimed question") };

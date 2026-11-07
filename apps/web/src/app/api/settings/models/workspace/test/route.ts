@@ -1,6 +1,6 @@
 /**
  * Send each chosen model one short message through the real chat transport,
- * before anything is saved. Gated on `settings.manage`.
+ * before anything is saved. Gated on `models.manage`.
  */
 
 import { NextResponse } from "next/server";
@@ -25,7 +25,7 @@ export const runtime = "nodejs";
 export const maxDuration = 120;
 
 export async function POST(request: Request) {
-    const ctx = await requireWorkspacePermission("settings.manage");
+    const ctx = await requireWorkspacePermission("models.manage");
     if (!ctx.success) return ctx.response;
     const locale = localeOfRequest(request);
     const t = translatorFor(locale, "settings.server.models");

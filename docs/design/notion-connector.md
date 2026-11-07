@@ -42,10 +42,13 @@ their own connection whatever their role (someone who lost upload access
 still sees their cards, with Disconnect only), and `connectors.manage` can
 still remove anyone's through `/api/connectors/connections/:id`; both are
 audited as `connector.disconnected`. When a member leaves or is removed,
-their Notion and Gmail connections are deleted in the same transaction and
-revoked once it commits, and their folders pass on with the rest of their
-sole-managed items (ADR-014). As a backstop, a sync pauses — with a reason on
-the card — when its owner is no longer an active member who can add files.
+`closePersonalConnections` (connectors/personal-connections.ts, shared with
+Gmail) deletes their Notion and Gmail connections in the same transaction and
+the grants are revoked once it commits; their Notion folders pass on with the
+rest of their sole-managed items (ADR-014), while Gmail mailboxes are deleted.
+The sync checks the same `personalSyncStanding` Gmail does: it pauses — with a
+reason on the card — when its owner is suspended or can no longer add files,
+and closes the connection itself if its owner has already gone.
 
 ## Shape
 

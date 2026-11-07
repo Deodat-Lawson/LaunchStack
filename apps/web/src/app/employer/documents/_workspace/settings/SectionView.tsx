@@ -4,8 +4,8 @@
  * One settings section on screen: its header, its single action area, and
  * its body — the chrome both settings surfaces draw a section in.
  *
- * Settings (yours alone) shows it beside a rail; the Workspace tab shows it
- * under its screens bar. Either way the chrome here owns the title, the
+ * Settings (yours alone) shows it beside a rail; the Workspace tab, and
+ * Models & usage for Spending and API keys, show it under their screens bar. Either way the chrome here owns the title, the
  * description and the one primary button. Sections are *bodies* — no page
  * shell, no header of their own, no second Save button. A section publishes
  * its primary action (see `./contract`) and the chrome renders it in the

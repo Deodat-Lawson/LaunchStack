@@ -1,16 +1,16 @@
 "use client";
 
 /**
- * Workspace › Models.
+ * Models & usage › Models, below the models offered in Ask
+ * (`usage/ModelsScreen.tsx`).
  *
  * Body only: the server default — what the server resolved from its chat
  * configuration file, a table of routes, then a card per configured model
  * saying what it can do. It never names the vendor, the endpoint, or the model
  * id — the server doesn't send them (see `~/server/settings/models`).
  *
- * A workspace that brings its own model sets it up in Workspace › Bring your
- * own keys; this section only reads whether it has, to say the default is
- * unused.
+ * A workspace that brings its own model sets it up in Models & usage › API
+ * keys; this section only reads whether it has, to say the default is unused.
  *
  * Below it, a Web search card: the engine every feature searches the web
  * with, how it was picked (SEARCH_PROVIDER, or the first configured engine),
@@ -331,7 +331,7 @@ export function ModelsSection({ onActions }: SettingsSectionProps) {
 
 const code = (chunks: React.ReactNode) => <Code>{chunks}</Code>;
 
-/** Workspace › Models › Web search: the engine every feature searches with. */
+/** Models & usage › Models › Web search: the engine every feature searches with. */
 function WebSearchSection({ search }: { search: WebSearchInfo }) {
     const t = useTranslations("settings.models.webSearch");
     const locale = useLocale();

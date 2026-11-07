@@ -144,7 +144,17 @@
     "website": "Website",
     "savedOn": "· Saved {date}",
     "openSite": "Open site",
-    "textNote": "Below is the text LaunchStack read from this page. Ask and the company profile quote it."
+    "textNote": "Below is the text LaunchStack read from this page. Ask and the company profile quote it.",
+    "tabText": "Page text",
+    "previewLoading": "Taking a picture of the page…",
+    "previewLoadingHint": "The first time takes a few seconds.",
+    "previewFailedTitle": "Couldn't show this page",
+    "previewUnavailableTitle": "Page previews aren't set up here",
+    "tryAgain": "Try again",
+    "showText": "Read the page text",
+    "previewAlt": "{host} as it looked when it was saved",
+    "previewTruncated": "The picture stops here. Open the site to see the rest of the page.",
+    "viewToggle": "Show the page as"
   },
   "xlsx": {
     "fetchFailed": "Failed to fetch spreadsheet ({status})",
@@ -361,7 +371,10 @@
       "transcriptEmpty": "This transcript is empty",
       "translationFailed": "Translation failed",
       "noMedia": "This document has no audio or video",
-      "mediaLoadFailed": "Failed to load media"
+      "mediaLoadFailed": "Failed to load media",
+      "notWebsite": "This document isn't a saved website.",
+      "previewNotConfigured": "Page previews need the rendering service. Set GOTENBERG_SERVICE_URL (and its basic-auth pair), and make sure the gotenberg service is running.",
+      "previewRenderFailed": "The rendering service couldn't take a picture of this page."
     },
     "artifacts": {
       "notFound": "Artifact not found",

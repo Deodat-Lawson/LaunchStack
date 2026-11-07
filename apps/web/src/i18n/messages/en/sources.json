@@ -492,7 +492,6 @@
     "notConfigured": "Notion is not configured on this server. Whoever runs LaunchStack needs to add NOTION_OAUTH_CLIENT_ID and NOTION_OAUTH_CLIENT_SECRET — the steps are in .env.example.",
     "connectAnother": "Connect another Notion workspace",
     "paused": {
-      "ownerLeft": "Paused: the member who connected this is no longer in the workspace.",
       "noUpload": "Paused: you can no longer add files in this workspace. Ask an admin for upload access."
     }
   },

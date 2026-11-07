@@ -16,7 +16,6 @@ export const NOTION_ROOT_FOLDER = "Notion";
  * logs and anything that reads the raw error.
  */
 export const NOTION_PAUSED = {
-    ownerLeft: "Paused: the member who connected Notion is no longer in this workspace",
     noUpload:
         "Paused: you can no longer add files in this workspace. Ask an admin for upload access.",
 } as const;

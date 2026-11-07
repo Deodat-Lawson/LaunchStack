@@ -3,15 +3,19 @@
  */
 
 import { RESPONSE_STYLES, type ResponseStyleId, DEFAULT_STYLE } from "~/lib/ai/styles";
+import { CHAT_CORE_INSTRUCTIONS } from "~/lib/ai/chat-instructions";
+
+const withCore = (preferences: string) =>
+    `${CHAT_CORE_INSTRUCTIONS}\n\n## Response preferences\n${preferences}`;
 
 // Re-export for backward compatibility or direct usage
 export const SYSTEM_PROMPTS = {
-    balanced: RESPONSE_STYLES.balanced.systemPrompt,
-    concise: RESPONSE_STYLES.concise.systemPrompt,
-    detailed: RESPONSE_STYLES.detailed.systemPrompt,
-    academic: RESPONSE_STYLES.academic.systemPrompt,
-    organized: RESPONSE_STYLES.organized.systemPrompt,
-    "bullet-points": RESPONSE_STYLES.organized.systemPrompt, // Mapping old to new
+    balanced: withCore(RESPONSE_STYLES.balanced.systemPrompt),
+    concise: withCore(RESPONSE_STYLES.concise.systemPrompt),
+    detailed: withCore(RESPONSE_STYLES.detailed.systemPrompt),
+    academic: withCore(RESPONSE_STYLES.academic.systemPrompt),
+    organized: withCore(RESPONSE_STYLES.organized.systemPrompt),
+    "bullet-points": withCore(RESPONSE_STYLES.organized.systemPrompt), // Mapping old to new
 };
 
 /**
@@ -25,7 +29,7 @@ export function getSystemPrompt(style: string = DEFAULT_STYLE, persona?: string)
     }
 
     const config = RESPONSE_STYLES[styleId as ResponseStyleId] ?? RESPONSE_STYLES[DEFAULT_STYLE];
-    let prompt = config.systemPrompt;
+    let prompt = withCore(config.systemPrompt);
 
     if (persona === "legal-expert") {
         prompt = `${prompt}

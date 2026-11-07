@@ -326,9 +326,22 @@ export interface NewSegmentInput {
     name: string;
     /** What you sell, in your words. */
     offering: string;
+    /** Who buys it: the kinds of companies to look for ("restaurants", "coffee roasters"). */
     industries: string[];
     /** ISO-3166 alpha-2 codes. */
-    countries: string[];
+    countries?: string[];
+    /** Places as people write them: "Baltimore, MD, USA", "Netherlands". */
+    places?: string[];
+}
+
+/** A first segment drafted from the company's own profile, for the setup form. */
+export interface SegmentSuggestion {
+    /** The company's description, as a start for "what you sell". */
+    offering: string;
+    /** Where the company is ("Baltimore, United States"), the default place to look. */
+    place: string | null;
+    /** What the draft came from, so the form can say so. */
+    basis: { profile: boolean; headquarters: boolean };
 }
 
 // ─── Client ─────────────────────────────────────────────────────────────────
@@ -398,6 +411,8 @@ export const prospectsApi = {
             method: "POST",
             body: JSON.stringify(input),
         }),
+    segmentSuggestion: () =>
+        call<{ suggestion: SegmentSuggestion }>("/api/prospects/segments/suggestion"),
     patchSegment: (id: string, fields: Record<string, string | string[]>) =>
         call<{ segment: SegmentDto }>(`/api/prospects/segments/${id}`, {
             method: "PATCH",

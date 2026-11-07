@@ -7,6 +7,8 @@ import { NextResponse } from "next/server";
 
 import { localeOfRequest } from "~/i18n/server";
 import { translatorFor, wordOr } from "~/i18n/translate";
+import { isAiAllowanceExceededError } from "~/server/ai-usage/errors";
+import { allowanceRefusalBody } from "~/server/ai-usage/refusal";
 import { isStatusCarryingError } from "~/server/api/responses";
 
 export function json(data: unknown, status = 200): NextResponse {
@@ -27,6 +29,9 @@ export function error(
  */
 export function handleRouteError(scope: string, err: unknown, request?: Request): NextResponse {
     const locale = request ? localeOfRequest(request) : "en";
+    if (isAiAllowanceExceededError(err)) {
+        return NextResponse.json(allowanceRefusalBody(err.allowance, locale), { status: 429 });
+    }
     if (isStatusCarryingError(err)) {
         return error(wordOr(err.copy, err.message, locale), err.status, { code: err.code });
     }

@@ -44,6 +44,11 @@ export interface RichChatEditorHandle {
     focus: () => void;
     insertContext: (context: ComposerContext) => void;
     insertText: (value: string) => void;
+    /**
+     * Replaces the `charsBack` characters before the caret — a typed
+     * `@query` or `/command` — with a chip or text ("" just removes them).
+     */
+    replaceQuery: (charsBack: number, content: ComposerContext | string) => void;
     getJSON: () => JSONContent | null;
     getContexts: () => ComposerContext[];
     isInList: () => boolean;
@@ -58,6 +63,8 @@ export interface RichChatEditorProps {
     onKeyDown: (event: KeyboardEvent) => boolean;
     onPaste: (event: ClipboardEvent, selectedLength: number) => boolean;
     onOpenContext: (context: ComposerContext) => void;
+    /** Called by the composer's stand-in when this editor's code could not be loaded. */
+    onUnavailable?: () => void;
 }
 
 function ContextNodeView({ node, extension }: NodeViewProps) {
@@ -604,6 +611,21 @@ const RichChatEditor = forwardRef<RichChatEditorHandle, RichChatEditorProps>(
                 },
                 insertText: value => {
                     editor?.chain().focus().insertContent({ type: "text", text: value }).run();
+                },
+                replaceQuery: (charsBack, content) => {
+                    if (!editor) return;
+                    const to = editor.state.selection.from;
+                    const from = Math.max(1, to - charsBack);
+                    const chain = editor.chain().focus().deleteRange({ from, to });
+                    if (typeof content === "string") {
+                        if (content) chain.insertContent({ type: "text", text: content });
+                    } else {
+                        chain.insertContent([
+                            { type: "composerContext", attrs: { context: content } },
+                            { type: "text", text: " " },
+                        ]);
+                    }
+                    chain.run();
                 },
                 getJSON: () => editor?.getJSON() ?? null,
                 getContexts: () => (editor ? composerContexts(editor.getJSON()) : []),

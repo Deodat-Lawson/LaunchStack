@@ -148,12 +148,16 @@ Run the **same checklist** (sections 1–5, and optionally 6) again. Note any di
 | 3.3.6 | Document generator (if present) | Outline/citation/grammar/research/export panels open and behave; export works or shows clear state. |
 | 3.3.7 | Simple query / Agent chat       | Query panel or agent chat returns answers; no infinite loading.                                     |
 
-### 3.3 Statistics (`/employer/statistics`)
+### 3.3 Usage (`/employer/documents?feature=usage`)
 
-| #     | Check      | Expected                                                                                 |
-| ----- | ---------- | ---------------------------------------------------------------------------------------- |
-| 3.4.1 | Page loads | Charts and tables load (employee activity, document stats).                              |
-| 3.4.2 | Data       | Numbers and trends match backend; document details sheet or drill-down works if present. |
+`/employer/statistics` and `?feature=analytics` redirect here (Analytics folded into the Usage tab).
+
+| #     | Check           | Expected                                                                                                                         |
+| ----- | --------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| 3.4.1 | Owner or Admin  | Overview, People, Activity, Documents, You and Spending across the top; tiles, daily chart and tables load for 7/30/90 days.     |
+| 3.4.2 | Data            | Overview totals match the People rows plus "No one person"; a person's page matches their People row; Export CSV holds the rows. |
+| 3.4.3 | Member / Viewer | Only "Your usage", from any link; the workspace median under each tile (from 3 members); `/api/usage/people` answers 403.        |
+| 3.4.4 | Old links       | `/employer/settings#usage.pricePerMillionTokens` opens Usage › Spending with the row in view.                                    |
 
 ### 3.4 People and access (`/employer/settings#people`) (Only if working on access)
 
@@ -264,8 +268,10 @@ their switches are locked.
 
 - **Keyless** (no chat model or no search key configured, which is every fresh
   dev setup): OpenStreetMap (Photon category search plus the OSM API, then
-  Overpass, then Nominatim by native-language names) and the Y Combinator
-  directory find organisations with a website in each territory; each site is read by the page profiler
+  Overpass, then Nominatim by native-language names) finds real places with a
+  website in each territory — of the OpenStreetMap kinds closest in meaning to
+  who the segment sells to, chosen with the workspace's embedding model; each
+  site is read by the page profiler
   (home plus about/contact/careers pages) which records what the pages
   literally say as evidence — description, headcount, roles, countries,
   certifications, public mailboxes — and assembles the dossier. It runs in
@@ -283,11 +289,19 @@ Profiles are published into Sources only when `FILE_ACCESS_TOKEN_SECRET` is
 set (the ingestion pipeline needs it); without it every row is kept and the
 document is skipped, with one warning in the server log.
 
+**Matching.** In every mode, companies are matched to the segment by meaning:
+the brief ("retailers that would buy, stock or resell …") and each company's
+own words are embedded, and a company must read more like that buyer than
+like business in general. With a chat model configured, the closest
+companies are then checked ("would this business buy this?") and a no takes
+them off the shortlist. The run's warnings say how many were left out for
+area, for meaning and by the fit check. Without an embedding model the run
+matches by shared words and says so.
+
 The run's `caps` line and the Sources yield labels say which mode produced
-it ("OpenStreetMap" and "Public directories (YC)" for keyless; "Sample …" for
-fixtures). Segments that name concrete, physical buyer types (cafés,
-roasters, bakeries, warehouses, clinics) get the most from OpenStreetMap;
-abstract software categories mostly reach the YC directory.
+it ("OpenStreetMap" for keyless; "Sample …" for fixtures). There is no
+startup directory any more: it answered every segment with software
+companies, whatever the segment sold.
 
 1. Open Prospects with no program: the rail says "No segment"; New segment
    (segment switcher → New segment) asks for a name, what you sell,

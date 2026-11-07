@@ -146,6 +146,7 @@ jest.mock("drizzle-orm", () => ({
     sql: jest.requireActual("drizzle-orm").sql,
     getTableName: jest.requireActual("drizzle-orm").getTableName,
     getTableColumns: jest.requireActual("drizzle-orm").getTableColumns,
+    relations: jest.requireActual("drizzle-orm").relations,
     and: (...conditions: unknown[]) => ({ op: "and", conditions }),
     eq: (column: unknown, value: unknown) => ({ op: "eq", column, value }),
     inArray: (column: unknown, values: unknown[]) => ({ op: "in", column, values }),

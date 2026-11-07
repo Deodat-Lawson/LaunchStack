@@ -24,7 +24,7 @@
     },
     "company": {
       "title": "Tell us about {company}",
-      "intro": "We read your website and documents and build a profile of the company that every tool here uses: chat answers, proposals, outreach. What you write here is kept as your own facts; you can change any of it later in Settings › Company.",
+      "intro": "We read your website and documents and build a profile of the company that every tool here uses: chat answers, proposals, outreach. What you write here is kept as your own facts; you can change any of it later in Workspace › Company profile.",
       "website": "Website",
       "homepageIsSource": "Your homepage is already a source; it is not imported again.",
       "homepageImport": "We import your homepage as a source, so the profile can quote it.",
@@ -68,7 +68,7 @@
       "ready": "This is the profile of {company} as your sources and answers stand. Add documents any time and it grows.",
       "importing": "Importing the homepage",
       "imported": "Homepage imported",
-      "importFailedKept": "{message}. It stays your website; change it in Settings › Company.",
+      "importFailedKept": "{message}. It stays your website; change it in Workspace › Company profile.",
       "profileFailed": "The profile could not be built. Your answers and sources are kept; rebuild it from the company profile.",
       "profileFailedReason": "The profile could not be built: {reason} Your answers and sources are kept; rebuild it from the company profile.",
       "profileFailedReasonStop": "The profile could not be built: {reason}. Your answers and sources are kept; rebuild it from the company profile.",

@@ -98,7 +98,12 @@ export async function startRebuild(ctx: Ctx): Promise<CompanyProfileDto> {
         const changedBy = ctx.authUserId;
         after(async () => {
             try {
-                await withWorkspaceChatModels(companyId, "companyProfile", () =>
+                const aiUse = {
+                    feature: "companyProfile",
+                    userId: changedBy,
+                    enforce: false,
+                } as const;
+                await withWorkspaceChatModels(companyId, aiUse, () =>
                     rebuildProfile(companyId, createProfilePorts(), { changedBy })
                 );
             } catch (error) {
@@ -139,17 +144,20 @@ export async function editFact(ctx: Ctx, edit: FactEdit): Promise<CompanyProfile
 /**
  * Run `work` after the response. When no build is running, the profile says
  * "building" until it ends; during a Rebuild the status is left to the
- * Rebuild, so this never marks it done early.
+ * Rebuild, so this never marks it done early. Its model calls count against
+ * `changedBy`, the person whose change set it off.
  */
 async function buildAfterResponse(
     companyId: bigint,
     label: string,
+    changedBy: string,
     work: () => Promise<unknown>
 ): Promise<void> {
     const token = await startBuildIfIdle(companyId);
     after(async () => {
         try {
-            await withWorkspaceChatModels(companyId, "companyProfile", work);
+            const aiUse = { feature: "companyProfile", userId: changedBy, enforce: false } as const;
+            await withWorkspaceChatModels(companyId, aiUse, work);
             if (token) await finishBuild(companyId, token, "idle");
         } catch (error) {
             console.error(`[company-profile] ${label} failed:`, error);
@@ -166,7 +174,7 @@ async function buildAfterResponse(
 
 /** Reassemble after the response, reading only what is stale. */
 export async function reassembleAfterResponse(companyId: bigint, changedBy: string): Promise<void> {
-    await buildAfterResponse(companyId, "reassembly", () =>
+    await buildAfterResponse(companyId, "reassembly", changedBy, () =>
         catchUpAndAssemble(companyId, createProfilePorts(), { changedBy })
     );
 }
@@ -186,7 +194,7 @@ export async function setSourceOverride(
         throw new CompanyProfileError(copy("companyProfile.server.errors.sourceNotFound"), 404);
     await recordOverride(ctx.companyId, documentId, override, ctx.authUserId);
     const companyId = ctx.companyId;
-    await buildAfterResponse(companyId, "source refresh", () =>
+    await buildAfterResponse(companyId, "source refresh", ctx.authUserId, () =>
         refreshForDocument(companyId, documentId, createProfilePorts())
     );
     return loadCompanyProfile(ctx);
@@ -202,7 +210,8 @@ export function reassembleAfterDelete(companyId: bigint, changedBy: string): voi
         try {
             const row = await getProfileRow(companyId);
             if (!row?.builtAt) return;
-            await withWorkspaceChatModels(companyId, "companyProfile", () =>
+            const aiUse = { feature: "companyProfile", userId: changedBy, enforce: false } as const;
+            await withWorkspaceChatModels(companyId, aiUse, () =>
                 catchUpAndAssemble(companyId, createProfilePorts(), { changedBy })
             );
         } catch (error) {

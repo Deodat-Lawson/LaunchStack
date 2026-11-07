@@ -132,7 +132,7 @@
       "sourceNotFound": "Source not found",
       "editNeedsPathValue": "A fact edit needs a path and a value",
       "overrideValues": "override must be about_us, set_aside or null",
-      "noProfileYet": "No company profile yet. Build it from Settings › Company."
+      "noProfileYet": "No company profile yet. Build it from Workspace › Company profile."
     },
     "editErrors": {
       "nothingToUndo": "There is no edit to undo there",

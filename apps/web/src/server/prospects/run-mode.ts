@@ -18,7 +18,7 @@ export interface RunEnvironment {
 
 export function readRunEnvironment(
     env: Record<string, string | undefined>,
-    /** The workspace brought its own working model (Settings › Bring your own keys). */
+    /** The workspace brought its own working model (Workspace › Bring your own keys). */
     workspaceHasOwnModel = false
 ): RunEnvironment {
     return {

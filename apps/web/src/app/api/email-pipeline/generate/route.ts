@@ -3,8 +3,9 @@ import { z } from "zod";
 
 import { generateTemplate, reviewTemplate } from "@launchstack/pipelines/email";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { refuseAtAiAllowance } from "~/server/ai-usage/refusal";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
-import { requestTranslator } from "~/i18n/server";
+import { localeOfRequest, requestTranslator } from "~/i18n/server";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -23,7 +24,14 @@ export async function POST(request: Request) {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
-        return await withWorkspaceChatModels(ctx.data.companyId, "emailCampaigns", async () => {
+        const aiUse = { feature: "emailCampaigns", userId: ctx.data.authUserId } as const;
+        const refused = await refuseAtAiAllowance(
+            ctx.data.companyId,
+            aiUse.userId,
+            localeOfRequest(request)
+        );
+        if (refused) return refused;
+        return await withWorkspaceChatModels(ctx.data.companyId, aiUse, async () => {
             let json: unknown;
             try {
                 json = await request.json();

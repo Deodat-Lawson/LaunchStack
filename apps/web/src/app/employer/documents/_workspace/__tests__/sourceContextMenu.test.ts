@@ -636,3 +636,81 @@ describe("rail additions", () => {
         ).toMatchObject({ label: "Paste 1 source at the top level" });
     });
 });
+
+describe("Re-embed", () => {
+    const ids = (items: ReturnType<typeof buildSourceMenuItems>) => items.map(i => i.id);
+    const item = (items: ReturnType<typeof buildSourceMenuItems>) => {
+        const found = items.find(i => i.id === "reembed");
+        if (!found || found.type !== "item") throw new Error("no Re-embed item");
+        return found;
+    };
+
+    it("offers Re-embed on a file when a handler is wired, before delete", () => {
+        const onReembed = jest.fn();
+        const items = buildSourceMenuItems(t, source({ indexStatus: "ready" }), folders, [], {
+            onReembed,
+            onDelete: jest.fn(),
+        });
+
+        const order = ids(items);
+        expect(order.indexOf("reembed")).toBeGreaterThan(-1);
+        expect(order.indexOf("reembed")).toBeLessThan(order.indexOf("delete"));
+        const reembed = item(items);
+        expect(reembed.label).toBe("Re-embed");
+        expect(reembed.disabled).toBe(false);
+        reembed.onSelect?.();
+        expect(onReembed).toHaveBeenCalledWith(expect.objectContaining({ id: "d1" }));
+    });
+
+    it("is absent without a handler, and on a mindmap, which re-embeds by publishing", () => {
+        expect(ids(buildSourceMenuItems(t, source(), folders, [], {}))).not.toContain("reembed");
+        expect(
+            ids(
+                buildSourceMenuItems(t, source({ type: "mindmap", mindmapId: 4 }), folders, [], {
+                    onReembed: jest.fn(),
+                })
+            )
+        ).not.toContain("reembed");
+    });
+
+    it("waits while the file is processing, and says why", () => {
+        const reembed = item(
+            buildSourceMenuItems(t, source({ indexStatus: "processing" }), folders, [], {
+                onReembed: jest.fn(),
+            })
+        );
+        expect(reembed.disabled).toBe(true);
+        expect(reembed.disabledReason).toBe("This source is already being processed.");
+    });
+
+    it("is refused on a file the caller can only view", () => {
+        const reembed = item(
+            buildSourceMenuItems(
+                t,
+                source({
+                    indexStatus: "ready",
+                    access: {
+                        level: "view",
+                        canEdit: false,
+                        canManage: false,
+                        restricted: false,
+                    } as unknown as WorkspaceSource["access"],
+                }),
+                folders,
+                [],
+                { onReembed: jest.fn() }
+            )
+        );
+        expect(reembed.disabled).toBe(true);
+        expect(reembed.disabledReason).toBe("You can view this file but not change it.");
+    });
+
+    it("stays available for a failed file — it starts over from the beginning", () => {
+        const reembed = item(
+            buildSourceMenuItems(t, source({ indexStatus: "failed" }), folders, [], {
+                onReembed: jest.fn(),
+            })
+        );
+        expect(reembed.disabled).toBe(false);
+    });
+});

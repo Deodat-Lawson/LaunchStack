@@ -45,6 +45,8 @@ export interface SourceMenuHandlers {
     onCut?: (source: WorkspaceSource) => void;
     /** "Share…" — opens the Share dialog: who can open this file, and at what level. */
     onRestrictAccess?: (source: WorkspaceSource) => void;
+    /** Read the file again and embed it with the workspace's current model. */
+    onReembed?: (source: WorkspaceSource) => void;
     onDelete?: (source: WorkspaceSource) => void;
 }
 
@@ -268,6 +270,21 @@ export function buildSourceMenuItems(
             disabled: !persisted,
             disabledReason: persisted ? undefined : indexingReason,
             onSelect: () => handlers.onRestrictAccess?.(source),
+        });
+    }
+
+    // A mindmap is embedded through what it publishes, so publishing again
+    // is how it re-embeds; a file still processing has a run under way.
+    if (handlers.onReembed && source.type !== "mindmap") {
+        const running = source.indexStatus === "processing";
+        items.push({
+            type: "item",
+            id: "reembed",
+            label: t("reembed"),
+            icon: "refresh",
+            disabled: changeBlocked || running,
+            disabledReason: changeReason ?? (running ? t("reembedRunning") : undefined),
+            onSelect: () => handlers.onReembed?.(source),
         });
     }
 

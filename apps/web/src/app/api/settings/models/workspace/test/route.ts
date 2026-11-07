@@ -8,6 +8,7 @@ import { NextResponse } from "next/server";
 import { ChatConfigurationError } from "@launchstack/llm";
 
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
+import { settledSelection } from "~/server/workspace-models/config";
 import { WorkspaceEndpointUrlError } from "~/server/workspace-models/endpoint-url";
 import { testEndpoint } from "~/server/workspace-models/probe";
 import {
@@ -36,7 +37,9 @@ export async function POST(request: Request) {
 
     try {
         const candidate = await resolveCandidate(ctx.data.companyId, parsed.data);
-        const results = await testEndpoint(candidate, parsed.data.models, locale);
+        // A test prices nothing: a price it couldn't use is left off, and
+        // checked when the setup is saved.
+        const results = await testEndpoint(candidate, settledSelection(parsed.data.models), locale);
         return NextResponse.json({
             ok: results.every(result => result.ok),
             results: results.map(result =>

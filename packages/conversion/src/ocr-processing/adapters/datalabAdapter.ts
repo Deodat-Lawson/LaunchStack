@@ -1,4 +1,5 @@
 import type { OCRAdapter, OCRAdapterOptions, PageContent, NormalizedDocument } from "../types";
+import { getStoragePort } from "@launchstack/runtime";
 import { getOcrConfig } from "../config";
 
 interface OCRSubmitResponse {
@@ -141,7 +142,9 @@ export class DatalabAdapter implements OCRAdapter {
             output_format?: string;
         }
     ): Promise<OCRSubmitResponse> {
-        const fileResponse = await fetch(fileUrl);
+        // Through the storage port, like every other adapter: a bare fetch
+        // cannot resolve or sign an internal /api/files/ reference.
+        const fileResponse = await getStoragePort().download(fileUrl);
         if (!fileResponse.ok) {
             throw new Error(`Failed to download PDF from URL: ${fileResponse.status}`);
         }

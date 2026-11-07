@@ -27,6 +27,10 @@ export interface PaneTab {
     label: string;
     Icon: ComponentType<IconProps>;
     desc?: string;
+    /** A live count beside the name — the Processing tab's files still moving. */
+    count?: number;
+    /** `danger` when something in that count needs attention. */
+    countTone?: "active" | "danger";
 }
 
 export interface StudioTabsProps {
@@ -492,6 +496,25 @@ export function StudioTabs({
                                         >
                                             <Icon size={13} />
                                             <span className="truncate">{tab.label}</span>
+                                            {tab.count ? (
+                                                <span
+                                                    data-testid="tab-count"
+                                                    aria-label={t(
+                                                        tab.countTone === "danger"
+                                                            ? "studioTabs.countAttention"
+                                                            : "studioTabs.countActive",
+                                                        { count: tab.count }
+                                                    )}
+                                                    className={cn(
+                                                        "inline-flex h-4 min-w-4 shrink-0 items-center justify-center rounded-full px-1 text-[10px] font-semibold tabular-nums leading-none",
+                                                        tab.countTone === "danger"
+                                                            ? "bg-danger text-white"
+                                                            : "bg-brand-soft text-brand-ink"
+                                                    )}
+                                                >
+                                                    {tab.count}
+                                                </span>
+                                            ) : null}
                                         </TabsTrigger>
                                         <Button
                                             variant="ghost"

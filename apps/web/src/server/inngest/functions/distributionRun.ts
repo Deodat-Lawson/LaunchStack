@@ -9,6 +9,7 @@
 import {
     DistributionRunEventDataSchema,
     createDefaultPorts,
+    createKeylessPorts,
     enrichCandidate,
     failRun,
     finalizeRun,
@@ -20,6 +21,8 @@ import {
 import { inngest } from "../client";
 import { uploadFile } from "~/lib/storage";
 import { debitTokens } from "~/lib/credits";
+import { canPublishToSources } from "~/server/prospects/keyless-run";
+import { prospectEmbedder, prospectFitJudge } from "~/server/prospects/matching";
 import { processDocumentUpload } from "~/server/services/document-upload";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
@@ -86,11 +89,22 @@ export const distributionRunJob = inngest.createFunction(
         // createDefaultPorts resolves its models when called, and a step body runs
         // outside the handler's async context: each step that builds ports or
         // calls a model enters the workspace's models itself.
+        const aiUse = { feature: "distribution", userId: data.userId, enforce: false } as const;
         const inWorkspace = <T>(work: () => Promise<T>) =>
-            withWorkspaceChatModels(companyId, "distribution", work);
-        const ports = () =>
-            createDefaultPorts({
+            withWorkspaceChatModels(companyId, aiUse, work);
+        const ports = async () => {
+            const embed = await prospectEmbedder(companyId);
+            // Same job, same steps; what differs is where companies come from.
+            if (data.mode === "keyless")
+                return createKeylessPorts({
+                    publishDossier: canPublishToSources() ? publishDossier : null,
+                    debitCredits: null,
+                    embed,
+                    judgeFit: await prospectFitJudge(companyId),
+                });
+            return createDefaultPorts({
                 publishDossier,
+                embed,
                 debitCredits: async ({ amount, description, referenceId }) => {
                     await debitTokens({
                         companyId,
@@ -101,18 +115,22 @@ export const distributionRunJob = inngest.createFunction(
                     });
                 },
             });
+        };
 
         const startedAtIso = await step.run("start", async () => new Date().toISOString());
 
         const prepared = await step.run("prepare", () =>
-            inWorkspace(() => prepareRun(ctx, ports()))
+            inWorkspace(async () => prepareRun(ctx, await ports()))
         );
 
         const results: EnrichCandidateResult[] = [];
         for (const [index, relationshipId] of prepared.candidateRelationshipIds.entries()) {
             const result = await step.run(`enrich-${index}`, () =>
-                inWorkspace(() =>
-                    enrichCandidate(ctx, ports(), { relationshipId, profile: prepared.profile })
+                inWorkspace(async () =>
+                    enrichCandidate(ctx, await ports(), {
+                        relationshipId,
+                        profile: prepared.profile,
+                    })
                 )
             );
             results.push(result);

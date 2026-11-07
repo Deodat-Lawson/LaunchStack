@@ -18,6 +18,9 @@ export interface CompanyEmbeddingConfig {
     ollamaModel?: string | null;
 }
 
+/** Whose endpoint serves a provider: the deployment's, or one the workspace brought. */
+export type EmbeddingOwner = "deployment" | "workspace";
+
 export interface EffectiveEmbeddingConfig {
     embeddingIndexKey?: string;
     openAIApiKey?: string;
@@ -25,6 +28,12 @@ export interface EffectiveEmbeddingConfig {
     huggingFaceApiKey?: string;
     ollamaBaseUrl?: string;
     ollamaModel?: string;
+    /** Who the OpenAI-compatible key and URL belong to (they always come as a pair). */
+    openAIOwner: EmbeddingOwner;
+    /** Who the Hugging Face key belongs to. */
+    huggingFaceOwner: EmbeddingOwner;
+    /** Who the Ollama server belongs to. */
+    ollamaOwner: EmbeddingOwner;
 }
 
 /**
@@ -81,15 +90,19 @@ export function resolveEffectiveEmbeddingConfig(
           }
         : { apiKey: defaults.openAIApiKey, baseUrl: defaults.openAIBaseUrl };
 
+    const companyHuggingFaceKey = normalizeOptional(config?.huggingFaceApiKey);
+    const companyOllamaUrl = normalizeOptional(config?.ollamaBaseUrl);
+
     return {
         embeddingIndexKey:
             normalizeOptional(config?.embeddingIndexKey) ?? defaults.embeddingIndexKey ?? undefined,
         openAIApiKey: openAI.apiKey ?? undefined,
         openAIBaseUrl: openAI.baseUrl ?? undefined,
-        huggingFaceApiKey:
-            normalizeOptional(config?.huggingFaceApiKey) ?? defaults.huggingFaceApiKey ?? undefined,
-        ollamaBaseUrl:
-            normalizeOptional(config?.ollamaBaseUrl) ?? defaults.ollamaBaseUrl ?? undefined,
+        openAIOwner: companyOpenAIApiKey ? "workspace" : "deployment",
+        huggingFaceApiKey: companyHuggingFaceKey ?? defaults.huggingFaceApiKey ?? undefined,
+        huggingFaceOwner: companyHuggingFaceKey ? "workspace" : "deployment",
+        ollamaOwner: companyOllamaUrl ? "workspace" : "deployment",
+        ollamaBaseUrl: companyOllamaUrl ?? defaults.ollamaBaseUrl ?? undefined,
         ollamaModel:
             normalizeOptional(config?.ollamaModel) ??
             defaults.ollamaEmbeddingModel ??

@@ -468,7 +468,7 @@ it("uses Chinese setup copy through the shared catalogue", async () => {
 });
 
 it.each([
-    ["silence", "Stopped automatically — no audio"],
+    ["silence", "Stopped automatically — silence"],
     ["call_ended", "Stopped automatically — call ended"],
     [null, "Completed"],
 ] as const)("shows an autonomous end from the next call poll (%s)", async (stopReason, label) => {

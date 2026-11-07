@@ -19,6 +19,7 @@ const input: PlanInput = {
         partnerKinds: ["importer", "retailer"],
         constraints: null,
         knownPartnerDomains: [],
+        customerDomains: [],
         status: "active",
         createdAt: new Date(),
         updatedAt: null,

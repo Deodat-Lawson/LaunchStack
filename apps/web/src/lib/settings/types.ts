@@ -21,11 +21,20 @@ export function isStoredScope(value: unknown): value is StoredScope {
     return value === "workspace" || value === "folder" || value === "member";
 }
 
-/** Rail sections of the panel. Grouped into You / Workspace / Workspace data. */
+/**
+ * Every settings section, on either surface: Settings holds what is yours
+ * alone (Account, Appearance, Shortcuts, Data and privacy), the Workspace tab
+ * everything about the workspace. Which surface draws which is
+ * `~/lib/settings/surfaces`. There was a `processing` section, which became
+ * `byok` (Bring your own keys), and a `documents` one (Document defaults),
+ * which is gone; the old links of both still land somewhere
+ * (`./surfaces`).
+ */
 export const SETTINGS_SECTION_IDS = [
     "account",
     "appearance",
     "shortcuts",
+    "general",
     "people",
     "company",
     "byok",

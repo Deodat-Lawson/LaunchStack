@@ -11,6 +11,10 @@ jest.mock("@launchstack/llm/embeddings", () => ({
 }));
 
 jest.mock("~/server/db", () => ({ db: {} }));
+// Runs the work as-is: which workspace's models it gets is not this test's concern.
+jest.mock("~/server/workspace-models/scope", () => ({
+    withWorkspaceChatModels: (_companyId: unknown, _feature: unknown, fn: () => unknown) => fn(),
+}));
 jest.mock("~/server/db/index", () => ({
     db: { execute: jest.fn().mockResolvedValue([]) },
     toRows: (value: unknown) => value,

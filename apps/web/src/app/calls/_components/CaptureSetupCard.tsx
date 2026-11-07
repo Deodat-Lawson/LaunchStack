@@ -154,6 +154,18 @@ export function CaptureSetupCard({
                         </Button>
                     </div>
                     <p className="text-ink-3 m-0 mt-2 text-xs">{t("requirements")}</p>
+                    {!connectedDevice && (
+                        <div className="border-line mt-4 rounded-lg border p-3">
+                            <h3 className="text-ink m-0 text-xs font-medium">
+                                {t("installTitle")}
+                            </h3>
+                            <ol className="text-ink-2 m-0 mt-2 grid list-decimal gap-1 pl-4 text-xs leading-relaxed">
+                                <li>{t("installDrag")}</li>
+                                <li>{t("installOpenAnyway")}</li>
+                                <li>{t("installPermissions")}</li>
+                            </ol>
+                        </div>
+                    )}
                     {error && (
                         <p role="alert" className="text-danger m-0 mt-3 text-sm">
                             {error}

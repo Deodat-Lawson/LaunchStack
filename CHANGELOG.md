@@ -23,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - **Pause instead of fail:** when the worker gives up, crashes, or stops renewing its lease, the Capture is paused with `pausedReason: "worker_error"`. The Call stays open with its Transcript, the outage is a Gap, and the Calls UI shows "Paused — capture error" with Resume. Resume continues the same Call with a new Capture Attempt.
   - **Reattach:** only a still-running pipeline whose attempt was reaped for lease expiry can reattach and remove its presumed Gap. A crashed process or confirmed stream loss cannot resurrect that attempt; Resume creates a fresh attempt, and real missing intervals remain Gaps that make retained evidence partial.
   - **User Pause:** now drains and ends the attempt instead of failing it.
-  - **Migration:** `20261025000010_capture_paused_reason` adds `paused_reason`.
+  - **Migration:** `20261107060010_capture_paused_reason` adds `paused_reason`.
   - **Older Calls:** Calls failed by a worker error before this release stay failed.
 - **Dev server memory leak** — `next dev` no longer grows by about 1 GB of live heap per hour. Three causes, all measured with heap snapshots under the Calls polling workload:
   - The React Flight development runtime that Next loads into its router process tracked every async operation in the process and linked them into one chain that was never released (99% of the growth). `patches/next@15.5.7.patch` now starts that tracking only inside a React render (`app-page-turbo.runtime.dev.js`).

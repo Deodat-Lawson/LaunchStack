@@ -29,14 +29,15 @@
     "./trend-search/providers/types": "./src/trend-search/providers/types.ts",
     "./client-prospector": "./src/client-prospector/index.ts",
     "./client-prospector/db": "./src/client-prospector/db.ts",
+    "./founder-weekly-review": "./src/founder-weekly-review/index.ts",
     "./call-notes": "./src/call-notes/index.ts",
     "./call-notes/contracts": "./src/call-notes/contracts.ts",
     "./call-notes/files": "./src/call-notes/files.ts",
     "./call-notes/enrichment": "./src/call-notes/enrichment.ts",
-    "./founder-weekly-review": "./src/founder-weekly-review/index.ts",
     "./marketing": "./src/marketing/index.ts",
     "./marketing/benchmark": "./src/marketing/benchmark/index.ts",
     "./marketing/posts": "./src/marketing/posts.ts",
+    "./marketing/runs": "./src/marketing/runs.ts",
     "./email": "./src/email/index.ts",
     "./email/types": "./src/email/types.ts",
     "./email/merge": "./src/email/merge.ts",
@@ -59,6 +60,8 @@
     "./distribution/schema": "./src/distribution/schema.ts",
     "./distribution/types": "./src/distribution/types.ts",
     "./distribution/stages": "./src/distribution/stages.ts",
+    "./distribution/locate": "./src/distribution/locate.ts",
+    "./distribution/geocode": "./src/distribution/geocode.ts",
     "./proposals": "./src/proposals/index.ts",
     "./proposals/db": "./src/proposals/db.ts",
     "./proposals/schema": "./src/proposals/schema.ts",
@@ -67,7 +70,9 @@
     "./scenarios/db": "./src/scenarios/db.ts",
     "./scenarios/schema": "./src/scenarios/schema.ts",
     "./vantage": "./src/vantage/index.ts",
-    "./vantage/schema": "./src/vantage/schema.ts"
+    "./vantage/schema": "./src/vantage/schema.ts",
+    "./accelerators/schema": "./src/proposals/accelerators/schema.ts",
+    "./accelerators/types": "./src/proposals/accelerators/types.ts"
   },
   "files": [
     "dist",
@@ -163,6 +168,10 @@
         "types": "./dist/client-prospector/db.d.ts",
         "default": "./dist/client-prospector/db.js"
       },
+      "./founder-weekly-review": {
+        "types": "./dist/founder-weekly-review/index.d.ts",
+        "default": "./dist/founder-weekly-review/index.js"
+      },
       "./call-notes": {
         "types": "./dist/call-notes/index.d.ts",
         "default": "./dist/call-notes/index.js"
@@ -179,10 +188,6 @@
         "types": "./dist/call-notes/enrichment.d.ts",
         "default": "./dist/call-notes/enrichment.js"
       },
-      "./founder-weekly-review": {
-        "types": "./dist/founder-weekly-review/index.d.ts",
-        "default": "./dist/founder-weekly-review/index.js"
-      },
       "./marketing": {
         "types": "./dist/marketing/index.d.ts",
         "default": "./dist/marketing/index.js"
@@ -194,6 +199,10 @@
       "./marketing/posts": {
         "types": "./dist/marketing/posts.d.ts",
         "default": "./dist/marketing/posts.js"
+      },
+      "./marketing/runs": {
+        "types": "./dist/marketing/runs.d.ts",
+        "default": "./dist/marketing/runs.js"
       },
       "./email": {
         "types": "./dist/email/index.d.ts",
@@ -272,13 +281,21 @@
         "types": "./dist/distribution/schema.d.ts",
         "default": "./dist/distribution/schema.js"
       },
-      "./distribution/types": {
-        "types": "./dist/distribution/types.d.ts",
-        "default": "./dist/distribution/types.js"
-      },
       "./distribution/stages": {
         "types": "./dist/distribution/stages.d.ts",
         "default": "./dist/distribution/stages.js"
+      },
+      "./distribution/locate": {
+        "types": "./dist/distribution/locate.d.ts",
+        "default": "./dist/distribution/locate.js"
+      },
+      "./distribution/geocode": {
+        "types": "./dist/distribution/geocode.d.ts",
+        "default": "./dist/distribution/geocode.js"
+      },
+      "./distribution/types": {
+        "types": "./dist/distribution/types.d.ts",
+        "default": "./dist/distribution/types.js"
       },
       "./proposals": {
         "types": "./dist/proposals/index.d.ts",
@@ -315,6 +332,14 @@
       "./vantage/schema": {
         "types": "./dist/vantage/schema.d.ts",
         "default": "./dist/vantage/schema.js"
+      },
+      "./accelerators/schema": {
+        "types": "./dist/proposals/accelerators/schema.d.ts",
+        "default": "./dist/proposals/accelerators/schema.js"
+      },
+      "./accelerators/types": {
+        "types": "./dist/proposals/accelerators/types.d.ts",
+        "default": "./dist/proposals/accelerators/types.js"
       }
     }
   },

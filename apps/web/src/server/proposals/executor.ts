@@ -20,6 +20,7 @@ import {
 import { copy, type Copy } from "~/i18n/copy";
 import { englishCopy } from "~/i18n/translate";
 import { hasTokens } from "~/lib/credits";
+import { assertWithinAiAllowance } from "~/server/ai-usage/refusal";
 import { isMeteringEnforced } from "~/server/deployment";
 import { inngest } from "~/server/inngest/client";
 
@@ -62,6 +63,9 @@ export interface StartRunArgs {
 
 /** Queue a run and hand it to the executor. Returns the queued row at once. */
 export async function startProposalRun(args: StartRunArgs): Promise<RunRecord> {
+    // The run is never stopped once queued, so a person at their AI limit is
+    // refused here (a 429 from the shared route handler).
+    await assertWithinAiAllowance(args.companyId, args.userId);
     if (isMeteringEnforced()) {
         const required = creditsFor(args.kind, args.sectionLabels?.length ?? 1);
         if (!(await hasTokens(args.companyId, required)))
@@ -84,8 +88,10 @@ export async function startProposalRun(args: StartRunArgs): Promise<RunRecord> {
     }
     after(async () => {
         try {
-            // After the response, under the workspace's own models if it brought them.
-            await withWorkspaceChatModels(args.companyId, "proposals", () =>
+            // After the response, under the workspace's own models if it brought
+            // them; counted against whoever started the run, never stopped midway.
+            const aiUse = { feature: "proposals", userId: args.userId, enforce: false } as const;
+            await withWorkspaceChatModels(args.companyId, aiUse, () =>
                 executeProposalRun(ctx, createProposalPorts(args.companyId))
             );
         } catch (error) {

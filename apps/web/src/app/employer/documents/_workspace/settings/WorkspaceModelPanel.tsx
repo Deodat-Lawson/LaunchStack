@@ -1,7 +1,7 @@
 "use client";
 
 /**
- * Settings › Bring your own keys › API key.
+ * Workspace › Bring your own keys › API key.
  *
  * A workspace admin points the workspace's AI — chat, drafting, meetings,
  * background work — at their own provider account: OpenRouter in one click,
@@ -15,10 +15,16 @@
  *
  * The editor's Save is published as the section's primary action, so it sits
  * in the settings chrome like every other section's Save.
+ *
+ * Each chosen model can carry what the provider charges for it. A priced
+ * model's calls show a cost and weigh against the Standard model in usage and
+ * limits; blank leaves it unpriced, one token counting as one. When the
+ * listing carries prices (OpenRouter's catalogue does), picking a model fills
+ * its empty price fields; a price the admin typed or saved is never replaced.
  */
 
 import React, { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useFormatter, useTranslations } from "next-intl";
 import { CheckCircle2, ChevronRight, ExternalLink, XCircle } from "lucide-react";
 
 import { Card, Section } from "~/components/layout/page-shell";
@@ -37,6 +43,7 @@ import {
     SelectValue,
 } from "~/components/ui/select";
 import { Spinner } from "~/components/ui/spinner";
+import { MAX_PRICE_PER_MTOK, isPlausiblePrice } from "~/lib/ai/model-pricing";
 import {
     MODEL_PROVIDERS,
     getModelProvider,
@@ -55,11 +62,19 @@ import { StatusNote, type StatusTone } from "./ui";
 // component must not import)
 // ---------------------------------------------------------------------------
 
+/** US dollars per 1M tokens. */
+export interface WorkspaceModelPricing {
+    input: number;
+    output: number;
+    cachedInput?: number;
+}
+
 export interface WorkspaceModelChoice {
     id: string;
     vision: boolean;
     reasoning: boolean;
     structuredOutput?: boolean;
+    pricing?: WorkspaceModelPricing;
 }
 
 export interface WorkspaceModelSelection {
@@ -429,6 +444,19 @@ function inheritsMain(route: RouteId, main: WorkspaceModelChoice | undefined): b
     return true;
 }
 
+type Formatter = ReturnType<typeof useFormatter>;
+
+/** "$3.00 in, $15.00 out per 1M tokens", or nothing for an unpriced model. */
+function priceSummary(t: PanelT, format: Formatter, choice: WorkspaceModelChoice): string {
+    if (!choice.pricing) return "";
+    const dollars = (value: number) =>
+        format.number(value, { style: "currency", currency: "USD", maximumFractionDigits: 4 });
+    return ` · ${t("summary.price", {
+        input: dollars(choice.pricing.input),
+        output: dollars(choice.pricing.output),
+    })}`;
+}
+
 function capabilities(t: PanelT, choice: WorkspaceModelChoice): string {
     const said = [
         choice.vision && t("capabilities.readsImages"),
@@ -451,6 +479,7 @@ function EndpointSummary({
 }) {
     const t = useTranslations("settings.workspaceModel");
     const tc = useTranslations("common");
+    const format = useFormatter();
     const time = useTimeFormat();
     const test = useConnectionTest();
     const provider = getModelProvider(endpoint.provider);
@@ -497,6 +526,7 @@ function EndpointSummary({
                                         </span>
                                         <span className="text-ink-3">
                                             {capabilities(t, choice)}
+                                            {priceSummary(t, format, choice)}
                                         </span>
                                     </>
                                 ) : route.id === "default" ? (
@@ -569,31 +599,116 @@ interface ChoiceDraft {
     reasoning: boolean;
     /** Unset until the admin touches it: the provider's default stands. */
     structuredOutput?: boolean;
+    /** Price fields as typed, US dollars per 1M tokens. Both empty is no price. */
+    inputPrice: string;
+    outputPrice: string;
+    /**
+     * The price per 1M cached input tokens, which the form doesn't show. It
+     * comes with a catalogue or saved price and goes when the input price is
+     * edited, since it is a discount on that price.
+     */
+    cachedInputPrice?: number;
+    /**
+     * Where the price fields stand: empty, filled from the catalogue (picking
+     * another model may replace them), or the admin's (typed, cleared or
+     * saved), which nothing replaces.
+     */
+    priceSource: "empty" | "catalogue" | "admin";
 }
 
 type Drafts = Record<RouteId, ChoiceDraft>;
 
-const EMPTY_CHOICE: ChoiceDraft = { id: "", vision: false, reasoning: false };
+/** Catalogue prices by model id, from the model listing. */
+type CatalogPrices = ReadonlyMap<string, WorkspaceModelPricing>;
+
+const EMPTY_PRICE = {
+    inputPrice: "",
+    outputPrice: "",
+    cachedInputPrice: undefined,
+    priceSource: "empty",
+} as const satisfies Partial<ChoiceDraft>;
+
+const EMPTY_CHOICE: ChoiceDraft = { id: "", vision: false, reasoning: false, ...EMPTY_PRICE };
+
+function draftFrom(choice?: WorkspaceModelChoice): ChoiceDraft {
+    if (!choice) return { ...EMPTY_CHOICE };
+    const { pricing, ...rest } = choice;
+    if (!pricing) return { ...EMPTY_CHOICE, ...rest };
+    return {
+        ...rest,
+        inputPrice: String(pricing.input),
+        outputPrice: String(pricing.output),
+        ...(pricing.cachedInput !== undefined ? { cachedInputPrice: pricing.cachedInput } : {}),
+        priceSource: "admin",
+    };
+}
+
+/**
+ * The catalogue's price for the model a draft names, when its price fields
+ * are empty or still hold the catalogue's price for the model picked before.
+ * A price the admin typed, cleared or saved stays as it is.
+ */
+function withCatalogPrice(draft: ChoiceDraft, prices: CatalogPrices): ChoiceDraft {
+    if (draft.priceSource === "admin") return draft;
+    const price = prices.get(draft.id.trim());
+    if (price) {
+        return {
+            ...draft,
+            inputPrice: String(price.input),
+            outputPrice: String(price.output),
+            cachedInputPrice: price.cachedInput,
+            priceSource: "catalogue",
+        };
+    }
+    // The previous pick's price doesn't belong to this model.
+    if (draft.priceSource === "catalogue") {
+        return { ...draft, ...EMPTY_PRICE };
+    }
+    return draft;
+}
+
+/** A typed price as a number, when it is one an admin could mean. */
+function parsePrice(text: string): number | null {
+    const trimmed = text.trim();
+    if (!trimmed) return null;
+    const value = Number(trimmed);
+    return isPlausiblePrice(value) ? value : null;
+}
+
+/** The price a draft carries, or none when both fields are empty or either is unusable. */
+function pricingFrom(draft: ChoiceDraft): WorkspaceModelPricing | undefined {
+    const input = parsePrice(draft.inputPrice);
+    const output = parsePrice(draft.outputPrice);
+    if (input === null || output === null) return undefined;
+    return {
+        input,
+        output,
+        ...(draft.cachedInputPrice !== undefined ? { cachedInput: draft.cachedInputPrice } : {}),
+    };
+}
 
 function draftsFrom(selection: WorkspaceModelSelection | null): Drafts {
-    const copy = (choice?: WorkspaceModelChoice): ChoiceDraft =>
-        choice ? { ...choice } : { ...EMPTY_CHOICE };
     return {
-        default: copy(selection?.default),
-        fast: copy(selection?.fast),
-        reasoning: copy(selection?.reasoning),
-        vision: copy(selection?.vision),
+        default: draftFrom(selection?.default),
+        fast: draftFrom(selection?.fast),
+        reasoning: draftFrom(selection?.reasoning),
+        vision: draftFrom(selection?.vision),
     };
 }
 
 function selectionFrom(drafts: Drafts, provider: ModelProviderId): WorkspaceModelSelection | null {
     const structuredByDefault = getModelProvider(provider).structuredOutputByDefault;
-    const pick = (draft: ChoiceDraft): WorkspaceModelChoice => ({
-        id: draft.id.trim(),
-        vision: draft.vision,
-        reasoning: draft.reasoning,
-        structuredOutput: draft.structuredOutput ?? structuredByDefault,
-    });
+    const pick = (draft: ChoiceDraft): WorkspaceModelChoice => {
+        const pricing = pricingFrom(draft);
+        return {
+            id: draft.id.trim(),
+            vision: draft.vision,
+            reasoning: draft.reasoning,
+            structuredOutput: draft.structuredOutput ?? structuredByDefault,
+            // Saving replaces the whole selection: no price here removes one.
+            ...(pricing ? { pricing } : {}),
+        };
+    };
     if (!drafts.default.id.trim()) return null;
     const selection: WorkspaceModelSelection = { default: pick(drafts.default) };
     for (const route of EXTRA_ROUTES) {
@@ -610,6 +725,19 @@ function routeProblem(t: PanelT, route: RouteId, draft: ChoiceDraft): string | n
     if (/\s/.test(id) || id.length > 200) return t("problems.badId");
     if (route === "reasoning" && !draft.reasoning) return t("problems.needsReasoning");
     if (route === "vision" && !draft.vision) return t("problems.needsVision");
+    return null;
+}
+
+/** What is wrong with a chosen model's price, or null. A route left empty has none. */
+function priceProblem(t: PanelT, draft: ChoiceDraft): string | null {
+    if (!draft.id.trim()) return null;
+    const input = draft.inputPrice.trim();
+    const output = draft.outputPrice.trim();
+    if (!input && !output) return null;
+    if (!input || !output) return t("problems.pricePair");
+    if (parsePrice(input) === null || parsePrice(output) === null) {
+        return t("problems.priceRange", { max: MAX_PRICE_PER_MTOK });
+    }
     return null;
 }
 
@@ -648,6 +776,7 @@ function EndpointEditor({
         Boolean(initial?.models?.fast ?? initial?.models?.reasoning ?? initial?.models?.vision)
     );
     const [suggestions, setSuggestions] = useState<string[]>([]);
+    const [catalogPrices, setCatalogPrices] = useState<CatalogPrices>(() => new Map());
     const [listing, setListing] = useState<
         | { status: "idle" }
         | { status: "loading" }
@@ -689,7 +818,11 @@ function EndpointEditor({
     const problems = Object.fromEntries(
         ROUTES.map(route => [route.id, routeProblem(t, route.id, drafts[route.id])])
     ) as Record<RouteId, string | null>;
-    const hasProblem = Object.values(problems).some(Boolean);
+    const priceProblems = Object.fromEntries(
+        ROUTES.map(route => [route.id, priceProblem(t, drafts[route.id])])
+    ) as Record<RouteId, string | null>;
+    const hasProblem =
+        Object.values(problems).some(Boolean) || Object.values(priceProblems).some(Boolean);
 
     const blockers = [
         !trimmedUrl && t("blockers.address"),
@@ -702,9 +835,22 @@ function EndpointEditor({
         if (!trimmedUrl) return;
         setListing({ status: "loading" });
         try {
-            const data = await sendJson<{ models: string[] }>("POST", MODELS_URL, connection);
+            const data = await sendJson<{
+                models: string[];
+                prices?: Record<string, WorkspaceModelPricing>;
+            }>("POST", MODELS_URL, connection);
             const models = [...new Set(data.models ?? [])].sort((a, b) => a.localeCompare(b));
+            const prices: CatalogPrices = new Map(Object.entries(data.prices ?? {}));
             setSuggestions(models);
+            setCatalogPrices(prices);
+            // A model already named gets the catalogue's price too, if its
+            // fields are empty.
+            setDrafts(current => {
+                const next = { ...current };
+                for (const route of ROUTES)
+                    next[route.id] = withCatalogPrice(current[route.id], prices);
+                return next;
+            });
             setListing({ status: "done", count: models.length });
         } catch (error) {
             setListing({
@@ -790,12 +936,20 @@ function EndpointEditor({
             return reset;
         });
         setSuggestions([]);
+        setCatalogPrices(new Map());
         setListing({ status: "idle" });
         test.reset();
     };
 
     const editRoute = (route: RouteId, patch: Partial<ChoiceDraft>) =>
-        setDrafts(current => ({ ...current, [route]: { ...current[route], ...patch } }));
+        setDrafts(current => {
+            const next = { ...current[route], ...patch };
+            // Picking a model fills its price from the catalogue, when it may.
+            return {
+                ...current,
+                [route]: patch.id !== undefined ? withCatalogPrice(next, catalogPrices) : next,
+            };
+        });
 
     const keyPlaceholder = canKeepKey
         ? initial?.keyLast4
@@ -977,6 +1131,7 @@ function EndpointEditor({
                     structuredByDefault={preset.structuredOutputByDefault}
                     draft={drafts.default}
                     problem={problems.default}
+                    priceProblem={priceProblems.default}
                     listId={listId}
                     inputRef={mainRef}
                     onChange={patch => editRoute("default", patch)}
@@ -1003,6 +1158,7 @@ function EndpointEditor({
                                 structuredByDefault={preset.structuredOutputByDefault}
                                 draft={drafts[route.id]}
                                 problem={problems[route.id]}
+                                priceProblem={priceProblems[route.id]}
                                 listId={listId}
                                 onChange={patch => editRoute(route.id, patch)}
                             />
@@ -1051,6 +1207,7 @@ function RouteFields({
     structuredByDefault,
     draft,
     problem,
+    priceProblem,
     listId,
     inputRef,
     onChange,
@@ -1060,6 +1217,7 @@ function RouteFields({
     structuredByDefault: boolean;
     draft: ChoiceDraft;
     problem: string | null;
+    priceProblem: string | null;
     listId: string;
     inputRef?: React.Ref<HTMLInputElement>;
     onChange: (patch: Partial<ChoiceDraft>) => void;
@@ -1145,6 +1303,87 @@ function RouteFields({
                 className="text-ink-3 mt-1 text-[11px] leading-normal"
             >
                 {t("editor.structuredHint")}
+            </div>
+            {/* The main model is always chosen; another route only once it names a model. */}
+            {(isMain || draft.id.trim()) && (
+                <PriceFields draft={draft} problem={priceProblem} onChange={onChange} />
+            )}
+        </div>
+    );
+}
+
+function PriceFields({
+    draft,
+    problem,
+    onChange,
+}: {
+    draft: ChoiceDraft;
+    problem: string | null;
+    onChange: (patch: Partial<ChoiceDraft>) => void;
+}) {
+    const t = useTranslations("settings.workspaceModel");
+    const id = useId();
+    const fields = [
+        {
+            key: "input",
+            label: t("editor.priceInput"),
+            value: draft.inputPrice,
+            // The hidden cached price is a discount on the input price it came with.
+            edit: (text: string) =>
+                onChange({ inputPrice: text, cachedInputPrice: undefined, priceSource: "admin" }),
+        },
+        {
+            key: "output",
+            label: t("editor.priceOutput"),
+            value: draft.outputPrice,
+            edit: (text: string) => onChange({ outputPrice: text, priceSource: "admin" }),
+        },
+    ] as const;
+    return (
+        <div role="group" aria-labelledby={`${id}-label`} className="mt-3">
+            <div id={`${id}-label`} className="text-ink-2 mb-1.5 flex gap-2 text-xs font-semibold">
+                {t("editor.price")}
+                <span className="text-ink-3 font-normal">{t("editor.optional")}</span>
+            </div>
+            <div className="grid max-w-[320px] grid-cols-2 gap-2.5">
+                {fields.map(field => (
+                    <div key={field.key} className="min-w-0">
+                        <Label
+                            htmlFor={`${id}-${field.key}`}
+                            className="text-ink-3 mb-1 text-[11.5px] font-normal"
+                        >
+                            {field.label}
+                        </Label>
+                        <div className="relative">
+                            <span
+                                aria-hidden
+                                className="text-ink-3 pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-[13px]"
+                            >
+                                {t("editor.priceUnit")}
+                            </span>
+                            <Input
+                                id={`${id}-${field.key}`}
+                                value={field.value}
+                                onChange={event => field.edit(event.target.value)}
+                                inputMode="decimal"
+                                autoComplete="off"
+                                spellCheck={false}
+                                aria-invalid={problem ? true : undefined}
+                                aria-describedby={`${id}-hint`}
+                                className="mono pl-6"
+                            />
+                        </div>
+                    </div>
+                ))}
+            </div>
+            <div
+                id={`${id}-hint`}
+                className={cn(
+                    "mt-1 text-[11px] leading-normal",
+                    problem ? "text-danger" : "text-ink-3"
+                )}
+            >
+                {problem ?? t("editor.priceHint")}
             </div>
         </div>
     );

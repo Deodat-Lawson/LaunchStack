@@ -30,14 +30,13 @@ jest.mock("~/lib/require-workspace-context", () =>
         }))
 );
 
-// The route reads validated env (~/env) for availableProviders.docling; the
-// real module runs zod validation + import.meta at load time, so mock it.
-jest.mock("~/env", () => ({
-    env: {
-        server: {
-            DOCUMENT_CONVERTER_URL: process.env.DOCUMENT_CONVERTER_URL,
-        },
-    },
+// OCR availability probes the document converter for Docling; these tests
+// are about storage reporting, so it is stubbed.
+jest.mock("~/server/ocr-availability", () => ({
+    ocrOverview: jest.fn().mockResolvedValue({
+        availableProviders: { azure: false, datalab: false, landingAI: false, docling: false },
+        order: [],
+    }),
 }));
 
 jest.mock("drizzle-orm", () => ({

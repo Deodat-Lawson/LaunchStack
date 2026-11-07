@@ -20,6 +20,7 @@ import { validateDeprecatedChatSelection } from "~/server/chat-request-compat";
 import { localeOfRequest } from "~/i18n/server";
 import { translatorFor } from "~/i18n/translate";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { refuseAtAiAllowance } from "~/server/ai-usage/refusal";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
 /** Strip wrapper quotes from rewrite output for fluid in-place insertion. */
@@ -185,7 +186,10 @@ export async function POST(request: Request) {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
-        return await withWorkspaceChatModels(ctx.data.companyId, "documentWriter", async () => {
+        const aiUse = { feature: "documentWriter", userId: ctx.data.authUserId } as const;
+        const refused = await refuseAtAiAllowance(ctx.data.companyId, aiUse.userId, locale);
+        if (refused) return refused;
+        return await withWorkspaceChatModels(ctx.data.companyId, aiUse, async () => {
             let body: unknown;
             try {
                 body = (await request.json()) as unknown;

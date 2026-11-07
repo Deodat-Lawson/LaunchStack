@@ -29,7 +29,7 @@ import {
 import { ShortcutHint, type ShortcutHints, withShortcut } from "./ShortcutHint";
 
 import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
-import { LandingLogoLink } from "~/components/LandingLogoLink";
+import { LogoLink } from "~/components/LogoLink";
 import {
     UNFILED_FOLDER,
     buildFolderTree,
@@ -623,6 +623,12 @@ export interface SourceRailProps {
      * the caller can edit the file — the same gate as uploading a new version.
      */
     onRetrySource?: (source: WorkspaceSource) => Promise<void>;
+    /**
+     * Read a file again and embed it with the workspace's current model —
+     * the source menu's Re-embed. Same gate as Retry; the menu disables it
+     * on a file the caller can only view.
+     */
+    onReembedSource?: (source: WorkspaceSource) => void;
     /** Delete several at once — the multi-selection menu's Delete. */
     onDeleteSources?: (sources: WorkspaceSource[]) => void;
     /** Open the Add dialog with this folder pre-selected. */
@@ -950,6 +956,7 @@ export function SourceRail({
     onRestrictAccess,
     onDeleteSource,
     onRetrySource,
+    onReembedSource,
     onDeleteSources,
     onAddToFolder,
     activeFolder,
@@ -1192,6 +1199,7 @@ export function SourceRail({
                     );
                 },
                 onRestrictAccess,
+                onReembed: onReembedSource,
                 onDelete: onDeleteSource,
             });
         },
@@ -1207,6 +1215,7 @@ export function SourceRail({
             onRenameSource,
             onMoveToFolder,
             onRestrictAccess,
+            onReembedSource,
             onDeleteSource,
             onDeleteSources,
         ]
@@ -1488,13 +1497,15 @@ export function SourceRail({
                     the empty space between them part of the link. The name
                     yields before that control is pushed past the sidebar's
                     edge. */}
-                <LandingLogoLink className="mr-auto flex min-w-0 items-center gap-[9px]">
+                <LogoLink signedIn className="mr-auto flex min-w-0 items-center gap-[9px]">
                     <LaunchstackMark size={22} title={logoLabel} />
                     <span className="min-w-0 truncate text-[13px] font-bold tracking-[-0.01em]">
                         {logoLabel}
                     </span>
-                </LandingLogoLink>
-                {inbox && <InboxBell onOpenTarget={inboxOpen} />}
+                </LogoLink>
+                {inbox && (
+                    <InboxBell onOpenTarget={inboxOpen} onOpenFeedback={inbox.onOpenFeedback} />
+                )}
                 {onClose && (
                     <button
                         onClick={onClose}

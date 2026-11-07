@@ -1,4 +1,17 @@
 import { passagesAsText, type ChatPassage } from "~/lib/chat-passages";
+import type { ChatStep } from "~/lib/chat-stream";
+
+/**
+ * A step of an answer's work as the transcript keeps it: the server's step
+ * plus when the client saw it start and finish, in ms from the send.
+ */
+export interface ChatTurnStep extends ChatStep {
+    startMs?: number;
+    endMs?: number;
+}
+
+/** A turn keeps at most this many steps; a runaway stream can't grow it further. */
+export const MAX_TURN_STEPS = 24;
 
 /** Persisted chat controls contain no provider credentials or executable instructions. */
 export interface ChatSendPayload {
@@ -42,8 +55,11 @@ export interface ChatTurnMetadata {
     id?: string;
     status?: "complete" | "stopped" | "error";
     reasoning?: string;
-    thoughtMs?: number;
     elapsedMs?: number;
+    /** What the answer did before and while writing, in order. */
+    steps?: ChatTurnStep[];
+    /** Time from the send to the answer's first word. */
+    thoughtMs?: number;
     send?: ChatSendPayload;
     tokenBreakdown?: { inputTokens: number; outputTokens: number };
     chunksAnalyzed?: number;
@@ -80,7 +96,13 @@ export function conversationContext(
         send?: { passages?: ChatPassage[] };
     }[],
     imported?: string,
-    maxChars = 60_000
+    maxChars = 60_000,
+    /**
+     * Applied to each of the person's turns: the composer stores a source
+     * chip as a machine link, and the model should read its name instead
+     * (lib/source-mentions.ts `renderMentionsFor`).
+     */
+    renderUserText: (text: string) => string = text => text
 ): string | undefined {
     const context = [
         imported,
@@ -88,13 +110,44 @@ export function conversationContext(
             .filter(m => m.status !== "error")
             .map(m => {
                 const passages = m.role === "user" ? (m.send?.passages ?? []) : [];
-                const text = passages.length ? `${passagesAsText(passages)}\n\n${m.text}` : m.text;
+                const words = m.role === "user" ? renderUserText(m.text) : m.text;
+                const text = passages.length ? `${passagesAsText(passages)}\n\n${words}` : words;
                 return `${m.role === "user" ? "User" : "Assistant"}: ${text}`;
             }),
     ]
         .filter(Boolean)
         .join("\n\n");
     return context ? context.slice(-maxChars) : undefined;
+}
+
+/** Earlier turns sent as `priorQuestions`; each is cut to this many characters. */
+export const PRIOR_QUESTION_LIMIT = 20;
+export const PRIOR_QUESTION_CHARS = 4_000;
+
+/**
+ * What the person themselves wrote earlier in this chat — their messages and
+ * the passages they selected — newest last. The route lets `fetch_page` read
+ * links from these and the current question only, never from the transcript,
+ * where an answer could have written a line that looks like the person's.
+ */
+export function priorQuestions(
+    messages: {
+        role: "user" | "assistant";
+        text: string;
+        status?: string;
+        send?: { origin?: string; passages?: ChatPassage[] };
+    }[]
+): string[] {
+    return messages
+        .filter(m => m.role === "user" && m.status !== "error")
+        .filter(m => !m.send?.origin || m.send.origin === "user")
+        .map(m => {
+            const passages = m.send?.passages ?? [];
+            const text = passages.length ? `${passagesAsText(passages)}\n\n${m.text}` : m.text;
+            return text.slice(0, PRIOR_QUESTION_CHARS);
+        })
+        .filter(text => text.trim().length > 0)
+        .slice(-PRIOR_QUESTION_LIMIT);
 }
 
 /** Recall only what the person typed, without stale machine context or synthetic sends. */

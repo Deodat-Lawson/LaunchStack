@@ -13,6 +13,7 @@ import type { EmbeddingsProvider } from "@launchstack/llm/embeddings";
 import { db } from "~/server/db";
 import { documentNoteEmbeddings, documentNotes, type NoteAnchor } from "~/server/db/schema";
 import { resolveNoteEmbeddingRuntime, type NoteEmbeddingRuntime } from "./embedding-config";
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
 /** Build the exact text that gets embedded for both snapshots and writes. */
 export function buildEmbeddingText(args: {
@@ -279,7 +280,12 @@ export async function embedNoteWithDependencies(
         return "skipped";
     }
 
-    const embedding = await embedOne(runtime.embeddings, embeddingText);
+    // Counted toward the note's author; a legacy note with no workspace counts nowhere.
+    const embedding = await withWorkspaceChatModels(
+        snapshot.note.companyId,
+        { feature: "notes", userId: snapshot.note.userId, enforce: false },
+        () => embedOne(runtime.embeddings, embeddingText)
+    );
     if (!embedding || embedding.length !== runtime.index.dimension) {
         console.warn(`[embedNote] unexpected embedding length ${embedding?.length ?? "null"}`);
         return "skipped";

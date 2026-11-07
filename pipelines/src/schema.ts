@@ -22,3 +22,4 @@ export * from "./distribution/schema";
 export * from "./vantage/schema";
 export * from "./proposals/schema";
 export * from "./scenarios/schema";
+export * from "./proposals/accelerators/schema";

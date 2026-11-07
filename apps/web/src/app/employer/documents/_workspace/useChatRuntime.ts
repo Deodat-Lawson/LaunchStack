@@ -6,7 +6,8 @@ import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 import { DEFAULT_PASSAGE_QUESTION, toPassagePayload } from "~/lib/chat-passages";
 import { chatStatusKeyword, chatStreamErrorKey } from "~/lib/chat-stream";
-import { conversationContext } from "~/lib/chat-turns";
+import { conversationContext, priorQuestions } from "~/lib/chat-turns";
+import { mentionedSourceRefs, renderMentionsFor } from "~/lib/source-mentions";
 import { deriveSessionTitle, MAX_SESSION_APPEND } from "~/lib/workspace-history";
 import { useAIChat } from "../hooks/useAIChat";
 import type { AIChatResponse, AIChatStreamEvent } from "../hooks/useAIChat";
@@ -14,6 +15,7 @@ import type { ComposerSend, ThreadMessage, WorkspaceSource } from "./types";
 import type { ChatAgentOption } from "./collab/types";
 import * as sessions from "./sessionApi";
 import { resolveSourceReference } from "./sourceReferences";
+import { applyStep, settleSteps } from "./turnTrace";
 
 type RuntimeTranslator = ReturnType<typeof useTranslations<"chat.runtime">>;
 
@@ -110,8 +112,9 @@ function storedMessage(message: ThreadMessage): sessions.SessionMessagePayload {
             id: message.id,
             status: message.status === "streaming" ? undefined : message.status,
             reasoning: message.reasoning,
-            thoughtMs: message.thoughtMs,
             elapsedMs: message.elapsedMs,
+            steps: message.steps?.length ? message.steps : undefined,
+            thoughtMs: message.thoughtMs,
             send: message.send,
             tokenBreakdown: message.tokenBreakdown,
             chunksAnalyzed: message.chunksAnalyzed,
@@ -181,11 +184,13 @@ export function useChatRuntime(input: {
 
     const emit = useCallback((context: Conversation) => {
         if (keyRef.current !== context.key || contexts.current.get(context.key) !== context) return;
-        // A streaming answer is written in place as deltas arrive. Each emit
-        // hands out a fresh copy of it, or the memoized row never re-renders.
+        // A turn is updated in place while it streams, and the panel memoises
+        // each message by identity: the live turn goes out as a new object, or
+        // its steps and text wait for an unrelated re-render to show.
+        const last = context.messages.length - 1;
         currentInput.current.setThread(
-            context.messages.map(message =>
-                message.status === "streaming" ? { ...message } : message
+            context.messages.map((message, i) =>
+                message.status === "streaming" || i === last ? { ...message } : message
             )
         );
         setView({
@@ -319,6 +324,9 @@ export function useChatRuntime(input: {
         context.controller = new AbortController();
         const signal = context.controller.signal;
         const started = performance.now();
+        // Earlier turns reach the model with each chip as "Title" (d12), the
+        // name the route gives this turn's chips (lib/source-mentions.ts).
+        const renderTurn = renderMentionsFor(sourceList);
         const companyId = currentInput.current.companyId;
         const askedAgent = currentInput.current.agents.find(a => a.id === send.agentKey);
         const prior = [...context.messages];
@@ -355,92 +363,137 @@ export function useChatRuntime(input: {
 
         const onEvent = (event: AIChatStreamEvent) => {
             if (signal.aborted) return;
-            const now = performance.now() - started;
+            const at = performance.now() - started;
             if (event.type === "text") {
                 answer.text += event.delta;
+                answer.thoughtMs ??= at;
                 answer.stage = words.current.t("stages.writing");
             }
-            if (event.type === "reasoning") {
+            if (event.type === "reasoning")
                 answer.reasoning = (answer.reasoning ?? "") + event.delta;
-                answer.thoughtMs = now;
-            }
             if (event.type === "status") {
                 const keyword = chatStatusKeyword(event.status);
                 answer.stage = keyword ? words.current.t(`stages.${keyword}`) : event.status;
             }
-            answer.elapsedMs = now;
+            if (event.type === "step") answer.steps = applyStep(answer.steps, event.step, at);
+            answer.elapsedMs = at;
             emit(context);
         };
         let savedUser = Boolean(persistedUser);
+        // The question goes out while it is being saved: the answer doesn't
+        // need the saved row, and waiting for it held back every first step
+        // by a full round trip. A save that fails stops the request.
+        let saveFailure: Error | undefined;
+        let stoppedAt: number | undefined;
+        const saving = (
+            persistedUser
+                ? Promise.resolve()
+                : serial(context, async () => {
+                      if (context.sessionId) {
+                          await sessions.appendMessages(context.sessionId, {
+                              messages: [storedMessage(user)],
+                              contextSourceIds: send.refs,
+                              agentKey: send.agentKey,
+                          });
+                      } else {
+                          const opening = [...prior, user];
+                          const created = await sessions.createSession({
+                              messages: opening.slice(0, MAX_SESSION_APPEND).map(storedMessage),
+                              ...(send.passages?.length
+                                  ? { title: deriveSessionTitle(send.text, send.passages) }
+                                  : {}),
+                              contextSourceIds: send.refs,
+                              continuation: context.continuation,
+                              agentKey: send.agentKey,
+                          });
+                          context.sessionId = created.id;
+                          contexts.current.set(created.id, context);
+                          const identity = readIdentity(scopeKey);
+                          const entries = Object.entries({
+                              ...identity.sessions,
+                              [created.id]: context.key,
+                          }).slice(-1000);
+                          saveIdentity(scopeKey, {
+                              activeNew:
+                                  identity.activeNew === context.key ? null : identity.activeNew,
+                              sessions: Object.fromEntries(entries),
+                          });
+                          for (
+                              let offset = MAX_SESSION_APPEND;
+                              offset < opening.length;
+                              offset += MAX_SESSION_APPEND
+                          ) {
+                              await sessions.appendMessages(created.id, {
+                                  messages: opening
+                                      .slice(offset, offset + MAX_SESSION_APPEND)
+                                      .map(storedMessage),
+                              });
+                          }
+                          if (keyRef.current === context.key) {
+                              currentInput.current.sessionIdRef.current = created.id;
+                              currentInput.current.hydratedSession.current = created.id;
+                              currentInput.current.setSessionParam(created.id);
+                          }
+                      }
+                      savedUser = true;
+                  })
+        ).catch((error: unknown) => {
+            saveFailure =
+                error instanceof Error ? error : new Error(words.current.t("errors.saveFailed"));
+            context.controller?.abort();
+        });
         try {
-            if (!persistedUser)
-                await serial(context, async () => {
-                    if (context.sessionId) {
-                        await sessions.appendMessages(context.sessionId, {
-                            messages: [storedMessage(user)],
-                            contextSourceIds: send.refs,
-                            agentKey: send.agentKey,
-                        });
-                    } else {
-                        const opening = [...prior, user];
-                        const created = await sessions.createSession({
-                            messages: opening.slice(0, MAX_SESSION_APPEND).map(storedMessage),
-                            ...(send.passages?.length
-                                ? { title: deriveSessionTitle(send.text, send.passages) }
-                                : {}),
-                            contextSourceIds: send.refs,
-                            continuation: context.continuation,
-                            agentKey: send.agentKey,
-                        });
-                        context.sessionId = created.id;
-                        contexts.current.set(created.id, context);
-                        const identity = readIdentity(scopeKey);
-                        const entries = Object.entries({
-                            ...identity.sessions,
-                            [created.id]: context.key,
-                        }).slice(-1000);
-                        saveIdentity(scopeKey, {
-                            activeNew:
-                                identity.activeNew === context.key ? null : identity.activeNew,
-                            sessions: Object.fromEntries(entries),
-                        });
-                        for (
-                            let offset = MAX_SESSION_APPEND;
-                            offset < opening.length;
-                            offset += MAX_SESSION_APPEND
-                        ) {
-                            await sessions.appendMessages(created.id, {
-                                messages: opening
-                                    .slice(offset, offset + MAX_SESSION_APPEND)
-                                    .map(storedMessage),
-                            });
-                        }
-                        if (keyRef.current === context.key) {
-                            currentInput.current.sessionIdRef.current = created.id;
-                            currentInput.current.hydratedSession.current = created.id;
-                            currentInput.current.setSessionParam(created.id);
-                        }
-                    }
-                    savedUser = true;
-                });
             if (signal.aborted) throw new DOMException("Stopped", "AbortError");
             answer.stage = words.current.t("stages.preparing");
             emit(context);
             const references: string[] = [];
-            for (const id of send.threadRefs ?? []) {
+            const referencedTitles: string[] = [];
+            const threadRefs = send.threadRefs ?? [];
+            for (const id of threadRefs) {
                 if (signal.aborted) throw new DOMException("Stopped", "AbortError");
                 answer.stage = words.current.t("stages.readingReferenced");
+                answer.steps = applyStep(
+                    answer.steps,
+                    {
+                        id: "thread-refs",
+                        label: words.current.t("steps.readingChats", { count: threadRefs.length }),
+                        state: "active",
+                    },
+                    performance.now() - started
+                );
                 emit(context);
                 const referenced = await sessions.fetchSession(id);
                 if (!referenced) throw new Error(words.current.t("errors.referencedUnavailable"));
+                referencedTitles.push(referenced.title);
                 references.push(
-                    `Referenced conversation: ${referenced.title}\n${conversationContext(referenced.messages ?? []) ?? "(empty)"}`
+                    `Referenced conversation: ${referenced.title}\n${conversationContext(referenced.messages ?? [], undefined, undefined, renderTurn) ?? "(empty)"}`
                 );
+            }
+            if (threadRefs.length > 0) {
+                answer.steps = applyStep(
+                    answer.steps,
+                    {
+                        id: "thread-refs",
+                        label: words.current.t("steps.readChats", { count: threadRefs.length }),
+                        state: "done",
+                        detail: referencedTitles.join(", ").slice(0, 500),
+                    },
+                    performance.now() - started
+                );
+                emit(context);
             }
             const ids = [...new Set(chatSources.map(source => source.documentId))];
             const scope = ids.length > 1 ? "selected" : ids.length === 1 ? "document" : "none";
+            // The chips in the words, each mapped to the document it stands
+            // for, so the route names it by id (server/chat-mentions.ts).
+            const sourceMentions = mentionedSourceRefs(send.text).flatMap(ref => {
+                const documentId = sourceList.find(s => s.id === ref)?.documentId;
+                return typeof documentId === "number" ? [{ ref, documentId }] : [];
+            });
             const response = await requestRef.current(
                 {
+                    // Uploads alone still need a question on the wire; the
+                    // route drops these words when the origin is "attachment".
                     question:
                         send.text ||
                         (send.passages?.length
@@ -450,14 +503,22 @@ export function useChatRuntime(input: {
                     companyId: companyId ?? undefined,
                     documentId: scope === "document" ? ids[0] : undefined,
                     selectedDocumentIds: scope === "selected" ? ids : undefined,
+                    sourceMentions: sourceMentions.length ? sourceMentions : undefined,
                     // All workspace sends share automatic defaults, including old
                     // persisted drafts, queued prompts, edits and retries.
                     enableWebSearch: true,
                     thinkingMode: "auto",
                     conversationHistory: conversationContext(
                         prior,
-                        [context.continuation?.context, ...references].filter(Boolean).join("\n\n")
+                        [context.continuation?.context, ...references].filter(Boolean).join("\n\n"),
+                        undefined,
+                        renderTurn
                     ),
+                    // The person's own earlier words, apart from the transcript: links
+                    // in them are the only ones a page read may follow from history.
+                    priorQuestions: priorQuestions(prior),
+                    // A question the app wrote (a plan to carry out) opens no links.
+                    questionOrigin: send.origin && send.origin !== "user" ? send.origin : undefined,
                     agentKey: send.agentKey,
                     modelRoute: send.modelRoute,
                     reasoningEffort: send.reasoningEffort,
@@ -472,27 +533,66 @@ export function useChatRuntime(input: {
                 },
                 { stream: true, onEvent, signal, independent: true }
             );
-            if (signal.aborted || response.cancelled)
+            // A stop shows at once, without waiting for the save. (A failed
+            // save cancels the request too, but it says why below.)
+            if (!saveFailure && (signal.aborted || response.cancelled))
                 throw new DOMException("Stopped", "AbortError");
+            await saving;
+            // A save that fails after the answer arrived keeps the answer on
+            // screen: only the chat is lost, and the reader is told so.
+            const answered = response.success && !response.cancelled;
+            if (saveFailure && !answered) throw saveFailure;
             applyResponse(answer, response, sourceList, words.current);
             if (answer.createdSources) void currentInput.current.onSourcesCreated?.();
-            if (!response.success) context.held = true;
-        } catch (error) {
-            const stopped =
-                signal.aborted || (error instanceof Error && error.name === "AbortError");
-            answer.status = stopped ? "stopped" : "error";
-            answer.stage = stopped
-                ? words.current.t("stages.stopped")
-                : words.current.t("stages.failed");
-            if (!stopped)
-                answer.text = failureText(
-                    error,
-                    words.current,
-                    words.current.t("errors.sendFailed")
+            if (!response.success || saveFailure) context.held = true;
+            if (saveFailure)
+                toast.error(
+                    words.current.t("errors.chatNotSaved", { reason: saveFailure.message })
                 );
+        } catch (error) {
+            // A stop shows at once, even while the chat is still saving.
+            if (
+                !saveFailure &&
+                (signal.aborted || (error instanceof Error && error.name === "AbortError"))
+            ) {
+                answer.status = "stopped";
+                answer.stage = words.current.t("stages.stopped");
+                stoppedAt = performance.now() - started;
+                answer.elapsedMs = stoppedAt;
+                answer.steps = settleSteps(answer.steps, answer.elapsedMs);
+                emit(context);
+            }
+            await saving;
+            if (saveFailure && stoppedAt !== undefined) {
+                // Stopped first: what the reader kept stays; only the chat is lost.
+                toast.error(
+                    answer.text
+                        ? words.current.t("errors.chatNotSaved", { reason: saveFailure.message })
+                        : words.current.t("errors.chatNotSavedEmpty", {
+                              reason: saveFailure.message,
+                          })
+                );
+            } else {
+                if (saveFailure) error = saveFailure;
+                const stopped =
+                    !saveFailure &&
+                    (signal.aborted || (error instanceof Error && error.name === "AbortError"));
+                answer.status = stopped ? "stopped" : "error";
+                answer.stage = stopped
+                    ? words.current.t("stages.stopped")
+                    : words.current.t("stages.failed");
+                if (!stopped)
+                    answer.text = failureText(
+                        error,
+                        words.current,
+                        words.current.t("errors.sendFailed")
+                    );
+            }
             context.held = true;
         } finally {
-            answer.elapsedMs = performance.now() - started;
+            // A stop's time is when it stopped, not when the save behind it finished.
+            answer.elapsedMs = stoppedAt ?? performance.now() - started;
+            answer.steps = settleSteps(answer.steps, answer.elapsedMs);
             if (savedUser && context.sessionId) {
                 try {
                     await serial(context, () =>
@@ -847,6 +947,12 @@ function applyResponse(
 ) {
     answer.status = response.success ? "complete" : "error";
     answer.stage = response.success ? words.t("stages.complete") : words.t("stages.failed");
+    // At an AI limit the server's sentence says which, when it resets and who
+    // can raise it; the panel offers no retry, which could not succeed.
+    answer.failureCode =
+        !response.success && response.code === "ai_allowance_reached"
+            ? "ai_allowance_reached"
+            : undefined;
     const failure = response.message ?? response.error;
     answer.text = response.success
         ? (response.summarizedAnswer ?? answer.text)

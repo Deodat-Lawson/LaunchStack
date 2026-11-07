@@ -3,9 +3,10 @@
  * records (programs, partner organisations, relationships, evidence, runs) to
  * the Prospects contract in `~/app/employer/tools/growth/prospects/api`.
  *
- * This is the bridge until the pipeline reframe lands. It never invents data
+ * Stages are stored in the funnel's own words (lead … won, lost, nurture),
+ * so a deal's stage passes straight through. It never invents data
  * the backend does not have: people are the dossier's public mailboxes,
- * sources are the three the gather stage really has, and figures the backend
+ * sources are the ones the gather stage really has, and figures the backend
  * cannot attribute are null rather than zero.
  *
  * Every sentence it writes goes out twice: the English field API readers
@@ -13,9 +14,18 @@
  * reader's language.
  */
 import type { PartnerListItem } from "@launchstack/pipelines/distribution/db";
-import { ALLOWED_TRANSITIONS, stageRequirements } from "@launchstack/pipelines/distribution/stages";
 import {
+    ALLOWED_TRANSITIONS,
+    IN_MOTION_STAGES,
+    STAGE_ORDER,
+    stageRequirements,
+} from "@launchstack/pipelines/distribution/stages";
+import {
+    MAX_CUSTOMER_DOMAINS,
+    RELATIONSHIP_STAGES,
     RUN_STATUSES,
+    SOURCE_IDS,
+    TERMINAL_STAGES,
     type EvidenceRecord,
     type PartnerOrgRecord,
     type ProgramRecord,
@@ -25,6 +35,7 @@ import {
     type RunRecord,
     type SourceCount,
 } from "@launchstack/pipelines/distribution/types";
+import { normalizeDomain } from "@launchstack/tools/org-resolver";
 
 import type {
     Claim,
@@ -57,31 +68,15 @@ const DAY = 86_400_000;
 
 // ── Stages ────────────────────────────────────────────────────────────────
 
-export const SALES_STAGES: SalesStage[] = [
-    "lead",
-    "qualified",
-    "contacted",
-    "meeting",
-    "proposal",
-    "negotiating",
-    "won",
-    "lost",
-    "nurture",
-];
+/** The stored stages are the sales stages; this fails to compile if they drift apart. */
+const SAME_VOCABULARY: [SalesStage] extends [RelationshipStage]
+    ? [RelationshipStage] extends [SalesStage]
+        ? true
+        : never
+    : never = true;
+void SAME_VOCABULARY;
 
-/** The pipeline's ten relationship stages folded onto the sales funnel. */
-export const SALES_OF: Record<RelationshipStage, SalesStage> = {
-    candidate: "lead",
-    researched: "lead",
-    qualified: "qualified",
-    contacted: "contacted",
-    in_conversation: "meeting",
-    negotiating: "negotiating",
-    contracted: "won",
-    active: "won",
-    declined: "lost",
-    dormant: "nurture",
-};
+export const SALES_STAGES: SalesStage[] = [...RELATIONSHIP_STAGES];
 
 const STAGE_WORD: Record<SalesStage, string> = {
     lead: "Lead",
@@ -95,43 +90,13 @@ const STAGE_WORD: Record<SalesStage, string> = {
     nurture: "Nurture",
 };
 
-const IN_MOTION = new Set<SalesStage>(["contacted", "meeting", "proposal", "negotiating"]);
-
-/** Which relationship stage a sales-stage move lands on, from where the deal is now. */
-export function relationshipTarget(
-    current: RelationshipStage,
-    to: SalesStage
-): RelationshipStage | null {
-    switch (to) {
-        case "lead":
-            return (
-                (["researched", "candidate"] as const).find(s =>
-                    ALLOWED_TRANSITIONS[current].includes(s)
-                ) ?? null
-            );
-        case "qualified":
-            return "qualified";
-        case "contacted":
-            return "contacted";
-        case "meeting":
-            return "in_conversation";
-        case "negotiating":
-            return "negotiating";
-        case "won":
-            return "contracted";
-        case "lost":
-            return "declined";
-        case "nurture":
-            return "dormant";
-        case "proposal":
-            return null;
-    }
-}
+const IN_MOTION = new Set<SalesStage>(IN_MOTION_STAGES);
 
 export const REQUIREMENT_WORDS: Record<string, string> = {
     owner_required: "Needs an owner",
     next_action_required: "Needs a next step",
     agreement_required: "Needs an agreement recorded in Distribution",
+    stage_changed_concurrently: "Someone else moved this deal just now",
 };
 
 /** A stage requirement in plain words, as a copy; null for a code without words. */
@@ -143,6 +108,8 @@ export function requirementCopy(code: string): Copy | null {
             return copy("growth.server.requirements.nextActionRequired");
         case "agreement_required":
             return copy("growth.server.requirements.agreementRequired");
+        case "stage_changed_concurrently":
+            return copy("growth.server.requirements.changedConcurrently");
         default:
             return null;
     }
@@ -154,21 +121,21 @@ export function moveRefusal(
     hasAgreement: boolean,
     to: SalesStage
 ): { reason: string; copy: Copy | null } | null {
-    const current = SALES_OF[rel.stage];
+    const current = rel.stage;
     if (to === current)
         return { reason: "Current stage", copy: copy("growth.server.moves.currentStage") };
-    if (to === "proposal")
-        return {
-            reason: "Not a stage in this workspace yet",
-            copy: copy("growth.server.moves.notAStage"),
-        };
-    const target = relationshipTarget(rel.stage, to);
-    if (!target || !ALLOWED_TRANSITIONS[rel.stage].includes(target)) {
+    if (!ALLOWED_TRANSITIONS[current].includes(to)) {
         if (current === "won")
             return { reason: "Won deals stay won", copy: copy("growth.server.moves.wonStaysWon") };
-        const nextForward = ALLOWED_TRANSITIONS[rel.stage]
-            .map(s => SALES_OF[s])
-            .find(s => s !== current && s !== "lost" && s !== "nurture");
+        const rank = STAGE_ORDER.indexOf(current);
+        if (rank >= 0 && STAGE_ORDER.includes(to) && STAGE_ORDER.indexOf(to) < rank)
+            return {
+                reason: "Move back one stage at a time",
+                copy: copy("growth.server.moves.backOneStage"),
+            };
+        const nextForward = ALLOWED_TRANSITIONS[current].find(
+            s => STAGE_ORDER.indexOf(s) > rank && !TERMINAL_STAGES.has(s)
+        );
         return nextForward
             ? {
                   reason: `Move to ${STAGE_WORD[nextForward]} first`,
@@ -179,7 +146,7 @@ export function moveRefusal(
                   copy: copy("growth.server.moves.notAvailableFrom", { stage: current }),
               };
     }
-    const missing = stageRequirements(target, {
+    const missing = stageRequirements(to, {
         ownerUserId: rel.ownerUserId,
         nextAction: rel.nextAction,
         hasAgreement,
@@ -253,7 +220,7 @@ export function isExcluded(
     rel: Pick<RelationshipRecord, "stage">,
     excludedDomains: ReadonlySet<string>
 ): boolean {
-    return rel.stage === "declined" && org.domain !== null && excludedDomains.has(org.domain);
+    return rel.stage === "lost" && org.domain !== null && excludedDomains.has(org.domain);
 }
 
 // ── Evidence and claims ───────────────────────────────────────────────────
@@ -595,7 +562,7 @@ export function toCompanyRow(item: PartnerListItem, ctx: RowContext): CompanyRow
         why: whyOf(item),
         fit: rel.fitScore,
         fitThreshold: FIT_THRESHOLD,
-        stage: SALES_OF[rel.stage],
+        stage: rel.stage,
         staleDays: staleDays(item, ctx.now),
         people,
         lastActivityAt: iso(rel.lastActivityAt),
@@ -658,7 +625,7 @@ export function toDeal(
     return {
         id: rel.id,
         companyId: rel.id,
-        stage: SALES_OF[rel.stage],
+        stage: rel.stage,
         ownerName: owner,
         ownerIsViewer: rel.ownerUserId !== null && rel.ownerUserId === viewerId,
         ownerInitials: owner ? (owner === "You" ? "ME" : initials(owner)) : null,
@@ -797,6 +764,16 @@ export function segmentFields(program: ProgramRecord): SegmentField[] {
             sourcesCopy: [fieldSource("territories")],
         },
         {
+            // The key the Segment screen (and the dev harness) shows as domains.
+            key: "seedDomains",
+            label: "Customers like these",
+            value: program.customerDomains,
+            sources: program.customerDomains.length > 0 ? ["from the program · customers"] : [],
+            editable: true,
+            labelCopy: fieldLabel("seedDomains"),
+            sourcesCopy: program.customerDomains.length > 0 ? [fieldSource("customers")] : [],
+        },
+        {
             key: "disqualifiers",
             label: "Not a fit",
             value: program.constraints ?? "",
@@ -838,6 +815,37 @@ export function toSegment(
     };
 }
 
+/** Labels of letters, digits and inner hyphens; a top-level domain of two or more letters. */
+const DOMAIN_SHAPE =
+    /^(?=.{4,253}$)([a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+(?:[a-z]{2,63}|xn--[a-z0-9-]{2,59})$/;
+
+/** A company website as typed ("https://www.Acme.com/about", "acme.com") to its domain. */
+export function customerDomainOf(input: string): string | null {
+    const domain = normalizeDomain(input);
+    return domain && DOMAIN_SHAPE.test(domain) ? domain : null;
+}
+
+/**
+ * The "Customers like these" list as entered: each entry (or several in one,
+ * split on commas and spaces) to a bare domain, each once, in order. What is
+ * not a website comes back in `invalid` as typed; more than the cap is
+ * `tooMany`.
+ */
+export function parseCustomerDomains(values: readonly string[]): {
+    domains: string[];
+    invalid: string[];
+    tooMany: boolean;
+} {
+    const domains: string[] = [];
+    const invalid: string[] = [];
+    for (const entry of values.flatMap(v => v.split(/[\s,，、;]+/)).filter(Boolean)) {
+        const domain = customerDomainOf(entry);
+        if (!domain) invalid.push(entry);
+        else if (!domains.includes(domain)) domains.push(domain);
+    }
+    return { domains, invalid, tooMany: domains.length > MAX_CUSTOMER_DOMAINS };
+}
+
 export function joinNatural(items: string[]): string {
     if (items.length <= 1) return items.join("");
     return `${items.slice(0, -1).join(", ")} and ${items[items.length - 1]}`;
@@ -846,7 +854,10 @@ export function joinNatural(items: string[]): string {
 // ── Sources (what the gather stage really has) ────────────────────────────
 
 export interface SourceAvailability {
+    /** Exa company search, or Serper web search when it is the only key. */
     web: boolean;
+    /** Lookalikes of the segment's customers: Exa only. */
+    lookalike: boolean;
     place: boolean;
     trade: boolean;
     screening: boolean;
@@ -854,16 +865,19 @@ export interface SourceAvailability {
 
 const SOURCE_LABEL: Record<SourceCount["source"], string> = {
     web: "Web search",
+    lookalike: "Lookalikes",
     place: "Places",
     trade: "Trade data",
 };
 const KEYLESS_LABEL: Record<SourceCount["source"], string> = {
-    web: "Public directories (YC)",
+    web: "Web search",
+    lookalike: "Lookalikes",
     place: "OpenStreetMap",
     trade: "Trade data",
 };
 const FIXTURE_LABEL: Record<SourceCount["source"], string> = {
     web: "Sample web search",
+    lookalike: "Lookalikes",
     place: "Sample places",
     trade: "Sample trade data",
 };
@@ -898,12 +912,23 @@ const SOURCE_DETAIL: Record<string, Copy> = {
     "no place queries planned": copy("growth.server.sources.details.noPlaceQueries"),
     "place search not configured": copy("growth.server.sources.details.placeNotConfigured"),
     "trade data not configured": copy("growth.server.sources.details.tradeNotConfigured"),
+    "needs EXA_API_KEY": copy("growth.server.sources.details.lookalikeNeedsExa"),
+    "no customers yet": copy("growth.server.sources.details.noCustomersYet"),
 };
 
 export function sourceDetailCopy(detail: string | null | undefined): Copy | null {
     if (!detail) return null;
     const fixed = SOURCE_DETAIL[detail];
     if (fixed) return fixed;
+    const from = /^from (\d+) customers?$/.exec(detail);
+    if (from)
+        return copy("growth.server.sources.details.fromCustomers", { count: Number(from[1]) });
+    const seedsFailed = /^(\d+) of (\d+) customers failed$/.exec(detail);
+    if (seedsFailed)
+        return copy("growth.server.sources.details.customersFailed", {
+            failed: seedsFailed[1]!,
+            total: seedsFailed[2]!,
+        });
     const failed = /^(\d+) (queries|territories) failed$/.exec(detail);
     if (failed)
         return copy(
@@ -922,6 +947,8 @@ const costCopy = (cost: "free" | "creditsPerRun" | "included" | "providerRates")
 
 export function sourceRows(avail: SourceAvailability, latest: RunRecord | null): SourceRow[] {
     const mode = latest?.options.mode ?? null;
+    // Lookalikes need Exa, so web search without them is Serper's.
+    const serperOnly = avail.web && !avail.lookalike;
     const yieldFor = (id: SourceCount["source"], forMode: RunRecord["options"]["mode"]) => {
         const s = latest?.summary?.sources.find(x => x.source === id);
         if (!latest || mode !== forMode || !s || s.status === "skipped") return null;
@@ -939,7 +966,7 @@ export function sourceRows(avail: SourceAvailability, latest: RunRecord | null):
             label: "OpenStreetMap",
             kind: "api",
             description:
-                "Organisations with a website, by country or city and by what they are. Free, no key; used whenever no search provider is configured.",
+                "Real places with a website — shops, cafés, workshops, offices — in each city or country, of the kinds closest in meaning to who you sell to. Free, no key; used whenever no search provider is configured.",
             enabled: true,
             available: true,
             requires: null,
@@ -947,31 +974,45 @@ export function sourceRows(avail: SourceAvailability, latest: RunRecord | null):
             locked: true,
             lastYield: yieldFor("place", "keyless"),
         },
+        serperOnly
+            ? {
+                  id: "web",
+                  label: "Web search (Serper)",
+                  kind: "api",
+                  description:
+                      "Serper web search: the site of each result stands for a company. Add an Exa key for Exa's company index and lookalikes. Needs a model for the research agent.",
+                  enabled: true,
+                  available: true,
+                  requires: null,
+                  cost: "credits per run",
+                  locked: true,
+                  lastYield: yieldFor("web", "live"),
+              }
+            : {
+                  id: "web",
+                  label: "Exa company search",
+                  kind: "api",
+                  description:
+                      "Exa's company index: the homepages of companies matching each query in each territory. Serper web search is the fallback when it is the only key. Needs a model for the research agent.",
+                  enabled: avail.web,
+                  available: avail.web,
+                  requires: "EXA_API_KEY",
+                  cost: "credits per run",
+                  locked: true,
+                  lastYield: yieldFor("web", "live"),
+              },
         {
-            id: "yc",
-            label: "Y Combinator directory",
+            id: "lookalike",
+            label: "Lookalikes",
             kind: "api",
             description:
-                "Active YC companies in the segment's countries whose blurb matches its words. Free, no key.",
-            enabled: true,
-            available: true,
-            requires: null,
-            cost: "free",
-            locked: true,
-            lastYield: yieldFor("web", "keyless"),
-        },
-        {
-            id: "web",
-            label: "Web search",
-            kind: "api",
-            description:
-                "Exa or Serper search for organisations in each territory; needs a model for the research agent.",
-            enabled: avail.web,
-            available: avail.web,
-            requires: "EXA_API_KEY or SERPER_API_KEY",
+                "Companies like your customers: the ones you list on the segment and your won deals, up to five per run, from Exa. Customers are never prospected themselves.",
+            enabled: avail.lookalike,
+            available: avail.lookalike,
+            requires: "EXA_API_KEY",
             cost: "credits per run",
             locked: true,
-            lastYield: yieldFor("web", "live"),
+            lastYield: yieldFor("lookalike", "live"),
         },
         {
             id: "place",
@@ -1029,12 +1070,15 @@ export function sourceRows(avail: SourceAvailability, latest: RunRecord | null):
         included: "included",
         "provider rates": "providerRates",
     };
-    return rows.map(row => ({
-        ...row,
-        labelCopy: rowCopy(row.id, "label"),
-        descriptionCopy: rowCopy(row.id, "description"),
-        costCopy: costCopy(COST[row.cost]!),
-    }));
+    return rows.map(row => {
+        const copyId = row.id === "web" && serperOnly ? "webSerper" : row.id;
+        return {
+            ...row,
+            labelCopy: rowCopy(copyId, "label"),
+            descriptionCopy: rowCopy(copyId, "description"),
+            costCopy: costCopy(COST[row.cost]!),
+        };
+    });
 }
 
 export function toYield(s: SourceCount, mode: RunRecord["options"]["mode"] = "live"): SourceYield {
@@ -1074,7 +1118,7 @@ export function toRunDto(run: RunRecord, progress: RunProgress | null = null): R
     const summary = run.summary;
     const sourceChildren: RunStep[] = (
         summary?.sources ??
-        (["web", "place", "trade"] as const).map(source => ({
+        SOURCE_IDS.map(source => ({
             source,
             queries: 0,
             results: 0,

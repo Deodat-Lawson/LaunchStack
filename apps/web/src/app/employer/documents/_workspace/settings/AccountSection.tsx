@@ -4,7 +4,8 @@
  * Account — who you are, and where you are signed in.
  *
  * Body only. The profile (photo, names, title, the per-workspace look) is
- * `ProfileEditor`. The rest is Better Auth's own data, reached through its
+ * `ProfileEditor`; your AI allowance this month is `AiAllowanceCard`. The
+ * rest is Better Auth's own data, reached through its
  * client: the credential and linked sign-in accounts, and every session
  * that currently holds a cookie for this person, with the device it came
  * from and a way to end it.
@@ -34,6 +35,7 @@ import { authClient, useUser } from "~/lib/auth-client";
 import { cn } from "~/lib/utils";
 import type { SocialProvider } from "~/server/auth/providers";
 
+import { AiAllowanceCard } from "./AiAllowanceCard";
 import { AssistantsBlock } from "./AssistantsBlock";
 import type { SettingsSectionProps } from "./contract";
 import { useTimeFormat } from "./people/format";
@@ -286,6 +288,8 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
             {error && <StatusNote tone="danger">{error}</StatusNote>}
 
             <ProfileEditor onActions={onActions} emailVerified={user ? user.emailVerified : null} />
+
+            <AiAllowanceCard />
 
             <div ref={signInRef} className="scroll-mt-4" />
             <Section title={t("signIn.title")} description={t("signIn.description")}>

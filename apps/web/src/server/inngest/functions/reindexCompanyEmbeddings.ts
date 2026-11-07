@@ -18,6 +18,7 @@ import { and, eq, gt, inArray, sql } from "drizzle-orm";
 import { T } from "~/server/db/tables";
 
 import { inngest } from "../client";
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 import { db } from "~/server/db";
 import { company, document, documentRetrievalChunks } from "@launchstack/store/schema";
 import {
@@ -146,6 +147,11 @@ export const reindexCompanyEmbeddingsJob = inngest.createFunction(
         //    chunk window rather than the whole company.
         // ------------------------------------------------------------------
         const embeddings = createEmbeddingModel(index, config);
+        const reindexUse = {
+            feature: "ingestion",
+            userId: event.data.triggeredByUserId ?? null,
+            enforce: false,
+        } as const;
 
         let cursor = 0n;
         let reindexed = 0;
@@ -160,10 +166,14 @@ export const reindexCompanyEmbeddingsJob = inngest.createFunction(
             await step.run(`embed-batch-${batchIdx}`, async () => {
                 const contents = batch.map(c => c.content);
                 // Providers that implement embedDocuments batch in a single call;
-                // the rest need per-item fallback.
-                const vectors = embeddings.embedDocuments
-                    ? await embeddings.embedDocuments(contents)
-                    : await Promise.all(contents.map(c => embeddings.embedQuery(c)));
+                // the rest need per-item fallback. Counted as document processing
+                // for whoever switched the index, inside the step (a step body
+                // runs outside the handler's async context); never stopped midway.
+                const vectors = await withWorkspaceChatModels(companyId, reindexUse, () =>
+                    embeddings.embedDocuments
+                        ? embeddings.embedDocuments(contents)
+                        : Promise.all(contents.map(c => embeddings.embedQuery(c)))
+                );
                 if (vectors.length !== batch.length) {
                     throw new Error(
                         `Embedding provider returned ${vectors.length} vectors for ${batch.length} chunks`

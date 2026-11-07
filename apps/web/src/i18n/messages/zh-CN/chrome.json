@@ -43,6 +43,8 @@
     "title": "出了点问题",
     "body": "加载此页面时出错。请重试，或返回工作台。",
     "errorId": "错误 ID：{id}",
-    "backToDashboard": "返回工作台"
+    "backToDashboard": "返回工作台",
+    "report": "报告此问题",
+    "reportTitle": "页面显示“出了点问题”"
   }
 }

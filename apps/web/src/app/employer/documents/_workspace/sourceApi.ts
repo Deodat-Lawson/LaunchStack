@@ -45,7 +45,9 @@ export type SourceApiFailure =
     | "deleteDocument"
     | "stillAdding"
     | "nothingToRetry"
-    | "retry";
+    | "retry"
+    | "nothingToReembed"
+    | "reembed";
 
 /** English for each failure — the error's `message`, for callers that show it as is. */
 const FAILURE_TEXT: Record<SourceApiFailure, string> = {
@@ -59,6 +61,8 @@ const FAILURE_TEXT: Record<SourceApiFailure, string> = {
     stillAdding: "This source is still being added",
     nothingToRetry: "This source has nothing to retry",
     retry: "Couldn't retry processing",
+    nothingToReembed: "This source has nothing to re-embed",
+    reembed: "Couldn't re-embed this source",
 };
 
 /**
@@ -211,4 +215,21 @@ export async function retrySourceProcessing(source: WorkspaceSource): Promise<vo
     }
     const res = await fetch(`/api/documents/${source.documentId}/retry`, { method: "POST" });
     if (!res.ok) throw await readError(res, "retry");
+}
+
+/**
+ * Read a source's file again and embed it with the workspace's current
+ * model, as a new version of the same file. A recording re-embeds its
+ * transcript. A mindmap re-embeds by publishing again, so it is not offered.
+ */
+export async function reembedSource(source: WorkspaceSource): Promise<void> {
+    if (
+        source.type === "mindmap" ||
+        typeof source.documentId !== "number" ||
+        source.documentId <= 0
+    ) {
+        throw new SourceApiError("nothingToReembed");
+    }
+    const res = await fetch(`/api/documents/${source.documentId}/reembed`, { method: "POST" });
+    if (!res.ok) throw await readError(res, "reembed");
 }

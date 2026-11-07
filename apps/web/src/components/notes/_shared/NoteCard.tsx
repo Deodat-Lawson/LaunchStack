@@ -7,6 +7,7 @@ import type { DocumentNote } from "~/server/db/schema";
 import { useContextTarget } from "~/components/context-menu";
 import { copyText } from "~/lib/context-menu";
 import { type NoteAnchorLite } from "./anchor";
+import { HIGHLIGHT_FILL, HIGHLIGHT_TAG, highlightColorOf } from "./highlight";
 import styles from "./NoteCard.module.css";
 import { iconBtnStyle, metaChipStyle, statusBadge } from "./styles";
 
@@ -97,6 +98,10 @@ export function NoteCard({
 
     const quote = anchor?.quote?.exact?.trim();
     const highlighted = active || editing;
+    // A highlight's text is its passage: shown once, as the quote, with the
+    // colour it was marked in where a note has its quote mark.
+    const highlightColor = highlightColorOf(note);
+    const shownBody = highlightColor && body.trim() === quote ? "" : body;
 
     return (
         <div
@@ -136,20 +141,38 @@ export function NoteCard({
                         fontSize: 11,
                         fontStyle: "italic",
                         lineHeight: 1.45,
-                        marginBottom: 7,
-                        paddingBottom: 7,
-                        borderBottom: "1px solid var(--line-2)",
+                        // A highlight with no words of its own has nothing
+                        // under its passage to divide it from.
+                        ...(note.title || shownBody
+                            ? {
+                                  marginBottom: 7,
+                                  paddingBottom: 7,
+                                  borderBottom: "1px solid var(--line-2)",
+                              }
+                            : {}),
                     }}
                 >
-                    <QuoteIcon
-                        size={10}
-                        style={{
-                            flexShrink: 0,
-                            color: "var(--accent)",
-                            alignSelf: "flex-start",
-                            marginTop: 3,
-                        }}
-                    />
+                    {highlightColor ? (
+                        <span
+                            aria-hidden
+                            data-highlight-color={highlightColor}
+                            className="border-line mt-[3px] size-2.5 shrink-0 self-start rounded-full border bg-[var(--paper-panel)]"
+                            // The ink over white paper, as it looks on the page.
+                            style={{
+                                backgroundImage: `linear-gradient(${HIGHLIGHT_FILL[highlightColor]}, ${HIGHLIGHT_FILL[highlightColor]})`,
+                            }}
+                        />
+                    ) : (
+                        <QuoteIcon
+                            size={10}
+                            style={{
+                                flexShrink: 0,
+                                color: "var(--accent)",
+                                alignSelf: "flex-start",
+                                marginTop: 3,
+                            }}
+                        />
+                    )}
                     <span
                         style={{
                             display: "-webkit-box",
@@ -186,7 +209,7 @@ export function NoteCard({
                             {note.title}
                         </div>
                     )}
-                    {body && (
+                    {shownBody && (
                         <div
                             style={{
                                 fontSize: 11.5,
@@ -207,7 +230,7 @@ export function NoteCard({
                                       }),
                             }}
                         >
-                            {body}
+                            {shownBody}
                         </div>
                     )}
                 </div>
@@ -266,11 +289,14 @@ export function NoteCard({
                 >
                     {note.createdAt ? noteAge(new Date(note.createdAt), t, format) : ""}
                 </span>
-                {note.tags?.map(tag => (
-                    <span key={tag} style={metaChipStyle}>
-                        #{tag}
-                    </span>
-                ))}
+                {highlightColor && <span style={metaChipStyle}>{t("highlight")}</span>}
+                {note.tags
+                    ?.filter(tag => !(highlightColor && tag === HIGHLIGHT_TAG))
+                    .map(tag => (
+                        <span key={tag} style={metaChipStyle}>
+                            #{tag}
+                        </span>
+                    ))}
                 {badge && (
                     <span
                         style={{

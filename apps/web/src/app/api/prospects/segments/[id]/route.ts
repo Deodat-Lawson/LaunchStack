@@ -1,5 +1,6 @@
 // GET   /api/prospects/segments/[id]
-// PATCH /api/prospects/segments/[id] — { fields: { offering?, industries?, geographies?, disqualifiers? } }
+// PATCH /api/prospects/segments/[id] — { fields: { offering?, industries?, geographies?, disqualifiers?, seedDomains? } }
+//       seedDomains: customer websites (lookalike seeds, never prospected); stored as bare domains.
 import type { NextRequest } from "next/server";
 
 import { getSegment, patchSegment } from "~/server/prospects/service";

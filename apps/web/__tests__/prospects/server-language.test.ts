@@ -42,7 +42,7 @@ const rel = (over: Partial<RelationshipRecord> = {}): RelationshipRecord => ({
     orgId: "org-1",
     kind: "distributor",
     territory: { country: "NL" },
-    stage: "candidate",
+    stage: "lead",
     fitScore: 72,
     fitRationale: null,
     fitBreakdown: null,
@@ -72,6 +72,7 @@ const program: ProgramRecord = {
     partnerKinds: ["distributor", "retailer"],
     constraints: null,
     knownPartnerDomains: ["a.test", "b.test"],
+    customerDomains: ["delta.example"],
     status: "active",
     createdByUserId: "u1",
     createdAt: new Date("2026-09-01T00:00:00Z"),
@@ -160,12 +161,13 @@ describe("adapter copies say their English field exactly", () => {
 
     it("for every stage move's reason", () => {
         for (const stage of [
-            "candidate",
+            "lead",
             "contacted",
+            "proposal",
             "negotiating",
-            "contracted",
-            "declined",
-            "dormant",
+            "won",
+            "lost",
+            "nurture",
         ] as const) {
             for (const hasAgreement of [true, false]) {
                 for (const move of allowedMoves(rel({ stage }), hasAgreement)) {
@@ -192,7 +194,7 @@ describe("adapter copies say their English field exactly", () => {
             countries: ["NL", "DE", "GB"],
         });
         for (const row of sourceRows(
-            { web: true, place: false, trade: false, screening: true },
+            { web: true, lookalike: true, place: false, trade: false, screening: true },
             null
         )) {
             expect(en(row.labelCopy)).toBe(row.label);
@@ -208,7 +210,7 @@ describe("adapter copies say their English field exactly", () => {
             { type: "reply_logged", payload: {} },
             { type: "document_shared", payload: { title: "Deck" } },
             { type: "agreement_signed", payload: {} },
-            { type: "imported", payload: { stage: "active" } },
+            { type: "imported", payload: { stage: "won" } },
             { type: "imported", payload: {} },
         ].map(
             (e, i) =>
@@ -269,7 +271,7 @@ describe("in Chinese", () => {
         expect(zh(sources.labelCopy)).toBe("来源");
         expect(zh(sources.detailCopy)).toBe("已完成 1/2");
         expect(sources.children!.map(c => zh(c.labelCopy))).toEqual([
-            "公开目录（YC）",
+            "网页搜索",
             "OpenStreetMap",
             "贸易数据",
         ]);
@@ -282,13 +284,65 @@ describe("in Chinese", () => {
         expect(sourceDetailCopy("Exa returned 500")).toBeNull();
     });
 
+    it("words the lookalike source and its details", () => {
+        const dto = toRunDto(
+            run({
+                options: { maxCandidates: 25, mode: "live" },
+                summary: {
+                    ...run({}).summary!,
+                    sources: [
+                        {
+                            source: "lookalike",
+                            queries: 2,
+                            results: 9,
+                            status: "ok",
+                            detail: "from 2 customers",
+                        },
+                        { source: "web", queries: 4, results: 30, status: "ok" },
+                    ],
+                },
+            })
+        );
+        const children = dto.steps.find(s => s.id === "sources")!.children!;
+        expect(children.map(c => zh(c.labelCopy))).toEqual(["相似公司", "网页搜索"]);
+        expect(zh(children[0]!.detailCopy)).toBe("来自 2 个客户");
+        expect(dto.summary!.sources[0]!.sourceId).toBe("live:lookalike");
+
+        for (const detail of [
+            "needs EXA_API_KEY",
+            "no customers yet",
+            "from 1 customer",
+            "from 3 customers",
+            "2 of 5 customers failed",
+        ]) {
+            expect(en(sourceDetailCopy(detail))).toBe(detail);
+        }
+        expect(zh(sourceDetailCopy("needs EXA_API_KEY"))).toBe("需要 EXA_API_KEY");
+        expect(zh(sourceDetailCopy("no customers yet"))).toBe("还没有客户");
+        expect(zh(sourceDetailCopy("2 of 5 customers failed"))).toBe("5 个客户中有 2 个查询失败");
+
+        const rows = sourceRows(
+            { web: true, lookalike: true, place: false, trade: false, screening: false },
+            null
+        );
+        const byId = Object.fromEntries(rows.map(r => [r.id, r]));
+        expect(zh(byId.web!.labelCopy)).toBe("Exa 公司搜索");
+        expect(zh(byId.lookalike!.labelCopy)).toBe("相似公司");
+    });
+
+    it("words the customers field", () => {
+        const field = segmentFields(program).find(f => f.key === "seedDomains")!;
+        expect(zh(field.labelCopy)).toBe("类似这些客户");
+        expect(field.sourcesCopy?.map(zh)).toEqual(["来自计划 · 客户"]);
+    });
+
     it("words why a stage move is refused", () => {
         const reasons = Object.fromEntries(
-            allowedMoves(rel({ stage: "candidate" }), false).map(m => [m.stage, zh(m.reasonCopy)])
+            allowedMoves(rel({ stage: "lead" }), false).map(m => [m.stage, zh(m.reasonCopy)])
         );
         expect(reasons.lead).toBe("当前阶段");
-        expect(reasons.proposal).toBe("此工作区暂未启用该阶段");
-        expect(reasons.qualified).toBe("请先移至“已联系”");
+        expect(reasons.proposal).toBe("请先移至“已确认”");
+        expect(reasons.qualified).toBeNull();
         expect(reasons.contacted).toBe("需要指定负责人");
         expect(reasons.lost).toBeNull();
     });
@@ -320,7 +374,7 @@ describe("route errors", () => {
         let refused: unknown;
         try {
             assertTransition({
-                from: "researched",
+                from: "lead",
                 to: "contacted",
                 context: { ownerUserId: null, nextAction: null, hasAgreement: false },
             });

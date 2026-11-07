@@ -28,6 +28,7 @@ import { isVideoUrl, transcribeVideoFromUrl } from "@launchstack/conversion/vide
 | `./extraction-router` | (mime, filename, signals) → converter choice |
 | `./archive-expansion` | archive upload → member sources |
 | `./ocr` | OCR primitives: config, complexity, enrichment, provider adapters, processor |
+| `./ocr/provider-order` | the one OCR order (pin → Azure → Docling when reachable → Landing AI → Datalab → text layer): the engine provider-first routing (the default `OCR_PDF_STRATEGY`) sends every PDF to, and the fallback chain |
 | `./ports` | DocumentConverterPort · TranscriptionPort |
 
 ## Configuration

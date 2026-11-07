@@ -1,6 +1,10 @@
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
-import { createTtlCache, executeSearch } from "@launchstack/tools/web-research";
-import type { PlannedQuery } from "@launchstack/tools/web-research";
+import {
+    configuredWebSearchProvider,
+    createTtlCache,
+    searchWeb,
+} from "@launchstack/tools/web-research";
+import type { WebSearchHit } from "@launchstack/tools/web-research";
 import { invokeMarketingStructured } from "./models";
 import type { CompetitorAnalysis } from "./types";
 import { CompetitorAnalysisSchema } from "./types";
@@ -28,7 +32,7 @@ function buildCompetitorQueries(
     companyName: string,
     categories: string[],
     companyDescription?: string
-): PlannedQuery[] {
+): string[] {
     const categoryStr = categories.length > 0 ? categories.join(" ") : "industry";
     const currentYear = new Date().getFullYear();
 
@@ -37,17 +41,44 @@ function buildCompetitorQueries(
         : "";
 
     return [
-        {
-            searchQuery: `"${companyName}"${descHint} competitors ${categoryStr} ${currentYear}`,
-            category: "business",
-            rationale: "Find direct competitors using company description to disambiguate",
-        },
-        {
-            searchQuery: `${categoryStr} market leaders alternative solutions ${currentYear}`,
-            category: "business",
-            rationale: "Find alternatives and market leaders in the same category",
-        },
+        // Direct competitors, the company description disambiguating the name
+        `"${companyName}"${descHint} competitors ${categoryStr} ${currentYear}`,
+        // Alternatives and market leaders in the same category
+        `${categoryStr} market leaders alternative solutions ${currentYear}`,
     ];
+}
+
+/* ──────────────────────────────────────────────────────────────
+ * Web search
+ * ────────────────────────────────────────────────────────────── */
+
+/** Results per query; two queries fill the 12 hits the prompt shows. */
+const RESULTS_PER_QUERY = 6;
+
+/**
+ * General web search, not news: competitors are found on their own sites and
+ * on comparison pages. One query failing keeps the other's hits; no search
+ * key means no hits, and the analysis runs on the company context alone.
+ */
+async function searchCompetitorWeb(queries: string[]): Promise<WebSearchHit[]> {
+    if (configuredWebSearchProvider() === null) return [];
+    const settled = await Promise.allSettled(
+        queries.map(query => searchWeb(query, { maxResults: RESULTS_PER_QUERY, snippetChars: 200 }))
+    );
+    const seen = new Set<string>();
+    const hits: WebSearchHit[] = [];
+    for (const outcome of settled) {
+        if (outcome.status === "rejected") {
+            console.warn("[marketing-pipeline] competitor web search failed:", outcome.reason);
+            continue;
+        }
+        for (const hit of outcome.value.results) {
+            if (seen.has(hit.url)) continue;
+            seen.add(hit.url);
+            hits.push(hit);
+        }
+    }
+    return hits;
 }
 
 /* ──────────────────────────────────────────────────────────────
@@ -67,23 +98,17 @@ export async function analyzeCompetitors(args: {
         return cached;
     }
 
-    const plannedQueries = buildCompetitorQueries(companyName, categories, companyContext);
+    const queries = buildCompetitorQueries(companyName, categories, companyContext);
 
     let rawContext = companyContext;
-    try {
-        const { results } = await executeSearch(plannedQueries);
-        if (results.length > 0) {
-            rawContext +=
-                "\n\nWeb search results (competitors / market):\n" +
-                results
-                    .slice(0, 12)
-                    .map(
-                        (r, i) => `${i + 1}. [${r.title}] ${r.content.slice(0, 200)}... (${r.url})`
-                    )
-                    .join("\n\n");
-        }
-    } catch (error) {
-        console.warn("[marketing-pipeline] competitor web search failed:", error);
+    const results = await searchCompetitorWeb(queries);
+    if (results.length > 0) {
+        rawContext +=
+            "\n\nWeb search results (competitors / market):\n" +
+            results
+                .slice(0, 12)
+                .map((r, i) => `${i + 1}. [${r.title}] ${r.snippet} (${r.url})`)
+                .join("\n\n");
     }
 
     if (!rawContext.trim()) {

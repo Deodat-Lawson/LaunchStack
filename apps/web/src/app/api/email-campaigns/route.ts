@@ -3,8 +3,9 @@ import { z } from "zod";
 import { listCampaigns, prepareEmailCampaign, RecipientSchema } from "@launchstack/pipelines/email";
 
 import { fail, handleRouteError, ok, readJson, resolveActor } from "./_lib/context";
+import { refuseAtAiAllowance } from "~/server/ai-usage/refusal";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
-import { requestTranslator } from "~/i18n/server";
+import { localeOfRequest, requestTranslator } from "~/i18n/server";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -27,7 +28,14 @@ export async function POST(request: Request) {
         const actor = await resolveActor();
         if (!actor.ok) return actor.response;
 
-        return await withWorkspaceChatModels(actor.actor.companyId, "emailCampaigns", async () => {
+        const aiUse = { feature: "emailCampaigns", userId: actor.actor.externalUserId } as const;
+        const refused = await refuseAtAiAllowance(
+            actor.actor.companyId,
+            aiUse.userId,
+            localeOfRequest(request)
+        );
+        if (refused) return refused;
+        return await withWorkspaceChatModels(actor.actor.companyId, aiUse, async () => {
             const parsed = CreateSchema.safeParse(await readJson(request));
             if (!parsed.success) {
                 return fail(requestTranslator(request, "errors.api")("invalidInput"), 400, {

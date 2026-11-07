@@ -72,6 +72,7 @@ async function main(): Promise<void> {
                         partnerKinds: ["importer", "distributor", "retailer"],
                         constraints: "MOQ 200 kg; EU organic preferred",
                         knownPartnerDomains: [],
+                        customerDomains: [],
                     },
                 })
             ).id;

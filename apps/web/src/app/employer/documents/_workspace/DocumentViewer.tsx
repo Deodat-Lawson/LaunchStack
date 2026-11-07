@@ -8,6 +8,7 @@ import {
     Folder as IconFolder,
     PanelRightClose,
     Pencil,
+    RefreshCw,
     Sparkles,
     Trash2,
     Upload,
@@ -53,7 +54,16 @@ import { DocumentViewerHeader, type HeaderAction } from "./DocumentViewerHeader"
 import { DocumentNotesPanel, type PrefilledAnchor } from "~/components/notes/DocumentNotesPanel";
 import type { DocumentNote } from "~/server/db/schema";
 import { getDocumentDisplayType } from "../types/document";
-import type { PdfAnchorCapture, PdfNoteLite } from "~/components/notes/PdfViewerWithNotes";
+import type {
+    PdfAnchorCapture,
+    PdfHighlightCapture,
+    PdfNoteLite,
+} from "~/components/notes/PdfViewerWithNotes";
+import {
+    HIGHLIGHT_TAG,
+    highlightColorOf,
+    type HighlightColor,
+} from "~/components/notes/_shared/highlight";
 
 const PdfViewerWithNotes = dynamic(
     () => import("~/components/notes/PdfViewerWithNotes").then(m => m.PdfViewerWithNotes),
@@ -116,6 +126,12 @@ export interface DocumentViewerProps {
      */
     onAskAboutPassage?: (source: WorkspaceSource, selection: PassageSelection) => void;
     onVersionChanged?: () => void;
+    /**
+     * Read the file again and embed it with the workspace's current model,
+     * as a new version of the same file. Absent for someone who may not
+     * re-run processing; a mindmap re-embeds by publishing again.
+     */
+    onReembed?: (source: WorkspaceSource) => Promise<void>;
     /** Mindmaps only: leave the preview for the editor. */
     onEdit?: (source: WorkspaceSource) => void;
     /** Mindmaps only: the citable copy was created or updated. */
@@ -287,6 +303,7 @@ export function DocumentViewer({
     onAskAbout,
     onAskAboutPassage,
     onVersionChanged,
+    onReembed,
     onEdit,
     onPublished,
 }: DocumentViewerProps) {
@@ -360,6 +377,7 @@ export function DocumentViewer({
     const [previewNonce, setPreviewNonce] = useState(0);
     const shownVersionRef = useRef<number | null>(null);
     const [uploadState, setUploadState] = useState<UploadState>({ phase: "idle" });
+    const [reembedding, setReembedding] = useState(false);
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [sidebarTab, setSidebarTab] = useState<"versions" | "notes">("versions");
     /**
@@ -582,6 +600,93 @@ export function DocumentViewer({
         };
     }, [source.documentId, isPdf, notesNonce]);
 
+    /**
+     * Highlights are notes (see `_shared/highlight`), saved through the notes
+     * API. The page shows the change at once; the list is fetched again
+     * after, for the saved row and for the Notes panel.
+     */
+    const createHighlight = useCallback(
+        async (capture: PdfHighlightCapture) => {
+            if (!source.documentId) return;
+            const anchor = {
+                type: "pdf" as const,
+                primary: {
+                    kind: "pdf" as const,
+                    page: capture.page,
+                    quads: capture.quads,
+                    color: capture.color,
+                },
+                quote: { exact: capture.quote.exact },
+            };
+            const optimistic = {
+                id: -Date.now(),
+                title: null,
+                content: capture.quote.exact,
+                tags: [HIGHLIGHT_TAG],
+                anchor,
+                anchorStatus: "resolved",
+            } as unknown as DocumentNote;
+            setPdfNotes(prev => [...prev, optimistic]);
+            try {
+                const res = await fetch("/api/notes", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        documentId: String(source.documentId),
+                        ...(activeVersionId !== null ? { versionId: activeVersionId } : {}),
+                        // The passage is the highlight's text: it is what
+                        // the Notes panel lists and what search finds.
+                        content: capture.quote.exact,
+                        anchor,
+                        anchorStatus: "resolved",
+                        tags: [HIGHLIGHT_TAG],
+                    }),
+                });
+                if (!res.ok) throw new Error(String(res.status));
+            } catch {
+                toast.error(t("documentViewer.highlightFailed"));
+            }
+            setNotesNonce(n => n + 1);
+        },
+        [source.documentId, activeVersionId, t]
+    );
+
+    const recolorHighlight = useCallback(
+        async (noteId: number, color: HighlightColor) => {
+            const note = pdfNotes.find(n => n.id === noteId);
+            const anchor = note?.anchor as { primary?: Record<string, unknown> } | null;
+            if (!note || !anchor?.primary) return;
+            const next = { ...anchor, primary: { ...anchor.primary, color } };
+            setPdfNotes(prev => prev.map(n => (n.id === noteId ? { ...n, anchor: next } : n)));
+            try {
+                const res = await fetch(`/api/notes/${noteId}`, {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ anchor: next }),
+                });
+                if (!res.ok) throw new Error(String(res.status));
+            } catch {
+                toast.error(t("documentViewer.highlightFailed"));
+            }
+            setNotesNonce(n => n + 1);
+        },
+        [pdfNotes, t]
+    );
+
+    const removeHighlight = useCallback(
+        async (noteId: number) => {
+            setPdfNotes(prev => prev.filter(n => n.id !== noteId));
+            try {
+                const res = await fetch(`/api/notes/${noteId}`, { method: "DELETE" });
+                if (!res.ok) throw new Error(String(res.status));
+            } catch {
+                toast.error(t("documentViewer.highlightRemoveFailed"));
+            }
+            setNotesNonce(n => n + 1);
+        },
+        [t]
+    );
+
     // When the PDF viewer captures a selection, pop the notes panel open so
     // the user can type the body without hunting for the sidebar. Switching
     // the tab is not enough in a narrow column — beside the chat, where Ask AI
@@ -655,6 +760,16 @@ export function DocumentViewer({
         setActiveVersionId(data.currentVersionId);
         setExpectedMime(data.fileType);
     }, [source.documentId]);
+
+    // A run started from somewhere else — Re-embed in the rail's menu, an
+    // upload in another tab — makes a new current version while this is
+    // open; the source's status moving is the sign, so the list follows it.
+    const seenIndexStatus = useRef(source.indexStatus);
+    useEffect(() => {
+        if (seenIndexStatus.current === source.indexStatus) return;
+        seenIndexStatus.current = source.indexStatus;
+        if (!isMindmap) void refreshVersions();
+    }, [source.indexStatus, isMindmap, refreshVersions]);
 
     // The first current version is the one the preview opened with; a later
     // one means the file changed underneath it.
@@ -913,6 +1028,18 @@ export function DocumentViewer({
               ? "var(--accent)"
               : "var(--ok)";
 
+    const reembed = useCallback(async () => {
+        if (!onReembed || reembedding) return;
+        setReembedding(true);
+        try {
+            await onReembed(source);
+            await refreshVersions();
+        } finally {
+            setReembedding(false);
+        }
+    }, [onReembed, reembedding, source, refreshVersions]);
+    const reembedRunning = reembedding || source.indexStatus === "processing";
+
     /** The header's buttons, in the order they give way when room runs out. */
     const headerActions: HeaderAction[] = [
         // A draft someone can only view opens here and nowhere else: its
@@ -994,6 +1121,24 @@ export function DocumentViewer({
                               : tDrive("showHint")
                           : tDrive("hideToggleHint"),
                       testId: "viewer-drive-toggle",
+                  },
+              ]
+            : []),
+        ...(onReembed && !isMindmap
+            ? [
+                  {
+                      id: "reembed",
+                      label: tSourceMenu("reembed"),
+                      icon: <RefreshCw className="size-3.5" />,
+                      onSelect: () => void reembed(),
+                      iconOnly: true,
+                      disabled: !persisted || !editable || reembedRunning,
+                      hint: !editable
+                          ? t("common.viewOnly")
+                          : reembedRunning
+                            ? tSourceMenu("reembedRunning")
+                            : t("documentViewer.reembedHint"),
+                      testId: "viewer-reembed",
                   },
               ]
             : []),
@@ -1221,6 +1366,25 @@ export function DocumentViewer({
                                             quote: anchor.quote,
                                         });
                                     }}
+                                    onCreateHighlight={
+                                        source.documentId
+                                            ? capture => void createHighlight(capture)
+                                            : undefined
+                                    }
+                                    onRecolorHighlight={(id, color) =>
+                                        void recolorHighlight(id, color)
+                                    }
+                                    onRemoveHighlight={id => void removeHighlight(id)}
+                                    downloadUrl={fullDoc.url}
+                                    downloadName={pdfFileName(source.title)}
+                                    // Where the reader was, per document and
+                                    // version: a long book opens where it
+                                    // was left.
+                                    persistKey={
+                                        source.documentId
+                                            ? `${source.documentId}:${activeVersionId ?? "current"}`
+                                            : undefined
+                                    }
                                     onAskAi={
                                         onAskAboutPassage
                                             ? selection => onAskAboutPassage(source, selection)
@@ -1386,6 +1550,9 @@ export function DocumentViewer({
                             <DocumentNotesPanel
                                 documentId={source.documentId ? String(source.documentId) : null}
                                 versionId={activeVersionId}
+                                // A highlight made in the page is a note
+                                // too; the list follows it.
+                                refreshKey={notesNonce}
                                 prefilledAnchor={pdfAnchorDraft}
                                 prefilledText={noteSeed}
                                 // Set by a card click and by a pin click in
@@ -1566,8 +1733,19 @@ export function DocumentViewer({
                                         {t("documentViewer.noVersions")}
                                     </div>
                                 )}
-                                {versions.map(v => {
+                                {versions.map((v, index) => {
                                     const active = v.id === activeVersionId;
+                                    // Newest first: the version below is the
+                                    // one this replaced. The same file means
+                                    // it was read again, not replaced.
+                                    const previous = versions[index + 1];
+                                    const note =
+                                        v.changelog ??
+                                        (previous && previous.url === v.url
+                                            ? t("documentViewer.reembeddedFrom", {
+                                                  number: previous.versionNumber,
+                                              })
+                                            : null);
                                     return (
                                         <VersionTarget
                                             key={v.id}
@@ -1655,15 +1833,9 @@ export function DocumentViewer({
                                                         {humanDate(v.createdAt)}
                                                     </span>
                                                 </div>
-                                                {v.changelog && (
-                                                    <div
-                                                        style={{
-                                                            fontSize: 11,
-                                                            color: "var(--ink-3)",
-                                                            lineHeight: 1.4,
-                                                        }}
-                                                    >
-                                                        {v.changelog}
+                                                {note && (
+                                                    <div className="text-ink-3 text-[11px] leading-[1.4]">
+                                                        {note}
                                                     </div>
                                                 )}
                                             </button>
@@ -1761,9 +1933,21 @@ export function DocumentViewer({
                                 <MetaRow
                                     label={t("documentViewer.metaIndexed")}
                                     value={
-                                        <span style={{ color: "var(--ok)" }}>
-                                            {t("documentViewer.readyToQuery")}
-                                        </span>
+                                        // What the file's current version can do now:
+                                        // a re-embed or a new version is processing.
+                                        source.indexStatus === "processing" ? (
+                                            <span className="text-ink-3">
+                                                {t("documentViewer.indexProcessing")}
+                                            </span>
+                                        ) : source.indexStatus === "failed" ? (
+                                            <span className="text-danger-ink">
+                                                {t("documentViewer.indexFailed")}
+                                            </span>
+                                        ) : (
+                                            <span style={{ color: "var(--ok)" }}>
+                                                {t("documentViewer.readyToQuery")}
+                                            </span>
+                                        )
                                     }
                                 />
                             </div>
@@ -1984,8 +2168,10 @@ type MindmapErrorTranslator = ReturnType<typeof useTranslations<"mindmap.errors"
 
 /**
  * Project a list of server-side `documentNotes` rows down to the minimal
- * shape the PDF overlay needs. Only notes with a `pdf` primary anchor can
- * render as pins; the rest show up in the sidebar list only.
+ * shape the PDF overlay needs. Only notes with a `pdf` primary anchor can be
+ * placed; the rest show up in the sidebar list only. A note with no quads
+ * (one a new version moved, or an agent captured) keeps its quote, and the
+ * viewer places it by finding that.
  */
 function toPdfNoteLites(notes: DocumentNote[]): PdfNoteLite[] {
     return notes
@@ -2003,16 +2189,24 @@ function toPdfNoteLites(notes: DocumentNote[]): PdfNoteLite[] {
             const page = typeof anchor.primary.page === "number" ? anchor.primary.page : null;
             if (page === null) return null;
             const quads = Array.isArray(anchor.primary.quads) ? anchor.primary.quads : [];
-            if (quads.length === 0) return null;
+            const quote = anchor.quote?.exact?.trim();
+            if (quads.length === 0 && !quote) return null;
             const lite: PdfNoteLite = {
                 id: n.id,
                 title: n.title ?? null,
                 page,
                 quads,
-                quote: anchor.quote?.exact,
+                quote,
                 anchorStatus: (n.anchorStatus ?? "resolved") as "resolved" | "drifted" | "orphaned",
+                highlight: highlightColorOf(n),
             };
             return lite;
         })
         .filter((x): x is PdfNoteLite => x !== null);
+}
+
+/** The name a downloaded PDF is saved under: its title, with the extension it needs. */
+function pdfFileName(title: string): string {
+    const name = title.trim() || "document";
+    return /\.pdf$/i.test(name) ? name : `${name}.pdf`;
 }

@@ -292,7 +292,7 @@ describe("Capture Sparkle appcast", () => {
         );
         expect(response.headers.get("Content-Type")).toBe("application/xml; charset=utf-8");
         expect(response.headers.get("Cache-Control")).toBe("private, no-store");
-        expect(mockRequireCaptureDevice).toHaveBeenCalledWith(incoming);
+        expect(mockRequireCaptureDevice).toHaveBeenCalledWith(incoming, "update");
         expect(mockWorkspacePermission).not.toHaveBeenCalled();
         expect(mockGetBlobClient).toHaveBeenCalledWith("appcast.xml");
     });
@@ -360,7 +360,7 @@ describe("Capture Sparkle update archives", () => {
             );
             expect(response.headers.get("Cache-Control")).toBe("private, no-store");
             expect(response.headers.get("Location")).toBeNull();
-            expect(mockRequireCaptureDevice).toHaveBeenCalledWith(incoming);
+            expect(mockRequireCaptureDevice).toHaveBeenCalledWith(incoming, "update");
             expect(mockWorkspacePermission).not.toHaveBeenCalled();
             expect(mockGetBlobClient).toHaveBeenCalledTimes(1);
             expect(mockGetBlobClient).toHaveBeenCalledWith(path);

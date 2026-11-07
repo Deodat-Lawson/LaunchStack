@@ -1,5 +1,5 @@
 /**
- * The workspace's embedding configuration, for Settings › Bring your own keys.
+ * The workspace's embedding configuration, for Workspace › Bring your own keys.
  *
  * Gated on `settings.manage`, like the section that reads it and the
  * `updateCompany` route that writes it: the answer carries the embedding

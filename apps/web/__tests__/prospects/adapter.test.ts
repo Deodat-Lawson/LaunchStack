@@ -1,22 +1,26 @@
 /**
- * The adapter is how Prospects reads today's Distribution data. These tests
- * pin the parts a wrong mapping would silently break: which sales stage a
- * relationship shows as, which moves the stage menu offers and why the
+ * The adapter is how Prospects reads the pipeline's data. These tests pin
+ * the parts a wrong mapping would silently break: that a deal's stored stage
+ * is the stage it shows, which moves the stage menu offers and why the
  * others are disabled, how a run's status becomes the step list, and how a
  * dossier becomes cited claims.
  */
 import type {
     EvidenceRecord,
+    ProgramRecord,
     RelationshipRecord,
     RunRecord,
 } from "@launchstack/pipelines/distribution/types";
 import {
-    SALES_OF,
+    SALES_STAGES,
     allowedMoves,
     contactPeople,
+    customerDomainOf,
     moveReason,
+    parseCustomerDomains,
     profileClaims,
-    relationshipTarget,
+    segmentFields,
+    sourceRows,
     toRunDto,
     viewMatches,
 } from "~/server/prospects/adapter";
@@ -29,7 +33,7 @@ const rel = (over: Partial<RelationshipRecord> = {}): RelationshipRecord => ({
     orgId: "org-1",
     kind: "distributor",
     territory: { country: "NL" },
-    stage: "candidate",
+    stage: "lead",
     fitScore: 72,
     fitRationale: "Strong category overlap.",
     fitBreakdown: null,
@@ -48,22 +52,19 @@ const rel = (over: Partial<RelationshipRecord> = {}): RelationshipRecord => ({
     ...over,
 });
 
-describe("stage mapping", () => {
-    it("folds ten relationship stages onto the funnel", () => {
-        expect(SALES_OF.candidate).toBe("lead");
-        expect(SALES_OF.researched).toBe("lead");
-        expect(SALES_OF.in_conversation).toBe("meeting");
-        expect(SALES_OF.contracted).toBe("won");
-        expect(SALES_OF.active).toBe("won");
-        expect(SALES_OF.declined).toBe("lost");
-        expect(SALES_OF.dormant).toBe("nurture");
-    });
-
-    it("picks a legal relationship stage for a sales move", () => {
-        expect(relationshipTarget("contacted", "lead")).toBe("researched");
-        expect(relationshipTarget("declined", "lead")).toBe("researched");
-        expect(relationshipTarget("candidate", "won")).toBe("contracted");
-        expect(relationshipTarget("candidate", "proposal")).toBeNull();
+describe("stage vocabulary", () => {
+    it("stores the funnel's own stages, so there is nothing to translate", () => {
+        expect(SALES_STAGES).toEqual([
+            "lead",
+            "qualified",
+            "contacted",
+            "meeting",
+            "proposal",
+            "negotiating",
+            "won",
+            "lost",
+            "nurture",
+        ]);
     });
 });
 
@@ -71,11 +72,26 @@ describe("moves and reasons", () => {
     it("explains every disabled move in plain words", () => {
         const lead = rel();
         expect(moveReason(lead, false, "lead")).toBe("Current stage");
+        expect(moveReason(lead, false, "qualified")).toBeNull();
         expect(moveReason(lead, false, "contacted")).toBe("Needs an owner");
-        expect(moveReason(lead, false, "qualified")).toBe("Move to Contacted first");
-        expect(moveReason(lead, false, "proposal")).toBe("Not a stage in this workspace yet");
+        expect(moveReason(lead, false, "meeting")).toBe("Move to Qualified first");
         expect(moveReason(lead, false, "lost")).toBeNull();
         expect(moveReason(lead, false, "nurture")).toBeNull();
+        const proposal = rel({ stage: "proposal", ownerUserId: "u1", nextAction: "Send" });
+        expect(moveReason(proposal, false, "lead")).toBe("Move back one stage at a time");
+    });
+
+    it("Proposal is a real stage now: reachable from Meeting, with the usual gates", () => {
+        const meeting = rel({ stage: "meeting", ownerUserId: "u1", nextAction: "Send proposal" });
+        expect(moveReason(meeting, false, "proposal")).toBeNull();
+        expect(moveReason(rel({ stage: "meeting", ownerUserId: "u1" }), false, "proposal")).toBe(
+            "Needs a next step"
+        );
+        // Won is reached through Proposal, not straight from a meeting.
+        expect(moveReason(meeting, true, "won")).toBe("Move to Proposal first");
+        const proposal = rel({ stage: "proposal", ownerUserId: "u1", nextAction: "Sign" });
+        expect(moveReason(proposal, true, "won")).toBeNull();
+        expect(moveReason(proposal, false, "negotiating")).toBeNull();
     });
 
     it("lets an owned, planned deal move forward and keeps won deals won", () => {
@@ -88,7 +104,10 @@ describe("moves and reasons", () => {
             "Needs an agreement recorded in Distribution"
         );
         expect(moveReason(negotiating, true, "won")).toBeNull();
-        const won = rel({ stage: "contracted", ownerUserId: "u1" });
+        // Negotiating with nobody owning it is refused.
+        const unowned = rel({ stage: "proposal", nextAction: "Sign" });
+        expect(moveReason(unowned, false, "negotiating")).toBe("Needs an owner");
+        const won = rel({ stage: "won", ownerUserId: "u1" });
         expect(moveReason(won, true, "meeting")).toBe("Won deals stay won");
         expect(moveReason(won, true, "nurture")).toBeNull();
     });
@@ -293,6 +312,111 @@ describe("runs", () => {
         expect(dto.summary?.sources[0]!.sourceId).toBe("fixture:web");
         const sources = dto.steps.find(s => s.id === "sources")!;
         expect(sources.children!.map(c => c.status)).toEqual(["done", "skipped", "done"]);
+    });
+
+    it("lists every source, lookalikes included, before a run has a summary", () => {
+        const dto = toRunDto(
+            run({ status: "gathering", options: { maxCandidates: 25, mode: "live" } })
+        );
+        const sources = dto.steps.find(s => s.id === "sources")!;
+        expect(sources.children!.map(c => [c.id, c.label])).toEqual([
+            ["web", "Web search"],
+            ["place", "Places"],
+            ["trade", "Trade data"],
+            ["lookalike", "Lookalikes"],
+        ]);
+    });
+});
+
+describe("customers like these", () => {
+    it("normalises a typed website to its bare domain", () => {
+        expect(customerDomainOf("https://www.Delta-Logistics.nl/over-ons?x=1")).toBe(
+            "delta-logistics.nl"
+        );
+        expect(customerDomainOf("pickpoint.co.uk")).toBe("pickpoint.co.uk");
+        expect(customerDomainOf("shop.acme.com")).toBe("acme.com");
+        for (const bad of ["Acme Inc", "acme", "localhost", "10.0.0.1", "acme.c", "-acme.com"])
+            expect(customerDomainOf(bad)).toBeNull();
+    });
+
+    it("splits, de-duplicates and caps the list, and names what is not a website", () => {
+        expect(
+            parseCustomerDomains(["https://delta.example/", "pickpoint.example, www.delta.example"])
+        ).toEqual({ domains: ["delta.example", "pickpoint.example"], invalid: [], tooMany: false });
+        expect(parseCustomerDomains(["delta.example", "not a site"]).invalid).toEqual([
+            "not",
+            "a",
+            "site",
+        ]);
+        const many = Array.from({ length: 26 }, (_, i) => `customer-${i}.example`);
+        expect(parseCustomerDomains(many).tooMany).toBe(true);
+        expect(parseCustomerDomains(many.slice(0, 25)).tooMany).toBe(false);
+    });
+
+    it("is an editable field on the segment, after where", () => {
+        const program = {
+            name: "NL fulfilment",
+            offering: "Picking robots",
+            categories: [],
+            hsCodes: [],
+            targetTerritories: [{ country: "NL" }],
+            partnerKinds: ["distributor"],
+            constraints: null,
+            knownPartnerDomains: [],
+            customerDomains: ["delta.example"],
+        } as unknown as ProgramRecord;
+        const fields = segmentFields(program);
+        const keys = fields.map(f => f.key);
+        expect(keys.indexOf("seedDomains")).toBe(keys.indexOf("geographies") + 1);
+        expect(fields.find(f => f.key === "seedDomains")).toMatchObject({
+            label: "Customers like these",
+            value: ["delta.example"],
+            editable: true,
+        });
+        const empty = segmentFields({ ...program, customerDomains: [] });
+        expect(empty.find(f => f.key === "seedDomains")).toMatchObject({ value: [], sources: [] });
+    });
+});
+
+describe("source rows", () => {
+    it("names the web source by its provider, and offers lookalikes with Exa only", () => {
+        const serperOnly = Object.fromEntries(
+            sourceRows(
+                { web: true, lookalike: false, place: false, trade: false, screening: false },
+                null
+            ).map(r => [r.id, r])
+        );
+        // Serper alone is named as Serper, not as Exa, and needs nothing more.
+        expect(serperOnly.web).toMatchObject({
+            label: "Web search (Serper)",
+            enabled: true,
+            requires: null,
+            labelCopy: { key: "growth.server.sources.rows.webSerper.label" },
+        });
+        expect(serperOnly.lookalike).toMatchObject({
+            label: "Lookalikes",
+            enabled: false,
+            available: false,
+            requires: "EXA_API_KEY",
+        });
+        const exa = Object.fromEntries(
+            sourceRows(
+                { web: true, lookalike: true, place: false, trade: false, screening: false },
+                null
+            ).map(r => [r.id, r])
+        );
+        expect(exa.lookalike!.enabled && exa.lookalike!.available).toBe(true);
+        expect(exa.web).toMatchObject({ label: "Exa company search", requires: "EXA_API_KEY" });
+        // No key: the row says which one key turns it on, with no English inside the copy.
+        const none = sourceRows(
+            { web: false, lookalike: false, place: false, trade: false, screening: false },
+            null
+        ).find(r => r.id === "web")!;
+        expect(none).toMatchObject({
+            label: "Exa company search",
+            enabled: false,
+            requires: "EXA_API_KEY",
+        });
     });
 });
 

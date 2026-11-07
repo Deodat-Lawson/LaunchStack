@@ -185,6 +185,11 @@ function mount() {
 beforeEach(() => {
     jest.clearAllMocks();
     localStorage.clear();
+    // These flows type into the plain composer; the workspace default is rich.
+    localStorage.setItem(
+        "launchstack:composer-preferences:chat:owner:1",
+        JSON.stringify({ editorMode: "plain", editorModeChosen: true })
+    );
     mockSearchParams = new URLSearchParams();
     mockSendQuery.mockResolvedValue({
         success: true,
@@ -247,7 +252,11 @@ describe("Call Notes from the source rail to chat", () => {
                 ])
             );
         });
-        await user.click(await screen.findByTitle("Open the source at this passage"));
+        await user.click(
+            await screen.findByRole("button", {
+                name: `Open ${indexed.title} at the cited passage`,
+            })
+        );
         const href = mockRouter.push.mock.calls.at(-1)?.[0] as string;
         const params = new URL(href, "http://localhost").searchParams;
         expect(params.get("feature")).toBe("calls");
@@ -315,7 +324,11 @@ describe("Call Notes from the source rail to chat", () => {
             ],
         });
         mount();
-        await user.click(await screen.findByTitle("Open the source at this passage"));
+        await user.click(
+            await screen.findByRole("button", {
+                name: `Open ${indexed.title} at the cited passage`,
+            })
+        );
         expect(
             new URL(
                 mockRouter.push.mock.calls.at(-1)?.[0] as string,

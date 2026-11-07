@@ -9,6 +9,8 @@ import type { FounderWeeklyReviewActorResolver } from "~/server/founder-weekly-r
 import type { retryRunWithDispatch } from "~/server/founder-weekly-review/dispatch-service";
 import { failIn, handleWeeklyReviewError, ok, safeRun } from "~/server/founder-weekly-review/http";
 import { logFounderWeeklyReview } from "~/server/founder-weekly-review/observability";
+import { localeOfRequest } from "~/i18n/server";
+import { refuseAtAiAllowance } from "~/server/ai-usage/refusal";
 
 const RetrySchema = z.object({ requestKey: z.string().min(1).max(128) });
 
@@ -40,6 +42,12 @@ export function createFounderWeeklyReviewRetryPostHandler(
                 stage: "retry_requested",
                 status: "failed",
             });
+            const refused = await refuseAtAiAllowance(
+                actor.companyId,
+                actor.externalUserId,
+                localeOfRequest(request)
+            );
+            if (refused) return refused;
             const { run, transitionApplied } = await deps.retryRunWithDispatch({
                 actor,
                 runId,

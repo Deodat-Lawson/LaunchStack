@@ -594,9 +594,9 @@ export async function patchSection(
     if (input.status && !SECTION_STATUSES.includes(input.status)) throw fail("unknownStatus", 400);
     let status = input.status;
     if (input.draft !== undefined && status === undefined) {
-        // Typing into a draft makes it "edited"; clearing it makes it empty.
+        // Approval belongs to the exact saved text, not a later edit.
         status = input.draft?.trim()
-            ? current.status === "approved"
+            ? current.status === "approved" && input.draft === current.draft
                 ? "approved"
                 : "edited"
             : "empty";

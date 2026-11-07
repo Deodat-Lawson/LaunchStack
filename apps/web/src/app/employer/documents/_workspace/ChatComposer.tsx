@@ -1766,8 +1766,8 @@ export function Composer({
             detail: routeBlurb(route),
             info: chatRoutes.config.routes[route],
             favoriteLabel: favorites.includes(route)
-                ? t("unfavorite", { route })
-                : t("favorite", { route }),
+                ? t("unfavoriteModel", { label: routeLabel(route) })
+                : t("favoriteModel", { label: routeLabel(route) }),
         }));
     const offeredChoices: ModelChoice[] = offeredModels
         .map(model => ({ model, pick: pickOfModel(model.key) }))
@@ -1786,7 +1786,7 @@ export function Composer({
         ...PICKER_ROUTES.filter(route => chatRoutes.config.routes[route]?.available).map(route => ({
             pick: route as ModelPick,
             label: routeLabel(route),
-            ariaLabel: t("compareRoute", { route }),
+            ariaLabel: t("compareModel", { label: routeLabel(route) }),
         })),
         ...offeredModels.map(model => ({
             pick: pickOfModel(model.key),
@@ -1807,12 +1807,13 @@ export function Composer({
                 variant="ghost"
                 disabled={!choice.info?.available}
                 title={choice.info?.unavailableReason}
-                className="h-auto min-w-0 flex-1 justify-start px-2 py-2 text-left text-xs"
+                // The kit button doesn't wrap; a long line here would run under the star.
+                className="h-auto min-w-0 flex-1 justify-start whitespace-normal px-2 py-2 text-left text-xs"
                 onClick={() => choosePick(choice.pick)}
             >
                 <span className="min-w-0 flex-1">
                     <span className="block truncate font-medium">{choice.label}</span>
-                    <span className="text-ink-3 block">
+                    <span className="text-ink-3 block leading-snug">
                         {choice.detail}
                         {!choice.info?.available ? ` · ${t("unavailable")}` : ""}
                     </span>

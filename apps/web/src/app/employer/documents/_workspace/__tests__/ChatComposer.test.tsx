@@ -701,8 +701,8 @@ describe("Composer uploads and completion", () => {
         fireEvent.keyDown(box, { key: "Enter" });
         expect(box.value).toContain("Revenue planning");
         fireEvent.click(screen.getByRole("button", { name: "Choose model" }));
-        fireEvent.click(screen.getByRole("checkbox", { name: "Compare default model" }));
-        fireEvent.click(screen.getByRole("checkbox", { name: "Compare fast model" }));
+        fireEvent.click(screen.getByRole("checkbox", { name: "Compare Standard" }));
+        fireEvent.click(screen.getByRole("checkbox", { name: "Compare Fast" }));
         fireEvent.change(box, { target: { value: "Compare this question" } });
         fireEvent.keyDown(box, { key: "Enter" });
         expect(onSend).toHaveBeenCalledWith(
@@ -1123,7 +1123,7 @@ describe("Composer offered workspace models", () => {
         const user = userEvent.setup();
         const { box, onSend } = mount();
         await user.click(trigger());
-        await user.click(screen.getByRole("checkbox", { name: "Compare fast model" }));
+        await user.click(screen.getByRole("checkbox", { name: "Compare Fast" }));
         await user.click(screen.getByRole("checkbox", { name: "Compare Team writer" }));
         expect(trigger()).toHaveTextContent("2 models");
         fireEvent.change(box, { target: { value: "Compare these" } });

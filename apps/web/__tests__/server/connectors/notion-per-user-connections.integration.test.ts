@@ -3,8 +3,9 @@
  *
  * - The migration hands each existing Notion connection to the member who
  *   made it, drops the ones nobody owns (no granter, or a granter who has
- *   already left), leaves workspace connections alone, and narrows the
- *   one-per-member index to Gmail.
+ *   already left), keeps a suspended member's (their sync only pauses),
+ *   leaves workspace connections alone, and narrows the one-per-member index
+ *   to Gmail.
  * - A member owns what they connect, may connect several Notion workspaces,
  *   and converges on their own row when re-authorizing.
  * - A Notion grant another member owns is refused, not taken over.
@@ -115,8 +116,20 @@ describeDb("Notion per-user migration (integration)", () => {
     });
 
     it("gives existing Notion connections to whoever made them and narrows the index to Gmail", async () => {
-        const { connectorConnections, users } = await import("~/server/db/schema");
-        const { companyId, pk } = await seedWorkspace(test.db, ["ada", "ben"]);
+        const { connectorConnections, users, userCompanyMemberships } = await import(
+            "~/server/db/schema"
+        );
+        const { companyId, pk } = await seedWorkspace(test.db, ["ada", "ben", "cy"]);
+        // Cy is suspended, not gone: still a member, so their Notion stays.
+        await test.db
+            .update(userCompanyMemberships)
+            .set({ status: "suspended" })
+            .where(
+                and(
+                    eq(userCompanyMemberships.companyId, companyId),
+                    eq(userCompanyMemberships.userId, pk.cy)
+                )
+            );
         // Someone who connected Notion and then left: a user row, no membership.
         const [gone] = await test.db
             .insert(users)
@@ -134,6 +147,7 @@ describeDb("Notion per-user migration (integration)", () => {
                 providerAccountId: "bot-left",
                 grantedByUserId: BigInt(gone!.id),
             },
+            { ...base, provider: "notion", providerAccountId: "bot-cy", grantedByUserId: pk.cy },
             { ...base, provider: "slack", providerAccountId: "T1", grantedByUserId: pk.ben },
         ]);
 
@@ -153,6 +167,7 @@ describeDb("Notion per-user migration (integration)", () => {
         expect(byAccount.get("bot-a2")?.owner).toBe(pk.ada);
         expect(byAccount.has("bot-gone")).toBe(false);
         expect(byAccount.has("bot-left")).toBe(false);
+        expect(byAccount.get("bot-cy")?.owner).toBe(pk.cy);
         expect(byAccount.get("T1")?.owner).toBeNull();
 
         const [index] = await test.db.execute<{ indexdef: string }>(

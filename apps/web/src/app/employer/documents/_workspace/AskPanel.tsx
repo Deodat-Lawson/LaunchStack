@@ -47,6 +47,7 @@ import { usePeople } from "~/lib/profile/use-people";
 import { workspaceHref } from "~/lib/settings/surfaces";
 import type { ChatSendResult } from "~/lib/chat-turns";
 import { stripStreamingSourceLabels } from "~/lib/source-labels";
+import { HIDDEN_MENTION_LABEL, mentionedSourceRefs, parseMentions } from "~/lib/source-mentions";
 import { AgentAvatar } from "./collab/AgentAvatar";
 import { type ChatAgentOption } from "./collab/types";
 import { useContextTarget } from "~/components/context-menu";
@@ -286,6 +287,8 @@ interface MessageProps {
     /** Opens the cited document scrolled to (and highlighting) the cited passage. */
     onOpenCitation?: (cite: ThreadReference) => void;
     onOpenSource?: (source: WorkspaceSource) => void;
+    /** Opens the composer's sources picker: the scope this chat is over. */
+    onChangeScope?: () => void;
     /** Puts a quote of this text in the composer. */
     onQuote: (text: string) => void;
     /** Puts this text in the composer to change and resend. */
@@ -313,7 +316,13 @@ interface MessageProps {
  * indistinguishable from the question. Both halves are now drawn for what they
  * are, and `pre-wrap` keeps the line breaks in either.
  */
-function QuestionProse({ text }: { text: string }) {
+interface ProseSourcesProps {
+    /** The roster, so a source chip in the words can open its source. */
+    sources?: WorkspaceSource[];
+    onOpenSource?: (source: WorkspaceSource) => void;
+}
+
+function QuestionProse({ text, sources = [], onOpenSource }: { text: string } & ProseSourcesProps) {
     const t = useTranslations("chat.message");
     const parts = text.split(
         /(\[Source message\]\(#chat-message-[\w-]+\)|\[(?:Source|Conversation|Folder): (?:\\.|[^\]\\\n]){1,300}\]\(#launchstack-(?:source|thread|folder)-[^)\s]+\))/g
@@ -328,16 +337,37 @@ function QuestionProse({ text }: { text: string }) {
                             {t("sourceMessage")}
                         </a>
                     );
-                // The rich editor writes its context chips into the message
-                // as machine links; they read as the name they stand for.
-                const context =
-                    /^\[(?:Source|Conversation|Folder): ((?:\\.|[^\]\\\n]){1,300})\]\(#launchstack-/.exec(
-                        part
+                // The composer writes its chips into the message as machine
+                // links. A source reads as its chip, which opens it; one the
+                // reader cannot open (gone, or hidden from a reader of a
+                // shared chat) as an unavailable chip; a folder or a
+                // conversation as the name it stands for.
+                const [mention] = parseMentions(part);
+                if (mention?.kind === "source") {
+                    const found = sources.find(item => item.id === mention.ref);
+                    return found ? (
+                        <SourceChip
+                            key={i}
+                            source={found}
+                            size="sm"
+                            onOpen={onOpenSource ? () => onOpenSource(found) : undefined}
+                        />
+                    ) : (
+                        <span
+                            key={i}
+                            className="border-line text-ink-3 inline-flex items-center rounded-full border border-dashed px-2 align-baseline text-xs"
+                            title={t("unavailableSource")}
+                        >
+                            {mention.label === HIDDEN_MENTION_LABEL
+                                ? t("unavailableSource")
+                                : mention.label}
+                        </span>
                     );
-                if (context)
+                }
+                if (mention)
                     return (
                         <span key={i} className="text-brand font-medium">
-                            {(context[1] ?? "").replace(/\\(.)/g, "$1")}
+                            {mention.label}
                         </span>
                     );
                 return <React.Fragment key={i}>{part}</React.Fragment>;
@@ -346,7 +376,7 @@ function QuestionProse({ text }: { text: string }) {
     );
 }
 
-function QuestionBody({ text: raw }: { text: string }) {
+function QuestionBody({ text: raw, sources, onOpenSource }: { text: string } & ProseSourcesProps) {
     const t = useTranslations("chat.message");
     const tc = useTranslations("common");
     const [expanded, setExpanded] = useState(false);
@@ -377,7 +407,7 @@ function QuestionBody({ text: raw }: { text: string }) {
                                 : undefined,
                     }}
                 >
-                    <QuestionProse text={text} />
+                    <QuestionProse text={text} sources={sources} onOpenSource={onOpenSource} />
                 </div>
                 {long && (
                     <button
@@ -408,7 +438,7 @@ function QuestionBody({ text: raw }: { text: string }) {
             >
                 {lead && (
                     <div style={prose}>
-                        <QuestionProse text={lead} />
+                        <QuestionProse text={lead} sources={sources} onOpenSource={onOpenSource} />
                     </div>
                 )}
                 <blockquote
@@ -427,7 +457,7 @@ function QuestionBody({ text: raw }: { text: string }) {
                 </blockquote>
                 {trail && (
                     <div style={prose}>
-                        <QuestionProse text={trail} />
+                        <QuestionProse text={trail} sources={sources} onOpenSource={onOpenSource} />
                     </div>
                 )}
             </div>
@@ -453,6 +483,7 @@ const Message = React.memo(function Message({
     setSelected,
     onOpenCitation,
     onOpenSource,
+    onChangeScope,
     onQuote,
     onEdit,
     agents,
@@ -607,6 +638,10 @@ const Message = React.memo(function Message({
     const refs = (msg.refs ?? [])
         .map(id => sources.find(s => s.id === id))
         .filter((s): s is WorkspaceSource => Boolean(s));
+    // A source the words mention is its chip there; the rest of the scope —
+    // carried from earlier turns — is shown under the words.
+    const mentioned = mentionedSourceRefs(msg.text);
+    const carried = refs.filter(source => !mentioned.includes(source.id));
     const cites = msg.citations ?? [];
     // The model cites sources by id ("[d12]"); the finished answer arrives
     // with them taken out, so hide them while it streams too.
@@ -721,11 +756,22 @@ const Message = React.memo(function Message({
                             {t("toAgent", { handle: agent.key })}
                         </span>
                     )}
-                    {refs.length > 0 && (
-                        <span className="mono" style={{ fontSize: 10, color: "var(--ink-3)" }}>
-                            {t("askingOver", { count: refs.length })}
-                        </span>
-                    )}
+                    {refs.length > 0 &&
+                        (onChangeScope && !readOnly ? (
+                            <button
+                                type="button"
+                                className="mono hover:text-ink-2 rounded px-0.5"
+                                style={{ fontSize: 10, color: "var(--ink-3)" }}
+                                title={t("askingOverTitle")}
+                                onClick={onChangeScope}
+                            >
+                                {t("askingOver", { count: refs.length })}
+                            </button>
+                        ) : (
+                            <span className="mono" style={{ fontSize: 10, color: "var(--ink-3)" }}>
+                                {t("askingOver", { count: refs.length })}
+                            </span>
+                        ))}
                 </div>
                 {passages.length > 0 && (
                     <div className="mb-3 flex flex-col gap-1.5" data-testid="question-passages">
@@ -743,10 +789,10 @@ const Message = React.memo(function Message({
                         ))}
                     </div>
                 )}
-                <QuestionBody text={msg.text} />
-                {refs.length > 0 && (
+                <QuestionBody text={msg.text} sources={sources} onOpenSource={onOpenSource} />
+                {carried.length > 0 && (
                     <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 12 }}>
-                        {refs.map(s => (
+                        {carried.map(s => (
                             <SourceChip
                                 key={s.id}
                                 source={s}
@@ -1131,6 +1177,8 @@ export interface AskPanelProps {
     sources: WorkspaceSource[];
     selected: string[];
     setSelected: Dispatch<SetStateAction<string[]>>;
+    /** The editor the composer starts in until the person picks one. Rich: chips live in the words. */
+    composerEditor?: "plain" | "rich";
     thread: ThreadMessage[];
     sendMessage: (
         send: ComposerSend
@@ -1246,6 +1294,7 @@ export function AskPanel({
     sources,
     selected,
     setSelected,
+    composerEditor = "rich",
     thread,
     sendMessage,
     isSending,
@@ -1294,7 +1343,15 @@ export function AskPanel({
     const { scrollRef, contentRef, following, currentIndex, onScroll, latest, navigate } =
         useChatTimeline(thread, draftKey, isSending);
     const [visibleCounts, setVisibleCounts] = useState<Record<string, number>>({});
+    // Bumped by a turn's "asking over N sources" to open the composer's picker.
+    const [scopeSignal, setScopeSignal] = useState(0);
     const visibleCount = visibleCounts[draftKey] ?? 100;
+    // The sources this chat is already over: what earlier turns were asked
+    // over. The composer keeps them in scope without chips for them.
+    const carriedRefs = useMemo(
+        () => [...new Set(thread.filter(m => m.role === "user").flatMap(m => m.refs ?? []))],
+        [thread]
+    );
     const setVisibleCount = useCallback(
         (value: number | ((previous: number) => number)) =>
             setVisibleCounts(previous => ({
@@ -1796,6 +1853,9 @@ export function AskPanel({
                                         setSelected={setSelected}
                                         onOpenCitation={onOpenCitation}
                                         onOpenSource={onOpenSource}
+                                        onChangeScope={
+                                            readOnly ? undefined : () => setScopeSignal(n => n + 1)
+                                        }
                                         onQuote={quote}
                                         onEdit={edit}
                                         onCite={cite}
@@ -1935,6 +1995,9 @@ export function AskPanel({
                             sources={sources}
                             selected={selected}
                             setSelected={setSelected}
+                            carriedRefs={carriedRefs}
+                            defaultEditorMode={composerEditor}
+                            openSourcesSignal={scopeSignal}
                             onSend={handleSend}
                             disabled={disabled || allowanceBlocked}
                             draftKey={suppliedDraftKey}

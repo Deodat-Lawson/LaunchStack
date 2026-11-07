@@ -79,6 +79,8 @@ function mount(overrides: Partial<AskPanelProps> = {}) {
         sources: [],
         selected: [],
         setSelected: jest.fn(),
+        // These tests type into the plain textarea; the panel's default is the rich editor.
+        composerEditor: "plain",
         thread: THREAD,
         sendMessage: jest.fn(),
         isSending: false,

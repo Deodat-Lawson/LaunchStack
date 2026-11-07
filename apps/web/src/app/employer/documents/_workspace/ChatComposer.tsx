@@ -4,6 +4,8 @@ import React, {
     Suspense,
     lazy,
     type Dispatch,
+    type ForwardRefExoticComponent,
+    type RefAttributes,
     type SetStateAction,
     useCallback,
     useEffect,
@@ -33,6 +35,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "~/components/ui/dialog";
 import { useContextTarget } from "~/components/context-menu";
 import { copyText, readClipboardText } from "~/lib/context-menu";
+import { mentionedSourceRefs, stripMentions } from "~/lib/source-mentions";
 import {
     addPassage,
     DEFAULT_PASSAGE_QUESTION,
@@ -80,7 +83,7 @@ import {
     type ComposerPreferences,
     type PromptStash,
 } from "./composerState";
-import type { ComposerContext, RichChatEditorHandle } from "./RichChatEditor";
+import type { ComposerContext, RichChatEditorHandle, RichChatEditorProps } from "./RichChatEditor";
 import type { JSONContent } from "@tiptap/react";
 import {
     ComposerImageError,
@@ -91,12 +94,32 @@ import {
 
 let serializeRichDocument: ((document: JSONContent) => string) | undefined;
 let validateRichDocument: ((document: unknown) => document is JSONContent) | undefined;
+type RichEditorComponent = ForwardRefExoticComponent<
+    RichChatEditorProps & RefAttributes<RichChatEditorHandle>
+>;
+/**
+ * Stands in for the rich editor when its code could not be loaded (a deploy
+ * mid-session, an offline reload): it hands the composer back to the plain
+ * editor, which still sends, instead of leaving the loading line on screen.
+ */
+function RichEditorUnavailable({ onUnavailable }: RichChatEditorProps) {
+    useEffect(() => {
+        onUnavailable?.();
+    }, [onUnavailable]);
+    return null;
+}
 const RichChatEditor = lazy(async () => {
-    const richModule = await import("./RichChatEditor");
-    serializeRichDocument = richModule.composerJsonToMarkdown;
-    validateRichDocument = richModule.validComposerDocument;
-    return richModule;
+    try {
+        const richModule = await import("./RichChatEditor");
+        serializeRichDocument = richModule.composerJsonToMarkdown;
+        validateRichDocument = richModule.validComposerDocument;
+        return richModule;
+    } catch (error) {
+        console.warn("[composer] rich editor unavailable; using the plain editor", error);
+        return { default: RichEditorUnavailable as unknown as RichEditorComponent };
+    }
 });
+const NO_REFS: string[] = [];
 
 const attachmentAvailabilityKey = (attachment: EphemeralAttachment) =>
     `${attachment.id}:${attachment.url}`;
@@ -107,6 +130,16 @@ export interface ComposerProps {
     sources: WorkspaceSource[];
     selected: string[];
     setSelected: Dispatch<SetStateAction<string[]>>;
+    /**
+     * Sources this chat is already over from earlier turns. They stay in the
+     * scope without a chip in the words and show as one line above the text,
+     * not as chips (docs/design/inline-source-context.md §3.4).
+     */
+    carriedRefs?: string[];
+    /** The editor to start in until the person picks one; the chat panel asks for rich. */
+    defaultEditorMode?: "plain" | "rich";
+    /** Bump to open the sources picker from outside (a turn's "asking over N sources"). */
+    openSourcesSignal?: number;
     onSend: (send: ComposerSend) => void | ComposerSendResult | Promise<ComposerSendResult>;
     disabled?: boolean;
     active?: boolean;
@@ -175,6 +208,9 @@ export function Composer({
     sources,
     selected,
     setSelected,
+    carriedRefs = NO_REFS,
+    defaultEditorMode = "plain",
+    openSourcesSignal = 0,
     onSend,
     disabled = false,
     active = false,
@@ -233,12 +269,20 @@ export function Composer({
     const [modelSearch, setModelSearch] = useState("");
     const [sourceOpen, setSourceOpen] = useState(false);
     const [sourceSearch, setSourceSearch] = useState("");
+    useEffect(() => {
+        if (openSourcesSignal > 0) setSourceOpen(true);
+    }, [openSourcesSignal]);
     const [stashes, setStashes] = useState<PromptStash[]>([]);
     const [stashOpen, setStashOpen] = useState(false);
     const [sendKey, setSendKey] = useState<ComposerPreferences["sendKey"]>(defaultSendKey);
     const [favorites, setFavorites] = useState<string[]>([]);
     const [followUp, setFollowUp] = useState<"queue" | "interrupt">("queue");
-    const [editorMode, setEditorMode] = useState<"plain" | "rich">("plain");
+    const [editorMode, setEditorMode] = useState<"plain" | "rich">(defaultEditorMode);
+    const [editorModeChosen, setEditorModeChosen] = useState(false);
+    const chooseEditorMode = (mode: "plain" | "rich") => {
+        setEditorMode(mode);
+        setEditorModeChosen(true);
+    };
     const [richContent, setRichContent] = useState<JSONContent | null>(null);
     const [loadedKey, setLoadedKey] = useState<string | undefined>();
     const [mention, setMention] = useState<{ query: string; start: number } | null>(null);
@@ -306,6 +350,18 @@ export function Composer({
     const uploading = uploads.some(row => row.status === "uploading");
     const uploadBlocked = uploads.length > 0 || preparingFiles || missingFiles.length > 0;
     const unavailableSources = selected.filter(id => !sources.some(source => source.id === id));
+    // The chips in the words. A source carried over from earlier turns stays
+    // in the scope without one and gets a chip only when it is mentioned
+    // again; the rich editor is never asked to insert chips for the scope.
+    const mentionedIds = useMemo(() => mentionedSourceRefs(text), [text]);
+    const chipSources = useMemo(
+        () => selected.filter(id => !carriedRefs.includes(id) || mentionedIds.includes(id)),
+        [selected, carriedRefs, mentionedIds]
+    );
+    const carriedScope = selected.filter(
+        id => carriedRefs.includes(id) && !mentionedIds.includes(id)
+    );
+    const unmentionedUnavailable = unavailableSources.filter(id => !mentionedIds.includes(id));
     const unavailableThreads = threadRefs.filter(
         id => !threadContextOptions.some(thread => thread.id === id)
     );
@@ -444,7 +500,7 @@ export function Composer({
     const completionCount = slash ? slashMatches.length : mentionMatches.length;
     const richContexts = useMemo<ComposerContext[]>(
         () => [
-            ...selected.map(id => {
+            ...chipSources.map(id => {
                 const source = sources.find(item => item.id === id);
                 return {
                     id,
@@ -471,7 +527,7 @@ export function Composer({
                 unavailable: !threadContextOptions.some(thread => thread.id === id),
             })),
         ],
-        [selected, sources, attachments, threadRefs, threadContextOptions, t]
+        [chipSources, sources, attachments, threadRefs, threadContextOptions, t]
     );
 
     const updateAttachments = useCallback((next: EphemeralAttachment[]) => {
@@ -619,7 +675,14 @@ export function Composer({
             Array.isArray(preferences?.favorites) ? preferences.favorites.filter(isPickerRoute) : []
         );
         setFollowUp(preferences?.followUp === "interrupt" ? "interrupt" : "queue");
-        setEditorMode(preferences?.editorMode === "rich" ? "rich" : "plain");
+        // Only a mode the person picked counts: the mode is written back on
+        // every change, so an old automatic default would otherwise pass for
+        // a choice and keep the panel's default from applying.
+        const chosen =
+            preferences?.editorModeChosen === true &&
+            (preferences.editorMode === "rich" || preferences.editorMode === "plain");
+        setEditorModeChosen(chosen);
+        setEditorMode(chosen ? preferences.editorMode! : defaultEditorMode);
         if (!isComposerDraft(stored)) {
             if (isPickerRoute(preferences.modelRoute)) setModelRoute(preferences.modelRoute);
             if (typeof preferences?.reasoningEffort === "string")
@@ -628,7 +691,14 @@ export function Composer({
         setLoadedKey(scopedKey);
         setStorageError(false);
         // Keys identify a different user/workspace/thread. Only switching that scope hydrates a draft.
-    }, [scopedKey, preferencesKey, applyDraft, updateAttachments, updateUploads]);
+    }, [
+        scopedKey,
+        preferencesKey,
+        applyDraft,
+        updateAttachments,
+        updateUploads,
+        defaultEditorMode,
+    ]);
     useEffect(() => {
         if (loadedKey !== scopedKey) return;
         const saved = writeComposerStorage(scopedKey, {
@@ -679,6 +749,7 @@ export function Composer({
                 favorites,
                 followUp,
                 editorMode,
+                editorModeChosen,
                 modelRoute,
                 reasoningEffort,
             });
@@ -690,6 +761,7 @@ export function Composer({
         favorites,
         followUp,
         editorMode,
+        editorModeChosen,
         modelRoute,
         reasoningEffort,
     ]);
@@ -850,7 +922,10 @@ export function Composer({
         if (slash) {
             const command = slashMatches[index];
             if (!command) return;
-            setText(text.slice(0, slash.start) + text.slice(caret));
+            // The rich editor holds the words: edit it, not the Markdown, or
+            // the typed command stays on screen.
+            if (editorMode === "rich") richRef.current?.replaceQuery(caret - slash.start, "");
+            else setText(text.slice(0, slash.start) + text.slice(caret));
             if (command.id === "new") {
                 requests.current.forEach(request => request.abort());
                 updateUploads([]);
@@ -874,7 +949,25 @@ export function Composer({
                     : option.sourceIds
                       ? `[Folder: ${option.label}](#launchstack-folder-${encodeURIComponent(option.key.slice(7))}) `
                       : "";
-            setText(`${text.slice(0, mention.start)}${insert}${text.slice(caret)}`);
+            if (editorMode === "rich") {
+                // The rich editor holds the words: a source becomes its chip
+                // in place of the typed query; a conversation's chip follows
+                // from threadRefs; an agent or folder is text.
+                const source = option.source;
+                richRef.current?.replaceQuery(
+                    caret - mention.start,
+                    source
+                        ? {
+                              id: source.id,
+                              kind: "source",
+                              label: source.title,
+                              markdown: `[Source: ${source.title.replace(/([\\\[\]])/g, "\\$1")}](#launchstack-source-${encodeURIComponent(source.id)})`,
+                          }
+                        : option.threadId
+                          ? ""
+                          : insert
+                );
+            } else setText(`${text.slice(0, mention.start)}${insert}${text.slice(caret)}`);
             if (option.source)
                 setSelected(previous =>
                     previous.includes(option.source!.id)
@@ -885,7 +978,7 @@ export function Composer({
                 setSelected(previous => [...new Set([...previous, ...option.sourceIds!])]);
             if (option.threadId)
                 setThreadRefs(previous => [...new Set([...previous, option.threadId!])]);
-            focusAt(mention.start + insert.length);
+            if (editorMode !== "rich") focusAt(mention.start + insert.length);
         }
         setMention(null);
         setSlash(null);
@@ -905,7 +998,15 @@ export function Composer({
                 richContent && serializeRichDocument && validateRichDocument?.(richContent)
                     ? serializeRichDocument(composerDocumentWithoutContext(richContent))
                     : text,
-            origin: text.trim() || passages.length ? "user" : "attachment",
+            // Chips alone are an attachment, not words: the route then asks
+            // for an orientation instead of reading the links as a question.
+            origin:
+                stripMentions(
+                    text,
+                    attachments.map(attachment => attachment.url)
+                ).trim() || passages.length
+                    ? "user"
+                    : "attachment",
             refs: selected,
             attachments,
             webSearch,
@@ -1585,7 +1686,51 @@ export function Composer({
             }}
         >
             {dragging && <p className="text-brand mb-2 text-sm">{t("dropHint")}</p>}
-            {selected.length > 0 && (
+            {editorMode === "rich" &&
+                (carriedScope.length > 0 || unmentionedUnavailable.length > 0) && (
+                    // The scope this chat carries from earlier turns: one line,
+                    // not chips. This message's own sources are chips in the words.
+                    <div
+                        className="border-line text-ink-3 mb-2.5 flex flex-wrap items-center gap-1.5 border-b border-dashed pb-2.5 text-xs"
+                        data-testid="composer-scope"
+                    >
+                        <span>{t("scopeLine", { count: selected.length })}</span>
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-ink-2 h-6 px-1.5 text-xs"
+                            onClick={() => setSourceOpen(true)}
+                        >
+                            {t("changeScope")}
+                        </Button>
+                        {unmentionedUnavailable.map(id => (
+                            <span
+                                key={id}
+                                className="border-line text-ink-3 inline-flex max-w-full items-center gap-1 rounded-md border border-dashed px-2 py-1 text-xs"
+                                title={t("unavailableSourceTitle")}
+                            >
+                                <span className="max-w-[240px] truncate">
+                                    {t("unavailableSourceChip", { id })}
+                                </span>
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="size-6"
+                                    aria-label={t("removeUnavailableSource", { id })}
+                                    onClick={() =>
+                                        setSelected(previous =>
+                                            previous.filter(item => item !== id)
+                                        )
+                                    }
+                                >
+                                    <X className="size-3" />
+                                </Button>
+                            </span>
+                        ))}
+                    </div>
+                )}
+            {editorMode === "plain" && selected.length > 0 && (
+                // The plain editor cannot hold chips, so its sources stay in a row.
                 <div className="border-line mb-2.5 flex flex-wrap items-center gap-1.5 border-b border-dashed pb-2.5">
                     <span className="mono text-ink-3 text-[11px] uppercase">
                         {t("contextLabel")}
@@ -1917,6 +2062,7 @@ export function Composer({
                         value={text}
                         content={richContent}
                         contexts={richContexts}
+                        onUnavailable={() => setEditorMode("plain")}
                         placeholder={
                             passages.length > 0
                                 ? t("richPlaceholderPassages", { count: passages.length })
@@ -1937,9 +2083,16 @@ export function Composer({
                                 removedSources.length ||
                                 addedSources.some(id => !selected.includes(id))
                             )
+                                // Deleting a chip takes the source out of this
+                                // message; a source the chat already carried
+                                // stays in the scope (the picker removes it).
                                 setSelected(previous => [
                                     ...new Set([
-                                        ...previous.filter(id => !removedSources.includes(id)),
+                                        ...previous.filter(
+                                            id =>
+                                                !removedSources.includes(id) ||
+                                                carriedRefs.includes(id)
+                                        ),
                                         ...addedSources,
                                     ]),
                                 ]);
@@ -2478,14 +2631,14 @@ export function Composer({
                             <Button
                                 variant={editorMode === "plain" ? "default" : "outline"}
                                 size="sm"
-                                onClick={() => setEditorMode("plain")}
+                                onClick={() => chooseEditorMode("plain")}
                             >
                                 {t("options.plainMarkdown")}
                             </Button>
                             <Button
                                 variant={editorMode === "rich" ? "default" : "outline"}
                                 size="sm"
-                                onClick={() => setEditorMode("rich")}
+                                onClick={() => chooseEditorMode("rich")}
                             >
                                 {t("options.richText")}
                             </Button>

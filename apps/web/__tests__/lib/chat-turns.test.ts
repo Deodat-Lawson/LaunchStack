@@ -153,3 +153,16 @@ test("prior questions keep the newest twenty, each cut to fit the request", () =
     expect(kept[0]).toMatch(/^question 5 /);
     expect(kept.every(text => text.length <= 4_000)).toBe(true);
 });
+test("the person's turns are rendered for the model while the answers are left alone", () => {
+    expect(
+        conversationContext(
+            [
+                { role: "user", text: "See [Source: Deck](#launchstack-source-d7)" },
+                { role: "assistant", text: "A [Source: Deck](#launchstack-source-d7) echo" },
+            ],
+            undefined,
+            undefined,
+            text => text.replace("[Source: Deck](#launchstack-source-d7)", '"Deck" (d7)')
+        )
+    ).toBe('User: See "Deck" (d7)\n\nAssistant: A [Source: Deck](#launchstack-source-d7) echo');
+});

@@ -1,12 +1,15 @@
 /**
- * A member's own connections (`connector_connections.owner_user_id`, Gmail
- * today) and what becomes of them when the member is gone.
+ * A member's own connections (`connector_connections.owner_user_id`: Gmail
+ * and Notion) and what becomes of them when the member is gone.
  *
  * A personal connection belongs to its member, not to the workspace, so it
  * lasts exactly as long as their membership:
  *
  * - **Removed, or left.** The connection row goes (its sync state and scope
- *   cascade) and its Google grant is revoked once the transaction commits.
+ *   cascade) and its grant is revoked at Google or Notion once the
+ *   transaction commits (`revokePersonalGrants`, bounded so a hung provider
+ *   never holds the request). A Notion connection's pages stay, and its
+ *   folder is handed over like the member's other sole-managed items.
  *   The mail it brought in goes too: every document still inside the
  *   member's Gmail folder, and the folder. A mailbox was private to its owner
  *   (ADR-014 kept the `Gmail` subtree out of the admin carry-over), so nobody
@@ -51,7 +54,7 @@ import {
     gmailFolderFor,
     isPersonalMailboxPath,
 } from "./gmail/config";
-import { revokeGoogleToken } from "./gmail/connections";
+import { revokeConnectionTokens, type ConnectionTokens } from "./revoke";
 
 /** Personal providers whose grants are Google's, revoked at Google's endpoint. */
 const GOOGLE_PERSONAL_PROVIDERS: ReadonlySet<string> = new Set([GMAIL_PROVIDER]);
@@ -60,8 +63,24 @@ export interface ClosedPersonalConnections {
     readonly connections: number;
     readonly documents: number;
     readonly folders: number;
+    /** Which connections closed, for one audit line each. */
+    readonly closed: readonly { readonly id: number; readonly provider: string }[];
     /** Refresh tokens to revoke at Google once the transaction has committed. */
     readonly googleTokensToRevoke: readonly string[];
+    /** Other providers' grants (Notion) to revoke once it has committed. */
+    readonly otherGrantsToRevoke: readonly {
+        readonly provider: string;
+        readonly tokens: ConnectionTokens;
+    }[];
+}
+
+function decryptOrNull(ciphertext: string | null): string | null {
+    if (!ciphertext) return null;
+    try {
+        return decryptSecret(ciphertext);
+    } catch {
+        return null; // a key-rotation casualty can't be revoked; the row goes regardless
+    }
 }
 
 /**
@@ -198,7 +217,7 @@ async function deleteMailboxes(
  * Ends every personal connection `userPk` holds in `companyId`, inside the
  * caller's transaction: the rows, the mail still in their mailbox folders,
  * and those folders. Revoking the grants at Google is network work, so the
- * tokens come back for `revokeGoogleGrants` to send after the commit.
+ * tokens come back for `revokePersonalGrants` to send after the commit.
  *
  * The rows are locked first, so a sync finishing at the same moment waits
  * for this to commit before it checks what it left behind
@@ -226,12 +245,19 @@ export async function closePersonalConnections(
         .for("update");
 
     const googleTokensToRevoke: string[] = [];
+    const otherGrantsToRevoke: { provider: string; tokens: ConnectionTokens }[] = [];
     for (const row of connections) {
-        if (!GOOGLE_PERSONAL_PROVIDERS.has(row.provider) || !row.refreshTokenCiphertext) continue;
-        try {
-            googleTokensToRevoke.push(decryptSecret(row.refreshTokenCiphertext));
-        } catch {
-            // A key-rotation casualty can't be revoked; the row goes regardless.
+        if (GOOGLE_PERSONAL_PROVIDERS.has(row.provider)) {
+            const refreshToken = decryptOrNull(row.refreshTokenCiphertext);
+            if (refreshToken) googleTokensToRevoke.push(refreshToken);
+            continue;
+        }
+        const tokens = {
+            accessToken: decryptOrNull(row.accessTokenCiphertext),
+            refreshToken: decryptOrNull(row.refreshTokenCiphertext),
+        };
+        if (tokens.accessToken || tokens.refreshToken) {
+            otherGrantsToRevoke.push({ provider: row.provider, tokens });
         }
     }
 
@@ -264,12 +290,30 @@ export async function closePersonalConnections(
         );
     }
 
-    return { connections: connections.length, documents, folders, googleTokensToRevoke };
+    return {
+        connections: connections.length,
+        documents,
+        folders,
+        closed: connections.map(row => ({ id: row.id, provider: row.provider })),
+        googleTokensToRevoke,
+        otherGrantsToRevoke,
+    };
 }
 
-/** Best effort, after the commit: a copied refresh token dies with its connection. */
-export async function revokeGoogleGrants(tokens: readonly string[]): Promise<void> {
-    await Promise.all(tokens.map(token => revokeGoogleToken(token)));
+/**
+ * Best effort, after the commit: a copied token dies with its connection.
+ * Each revocation is bounded (`revokeConnectionTokens`), so a provider that
+ * hangs costs seconds, never the removal it follows.
+ */
+export async function revokePersonalGrants(closed: ClosedPersonalConnections): Promise<void> {
+    await Promise.all([
+        ...closed.googleTokensToRevoke.map(refreshToken =>
+            revokeConnectionTokens(GMAIL_PROVIDER, { accessToken: null, refreshToken })
+        ),
+        ...closed.otherGrantsToRevoke.map(grant =>
+            revokeConnectionTokens(grant.provider, grant.tokens)
+        ),
+    ]);
 }
 
 /** `closePersonalConnections` in a transaction of its own, then the revocations. */
@@ -278,7 +322,7 @@ export async function closePersonalConnectionsNow(
     userPk: bigint
 ): Promise<ClosedPersonalConnections> {
     const closed = await db.transaction(tx => closePersonalConnections(tx, companyId, userPk));
-    await revokeGoogleGrants(closed.googleTokensToRevoke);
+    await revokePersonalGrants(closed);
     return closed;
 }
 

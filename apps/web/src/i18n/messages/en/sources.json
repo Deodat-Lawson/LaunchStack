@@ -480,7 +480,6 @@
     "disconnected": "{name} disconnected. Pages already synced were kept.",
     "disconnectFailed": "Could not disconnect {name}",
     "revoked": "Access was revoked — reconnect to keep syncing",
-    "connectedBy": "connected by {name}",
     "reconnect": "Reconnect",
     "syncNow": "Sync now",
     "choosePages": "Choose pages",
@@ -488,10 +487,13 @@
     "connectTitle": "Connect Notion",
     "oneClick": "One-click OAuth, revoke anytime.",
     "checking": "Checking Notion…",
-    "forbidden": "Connecting Notion is for workspace admins. Ask one to connect it; the pages they pick will show up in Sources.",
+    "forbidden": "Connecting Notion needs permission to add files to this workspace. Ask a workspace admin for it.",
     "loadError": "Could not load the Notion connection. Try again in a moment.",
     "notConfigured": "Notion is not configured on this server. Whoever runs LaunchStack needs to add NOTION_OAUTH_CLIENT_ID and NOTION_OAUTH_CLIENT_SECRET — the steps are in .env.example.",
-    "connectAnother": "Connect another Notion workspace"
+    "connectAnother": "Connect another Notion workspace",
+    "paused": {
+      "noUpload": "Paused: you can no longer add files in this workspace. Ask an admin for upload access."
+    }
   },
   "obsidianImport": {
     "noNotes": "No Markdown notes found in that pick. Choose the vault's own folder.",

@@ -45,7 +45,7 @@ interface ConnectorsOverview {
         status: string;
         statusDetail: string | null;
         grantedBy: string | null;
-        /** A per-user connection (Gmail) — the caller's own, never a colleague's. */
+        /** A per-user connection (Gmail, Notion) — the caller's own, never a colleague's. */
         personal?: boolean;
         createdAt: string;
     }>;
@@ -264,7 +264,7 @@ export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
     const [pendingDisconnect, setPendingDisconnect] = useState<{
         id: string;
         label: string;
-        personal: boolean;
+        provider: string;
     } | null>(null);
     const origin = typeof window === "undefined" ? "https://your-app" : window.location.origin;
 
@@ -284,13 +284,16 @@ export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
         [refreshAll, loading, connectors.loading, t]
     );
 
-    const disconnect = async (connectionId: string, label: string, personal = false) => {
+    const disconnect = async (connectionId: string, label: string, provider: string) => {
         setDisconnecting(connectionId);
         try {
-            // A member's own Gmail row is theirs to remove; the generic route
-            // is the management-gated path for workspace connections.
+            // Gmail has its own route, which also records the audit event.
+            // The generic route lets an owner remove their own per-user row
+            // (Notion) and needs connectors.manage for anything else.
             const res = await fetch(
-                personal ? "/api/connectors/gmail" : `/api/connectors/connections/${connectionId}`,
+                provider === "gmail"
+                    ? "/api/connectors/gmail"
+                    : `/api/connectors/connections/${connectionId}`,
                 { method: "DELETE" }
             );
             if (res.ok) {
@@ -366,7 +369,7 @@ export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
                                                     setPendingDisconnect({
                                                         id: row.id,
                                                         label,
-                                                        personal: Boolean(row.personal),
+                                                        provider: row.provider,
                                                     }),
                                             },
                                         ],
@@ -386,28 +389,19 @@ export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
                                                 {row.status !== "active"
                                                     ? ` · ${row.status}${row.statusDetail ? ` — ${row.statusDetail}` : ""}`
                                                     : ""}{" "}
-                                                <button
+                                                <Button
+                                                    size="sm"
+                                                    variant="outline"
+                                                    className="h-6 px-2 text-xs"
                                                     onClick={() =>
-                                                        void disconnect(row.id, label, row.personal)
+                                                        void disconnect(row.id, label, row.provider)
                                                     }
                                                     disabled={disconnecting === row.id}
-                                                    style={{
-                                                        fontSize: 12,
-                                                        fontWeight: 600,
-                                                        color: "var(--ink-2)",
-                                                        padding: "2px 8px",
-                                                        borderRadius: 6,
-                                                        border: "1px solid var(--line)",
-                                                        cursor:
-                                                            disconnecting === row.id
-                                                                ? "wait"
-                                                                : "pointer",
-                                                    }}
                                                 >
                                                     {disconnecting === row.id
                                                         ? t("removing")
                                                         : tc("actions.disconnect")}
-                                                </button>
+                                                </Button>
                                             </>
                                         }
                                     />
@@ -427,7 +421,7 @@ export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
                     onConfirm={() => {
                         const target = pendingDisconnect;
                         setPendingDisconnect(null);
-                        if (target) void disconnect(target.id, target.label, target.personal);
+                        if (target) void disconnect(target.id, target.label, target.provider);
                     }}
                 />
             </Section>

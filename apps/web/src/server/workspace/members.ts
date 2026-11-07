@@ -34,7 +34,8 @@ import {
 import { copy } from "~/i18n/copy";
 import {
     closePersonalConnections,
-    revokeGoogleGrants,
+    revokePersonalGrants,
+    type ClosedPersonalConnections,
 } from "~/server/services/connectors/personal-connections";
 
 import type { Executor } from "./db-types";
@@ -344,7 +345,8 @@ export async function updateMember(
  * membership (with its profile override), their photo for this workspace,
  * their group seats, and grants naming them. The `users` row
  * stays; if it pointed at this workspace as its default, it is repointed at
- * another workspace they still belong to.
+ * another workspace they still belong to. Their own connections (Gmail,
+ * Notion) are closed before this, by `closePersonalConnections`.
  */
 async function deleteMembershipEverywhere(
     tx: Executor,
@@ -426,6 +428,30 @@ async function deleteMembershipEverywhere(
     }
 }
 
+/** One audit line per connection that left with a member. */
+async function recordClosedConnections(
+    tx: Executor,
+    companyId: bigint,
+    actorUserId: string,
+    memberUserId: bigint,
+    personal: ClosedPersonalConnections
+): Promise<void> {
+    for (const connection of personal.closed) {
+        await recordAuditEvent(tx, {
+            companyId,
+            actorUserId,
+            action: "connector.disconnected",
+            targetType: "connector",
+            targetId: connection.provider,
+            detail: {
+                connectionId: connection.id,
+                ownerUserId: memberUserId.toString(),
+                reason: "member-departed",
+            },
+        });
+    }
+}
+
 export async function removeMember(
     ctx: WorkspaceContext,
     userId: bigint
@@ -448,6 +474,7 @@ export async function removeMember(
             authUserId: ctx.authUserId,
         });
         await deleteMembershipEverywhere(tx, ctx.companyId, userId);
+        await recordClosedConnections(tx, ctx.companyId, ctx.authUserId, userId, personal);
         await recordAuditEvent(tx, {
             companyId: ctx.companyId,
             actorUserId: ctx.authUserId,
@@ -465,7 +492,7 @@ export async function removeMember(
         });
         return personal;
     });
-    await revokeGoogleGrants(closed.googleTokensToRevoke);
+    await revokePersonalGrants(closed);
     return { success: true };
 }
 
@@ -498,6 +525,7 @@ export async function leaveWorkspace(
             }
         }
         await deleteMembershipEverywhere(tx, ctx.companyId, ctx.userPk);
+        await recordClosedConnections(tx, ctx.companyId, ctx.authUserId, ctx.userPk, personal);
         await recordAuditEvent(tx, {
             companyId: ctx.companyId,
             actorUserId: ctx.authUserId,
@@ -512,7 +540,7 @@ export async function leaveWorkspace(
         });
         return personal;
     });
-    await revokeGoogleGrants(closed.googleTokensToRevoke);
+    await revokePersonalGrants(closed);
     return { success: true, redirectTo: "/workspaces" };
 }
 

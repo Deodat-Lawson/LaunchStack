@@ -57,6 +57,8 @@ export interface ToolHost {
     openTool?: (toolId: string, at: string) => void;
     /** Follow a site href that is not a tool's: a source, `?ask=`, Settings. */
     openHref?: (href: string) => void;
+    /** Optional destination for this tool's real anchors, e.g. an isolated dev preview. */
+    hrefForToolPath?: (at: string) => string;
 }
 
 interface Entry extends ToolLocation {
@@ -195,9 +197,12 @@ export function ToolNavProvider({
 
     const linkFor = useCallback(
         (to: string) => {
-            if (to.startsWith("?")) return toolTabHref(toolId, `${current.path}${to}`);
-            if (isToolPath(to, roots)) return toolTabHref(toolId, formatToolHref(resolve(to)));
+            const ownHref = (at: string) =>
+                hostRef.current?.hrefForToolPath?.(at) ?? toolTabHref(toolId, at);
+            if (to.startsWith("?")) return ownHref(`${current.path}${to}`);
+            if (isToolPath(to, roots)) return ownHref(formatToolHref(resolve(to)));
             const target = toolTargetFromHref(to);
+            if (target?.toolId === toolId) return ownHref(target.at);
             return target ? toolTabHref(target.toolId, target.at) : to;
         },
         [current.path, resolve, roots, toolId]

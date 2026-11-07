@@ -20,7 +20,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from "~/components/ui/select";
-import { Switch } from "~/components/ui/switch";
 import { Textarea } from "~/components/ui/textarea";
 
 import {
@@ -59,7 +58,6 @@ export function EvidenceDialog({
     const [source, setSource] = useState("");
     const [sourceUrl, setSourceUrl] = useState("");
     const [observedAt, setObservedAt] = useState(todayIso());
-    const [shared, setShared] = useState(false);
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const fileRef = useRef<HTMLInputElement>(null);
@@ -72,7 +70,6 @@ export function EvidenceDialog({
         setSource(initial?.source ?? "");
         setSourceUrl(initial?.sourceUrl ?? "");
         setObservedAt(initial?.observedAt ?? todayIso());
-        setShared(initial?.visibility === "shared");
         setError(null);
     }, [open, initial, defaultKind]);
 
@@ -99,7 +96,7 @@ export function EvidenceDialog({
                 source: source || null,
                 sourceUrl: sourceUrl || null,
                 observedAt,
-                visibility: shared ? ("shared" as const) : ("private" as const),
+                visibility: "private" as const,
             };
             const { evidence } = initial
                 ? await vantageApi.patchEvidence(initial.id, input)
@@ -223,18 +220,7 @@ export function EvidenceDialog({
                             placeholder="https://"
                         />
                     </Field>
-                    <div className="border-line-2 flex items-center justify-between gap-3 border-t pt-3">
-                        <div>
-                            <div className="text-ink text-[13px] font-medium">
-                                Visible to a mentor or administrator
-                            </div>
-                            <div className="text-ink-3 text-[11.5px]">
-                                Private evidence can still inform an agenda; it is never quoted in a
-                                shared topic or update.
-                            </div>
-                        </div>
-                        <Switch checked={shared} onCheckedChange={setShared} aria-label="Shared" />
-                    </div>
+                    <p className="text-ink-3 text-xs">Private to this test workspace.</p>
                     <FormError message={error} />
                 </div>
                 <DialogFooter>

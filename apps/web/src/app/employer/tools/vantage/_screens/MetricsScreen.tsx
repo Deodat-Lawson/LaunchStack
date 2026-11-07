@@ -1,5 +1,7 @@
 "use client";
 
+import { useDialogFocus } from "../_lib/useDialogFocus";
+
 import { MoreHorizontal } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
@@ -40,15 +42,13 @@ import { MetricSuggestions } from "../_components/MetricSuggestions";
 import { Field, FormError } from "../_components/Primitives";
 import { useOneClick } from "../_lib/actions";
 import { useHiddenSuggestions } from "../_lib/hidden";
+import { mondayOf } from "../_lib/reporting";
 import { addDaysIso, fmtChange, fmtDate, fmtNumber, plural, todayIso } from "../_lib/format";
 
 const UNITS = ["count", "percent", "usd", "eur", "minutes", "days"];
 
 function lastMonday(today = todayIso()): string {
-    const d = new Date(today);
-    const day = d.getDay();
-    const back = day === 0 ? 6 : day - 1;
-    return addDaysIso(today, -back - 7);
+    return addDaysIso(mondayOf(today), -7);
 }
 
 /**
@@ -182,11 +182,23 @@ export function MetricsScreen() {
                     <div className="border-line bg-panel rounded-lg border">
                         {definitions.map(d => {
                             const l = latestByMetric.get(d.id);
+                            const comparable = Boolean(
+                                l?.previous &&
+                                    Date.parse(l.latest.periodEnd) -
+                                        Date.parse(l.latest.periodStart) ===
+                                        Date.parse(l.previous.periodEnd) -
+                                            Date.parse(l.previous.periodStart) &&
+                                    new Date(`${l.latest.periodStart}T12:00:00Z`).getUTCDay() ===
+                                        new Date(`${l.previous.periodStart}T12:00:00Z`).getUTCDay()
+                            );
                             const pct =
-                                l?.previous && l.previous.value !== 0
+                                comparable && l?.previous && l.previous.value !== 0
                                     ? (l.latest.value - l.previous.value) / l.previous.value
                                     : null;
-                            const delta = l?.previous ? l.latest.value - l.previous.value : null;
+                            const delta =
+                                comparable && l?.previous
+                                    ? l.latest.value - l.previous.value
+                                    : null;
                             return (
                                 <div
                                     key={d.id}
@@ -222,6 +234,11 @@ export function MetricsScreen() {
                                                 {delta !== null && (
                                                     <span className="ml-1.5 font-mono tabular-nums">
                                                         {fmtChange(pct, delta, d.unit)}
+                                                    </span>
+                                                )}
+                                                {l.previous && !comparable && (
+                                                    <span className="block">
+                                                        No trend: reporting periods differ.
                                                     </span>
                                                 )}
                                             </div>
@@ -657,6 +674,7 @@ function ImportDialog({
     onOpenChange: (o: boolean) => void;
     onDone: () => void;
 }) {
+    const dialogFocus = useDialogFocus();
     const [csv, setCsv] = useState("");
     const [source, setSource] = useState("");
     const [busy, setBusy] = useState(false);
@@ -691,13 +709,16 @@ function ImportDialog({
     };
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-[600px]">
+            <DialogContent
+                {...dialogFocus}
+                className="max-h-[90dvh] overflow-y-auto sm:max-w-[600px]"
+            >
                 <DialogHeader>
                     <DialogTitle>Import numbers from a spreadsheet</DialogTitle>
                     <DialogDescription>
                         Columns: metric, value, period_start, period_end (or one period column),
-                        source. A metric that is not defined yet is created and needs its definition
-                        afterwards.
+                        source, note. A metric that is not defined yet is created and needs its
+                        definition afterwards.
                     </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-3.5">
@@ -766,15 +787,16 @@ function ImportDialog({
                                 </div>
                             )}
                             {result.problems.length > 0 && (
-                                <ul className="text-danger mt-1 list-disc pl-4">
-                                    {result.problems.slice(0, 8).map(p => (
-                                        <li key={p.line}>
+                                <ul
+                                    aria-label="Import problems"
+                                    tabIndex={0}
+                                    className="text-danger mt-1 max-h-48 list-disc overflow-y-auto pl-4"
+                                >
+                                    {result.problems.map((p, index) => (
+                                        <li key={`${p.line}-${index}`}>
                                             Line {p.line}: {p.message}
                                         </li>
                                     ))}
-                                    {result.problems.length > 8 && (
-                                        <li>…and {result.problems.length - 8} more</li>
-                                    )}
                                 </ul>
                             )}
                         </div>

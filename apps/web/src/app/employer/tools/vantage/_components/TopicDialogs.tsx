@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useDialogFocus } from "../_lib/useDialogFocus";
+
+import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "~/components/ui/button";
@@ -16,7 +18,15 @@ import { Input } from "~/components/ui/input";
 import { Switch } from "~/components/ui/switch";
 import { Textarea } from "~/components/ui/textarea";
 
-import { vantageApi, type TopicDto, type TopicInput, type VantageFact } from "../api";
+import {
+    vantageApi,
+    vantageErrorMessage,
+    VantageApiError,
+    type DecisionInput,
+    type TopicDto,
+    type TopicInput,
+    type VantageFact,
+} from "../api";
 import { addDaysIso, todayIso } from "../_lib/format";
 import { Field, FormError } from "./Primitives";
 
@@ -38,6 +48,7 @@ export function TopicDialog({
     initial: TopicDto | null;
     onSaved: (topic: TopicDto) => void;
 }) {
+    const dialogFocus = useDialogFocus();
     const [title, setTitle] = useState("");
     const [factsText, setFactsText] = useState("");
     const [why, setWhy] = useState("");
@@ -47,7 +58,6 @@ export function TopicDialog({
     const [due, setDue] = useState("");
     const [help, setHelp] = useState("");
     const [unknowns, setUnknowns] = useState("");
-    const [shared, setShared] = useState(false);
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
@@ -62,11 +72,13 @@ export function TopicDialog({
         setDue(initial?.proposedDue ?? "");
         setHelp(initial?.helpRequested ?? "");
         setUnknowns(initial?.unknowns.join("\n") ?? "");
-        setShared(initial?.shared ?? false);
         setError(null);
     }, [open, initial]);
 
+    const saving = useRef(false);
     const save = async () => {
+        if (saving.current) return;
+        saving.current = true;
         setBusy(true);
         setError(null);
         try {
@@ -91,7 +103,7 @@ export function TopicDialog({
                     .split("\n")
                     .map(l => l.trim())
                     .filter(Boolean),
-                shared,
+                shared: false,
             };
             const { topic } = initial
                 ? await vantageApi.patchTopic(initial.id, input)
@@ -100,15 +112,19 @@ export function TopicDialog({
             onSaved(topic);
             onOpenChange(false);
         } catch (e) {
-            setError(e instanceof Error ? e.message : "That did not save");
+            setError(vantageErrorMessage(e));
         } finally {
+            saving.current = false;
             setBusy(false);
         }
     };
 
     return (
-        <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="max-h-[90dvh] overflow-y-auto sm:max-w-[640px]">
+        <Dialog open={open} onOpenChange={value => !busy && onOpenChange(value)}>
+            <DialogContent
+                {...dialogFocus}
+                className="max-h-[90dvh] overflow-y-auto sm:max-w-[640px]"
+            >
                 <DialogHeader>
                     <DialogTitle>{initial ? "Edit topic" : "Add a topic"}</DialogTitle>
                     <DialogDescription>
@@ -116,13 +132,13 @@ export function TopicDialog({
                         is an update, not a topic.
                     </DialogDescription>
                 </DialogHeader>
-                <div className="grid gap-3.5">
+                <fieldset disabled={busy} className="grid min-w-0 gap-3.5">
                     <Field label="Title" htmlFor="t-title">
                         <Input
                             id="t-title"
+                            maxLength={300}
                             value={title}
                             onChange={e => setTitle(e.target.value)}
-                            autoFocus
                             placeholder="Onboarding drop-off"
                         />
                     </Field>
@@ -146,6 +162,7 @@ export function TopicDialog({
                     >
                         <Textarea
                             id="t-why"
+                            maxLength={2000}
                             value={why}
                             onChange={e => setWhy(e.target.value)}
                             rows={2}
@@ -158,6 +175,7 @@ export function TopicDialog({
                     >
                         <Input
                             id="t-decision"
+                            maxLength={1000}
                             value={decision}
                             onChange={e => setDecision(e.target.value)}
                             placeholder="Improve onboarding, or spend next week on another acquisition channel?"
@@ -166,6 +184,7 @@ export function TopicDialog({
                     <Field label="Proposed next step" htmlFor="t-next">
                         <Input
                             id="t-next"
+                            maxLength={1000}
                             value={next}
                             onChange={e => setNext(e.target.value)}
                             placeholder="Cut onboarding to three screens and re-measure for one week"
@@ -175,6 +194,7 @@ export function TopicDialog({
                         <Field label="Owner" htmlFor="t-owner">
                             <Input
                                 id="t-owner"
+                                maxLength={200}
                                 value={owner}
                                 onChange={e => setOwner(e.target.value)}
                                 placeholder="Dana"
@@ -192,10 +212,11 @@ export function TopicDialog({
                     <Field
                         label="Help requested"
                         htmlFor="t-help"
-                        hint="What a mentor or administrator could unblock; visible to them only if the topic is shared"
+                        hint="What would help resolve this topic"
                     >
                         <Input
                             id="t-help"
+                            maxLength={1000}
                             value={help}
                             onChange={e => setHelp(e.target.value)}
                             placeholder="Optional"
@@ -213,20 +234,11 @@ export function TopicDialog({
                             rows={2}
                         />
                     </Field>
-                    <div className="border-line-2 flex items-center justify-between gap-3 border-t pt-3">
-                        <div>
-                            <div className="text-ink text-[13px] font-medium">
-                                Share with a mentor or administrator
-                            </div>
-                            <div className="text-ink-3 text-[11.5px]">
-                                Shared topics appear in the program triage view and the weekly
-                                update.
-                            </div>
-                        </div>
-                        <Switch checked={shared} onCheckedChange={setShared} aria-label="Shared" />
-                    </div>
+                    <p className="text-ink-3 text-xs">
+                        This topic stays private in the test workspace.
+                    </p>
                     <FormError message={error} />
-                </div>
+                </fieldset>
                 <DialogFooter>
                     <Button variant="outline" onClick={() => onOpenChange(false)} disabled={busy}>
                         Cancel
@@ -259,13 +271,17 @@ export function DecisionDialog({
 }) {
     const [decision, setDecision] = useState("");
     const [withCommitment, setWithCommitment] = useState(true);
+    const dialogFocus = useDialogFocus();
     const [title, setTitle] = useState("");
     const [owner, setOwner] = useState("");
     const [due, setDue] = useState("");
     const [test, setTest] = useState("");
-    const [shared, setShared] = useState(false);
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState<string | null>(null);
+
+    const saving = useRef(false);
+    const uncertain = useRef(new Map<string, DecisionInput>());
+    const [retrying, setRetrying] = useState(false);
 
     useEffect(() => {
         if (!open || !topic) return;
@@ -275,48 +291,73 @@ export function DecisionDialog({
         setOwner(topic.proposedOwner ?? "");
         setDue(topic.proposedDue ?? addDaysIso(todayIso(), 7));
         setTest("");
-        setShared(topic.shared);
-        setError(null);
+        const pending = uncertain.current.get(topic.id);
+        setRetrying(Boolean(pending));
+        if (pending) {
+            setDecision(pending.decision);
+            setWithCommitment(Boolean(pending.commitment));
+            setTitle(pending.commitment?.title ?? "");
+            setOwner(pending.commitment?.owner ?? "");
+            setDue(pending.commitment?.dueOn ?? "");
+            setTest(pending.commitment?.test ?? "");
+        }
+        setError(
+            pending
+                ? "The previous submission was not confirmed. Retry it unchanged to safely retrieve the saved result."
+                : null
+        );
     }, [open, topic]);
 
     const save = async () => {
-        if (!topic) return;
+        if (!topic || saving.current) return;
+        const payload: DecisionInput = uncertain.current.get(topic.id) ?? {
+            decision,
+            commitment:
+                withCommitment && !topic.commitmentId
+                    ? { title, owner, dueOn: due, test: test.trim(), shared: false }
+                    : null,
+        };
+        saving.current = true;
         setBusy(true);
         setError(null);
         try {
-            const { topic: saved } = await vantageApi.decide(topic.id, {
-                decision,
-                commitment: withCommitment
-                    ? { title, owner, dueOn: due, test: test || null, shared }
-                    : null,
-            });
-            toast(withCommitment ? "Decision recorded and commitment opened" : "Decision recorded");
+            const { topic: saved } = await vantageApi.decide(topic.id, payload);
+            uncertain.current.delete(topic.id);
+            setRetrying(false);
+            toast(payload.commitment ? "Decision and primary action saved" : "Decision saved");
             onSaved(saved);
             onOpenChange(false);
         } catch (e) {
-            setError(e instanceof Error ? e.message : "That did not save");
+            // A lost response may follow a committed transaction. Freeze the exact
+            // payload until its retry confirms the result; keep its existing key.
+            if (!(e instanceof VantageApiError) || e.status >= 500) {
+                uncertain.current.set(topic.id, payload);
+                setRetrying(true);
+            }
+            setError(vantageErrorMessage(e));
         } finally {
+            saving.current = false;
             setBusy(false);
         }
     };
 
     return (
-        <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-[560px]">
+        <Dialog open={open} onOpenChange={value => !busy && onOpenChange(value)}>
+            <DialogContent {...dialogFocus} className="sm:max-w-[560px]">
                 <DialogHeader>
                     <DialogTitle>Record the decision</DialogTitle>
                     <DialogDescription>
                         {topic?.decisionQuestion === "" ? topic?.title : topic?.decisionQuestion}
                     </DialogDescription>
                 </DialogHeader>
-                <div className="grid gap-3.5">
+                <fieldset disabled={busy || retrying} className="grid min-w-0 gap-3.5">
                     <Field label="What was decided" htmlFor="d-decision">
                         <Textarea
                             id="d-decision"
+                            maxLength={2000}
                             value={decision}
                             onChange={e => setDecision(e.target.value)}
                             rows={3}
-                            autoFocus
                             placeholder="We fix onboarding first; the channel test waits a week."
                         />
                     </Field>
@@ -326,10 +367,13 @@ export function DecisionDialog({
                                 Open a commitment
                             </div>
                             <div className="text-ink-3 text-[11.5px]">
-                                Next week&apos;s agenda checks whether it happened.
+                                {topic?.commitmentId
+                                    ? "An action is already linked. This submission keeps it; edit it from Commitments."
+                                    : "One primary action per topic, with an owner, due date and success test."}
                             </div>
                         </div>
                         <Switch
+                            disabled={Boolean(topic?.commitmentId)}
                             checked={withCommitment}
                             onCheckedChange={setWithCommitment}
                             aria-label="Open a commitment"
@@ -340,6 +384,7 @@ export function DecisionDialog({
                             <Field label="Action" htmlFor="d-title">
                                 <Input
                                     id="d-title"
+                                    maxLength={300}
                                     value={title}
                                     onChange={e => setTitle(e.target.value)}
                                 />
@@ -348,6 +393,7 @@ export function DecisionDialog({
                                 <Field label="Owner" htmlFor="d-owner">
                                     <Input
                                         id="d-owner"
+                                        maxLength={200}
                                         value={owner}
                                         onChange={e => setOwner(e.target.value)}
                                         placeholder="Who"
@@ -369,25 +415,16 @@ export function DecisionDialog({
                             >
                                 <Input
                                     id="d-test"
+                                    maxLength={1000}
                                     value={test}
                                     onChange={e => setTest(e.target.value)}
                                     placeholder="Activation above 30% for the week"
                                 />
                             </Field>
-                            <div className="flex items-center justify-between gap-3">
-                                <div className="text-ink-2 text-[12.5px]">
-                                    Visible to the program
-                                </div>
-                                <Switch
-                                    checked={shared}
-                                    onCheckedChange={setShared}
-                                    aria-label="Share the commitment"
-                                />
-                            </div>
                         </>
                     )}
-                    <FormError message={error} />
-                </div>
+                </fieldset>
+                <FormError message={error} />
                 <DialogFooter>
                     <Button variant="outline" onClick={() => onOpenChange(false)} disabled={busy}>
                         Cancel
@@ -397,10 +434,11 @@ export function DecisionDialog({
                         disabled={
                             busy ||
                             !decision.trim() ||
-                            (withCommitment && (!title.trim() || !owner.trim() || !due))
+                            (withCommitment &&
+                                (!title.trim() || !owner.trim() || !due || !test.trim()))
                         }
                     >
-                        Record
+                        {busy ? "Saving…" : retrying ? "Retry unchanged submission" : "Record"}
                     </Button>
                 </DialogFooter>
             </DialogContent>

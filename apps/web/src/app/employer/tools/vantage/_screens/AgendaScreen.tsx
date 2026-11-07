@@ -1,605 +1,758 @@
 "use client";
 
-import { ChevronDown, ChevronLeft, ChevronRight, Loader2, Plus } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
-import { toast } from "sonner";
-
-import { ToolLink } from "~/components/tool-app/ToolLink";
-import { useToolRouter } from "~/components/tool-app/nav";
-import { EmptyState, InlineError } from "~/components/tools/EmptyState";
-import { PageHeader, SectionHeading } from "~/components/tools/PageHeader";
+import { ChevronLeft, ChevronRight, Loader2, RefreshCw, Sparkles } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { useToolNav } from "~/components/tool-app/nav";
+import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "~/components/ui/select";
 import { SkeletonRows } from "~/components/tools/SkeletonRows";
 import { useResource } from "~/lib/tools/useResource";
-import { Button } from "~/components/ui/button";
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger,
-} from "~/components/ui/dropdown-menu";
-import { cn } from "~/lib/utils";
-
-import { vantageApi, type AgendaDto, type TopicDto, type VantageAgendaStatus } from "../api";
-import { StatusWord } from "../_components/Primitives";
-import { AllCaughtUp, DraftingCard, SuggestionMark } from "../_components/Suggestion";
-import { AgendaTopicRow, IgnoredTopicRow, TopicSuggestion } from "../_components/TopicCard";
-import { DecisionDialog, TopicDialog } from "../_components/TopicDialogs";
-import { WeekSteps } from "../_components/WeekSteps";
-import {
-    commitToNextStep,
-    ignoreTopic,
-    keepTopic,
-    setAside,
-    SET_ASIDE_DAYS,
-    useOneClick,
-} from "../_lib/actions";
-import { addDaysIso, fmtDate, plural, weekRange } from "../_lib/format";
-import { unhideSuggestion, useHiddenSuggestions } from "../_lib/hidden";
+    vantageApi,
+    vantageErrorMessage,
+    VantageApiError,
+    type AgendaV1Dto,
+    type TopicDto,
+    type TopicV1Dto,
+    type VantageEvidenceRef,
+} from "../api";
+import { TopicDialog, DecisionDialog } from "../_components/TopicDialogs";
+import { SourceDialog, SourceLinks } from "../_components/SourceDialog";
+import { BasisTag, FormError, StatusWord } from "../_components/Primitives";
 import { vantagePath } from "../_lib/paths";
-import { draftedWords, hasMaterial } from "../_lib/suggestions";
-import { useAutoDraft } from "../_lib/useAutoDraft";
+import {
+    calendarAdd,
+    formatReportingInstant,
+    mondayOf,
+    reportingDate,
+    validReportingDate,
+} from "../_lib/reporting";
+import { weekRange } from "../_lib/format";
 
-const STATUS_WORD: Record<VantageAgendaStatus, string> = {
-    draft: "Draft",
-    ready: "Ready for the meeting",
-    held: "Meeting held",
-    closed: "Closed",
-};
-
-function isIsoWeek(v: string | null): v is string {
-    return Boolean(v && /^\d{4}-\d{2}-\d{2}$/.test(v));
+export function AgendaScreen({ week }: { week?: string | null }) {
+    const normalized = week && validReportingDate(week) ? mondayOf(week) : (week ?? undefined);
+    // A new selection owns fresh state, including dialogs and in-flight response guards.
+    return <WeeklyAgenda key={normalized ?? "default"} week={normalized} />;
 }
 
-/**
- * The agenda for one week, in the order the week runs. Vantage's drafted
- * topics wait at the top as suggestions — Add to agenda or Ignore, one
- * click each. What was added is the agenda: numbered, reorderable, shared
- * or private, and each undecided topic carries Vantage's proposed next step
- * as a one-click Commit. Ignored topics fold away with Restore. The next
- * meeting's week drafts itself on arrival when there is no agenda yet;
- * fresh suggestions replace only untouched ones.
- *
- * `week` is the tab's `?week=` (null for the default week by the Thursday
- * rule); the week arrows and past weeks move the tab to another `?week=`.
- */
-export function AgendaScreen({ week: weekParam = null }: { week?: string | null }) {
-    const router = useToolRouter();
-    const key = isIsoWeek(weekParam) ? weekParam : "default";
-    const res = useResource(`vantage:agenda:${key}`, () =>
-        vantageApi.agendas(isIsoWeek(weekParam) ? weekParam : undefined)
-    );
-    const [busy, setBusy] = useState(false);
-    const [editing, setEditing] = useState<TopicDto | null | "new">(null);
-    const [deciding, setDeciding] = useState<TopicDto | null>(null);
-    const [showIgnored, setShowIgnored] = useState(false);
-    const { act, gone } = useOneClick(res.reload);
-    const hidden = useHiddenSuggestions();
-
-    const week = res.data?.week ?? weekParam ?? "";
-    const agenda = res.data?.agenda ?? null;
-    const history = res.data?.agendas ?? [];
-
-    // No agenda: is this the next meeting's week, with something on file to
-    // draft from? Then Vantage drafts it now instead of offering a button.
-    const missing = Boolean(res.data && !agenda);
-    const ov = useResource(missing ? "vantage:overview" : null, () => vantageApi.overview());
-    const nextMeeting = ov.data ? ov.data.agendaWeek === week : false;
-    const auto = useAutoDraft({
-        week: isIsoWeek(week) ? week : null,
-        // The overview read comes after the agendas read; if a draft landed in
-        // between (This week drafting as you switched tabs), it shows here.
-        auto: missing && nextMeeting && Boolean(ov.data && !ov.data.agenda && hasMaterial(ov.data)),
-        // Read the agenda back rather than trusting the draft's copy: the read
-        // is what this workspace has (the drafting state holds until it lands).
-        onDrafted: () => res.reload(),
+function WeeklyAgenda({ week }: { week?: string }) {
+    const { navigate } = useToolNav();
+    const invalid = Boolean(week && !validReportingDate(week));
+    const res = useResource(invalid ? null : `vantage:v1:${week ?? "default"}`, async () => {
+        try {
+            return await vantageApi.agendas(week);
+        } catch (e) {
+            throw new Error(vantageErrorMessage(e));
+        }
     });
-
-    // The overview has this week's agenda but the agendas read said none: it
-    // landed in between (This week drafting as you switched tabs). Read again.
-    const reloadAgenda = res.reload;
-    const landedMeanwhile = missing && nextMeeting && Boolean(ov.data?.agenda);
+    const [mode, setMode] = useState<"configured-model" | "rules">("configured-model");
+    const [busy, setBusy] = useState<string | null>(null);
+    const [error, setError] = useState<string | null>(null);
+    const [notice, setNotice] = useState<string | null>(null);
+    const [editing, setEditing] = useState<TopicDto | "new" | null>(null);
+    const [deciding, setDeciding] = useState<TopicDto | null>(null);
+    const [source, setSource] = useState<VantageEvidenceRef | null>(null);
+    const [filter, setFilter] = useState("all");
+    const running = useRef(false);
+    const controller = useRef<AbortController | null>(null);
+    const alive = useRef(true);
     useEffect(() => {
-        if (landedMeanwhile) void reloadAgenda();
-    }, [landedMeanwhile, reloadAgenda]);
+        alive.current = true;
+        return () => {
+            alive.current = false;
+            controller.current?.abort();
+        };
+    }, []);
+    const agenda = res.data?.agenda;
+    const selected = res.data?.week ?? week;
+    const future = Boolean(selected && selected > mondayOf(reportingDate()));
+    const go = (date: string) => navigate(vantagePath(`/agenda?week=${date}`));
 
-    const goTo = (w: string) => router.push(vantagePath(`/agenda?week=${w}`));
-
-    const setAgenda = (next: AgendaDto) => res.mutate(c => ({ ...c, agenda: next }));
-    const setTopic = (topic: TopicDto) =>
-        res.mutate(c =>
-            c.agenda
-                ? {
-                      ...c,
-                      agenda: {
-                          ...c.agenda,
-                          topics: c.agenda.topics.map(t => (t.id === topic.id ? topic : t)),
-                      },
-                  }
-                : c
-        );
-
-    const run = async (work: () => Promise<void>, done?: string) => {
-        setBusy(true);
+    const run = async (label: string, work: () => Promise<unknown>) => {
+        if (running.current) return;
+        running.current = true;
+        setBusy(label);
+        setError(null);
+        setNotice(null);
         try {
             await work();
-            if (done) toast(done);
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : "That did not work");
+            if (alive.current) setError(vantageErrorMessage(e));
         } finally {
-            setBusy(false);
+            running.current = false;
+            if (alive.current) setBusy(null);
         }
     };
-
-    const regenerate = () =>
-        run(async () => {
-            const { agenda: next } = await vantageApi.prepare(week);
-            setAgenda(next);
-            void res.reload();
-        }, "Fresh suggestions — your kept and edited topics stayed");
-
-    const patch = (
-        topic: TopicDto,
-        p: Parameters<typeof vantageApi.patchTopic>[1],
-        done?: string
-    ) =>
-        run(async () => {
-            const { topic: next } = await vantageApi.patchTopic(topic.id, p);
-            setTopic(next);
-        }, done);
-
-    const topics = useMemo(
-        () => (agenda ? [...agenda.topics].sort((a, b) => a.position - b.position) : []),
-        [agenda]
-    );
-    const suggested = topics.filter(
-        t => t.status === "suggested" && !t.decision && !gone.has(`topic:${t.id}`)
-    );
-    const kept = topics.filter(t => t.status === "kept");
-    const ignored = topics.filter(t => t.status === "dismissed");
-    const decided = kept.filter(t => t.decision).length;
-    const unsupported = [...suggested, ...kept].reduce(
-        (n, t) => n + t.facts.filter(f => f.unsupported).length,
-        0
-    );
-
-    /** Swap a kept topic with its kept neighbour; suggestions and ignored keep their places. */
-    const move = (topic: TopicDto, dir: -1 | 1) =>
-        run(async () => {
-            if (!agenda) return;
-            const i = kept.findIndex(t => t.id === topic.id);
-            const other = kept[i + dir];
-            if (i < 0 || !other) return;
-            const ids = topics.map(t => t.id);
-            const a = ids.indexOf(topic.id);
-            const b = ids.indexOf(other.id);
-            [ids[a], ids[b]] = [ids[b]!, ids[a]!];
-            const { agenda: next } = await vantageApi.reorder(agenda.id, ids);
-            setAgenda(next);
+    const generate = () =>
+        run("Generating", async () => {
+            const abort = new AbortController();
+            controller.current = abort;
+            const timeout = window.setTimeout(() => abort.abort(), 65_000);
+            try {
+                const { agenda: saved } = await vantageApi.prepare(selected, mode, abort.signal);
+                if (!alive.current || abort.signal.aborted) return;
+                res.mutate(current => ({ ...current, week: saved.weekStart, agenda: saved }));
+                setNotice("Report generated and saved.");
+                await res.reload();
+            } catch (e) {
+                if (abort.signal.aborted && alive.current)
+                    throw new VantageApiError(
+                        "Generation could not be confirmed before the timeout. Reload the saved report before generating again.",
+                        408,
+                        {}
+                    );
+                throw e;
+            } finally {
+                window.clearTimeout(timeout);
+            }
         });
-
-    const remove = (topic: TopicDto) =>
-        run(async () => {
-            await vantageApi.deleteTopic(topic.id);
-            res.mutate(c =>
-                c.agenda
-                    ? {
-                          ...c,
-                          agenda: {
-                              ...c.agenda,
-                              topics: c.agenda.topics.filter(t => t.id !== topic.id),
-                          },
-                      }
-                    : c
-            );
-        }, "Topic deleted");
-
-    const setStatus = (status: VantageAgendaStatus) =>
-        run(async () => {
-            if (!agenda) return;
-            const { agenda: next } = await vantageApi.setAgendaStatus(agenda.id, status);
-            setAgenda(next);
-            void res.reload();
-        }, `Agenda marked ${STATUS_WORD[status].toLowerCase()}`);
-
-    const copyUpdate = (includePrivate: boolean) =>
-        run(
-            async () => {
-                if (!agenda) return;
-                const { markdown } = await vantageApi.weeklyUpdate(agenda.id, includePrivate);
-                await navigator.clipboard.writeText(markdown);
-            },
-            includePrivate
-                ? "Your private copy is on the clipboard"
-                : "Shared update copied — paste it anywhere"
-        );
-
-    const share = (t: TopicDto, shared: boolean) =>
-        void patch(t, { shared }, shared ? "Shared with the program" : "Made private");
-
-    const drafted = agenda ? draftedWords(agenda) : null;
-    const sub = agenda ? (
-        <span className="inline-flex flex-wrap items-center gap-x-2">
-            <span>{weekRange(agenda.weekStart, agenda.weekEnd)}</span>
-            {drafted && (
-                <>
-                    <span>·</span>
-                    <span>{drafted}</span>
-                </>
-            )}
-            <span>·</span>
-            <span>
-                {plural(kept.length, "topic")} on the agenda, {decided} decided,{" "}
-                {kept.filter(t => t.shared).length} shared
-            </span>
-        </span>
-    ) : isIsoWeek(week) ? (
-        weekRange(week, addDaysIso(week, 6))
-    ) : undefined;
+    const patch = (topic: TopicV1Dto, status: "kept" | "dismissed") =>
+        run("Saving topic", async () => {
+            await vantageApi.patchTopic(topic.id, { status });
+            await res.reload();
+            if (alive.current)
+                setNotice(
+                    status === "kept"
+                        ? "Topic kept on the agenda."
+                        : "Topic dismissed and preserved."
+                );
+        });
+    const topics = agenda?.topics.filter(t => filter === "all" || t.status === filter) ?? [];
 
     return (
-        <div className="mx-auto flex max-w-[1100px] flex-col gap-7">
-            <PageHeader
-                title="The agenda for the"
-                accent={isIsoWeek(week) ? `week of ${fmtDate(week)}` : "week"}
-                sub={sub}
-                actions={
-                    <>
-                        <div className="inline-flex items-center gap-0.5">
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                className="size-8"
-                                aria-label="Previous week"
-                                onClick={() => goTo(addDaysIso(week, -7))}
-                                disabled={!isIsoWeek(week)}
-                            >
-                                <ChevronLeft className="size-4" />
-                            </Button>
-                            <Button
-                                variant="ghost"
-                                size="icon"
-                                className="size-8"
-                                aria-label="Next week"
-                                onClick={() => goTo(addDaysIso(week, 7))}
-                                disabled={!isIsoWeek(week)}
-                            >
-                                <ChevronRight className="size-4" />
-                            </Button>
-                        </div>
-                        {/* Not modal: "Add a topic" opens a dialog, and a modal menu that hands
-                            off to a dialog leaves the page unclickable once it closes. */}
-                        {agenda && (
-                            <DropdownMenu modal={false}>
-                                <DropdownMenuTrigger asChild>
-                                    <Button variant="outline" size="sm" disabled={busy}>
-                                        More
-                                    </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end">
-                                    <DropdownMenuItem onSelect={() => setEditing("new")}>
-                                        Add a topic
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem onSelect={() => void regenerate()}>
-                                        Ask Vantage for fresh suggestions
-                                    </DropdownMenuItem>
-                                    <DropdownMenuSeparator />
-                                    <DropdownMenuItem onSelect={() => void copyUpdate(false)}>
-                                        Copy weekly update (shared)
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem onSelect={() => void copyUpdate(true)}>
-                                        Copy my private copy
-                                    </DropdownMenuItem>
-                                    <DropdownMenuSeparator />
-                                    {agenda.status !== "draft" && (
-                                        <DropdownMenuItem onSelect={() => void setStatus("draft")}>
-                                            Back to draft
-                                        </DropdownMenuItem>
-                                    )}
-                                    {agenda.status !== "ready" && (
-                                        <DropdownMenuItem onSelect={() => void setStatus("ready")}>
-                                            Mark ready
-                                        </DropdownMenuItem>
-                                    )}
-                                    {agenda.status !== "held" && (
-                                        <DropdownMenuItem onSelect={() => void setStatus("held")}>
-                                            Meeting held
-                                        </DropdownMenuItem>
-                                    )}
-                                    {agenda.status !== "closed" && (
-                                        <DropdownMenuItem onSelect={() => void setStatus("closed")}>
-                                            Close
-                                        </DropdownMenuItem>
-                                    )}
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-                        )}
-                        {agenda?.status === "draft" ? (
-                            <Button
-                                size="sm"
-                                onClick={() => void setStatus("ready")}
-                                disabled={busy || kept.length === 0}
-                            >
-                                Mark ready
-                            </Button>
-                        ) : agenda?.status === "ready" ? (
-                            <Button
-                                size="sm"
-                                onClick={() => void setStatus("held")}
-                                disabled={busy}
-                            >
-                                Meeting held
-                            </Button>
-                        ) : null}
-                    </>
-                }
-            />
-
-            {res.error && <InlineError message={res.error} onRetry={() => void res.reload()} />}
-
-            {/* Skeleton, not "No agenda", until the overview has answered (useResource
-                reports loading=false for the first render after its key turns
-                non-null) and while a re-read for a draft that landed is on its way. */}
-            {res.loading ||
-            (missing && ov.data === null && ov.error === null) ||
-            landedMeanwhile ? (
-                <SkeletonRows rows={4} height={64} />
-            ) : !agenda ? (
-                auto.drafting ? (
-                    <DraftingCard reading="Reading the evidence, numbers and open commitments on file. The topics land here as suggestions." />
-                ) : (
-                    <EmptyState
-                        title={
-                            auto.error
-                                ? "Vantage could not draft this week"
-                                : "No agenda for this week"
-                        }
-                        body={
-                            auto.error ??
-                            "Vantage drafts three to five topics from the evidence, numbers and open commitments on file — each with what happened, its sources, why it matters, the decision to make and a next step — and brings them here as suggestions for you to take or ignore."
-                        }
-                        action={
-                            <>
-                                <Button size="sm" onClick={auto.draft} disabled={!res.data}>
-                                    {auto.error ? "Try again" : "Draft this week"}
-                                </Button>
-                                <Button size="sm" variant="outline" asChild>
-                                    <ToolLink href={vantagePath("/evidence")}>
-                                        Add evidence first
-                                    </ToolLink>
-                                </Button>
-                            </>
-                        }
-                    />
-                )
-            ) : (
-                <>
-                    <WeekSteps agenda={agenda} />
-
-                    {(Boolean(agenda.summary) || unsupported > 0) && (
-                        <section
-                            aria-label="Vantage's read on the week"
-                            className="border-line from-brand-soft rounded-xl border bg-gradient-to-br to-transparent px-5 py-4"
-                        >
-                            <SuggestionMark>Vantage&apos;s read on the week</SuggestionMark>
-                            {agenda.summary && (
-                                <p className="text-ink mt-1.5 max-w-[72ch] text-[14.5px] leading-[1.55]">
-                                    {agenda.summary}
-                                </p>
-                            )}
-                            {unsupported > 0 && (
-                                <p className="text-warn mt-2 text-[12px]">
-                                    {plural(unsupported, "fact")} without a source on file — open
-                                    Details on a topic to see which.
-                                </p>
-                            )}
-                        </section>
-                    )}
-
-                    {suggested.length > 0 ? (
-                        <section aria-label="Suggested by Vantage">
-                            <SectionHeading
-                                title="Suggested by Vantage"
-                                aside={
-                                    busy ? (
-                                        <Loader2 className="size-3.5 animate-spin motion-reduce:animate-none" />
-                                    ) : (
-                                        `${plural(suggested.length, "topic")} to review`
-                                    )
-                                }
-                            />
-                            <div className="flex flex-col gap-2.5">
-                                {suggested.map(t => (
-                                    <TopicSuggestion
-                                        key={t.id}
-                                        topic={t}
-                                        busy={busy}
-                                        onKeep={() => void act(`topic:${t.id}`, () => keepTopic(t))}
-                                        onIgnore={() =>
-                                            void act(`topic:${t.id}`, () => ignoreTopic(t))
-                                        }
-                                        onEdit={() => setEditing(t)}
-                                        onDecide={() => setDeciding(t)}
-                                        onDelete={() => void remove(t)}
-                                    />
-                                ))}
-                            </div>
-                        </section>
-                    ) : agenda.status === "draft" && kept.length > 0 ? (
-                        <AllCaughtUp body="Every suggestion is answered. Mark the agenda ready when it says what the meeting should decide." />
-                    ) : null}
-
-                    <section aria-label="On the agenda">
-                        <SectionHeading
-                            title="On the agenda"
-                            aside={kept.length > 0 ? `${kept.length} of 5` : undefined}
+        <div className="mx-auto flex w-full max-w-[1100px] flex-col gap-6 pb-8">
+            <header className="flex flex-wrap items-start justify-between gap-4">
+                <div>
+                    <p className="text-brand-ink mb-1 text-xs font-semibold uppercase tracking-widest">
+                        Weekly decision agenda
+                    </p>
+                    <h1 className="display text-ink text-2xl">
+                        {selected && validReportingDate(selected)
+                            ? weekRange(selected, calendarAdd(selected, 6))
+                            : "Your weekly review"}
+                    </h1>
+                    <p className="text-ink-2 mt-1 text-sm">
+                        Review the evidence. Make the decision. Follow through.
+                    </p>
+                </div>
+                <div className="flex flex-wrap items-center gap-2">
+                    <Button
+                        variant="outline"
+                        size="icon"
+                        aria-label="Previous week"
+                        disabled={!selected || invalid || !!busy}
+                        onClick={() => selected && go(calendarAdd(selected, -7))}
+                    >
+                        <ChevronLeft className="size-4" />
+                    </Button>
+                    <div>
+                        <label className="sr-only" htmlFor="agenda-week">
+                            Reporting week
+                        </label>
+                        <Input
+                            id="agenda-week"
+                            type="date"
+                            value={invalid ? "" : (selected ?? "")}
+                            disabled={!!busy}
+                            className="w-40"
+                            onChange={e =>
+                                validReportingDate(e.target.value) && go(mondayOf(e.target.value))
+                            }
                         />
-                        {kept.length === 0 ? (
-                            <p className="text-ink-3 border-line rounded-lg border border-dashed px-4 py-3 text-[13px]">
-                                {suggested.length > 0
-                                    ? "Nothing yet. Add Vantage's suggestions above, or write a topic of your own."
-                                    : "Nothing on the agenda. Ask Vantage for fresh suggestions from the More menu, or write a topic of your own."}
-                            </p>
+                    </div>
+                    <Button
+                        variant="outline"
+                        size="icon"
+                        aria-label="Next week"
+                        disabled={!selected || invalid || !!busy}
+                        onClick={() => selected && go(calendarAdd(selected, 7))}
+                    >
+                        <ChevronRight className="size-4" />
+                    </Button>
+                    <Button
+                        variant="ghost"
+                        disabled={!!busy}
+                        onClick={() => navigate(vantagePath("/agenda"))}
+                    >
+                        Default week
+                    </Button>
+                </div>
+            </header>
+            <section
+                aria-label="Generation controls"
+                className="bg-panel border-line flex flex-wrap items-center justify-between gap-4 rounded-xl border p-4"
+            >
+                <div className="min-w-0">
+                    <p className="text-ink text-sm font-medium">
+                        {agenda
+                            ? "Refresh the evidence, preserve your work"
+                            : "Build this week’s agenda"}
+                    </p>
+                    <p className="text-ink-2 mt-1 max-w-[60ch] text-xs">
+                        Edited topics, decisions and linked actions stay intact. New additions to
+                        reviewed topics need your approval.
+                    </p>
+                </div>
+                <div className="flex flex-wrap items-center gap-2">
+                    <Select
+                        value={mode}
+                        onValueChange={value => setMode(value as typeof mode)}
+                        disabled={!!busy}
+                    >
+                        <SelectTrigger className="w-44" aria-label="Generation mode">
+                            <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="configured-model">Configured AI model</SelectItem>
+                            <SelectItem value="rules">Rules only</SelectItem>
+                        </SelectContent>
+                    </Select>
+                    <Button
+                        onClick={() => void generate()}
+                        disabled={!!busy || res.loading || !res.data || future || invalid}
+                    >
+                        {busy === "Generating" ? (
+                            <Loader2 className="size-4 animate-spin motion-reduce:animate-none" />
                         ) : (
-                            <div className="border-line bg-panel rounded-lg border">
-                                {kept.map((t, i) => (
-                                    <AgendaTopicRow
-                                        key={t.id}
-                                        topic={t}
-                                        index={i}
-                                        first={i === 0}
-                                        last={i === kept.length - 1}
-                                        busy={busy || gone.has(`commit:${t.id}`)}
-                                        onCommit={() =>
-                                            void act(`commit:${t.id}`, () => commitToNextStep(t))
-                                        }
-                                        nextStepHidden={hidden.has(`commit:${t.id}`)}
-                                        onIgnoreNextStep={() =>
-                                            void act(`commit:${t.id}`, () =>
-                                                setAside(
-                                                    `commit:${t.id}`,
-                                                    SET_ASIDE_DAYS.nextStep,
-                                                    "Ignored — decide it your own way"
-                                                )
-                                            )
-                                        }
-                                        onShowNextStep={() => unhideSuggestion(`commit:${t.id}`)}
-                                        onDecide={() => setDeciding(t)}
-                                        onEdit={() => setEditing(t)}
-                                        onMove={dir => void move(t, dir)}
-                                        onShare={shared => share(t, shared)}
-                                        onIgnore={() =>
-                                            void act(`topic:${t.id}`, () => ignoreTopic(t))
-                                        }
-                                        onDelete={() => void remove(t)}
-                                    />
-                                ))}
-                            </div>
+                            <Sparkles className="size-4" />
                         )}
-                        <div className="mt-2 flex gap-2">
-                            <Button
-                                size="sm"
-                                variant="outline"
-                                onClick={() => setEditing("new")}
-                                disabled={busy}
-                            >
-                                <Plus aria-hidden="true" />
-                                Write a topic
-                            </Button>
-                        </div>
-                    </section>
-
-                    {ignored.length > 0 && (
-                        <section aria-label="Ignored">
-                            <button
-                                type="button"
-                                onClick={() => setShowIgnored(o => !o)}
-                                aria-expanded={showIgnored}
-                                className="text-ink-2 hover:text-ink focus-visible:ring-brand/50 mb-2 inline-flex items-center gap-1.5 rounded-sm text-[13px] font-semibold outline-none focus-visible:ring-2"
-                            >
-                                Ignored
-                                <span className="text-ink-3 text-xs font-normal">
-                                    {plural(ignored.length, "topic")}
-                                </span>
-                                <ChevronDown
-                                    className={cn(
-                                        "size-3.5 transition-transform motion-reduce:transition-none",
-                                        showIgnored && "rotate-180"
-                                    )}
-                                    aria-hidden="true"
-                                />
-                            </button>
-                            {showIgnored && (
-                                <div className="border-line bg-panel rounded-lg border">
-                                    {ignored.map(t => (
-                                        <IgnoredTopicRow
-                                            key={t.id}
-                                            topic={t}
-                                            busy={busy}
-                                            onRestore={() =>
-                                                void patch(
-                                                    t,
-                                                    { status: "kept" },
-                                                    "Back on the agenda"
-                                                )
-                                            }
-                                            onDelete={() => void remove(t)}
-                                        />
-                                    ))}
-                                </div>
-                            )}
-                        </section>
+                        {busy === "Generating"
+                            ? "Generating…"
+                            : agenda
+                              ? "Regenerate report"
+                              : "Generate report"}
+                    </Button>
+                </div>
+                {future && (
+                    <p className="text-warn w-full text-sm">
+                        Future weeks can be viewed, but cannot be generated.
+                    </p>
+                )}
+                {busy === "Generating" && (
+                    <p role="status" className="text-ink-2 w-full text-sm">
+                        Reading the selected period and saving the result. This can take up to a
+                        minute.
+                    </p>
+                )}
+            </section>
+            {(invalid || Boolean(res.error) || Boolean(error)) && (
+                <div className="border-danger/30 bg-panel rounded-lg border p-4">
+                    <FormError
+                        message={invalid ? "Choose a valid reporting date." : (error ?? res.error)}
+                    />
+                    {!invalid && (
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            className="mt-3"
+                            disabled={!!busy}
+                            onClick={() =>
+                                void run("Reloading", async () => {
+                                    await res.reload();
+                                })
+                            }
+                        >
+                            <RefreshCw className="size-3.5" />
+                            Reload saved report
+                        </Button>
                     )}
-                </>
+                </div>
             )}
-
-            {history.length > 0 && (
-                <section>
-                    <SectionHeading title="Past weeks" />
-                    <div className="border-line bg-panel rounded-lg border">
-                        {history.map(h => (
-                            <ToolLink
-                                key={h.id}
-                                href={vantagePath(`/agenda?week=${h.weekStart}`)}
-                                aria-current={h.weekStart === week ? "true" : undefined}
-                                className="border-line-2 hover:bg-panel-2 focus-visible:ring-brand/50 flex min-h-10 items-center gap-3 border-t px-4 py-2 outline-none first:border-t-0 focus-visible:ring-[3px]"
-                            >
-                                <span className="text-ink @max-sm:w-28 w-40 text-[13px] font-medium">
-                                    {weekRange(h.weekStart, h.weekEnd)}
-                                </span>
-                                <span className="text-ink-3 text-[12px]">
-                                    {plural(h.topicCount, "topic")} · {h.decidedCount} decided
-                                </span>
-                                <StatusWord
-                                    className="ml-auto"
-                                    tone={
-                                        h.status === "draft"
-                                            ? "neutral"
-                                            : h.status === "ready"
-                                              ? "brand"
-                                              : "success"
-                                    }
+            {notice && (
+                <p role="status" className="text-success text-sm">
+                    {notice}
+                </p>
+            )}
+            {res.loading ? (
+                <SkeletonRows rows={3} height={100} />
+            ) : agenda ? (
+                <>
+                    <ReportMetadata agenda={agenda} />
+                    <section
+                        className="border-line bg-panel rounded-xl border p-5"
+                        aria-label="Report summary"
+                    >
+                        <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+                            <h2 className="text-ink font-semibold">The week at a glance</h2>
+                            <span className="text-ink-3 text-xs">
+                                {agenda.topics.length}{" "}
+                                {agenda.topics.length === 1 ? "topic" : "topics"} ·{" "}
+                                {agenda.topics.filter(t => t.decision).length}{" "}
+                                {agenda.topics.filter(t => t.decision).length === 1
+                                    ? "decision"
+                                    : "decisions"}{" "}
+                                · Saved version {agenda.version}
+                            </span>
+                        </div>
+                        <p className="text-ink-2 whitespace-pre-wrap text-sm leading-relaxed">
+                            {agenda.summary ?? "No summary was saved for this report."}
+                        </p>
+                        {agenda.execution?.outcome === "empty" && (
+                            <p className="text-ink-2 mt-3 text-sm">
+                                Generation completed with no eligible evidence. Add evidence or
+                                write a topic to continue.
+                            </p>
+                        )}
+                    </section>
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                        <div
+                            className="flex flex-wrap gap-1"
+                            role="group"
+                            aria-label="Filter topics"
+                        >
+                            {["all", "suggested", "kept", "dismissed"].map(value => (
+                                <Button
+                                    key={value}
+                                    size="sm"
+                                    variant={filter === value ? "default" : "ghost"}
+                                    aria-pressed={filter === value}
+                                    onClick={() => setFilter(value)}
                                 >
-                                    {STATUS_WORD[h.status]}
-                                </StatusWord>
-                            </ToolLink>
+                                    {value === "all"
+                                        ? "All topics"
+                                        : value.charAt(0).toUpperCase() + value.slice(1)}
+                                </Button>
+                            ))}
+                        </div>
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            disabled={!!busy}
+                            onClick={() => setEditing("new")}
+                        >
+                            Write a topic
+                        </Button>
+                    </div>
+                    <div className="flex flex-col gap-4">
+                        {topics.map((topic, index) => (
+                            <article
+                                key={topic.id}
+                                className="border-line bg-panel overflow-hidden rounded-xl border"
+                                aria-label={topic.title}
+                            >
+                                <div className="p-5">
+                                    <div className="mb-3 flex flex-wrap items-center gap-2">
+                                        <span className="text-ink-3 font-mono text-xs">
+                                            {String(index + 1).padStart(2, "0")}
+                                        </span>
+                                        <StatusWord
+                                            tone={topic.status === "kept" ? "success" : "neutral"}
+                                        >
+                                            {topic.status}
+                                        </StatusWord>
+                                        <span className="text-ink-3 text-xs">
+                                            {topic.origin === "ai"
+                                                ? "AI suggestion"
+                                                : topic.origin === "rules"
+                                                  ? "Rules suggestion"
+                                                  : "Human topic"}{" "}
+                                            · Content version {topic.contentVersion}
+                                        </span>
+                                    </div>
+                                    <h2 className="text-ink display text-lg">{topic.title}</h2>
+                                    <div className="mt-4 grid gap-4">
+                                        <div>
+                                            <BasisTag basis="observed" />
+                                            <ul className="mt-2 space-y-3">
+                                                {topic.facts.map((fact, i) => (
+                                                    <li key={i} className="text-ink text-sm">
+                                                        <p className="whitespace-pre-wrap">
+                                                            {fact.text}
+                                                        </p>
+                                                        {(fact.unsupported === true ||
+                                                            !fact.refs.length) && (
+                                                            <p className="text-warn mt-1 text-xs">
+                                                                No verified supporting source on
+                                                                file.
+                                                            </p>
+                                                        )}
+                                                        <SourceLinks
+                                                            refs={fact.refs}
+                                                            onOpen={setSource}
+                                                        />
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                            {!topic.facts.length && (
+                                                <p className="text-ink-3 mt-2 text-sm">
+                                                    No facts recorded.
+                                                </p>
+                                            )}
+                                        </div>
+                                        {topic.whyItMatters && (
+                                            <div>
+                                                <BasisTag basis="interpretation" />
+                                                <p className="text-ink-2 mt-2 whitespace-pre-wrap text-sm">
+                                                    {topic.whyItMatters}
+                                                </p>
+                                            </div>
+                                        )}
+                                        {topic.decisionQuestion && (
+                                            <div className="bg-panel-2 rounded-lg p-3">
+                                                <p className="text-ink-3 text-xs font-medium">
+                                                    Decision to make
+                                                </p>
+                                                <p className="text-ink mt-1 text-sm font-medium">
+                                                    {topic.decisionQuestion}
+                                                </p>
+                                            </div>
+                                        )}
+                                        {topic.proposedNextStep && (
+                                            <div>
+                                                <BasisTag basis="suggestion" />
+                                                <p className="text-ink-2 mt-2 text-sm">
+                                                    {topic.proposedNextStep}
+                                                </p>
+                                                <p className="text-ink-3 mt-1 text-xs">
+                                                    Owner: {topic.proposedOwner ?? "Not proposed"} ·
+                                                    Due: {topic.proposedDue ?? "Not proposed"}
+                                                </p>
+                                            </div>
+                                        )}
+                                        {topic.unknowns.length > 0 && (
+                                            <div>
+                                                <BasisTag basis="unknown" />
+                                                <ul className="text-ink-2 mt-2 list-inside list-disc text-sm">
+                                                    {topic.unknowns.map((item, i) => (
+                                                        <li key={i}>{item}</li>
+                                                    ))}
+                                                </ul>
+                                            </div>
+                                        )}
+                                        {topic.conflicts.map((conflict, i) => (
+                                            <div key={i}>
+                                                <BasisTag basis="conflict" />
+                                                <p className="text-ink-2 mt-2 text-sm">
+                                                    {conflict.text}
+                                                </p>
+                                                <SourceLinks
+                                                    refs={conflict.refs}
+                                                    onOpen={setSource}
+                                                />
+                                            </div>
+                                        ))}
+                                        {topic.rationale && (
+                                            <p className="text-ink-3 text-xs">
+                                                Rationale: {topic.rationale}
+                                            </p>
+                                        )}
+                                        {topic.helpRequested && (
+                                            <p className="text-ink-2 text-sm">
+                                                Help requested: {topic.helpRequested}
+                                            </p>
+                                        )}
+                                        {topic.decision && (
+                                            <div className="border-success/30 rounded-lg border p-3">
+                                                <p className="text-success text-xs font-semibold">
+                                                    Saved decision
+                                                </p>
+                                                <p className="text-ink mt-1 whitespace-pre-wrap text-sm">
+                                                    {topic.decision}
+                                                </p>
+                                                {topic.decidedAt && (
+                                                    <p className="text-ink-3 mt-1 text-xs">
+                                                        {formatReportingInstant(topic.decidedAt)}
+                                                    </p>
+                                                )}
+                                            </div>
+                                        )}
+                                        {topic.commitmentId && (
+                                            <Button
+                                                variant="outline"
+                                                className="w-fit"
+                                                size="sm"
+                                                onClick={() =>
+                                                    navigate(
+                                                        vantagePath(
+                                                            `/commitments?action=${encodeURIComponent(topic.commitmentId!)}`
+                                                        )
+                                                    )
+                                                }
+                                            >
+                                                View linked action
+                                            </Button>
+                                        )}
+                                    </div>
+                                    <div className="mt-5 flex flex-wrap gap-2">
+                                        {topic.status !== "kept" && (
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                disabled={!!busy}
+                                                onClick={() => void patch(topic, "kept")}
+                                            >
+                                                {topic.status === "dismissed"
+                                                    ? "Restore topic"
+                                                    : "Keep topic"}
+                                            </Button>
+                                        )}
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            disabled={!!busy}
+                                            onClick={() => setEditing(topic)}
+                                        >
+                                            Edit topic
+                                        </Button>
+                                        {topic.status !== "dismissed" && (
+                                            <Button
+                                                size="sm"
+                                                disabled={!!busy}
+                                                onClick={() => setDeciding(topic)}
+                                            >
+                                                {topic.decision
+                                                    ? "Edit decision"
+                                                    : "Record decision"}
+                                            </Button>
+                                        )}
+                                        {topic.status !== "dismissed" && (
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                disabled={!!busy}
+                                                onClick={() => void patch(topic, "dismissed")}
+                                            >
+                                                Dismiss topic
+                                            </Button>
+                                        )}
+                                    </div>
+                                </div>
+                                {agenda.enhancements
+                                    .filter(e => e.topicId === topic.id)
+                                    .map(enhancement => {
+                                        const stale =
+                                            enhancement.baseTopicVersion !== topic.contentVersion;
+                                        return (
+                                            <section
+                                                key={enhancement.id}
+                                                className="border-line bg-panel-2 border-t p-5"
+                                                aria-label={`${enhancement.status === "accepted" ? "Approved addition" : "Suggested addition"}: ${enhancement.kind}`}
+                                            >
+                                                <div className="flex flex-wrap items-center justify-between gap-2">
+                                                    <h3 className="text-ink text-sm font-semibold">
+                                                        {enhancement.status === "accepted"
+                                                            ? "Approved addition"
+                                                            : enhancement.status === "dismissed"
+                                                              ? "Dismissed addition"
+                                                              : "Review suggested addition"}
+                                                    </h3>
+                                                    <span className="text-ink-3 text-xs">
+                                                        {enhancement.kind}
+                                                    </span>
+                                                </div>
+                                                <p className="text-ink mt-2 whitespace-pre-wrap text-sm">
+                                                    {enhancement.text}
+                                                </p>
+                                                <p className="text-ink-2 mt-2 text-xs">
+                                                    Why this was suggested: {enhancement.rationale}
+                                                </p>
+                                                <SourceLinks
+                                                    refs={enhancement.refs}
+                                                    onOpen={setSource}
+                                                />
+                                                {enhancement.status === "suggested" && (
+                                                    <>
+                                                        {stale && (
+                                                            <p className="text-warn mt-3 text-xs">
+                                                                The original topic has changed. This
+                                                                addition needs regeneration before
+                                                                it can be reviewed.
+                                                            </p>
+                                                        )}
+                                                        <div className="mt-3 flex gap-2">
+                                                            {(
+                                                                ["accepted", "dismissed"] as const
+                                                            ).map(status => (
+                                                                <Button
+                                                                    key={status}
+                                                                    size="sm"
+                                                                    variant={
+                                                                        status === "accepted"
+                                                                            ? "default"
+                                                                            : "outline"
+                                                                    }
+                                                                    disabled={!!busy || stale}
+                                                                    onClick={() =>
+                                                                        void run(
+                                                                            "Reviewing addition",
+                                                                            async () => {
+                                                                                await vantageApi.reviewEnhancement(
+                                                                                    topic.id,
+                                                                                    enhancement.id,
+                                                                                    status,
+                                                                                    enhancement.baseTopicVersion
+                                                                                );
+                                                                                await res.reload();
+                                                                                if (alive.current)
+                                                                                    setNotice(
+                                                                                        status ===
+                                                                                            "accepted"
+                                                                                            ? "Addition approved. Original topic preserved."
+                                                                                            : "Addition dismissed."
+                                                                                    );
+                                                                            }
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    {status === "accepted"
+                                                                        ? "Accept addition"
+                                                                        : "Dismiss addition"}
+                                                                </Button>
+                                                            ))}
+                                                        </div>
+                                                    </>
+                                                )}
+                                            </section>
+                                        );
+                                    })}
+                            </article>
+                        ))}
+                        {topics.length === 0 && (
+                            <p className="text-ink-3 border-line rounded-lg border border-dashed p-6 text-center text-sm">
+                                {agenda.topics.length
+                                    ? "No topics in this view."
+                                    : "This saved report has no topics yet."}
+                            </p>
+                        )}
+                    </div>
+                    <TopicDialog
+                        open={editing !== null}
+                        onOpenChange={open => !open && setEditing(null)}
+                        agendaId={agenda.id}
+                        initial={editing === "new" ? null : editing}
+                        onSaved={() => {
+                            void res.reload();
+                            setNotice(
+                                "Topic saved. Human edits are protected during regeneration."
+                            );
+                        }}
+                    />
+                </>
+            ) : res.data && !res.error ? (
+                <section className="border-line rounded-xl border border-dashed px-6 py-12 text-center">
+                    <h2 className="text-ink text-lg font-semibold">
+                        No saved report for this week
+                    </h2>
+                    <p className="text-ink-2 mx-auto mt-2 max-w-md text-sm">
+                        Choose a generation mode above when you are ready. Browsing weeks does not
+                        generate or change a report.
+                    </p>
+                </section>
+            ) : null}
+            {res.data && res.data.agendas.length > 0 && (
+                <section aria-label="Saved weeks">
+                    <h2 className="text-ink mb-3 text-sm font-semibold">Saved weeks</h2>
+                    <div className="flex flex-wrap gap-2">
+                        {res.data.agendas.map(item => (
+                            <Button
+                                key={item.id}
+                                variant="outline"
+                                size="sm"
+                                disabled={!!busy}
+                                aria-current={item.weekStart === selected ? "date" : undefined}
+                                onClick={() => go(item.weekStart)}
+                            >
+                                {weekRange(item.weekStart, item.weekEnd)} · {item.decidedCount}/
+                                {item.topicCount} decided
+                            </Button>
                         ))}
                     </div>
                 </section>
             )}
-
-            {agenda && (
-                <TopicDialog
-                    open={editing !== null}
-                    onOpenChange={o => !o && setEditing(null)}
-                    agendaId={agenda.id}
-                    initial={editing === "new" ? null : editing}
-                    onSaved={topic => {
-                        if (editing === "new")
-                            res.mutate(c =>
-                                c.agenda
-                                    ? {
-                                          ...c,
-                                          agenda: {
-                                              ...c.agenda,
-                                              topics: [...c.agenda.topics, topic],
-                                          },
-                                      }
-                                    : c
-                            );
-                        else setTopic(topic);
-                    }}
-                />
-            )}
             <DecisionDialog
                 open={deciding !== null}
-                onOpenChange={o => !o && setDeciding(null)}
+                onOpenChange={open => !open && setDeciding(null)}
                 topic={deciding}
-                onSaved={topic => {
-                    setTopic(topic);
+                onSaved={() => {
                     void res.reload();
+                    setNotice("Decision saved.");
                 }}
             />
+            <SourceDialog sourceRef={source} onClose={() => setSource(null)} />
         </div>
+    );
+}
+
+function ReportMetadata({ agenda }: { agenda: AgendaV1Dto }) {
+    const period = agenda.reportPeriod;
+    const execution = agenda.execution;
+    const fallback: Record<string, string> = {
+        "no-model": "No model configured",
+        timeout: "Model timed out",
+        "provider-error": "Provider error",
+        "invalid-output": "Invalid model output",
+    };
+    return (
+        <section
+            aria-label="Saved report metadata"
+            className="@max-md:grid-cols-1 grid gap-3 md:grid-cols-2"
+        >
+            <div className="border-line rounded-lg border p-4">
+                <h2 className="text-ink text-sm font-semibold">
+                    {period
+                        ? period.kind === "completed-week"
+                            ? "Complete week"
+                            : "Week to date"
+                        : "Legacy report"}
+                </h2>
+                {period ? (
+                    <>
+                        <p className="text-ink-2 mt-1 text-xs">
+                            {formatReportingInstant(period.startInclusive)} →{" "}
+                            {formatReportingInstant(period.endExclusive)} (end excluded)
+                        </p>
+                        <p className="text-ink-3 mt-2 text-xs">
+                            Captured {formatReportingInstant(period.asOf)} · America/New_York
+                        </p>
+                    </>
+                ) : (
+                    <p className="text-ink-2 mt-1 text-xs">
+                        Reporting period was not recorded. No cutoff has been assumed.
+                    </p>
+                )}
+            </div>
+            <div className="border-line rounded-lg border p-4">
+                <h2 className="text-ink text-sm font-semibold">
+                    {!execution
+                        ? "Generation details unavailable"
+                        : execution.outcome === "empty"
+                          ? "Empty result"
+                          : execution.mode === "ai"
+                            ? "AI generated"
+                            : execution.fallbackReason
+                              ? "Rules fallback"
+                              : "Rules generated"}
+                </h2>
+                {execution ? (
+                    <>
+                        <p className="text-ink-2 mt-1 text-xs">
+                            {execution.fallbackReason
+                                ? fallback[execution.fallbackReason]
+                                : execution.outcome === "empty"
+                                  ? "No eligible evidence; no provider failure."
+                                  : execution.mode === "rules"
+                                    ? "Rules mode; no provider failure."
+                                    : `Model: ${execution.modelId ?? "Not recorded"}`}
+                        </p>
+                        <p className="text-ink-3 mt-2 text-xs">
+                            {execution.attempts} provider{" "}
+                            {execution.attempts === 1 ? "attempt" : "attempts"} ·{" "}
+                            {(execution.durationMs / 1000).toFixed(1)}s · {execution.promptVersion}
+                        </p>
+                    </>
+                ) : (
+                    <p className="text-ink-2 mt-1 text-xs">
+                        This legacy report has no saved execution record.
+                    </p>
+                )}
+            </div>
+        </section>
     );
 }

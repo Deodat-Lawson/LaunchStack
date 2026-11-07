@@ -1,12 +1,10 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { toast } from "sonner";
+import { useDialogFocus } from "../_lib/useDialogFocus";
 
-import { EmptyState, InlineError } from "~/components/tools/EmptyState";
-import { PageHeader, SectionHeading } from "~/components/tools/PageHeader";
-import { SkeletonRows } from "~/components/tools/SkeletonRows";
-import { useResource } from "~/lib/tools/useResource";
+import { useEffect, useRef, useState } from "react";
+import { useToolNav } from "~/components/tool-app/nav";
+import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import {
     Dialog,
@@ -17,235 +15,172 @@ import {
     DialogTitle,
 } from "~/components/ui/dialog";
 import { Input } from "~/components/ui/input";
-import { Switch } from "~/components/ui/switch";
-import { cn } from "~/lib/utils";
-
-import { vantageApi, type CommitmentDto, type TopicDto } from "../api";
+import { SkeletonRows } from "~/components/tools/SkeletonRows";
+import { useResource } from "~/lib/tools/useResource";
+import { vantageApi, vantageErrorMessage, type CommitmentDto } from "../api";
 import { CheckInRow } from "../_components/CheckInRow";
 import { Field, FormError } from "../_components/Primitives";
-import { DecisionDialog } from "../_components/TopicDialogs";
-import { WeekSuggestions } from "../_components/WeekSuggestions";
-import { useOneClick } from "../_lib/actions";
-import { addDaysIso, plural, todayIso } from "../_lib/format";
-import { useHiddenSuggestions } from "../_lib/hidden";
-import { weekSuggestions } from "../_lib/suggestions";
+import { addDaysIso, todayIso } from "../_lib/format";
 
-type View = "open" | "resolved" | "all";
-
-/**
- * The promise ledger: every commitment a meeting produced, with its owner,
- * due date and the test that settles it. Open ones first, late ones on top.
- * Above it, the same follow-through suggestions This week shows — promises
- * due, as Done / Missed / Not yet, and a held meeting's next steps to
- * commit to — answered with one click.
- */
-export function CommitmentsScreen() {
-    const res = useResource("vantage:commitments", () => vantageApi.commitments());
-    const overview = useResource("vantage:overview", () => vantageApi.overview());
-    const hidden = useHiddenSuggestions();
-    const reloadLedger = res.reload;
-    const reloadOverview = overview.reload;
-    const refresh = useCallback(
-        () => Promise.all([reloadLedger(), reloadOverview()]),
-        [reloadLedger, reloadOverview]
+export function CommitmentsScreen({ actionId }: { actionId?: string | null }) {
+    const { navigate } = useToolNav();
+    const res = useResource("vantage:commitments", async () => {
+        try {
+            return await vantageApi.commitments();
+        } catch (error) {
+            throw new Error(vantageErrorMessage(error));
+        }
+    });
+    const [view, setView] = useState(actionId ? "all" : "open");
+    const [editing, setEditing] = useState<CommitmentDto | "new" | null>(null);
+    const all = res.data?.commitments ?? [];
+    const shown = all.filter(
+        c =>
+            (!actionId || c.id === actionId) &&
+            (view === "all" || (view === "open" ? c.status === "open" : c.status !== "open"))
     );
-    const { act, gone } = useOneClick(refresh);
-    const [view, setView] = useState<View>("open");
-    const [adding, setAdding] = useState(false);
-    const [deciding, setDeciding] = useState<TopicDto | null>(null);
-
-    const all = useMemo(() => res.data?.commitments ?? [], [res.data]);
-    const today = todayIso();
-    const open = useMemo(
-        () =>
-            all
-                .filter(c => c.status === "open")
-                .sort((a, b) => (a.dueOn < b.dueOn ? -1 : a.dueOn > b.dueOn ? 1 : 0)),
-        [all]
-    );
-    const resolved = useMemo(
-        () =>
-            all
-                .filter(c => c.status !== "open")
-                .sort((a, b) => ((a.resolvedAt ?? "") < (b.resolvedAt ?? "") ? 1 : -1)),
-        [all]
-    );
-    const late = open.filter(c => c.dueOn < today).length;
-    const followThrough = useMemo(
-        () =>
-            overview.data
-                ? weekSuggestions(overview.data, { today, hidden }).filter(
-                      g => g.id === "follow-through"
-                  )
-                : [],
-        [overview.data, today, hidden]
-    );
-    const shown = view === "open" ? open : view === "resolved" ? resolved : [...open, ...resolved];
-
     return (
-        <div className="mx-auto flex max-w-[1100px] flex-col gap-7">
-            <PageHeader
-                title="What was promised,"
-                accent="and what came of it"
-                sub={
-                    res.data
-                        ? `${plural(open.length, "open commitment")}${late ? `, ${late} late` : ""} · ${resolved.length} resolved`
-                        : undefined
-                }
-                actions={
-                    <Button size="sm" onClick={() => setAdding(true)}>
-                        Add a commitment
+        <div className="mx-auto flex w-full max-w-[1100px] flex-col gap-5">
+            <header className="flex flex-wrap items-center justify-between gap-3">
+                <div>
+                    <h1 className="display text-ink text-2xl">Commitments</h1>
+                    <p className="text-ink-2 mt-1 text-sm">
+                        An action, an owner, a date, and a result to learn from.
+                    </p>
+                </div>
+                <Button size="sm" onClick={() => setEditing("new")}>
+                    Add a commitment
+                </Button>
+            </header>
+            {actionId && (
+                <div className="flex items-center justify-between gap-3">
+                    <p className="text-ink-2 text-sm">Linked action</p>
+                    <Button variant="outline" size="sm" onClick={() => navigate("/commitments")}>
+                        Show all commitments
                     </Button>
-                }
-            />
-
-            {res.error && <InlineError message={res.error} onRetry={() => void res.reload()} />}
-
-            {followThrough.length > 0 && (
-                <WeekSuggestions
-                    groups={followThrough}
-                    act={act}
-                    gone={gone}
-                    onDecide={setDeciding}
-                />
+                </div>
             )}
-
-            <div className="flex flex-wrap gap-1" role="tablist" aria-label="View">
-                {(
-                    [
-                        ["open", `Open${open.length ? ` ${open.length}` : ""}`],
-                        ["resolved", `Resolved${resolved.length ? ` ${resolved.length}` : ""}`],
-                        ["all", "All"],
-                    ] as [View, string][]
-                ).map(([v, label]) => (
-                    <button
-                        key={v}
-                        type="button"
-                        role="tab"
-                        aria-selected={view === v}
-                        onClick={() => setView(v)}
-                        className={cn(
-                            "focus-visible:ring-brand/50 inline-flex h-8 items-center rounded-md px-2.5 text-[13px] outline-none transition-colors focus-visible:ring-[3px]",
-                            view === v
-                                ? "bg-panel text-ink shadow-1 font-medium"
-                                : "text-ink-2 hover:bg-panel/60 hover:text-ink"
-                        )}
+            <div role="group" aria-label="Filter commitments" className="flex gap-2">
+                {["open", "resolved", "all"].map(value => (
+                    <Button
+                        key={value}
+                        size="sm"
+                        variant={view === value ? "default" : "outline"}
+                        aria-pressed={view === value}
+                        onClick={() => setView(value)}
                     >
-                        {label}
-                    </button>
+                        {value.charAt(0).toUpperCase() + value.slice(1)}
+                    </Button>
                 ))}
             </div>
-
-            <section>
-                <SectionHeading
-                    title={
-                        view === "open" ? "Open" : view === "resolved" ? "Resolved" : "Everything"
-                    }
-                    aside={
-                        view === "open" && late > 0 ? (
-                            <span className="text-warn">{plural(late, "commitment")} late</span>
-                        ) : undefined
-                    }
-                />
-                {res.loading ? (
-                    <SkeletonRows rows={5} height={52} />
-                ) : all.length === 0 ? (
-                    <EmptyState
-                        title="No commitments yet"
-                        body="A commitment is made when a decision is recorded on an agenda topic: an action, an owner, a date, and the test that would settle it. Next week's agenda checks whether it happened."
-                        action={
-                            <Button size="sm" variant="outline" onClick={() => setAdding(true)}>
-                                Add one by hand
-                            </Button>
-                        }
-                    />
-                ) : shown.length === 0 ? (
-                    <p className="text-ink-3 text-[13px]">Nothing in this view.</p>
-                ) : (
-                    <div className="border-line bg-panel rounded-lg border">
-                        {shown.map(c => (
-                            <CheckInRow key={c.id} commitment={c} onChange={() => void refresh()} />
-                        ))}
-                    </div>
-                )}
-            </section>
-
-            <AddCommitmentDialog
-                open={adding}
-                onOpenChange={setAdding}
-                onSaved={() => void refresh()}
-            />
-            <DecisionDialog
-                open={deciding !== null}
-                onOpenChange={o => !o && setDeciding(null)}
-                topic={deciding}
-                onSaved={() => void refresh()}
+            <FormError message={res.error} />
+            {res.error && (
+                <Button variant="outline" onClick={() => void res.reload()}>
+                    Reload commitments
+                </Button>
+            )}
+            {res.loading ? (
+                <SkeletonRows rows={3} height={60} />
+            ) : shown.length ? (
+                <div className="border-line bg-panel rounded-xl border">
+                    {shown.map(item => (
+                        <CheckInRow
+                            key={item.id}
+                            commitment={item}
+                            onChange={() => void res.reload()}
+                            onEdit={() => setEditing(item)}
+                        />
+                    ))}
+                </div>
+            ) : (
+                !res.error && (
+                    <p className="text-ink-3 border-line rounded-xl border border-dashed p-8 text-center text-sm">
+                        {actionId && !all.some(c => c.id === actionId)
+                            ? "This linked action is unavailable or you no longer have access to it."
+                            : "No commitments in this view."}
+                    </p>
+                )
+            )}
+            <CommitmentDialog
+                open={editing !== null}
+                initial={editing === "new" ? null : editing}
+                onOpenChange={open => !open && setEditing(null)}
+                onSaved={() => void res.reload()}
             />
         </div>
     );
 }
 
-function AddCommitmentDialog({
+function CommitmentDialog({
     open,
     onOpenChange,
     onSaved,
+    initial,
 }: {
+    initial: CommitmentDto | null;
     open: boolean;
     onOpenChange: (o: boolean) => void;
     onSaved: (c: CommitmentDto) => void;
 }) {
+    const dialogFocus = useDialogFocus();
     const [title, setTitle] = useState("");
     const [owner, setOwner] = useState("");
     const [dueOn, setDueOn] = useState(addDaysIso(todayIso(), 7));
     const [test, setTest] = useState("");
-    const [shared, setShared] = useState(false);
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState<string | null>(null);
     useEffect(() => {
         if (!open) return;
-        setTitle("");
-        setOwner("");
-        setDueOn(addDaysIso(todayIso(), 7));
-        setTest("");
-        setShared(false);
+        setTitle(initial?.title ?? "");
+        setOwner(initial?.owner ?? "");
+        setDueOn(initial?.dueOn ?? addDaysIso(todayIso(), 7));
+        setTest(initial?.test ?? "");
         setError(null);
-    }, [open]);
+    }, [open, initial]);
+    const saving = useRef(false);
     const save = async () => {
+        if (saving.current) return;
+        saving.current = true;
         setBusy(true);
         setError(null);
         try {
-            const { commitment } = await vantageApi.addCommitment({
+            const input = {
                 title,
                 owner,
                 dueOn,
                 test: test || null,
-                shared,
-            });
-            toast("Commitment added");
+                shared: false,
+            };
+            const { commitment } = initial
+                ? await vantageApi.patchCommitment(initial.id, input)
+                : await vantageApi.addCommitment(input);
+            toast(initial ? "Action updated" : "Commitment added");
             onSaved(commitment);
             onOpenChange(false);
         } catch (e) {
-            setError(e instanceof Error ? e.message : "That did not save");
+            setError(vantageErrorMessage(e));
         } finally {
+            saving.current = false;
             setBusy(false);
         }
     };
     return (
-        <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent className="sm:max-w-[520px]">
+        <Dialog open={open} onOpenChange={value => !busy && onOpenChange(value)}>
+            <DialogContent {...dialogFocus} className="sm:max-w-[520px]">
                 <DialogHeader>
-                    <DialogTitle>Add a commitment</DialogTitle>
+                    <DialogTitle>{initial ? "Edit action" : "Add a commitment"}</DialogTitle>
                     <DialogDescription>
-                        Something promised outside a meeting, so it is still checked next week.
+                        Keep the owner, due date and success test clear. Existing action links and
+                        outcomes are preserved.
                     </DialogDescription>
                 </DialogHeader>
-                <div className="grid gap-3.5">
+                <fieldset disabled={busy} className="grid min-w-0 gap-3.5">
                     <Field label="Action" htmlFor="c-title">
                         <Input
                             id="c-title"
+                            maxLength={300}
                             value={title}
                             onChange={e => setTitle(e.target.value)}
-                            autoFocus
                             placeholder="Ship the shorter onboarding"
                         />
                     </Field>
@@ -253,6 +188,7 @@ function AddCommitmentDialog({
                         <Field label="Owner" htmlFor="c-owner">
                             <Input
                                 id="c-owner"
+                                maxLength={200}
                                 value={owner}
                                 onChange={e => setOwner(e.target.value)}
                                 placeholder="Dana"
@@ -270,26 +206,24 @@ function AddCommitmentDialog({
                     <Field label="The test" htmlFor="c-test" hint="What result would settle it">
                         <Input
                             id="c-test"
+                            maxLength={1000}
                             value={test}
                             onChange={e => setTest(e.target.value)}
                             placeholder="Activation above 30% for the week"
                         />
                     </Field>
-                    <div className="flex items-center justify-between gap-3">
-                        <div className="text-ink-2 text-[12.5px]">Visible to the program</div>
-                        <Switch checked={shared} onCheckedChange={setShared} aria-label="Shared" />
-                    </div>
+                    <p className="text-ink-3 text-xs">Private to this test workspace.</p>
                     <FormError message={error} />
-                </div>
+                </fieldset>
                 <DialogFooter>
                     <Button variant="outline" onClick={() => onOpenChange(false)} disabled={busy}>
                         Cancel
                     </Button>
                     <Button
                         onClick={() => void save()}
-                        disabled={busy || !title.trim() || !owner.trim() || !dueOn}
+                        disabled={busy || !title.trim() || !owner.trim() || !dueOn || !test.trim()}
                     >
-                        Add
+                        {initial ? "Save action" : "Add"}
                     </Button>
                 </DialogFooter>
             </DialogContent>

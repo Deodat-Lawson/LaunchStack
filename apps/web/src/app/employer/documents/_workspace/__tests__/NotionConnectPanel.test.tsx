@@ -14,7 +14,8 @@ import { ADD_TABS } from "../types";
 /**
  * The Notion panel: one consent on Notion's screen connects a workspace, its
  * picked pages sync into Sources, and every connected workspace gets Sync
- * now, Choose pages (the same consent again) and Disconnect.
+ * now, Choose pages (the same consent again) and Disconnect, plus Sync again
+ * for a page deleted here.
  */
 
 jest.mock("sonner", () => ({ toast: { success: jest.fn(), error: jest.fn() } }));
@@ -59,6 +60,9 @@ beforeEach(() => {
     fetchMock.mockImplementation((url: string, init?: RequestInit) => {
         if (url.endsWith("/status")) return respond({ data: statusBody }, statusCode);
         if (url.includes("/sync")) return respond({ data: { queued: 1 } }, 202);
+        if (url.endsWith("/deleted") && init?.method === "DELETE") {
+            return respond({ data: { restored: 1 } });
+        }
         if (url.startsWith("/api/connectors/connections/") && init?.method === "DELETE") {
             return respond({ data: { deleted: true } });
         }
@@ -163,5 +167,60 @@ describe("syncSummary", () => {
             "1 page · 2 failed · page limit reached"
         );
         expect(syncSummary(t, null)).toBeNull();
+    });
+});
+
+describe("NotionConnectPanel pages deleted here", () => {
+    const deletedHere = {
+        items: [{ sourceId: "page-1", title: "Roadmap", deletedAt: "2026-11-07T00:00:00Z" }],
+        others: 0,
+    };
+
+    it("names the page you deleted and says Notion was not touched", async () => {
+        statusBody = { configured: true, connections: [connection({ deletedHere })] };
+        render(<NotionConnectPanel tab={notionTab} />);
+
+        expect(await screen.findByText("DELETED HERE (1)")).toBeInTheDocument();
+        expect(screen.getByText("Roadmap")).toBeInTheDocument();
+        expect(screen.getByText(/Nothing was changed in Notion/)).toBeInTheDocument();
+        // One file: no "Sync all" next to its own button.
+        expect(screen.queryByRole("button", { name: /Sync all/ })).not.toBeInTheDocument();
+    });
+
+    it("forgets the delete on that connection, then syncs it", async () => {
+        const user = userEvent.setup();
+        statusBody = { configured: true, connections: [connection({ deletedHere })] };
+        render(<NotionConnectPanel tab={notionTab} />);
+
+        await user.click(await screen.findByRole("button", { name: "Sync Roadmap again" }));
+
+        await waitFor(() =>
+            expect(
+                fetchMock.mock.calls.some(([url]) =>
+                    String(url).startsWith("/api/connectors/notion/sync?connectionId=41")
+                )
+            ).toBe(true)
+        );
+        const call = fetchMock.mock.calls.find(([url]) =>
+            String(url).endsWith("/api/connectors/notion/deleted")
+        ) as [string, RequestInit];
+        expect(call[1].method).toBe("DELETE");
+        expect(JSON.parse(call[1].body as string)).toEqual({
+            connectionId: "41",
+            sourceIds: ["page-1"],
+        });
+    });
+
+    it("shows nothing for a revoked connection or when nothing was deleted", async () => {
+        statusBody = {
+            configured: true,
+            connections: [
+                connection({ connectionId: "41", deletedHere: { items: [], others: 0 } }),
+                connection({ connectionId: "42", status: "revoked", deletedHere }),
+            ],
+        };
+        render(<NotionConnectPanel tab={notionTab} />);
+        await screen.findAllByText("Acme HQ");
+        expect(screen.queryByText(/DELETED HERE/)).not.toBeInTheDocument();
     });
 });

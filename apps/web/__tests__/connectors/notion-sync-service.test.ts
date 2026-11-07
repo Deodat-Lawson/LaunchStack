@@ -3,6 +3,7 @@
  * the first sign a token died. The run refreshes once and retries; a token
  * Notion still refuses after that is a dead grant, and the connection is
  * marked revoked so the panel offers reconnect instead of retrying forever.
+ * Pages deleted here stay out of the run.
  */
 
 import type { NotionClient } from "@launchstack/pipelines/connectors/notion";
@@ -28,6 +29,9 @@ jest.mock("~/server/services/connectors/notion/sink", () => ({
     createNotionSink: jest.fn(),
     listKnownSourceIds: jest.fn(),
     markMissingDocuments: jest.fn(),
+}));
+jest.mock("~/server/services/connectors/deleted-items", () => ({
+    listDeletedSourceIds: jest.fn(),
 }));
 jest.mock("~/server/services/connectors/notion/folder", () => ({
     ensureNotionFolder: jest.fn(async () => ({ path: "Notion/Acme HQ", categoryId: 9 })),
@@ -56,6 +60,7 @@ jest.mock("@launchstack/pipelines/connectors/notion", () => {
 
 import { NotionAuthError } from "@launchstack/pipelines/connectors/notion";
 import * as connectionStoreModule from "~/server/services/connectors/connection-store";
+import { listDeletedSourceIds } from "~/server/services/connectors/deleted-items";
 import * as sinkModuleExports from "~/server/services/connectors/notion/sink";
 import * as syncStoreModule from "~/server/services/connectors/notion/store";
 import { runNotionSync } from "~/server/services/connectors/notion/sync-service";
@@ -132,6 +137,7 @@ beforeEach(() => {
     mockSyncStore.claimSyncLease.mockResolvedValue(true);
     mockSyncStore.getSyncState.mockResolvedValue(SYNC_STATE);
     mockSinkModule.listKnownSourceIds.mockResolvedValue([]);
+    jest.mocked(listDeletedSourceIds).mockResolvedValue([]);
     mockSinkModule.createNotionSink.mockResolvedValue({
         async store(item: { sourceId: string }) {
             stored.push(item.sourceId);
@@ -202,6 +208,24 @@ describe("runNotionSync", () => {
         await runNotionSync(41);
 
         expect(mockSinkModule.markMissingDocuments).toHaveBeenCalledWith(7n, 41, ["p-gone"]);
+    });
+
+    it("leaves out pages deleted here, and counts them in the report", async () => {
+        mockConnectionStore.getConnectionAccessToken.mockResolvedValue("stored");
+        mockClientsByToken.set("stored", workingClient(["p-1", "p-deleted"]));
+        jest.mocked(listDeletedSourceIds).mockResolvedValue(["p-deleted"]);
+
+        const result = await runNotionSync(41);
+
+        expect(listDeletedSourceIds).toHaveBeenCalledWith(41);
+        expect(stored).toEqual(["p-1"]);
+        expect(result.outcome).toBe("synced");
+        expect(mockSyncStore.releaseSyncLease).toHaveBeenCalledWith(
+            41,
+            expect.objectContaining({ report: expect.objectContaining({ deletedHere: 1 }) })
+        );
+        // Still shared with the connection: not flagged as gone.
+        expect(mockSinkModule.markMissingDocuments).not.toHaveBeenCalled();
     });
 
     it("skips a revoked connection without claiming the lease", async () => {

@@ -14,13 +14,15 @@
  * deletions are noticed.
  */
 
-import type {
-    DiscoveredKnowledgeItem,
-    FailedKnowledgeItem,
-    KnowledgeSink,
-    KnowledgeSyncReport,
-    SkippedKnowledgeItem,
-    StoredKnowledgeItem,
+import {
+    DELETED_HERE_DETAIL,
+    SourceDeletedError,
+    type DiscoveredKnowledgeItem,
+    type FailedKnowledgeItem,
+    type KnowledgeSink,
+    type KnowledgeSyncReport,
+    type SkippedKnowledgeItem,
+    type StoredKnowledgeItem,
 } from "../types";
 import { NotionAuthError, NotionNotFoundError, type NotionClient, type NotionPage } from "./client";
 import {
@@ -47,6 +49,12 @@ export interface NotionSyncOptions {
     readonly sink: KnowledgeSink;
     /** Source ids (page ids) the host has already ingested for this connection. */
     readonly knownSourceIds?: readonly string[];
+    /**
+     * Pages someone deleted in the host. Notion still lists them, so without
+     * this every run would import them again; they are skipped before their
+     * content is fetched.
+     */
+    readonly deletedSourceIds?: readonly string[];
     readonly force?: boolean;
     readonly workspaceName?: string | null;
     readonly maxPages?: number;
@@ -176,6 +184,10 @@ async function fetchBody(
     return mergeUnknownSubtrees(page.markdown, subtrees);
 }
 
+function deletedHereSkip(sourceId: string): SkippedKnowledgeItem {
+    return { sourceId, reason: "excluded", detail: DELETED_HERE_DETAIL };
+}
+
 interface PageOutcome {
     readonly stored?: StoredKnowledgeItem;
     readonly skipped?: SkippedKnowledgeItem;
@@ -233,6 +245,10 @@ async function processPage(context: ProcessContext, page: NotionPage): Promise<P
         });
         return { stored };
     } catch (error) {
+        // Deleted here while this run was going: left out, like the rest.
+        if (error instanceof SourceDeletedError) {
+            return { skipped: deletedHereSkip(page.id) };
+        }
         // Not this page's fault: the token died. The caller refreshes it and
         // reruns, so the run stops rather than recording every page as failed.
         if (error instanceof NotionAuthError) {
@@ -258,8 +274,15 @@ export async function syncNotion(options: NotionSyncOptions): Promise<NotionSync
         maxSubtreeFetches: options.maxSubtreeFetches ?? DEFAULT_MAX_SUBTREE_FETCHES,
         authError: null,
     };
+    // Deleted here: still shared with the connection, left out.
+    const deleted = new Set(options.deletedSourceIds ?? []);
+    const toSync = listing.pages.filter(page => !deleted.has(page.id));
+    const deletedHere = listing.pages
+        .filter(page => deleted.has(page.id))
+        .map(page => deletedHereSkip(page.id));
+
     const outcomes = await runWithConcurrency(
-        listing.pages.map(page => () => processPage(context, page)),
+        toSync.map(page => () => processPage(context, page)),
         options.concurrency ?? DEFAULT_SYNC_CONCURRENCY,
         () => context.authError !== null
     );
@@ -268,7 +291,7 @@ export async function syncNotion(options: NotionSyncOptions): Promise<NotionSync
     if (context.authError) throw context.authError;
 
     const stored: StoredKnowledgeItem[] = [];
-    const skipped: SkippedKnowledgeItem[] = [];
+    const skipped: SkippedKnowledgeItem[] = [...deletedHere];
     const failed: FailedKnowledgeItem[] = [];
     const notFound: string[] = [];
     for (const outcome of outcomes) {

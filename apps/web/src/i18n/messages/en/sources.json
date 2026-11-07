@@ -377,6 +377,17 @@
     "cardTitle": "Synced from Google Drive",
     "notConnected": "Nothing syncs from Google Drive yet. Pick files from Drive in Add source › Files, or a folder in Add source › Folder, and they’re listed here."
   },
+  "deletedHere": {
+    "title": "DELETED HERE ({count})",
+    "body": "{provider, select, notion {These pages stay deleted here: syncing leaves them out. Nothing was changed in Notion.} other {These files stay deleted here: syncing leaves them out. Nothing was changed in Google Drive.}}",
+    "syncAgain": "Sync again",
+    "syncAgainAria": "Sync {name} again",
+    "syncAllAgain": "Sync all {count} again",
+    "othersMore": "{count, plural, one {And # more, deleted by someone else.} other {And # more, deleted by other people.}}",
+    "othersOnly": "{count, plural, one {# deleted by someone else.} other {# deleted by other people.}}",
+    "restored": "{provider, select, notion {{count, plural, =0 {Nothing to bring back.} one {# page will sync again.} other {# pages will sync again.}}} other {{count, plural, =0 {Nothing to bring back.} one {# file will sync again.} other {# files will sync again.}}}}",
+    "restoreFailed": "Sync again didn't go through. Try again."
+  },
   "driveSource": {
     "chooseFiles": "From Google Drive",
     "chooseFolder": "From Google Drive",
@@ -1007,7 +1018,9 @@
       "obsidianNeedsUpload": "Importing notes needs permission to add documents.",
       "driveConnectsElsewhere": "Google Drive connects via /api/connectors/google/oauth/start.",
       "gmailConnectsElsewhere": "Gmail connects via /api/connectors/google/oauth/start?provider=gmail.",
-      "unknownProvider": "Unknown connector provider: {provider}"
+      "unknownProvider": "Unknown connector provider: {provider}",
+      "deletedDriveNotionOnly": "Deleted files are tracked only for google-drive and notion.",
+      "deletedRestored": "{count, plural, =0 {Nothing to bring back.} one {# file will come back on the next sync.} other {# files will come back on the next sync.}}"
     },
     "gmail": {
       "notConfigured": "The Gmail connector is not enabled on this server. Set GMAIL_CONNECTOR_ENABLED=true, GOOGLE_OAUTH_CLIENT_ID, GOOGLE_OAUTH_CLIENT_SECRET and EMBEDDING_SECRETS_KEY.",

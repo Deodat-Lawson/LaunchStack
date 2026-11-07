@@ -16,6 +16,8 @@ import {
     type NotionSyncResult,
 } from "@launchstack/pipelines/connectors/notion";
 
+import { DELETED_HERE_DETAIL } from "@launchstack/pipelines/connectors";
+
 import { eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
@@ -27,6 +29,7 @@ import {
     markConnectionRevoked,
     refreshConnectionAccessToken,
 } from "../connection-store";
+import { listDeletedSourceIds } from "../deleted-items";
 import { ConnectorGrantRevokedError } from "../providers/types";
 import { NOTION_PROVIDER } from "./config";
 import { ensureNotionFolder } from "./folder";
@@ -50,6 +53,7 @@ export function reportCounts(report: NotionSyncResult): Record<string, unknown> 
         revised: report.stored.filter(item => item.revised).length,
         skipped: report.skipped.length,
         unchanged: report.skipped.filter(skip => skip.reason === "unchanged").length,
+        deletedHere: report.skipped.filter(skip => skip.detail === DELETED_HERE_DETAIL).length,
         tooLarge: report.skipped.filter(skip => skip.reason === "too-large").length,
         failed: report.failed.length,
         missing: report.missingSourceIds.length,
@@ -104,8 +108,9 @@ export async function runNotionSync(
             await rememberFolder(connectionId, folder.categoryId);
         }
 
-        const [knownSourceIds, sink] = await Promise.all([
+        const [knownSourceIds, deletedSourceIds, sink] = await Promise.all([
             listKnownSourceIds(connection.companyId, connectionId),
+            listDeletedSourceIds(connectionId),
             createNotionSink({
                 companyId: connection.companyId,
                 connectionId,
@@ -119,6 +124,7 @@ export async function runNotionSync(
                 client: createNotionClient({ accessToken }),
                 sink,
                 knownSourceIds,
+                deletedSourceIds,
                 force: options?.force,
                 workspaceName: connection.providerAccountEmail,
             });

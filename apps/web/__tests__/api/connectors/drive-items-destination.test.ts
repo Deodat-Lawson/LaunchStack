@@ -2,7 +2,8 @@
  * Picking from Google Drive in Add source names the folder it goes to, and
  * picking into a folder is uploading into it: a restricted folder takes edit
  * access, as /api/uploadDocument checks, or nothing is saved. A pick with no
- * folder (an older client) keeps the old placement.
+ * folder (an older client) keeps the old placement. Picking something again
+ * lets back in what was deleted here under it.
  */
 import type { NextResponse } from "next/server";
 
@@ -32,8 +33,12 @@ jest.mock("~/server/services/connectors/google-drive/store", () => ({
 jest.mock("~/server/services/folder-access", () => ({
     canEditFolder: jest.fn(),
 }));
+jest.mock("~/server/services/connectors/deleted-items", () => ({
+    forgetDeletedUnderPicks: jest.fn(),
+}));
 
 import { POST } from "~/app/api/connectors/[provider]/items/route";
+import { forgetDeletedUnderPicks } from "~/server/services/connectors/deleted-items";
 import { addPickedItems } from "~/server/services/connectors/google-drive/store";
 import { requireConnectorAdmin } from "~/server/services/connectors/workspace-guard";
 import { canEditFolder } from "~/server/services/folder-access";
@@ -85,4 +90,19 @@ it("keeps the old placement for a pick that names no folder", async () => {
     expect(res.status).toBe(200);
     expect(canEditFolder).not.toHaveBeenCalled();
     expect(addPickedItems).toHaveBeenCalledWith(7, expect.any(Array), 11, null);
+});
+
+it("lets back in what was deleted here under what was picked again", async () => {
+    const folder = { fileId: "f1", kind: "folder", name: "Templates" };
+    const res = await pick({ items: [deck, folder] });
+
+    expect(res.status).toBe(200);
+    expect(forgetDeletedUnderPicks).toHaveBeenCalledWith(7, ["d1", "f1"]);
+});
+
+it("forgets nothing when the pick is refused", async () => {
+    jest.mocked(canEditFolder).mockResolvedValue(false);
+    await pick({ items: [deck], destination: "Board" });
+
+    expect(forgetDeletedUnderPicks).not.toHaveBeenCalled();
 });

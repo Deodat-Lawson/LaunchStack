@@ -144,7 +144,17 @@
     "website": "网站",
     "savedOn": "· 保存于 {date}",
     "openSite": "打开网站",
-    "textNote": "以下是 LaunchStack 从此页面读取的文本，提问和公司资料会引用它。"
+    "textNote": "以下是 LaunchStack 从此页面读取的文本，提问和公司资料会引用它。",
+    "tabText": "页面文本",
+    "previewLoading": "正在生成页面截图…",
+    "previewLoadingHint": "首次生成需要几秒钟。",
+    "previewFailedTitle": "无法显示此页面",
+    "previewUnavailableTitle": "此处尚未配置页面预览",
+    "tryAgain": "重试",
+    "showText": "查看页面文本",
+    "previewAlt": "{host} 保存时的样子",
+    "previewTruncated": "截图到此为止。打开网站查看页面的其余部分。",
+    "viewToggle": "页面显示方式"
   },
   "xlsx": {
     "fetchFailed": "获取电子表格失败（{status}）",
@@ -361,7 +371,10 @@
       "transcriptEmpty": "此转录文本为空",
       "translationFailed": "翻译失败",
       "noMedia": "此文档没有音频或视频",
-      "mediaLoadFailed": "媒体加载失败"
+      "mediaLoadFailed": "媒体加载失败",
+      "notWebsite": "此文档不是已保存的网站。",
+      "previewNotConfigured": "页面预览需要渲染服务。请设置 GOTENBERG_SERVICE_URL（及其基本认证用户名和密码），并确保 gotenberg 服务正在运行。",
+      "previewRenderFailed": "渲染服务无法为此页面生成截图。"
     },
     "artifacts": {
       "notFound": "未找到该 Artifact",

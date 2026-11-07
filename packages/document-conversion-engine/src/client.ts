@@ -2,10 +2,12 @@ import type {
     BinaryInput,
     ChromiumPageProperties,
     GotenbergConfig,
+    HtmlScreenshotParams,
     HtmlToPdfParams,
     MarkdownToPdfParams,
     OfficeToPdfParams,
     RenderAsset,
+    RenderedImage,
     RenderedPdf,
 } from "./types";
 import { OFFICE_CONVERTIBLE_EXTENSIONS } from "./types";
@@ -162,6 +164,36 @@ export class GotenbergClient {
         return this.convert("/forms/libreoffice/convert", form);
     }
 
+    /**
+     * Screenshot a complete HTML document through Chromium: by default the
+     * whole page, top to bottom, not just the window.
+     *
+     * The shot is taken after the page's load event plus `waitDelay`. Waiting
+     * for the network to go idle is switched off: a page's analytics beacons
+     * and long polls can keep it busy until the request times out.
+     */
+    async htmlToScreenshot(params: HtmlScreenshotParams): Promise<RenderedImage> {
+        const form = new FormData();
+        form.append("files", toBlob(params.html), "index.html");
+        if (params.width !== undefined) form.append("width", String(params.width));
+        if (params.height !== undefined) form.append("height", String(params.height));
+        if (params.clip !== undefined) form.append("clip", String(params.clip));
+        if (params.format) form.append("format", params.format);
+        if (params.quality !== undefined) form.append("quality", String(params.quality));
+        if (params.waitDelay) form.append("waitDelay", params.waitDelay);
+        form.append("skipNetworkIdleEvent", "true");
+        form.append("skipNetworkAlmostIdleEvent", "true");
+        const { body, contentType, trace } = await this.post(
+            "/forms/chromium/screenshot/html",
+            form
+        );
+        return {
+            image: body,
+            contentType: contentType ?? `image/${params.format ?? "png"}`,
+            trace,
+        };
+    }
+
     private async fetchWithTimeout(url: string, options: RequestInit): Promise<Response> {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), this.timeoutMs);
@@ -177,6 +209,14 @@ export class GotenbergClient {
     }
 
     private async convert(path: string, form: FormData): Promise<RenderedPdf> {
+        const { body, trace } = await this.post(path, form);
+        return { pdf: body, trace };
+    }
+
+    private async post(
+        path: string,
+        form: FormData
+    ): Promise<{ body: Buffer; contentType: string | null; trace: string | null }> {
         let res: Response;
         try {
             res = await this.fetchWithTimeout(`${this.baseUrl}${path}`, {
@@ -199,7 +239,11 @@ export class GotenbergClient {
             throw new RenderingServiceError(res.status, detail.trim(), trace);
         }
 
-        return { pdf: Buffer.from(await res.arrayBuffer()), trace };
+        return {
+            body: Buffer.from(await res.arrayBuffer()),
+            contentType: res.headers.get("content-type"),
+            trace,
+        };
     }
 }
 

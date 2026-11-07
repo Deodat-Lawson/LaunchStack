@@ -452,6 +452,109 @@ describe("Ask web search as a model-called tool", () => {
         expect(calls).toHaveLength(1);
     });
 
+    it('answers with the tools withdrawn when the endpoint refuses tool_choice "none"', async () => {
+        // Meta's endpoint accepts only "auto" for tool_choice and answers the
+        // forced last round with HTTP 400 (prod, 2026-11-02: the model read
+        // its search results, said nothing, and the turn failed). The round
+        // is asked again without the tools, which the endpoint accepts.
+        const refusal = Object.assign(
+            new Error('400 only `"auto"` is supported for `tool_choice`'),
+            { status: 400 }
+        );
+        const web = createWebTools({ search: jest.fn().mockResolvedValue(HEADLINES) });
+        const { chat, calls } = scriptedChat([
+            [toolCall("search_web", { query: "studio tools" })],
+            [text("")],
+            refusal,
+            [text("Three products shipped [Source 1].")],
+        ]);
+        const warn = jest.spyOn(console, "warn").mockImplementation(() => undefined);
+        try {
+            const answer = await answerWithTools({
+                chat,
+                messages: [],
+                tools: web.tools,
+                signal: new AbortController().signal,
+                ...streamSink(),
+            });
+            expect(calls).toHaveLength(4);
+            expect(calls[2]!.kwargs).toEqual({ tool_choice: "none" });
+            // The retry carries no tools, keeps the tool results and the
+            // reminder to answer, and is the answer.
+            expect(calls[3]!.tools).toBeUndefined();
+            expect(calls[3]!.kwargs).toBeUndefined();
+            expect(calls[3]!.messages.some(m => m instanceof ToolMessage)).toBe(true);
+            expect(calls[3]!.messages.at(-1)).toEqual(new HumanMessage(OUT_OF_TOOL_ROUNDS));
+            expect(answer.finalText).toBe("Three products shipped [Source 1].");
+            expect(answer.modelCalls).toBe(4);
+            expect(answer.toolCalls).toHaveLength(1);
+            expect(warn).toHaveBeenCalledTimes(1);
+        } finally {
+            warn.mockRestore();
+        }
+    });
+
+    it("leaves the tools on auto when the endpoint also refuses the request without them", async () => {
+        const refusal = () => Object.assign(new Error("400 invalid request"), { status: 400 });
+        const web = createWebTools({ search: jest.fn().mockResolvedValue(HEADLINES) });
+        const { chat, calls } = scriptedChat([
+            [toolCall("search_web", { query: "a" })],
+            refusal(),
+            refusal(),
+            [text("Answer from what I found [Source 1].")],
+        ]);
+        const warn = jest.spyOn(console, "warn").mockImplementation(() => undefined);
+        try {
+            const answer = await answerWithTools({
+                chat,
+                messages: [],
+                tools: web.tools,
+                signal: new AbortController().signal,
+                maxToolRounds: 1,
+            });
+            expect(calls).toHaveLength(4);
+            expect(calls[1]!.kwargs).toEqual({ tool_choice: "none" });
+            expect(calls[2]!.tools).toBeUndefined();
+            expect(calls[3]!.tools).toHaveLength(2);
+            expect(calls[3]!.kwargs).toBeUndefined();
+            expect(calls[3]!.messages.at(-1)).toEqual(new HumanMessage(OUT_OF_TOOL_ROUNDS));
+            expect(answer.finalContent).toBe("Answer from what I found [Source 1].");
+            expect(answer.modelCalls).toBe(4);
+            expect(warn).toHaveBeenCalledTimes(2);
+        } finally {
+            warn.mockRestore();
+        }
+    });
+
+    it("does not retry a forced round that failed for a reason other than a refusal", async () => {
+        const outage = Object.assign(new Error("503 unavailable"), { status: 503 });
+        const { chat, calls } = scriptedChat([[toolCall("search_web", { query: "a" })], outage]);
+        await expect(
+            answerWithTools({
+                chat,
+                messages: [],
+                tools: createWebTools({ search: jest.fn().mockResolvedValue(HEADLINES) }).tools,
+                signal: new AbortController().signal,
+                maxToolRounds: 1,
+            })
+        ).rejects.toThrow("503 unavailable");
+        expect(calls).toHaveLength(2);
+    });
+
+    it("does not retry a refusal in a round where the tools were still on offer", async () => {
+        const refusal = Object.assign(new Error("400 bad request"), { status: 400 });
+        const { chat, calls } = scriptedChat([[toolCall("search_web", { query: "a" })], refusal]);
+        await expect(
+            answerWithTools({
+                chat,
+                messages: [],
+                tools: createWebTools({ search: jest.fn().mockResolvedValue(HEADLINES) }).tools,
+                signal: new AbortController().signal,
+            })
+        ).rejects.toThrow("400 bad request");
+        expect(calls).toHaveLength(2);
+    });
+
     it("binds nothing and calls the model once when no tools are offered", async () => {
         const { chat, calls, bindTools } = scriptedChat([[text("Hello.")]]);
         const answer = await answerWithTools({

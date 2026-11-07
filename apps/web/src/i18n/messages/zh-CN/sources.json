@@ -377,6 +377,17 @@
     "cardTitle": "从 Google Drive 同步的内容",
     "notConnected": "目前没有从 Google Drive 同步任何内容。在“添加来源 › 文件”中从 Drive 选择文件，或在“添加来源 › 文件夹”中选择文件夹，它们就会列在这里。"
   },
+  "deletedHere": {
+    "title": "已在此处删除（{count}）",
+    "body": "{provider, select, notion {这些页面在此处保持删除状态：同步时会跳过它们。Notion 中的内容没有任何改动。} other {这些文件在此处保持删除状态：同步时会跳过它们。Google Drive 中的内容没有任何改动。}}",
+    "syncAgain": "重新同步",
+    "syncAgainAria": "重新同步“{name}”",
+    "syncAllAgain": "全部 {count} 项重新同步",
+    "othersMore": "{count, plural, other {另有 # 项由其他人删除。}}",
+    "othersOnly": "{count, plural, other {# 项由其他人删除。}}",
+    "restored": "{provider, select, notion {{count, plural, =0 {没有需要恢复的内容。} other {# 个页面将重新同步。}}} other {{count, plural, =0 {没有需要恢复的内容。} other {# 个文件将重新同步。}}}}",
+    "restoreFailed": "重新同步未能完成，请重试。"
+  },
   "driveSource": {
     "chooseFiles": "从 Google Drive 选择",
     "chooseFolder": "从 Google Drive 选择",
@@ -1007,7 +1018,9 @@
       "obsidianNeedsUpload": "导入笔记需要添加文档的权限。",
       "driveConnectsElsewhere": "Google Drive 需通过 /api/connectors/google/oauth/start 连接。",
       "gmailConnectsElsewhere": "Gmail 需通过 /api/connectors/google/oauth/start?provider=gmail 连接。",
-      "unknownProvider": "未知的连接器提供方：{provider}"
+      "unknownProvider": "未知的连接器提供方：{provider}",
+      "deletedDriveNotionOnly": "只有 google-drive 和 notion 会记录已删除的文件。",
+      "deletedRestored": "{count, plural, =0 {没有需要恢复的内容。} other {# 个文件将在下次同步时恢复。}}"
     },
     "gmail": {
       "notConfigured": "此服务器未启用 Gmail 连接器。请设置 GMAIL_CONNECTOR_ENABLED=true、GOOGLE_OAUTH_CLIENT_ID、GOOGLE_OAUTH_CLIENT_SECRET 和 EMBEDDING_SECRETS_KEY。",

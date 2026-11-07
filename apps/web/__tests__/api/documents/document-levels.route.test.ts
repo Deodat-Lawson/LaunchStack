@@ -247,7 +247,9 @@ describe("DELETE /api/deleteDocument", () => {
         const response = await deleteDocument(del("/api/deleteDocument", { docId: "12" }));
 
         expect(response.status).toBe(200);
-        expect(deleteDocumentCore).toHaveBeenCalledWith(expect.anything(), 12);
+        expect(deleteDocumentCore).toHaveBeenCalledWith(expect.anything(), 12, {
+            deletedByUserPk: 7,
+        });
         expect(recordActivity).toHaveBeenCalledWith(
             expect.anything(),
             expect.objectContaining({
@@ -279,7 +281,9 @@ describe("DELETE /api/deleteDocument — who may throw a file away", () => {
         const response = await deleteDocument(del("/api/deleteDocument", { docId: "12" }));
 
         expect(response.status).toBe(200);
-        expect(deleteDocumentCore).toHaveBeenCalledWith(expect.anything(), 12);
+        expect(deleteDocumentCore).toHaveBeenCalledWith(expect.anything(), 12, {
+            deletedByUserPk: 7,
+        });
     });
 
     it("refuses a Member who can edit a teammate's file but does not manage it", async () => {

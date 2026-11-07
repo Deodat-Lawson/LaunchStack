@@ -1,6 +1,6 @@
 /**
  * What the Notion panel shows: every Notion workspace connected here, where
- * its pages land, and how its last sync went. A workspace may connect more
+ * its pages land, how its last sync went, and the pages deleted here. A workspace may connect more
  * than one Notion workspace (each consent is its own connection).
  */
 
@@ -13,6 +13,7 @@ import { db } from "~/server/db";
 import { users } from "~/server/db/schema";
 import { isConnectorConfigured } from "../config";
 import { listConnectionsForCompany } from "../connection-store";
+import { listDeletedItems, summarizeDeletedItems, type DeletedHereSummary } from "../deleted-items";
 import { NOTION_PROVIDER } from "./config";
 import { getSyncStates } from "./store";
 
@@ -28,6 +29,8 @@ export interface NotionConnectionStatus {
     readonly lastSyncStatus: string | null;
     readonly lastSyncError: string | null;
     readonly lastSyncReport: Record<string, unknown> | null;
+    /** Pages deleted here, so not synced back; named only to whoever deleted them. */
+    readonly deletedHere: DeletedHereSummary;
 }
 
 export interface NotionStatus {
@@ -61,7 +64,10 @@ export async function loadNotionStatus(ctx: WorkspaceContext): Promise<NotionSta
     const connections = await listConnectionsForCompany(ctx.companyId, NOTION_PROVIDER);
     if (connections.length === 0) return { configured, connections: [] };
 
-    const states = await getSyncStates(connections.map(row => row.id));
+    const [states, deletedRows] = await Promise.all([
+        getSyncStates(connections.map(row => row.id)),
+        listDeletedItems(connections.map(row => row.id)),
+    ]);
     const folderIds = [...states.values()].flatMap(state =>
         state.folderCategoryId == null ? [] : [state.folderCategoryId]
     );
@@ -95,6 +101,10 @@ export async function loadNotionStatus(ctx: WorkspaceContext): Promise<NotionSta
                 lastSyncStatus: state?.lastSyncStatus ?? null,
                 lastSyncError: state?.lastSyncError ?? null,
                 lastSyncReport: state?.lastSyncReport ?? null,
+                deletedHere: summarizeDeletedItems(
+                    deletedRows.filter(deleted => deleted.connectionId === row.id),
+                    Number(ctx.userPk)
+                ),
             };
         }),
     };

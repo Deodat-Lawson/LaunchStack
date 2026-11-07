@@ -10,8 +10,8 @@
  * "Choose pages" runs the same consent again, which reopens the picker.
  *
  * States: loading → not-configured → not-connected → connected (one card per
- * connected Notion workspace: folder, last sync, Sync now, Choose pages,
- * Disconnect) → syncing (polls status; a sync that never starts says so, see
+ * connected Notion workspace: folder, last sync, pages deleted here with Sync
+ * again, Sync now, Choose pages, Disconnect) → syncing (polls status; a sync that never starts says so, see
  * useConnectorSync) → revoked (reconnect). All data comes from
  * /api/connectors/notion/status.
  */
@@ -24,6 +24,7 @@ import { Check, FolderClosed, RefreshCw } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Spinner } from "~/components/ui/spinner";
 
+import { DeletedHereList, type DeletedHereSummary } from "./DeletedHereList";
 import { SyncStalledNotice } from "./SyncStalledNotice";
 import type { AddSourceTab } from "./types";
 import { useConnectorSync, useSyncStatusLabel } from "./useConnectorSync";
@@ -39,6 +40,7 @@ interface NotionConnection {
     readonly lastSyncStatus: string | null;
     readonly lastSyncError: string | null;
     readonly lastSyncReport: Record<string, unknown> | null;
+    readonly deletedHere?: DeletedHereSummary;
 }
 
 interface NotionStatus {
@@ -176,6 +178,19 @@ function ConnectionCard({
                     <SyncStalledNotice />
                 </div>
             )}
+            {!revoked ? (
+                <DeletedHereList
+                    className="mt-3"
+                    provider="notion"
+                    connectionId={connection.connectionId}
+                    deleted={connection.deletedHere}
+                    disabled={phase === "running" || phase === "starting"}
+                    onRestored={async () => {
+                        await requestSync();
+                        await refresh();
+                    }}
+                />
+            ) : null}
             <div className="mt-3 flex flex-wrap gap-2">
                 {revoked ? (
                     <Button asChild size="sm">

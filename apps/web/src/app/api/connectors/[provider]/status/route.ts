@@ -1,7 +1,8 @@
 /**
  * Connector status for the providers with their own panel — the panel's
  * single source of truth. Google Drive: configured / connected / account /
- * picked items / last sync, plus the public Picker config. Notion: every
+ * picked items / last sync / files deleted here, plus the public Picker
+ * config. Notion: every
  * connected Notion workspace with its folder and last sync
  * (`loadNotionStatus`). Other providers have no per-provider detail and are
  * served by GET /api/connectors.
@@ -24,6 +25,11 @@ import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { getPickerPublicConfig, isConnectorConfigured } from "~/server/services/connectors/config";
 import { listConnectionsForCompany } from "~/server/services/connectors/connection-store";
+import {
+    isListableDriveRow,
+    listDeletedItems,
+    summarizeDeletedItems,
+} from "~/server/services/connectors/deleted-items";
 import { getSyncState, listPickedItems } from "~/server/services/connectors/google-drive/store";
 import { loadNotionStatus } from "~/server/services/connectors/notion/status";
 import { requireConnectorAdmin } from "~/server/services/connectors/workspace-guard";
@@ -90,9 +96,10 @@ export async function GET(request: Request, { params }: { params: Promise<{ prov
                 });
             }
 
-            const [pickedItems, syncState] = await Promise.all([
+            const [pickedItems, syncState, deletedRows] = await Promise.all([
                 listPickedItems(connection.id),
                 getSyncState(connection.id),
+                listDeletedItems([connection.id]),
             ]);
             const [paths, scope] = await Promise.all([
                 folderPaths(
@@ -154,6 +161,10 @@ export async function GET(request: Request, { params }: { params: Promise<{ prov
                 lastSyncStatus: syncState?.lastSyncStatus ?? null,
                 lastSyncError: syncState?.lastSyncError ?? null,
                 lastSyncReport: syncState?.lastSyncReport ?? null,
+                // Deleted here, so not synced back; named only to whoever deleted them.
+                deletedHere: summarizeDeletedItems(deletedRows, Number(guard.ctx.userPk), {
+                    listable: isListableDriveRow,
+                }),
                 picker,
             });
         } catch (error) {

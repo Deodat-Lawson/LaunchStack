@@ -32,6 +32,10 @@ import {
     type MembershipStatus,
 } from "~/lib/authz/permissions";
 import { copy } from "~/i18n/copy";
+import {
+    closePersonalConnections,
+    revokeGoogleGrants,
+} from "~/server/services/connectors/personal-connections";
 
 import type { Executor } from "./db-types";
 import { deleteUserSessionGrants, handOverSoleManaged, workspaceOwnerHeir } from "./ownership";
@@ -433,7 +437,10 @@ export async function removeMember(
     }
     await assertNotLastOwner(ctx.companyId, target);
 
-    await db.transaction(async tx => {
+    const closed = await db.transaction(async tx => {
+        // Their own connections end with them, and the mail those brought in
+        // goes too, before anything of theirs is handed on.
+        const personal = await closePersonalConnections(tx, ctx.companyId, userId);
         // Their sole-managed files and folders pass to whoever removed them (ADR-014).
         await handOverSoleManaged(tx, ctx.companyId, userId, {
             companyId: ctx.companyId,
@@ -452,9 +459,13 @@ export async function removeMember(
                 email: target.email,
                 role: normalizeRoleSlug(target.role),
                 status: toStatus(target.status),
+                closedConnections: personal.connections,
+                deletedMail: personal.documents,
             },
         });
+        return personal;
     });
+    await revokeGoogleGrants(closed.googleTokensToRevoke);
     return { success: true };
 }
 
@@ -468,7 +479,8 @@ export async function leaveWorkspace(
         }
     }
 
-    await db.transaction(async tx => {
+    const closed = await db.transaction(async tx => {
+        const personal = await closePersonalConnections(tx, ctx.companyId, ctx.userPk);
         // Someone leaving on their own hands their sole-managed items to the owner.
         const heir = await workspaceOwnerHeir(tx, ctx.companyId);
         if (heir !== null && heir !== ctx.userPk) {
@@ -492,9 +504,15 @@ export async function leaveWorkspace(
             action: "member.left",
             targetType: "member",
             targetId: ctx.userPk,
-            detail: { role: ctx.role },
+            detail: {
+                role: ctx.role,
+                closedConnections: personal.connections,
+                deletedMail: personal.documents,
+            },
         });
+        return personal;
     });
+    await revokeGoogleGrants(closed.googleTokensToRevoke);
     return { success: true, redirectTo: "/workspaces" };
 }
 

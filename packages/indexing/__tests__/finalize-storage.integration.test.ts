@@ -200,6 +200,32 @@ describe.skipIf(!url)("finalizeStorage version guard (integration)", () => {
         expect(job.status).toBe("completed");
     });
 
+    it("clears the previous run's index key when a later run uses the default index", async () => {
+        // The run before this one finalized on "legacy-openai-1536".
+        expect((await documentRow()).ocrMetadata).toHaveProperty(
+            "embeddingIndexKey",
+            "legacy-openai-1536"
+        );
+
+        await finalizeStorage(
+            documentId,
+            v2.jobId,
+            5,
+            "v2 summary",
+            meta,
+            Date.now() - 10,
+            v2.versionId
+        );
+
+        for (const metadata of [
+            (await documentRow()).ocrMetadata,
+            (await versionRow(v2.versionId)).ocrMetadata,
+        ]) {
+            expect(metadata).toEqual(expect.objectContaining({ totalChunks: 5 }));
+            expect(metadata).not.toHaveProperty("embeddingIndexKey");
+        }
+    });
+
     it("keeps a key another request merges in while the run is finishing", async () => {
         // A website source's preview is recorded on first open, which can land
         // between this run's read of the row and its write.

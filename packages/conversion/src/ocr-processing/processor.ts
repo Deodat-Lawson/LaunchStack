@@ -1173,9 +1173,17 @@ export async function finalizeStorage(
         // The document row is merged in SQL, not written back from the read
         // above: a key another request adds while this run finishes (a
         // website's stored preview, written on first open) must survive.
-        const failureStampKeys = sql.raw(
-            [...FAILURE_STAMP_KEYS].map(key => `'${key}'`).join(" - ")
-        );
+        // Removed first: the failure stamp, and any completion key this run
+        // leaves unset, as the whole-object write used to drop it. A run on
+        // the default index must not keep a previous run's embeddingIndexKey.
+        const cleared = [
+            ...FAILURE_STAMP_KEYS,
+            ...Object.entries(completion)
+                .filter(([, value]) => value === undefined)
+                .map(([key]) => key),
+        ];
+        // Code-defined key names only, so they are safe to inline.
+        const clearedKeys = sql.raw(cleared.map(key => `'${key}'`).join(" - "));
         await getDb()
             .update(documentTable)
             .set({
@@ -1184,7 +1192,7 @@ export async function finalizeStorage(
                 ocrProvider: meta.provider,
                 ocrConfidenceScore: toStoredConfidencePercent(meta.confidenceScore),
                 ocrMetadata: sql`(CASE WHEN jsonb_typeof(${documentTable.ocrMetadata}) = 'object'
-                    THEN ${documentTable.ocrMetadata} - ${failureStampKeys}
+                    THEN ${documentTable.ocrMetadata} - ${clearedKeys}
                     ELSE '{}'::jsonb END) || ${JSON.stringify(completion)}::jsonb`,
             })
             .where(

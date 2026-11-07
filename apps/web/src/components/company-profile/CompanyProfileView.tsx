@@ -2,6 +2,7 @@
 
 import { RefreshCw } from "lucide-react";
 import Link from "next/link";
+import { useLocale, useTranslations } from "next-intl";
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { toast } from "sonner";
 
@@ -10,20 +11,23 @@ import { EvidenceRows, Cite } from "~/components/tools/Cite";
 import { EmptyState, InlineError } from "~/components/tools/EmptyState";
 import { PageHeader, SectionHeading } from "~/components/tools/PageHeader";
 import { SkeletonBlock, SkeletonRows } from "~/components/tools/SkeletonRows";
-import { companyProfileApi } from "~/lib/company-profile/api";
+import { CompanyProfileApiError, companyProfileApi } from "~/lib/company-profile/api";
 import type {
     CompanyProfileDto,
     ProfileFactPatch,
     ProfileSourceDto,
     SourceOverride,
 } from "~/lib/company-profile/dto";
-import { plural, relativeTime } from "~/lib/tools/format";
+import { useToolFormat } from "~/lib/tools/format";
 import { useResource } from "~/lib/tools/useResource";
 import { cn } from "~/lib/utils";
 
 import { EntriesSection, FactsSection } from "./FactsSection";
 import { SourcesSection } from "./SourcesSection";
-import { APPLICANT_WORD } from "./words";
+import { APPLICANT_KEY } from "./words";
+
+/** `useTranslations("companyProfile")`. */
+type ProfileT = ReturnType<typeof useTranslations<"companyProfile">>;
 
 /** How often a building profile is asked again. */
 const POLL_MS = 2500;
@@ -52,8 +56,15 @@ export interface CompanyProfileViewProps {
     onActions?: (actions: ProfileSectionActions | null) => void;
 }
 
-function errorMessage(e: unknown, fallback: string): string {
+function errorMessage(t: ProfileT, e: unknown, fallback: string): string {
+    if (e instanceof CompanyProfileApiError && e.generated)
+        return t("requestFailed", { status: e.status });
     return e instanceof Error && e.message ? e.message : fallback;
+}
+
+/** Whole sentences one after another: a space between them in English, none in Chinese. */
+function sentences(locale: string, parts: string[]): string {
+    return new Intl.ListFormat(locale, { type: "unit", style: "narrow" }).format(parts);
 }
 
 /**
@@ -63,6 +74,8 @@ function errorMessage(e: unknown, fallback: string): string {
  * Company and Proposals › Profile both render this, over one store.
  */
 export function CompanyProfileView({ variant, onActions }: CompanyProfileViewProps) {
+    const t = useTranslations("companyProfile");
+    const format = useToolFormat();
     const [pollMs, setPollMs] = useState<number | null>(null);
     const res = useResource("company-profile", () => companyProfileApi.get(), { pollMs });
     const { mutate, reload } = res;
@@ -85,11 +98,11 @@ export function CompanyProfileView({ variant, onActions }: CompanyProfileViewPro
             const { profile } = await companyProfileApi.rebuild();
             take(profile);
         } catch (e) {
-            toast.error(errorMessage(e, "Could not start reading your sources"));
+            toast.error(errorMessage(t, e, t("view.couldNotStart")));
         } finally {
             setStarting(false);
         }
-    }, [take]);
+    }, [take, t]);
 
     const saveFact = useCallback(
         async (patch: ProfileFactPatch) => {
@@ -98,17 +111,17 @@ export function CompanyProfileView({ variant, onActions }: CompanyProfileViewPro
                 take(profile);
                 toast.success(
                     patch.reset
-                        ? "Back to what the sources say"
+                        ? t("view.backToSources")
                         : patch.value.trim()
-                          ? "Saved"
-                          : "Removed"
+                          ? t("view.saved")
+                          : t("view.removed")
                 );
             } catch (e) {
-                toast.error(errorMessage(e, "Could not save that"));
+                toast.error(errorMessage(t, e, t("view.couldNotSave")));
                 throw e;
             }
         },
-        [take]
+        [take, t]
     );
 
     const setSource = useCallback(
@@ -120,19 +133,19 @@ export function CompanyProfileView({ variant, onActions }: CompanyProfileViewPro
                 });
                 take(profile);
             } catch (e) {
-                toast.error(errorMessage(e, "Could not change that source"));
+                toast.error(errorMessage(t, e, t("view.couldNotChangeSource")));
             } finally {
                 setBusySource(null);
             }
         },
-        [take]
+        [take, t]
     );
 
     const rebuildLabel = building
-        ? "Reading sources…"
+        ? t("view.reading")
         : p?.status === "ready" || p?.status === "failed"
-          ? "Rebuild profile"
-          : "Build profile";
+          ? t("view.rebuild")
+          : t("view.build");
     const rebuildDisabled = !p || building || !hasSources;
 
     // In Settings the hub's chrome owns the action area — but it hides
@@ -143,13 +156,13 @@ export function CompanyProfileView({ variant, onActions }: CompanyProfileViewPro
         if (!chromeOwnsRebuild || !onActions) return;
         onActions({
             primaryLabel: rebuildLabel,
-            primaryBusyLabel: "Reading sources…",
+            primaryBusyLabel: t("view.reading"),
             onPrimary: () => void rebuild(),
             busy: building,
             disabled: rebuildDisabled,
         });
         return () => onActions(null);
-    }, [chromeOwnsRebuild, onActions, rebuildLabel, rebuild, building, rebuildDisabled]);
+    }, [chromeOwnsRebuild, onActions, rebuildLabel, rebuild, building, rebuildDisabled, t]);
 
     const rebuildButton = (
         <Button
@@ -166,14 +179,18 @@ export function CompanyProfileView({ variant, onActions }: CompanyProfileViewPro
     const sub = !p
         ? undefined
         : building
-          ? "Reading your sources now"
+          ? t("sub.reading")
           : p.status === "ready"
-            ? `${plural(p.facts.length, "fact")} from ${plural(p.counts.counted, "source")} · built ${relativeTime(p.builtAt)}`
+            ? t("sub.ready", {
+                  facts: p.facts.length,
+                  sources: p.counts.counted,
+                  when: format.relativeTime(p.builtAt),
+              })
             : p.status === "failed"
-              ? "The last build failed"
+              ? t("sub.failed")
               : hasSources
-                ? `${plural(p.counts.sources, "source")} in the workspace to read from`
-                : "No sources yet";
+                ? t("sub.toRead", { count: p.counts.sources })
+                : t("sub.none");
 
     return (
         <div
@@ -185,8 +202,8 @@ export function CompanyProfileView({ variant, onActions }: CompanyProfileViewPro
         >
             {variant === "proposals" ? (
                 <PageHeader
-                    title="What your sources"
-                    accent="can prove"
+                    title={t("header.title")}
+                    accent={t("header.accent")}
                     sub={<span aria-live="polite">{sub}</span>}
                     actions={rebuildButton}
                 />
@@ -197,25 +214,23 @@ export function CompanyProfileView({ variant, onActions }: CompanyProfileViewPro
                     </p>
                     <div className="flex flex-wrap items-center gap-2">
                         {p?.canEdit && hasSources && (
-                            <SetupLink variant="ghost">Go through setup again</SetupLink>
+                            <SetupLink variant="ghost">{t("view.setupAgain")}</SetupLink>
                         )}
                         {!chromeOwnsRebuild && rebuildButton}
                     </div>
                 </div>
             )}
 
-            {p && !p.canEdit && (
-                <p className="text-ink-3 -mt-4 text-xs">
-                    You can read this profile and rebuild it. An admin can edit its facts and decide
-                    which sources count.
-                </p>
-            )}
+            {p && !p.canEdit && <p className="text-ink-3 -mt-4 text-xs">{t("view.readOnly")}</p>}
 
             {res.error && <InlineError message={res.error} onRetry={() => void reload()} />}
 
             {p?.status === "failed" && !building && (
                 <InlineError
-                    message={p.error ?? "The last build failed."}
+                    message={
+                        (p.errorKey ? t(`server.failures.${p.errorKey}`) : p.error) ??
+                        t("view.lastBuildFailed")
+                    }
                     onRetry={hasSources ? () => void rebuild() : undefined}
                 />
             )}
@@ -254,17 +269,15 @@ function SetupLink({
 }
 
 function StaleBanner({ onRebuild, disabled }: { onRebuild: () => void; disabled: boolean }) {
+    const t = useTranslations("companyProfile.stale");
     return (
         <div
             role="status"
             className="border-line bg-panel-2 @max-md:flex-col @max-md:items-start flex items-center justify-between gap-3 rounded-lg border px-4 py-3"
         >
-            <p className="text-ink-2 text-[13px]">
-                Out of date: a source or a decision about one changed since this was built, so a
-                rebuild would read differently.
-            </p>
+            <p className="text-ink-2 text-[13px]">{t("body")}</p>
             <Button size="sm" variant="outline" onClick={onRebuild} disabled={disabled}>
-                Rebuild
+                {t("rebuild")}
             </Button>
         </div>
     );
@@ -297,10 +310,11 @@ function Body({
     onSaveFact: (patch: ProfileFactPatch) => Promise<void>;
     onSetSource: (source: ProfileSourceDto, override: SourceOverride | null) => void;
 }) {
+    const t = useTranslations("companyProfile");
     if (loading || !p) {
         if (!loading) return null; // a failed first load: the error above says so
         return (
-            <div className="flex flex-col gap-7" aria-busy="true" aria-label="Loading the profile">
+            <div className="flex flex-col gap-7" aria-busy="true" aria-label={t("view.loading")}>
                 <SkeletonBlock lines={3} />
                 <SkeletonRows rows={5} height={56} />
             </div>
@@ -310,9 +324,13 @@ function Body({
     if (!hasSources) {
         return (
             <EmptyState
-                title="Nothing to read yet"
-                body={`The profile is built from what your sources say about ${p.name}: past proposals, annual reports, a pitch deck, your website. Add a few to Sources, then build it here.`}
-                action={p.canEdit ? <SetupLink>Tell us about {p.name}</SetupLink> : undefined}
+                title={t("empty.nothingTitle")}
+                body={t("empty.nothingBody", { name: p.name })}
+                action={
+                    p.canEdit ? (
+                        <SetupLink>{t("view.tellUs", { name: p.name })}</SetupLink>
+                    ) : undefined
+                }
             />
         );
     }
@@ -339,10 +357,7 @@ function Body({
             return (
                 <>
                     <div className="flex flex-col gap-3" aria-busy="true">
-                        <p className="text-ink-2 text-sm">
-                            Reading your sources now. Facts appear as soon as each source has been
-                            read; this page updates itself.
-                        </p>
+                        <p className="text-ink-2 text-sm">{t("view.buildingNote")}</p>
                         <SkeletonBlock lines={4} />
                     </div>
                     {sources}
@@ -353,8 +368,8 @@ function Body({
             return (
                 <>
                     <EmptyState
-                        title="No profile yet"
-                        body={`Reads your ${plural(p.counts.sources, "source")} — past proposals, reports, your website — and keeps the facts about ${p.name} a writer needs at hand, each with the excerpt that proves it.`}
+                        title={t("empty.noProfileTitle")}
+                        body={t("empty.noProfileBody", { count: p.counts.sources, name: p.name })}
                         action={rebuildButton ?? undefined}
                     />
                     {sources}
@@ -382,7 +397,7 @@ function Body({
     return (
         <>
             {(Boolean(p.summary) || hasChips(p)) && (
-                <section aria-label="Summary">
+                <section aria-label={t("view.summary")}>
                     {p.summary && (
                         <p className="text-ink max-w-[70ch] text-[14px] leading-relaxed">
                             {p.summary}
@@ -392,8 +407,13 @@ function Body({
                         </p>
                     )}
                     {hasChips(p) && (
-                        <ul className="mt-3 flex flex-wrap gap-1.5" aria-label="At a glance">
-                            {p.applicantType && <Chip>{APPLICANT_WORD[p.applicantType]}</Chip>}
+                        <ul
+                            className="mt-3 flex flex-wrap gap-1.5"
+                            aria-label={t("view.atAGlance")}
+                        >
+                            {p.applicantType && (
+                                <Chip>{t(`applicant.${APPLICANT_KEY[p.applicantType]}`)}</Chip>
+                            )}
                             {p.focusAreas.map(f => (
                                 <Chip key={`f:${f}`}>{f}</Chip>
                             ))}
@@ -415,28 +435,28 @@ function Body({
                 onSave={onSaveFact}
             />
             <EntriesSection
-                title="People"
+                title={t("sections.people")}
                 entries={p.people}
                 evidence={p.evidence}
                 canEdit={p.canEdit}
                 onSave={onSaveFact}
             />
             <EntriesSection
-                title="Products & services"
+                title={t("sections.services")}
                 entries={p.services}
                 evidence={p.evidence}
                 canEdit={p.canEdit}
                 onSave={onSaveFact}
             />
             <EntriesSection
-                title="Projects"
+                title={t("sections.projects")}
                 entries={p.projects}
                 evidence={p.evidence}
                 canEdit={p.canEdit}
                 onSave={onSaveFact}
             />
             <EntriesSection
-                title="Agreements"
+                title={t("sections.agreements")}
                 entries={p.legal}
                 evidence={p.evidence}
                 canEdit={p.canEdit}
@@ -444,10 +464,10 @@ function Body({
             />
 
             {p.evidence.length > 0 && (
-                <section aria-label="Evidence">
+                <section aria-label={t("sections.evidence")}>
                     <SectionHeading
-                        title="Evidence"
-                        aside={`${plural(p.evidence.length, "excerpt")} the profile cites`}
+                        title={t("sections.evidence")}
+                        aside={t("sections.evidenceAside", { count: p.evidence.length })}
                     />
                     <EvidenceRows evidence={p.evidence} />
                 </section>
@@ -473,6 +493,8 @@ function hasChips(p: CompanyProfileDto): boolean {
  * points at the list of what was set aside, which sits right below it.
  */
 function NothingProven({ profile: p }: { profile: CompanyProfileDto }) {
+    const t = useTranslations("companyProfile");
+    const locale = useLocale();
     const counted = p.sources.filter(s => s.counted).length;
     const reading = p.sources.filter(s => !s.counted && s.status === "pending").length;
     const aside = p.sources.length - counted - reading;
@@ -481,41 +503,37 @@ function NothingProven({ profile: p }: { profile: CompanyProfileDto }) {
     if (aside > 0 && counted === 0) {
         read.push(
             aside === 1
-                ? "Your one source was read and set aside; it says why below."
-                : `All ${aside} of your sources were read and set aside; each says why below.`
+                ? t("nothingProven.oneAside")
+                : t("nothingProven.allAside", { count: aside })
         );
     } else if (aside > 0) {
-        read.push(`${plural(aside, "source")} set aside; each says why below.`);
+        read.push(t("nothingProven.someAside", { count: aside }));
     }
-    if (counted > 0) {
-        read.push(
-            `${plural(counted, "source")} counted, but nothing in ${counted === 1 ? "it" : "them"} could be proven yet.`
-        );
-    }
-    if (reading > 0) read.push(`${plural(reading, "source")} still being read.`);
+    if (counted > 0) read.push(t("nothingProven.countedNothing", { count: counted }));
+    if (reading > 0) read.push(t("nothingProven.stillReading", { count: reading }));
 
     return (
         <section
-            aria-label="Nothing proven yet"
+            aria-label={t("nothingProven.label")}
             className="border-line bg-panel flex flex-col gap-2 rounded-lg border px-5 py-5"
         >
             <h2 className="text-ink text-sm font-medium">
                 {counted > 0
-                    ? `Nothing about ${p.name} could be proven yet`
-                    : `None of your sources is about ${p.name} yet`}
+                    ? t("nothingProven.titleCounted", { name: p.name })
+                    : t("nothingProven.titleNone", { name: p.name })}
             </h2>
             <p className="text-ink-2 max-w-[62ch] text-sm">
-                The profile keeps only what a source written by or about {p.name} says, each fact
-                with the excerpt that proves it. {read.join(" ")}
+                {sentences(locale, [t("nothingProven.keepsOnly", { name: p.name }), ...read])}
             </p>
             <p className="text-ink-2 max-w-[62ch] text-sm">
-                Add something about {p.name} — a pitch deck, a past proposal, an annual report, your
-                website — and rebuild.
-                {p.canEdit && " If a source below is about you after all, count it."}
+                {sentences(locale, [
+                    t("nothingProven.addSomething", { name: p.name }),
+                    ...(p.canEdit ? [t("nothingProven.countIt")] : []),
+                ])}
             </p>
             {p.canEdit && (
                 <div className="mt-1">
-                    <SetupLink>Tell us about {p.name}</SetupLink>
+                    <SetupLink>{t("view.tellUs", { name: p.name })}</SetupLink>
                 </div>
             )}
         </section>

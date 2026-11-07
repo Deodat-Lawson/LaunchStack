@@ -1,0 +1,214 @@
+{
+  "frame": {
+    "title": "Processing queue",
+    "about": "Every file on its way into the workspace and the stage it is at: uploading, waiting for a worker, reading the text (OCR for scans and images), splitting into sections, indexing for search. Opens by itself when you add something."
+  },
+  "header": {
+    "title": "Processing",
+    "accent": "queue",
+    "checking": "Checking…"
+  },
+  "summary": {
+    "running": "{count} running",
+    "waiting": "{count} waiting",
+    "attention": "{count, plural, one {# needs attention} other {# need attention}}",
+    "allCaughtUp": "All caught up — {count, plural, one {# file} other {# files}} ready in the last 24 hours",
+    "nothing": "Nothing is processing",
+    "separator": " · "
+  },
+  "filter": {
+    "label": "Whose files",
+    "everyone": "Everyone",
+    "mine": "Mine"
+  },
+  "actions": {
+    "clearFinished": "Clear finished",
+    "addSource": "Add a source"
+  },
+  "overall": {
+    "onTheWay": "{count, plural, one {# file on the way} other {# files on the way}}",
+    "stepsDone": "{percent}% of all steps done",
+    "label": "All files in progress"
+  },
+  "loadError": {
+    "rateLimited": "Checking too often — slowing down.",
+    "http": "The queue didn't load (HTTP {status}).",
+    "network": "The queue didn't load.",
+    "behind": "What you see may be a little behind.",
+    "tryNow": "Try now"
+  },
+  "empty": {
+    "title": "Files you add show up here",
+    "body": "Uploads, folders, links and Google Drive imports appear while their text is read and indexed, with each stage as it happens. This tab opens by itself when you add something."
+  },
+  "sections": {
+    "attention": {
+      "title": "Needs attention",
+      "aside": "Stopped, or about to be tried again"
+    },
+    "running": {
+      "title": "Running now",
+      "aside": "Several files are worked on at the same time"
+    },
+    "waiting": {
+      "title": "Waiting",
+      "aside": "Each starts as soon as a worker is free"
+    },
+    "done": {
+      "title": "Finished",
+      "aside": "Last 24 hours"
+    },
+    "showAll": "Show all {count}",
+    "showFewer": "Show fewer"
+  },
+  "mineEmpty": {
+    "text": "Nothing of yours is processing.",
+    "showEveryone": "Show everyone's"
+  },
+  "announce": {
+    "ready": "{count, plural, one {{names} is ready.} other {{names} are ready.}}",
+    "failed": "{count, plural, one {{names} stopped with an error.} other {{names} stopped with an error.}}"
+  },
+  "stages": {
+    "added": {
+      "label": "Added",
+      "about": "The file reaches storage"
+    },
+    "waiting": {
+      "label": "Waiting",
+      "about": "In line for a free worker"
+    },
+    "reading": {
+      "label": "Reading",
+      "about": "Reading the text, with OCR for scans and images"
+    },
+    "splitting": {
+      "label": "Splitting",
+      "about": "Splitting the text into sections"
+    },
+    "indexing": {
+      "label": "Indexing",
+      "about": "Indexing each section for search"
+    },
+    "ready": {
+      "label": "Ready",
+      "about": "Finishing up, then it can be cited"
+    }
+  },
+  "stageTiming": {
+    "took": "took {duration}",
+    "soFar": "{duration} so far"
+  },
+  "progressbar": {
+    "label": "{name}: processing",
+    "value": "{headline} — step {step} of {total}"
+  },
+  "headline": {
+    "ready": "Ready to search",
+    "stopped": {
+      "added": "Stopped while being added",
+      "waiting": "Stopped while waiting",
+      "reading": "Stopped while reading",
+      "splitting": "Stopped while splitting",
+      "indexing": "Stopped while indexing",
+      "ready": "Stopped while finishing up"
+    },
+    "retryIn": "Trying again in {duration}",
+    "retryNow": "Trying again any moment now",
+    "retrySoon": "Trying again soon",
+    "waitingTurn": "Waiting its turn",
+    "waitingFor": {
+      "reading": "Waiting to start reading",
+      "splitting": "Waiting to start splitting",
+      "indexing": "Waiting to start indexing",
+      "ready": "Waiting to finish up"
+    },
+    "reading": "Reading the text",
+    "splitting": "Splitting into sections",
+    "indexing": "Indexing for search",
+    "indexingPercent": "Indexing for search · {percent}%",
+    "finishing": "Finishing up",
+    "starting": "Starting"
+  },
+  "detail": {
+    "attempt": "Attempt {attempt} of {max}",
+    "sections": "{done} of {total, plural, one {# section} other {# sections}}",
+    "pages": "{count, plural, one {# page} other {# pages}}",
+    "took": "took {duration}",
+    "separator": " · "
+  },
+  "local": {
+    "waitingUpload": "Waiting to upload",
+    "uploading": "Uploading · {percent}%",
+    "uploadedOf": "{loaded} of {total}",
+    "failedFile": "Upload failed",
+    "failedLink": "Couldn't add it",
+    "uploadFailed": "{name} couldn't be uploaded",
+    "linkFailed": "{name} couldn't be added",
+    "keepOpen": "Done before processing starts — keep this page open",
+    "serverFetching": "The server is fetching it",
+    "crawlNote": "{message} — pages appear here as they're found"
+  },
+  "work": {
+    "transcribing": "Transcribing the recording",
+    "starting": "Starting processing",
+    "fetchingPage": "Fetching the page",
+    "startingCrawl": "Starting the crawl",
+    "downloadingVideo": "Downloading and transcribing the video"
+  },
+  "time": {
+    "seconds": "{count} s",
+    "minutes": "{count} min",
+    "hours": "{hours} h",
+    "hoursMinutes": "{hours} h {minutes} min",
+    "justNow": "just now",
+    "ago": "{duration} ago",
+    "yesterday": "yesterday",
+    "waiting": "waiting {duration}"
+  },
+  "size": {
+    "bytes": "{size} B",
+    "kb": "{size} KB",
+    "mb": "{size} MB",
+    "gb": "{size} GB"
+  },
+  "providers": {
+    "NATIVE_PDF": "Native PDF",
+    "INGESTION": "Text extraction",
+    "AZURE": "Azure",
+    "LANDING_AI": "Landing AI",
+    "DATALAB": "Datalab",
+    "DOCLING": "Docling"
+  },
+  "noFolder": "No folder",
+  "row": {
+    "open": "Open",
+    "openFile": "Open {name}",
+    "retry": "Retry",
+    "copyDetails": "Copy details",
+    "dismiss": "Dismiss",
+    "dismissFile": "Dismiss {name}",
+    "addedBy": "Added by {name}",
+    "addedByYou": "Added by you",
+    "lastTry": "Last try: {message}",
+    "keepsTrying": "It keeps trying on its own, up to {max} times; you don't need to do anything.",
+    "retriedBefore": "{count, plural, one {Retried once before.} other {Retried # times before.}}",
+    "contactUs": "Contact us",
+    "copied": "Error details copied",
+    "copyFailed": "Couldn't copy — select the text instead",
+    "retryStarted": "Trying {name} again",
+    "retryFailed": "Retry didn't start"
+  },
+  "connector": {
+    "syncing": "Syncing — looking for new and changed files. Each one shows up below as it's queued.",
+    "syncingLabel": "Syncing",
+    "error": "The last sync stopped with an error.",
+    "lastSync": "Last sync {when}: {parts}.",
+    "queued": "{count} queued",
+    "unchanged": "{count} unchanged",
+    "skipped": "{count} skipped",
+    "failed": "{count} failed",
+    "synced": "Synced.",
+    "separator": ", "
+  }
+}

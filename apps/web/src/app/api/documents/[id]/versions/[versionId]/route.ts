@@ -32,13 +32,17 @@ import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
-import { DOCUMENT_EDIT_DENIED } from "~/server/services/folder-access";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { canEditDocument } from "~/server/workspace/item-access";
 
 export async function DELETE(
     request: Request,
     context: { params: Promise<{ id: string; versionId: string }> }
 ) {
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "sources.server.versions");
+    const s = translatorFor(locale, "sources.server.errors");
     return withRateLimit(request, RateLimitPresets.strict, async () => {
         try {
             const { id: rawDocId, versionId: rawVersionId } = await context.params;
@@ -46,10 +50,10 @@ export async function DELETE(
             const documentId = Number(rawDocId);
             const versionId = Number(rawVersionId);
             if (!Number.isInteger(documentId) || documentId <= 0) {
-                return NextResponse.json({ error: "Invalid document id" }, { status: 400 });
+                return NextResponse.json({ error: s("invalidDocumentId") }, { status: 400 });
             }
             if (!Number.isInteger(versionId) || versionId <= 0) {
-                return NextResponse.json({ error: "Invalid version id" }, { status: 400 });
+                return NextResponse.json({ error: t("invalidVersionId") }, { status: 400 });
             }
 
             const ctx = await requireWorkspacePermission("documents.delete");
@@ -68,12 +72,15 @@ export async function DELETE(
                 );
 
             if (!doc) {
-                return NextResponse.json({ error: "Document not found" }, { status: 404 });
+                return NextResponse.json(
+                    { error: translatorFor(locale, "errors.api")("documentNotFound") },
+                    { status: 404 }
+                );
             }
 
             // Throwing a version away is changing the file (ADR-014).
             if (!(await canEditDocument(ctx.data, { id: documentId, category: doc.category }))) {
-                return NextResponse.json({ error: DOCUMENT_EDIT_DENIED }, { status: 403 });
+                return NextResponse.json({ error: s("documentEditDenied") }, { status: 403 });
             }
 
             // Must belong to this document — prevents cross-document row deletion.
@@ -92,10 +99,7 @@ export async function DELETE(
                 );
 
             if (!targetVersion) {
-                return NextResponse.json(
-                    { error: "Version not found for this document" },
-                    { status: 404 }
-                );
+                return NextResponse.json({ error: t("versionNotFound") }, { status: 404 });
             }
 
             // Safety: cannot delete the version that the document currently points at.
@@ -106,9 +110,8 @@ export async function DELETE(
             ) {
                 return NextResponse.json(
                     {
-                        error: "Cannot delete the current version",
-                        details:
-                            "Revert the document to a different version before deleting this one.",
+                        error: t("cannotDeleteCurrent"),
+                        details: t("cannotDeleteCurrentDetail"),
                     },
                     { status: 409 }
                 );
@@ -125,9 +128,8 @@ export async function DELETE(
             if (allVersions.length <= 1) {
                 return NextResponse.json(
                     {
-                        error: "Cannot delete the only version of a document",
-                        details:
-                            "Use DELETE /api/deleteDocument to remove the entire document instead.",
+                        error: t("cannotDeleteOnly"),
+                        details: t("cannotDeleteOnlyDetail"),
                     },
                     { status: 409 }
                 );
@@ -146,7 +148,7 @@ export async function DELETE(
                 );
                 return NextResponse.json(
                     {
-                        error: "Failed to delete version blob from storage",
+                        error: t("blobDeleteFailed"),
                         details: blobError instanceof Error ? blobError.message : String(blobError),
                     },
                     { status: 502 }
@@ -169,7 +171,7 @@ export async function DELETE(
                     documentId,
                     versionId: targetVersion.id,
                     versionNumber: targetVersion.versionNumber,
-                    message: "Version deleted successfully",
+                    message: t("deleted"),
                 },
                 { status: 200 }
             );
@@ -177,7 +179,7 @@ export async function DELETE(
             console.error("[Versions] delete failed:", error);
             return NextResponse.json(
                 {
-                    error: "Failed to delete document version",
+                    error: t("deleteFailed"),
                     details: error instanceof Error ? error.message : String(error),
                 },
                 { status: 500 }

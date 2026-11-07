@@ -22,19 +22,19 @@ export interface AgentAvatarProps {
     title?: string;
 }
 
-/** The ten shipped pictures, offered in the editor for custom agents too. */
-export const DEFAULT_AVATARS: ReadonlyArray<{ url: string; label: string }> = [
-    { url: "/agents/facilitator.jpg", label: "Kandinsky, Composition 8" },
-    { url: "/agents/analyst.jpg", label: "Vermeer, The Astronomer" },
-    { url: "/agents/engineer.jpg", label: "Leonardo, Vitruvian Man" },
-    { url: "/agents/counsel.jpg", label: "Vermeer, Woman Holding a Balance" },
-    { url: "/agents/finance.jpg", label: "Matsys, The Moneylender and His Wife" },
-    { url: "/agents/product.jpg", label: "Van Gogh, The Starry Night" },
-    { url: "/agents/marketing.jpg", label: "Toulouse-Lautrec, Moulin Rouge" },
-    { url: "/agents/sales.jpg", label: "Hokusai, The Great Wave" },
-    { url: "/agents/support.jpg", label: "Van Gogh, Almond Blossom" },
-    { url: "/agents/critic.jpg", label: "Goya, The Sleep of Reason" },
-];
+/** The ten shipped pictures, offered in the editor for custom agents too. Named by `collab.avatars.<key>`. */
+export const DEFAULT_AVATARS = [
+    { url: "/agents/facilitator.jpg", key: "facilitator" },
+    { url: "/agents/analyst.jpg", key: "analyst" },
+    { url: "/agents/engineer.jpg", key: "engineer" },
+    { url: "/agents/counsel.jpg", key: "counsel" },
+    { url: "/agents/finance.jpg", key: "finance" },
+    { url: "/agents/product.jpg", key: "product" },
+    { url: "/agents/marketing.jpg", key: "marketing" },
+    { url: "/agents/sales.jpg", key: "sales" },
+    { url: "/agents/support.jpg", key: "support" },
+    { url: "/agents/critic.jpg", key: "critic" },
+] as const;
 
 export function AgentAvatar({ agent, size = 26, className, square, title }: AgentAvatarProps) {
     const [broken, setBroken] = useState(false);

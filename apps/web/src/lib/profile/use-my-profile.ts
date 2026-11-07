@@ -23,10 +23,17 @@ import { resetPeopleCache } from "./use-people";
 interface State {
     data: MyProfile | null;
     error: string | null;
+    /**
+     * True when `error` is this module's own English fallback rather than the
+     * server's sentence, so a screen can say it in the reader's language.
+     */
+    errorIsFallback?: boolean;
     loaded: boolean;
 }
 
 const EMPTY: State = { data: null, error: null, loaded: false };
+
+const LOAD_FAILED = "Could not load your profile.";
 
 let state: State = EMPTY;
 let inflight: Promise<MyProfile | null> | null = null;
@@ -54,10 +61,8 @@ export function refreshMyProfile(): Promise<MyProfile | null> {
                 // 401/404 are "no profile yet", not an error worth showing.
                 emit({
                     loaded: true,
-                    error:
-                        response.status >= 500
-                            ? (body.error ?? "Could not load your profile.")
-                            : null,
+                    error: response.status >= 500 ? (body.error ?? LOAD_FAILED) : null,
+                    errorIsFallback: response.status >= 500 && !body.error,
                 });
                 return null;
             }
@@ -68,7 +73,7 @@ export function refreshMyProfile(): Promise<MyProfile | null> {
         })
         .catch(() => {
             if (started === generation) {
-                emit({ loaded: true, error: "Could not load your profile." });
+                emit({ loaded: true, error: LOAD_FAILED, errorIsFallback: true });
             }
             return null;
         })
@@ -83,7 +88,7 @@ export function setMyProfile(data: MyProfile) {
     // Other people can look different in another workspace; drop their looks
     // when this tab's active workspace changes.
     if (state.data && state.data.workspace?.id !== data.workspace?.id) resetPeopleCache();
-    emit({ data, error: null, loaded: true });
+    emit({ data, error: null, errorIsFallback: false, loaded: true });
 }
 
 /**
@@ -113,13 +118,25 @@ export function useMyProfile({ enabled = true }: { enabled?: boolean } = {}): St
 }
 
 /**
+ * A failed profile write. `serverMessage` is the server's own sentence; when
+ * it is null the message is this module's English fallback, and a screen may
+ * say "could not save" in the reader's language instead.
+ */
+export class ProfileWriteError extends Error {
+    constructor(readonly serverMessage: string | null) {
+        super(serverMessage ?? "Could not save your profile.");
+        this.name = "ProfileWriteError";
+    }
+}
+
+/**
  * Sends a profile write and folds the response into the store. Throws the
  * server's `{ error }` sentence on failure.
  */
 export async function sendProfileWrite(input: string, init: RequestInit): Promise<MyProfile> {
     const response = await fetch(input, init);
     const body = (await response.json().catch(() => ({}))) as MyProfile & { error?: string };
-    if (!response.ok) throw new Error(body.error ?? "Could not save your profile.");
+    if (!response.ok) throw new ProfileWriteError(body.error ?? null);
     setMyProfile(body);
     return body;
 }

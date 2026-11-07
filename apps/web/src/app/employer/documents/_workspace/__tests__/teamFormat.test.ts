@@ -1,3 +1,7 @@
+import { createTranslator } from "use-intl";
+
+import { englishMessages } from "~/i18n/messages";
+
 import {
     activitySentence,
     activityTarget,
@@ -12,6 +16,11 @@ import {
 import type { ActivityRow, InboxEntry } from "../team/api";
 
 /** The team layer's sentences, pinned (ADR-014 §7). */
+
+const f = {
+    t: createTranslator({ locale: "en", messages: englishMessages, namespace: "team.format" }),
+    locale: "en",
+};
 
 function row(over: Partial<ActivityRow>): ActivityRow {
     return {
@@ -37,11 +46,11 @@ describe("shortAgo", () => {
         ["2026-10-10T10:00:00Z", "2h"],
         ["2026-10-07T12:00:00Z", "3d"],
     ])("%s → %s", (iso, expected) => {
-        expect(shortAgo(iso, now)).toBe(expected);
+        expect(shortAgo(f, iso, now)).toBe(expected);
     });
 
     it("falls back to a date after a week", () => {
-        expect(shortAgo("2026-09-01T12:00:00Z", now)).toMatch(/Sep|9/);
+        expect(shortAgo(f, "2026-09-01T12:00:00Z", now)).toMatch(/Sep|9/);
     });
 });
 
@@ -51,12 +60,12 @@ describe("dayLabel", () => {
     const at = (y: number, m: number, d: number, h = 9) => new Date(y, m, d, h).toISOString();
 
     it("names the last two days, then the weekday and date", () => {
-        expect(dayLabel(at(2026, 9, 13), now)).toBe("Today");
-        expect(dayLabel(at(2026, 9, 12, 23), now)).toBe("Yesterday");
-        const older = dayLabel(at(2026, 9, 6), now);
+        expect(dayLabel(f, at(2026, 9, 13), now)).toBe("Today");
+        expect(dayLabel(f, at(2026, 9, 12, 23), now)).toBe("Yesterday");
+        const older = dayLabel(f, at(2026, 9, 6), now);
         expect(older).toMatch(/Oct|10/);
         expect(older).not.toMatch(/2026/);
-        expect(dayLabel(at(2025, 11, 30), now)).toMatch(/2025/);
+        expect(dayLabel(f, at(2025, 11, 30), now)).toMatch(/2025/);
     });
 
     it("keys rows by local calendar day", () => {
@@ -68,10 +77,10 @@ describe("dayLabel", () => {
 
 describe("joinNames", () => {
     it("reads like a sentence", () => {
-        expect(joinNames(["Ada"])).toBe("Ada");
-        expect(joinNames(["Ada", "Sales team"])).toBe("Ada and Sales team");
-        expect(joinNames(["Ada", "Ben", "Cy", "Dee"])).toBe("Ada, Ben and 2 others");
-        expect(joinNames(["Ada", "Ben", "Cy"])).toBe("Ada, Ben and 1 other");
+        expect(joinNames(f, ["Ada"])).toBe("Ada");
+        expect(joinNames(f, ["Ada", "Sales team"])).toBe("Ada and Sales team");
+        expect(joinNames(f, ["Ada", "Ben", "Cy", "Dee"])).toBe("Ada, Ben and 2 others");
+        expect(joinNames(f, ["Ada", "Ben", "Cy"])).toBe("Ada, Ben and 1 other");
     });
 });
 
@@ -131,7 +140,7 @@ describe("activitySentence", () => {
         ],
         [{ verb: "deleted" }, "Ada deleted Q3 plan.pdf"],
     ])("case %#", (over, expected) => {
-        expect(activitySentence("Ada", row(over))).toBe(expected);
+        expect(activitySentence(f, "Ada", row(over))).toBe(expected);
     });
 });
 
@@ -166,8 +175,8 @@ describe("inbox", () => {
     };
 
     it("says who it reached through", () => {
-        expect(inboxSentence("Ada", entry)).toBe("Ada shared “Board” with Sales team");
-        expect(inboxSentence("Ada", { ...entry, detail: { via: "direct" } })).toBe(
+        expect(inboxSentence(f, "Ada", entry)).toBe("Ada shared “Board” with Sales team");
+        expect(inboxSentence(f, "Ada", { ...entry, detail: { via: "direct" } })).toBe(
             "Ada shared “Board” with you"
         );
     });

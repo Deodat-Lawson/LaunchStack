@@ -1,12 +1,14 @@
 /** @jest-environment jsdom */
 
 /**
- * Settings › Models › Your own model.
+ * Models & usage › API keys (Workspace › Bring your own keys until November
+ * 2026), and the server default it overrides.
  *
  * What a workspace admin sees and sends when bringing their own model: the
  * two ways in, the editor's request body (a blank key keeps the saved one
  * only while the address is unchanged), the connected summary, which says
- * which key is saved without ever showing it, and the OpenRouter return leg.
+ * which key is saved without ever showing it, the OpenRouter return leg, and
+ * each model's optional price (filled from OpenRouter's catalogue when empty).
  */
 
 import React from "react";
@@ -14,19 +16,18 @@ import { act, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 
-// For the hub test at the end: an owner, with no router or account body.
+// For the Models & usage tab test at the end: an owner, with no router.
 jest.mock("next/navigation", () => ({
-    useRouter: () => ({ replace: jest.fn(), push: jest.fn() }),
+    useRouter: () => ({ replace: jest.fn(), push: jest.fn(), refresh: jest.fn() }),
     usePathname: () => "/employer/documents",
 }));
 jest.mock("~/lib/use-permissions", () => ({
     usePermissions: () => ({ loaded: true, error: null, roleName: "Owner", can: () => true }),
-}));
-jest.mock("~/app/employer/documents/_workspace/settings/AccountSection", () => ({
-    AccountSection: () => <div data-testid="body-account">account body</div>,
+    setWorkspaceNameLocally: jest.fn(),
 }));
 
-import { SettingsHub } from "~/app/employer/documents/_workspace/SettingsHub";
+import { UsageTool } from "~/app/employer/documents/_workspace/usage/UsageTool";
+import { KeysSection } from "~/app/employer/documents/_workspace/settings/KeysSection";
 import { ModelsSection } from "~/app/employer/documents/_workspace/settings/ModelsSection";
 import type { SettingsSectionActions } from "~/app/employer/documents/_workspace/settings/contract";
 import type { WorkspaceEndpointView } from "~/app/employer/documents/_workspace/settings/WorkspaceModelPanel";
@@ -47,6 +48,52 @@ const OVERVIEW = {
             routes: ["default"],
         },
     ],
+};
+
+/** The five engines as the server lists them: names of settings, never their values. */
+const ENGINES = [
+    { id: "exa", label: "Exa", credential: "EXA_API_KEY", configured: true, companies: true },
+    {
+        id: "serper",
+        label: "Serper",
+        credential: "SERPER_API_KEY",
+        configured: false,
+        companies: false,
+    },
+    {
+        id: "brave",
+        label: "Brave Search",
+        credential: "BRAVE_SEARCH_API_KEY",
+        configured: false,
+        companies: false,
+    },
+    {
+        id: "tavily",
+        label: "Tavily",
+        credential: "TAVILY_API_KEY",
+        configured: false,
+        companies: false,
+    },
+    {
+        id: "searxng",
+        label: "SearXNG",
+        credential: "SEARXNG_URL",
+        configured: true,
+        companies: false,
+    },
+];
+
+const OFF = { web: false, news: false, companies: false };
+
+const SEARCH_AUTO_EXA = {
+    provider: "exa",
+    label: "Exa",
+    source: "auto",
+    requested: null,
+    problem: null,
+    credential: "EXA_API_KEY",
+    capabilities: { web: true, news: true, companies: true },
+    providers: ENGINES,
 };
 
 const minutesAgo = (minutes: number) => new Date(Date.now() - minutes * 60_000).toISOString();
@@ -86,6 +133,7 @@ let deletes: number;
 let listed: Body[];
 let tested: Body[];
 let actions: SettingsSectionActions | null;
+let webSearch: Record<string, unknown>;
 const originalFetch = global.fetch;
 
 /** A stand-in for the workspace model routes, keeping what was saved. */
@@ -93,7 +141,7 @@ function serve() {
     global.fetch = jest.fn((url: string, init?: RequestInit) => {
         const method = init?.method ?? "GET";
         const body = init?.body ? (JSON.parse(init.body as string) as Body) : {};
-        if (url === "/api/settings/models") return respond(OVERVIEW);
+        if (url === "/api/settings/models") return respond({ ...OVERVIEW, webSearch });
         if (url === "/api/settings/models/workspace") {
             if (method === "GET") return respond({ endpoint: stored });
             if (method === "DELETE") {
@@ -125,7 +173,11 @@ function serve() {
         }
         if (url === "/api/settings/models/workspace/models") {
             listed.push(body);
-            return respond({ models: ["zeta/chat", "alpha/chat"] });
+            return respond({
+                models: ["zeta/chat", "alpha/chat"],
+                // OpenRouter's catalogue prices some of what it lists.
+                prices: { "alpha/chat": { input: 3, output: 15, cachedInput: 0.3 } },
+            });
         }
         if (url === "/api/settings/models/workspace/test") {
             tested.push(body);
@@ -141,7 +193,7 @@ function serve() {
 function renderSection() {
     actions = null;
     return render(
-        <ModelsSection
+        <KeysSection
             onActions={next => {
                 actions = next;
             }}
@@ -160,7 +212,18 @@ const mainModel = () =>
     // An input with suggestions (`list`) is a combobox.
     screen.getByRole("combobox", { name: "Main model" });
 
-describe("Settings › Models › Your own model", () => {
+/** A route's price pair, inside its group. */
+function priceOf(route: RegExp) {
+    const group = within(screen.getByRole("group", { name: route }));
+    const prices = within(group.getByRole("group", { name: /Price per 1M tokens/ }));
+    return {
+        input: () => prices.getByRole("textbox", { name: "Input" }),
+        output: () => prices.getByRole("textbox", { name: "Output" }),
+        group: prices,
+    };
+}
+
+describe("Models & usage › API keys › API key", () => {
     beforeAll(() => {
         // Radix Select reaches for layout APIs jsdom lacks.
         Element.prototype.scrollIntoView = jest.fn();
@@ -187,10 +250,11 @@ describe("Settings › Models › Your own model", () => {
 
         expect(await screen.findByRole("button", { name: "Connect OpenRouter" })).toBeVisible();
         expect(screen.getByRole("button", { name: "Use an API key" })).toBeVisible();
-        expect(screen.getByRole("heading", { name: "Your own model" })).toBeInTheDocument();
-        expect(screen.getByRole("heading", { name: "Server default" })).toBeInTheDocument();
-        expect(screen.queryByText(/uses its own model/)).not.toBeInTheDocument();
-        await waitFor(() => expect(actions?.primaryLabel).toBe("Re-read"));
+        expect(screen.getByRole("heading", { name: "API key" })).toBeInTheDocument();
+        // The embedding key that once sat below it is gone.
+        expect(screen.queryByRole("heading", { name: "Embedding key" })).not.toBeInTheDocument();
+        // With the editor closed, the section has no action of its own.
+        await waitFor(() => expect(actions?.primaryLabel).toBeUndefined());
     });
 
     it("fills the base URL from the provider an admin picks", async () => {
@@ -272,9 +336,9 @@ describe("Settings › Models › Your own model", () => {
         });
         expect(puts[0]).not.toHaveProperty("apiKey");
 
-        // Back on the summary, with Re-read as the section's action again.
+        // Back on the summary, where the section has no action of its own.
         expect(await screen.findByText("main-2")).toBeInTheDocument();
-        await waitFor(() => expect(actions?.primaryLabel).toBe("Re-read"));
+        await waitFor(() => expect(actions?.primaryLabel).toBeUndefined());
     });
 
     it("asks for the key again when the address changes", async () => {
@@ -336,6 +400,220 @@ describe("Settings › Models › Your own model", () => {
         });
     });
 
+    describe("a model's price", () => {
+        it("renders an optional pair under the main model and sends it with the model", async () => {
+            stored = CONNECTED;
+            const user = userEvent.setup();
+            renderSection();
+
+            await user.click(await screen.findByRole("button", { name: "Edit" }));
+            const main = priceOf(/Main model/);
+            expect(main.input()).toHaveValue("");
+            expect(main.output()).toHaveValue("");
+            expect(main.input()).toHaveAttribute("inputmode", "decimal");
+            expect(
+                main.group.getByText(/What your provider charges, in US dollars/)
+            ).toBeInTheDocument();
+            expect(main.group.getByText(/its tokens count one for one/)).toBeInTheDocument();
+
+            await user.type(main.input(), "3");
+            await user.type(main.output(), "15");
+            await waitFor(() => expect(actions?.disabled).toBe(false));
+            await pressPrimary();
+
+            expect(puts[0]?.models).toEqual({
+                default: {
+                    id: "main-1",
+                    vision: false,
+                    reasoning: false,
+                    structuredOutput: true,
+                    pricing: { input: 3, output: 15 },
+                },
+            });
+            // The summary says what was saved.
+            expect(
+                await screen.findByText(/\$3\.00 in, \$15\.00 out per 1M tokens/)
+            ).toBeInTheDocument();
+        });
+
+        it("loads a saved price, and clearing it removes it", async () => {
+            stored = {
+                ...CONNECTED,
+                models: {
+                    default: {
+                        id: "main-1",
+                        vision: false,
+                        reasoning: false,
+                        pricing: { input: 2, output: 8, cachedInput: 0.2 },
+                    },
+                },
+            };
+            const user = userEvent.setup();
+            renderSection();
+
+            expect(
+                await screen.findByText(/\$2\.00 in, \$8\.00 out per 1M tokens/)
+            ).toBeInTheDocument();
+            await user.click(screen.getByRole("button", { name: "Edit" }));
+            const main = priceOf(/Main model/);
+            expect(main.input()).toHaveValue("2");
+            expect(main.output()).toHaveValue("8");
+
+            // Saved untouched, the cached-input price it came with stays.
+            await pressPrimary();
+            expect((puts[0]?.models as Body).default).toMatchObject({
+                pricing: { input: 2, output: 8, cachedInput: 0.2 },
+            });
+
+            await user.click(await screen.findByRole("button", { name: "Edit" }));
+            await user.clear(priceOf(/Main model/).input());
+            await user.clear(priceOf(/Main model/).output());
+            await waitFor(() => expect(actions?.disabled).toBe(false));
+            await pressPrimary();
+            expect((puts[1]?.models as Body).default).not.toHaveProperty("pricing");
+            await waitFor(() =>
+                expect(screen.queryByText(/out per 1M tokens/)).not.toBeInTheDocument()
+            );
+        });
+
+        it("refuses half a price and a price out of range", async () => {
+            stored = CONNECTED;
+            const user = userEvent.setup();
+            renderSection();
+
+            await user.click(await screen.findByRole("button", { name: "Edit" }));
+            const main = priceOf(/Main model/);
+            await user.type(main.input(), "3");
+            expect(
+                main.group.getByText("Give both an input and an output price, or leave both empty.")
+            ).toBeInTheDocument();
+            expect(main.input()).toHaveAttribute("aria-invalid", "true");
+            await waitFor(() => expect(actions?.disabled).toBe(true));
+
+            await user.type(main.output(), "20000");
+            expect(
+                main.group.getByText(
+                    "A price is a number from 0 to 10,000, in US dollars per 1M tokens."
+                )
+            ).toBeInTheDocument();
+            expect(actions?.disabled).toBe(true);
+
+            await user.clear(main.output());
+            await user.type(main.output(), "abc");
+            expect(main.group.getByText(/A price is a number/)).toBeInTheDocument();
+
+            await user.clear(main.output());
+            await user.type(main.output(), "0.6");
+            await waitFor(() => expect(actions?.disabled).toBe(false));
+        });
+
+        it("gives a routed model its own price once it is chosen", async () => {
+            stored = CONNECTED;
+            const user = userEvent.setup();
+            renderSection();
+
+            await user.click(await screen.findByRole("button", { name: "Edit" }));
+            await user.click(screen.getByRole("button", { name: /Use different models/ }));
+            const fast = screen.getByRole("group", { name: /^Fast/ });
+            expect(
+                within(fast).queryByRole("group", { name: /Price per 1M tokens/ })
+            ).not.toBeInTheDocument();
+
+            await user.type(within(fast).getByRole("combobox"), "small-1");
+            await user.type(priceOf(/^Fast/).input(), "0.15");
+            await user.type(priceOf(/^Fast/).output(), "0.6");
+            await waitFor(() => expect(actions?.disabled).toBe(false));
+            await pressPrimary();
+
+            expect(puts[0]?.models).toEqual({
+                default: { id: "main-1", vision: false, reasoning: false, structuredOutput: true },
+                fast: {
+                    id: "small-1",
+                    vision: false,
+                    reasoning: false,
+                    structuredOutput: true,
+                    pricing: { input: 0.15, output: 0.6 },
+                },
+            });
+        });
+
+        it("fills an empty price from OpenRouter's catalogue when the admin picks a model", async () => {
+            window.history.replaceState(null, "", "/employer/documents?openrouter=connected#byok");
+            stored = OPENROUTER_FRESH;
+            const user = userEvent.setup();
+            renderSection();
+
+            await waitFor(() => expect(listed).toHaveLength(1));
+            const main = priceOf(/Main model/);
+            await user.type(mainModel(), "alpha/chat");
+            expect(main.input()).toHaveValue("3");
+            expect(main.output()).toHaveValue("15");
+
+            // Another pick replaces the catalogue's price; one it doesn't price clears it.
+            await user.clear(mainModel());
+            await user.type(mainModel(), "zeta/chat");
+            expect(main.input()).toHaveValue("");
+            expect(main.output()).toHaveValue("");
+
+            await user.clear(mainModel());
+            await user.type(mainModel(), "alpha/chat");
+            await waitFor(() => expect(actions?.disabled).toBe(false));
+            await pressPrimary();
+            expect((puts[0]?.models as Body).default).toEqual({
+                id: "alpha/chat",
+                vision: false,
+                reasoning: false,
+                structuredOutput: true,
+                pricing: { input: 3, output: 15, cachedInput: 0.3 },
+            });
+        });
+
+        it("never replaces a price the admin typed", async () => {
+            window.history.replaceState(null, "", "/employer/documents?openrouter=connected#byok");
+            stored = OPENROUTER_FRESH;
+            const user = userEvent.setup();
+            renderSection();
+
+            await waitFor(() => expect(listed).toHaveLength(1));
+            const main = priceOf(/Main model/);
+            await user.type(main.input(), "1");
+            await user.type(main.output(), "2");
+            await user.type(mainModel(), "alpha/chat");
+            expect(main.input()).toHaveValue("1");
+            expect(main.output()).toHaveValue("2");
+
+            await pressPrimary();
+            expect((puts[0]?.models as Body).default).toMatchObject({
+                pricing: { input: 1, output: 2 },
+            });
+        });
+
+        it("fills a chosen model's empty price when the list arrives, but not a saved one", async () => {
+            stored = {
+                ...OPENROUTER_FRESH,
+                models: {
+                    default: { id: "alpha/chat", vision: false, reasoning: false },
+                    fast: {
+                        id: "alpha/chat",
+                        vision: false,
+                        reasoning: false,
+                        pricing: { input: 1, output: 2 },
+                    },
+                },
+                active: true,
+            };
+            const user = userEvent.setup();
+            renderSection();
+
+            await user.click(await screen.findByRole("button", { name: "Edit" }));
+            await user.click(screen.getByRole("button", { name: "Load models" }));
+            await waitFor(() => expect(priceOf(/Main model/).input()).toHaveValue("3"));
+            expect(priceOf(/Main model/).output()).toHaveValue("15");
+            expect(priceOf(/^Fast/).input()).toHaveValue("1");
+            expect(priceOf(/^Fast/).output()).toHaveValue("2");
+        });
+    });
+
     it("shows which key is saved without ever showing the key", async () => {
         stored = CONNECTED;
         const user = userEvent.setup();
@@ -344,7 +622,6 @@ describe("Settings › Models › Your own model", () => {
         expect(await screen.findByText("Key ending wxyz")).toBeInTheDocument();
         expect(screen.getByText("Active")).toBeInTheDocument();
         expect(screen.getByText(/Last changed by Ada Lovelace, 5 min ago/)).toBeInTheDocument();
-        expect(screen.getByText(/uses its own model, so the server default/)).toBeInTheDocument();
 
         await user.click(screen.getByRole("button", { name: "Edit" }));
         await user.type(screen.getByLabelText("API key"), "sk-SECRET-0123abcd");
@@ -399,7 +676,7 @@ describe("Settings › Models › Your own model", () => {
         window.history.replaceState(
             null,
             "",
-            "/employer/documents?feature=settings&openrouter=connected#models"
+            "/employer/documents?feature=settings&openrouter=connected#byok"
         );
         stored = OPENROUTER_FRESH;
         renderSection();
@@ -411,7 +688,7 @@ describe("Settings › Models › Your own model", () => {
         ).toBeInTheDocument();
         // The outcome is read once; the rest of the address stays.
         expect(window.location.search).toBe("?feature=settings");
-        expect(window.location.hash).toBe("#models");
+        expect(window.location.hash).toBe("#byok");
 
         await waitFor(() => expect(mainModel()).toHaveFocus());
         expect(screen.getByLabelText("API key")).toHaveAttribute(
@@ -435,25 +712,24 @@ describe("Settings › Models › Your own model", () => {
         ["expired", "That sign-in expired, try again."],
         ["error", "Couldn't connect OpenRouter. Try again, or use an API key instead."],
     ])("says what happened when OpenRouter returns %s", async (outcome, message) => {
-        window.history.replaceState(null, "", `/employer/documents?openrouter=${outcome}#models`);
+        window.history.replaceState(null, "", `/employer/documents?openrouter=${outcome}#byok`);
         renderSection();
 
         expect(await screen.findByText(message)).toBeInTheDocument();
         expect(window.location.search).toBe("");
-        expect(window.location.hash).toBe("#models");
+        expect(window.location.hash).toBe("#byok");
     });
 
-    it("lands the OpenRouter return on Models even after the shell dropped the #models hash", async () => {
-        // The workspace shell strips `?feature=settings` with a router.replace
-        // that loses the hash, usually before the lazy hub mounts.
+    it("lands the OpenRouter return on Models & usage › API keys with its outcome", async () => {
+        // The callback sends `?feature=usage&at=/keys&openrouter=…`; the
+        // shell opens the tab on API keys and strips `feature` and `at`,
+        // leaving the outcome for the section to read when it mounts.
         window.history.replaceState(null, "", "/employer/documents?openrouter=connected");
         stored = OPENROUTER_FRESH;
-        render(<SettingsHub embedded />);
+        render(<UsageTool host={{ active: true, request: { at: "/keys", nonce: 1 } }} />);
 
         await waitFor(() =>
-            expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
-                "Which model serves each kind of request"
-            )
+            expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("API keys")
         );
         expect(
             await screen.findByText(
@@ -461,5 +737,178 @@ describe("Settings › Models › Your own model", () => {
             )
         ).toBeInTheDocument();
         expect(window.location.search).toBe("");
+    });
+});
+
+describe("Models & usage › Models › Server default", () => {
+    beforeEach(() => {
+        stored = null;
+        webSearch = SEARCH_AUTO_EXA;
+        serve();
+    });
+
+    afterAll(() => {
+        global.fetch = originalFetch;
+    });
+
+    function renderModels() {
+        actions = null;
+        return render(<ModelsSection onActions={next => (actions = next)} />);
+    }
+
+    it("shows the server default read-only, with nothing to set up here", async () => {
+        renderModels();
+
+        expect(await screen.findByRole("heading", { name: "Server default" })).toBeInTheDocument();
+        expect(
+            screen.queryByRole("button", { name: "Connect OpenRouter" })
+        ).not.toBeInTheDocument();
+        expect(screen.queryByText(/Bring your own keys/)).not.toBeInTheDocument();
+        await waitFor(() => expect(actions?.primaryLabel).toBe("Re-read"));
+    });
+
+    it("says the default is unused when the workspace runs on its own model", async () => {
+        stored = CONNECTED;
+        renderModels();
+
+        expect(
+            await screen.findByText(/runs on its own model, set up in API keys/)
+        ).toBeInTheDocument();
+    });
+
+    it("says a connected key with no model chosen still runs on the default", async () => {
+        stored = OPENROUTER_FRESH;
+        renderModels();
+
+        expect(
+            await screen.findByText(
+                /has no model chosen yet, so it still runs on the server default/
+            )
+        ).toBeInTheDocument();
+    });
+
+    /** The Web search section, once the overview has loaded. */
+    async function webSearchSection() {
+        const heading = await screen.findByRole("heading", { name: "Web search" });
+        return heading.closest("section")!;
+    }
+
+    /** The engines table row for one engine. */
+    function engineRow(section: HTMLElement, name: string) {
+        return within(section)
+            .getAllByRole("row")
+            .find(row => within(row).queryByText(name, { exact: true }))!;
+    }
+
+    it("names the engine in use, how it was picked and what it covers", async () => {
+        renderModels();
+        const section = await webSearchSection();
+
+        expect(section).toHaveTextContent("set on the server, so nothing here changes it");
+        expect(section).toHaveTextContent(
+            "The first configured engine; set SEARCH_PROVIDER to choose."
+        );
+        expect(section).toHaveTextContent("Web and news search for every feature.");
+        expect(section).toHaveTextContent("Company search and lookalikes in Prospects.");
+        expect(within(engineRow(section, "Exa")).getByText("In use")).toBeInTheDocument();
+        expect(within(engineRow(section, "SearXNG")).getByText("Configured")).toBeInTheDocument();
+        expect(within(engineRow(section, "SearXNG")).getByText("SEARXNG_URL")).toBeInTheDocument();
+        expect(within(engineRow(section, "Tavily")).getByText("Not set")).toBeInTheDocument();
+        // Read-only: nothing to press but the section's Re-read.
+        expect(within(section).queryByRole("button")).not.toBeInTheDocument();
+        expect(within(section).queryByRole("textbox")).not.toBeInTheDocument();
+    });
+
+    it("says an engine without a company index finds companies by web search", async () => {
+        webSearch = {
+            ...SEARCH_AUTO_EXA,
+            provider: "searxng",
+            label: "SearXNG",
+            source: "setting",
+            requested: "searxng",
+            credential: "SEARXNG_URL",
+            capabilities: { web: true, news: true, companies: false },
+        };
+        renderModels();
+        const section = await webSearchSection();
+
+        expect(section).toHaveTextContent("Chosen with SEARCH_PROVIDER.");
+        expect(section).toHaveTextContent(
+            "Prospects finds companies through ordinary web search; lookalikes need Exa."
+        );
+        expect(within(engineRow(section, "SearXNG")).getByText("In use")).toBeInTheDocument();
+        expect(within(engineRow(section, "Exa")).getByText("Configured")).toBeInTheDocument();
+    });
+
+    it("says a retired SEARCH_PROVIDER value no longer chooses", async () => {
+        webSearch = { ...SEARCH_AUTO_EXA, requested: "fallback" };
+        renderModels();
+        const section = await webSearchSection();
+
+        expect(section).toHaveTextContent(
+            "SEARCH_PROVIDER=fallback is no longer a choice, so this is the first configured engine."
+        );
+    });
+
+    it("warns that a named engine without its setting leaves web search off", async () => {
+        webSearch = {
+            ...SEARCH_AUTO_EXA,
+            provider: null,
+            label: "Tavily",
+            source: "setting",
+            requested: "tavily",
+            problem: "missing-credentials",
+            credential: "TAVILY_API_KEY",
+            capabilities: OFF,
+        };
+        renderModels();
+        const section = await webSearchSection();
+
+        expect(section).toHaveTextContent(
+            "SEARCH_PROVIDER=tavily needs TAVILY_API_KEY. Web search is off until it’s set."
+        );
+        expect(
+            within(engineRow(section, "Tavily")).getByText("Chosen, not set")
+        ).toBeInTheDocument();
+        expect(within(section).queryByText("In use")).not.toBeInTheDocument();
+        expect(within(section).queryByText("On")).not.toBeInTheDocument();
+    });
+
+    it("lists the valid values when SEARCH_PROVIDER is not a search engine", async () => {
+        webSearch = {
+            ...SEARCH_AUTO_EXA,
+            provider: null,
+            label: null,
+            source: "setting",
+            requested: "bing",
+            problem: "unknown-provider",
+            credential: null,
+            capabilities: OFF,
+        };
+        renderModels();
+        const section = await webSearchSection();
+
+        expect(section).toHaveTextContent(
+            "SEARCH_PROVIDER=bing isn’t a search engine, so web search is off. Set it to one of exa, serper, brave, tavily, searxng."
+        );
+    });
+
+    it("says how to turn web search on when nothing is configured", async () => {
+        webSearch = {
+            ...SEARCH_AUTO_EXA,
+            provider: null,
+            label: null,
+            source: null,
+            credential: null,
+            capabilities: OFF,
+            providers: ENGINES.map(engine => ({ ...engine, configured: false })),
+        };
+        renderModels();
+        const section = await webSearchSection();
+
+        expect(section).toHaveTextContent(
+            "Web search is off: no engine is configured. To turn it on, set SEARCH_PROVIDER"
+        );
+        expect(within(section).getAllByText("Not set")).toHaveLength(5);
     });
 });

@@ -1,4 +1,8 @@
 import { NextResponse } from "next/server";
+
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
+
 import { HTTP_STATUS, ERROR_TYPES, type ErrorType } from "./constants";
 
 /**
@@ -143,44 +147,37 @@ export function createExternalServiceError(
 }
 
 /**
- * Handle API errors with appropriate response
+ * Handle API errors with appropriate response. With the request, the
+ * sentence is in the reader's language.
  */
-export function handleApiError(error: unknown): NextResponse<ErrorResponse> {
+export function handleApiError(error: unknown, request?: Request): NextResponse<ErrorResponse> {
     console.error("API Error:", error);
+    const t = translatorFor(request ? localeOfRequest(request) : "en", "errors.api");
 
     if (error instanceof Error) {
         if (error.message.includes("timed out") || error.message.includes("timeout")) {
-            return createTimeoutError(
-                "The request took too long to complete. Please try again.",
-                error
-            );
+            return createTimeoutError(t("tookTooLong"), error);
         }
 
         if (error.message.includes("database") || error.message.includes("connection")) {
-            return createDatabaseError("Database connection error. Please try again later.", error);
+            return createDatabaseError(t("databaseConnection"), error);
         }
 
         if (error.message.includes("search") || error.message.includes("fetch")) {
-            return createExternalServiceError(
-                "External service error. Please try again later.",
-                error
-            );
+            return createExternalServiceError(t("externalServiceRetry"), error);
         }
 
         if (error.message.includes("openai") || error.message.includes("api")) {
-            return createExternalServiceError(
-                "AI service temporarily unavailable. Please try again later.",
-                error
-            );
+            return createExternalServiceError(t("aiUnavailable"), error);
         }
 
         if (error.message.includes("validation") || error.message.includes("invalid")) {
-            return createValidationError("Invalid request data provided.", error);
+            return createValidationError(t("invalidDataProvided"), error);
         }
     }
 
     return createErrorResponse(
-        "An unexpected error occurred. Please try again.",
+        t("unexpected"),
         ERROR_TYPES.UNKNOWN,
         HTTP_STATUS.INTERNAL_SERVER_ERROR,
         error instanceof Error ? error : new Error("An unexpected error occurred")

@@ -3,13 +3,14 @@
 import { useEffect, useRef } from "react";
 import { toast } from "sonner";
 
-import { fitImageBox, isImageFile, loadImageFile } from "../lib/images";
+import { fitImageBox, ImageReadError, isImageFile, loadImageFile } from "../lib/images";
 import { instantiate, parsePayload } from "../model/clipboard";
 import { createNodeAt } from "../model/factory";
 import { docMode } from "../model/commands";
 import { parseDoc } from "../model/serialize";
 import type { EditorStore } from "../model/store";
 import type { Point } from "../model/types";
+import type { MindmapT } from "./EditorContext";
 
 /**
  * Paste, from the native `paste` event rather than the async Clipboard API.
@@ -25,10 +26,12 @@ export function useClipboardPaste(
     store: EditorStore,
     getPastePoint: () => Point,
     /** A hidden editor keeps its store but must not swallow the paste. */
-    isActive: () => boolean
+    isActive: () => boolean,
+    /** `useTranslations("mindmap")`, for what a failed paste says. */
+    t: MindmapT
 ): void {
-    const at = useRef({ getPastePoint, isActive });
-    at.current = { getPastePoint, isActive };
+    const at = useRef({ getPastePoint, isActive, t });
+    at.current = { getPastePoint, isActive, t };
 
     useEffect(() => {
         const onPaste = (event: ClipboardEvent) => {
@@ -66,7 +69,7 @@ export function useClipboardPaste(
             const files = Array.from(data.files ?? []).filter(isImageFile);
             if (files.length > 0) {
                 event.preventDefault();
-                void insertImages(store, files, at.current.getPastePoint());
+                void insertImages(store, files, at.current.getPastePoint(), at.current.t);
                 return;
             }
 
@@ -84,7 +87,8 @@ export function useClipboardPaste(
 export async function insertImages(
     store: EditorStore,
     files: readonly File[],
-    at: Point
+    at: Point,
+    t: MindmapT
 ): Promise<void> {
     let cursor = { ...at };
     for (const file of files) {
@@ -103,20 +107,28 @@ export async function insertImages(
             // Stagger multiple images so they do not land on top of each other.
             cursor = { x: cursor.x + 24, y: cursor.y + 24 };
         } catch (error) {
-            toast.error(error instanceof Error ? error.message : `Couldn't read ${file.name}`);
+            toast.error(
+                error instanceof ImageReadError && error.code === "notImage"
+                    ? t("errors.notImage")
+                    : t("clipboard.readFailed", { name: file.name })
+            );
         }
     }
 }
 
 /** Import a dropped `.json` mindmap file, replacing the document. */
-export async function importDocumentFile(store: EditorStore, file: File): Promise<void> {
+export async function importDocumentFile(
+    store: EditorStore,
+    file: File,
+    t: MindmapT
+): Promise<void> {
     try {
         const parsed: unknown = JSON.parse(await file.text());
         const title = store.getState().doc.title;
         store.replaceDoc({ ...parseDoc(parsed, title), title }, { label: "Import" });
-        toast.success(`Imported ${file.name}`);
+        toast.success(t("clipboard.imported", { name: file.name }));
     } catch {
-        toast.error(`${file.name} is not a readable mindmap file`);
+        toast.error(t("clipboard.notMindmap", { name: file.name }));
     }
 }
 

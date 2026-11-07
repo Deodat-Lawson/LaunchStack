@@ -12,11 +12,17 @@ import { RunOptionsSchema } from "@launchstack/pipelines/distribution/types";
 import { createRun, getProgram, getRun, listRuns } from "@launchstack/pipelines/distribution/db";
 import { hasTokens } from "~/lib/credits";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
+import { localeOfRequest, requestTranslator } from "~/i18n/server";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { isMeteringEnforced } from "~/server/deployment";
-import { error, handleRouteError, json, readJsonBody } from "~/server/distribution/http";
+import { error, json, readJsonBody } from "~/server/distribution/http";
+import { distributionRouteError } from "~/server/distribution/stage-errors";
 import { runFixtureDistribution } from "~/server/distribution/fixture-run";
 import { inngest } from "~/server/inngest/client";
+import { refuseAtAiAllowance } from "~/server/ai-usage/refusal";
+
+const api = (request: Request) => requestTranslator(request, "errors.api");
+const growth = (request: Request) => requestTranslator(request, "growth.server.errors");
 
 const CreateRunSchema = z.object({
     programId: z.string().min(1),
@@ -34,13 +40,19 @@ export async function GET(request: NextRequest) {
         const runs = await listRuns(ctx.data.companyId, { programId, limit: 50 });
         return json({ runs });
     } catch (err) {
-        return handleRouteError("GET runs", err);
+        return distributionRouteError("GET runs", err, request);
     }
 }
 
 export async function POST(request: NextRequest) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
+    const refused = await refuseAtAiAllowance(
+        ctx.data.companyId,
+        ctx.data.authUserId,
+        localeOfRequest(request)
+    );
+    if (refused) return refused;
 
     return withRateLimit(
         request,
@@ -53,10 +65,13 @@ export async function POST(request: NextRequest) {
             try {
                 const parsed = CreateRunSchema.safeParse(await readJsonBody(request));
                 if (!parsed.success)
-                    return error("Validation failed", 400, { details: parsed.error.flatten() });
+                    return error(api(request)("validationFailed"), 400, {
+                        details: parsed.error.flatten(),
+                    });
                 const program = await getProgram(parsed.data.programId, ctx.data.companyId);
-                if (!program) return error("Program not found", 404);
-                if (program.status !== "active") return error("Program is archived", 409);
+                if (!program) return error(growth(request)("programNotFound"), 404);
+                if (program.status !== "active")
+                    return error(growth(request)("programArchived"), 409);
 
                 const requestedMode = parsed.data.options?.mode ?? "live";
                 if (requestedMode === "live" && isMeteringEnforced()) {
@@ -64,7 +79,7 @@ export async function POST(request: NextRequest) {
                     if (!sufficient) {
                         return NextResponse.json(
                             {
-                                error: "Insufficient credits",
+                                error: growth(request)("insufficientCredits"),
                                 code: "insufficient_credits",
                                 required: RUN_MINIMUM_CREDITS,
                             },
@@ -111,7 +126,7 @@ export async function POST(request: NextRequest) {
                 });
                 return json({ run }, 202);
             } catch (err) {
-                return handleRouteError("POST runs", err);
+                return distributionRouteError("POST runs", err, request);
             }
         }
     );

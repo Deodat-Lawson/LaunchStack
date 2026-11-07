@@ -1,15 +1,14 @@
 import { NextResponse } from "next/server";
 
-export const revalidate = 3600;
+import { ocrOverview } from "~/server/ocr-availability";
 
+// Docling's answer comes from a live probe of the document converter, so this
+// is computed per request (the probe itself is cached for seconds), never at
+// build time.
+export const dynamic = "force-dynamic";
+
+/** The OCR providers this server can run, as the upload bootstrap reports them, plus their order. */
 export async function GET() {
-    const providers = {
-        azure:
-            !!process.env.AZURE_DOC_INTELLIGENCE_KEY &&
-            !!process.env.AZURE_DOC_INTELLIGENCE_ENDPOINT,
-        datalab: !!process.env.DATALAB_API_KEY,
-        landingAI: !!process.env.LANDING_AI_API_KEY,
-    };
-
-    return NextResponse.json(providers);
+    const { availableProviders, order } = await ocrOverview();
+    return NextResponse.json({ ...availableProviders, order });
 }

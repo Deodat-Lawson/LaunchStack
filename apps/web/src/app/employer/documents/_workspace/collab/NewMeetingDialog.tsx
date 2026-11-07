@@ -18,6 +18,7 @@
  */
 
 import React, { useEffect, useId, useMemo, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { BookOpen, Check, Hash, Server } from "lucide-react";
 
 import { Badge } from "~/components/ui/badge";
@@ -49,11 +50,11 @@ import {
     DEFAULT_AGENT_AUTONOMY,
     effectiveAutonomy,
     isAgentAutonomy,
-    meetingPlanViolations,
+    meetingPlanViolationCodes,
 } from "~/lib/agents/autonomy";
+import { useAgentCopy } from "~/lib/agents/i18n";
 import {
     MEETING_WORKFLOWS,
-    WORKFLOW_CATEGORY_META,
     meetingWorkflow,
     phasesForRoom,
     workflowTurnCount,
@@ -76,26 +77,16 @@ export interface NewMeetingDialogProps {
     initialSeats?: string[] | null;
 }
 
+/** Words: `collab.newMeeting.policies.<key>`. */
 const TURN_POLICIES = [
-    {
-        id: "round_robin",
-        label: "Round robin",
-        desc: "Everyone speaks in turn. Predictable, and no one dominates.",
-    },
-    {
-        id: "moderated",
-        label: "Moderated",
-        desc: "A chair opens, closes, and hands the floor to whoever they name.",
-    },
-    {
-        id: "reactive",
-        label: "Reactive",
-        desc: "Whoever was addressed speaks next; otherwise the closest role picks it up.",
-    },
+    { id: "round_robin", key: "roundRobin" },
+    { id: "moderated", key: "moderated" },
+    { id: "reactive", key: "reactive" },
 ] as const;
 
 type PolicyId = (typeof TURN_POLICIES)[number]["id"];
 
+/** The blank recipe. Its title and tagline on screen are `collab.newMeeting.custom*`. */
 const CUSTOM: MeetingWorkflow = {
     key: "custom",
     title: "Custom",
@@ -121,6 +112,28 @@ const WORKFLOW_GROUPS = workflowsByCategory();
  */
 const GROWS_WITH_TEXT = "[field-sizing:content]";
 
+/** The title and tagline a workflow shows in the rail and the picker. */
+function useWorkflowWords() {
+    const t = useTranslations("collab.newMeeting");
+    const copy = useAgentCopy();
+    return (workflow: MeetingWorkflow) =>
+        workflow.key === CUSTOM.key
+            ? { title: t("customTitle"), tagline: t("customTagline"), description: "" }
+            : copy.workflowCopy(workflow);
+}
+
+/** "a", "a and b", "a, b and c" in the reader's language. */
+function useListPhrase() {
+    const ts = useTranslations("collab.shared");
+    return (items: string[]): string => {
+        if (items.length <= 1) return items[0] ?? "";
+        return ts("listPair", {
+            first: items.slice(0, -1).join(ts("listSeparator")),
+            last: items[items.length - 1]!,
+        });
+    };
+}
+
 export function NewMeetingDialog({
     open,
     onClose,
@@ -128,6 +141,12 @@ export function NewMeetingDialog({
     initialWorkflowKey,
     initialSeats,
 }: NewMeetingDialogProps) {
+    const t = useTranslations("collab.newMeeting");
+    const ts = useTranslations("collab.shared");
+    const tc = useTranslations("common");
+    const copy = useAgentCopy();
+    const wordsOf = useWorkflowWords();
+    const listPhrase = useListPhrase();
     const { data, loading } = useAgents();
     const personas = useMemo(() => data?.personas.filter(p => !p.archived) ?? [], [data]);
 
@@ -216,7 +235,7 @@ export function NewMeetingDialog({
     );
     const mirrorProblems = useMemo(
         () =>
-            meetingPlanViolations({
+            meetingPlanViolationCodes({
                 participants: roomLevels,
                 slackMirrorEnabled: true,
                 slackUseAgentIdentity: true,
@@ -232,9 +251,9 @@ export function NewMeetingDialog({
     const phasedTurns = phases.reduce((sum, phase) => sum + phase.turns, 0);
 
     const missing = [
-        !title.trim() && "a title",
-        !objective.trim() && "an objective",
-        selected.length === 0 && "someone to the room",
+        !title.trim() && t("missingTitle"),
+        !objective.trim() && t("missingObjective"),
+        selected.length === 0 && t("missingRoom"),
     ].filter((item): item is string => Boolean(item));
     const canSubmit = missing.length === 0;
 
@@ -266,11 +285,10 @@ export function NewMeetingDialog({
                 }),
             });
             const body = (await response.json()) as { meeting?: { id: string }; error?: string };
-            if (!response.ok || !body.meeting)
-                throw new Error(body.error ?? "Could not start the meeting");
+            if (!response.ok || !body.meeting) throw new Error(body.error ?? t("startFailed"));
             onCreated(body.meeting.id);
         } catch (err) {
-            setError(err instanceof Error ? err.message : "Could not start the meeting");
+            setError(err instanceof Error ? err.message : t("startFailed"));
         } finally {
             setSubmitting(false);
         }
@@ -279,10 +297,12 @@ export function NewMeetingDialog({
     const toggleSeat = (key: string) =>
         setSelected(prev => (prev.includes(key) ? prev.filter(id => id !== key) : [...prev, key]));
 
+    const words = wordsOf(workflow);
+
     const summary = [
-        `${selected.length} seat${selected.length === 1 ? "" : "s"}`,
-        phases.length > 0 && `${phases.length} phases`,
-        `up to ${maxTurns} turns`,
+        ts("seats", { count: selected.length }),
+        phases.length > 0 && t("summaryPhases", { count: phases.length }),
+        t("summaryTurns", { count: maxTurns }),
     ]
         .filter(Boolean)
         .join(" · ");
@@ -293,10 +313,11 @@ export function NewMeetingDialog({
                 and is the container its `@max-*` variants measure. */}
             <DialogContent className="flex h-[min(88vh,860px)] w-[min(1200px,calc(100vw-32px))] max-w-none flex-col gap-0 overflow-hidden p-0 [container-type:inline-size] sm:max-w-none">
                 <DialogHeader className="border-line @max-sm:px-4 gap-1 border-b px-5 py-4 pr-14 text-left">
-                    <DialogTitle className="display text-ink text-[18px]">New meeting</DialogTitle>
+                    <DialogTitle className="display text-ink text-[18px]">
+                        {ts("newMeeting")}
+                    </DialogTitle>
                     <DialogDescription className="text-[12.5px] leading-snug">
-                        Pick a workflow, choose who&apos;s in the room, and press start. The
-                        workflow fills in the rest — change any of it first.
+                        {t("description")}
                     </DialogDescription>
                 </DialogHeader>
 
@@ -317,14 +338,14 @@ export function NewMeetingDialog({
                     <div className="@max-md:flex-none @max-md:overflow-visible @max-sm:px-4 min-w-0 flex-1 overflow-y-auto px-5 pb-6 pt-5">
                         <div className="border-line mb-5 border-b pb-5">
                             <h3 className="text-ink text-[16px] font-semibold [@container(max-width:1023px)]:hidden">
-                                {workflow.title}
+                                {words.title}
                             </h3>
                             <div className="[@container(min-width:1024px)]:hidden">
                                 <Label
                                     htmlFor={`${id}-workflow`}
                                     className="text-ink-2 mb-1.5 text-xs font-semibold"
                                 >
-                                    Workflow
+                                    {t("workflow")}
                                 </Label>
                                 <WorkflowPicker
                                     id={`${id}-workflow`}
@@ -333,20 +354,23 @@ export function NewMeetingDialog({
                                 />
                             </div>
                             <p className="text-ink-3 mt-1.5 text-[12.5px] leading-relaxed">
-                                {workflow.description || workflow.tagline}
+                                {words.description || words.tagline}
                             </p>
-                            {workflow.basis && (
+                            {"basis" in words && words.basis && (
                                 <div
                                     className="text-ink-3 mt-2 flex items-start gap-1.5 text-[11.5px] leading-snug"
-                                    title={`${workflow.basis.origin} Used by: ${workflow.basis.usedBy}`}
+                                    title={ts("basisTitle", {
+                                        origin: words.basis.origin,
+                                        usedBy: words.basis.usedBy,
+                                    })}
                                 >
                                     <BookOpen className="mt-px size-3 shrink-0" aria-hidden />
                                     <span>
                                         <span className="text-ink-2 font-medium">
-                                            {workflow.basis.name}
+                                            {words.basis.name}
                                         </span>
                                         {" · "}
-                                        {workflow.basis.usedBy}
+                                        {words.basis.usedBy}
                                     </span>
                                 </div>
                             )}
@@ -357,23 +381,23 @@ export function NewMeetingDialog({
                         <div className="flex flex-wrap gap-x-4">
                             <div className="min-w-0 flex-[2_1_200px]">
                                 <Field
-                                    label="Title"
-                                    hint="Becomes the channel name."
+                                    label={tc("fields.title")}
+                                    hint={t("titleHint")}
                                     htmlFor={`${id}-title`}
                                 >
                                     <TextInput
                                         id={`${id}-title`}
                                         value={title}
                                         onChange={e => setTitle(e.target.value)}
-                                        placeholder="Q3 pricing review"
+                                        placeholder={t("titlePlaceholder")}
                                         autoFocus
                                     />
                                 </Field>
                             </div>
                             <div className="min-w-0 flex-[3_1_300px]">
                                 <Field
-                                    label="Objective"
-                                    hint="What the meeting has to produce. Every agent sees it on every turn."
+                                    label={t("objective")}
+                                    hint={t("objectiveHint")}
                                     htmlFor={`${id}-objective`}
                                 >
                                     <TextArea
@@ -381,7 +405,7 @@ export function NewMeetingDialog({
                                         value={objective}
                                         onChange={e => setObjective(e.target.value)}
                                         rows={3}
-                                        placeholder="Agree a Q3 price change and name who ships it"
+                                        placeholder={t("objectivePlaceholder")}
                                         className={cn(
                                             "max-h-[200px] min-h-[76px]",
                                             GROWS_WITH_TEXT
@@ -392,11 +416,14 @@ export function NewMeetingDialog({
                         </div>
 
                         <Section
-                            title="In the room"
+                            title={t("inRoom")}
                             meta={
                                 loading
-                                    ? "Loading your agents…"
-                                    : `${selected.length} of ${personas.length} seated`
+                                    ? t("loadingAgents")
+                                    : t("seated", {
+                                          count: selected.length,
+                                          total: personas.length,
+                                      })
                             }
                             className="mt-2"
                         >
@@ -418,26 +445,26 @@ export function NewMeetingDialog({
                                         ))}
                                     </div>
                                     <p className="text-ink-3 mt-2 text-[11px] leading-normal">
-                                        Any agent can take a seat; manage the roster in Studio →
-                                        Agents.
+                                        {t("anyAgent")}
                                     </p>
                                 </>
                             ) : (
                                 !loading && (
-                                    <p className="text-ink-3 text-[12px]">
-                                        No agents yet — add one in Studio → Agents.
-                                    </p>
+                                    <p className="text-ink-3 text-[12px]">{t("noAgents")}</p>
                                 )
                             )}
                         </Section>
 
                         {workflow.phases.length > 0 && (
                             <Section
-                                title="Phases"
+                                title={t("phases")}
                                 meta={
                                     usePhases
-                                        ? `${phases.length} phases · ${phasedTurns} turns`
-                                        : "Off"
+                                        ? t("phasesMeta", {
+                                              count: phases.length,
+                                              turns: phasedTurns,
+                                          })
+                                        : t("phasesOff")
                                 }
                                 action={
                                     <div className="flex items-center gap-2">
@@ -450,7 +477,7 @@ export function NewMeetingDialog({
                                             htmlFor={`${id}-phases`}
                                             className="text-ink-2 text-[12px] font-medium"
                                         >
-                                            Follow the phases
+                                            {t("followPhases")}
                                         </Label>
                                     </div>
                                 }
@@ -465,15 +492,14 @@ export function NewMeetingDialog({
                                         <PhaseRow
                                             key={phase.id}
                                             phase={phase}
+                                            workflowKey={workflow.key}
                                             index={index}
                                             personas={personas}
                                         />
                                     ))}
                                 </ol>
                                 <p className="text-ink-3 mt-2 text-[11px] leading-normal">
-                                    {usePhases
-                                        ? "The engine keeps each phase to its speakers and goal, and announces the change in the channel."
-                                        : "Off — the turn policy runs the whole meeting."}
+                                    {usePhases ? t("phasesOnHint") : t("phasesOffHint")}
                                 </p>
                             </Section>
                         )}
@@ -484,17 +510,17 @@ export function NewMeetingDialog({
                         className="bg-panel-2 border-line @max-md:w-auto @max-md:flex-none @max-md:overflow-visible @max-md:border-l-0 @max-md:border-t @max-sm:px-4 w-[300px] shrink-0 overflow-y-auto border-l px-5 pb-6 pt-5"
                     >
                         <h3 id={`${id}-runs`} className="text-ink mb-4 text-[13px] font-semibold">
-                            How it runs
+                            {t("howItRuns")}
                         </h3>
 
-                        <Field label="Who speaks next">
+                        <Field label={t("whoSpeaks")}>
                             <RadioGroup
                                 value={policy}
                                 onValueChange={value => {
                                     const option = TURN_POLICIES.find(p => p.id === value);
                                     if (option) setPolicy(option.id);
                                 }}
-                                aria-label="Who speaks next"
+                                aria-label={t("whoSpeaks")}
                                 className="gap-1.5"
                             >
                                 {TURN_POLICIES.map(option => (
@@ -515,10 +541,10 @@ export function NewMeetingDialog({
                                         />
                                         <span className="min-w-0">
                                             <span className="text-ink block text-[12.5px] font-semibold">
-                                                {option.label}
+                                                {t(`policies.${option.key}.label`)}
                                             </span>
                                             <span className="text-ink-3 block text-[11.5px] leading-snug">
-                                                {option.desc}
+                                                {t(`policies.${option.key}.description`)}
                                             </span>
                                         </span>
                                     </label>
@@ -527,14 +553,14 @@ export function NewMeetingDialog({
                         </Field>
 
                         {policy === "moderated" && (
-                            <Field label="Chair" htmlFor={`${id}-chair`}>
+                            <Field label={t("chair")} htmlFor={`${id}-chair`}>
                                 <Select
                                     value={moderator}
                                     onValueChange={setModerator}
                                     disabled={selected.length === 0}
                                 >
                                     <SelectTrigger id={`${id}-chair`} className="bg-panel">
-                                        <SelectValue placeholder="Seat someone first" />
+                                        <SelectValue placeholder={t("seatFirst")} />
                                     </SelectTrigger>
                                     <SelectContent>
                                         {selected.map(key => {
@@ -564,11 +590,11 @@ export function NewMeetingDialog({
                         )}
 
                         <Field
-                            label="Turn limit"
+                            label={t("turnLimit")}
                             hint={
                                 phases.length > 0 && maxTurns < phasedTurns
-                                    ? `Below the ${phasedTurns} turns the phases add up to — the meeting will stop before the last phase.`
-                                    : "A hard stop. The meeting also ends early once the objective is met."
+                                    ? t("turnLimitBelow", { turns: phasedTurns })
+                                    : t("turnLimitHint")
                             }
                             htmlFor={`${id}-turns`}
                         >
@@ -587,17 +613,13 @@ export function NewMeetingDialog({
                             />
                         </Field>
 
-                        <Field
-                            label="Agenda"
-                            hint="One item per line. Optional."
-                            htmlFor={`${id}-agenda`}
-                        >
+                        <Field label={t("agenda")} hint={t("agendaHint")} htmlFor={`${id}-agenda`}>
                             <TextArea
                                 id={`${id}-agenda`}
                                 value={agenda}
                                 onChange={e => setAgenda(e.target.value)}
                                 rows={5}
-                                placeholder={"Current margin\nProposed change\nOwner and timing"}
+                                placeholder={t("agendaPlaceholder")}
                                 className={cn(
                                     "bg-panel max-h-[260px] min-h-[88px]",
                                     GROWS_WITH_TEXT
@@ -606,13 +628,17 @@ export function NewMeetingDialog({
                         </Field>
 
                         <Field
-                            label="Slack mirror"
+                            label={t("slackMirror")}
                             hint={
                                 !data?.slack.canPost
-                                    ? `Set ${data?.slack.missing.join(" and ") ?? "SLACK_BOT_TOKEN"} to enable mirroring.`
+                                    ? t("slackMissing", {
+                                          vars: data
+                                              ? listPhrase(data.slack.missing)
+                                              : "SLACK_BOT_TOKEN",
+                                      })
                                     : !mirrorAllowed
-                                      ? mirrorProblems[0]!
-                                      : "Turns are posted to this channel, and messages people write there come back here."
+                                      ? copy.violationMessage(mirrorProblems[0]!)
+                                      : t("slackHint")
                             }
                             htmlFor={`${id}-slack`}
                         >
@@ -624,7 +650,7 @@ export function NewMeetingDialog({
                                     id={`${id}-slack`}
                                     value={slackChannelId}
                                     onChange={e => setSlackChannelId(e.target.value)}
-                                    placeholder="Channel ID, e.g. C0123456789"
+                                    placeholder={t("slackPlaceholder")}
                                     disabled={!data?.slack.canPost}
                                     className="bg-panel pl-8"
                                 />
@@ -644,7 +670,7 @@ export function NewMeetingDialog({
                                     htmlFor={`${id}-mirror`}
                                     className="text-ink-2 text-[12px] font-medium"
                                 >
-                                    Mirror the meeting to this channel
+                                    {t("mirrorLabel")}
                                 </Label>
                             </div>
                         </Field>
@@ -669,14 +695,16 @@ export function NewMeetingDialog({
                                 <span className="@max-sm:hidden shrink-0">· {summary}</span>
                             </>
                         ) : (
-                            <span className="truncate">Add {listPhrase(missing)} to start.</span>
+                            <span className="truncate">
+                                {t("missing", { items: listPhrase(missing) })}
+                            </span>
                         )}
                     </div>
                     <Button variant="ghost" onClick={onClose}>
-                        Cancel
+                        {tc("actions.cancel")}
                     </Button>
                     <Button onClick={() => void submit()} disabled={!canSubmit || submitting}>
-                        {submitting ? "Starting…" : "Start meeting"}
+                        {submitting ? t("starting") : t("start")}
                     </Button>
                 </DialogFooter>
             </DialogContent>
@@ -696,10 +724,12 @@ function WorkflowRail({
     onPick: (workflow: MeetingWorkflow) => void;
     className?: string;
 }) {
+    const t = useTranslations("collab.newMeeting");
+    const copy = useAgentCopy();
     return (
         <nav
             ref={navRef}
-            aria-label="Workflows"
+            aria-label={t("workflows")}
             className={cn(
                 "bg-panel-2 border-line w-[248px] shrink-0 overflow-y-auto border-r px-2 py-3",
                 className
@@ -708,7 +738,7 @@ function WorkflowRail({
             {WORKFLOW_GROUPS.map(([category, workflows]) => (
                 <div key={category} className="mb-3">
                     <div className="mono text-ink-3 px-2.5 pb-1.5 pt-1 text-[10px] font-bold uppercase tracking-[0.1em]">
-                        {WORKFLOW_CATEGORY_META[category].label}
+                        {copy.workflowCategoryLabel(category)}
                     </div>
                     <div className="flex flex-col gap-0.5">
                         {workflows.map(option => (
@@ -737,6 +767,7 @@ function RailItem({
     active: boolean;
     onPick: (workflow: MeetingWorkflow) => void;
 }) {
+    const words = useWorkflowWords()(workflow);
     return (
         <button
             type="button"
@@ -748,14 +779,14 @@ function RailItem({
                 active ? "bg-brand-soft text-brand-ink" : "text-ink-2 hover:bg-line-2"
             )}
         >
-            <span className="text-[12.5px] font-semibold">{workflow.title}</span>
+            <span className="text-[12.5px] font-semibold">{words.title}</span>
             <span
                 className={cn(
                     "text-[11px] leading-snug",
                     active ? "text-brand-ink/80" : "text-ink-3"
                 )}
             >
-                {workflow.tagline}
+                {words.tagline}
             </span>
         </button>
     );
@@ -771,6 +802,8 @@ function WorkflowPicker({
     current: string;
     onPick: (workflow: MeetingWorkflow) => void;
 }) {
+    const copy = useAgentCopy();
+    const wordsOf = useWorkflowWords();
     return (
         <Select value={current} onValueChange={key => onPick(meetingWorkflow(key) ?? CUSTOM)}>
             <SelectTrigger id={id} className="bg-panel w-full max-w-[360px]">
@@ -779,16 +812,16 @@ function WorkflowPicker({
             <SelectContent>
                 {WORKFLOW_GROUPS.map(([category, workflows]) => (
                     <SelectGroup key={category}>
-                        <SelectLabel>{WORKFLOW_CATEGORY_META[category].label}</SelectLabel>
+                        <SelectLabel>{copy.workflowCategoryLabel(category)}</SelectLabel>
                         {workflows.map(option => (
                             <SelectItem key={option.key} value={option.key}>
-                                {option.title}
+                                {wordsOf(option).title}
                             </SelectItem>
                         ))}
                     </SelectGroup>
                 ))}
                 <SelectSeparator />
-                <SelectItem value={CUSTOM.key}>{CUSTOM.title}</SelectItem>
+                <SelectItem value={CUSTOM.key}>{wordsOf(CUSTOM).title}</SelectItem>
             </SelectContent>
         </Select>
     );
@@ -835,14 +868,14 @@ function SeatCard({
     chair: boolean;
     onToggle: () => void;
 }) {
+    const t = useTranslations("collab.newMeeting");
+    const base = persona.description ? `${persona.role} — ${persona.description}` : persona.role;
     return (
         <button
             type="button"
             onClick={onToggle}
             aria-pressed={selected}
-            title={`${persona.role}${persona.description ? ` — ${persona.description}` : ""}${
-                persona.nodeId ? ` · runs on node ${persona.nodeId}` : ""
-            }`}
+            title={persona.nodeId ? t("seatNode", { base, node: persona.nodeId }) : base}
             className={cn(
                 "flex min-w-0 items-center gap-2.5 rounded-lg border px-2.5 py-2 text-left transition-colors",
                 "focus-visible:ring-brand/50 outline-none focus-visible:ring-[3px]",
@@ -864,9 +897,13 @@ function SeatCard({
                     {persona.displayName}
                 </span>
                 <span className="text-ink-3 block truncate text-[11px]">
-                    {chair && <span className="text-brand-ink font-medium">Chair · </span>}
+                    {chair && (
+                        <span className="text-brand-ink font-medium">{t("chairTag")} · </span>
+                    )}
                     {persona.role}
-                    {suggested && !selected && <span className="text-brand-ink"> · suggested</span>}
+                    {suggested && !selected && (
+                        <span className="text-brand-ink"> · {t("suggestedTag")}</span>
+                    )}
                 </span>
             </span>
             {persona.nodeId && <Server className="text-ink-3 size-3 shrink-0" aria-hidden />}
@@ -885,13 +922,17 @@ function SeatCard({
 
 function PhaseRow({
     phase,
+    workflowKey,
     index,
     personas,
 }: {
     phase: MeetingPhase;
+    workflowKey: string;
     index: number;
     personas: AgentPersonaRecord[];
 }) {
+    const t = useTranslations("collab.newMeeting");
+    const words = useAgentCopy().phaseCopy(workflowKey, phase);
     const speakers = (phase.speakerIds ?? [])
         .map(id => personas.find(p => p.id === id))
         .filter((p): p is AgentPersonaRecord => Boolean(p));
@@ -902,16 +943,14 @@ function PhaseRow({
             </span>
             <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
-                    <span className="text-ink text-[12.5px] font-semibold">{phase.title}</span>
-                    <Badge variant="secondary">
-                        {phase.turns} turn{phase.turns === 1 ? "" : "s"}
-                    </Badge>
+                    <span className="text-ink text-[12.5px] font-semibold">{words.title}</span>
+                    <Badge variant="secondary">{t("phaseTurns", { count: phase.turns })}</Badge>
                 </div>
-                <p className="text-ink-3 mt-0.5 text-[11.5px] leading-snug">{phase.goal}</p>
+                <p className="text-ink-3 mt-0.5 text-[11.5px] leading-snug">{words.goal}</p>
             </div>
             <div className="flex shrink-0 -space-x-1 pt-px">
                 {speakers.length === 0 ? (
-                    <span className="text-ink-3 text-[10.5px]">everyone</span>
+                    <span className="text-ink-3 text-[10.5px]">{t("everyone")}</span>
                 ) : (
                     speakers.map(p => (
                         <AgentAvatar
@@ -926,12 +965,6 @@ function PhaseRow({
             </div>
         </li>
     );
-}
-
-/** "a title", "a title and an objective", "a, b and c". */
-function listPhrase(items: string[]): string {
-    if (items.length <= 1) return items[0] ?? "";
-    return `${items.slice(0, -1).join(", ")} and ${items[items.length - 1]}`;
 }
 
 function slugPreview(title: string): string {

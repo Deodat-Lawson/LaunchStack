@@ -5,6 +5,8 @@ import { agentAiChatbotExecutionStep } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
 import { randomUUID } from "crypto";
 import { validateRequestBody, CreateExecutionStepSchema } from "~/lib/validation";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { assertTaskOwnedByUser } from "~/lib/ai-chat-ownership";
 
@@ -15,6 +17,8 @@ export const maxDuration = 300;
 export async function POST(request: NextRequest) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "chat.server.aiChat");
 
     try {
         const validation = await validateRequestBody(request, CreateExecutionStepSchema);
@@ -22,7 +26,7 @@ export async function POST(request: NextRequest) {
         const { taskId, stepNumber, stepType, description, reasoning, input, output } =
             validation.data;
 
-        const owned = await assertTaskOwnedByUser(taskId, ctx.data.authUserId);
+        const owned = await assertTaskOwnedByUser(taskId, ctx.data.authUserId, locale);
         if (!owned.success) return owned.response;
 
         const stepId = randomUUID();
@@ -50,7 +54,7 @@ export async function POST(request: NextRequest) {
         });
     } catch (error) {
         console.error("Error creating execution step:", error);
-        return NextResponse.json({ error: "Failed to create execution step" }, { status: 500 });
+        return NextResponse.json({ error: t("createStep") }, { status: 500 });
     }
 }
 
@@ -58,16 +62,19 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "chat.server.aiChat");
+    const tValidation = translatorFor(locale, "errors.validation");
 
     try {
         const { searchParams } = new URL(request.url);
         const taskId = searchParams.get("taskId");
 
         if (!taskId) {
-            return NextResponse.json({ error: "taskId is required" }, { status: 400 });
+            return NextResponse.json({ error: tValidation("taskIdRequired") }, { status: 400 });
         }
 
-        const owned = await assertTaskOwnedByUser(taskId, ctx.data.authUserId);
+        const owned = await assertTaskOwnedByUser(taskId, ctx.data.authUserId, locale);
         if (!owned.success) return owned.response;
 
         const steps = await db
@@ -82,6 +89,6 @@ export async function GET(request: NextRequest) {
         });
     } catch (error) {
         console.error("Error fetching execution steps:", error);
-        return NextResponse.json({ error: "Failed to fetch execution steps" }, { status: 500 });
+        return NextResponse.json({ error: t("fetchSteps") }, { status: 500 });
     }
 }

@@ -24,7 +24,7 @@ export async function POST(request: NextRequest, { params }: Params) {
     try {
         const { id } = await params;
         const parsed = DecisionSchema.safeParse(await readBody(request));
-        if (!parsed.success) return error(firstIssue(parsed.error.issues), 400);
+        if (!parsed.success) return error(firstIssue(parsed.error.issues, request), 400);
         const topic = await recordDecision({
             companyId: auth.ctx.companyId,
             userId: auth.ctx.userId,
@@ -34,7 +34,7 @@ export async function POST(request: NextRequest, { params }: Params) {
         });
         return json({ topic });
     } catch (err) {
-        return handleVantageError("POST decide", err);
+        return handleVantageError("POST decide", err, request);
     }
 }
 
@@ -50,6 +50,6 @@ export async function DELETE(request: NextRequest, { params }: Params) {
         });
         return json({ topic });
     } catch (err) {
-        return handleVantageError("DELETE decide", err);
+        return handleVantageError("DELETE decide", err, request);
     }
 }

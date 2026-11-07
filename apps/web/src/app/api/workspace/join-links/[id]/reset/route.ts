@@ -14,11 +14,11 @@ export async function POST(request: Request, { params }: { params: Promise<{ id:
     const ctx = await requireWorkspacePermission("members.invite");
     if (!ctx.success) return ctx.response;
     const id = parseIdParam((await params).id);
-    if (id === null) return invalidIdResponse();
+    if (id === null) return invalidIdResponse(request);
     try {
         const link = await resetJoinLink(ctx.data, id, requestOrigin(request));
         return NextResponse.json({ link }, { status: 201 });
     } catch (error) {
-        return workspaceErrorResponse(error, "[workspace/join-links/reset POST]");
+        return workspaceErrorResponse(error, "[workspace/join-links/reset POST]", request);
     }
 }

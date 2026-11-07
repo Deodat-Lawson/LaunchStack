@@ -3,6 +3,8 @@ import {
     contrastRatio,
     DARK_SWATCHES,
     isDarkSurface,
+    isSwatchId,
+    isThemeId,
     readableInkOn,
     relativeLuminance,
     stickyColors,
@@ -368,5 +370,18 @@ describe("a fresh mindmap", () => {
             const into = page.edges.find(e => e.to.nodeId === nd.id)!;
             expect(into.style.stroke).toBe(branch.style.stroke);
         }
+    });
+});
+
+describe("names on screen", () => {
+    // Swatch and theme names show through `mindmap.colors.<id>` and
+    // `mindmap.themes.<id>`, keyed by these id lists; an id missing from them
+    // would quietly fall back to English.
+    it("lists every swatch and theme id", () => {
+        for (const swatch of [...SWATCHES, ...DARK_SWATCHES]) {
+            expect([swatch.id, isSwatchId(swatch.id)]).toEqual([swatch.id, true]);
+        }
+        for (const theme of THEMES)
+            expect([theme.id, isThemeId(theme.id)]).toEqual([theme.id, true]);
     });
 });

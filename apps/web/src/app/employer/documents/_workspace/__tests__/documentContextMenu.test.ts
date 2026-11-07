@@ -1,5 +1,11 @@
+import { createTranslator } from "use-intl";
+
+import { englishMessages } from "~/i18n/messages";
+
 import { buildDocumentMenuItems, buildVersionMenuItems } from "../documentContextMenu";
 import type { WorkspaceSource } from "../types";
+
+const t = createTranslator({ locale: "en", messages: englishMessages, namespace: "workspace" });
 
 const doc: WorkspaceSource = {
     id: "d1",
@@ -31,7 +37,8 @@ describe("document menu builders", () => {
         const items = buildDocumentMenuItems(
             doc,
             { isMindmap: false, askable: true, persisted: true, originalUrl: "https://x/y.pdf" },
-            h
+            h,
+            t
         );
         expect(items.map(i => i.id)).toEqual([
             "title",
@@ -67,7 +74,8 @@ describe("document menu builders", () => {
                 editable: false,
                 originalUrl: "https://x/y.pdf",
             },
-            handlers()
+            handlers(),
+            t
         );
         for (const id of ["rename", "delete"]) {
             expect(items.find(i => i.id === id)).toMatchObject({
@@ -82,7 +90,8 @@ describe("document menu builders", () => {
         const items = buildDocumentMenuItems(
             { ...doc, documentId: undefined },
             { isMindmap: false, askable: true, persisted: false, originalUrl: null },
-            handlers()
+            handlers(),
+            t
         );
         expect(items.find(i => i.id === "rename")).toMatchObject({
             disabled: true,
@@ -93,7 +102,8 @@ describe("document menu builders", () => {
         const map = buildDocumentMenuItems(
             { ...doc, type: "mindmap", citability: "none" },
             { isMindmap: true, askable: false, persisted: true, originalUrl: null },
-            handlers()
+            handlers(),
+            t
         );
         expect(map.find(i => i.id === "open-tab")).toBeUndefined();
         expect(map.find(i => i.id === "download")).toBeUndefined();
@@ -107,14 +117,16 @@ describe("document menu builders", () => {
         const old = buildVersionMenuItems(
             { versionNumber: 2, isCurrent: false },
             { reverting: false },
-            h
+            h,
+            t
         );
         expect(old[0]).toMatchObject({ label: "v2" });
         expect(old.find(i => i.id === "restore")).toMatchObject({ disabled: false });
         const current = buildVersionMenuItems(
             { versionNumber: 3, isCurrent: true },
             { reverting: false },
-            h
+            h,
+            t
         );
         expect(current[0]).toMatchObject({ label: "v3 (current)" });
         expect(current.find(i => i.id === "preview")).toMatchObject({ disabled: true });

@@ -4,6 +4,8 @@ import { db } from "~/server/db";
 import { agentAiChatbotExecutionStep } from "~/server/db/schema";
 import { eq } from "drizzle-orm";
 import { validateRequestBody, UpdateExecutionStepSchema } from "~/lib/validation";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { assertStepOwnedByUser } from "~/lib/ai-chat-ownership";
 
@@ -17,11 +19,13 @@ export async function PATCH(
 ) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "chat.server.aiChat");
 
     try {
         const { stepId } = await params;
 
-        const owned = await assertStepOwnedByUser(stepId, ctx.data.authUserId);
+        const owned = await assertStepOwnedByUser(stepId, ctx.data.authUserId, locale);
         if (!owned.success) return owned.response;
 
         const validation = await validateRequestBody(request, UpdateExecutionStepSchema);
@@ -43,7 +47,7 @@ export async function PATCH(
             .returning();
 
         if (!updatedStep) {
-            return NextResponse.json({ error: "Execution step not found" }, { status: 404 });
+            return NextResponse.json({ error: t("stepNotFound") }, { status: 404 });
         }
 
         return NextResponse.json({
@@ -52,6 +56,6 @@ export async function PATCH(
         });
     } catch (error) {
         console.error("Error updating execution step:", error);
-        return NextResponse.json({ error: "Failed to update execution step" }, { status: 500 });
+        return NextResponse.json({ error: t("updateStep") }, { status: 500 });
     }
 }

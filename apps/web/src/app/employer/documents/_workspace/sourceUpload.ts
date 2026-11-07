@@ -1,3 +1,5 @@
+import type { useTranslations } from "next-intl";
+
 import type { ArtifactType } from "~/lib/artifact-content";
 
 /**
@@ -7,6 +9,55 @@ import type { ArtifactType } from "~/lib/artifact-content";
  * go through here.
  */
 
+/**
+ * A file that did not make it in. `message` reads "<file>: <why>" in the
+ * server's words, or English; `sourceUploadErrorMessage` says it in the
+ * reader's language.
+ */
+export class SourceUploadError extends Error {
+    constructor(
+        readonly fileName: string,
+        /** Storing the bytes, or registering the document. */
+        readonly step: "upload" | "register",
+        readonly status: number,
+        /** The route's own sentence, shown as is; null when it gave none. */
+        readonly serverMessage: string | null
+    ) {
+        super(
+            `${fileName}: ${
+                serverMessage ??
+                (step === "upload"
+                    ? `upload failed (HTTP ${status})`
+                    : `couldn't be added (HTTP ${status})`)
+            }`
+        );
+        this.name = "SourceUploadError";
+    }
+}
+
+/** `useTranslations("sources.sourceUpload")`. */
+export type SourceUploadTranslator = ReturnType<typeof useTranslations<"sources.sourceUpload">>;
+
+/** What to show for an error from this module; `otherwise` for anything else thrown. */
+export function sourceUploadErrorMessage(
+    error: unknown,
+    t: SourceUploadTranslator,
+    otherwise: string
+): string {
+    if (error instanceof SourceUploadError) {
+        // No answer at all: the connection dropped while the bytes went up.
+        if (error.status === 0) return t("connectionLost", { name: error.fileName });
+        if (error.serverMessage !== null) {
+            return t("withReason", { name: error.fileName, reason: error.serverMessage });
+        }
+        return t(error.step === "upload" ? "uploadFailed" : "registerFailed", {
+            name: error.fileName,
+            status: error.status,
+        });
+    }
+    return error instanceof Error ? error.message : otherwise;
+}
+
 export interface UploadResult {
     url: string;
     provider: "s3" | "database";
@@ -15,22 +66,69 @@ export interface UploadResult {
 // Uses the provider-agnostic /api/upload-local route so uploads work whether the
 // app is configured for S3 or database storage (NEXT_PUBLIC_STORAGE_PROVIDER).
 // The old /api/storage/upload path 400s whenever storage isn't S3.
-export async function uploadFileToStorage(file: File): Promise<UploadResult> {
+//
+// With `onProgress` the bytes go up through XMLHttpRequest, the one browser
+// API that reports upload progress — the Processing queue draws it as the
+// first stage of the file's bar. Without it, a plain fetch.
+export async function uploadFileToStorage(
+    file: File,
+    options: { onProgress?: (loaded: number, total: number) => void } = {}
+): Promise<UploadResult> {
     const form = new FormData();
     form.append("file", file);
-    const res = await fetch("/api/upload-local", { method: "POST", body: form });
-    if (!res.ok) {
-        const body = (await res.json().catch(() => ({}))) as { error?: string };
-        throw new Error(`${file.name}: ${body.error ?? `upload failed (HTTP ${res.status})`}`);
+    const { status, text } = options.onProgress
+        ? await postWithProgress("/api/upload-local", form, options.onProgress, file.name)
+        : await fetch("/api/upload-local", { method: "POST", body: form }).then(async res => ({
+              status: res.status,
+              text: await res.text().catch(() => ""),
+          }));
+    const data = parseJson(text) as { url?: unknown; provider?: unknown; error?: unknown };
+    if (status < 200 || status >= 300 || typeof data.url !== "string") {
+        throw new SourceUploadError(
+            file.name,
+            "upload",
+            status,
+            typeof data.error === "string" ? data.error : null
+        );
     }
-    const data = (await res.json()) as {
-        url: string;
-        provider?: "s3" | "database";
-    };
     return {
         url: data.url,
         provider: data.provider === "s3" ? "s3" : "database",
     };
+}
+
+function parseJson(text: string): Record<string, unknown> {
+    try {
+        const value = JSON.parse(text) as unknown;
+        return value && typeof value === "object" ? (value as Record<string, unknown>) : {};
+    } catch {
+        return {};
+    }
+}
+
+/** POST with upload progress; a dropped connection is a SourceUploadError with status 0. */
+function postWithProgress(
+    url: string,
+    body: FormData,
+    onProgress: (loaded: number, total: number) => void,
+    fileName: string
+): Promise<{ status: number; text: string }> {
+    return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", url);
+        xhr.upload.onprogress = event => {
+            if (event.lengthComputable) onProgress(event.loaded, event.total);
+        };
+        xhr.onload = () => resolve({ status: xhr.status, text: xhr.responseText });
+        xhr.onerror = () => reject(new SourceUploadError(fileName, "upload", 0, null));
+        xhr.send(body);
+    });
+}
+
+/** The document the upload created, and the ingestion job the Processing queue follows; null when an older server did not say. */
+export interface RegisteredDocument {
+    documentId: number | null;
+    jobId: string | null;
 }
 
 export async function registerDocument(params: {
@@ -47,7 +145,7 @@ export async function registerDocument(params: {
     mimeType?: string;
     /** Marks the document as an imported Claude artifact (see ~/lib/artifact-document). */
     artifact?: { artifactType: ArtifactType; sourceUrl?: string | null };
-}): Promise<void> {
+}): Promise<RegisteredDocument> {
     const body: Record<string, unknown> = {
         documentName: params.documentName ?? params.file.name,
         category: params.category,
@@ -72,8 +170,16 @@ export async function registerDocument(params: {
         } catch {
             // not JSON: keep the text
         }
-        throw new Error(
-            `${params.file.name}: ${message || `couldn't be added (HTTP ${res.status})`}`
-        );
+        throw new SourceUploadError(params.file.name, "register", res.status, message || null);
     }
+    // 202 { jobId, document: { id } }.
+    const data = (await res.json().catch(() => null)) as {
+        jobId?: unknown;
+        document?: { id?: unknown };
+    } | null;
+    const id = data?.document?.id;
+    return {
+        documentId: typeof id === "number" ? id : null,
+        jobId: typeof data?.jobId === "string" && data.jobId ? data.jobId : null,
+    };
 }

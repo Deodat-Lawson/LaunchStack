@@ -149,6 +149,18 @@ describe("POST /api/legal/apply-edits", () => {
             expect(json.details).toBeDefined();
         });
 
+        it("answers a Chinese reader in Chinese", async () => {
+            const request = new Request("http://localhost/api/legal/apply-edits", {
+                method: "POST",
+                headers: { cookie: "ls-locale=zh-CN.1" },
+                body: JSON.stringify({ edits: [] }),
+            });
+
+            const json = await (await POST(request)).json();
+
+            expect(json.error).toBe("请求无效");
+        });
+
         // Test: Type validation should catch incorrect data types
         // Ensures the Zod schema enforces string type for documentBase64
         it("returns 400 when documentBase64 is not a string", async () => {

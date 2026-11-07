@@ -1,0 +1,138 @@
+{
+  "registry": {
+    "growth": {
+      "name": "增长",
+      "description": "让公司被更多人知道，并找到会购买的公司——品牌模块跨平台排期和发布内容，潜在客户模块用带引用的档案找到买家并推进交易"
+    },
+    "proposals": {
+      "name": "提案",
+      "description": "依据来源能证明的内容撰写资助与融资提案：建立一次机构档案，找到契合的资助方，把征集要求变成清单，为每个回答起草带引用的内容，提交前先审阅"
+    },
+    "vantage": {
+      "name": "Vantage",
+      "description": "每周一览：重要的决策、每条论点都引用来源的议程，以及对已商定事项的跟进——还为项目提供分诊视图"
+    },
+    "scenarios": {
+      "name": "情景模拟",
+      "description": "模拟依据你的记录构建的人物如何应对某个情境——动态流、谁改变了想法及原因，以及一份报告。它是帮助思考的工具，而不是预测"
+    },
+    "knowledgeGraph": {
+      "name": "知识图谱",
+      "description": "索引健康状况——上传时提取的实体，按共现关系相连。对话中的实体问题依据公司事实回答，而不是这张图谱。"
+    },
+    "repoExplainer": {
+      "name": "代码库解读",
+      "description": "粘贴任意 GitHub 代码库 URL，即可获得摘要和 Mermaid 图。"
+    }
+  },
+  "frame": {
+    "screensLabel": "{title}：页面",
+    "optionsLabel": "{title}：选项",
+    "area": "区域",
+    "back": "后退",
+    "forward": "前进",
+    "linkCopied": "链接已复制",
+    "linkCopyFailed": "无法复制链接",
+    "copyLink": "复制此页面的链接",
+    "openInBrowserTab": "在新的浏览器标签页中打开",
+    "notFoundTitle": "此页面不存在",
+    "notFoundBody": "该链接可能来自旧版本的应用，或者它指向的内容已被删除。",
+    "goTo": "前往{label}"
+  },
+  "cite": {
+    "sourceWithTitle": "来源 {n}：{title}",
+    "source": "来源 {n}",
+    "page": "第 {page} 页",
+    "pageShort": "第 {page} 页",
+    "sources": "来源"
+  },
+  "fitMeter": {
+    "notScored": "尚未评分",
+    "title": "契合度 {value}/100",
+    "titleBelowThreshold": "契合度 {value}/100（阈值 {threshold}）",
+    "label": "契合度 {value}/100"
+  },
+  "resource": {
+    "error": "出了点问题",
+    "requestFailed": "请求失败（{status}）"
+  },
+  "format": {
+    "never": "从未",
+    "justNow": "刚刚",
+    "minutesAgo": "{minutes} 分钟前",
+    "todayAt": "今天 {time}",
+    "hoursAgo": "{hours, plural, other {# 小时前}}",
+    "yesterday": "昨天",
+    "daysAgo": "{days} 天前",
+    "milliseconds": "{ms} 毫秒",
+    "seconds": "{s} 秒",
+    "minutes": "{m} 分钟",
+    "minutesSeconds": "{m} 分 {s} 秒",
+    "listSeparator": "、",
+    "listJoin": "{rest}和{last}"
+  },
+  "knowledgeGraph": {
+    "searchPlaceholder": "查找实体…",
+    "servedFrom": {
+      "neo4j": "数据来自 Neo4j",
+      "postgres": "数据来自 Postgres 备用存储",
+      "none": "还没有图谱数据"
+    },
+    "loading": "正在加载知识图谱…",
+    "loadFailed": "无法加载图谱",
+    "requestFailed": "加载失败（{status}）",
+    "empty": "还没有提取到实体。实体提取默认关闭；请设置 ENABLE_ENTITY_EXTRACTION=true，上传一个文档，然后回到此视图。",
+    "mentions": "{label} · {count, plural, other {# 次提及}}",
+    "relationships": "{count, plural, other {# 条关系}}",
+    "entityTypes": "实体类型",
+    "stats": "{entities} 个节点 · {relationships} 条边",
+    "statsTruncated": "{entities} 个节点 · {relationships} 条边 · 已截断",
+    "zoomIn": "放大",
+    "zoomOut": "缩小",
+    "resetView": "重置视图",
+    "hint": "点击选择 · 滚动缩放 · 拖动平移"
+  },
+  "repoExplainer": {
+    "title": "GitHub 代码库解读",
+    "urlLabel": "GitHub 代码库 URL",
+    "urlPlaceholder": "https://github.com/owner/repo 或 owner/repo",
+    "generating": "正在生成…",
+    "generate": "生成图表",
+    "tokenLabel": "GitHub 访问令牌（可选，私有代码库必填）",
+    "tokenPlaceholder": "'<'your-github-token> 或细粒度令牌",
+    "diagramType": "图表类型",
+    "diagramTypes": {
+      "architecture": "架构图",
+      "component": "组件图",
+      "sequence": "时序图",
+      "class": "类图",
+      "er": "ER 图"
+    },
+    "instructionsLabel": "补充说明（可选）",
+    "instructionsPlaceholder": "例如：“重点关注 API 设计，并生成 UML 组件图。”",
+    "tip": "提示：试试 <url>https://github.com/facebook/react</url>，并给出类似 <example>“生成一张高层级的 UML 图…”</example>的说明。",
+    "tipInstruction": "生成一张高层级的 UML 图，展示主要组件及其交互方式。",
+    "summary": "摘要",
+    "architectureDiagram": "架构图",
+    "noDiagram": "没有生成图表。",
+    "umlJson": "UML JSON 响应",
+    "errors": {
+      "missingUrl": "请输入 GitHub 代码库 URL。",
+      "failed": "无法为这个代码库生成解读，请重试。",
+      "network": "与代码库解读服务通信时出了问题，请重试。"
+    },
+    "diagram": {
+      "menuLabel": "图表操作",
+      "copySource": "复制 Mermaid 源码",
+      "copySvg": "复制为 SVG",
+      "notRendered": "图表还没有渲染完成。",
+      "emptyResult": "Mermaid 返回了空结果",
+      "renderFailed": "无法渲染图表",
+      "renderError": "图表渲染出错",
+      "rawCode": "Mermaid 原始代码",
+      "downloadSvg": "下载为 SVG",
+      "downloadPng": "下载为 PNG",
+      "rendering": "正在渲染图表…"
+    }
+  }
+}

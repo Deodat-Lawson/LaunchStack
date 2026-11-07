@@ -2,6 +2,7 @@
 
 import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { ExternalLink, Film, Loader2, Music } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "~/components/ui/button";
 import { IconYoutube } from "~/components/icons/brand";
@@ -35,6 +36,7 @@ export const EmbedPlayer = forwardRef<PlayerHandle, EmbedPlayerProps>(function E
     { playback, kind, title, onTimeChange, fill = false },
     ref
 ) {
+    const t = useTranslations("viewers.media");
     const frameRef = useRef<HTMLIFrameElement>(null);
     const [loaded, setLoaded] = useState(false);
     const bridge = embedBridgeFor(playback.provider);
@@ -111,7 +113,7 @@ export const EmbedPlayer = forwardRef<PlayerHandle, EmbedPlayerProps>(function E
                 <iframe
                     ref={frameRef}
                     src={playback.embedUrl}
-                    title={`${title} — ${playback.label} player`}
+                    title={t("embedFrameTitle", { title, platform: playback.label })}
                     className="absolute inset-0 h-full w-full border-0"
                     allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
                     allowFullScreen
@@ -122,12 +124,12 @@ export const EmbedPlayer = forwardRef<PlayerHandle, EmbedPlayerProps>(function E
             <div className="border-line flex items-center gap-2 border-b px-4 py-1.5">
                 <PlatformIcon className="text-ink-3 size-4 shrink-0" aria-hidden />
                 <span className="text-ink-3 min-w-0 flex-1 truncate text-xs">
-                    Streaming from {playback.label}
+                    {t("streamingFrom", { platform: playback.label })}
                 </span>
                 <Button variant="ghost" size="sm" asChild className="text-ink-2 text-xs">
                     <a href={playback.watchUrl} target="_blank" rel="noopener noreferrer">
                         <ExternalLink />
-                        Open on {playback.label}
+                        {t("openOn", { platform: playback.label })}
                     </a>
                 </Button>
             </div>

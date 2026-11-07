@@ -7,10 +7,11 @@ import { ScenariosTool } from "~/app/employer/tools/scenarios/ScenariosTool";
 import type { ToolHost } from "~/components/tool-app/nav";
 import { Toaster } from "~/components/ui/sonner";
 
-import { configureScenariosSim, simulateScenarios } from "./scenarios-sim";
+import { configureScenariosSim, simulateScenarios, simulateUpload } from "./scenarios-sim";
 
 /**
- * Answers `/api/scenarios/**` from the in-memory simulator. Installed at
+ * Answers `/api/scenarios/**`, and the two upload calls the new-scenario
+ * form makes, from the in-memory simulator. Installed at
  * module scope so the first fetch the tab makes is already intercepted, with
  * a short wait so skeletons and busy states show the way they do live.
  */
@@ -29,9 +30,13 @@ function stubApi() {
         const url =
             typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
         const parsed = new URL(url, window.location.origin);
-        if (!parsed.pathname.startsWith("/api/scenarios")) return real(input, init);
-        await new Promise(resolve => setTimeout(resolve, 160));
-        const simulated = await simulateScenarios(parsed, init);
+        const upload =
+            parsed.pathname === "/api/upload-local" || parsed.pathname === "/api/uploadDocument";
+        if (!parsed.pathname.startsWith("/api/scenarios") && !upload) return real(input, init);
+        await new Promise(resolve => setTimeout(resolve, upload ? 600 : 160));
+        const simulated = upload
+            ? await simulateUpload(parsed, init)
+            : await simulateScenarios(parsed, init);
         return simulated ?? real(input, init);
     };
 }
@@ -55,7 +60,7 @@ export function ScenariosPreview({ at }: { at: string }) {
     if (!mounted) return null;
     return (
         <div data-preview="scenarios" className="flex h-dvh flex-col">
-            <div className="bg-warn-soft text-warn border-warn/40 shrink-0 border-b px-4 py-1.5 text-center text-xs">
+            <div className="bg-warn-soft text-warn-ink border-warn/40 shrink-0 border-b px-4 py-1.5 text-center text-xs">
                 Preview harness — no login, in-memory data; a reload starts over. Run 2 finishes a
                 round every 5 seconds. Add <span className="font-mono">?empty=1</span> for no runs,{" "}
                 <span className="font-mono">?credits=short</span> or{" "}

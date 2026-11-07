@@ -2,14 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { Coins } from "lucide-react";
-
-function formatTokens(n: number): string {
-    if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
-    if (n >= 1_000) return `${(n / 1_000).toFixed(0)}K`;
-    return n.toLocaleString();
-}
+import { useFormatter, useTranslations } from "next-intl";
 
 export function TokenBalance() {
+    const t = useTranslations("chrome.tokens");
+    const format = useFormatter();
     const [balance, setBalance] = useState<number | null>(null);
 
     useEffect(() => {
@@ -29,18 +26,24 @@ export function TokenBalance() {
     if (balance === null) return null;
 
     const isLow = balance < 500_000;
+    // 1.2M, 340K: one decimal for millions, none for thousands.
+    const short = format.number(balance, {
+        notation: "compact",
+        minimumFractionDigits: balance >= 1_000_000 ? 1 : 0,
+        maximumFractionDigits: balance >= 1_000_000 ? 1 : 0,
+    });
 
     return (
         <div
             className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
                 isLow
-                    ? "border-red-200 bg-red-50 text-red-600 dark:border-red-800/50 dark:bg-red-950/40 dark:text-red-400"
+                    ? "border-danger/30 bg-danger-soft text-danger"
                     : "border-brand bg-brand-soft text-brand-ink dark:border-brand-soft"
             }`}
-            title={`${balance.toLocaleString()} tokens remaining`}
+            title={t("remaining", { count: format.number(balance) })}
         >
             <Coins className="h-3.5 w-3.5" />
-            {formatTokens(balance)}
+            {short}
         </div>
     );
 }

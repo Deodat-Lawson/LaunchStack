@@ -59,4 +59,39 @@ describe("embedding credential/endpoint pairing", () => {
         expect(effective.openAIApiKey).toBe("deployment-key");
         expect(effective.openAIBaseUrl).toBe("https://api.siliconflow.cn/v1");
     });
+
+    it("counts an endpoint as the workspace's only when the company supplied it", () => {
+        // Usage on a workspace's own endpoint is its provider's bill, not the server's.
+        expect(resolveEffectiveEmbeddingConfig({})).toMatchObject({
+            openAIOwner: "deployment",
+            huggingFaceOwner: "deployment",
+            ollamaOwner: "deployment",
+        });
+        // A URL without a key keeps the deployment's pair, so the deployment's bill.
+        expect(
+            resolveEffectiveEmbeddingConfig({ openAIBaseUrl: "https://tenant.example/v1" })
+        ).toMatchObject({ openAIOwner: "deployment" });
+        expect(
+            resolveEffectiveEmbeddingConfig({
+                openAIApiKey: "tenant-openai-key",
+                openAIBaseUrl: "https://api.openai.com/v1",
+                huggingFaceApiKey: "  ",
+                ollamaModel: "nomic-embed-text",
+            })
+        ).toMatchObject({
+            openAIOwner: "workspace",
+            huggingFaceOwner: "deployment",
+            ollamaOwner: "deployment",
+        });
+        expect(
+            resolveEffectiveEmbeddingConfig({
+                huggingFaceApiKey: "hf-tenant",
+                ollamaBaseUrl: "http://ollama.tenant:11434",
+            })
+        ).toMatchObject({
+            openAIOwner: "deployment",
+            huggingFaceOwner: "workspace",
+            ollamaOwner: "workspace",
+        });
+    });
 });

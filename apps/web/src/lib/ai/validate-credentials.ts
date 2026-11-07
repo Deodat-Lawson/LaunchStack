@@ -1,11 +1,17 @@
 import type { EmbeddingIndexConfig, CompanyEmbeddingConfig } from "@launchstack/llm/embeddings";
 
+import { V, v } from "~/i18n/validation";
+
 export interface CredentialCheckResult {
     ok: boolean;
     error?: string;
 }
 
 /**
+ * `error` is English: the provider's own message, or one of the
+ * `errors.validation` sentences, which the route words for its reader with
+ * `wordEnglish(error, "errors.validation", locale)`.
+ *
  * Perform a 1-token test embed against the configured provider using the
  * supplied credentials. Returns `{ ok: true }` on success or `{ ok: false,
  * error }` on any network / auth / dimension failure.
@@ -32,7 +38,7 @@ export async function validateEmbeddingCredentials(
     } catch (err) {
         return {
             ok: false,
-            error: err instanceof Error ? err.message : "Embedding index could not be resolved.",
+            error: err instanceof Error ? err.message : V.embeddingIndexUnresolved,
         };
     }
 
@@ -42,17 +48,17 @@ export async function validateEmbeddingCredentials(
         if (!Array.isArray(vector) || vector.length !== index.dimension) {
             return {
                 ok: false,
-                error: `Embedding provider returned a vector of length ${Array.isArray(vector) ? vector.length : "unknown"}, expected ${index.dimension}.`,
+                error: v("embeddingVectorLength", {
+                    actual: Array.isArray(vector) ? String(vector.length) : "unknown",
+                    expected: String(index.dimension),
+                }),
             };
         }
         return { ok: true };
     } catch (err) {
         return {
             ok: false,
-            error:
-                err instanceof Error
-                    ? err.message
-                    : "Embedding provider rejected the supplied credentials.",
+            error: err instanceof Error ? err.message : V.embeddingCredentialsRejected,
         };
     }
 }

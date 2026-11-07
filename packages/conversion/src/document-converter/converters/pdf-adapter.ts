@@ -1,4 +1,26 @@
-import type { SourceAdapter, SourceAdapterOptions, StandardizedDocument } from "../../types";
+import type { OCRProvider } from "../../ocr-processing/types";
+import type {
+    IngestionProvider,
+    SourceAdapter,
+    SourceAdapterOptions,
+    StandardizedDocument,
+} from "../../types";
+
+/** The OCR provider that produced the text, as the ingestion layer names it. */
+export function ingestionProviderFor(provider: OCRProvider): IngestionProvider {
+    switch (provider) {
+        case "AZURE":
+            return "azure";
+        case "DOCLING":
+            return "docling";
+        case "LANDING_AI":
+            return "landing_ai";
+        case "DATALAB":
+            return "datalab";
+        default:
+            return "native_pdf";
+    }
+}
 
 export class PdfAdapter implements SourceAdapter {
     readonly name = "PdfAdapter";
@@ -32,6 +54,8 @@ export class PdfAdapter implements SourceAdapter {
         const routeStart = Date.now();
         const routing = await routeDocument(documentUrl, {
             forceOCR: options?.forceOCR,
+            mimeType: options?.mimeType,
+            filename: options?.filename,
         });
         console.log(
             `[PdfAdapter] Routing decision (${Date.now() - routeStart}ms): ` +
@@ -46,8 +70,11 @@ export class PdfAdapter implements SourceAdapter {
         );
 
         const elapsed = Date.now() - startTime;
+        // The provider that produced the text — after any fallback — not
+        // the one routing asked for.
+        const provider = ingestionProviderFor(normResult.provider);
         console.log(
-            `[PdfAdapter] Done: ${normResult.pages.length} pages, provider=${routing.isNativePDF ? "native_pdf" : "azure"} (${elapsed}ms)`
+            `[PdfAdapter] Done: ${normResult.pages.length} pages, provider=${provider} (${elapsed}ms)`
         );
 
         return {
@@ -59,7 +86,7 @@ export class PdfAdapter implements SourceAdapter {
             metadata: {
                 sourceType: "pdf",
                 totalPages: normResult.pages.length,
-                provider: routing.isNativePDF ? "native_pdf" : "azure",
+                provider,
                 processingTimeMs: elapsed,
                 confidenceScore: normResult.confidenceScore,
                 originalFilename: options?.filename,

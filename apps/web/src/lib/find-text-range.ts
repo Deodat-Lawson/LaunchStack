@@ -96,14 +96,8 @@ export function citationNeedles(snippet: string, matchText?: string): string[] {
     return candidates;
 }
 
-/**
- * Find the first candidate needle inside `root`'s visible text and return it
- * as a DOM Range, or null when nothing matches.
- */
-export function findTextRange(root: Node, needles: string[]): Range | null {
-    if (needles.length === 0) return null;
-
-    // Build the normalized haystack with a char → (node, offset) map.
+/** `root`'s visible text in the matching space, with each character's place in the DOM. */
+function buildHaystack(root: Node): { doc: Document; haystack: string; map: CharMapEntry[] } {
     const doc = root.ownerDocument ?? (root as Document);
     const walker = doc.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
         acceptNode: node => {
@@ -127,19 +121,105 @@ export function findTextRange(root: Node, needles: string[]): Range | null {
             map.push({ node: textNode, offset: i });
         }
     }
+    return { doc, haystack, map };
+}
+
+function rangeAt(doc: Document, map: CharMapEntry[], index: number, length: number): Range | null {
+    const start = map[index];
+    const end = map[index + length - 1];
+    if (!start || !end) return null;
+    const range = doc.createRange();
+    range.setStart(start.node, start.offset);
+    range.setEnd(end.node, end.offset + 1);
+    return range;
+}
+
+/**
+ * Find the first candidate needle inside `root`'s visible text and return it
+ * as a DOM Range, or null when nothing matches.
+ */
+export function findTextRange(root: Node, needles: string[]): Range | null {
+    if (needles.length === 0) return null;
+    const { doc, haystack, map } = buildHaystack(root);
 
     for (const rawNeedle of needles) {
         const needle = rawNeedle.replace(/\s+/g, "");
         if (needle.length === 0) continue;
         const idx = haystack.indexOf(needle);
         if (idx < 0) continue;
-        const start = map[idx];
-        const end = map[idx + needle.length - 1];
-        if (!start || !end) continue;
-        const range = doc.createRange();
-        range.setStart(start.node, start.offset);
-        range.setEnd(end.node, end.offset + 1);
-        return range;
+        const range = rangeAt(doc, map, idx, needle.length);
+        if (range) return range;
     }
     return null;
+}
+
+/**
+ * Every place `query` occurs in `root`'s visible text, in reading order and
+ * not overlapping — what a viewer's Find marks. Matched like a citation:
+ * case- and whitespace-insensitive, so a phrase found across a line break in
+ * the page still counts. Stops at `limit` matches.
+ */
+export function findAllTextRanges(root: Node, query: string, limit = 1000): Range[] {
+    const needle = normalizeNeedle(query).replace(/\s+/g, "");
+    if (needle.length === 0 || limit <= 0) return [];
+    const { doc, haystack, map } = buildHaystack(root);
+
+    const ranges: Range[] = [];
+    let from = 0;
+    while (ranges.length < limit) {
+        const idx = haystack.indexOf(needle, from);
+        if (idx < 0) break;
+        const range = rangeAt(doc, map, idx, needle.length);
+        if (range) ranges.push(range);
+        from = idx + needle.length;
+    }
+    return ranges;
+}
+
+// ---------------------------------------------------------------------------
+// The same matching over plain text
+// ---------------------------------------------------------------------------
+
+/**
+ * `text` in the matching space — lowercased, whitespace and marker characters
+ * dropped — so a search over a page's extracted text (pdf.js `getTextContent`)
+ * agrees with the one over its rendered text layer. A viewer that draws only
+ * the pages in view uses this to find *which* page holds a passage, and the
+ * DOM functions above to find *where* on the page once it is drawn.
+ */
+export function normalizeHaystackText(text: string): string {
+    let out = "";
+    for (const ch of text) {
+        if (MARKER_CHARS.has(ch) || /\s/.test(ch)) continue;
+        const lower = ch.toLowerCase();
+        out += lower.length === 1 ? lower : ch;
+    }
+    return out;
+}
+
+/** How many non-overlapping times `query` occurs in `text`, as `findAllTextRanges` counts. */
+export function countTextMatches(text: string, query: string, limit = 1000): number {
+    const needle = normalizeNeedle(query).replace(/\s+/g, "");
+    if (needle.length === 0 || limit <= 0) return 0;
+    const haystack = normalizeHaystackText(text);
+    let count = 0;
+    let from = 0;
+    while (count < limit) {
+        const idx = haystack.indexOf(needle, from);
+        if (idx < 0) break;
+        count += 1;
+        from = idx + needle.length;
+    }
+    return count;
+}
+
+/** Whether any of `needles` occurs in `text`, as `findTextRange` would match. */
+export function textContainsNeedle(text: string, needles: string[]): boolean {
+    if (needles.length === 0) return false;
+    const haystack = normalizeHaystackText(text);
+    for (const rawNeedle of needles) {
+        const needle = rawNeedle.replace(/\s+/g, "");
+        if (needle.length > 0 && haystack.includes(needle)) return true;
+    }
+    return false;
 }

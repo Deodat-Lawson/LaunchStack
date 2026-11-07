@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslations } from "next-intl";
 import { MoreHorizontal, Plus, Trash2 } from "lucide-react";
 
 import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip";
@@ -19,7 +20,7 @@ import { SWATCH_BY_ID, swatchFor } from "../model/palette";
 
 import type { EditorState } from "../model/store";
 import type { DiagramNode } from "../model/types";
-import { useEditor, useStore } from "./EditorContext";
+import { swatchName, useEditor, useStore } from "./EditorContext";
 
 /**
  * The eight hues on the floating toolbar: one neutral and seven that are far
@@ -50,6 +51,8 @@ const TOOLBAR_HEIGHT = 36;
 const GAP = 10;
 
 export function SelectionToolbar({ onMore }: { onMore: () => void }) {
+    const t = useTranslations("mindmap");
+    const tc = useTranslations("common");
     const store = useStore();
     const doc = useEditor(selectDoc);
     const selection = useEditor(selectSelection);
@@ -82,19 +85,19 @@ export function SelectionToolbar({ onMore }: { onMore: () => void }) {
     return (
         <div
             role="toolbar"
-            aria-label="Selection"
+            aria-label={t("selectionToolbar.label")}
             data-export="omit"
             className="border-line bg-panel text-ink absolute z-20 flex h-9 -translate-x-1/2 items-center gap-0.5 rounded-lg border px-1 shadow-md"
             style={{ left: top.x, top: y }}
             onPointerDown={e => e.stopPropagation()}
             onMouseDown={e => e.stopPropagation()}
         >
-            <Tip label="Add child" hint="Tab">
+            <Tip label={t("selectionToolbar.addChild")} hint="Tab">
                 <button
                     type="button"
                     onClick={() => addChildTopic(store, first.id)}
                     className="text-ink-2 hover:bg-brand-soft hover:text-brand-ink flex size-7 items-center justify-center rounded-md transition-colors"
-                    aria-label="Add child topic"
+                    aria-label={t("selectionToolbar.addChildTopic")}
                 >
                     <Plus className="size-4" />
                 </button>
@@ -102,19 +105,24 @@ export function SelectionToolbar({ onMore }: { onMore: () => void }) {
 
             <span className="bg-line mx-0.5 h-5 w-px" />
 
-            <div className="flex items-center gap-1 px-1" role="group" aria-label="Colour">
+            <div
+                className="flex items-center gap-1 px-1"
+                role="group"
+                aria-label={t("selectionToolbar.colour")}
+            >
                 {PICKER.map(id => SWATCH_BY_ID[id]!).map(sw => {
                     const tone = swatchFor(sw.id, mode);
                     // A central topic wears its hue as the fill, not the outline.
                     const worn =
                         first.shape === "mind-root" ? first.style.fill : first.style.stroke;
                     const active = worn === tone.stroke;
+                    const name = swatchName(t, sw);
                     return (
-                        <Tip key={sw.id} label={sw.name}>
+                        <Tip key={sw.id} label={name}>
                             <button
                                 type="button"
                                 onClick={() => applySwatch(store, sw.id)}
-                                aria-label={sw.name}
+                                aria-label={name}
                                 aria-pressed={active}
                                 className={cn(
                                     "size-4 rounded-full border transition-transform hover:scale-110",
@@ -130,26 +138,26 @@ export function SelectionToolbar({ onMore }: { onMore: () => void }) {
 
             <span className="bg-line mx-0.5 h-5 w-px" />
 
-            <Tip label="Smaller text">
+            <Tip label={t("selectionToolbar.smaller")}>
                 <button
                     type="button"
                     onClick={() =>
                         styleTextSelection(store, { size: Math.max(9, size - 2) }, "Font size")
                     }
                     className="text-ink-2 hover:bg-brand-soft hover:text-brand-ink flex h-7 min-w-7 items-center justify-center rounded-md px-1 text-[11px] font-semibold transition-colors"
-                    aria-label="Smaller text"
+                    aria-label={t("selectionToolbar.smaller")}
                 >
                     A−
                 </button>
             </Tip>
-            <Tip label="Larger text">
+            <Tip label={t("selectionToolbar.larger")}>
                 <button
                     type="button"
                     onClick={() =>
                         styleTextSelection(store, { size: Math.min(48, size + 2) }, "Font size")
                     }
                     className="text-ink-2 hover:bg-brand-soft hover:text-brand-ink flex h-7 min-w-7 items-center justify-center rounded-md px-1 text-[13px] font-semibold transition-colors"
-                    aria-label="Larger text"
+                    aria-label={t("selectionToolbar.larger")}
                 >
                     A+
                 </button>
@@ -157,22 +165,22 @@ export function SelectionToolbar({ onMore }: { onMore: () => void }) {
 
             <span className="bg-line mx-0.5 h-5 w-px" />
 
-            <Tip label="Delete" hint="⌫">
+            <Tip label={tc("actions.delete")} hint="⌫">
                 <button
                     type="button"
                     onClick={() => deleteTopicsOrSelection(store)}
                     className="text-ink-2 hover:bg-danger/10 hover:text-danger flex size-7 items-center justify-center rounded-md transition-colors"
-                    aria-label="Delete"
+                    aria-label={tc("actions.delete")}
                 >
                     <Trash2 className="size-4" />
                 </button>
             </Tip>
-            <Tip label="Everything else">
+            <Tip label={t("selectionToolbar.everythingElse")}>
                 <button
                     type="button"
                     onClick={onMore}
                     className="text-ink-2 hover:bg-brand-soft hover:text-brand-ink flex size-7 items-center justify-center rounded-md transition-colors"
-                    aria-label="More options"
+                    aria-label={t("selectionToolbar.moreOptions")}
                 >
                     <MoreHorizontal className="size-4" />
                 </button>

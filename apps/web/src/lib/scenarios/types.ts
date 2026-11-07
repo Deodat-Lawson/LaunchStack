@@ -37,14 +37,18 @@ export const SCENARIO_LIMITS = {
     agents: { min: 5, max: 200, default: 30 },
     rounds: { min: 1, max: 30, default: 8 },
     postTest: { agents: 20, rounds: 3 },
-    subjectMax: 600,
+    /** Room for a plan, the actions behind it and where things stand; longer material goes in files. */
+    subjectMax: 4000,
     notesMax: 8000,
     eventMax: 500,
     questionMax: 600,
     documentsMax: 20,
 } as const;
 
-/** The line every scenario surface shows. */
+/**
+ * The line every scenario surface shows, in English. Screens say it in the
+ * reader's language with `useTranslations("scenarios.words")("caveat")`.
+ */
 export const SCENARIO_CAVEAT =
     "A scenario among simulated people built from your records — something to think with, not a forecast.";
 
@@ -65,7 +69,10 @@ export interface ScenarioSources {
 
 export interface CreateScenarioInput {
     title?: string;
-    /** The situation or question, e.g. "We raise prices 20% for new customers in January." */
+    /**
+     * The situation or question, e.g. "We raise prices 20% for new customers in
+     * January." — or a few paragraphs: the plan, the actions, the current cases.
+     */
     subject: string;
     sources: ScenarioSources;
     agents: number;
@@ -85,12 +92,34 @@ export interface ScenarioEstimate {
     enough: boolean;
 }
 
+/**
+ * Whether a file's passages can be read yet: a file still being processed
+ * gives a run nothing, so the form waits for it.
+ */
+export type ScenarioFileStatus = "ready" | "processing" | "failed";
+
+/** One file the new-scenario form can offer. */
+export interface ScenarioFileOption {
+    id: number;
+    title: string;
+    folder: string | null;
+    /** As stored, for the file's icon; null when the upload did not say. */
+    mimeType: string | null;
+    addedAt: string;
+    status: ScenarioFileStatus;
+    /** The company profile counts it as written by or about the company. */
+    aboutCompany: boolean;
+}
+
 /** What the new-scenario form can offer. */
 export interface ScenarioSourceOptions {
-    documents: Array<{ id: number; title: string; folder: string | null }>;
+    /** Newest first. */
+    documents: ScenarioFileOption[];
     prospects: number;
     brandComments: number;
     companyProfile: boolean;
+    /** The viewer may add files to the workspace from the form. */
+    canUpload: boolean;
 }
 
 export interface ScenarioSummary {
@@ -129,6 +158,15 @@ export interface ScenarioSource {
 
 export type Stance = -2 | -1 | 0 | 1 | 2;
 
+/** What a person has to spend: nothing set aside, little, or a budget for the right thing. */
+export type ScenarioBudget = "none" | "tight" | "funded";
+/** Their part in a purchase. */
+export type ScenarioBuyingRole = "decides" | "influences" | "uses";
+/** What moving off their current tool would cost them. */
+export type ScenarioSwitchingCost = "low" | "medium" | "high";
+/** Whether they'd spend money on what's on offer, as things stand. */
+export type ScenarioWouldPay = "yes" | "maybe" | "no";
+
 export interface ScenarioPerson {
     id: string;
     name: string;
@@ -152,6 +190,18 @@ export interface ScenarioPerson {
     comments: number;
     /** The person's last private reasoning. */
     lastThought: string | null;
+    // The wallet, from the cast. Null in runs cast before it was asked for.
+    /** What they use for this today, e.g. a named product, "Spreadsheets" or "nothing". */
+    currentSolution: string | null;
+    budget: ScenarioBudget | null;
+    buyingRole: ScenarioBuyingRole | null;
+    switchingCost: ScenarioSwitchingCost | null;
+    /** Their first doubt, in their own words. */
+    firstObjection: string | null;
+    /** Whether they'd pay, as of their last turn; null before their first. */
+    wouldPay: ScenarioWouldPay | null;
+    /** What still held them back on their last turn. */
+    objection: string | null;
 }
 
 export interface ScenarioComment {

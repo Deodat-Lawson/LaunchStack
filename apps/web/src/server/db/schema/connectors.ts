@@ -7,7 +7,7 @@
  * every consumer of the synced data is company-owned, and the reconciler and
  * sync jobs run in the worker with no user session. One table serves every
  * OAuth provider — `provider` discriminates — Google Drive, Slack, GitHub,
- * and Gmail today.
+ * Gmail, and Notion today.
  *
  * Gmail is the one per-user provider: a mailbox is personal, so its row is
  * owned by a member (`ownerUserId`, one connection per member per
@@ -50,6 +50,7 @@ export const CONNECTOR_PROVIDERS = [
     "slack",
     "github",
     "gmail",
+    "notion",
     // Brand's social accounts (Growth › Brand › Accounts): LinkedIn is an
     // OAuth grant; Bluesky stores an app password where a token would go.
     "linkedin",
@@ -231,9 +232,10 @@ export const googleDriveSyncState = pgTable("google_drive_sync_state", {
 });
 
 /**
- * What an admin picked in the Google Picker or pasted as a link. Under the
- * drive.file scope these are the entire universe the knowledge sync can see;
- * with drive.readonly a picked folder brings everything inside it.
+ * What an admin picked in the Google Picker (Add source → Files or Folder)
+ * or pasted as a link. Under the drive.file scope these are the entire
+ * universe the knowledge sync can see; with drive.readonly a picked folder
+ * brings everything inside it.
  */
 export const googleDrivePickedItem = pgTable(
     "google_drive_picked_item",
@@ -258,6 +260,15 @@ export const googleDrivePickedItem = pgTable(
          * category table belongs to the engine schema.
          */
         folderCategoryId: bigint("folder_category_id", { mode: "number" }),
+        /**
+         * The folder picked in Add source's destination bar, as a path: a
+         * picked file lands in it, a picked folder is rebuilt inside it.
+         * Read once, when the pick's first files are placed — after that
+         * they stay wherever people move them. Null for picks made before
+         * Drive moved into Add source: files go to "Google Drive", folders
+         * become top-level folders.
+         */
+        destination: varchar("destination", { length: 256 }),
     },
     table => ({
         connectionFileUnique: uniqueIndex("gdrive_picked_conn_file_idx").on(
@@ -321,6 +332,77 @@ export const gmailSyncScope = pgTable(
     })
 );
 
+/**
+ * Notion sync bookkeeping — the sync lease and last-run summary, plus the
+ * folder the connection's pages land in. One row per Notion connection.
+ * There is no cursor: every run lists what the connection can read (search
+ * returns metadata only, so this is cheap) and compares edit times, which is
+ * also how pages that were deleted or un-shared are noticed. What syncs is
+ * whatever was picked on Notion's own consent screen, so there is no
+ * picked-items table either.
+ */
+export const notionSyncState = pgTable("notion_sync_state", {
+    connectionId: bigint("connection_id", { mode: "number" })
+        .primaryKey()
+        .references(() => connectorConnections.id, { onDelete: "cascade" }),
+    /**
+     * The LaunchStack folder (category id) this connection's pages land in.
+     * An id, not a path, so a rename or move in LaunchStack is followed.
+     * No FK: the category table belongs to the engine schema.
+     */
+    folderCategoryId: bigint("folder_category_id", { mode: "number" }),
+    lastSyncAt: timestamp("last_sync_at", { withTimezone: true }),
+    /** ok | error | running */
+    lastSyncStatus: varchar("last_sync_status", { length: 16 }),
+    lastSyncError: text("last_sync_error"),
+    /** Counts from the last run ({discovered, stored, unchanged, failed, …}). */
+    lastSyncReport: jsonb("last_sync_report").$type<Record<string, unknown>>(),
+    /** Sync lease; stale after 10 minutes, claimed via conditional update. */
+    syncLockedAt: timestamp("sync_locked_at", { withTimezone: true }),
+});
+
+/**
+ * Synced files someone deleted in LaunchStack, so the sync leaves them
+ * deleted. Drive and Notion sync what a pick or a share reaches, not a list
+ * of documents: without this, a deleted file is simply "new" to the next
+ * run and comes straight back. The file in Drive or Notion is never
+ * touched. Deleting the row (Settings › "Sync again", or picking the file or
+ * its folder again) lets the next sync import it like any new file.
+ */
+export const connectorDeletedItem = pgTable(
+    "connector_deleted_item",
+    {
+        id: bigserial("id", { mode: "bigint" }).primaryKey(),
+        connectionId: bigint("connection_id", { mode: "number" })
+            .notNull()
+            .references(() => connectorConnections.id, { onDelete: "cascade" }),
+        /** The connector's own id for the file: a Drive file id, a Notion page id. */
+        sourceId: varchar("source_id", { length: 128 }).notNull(),
+        /**
+         * Drive only: the pick that brought the file in. Picking that folder
+         * again brings its deleted files back; a file whose own pick was
+         * removed with it comes back by being picked again.
+         */
+        pickedRootId: varchar("picked_root_id", { length: 128 }),
+        /** The document's title when it was deleted, for Settings to name it. */
+        title: text("title").notNull(),
+        /** Who deleted it. Settings names a file only to whoever deleted it (ADR-014). */
+        deletedByUserPk: bigint("deleted_by_user_pk", { mode: "number" }).references(
+            () => users.id,
+            { onDelete: "set null" }
+        ),
+        deletedAt: timestamp("deleted_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
+    },
+    table => ({
+        connectionSourceUnique: uniqueIndex("connector_deleted_item_conn_source_idx").on(
+            table.connectionId,
+            table.sourceId
+        ),
+    })
+);
+
 export const connectorConnectionsRelations = relations(connectorConnections, ({ one, many }) => ({
     company: one(company, {
         fields: [connectorConnections.companyId],
@@ -354,3 +436,5 @@ export type GoogleDriveSyncState = InferSelectModel<typeof googleDriveSyncState>
 export type GoogleDrivePickedItem = InferSelectModel<typeof googleDrivePickedItem>;
 export type GmailSyncState = InferSelectModel<typeof gmailSyncState>;
 export type GmailSyncScope = InferSelectModel<typeof gmailSyncScope>;
+export type NotionSyncState = InferSelectModel<typeof notionSyncState>;
+export type ConnectorDeletedItem = InferSelectModel<typeof connectorDeletedItem>;

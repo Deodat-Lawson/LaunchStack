@@ -1,23 +1,26 @@
 "use client";
 
 /**
- * Usage and costs.
+ * Spending and limits — the Usage tab's Spending screen (Workspace › Usage
+ * until October 2026).
  *
- * Body only. The ledger already existed; this is its surface: a hero
- * balance, burn per day stacked by service, the same numbers as a table,
- * chat usage by route where the ledger has it, and the two settings the
- * numbers exist to inform. Cost is an estimate from a price the workspace
- * sets — the ledger counts unified tokens and knows nothing about invoices.
+ * Body only. The balance: a hero figure, burn per day stacked by service and
+ * the same numbers as a table — what the features that debit have charged,
+ * in unified tokens. Then each person's AI use this month against the limit
+ * that binds them (MemberAllowancesBlock), the two settings the numbers
+ * inform, and the ledger. What every model call used, by feature and route,
+ * is the tab's Overview (`../usage/OverviewScreen`), where it can be scoped
+ * to a person or a group.
  *
- * Series colours are design tokens; dark mode uses darker steps of the same
- * hues, validated against the dark surface rather than flipped.
+ * Series colours are the tab's (`../usage/format`).
  */
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import { Badge } from "~/components/ui/badge";
-import { Button } from "~/components/ui/button";
+import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 import { Card, Section } from "~/components/layout/page-shell";
 import {
     ChartContainer,
@@ -37,8 +40,11 @@ import {
 } from "~/components/ui/table";
 import { cn } from "~/lib/utils";
 
+import { useOptionalUsageFilters } from "../usage/data";
+import { SERIES_THEMES } from "../usage/format";
 import { usePublishedActions, type SettingsSectionProps } from "./contract";
-import { relativeTime } from "./people/format";
+import { MemberAllowancesBlock } from "./MemberAllowancesBlock";
+import { useTimeFormat } from "./people/format";
 import { SectionRows } from "./SettingRow";
 import { StatusNote } from "./ui";
 
@@ -54,7 +60,6 @@ interface UsageOverview {
     lifetime: { purchased: number; granted: number; used: number };
     daily: UsageDay[];
     byService: { service: string; tokens: number; operations: number }[];
-    byRoute: { route: string; tokens: number; calls: number }[];
     recent: {
         id: number;
         type: string;
@@ -62,6 +67,8 @@ interface UsageOverview {
         balanceAfter: number;
         service: string | null;
         description: string | null;
+        /** The description as message data (`settings.server.ledger`), when the app wrote it. */
+        descriptionCopy?: { key: LedgerKey; values?: Record<string, string> } | null;
         createdAt: string;
     }[];
     pricePerMillionTokens: number;
@@ -69,74 +76,140 @@ interface UsageOverview {
     estimatedCost: number | null;
 }
 
+/** `LedgerKey` in ~/server/settings/usage — the ledger descriptions the page can word. */
+type LedgerKey =
+    | "grant"
+    | "serviceUsage"
+    | "chatQuery"
+    | "transcribe"
+    | "ner"
+    | "embed"
+    | "ocr"
+    | "distribution"
+    | "proposalsRewrite"
+    | "proposalsReview"
+    | "scenarioInterview"
+    | "scenarioUnit"
+    | "scenarioRound";
+
 const RANGES = [7, 30, 90] as const;
 
 /** Fixed order; anything past the fourth folds into Other. Never cycled. */
 const SERIES = ["llm_chat", "embedding", "ocr", "transcription"] as const;
 const OTHER = "other";
 
-const SERVICE_LABEL: Record<string, string> = {
-    llm_chat: "Chat",
-    embedding: "Embeddings",
-    ocr: "OCR",
-    transcription: "Transcription",
-    rerank: "Reranking",
-    ner: "Entity extraction",
-    distribution_research: "Distribution research",
-    scenario_simulation: "Scenarios",
-    other: "Other",
-};
+/** Ledger service ids → their names in `settings.usage.services`. */
+const SERVICE_KEYS = {
+    llm_chat: "llmChat",
+    embedding: "embedding",
+    ocr: "ocr",
+    transcription: "transcription",
+    rerank: "rerank",
+    ner: "ner",
+    distribution_research: "distributionResearch",
+    scenario_simulation: "scenarioSimulation",
+    other: "other",
+} as const;
 
-const CHART_CONFIG: ChartConfig = {
-    llm_chat: {
-        label: "Chat",
-        theme: { light: "var(--accent)", dark: "oklch(from var(--accent-2) 0.62 c h)" },
-    },
-    embedding: {
-        label: "Embeddings",
-        theme: { light: "var(--hue-teal)", dark: "oklch(from var(--hue-teal) 0.62 c h)" },
-    },
-    ocr: {
-        label: "OCR",
-        theme: { light: "var(--warn)", dark: "oklch(from var(--warn) 0.66 c h)" },
-    },
-    transcription: {
-        label: "Transcription",
-        theme: { light: "var(--info)", dark: "oklch(from var(--info) 0.6 c h)" },
-    },
-    other: { label: "Other", color: "var(--ink-4)" },
-};
+/** Ledger entry types (`token_transactions.type`) → `settings.usage.types`. */
+const TYPE_KEYS = ["grant", "purchase", "debit", "refund", "adjustment"] as const;
 
-function compact(n: number): string {
-    if (Math.abs(n) >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
-    if (Math.abs(n) >= 1_000) return `${(n / 1_000).toFixed(0)}K`;
-    return n.toLocaleString();
+type UsageT = ReturnType<typeof useTranslations<"settings.usage">>;
+
+function serviceLabel(t: UsageT, service: string | null): string | undefined {
+    const key = service ? (SERVICE_KEYS as Record<string, string | undefined>)[service] : undefined;
+    return key
+        ? t(`services.${key as (typeof SERVICE_KEYS)[keyof typeof SERVICE_KEYS]}`)
+        : undefined;
 }
 
-function money(value: number): string {
-    return value.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+function typeLabel(t: UsageT, type: string): string {
+    return (TYPE_KEYS as readonly string[]).includes(type)
+        ? t(`types.${type as (typeof TYPE_KEYS)[number]}`)
+        : type;
+}
+
+function chartConfig(t: UsageT): ChartConfig {
+    return {
+        llm_chat: { label: t("services.llmChat"), theme: SERIES_THEMES[0] },
+        embedding: { label: t("services.embedding"), theme: SERIES_THEMES[1] },
+        ocr: { label: t("services.ocr"), theme: SERIES_THEMES[2] },
+        transcription: { label: t("services.transcription"), theme: SERIES_THEMES[3] },
+        other: { label: t("services.other"), color: "var(--ink-4)" },
+    };
+}
+
+function compact(n: number, locale: string): string {
+    if (Math.abs(n) >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
+    if (Math.abs(n) >= 1_000) return `${(n / 1_000).toFixed(0)}K`;
+    return n.toLocaleString(locale);
+}
+
+function money(value: number, locale: string): string {
+    return value.toLocaleString(locale, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+/** One zero-filled row per day of the window, so the axis is a calendar. */
+function calendarRows(
+    days: number,
+    byDate: Map<string, Record<string, number>>,
+    series: readonly string[]
+): Array<Record<string, number | string>> {
+    const rows: Array<Record<string, number | string>> = [];
+    for (let i = days - 1; i >= 0; i--) {
+        const date = new Date(Date.now() - i * 86_400_000).toISOString().slice(0, 10);
+        const row: Record<string, number | string> = { date };
+        let other = 0;
+        for (const [key, tokens] of Object.entries(byDate.get(date) ?? {})) {
+            if (series.includes(key)) row[key] = tokens;
+            else other += tokens;
+        }
+        for (const key of series) row[key] ??= 0;
+        row[OTHER] = other;
+        rows.push(row);
+    }
+    return rows;
 }
 
 export function UsageSection({ onActions }: SettingsSectionProps) {
-    const [days, setDays] = useState<(typeof RANGES)[number]>(30);
+    const t = useTranslations("settings.usage");
+    const tLedger = useTranslations("settings.server.ledger");
+    const tc = useTranslations("common");
+    const locale = useLocale();
+    const time = useTimeFormat();
+    const CHART_CONFIG = useMemo(() => chartConfig(t), [t]);
+    const num = (n: number) => n.toLocaleString(locale);
+    // The Usage tab's window when it is a preset: Spending reads the same
+    // 7, 30 or 90 days as the other screens. A custom range has no balance
+    // view of its own (the ledger route takes days), so Spending keeps 30.
+    const filters = useOptionalUsageFilters();
+    const [ownDays, setOwnDays] = useState<(typeof RANGES)[number]>(30);
+    const days = filters?.choice.kind === "preset" ? filters.choice.days : ownDays;
+    const setDays = (next: (typeof RANGES)[number]) => {
+        if (filters) filters.setChoice({ kind: "preset", days: next });
+        else setOwnDays(next);
+    };
     const [overview, setOverview] = useState<UsageOverview | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    // The per-person block loads on its own; the Refresh action reloads it too.
+    const [membersRefresh, setMembersRefresh] = useState(0);
 
     const refresh = useCallback(async () => {
         setLoading(true);
         try {
             const res = await fetch(`/api/settings/usage?days=${days}`);
             const body = (await res.json().catch(() => ({}))) as UsageOverview & { error?: string };
-            if (!res.ok) throw new Error(body.error ?? `Could not load usage (${res.status}).`);
+            if (!res.ok)
+                throw new Error(body.error ?? t("loadFailedStatus", { status: res.status }));
             setOverview(body);
             setError(null);
         } catch (err) {
-            setError(err instanceof Error ? err.message : "Could not load usage.");
+            setError(err instanceof Error ? err.message : t("loadFailed"));
         } finally {
             setLoading(false);
         }
-    }, [days]);
+    }, [days, t]);
 
     useEffect(() => {
         void refresh();
@@ -145,34 +218,23 @@ export function UsageSection({ onActions }: SettingsSectionProps) {
     usePublishedActions(
         onActions,
         {
-            primaryLabel: "Refresh",
-            primaryBusyLabel: "Refreshing…",
-            onPrimary: refresh,
+            primaryLabel: tc("actions.refresh"),
+            primaryBusyLabel: t("refreshing"),
+            onPrimary: () => {
+                setMembersRefresh(n => n + 1);
+                return refresh();
+            },
             busy: loading,
         },
-        [refresh, loading]
+        [refresh, loading, t, tc]
     );
 
     // One row per day in the window, zero-filled so the axis is a calendar
     // rather than a list of days that happened to have usage.
     const chartData = useMemo(() => {
         if (!overview) return [];
-        const byDate = new Map(overview.daily.map(day => [day.date, day]));
-        const rows: Array<Record<string, number | string>> = [];
-        for (let i = overview.days - 1; i >= 0; i--) {
-            const date = new Date(Date.now() - i * 86_400_000).toISOString().slice(0, 10);
-            const day = byDate.get(date);
-            const row: Record<string, number | string> = { date };
-            let other = 0;
-            for (const [service, tokens] of Object.entries(day?.services ?? {})) {
-                if ((SERIES as readonly string[]).includes(service)) row[service] = tokens;
-                else other += tokens;
-            }
-            for (const series of SERIES) row[series] ??= 0;
-            row[OTHER] = other;
-            rows.push(row);
-        }
-        return rows;
+        const byDate = new Map(overview.daily.map(day => [day.date, day.services]));
+        return calendarRows(overview.days, byDate, SERIES);
     }, [overview]);
 
     const windowTotal = overview?.byService.reduce((sum, s) => sum + s.tokens, 0) ?? 0;
@@ -183,90 +245,101 @@ export function UsageSection({ onActions }: SettingsSectionProps) {
             {error && <StatusNote tone="danger">{error}</StatusNote>}
             {overview && low && (
                 <StatusNote tone="warn">
-                    The balance is below the low-balance warning of{" "}
-                    {overview.lowBalanceThreshold.toLocaleString()} tokens.
+                    {t("lowBalance", { threshold: num(overview.lowBalanceThreshold) })}
                 </StatusNote>
             )}
 
-            <Section title="Balance">
+            {/* One window for every figure on the page. */}
+            <ToggleGroup
+                type="single"
+                variant="outline"
+                size="sm"
+                value={String(days)}
+                onValueChange={value => value && setDays(Number(value) as (typeof RANGES)[number])}
+                aria-label={t("burn.window")}
+                className="mb-5 justify-start"
+            >
+                {RANGES.map(range => (
+                    <ToggleGroupItem
+                        key={range}
+                        value={String(range)}
+                        className="h-8 shrink-0 px-2.5 text-[12.5px]"
+                    >
+                        {t("burn.lastDays", { days: range })}
+                    </ToggleGroupItem>
+                ))}
+            </ToggleGroup>
+
+            <Section title={t("balance.title")}>
                 <div className="grid gap-3.5 md:grid-cols-3">
                     <Card padding={16}>
-                        <div className="text-ink-3 text-[12px]">Tokens remaining</div>
+                        <div className="text-ink-3 text-[12px]">{t("balance.remaining")}</div>
                         <div
                             className={cn(
                                 "mt-1 text-[36px] font-semibold leading-none tracking-tight",
                                 low ? "text-danger" : "text-ink"
                             )}
                         >
-                            {overview ? compact(overview.balanceTokens) : "…"}
+                            {overview ? compact(overview.balanceTokens, locale) : "…"}
                         </div>
                         {overview && (
                             <div className="text-ink-3 mt-2 text-[12px]">
-                                {overview.balanceTokens.toLocaleString()} exactly
+                                {t("balance.exactly", { value: num(overview.balanceTokens) })}
                             </div>
                         )}
                     </Card>
                     <Card padding={16}>
-                        <div className="text-ink-3 text-[12px]">Used in the last {days} days</div>
+                        <div className="text-ink-3 text-[12px]">
+                            {t("balance.usedInLast", { days })}
+                        </div>
                         <div className="text-ink mt-1 text-[28px] font-semibold leading-none tracking-tight">
-                            {overview ? compact(windowTotal) : "…"}
+                            {overview ? compact(windowTotal, locale) : "…"}
                         </div>
                         {overview?.estimatedCost !== null &&
                         overview?.estimatedCost !== undefined ? (
                             <div className="text-ink-3 mt-2 text-[12px]">
-                                ≈ {money(overview.estimatedCost)} at{" "}
-                                {overview.pricePerMillionTokens} per 1M
+                                {t("balance.estimate", {
+                                    cost: money(overview.estimatedCost, locale),
+                                    price: String(overview.pricePerMillionTokens),
+                                })}
                             </div>
                         ) : (
                             <div className="text-ink-3 mt-2 text-[12px]">
-                                Set a price below to estimate spend.
+                                {t("balance.setPrice")}
                             </div>
                         )}
                     </Card>
                     <Card padding={16}>
-                        <div className="text-ink-3 text-[12px]">Lifetime</div>
+                        <div className="text-ink-3 text-[12px]">{t("balance.lifetime")}</div>
                         <dl className="text-ink-2 mt-1.5 grid grid-cols-[auto_1fr] gap-x-3 gap-y-0.5 text-[12.5px]">
-                            <dt className="text-ink-3">Used</dt>
+                            <dt className="text-ink-3">{t("balance.used")}</dt>
                             <dd className="m-0 tabular-nums">
-                                {overview ? compact(overview.lifetime.used) : "…"}
+                                {overview ? compact(overview.lifetime.used, locale) : "…"}
                             </dd>
-                            <dt className="text-ink-3">Granted</dt>
+                            <dt className="text-ink-3">{t("balance.granted")}</dt>
                             <dd className="m-0 tabular-nums">
-                                {overview ? compact(overview.lifetime.granted) : "…"}
+                                {overview ? compact(overview.lifetime.granted, locale) : "…"}
                             </dd>
-                            <dt className="text-ink-3">Purchased</dt>
+                            <dt className="text-ink-3">{t("balance.purchased")}</dt>
                             <dd className="m-0 tabular-nums">
-                                {overview ? compact(overview.lifetime.purchased) : "…"}
+                                {overview ? compact(overview.lifetime.purchased, locale) : "…"}
                             </dd>
                         </dl>
                     </Card>
                 </div>
             </Section>
 
-            <Section
-                title="Burn by day"
-                description="Tokens drawn from the balance, by what drew them. Hover a day for the breakdown; the table below carries the same numbers."
-            >
-                <div className="mb-3 flex items-center gap-1.5">
-                    {RANGES.map(range => (
-                        <Button
-                            key={range}
-                            size="sm"
-                            variant={range === days ? "default" : "outline"}
-                            onClick={() => setDays(range)}
-                        >
-                            Last {range} days
-                        </Button>
-                    ))}
-                </div>
+            <MemberAllowancesBlock refreshToken={membersRefresh} />
+
+            <Section title={t("burn.title")} description={t("burn.description")}>
                 <Card>
                     {chartData.length === 0 ? (
                         <StatusNote tone="muted" style={{ marginBottom: 0 }}>
-                            Loading…
+                            {tc("status.loading")}
                         </StatusNote>
                     ) : windowTotal === 0 ? (
                         <div className="text-ink-3 py-8 text-center text-[13px]">
-                            Nothing drew on the balance in this window.
+                            {t("burn.nothing")}
                         </div>
                     ) : (
                         <ChartContainer
@@ -285,7 +358,7 @@ export function UsageSection({ onActions }: SettingsSectionProps) {
                                     axisLine={false}
                                     minTickGap={24}
                                     tickFormatter={(value: string) =>
-                                        new Date(value).toLocaleDateString(undefined, {
+                                        new Date(value).toLocaleDateString(locale, {
                                             month: "short",
                                             day: "numeric",
                                         })
@@ -295,19 +368,16 @@ export function UsageSection({ onActions }: SettingsSectionProps) {
                                     tickLine={false}
                                     axisLine={false}
                                     width={44}
-                                    tickFormatter={(value: number) => compact(value)}
+                                    tickFormatter={(value: number) => compact(value, locale)}
                                 />
                                 <ChartTooltip
                                     cursor={{ fill: "var(--panel-2)" }}
                                     content={
                                         <ChartTooltipContent
                                             labelFormatter={(value: unknown) =>
-                                                new Date(String(value)).toLocaleDateString(
-                                                    undefined,
-                                                    {
-                                                        dateStyle: "medium",
-                                                    }
-                                                )
+                                                new Date(String(value)).toLocaleDateString(locale, {
+                                                    dateStyle: "medium",
+                                                })
                                             }
                                         />
                                     }
@@ -331,28 +401,30 @@ export function UsageSection({ onActions }: SettingsSectionProps) {
                 </Card>
             </Section>
 
-            <Section title="By service" description="Same window, totalled.">
+            <Section title={t("byService.title")} description={t("byService.description")}>
                 <Card padding={0}>
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead>Service</TableHead>
-                                <TableHead className="text-right">Operations</TableHead>
-                                <TableHead className="text-right">Tokens</TableHead>
-                                <TableHead className="text-right">Share</TableHead>
+                                <TableHead>{t("byService.service")}</TableHead>
+                                <TableHead className="text-right">
+                                    {t("byService.operations")}
+                                </TableHead>
+                                <TableHead className="text-right">{t("tokens")}</TableHead>
+                                <TableHead className="text-right">{t("byService.share")}</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {(overview?.byService ?? []).map(row => (
                                 <TableRow key={row.service}>
                                     <TableCell className="text-ink">
-                                        {SERVICE_LABEL[row.service] ?? row.service}
+                                        {serviceLabel(t, row.service) ?? row.service}
                                     </TableCell>
                                     <TableCell className="text-right tabular-nums">
-                                        {row.operations.toLocaleString()}
+                                        {num(row.operations)}
                                     </TableCell>
                                     <TableCell className="text-right tabular-nums">
-                                        {row.tokens.toLocaleString()}
+                                        {num(row.tokens)}
                                     </TableCell>
                                     <TableCell className="text-right tabular-nums">
                                         {windowTotal > 0
@@ -364,7 +436,7 @@ export function UsageSection({ onActions }: SettingsSectionProps) {
                             {overview && overview.byService.length === 0 && (
                                 <TableRow>
                                     <TableCell colSpan={4} className="text-ink-3 text-center">
-                                        Nothing in this window.
+                                        {t("byService.empty")}
                                     </TableCell>
                                 </TableRow>
                             )}
@@ -373,93 +445,62 @@ export function UsageSection({ onActions }: SettingsSectionProps) {
                 </Card>
             </Section>
 
-            {overview && overview.byRoute.length > 0 && (
-                <Section
-                    title="By chat route"
-                    description="Only chat debits record a route, so this covers Ask and meetings, not embeddings or OCR."
-                >
-                    <Card padding={0}>
-                        <Table>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead>Route</TableHead>
-                                    <TableHead className="text-right">Calls</TableHead>
-                                    <TableHead className="text-right">Tokens</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {overview.byRoute.map(row => (
-                                    <TableRow key={row.route}>
-                                        <TableCell className="text-ink capitalize">
-                                            {row.route}
-                                        </TableCell>
-                                        <TableCell className="text-right tabular-nums">
-                                            {row.calls.toLocaleString()}
-                                        </TableCell>
-                                        <TableCell className="text-right tabular-nums">
-                                            {row.tokens.toLocaleString()}
-                                        </TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </Card>
-                </Section>
-            )}
-
-            <Section
-                title="Pricing and warnings"
-                description="The numbers above exist to inform these two."
-            >
+            <Section title={t("pricing.title")} description={t("pricing.description")}>
                 <Card>
                     <SectionRows section="usage" />
                 </Card>
             </Section>
 
             {overview && overview.recent.length > 0 && (
-                <Section
-                    title="Recent ledger entries"
-                    description="The last forty movements on the balance."
-                >
+                <Section title={t("recent.title")} description={t("recent.description")}>
                     <Card padding={0}>
                         <Table>
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead>When</TableHead>
-                                    <TableHead>What</TableHead>
-                                    <TableHead className="text-right">Amount</TableHead>
-                                    <TableHead className="text-right">Balance after</TableHead>
+                                    <TableHead>{t("recent.when")}</TableHead>
+                                    <TableHead>{t("recent.what")}</TableHead>
+                                    <TableHead className="text-right">
+                                        {t("recent.amount")}
+                                    </TableHead>
+                                    <TableHead className="text-right">
+                                        {t("recent.balanceAfter")}
+                                    </TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
                                 {overview.recent.map(row => (
                                     <TableRow key={row.id}>
                                         <TableCell className="text-ink-3 whitespace-nowrap">
-                                            {relativeTime(row.createdAt)}
+                                            {time.relative(row.createdAt)}
                                         </TableCell>
                                         <TableCell>
                                             <span className="text-ink">
-                                                {row.description ??
-                                                    SERVICE_LABEL[row.service ?? ""] ??
-                                                    row.type}
+                                                {(row.descriptionCopy
+                                                    ? tLedger(
+                                                          row.descriptionCopy.key,
+                                                          row.descriptionCopy.values
+                                                      )
+                                                    : row.description) ??
+                                                    serviceLabel(t, row.service) ??
+                                                    typeLabel(t, row.type)}
                                             </span>
                                             {row.type !== "debit" && (
                                                 <Badge variant="secondary" className="ml-2">
-                                                    {row.type}
+                                                    {typeLabel(t, row.type)}
                                                 </Badge>
                                             )}
                                         </TableCell>
                                         <TableCell
                                             className={cn(
                                                 "text-right tabular-nums",
-                                                row.amount < 0 ? "text-ink" : "text-success"
+                                                row.amount < 0 ? "text-ink" : "text-success-ink"
                                             )}
                                         >
                                             {row.amount > 0 ? "+" : ""}
-                                            {row.amount.toLocaleString()}
+                                            {num(row.amount)}
                                         </TableCell>
                                         <TableCell className="text-ink-3 text-right tabular-nums">
-                                            {row.balanceAfter.toLocaleString()}
+                                            {num(row.balanceAfter)}
                                         </TableCell>
                                     </TableRow>
                                 ))}

@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -7,9 +8,10 @@ import { Button } from "~/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
 import { Textarea } from "~/components/ui/textarea";
 import { cn } from "~/lib/utils";
+import { useErrorText } from "~/lib/tools/errorText";
 
 import { vantageApi, type CommitmentDto, type VantageCommitmentStatus } from "../api";
-import { dueWords, fmtDate, todayIso } from "../_lib/format";
+import { todayIso, useVantageFormat } from "../_lib/format";
 import { SharedMark, StatusWord, type Tone } from "./Primitives";
 
 export const COMMITMENT_TONE: Record<VantageCommitmentStatus, Tone> = {
@@ -19,18 +21,12 @@ export const COMMITMENT_TONE: Record<VantageCommitmentStatus, Tone> = {
     dropped: "quiet",
 };
 
-export const COMMITMENT_WORD: Record<VantageCommitmentStatus, string> = {
-    open: "Open",
-    done: "Done",
-    missed: "Missed",
-    dropped: "Dropped",
-};
-
 export function CommitmentStatus({ commitment }: { commitment: CommitmentDto }) {
+    const t = useTranslations("vantage.checkIn");
     const late = commitment.status === "open" && commitment.dueOn < todayIso();
     return (
         <StatusWord tone={late ? "warn" : COMMITMENT_TONE[commitment.status]}>
-            {late ? "Late" : COMMITMENT_WORD[commitment.status]}
+            {late ? t("status.late") : t(`status.${commitment.status}`)}
         </StatusWord>
     );
 }
@@ -49,6 +45,9 @@ export function CheckInRow({
     onChange: () => void;
     showTopic?: boolean;
 }) {
+    const errorText = useErrorText();
+    const t = useTranslations("vantage.checkIn");
+    const fmt = useVantageFormat();
     const [open, setOpen] = useState(false);
     const [pending, setPending] = useState<VantageCommitmentStatus | null>(null);
     const [outcome, setOutcome] = useState(commitment.outcome ?? "");
@@ -61,20 +60,12 @@ export function CheckInRow({
                 status,
                 outcome: outcome.trim() || null,
             });
-            toast(
-                status === "done"
-                    ? "Marked done"
-                    : status === "missed"
-                      ? "Marked missed — it will be on the next agenda"
-                      : status === "dropped"
-                        ? "Dropped"
-                        : "Reopened"
-            );
+            toast(t(`toast.${status}`));
             setOpen(false);
             setPending(null);
             onChange();
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : "That did not save");
+            toast.error(errorText(e, t("saveError")));
         } finally {
             setBusy(false);
         }
@@ -88,10 +79,12 @@ export function CheckInRow({
                 <div className="text-ink-3 flex flex-wrap items-center gap-x-2 text-[11.5px]">
                     <span>{commitment.owner}</span>
                     <span>·</span>
-                    <span className={cn(isOpen && commitment.dueOn < todayIso() && "text-warn")}>
+                    <span
+                        className={cn(isOpen && commitment.dueOn < todayIso() && "text-warn-ink")}
+                    >
                         {isOpen
-                            ? dueWords(commitment.dueOn)
-                            : `was due ${fmtDate(commitment.dueOn)}`}
+                            ? fmt.due(commitment.dueOn)
+                            : t("wasDue", { date: fmt.date(commitment.dueOn) })}
                     </span>
                     {showTopic && commitment.topicTitle && (
                         <>
@@ -102,11 +95,13 @@ export function CheckInRow({
                     <SharedMark shared={commitment.shared} />
                 </div>
                 {commitment.test && (
-                    <div className="text-ink-2 mt-0.5 text-[12px]">Test: {commitment.test}</div>
+                    <div className="text-ink-2 mt-0.5 text-[12px]">
+                        {t("test", { test: commitment.test })}
+                    </div>
                 )}
                 {commitment.outcome && !isOpen && (
                     <div className="text-ink-2 mt-0.5 text-[12px]">
-                        Learned: {commitment.outcome}
+                        {t("learned", { outcome: commitment.outcome })}
                     </div>
                 )}
             </div>
@@ -120,14 +115,14 @@ export function CheckInRow({
             >
                 <PopoverTrigger asChild>
                     <Button variant="outline" size="sm">
-                        {isOpen ? "Check in" : "Change"}
+                        {isOpen ? t("checkIn") : t("change")}
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent align="end" className="w-[340px] p-3">
                     <div className="text-ink text-[13px] font-medium">{commitment.title}</div>
                     {commitment.test && (
                         <p className="text-ink-3 mt-1 text-[12px]">
-                            Was it resolved? {commitment.test}
+                            {t("wasResolved", { test: commitment.test })}
                         </p>
                     )}
                     <div className="mt-3 flex flex-wrap gap-1.5">
@@ -140,7 +135,7 @@ export function CheckInRow({
                                 onClick={() => setPending(s)}
                                 disabled={busy}
                             >
-                                {COMMITMENT_WORD[s]}
+                                {t(`status.${s}`)}
                             </Button>
                         ))}
                         {!isOpen && (
@@ -151,7 +146,7 @@ export function CheckInRow({
                                 onClick={() => void resolve("open")}
                                 disabled={busy}
                             >
-                                Reopen
+                                {t("reopen")}
                             </Button>
                         )}
                     </div>
@@ -161,7 +156,7 @@ export function CheckInRow({
                                 className="text-ink-2 text-[12px] font-medium"
                                 htmlFor={`outcome-${commitment.id}`}
                             >
-                                What was learned
+                                {t("learnedLabel")}
                             </label>
                             <Textarea
                                 id={`outcome-${commitment.id}`}
@@ -170,10 +165,10 @@ export function CheckInRow({
                                 rows={3}
                                 placeholder={
                                     pending === "done"
-                                        ? "What the result was, in one or two lines"
+                                        ? t("placeholder.done")
                                         : pending === "missed"
-                                          ? "Why it slipped, and whether it still matters"
-                                          : "Why it is no longer the right thing to do"
+                                          ? t("placeholder.missed")
+                                          : t("placeholder.dropped")
                                 }
                             />
                             <div className="flex justify-end">
@@ -182,7 +177,7 @@ export function CheckInRow({
                                     onClick={() => void resolve(pending)}
                                     disabled={busy}
                                 >
-                                    Save check-in
+                                    {t("save")}
                                 </Button>
                             </div>
                         </div>

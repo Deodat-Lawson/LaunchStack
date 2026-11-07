@@ -74,8 +74,8 @@ Inngest-hosted background verticals.
 ### Full local stack (Postgres + SeaweedFS + worker + compute services)
 
 ```bash
-make up            # lite stack (~400MB RAM, native OCR only)
-make up-ocr        # full stack with Docling for Office docs
+make up            # lite stack (~400MB RAM; OCR via Azure if its key is set, else the PDF text layer)
+make up-ocr        # full stack with Docling for Office docs and as the OCR fallback
 make up-fast       # build Next on host first, then compose (fastest for testing prod image)
 make down          # tear down
 make down-clean    # tear down + wipe volumes

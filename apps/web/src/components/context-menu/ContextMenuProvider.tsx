@@ -10,6 +10,7 @@ import {
     useState,
     type ReactNode,
 } from "react";
+import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 import { ActionMenu, type ActionMenuItem } from "~/components/ui/action-menu";
 import {
@@ -29,7 +30,7 @@ import {
     type MenuOpenContext,
     type MenuVia,
 } from "~/lib/context-menu";
-import { buildAppActions } from "./appActions";
+import { buildAppActions, type AppActionLabels } from "./appActions";
 import { useRegisterActions } from "./useRegisterActions";
 
 /**
@@ -118,9 +119,32 @@ export function ContextMenuProvider({ children, onEvent }: ContextMenuProviderPr
         []
     );
 
+    const t = useTranslations("workspace");
+    const tc = useTranslations("common");
+    const labels = useMemo<AppActionLabels>(
+        () => ({
+            copy: tc("actions.copy"),
+            copied: tc("actions.copied"),
+            openLinkInNewTab: t("contextMenu.openLinkInNewTab"),
+            copyLinkAddress: t("contextMenu.copyLinkAddress"),
+            linkCopied: t("common.linkCopied"),
+            copyPageLink: t("contextMenu.copyPageLink"),
+            theme: t("contextMenu.theme"),
+            themes: {
+                light: t("contextMenu.themes.light"),
+                dark: t("contextMenu.themes.dark"),
+                system: t("contextMenu.themes.system"),
+            },
+        }),
+        [t, tc]
+    );
+    const fallbackLabel = tc("a11y.actions");
     const { theme, setTheme } = useTheme();
     useRegisterActions(
-        useMemo(() => buildAppActions({ current: theme, set: setTheme }), [theme, setTheme])
+        useMemo(
+            () => buildAppActions({ current: theme, set: setTheme }, labels),
+            [theme, setTheme, labels]
+        )
     );
 
     const open = useCallback(
@@ -137,13 +161,13 @@ export function ContextMenuProvider({ children, onEvent }: ContextMenuProviderPr
                 x: request.x,
                 y: request.y,
                 items,
-                ariaLabel: request.ariaLabel ?? "Actions",
+                ariaLabel: request.ariaLabel ?? fallbackLabel,
                 via,
                 kind,
             });
             emit({ type: "open", via, kind, itemCount: items.length });
         },
-        [emit]
+        [emit, fallbackLabel]
     );
 
     const close = useCallback(() => {
@@ -166,7 +190,7 @@ export function ContextMenuProvider({ children, onEvent }: ContextMenuProviderPr
                     kind: SELECTION_TARGET_KIND,
                     overlay: true,
                     data: selection,
-                    label: "Selection",
+                    label: t("contextMenu.selection"),
                 });
             }
             const link = linkAt(element);
@@ -174,7 +198,7 @@ export function ContextMenuProvider({ children, onEvent }: ContextMenuProviderPr
             chain.push(...targets, { kind: APP_TARGET_KIND });
 
             const ctx: MenuOpenContext = { x: point.x, y: point.y, via, chain, selection, element };
-            const { items, ariaLabel } = resolveMenu(ctx, listActions());
+            const { items, ariaLabel } = resolveMenu(ctx, listActions(), fallbackLabel);
             if (items.length === 0) return false;
             const primary =
                 targets[0]?.kind ??
@@ -182,7 +206,7 @@ export function ContextMenuProvider({ children, onEvent }: ContextMenuProviderPr
             open({ x: point.x, y: point.y, items, ariaLabel, via, kind: primary });
             return true;
         },
-        [open]
+        [open, t, fallbackLabel]
     );
 
     useEffect(() => {

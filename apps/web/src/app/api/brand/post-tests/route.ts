@@ -1,6 +1,7 @@
 // POST /api/brand/post-tests — { text, networks }: simulate how people react to a draft
 import type { NextRequest } from "next/server";
 
+import { localeOfRequest } from "~/i18n/server";
 import { createPostTest } from "~/server/scenarios/service";
 
 import { handleScenarioError, json, readBody, scenarioContext } from "../../scenarios/_http";
@@ -10,12 +11,16 @@ export async function POST(request: NextRequest) {
     if (!auth.ok) return auth.response;
     try {
         const body = await readBody(request);
-        const test = await createPostTest(auth.ctx, {
-            text: typeof body.text === "string" ? body.text : "",
-            networks: Array.isArray(body.networks) ? (body.networks as string[]) : [],
-        });
+        const test = await createPostTest(
+            auth.ctx,
+            {
+                text: typeof body.text === "string" ? body.text : "",
+                networks: Array.isArray(body.networks) ? (body.networks as string[]) : [],
+            },
+            localeOfRequest(request)
+        );
         return json({ test }, 201);
     } catch (err) {
-        return handleScenarioError("POST post test", err);
+        return handleScenarioError("POST post test", err, request);
     }
 }

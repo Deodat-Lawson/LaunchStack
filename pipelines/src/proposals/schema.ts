@@ -25,7 +25,7 @@ import { pgTable } from "@launchstack/store/schema/helpers";
 
 import type {
     DraftMeta,
-    Evidence,
+    StoredLibraryEvidence,
     ExtractedRequest,
     Fit,
     Requirement,
@@ -178,7 +178,7 @@ export const proposalLibraryItems = pgTable(
         question: text("question").notNull(),
         answer: text("answer").notNull(),
         tags: jsonb("tags").$type<string[]>().notNull().default([]),
-        evidence: jsonb("evidence").$type<Evidence[]>().notNull().default([]),
+        evidence: jsonb("evidence").$type<StoredLibraryEvidence>().notNull().default([]),
         sourceApplicationId: varchar("source_application_id", { length: 64 }).references(
             () => proposalApplications.id,
             { onDelete: "set null" }

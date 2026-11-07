@@ -11,6 +11,7 @@
  */
 
 import { NextResponse } from "next/server";
+import { localeOfRequest, requestTranslator } from "~/i18n/server";
 import type { JSONContent } from "@tiptap/react";
 
 import { db } from "~/server/db";
@@ -23,6 +24,7 @@ import { validateNoteTarget } from "~/server/notes/validate-note-target";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { refuseAtAiAllowance } from "~/server/ai-usage/refusal";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
 export const runtime = "nodejs";
@@ -42,20 +44,28 @@ interface Body {
 const VALID_INTENTS: ReadonlySet<AiCaptureIntent> = new Set(["summary", "action", "decision"]);
 
 export async function POST(request: Request) {
+    const t = requestTranslator(request, "notes.server.errors");
     return withRateLimit(request, RateLimitPresets.strict, async () => {
         try {
             const ctx = await requireWorkspaceContext();
             if (!ctx.success) return ctx.response;
 
-            return await withWorkspaceChatModels(ctx.data.companyId, async () => {
+            const aiUse = { feature: "notes", userId: ctx.data.authUserId } as const;
+            const refused = await refuseAtAiAllowance(
+                ctx.data.companyId,
+                aiUse.userId,
+                localeOfRequest(request)
+            );
+            if (refused) return refused;
+            return await withWorkspaceChatModels(ctx.data.companyId, aiUse, async () => {
                 const body = (await request.json().catch(() => ({}))) as Body;
                 const selection = (body.selection ?? "").trim();
                 const intent = body.intent ?? "summary";
                 if (!selection) {
-                    return NextResponse.json({ error: "Selection is required" }, { status: 400 });
+                    return NextResponse.json({ error: t("selectionRequired") }, { status: 400 });
                 }
                 if (!VALID_INTENTS.has(intent)) {
-                    return NextResponse.json({ error: "Invalid intent" }, { status: 400 });
+                    return NextResponse.json({ error: t("invalidIntent") }, { status: 400 });
                 }
 
                 const sourceCtx = body.sourceContext ?? {};
@@ -67,6 +77,7 @@ export async function POST(request: Request) {
                     versionId: sourceCtx.versionId,
                     companyId: ctx.data.companyId,
                     scope,
+                    request,
                 });
                 if (!target.ok) return target.response;
 
@@ -75,6 +86,7 @@ export async function POST(request: Request) {
                     intent,
                     documentTitle: sourceCtx.documentTitle ?? null,
                     page: sourceCtx.page ?? null,
+                    locale: localeOfRequest(request),
                 });
 
                 // Anchor by quote (durable across re-OCR) + page when known.
@@ -142,7 +154,7 @@ export async function POST(request: Request) {
             });
         } catch (err) {
             console.error("[/api/notes/ai-capture] failed:", err);
-            return NextResponse.json({ error: "AI capture failed" }, { status: 500 });
+            return NextResponse.json({ error: t("aiCaptureFailed") }, { status: 500 });
         }
     });
 }

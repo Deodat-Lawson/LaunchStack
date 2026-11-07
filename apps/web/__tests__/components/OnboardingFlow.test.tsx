@@ -6,7 +6,7 @@
  * filled in; an address that is not one is refused before anything is sent;
  * the answers are posted and the homepage imported into the Company folder;
  * documents go through the normal upload path into the same folder; the last
- * step shows the profile as it builds and links to Settings › Company; and
+ * step shows the profile as it builds and links to Workspace › Company profile; and
  * every step can be skipped.
  */
 
@@ -287,7 +287,7 @@ it("shows what was understood, the sources as they are read, and where to manage
 
     expect(screen.getByRole("link", { name: "Review the company profile" })).toHaveAttribute(
         "href",
-        "/employer/settings#company"
+        "/employer/documents?feature=workspace&at=%2Fcompany"
     );
     await user.click(screen.getByRole("button", { name: /Open your workspace/ }));
     expect(mockReplace).toHaveBeenCalledWith("/employer/documents");
@@ -381,7 +381,7 @@ it("lists what the person told us before what the sources say, and links to the 
     expect(terms[0]).toHaveTextContent("The idea · from you");
     expect(screen.getByRole("link", { name: "3 more in the company profile" })).toHaveAttribute(
         "href",
-        "/employer/settings#company"
+        "/employer/documents?feature=workspace&at=%2Fcompany"
     );
 });
 
@@ -521,7 +521,7 @@ it("someone who cannot set up the profile is shown the way out, not a form", asy
     expect(screen.queryByLabelText("Website")).toBeNull();
     expect(screen.getByRole("link", { name: "See the company profile" })).toHaveAttribute(
         "href",
-        "/employer/settings#company"
+        "/employer/documents?feature=workspace&at=%2Fcompany"
     );
     await user.click(screen.getByRole("button", { name: /Open your workspace/ }));
     expect(mockReplace).toHaveBeenCalledWith("/employer/documents");

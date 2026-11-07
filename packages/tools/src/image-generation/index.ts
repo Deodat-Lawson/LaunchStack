@@ -54,6 +54,7 @@ export interface ImageAssetStore {
         data: Buffer | ArrayBuffer | Uint8Array;
         contentType?: string;
         userId?: string;
+        companyId?: bigint;
     }): Promise<{ url: string; pathname: string }>;
 }
 
@@ -68,6 +69,11 @@ export interface GenerateImageDeps {
     storage: ImageAssetStore;
     /** Stamped on the upload so object ownership matches the rest of the app. */
     userId?: string;
+    /**
+     * The workspace the asset belongs to, stamped on the upload. Storage that
+     * gates reads by workspace serves an unstamped asset to no member session.
+     */
+    companyId?: bigint;
     /** Images to edit. Honoured only on endpoints that can carry them. */
     inputImages?: ImageInput[];
     /**
@@ -156,6 +162,8 @@ export async function generateImage(
                 data: Buffer.from(image.base64, "base64"),
                 contentType: image.mediaType,
                 userId: deps.userId,
+                // Stamps the workspace, so a member opening the source can read the file.
+                companyId: deps.companyId,
             });
 
             const asset: GeneratedAsset = {

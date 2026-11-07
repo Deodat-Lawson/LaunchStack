@@ -312,7 +312,7 @@ export const GUIDES: Guide[] = [
                 title: "Supporting capabilities and workspace settings",
                 body: [
                     "AI_BASE_URL + AI_API_KEY provide a global endpoint pair for non-chat capabilities. Per-capability EMBEDDING_*, RERANK_*, NER_*, and TRANSCRIPTION_* API pairs can override it. Keep each key paired with its intended endpoint.",
-                    "Workspace Settings → Models shows the resolved chat models and routes as a read-only view. Settings → Processing manages workspace embedding settings. EMBEDDING_SECRETS_KEY must contain 32 random bytes encoded as base64 to encrypt workspace provider credentials. Preserve that key across restarts and restores.",
+                    "Workspace › Models shows the resolved chat models and routes as a read-only view; Workspace › Bring your own keys is where a workspace brings its own model endpoint and API key, or connects OpenRouter. Embeddings use the server's EMBEDDING_* settings; there is no per-workspace embedding screen. EMBEDDING_SECRETS_KEY must contain 32 random bytes encoded as base64 to encrypt workspace provider credentials. Preserve that key across restarts and restores.",
                 ],
                 note: "GOOGLE_MODEL is not the chat model selector. Use the mounted YAML. Do not replace the embedding index just to change the chat model.",
             },
@@ -473,19 +473,20 @@ export const GUIDES: Guide[] = [
             {
                 title: "Document parsing and OCR",
                 body: [
-                    "OCR_DEFAULT_PROVIDER selects the parser. Local Compose defaults to DOCLING, which needs --profile ocr. Cloud options include AZURE, LANDING_AI, and DATALAB; set the selected provider's credentials on both app and worker.",
+                    "OCR is on by default whenever an engine can run: every PDF and image goes to the first one in this order: Azure Document Intelligence when it is configured, then Docling while docling-serve is running (--profile ocr), then Landing AI and Datalab if configured. An engine that fails hands the document to the next one, and the PDF's own text layer is the last resort. A scan, or a PDF with scanned pages, keeps the error and is retried instead of being indexed blank. With no engine configured, PDFs are read from their text layer for free. Set provider credentials on both app and worker.",
+                    "OCR_DEFAULT_PROVIDER is optional: leave it empty for that automatic order, or name a provider to try it first. NATIVE_PDF makes the text layer the default. OCR_PDF_STRATEGY=text-layer-first opts out of OCR for every PDF: a PDF with its own text layer is read from it, and only scans go to OCR.",
                 ],
                 rows: [
                     {
                         name: "AZURE",
-                        detail: "AZURE_DOC_INTELLIGENCE_ENDPOINT + AZURE_DOC_INTELLIGENCE_KEY.",
+                        detail: "AZURE_DOC_INTELLIGENCE_ENDPOINT + AZURE_DOC_INTELLIGENCE_KEY. Use a paid S0 resource: the free F0 tier reads only the first two pages of each document. AZURE_DOC_INTELLIGENCE_MODEL=prebuilt-read reads text only for about a seventh of the layout model's price. Longer PDFs go in 2,000-page ranges, and throttling (429) and 5xx answers are retried.",
+                    },
+                    {
+                        name: "DOCLING",
+                        detail: "Local Docling service through the document converter; enable the ocr profile. Used only while docling-serve answers its health check.",
                     },
                     { name: "LANDING_AI", detail: "LANDING_AI_API_KEY." },
                     { name: "DATALAB", detail: "DATALAB_API_KEY." },
-                    {
-                        name: "DOCLING",
-                        detail: "Local Docling service through the document converter; enable the ocr profile.",
-                    },
                 ],
                 note: "Use DOCUMENT_CONVERTER_URL for the current conversion service. OCR_WORKER_URL is obsolete; OCR_ROUTER_URL is a deprecated fallback.",
             },
@@ -573,7 +574,7 @@ export const GUIDES: Guide[] = [
                     },
                     {
                         name: "Drive folder import · opt-in",
-                        detail: "GOOGLE_DRIVE_FOLDER_ACCESS_ENABLED=true adds read-only Drive access, so a picked or pasted folder imports with its subfolders, including folders shared with the account and shared drives. Without it, only files picked one by one can be imported. The connection belongs to the workspace, so with it on every admin can import from the connected account's whole Drive, and the short-lived token the Google Picker receives in the browser can read all of it.",
+                        detail: "GOOGLE_DRIVE_FOLDER_ACCESS_ENABLED=true lets an admin add read-only Drive access after connecting (Allow folder access), so a picked or pasted folder imports with its subfolders, including folders shared with the account and shared drives. Connecting itself asks only for the files picked one by one, so it never shows Google's unverified-app warning; only allowing folder access does, until the app is verified. Without the flag, only files picked one by one can be imported. The connection belongs to the workspace, so once folder access is allowed every admin can import from the connected account's whole Drive, and the short-lived token the Google Picker receives in the browser can read all of it.",
                     },
                 ],
                 note: "Gmail uses the restricted gmail.readonly scope, and Drive folder import the restricted drive.readonly scope. Prepare the Google consent screen and the verification or internal-app setup before enabling either for users.",
@@ -611,13 +612,32 @@ export const GUIDES: Guide[] = [
         summary:
             "Enable supporting capabilities as you need them, without treating every integration as a setup requirement.",
         keywords:
-            "optional search exa serper langchain langsmith tracing images campaigns email sending collaboration slack",
+            "optional search web search search_provider exa serper brave tavily searxng company search lookalikes langchain langsmith tracing images campaigns email sending collaboration slack",
         blocks: [
             {
                 title: "Web research",
                 body: [
-                    "SEARCH_PROVIDER selects exa, serper, fallback, or parallel. Supply EXA_API_KEY and/or SERPER_API_KEY for the chosen strategy. Forward settings absent from the Compose allowlist to the processes that use them.",
+                    "One setting, SEARCH_PROVIDER, picks the engine for every web search: Ask's search_web tool, Prospects, competitor analysis, grant search, document research, predictive analysis, and trend search. Each engine needs one credential, listed below. Settings › Models shows the active engine.",
+                    "Leave SEARCH_PROVIDER unset or empty and the first engine with a credential wins, in the order exa, serper, brave, tavily, searxng. Name an engine and only that engine is used: if its credential is missing, web search is off and the reason is logged, never a silent switch to another engine. The old values fallback and parallel are treated as unset.",
+                    "Only Exa has a company index. With Exa active, Prospects searches it for companies and offers lookalikes; with any other engine, Prospects finds companies through ordinary web search and lookalikes are off.",
                 ],
+                rows: [
+                    {
+                        name: "exa",
+                        detail: "EXA_API_KEY. About $7 per 1,000 searches, and new Exa accounts get $10 of free credit each month. The only engine with company search and lookalikes.",
+                    },
+                    {
+                        name: "serper",
+                        detail: "SERPER_API_KEY. Google results through serper.dev.",
+                    },
+                    { name: "brave", detail: "BRAVE_SEARCH_API_KEY. The Brave Search API." },
+                    { name: "tavily", detail: "TAVILY_API_KEY." },
+                    {
+                        name: "searxng",
+                        detail: "SEARXNG_URL, the base URL of a SearXNG instance with JSON output enabled. Free and self-hosted: start the bundled one with --profile search and set SEARXNG_URL=http://searxng:8080. Set SEARXNG_SECRET for production.",
+                    },
+                ],
+                note: "SearXNG asks public search engines from your server's address, and they may rate-limit or CAPTCHA a busy instance, which then returns fewer results or none. Use a keyed engine for steady traffic.",
             },
             {
                 title: "Image generation",

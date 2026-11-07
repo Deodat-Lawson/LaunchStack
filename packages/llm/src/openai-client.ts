@@ -16,6 +16,7 @@ import OpenAI from "openai";
 
 import { createSlot } from "@launchstack/runtime";
 import { GEMINI_BASE_URL } from "./types";
+import { createUsageMeteringFetch } from "./usage-meter";
 
 export interface AuxiliaryOpenAIConfig {
     /**
@@ -93,6 +94,9 @@ export function getOpenAIClient(): OpenAI | null {
     const client = new OpenAI({
         apiKey: resolved.apiKey,
         baseURL: resolved.baseUrl,
+        // Counted against whichever workspace's ingestion makes the call; the
+        // client is shared, so the recorder is read per request.
+        fetch: createUsageMeteringFetch({ route: "auxiliary" }),
     });
     clientSlot.set({ client, key: cacheKey });
     return client;

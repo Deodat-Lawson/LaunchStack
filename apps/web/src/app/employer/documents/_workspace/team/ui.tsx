@@ -9,6 +9,7 @@
 
 import React from "react";
 import { ChevronLeft, FileText, Folder, MessageSquare, Search, Users } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { ProfileAvatar } from "~/components/ProfileAvatar";
 import { Button } from "~/components/ui/button";
@@ -133,6 +134,7 @@ export function ErrorLine({
     /** No side padding, for a full-width screen. */
     flush?: boolean;
 }) {
+    const tc = useTranslations("common");
     return (
         <div className={cn("flex items-center gap-2 py-2", flush ? "px-0" : "px-3.5")} role="alert">
             <span className="text-danger min-w-0 flex-1 text-[12.5px]">{message}</span>
@@ -143,7 +145,7 @@ export function ErrorLine({
                     className="h-7 px-2 text-[12px]"
                     onClick={onRetry}
                 >
-                    Retry
+                    {tc("actions.retry")}
                 </Button>
             )}
         </div>
@@ -151,11 +153,12 @@ export function ErrorLine({
 }
 
 export function LoadingRows({ rows = 4, flush = false }: { rows?: number; flush?: boolean }) {
+    const tc = useTranslations("common");
     return (
         <div
             className={cn("flex flex-col gap-1 py-2", flush ? "px-0" : "px-3.5")}
             aria-busy="true"
-            aria-label="Loading"
+            aria-label={tc("a11y.loading")}
         >
             {Array.from({ length: rows }, (_, i) => (
                 <div key={i} className="flex h-10 items-center gap-2.5">

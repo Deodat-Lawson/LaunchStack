@@ -151,6 +151,11 @@ const model: SimulationModel & { requests: ModelRequest[] } = {
                 influence: 0.3,
                 sourceIds: i === 0 ? [] : ["E1"],
                 invented: i === 0,
+                currentSolution: "Spreadsheets",
+                budget: "tight",
+                buyingRole: i % 2 ? "uses" : "decides",
+                switchingCost: "medium",
+                objection: "Prices only go one way.",
             }));
             return { text: JSON.stringify({ personas }), usage };
         }
@@ -160,6 +165,9 @@ const model: SimulationModel & { requests: ModelRequest[] } = {
                 text: JSON.stringify({
                     thought: "Hm.",
                     stance: 1,
+                    convincedBy: first ?? null,
+                    wouldPay: "maybe",
+                    objection: null,
                     actions: first
                         ? [{ type: "like", postId: first, text: null, handle: null }]
                         : [],
@@ -206,7 +214,9 @@ async function drive(p: ScenarioRunPorts, id = 1) {
 describe("advanceRun", () => {
     it("runs brief → cast → rounds → report, one unit per call, charging as it goes", async () => {
         const store = memoryStore(baseRun());
+        const before = model.requests.length;
         const outcomes = await drive(ports(store));
+        const requests = model.requests.slice(before);
         expect(outcomes).toEqual(["advanced", "advanced", "advanced", "advanced", "done"]);
         const run = store.runs.get(1)!;
         expect(run.status).toBe("done");
@@ -221,7 +231,18 @@ describe("advanceRun", () => {
         expect(run.world?.agents[1]?.persona).toMatchObject({
             grounding: "grounded",
             sourceIds: ["E1"],
+            currentSolution: "Spreadsheets",
+            budget: "tight",
+            buyingRole: "uses",
+            switchingCost: "medium",
+            objection: "Prices only go one way.",
         });
+        // Two of six start against, as a scenario's mix asks: no second cast call.
+        expect(requests.filter(r => r.purpose === "cast")).toHaveLength(1);
+        expect(requests.find(r => r.purpose === "cast")?.prompt).toContain(
+            "Starting stances for these 6: 2 against (-1 or -2), 2 undecided (0), 2 in favour (1 or 2)."
+        );
+        expect(run.world?.rounds.at(-1)?.wouldPayCounts).toEqual([0, 6, 0]);
         expect(run.world?.posts[0]).toMatchObject({
             authorId: "narrator",
             text: "Acme raises prices 20%.",
@@ -374,8 +395,11 @@ describe("advanceRun", () => {
             text: draft.text,
         });
         expect(run.world?.accounts.map(a => a.handle)).toEqual(["@acme", "@newswire"]);
-        expect(model.requests.slice(cast).find(r => r.purpose === "cast")?.prompt).toContain(
-            "people who would see Acme's post on linkedin"
+        const castPrompt = model.requests.slice(cast).find(r => r.purpose === "cast")?.prompt;
+        expect(castPrompt).toContain("people who would see Acme's post on linkedin");
+        // A brand's own audience starts warmer than a scenario's.
+        expect(castPrompt).toContain(
+            "Starting stances for these 6: 1 against (-1 or -2), 3 undecided (0), 2 in favour (1 or 2)."
         );
         expect(run.reception).toMatchObject({
             postId: "p1",
@@ -383,6 +407,82 @@ describe("advanceRun", () => {
             engaged: 6,
             engagementRate: 1,
         });
+    });
+
+    it("casts again for the missing skeptics when a cast comes back too warm", async () => {
+        const warm = (n: number, against: boolean, name: string) =>
+            Array.from({ length: n }, (_, i) => ({
+                name: `${name} ${i}`,
+                handle: `@${name.toLowerCase()}_${i}`,
+                role: "Founder",
+                bio: "Runs a small firm.",
+                interests: [],
+                stance: against ? -2 : i === 0 ? 2 : 1,
+                activity: 1,
+                influence: 0.3,
+                sourceIds: i === 1 ? [] : ["E1"],
+                invented: i === 1,
+                currentSolution: "nothing",
+                budget: "none",
+                buyingRole: "decides",
+                switchingCost: "low",
+                objection: "Why now?",
+            }));
+        const requests: ModelRequest[] = [];
+        const castModel: SimulationModel = {
+            async complete(request) {
+                requests.push(request);
+                if (request.purpose !== "cast") return model.complete(request);
+                const n = Number(/Return exactly (\d+) personas/.exec(request.prompt)?.[1] ?? 1);
+                const recast = request.prompt.includes(`${n} against (-1 or -2), 0 undecided`);
+                return {
+                    text: JSON.stringify({ personas: warm(n, recast, recast ? "Skeptic" : "Fan") }),
+                    usage: { inputTokens: 100, outputTokens: 10 },
+                };
+            },
+        };
+        const logs: string[] = [];
+        const store = memoryStore(baseRun());
+        const p = ports(store, { model: castModel, log: message => logs.push(message) });
+        await advanceRun(p, 1); // brief
+        await advanceRun(p, 1); // cast
+        const casts = requests.filter(r => r.purpose === "cast");
+        expect(casts).toHaveLength(2);
+        expect(casts[1]!.prompt).toContain("Return exactly 2 personas.");
+        expect(casts[1]!.prompt).toContain("Handles already taken: @newswire, @fan_0");
+        const agents = store.runs.get(1)!.world!.agents;
+        expect(agents.map(a => a.persona.id)).toEqual(["a1", "a2", "a3", "a4", "a5", "a6"]);
+        // The invented seat goes first, then the warmest fan.
+        expect(agents.map(a => [a.persona.name, a.stance])).toEqual([
+            ["Skeptic 1", -2],
+            ["Skeptic 0", -2],
+            ["Fan 2", 1],
+            ["Fan 3", 1],
+            ["Fan 4", 1],
+            ["Fan 5", 1],
+        ]);
+        expect(logs).toContain("scenario cast recast for skeptics");
+    });
+
+    it("keeps a warm cast when the call for skeptics fails", async () => {
+        let castCalls = 0;
+        const flaky: SimulationModel = {
+            async complete(request) {
+                if (request.purpose === "cast" && ++castCalls > 1) throw new Error("timeout");
+                const reply = await model.complete(request);
+                if (request.purpose !== "cast") return reply;
+                const parsed = JSON.parse(reply.text) as { personas: Array<{ stance: number }> };
+                for (const person of parsed.personas) person.stance = 1;
+                return { ...reply, text: JSON.stringify(parsed) };
+            },
+        };
+        const logs: string[] = [];
+        const store = memoryStore(baseRun());
+        const p = ports(store, { model: flaky, log: message => logs.push(message) });
+        await advanceRun(p, 1); // brief
+        expect(await advanceRun(p, 1)).toEqual({ state: "advanced", step: 2 });
+        expect(store.runs.get(1)!.world!.agents.every(a => a.stance === 1)).toBe(true);
+        expect(logs).toContain("scenario cast recast failed; keeping the cast");
     });
 
     it("reports stage and rounds done from the step", () => {

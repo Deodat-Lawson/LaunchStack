@@ -10,6 +10,12 @@
  * vendor: no endpoint host, no model id, no preset (preset names and notes
  * are vendor-prefixed), no config file name. Those live in the server's
  * configuration and logs.
+ *
+ * It also carries the web search engine (`webSearch`), set the same way: in
+ * the server's environment, read-only here. The no-vendor rule is about AI
+ * models; search engines are named (Prospects names them too). Keys and
+ * addresses are not: only which setting each engine reads and whether it is
+ * present.
  */
 
 import {
@@ -21,6 +27,7 @@ import {
     resolveChatRoute,
     type ChatModelDefinition,
 } from "@launchstack/llm";
+import { describeSearchSetup, type SearchSetupView } from "@launchstack/tools/web-research";
 import { env } from "~/env";
 import { configureAppChatModels } from "~/server/chat-models";
 
@@ -48,9 +55,13 @@ export interface ModelInfo {
     routes: string[];
 }
 
+/** The search engine every feature uses; see `describeSearchSetup`. */
+export type WebSearchInfo = SearchSetupView;
+
 export interface ModelsOverview {
     routes: ModelRouteInfo[];
     models: ModelInfo[];
+    webSearch: WebSearchInfo;
 }
 
 function describeModel(name: string, definition: ChatModelDefinition, routes: string[]): ModelInfo {
@@ -65,6 +76,34 @@ function describeModel(name: string, definition: ChatModelDefinition, routes: st
         contextTokens: definition.behavior.limits?.contextTokens ?? null,
         maxOutputTokens: definition.behavior.limits?.maxOutputTokens ?? null,
         routes,
+    };
+}
+
+/**
+ * The search setup, field by field: whatever `describeSearchSetup` grows
+ * later reaches the browser only once it is added here on purpose.
+ */
+export function webSearchOverview(): WebSearchInfo {
+    const setup = describeSearchSetup();
+    return {
+        provider: setup.provider,
+        label: setup.label,
+        source: setup.source,
+        requested: setup.requested,
+        problem: setup.problem,
+        credential: setup.credential,
+        capabilities: {
+            web: setup.capabilities.web,
+            news: setup.capabilities.news,
+            companies: setup.capabilities.companies,
+        },
+        providers: setup.providers.map(provider => ({
+            id: provider.id,
+            label: provider.label,
+            credential: provider.credential,
+            configured: provider.configured,
+            companies: provider.companies,
+        })),
     };
 }
 
@@ -95,5 +134,5 @@ export function modelsOverview(): ModelsOverview {
         models.push(describeModel(name, definition, routesByModel.get(name) ?? []));
     }
 
-    return { routes, models };
+    return { routes, models, webSearch: webSearchOverview() };
 }

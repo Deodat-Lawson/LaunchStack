@@ -10,6 +10,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { FileText, MessageSquareText, UserRound } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "~/components/ui/button";
 import {
@@ -23,24 +24,13 @@ import {
 import { takeJoinWelcome, type JoinWelcome as Welcome } from "~/lib/join-handoff";
 
 const FIRST_STEPS = [
-    {
-        Icon: MessageSquareText,
-        title: "Ask anything",
-        body: "Questions get answered from the documents shared with you, with citations.",
-    },
-    {
-        Icon: FileText,
-        title: "Look around Documents",
-        body: "Everything the workspace shares is in the Sources rail on the left.",
-    },
-    {
-        Icon: UserRound,
-        title: "Tell people who you are",
-        body: "Add a photo and a title so teammates recognise you.",
-    },
+    { key: "ask", Icon: MessageSquareText },
+    { key: "documents", Icon: FileText },
+    { key: "profile", Icon: UserRound },
 ] as const;
 
 export function JoinWelcome() {
+    const t = useTranslations("chrome.joinWelcome");
     const [welcome, setWelcome] = useState<Welcome | null>(null);
 
     useEffect(() => {
@@ -55,26 +45,26 @@ export function JoinWelcome() {
             <DialogContent className="bg-panel border-line sm:max-w-md">
                 <DialogHeader>
                     <DialogTitle className="text-ink text-xl">
-                        Welcome to {welcome.workspaceName}
+                        {t("title", { workspace: welcome.workspaceName })}
                     </DialogTitle>
                     <DialogDescription>
                         {welcome.invitedBy
-                            ? `${welcome.invitedBy} invited you. You've joined as ${welcome.roleName}.`
-                            : `You've joined as ${welcome.roleName}.`}
+                            ? t("invitedBy", { inviter: welcome.invitedBy, role: welcome.roleName })
+                            : t("joined", { role: welcome.roleName })}
                     </DialogDescription>
                 </DialogHeader>
                 <ul className="m-0 flex list-none flex-col gap-3 p-0">
-                    {FIRST_STEPS.map(({ Icon, title, body }) => (
-                        <li key={title} className="flex items-start gap-3">
+                    {FIRST_STEPS.map(({ key, Icon }) => (
+                        <li key={key} className="flex items-start gap-3">
                             <span className="bg-brand-soft text-brand flex size-8 shrink-0 items-center justify-center rounded-lg">
                                 <Icon className="size-4" aria-hidden />
                             </span>
                             <span className="min-w-0">
                                 <span className="text-ink block text-sm font-semibold">
-                                    {title}
+                                    {t(`steps.${key}.title`)}
                                 </span>
                                 <span className="text-ink-3 block text-[13px] leading-relaxed">
-                                    {body}
+                                    {t(`steps.${key}.body`)}
                                 </span>
                             </span>
                         </li>
@@ -82,10 +72,10 @@ export function JoinWelcome() {
                 </ul>
                 <DialogFooter>
                     <Button asChild variant="outline" onClick={close}>
-                        <Link href="/employer/settings#account">Set up your profile</Link>
+                        <Link href="/employer/settings#account">{t("setUpProfile")}</Link>
                     </Button>
                     <Button onClick={close} autoFocus>
-                        Get started
+                        {t("getStarted")}
                     </Button>
                 </DialogFooter>
             </DialogContent>

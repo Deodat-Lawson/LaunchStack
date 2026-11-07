@@ -251,9 +251,42 @@ export function normalizeCountry(input: string | null | undefined): string | nul
 }
 
 /**
+ * Hosting platforms where every subdomain is a different company's site
+ * (`freshfarm.myshopify.com`). Their tenants keep their own label, or every
+ * Shopify store would resolve to one organisation called myshopify.com.
+ */
+const TENANT_PLATFORMS = [
+    "myshopify.com",
+    "github.io",
+    "gitlab.io",
+    "netlify.app",
+    "vercel.app",
+    "pages.dev",
+    "web.app",
+    "firebaseapp.com",
+    "herokuapp.com",
+    "azurewebsites.net",
+    "onrender.com",
+    "fly.dev",
+    "wixsite.com",
+    "squarespace.com",
+    "webflow.io",
+    "wordpress.com",
+    "blogspot.com",
+    "weebly.com",
+    "godaddysites.com",
+    "square.site",
+    "carrd.co",
+    "notion.site",
+    "framer.website",
+    "substack.com",
+];
+
+/**
  * Host → registrable-ish domain: lowercase, strip `www.` and common
  * marketing subdomains, keep the rest (we do not ship a public-suffix list;
- * `shop.acme.co.uk` → `acme.co.uk` is handled by the known-second-level rule).
+ * `shop.acme.co.uk` → `acme.co.uk` is handled by the known-second-level rule,
+ * and a hosting platform's tenant keeps its own label).
  */
 export function normalizeDomain(input: string | null | undefined): string | null {
     if (!input) return null;
@@ -271,6 +304,14 @@ export function normalizeDomain(input: string | null | undefined): string | null
         return null;
     if (!hostname.includes(".")) return null;
     hostname = hostname.replace(/^(www\d?|m|shop|store|en|de|fr|nl|us|uk|eu|www2)\./, "");
+    const platform = TENANT_PLATFORMS.find(suffix => hostname.endsWith(`.${suffix}`));
+    if (platform) {
+        const tenant = hostname
+            .slice(0, -(platform.length + 1))
+            .split(".")
+            .pop()!;
+        return `${tenant}.${platform}`;
+    }
     const parts = hostname.split(".");
     const secondLevel = new Set(["co", "com", "org", "net", "ac", "gov", "edu", "or", "ne"]);
     if (parts.length >= 3) {

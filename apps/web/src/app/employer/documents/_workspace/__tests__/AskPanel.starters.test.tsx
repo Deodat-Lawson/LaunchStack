@@ -1,7 +1,7 @@
 /** @jest-environment jsdom */
 
 import React from "react";
-import { act, render, screen, waitFor, within } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 import { ContextMenuProvider } from "~/components/context-menu";
@@ -205,20 +205,25 @@ describe("AskPanel starter questions", () => {
             </ContextMenuProvider>
         );
 
-        expect(screen.getByText("1 source indexed · 1 processing · 1 failed")).toBeInTheDocument();
+        // The counts that aren't ready open the Processing queue tab.
+        const toQueue = screen.getByRole("button", { name: "1 processing · 1 failed" });
+        expect(toQueue.parentElement).toHaveTextContent(
+            "1 source indexed · 1 processing · 1 failed"
+        );
         const failedRow = within(screen.getByTestId("source-row-d9"));
         const failedCheckbox = failedRow.getByRole("checkbox");
         expect(failedCheckbox).toBeDisabled();
         await user.click(failedCheckbox);
         expect(setSelected).not.toHaveBeenCalled();
-        expect(
-            within(screen.getByTestId("source-row-d11")).getByText("syncing…")
-        ).toBeInTheDocument();
-        const failedStatus = failedRow.getByText("failed");
-        act(() => failedStatus.focus());
-        expect(await screen.findByRole("tooltip")).toHaveTextContent(errorMessage);
-        expect(failedStatus).toHaveAccessibleDescription(errorMessage);
-        act(() => failedStatus.blur());
+        expect(screen.getByTestId("source-progress-d11")).toHaveTextContent("Syncing…");
+        // The failure reads in words; the worker's own text waits behind Details.
+        const failedStatus = failedRow.getByTestId("source-failure-d9");
+        expect(failedStatus).toHaveTextContent("Not set up");
+        await user.click(failedStatus);
+        const card = await screen.findByRole("dialog");
+        expect(card).toHaveTextContent("This server isn't set up to process this file.");
+        expect(card).not.toHaveTextContent(errorMessage);
+        await user.keyboard("{Escape}");
 
         await user.click(within(screen.getByTestId("folder-row-Contracts")).getByRole("checkbox"));
         const update = setSelected.mock.calls[0]![0] as (previous: string[]) => string[];
@@ -345,7 +350,10 @@ describe("AskPanel starter questions", () => {
 
         await user.click(await screen.findByRole("button", { name: /add company profile/i }));
 
-        expect(onStudioNavigate).toHaveBeenCalledWith("/employer/settings#company");
+        // Workspace › Company profile, a tab away.
+        expect(onStudioNavigate).toHaveBeenCalledWith(
+            "/employer/documents?feature=workspace&at=%2Fcompany"
+        );
         await waitFor(() =>
             expect(
                 screen.getByText("Suggested from 2 sources in Acme Robotics")

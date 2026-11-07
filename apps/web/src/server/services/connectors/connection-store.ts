@@ -196,6 +196,29 @@ export async function getConnectionAccessToken(connection: ConnectorConnection):
         }
     }
 
+    return refreshStoredToken(connection);
+}
+
+/**
+ * Refresh now, whatever the stored expiry says, and return the new access
+ * token. For providers that send no expiry (Notion): the first sign a
+ * token died is a 401, and one refresh is the only way to tell a stale
+ * token from a revoked grant. Re-reads the row so a refresh token rotated
+ * since the caller loaded it is the one spent.
+ */
+export async function refreshConnectionAccessToken(connectionId: number): Promise<string> {
+    getEngine();
+    const connection = await getConnectionById(connectionId);
+    if (!connection) throw new Error(`Connection ${connectionId} no longer exists`);
+    return refreshStoredToken(connection);
+}
+
+async function refreshStoredToken(connection: ConnectorConnection): Promise<string> {
+    if (!isOAuthProvider(connection.provider)) {
+        throw new Error(
+            `Token refresh here serves the generic providers; ${connection.provider} has its own accessor`
+        );
+    }
     if (!connection.refreshTokenCiphertext) {
         throw new Error(
             `The stored ${connection.provider} token expired and no refresh token exists — reconnect required`

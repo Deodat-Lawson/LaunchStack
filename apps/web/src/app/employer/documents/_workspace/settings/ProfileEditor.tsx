@@ -15,6 +15,7 @@
  */
 
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import { Camera, Clock, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -33,7 +34,7 @@ import {
     resolveProfile,
     type MyProfile,
 } from "~/lib/profile/resolve";
-import { sendProfileWrite, useMyProfile } from "~/lib/profile/use-my-profile";
+import { ProfileWriteError, sendProfileWrite, useMyProfile } from "~/lib/profile/use-my-profile";
 
 import { usePublishedActions, type SettingsSectionProps } from "./contract";
 import { ProfilePhotoDialog } from "./ProfilePhotoDialog";
@@ -104,7 +105,18 @@ export function ProfileEditor({
     onActions,
     emailVerified,
 }: SettingsSectionProps & { emailVerified: boolean | null }) {
-    const { data, error, loaded } = useMyProfile();
+    const t = useTranslations("settings.profile");
+    const tc = useTranslations("common");
+    const locale = useLocale();
+    const { data, error: storeError, errorIsFallback, loaded } = useMyProfile();
+    const error = errorIsFallback ? t("loadFailed") : storeError;
+    /** A thrown write, in words: the server's sentence, else ours. */
+    const failure = (err: unknown, fallback: string) =>
+        err instanceof ProfileWriteError
+            ? (err.serverMessage ?? t("saveFailed"))
+            : err instanceof Error
+              ? err.message
+              : fallback;
     const base = useMemo(() => (data ? draftFrom(data) : null), [data]);
     const [draft, setDraft] = useState<Draft | null>(null);
     const lastBase = useRef<Draft | null>(null);
@@ -143,8 +155,7 @@ export function ProfileEditor({
                 // The sign-in copy of the name is Better Auth's; update it
                 // first so the session and the profile never disagree for long.
                 const result = await authClient.updateUser({ name: draft.name.trim() });
-                if (result.error)
-                    throw new Error(result.error.message ?? "Could not save your name.");
+                if (result.error) throw new Error(result.error.message ?? t("couldNotSaveName"));
             }
             if (profileChanges.length > 0) {
                 const patch: Record<string, string | null> = {};
@@ -174,9 +185,9 @@ export function ProfileEditor({
             // Take the server's normalised values (trimmed, blanks cleared).
             setDraft(null);
             lastBase.current = null;
-            toast.success("Profile saved");
+            toast.success(t("saved"));
         } catch (err) {
-            toast.error(err instanceof Error ? err.message : "Could not save your profile.");
+            toast.error(failure(err, t("saveFailed")));
         } finally {
             setSaving(false);
         }
@@ -185,13 +196,13 @@ export function ProfileEditor({
     usePublishedActions(
         onActions,
         {
-            primaryLabel: "Save profile",
-            primaryBusyLabel: "Saving…",
+            primaryLabel: t("savePrimary"),
+            primaryBusyLabel: tc("status.saving"),
             onPrimary: save,
             busy: saving,
             disabled: !dirty || nameInvalid,
         },
-        [draft, base, saving, dirty, nameInvalid]
+        [draft, base, saving, dirty, nameInvalid, t, tc]
     );
 
     // After a save, `draft` is cleared so the effect re-seeds from the store.
@@ -212,7 +223,7 @@ export function ProfileEditor({
         event.target.value = "";
         if (!file) return;
         if (file.size > PROFILE_PHOTO.maxBytes) {
-            toast.error(`Photos can be up to ${PROFILE_PHOTO.maxBytes / (1024 * 1024)} MB.`);
+            toast.error(t("tooLarge", { mb: PROFILE_PHOTO.maxBytes / (1024 * 1024) }));
             return;
         }
         setPhoto({ file, scope: pickScope.current });
@@ -228,8 +239,8 @@ export function ProfileEditor({
         });
         toast.success(
             photo.scope === "workspace" && data?.workspace
-                ? `Photo for ${data.workspace.name} updated`
-                : "Photo updated"
+                ? t("photoUpdatedIn", { workspace: data.workspace.name })
+                : t("photoUpdated")
         );
         setPhoto(null);
     };
@@ -238,9 +249,9 @@ export function ProfileEditor({
         setPhotoBusy(scope);
         try {
             await sendProfileWrite(`/api/profile/photo?scope=${scope}`, { method: "DELETE" });
-            toast.success("Photo removed");
+            toast.success(t("photoRemoved"));
         } catch (err) {
-            toast.error(err instanceof Error ? err.message : "Could not remove the photo.");
+            toast.error(failure(err, t("removeFailed")));
         } finally {
             setPhotoBusy(null);
         }
@@ -257,9 +268,9 @@ export function ProfileEditor({
             setDraft(current =>
                 current ? { ...current, workspaceDisplayName: "", workspaceTitle: "" } : current
             );
-            toast.success("Using your profile in this workspace");
+            toast.success(t("usingProfile"));
         } catch (err) {
-            toast.error(err instanceof Error ? err.message : "Could not reset.");
+            toast.error(failure(err, t("resetFailed")));
         } finally {
             setPhotoBusy(null);
         }
@@ -267,10 +278,10 @@ export function ProfileEditor({
 
     if (!loaded || !data || !draft) {
         return (
-            <Section title="Profile" description="How you appear to the people you work with.">
+            <Section title={t("section.title")} description={t("section.loadingDescription")}>
                 <Card>
                     <StatusNote tone={error ? "danger" : "muted"} style={{ marginBottom: 0 }}>
-                        {error ?? "Loading…"}
+                        {error ?? tc("status.loading")}
                     </StatusNote>
                 </Card>
             </Section>
@@ -299,7 +310,7 @@ export function ProfileEditor({
     const set = (key: DraftKey) => (value: string) =>
         setDraft(current => (current ? { ...current, [key]: value } : current));
     const workspace = data.workspace;
-    const localTime = localTimeIn(preview.timeZone);
+    const localTime = localTimeIn(preview.timeZone, new Date(), locale);
 
     return (
         <>
@@ -313,10 +324,7 @@ export function ProfileEditor({
                 onChange={onFile}
             />
 
-            <Section
-                title="Profile"
-                description="Yours in every workspace you belong to. A workspace can show a different photo, name or title — see below."
-            >
+            <Section title={t("section.title")} description={t("section.description")}>
                 <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_260px]">
                     <Card>
                         <div className="mb-5 flex items-center gap-4">
@@ -335,7 +343,9 @@ export function ProfileEditor({
                                         onClick={() => choosePhoto("global")}
                                     >
                                         <Camera aria-hidden />
-                                        {data.profile.avatarUrl ? "Change photo" : "Upload photo"}
+                                        {data.profile.avatarUrl
+                                            ? t("changePhoto")
+                                            : t("uploadPhoto")}
                                     </Button>
                                     {data.profile.avatarUrl && (
                                         <Button
@@ -345,23 +355,21 @@ export function ProfileEditor({
                                             onClick={() => void removePhoto("global")}
                                         >
                                             <Trash2 aria-hidden />
-                                            Remove
+                                            {tc("actions.remove")}
                                         </Button>
                                     )}
                                 </div>
                                 <div className="text-ink-3 mt-1.5 text-[11px]">
-                                    {PROFILE_PHOTO.acceptLabel}, up to{" "}
-                                    {PROFILE_PHOTO.maxBytes / (1024 * 1024)} MB. You can crop it
-                                    next.
+                                    {t("photoHint", { mb: PROFILE_PHOTO.maxBytes / (1024 * 1024) })}
                                 </div>
                             </div>
                         </div>
 
                         <div className="grid gap-x-3.5 md:grid-cols-2">
                             <Field
-                                label="Full name"
-                                hint="Used for sign-in, invitations and the audit trail."
-                                error={nameInvalid ? "Your name can't be empty." : undefined}
+                                label={t("fullName")}
+                                hint={t("fullNameHint")}
+                                error={nameInvalid ? t("nameEmpty") : undefined}
                             >
                                 <TextInput
                                     value={draft.name}
@@ -370,34 +378,31 @@ export function ProfileEditor({
                                     onChange={e => set("name")(e.target.value)}
                                 />
                             </Field>
-                            <Field
-                                label="Display name"
-                                hint="What people see in lists and chat. Blank uses your full name."
-                            >
+                            <Field label={t("displayName")} hint={t("displayNameHint")}>
                                 <TextInput
                                     value={draft.displayName}
                                     maxLength={PROFILE_LIMITS.displayName}
                                     placeholder={
-                                        firstFilled(draft.name.split(/\s+/)[0]) ?? "Display name"
+                                        firstFilled(draft.name.split(/\s+/)[0]) ?? t("displayName")
                                     }
                                     autoComplete="nickname"
                                     onChange={e => set("displayName")(e.target.value)}
                                 />
                             </Field>
-                            <Field label="Title">
+                            <Field label={t("title")}>
                                 <TextInput
                                     value={draft.title}
                                     maxLength={PROFILE_LIMITS.title}
-                                    placeholder="e.g. Head of Growth"
+                                    placeholder={t("titlePlaceholder")}
                                     autoComplete="organization-title"
                                     onChange={e => set("title")(e.target.value)}
                                 />
                             </Field>
-                            <Field label="Pronouns">
+                            <Field label={t("pronouns")}>
                                 <TextInput
                                     value={draft.pronouns}
                                     maxLength={PROFILE_LIMITS.pronouns}
-                                    placeholder="e.g. they/them"
+                                    placeholder={t("pronounsPlaceholder")}
                                     list="profile-pronoun-suggestions"
                                     onChange={e => set("pronouns")(e.target.value)}
                                 />
@@ -410,11 +415,11 @@ export function ProfileEditor({
                         </div>
 
                         <Field
-                            label="Time zone"
+                            label={t("timeZone")}
                             hint={
                                 localTime
-                                    ? `Others see your local time: ${localTime}.`
-                                    : "Lets others see your local time before they message you."
+                                    ? t("localTimeHint", { time: localTime })
+                                    : t("timeZoneHint")
                             }
                         >
                             <div className="flex flex-col items-start gap-2 sm:flex-row sm:items-center">
@@ -422,7 +427,7 @@ export function ProfileEditor({
                                     value={draft.timeZone}
                                     onChange={e => set("timeZone")(e.target.value)}
                                 >
-                                    <option value="">Not set</option>
+                                    <option value="">{t("notSet")}</option>
                                     {draft.timeZone && !zones.includes(draft.timeZone) && (
                                         <option value={draft.timeZone}>{draft.timeZone}</option>
                                     )}
@@ -439,34 +444,31 @@ export function ProfileEditor({
                                         className="shrink-0"
                                         onClick={() => set("timeZone")(detected)}
                                     >
-                                        Use {detected.replace(/_/g, " ")}
+                                        {t("useZone", { zone: detected.replace(/_/g, " ") })}
                                     </Button>
                                 )}
                             </div>
                         </Field>
 
                         <Field
-                            label="About"
+                            label={t("about")}
                             hint={`${draft.bio.trim().length}/${PROFILE_LIMITS.bio}`}
                         >
                             <TextArea
                                 value={draft.bio}
                                 maxLength={PROFILE_LIMITS.bio}
                                 rows={3}
-                                placeholder="A line about what you work on."
+                                placeholder={t("aboutPlaceholder")}
                                 onChange={e => set("bio")(e.target.value)}
                             />
                         </Field>
 
-                        <Field
-                            label="Email"
-                            hint="Sign-in email. Ask an admin to re-invite you to change it."
-                        >
+                        <Field label={tc("fields.email")} hint={t("emailHint")}>
                             <div className="flex items-center gap-2">
                                 <TextInput value={data.profile.email} disabled readOnly />
                                 {emailVerified !== null && (
                                     <Badge variant={emailVerified ? "success" : "warn"}>
-                                        {emailVerified ? "Verified" : "Unverified"}
+                                        {emailVerified ? t("verified") : t("unverified")}
                                     </Badge>
                                 )}
                             </div>
@@ -475,7 +477,9 @@ export function ProfileEditor({
 
                     <ProfilePreview
                         heading={
-                            workspace ? `How ${workspace.name} sees you` : "How others see you"
+                            workspace
+                                ? t("previewIn", { workspace: workspace.name })
+                                : t("previewOthers")
                         }
                         preview={preview}
                         localTime={localTime}
@@ -485,8 +489,8 @@ export function ProfileEditor({
 
             {workspace && (
                 <Section
-                    title={`In ${workspace.name}`}
-                    description="Show up differently in this workspace only — a client's logo, the name they know you by, your title there. Blank fields use your profile. Other workspaces never see these."
+                    title={t("workspaceSection.title", { workspace: workspace.name })}
+                    description={t("workspaceSection.description")}
                 >
                     <Card>
                         <div className="mb-5 flex items-center gap-4">
@@ -508,8 +512,8 @@ export function ProfileEditor({
                                     >
                                         <Camera aria-hidden />
                                         {workspace.override.avatarUrl
-                                            ? "Change photo here"
-                                            : "Use a different photo here"}
+                                            ? t("changePhotoHere")
+                                            : t("usePhotoHere")}
                                     </Button>
                                     {workspace.override.avatarUrl && (
                                         <Button
@@ -518,34 +522,35 @@ export function ProfileEditor({
                                             disabled={photoBusy === "workspace"}
                                             onClick={() => void removePhoto("workspace")}
                                         >
-                                            Use my profile photo
+                                            {t("useProfilePhoto")}
                                         </Button>
                                     )}
                                 </div>
                                 <div className="text-ink-3 mt-1.5 text-[11px]">
                                     {workspace.override.avatarUrl
-                                        ? `Only ${workspace.name} sees this photo.`
-                                        : "Showing your profile photo."}
+                                        ? t("onlyWorkspaceSees", { workspace: workspace.name })
+                                        : t("showingProfilePhoto")}
                                 </div>
                             </div>
                         </div>
 
                         <div className="grid gap-x-3.5 md:grid-cols-2">
-                            <Field label="Display name here">
+                            <Field label={t("displayNameHere")}>
                                 <TextInput
                                     value={draft.workspaceDisplayName}
                                     maxLength={PROFILE_LIMITS.displayName}
                                     placeholder={
-                                        orNull(draft.displayName) ?? (draft.name || "Display name")
+                                        orNull(draft.displayName) ??
+                                        (draft.name || t("displayName"))
                                     }
                                     onChange={e => set("workspaceDisplayName")(e.target.value)}
                                 />
                             </Field>
-                            <Field label="Title here">
+                            <Field label={t("titleHere")}>
                                 <TextInput
                                     value={draft.workspaceTitle}
                                     maxLength={PROFILE_LIMITS.title}
-                                    placeholder={orNull(draft.title) ?? "e.g. Advisor"}
+                                    placeholder={orNull(draft.title) ?? t("titleHerePlaceholder")}
                                     onChange={e => set("workspaceTitle")(e.target.value)}
                                 />
                             </Field>
@@ -559,7 +564,7 @@ export function ProfileEditor({
                                     disabled={photoBusy === "workspace"}
                                     onClick={() => void resetWorkspace()}
                                 >
-                                    Reset to my profile
+                                    {t("resetToProfile")}
                                 </Button>
                             </div>
                         )}
@@ -571,13 +576,13 @@ export function ProfileEditor({
                 file={photo?.file ?? null}
                 title={
                     photo?.scope === "workspace" && workspace
-                        ? `Photo for ${workspace.name}`
-                        : "Profile photo"
+                        ? t("photoDialog.titleIn", { workspace: workspace.name })
+                        : t("photoDialog.titleProfile")
                 }
                 description={
                     photo?.scope === "workspace" && workspace
-                        ? `Only people in ${workspace.name} will see it.`
-                        : "Drag to position, zoom to fit. Everyone in your workspaces sees this unless you set one for a workspace."
+                        ? t("photoDialog.descriptionIn", { workspace: workspace.name })
+                        : t("photoDialog.descriptionProfile")
                 }
                 onClose={() => setPhoto(null)}
                 onSave={uploadPhoto}
@@ -595,6 +600,7 @@ function ProfilePreview({
     preview: ReturnType<typeof resolveProfile>;
     localTime: string | null;
 }) {
+    const t = useTranslations("settings.profile");
     return (
         <Card className="self-start">
             <div className="text-ink-3 mb-4 text-[11px] font-semibold uppercase tracking-[0.06em]">
@@ -618,7 +624,7 @@ function ProfilePreview({
             {localTime && (
                 <div className="text-ink-3 mt-2 flex items-center gap-1.5 text-xs">
                     <Clock className="size-3.5" aria-hidden />
-                    {localTime} local time
+                    {t("localTime", { time: localTime })}
                 </div>
             )}
             {preview.bio && (

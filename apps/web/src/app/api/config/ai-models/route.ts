@@ -1,7 +1,11 @@
 import { NextResponse } from "next/server";
 import { describeChatResolutionFailure, getConfiguredPublicChatConfig } from "~/lib/models";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
-import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
+import {
+    loadWorkspaceOfferedModels,
+    withWorkspaceChatModels,
+} from "~/server/workspace-models/scope";
+import { localeOfRequest } from "~/i18n/server";
 
 export const dynamic = "force-dynamic";
 
@@ -16,13 +20,23 @@ export const dynamic = "force-dynamic";
  * Read inside the caller's workspace scope, so a workspace that brought its
  * own models sees the routes those models serve. A signed-out caller gets the
  * deployment's, as before.
+ *
+ * `models` lists what the workspace's admins offer in Ask's model menu, each
+ * under the name they gave it and with what it can do — never the provider's
+ * model id. A workspace on the deployment's models offers none.
  */
-export async function GET() {
+export async function GET(request: Request) {
     try {
         const ctx = await requireWorkspaceContext();
         const companyId = ctx.success ? ctx.data.companyId : null;
-        return await withWorkspaceChatModels(companyId, () =>
-            NextResponse.json(getConfiguredPublicChatConfig())
+        const aiUse = {
+            feature: "ask",
+            userId: ctx.success ? ctx.data.authUserId : null,
+            enforce: false,
+        } as const;
+        const models = await loadWorkspaceOfferedModels(companyId);
+        return await withWorkspaceChatModels(companyId, aiUse, () =>
+            NextResponse.json({ ...getConfiguredPublicChatConfig(), models })
         );
     } catch (error) {
         // A broken configuration must not take the whole UI down — report every
@@ -30,7 +44,7 @@ export async function GET() {
         // describeChatResolutionFailure logs the detail and keeps only words
         // fit for every user: the fixed reason for a broken server file, or
         // the workspace's own "fix it in Settings" when its endpoint is down.
-        const { message } = describeChatResolutionFailure(error);
+        const { message } = describeChatResolutionFailure(error, localeOfRequest(request));
         return NextResponse.json(
             {
                 routes: {

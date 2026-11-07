@@ -239,6 +239,83 @@
       "when": 1792279509930,
       "tag": "20261017232509_scenario_simulation",
       "breakpoints": true
+    },
+    {
+      "idx": 34,
+      "version": "7",
+      "when": 1792728154217,
+      "tag": "20261023040234_notion_connector",
+      "breakpoints": true
+    },
+    {
+      "idx": 35,
+      "version": "7",
+      "when": 1792878556252,
+      "tag": "20261024214916_ai_usage_daily",
+      "breakpoints": true
+    },
+    {
+      "idx": 36,
+      "version": "7",
+      "when": 1792882362467,
+      "tag": "20261024225242_drive_pick_destination",
+      "breakpoints": true
+    },
+    {
+      "idx": 37,
+      "version": "7",
+      "when": 1792973638335,
+      "tag": "20261026001358_feedback",
+      "breakpoints": true
+    },
+    {
+      "idx": 38,
+      "version": "7",
+      "when": 1793080045101,
+      "tag": "20261027054725_member_ai_allowances",
+      "breakpoints": true
+    },
+    {
+      "idx": 39,
+      "version": "7",
+      "when": 1793158004541,
+      "tag": "20261028032644_prospects_customer_domains",
+      "breakpoints": true
+    },
+    {
+      "idx": 40,
+      "version": "7",
+      "when": 1793163053692,
+      "tag": "20261028045053_ai_usage_kinds",
+      "breakpoints": true
+    },
+    {
+      "idx": 41,
+      "version": "7",
+      "when": 1793581675751,
+      "tag": "20261102010755_deal_stage_history",
+      "breakpoints": true
+    },
+    {
+      "idx": 42,
+      "version": "7",
+      "when": 1793581690555,
+      "tag": "20261102010810_marketing_runs",
+      "breakpoints": true
+    },
+    {
+      "idx": 43,
+      "version": "7",
+      "when": 1794029861620,
+      "tag": "20261107053741_accelerator_catalogue",
+      "breakpoints": true
+    },
+    {
+      "idx": 44,
+      "version": "7",
+      "when": 1794074292985,
+      "tag": "20261107175812_connector_deleted_items",
+      "breakpoints": true
     }
   ]
 }

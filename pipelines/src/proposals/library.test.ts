@@ -12,6 +12,7 @@ function item(id: string, question: string, tags: string[] = [], uses = 0): Libr
         answer: `Answer for ${question}`,
         tags,
         evidence: [],
+        provenance: { kind: "manual" },
         sourceApplicationId: null,
         sourceSectionKey: null,
         uses,

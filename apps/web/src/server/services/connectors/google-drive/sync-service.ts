@@ -10,6 +10,7 @@ import {
     syncGoogleDrive,
     type GoogleDriveSyncResult,
 } from "@launchstack/pipelines/connectors/google-drive";
+import { DELETED_HERE_DETAIL } from "@launchstack/pipelines/connectors";
 import { GoogleAuthError } from "@launchstack/google-drive";
 
 import { and, eq, inArray, sql } from "drizzle-orm";
@@ -29,6 +30,7 @@ import {
     resetSyncCursor,
 } from "./store";
 import { ensureCategoryRow } from "../../folder-access";
+import { listDeletedSourceIds } from "../deleted-items";
 import {
     createDriveDestinations,
     missingToMark,
@@ -54,6 +56,7 @@ function reportCounts(report: GoogleDriveSyncResult): Record<string, unknown> {
         stored: report.stored.length,
         skipped: report.skipped.length,
         unchanged: report.skipped.filter(skip => skip.reason === "unchanged").length,
+        deletedHere: report.skipped.filter(skip => skip.detail === DELETED_HERE_DETAIL).length,
         failed: report.failed.length,
         missing: report.missingSourceIds.length,
         accessLost: report.accessLost.length,
@@ -138,14 +141,16 @@ export async function runGoogleDriveSync(
         // can be restricted like any other folder.
         await ensureCategoryRow(connection.companyId, GOOGLE_DRIVE_CATEGORY);
 
-        const [syncState, pickedRows, knownSources] = await Promise.all([
+        const [syncState, pickedRows, knownSources, deletedSourceIds] = await Promise.all([
             getSyncState(connectionId),
             listPickedItems(connectionId),
             listKnownSources(connection.companyId, connectionId),
+            listDeletedSourceIds(connectionId),
         ]);
 
-        // A picked folder belongs to whoever picked it (ADR-014); files
-        // picked one by one stay a workspace import, as before.
+        // What a pick brings in belongs to whoever picked it (ADR-014) — a
+        // folder always, a file when it was picked into a folder from Add
+        // source; files picked before that stay a workspace import.
         const pickers = await ownersByUserPk(
             connection.companyId,
             pickedRows.map(row => row.addedByUserPk)
@@ -162,6 +167,7 @@ export async function runGoogleDriveSync(
             kind: row.kind,
             name: row.name,
             folderCategoryId: row.folderCategoryId,
+            destination: row.destination,
             owner: ownerForPick(row.addedByUserPk, pickers, granterOwner),
         }));
         const destinations = createDriveDestinations({
@@ -185,6 +191,7 @@ export async function runGoogleDriveSync(
             })),
             startPageToken: syncState?.startPageToken ?? undefined,
             knownSourceIds: knownSources.map(known => known.sourceId),
+            deletedSourceIds,
             force: options?.force,
         });
 

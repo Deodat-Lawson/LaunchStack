@@ -4,7 +4,14 @@ import { z } from "zod";
 
 import { setExcluded } from "~/server/prospects/service";
 
-import { error, handleProspectsError, json, prospectsContext, readBody } from "../../_http";
+import {
+    error,
+    handleProspectsError,
+    json,
+    prospectsContext,
+    prospectsT,
+    readBody,
+} from "../../_http";
 
 const Schema = z.object({
     ids: z.array(z.string().min(1)).min(1).max(100),
@@ -16,11 +23,11 @@ export async function POST(request: NextRequest) {
     if (!auth.ok) return auth.response;
     try {
         const parsed = Schema.safeParse(await readBody(request));
-        if (!parsed.success) return error("ids are required", 400);
+        if (!parsed.success) return error(prospectsT(request)("idsRequired"), 400);
         return json({
             updated: await setExcluded(auth.ctx, parsed.data.ids, parsed.data.excluded),
         });
     } catch (err) {
-        return handleProspectsError("POST exclude", err);
+        return handleProspectsError("POST exclude", err, request);
     }
 }

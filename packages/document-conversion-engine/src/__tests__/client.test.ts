@@ -172,6 +172,56 @@ describe("officeToPdf", () => {
     });
 });
 
+describe("htmlToScreenshot", () => {
+    it("posts index.html with the window and image settings to the screenshot route", async () => {
+        mockFetch.mockResolvedValue(
+            new Response(new Uint8Array([0xff, 0xd8, 0xff]), {
+                status: 200,
+                headers: { "content-type": "image/jpeg", "gotenberg-trace": "trace-9" },
+            })
+        );
+
+        const result = await client().htmlToScreenshot({
+            html: '<html><head><base href="https://acme.com/"></head><body>Acme</body></html>',
+            width: 1280,
+            height: 800,
+            format: "jpeg",
+            quality: 82,
+            waitDelay: "1s",
+        });
+
+        expect(mockFetch).toHaveBeenCalledWith(
+            "http://gotenberg:3000/forms/chromium/screenshot/html",
+            expect.anything()
+        );
+        expect([...result.image]).toEqual([0xff, 0xd8, 0xff]);
+        expect(result.contentType).toBe("image/jpeg");
+        expect(result.trace).toBe("trace-9");
+
+        const form = (mockFetch.mock.calls[0]![1] as RequestInit).body as FormData;
+        expect((form.get("files") as File).name).toBe("index.html");
+        expect(form.get("width")).toBe("1280");
+        expect(form.get("height")).toBe("800");
+        expect(form.get("format")).toBe("jpeg");
+        expect(form.get("quality")).toBe("82");
+        expect(form.get("waitDelay")).toBe("1s");
+        // Whole page unless asked otherwise, and never stuck waiting on beacons.
+        expect(form.get("clip")).toBeNull();
+        expect(form.get("skipNetworkIdleEvent")).toBe("true");
+        expect(form.get("skipNetworkAlmostIdleEvent")).toBe("true");
+    });
+
+    it("wraps a refusal in RenderingServiceError", async () => {
+        mockFetch.mockResolvedValue(
+            new Response("The request exceeded the time limit.", { status: 503 })
+        );
+        await expect(client().htmlToScreenshot({ html: "<p>x</p>" })).rejects.toMatchObject({
+            name: "RenderingServiceError",
+            statusCode: 503,
+        });
+    });
+});
+
 describe("health", () => {
     it("is true when the probe answers and false when it does not", async () => {
         mockFetch.mockResolvedValueOnce(new Response("{}", { status: 200 }));

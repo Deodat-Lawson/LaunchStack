@@ -43,8 +43,8 @@ There is no *per-vendor* variable: a bare `OPENAI_API_KEY`, `OPENROUTER_API_KEY`
 ### With Docker (recommended)
 
 ```bash
-make up-prod     # lite stack, detached (~400MB RAM)
-make up-ocr      # adds Docling for Office docs, detached (~1.2GB RAM)
+make up-prod     # lite stack, detached (~400MB RAM); OCR via Azure if its key is set
+make up-ocr      # adds Docling: Office docs, and the OCR fallback after Azure (~1.2GB RAM)
 make logs        # follow logs
 make down        # stop containers (keeps volumes — DB + S3 data persists)
 make down-clean  # stop + wipe volumes (fresh DB on next up)
@@ -285,7 +285,7 @@ The registration functions store state on `globalThis` (20 `createSlot` call sit
 [`apps/web`](apps/web) is a Next.js app built on the engine. It demonstrates:
 
 - First-party auth (better-auth, in the app's own Postgres) with per-workspace roles, folder-level access, invitations and an audit log (ADR-010)
-- Document upload + optional OCR (`NATIVE_PDF`, Docling, Azure, Landing.AI, Datalab)
+- Document upload with OCR on by default: Azure reads every PDF and image, Docling is the fallback, then Landing.AI / Datalab if configured; the PDF's own text layer is the last resort (a scan is retried rather than indexed blank), and `OCR_PDF_STRATEGY=text-layer-first` sends only scans to OCR
 - PostgreSQL + pgvector semantic retrieval for RAG
 - AI chat with agent guardrails (PII filter, grounding, confidence gate)
 - Predictive document analysis — eight document types are defined, though the request validator currently accepts only `contract`, `financial`, `technical`, `compliance` and `general`

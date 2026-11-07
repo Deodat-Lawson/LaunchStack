@@ -10,6 +10,7 @@
  */
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 
 import { ProfileAvatar } from "~/components/ProfileAvatar";
 import { Button } from "~/components/ui/button";
@@ -17,16 +18,19 @@ import { usePeople } from "~/lib/profile/use-people";
 import { cn } from "~/lib/utils";
 import type { ActivityKind } from "~/lib/workspace-activity-kinds";
 
-import { errorMessage } from "../settings/people/api";
+import { useErrorText } from "../settings/people/ui";
 import { teamApi, type ActivityRow } from "./api";
 import {
-    activityParts,
+    activityMessage,
     activitySentence,
     activityTarget,
     dayKey,
     dayLabel,
+    fullDateTime,
     shortAgo,
     timeOfDay,
+    useTeamFormat,
+    type TeamFormat,
 } from "./format";
 import type { TeamTarget } from "./types";
 import { EmptyLine, ErrorLine, LoadingRows } from "./ui";
@@ -59,6 +63,11 @@ export function ActivityList({
     onOpenTarget,
     onOpenGroup,
 }: ActivityListProps) {
+    const t = useTranslations("team.activityList");
+    const errorText = useErrorText();
+    const tTeam = useTranslations("team");
+    const tc = useTranslations("common");
+    const f = useTeamFormat();
     const [rows, setRows] = useState<ActivityRow[]>([]);
     const [next, setNext] = useState<number | null>(null);
     const [loading, setLoading] = useState(true);
@@ -73,11 +82,11 @@ export function ActivityList({
             setRows(res.entries);
             setNext(res.nextBefore);
         } catch (err) {
-            setError(errorMessage(err, "Couldn't load activity."));
+            setError(errorText(err, t("loadError")));
         } finally {
             setLoading(false);
         }
-    }, [actor, kind, pageSize]);
+    }, [actor, kind, pageSize, t, errorText]);
 
     useEffect(() => {
         void load();
@@ -91,7 +100,7 @@ export function ActivityList({
             setRows(prev => [...prev, ...res.entries.filter(r => !prev.some(p => p.id === r.id))]);
             setNext(res.nextBefore);
         } catch (err) {
-            setError(errorMessage(err, "Couldn't load more activity."));
+            setError(errorText(err, t("loadMoreError")));
         } finally {
             setLoadingMore(false);
         }
@@ -99,8 +108,8 @@ export function ActivityList({
 
     const people = usePeople(rows.map(r => r.actorUserId));
     const nameOf = useCallback(
-        (authUserId: string) => people[authUserId]?.displayName ?? "Someone",
-        [people]
+        (authUserId: string) => people[authUserId]?.displayName ?? tTeam("someone"),
+        [people, tTeam]
     );
 
     const needle = query.trim().toLowerCase();
@@ -108,10 +117,10 @@ export function ActivityList({
         () =>
             needle
                 ? rows.filter(r =>
-                      activitySentence(nameOf(r.actorUserId), r).toLowerCase().includes(needle)
+                      activitySentence(f, nameOf(r.actorUserId), r).toLowerCase().includes(needle)
                   )
                 : rows,
-        [rows, needle, nameOf]
+        [rows, needle, nameOf, f]
     );
 
     /** Consecutive rows that fall on the same local day; the feed is newest first. */
@@ -121,10 +130,10 @@ export function ActivityList({
             const key = dayKey(row.at);
             const last = out[out.length - 1];
             if (last && last.key === key) last.rows.push(row);
-            else out.push({ key, label: dayLabel(row.at), rows: [row] });
+            else out.push({ key, label: dayLabel(f, row.at), rows: [row] });
         }
         return out;
-    }, [shown]);
+    }, [shown, f]);
 
     if (loading) return <LoadingRows rows={5} />;
     if (error && rows.length === 0)
@@ -137,7 +146,8 @@ export function ActivityList({
             row={row}
             actorName={nameOf(row.actorUserId)}
             actorAvatar={people[row.actorUserId]?.avatarUrl ?? null}
-            when={groupByDay ? timeOfDay(row.at) : shortAgo(row.at)}
+            when={groupByDay ? timeOfDay(f.locale, row.at) : shortAgo(f, row.at)}
+            format={f}
             onOpenTarget={onOpenTarget}
             onOpenGroup={onOpenGroup}
         />
@@ -146,7 +156,7 @@ export function ActivityList({
     return (
         <div>
             {shown.length === 0 ? (
-                <EmptyLine>Nothing loaded here matches “{query.trim()}”.</EmptyLine>
+                <EmptyLine>{t("noMatch", { query: query.trim() })}</EmptyLine>
             ) : groupByDay ? (
                 <div data-testid="team-activity">
                     {days.map(day => (
@@ -177,7 +187,7 @@ export function ActivityList({
                         disabled={loadingMore}
                         onClick={() => void loadMore()}
                     >
-                        {loadingMore ? "Loading…" : "Show older"}
+                        {loadingMore ? tc("status.loading") : t("showOlder")}
                     </Button>
                 </div>
             )}
@@ -190,6 +200,7 @@ function ActivityItem({
     actorName,
     actorAvatar,
     when,
+    format: f,
     onOpenTarget,
     onOpenGroup,
 }: {
@@ -198,10 +209,11 @@ function ActivityItem({
     actorAvatar: string | null;
     /** "2h" in a short list, "2:14 PM" under a day heading. */
     when: string;
+    format: TeamFormat;
     onOpenTarget: (target: TeamTarget) => void;
     onOpenGroup?: (groupId: number) => void;
 }) {
-    const { before, target, after } = activityParts(row);
+    const { key, values } = activityMessage(f, row);
     const opens = activityTarget(row);
     const groupId =
         row.targetType === "group" && row.openable && row.targetId && /^\d+$/.test(row.targetId)
@@ -225,21 +237,26 @@ function ActivityItem({
                 fallbackClassName="text-[9px]"
             />
             <span className="text-ink-2 min-w-0 flex-1 break-words text-[12.5px] leading-snug">
-                <span className="text-ink font-medium">{actorName}</span> {before}{" "}
-                <span
-                    className={cn(
-                        "text-ink font-medium",
-                        onClick &&
-                            "decoration-line group-hover/act:text-brand-ink underline underline-offset-2 group-hover/act:decoration-current"
-                    )}
-                >
-                    {target}
-                </span>
-                {after}
+                {f.t.rich(`activity.${key}`, {
+                    ...values,
+                    actor: actorName,
+                    person: chunks => <span className="text-ink font-medium">{chunks}</span>,
+                    target: chunks => (
+                        <span
+                            className={cn(
+                                "text-ink font-medium",
+                                onClick &&
+                                    "decoration-line group-hover/act:text-brand-ink underline underline-offset-2 group-hover/act:decoration-current"
+                            )}
+                        >
+                            {chunks}
+                        </span>
+                    ),
+                })}
             </span>
             <time
                 dateTime={row.at}
-                title={new Date(row.at).toLocaleString()}
+                title={fullDateTime(f.locale, row.at)}
                 className="text-ink-3 mt-px shrink-0 text-[11px] tabular-nums"
             >
                 {when}

@@ -1,10 +1,10 @@
 /**
- * Who sees which Settings section, per built-in role.
+ * Who sees which settings section, per built-in role.
  *
- * Settings is open to everyone; each section carries its own gate. The table
- * below is the contract a reviewer reads: You is everyone's, a section whose
- * data is refused to a role is left out for it, and a section a role may only
- * read is shown read-only.
+ * Settings (yours alone), the Workspace tab and Models & usage are open to
+ * everyone; each section carries its own gate. The table below is the contract a reviewer
+ * reads: You is everyone's, a section whose data is refused to a role is
+ * left out for it, and a section a role may only read is shown read-only.
  */
 
 import {
@@ -57,13 +57,13 @@ describe("SETTINGS_SECTION_ACCESS", () => {
                 "account",
                 "appearance",
                 "shortcuts",
+                "general",
                 "people",
                 "company",
-                "documents",
                 "privacy",
                 "labs",
             ]);
-            expect(readOnlyFor(role)).toEqual(["company", "documents", "labs"]);
+            expect(readOnlyFor(role)).toEqual(["general", "company", "labs"]);
         }
     });
 
@@ -72,18 +72,25 @@ describe("SETTINGS_SECTION_ACCESS", () => {
             "account",
             "appearance",
             "shortcuts",
+            "general",
             "company",
-            "documents",
             "privacy",
             "labs",
         ]);
+    });
+
+    it("lets everyone read the workspace's own details, and only settings.manage change them", () => {
+        // The same gate as PATCH /api/workspace/details.
+        expect(SETTINGS_SECTION_ACCESS.general.view).toBeUndefined();
+        expect(SETTINGS_SECTION_ACCESS.general.edit).toBe("settings.manage");
     });
 
     it("leaves out every section whose own read the server refuses", () => {
         // The API gates behind each section's mount-time GET. A section is
         // never shown to someone its data would answer 403.
         const refusedReads: Partial<Record<SettingsSectionId, Permission>> = {
-            models: "settings.manage", // GET /api/settings/models
+            byok: "models.manage", // GET /api/settings/models/workspace
+            models: "models.manage", // GET /api/settings/models
             usage: "analytics.view", // GET /api/settings/usage
             archive: "settings.manage", // GET /api/settings/archive
             people: "members.view", // GET /api/workspace/members
@@ -91,6 +98,29 @@ describe("SETTINGS_SECTION_ACCESS", () => {
         for (const [section, permission] of Object.entries(refusedReads)) {
             expect(SETTINGS_SECTION_ACCESS[section as SettingsSectionId].view).toBe(permission);
         }
+    });
+
+    it("keeps API keys and Models to models.manage, whatever else a role may manage", () => {
+        for (const section of ["byok", "models"] as const) {
+            expect(SETTINGS_SECTION_ACCESS[section]).toMatchObject({
+                view: "models.manage",
+                edit: "models.manage",
+            });
+        }
+        const only =
+            (...held: Permission[]) =>
+            (p: Permission | undefined) =>
+                p === undefined || held.includes(p);
+        // A custom role that manages the workspace's settings but not its models.
+        const settingsOnly = only("settings.manage", "analytics.view", "members.view");
+        expect(canSeeSettingsSection("byok", settingsOnly)).toBe(false);
+        expect(canSeeSettingsSection("models", settingsOnly)).toBe(false);
+        expect(canSeeSettingsSection("usage", settingsOnly)).toBe(true);
+        // One that manages the models and nothing else.
+        const modelsOnly = only("models.manage");
+        expect(canSeeSettingsSection("byok", modelsOnly)).toBe(true);
+        expect(canSeeSettingsSection("models", modelsOnly)).toBe(true);
+        expect(canSeeSettingsSection("archive", modelsOnly)).toBe(false);
     });
 
     it("keeps the registry's write permission and its section's edit gate in step", () => {
@@ -137,9 +167,16 @@ describe("SETTINGS_SECTION_ACCESS", () => {
 
 describe("settingsSectionFromHash", () => {
     it("lands old deep links and registry keys where the hub did", () => {
-        expect(settingsSectionFromHash("#byok")).toBe("processing");
+        expect(settingsSectionFromHash("#byok")).toBe("byok");
+        expect(settingsSectionFromHash("#processing")).toBe("byok");
+        // The embedding key that lived here is gone; its old links still land.
+        expect(settingsSectionFromHash("#embedding")).toBe("byok");
+        expect(settingsSectionFromHash("#openrouter")).toBe("byok");
         expect(settingsSectionFromHash("#profile")).toBe("company");
-        expect(settingsSectionFromHash("#keys")).toBe("processing");
+        expect(settingsSectionFromHash("#keys")).toBe("byok");
+        expect(settingsSectionFromHash("#models")).toBe("models");
+        // Document defaults is gone, with no section of its own to land on.
+        expect(settingsSectionFromHash("#documents")).toBeNull();
         expect(settingsSectionFromHash("#appearance.theme")).toBe("appearance");
         // Hashes arrive lower-cased; the personal row is the one everyone reaches.
         expect(settingsSectionFromHash("#chat.responseStyle")).toBe("appearance");

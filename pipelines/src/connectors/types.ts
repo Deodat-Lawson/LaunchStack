@@ -92,6 +92,21 @@ export interface KnowledgeSink {
     store(item: KnowledgeItem): Promise<StoredKnowledgeItem>;
 }
 
+/** The `detail` of an "excluded" skip for a file someone deleted in the host. */
+export const DELETED_HERE_DETAIL = "deleted here";
+
+/**
+ * Thrown by a sink's `store` when the file was deleted in the host after
+ * the run began (so it was not among the run's `deletedSourceIds`). The
+ * sync reports it as skipped, not failed: nothing went wrong.
+ */
+export class SourceDeletedError extends Error {
+    constructor(readonly sourceId: string) {
+        super(`${sourceId} was deleted here; the sync leaves it out`);
+        this.name = "SourceDeletedError";
+    }
+}
+
 export interface StoredKnowledgeItem {
     readonly sourceId: string;
     readonly documentId: number;

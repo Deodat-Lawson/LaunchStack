@@ -21,7 +21,7 @@ export async function POST(request: NextRequest, { params }: Params) {
     try {
         const { id } = await params;
         const parsed = TopicSchema.safeParse(await readBody(request));
-        if (!parsed.success) return error(firstIssue(parsed.error.issues), 400);
+        if (!parsed.success) return error(firstIssue(parsed.error.issues, request), 400);
         const topic = await addTopic({
             companyId: auth.ctx.companyId,
             agendaId: id,
@@ -33,6 +33,6 @@ export async function POST(request: NextRequest, { params }: Params) {
         });
         return json({ topic }, 201);
     } catch (err) {
-        return handleVantageError("POST topic", err);
+        return handleVantageError("POST topic", err, request);
     }
 }

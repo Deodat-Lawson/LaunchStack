@@ -61,7 +61,7 @@ jest.mock("~/server/services/connectors/connection-store", () => ({
 
 import { POST } from "~/app/api/upload/github-repo/route";
 import { processDocumentUpload } from "~/server/services/document-upload";
-import { downloadGitHubRepoZip } from "~/server/services/github-repo";
+import { GitHubRepoNotFoundError, downloadGitHubRepoZip } from "~/server/services/github-repo";
 import { putFile } from "~/server/storage/vercel-blob";
 
 import { makeWorkspaceContext } from "../../helpers/workspace-context";
@@ -92,10 +92,10 @@ function mockUnauthenticated() {
     });
 }
 
-function requestFor(body: Record<string, unknown>) {
+function requestFor(body: Record<string, unknown>, headers: Record<string, string> = {}) {
     return new Request("http://localhost/api/upload/github-repo", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...headers },
         body: JSON.stringify(body),
     });
 }
@@ -148,5 +148,46 @@ describe("POST /api/upload/github-repo", () => {
                 user: { userId: "user_session", companyId: BigInt(6) },
             })
         );
+    });
+});
+
+describe("POST /api/upload/github-repo in the reader's language", () => {
+    const chinese = { cookie: "ls-locale=zh-CN.1" };
+
+    beforeEach(() => {
+        jest.clearAllMocks();
+        mockAuthenticated();
+        (downloadGitHubRepoZip as jest.Mock).mockRejectedValue(
+            new GitHubRepoNotFoundError("o", "r")
+        );
+    });
+
+    it("says a repository is missing in Chinese", async () => {
+        const response = await POST(requestFor({ repoUrl: "https://github.com/o/r" }, chinese));
+
+        expect(response.status).toBe(404);
+        await expect(response.json()).resolves.toEqual({
+            error: "未找到代码库“o/r”。请检查 URL 是否正确，以及该代码库是否公开（私有代码库请提供访问令牌）。",
+        });
+    });
+
+    it("keeps the English without a language", async () => {
+        const response = await POST(requestFor({ repoUrl: "https://github.com/o/r" }));
+
+        await expect(response.json()).resolves.toEqual({
+            error: 'Repository "o/r" not found. Check that the URL is correct and that the repository is public (or provide an access token for private repos).',
+        });
+    });
+
+    it("words a URL that is not GitHub in the details", async () => {
+        const response = await POST(
+            requestFor({ repoUrl: "https://evil.example.com/o/r" }, chinese)
+        );
+
+        expect(response.status).toBe(400);
+        await expect(response.json()).resolves.toEqual({
+            error: "GitHub URL 无效",
+            details: "不是 GitHub URL：“https://evil.example.com/o/r”。主机名应为“github.com”。",
+        });
     });
 });

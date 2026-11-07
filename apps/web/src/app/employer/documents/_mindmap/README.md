@@ -337,6 +337,15 @@ file opens anywhere. Images are stored as data URIs for the same reason: an SVG
 loaded through `<img>` cannot fetch external resources, so a linked image would
 vanish from every exported PNG.
 
+Every `id` the canvas defines for a `url(#…)` (the shadow filter, the grid
+pattern, image clip paths) is prefixed with that canvas's `useCanvasIdScope()`.
+Studio keeps hidden panes mounted, so a map's preview and its editor are often
+in the page together, and a `url(#…)` resolves to the first element with that
+id in the whole page: a fixed id pointed the editor's central topic at a filter
+inside the hidden preview, and it was not painted. Because the defs live inside
+the `<svg>` that export clones, the scoped ids still resolve in the file.
+`__tests__/canvas-ids.test.tsx` holds any new `<defs>` to the same rule.
+
 ## Chrome depths
 
 The editor is a full diagramming application, and most people who open it

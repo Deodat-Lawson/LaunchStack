@@ -10,14 +10,20 @@ import { after } from "next/server";
 
 import {
     executeProposalRun,
+    failProposalRun,
     queueProposalRun,
     PROPOSAL_CREDITS,
     type RunInput,
     type RunKind,
     type RunRecord,
 } from "@launchstack/pipelines/proposals";
+import { getRun } from "@launchstack/pipelines/proposals/db";
 
+import { copy, type Copy } from "~/i18n/copy";
+import { englishCopy } from "~/i18n/translate";
 import { hasTokens } from "~/lib/credits";
+import { resolveMemberContext } from "~/lib/require-workspace-context";
+import { assertWithinAiAllowance } from "~/server/ai-usage/refusal";
 import { isMeteringEnforced } from "~/server/deployment";
 import { inngest } from "~/server/inngest/client";
 
@@ -32,11 +38,13 @@ export function readProposalsExecutor(
     return env.PROPOSALS_EXECUTOR?.trim().toLowerCase() === "worker" ? "worker" : "inline";
 }
 
+/** A 402 the shared route handler answers from its `status`, worded from its `copy`. */
 export class InsufficientCreditsError extends Error {
     readonly code = "insufficient_credits";
     readonly status = 402;
+    readonly copy: Copy = copy("proposals.server.errors.notEnoughCredits");
     constructor(readonly required: number) {
-        super("Not enough credits to start this run");
+        super(englishCopy(copy("proposals.server.errors.notEnoughCredits")));
         this.name = "InsufficientCreditsError";
     }
 }
@@ -56,8 +64,29 @@ export interface StartRunArgs {
     sectionLabels?: string[];
 }
 
+/**
+ * Resolve the persisted writer at execution time, not when the run is queued.
+ * Both schedulers call this inside their deferred body under their model scope.
+ */
+export async function executeProposalRunForMember(
+    runId: string,
+    companyId: bigint
+): Promise<RunRecord> {
+    const run = await getRun(runId, companyId);
+    if (!run) throw new Error("Run not found");
+    if (run.status !== "queued") return run;
+    const ctx = { runId, companyId, userId: run.userId };
+    const member = await resolveMemberContext(run.userId, companyId);
+    if (!member) throw new Error("The run's writer is no longer an active workspace member.");
+    const scope = await member.documentScope();
+    return executeProposalRun({ ...ctx, scope }, createProposalPorts(companyId));
+}
+
 /** Queue a run and hand it to the executor. Returns the queued row at once. */
 export async function startProposalRun(args: StartRunArgs): Promise<RunRecord> {
+    // The run is never stopped once queued, so a person at their AI limit is
+    // refused here (a 429 from the shared route handler).
+    await assertWithinAiAllowance(args.companyId, args.userId);
     if (isMeteringEnforced()) {
         const required = creditsFor(args.kind, args.sectionLabels?.length ?? 1);
         if (!(await hasTokens(args.companyId, required)))
@@ -70,7 +99,6 @@ export async function startProposalRun(args: StartRunArgs): Promise<RunRecord> {
         input: args.input,
         sectionLabels: args.sectionLabels,
     });
-    const ctx = { runId: run.id, companyId: args.companyId, userId: args.userId };
     if (readProposalsExecutor() === "worker") {
         await inngest.send({
             name: "proposals/run.requested",
@@ -80,11 +108,17 @@ export async function startProposalRun(args: StartRunArgs): Promise<RunRecord> {
     }
     after(async () => {
         try {
-            // After the response, under the workspace's own models if it brought them.
-            await withWorkspaceChatModels(args.companyId, () =>
-                executeProposalRun(ctx, createProposalPorts(args.companyId))
+            // Count usage to the persisted writer while deferred work resolves
+            // their current membership and document scope inside the callback.
+            const aiUse = { feature: "proposals", userId: run.userId, enforce: false } as const;
+            await withWorkspaceChatModels(args.companyId, aiUse, () =>
+                executeProposalRunForMember(run.id, args.companyId)
             );
         } catch (error) {
+            await failProposalRun(
+                { runId: run.id, companyId: args.companyId },
+                error instanceof Error && error.message ? error.message : "The run failed"
+            );
             console.error("[proposals] run failed:", error);
         }
     });

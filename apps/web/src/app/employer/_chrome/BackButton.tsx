@@ -2,6 +2,7 @@
 
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import type { ComponentPropsWithoutRef } from "react";
 
 import { cn } from "~/lib/utils";
@@ -26,15 +27,17 @@ export function BackButton({
     /** Where it goes. Not `target`, which an anchor already uses for "_blank". */
     to: BackTarget;
 } & Omit<ComponentPropsWithoutRef<typeof Link>, "href" | "children" | "target">) {
+    const t = useTranslations("chrome.back");
+    const label = to.place ? t(`places.${to.place}`) : to.label;
     return (
         <Link
             href={to.href}
-            aria-label={`Back to ${to.label}`}
+            aria-label={t("label", { place: label })}
             className={cn(styles.button, className)}
             {...rest}
         >
             <ChevronLeft aria-hidden className={styles.icon} />
-            <span className={styles.label}>{to.label}</span>
+            <span className={styles.label}>{label}</span>
         </Link>
     );
 }

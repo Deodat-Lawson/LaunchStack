@@ -14,6 +14,13 @@ describe("normalizeDomain", () => {
         expect(normalizeDomain("https://www.acme-foods.de/en/brands")).toBe("acme-foods.de");
         expect(normalizeDomain("shop.acme.com")).toBe("acme.com");
         expect(normalizeDomain("WWW.Acme.COM.")).toBe("acme.com");
+        // A hosting platform's tenants are different companies.
+        expect(normalizeDomain("https://freshfarm.myshopify.com/collections")).toBe(
+            "freshfarm.myshopify.com"
+        );
+        expect(normalizeDomain("www.acme.github.io")).toBe("acme.github.io");
+        expect(normalizeDomain("blog.acme.github.io")).toBe("acme.github.io");
+        expect(normalizeDomain("myshopify.com")).toBe("myshopify.com");
     });
     it("keeps known second-level country domains", () => {
         expect(normalizeDomain("https://shop.acme.co.uk/")).toBe("acme.co.uk");

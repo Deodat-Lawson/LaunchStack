@@ -5,6 +5,8 @@ import {
     isTranscriptionError,
 } from "@launchstack/conversion/audio-transcription";
 import { getEngine } from "~/server/engine";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor, wordEnglish } from "~/i18n/translate";
 
 /**
  * Speech-to-Text.
@@ -22,6 +24,8 @@ import { getEngine } from "~/server/engine";
 const MIN_AUDIO_BYTES = 45;
 
 export async function POST(request: Request) {
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "chat.server.voice");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
@@ -30,7 +34,7 @@ export async function POST(request: Request) {
         const audioFile = formData.get("audio");
 
         if (!audioFile || typeof audioFile === "string") {
-            return NextResponse.json({ error: "Audio file is required" }, { status: 400 });
+            return NextResponse.json({ error: t("audioRequired") }, { status: 400 });
         }
 
         const buffer = Buffer.from(await audioFile.arrayBuffer());
@@ -38,7 +42,7 @@ export async function POST(request: Request) {
         if (buffer.length < MIN_AUDIO_BYTES) {
             return NextResponse.json(
                 {
-                    error: "Audio too short. Please record at least 0.1 seconds before sending.",
+                    error: t("audioTooShort"),
                 },
                 { status: 400 }
             );
@@ -71,8 +75,18 @@ export async function POST(request: Request) {
     } catch (error) {
         console.error("Error in speech-to-text:", error);
         if (isTranscriptionError(error)) {
-            return NextResponse.json({ error: error.userMessage }, { status: error.status });
+            // The provider words its sentence in English; the catalogue has the reader's.
+            return NextResponse.json(
+                {
+                    error: wordEnglish(
+                        error.userMessage,
+                        "chat.server.voice.transcription",
+                        locale
+                    ),
+                },
+                { status: error.status }
+            );
         }
-        return NextResponse.json({ error: "Failed to transcribe audio" }, { status: 500 });
+        return NextResponse.json({ error: t("transcribeFailed") }, { status: 500 });
     }
 }

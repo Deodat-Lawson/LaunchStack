@@ -3,7 +3,9 @@ import { z } from "zod";
 
 import { generateTemplate, reviewTemplate } from "@launchstack/pipelines/email";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { refuseAtAiAllowance } from "~/server/ai-usage/refusal";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
+import { localeOfRequest, requestTranslator } from "~/i18n/server";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -22,7 +24,14 @@ export async function POST(request: Request) {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
 
-        return await withWorkspaceChatModels(ctx.data.companyId, async () => {
+        const aiUse = { feature: "emailCampaigns", userId: ctx.data.authUserId } as const;
+        const refused = await refuseAtAiAllowance(
+            ctx.data.companyId,
+            aiUse.userId,
+            localeOfRequest(request)
+        );
+        if (refused) return refused;
+        return await withWorkspaceChatModels(ctx.data.companyId, aiUse, async () => {
             let json: unknown;
             try {
                 json = await request.json();
@@ -34,7 +43,7 @@ export async function POST(request: Request) {
                 return NextResponse.json(
                     {
                         success: false,
-                        message: "Invalid input",
+                        message: requestTranslator(request, "errors.api")("invalidInput"),
                         errors: parsed.error.flatten(),
                     },
                     { status: 400 }
@@ -54,7 +63,10 @@ export async function POST(request: Request) {
     } catch (error) {
         console.error("[email-pipeline/generate] failed:", error);
         return NextResponse.json(
-            { success: false, message: "Failed to generate email template" },
+            {
+                success: false,
+                message: requestTranslator(request, "growth.server.email")("generateFailed"),
+            },
             { status: 500 }
         );
     }

@@ -419,6 +419,14 @@ describe("linkability helpers", () => {
         expect(isDriveLinkableDocument(null, "text/plain", "notes.txt")).toBe(false);
     });
 
+    it("refuses a file the Drive connector syncs: it already lives in Drive", () => {
+        const synced = { connector: "google-drive", driveFileId: "doc-1" };
+        expect(isDriveLinkableDocument("docx", null, "Spec", synced)).toBe(false);
+        expect(isDriveLinkableDocument(null, "application/pdf", "Deck", synced)).toBe(false);
+        expect(isDriveLinkableDocument("docx", null, "Spec", { connector: "notion" })).toBe(true);
+        expect(isDriveLinkableDocument("docx", null, "Spec", null)).toBe(true);
+    });
+
     it("resolves the canonical MIME the versions route will lock against", () => {
         expect(resolveCanonicalMime("pdf", null, "x")).toBe("application/pdf");
         expect(resolveCanonicalMime("docx", null, "x")).toContain("wordprocessingml");

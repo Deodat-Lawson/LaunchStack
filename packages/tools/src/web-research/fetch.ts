@@ -5,6 +5,9 @@
  * model may ask for any URL, so every hop is checked before a socket opens.
  *  - DNS is resolved first and private, loopback, link-local and
  *    carrier-grade-NAT ranges are refused (SSRF guard);
+ *  - the socket connects to the addresses that were checked, not to a second
+ *    DNS answer, so a host that answers public then private (DNS rebinding)
+ *    cannot reach an internal service;
  *  - redirects are followed manually, at most three, each re-checked;
  *  - bodies are capped (2 MB default) and the cap is reported, not hidden;
  *  - scripts, styles and markup are stripped; whitespace is collapsed.
@@ -12,7 +15,9 @@
  * Page content is *data*. Callers hand it to a model as untrusted text.
  */
 import { lookup as dnsLookup } from "node:dns/promises";
-import { isIP } from "node:net";
+import { isIP, type LookupFunction } from "node:net";
+
+import { Agent, fetch as undiciFetch } from "undici";
 
 import { ToolError } from "../contract";
 
@@ -43,7 +48,7 @@ export interface FetchReadableOptions {
     userAgent?: string;
     /** Injectable for tests; defaults to node:dns lookup(all). */
     lookup?: HostLookup;
-    /** Injectable for tests; defaults to global fetch. */
+    /** Injectable for tests; defaults to a fetch pinned to the checked addresses. */
     fetchImpl?: typeof fetch;
 }
 
@@ -126,6 +131,32 @@ export async function assertPublicUrl(
     rawUrl: string,
     lookup: HostLookup = defaultLookup
 ): Promise<URL> {
+    return (await resolvePublicUrl(rawUrl, lookup)).url;
+}
+
+/**
+ * A socket lookup that answers only with `addresses`, the ones already
+ * checked, whatever DNS says now.
+ */
+export function pinnedLookup(addresses: readonly string[]): LookupFunction {
+    const entries = addresses.map(address => ({ address, family: isIP(address) }));
+    return (_hostname, options, callback) => {
+        const wanted = options.family === 4 || options.family === 6 ? options.family : 0;
+        const matching = wanted ? entries.filter(e => e.family === wanted) : entries;
+        const usable = matching.length > 0 ? matching : entries;
+        if (options.all) {
+            (callback as unknown as (err: null, list: typeof entries) => void)(null, usable);
+        } else {
+            callback(null, usable[0]!.address, usable[0]!.family);
+        }
+    };
+}
+
+/** `assertPublicUrl`, also returning the public addresses the host resolved to. */
+async function resolvePublicUrl(
+    rawUrl: string,
+    lookup: HostLookup
+): Promise<{ url: URL; addresses: string[] }> {
     let url: URL;
     try {
         url = new URL(rawUrl);
@@ -144,7 +175,7 @@ export async function assertPublicUrl(
     }
     if (isIP(host)) {
         if (isPrivateAddress(host)) throw new UnsafeUrlError(`Refusing private address ${host}`);
-        return url;
+        return { url, addresses: [host] };
     }
     let addresses: string[];
     try {
@@ -169,7 +200,7 @@ export async function assertPublicUrl(
             throw new UnsafeUrlError(`Refusing ${host}: resolves to private address ${address}`);
         }
     }
-    return url;
+    return { url, addresses };
 }
 
 const BLOCK_TAGS = new Set([
@@ -304,17 +335,18 @@ export async function fetchReadable(
     const timeoutMs = options.timeoutMs ?? DEFAULTS.timeoutMs;
     const maxRedirects = options.maxRedirects ?? DEFAULTS.maxRedirects;
     const lookup = options.lookup ?? defaultLookup;
-    const fetchImpl = options.fetchImpl ?? fetch;
 
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(new Error("fetch timed out")), timeoutMs);
     const onOuterAbort = () => controller.abort(options.signal?.reason);
     options.signal?.addEventListener("abort", onOuterAbort, { once: true });
+    // One connection pool per hop, each pinned to that hop's checked addresses.
+    const agents: Agent[] = [];
 
     try {
-        let current = await assertPublicUrl(rawUrl, lookup);
+        let { url: current, addresses } = await resolvePublicUrl(rawUrl, lookup);
         for (let hop = 0; ; hop++) {
-            const response = await fetchImpl(current.toString(), {
+            const init: RequestInit = {
                 method: "GET",
                 redirect: "manual",
                 signal: controller.signal,
@@ -323,7 +355,18 @@ export async function fetchReadable(
                     Accept: "text/html,application/xhtml+xml,text/plain;q=0.9,*/*;q=0.5",
                     "Accept-Language": "en,*;q=0.5",
                 },
-            });
+            };
+            let response: Response;
+            if (options.fetchImpl) {
+                response = await options.fetchImpl(current.toString(), init);
+            } else {
+                const agent = new Agent({ connect: { lookup: pinnedLookup(addresses) } });
+                agents.push(agent);
+                response = (await undiciFetch(current.toString(), {
+                    ...(init as Parameters<typeof undiciFetch>[1]),
+                    dispatcher: agent,
+                })) as unknown as Response;
+            }
 
             if (response.status >= 300 && response.status < 400) {
                 const location = response.headers.get("location");
@@ -342,7 +385,10 @@ export async function fetchReadable(
                     });
                 }
                 await response.body?.cancel().catch(() => undefined);
-                current = await assertPublicUrl(new URL(location, current).toString(), lookup);
+                ({ url: current, addresses } = await resolvePublicUrl(
+                    new URL(location, current).toString(),
+                    lookup
+                ));
                 continue;
             }
 
@@ -367,5 +413,6 @@ export async function fetchReadable(
     } finally {
         clearTimeout(timer);
         options.signal?.removeEventListener("abort", onOuterAbort);
+        await Promise.all(agents.map(agent => agent.destroy().catch(() => undefined)));
     }
 }

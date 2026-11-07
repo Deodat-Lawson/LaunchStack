@@ -17,6 +17,7 @@
  */
 import { sql } from "drizzle-orm";
 import type { InferSelectModel } from "drizzle-orm";
+import type { ChatModelPricing } from "@launchstack/llm";
 import { bigint, jsonb, smallint, text, timestamp, varchar } from "drizzle-orm/pg-core";
 
 import { pgTable } from "@launchstack/store/schema/helpers";
@@ -41,6 +42,28 @@ export interface WorkspaceModelChoice {
      * saved before this existed) structured calls go by JSON prompting.
      */
     structuredOutput?: boolean;
+    /**
+     * What the provider charges for it, US dollars per 1M tokens, as the admin
+     * entered it. Rides onto the model definition, so each call is priced and
+     * weighed against the Standard model's price; unset, its tokens count one
+     * for one. Absent on rows saved before this existed.
+     */
+    pricing?: ChatModelPricing;
+}
+
+/**
+ * A model people can pick in Ask, beside Standard and Fast, under the name
+ * the admin gave it (Models & usage › Models).
+ */
+export interface WorkspaceOfferedModel extends WorkspaceModelChoice {
+    /**
+     * The handle the picker, saved drafts and turns name it by
+     * (`~/lib/ai/model-picks`). Assigned by the server when the model is
+     * first offered and kept through renames; never the provider's id.
+     */
+    key: string;
+    /** What everyone in the workspace sees it called. */
+    label: string;
 }
 
 /** Which model does which kind of work. Unset routes use `default`. */
@@ -49,6 +72,11 @@ export interface WorkspaceModelSelection {
     fast?: WorkspaceModelChoice;
     reasoning?: WorkspaceModelChoice;
     vision?: WorkspaceModelChoice;
+    /**
+     * The models offered in Ask's model menu, in the order the menu lists
+     * them. Absent or empty: the menu offers Standard and Fast only.
+     */
+    offered?: WorkspaceOfferedModel[];
 }
 
 export const workspaceModelEndpoints = pgTable("workspace_model_endpoints", {

@@ -1,3 +1,4 @@
+import type { useTranslations } from "next-intl";
 import type { ActionMenuItem } from "~/components/ui/action-menu";
 import { citationOfReference, passagesMarkdown, plainTextOfAnswer } from "./transcript";
 import type { EphemeralAttachment, ThreadMessage, ThreadReference, WorkspaceSource } from "./types";
@@ -8,7 +9,13 @@ import type { EphemeralAttachment, ThreadMessage, ThreadReference, WorkspaceSour
  * pane itself. The shell layers session-level verbs (ask again, branch, save)
  * on top through the action registry; these are the verbs the panel can do
  * by itself.
+ *
+ * Each builder takes the `chat.contextMenu` translator last, so the labels
+ * read in the interface language.
  */
+
+/** `useTranslations("chat.contextMenu")`. */
+export type ChatMenuTranslator = ReturnType<typeof useTranslations<"chat.contextMenu">>;
 
 export interface AnswerMenuHandlers {
     onCopy: (text: string) => void;
@@ -17,27 +24,28 @@ export interface AnswerMenuHandlers {
 
 export function buildAnswerMenuItems(
     msg: ThreadMessage,
-    handlers: AnswerMenuHandlers
+    handlers: AnswerMenuHandlers,
+    t: ChatMenuTranslator
 ): ActionMenuItem[] {
     return [
         {
             type: "item",
             id: "copy",
-            label: "Copy answer",
+            label: t("copyAnswer"),
             icon: "copy",
             onSelect: () => handlers.onCopy(plainTextOfAnswer(msg.text)),
         },
         {
             type: "item",
             id: "copy-markdown",
-            label: "Copy as Markdown",
+            label: t("copyMarkdown"),
             icon: "code",
             onSelect: () => handlers.onCopy(msg.text),
         },
         {
             type: "item",
             id: "quote",
-            label: "Quote in reply",
+            label: t("quote"),
             icon: "quote",
             onSelect: () => handlers.onQuote(plainTextOfAnswer(msg.text)),
         },
@@ -53,27 +61,28 @@ export interface QuestionMenuHandlers {
 
 export function buildQuestionMenuItems(
     msg: ThreadMessage,
-    handlers: QuestionMenuHandlers
+    handlers: QuestionMenuHandlers,
+    t: ChatMenuTranslator
 ): ActionMenuItem[] {
     return [
         {
             type: "item",
             id: "edit",
-            label: "Edit and ask again",
+            label: t("editAndAsk"),
             icon: "rename",
             onSelect: () => handlers.onEdit(msg.text),
         },
         {
             type: "item",
             id: "copy",
-            label: "Copy",
+            label: t("copy"),
             icon: "copy",
             onSelect: () => handlers.onCopy(`${passagesMarkdown(msg)}${msg.text}`),
         },
         {
             type: "item",
             id: "quote",
-            label: "Quote in reply",
+            label: t("quote"),
             icon: "quote",
             onSelect: () => handlers.onQuote(msg.text),
         },
@@ -91,14 +100,15 @@ export interface CitationMenuHandlers {
 export function buildCitationMenuItems(
     cite: ThreadReference,
     source: WorkspaceSource,
-    handlers: CitationMenuHandlers
+    handlers: CitationMenuHandlers,
+    t: ChatMenuTranslator
 ): ActionMenuItem[] {
     const items: ActionMenuItem[] = [{ type: "label", id: "title", label: source.title }];
     if (handlers.onOpen) {
         items.push({
             type: "item",
             id: "open",
-            label: "Open source at this passage",
+            label: t("openAtPassage"),
             icon: "open",
             onSelect: () => handlers.onOpen?.(cite),
         });
@@ -107,26 +117,26 @@ export function buildCitationMenuItems(
         {
             type: "item",
             id: "copy-passage",
-            label: "Copy the passage",
+            label: t("copyPassage"),
             icon: "copy",
             disabled: !cite.snippet.trim(),
-            disabledReason: cite.snippet.trim() ? undefined : "This citation carries no passage.",
+            disabledReason: cite.snippet.trim() ? undefined : t("noPassage"),
             onSelect: () => handlers.onCopy(cite.snippet.trim()),
         },
         {
             type: "item",
             id: "copy-cited",
-            label: "Copy passage with citation",
+            label: t("copyWithCitation"),
             icon: "quote",
             disabled: !cite.snippet.trim(),
-            disabledReason: cite.snippet.trim() ? undefined : "This citation carries no passage.",
+            disabledReason: cite.snippet.trim() ? undefined : t("noPassage"),
             onSelect: () => handlers.onCopy(citationOfReference(cite, source)),
         },
         { type: "separator", id: "sep-context" },
         {
             type: "item",
             id: "context",
-            label: handlers.inContext ? "Leave out of the next answer" : "Add source to context",
+            label: handlers.inContext ? t("leaveOut") : t("addToContext"),
             icon: handlers.inContext ? "hide" : "ask",
             onSelect: () => handlers.onToggleContext(source),
         }
@@ -141,14 +151,15 @@ export interface ContextChipMenuHandlers {
 
 export function buildContextChipMenuItems(
     source: WorkspaceSource,
-    handlers: ContextChipMenuHandlers
+    handlers: ContextChipMenuHandlers,
+    t: ChatMenuTranslator
 ): ActionMenuItem[] {
     const items: ActionMenuItem[] = [{ type: "label", id: "title", label: source.title }];
     if (handlers.onOpen) {
         items.push({
             type: "item",
             id: "open",
-            label: "Open",
+            label: t("open"),
             icon: "open",
             onSelect: () => handlers.onOpen?.(),
         });
@@ -157,7 +168,7 @@ export function buildContextChipMenuItems(
         items.push({
             type: "item",
             id: "remove",
-            label: "Remove from context",
+            label: t("removeFromContext"),
             icon: "hide",
             onSelect: () => handlers.onRemove?.(),
         });
@@ -172,14 +183,15 @@ export interface AttachmentMenuHandlers {
 
 export function buildAttachmentMenuItems(
     attachment: EphemeralAttachment,
-    handlers: AttachmentMenuHandlers
+    handlers: AttachmentMenuHandlers,
+    t: ChatMenuTranslator
 ): ActionMenuItem[] {
     const items: ActionMenuItem[] = [
         { type: "label", id: "title", label: attachment.name },
         {
             type: "item",
             id: "open",
-            label: "Open in a new tab",
+            label: t("openInNewTab"),
             icon: "external",
             onSelect: handlers.onOpen,
         },
@@ -188,7 +200,7 @@ export function buildAttachmentMenuItems(
         items.push({
             type: "item",
             id: "remove",
-            label: "Remove attachment",
+            label: t("removeAttachment"),
             icon: "delete",
             danger: true,
             onSelect: () => handlers.onRemove?.(),
@@ -214,13 +226,14 @@ export interface ComposerMenuHandlers {
 
 export function buildComposerMenuItems(
     state: ComposerMenuState,
-    handlers: ComposerMenuHandlers
+    handlers: ComposerMenuHandlers,
+    t: ChatMenuTranslator
 ): ActionMenuItem[] {
     return [
         {
             type: "item",
             id: "cut",
-            label: "Cut",
+            label: t("cut"),
             icon: "cut",
             shortcut: "⌘X",
             disabled: !state.hasSelection,
@@ -229,7 +242,7 @@ export function buildComposerMenuItems(
         {
             type: "item",
             id: "copy",
-            label: "Copy",
+            label: t("copy"),
             icon: "copy",
             shortcut: "⌘C",
             disabled: !state.hasSelection,
@@ -238,7 +251,7 @@ export function buildComposerMenuItems(
         {
             type: "item",
             id: "paste",
-            label: "Paste",
+            label: t("paste"),
             icon: "paste",
             shortcut: "⌘V",
             onSelect: handlers.onPaste,
@@ -247,7 +260,7 @@ export function buildComposerMenuItems(
         {
             type: "item",
             id: "attach",
-            label: "Attach files…",
+            label: t("attach"),
             icon: "attach",
             disabled: state.uploading || state.disabled,
             onSelect: handlers.onAttach,
@@ -256,7 +269,7 @@ export function buildComposerMenuItems(
         {
             type: "item",
             id: "clear",
-            label: "Clear",
+            label: t("clear"),
             icon: "eraser",
             disabled: !state.hasContent,
             onSelect: handlers.onClear,
@@ -273,40 +286,43 @@ export interface ChatPaneMenuHandlers {
     onOpenPalette: () => void;
 }
 
-export function buildChatPaneMenuItems(handlers: ChatPaneMenuHandlers): ActionMenuItem[] {
+export function buildChatPaneMenuItems(
+    handlers: ChatPaneMenuHandlers,
+    t: ChatMenuTranslator
+): ActionMenuItem[] {
     return [
         {
             type: "item",
             id: "new-chat",
-            label: "New chat",
+            label: t("newChat"),
             icon: "newChat",
             disabled: handlers.isEmpty,
-            disabledReason: handlers.isEmpty ? "This is already a new chat." : undefined,
+            disabledReason: handlers.isEmpty ? t("alreadyNew") : undefined,
             onSelect: handlers.onNewChat,
         },
         {
             type: "item",
             id: "clear-context",
-            label: "Clear context",
+            label: t("clearContext"),
             icon: "eraser",
             disabled: !handlers.hasContext,
-            disabledReason: handlers.hasContext ? undefined : "No sources are pinned.",
+            disabledReason: handlers.hasContext ? undefined : t("noPinned"),
             onSelect: handlers.onClearContext,
         },
         {
             type: "item",
             id: "export-markdown",
-            label: "Export transcript as Markdown",
+            label: t("exportMarkdown"),
             icon: "export",
             disabled: handlers.isEmpty,
-            disabledReason: handlers.isEmpty ? "Nothing to export yet." : undefined,
+            disabledReason: handlers.isEmpty ? t("nothingToExport") : undefined,
             onSelect: handlers.onExportMarkdown,
         },
         { type: "separator", id: "sep-palette" },
         {
             type: "item",
             id: "palette",
-            label: "Command palette",
+            label: t("palette"),
             icon: "command",
             shortcut: "⌘K",
             onSelect: handlers.onOpenPalette,

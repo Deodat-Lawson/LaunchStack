@@ -218,3 +218,29 @@ describe("helpers", () => {
         expect(relativeAge(new Date("2026-08-24T08:00:00Z"), now)).toBe("last week");
     });
 });
+
+describe("starters in the reader's language", () => {
+    it("writes the deterministic set in Chinese, ages included", async () => {
+        const { starterWords } = await import("~/server/ask-starters/words");
+        const now = new Date("2026-10-23T12:00:00.000Z");
+        const words = await starterWords("zh-CN", now);
+        const out = fallbackStarters(
+            {
+                ...BRIEF,
+                recentDocuments: BRIEF.recentDocuments.map(doc => ({
+                    ...doc,
+                    createdAt: new Date("2026-10-21T12:00:00.000Z"),
+                })),
+            },
+            words
+        );
+        expect(out[0]?.question).toBe("总结“Globex MSA 2026”");
+        expect(out[0]?.hint).toContain("添加");
+        expect(out.map(s => s.question).join("")).not.toMatch(/[A-Za-z]{4,} [a-z]{3,}/);
+    });
+
+    it("keeps English readers on the original wording", async () => {
+        const { starterWords } = await import("~/server/ask-starters/words");
+        expect(fallbackStarters(BRIEF, await starterWords("en"))).toEqual(fallbackStarters(BRIEF));
+    });
+});

@@ -70,20 +70,6 @@ export function decodeFlowCookie(raw: string | undefined | null): FlowCookie | n
     }
 }
 
-/** Where the app is reachable from outside, for OpenRouter's redirect. */
-export function appOrigin(request: Request): string {
-    for (const candidate of [process.env.APP_PUBLIC_URL, process.env.BETTER_AUTH_URL]) {
-        const raw = candidate?.trim();
-        if (!raw) continue;
-        try {
-            return new URL(raw).origin;
-        } catch {
-            // fall through to the next candidate
-        }
-    }
-    return new URL(request.url).origin;
-}
-
 export function openRouterAuthorizeUrl(flow: PkceFlow, callbackUrl: string): string {
     const url = new URL(OPENROUTER_AUTH_URL);
     url.searchParams.set("callback_url", callbackUrl);

@@ -1,6 +1,7 @@
 "use client";
 
 import { BookMarked, Building2, FileText, Home, Landmark, Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "~/components/ui/button";
 
@@ -10,6 +11,7 @@ import { ToolNavProvider, useToolPathname, type ToolHost } from "~/components/to
 import { ProposalRunSheet } from "./_components/ProposalRunSheet";
 import { ProposalsMark } from "./_components/ProposalsMark";
 import { ProposalsProvider, runIsLive, useProposals } from "./_lib/context";
+import { useCopyText } from "~/lib/tools/copyText";
 import { PROPOSALS_ROOTS, proposalsScreenFor, type ProposalsScreen } from "./_lib/screens";
 import { ApplicationScreen } from "./_screens/ApplicationScreen";
 import { ApplicationsScreen } from "./_screens/ApplicationsScreen";
@@ -17,7 +19,6 @@ import { FundersScreen } from "./_screens/FundersScreen";
 import { HomeScreen } from "./_screens/HomeScreen";
 import { LibraryScreen } from "./_screens/LibraryScreen";
 import { ProfileScreen } from "./_screens/ProfileScreen";
-import { RUN_KIND_LABEL } from "./api";
 
 /**
  * Proposals: a writing app. Find the funders that fit, turn their call into
@@ -42,17 +43,24 @@ export function ProposalsTool({ host }: { host?: ToolHost }) {
 
 /** A run in progress, in the bar on every screen: what it is doing, with the current step. */
 function RunIndicator() {
+    const t = useTranslations("proposals.tool");
+    const tKind = useTranslations("proposals.runKind");
+    const say = useCopyText();
     const { activeRun, openRunSheet } = useProposals();
     if (!activeRun || !runIsLive(activeRun)) return null;
     const current = activeRun.steps.find(s => s.status === "running");
-    const label = `${RUN_KIND_LABEL[activeRun.kind]}${current ? ` · ${current.label.toLowerCase()}` : ""}`;
+    const kind = tKind(activeRun.kind);
+    // The step's label is the server's words, in the reader's language when it sent a copy.
+    const label = current
+        ? t("runLabel", { kind, step: say(current.labelCopy, current.label).toLowerCase() })
+        : kind;
     return (
         <Button
             type="button"
             variant="ghost"
             onClick={() => openRunSheet()}
             title={label}
-            aria-label={`${label}. Open the run`}
+            aria-label={t("runAria", { label })}
             className="bg-brand-soft text-brand-ink hover:bg-brand-soft/80 hover:text-brand-ink h-7 max-w-[200px] justify-start gap-2 px-2.5 text-left text-xs font-normal"
         >
             <Loader2 className="size-3.5 animate-spin motion-reduce:animate-none" />
@@ -71,26 +79,43 @@ function RunIndicator() {
  * over this tab only.
  */
 function ProposalsFrame() {
+    const t = useTranslations("proposals.tool");
+    const tName = useTranslations("tools.registry.proposals");
     const path = useToolPathname();
     const { counts } = useProposals();
     const groups: ToolNavGroup[] = [
         {
             id: "proposals",
             items: [
-                { to: "/", label: "Home", icon: Home, exact: true },
-                { to: "/write", label: "Write", icon: FileText, count: counts?.applications },
-                { to: "/funders", label: "Funders", icon: Landmark, count: counts?.funders },
-                { to: "/profile", label: "Profile", icon: Building2 },
-                { to: "/library", label: "Library", icon: BookMarked, count: counts?.library },
+                { to: "/", label: t("screens.home"), icon: Home, exact: true },
+                {
+                    to: "/write",
+                    label: t("screens.write"),
+                    icon: FileText,
+                    count: counts?.applications,
+                },
+                {
+                    to: "/funders",
+                    label: t("screens.funders"),
+                    icon: Landmark,
+                    count: counts?.funders,
+                },
+                { to: "/profile", label: t("screens.profile"), icon: Building2 },
+                {
+                    to: "/library",
+                    label: t("screens.library"),
+                    icon: BookMarked,
+                    count: counts?.library,
+                },
             ],
         },
     ];
     return (
         <ToolFrame
-            title="Proposals"
+            title={tName("name")}
             mark={<ProposalsMark />}
             groups={groups}
-            about="Drafts cite your Sources. Approved answers go to the Library. A finished proposal can be exported back into Sources."
+            about={t("about")}
             status={<RunIndicator />}
             overlay={<ProposalRunSheet />}
         >
@@ -100,6 +125,7 @@ function ProposalsFrame() {
 }
 
 function Screen({ screen }: { screen: ProposalsScreen }) {
+    const t = useTranslations("proposals.tool");
     switch (screen.screen) {
         case "home":
             return <HomeScreen />;
@@ -116,6 +142,6 @@ function Screen({ screen }: { screen: ProposalsScreen }) {
         case "library":
             return <LibraryScreen />;
         case "not-found":
-            return <ToolNotFound home="/" homeLabel="Proposals home" />;
+            return <ToolNotFound home="/" homeLabel={t("homeLabel")} />;
     }
 }

@@ -5,8 +5,10 @@ import { db } from "~/server/db";
 import { users, userCompanyMemberships } from "~/server/db/schema";
 import { setActiveWorkspaceCookie } from "~/lib/active-workspace";
 import { requireAuthIdentity } from "~/lib/require-workspace-context";
+import { requestTranslator } from "~/i18n/server";
 
-export async function POST(_request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function POST(request: Request, { params }: { params: Promise<{ id: string }> }) {
+    const t = requestTranslator(request, "auth.server.errors");
     try {
         const identity = await requireAuthIdentity();
         if (!identity.success) return identity.response;
@@ -17,10 +19,16 @@ export async function POST(_request: Request, { params }: { params: Promise<{ id
         try {
             companyId = BigInt(rawId);
         } catch {
-            return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+            return NextResponse.json(
+                { error: requestTranslator(request, "errors.api")("invalidId") },
+                { status: 400 }
+            );
         }
         if (companyId <= 0n) {
-            return NextResponse.json({ error: "Invalid id" }, { status: 400 });
+            return NextResponse.json(
+                { error: requestTranslator(request, "errors.api")("invalidId") },
+                { status: 400 }
+            );
         }
 
         const [user] = await db
@@ -28,7 +36,7 @@ export async function POST(_request: Request, { params }: { params: Promise<{ id
             .from(users)
             .where(eq(users.userId, authUserId));
         if (!user) {
-            return NextResponse.json({ error: "User not found" }, { status: 404 });
+            return NextResponse.json({ error: t("userNotFound") }, { status: 404 });
         }
 
         const [membership] = await db
@@ -42,16 +50,10 @@ export async function POST(_request: Request, { params }: { params: Promise<{ id
             );
 
         if (!membership) {
-            return NextResponse.json(
-                { error: "You are not a member of this workspace" },
-                { status: 403 }
-            );
+            return NextResponse.json({ error: t("notAMember") }, { status: 403 });
         }
         if (membership.status === "suspended") {
-            return NextResponse.json(
-                { error: "Your membership in this workspace is suspended" },
-                { status: 403 }
-            );
+            return NextResponse.json({ error: t("membershipSuspended") }, { status: 403 });
         }
 
         await db
@@ -72,6 +74,9 @@ export async function POST(_request: Request, { params }: { params: Promise<{ id
         return response;
     } catch (err) {
         console.error("[workspaces/switch] POST error:", err);
-        return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+        return NextResponse.json(
+            { error: requestTranslator(request, "errors.api")("internal") },
+            { status: 500 }
+        );
     }
 }

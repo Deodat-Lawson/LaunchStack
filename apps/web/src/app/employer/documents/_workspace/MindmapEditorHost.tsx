@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { ArrowLeft, Loader2 } from "lucide-react";
 
 import { Button } from "~/components/ui/button";
 import { useUser } from "~/lib/auth-client";
 
-import { getMindmap, type MindmapDetail } from "../_mindmap/lib/api";
+import { getMindmap, MindmapRequestError, type MindmapDetail } from "../_mindmap/lib/api";
 import { openMindmapDocument } from "../_mindmap/lib/open";
 import type { MindmapDoc } from "../_mindmap/model/types";
 import { MindmapEditor } from "../_mindmap/ui/MindmapEditor";
@@ -22,7 +23,11 @@ import { MindmapEditor } from "../_mindmap/ui/MindmapEditor";
 
 type HostState =
     | { status: "loading" }
-    | { status: "error"; message: string }
+    /**
+     * `message` is the server's reason, or null when it gave none; `httpStatus`
+     * is the failed request's, when there was one. Both are worded at render.
+     */
+    | { status: "error"; message: string | null; httpStatus?: number }
     | { status: "ready"; mindmap: MindmapDetail; doc: MindmapDoc; seeded: boolean };
 
 export function MindmapEditorHost({
@@ -51,6 +56,13 @@ export function MindmapEditorHost({
     onChanged?: () => void;
 }) {
     const { user } = useUser();
+    const t = useTranslations("workspace");
+    const tc = useTranslations("common");
+    const tMindmapErrors = useTranslations("mindmap.errors");
+    /** A new map's starter text — this is where new maps are built. Read without re-fetching. */
+    const starter = useTranslations("mindmap.starter");
+    const starterRef = useRef(starter);
+    starterRef.current = starter;
     const [state, setState] = useState<HostState>({ status: "loading" });
 
     useEffect(() => {
@@ -60,14 +72,18 @@ export function MindmapEditorHost({
             try {
                 const mindmap = await getMindmap(mindmapId);
                 if (cancelled) return;
-                const { doc, seeded } = openMindmapDocument(mindmap);
+                const { doc, seeded } = openMindmapDocument(mindmap, starterRef.current);
                 setState({ status: "ready", mindmap, doc, seeded });
             } catch (error) {
                 if (cancelled) return;
                 setState({
                     status: "error",
-                    message:
-                        error instanceof Error ? error.message : "We couldn't open that mindmap.",
+                    ...(error instanceof MindmapRequestError
+                        ? {
+                              message: error.serverMessage ?? null,
+                              httpStatus: error.status,
+                          }
+                        : { message: error instanceof Error ? error.message : null }),
                 });
             }
         })();
@@ -86,7 +102,7 @@ export function MindmapEditorHost({
         return (
             <div className="text-ink-3 flex h-full items-center justify-center gap-2 text-[13px]">
                 <Loader2 className="size-4 animate-spin" />
-                Opening…
+                {t("common.opening")}
             </div>
         );
     }
@@ -94,10 +110,15 @@ export function MindmapEditorHost({
     if (state.status === "error") {
         return (
             <div className="flex h-full flex-col items-center justify-center gap-3 px-6 text-center">
-                <p className="text-ink text-[15px] font-medium">{state.message}</p>
+                <p className="text-ink text-[15px] font-medium">
+                    {state.message ??
+                        (state.httpStatus !== undefined
+                            ? tMindmapErrors("requestFailed", { status: state.httpStatus })
+                            : t("mindmapHost.couldNotOpen"))}
+                </p>
                 <Button variant="outline" size="sm" onClick={onBack}>
                     <ArrowLeft className="size-4" />
-                    Back
+                    {tc("actions.back")}
                 </Button>
             </div>
         );

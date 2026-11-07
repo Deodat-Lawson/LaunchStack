@@ -14,7 +14,11 @@ import type {
     KnowledgeSink,
     StoredKnowledgeItem,
 } from "@launchstack/pipelines/connectors";
-import { contentByteLength, contentToBuffer } from "@launchstack/pipelines/connectors";
+import {
+    contentByteLength,
+    contentToBuffer,
+    SourceDeletedError,
+} from "@launchstack/pipelines/connectors";
 import { document } from "@launchstack/store/schema";
 import { resolveIngestIndexKey } from "@launchstack/llm/embeddings";
 
@@ -29,6 +33,7 @@ import {
     findDocumentByCreationKey,
 } from "../../document-creation";
 import { applyDocumentCreationDefaults, type OwnerRef } from "~/server/workspace/ownership";
+import { isSourceDeleted } from "../deleted-items";
 
 export const GOOGLE_DRIVE_CATEGORY = "Google Drive";
 
@@ -81,7 +86,8 @@ function creationKeyFor(connectionId: number, item: DiscoveredKnowledgeItem): st
 /**
  * Blob-storage filenames must stay flat, and the extension is load-bearing —
  * the ingestion router picks its adapter from it. Exports carry the export
- * target's extension (a Doc exported as Markdown must land as `.md`).
+ * target's extension (a Doc exported as Word must land as `.docx`, or as
+ * `.md` when it was too big for Drive's export cap and fell back).
  */
 function blobFilenameFor(item: KnowledgeItem): string {
     const flattened = item.title.replace(/[^a-zA-Z0-9._-]+/g, "-");
@@ -155,6 +161,10 @@ export async function createGoogleDriveSink(
             };
 
             const existing = await findDocumentByCreationKey(context.companyId, baseCreationKey);
+            // Deleted while this run was going (the run's list predates it).
+            if (!existing && (await isSourceDeleted(context.connectionId, item.sourceId))) {
+                throw new SourceDeletedError(item.sourceId);
+            }
             const placement: SinkPlacement | null =
                 !existing && context.place ? await context.place(item) : null;
             const userId = placement?.owner?.authUserId ?? context.userId;
@@ -164,6 +174,8 @@ export async function createGoogleDriveSink(
                 data: body,
                 contentType: item.mimeType,
                 userId,
+                // Stamps the workspace, so a member opening the source can read the file.
+                companyId: context.companyId,
             });
             const processingUrl = toProcessingUrl(blob.url, context.requestUrl);
 

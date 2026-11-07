@@ -5,7 +5,15 @@
  * exact JSON shapes and the preview harness answers the same paths from
  * memory. Every DTO is the user's vocabulary — profile, funder,
  * application, section, checklist, library, run — never the pipeline's.
+ *
+ * A sentence the server writes in English (a run step, a headline, a review
+ * finding, a checklist row it composed) may come with a `…Copy` beside it:
+ * the same sentence as a message key and values, which the screen words in
+ * the reader's language (`useCopyText` in ./_lib/copy). The English field
+ * stays as it is for every other reader of the API.
  */
+
+import type { Copy } from "~/i18n/copy";
 
 export type ApplicationStatus =
     | "draft"
@@ -74,6 +82,8 @@ export interface RequirementDto {
     text: string;
     done: boolean;
     sectionKey: string | null;
+    /** `text` as a message, for the rows the server composed (deadline, budget, sections). */
+    textCopy?: Copy;
 }
 
 export interface SectionDto {
@@ -100,6 +110,9 @@ export interface FindingDto {
     sectionKey: string | null;
     message: string;
     suggestion: string | null;
+    /** For the checks made without a model; the model's own findings have none. */
+    messageCopy?: Copy;
+    suggestionCopy?: Copy;
 }
 
 export interface ReviewDto {
@@ -107,6 +120,8 @@ export interface ReviewDto {
     summary: string;
     findings: FindingDto[];
     reviewedAt: string;
+    /** When the summary is the server's own sentence rather than the model's. */
+    summaryCopy?: Copy;
 }
 
 export interface ApplicationRow {
@@ -155,6 +170,9 @@ export interface RunStepDto {
     label: string;
     status: StepStatus;
     detail: string | null;
+    /** Absent for a draft step, which is named after its section's question. */
+    labelCopy?: Copy;
+    detailCopy?: Copy;
 }
 
 export interface RunDto {
@@ -168,13 +186,36 @@ export interface RunDto {
     headline: string | null;
     error: string | null;
     credits: number;
+    headlineCopy?: Copy;
+    /** When the error is one of the run's own sentences rather than a provider's. */
+    errorCopy?: Copy;
 }
+
+/**
+ * What a to-do item says, as data, so the screen words it in the reader's
+ * language (`proposals.home.todoItems`). `title`, `detail` and the action
+ * label stay English for every other reader of the API.
+ */
+export type TodoCopy =
+    | { key: "profile"; sources: number }
+    | {
+          key: "deadline";
+          application: string;
+          daysLeft: number;
+          readiness: number;
+          written: number;
+          total: number;
+          blockers: number;
+      }
+    | { key: "funders"; count: number }
+    | { key: "sections"; application: string; count: number; funder: string | null };
 
 export interface TodoItem {
     id: string;
     title: string;
     detail: string;
     action: { label: string; href: string };
+    copy?: TodoCopy;
 }
 
 export interface HomeDto {
@@ -253,7 +294,13 @@ export class ProposalsApiError extends Error {
     constructor(
         message: string,
         readonly status: number,
-        readonly body: unknown
+        readonly body: unknown,
+        /**
+         * True when the message is this client's own "Request failed" rather
+         * than the server's sentence, so a screen can say it in the reader's
+         * language instead (`useErrorText` in ~/lib/tools/errorText).
+         */
+        readonly generated = false
     ) {
         super(message);
         this.name = "ProposalsApiError";
@@ -275,11 +322,16 @@ async function call<T>(url: string, init?: RequestInit): Promise<T> {
         }
     }
     if (!response.ok) {
-        const message =
+        const server =
             body && typeof body === "object" && "error" in body && typeof body.error === "string"
                 ? body.error
-                : `Request failed (${response.status})`;
-        throw new ProposalsApiError(message, response.status, body);
+                : null;
+        throw new ProposalsApiError(
+            server ?? `Request failed (${response.status})`,
+            response.status,
+            body,
+            server === null
+        );
     }
     return body as T;
 }
@@ -398,36 +450,6 @@ export const proposalsApi = {
 
 export type ProposalsApi = typeof proposalsApi;
 
-export const APPLICATION_STATUS_LABEL: Record<ApplicationStatus, string> = {
-    draft: "Draft",
-    in_progress: "In progress",
-    in_review: "In review",
-    ready: "Ready",
-    submitted: "Submitted",
-    awarded: "Awarded",
-    declined: "Declined",
-    withdrawn: "Withdrawn",
-};
-
-export const SECTION_STATUS_LABEL: Record<SectionStatus, string> = {
-    empty: "Not written",
-    drafted: "Drafted",
-    edited: "Edited",
-    approved: "Approved",
-};
-
-export const RUN_KIND_LABEL: Record<RunKind, string> = {
-    funders: "Finding funders",
-    extract: "Reading the request",
-    draft: "Drafting",
-    rewrite: "Rewriting",
-    review: "Reviewing",
-};
-
-export const REWRITE_PRESET_LABEL: Record<RewritePreset, string> = {
-    tighten: "Tighten to the limit",
-    specific: "Make it more specific",
-    plainer: "Make it plainer",
-    stronger: "Make it stronger",
-    custom: "Rewrite with instructions…",
-};
+// Status, run and preset labels are messages: `proposals.applicationStatus.<status>`,
+// `proposals.sectionStatus.<status>`, `proposals.runKind.<kind>` and
+// `proposals.rewritePreset.<preset>`.

@@ -20,6 +20,7 @@ import {
     type NodeViewProps,
 } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import { useTranslations } from "next-intl";
 import { marked } from "marked";
 import { Button } from "~/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "~/components/ui/dialog";
@@ -43,6 +44,11 @@ export interface RichChatEditorHandle {
     focus: () => void;
     insertContext: (context: ComposerContext) => void;
     insertText: (value: string) => void;
+    /**
+     * Replaces the `charsBack` characters before the caret — a typed
+     * `@query` or `/command` — with a chip or text ("" just removes them).
+     */
+    replaceQuery: (charsBack: number, content: ComposerContext | string) => void;
     getJSON: () => JSONContent | null;
     getContexts: () => ComposerContext[];
     isInList: () => boolean;
@@ -57,9 +63,12 @@ export interface RichChatEditorProps {
     onKeyDown: (event: KeyboardEvent) => boolean;
     onPaste: (event: ClipboardEvent, selectedLength: number) => boolean;
     onOpenContext: (context: ComposerContext) => void;
+    /** Called by the composer's stand-in when this editor's code could not be loaded. */
+    onUnavailable?: () => void;
 }
 
 function ContextNodeView({ node, extension }: NodeViewProps) {
+    const t = useTranslations("chat.richEditor");
     const context = node.attrs.context as ComposerContext;
     return (
         <NodeViewWrapper
@@ -75,10 +84,10 @@ function ContextNodeView({ node, extension }: NodeViewProps) {
                 className={`border-line mx-0.5 inline-flex h-6 max-w-[240px] border px-1.5 align-baseline text-xs ${context.unavailable ? "text-ink-3 border-dashed" : ""}`}
                 title={
                     context.unavailable
-                        ? "This context is no longer available. Remove it or restore access before sending."
+                        ? t("contextUnavailable")
                         : (context.comment ?? context.quote ?? context.label)
                 }
-                aria-label={`${context.kind === "quote" ? "Quoted response" : context.kind === "source" ? "Source context" : context.kind === "thread" ? "Conversation context" : "Attached file"}: ${context.label}`}
+                aria-label={t("contextLabel", { kind: context.kind, label: context.label })}
                 onClick={() =>
                     (extension.options as { onOpen: (context: ComposerContext) => void }).onOpen(
                         context
@@ -88,7 +97,7 @@ function ContextNodeView({ node, extension }: NodeViewProps) {
                 {context.kind === "quote" ? <Quote className="size-3" /> : null}
                 <span className="truncate">
                     {context.comment ?? context.label}
-                    {context.unavailable ? " · unavailable" : ""}
+                    {context.unavailable ? ` · ${t("unavailable")}` : ""}
                 </span>
             </Button>
         </NodeViewWrapper>
@@ -169,9 +178,13 @@ const InlineContext = Node.create({
     },
 });
 
-const TaskLists = Extension.create({
+const TaskLists = Extension.create<{ completeTaskLabel: () => string }>({
     name: "composerTaskLists",
     priority: 1100,
+    addOptions() {
+        // Read when a checkbox is drawn, so it follows the interface language.
+        return { completeTaskLabel: () => "" };
+    },
     addGlobalAttributes() {
         return [
             {
@@ -217,6 +230,7 @@ const TaskLists = Extension.create({
     },
     addProseMirrorPlugins() {
         const editor = this.editor;
+        const completeTaskLabel = this.options.completeTaskLabel;
         return [
             new Plugin({
                 props: {
@@ -236,7 +250,7 @@ const TaskLists = Extension.create({
                                         input.type = "checkbox";
                                         input.checked = Boolean(node.attrs.checked);
                                         input.className = "mr-1 accent-[var(--accent)]";
-                                        input.setAttribute("aria-label", "Complete task");
+                                        input.setAttribute("aria-label", completeTaskLabel());
                                         input.contentEditable = "false";
                                         input.addEventListener("mousedown", event =>
                                             event.preventDefault()
@@ -444,6 +458,10 @@ export function composerContexts(node: JSONContent): ComposerContext[] {
 
 const RichChatEditor = forwardRef<RichChatEditorHandle, RichChatEditorProps>(
     function RichChatEditor(props, ref) {
+        const t = useTranslations("chat.richEditor");
+        const tc = useTranslations("common");
+        const tRef = useRef(t);
+        tRef.current = t;
         const callbacks = useRef(props);
         callbacks.current = props;
         const lastValue = useRef(props.value);
@@ -474,7 +492,9 @@ const RichChatEditor = forwardRef<RichChatEditorHandle, RichChatEditorProps>(
                             isAllowedUri: url => /^(https?:|mailto:|\/|#)/i.test(url),
                         },
                     }),
-                    TaskLists,
+                    TaskLists.configure({
+                        completeTaskLabel: () => tRef.current("completeTask"),
+                    }),
                     extension,
                 ],
                 content: validComposerDocument(props.content)
@@ -483,7 +503,7 @@ const RichChatEditor = forwardRef<RichChatEditorHandle, RichChatEditorProps>(
                 editorProps: {
                     attributes: {
                         role: "textbox",
-                        "aria-label": "Rich chat message",
+                        "aria-label": t("messageLabel"),
                         "aria-multiline": "true",
                         class: "text-ink min-h-[70px] max-h-60 overflow-y-auto whitespace-pre-wrap break-words text-[15px] leading-6 outline-none [&_p]:my-1 [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:list-decimal [&_ol]:pl-5 [&_pre]:bg-line-2 [&_pre]:rounded [&_pre]:p-2",
                         "data-placeholder": props.placeholder,
@@ -592,6 +612,21 @@ const RichChatEditor = forwardRef<RichChatEditorHandle, RichChatEditorProps>(
                 insertText: value => {
                     editor?.chain().focus().insertContent({ type: "text", text: value }).run();
                 },
+                replaceQuery: (charsBack, content) => {
+                    if (!editor) return;
+                    const to = editor.state.selection.from;
+                    const from = Math.max(1, to - charsBack);
+                    const chain = editor.chain().focus().deleteRange({ from, to });
+                    if (typeof content === "string") {
+                        if (content) chain.insertContent({ type: "text", text: content });
+                    } else {
+                        chain.insertContent([
+                            { type: "composerContext", attrs: { context: content } },
+                            { type: "text", text: " " },
+                        ]);
+                    }
+                    chain.run();
+                },
                 getJSON: () => editor?.getJSON() ?? null,
                 getContexts: () => (editor ? composerContexts(editor.getJSON()) : []),
                 isInList: () =>
@@ -636,34 +671,34 @@ const RichChatEditor = forwardRef<RichChatEditorHandle, RichChatEditorProps>(
         };
         return (
             <div data-editor-revision={revision}>
-                <div className="mb-1 flex flex-wrap gap-0.5" aria-label="Formatting">
+                <div className="mb-1 flex flex-wrap gap-0.5" aria-label={t("formatting")}>
                     {[
                         {
-                            name: "Bold",
+                            name: t("bold"),
                             icon: Bold,
                             active: "bold",
                             run: () => editor?.chain().focus().toggleBold().run(),
                         },
                         {
-                            name: "Italic",
+                            name: t("italic"),
                             icon: Italic,
                             active: "italic",
                             run: () => editor?.chain().focus().toggleItalic().run(),
                         },
                         {
-                            name: "Bullet list",
+                            name: t("bulletList"),
                             icon: List,
                             active: "bulletList",
                             run: () => editor?.chain().focus().toggleBulletList().run(),
                         },
                         {
-                            name: "Code block",
+                            name: t("codeBlock"),
                             icon: Code,
                             active: "codeBlock",
                             run: () => editor?.chain().focus().toggleCodeBlock().run(),
                         },
                         {
-                            name: "Task list",
+                            name: t("taskList"),
                             icon: CheckSquare,
                             active: "listItem",
                             run: () =>
@@ -694,7 +729,7 @@ const RichChatEditor = forwardRef<RichChatEditorHandle, RichChatEditorProps>(
                         variant="ghost"
                         size="icon"
                         className="size-7"
-                        aria-label="Undo"
+                        aria-label={tc("actions.undo")}
                         disabled={!editor?.can().undo()}
                         onClick={() => editor?.chain().focus().undo().run()}
                     >
@@ -704,7 +739,7 @@ const RichChatEditor = forwardRef<RichChatEditorHandle, RichChatEditorProps>(
                         variant="ghost"
                         size="icon"
                         className="size-7"
-                        aria-label="Redo"
+                        aria-label={t("redo")}
                         disabled={!editor?.can().redo()}
                         onClick={() => editor?.chain().focus().redo().run()}
                     >
@@ -719,23 +754,21 @@ const RichChatEditor = forwardRef<RichChatEditorHandle, RichChatEditorProps>(
                     }}
                 >
                     <DialogContent className="border-line bg-panel">
-                        <DialogTitle>Quoted response</DialogTitle>
-                        <DialogDescription>
-                            Add a comment to explain what you want the assistant to focus on.
-                        </DialogDescription>
+                        <DialogTitle>{t("quotedResponse")}</DialogTitle>
+                        <DialogDescription>{t("quoteDescription")}</DialogDescription>
                         <blockquote className="border-brand text-ink-2 max-h-48 overflow-auto border-l-2 pl-3 text-sm">
                             {quotedContext?.quote ?? quotedContext?.label}
                         </blockquote>
                         <label className="text-ink-2 text-xs">
-                            Comment
+                            {t("comment")}
                             <textarea
-                                aria-label="Quote comment"
+                                aria-label={t("commentLabel")}
                                 className="border-line bg-panel text-ink mt-1 min-h-20 w-full rounded-md border p-2 text-sm"
                                 value={comment}
                                 onChange={event => setComment(event.target.value)}
                             />
                         </label>
-                        <Button onClick={updateComment}>Save comment</Button>
+                        <Button onClick={updateComment}>{t("saveComment")}</Button>
                     </DialogContent>
                 </Dialog>
             </div>

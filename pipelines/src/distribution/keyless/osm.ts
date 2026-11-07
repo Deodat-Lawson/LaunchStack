@@ -6,6 +6,8 @@
  * time and modest timeouts; this adapter does exactly that.
  */
 import type { PartnerKind } from "../types";
+import { cosine, type EmbedTexts } from "../semantic";
+import type { OsmCategory } from "./taginfo";
 import { escapeRegExp, overpassAreas } from "./geo";
 
 export const OVERPASS_URL = "https://overpass-api.de/api/interpreter";
@@ -18,193 +20,80 @@ export const OVERPASS_MIRRORS = [
 export const KEYLESS_USER_AGENT =
     "LaunchStack-Prospects/0.1 (+https://github.com/Deodat-Lawson/LaunchStack)";
 
-/** Overpass tag selectors for the kinds of organisation a category names. */
-const TAG_RULES: Array<{ match: RegExp; selectors: string[] }> = [
-    {
-        match: /coffee|roast|koffie|kaffee|espresso|barista/i,
-        selectors: ['["shop"="coffee"]', '["craft"="coffee_roaster"]', '["cuisine"="coffee_shop"]'],
-    },
-    {
-        match: /bak(er|ery|kerij)|bread|brood|bäck|pastry|patiss/i,
-        selectors: ['["shop"="bakery"]', '["craft"="bakery"]', '["shop"="pastry"]'],
-    },
-    { match: /\btea\b|thee\b/i, selectors: ['["shop"="tea"]'] },
-    {
-        match: /wine|wijn|wein|spirits|liquor|beer|brew|distill/i,
-        selectors: [
-            '["shop"="wine"]',
-            '["shop"="alcohol"]',
-            '["craft"="brewery"]',
-            '["craft"="winery"]',
-            '["craft"="distillery"]',
-        ],
-    },
-    {
-        match: /deli|delicatess|fine food|specialty food|speciality food|gourmet|cheese|kaas|käse|organic|\bbio\b|health food/i,
-        selectors: [
-            '["shop"="deli"]',
-            '["shop"="cheese"]',
-            '["shop"="health_food"]',
-            '["shop"="organic"]',
-            '["shop"="farm"]',
-        ],
-    },
-    {
-        match: /grocer|supermarket|food retail|convenience|minimarket/i,
-        selectors: ['["shop"="supermarket"]', '["shop"="greengrocer"]', '["shop"="convenience"]'],
-    },
-    {
-        match: /restaurant|hospitality|horeca|caf[eé]|\bbar\b|catering|bistro/i,
-        selectors: ['["amenity"="restaurant"]', '["amenity"="cafe"]', '["amenity"="bar"]'],
-    },
-    {
-        match: /hotel|hostel|accommodation|guest ?house|b&b/i,
-        selectors: ['["tourism"="hotel"]', '["tourism"="guest_house"]', '["tourism"="hostel"]'],
-    },
-    {
-        match: /cosmetic|beauty|skin ?care|salon|hairdress|barber|nail/i,
-        selectors: ['["shop"="cosmetics"]', '["shop"="beauty"]', '["shop"="hairdresser"]'],
-    },
-    {
-        match: /fashion|apparel|clothing|boutique|kleding|\bmode\b|garment|footwear|shoe/i,
-        selectors: ['["shop"="clothes"]', '["shop"="boutique"]', '["shop"="shoes"]'],
-    },
-    {
-        match: /furniture|interior|home ?ware|meubel|möbel|decor/i,
-        selectors: [
-            '["shop"="furniture"]',
-            '["shop"="interior_decoration"]',
-            '["shop"="houseware"]',
-        ],
-    },
-    {
-        match: /sport|outdoor|bike|bicycle|cycl|fitness equipment/i,
-        selectors: ['["shop"="sports"]', '["shop"="bicycle"]', '["shop"="outdoor"]'],
-    },
-    { match: /\bpet|dog|cat food|dieren|tierbedarf/i, selectors: ['["shop"="pet"]'] },
-    {
-        match: /electronic|computer|hardware store|phone|gadget/i,
-        selectors: ['["shop"="electronics"]', '["shop"="computer"]', '["shop"="mobile_phone"]'],
-    },
-    {
-        match: /pharma|health|clinic|medical|dental|physio|care home/i,
-        selectors: [
-            '["amenity"="pharmacy"]',
-            '["amenity"="clinic"]',
-            '["amenity"="dentist"]',
-            '["healthcare"~"."]',
-        ],
-    },
-    {
-        match: /book|stationery|toy|gift/i,
-        selectors: [
-            '["shop"="books"]',
-            '["shop"="stationery"]',
-            '["shop"="toys"]',
-            '["shop"="gift"]',
-        ],
-    },
-    {
-        match: /garden|plant|florist|flower|nursery/i,
-        selectors: ['["shop"="garden_centre"]', '["shop"="florist"]'],
-    },
-    {
-        match: /logistic|warehous|fulfil|3pl|distribution cent|freight|shipping|storage|courier|parcel/i,
-        selectors: [
-            '["office"="logistics"]',
-            '["building"="warehouse"]',
-            '["industrial"="warehouse"]',
-            '["office"="courier"]',
-        ],
-    },
-    {
-        match: /manufactur|factory|fabriek|fabrik|industrial|producer|\bplant\b|machin|engineering/i,
-        selectors: ['["man_made"="works"]', '["industrial"="factory"]', '["office"="engineer"]'],
-    },
-    {
-        match: /wholesale|groothandel|großhandel|grossist|cash ?& ?carry/i,
-        selectors: ['["shop"="wholesale"]', '["shop"="trade"]'],
-    },
-    {
-        match: /import|distribut|trading|\bhandel\b/i,
-        selectors: ['["office"="company"]', '["shop"="wholesale"]'],
-    },
-    {
-        match: /software|saas|\btech\b|startup|agency|consult|\bit\b|digital|design studio/i,
-        selectors: ['["office"="it"]', '["office"="company"]', '["office"="advertising_agency"]'],
-    },
-    {
-        match: /school|education|training|university|academy/i,
-        selectors: [
-            '["amenity"="school"]',
-            '["amenity"="university"]',
-            '["amenity"="college"]',
-            '["office"="educational_institution"]',
-        ],
-    },
-    {
-        match: /gym|fitness|yoga|wellness|spa\b|pilates/i,
-        selectors: [
-            '["leisure"="fitness_centre"]',
-            '["leisure"="sports_centre"]',
-            '["shop"="massage"]',
-        ],
-    },
-    {
-        match: /\bcar\b|auto|garage|dealer|vehicle|motor/i,
-        selectors: ['["shop"="car"]', '["shop"="car_repair"]', '["shop"="car_parts"]'],
-    },
-    {
-        match: /construct|build|contractor|architect|plumb|electric|roof|hvac|install/i,
-        selectors: [
-            '["office"="construction_company"]',
-            '["craft"="electrician"]',
-            '["craft"="plumber"]',
-            '["office"="architect"]',
-            '["craft"="hvac"]',
-        ],
-    },
-    {
-        match: /\blaw\b|legal|attorney|advoca|notar/i,
-        selectors: ['["office"="lawyer"]', '["office"="notary"]'],
-    },
-    {
-        match: /account|\btax\b|bookkeep|financ|insur|bank/i,
-        selectors: [
-            '["office"="accountant"]',
-            '["office"="financial"]',
-            '["office"="insurance"]',
-            '["office"="financial_advisor"]',
-        ],
-    },
-    {
-        match: /real ?estate|property|makelaar|immobil|estate agent/i,
-        selectors: ['["office"="estate_agent"]'],
-    },
-    {
-        match: /farm|agri|nursery|greenhouse|kwekerij|landwirt/i,
-        selectors: [
-            '["shop"="farm"]',
-            '["landuse"="farmyard"]["name"]',
-            '["man_made"="greenhouse"]["name"]',
-        ],
-    },
-];
-
 // A plain key filter; a regex over keys is what makes a country-wide query time out.
 const WEBSITE_FILTER = '["website"]';
 const MAX_SELECTORS = 4;
 
-/** Tag selectors for a list of category words; empty when nothing is recognised. */
-export function tagSelectorsFor(keywords: readonly string[]): string[] {
-    const text = keywords.join(" ");
-    const out: string[] = [];
-    for (const rule of TAG_RULES) {
-        if (rule.match.test(text))
-            for (const s of rule.selectors) if (!out.includes(s)) out.push(s);
-        if (out.length >= MAX_SELECTORS) break;
+let categoryVectors: { key: string; vectors: number[][] } | null = null;
+
+/**
+ * The OpenStreetMap categories closest in meaning to who the segment sells
+ * to, best first. A category must sit nearer the brief than the best match
+ * does to an unrelated brief would — in practice: keep those within reach of
+ * the best one (the gap a real second category shows), never a long tail.
+ */
+export async function chooseOsmCategories(
+    embed: EmbedTexts,
+    brief: string,
+    vocabulary: readonly OsmCategory[],
+    max = MAX_SELECTORS
+): Promise<string[]> {
+    if (vocabulary.length === 0) return [];
+    const descriptions = vocabulary.map(c => c.description);
+    const key = descriptions.join("|");
+    if (categoryVectors?.key !== key) {
+        categoryVectors = { key, vectors: await embed(descriptions) };
     }
-    return out.slice(0, MAX_SELECTORS);
+    const [query] = await embed([brief]);
+    if (!query) return [];
+    const scored = vocabulary
+        .map((c, i) => ({
+            selector: c.selector,
+            score: cosine(query, categoryVectors!.vectors[i] ?? []),
+        }))
+        .sort((a, b) => b.score - a.score);
+    const best = scored[0]?.score ?? 0;
+    const spread = best - (scored[Math.min(scored.length - 1, 20)]?.score ?? 0);
+    // Within half the spread between the best and the 20th: the categories that
+    // stand out from the pack, not the pack itself.
+    return scored
+        .filter(c => c.score >= best - spread / 2)
+        .slice(0, max)
+        .map(c => c.selector);
+}
+
+/** Forget the cached category vectors (tests; a changed embedding model). */
+export function resetOsmCategoryVectors(): void {
+    categoryVectors = null;
+}
+
+/**
+ * Without an embedder: the categories whose description shares a word with
+ * the segment's. A plain fallback over the same vocabulary — no hand-written
+ * rules — used only when no embedding model is configured.
+ */
+export function tagSelectorsFor(
+    keywords: readonly string[],
+    vocabulary: readonly OsmCategory[]
+): string[] {
+    const words = new Set(
+        keywords
+            .flatMap(k => k.toLowerCase().split(/[^\p{L}\p{N}]+/u))
+            .filter(w => w.length >= 3)
+            .map(w => w.replace(/(ies|es|s)$/, ""))
+    );
+    if (words.size === 0) return [];
+    const scored = vocabulary
+        .map(c => {
+            const own = c.description
+                .toLowerCase()
+                .split(/[^\p{L}\p{N}]+/u)
+                .map(w => w.replace(/(ies|es|s)$/, ""));
+            return { selector: c.selector, hits: own.filter(w => words.has(w)).length };
+        })
+        .filter(c => c.hits > 0)
+        .sort((a, b) => b.hits - a.hits);
+    return scored.slice(0, MAX_SELECTORS).map(c => c.selector);
 }
 
 /** A case-insensitive Overpass regex over names, from the significant words in the keywords. */
@@ -225,7 +114,7 @@ export interface OverpassRequest {
     /** City or region name; null for the whole country (or the top cities of a large one). */
     region?: string | null;
     keywords: readonly string[];
-    /** Pre-computed selectors; defaults to tagSelectorsFor(keywords). */
+    /** Tag selectors chosen for the segment; none → match names only. */
     selectors?: readonly string[];
     limit?: number;
     timeoutSeconds?: number;
@@ -235,9 +124,7 @@ export function buildOverpassQuery(
     area: { country: string; city: string | null },
     req: OverpassRequest
 ): string {
-    const selectors = (
-        req.selectors?.length ? [...req.selectors] : tagSelectorsFor(req.keywords)
-    ).slice(0, MAX_SELECTORS);
+    const selectors = [...(req.selectors ?? [])].slice(0, MAX_SELECTORS);
     const nameRegex = nameRegexFor(req.keywords);
     const timeout = req.timeoutSeconds ?? 20;
     const limit = req.limit ?? 40;

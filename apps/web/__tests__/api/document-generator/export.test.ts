@@ -45,6 +45,26 @@ describe("POST /api/document-generator/export", () => {
         expect(body.error).toBe("service_not_configured");
     });
 
+    it("explains the missing renderer in the reader's language, keeping the code", async () => {
+        mockGetGotenbergClient.mockReturnValue(null);
+        const english = await POST(request({ format: "pdf", title: "Report", content: "# Hi" }));
+        expect(((await english.json()) as { message: string }).message).toBe(
+            "PDF rendering is not configured. Set GOTENBERG_SERVICE_URL (and its basic-auth pair), or export as HTML instead."
+        );
+        const chinese = await POST(
+            new Request("http://localhost/api/document-generator/export", {
+                method: "POST",
+                headers: { "content-type": "application/json", cookie: "ls-locale=zh-CN.1" },
+                body: JSON.stringify({ format: "pdf", title: "Report", content: "# Hi" }),
+            })
+        );
+        expect(await chinese.json()).toMatchObject({
+            error: "service_not_configured",
+            message:
+                "PDF 渲染尚未配置。请设置 GOTENBERG_SERVICE_URL（及其 basic-auth 用户名和密码），或改为导出 HTML。",
+        });
+    });
+
     it("still serves the non-PDF formats without Gotenberg", async () => {
         mockGetGotenbergClient.mockReturnValue(null);
         for (const format of ["markdown", "html", "text"]) {

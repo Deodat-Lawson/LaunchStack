@@ -21,6 +21,7 @@ import {
     validateRequestBody,
 } from "~/lib/validation";
 import { appendMessages, truncateMessages } from "~/server/sessions/repository";
+import { requestTranslator } from "~/i18n/server";
 
 export const runtime = "nodejs";
 
@@ -41,10 +42,17 @@ export async function POST(request: Request, { params }: Params) {
         );
         return session
             ? NextResponse.json({ session })
-            : NextResponse.json({ error: "Session not found" }, { status: 404 });
+            : NextResponse.json(
+                  {
+                      error: requestTranslator(request, "chat.server.sessions")("notFound"),
+                  },
+                  { status: 404 }
+              );
     } catch (error) {
         console.error("[workspace/sessions] append failed:", error);
-        return serverError("Failed to save this message");
+        return serverError(
+            requestTranslator(request, "workspace.server.errors")("saveMessageFailed")
+        );
     }
 }
 
@@ -61,15 +69,23 @@ export async function DELETE(request: Request, { params }: Params) {
             validation.data.expectedCount
         );
         if (result === "missing")
-            return NextResponse.json({ error: "Session not found" }, { status: 404 });
+            return NextResponse.json(
+                { error: requestTranslator(request, "chat.server.sessions")("notFound") },
+                { status: 404 }
+            );
         if (result === "conflict")
             return NextResponse.json(
-                { error: "This chat changed in another tab. Reopen it before editing." },
+                {
+                    error: requestTranslator(
+                        request,
+                        "workspace.server.errors"
+                    )("chatChangedElsewhere"),
+                },
                 { status: 409 }
             );
         return NextResponse.json({ truncated: true });
     } catch (error) {
         console.error("[workspace/sessions] rewind failed:", error);
-        return serverError("Failed to rewind this chat");
+        return serverError(requestTranslator(request, "workspace.server.errors")("rewindFailed"));
     }
 }

@@ -1,8 +1,8 @@
 "use client";
 
 /**
- * Appearance — theme, density, motion, and how the default assistant answers
- * you. Four rows, on purpose.
+ * Appearance — language, theme, density, motion, and how the default
+ * assistant answers you. Five rows, on purpose.
  *
  * Body only. Every row is member-scoped. The display rows are applied by
  * `PreferenceSync` (mounted in the employer shell), which is what keeps the
@@ -16,28 +16,26 @@
  */
 
 import React from "react";
+import { useTranslations } from "next-intl";
 
 import { Card, Section } from "~/components/layout/page-shell";
 
 import { PersonalAnswerStyleRow } from "./AnswerStyle";
 import type { SettingsSectionProps } from "./contract";
+import { LanguageRow } from "./LanguageRow";
 import { SectionRows } from "./SettingRow";
 
 export function AppearanceSection(_: SettingsSectionProps) {
+    const t = useTranslations("settings.appearance");
     return (
         <>
-            <Section
-                title="Display"
-                description="Applied to this browser as soon as you change it, and remembered for you everywhere you sign in."
-            >
+            <Section title={t("display.title")} description={t("display.description")}>
                 <Card>
+                    <LanguageRow />
                     <SectionRows section="appearance" />
                 </Card>
             </Section>
-            <Section
-                title="Answers"
-                description="How Launchstack answers you in chat when no agent is picked. Yours alone: nobody else's answers change."
-            >
+            <Section title={t("answers.title")} description={t("answers.description")}>
                 <Card>
                     <PersonalAnswerStyleRow />
                 </Card>

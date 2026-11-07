@@ -1,15 +1,18 @@
 /**
  * Disconnect a workspace connection.
  *
- * DELETE — management-gated. Removes the row; for Slack/GitHub and Gmail it
- * then best-effort revokes the grant at the provider so a copied token dies
- * with the connection (Drive rows are simply deleted — the Drive services
- * own no revocation endpoint, matching DELETE /api/connectors/google).
+ * DELETE — management-gated. Removes the row; for the generic OAuth providers
+ * (Slack, GitHub, LinkedIn, Notion) and Gmail it then best-effort revokes the
+ * grant at the provider so a copied token dies with the connection (Drive
+ * rows are simply deleted — the Drive services own no revocation endpoint,
+ * matching DELETE /api/connectors/google). Documents a connection imported
+ * are kept.
  * Cross-tenant deletes are impossible: the row must belong to the caller's
  * active workspace. A member disconnects their own Gmail through
  * DELETE /api/connectors/gmail; this route is the admin's offboarding path.
  */
 
+import { requestTranslator } from "~/i18n/server";
 import { createNotFoundError, createSuccessResponse, handleApiError } from "~/lib/api-utils";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
@@ -29,6 +32,7 @@ export async function DELETE(
     request: Request,
     { params }: { params: Promise<{ connectionId: string }> }
 ) {
+    const t = requestTranslator(request, "sources.server.connectors");
     return withRateLimit(request, RateLimitPresets.strict, async () => {
         try {
             const guard = await requireConnectorAdmin();
@@ -37,12 +41,12 @@ export async function DELETE(
             const { connectionId } = await params;
             const id = Number(connectionId);
             if (!Number.isSafeInteger(id) || id <= 0) {
-                return createNotFoundError("Connection not found.");
+                return createNotFoundError(t("connectionNotFound"));
             }
 
             const connection = await getConnectionById(id);
             if (!connection || connection.companyId !== guard.ctx.companyId) {
-                return createNotFoundError("Connection not found.");
+                return createNotFoundError(t("connectionNotFound"));
             }
 
             const provider = connection.provider;
@@ -67,12 +71,10 @@ export async function DELETE(
 
             return createSuccessResponse(
                 { deleted: true, providerRevoked: revoked },
-                revoked
-                    ? "Disconnected and revoked at the provider."
-                    : "Disconnected. The provider-side grant may still exist — revoke it from the provider's security settings if needed."
+                t(revoked ? "disconnectedRevoked" : "disconnectedNotRevoked")
             );
         } catch (error) {
-            return handleApiError(error);
+            return handleApiError(error, request);
         }
     });
 }

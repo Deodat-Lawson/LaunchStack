@@ -11,6 +11,10 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useFormatter, useTranslations } from "next-intl";
+
+import { useAgentCopy } from "~/lib/agents/i18n";
+import { meetingWorkflow } from "~/lib/agents/meeting-workflows";
 
 import type {
     AgentsResponse,
@@ -25,16 +29,24 @@ const IDLE_POLL_MS = 6_000;
 /** Turns one `run` request may take; the loop issues as many as it needs. */
 const RUN_BATCH = 3;
 
-async function readJson<T>(response: Response): Promise<T> {
+/** Reads a JSON response; a failure throws the server's error, or `failed(status)` without one. */
+async function readJson<T>(response: Response, failed: (status: number) => string): Promise<T> {
     const text = await response.text();
     const parsed = text
         ? (JSON.parse(text) as T & { error?: string })
         : ({} as T & { error?: string });
-    if (!response.ok) throw new Error(parsed.error ?? `Request failed (${response.status})`);
+    if (!response.ok) throw new Error(parsed.error ?? failed(response.status));
     return parsed;
 }
 
+type ErrorsTranslator = ReturnType<typeof useTranslations<"collab.errors">>;
+
+function requestFailed(t: ErrorsTranslator) {
+    return (status: number) => t("requestFailed", { status });
+}
+
 export function useMeetingList() {
+    const t = useTranslations("collab.errors");
     const [meetings, setMeetings] = useState<MeetingSummary[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -42,16 +54,17 @@ export function useMeetingList() {
     const refresh = useCallback(async () => {
         try {
             const data = await readJson<{ meetings: MeetingSummary[] }>(
-                await fetch("/api/collab/meetings")
+                await fetch("/api/collab/meetings"),
+                requestFailed(t)
             );
             setMeetings(data.meetings);
             setError(null);
         } catch (err) {
-            setError(err instanceof Error ? err.message : "Could not load meetings");
+            setError(err instanceof Error ? err.message : t("loadMeetings"));
         } finally {
             setLoading(false);
         }
-    }, []);
+    }, [t]);
 
     useEffect(() => {
         void refresh();
@@ -67,6 +80,7 @@ export function useMeetingList() {
  */
 export function useAgents(options: { includeArchived?: boolean } = {}) {
     const { includeArchived = false } = options;
+    const t = useTranslations("collab.errors");
     const [data, setData] = useState<AgentsResponse | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -77,16 +91,17 @@ export function useAgents(options: { includeArchived?: boolean } = {}) {
                 await readJson<AgentsResponse>(
                     await fetch(
                         includeArchived ? "/api/collab/agents?archived=1" : "/api/collab/agents"
-                    )
+                    ),
+                    requestFailed(t)
                 )
             );
             setError(null);
         } catch (err) {
-            setError(err instanceof Error ? err.message : "Could not load agents");
+            setError(err instanceof Error ? err.message : t("loadAgents"));
         } finally {
             setLoading(false);
         }
-    }, [includeArchived]);
+    }, [includeArchived, t]);
 
     useEffect(() => {
         void refresh();
@@ -138,6 +153,7 @@ function isTerminal(status: MeetingState["status"]): boolean {
 }
 
 export function useMeeting(meetingId: string | null): MeetingController {
+    const t = useTranslations("collab.errors");
     const [detail, setDetail] = useState<MeetingDetail["meeting"] | null>(null);
     const [state, setState] = useState<MeetingState | null>(null);
     const [messages, setMessages] = useState<ChannelMessage[]>([]);
@@ -155,7 +171,8 @@ export function useMeeting(meetingId: string | null): MeetingController {
         async (afterSeq: number) => {
             if (!meetingId) return;
             const data = await readJson<MeetingDetail>(
-                await fetch(`/api/collab/meetings/${meetingId}?afterSeq=${afterSeq}`)
+                await fetch(`/api/collab/meetings/${meetingId}?afterSeq=${afterSeq}`),
+                requestFailed(t)
             );
             // A late response from a meeting the user has already navigated away
             // from must not overwrite the one now on screen.
@@ -172,7 +189,7 @@ export function useMeeting(meetingId: string | null): MeetingController {
             });
             seqRef.current = Math.max(data.latestSeq, afterSeq);
         },
-        [meetingId]
+        [meetingId, t]
     );
 
     const reload = useCallback(async () => {
@@ -182,11 +199,11 @@ export function useMeeting(meetingId: string | null): MeetingController {
             await load(0);
             setError(null);
         } catch (err) {
-            setError(err instanceof Error ? err.message : "Could not load the meeting");
+            setError(err instanceof Error ? err.message : t("loadMeeting"));
         } finally {
             setLoading(false);
         }
-    }, [load, meetingId]);
+    }, [load, meetingId, t]);
 
     useEffect(() => {
         activeId.current = meetingId;
@@ -220,19 +237,20 @@ export function useMeeting(meetingId: string | null): MeetingController {
 
     const sendControl = useCallback(
         async (action: ControlAction, options: ControlOptions = {}): Promise<MeetingState> => {
-            if (!meetingId) throw new Error("No meeting selected");
+            if (!meetingId) throw new Error(t("noMeetingSelected"));
             const data = await readJson<{ state: MeetingState }>(
                 await fetch(`/api/collab/meetings/${meetingId}/control`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ action, ...options }),
-                })
+                }),
+                requestFailed(t)
             );
             if (activeId.current === meetingId) setState(data.state);
             await load(seqRef.current);
             return data.state;
         },
-        [meetingId, load]
+        [meetingId, load, t]
     );
 
     const control = useCallback(
@@ -248,12 +266,12 @@ export function useMeeting(meetingId: string | null): MeetingController {
             try {
                 await sendControl(action, options);
             } catch (err) {
-                setError(err instanceof Error ? err.message : `Could not ${action} the meeting`);
+                setError(err instanceof Error ? err.message : t("control", { action }));
             } finally {
                 setBusy(null);
             }
         },
-        [meetingId, sendControl]
+        [meetingId, sendControl, t]
     );
 
     const stopRunning = useCallback(() => {
@@ -275,7 +293,7 @@ export function useMeeting(meetingId: string | null): MeetingController {
             }
         } catch (err) {
             if (!loop.cancelled) {
-                setError(err instanceof Error ? err.message : "The meeting stopped unexpectedly");
+                setError(err instanceof Error ? err.message : t("stoppedUnexpectedly"));
             }
         } finally {
             if (runLoop.current === loop) runLoop.current = null;
@@ -284,7 +302,7 @@ export function useMeeting(meetingId: string | null): MeetingController {
                 setBusy(null);
             }
         }
-    }, [meetingId, sendControl]);
+    }, [meetingId, sendControl, t]);
 
     const postMessage = useCallback(
         async (text: string, asPersonaId?: string) => {
@@ -297,16 +315,17 @@ export function useMeeting(meetingId: string | null): MeetingController {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ text, asPersonaId }),
-                    })
+                    }),
+                    requestFailed(t)
                 );
                 await load(seqRef.current);
             } catch (err) {
-                setError(err instanceof Error ? err.message : "Could not post the message");
+                setError(err instanceof Error ? err.message : t("postFailed"));
             } finally {
                 setBusy(null);
             }
         },
-        [meetingId, load]
+        [meetingId, load, t]
     );
 
     return {
@@ -323,5 +342,58 @@ export function useMeeting(meetingId: string | null): MeetingController {
         running,
         postMessage,
         reload,
+    };
+}
+
+// ---------------------------------------------------------------------------
+// Display helpers the collab screens share
+// ---------------------------------------------------------------------------
+
+/**
+ * A meeting's workflow title in the reader's language. The meeting stores
+ * the template's English title; one still matching its template reads from
+ * the catalogue, anything else (an older template, a custom title) as stored.
+ */
+export function useWorkflowTitle(): (
+    workflowKey: string | null | undefined,
+    title: string | null | undefined
+) => string | null {
+    const copy = useAgentCopy();
+    return (workflowKey, title) => {
+        if (!title) return null;
+        const workflow = meetingWorkflow(workflowKey);
+        return workflow && workflow.title === title ? copy.workflowCopy(workflow).title : title;
+    };
+}
+
+/**
+ * "3m ago" for something that happened recently; past `dateAfterDays` it
+ * becomes a short date ("Mar 4"). `null` means it never happened.
+ */
+export function useAgo(): (
+    at: number | string | null | undefined,
+    options?: { seconds?: boolean; dateAfterDays?: number }
+) => string {
+    const t = useTranslations("collab.time");
+    const tc = useTranslations("common.time");
+    const format = useFormatter();
+    return (at, options = {}) => {
+        const then = typeof at === "string" ? new Date(at).getTime() : (at ?? 0);
+        if (!then || !Number.isFinite(then)) return typeof at === "string" ? "" : t("never");
+        const seconds = Math.max(0, Math.round((Date.now() - then) / 1000));
+        if (options.seconds) {
+            if (seconds < 60) return t("secondsAgo", { count: seconds });
+            if (seconds < 3600) return t("minutesAgo", { count: Math.round(seconds / 60) });
+            if (seconds < 86_400) return t("hoursAgo", { count: Math.round(seconds / 3600) });
+            return t("daysAgo", { count: Math.round(seconds / 86_400) });
+        }
+        const minutes = Math.round(seconds / 60);
+        if (minutes < 1) return tc("justNow");
+        if (minutes < 60) return t("minutesAgo", { count: minutes });
+        const hours = Math.round(minutes / 60);
+        if (hours < 24) return t("hoursAgo", { count: hours });
+        const days = Math.round(hours / 24);
+        if (days < (options.dateAfterDays ?? Infinity)) return t("daysAgo", { count: days });
+        return format.dateTime(new Date(then), { month: "short", day: "numeric" });
     };
 }

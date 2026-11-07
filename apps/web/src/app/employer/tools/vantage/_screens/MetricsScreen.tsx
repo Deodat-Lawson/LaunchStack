@@ -1,6 +1,7 @@
 "use client";
 
 import { MoreHorizontal } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -34,15 +35,18 @@ import {
 } from "~/components/ui/select";
 import { Textarea } from "~/components/ui/textarea";
 import { cn } from "~/lib/utils";
+import { useErrorText } from "~/lib/tools/errorText";
 
 import { vantageApi, type MetricDefinitionDto, type MetricObservationDto } from "../api";
 import { MetricSuggestions } from "../_components/MetricSuggestions";
 import { Field, FormError } from "../_components/Primitives";
 import { useOneClick } from "../_lib/actions";
 import { useHiddenSuggestions } from "../_lib/hidden";
-import { addDaysIso, fmtChange, fmtDate, fmtNumber, plural, todayIso } from "../_lib/format";
+import { addDaysIso, todayIso, useVantageFormat } from "../_lib/format";
 
-const UNITS = ["count", "percent", "usd", "eur", "minutes", "days"];
+const UNITS = ["count", "percent", "usd", "eur", "minutes", "days"] as const;
+type Unit = (typeof UNITS)[number];
+const isUnit = (u: string): u is Unit => (UNITS as readonly string[]).includes(u);
 
 function lastMonday(today = todayIso()): string {
     const d = new Date(today);
@@ -59,6 +63,10 @@ function lastMonday(today = todayIso()): string {
  * one, one click) and metrics with no number this week.
  */
 export function MetricsScreen() {
+    const errorText = useErrorText();
+    const t = useTranslations("vantage.metrics");
+    const tc = useTranslations("common");
+    const fmt = useVantageFormat();
     const metrics = useResource("vantage:metrics", () => vantageApi.metrics());
     const overview = useResource("vantage:overview", () => vantageApi.overview());
     const hidden = useHiddenSuggestions();
@@ -101,10 +109,10 @@ export function MetricsScreen() {
     const removeDefinition = async (d: MetricDefinitionDto) => {
         try {
             await vantageApi.deleteMetric(d.id);
-            toast("Metric removed");
+            toast(t("removed"));
             void refresh();
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : "Could not remove it");
+            toast.error(errorText(e, t("removeError")));
         }
     };
 
@@ -117,31 +125,34 @@ export function MetricsScreen() {
             }));
             void reloadOverview();
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : "Could not remove it");
+            toast.error(errorText(e, t("removeError")));
         }
     };
 
     return (
         <div className="mx-auto flex max-w-[1100px] flex-col gap-7">
             <PageHeader
-                title="Numbers that say"
-                accent="what they count"
+                title={t("title")}
+                accent={t("accent")}
                 sub={
                     metrics.data
-                        ? `${plural(definitions.length, "metric")} · ${plural(observations.length, "number")} recorded`
+                        ? t("sub", {
+                              metrics: definitions.length,
+                              numbers: observations.length,
+                          })
                         : undefined
                 }
                 actions={
                     <>
                         <Button variant="outline" size="sm" onClick={() => setImporting(true)}>
-                            Import CSV
+                            {t("importCsv")}
                         </Button>
                         <Button
                             size="sm"
                             onClick={() => setRecording(definitions[0]?.id ?? null)}
                             disabled={definitions.length === 0}
                         >
-                            Record a number
+                            {t("recordNumber")}
                         </Button>
                     </>
                 }
@@ -165,14 +176,14 @@ export function MetricsScreen() {
 
             <section>
                 <SectionHeading
-                    title="Definitions"
+                    title={t("definitions")}
                     aside={
                         <button
                             type="button"
                             onClick={() => setDefining("new")}
                             className="hover:text-ink"
                         >
-                            Define a metric
+                            {t("defineMetric")}
                         </button>
                     }
                 />
@@ -204,31 +215,32 @@ export function MetricsScreen() {
                                         <div
                                             className={cn(
                                                 "max-w-[70ch] text-[12px]",
-                                                d.definition ? "text-ink-2" : "text-warn"
+                                                d.definition ? "text-ink-2" : "text-warn-ink"
                                             )}
                                         >
-                                            {d.definition ||
-                                                "No definition yet — say what counts and what does not."}
+                                            {d.definition || t("noDefinition")}
                                         </div>
                                     </div>
                                     {l ? (
                                         <div className="@max-sm:hidden text-right">
                                             <div className="text-ink font-mono text-[13px] tabular-nums">
-                                                {fmtNumber(l.latest.value, d.unit)}
+                                                {fmt.number(l.latest.value, d.unit)}
                                             </div>
                                             <div className="text-ink-3 text-[11px]">
-                                                {fmtDate(l.latest.periodStart)}–
-                                                {fmtDate(l.latest.periodEnd)}
+                                                {t("period", {
+                                                    start: fmt.date(l.latest.periodStart),
+                                                    end: fmt.date(l.latest.periodEnd),
+                                                })}
                                                 {delta !== null && (
                                                     <span className="ml-1.5 font-mono tabular-nums">
-                                                        {fmtChange(pct, delta, d.unit)}
+                                                        {fmt.change(pct, delta, d.unit)}
                                                     </span>
                                                 )}
                                             </div>
                                         </div>
                                     ) : (
                                         <span className="text-ink-3 @max-sm:hidden text-[12px]">
-                                            no numbers yet
+                                            {t("noNumbersYet")}
                                         </span>
                                     )}
                                     <Button
@@ -236,7 +248,7 @@ export function MetricsScreen() {
                                         size="sm"
                                         onClick={() => setRecording(d.id)}
                                     >
-                                        Record
+                                        {t("record")}
                                     </Button>
                                     {/* Not modal: its items open dialogs, and a modal menu that hands off to a
                                         dialog leaves the page unclickable once the dialog closes. */}
@@ -246,20 +258,20 @@ export function MetricsScreen() {
                                                 variant="ghost"
                                                 size="icon"
                                                 className="size-7"
-                                                aria-label={`Actions for ${d.name}`}
+                                                aria-label={t("actionsFor", { name: d.name })}
                                             >
                                                 <MoreHorizontal className="size-4" />
                                             </Button>
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent align="end">
                                             <DropdownMenuItem onSelect={() => setDefining(d)}>
-                                                Edit definition
+                                                {t("editDefinition")}
                                             </DropdownMenuItem>
                                             <DropdownMenuItem
                                                 className="text-danger"
                                                 onSelect={() => setRemoving(d)}
                                             >
-                                                Remove metric…
+                                                {t("removeMetricAsk")}
                                             </DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
@@ -271,13 +283,13 @@ export function MetricsScreen() {
             </section>
 
             <section>
-                <SectionHeading title="Recorded numbers" aside="newest period first" />
+                <SectionHeading title={t("recorded")} aside={t("recordedAside")} />
                 {metrics.loading ? (
                     <SkeletonRows rows={5} height={40} />
                 ) : observations.length === 0 ? (
                     <EmptyState
-                        title="No numbers yet"
-                        body="Record this week's signups, activations, actives and paying customers — one number, one period, one source. Or paste a CSV from your spreadsheet."
+                        title={t("emptyTitle")}
+                        body={t("emptyBody")}
                         action={
                             <>
                                 <Button
@@ -285,14 +297,14 @@ export function MetricsScreen() {
                                     onClick={() => setRecording(definitions[0]?.id ?? null)}
                                     disabled={definitions.length === 0}
                                 >
-                                    Record a number
+                                    {t("recordNumber")}
                                 </Button>
                                 <Button
                                     size="sm"
                                     variant="outline"
                                     onClick={() => setImporting(true)}
                                 >
-                                    Import CSV
+                                    {t("importCsv")}
                                 </Button>
                             </>
                         }
@@ -302,11 +314,13 @@ export function MetricsScreen() {
                         <table className="w-full text-[13px]">
                             <thead>
                                 <tr className="text-ink-3 text-left text-[12px]">
-                                    <th className="px-4 py-2 font-medium">Metric</th>
-                                    <th className="px-4 py-2 text-right font-medium">Value</th>
-                                    <th className="px-4 py-2 font-medium">Period</th>
-                                    <th className="px-4 py-2 font-medium">Source</th>
-                                    <th className="px-4 py-2 font-medium">Note</th>
+                                    <th className="px-4 py-2 font-medium">{t("table.metric")}</th>
+                                    <th className="px-4 py-2 text-right font-medium">
+                                        {t("table.value")}
+                                    </th>
+                                    <th className="px-4 py-2 font-medium">{t("table.period")}</th>
+                                    <th className="px-4 py-2 font-medium">{t("table.source")}</th>
+                                    <th className="px-4 py-2 font-medium">{t("table.note")}</th>
                                     <th className="px-2 py-2" />
                                 </tr>
                             </thead>
@@ -320,7 +334,7 @@ export function MetricsScreen() {
                                                 {o.metricName}
                                             </td>
                                             <td className="text-ink px-4 text-right font-mono tabular-nums">
-                                                {fmtNumber(o.value, unit)}
+                                                {fmt.number(o.value, unit)}
                                             </td>
                                             <td className="text-ink-2 px-4 font-mono text-[12px] tabular-nums">
                                                 {o.periodStart === o.periodEnd
@@ -329,7 +343,9 @@ export function MetricsScreen() {
                                             </td>
                                             <td className="text-ink-2 max-w-[200px] truncate px-4">
                                                 {o.source ?? (
-                                                    <span className="text-warn">no source</span>
+                                                    <span className="text-warn-ink">
+                                                        {t("noSource")}
+                                                    </span>
                                                 )}
                                             </td>
                                             <td className="text-ink-3 max-w-[260px] truncate px-4 text-[12px]">
@@ -342,7 +358,7 @@ export function MetricsScreen() {
                                                     className="h-7 px-2 text-[12px]"
                                                     onClick={() => void removeObservation(o)}
                                                 >
-                                                    Remove
+                                                    {tc("actions.remove")}
                                                 </Button>
                                             </td>
                                         </tr>
@@ -377,9 +393,9 @@ export function MetricsScreen() {
                 onOpenChange={next => {
                     if (!next) setRemoving(null);
                 }}
-                title={`Remove “${removing?.name ?? ""}”?`}
-                description="Every number recorded against it goes too. This cannot be undone."
-                confirmLabel="Remove metric"
+                title={t("removeTitle", { name: removing?.name ?? "" })}
+                description={t("removeBody")}
+                confirmLabel={t("removeMetric")}
                 onConfirm={() => {
                     const target = removing;
                     setRemoving(null);
@@ -401,6 +417,9 @@ function DefineMetricDialog({
     initial: MetricDefinitionDto | null;
     onSaved: () => void;
 }) {
+    const errorText = useErrorText();
+    const t = useTranslations("vantage.metrics");
+    const tc = useTranslations("common");
     const [name, setName] = useState("");
     const [definition, setDefinition] = useState("");
     const [unit, setUnit] = useState("count");
@@ -419,11 +438,11 @@ function DefineMetricDialog({
         try {
             if (initial) await vantageApi.patchMetric(initial.id, { name, definition, unit });
             else await vantageApi.defineMetric({ name, definition, unit });
-            toast(initial ? "Definition saved" : "Metric defined");
+            toast(initial ? t("definitionSaved") : t("defined"));
             onSaved();
             onOpenChange(false);
         } catch (e) {
-            setError(e instanceof Error ? e.message : "That did not save");
+            setError(errorText(e, t("saveError")));
         } finally {
             setBusy(false);
         }
@@ -432,62 +451,55 @@ function DefineMetricDialog({
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-[520px]">
                 <DialogHeader>
-                    <DialogTitle>{initial ? "Edit definition" : "Define a metric"}</DialogTitle>
-                    <DialogDescription>
-                        Write down what counts. A deck and a dashboard disagree about definitions
-                        more often than about arithmetic.
-                    </DialogDescription>
+                    <DialogTitle>{initial ? t("editDefinition") : t("defineMetric")}</DialogTitle>
+                    <DialogDescription>{t("defineDescription")}</DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-3.5">
                     <div className="grid gap-3.5 sm:grid-cols-[minmax(0,1fr)_140px]">
-                        <Field label="Name" htmlFor="m-name">
+                        <Field label={tc("fields.name")} htmlFor="m-name">
                             <Input
                                 id="m-name"
                                 value={name}
                                 onChange={e => setName(e.target.value)}
-                                placeholder="Activated users"
+                                placeholder={t("namePlaceholder")}
                                 autoFocus
                             />
                         </Field>
-                        <Field label="Unit">
+                        <Field label={t("unit")}>
                             <Select value={unit} onValueChange={setUnit}>
-                                <SelectTrigger aria-label="Unit">
+                                <SelectTrigger aria-label={t("unit")}>
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
                                     {UNITS.map(u => (
                                         <SelectItem key={u} value={u}>
-                                            {u}
+                                            {t(`units.${u}`)}
                                         </SelectItem>
                                     ))}
                                 </SelectContent>
                             </Select>
                         </Field>
                     </div>
-                    <Field
-                        label="Definition"
-                        htmlFor="m-def"
-                        hint="What is in, what is out, and over what period a number is measured"
-                    >
+                    <Field label={t("definition")} htmlFor="m-def" hint={t("definitionHint")}>
                         <Textarea
                             id="m-def"
                             value={definition}
                             onChange={e => setDefinition(e.target.value)}
                             rows={3}
-                            placeholder="Signups that completed the first-value action within 7 days."
+                            placeholder={t("definitionPlaceholder")}
                         />
                     </Field>
                     <FormError message={error} />
                 </div>
                 <DialogFooter>
                     <Button variant="outline" onClick={() => onOpenChange(false)} disabled={busy}>
-                        Cancel
+                        {tc("actions.cancel")}
                     </Button>
                     <Button
                         onClick={() => void save()}
                         disabled={busy || !name.trim() || !definition.trim()}
                     >
-                        {initial ? "Save" : "Define"}
+                        {initial ? tc("actions.save") : t("define")}
                     </Button>
                 </DialogFooter>
             </DialogContent>
@@ -508,6 +520,9 @@ function RecordDialog({
     initialMetricId: string | null;
     onSaved: () => void;
 }) {
+    const errorText = useErrorText();
+    const t = useTranslations("vantage.metrics");
+    const tc = useTranslations("common");
     const [metricId, setMetricId] = useState("");
     const [value, setValue] = useState("");
     const [periodStart, setPeriodStart] = useState(lastMonday());
@@ -526,7 +541,7 @@ function RecordDialog({
     const save = async () => {
         const n = Number(value.replace(/[^\d.\-eE]/g, ""));
         if (!Number.isFinite(n)) {
-            setError("Enter a number.");
+            setError(t("enterNumber"));
             return;
         }
         setBusy(true);
@@ -540,11 +555,11 @@ function RecordDialog({
                 source: source || null,
                 note: note || null,
             });
-            toast("Number recorded");
+            toast(t("numberRecorded"));
             onSaved();
             onOpenChange(false);
         } catch (e) {
-            setError(e instanceof Error ? e.message : "That did not save");
+            setError(errorText(e, t("saveError")));
         } finally {
             setBusy(false);
         }
@@ -553,18 +568,16 @@ function RecordDialog({
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-[520px]">
                 <DialogHeader>
-                    <DialogTitle>Record a number</DialogTitle>
+                    <DialogTitle>{t("recordNumber")}</DialogTitle>
                     <DialogDescription>
-                        {def
-                            ? def.definition || "This metric has no definition yet."
-                            : "Pick a metric."}
+                        {def ? def.definition || t("noDefinitionShort") : t("pickMetric")}
                     </DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-3.5">
                     <div className="grid gap-3.5 sm:grid-cols-[minmax(0,1fr)_140px]">
-                        <Field label="Metric">
+                        <Field label={t("table.metric")}>
                             <Select value={metricId} onValueChange={setMetricId}>
-                                <SelectTrigger aria-label="Metric">
+                                <SelectTrigger aria-label={t("table.metric")}>
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -576,7 +589,18 @@ function RecordDialog({
                                 </SelectContent>
                             </Select>
                         </Field>
-                        <Field label={`Value${def ? ` (${def.unit})` : ""}`} htmlFor="o-value">
+                        <Field
+                            label={
+                                def
+                                    ? t("valueWithUnit", {
+                                          unit: isUnit(def.unit)
+                                              ? t(`units.${def.unit}`)
+                                              : def.unit,
+                                      })
+                                    : t("table.value")
+                            }
+                            htmlFor="o-value"
+                        >
                             <Input
                                 id="o-value"
                                 inputMode="decimal"
@@ -589,7 +613,7 @@ function RecordDialog({
                         </Field>
                     </div>
                     <div className="grid gap-3.5 sm:grid-cols-2">
-                        <Field label="Period start" htmlFor="o-start">
+                        <Field label={t("periodStart")} htmlFor="o-start">
                             <Input
                                 id="o-start"
                                 type="date"
@@ -597,7 +621,7 @@ function RecordDialog({
                                 onChange={e => setPeriodStart(e.target.value)}
                             />
                         </Field>
-                        <Field label="Period end" htmlFor="o-end">
+                        <Field label={t("periodEnd")} htmlFor="o-end">
                             <Input
                                 id="o-end"
                                 type="date"
@@ -606,37 +630,33 @@ function RecordDialog({
                             />
                         </Field>
                     </div>
-                    <Field
-                        label="Source"
-                        htmlFor="o-source"
-                        hint="Where the number comes from: a tool, an export, a person"
-                    >
+                    <Field label={t("table.source")} htmlFor="o-source" hint={t("sourceHint")}>
                         <Input
                             id="o-source"
                             value={source}
                             onChange={e => setSource(e.target.value)}
-                            placeholder="Mixpanel · Stripe · Seed deck v3"
+                            placeholder={t("sourcePlaceholder")}
                         />
                     </Field>
-                    <Field label="Note" htmlFor="o-note">
+                    <Field label={t("table.note")} htmlFor="o-note">
                         <Input
                             id="o-note"
                             value={note}
                             onChange={e => setNote(e.target.value)}
-                            placeholder="Optional"
+                            placeholder={tc("status.optional")}
                         />
                     </Field>
                     <FormError message={error} />
                 </div>
                 <DialogFooter>
                     <Button variant="outline" onClick={() => onOpenChange(false)} disabled={busy}>
-                        Cancel
+                        {tc("actions.cancel")}
                     </Button>
                     <Button
                         onClick={() => void save()}
                         disabled={busy || !metricId || !value.trim()}
                     >
-                        Record
+                        {t("record")}
                     </Button>
                 </DialogFooter>
             </DialogContent>
@@ -657,6 +677,9 @@ function ImportDialog({
     onOpenChange: (o: boolean) => void;
     onDone: () => void;
 }) {
+    const errorText = useErrorText();
+    const t = useTranslations("vantage.metrics");
+    const tc = useTranslations("common");
     const [csv, setCsv] = useState("");
     const [source, setSource] = useState("");
     const [busy, setBusy] = useState(false);
@@ -680,11 +703,11 @@ function ImportDialog({
             const r = await vantageApi.importMetrics(csv, source || null);
             setResult(r);
             if (r.imported > 0) {
-                toast(`${plural(r.imported, "number")} imported`);
+                toast(t("imported", { count: r.imported }));
                 onDone();
             }
         } catch (e) {
-            setError(e instanceof Error ? e.message : "The import failed");
+            setError(errorText(e, t("importFailed")));
         } finally {
             setBusy(false);
         }
@@ -693,15 +716,11 @@ function ImportDialog({
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-[600px]">
                 <DialogHeader>
-                    <DialogTitle>Import numbers from a spreadsheet</DialogTitle>
-                    <DialogDescription>
-                        Columns: metric, value, period_start, period_end (or one period column),
-                        source. A metric that is not defined yet is created and needs its definition
-                        afterwards.
-                    </DialogDescription>
+                    <DialogTitle>{t("importTitle")}</DialogTitle>
+                    <DialogDescription>{t("importDescription")}</DialogDescription>
                 </DialogHeader>
                 <div className="grid gap-3.5">
-                    <Field label="CSV" htmlFor="imp-csv">
+                    <Field label={t("csv")} htmlFor="imp-csv">
                         <Textarea
                             id="imp-csv"
                             value={csv}
@@ -728,7 +747,7 @@ function ImportDialog({
                                 size="sm"
                                 onClick={() => fileRef.current?.click()}
                             >
-                                Choose a file
+                                {t("chooseFile")}
                             </Button>
                             <Button
                                 type="button"
@@ -736,44 +755,48 @@ function ImportDialog({
                                 size="sm"
                                 onClick={() => setCsv(CSV_EXAMPLE)}
                             >
-                                Use the example
+                                {t("useExample")}
                             </Button>
                         </div>
                     </Field>
                     <Field
-                        label="Default source"
+                        label={t("defaultSource")}
                         htmlFor="imp-source"
-                        hint="Used for rows without a source column"
+                        hint={t("defaultSourceHint")}
                     >
                         <Input
                             id="imp-source"
                             value={source}
                             onChange={e => setSource(e.target.value)}
-                            placeholder="Mixpanel export"
+                            placeholder={t("defaultSourcePlaceholder")}
                         />
                     </Field>
                     <FormError message={error} />
                     {result && (
                         <div className="border-line bg-panel-2 rounded-lg border px-3 py-2 text-[12.5px]">
                             <div className="text-ink">
-                                {plural(result.imported, "number")} imported.
+                                {t("importedSentence", { count: result.imported })}
                             </div>
                             {result.createdMetrics.length > 0 && (
-                                <div className="text-warn mt-1">
-                                    New metrics without a definition:{" "}
-                                    {result.createdMetrics.join(", ")}. Define them so their numbers
-                                    can be cited.
+                                <div className="text-warn-ink mt-1">
+                                    {t("createdMetrics", {
+                                        names: result.createdMetrics.join(t("listSeparator")),
+                                    })}
                                 </div>
                             )}
                             {result.problems.length > 0 && (
                                 <ul className="text-danger mt-1 list-disc pl-4">
                                     {result.problems.slice(0, 8).map(p => (
                                         <li key={p.line}>
-                                            Line {p.line}: {p.message}
+                                            {t("problemLine", { line: p.line, message: p.message })}
                                         </li>
                                     ))}
                                     {result.problems.length > 8 && (
-                                        <li>…and {result.problems.length - 8} more</li>
+                                        <li>
+                                            {t("moreProblems", {
+                                                count: result.problems.length - 8,
+                                            })}
+                                        </li>
                                     )}
                                 </ul>
                             )}
@@ -782,10 +805,10 @@ function ImportDialog({
                 </div>
                 <DialogFooter>
                     <Button variant="outline" onClick={() => onOpenChange(false)} disabled={busy}>
-                        {result ? "Done" : "Cancel"}
+                        {result ? tc("actions.done") : tc("actions.cancel")}
                     </Button>
                     <Button onClick={() => void run()} disabled={busy || !csv.trim()}>
-                        Import
+                        {tc("actions.import")}
                     </Button>
                 </DialogFooter>
             </DialogContent>

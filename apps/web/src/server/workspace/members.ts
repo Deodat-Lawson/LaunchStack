@@ -31,6 +31,11 @@ import {
     roleRank,
     type MembershipStatus,
 } from "~/lib/authz/permissions";
+import { copy } from "~/i18n/copy";
+import {
+    closePersonalConnections,
+    revokeGoogleGrants,
+} from "~/server/services/connectors/personal-connections";
 
 import type { Executor } from "./db-types";
 import { deleteUserSessionGrants, handOverSoleManaged, workspaceOwnerHeir } from "./ownership";
@@ -201,13 +206,13 @@ export async function listMembers(
 export async function getMember(ctx: WorkspaceContext, userId: bigint): Promise<MemberView> {
     const rows = await memberRows(ctx.companyId, userId);
     const [member] = await toMemberViews(ctx, rows);
-    if (!member) throw notFound("Member not found.");
+    if (!member) throw notFound(copy("team.server.errors.memberNotFound"));
     return member;
 }
 
 async function loadTarget(companyId: bigint, userId: bigint): Promise<MemberRow> {
     const [row] = await memberRows(companyId, userId);
-    if (!row) throw notFound("Member not found.");
+    if (!row) throw notFound(copy("team.server.errors.memberNotFound"));
     return row;
 }
 
@@ -230,7 +235,7 @@ async function assertNotLastOwner(companyId: bigint, target: MemberRow): Promise
     if (!targetIsOwner) return;
     const activeOwnerCount = await countActiveOwners(companyId);
     if (wouldRemoveLastOwner({ targetIsOwner, activeOwnerCount })) {
-        throw conflict("A workspace must keep at least one owner. Transfer ownership first.");
+        throw conflict(copy("team.server.errors.keepOneOwner"));
     }
 }
 
@@ -244,13 +249,14 @@ export async function updateMember(
     input: { role?: string; status?: "active" | "suspended" }
 ): Promise<MemberView> {
     if (input.role === undefined && input.status === undefined) {
-        throw badRequest("Nothing to change.");
+        throw badRequest(copy("team.server.errors.nothingToChange"));
     }
-    if (userId === ctx.userPk) throw forbidden("You cannot change your own membership.");
+    if (userId === ctx.userPk)
+        throw forbidden(copy("team.server.errors.cannotChangeOwnMembership"));
 
     const target = await loadTarget(ctx.companyId, userId);
     if (!canActOnMember(ctx, target.role, userId)) {
-        throw forbidden("You cannot change this member's membership.");
+        throw forbidden(copy("team.server.errors.cannotChangeMember"));
     }
 
     const currentRole = normalizeRoleSlug(target.role);
@@ -262,10 +268,10 @@ export async function updateMember(
         nextRole = resolved.slug;
         if (nextRole !== currentRole) {
             if (nextRole === "owner") {
-                throw badRequest("Ownership is transferred, never assigned.");
+                throw badRequest(copy("team.server.errors.ownershipNotAssigned"));
             }
             if (!canAssignRole(ctx, resolved)) {
-                throw forbidden("You cannot assign a role with permissions you do not hold.");
+                throw forbidden(copy("team.server.errors.cannotAssignBeyondOwn"));
             }
         }
     }
@@ -424,14 +430,17 @@ export async function removeMember(
     ctx: WorkspaceContext,
     userId: bigint
 ): Promise<{ success: true }> {
-    if (userId === ctx.userPk) throw forbidden("Use “leave workspace” to remove yourself.");
+    if (userId === ctx.userPk) throw forbidden(copy("team.server.errors.useLeaveWorkspace"));
     const target = await loadTarget(ctx.companyId, userId);
     if (!canActOnMember(ctx, target.role, userId)) {
-        throw forbidden("You cannot remove this member.");
+        throw forbidden(copy("team.server.errors.cannotRemoveMember"));
     }
     await assertNotLastOwner(ctx.companyId, target);
 
-    await db.transaction(async tx => {
+    const closed = await db.transaction(async tx => {
+        // Their own connections end with them, and the mail those brought in
+        // goes too, before anything of theirs is handed on.
+        const personal = await closePersonalConnections(tx, ctx.companyId, userId);
         // Their sole-managed files and folders pass to whoever removed them (ADR-014).
         await handOverSoleManaged(tx, ctx.companyId, userId, {
             companyId: ctx.companyId,
@@ -450,9 +459,13 @@ export async function removeMember(
                 email: target.email,
                 role: normalizeRoleSlug(target.role),
                 status: toStatus(target.status),
+                closedConnections: personal.connections,
+                deletedMail: personal.documents,
             },
         });
+        return personal;
     });
+    await revokeGoogleGrants(closed.googleTokensToRevoke);
     return { success: true };
 }
 
@@ -462,11 +475,12 @@ export async function leaveWorkspace(
     if (isOwner(ctx.role)) {
         const owners = await countActiveOwners(ctx.companyId);
         if (wouldRemoveLastOwner({ targetIsOwner: true, activeOwnerCount: owners })) {
-            throw conflict("You are the only owner. Transfer ownership before leaving.");
+            throw conflict(copy("team.server.errors.onlyOwnerLeaving"));
         }
     }
 
-    await db.transaction(async tx => {
+    const closed = await db.transaction(async tx => {
+        const personal = await closePersonalConnections(tx, ctx.companyId, ctx.userPk);
         // Someone leaving on their own hands their sole-managed items to the owner.
         const heir = await workspaceOwnerHeir(tx, ctx.companyId);
         if (heir !== null && heir !== ctx.userPk) {
@@ -490,9 +504,15 @@ export async function leaveWorkspace(
             action: "member.left",
             targetType: "member",
             targetId: ctx.userPk,
-            detail: { role: ctx.role },
+            detail: {
+                role: ctx.role,
+                closedConnections: personal.connections,
+                deletedMail: personal.documents,
+            },
         });
+        return personal;
     });
+    await revokeGoogleGrants(closed.googleTokensToRevoke);
     return { success: true, redirectTo: "/workspaces" };
 }
 
@@ -504,12 +524,12 @@ export async function transferOwnership(
     ctx: WorkspaceContext,
     targetUserId: bigint
 ): Promise<{ success: true }> {
-    if (!isOwner(ctx.role)) throw forbidden("Only an owner can transfer ownership.");
-    if (targetUserId === ctx.userPk) throw badRequest("You already own this workspace.");
+    if (!isOwner(ctx.role)) throw forbidden(copy("team.server.errors.onlyOwnerTransfers"));
+    if (targetUserId === ctx.userPk) throw badRequest(copy("team.server.errors.alreadyOwner"));
 
     const target = await loadTarget(ctx.companyId, targetUserId);
     if (toStatus(target.status) !== "active") {
-        throw conflict("Ownership can only go to an active member.");
+        throw conflict(copy("team.server.errors.ownershipToActiveMember"));
     }
     const targetRole = normalizeRoleSlug(target.role);
 

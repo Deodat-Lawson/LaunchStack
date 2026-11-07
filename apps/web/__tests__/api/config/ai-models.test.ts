@@ -18,11 +18,13 @@ jest.mock("~/lib/require-workspace-context", () => ({
 
 // Records whose models the route read under; runs the work as-is.
 const mockScopes: unknown[] = [];
+const mockOffered = jest.fn();
 jest.mock("~/server/workspace-models/scope", () => ({
-    withWorkspaceChatModels: (companyId: unknown, fn: () => unknown) => {
+    withWorkspaceChatModels: (companyId: unknown, _feature: unknown, fn: () => unknown) => {
         mockScopes.push(companyId);
         return fn();
     },
+    loadWorkspaceOfferedModels: (...args: unknown[]) => mockOffered(...args),
 }));
 
 import { GET } from "~/app/api/config/ai-models/route";
@@ -62,12 +64,29 @@ describe("GET /api/config/ai-models", () => {
         mockPublicChatConfig.mockReset();
         mockWorkspaceContext.mockResolvedValue({ success: true, data: { companyId: 42n } });
         mockScopes.length = 0;
+        mockOffered.mockReset().mockResolvedValue([]);
+    });
+
+    it("lists the models the workspace offers in Ask, by name and ability only", async () => {
+        mockPublicChatConfig.mockReturnValue(SANITIZED);
+        const writer = {
+            key: "a1b2c3d4",
+            label: "Team writer",
+            available: true,
+            vision: { supported: false },
+            reasoning: { mode: "always", controllable: false },
+        };
+        mockOffered.mockResolvedValue([writer]);
+
+        const response = await GET(new Request("http://localhost/api/config/ai-models"));
+        expect(mockOffered).toHaveBeenCalledWith(42n);
+        expect(await response.json()).toEqual({ ...SANITIZED, models: [writer] });
     });
 
     it("reads the routes under the caller's workspace models", async () => {
         mockPublicChatConfig.mockReturnValue(SANITIZED);
 
-        await GET();
+        await GET(new Request("http://localhost/api/config/ai-models"));
         expect(mockScopes).toEqual([42n]);
     });
 
@@ -75,7 +94,7 @@ describe("GET /api/config/ai-models", () => {
         mockPublicChatConfig.mockReturnValue(SANITIZED);
         mockWorkspaceContext.mockResolvedValue({ success: false, response: new Response() });
 
-        const response = await GET();
+        const response = await GET(new Request("http://localhost/api/config/ai-models"));
         expect(response.status).toBe(200);
         expect(mockScopes).toEqual([null]);
     });
@@ -83,15 +102,17 @@ describe("GET /api/config/ai-models", () => {
     it("returns the sanitized route configuration", async () => {
         mockPublicChatConfig.mockReturnValue(SANITIZED);
 
-        const response = await GET();
+        const response = await GET(new Request("http://localhost/api/config/ai-models"));
         expect(response.status).toBe(200);
-        expect(await response.json()).toEqual(SANITIZED);
+        expect(await response.json()).toEqual({ ...SANITIZED, models: [] });
     });
 
     it("never exposes endpoints, credentials, or request patches", async () => {
         mockPublicChatConfig.mockReturnValue(SANITIZED);
 
-        const serialized = JSON.stringify(await (await GET()).json());
+        const serialized = JSON.stringify(
+            await (await GET(new Request("http://localhost/api/config/ai-models"))).json()
+        );
         for (const forbidden of [
             "baseUrl",
             "base_url",
@@ -113,7 +134,7 @@ describe("GET /api/config/ai-models", () => {
             throw new Error('/srv/chat-models.yaml: model "vendor/secret-9" is not declared');
         });
 
-        const response = await GET();
+        const response = await GET(new Request("http://localhost/api/config/ai-models"));
         expect(response.status).toBe(200);
 
         const body = (await response.json()) as PublicChatConfig;
@@ -130,12 +151,14 @@ describe("GET /api/config/ai-models", () => {
 
     it("shows the workspace's own reason when its endpoint can't be used", async () => {
         const reason =
-            "Your workspace's own model can't be used: its saved API key can't be read on this server, so enter it again. A workspace admin can fix it in Settings › Models.";
+            "Your workspace's own model can't be used: its saved API key can't be read on this server, so enter it again. A workspace admin can fix it in Workspace › Bring your own keys.";
         mockPublicChatConfig.mockImplementation(() => {
             throw new ChatScopeUnavailableError(reason);
         });
 
-        const body = (await (await GET()).json()) as PublicChatConfig;
+        const body = (await (
+            await GET(new Request("http://localhost/api/config/ai-models"))
+        ).json()) as PublicChatConfig;
         expect(body.routes.default.available).toBe(false);
         expect(body.routes.default.unavailableReason).toBe(reason);
     });

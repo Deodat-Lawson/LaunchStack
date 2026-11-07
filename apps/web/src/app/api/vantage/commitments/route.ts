@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
         const commitments = await listCommitments({ companyId: auth.ctx.companyId, status });
         return json({ commitments });
     } catch (err) {
-        return handleVantageError("GET commitments", err);
+        return handleVantageError("GET commitments", err, request);
     }
 }
 
@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
     if (!auth.ok) return auth.response;
     try {
         const parsed = CommitmentSchema.safeParse(await readBody(request));
-        if (!parsed.success) return error(firstIssue(parsed.error.issues), 400);
+        if (!parsed.success) return error(firstIssue(parsed.error.issues, request), 400);
         const commitment = await createCommitment({
             companyId: auth.ctx.companyId,
             userId: auth.ctx.userId,
@@ -43,6 +43,6 @@ export async function POST(request: NextRequest) {
         });
         return json({ commitment }, 201);
     } catch (err) {
-        return handleVantageError("POST commitment", err);
+        return handleVantageError("POST commitment", err, request);
     }
 }

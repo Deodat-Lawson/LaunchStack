@@ -11,6 +11,7 @@
  */
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { ZoomIn, ZoomOut } from "lucide-react";
 
 import { Button } from "~/components/ui/button";
@@ -55,6 +56,8 @@ export function ProfilePhotoDialog({
     /** Receives the cropped square. Throw to keep the dialog open with the message. */
     onSave: (square: Blob) => Promise<void>;
 }) {
+    const t = useTranslations("settings.profilePhoto");
+    const tc = useTranslations("common");
     const [src, setSrc] = useState<string | null>(null);
     const [size, setSize] = useState<ImageSize | null>(null);
     const [crop, setCrop] = useState<CropState>(INITIAL_CROP);
@@ -115,7 +118,7 @@ export function ProfilePhotoDialog({
             canvas.width = PROFILE_PHOTO.outputSize;
             canvas.height = PROFILE_PHOTO.outputSize;
             const context = canvas.getContext("2d");
-            if (!context) throw new Error("Your browser couldn't prepare the photo.");
+            if (!context) throw new Error(t("prepareFailed"));
             context.imageSmoothingQuality = "high";
             context.drawImage(
                 image,
@@ -131,10 +134,10 @@ export function ProfilePhotoDialog({
             const square = await new Promise<Blob | null>(resolve =>
                 canvas.toBlob(resolve, "image/png")
             );
-            if (!square) throw new Error("Your browser couldn't prepare the photo.");
+            if (!square) throw new Error(t("prepareFailed"));
             await onSave(square);
         } catch (err) {
-            setError(err instanceof Error ? err.message : "Could not save the photo.");
+            setError(err instanceof Error ? err.message : t("saveFailed"));
         } finally {
             setSaving(false);
         }
@@ -153,7 +156,7 @@ export function ProfilePhotoDialog({
                 <div
                     role="group"
                     tabIndex={0}
-                    aria-label="Photo position. Drag or use the arrow keys to move it, plus and minus to zoom."
+                    aria-label={t("position")}
                     className="bg-panel-2 focus-visible:ring-brand/50 relative mx-auto cursor-grab touch-none select-none overflow-hidden rounded-lg outline-none focus-visible:ring-[3px] active:cursor-grabbing"
                     style={{ width: VIEWPORT, height: VIEWPORT }}
                     onKeyDown={onKeyDown}
@@ -191,11 +194,7 @@ export function ProfilePhotoDialog({
                                     height: event.currentTarget.naturalHeight,
                                 })
                             }
-                            onError={() =>
-                                setError(
-                                    `Your browser can't open that file. Try a ${PROFILE_PHOTO.acceptLabel}.`
-                                )
-                            }
+                            onError={() => setError(t("cantOpen"))}
                             className="pointer-events-none absolute max-w-none"
                             style={
                                 layout
@@ -216,7 +215,7 @@ export function ProfilePhotoDialog({
                 <div className="flex items-center gap-3 px-2">
                     <ZoomOut className="text-ink-3 size-4 shrink-0" aria-hidden />
                     <Slider
-                        aria-label="Zoom"
+                        aria-label={t("zoom")}
                         min={1}
                         max={CROP_MAX_ZOOM}
                         step={0.01}
@@ -235,10 +234,10 @@ export function ProfilePhotoDialog({
 
                 <DialogFooter>
                     <Button variant="ghost" onClick={onClose} disabled={saving}>
-                        Cancel
+                        {tc("actions.cancel")}
                     </Button>
                     <Button onClick={() => void save()} disabled={!size || saving}>
-                        {saving ? "Saving…" : "Save photo"}
+                        {saving ? tc("status.saving") : t("savePhoto")}
                     </Button>
                 </DialogFooter>
             </DialogContent>

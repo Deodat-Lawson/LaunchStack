@@ -7,15 +7,22 @@
  * unlinked document it offers the link action; for a linked one it always
  * states *when* the document last synced — the design's defense against
  * anyone acting on a stale copy — plus Sync now and Unlink.
+ *
+ * A reader can hide it, once for every document. The viewer reads the
+ * status for the line and for the header's Drive button, which brings the
+ * line back — and carries the last-synced time in its tooltip meanwhile.
  */
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useSyncExternalStore } from "react";
 import dayjs from "dayjs";
+import { X } from "lucide-react";
+import { useFormatter, useTranslations } from "next-intl";
 
+import { GoogleDriveLogo } from "~/components/icons/brand";
 import { Button } from "~/components/ui/button";
 import { ConfirmActionDialog } from "./ConfirmActionDialog";
 
-interface DriveLinkStatus {
+export interface DriveLinkStatus {
     connected: boolean;
     linkable: boolean;
     link: {
@@ -48,14 +55,70 @@ const rowStyle: React.CSSProperties = {
     flexShrink: 0,
 };
 
-export function GoogleDriveBanner({ documentId }: { documentId: number }) {
+/** Remembers a reader's choice to hide the line. Per browser, like the viewer's rail. */
+const DRIVE_BAR_HIDDEN_KEY = "documentViewer.driveBarHidden.v1";
+
+/**
+ * Whether the reader hid the line: one choice for every document. A store
+ * rather than each viewer's state, so hiding it in one tab hides it in the
+ * tabs open beside it — and in other windows, through the storage event.
+ * Held in memory once read, so blocked storage still hides it for the visit.
+ */
+let driveBarHidden: boolean | null = null;
+const driveBarListeners = new Set<() => void>();
+
+function readDriveBarHidden(): boolean {
+    if (driveBarHidden === null) {
+        try {
+            driveBarHidden = localStorage.getItem(DRIVE_BAR_HIDDEN_KEY) === "1";
+        } catch {
+            // Private mode / blocked storage — fall back to shown.
+            driveBarHidden = false;
+        }
+    }
+    return driveBarHidden;
+}
+
+function subscribeDriveBarHidden(listener: () => void): () => void {
+    driveBarListeners.add(listener);
+    const onStorage = (event: StorageEvent) => {
+        if (event.key !== DRIVE_BAR_HIDDEN_KEY) return;
+        driveBarHidden = event.newValue === "1";
+        listener();
+    };
+    window.addEventListener("storage", onStorage);
+    return () => {
+        driveBarListeners.delete(listener);
+        window.removeEventListener("storage", onStorage);
+    };
+}
+
+export function setDriveBarHidden(hidden: boolean): void {
+    driveBarHidden = hidden;
+    try {
+        localStorage.setItem(DRIVE_BAR_HIDDEN_KEY, hidden ? "1" : "0");
+    } catch {
+        // Quota / private mode — the choice just is not remembered.
+    }
+    driveBarListeners.forEach(listener => listener());
+}
+
+export function useDriveBarHidden(): boolean {
+    return useSyncExternalStore(subscribeDriveBarHidden, readDriveBarHidden, () => false);
+}
+
+/**
+ * A document's Drive-link status; null while unread, or for no document. A
+ * new document starts from null rather than showing the last one's line.
+ */
+export function useDriveLinkStatus(documentId: number | null) {
     const [status, setStatus] = useState<DriveLinkStatus | null>(null);
-    const [busy, setBusy] = useState<null | "open" | "sync" | "unlink">(null);
-    const [notice, setNotice] = useState<string | null>(null);
-    const [confirmUnlink, setConfirmUnlink] = useState(false);
-    const [unlinkError, setUnlinkError] = useState<string | null>(null);
 
     const refresh = useCallback(async () => {
+        if (documentId === null) {
+            setStatus(null);
+            return;
+        }
         try {
             const res = await fetch(`/api/documents/${documentId}/google-docs/status`);
             if (!res.ok) {
@@ -69,9 +132,80 @@ export function GoogleDriveBanner({ documentId }: { documentId: number }) {
     }, [documentId]);
 
     useEffect(() => {
-        setNotice(null);
+        setStatus(null);
         void refresh();
     }, [refresh]);
+
+    return { status, refresh };
+}
+
+type BannerTranslator = ReturnType<typeof useTranslations<"sources.googleDriveBanner">>;
+type Formatter = ReturnType<typeof useFormatter>;
+
+/**
+ * Where a linked document lives and how fresh this copy is — the line's
+ * words. In English without a translator; `useDriveLinkSummary` words it in
+ * the reader's language.
+ */
+export function driveLinkSummary(
+    link: NonNullable<DriveLinkStatus["link"]>,
+    t?: BannerTranslator,
+    format?: Formatter
+): string {
+    if (!t || !format) {
+        if (link.status === "orphaned") return "The Google Drive copy was deleted or trashed.";
+        const synced = link.lastSyncedAt
+            ? dayjs(link.lastSyncedAt).format("MMM D, HH:mm")
+            : "never";
+        return `Lives in Google Drive${link.linkedBy ? ` — linked by ${link.linkedBy}` : ""} · last synced ${synced}`;
+    }
+    if (link.status === "orphaned") return t("orphaned");
+    const synced = link.lastSyncedAt
+        ? format.dateTime(new Date(link.lastSyncedAt), {
+              month: "short",
+              day: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+              hourCycle: "h23",
+          })
+        : t("never");
+    return link.linkedBy
+        ? t("livesInLinkedBy", { name: link.linkedBy, synced })
+        : t("livesIn", { synced });
+}
+
+/** `driveLinkSummary` in the reader's language. */
+export function useDriveLinkSummary(): (link: NonNullable<DriveLinkStatus["link"]>) => string {
+    const t = useTranslations("sources.googleDriveBanner");
+    const format = useFormatter();
+    return useCallback(link => driveLinkSummary(link, t, format), [t, format]);
+}
+
+export function GoogleDriveBanner({
+    documentId,
+    status,
+    refresh,
+    onSynced,
+    onHide,
+}: {
+    documentId: number;
+    status: DriveLinkStatus | null;
+    refresh: () => Promise<void>;
+    /** A pull brought a new version — the viewer shows it. */
+    onSynced?: () => void;
+    onHide: () => void;
+}) {
+    const t = useTranslations("sources.googleDriveBanner");
+    const tc = useTranslations("common");
+    const summary = useDriveLinkSummary();
+    const [busy, setBusy] = useState<null | "open" | "sync" | "unlink">(null);
+    const [notice, setNotice] = useState<string | null>(null);
+    const [confirmUnlink, setConfirmUnlink] = useState(false);
+    const [unlinkError, setUnlinkError] = useState<string | null>(null);
+
+    useEffect(() => {
+        setNotice(null);
+    }, [documentId]);
 
     const openInDrive = useCallback(async () => {
         // Open the tab synchronously so popup blockers allow it, then point it.
@@ -87,16 +221,16 @@ export function GoogleDriveBanner({ documentId }: { documentId: number }) {
                 if (tab) tab.location.href = body.url;
             } else {
                 tab?.close();
-                setNotice(body.message ?? "Could not open the document in Google Drive.");
+                setNotice(body.message ?? t("openFailed"));
             }
         } catch {
             tab?.close();
-            setNotice("Could not reach the server.");
+            setNotice(t("unreachable"));
         } finally {
             setBusy(null);
             void refresh();
         }
-    }, [documentId, refresh]);
+    }, [documentId, refresh, t]);
 
     const syncNow = useCallback(async () => {
         setBusy("sync");
@@ -108,23 +242,22 @@ export function GoogleDriveBanner({ documentId }: { documentId: number }) {
             const body = (await res.json()) as { outcome?: PullOutcomeShape; message?: string };
             const kind = body.outcome?.kind;
             if (kind === "synced") {
-                setNotice(
-                    `Synced v${body.outcome?.versionNumber ?? ""} from Google Drive. Reopen the document to see it.`
-                );
+                setNotice(t("synced", { version: String(body.outcome?.versionNumber ?? "") }));
+                onSynced?.();
             } else if (kind === "noop") {
-                setNotice("Already up to date.");
+                setNotice(t("upToDate"));
             } else if (kind) {
-                setNotice(`Sync result: ${kind.replace(/_/g, " ")}.`);
+                setNotice(t("syncResult", { kind: kind.replace(/_/g, " ") }));
             } else {
-                setNotice(body.message ?? "Sync failed.");
+                setNotice(body.message ?? t("syncFailed"));
             }
         } catch {
-            setNotice("Could not reach the server.");
+            setNotice(t("unreachable"));
         } finally {
             setBusy(null);
             void refresh();
         }
-    }, [documentId, refresh]);
+    }, [documentId, onSynced, refresh, t]);
 
     const unlink = useCallback(async () => {
         setBusy("unlink");
@@ -137,18 +270,18 @@ export function GoogleDriveBanner({ documentId }: { documentId: number }) {
             });
             const body = (await res.json()) as { success?: boolean; message?: string };
             if (!res.ok || !body.success) {
-                setUnlinkError(body.message ?? "Unlink failed — the link was kept.");
+                setUnlinkError(body.message ?? t("unlinkFailed"));
                 return;
             }
             setConfirmUnlink(false);
-            setNotice("Unlinked. The Drive copy was moved to the Drive trash.");
+            setNotice(t("unlinked"));
         } catch {
-            setUnlinkError("Could not reach the server.");
+            setUnlinkError(t("unreachable"));
         } finally {
             setBusy(null);
             void refresh();
         }
-    }, [documentId, refresh]);
+    }, [documentId, refresh, t]);
 
     if (!status?.linkable) return null;
 
@@ -157,52 +290,55 @@ export function GoogleDriveBanner({ documentId }: { documentId: number }) {
     if (!link) {
         return (
             <div style={rowStyle}>
-                <span>
-                    {status.connected
-                        ? "Edit this document with real tools — it opens in Google Drive and syncs back here."
-                        : "Connect a Google account to edit this document in Google Drive."}
-                </span>
+                <GoogleDriveLogo className="shrink-0" />
+                <span>{status.connected ? t("editPrompt") : t("connectPrompt")}</span>
                 <span style={{ flex: 1 }} />
                 {status.connected ? (
                     <Button size="sm" onClick={openInDrive} disabled={busy !== null}>
-                        {busy === "open" ? "Linking…" : "Open in Google Drive"}
+                        {busy === "open" ? t("linking") : t("openInDrive")}
                     </Button>
                 ) : (
                     <Button size="sm" variant="outline" asChild>
-                        <a href="/api/connectors/google/oauth/start">Connect Google Drive</a>
+                        <a href="/api/connectors/google/oauth/start">{t("connectDrive")}</a>
                     </Button>
                 )}
+                <Button
+                    size="icon"
+                    variant="ghost"
+                    onClick={onHide}
+                    aria-label={t("hide")}
+                    title={t("hideHint")}
+                    data-testid="drive-bar-hide"
+                    className="text-ink-3 size-7"
+                >
+                    <X className="size-3.5" />
+                </Button>
                 {notice && <span style={{ width: "100%", color: "var(--ink-2)" }}>{notice}</span>}
             </div>
         );
     }
 
-    const synced = link.lastSyncedAt ? dayjs(link.lastSyncedAt).format("MMM D, HH:mm") : "never";
-
     return (
         <>
             <div style={rowStyle}>
-                <span style={{ color: "var(--ink)" }}>
-                    {link.status === "orphaned"
-                        ? "The Google Drive copy was deleted or trashed."
-                        : `Lives in Google Drive${link.linkedBy ? ` — linked by ${link.linkedBy}` : ""} · last synced ${synced}`}
-                </span>
+                <GoogleDriveLogo className="shrink-0" />
+                <span style={{ color: "var(--ink)" }}>{summary(link)}</span>
                 <span style={{ flex: 1 }} />
                 {link.status === "linked" && link.url && (
                     <Button size="sm" variant="outline" asChild>
                         <a href={link.url} target="_blank" rel="noreferrer">
-                            Open
+                            {tc("actions.open")}
                         </a>
                     </Button>
                 )}
                 {link.status === "linked" && (
                     <Button size="sm" variant="outline" onClick={syncNow} disabled={busy !== null}>
-                        {busy === "sync" ? "Syncing…" : "Sync now"}
+                        {busy === "sync" ? t("syncing") : t("syncNow")}
                     </Button>
                 )}
                 {link.status === "orphaned" && (
                     <Button size="sm" onClick={openInDrive} disabled={busy !== null}>
-                        {busy === "open" ? "Re-linking…" : "Re-link from current version"}
+                        {busy === "open" ? t("relinking") : t("relink")}
                     </Button>
                 )}
                 <Button
@@ -214,12 +350,22 @@ export function GoogleDriveBanner({ documentId }: { documentId: number }) {
                     }}
                     disabled={busy !== null}
                 >
-                    Unlink
+                    {t("unlink")}
+                </Button>
+                <Button
+                    size="icon"
+                    variant="ghost"
+                    onClick={onHide}
+                    aria-label={t("hide")}
+                    title={t("hideHint")}
+                    data-testid="drive-bar-hide"
+                    className="text-ink-3 size-7"
+                >
+                    <X className="size-3.5" />
                 </Button>
                 {link.fidelityWarning && (
                     <span style={{ width: "100%", color: "var(--warn, var(--ink-2))" }}>
-                        This file was converted to a native Google Doc — formatting may drift on
-                        sync.
+                        {t("fidelity")}
                     </span>
                 )}
                 {link.lastError && (
@@ -230,9 +376,9 @@ export function GoogleDriveBanner({ documentId }: { documentId: number }) {
 
             <ConfirmActionDialog
                 open={confirmUnlink}
-                title="Unlink from Google Drive"
-                body="A final sync pulls any remaining Drive edits into version history, then the Drive copy is moved to the Drive trash and editing returns in-app."
-                confirmLabel={busy === "unlink" ? "Unlinking…" : "Unlink"}
+                title={t("confirmTitle")}
+                body={t("confirmBody")}
+                confirmLabel={busy === "unlink" ? t("unlinking") : t("unlink")}
                 busy={busy === "unlink"}
                 error={unlinkError}
                 danger

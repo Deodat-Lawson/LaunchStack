@@ -3,11 +3,13 @@
  * it started in) and the admin's permission, trades the code for a key, and
  * stores it. A workspace that was already on OpenRouter keeps its chosen
  * models; otherwise none is chosen yet, so nothing switches over until an
- * admin picks one in Settings › Models.
+ * admin picks one in Models & usage › API keys.
  *
- * Every exit is a redirect back to Settings › Models with an `openrouter=`
- * code the page turns into a message: this runs as a top-level navigation,
- * where a JSON error would strand the admin on a blank page.
+ * Every exit is a redirect back to Models & usage › API keys with an
+ * `openrouter=` code the page turns into a message: this runs as a top-level
+ * navigation, where a JSON error would strand the admin on a blank page. The
+ * redirect is built on the public origin — behind the proxy `request.url` is
+ * the server's bind address (`0.0.0.0:3000`).
  */
 
 import { NextResponse } from "next/server";
@@ -15,6 +17,8 @@ import { NextResponse } from "next/server";
 import { MissingSecretsKeyError, timingSafeStringEqual } from "@launchstack/store/crypto";
 
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
+import { modelsUsageHref } from "~/lib/settings/surfaces";
+import { publicOrigin } from "~/server/public-origin";
 import {
     OPENROUTER_BASE_URL,
     OPENROUTER_CALLBACK_PATH,
@@ -32,10 +36,10 @@ export const runtime = "nodejs";
 type Outcome = "connected" | "denied" | "expired" | "unavailable" | "error";
 
 function backToSettings(request: Request, outcome: Outcome): NextResponse {
-    const url = new URL("/employer/documents", new URL(request.url).origin);
-    url.searchParams.set("feature", "settings");
-    url.searchParams.set("openrouter", outcome);
-    url.hash = "models";
+    const url = new URL(
+        modelsUsageHref("keys", { query: { openrouter: outcome } }),
+        publicOrigin(request)
+    );
     const response = NextResponse.redirect(url);
     response.cookies.set(OPENROUTER_COOKIE, "", { path: OPENROUTER_CALLBACK_PATH, maxAge: 0 });
     return response;
@@ -59,7 +63,7 @@ export async function GET(request: Request) {
     const state = params.get("state") ?? "";
     if (!flow || !timingSafeStringEqual(flow.s, state)) return backToSettings(request, "expired");
 
-    const ctx = await requireWorkspacePermission("settings.manage");
+    const ctx = await requireWorkspacePermission("models.manage");
     if (!ctx.success) return backToSettings(request, "error");
     if (ctx.data.companyId.toString() !== flow.c) return backToSettings(request, "expired");
 

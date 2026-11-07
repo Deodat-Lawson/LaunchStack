@@ -1,0 +1,25 @@
+# SearXNG settings for the optional `searxng` service in docker-compose.yml
+# (`docker compose --profile search up -d`). Only what LaunchStack needs to
+# change; everything else is SearXNG's own default.
+# Reference: https://docs.searxng.org/admin/settings/
+use_default_settings: true
+
+server:
+  # secret_key is not set here: SEARXNG_SECRET (from docker-compose.yml)
+  # overrides it, so no secret is committed to the repository.
+  #
+  # The instance has no published port and is reached only by the app and the
+  # worker over the Compose network. The limiter (bot detection, which also
+  # needs Valkey) rejects clients that do not look like a browser, which is
+  # exactly what the app is, so it is off.
+  limiter: false
+  # The app reads result URLs and snippets, never thumbnails, so there is
+  # nothing to proxy.
+  image_proxy: false
+
+search:
+  # The app calls /search?format=json. A format missing from this list is
+  # answered with 403 Forbidden.
+  formats:
+    - html
+    - json

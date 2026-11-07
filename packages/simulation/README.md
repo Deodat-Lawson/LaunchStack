@@ -50,11 +50,27 @@ const report = parseReport(reply.text, world);
    agent's profile and the post (inject `similarity` for embeddings); hot is
    Reddit's hot score; decay is OASIS's `ln((271.8 − age) / 100)`, floored.
 3. **Turns.** One model call per active agent, in parallel; the reply is JSON
-   (`thought`, `stance`, up to three actions) and anything pointing outside
-   the agent's feed is dropped.
+   (`thought`, `stance`, `convincedBy`, `wouldPay`, `objection`, up to three
+   actions) and anything pointing outside the agent's feed is dropped. The
+   turn prompt has the persona weigh cost, switching and proof before
+   warming to anything.
 4. **Apply.** Actions apply in a fixed agent order under the platform rules
    (one like per post, no rating your own post, reposts resolve to the root,
-   no following yourself). Stances and memories update.
+   no following yourself). Stances and memories update, under the stance
+   guard: a stance moves at most `maxStanceStep` (1) per round, and a move
+   toward the subject applies only when `convincedBy` names a post from the
+   agent's feed.
+
+## The cast
+
+`buildCastRequest` asks for personas grounded in evidence, each with a
+wallet: what they use today, their budget, their part in buying, what
+switching would cost them and their first doubt. It also asks for a starting
+mix of stances (`REALISTIC_MIX`: 35% against, 40% undecided, 25% in favour).
+Models write agreeable crowds when left alone, so a host checks the result
+with `skepticShortfall` and, when it comes back too warm, recasts the seats
+`seatsToRecast` picks (invented people first, fans grounded in evidence last)
+and puts the newcomers in with `fillSeats`.
 
 Every random choice is seeded by (run seed, round, purpose) and `runRound`
 never mutates its input, so retrying a round gives the same feeds and the

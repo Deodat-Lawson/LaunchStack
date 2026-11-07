@@ -11,6 +11,12 @@ unset). In that mode:
   and `token_usage_daily` answer "which document burned 400k embedding tokens" —
   but nothing is ever refused for want of balance. Only `DEPLOYMENT_MODE=cloud`
   enforces a balance, because only a billing deployment has a way to add credits.
+- **No AI limit per person unless you set one.** Every model call, embedding
+  request and paid web search is recorded against the person it was for. To cap
+  what one person can run on your models, set `AI_MONTHLY_TOKEN_LIMIT_PER_USER`
+  (see [AI allowances](#ai-allowances-per-person));
+  workspace admins can also set their own limits. Unlike a credit balance, a
+  limit can always be raised, so it applies in either mode.
 - **No telemetry and no phone-home.** Vercel Analytics is mounted only on cloud
   deployments, `NEXT_TELEMETRY_DISABLED=1` is set in the images, and there is no
   usage reporting of any kind.
@@ -130,9 +136,70 @@ Optional integrations:
   `services/document-converter`) deployed separately to Fly.io / Railway /
   Cloud Run
 
-### Trend search (optional)
+### Web search (optional)
 
-Trend search calls external search APIs. Configure `EXA_API_KEY` and/or `SERPER_API_KEY` and set `SEARCH_PROVIDER` as documented in [`.env.example`](../.env.example) (`exa`, `serper`, `fallback`, or `parallel`). If no API key backs the chosen path, the pipeline returns empty results and `providerUsed` may be `none`—this is expected when keys are omitted for local or OSS setups.
+One setting, `SEARCH_PROVIDER`, picks the engine for every feature that
+searches the web: Ask's `search_web` tool, Prospects, competitor analysis,
+grant search (Find funders), the document generator's web research,
+predictive analysis, and trend search (news). Each engine needs one
+credential:
+
+| `SEARCH_PROVIDER` | Credential             | Notes                                                                                                                                                                                                                                                                          |
+| ----------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `exa`             | `EXA_API_KEY`          | The only engine with a company index. Exa bills the operator about $7 per 1,000 searches (type `auto`, up to 10 results) and $1 per 1,000 pages for contents and summaries; new accounts get $10 of free credit that resets monthly. Keys: <https://dashboard.exa.ai/api-keys> |
+| `serper`          | `SERPER_API_KEY`       | Google results through <https://serper.dev>                                                                                                                                                                                                                                    |
+| `brave`           | `BRAVE_SEARCH_API_KEY` | The Brave Search API, <https://brave.com/search/api/>                                                                                                                                                                                                                          |
+| `tavily`          | `TAVILY_API_KEY`       | <https://app.tavily.com>                                                                                                                                                                                                                                                       |
+| `searxng`         | `SEARXNG_URL`          | Base URL of a SearXNG instance with JSON output enabled. Free and self-hosted; see below                                                                                                                                                                                       |
+
+Leave `SEARCH_PROVIDER` unset (or empty) and the first engine with a
+credential wins, in the order exa, serper, brave, tavily, searxng, so a
+deployment that only sets `EXA_API_KEY` or `SERPER_API_KEY` keeps working
+unchanged. Name an engine and only that engine is used: if its credential is
+missing, web search is **off** (logged, and shown in Settings › Models),
+never a silent switch to another engine. Settings › Models has a read-only
+Web search card showing the active engine. The old trend-search values
+`fallback` and `parallel` are gone; a configuration that still sets them
+keeps booting and is treated as unset.
+
+Company search needs Exa. With Exa active, Prospects finds companies in
+Exa's company index and offers lookalikes ("companies like our customers").
+With any other engine, Prospects discovers companies through ordinary web
+search on that engine, and lookalikes are off.
+
+**SearXNG, the free self-hosted option.** The Compose stack includes an
+optional SearXNG service under the `search` profile. It publishes no port;
+only the app and the worker reach it, over the Compose network. Its
+configuration, [`docker/searxng/settings.yml`](../docker/searxng/settings.yml),
+turns on JSON output and turns off SearXNG's bot limiter, which would
+otherwise reject the app's requests. Set the engine in `.env`:
+
+```bash
+SEARCH_PROVIDER=searxng
+SEARXNG_URL=http://searxng:8080
+# Signs SearXNG's cookies. The Compose default is a local key; override it in production.
+SEARXNG_SECRET=<a long random string>
+```
+
+Then start the stack with the profile. This starts SearXNG and recreates the
+app and the worker with the new settings:
+
+```bash
+docker compose --profile search up -d
+```
+
+SearXNG is a metasearch engine: it asks public engines (Google, Bing,
+DuckDuckGo and others) from your server's IP address, and they may
+rate-limit or CAPTCHA a busy instance, which then returns fewer results or
+none. It suits light and personal use; for steady traffic, use a keyed
+engine. To use a SearXNG instance you already run, point `SEARXNG_URL` at it
+and make sure `json` is in its `search.formats`, or it answers 403.
+
+With no engine, the features above skip their web step (trend search returns
+empty results with `providerUsed: none`, and Ask does not offer
+`search_web`), which is expected for local or OSS setups. Ask still reads
+links people paste into a question without any key. See
+[`.env.example`](../.env.example).
 
 ### Verifying object-storage uploads
 
@@ -169,40 +236,152 @@ Model ids, per-model behavior, and route assignments live in
 [Chat Models](./chat-models.md) for presets, route inheritance, reasoning
 modes, and migration from the pre-PR variables.
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `DATABASE_URL` | Yes | PostgreSQL connection string |
-| `BETTER_AUTH_SECRET` | Yes | Signs auth session cookies — `openssl rand -base64 32` |
-| `BETTER_AUTH_URL` | Yes | Public origin, e.g. `https://app.example.com` (`http://localhost:3000` locally). Without it, browser sign-up is refused with "Invalid origin" |
-| `CHAT_BASE_URL` | Yes | The OpenAI-compatible chat endpoint every route talks to |
-| `CHAT_API_KEY` | Conditional | Bearer credential for that endpoint; omit for keyless local endpoints |
-| `CHAT_MODELS_CONFIG` | Optional | Chat model configuration file, relative to `apps/web`. Defaults to `config/chat-models.yaml` (Gemini); `config/chat-models.azure.yaml` targets Azure OpenAI |
-| `OPENAI_API_KEY` or `AI_API_KEY` | Conditional | Supporting non-chat capabilities (OCR, embeddings, rerank, NER, transcription) when no per-capability provider is configured. Never used for chat |
-| `INNGEST_EVENT_KEY` | Cloud only | Inngest event key. Required when `DEPLOYMENT_MODE=cloud`; otherwise a missing key warns at boot and the background verticals stay off. **Ingestion does not need it** — that runs through the transactional outbox |
-| `BLOB_READ_WRITE_TOKEN` | Conditional | Only when using Vercel Blob as the object-storage backend; S3-compatible storage (SeaweedFS, MinIO, S3) is configured separately |
-| `UPLOADTHING_TOKEN` | Optional | UploadThing legacy uploader |
-| `TRANSCRIPTION_SERVICE_URL` + `TRANSCRIPTION_SERVICE_API_KEY` | Optional | Whisper transcription service (`services/transcription`) — the names the Compose stack uses |
-| `ADEU_SERVICE_URL` + `ADEU_SERVICE_API_KEY` | Optional | DOCX redlining service (`services/adeu-ai-docs-editing`) — the names the Compose stack uses |
-| `DOCUMENT_CONVERTER_URL` + `DOCUMENT_CONVERTER_API_KEY` | Optional | OCR routing/parsing service (`services/document-converter`) — the names the Compose stack uses |
-| `GOTENBERG_SERVICE_URL` + `GOTENBERG_SERVICE_USERNAME`/`GOTENBERG_SERVICE_PASSWORD` | Optional | Gotenberg PDF-rendering service ([ADR-009](./architecture/ADR-009-gotenberg-pdf-rendering.md)) — the one PDF owner. Unset, every PDF-producing route returns a typed 503. Override `GOTENBERG_SERVICE_PASSWORD` in production — the Compose default is a local key |
+| Variable                                                                            | Required    | Description                                                                                                                                                                                                                                                             |
+| ----------------------------------------------------------------------------------- | ----------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DATABASE_URL`                                                                      | Yes         | PostgreSQL connection string                                                                                                                                                                                                                                            |
+| `BETTER_AUTH_SECRET`                                                                | Yes         | Signs auth session cookies — `openssl rand -base64 32`                                                                                                                                                                                                                  |
+| `BETTER_AUTH_URL`                                                                   | Yes         | Public origin, e.g. `https://app.example.com` (`http://localhost:3000` locally). Without it, browser sign-up is refused with "Invalid origin"                                                                                                                           |
+| `CHAT_BASE_URL`                                                                     | Yes         | The OpenAI-compatible chat endpoint every route talks to                                                                                                                                                                                                                |
+| `CHAT_API_KEY`                                                                      | Conditional | Bearer credential for that endpoint; omit for keyless local endpoints                                                                                                                                                                                                   |
+| `CHAT_MODELS_CONFIG`                                                                | Optional    | Chat model configuration file, relative to `apps/web`. Defaults to `config/chat-models.yaml` (Gemini); `config/chat-models.azure.yaml` targets Azure OpenAI                                                                                                             |
+| `OPENAI_API_KEY` or `AI_API_KEY`                                                    | Conditional | Supporting non-chat capabilities (OCR, embeddings, rerank, NER, transcription) when no per-capability provider is configured. Never used for chat                                                                                                                       |
+| `INNGEST_EVENT_KEY`                                                                 | Cloud only  | Inngest event key. Required when `DEPLOYMENT_MODE=cloud`; otherwise a missing key warns at boot and the background verticals stay off. **Ingestion does not need it** — that runs through the transactional outbox                                                      |
+| `BLOB_READ_WRITE_TOKEN`                                                             | Conditional | Only when using Vercel Blob as the object-storage backend; S3-compatible storage (SeaweedFS, MinIO, S3) is configured separately                                                                                                                                        |
+| `UPLOADTHING_TOKEN`                                                                 | Optional    | UploadThing legacy uploader                                                                                                                                                                                                                                             |
+| `TRANSCRIPTION_SERVICE_URL` + `TRANSCRIPTION_SERVICE_API_KEY`                       | Optional    | Whisper transcription service (`services/transcription`) — the names the Compose stack uses                                                                                                                                                                             |
+| `ADEU_SERVICE_URL` + `ADEU_SERVICE_API_KEY`                                         | Optional    | DOCX redlining service (`services/adeu-ai-docs-editing`) — the names the Compose stack uses                                                                                                                                                                             |
+| `DOCUMENT_CONVERTER_URL` + `DOCUMENT_CONVERTER_API_KEY`                             | Optional    | OCR routing/parsing service (`services/document-converter`) — the names the Compose stack uses                                                                                                                                                                          |
+| `GOTENBERG_SERVICE_URL` + `GOTENBERG_SERVICE_USERNAME`/`GOTENBERG_SERVICE_PASSWORD` | Optional    | Gotenberg PDF-rendering service ([ADR-009](./architecture/ADR-009-gotenberg-pdf-rendering.md)) — the one PDF owner. Unset, every PDF-producing route returns a typed 503. Override `GOTENBERG_SERVICE_PASSWORD` in production — the Compose default is a local key      |
+| `SEARCH_PROVIDER`                                                                   | Optional    | Web search engine for every feature: `exa`, `serper`, `brave`, `tavily` or `searxng`. Unset or empty: the first one with a credential, in that order. Named but missing its credential: web search is off, never another engine. See [Web search](#web-search-optional) |
+| `EXA_API_KEY`                                                                       | Optional    | Exa credential. The only engine with a company index (Prospects company search + lookalikes). ~$7 per 1,000 searches; $10 free monthly credit                                                                                                                           |
+| `SERPER_API_KEY`                                                                    | Optional    | Serper (Google results) credential                                                                                                                                                                                                                                      |
+| `BRAVE_SEARCH_API_KEY`                                                              | Optional    | Brave Search API credential                                                                                                                                                                                                                                             |
+| `TAVILY_API_KEY`                                                                    | Optional    | Tavily credential                                                                                                                                                                                                                                                       |
+| `SEARXNG_URL`                                                                       | Optional    | Base URL of a SearXNG instance with JSON output enabled, e.g. `http://searxng:8080` for the Compose `search` profile                                                                                                                                                    |
+| `SEARXNG_SECRET`                                                                    | Optional    | Compose only: signs the bundled SearXNG's cookies. Override the local default in production                                                                                                                                                                             |
+| `AZURE_DOC_INTELLIGENCE_*`                                                          | Optional    | OCR for scanned PDFs                                                                                                                                                                                                                                                    |
+| `DATALAB_API_KEY`                                                                   | Optional    | Alternative OCR                                                                                                                                                                                                                                                         |
+| `LANDING_AI_API_KEY`                                                                | Optional    | Fallback OCR                                                                                                                                                                                                                                                            |
+| `DEPLOYMENT_MODE`                                                                   | Optional    | `self-hosted` (default when unset) or `cloud` — see [Self-hosting defaults](#self-hosting-defaults)                                                                                                                                                                     |
+| `AI_MONTHLY_TOKEN_LIMIT_PER_USER`                                                   | Optional    | Monthly cap on one person's AI use on this server's models and search keys, in chat-token equivalents, across all their workspaces; unset or `0` = none — see [AI allowances](#ai-allowances-per-person)                                                                |
+| `AI_TOKEN_LIMIT_EXEMPT_EMAILS`                                                      | Optional    | Comma-separated emails the server-wide cap never applies to (yours, say)                                                                                                                                                                                                |
+| `AI_USAGE_CHAT_PRICE_PER_MTOK`                                                      | Optional    | US dollars per 1M standard chat tokens, the price embeddings and web searches are converted against. Default: the Standard model's declared price (three input tokens to one output), else `1.00` — see [AI allowances](#ai-allowances-per-person)                      |
+| `AI_USAGE_EMBEDDING_PRICE_PER_MTOK`                                                 | Optional    | US dollars per 1M embedding tokens, for every embedding model. Default: the model's list price (`text-embedding-3-large` $0.13, `-3-small` $0.02, `ada-002` $0.10, `gemini-embedding-001` $0.15; anything else $0.13)                                                   |
+| `AI_USAGE_WEB_SEARCH_PRICE_PER_1K`                                                  | Optional    | US dollars per 1,000 web searches, for every search provider. Default: the provider's list price (Exa $7, Serper $1, Brave Search $5, Tavily $8, SearXNG $0). Pages Exa reads for company descriptions stay at $2 per 1,000                                             |
+| `AI_USAGE_PRICES`                                                                   | Optional    | Your own price table for chat, embedding and search models the built-in list doesn't know: inline JSON or a path to a JSON file. Entries are dollar prices or `{ "ratio": n }` — see [Prices for new and self-hosted models](#prices-for-new-and-self-hosted-models)    |
+| `LANDING_PUBLIC_URL`                                                                | Optional    | Origin the public site (`apps/landing`) is served from, read per request. The logo, sign-out, Help, `/privacy` and `/terms` redirect there; set it when you run a prebuilt image                                                                                        |
+| `NEXT_PUBLIC_SITE_URL`                                                              | Optional    | The same origin, inlined at build time; the fallback when `LANDING_PUBLIC_URL` is unset                                                                                                                                                                                 |
+| `NEXT_PUBLIC_APP_URL`                                                               | Optional    | Origin this app is served from; where the public site's sign-in links point                                                                                                                                                                                             |
+| `EMAIL_UNSUBSCRIBE_SECRET`                                                          | Conditional | HMAC key for unsubscribe links; required to send email campaigns, min 16 chars                                                                                                                                                                                          |
+| `SUPPORT_CONTACT_EMAIL`                                                             | Optional    | Address the in-app contact form composes to. Unset hides the form                                                                                                                                                                                                       |
+| `FEEDBACK_ADMIN_EMAILS`                                                             | Optional    | Turns on in-app bug reports and feature requests and names who triages them: account emails, comma/space/semicolon separated, case-insensitive. Unset keeps the feature off. Accounts are not email-verified, so create the operator's account before listing it        |
+| `FEEDBACK_WEBHOOK_URL`                                                              | Optional    | Slack or Discord incoming webhook told about each new report — one line with the kind, severity, title and a Triage link; never the body, context or screenshots                                                                                                        |
 
 The legacy variables (`SIDECAR_URL`, `ADEU_SERVICE_URL`, `OCR_ROUTER_URL`,
 `OCR_WORKER_URL`) are being phased out per
 [ADR-004](./architecture/ADR-004-compute-service-consolidation.md); while the
 migration completes, set both the new and the legacy name if a service isn't
 being picked up.
-| `EXA_API_KEY` | Optional | Exa (trend search); required for `exa` / `fallback` / `parallel` when using Exa |
-| `SERPER_API_KEY` | Optional | Serper Google News (trend search); required for `serper` / `fallback` / `parallel` when using Serper |
-| `SEARCH_PROVIDER` | Optional | `exa` (default), `serper`, `fallback`, or `parallel` — see `.env.example` |
-| `AZURE_DOC_INTELLIGENCE_*` | Optional | OCR for scanned PDFs |
-| `DATALAB_API_KEY` | Optional | Alternative OCR |
-| `LANDING_AI_API_KEY` | Optional | Fallback OCR |
-| `DEPLOYMENT_MODE` | Optional | `self-hosted` (default when unset) or `cloud` — see [Self-hosting defaults](#self-hosting-defaults) |
-| `LANDING_PUBLIC_URL` | Optional | Origin the public site (`apps/landing`) is served from, read per request. The logo, sign-out, Help, `/privacy` and `/terms` redirect there; set it when you run a prebuilt image |
-| `NEXT_PUBLIC_SITE_URL` | Optional | The same origin, inlined at build time; the fallback when `LANDING_PUBLIC_URL` is unset |
-| `NEXT_PUBLIC_APP_URL` | Optional | Origin this app is served from; where the public site's sign-in links point |
-| `EMAIL_UNSUBSCRIBE_SECRET` | Conditional | HMAC key for unsubscribe links; required to send email campaigns, min 16 chars |
-| `SUPPORT_CONTACT_EMAIL` | Optional | Address the in-app contact form composes to. Unset hides the form |
+
+## AI allowances per person
+
+Two limits can apply to a person; the tighter one binds. Both count
+chat-token equivalents, as the Usage tab reports them, by
+calendar month in UTC, and reset on the 1st.
+
+A chat-token equivalent puts chat, embeddings and paid web searches in one
+unit. A chat token, in or out, counts as one, times its model's price over the
+Standard model's when that model has a price, so the Standard model itself
+counts one for one and a model at four times its price counts four. An
+embedding token or a web search counts what it costs divided by what one
+standard chat token costs, so cheap, bulky work (embedding a whole document)
+and expensive, small work (one search) each weigh what they cost. At the
+defaults, against a chat token at $1.00 per 1M:
+
+| Work                                                | Price  | Counts as |
+| --------------------------------------------------- | ------ | --------- |
+| 1M tokens embedded with `text-embedding-3-large`    | $0.13  | 130,000   |
+| 1M tokens embedded with `text-embedding-3-small`    | $0.02  | 20,000    |
+| One Exa search                                      | $0.007 | 7,000     |
+| One Serper search                                   | $0.001 | 1,000     |
+| One page Exa reads (Prospects company descriptions) | $0.002 | 2,000     |
+
+The standard chat token's price is `AI_USAGE_CHAT_PRICE_PER_MTOK` if set, else
+the Standard (`default` route) model's declared `pricing` blended three input
+tokens to one output (see [docs/chat-models.md](./chat-models.md#pricing)), else
+$1.00 per 1M. It is the unit embeddings and searches convert into; chat is
+always weighed against the Standard model's own price, so setting
+`AI_USAGE_CHAT_PRICE_PER_MTOK` never takes the Standard model off one for one.
+`AI_USAGE_EMBEDDING_PRICE_PER_MTOK` and `AI_USAGE_WEB_SEARCH_PRICE_PER_1K`
+replace the embedding and search list prices for every model and provider.
+
+### Prices for new and self-hosted models
+
+The built-in list knows a handful of hosted models. For anything else (a new
+release, a model you serve with Ollama or vLLM, another search engine), set
+`AI_USAGE_PRICES` to a JSON price table, inline or as a path to a JSON file
+(relative to the app's working directory, so mount it as you mount the model
+file):
+
+```json
+{
+  "chat": {
+    "gpt-5-mini": { "input": 0.25, "output": 2 },
+    "llama3.1:8b": { "ratio": 0 }
+  },
+  "embedding": { "voyage-3": 0.06, "nomic-embed-text": 0 },
+  "search": { "brave": 5, "searxng": 0 }
+}
+```
+
+- **chat** — US dollars per 1M tokens: `input`, `output`, optional
+  `cachedInput`. It prices the model's calls and sets its weight. A model's
+  own `pricing` in the model file wins over its entry here.
+- **embedding** — US dollars per 1M tokens embedded.
+- **search** — US dollars per 1,000 searches, keyed by provider (`exa`,
+  `serper`, …).
+- **`{ "ratio": n }`** — instead of a price, anywhere: chat-token equivalents
+  per token (chat, embedding) or per search. Use it when a model has no dollar
+  price: `0` makes a local model free toward limits. A ratio weighs usage but
+  never shows a cost.
+
+Keys match model ids and providers without case, with or without a vendor
+prefix (`openai/gpt-5-mini` matches `gpt-5-mini`). Entries win over
+`AI_USAGE_EMBEDDING_PRICE_PER_MTOK` and `AI_USAGE_WEB_SEARCH_PRICE_PER_1K`. An
+entry for the Standard model's id also sets the standard chat token's price
+when the model file declares none. The table is read on start; a table that
+doesn't parse is reported once in the server log, naming the bad entry, and
+ignored, so AI keeps working on the built-in prices.
+
+A workspace that brings its own models (Settings › Bring your own keys) can
+give each one a price there. That price counts toward that workspace's limits
+and shows its cost; the server cap never counts a workspace's own models.
+
+Each call is weighed when it is recorded, so a
+price change applies from then on and never rewrites past usage. When a
+provider reports no embedding token count (Gemini, Ollama, Hugging Face), it is
+estimated at four characters a token. Embedding debits in the credit ledger are
+charged at the same weight.
+
+- **The server's** — `AI_MONTHLY_TOKEN_LIMIT_PER_USER`. It protects your model
+  and search bill: it sums one person's use of this server's own models,
+  embedding endpoint and search keys across every workspace they belong to.
+  Calls to an endpoint a workspace brought itself (Settings › Bring your own
+  keys) never count toward it, and it does not apply while that workspace runs
+  on its own models. People listed in `AI_TOKEN_LIMIT_EXEMPT_EMAILS` are never
+  capped. Because anyone who creates a workspace owns it, this is the only limit
+  an individual can't lift themselves.
+- **The workspace's** — set in Usage › Spending › AI limits per person
+  by anyone with _settings.manage_: a default for everyone, and an override per
+  person (no limit, or a number of tokens). It counts all of the person's use
+  in that workspace, whoever's endpoint served it.
+
+At a limit, new AI work is refused with a message that says which limit, when it
+resets and who can raise it (HTTP 429, `code: "ai_allowance_reached"`). Work
+already running — a background run, a meeting, indexing — finishes and is
+counted; uploads are still accepted, and the AI that indexing spends on them
+counts toward the uploader. Usage recorded before this feature shipped belongs
+to no one, so allowances start counting from the upgrade.
 
 ## Post-deployment Checklist
 

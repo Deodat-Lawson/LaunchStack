@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 import {
     ChevronLeft,
     ChevronRight,
@@ -30,6 +31,7 @@ export function ChatMediaGallery({
     initialIndex?: number;
     onClose: () => void;
 }) {
+    const t = useTranslations("chat.gallery");
     const [index, setIndex] = useState(initialIndex);
     const [zoom, setZoom] = useState(100);
     const [failed, setFailed] = useState(false);
@@ -62,15 +64,15 @@ export function ChatMediaGallery({
                 }}
             >
                 <DialogTitle className="break-all pr-7 text-sm">
-                    {item.name || "Image preview"}
+                    {item.name || t("title")}
                 </DialogTitle>
                 <DialogDescription>
-                    Image {index + 1} of {items.length} · Use left and right arrow keys to navigate.
+                    {t("description", { index: index + 1, total: items.length })}
                 </DialogDescription>
                 <div className="flex flex-wrap items-center gap-2 text-xs text-[var(--ink-3)]">
                     <button
                         type="button"
-                        aria-label="Previous image"
+                        aria-label={t("previous")}
                         disabled={index === 0}
                         onClick={() => setIndex(i => i - 1)}
                         className="rounded p-1.5 disabled:opacity-30"
@@ -79,7 +81,7 @@ export function ChatMediaGallery({
                     </button>
                     <button
                         type="button"
-                        aria-label="Next image"
+                        aria-label={t("next")}
                         disabled={index === items.length - 1}
                         onClick={() => setIndex(i => i + 1)}
                         className="rounded p-1.5 disabled:opacity-30"
@@ -88,7 +90,7 @@ export function ChatMediaGallery({
                     </button>
                     <button
                         type="button"
-                        aria-label="Zoom out"
+                        aria-label={t("zoomOut")}
                         disabled={zoom <= 50}
                         onClick={() => setZoom(v => Math.max(50, v - 25))}
                         className="rounded p-1.5 disabled:opacity-30"
@@ -98,7 +100,7 @@ export function ChatMediaGallery({
                     <span aria-live="polite">{zoom}%</span>
                     <button
                         type="button"
-                        aria-label="Zoom in"
+                        aria-label={t("zoomIn")}
                         disabled={zoom >= 300}
                         onClick={() => setZoom(v => Math.min(300, v + 25))}
                         className="rounded p-1.5 disabled:opacity-30"
@@ -109,15 +111,13 @@ export function ChatMediaGallery({
                         type="button"
                         onClick={() =>
                             void copyText(item.src).then(ok =>
-                                ok
-                                    ? toast.success("Image URL copied")
-                                    : toast.error("Couldn't copy image URL")
+                                ok ? toast.success(t("urlCopied")) : toast.error(t("urlCopyFailed"))
                             )
                         }
                         className="flex items-center gap-1 rounded p-1.5"
                     >
                         <Copy size={13} />
-                        Copy URL
+                        {t("copyUrl")}
                     </button>
                     <a
                         href={item.src}
@@ -127,7 +127,7 @@ export function ChatMediaGallery({
                         className="flex items-center gap-1 rounded p-1.5"
                     >
                         <Download size={13} />
-                        Save
+                        {t("save")}
                     </a>
                     <a
                         href={item.src}
@@ -136,7 +136,7 @@ export function ChatMediaGallery({
                         className="flex items-center gap-1 rounded p-1.5"
                     >
                         <ExternalLink size={13} />
-                        Original
+                        {t("original")}
                     </a>
                 </div>
                 <div className="max-h-[60dvh] overflow-auto rounded-lg bg-[var(--bg)] p-2">
@@ -145,7 +145,7 @@ export function ChatMediaGallery({
                             role="alert"
                             className="flex items-center gap-2 p-4 text-sm text-[var(--ink-3)]"
                         >
-                            Image unavailable.
+                            {t("unavailable")}
                             <button
                                 type="button"
                                 onClick={() => {
@@ -155,7 +155,7 @@ export function ChatMediaGallery({
                                 className="flex items-center gap-1 underline"
                             >
                                 <RotateCcw size={13} />
-                                Retry loading
+                                {t("retryLoading")}
                             </button>
                         </div>
                     )}

@@ -2,11 +2,12 @@
 
 import { useMemo } from "react";
 import { Edit2, Quote as QuoteIcon, Trash2 } from "lucide-react";
+import { useFormatter, useTranslations } from "next-intl";
 import type { DocumentNote } from "~/server/db/schema";
 import { useContextTarget } from "~/components/context-menu";
 import { copyText } from "~/lib/context-menu";
-import { relativeTime } from "~/lib/workspace-history";
 import { type NoteAnchorLite } from "./anchor";
+import { HIGHLIGHT_FILL, HIGHLIGHT_TAG, highlightColorOf } from "./highlight";
 import styles from "./NoteCard.module.css";
 import { iconBtnStyle, metaChipStyle, statusBadge } from "./styles";
 
@@ -36,6 +37,9 @@ export function NoteCard({
     onDelete,
     onClick,
 }: NoteCardProps) {
+    const t = useTranslations("notes.card");
+    const tc = useTranslations("common.actions");
+    const format = useFormatter();
     const anchor = note.anchor as NoteAnchorLite | null;
     const badge = statusBadge(note.anchorStatus);
     const body = useMemo(
@@ -51,7 +55,7 @@ export function NoteCard({
     const ctxTarget = useContextTarget({
         kind: "note",
         id: String(note.id),
-        label: note.title ? `Actions for “${note.title}”` : "Note actions",
+        label: note.title ? t("menuLabelNamed", { title: note.title }) : t("menuLabel"),
         data: note,
         items: () => [
             ...(onClick
@@ -59,7 +63,7 @@ export function NoteCard({
                       {
                           type: "item" as const,
                           id: "go",
-                          label: "Go to this note",
+                          label: t("goTo"),
                           icon: "open" as const,
                           onSelect: onClick,
                       },
@@ -68,14 +72,14 @@ export function NoteCard({
             {
                 type: "item" as const,
                 id: "edit",
-                label: "Edit",
+                label: tc("edit"),
                 icon: "rename" as const,
                 onSelect: onEdit,
             },
             {
                 type: "item" as const,
                 id: "copy",
-                label: "Copy note text",
+                label: t("copyText"),
                 icon: "copy" as const,
                 onSelect: () =>
                     void copyText(note.contentMarkdown ?? note.content ?? note.title ?? ""),
@@ -84,7 +88,7 @@ export function NoteCard({
             {
                 type: "item" as const,
                 id: "delete",
-                label: "Delete…",
+                label: t("deleteEllipsis"),
                 icon: "delete" as const,
                 danger: true,
                 onSelect: onDelete,
@@ -94,6 +98,10 @@ export function NoteCard({
 
     const quote = anchor?.quote?.exact?.trim();
     const highlighted = active || editing;
+    // A highlight's text is its passage: shown once, as the quote, with the
+    // colour it was marked in where a note has its quote mark.
+    const highlightColor = highlightColorOf(note);
+    const shownBody = highlightColor && body.trim() === quote ? "" : body;
 
     return (
         <div
@@ -133,20 +141,38 @@ export function NoteCard({
                         fontSize: 11,
                         fontStyle: "italic",
                         lineHeight: 1.45,
-                        marginBottom: 7,
-                        paddingBottom: 7,
-                        borderBottom: "1px solid var(--line-2)",
+                        // A highlight with no words of its own has nothing
+                        // under its passage to divide it from.
+                        ...(note.title || shownBody
+                            ? {
+                                  marginBottom: 7,
+                                  paddingBottom: 7,
+                                  borderBottom: "1px solid var(--line-2)",
+                              }
+                            : {}),
                     }}
                 >
-                    <QuoteIcon
-                        size={10}
-                        style={{
-                            flexShrink: 0,
-                            color: "var(--accent)",
-                            alignSelf: "flex-start",
-                            marginTop: 3,
-                        }}
-                    />
+                    {highlightColor ? (
+                        <span
+                            aria-hidden
+                            data-highlight-color={highlightColor}
+                            className="border-line mt-[3px] size-2.5 shrink-0 self-start rounded-full border bg-[var(--paper-panel)]"
+                            // The ink over white paper, as it looks on the page.
+                            style={{
+                                backgroundImage: `linear-gradient(${HIGHLIGHT_FILL[highlightColor]}, ${HIGHLIGHT_FILL[highlightColor]})`,
+                            }}
+                        />
+                    ) : (
+                        <QuoteIcon
+                            size={10}
+                            style={{
+                                flexShrink: 0,
+                                color: "var(--accent)",
+                                alignSelf: "flex-start",
+                                marginTop: 3,
+                            }}
+                        />
+                    )}
                     <span
                         style={{
                             display: "-webkit-box",
@@ -183,7 +209,7 @@ export function NoteCard({
                             {note.title}
                         </div>
                     )}
-                    {body && (
+                    {shownBody && (
                         <div
                             style={{
                                 fontSize: 11.5,
@@ -204,7 +230,7 @@ export function NoteCard({
                                       }),
                             }}
                         >
-                            {body}
+                            {shownBody}
                         </div>
                     )}
                 </div>
@@ -222,13 +248,13 @@ export function NoteCard({
                         flexShrink: 0,
                     }}
                 >
-                    <button type="button" onClick={onEdit} title="Edit" style={iconBtnStyle}>
+                    <button type="button" onClick={onEdit} title={tc("edit")} style={iconBtnStyle}>
                         <Edit2 size={12} />
                     </button>
                     <button
                         type="button"
                         onClick={onDelete}
-                        title="Delete"
+                        title={tc("delete")}
                         style={{ ...iconBtnStyle, color: "var(--danger)" }}
                     >
                         <Trash2 size={12} />
@@ -248,15 +274,29 @@ export function NoteCard({
                 <span
                     className="mono"
                     style={{ fontSize: 10, color: "var(--ink-4)", marginRight: 2 }}
-                    title={note.createdAt ? new Date(note.createdAt).toLocaleString() : undefined}
+                    title={
+                        note.createdAt
+                            ? format.dateTime(new Date(note.createdAt), {
+                                  year: "numeric",
+                                  month: "numeric",
+                                  day: "numeric",
+                                  hour: "numeric",
+                                  minute: "numeric",
+                                  second: "numeric",
+                              })
+                            : undefined
+                    }
                 >
-                    {note.createdAt ? relativeTime(new Date(note.createdAt).toISOString()) : ""}
+                    {note.createdAt ? noteAge(new Date(note.createdAt), t, format) : ""}
                 </span>
-                {note.tags?.map(t => (
-                    <span key={t} style={metaChipStyle}>
-                        #{t}
-                    </span>
-                ))}
+                {highlightColor && <span style={metaChipStyle}>{t("highlight")}</span>}
+                {note.tags
+                    ?.filter(tag => !(highlightColor && tag === HIGHLIGHT_TAG))
+                    .map(tag => (
+                        <span key={tag} style={metaChipStyle}>
+                            #{tag}
+                        </span>
+                    ))}
                 {badge && (
                     <span
                         style={{
@@ -267,12 +307,39 @@ export function NoteCard({
                         }}
                     >
                         {badge.icon}
-                        {badge.label}
+                        {t(`status.${badge.status}`)}
                     </span>
                 )}
             </div>
         </div>
     );
+}
+
+const DAY_MS = 24 * 60 * 60 * 1000;
+
+function startOfDay(date: Date): number {
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate()).getTime();
+}
+
+/**
+ * The card's compact age: `now`, `12m`, `5h`, `3d`, then a date — the same
+ * scale as the sidebar's `relativeTime` (~/lib/workspace-history), in the
+ * reader's language. Calendar days, not 24-hour blocks.
+ */
+function noteAge(
+    at: Date,
+    t: ReturnType<typeof useTranslations<"notes.card">>,
+    format: ReturnType<typeof useFormatter>,
+    now: Date = new Date()
+): string {
+    const delta = now.getTime() - at.getTime();
+    if (Number.isNaN(delta)) return "";
+    if (delta < 60_000) return t("age.now");
+    if (delta < 60 * 60_000) return t("age.minutes", { count: Math.floor(delta / 60_000) });
+    const days = Math.round((startOfDay(now) - startOfDay(at)) / DAY_MS);
+    if (days === 0) return t("age.hours", { count: Math.floor(delta / (60 * 60_000)) });
+    if (days < 7) return t("age.days", { count: days });
+    return format.dateTime(at, { day: "numeric", month: "short" });
 }
 
 /**

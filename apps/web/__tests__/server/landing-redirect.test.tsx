@@ -17,7 +17,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { GET as site } from "~/app/site/[[...path]]/route";
 import { GET as privacy } from "~/app/privacy/route";
 import { GET as terms } from "~/app/terms/route";
-import { LandingLogoLink } from "~/components/LandingLogoLink";
+import { LogoLink } from "~/components/LogoLink";
 import { LANDING_URL } from "~/config/landing";
 import { redirectToLanding } from "~/server/landing-redirect";
 
@@ -104,8 +104,8 @@ describe("/privacy and /terms", () => {
 });
 
 describe("the brand logo", () => {
-    it("links to /site, never to a landing origin", () => {
-        const html = renderToStaticMarkup(<LandingLogoLink>Launchstack</LandingLogoLink>);
+    it("links a signed-out visitor to /site, never to a landing origin", () => {
+        const html = renderToStaticMarkup(<LogoLink signedIn={false}>Launchstack</LogoLink>);
 
         expect(html).toContain('href="/site"');
     });

@@ -3,8 +3,10 @@ import { MarketingPlatformEnum } from "@launchstack/pipelines/marketing";
 import { markContentPublished } from "@launchstack/pipelines/marketing";
 import { createBrandPosts, publishBrandPost } from "@launchstack/pipelines/marketing/posts";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
+import { requestTranslator } from "~/i18n/server";
 import { fail, handleRouteError, ok, readJson } from "~/server/api/responses";
 import { defaultChannelFor, NETWORK_LABELS } from "~/server/brand/accounts";
+import { CLAIM_GATE_MESSAGE, claimGate } from "~/server/brand/claim-gate";
 import { publishForWorkspace } from "~/server/brand/publish";
 
 export const runtime = "nodejs";
@@ -14,6 +16,8 @@ const PublishSchema = z.object({
     platform: MarketingPlatformEnum,
     message: z.string().min(1).max(5000),
     title: z.string().max(300).optional(),
+    /** The member saw which claims their documents don't back and posts anyway. */
+    acknowledgeUnsupportedClaims: z.boolean().optional(),
 });
 
 /**
@@ -24,18 +28,25 @@ const PublishSchema = z.object({
  */
 export async function POST(request: Request) {
     try {
+        const t = requestTranslator(request, "growth.server.marketing");
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
         if (!ctx.data.can("social.publish")) {
-            return fail("Your role can read Brand but not post as the company.", 403);
+            return fail(t("publishForbidden"), 403);
         }
 
         const validation = PublishSchema.safeParse(await readJson(request));
         if (!validation.success) {
-            return fail("Invalid input", 400, { errors: validation.error.flatten() });
+            return fail(requestTranslator(request, "errors.api")("invalidInput"), 400, {
+                errors: validation.error.flatten(),
+            });
         }
 
-        const { platform, message, title } = validation.data;
+        const { platform, message, title, acknowledgeUnsupportedClaims } = validation.data;
+        if (!acknowledgeUnsupportedClaims) {
+            const blocked = await claimGate(ctx.data.companyId, ctx.data.authUserId, message);
+            if (blocked) return fail(CLAIM_GATE_MESSAGE, 409, blocked);
+        }
         const channel = await defaultChannelFor(ctx.data.companyId, platform);
         if (!channel) {
             // LinkedIn and Bluesky are connected per workspace; X and Reddit
@@ -43,8 +54,8 @@ export async function POST(request: Request) {
             const perWorkspace = platform === "linkedin" || platform === "bluesky";
             return fail(
                 perWorkspace
-                    ? `Nothing can post to ${NETWORK_LABELS[platform]} yet. Connect it under Growth › Brand › Accounts.`
-                    : `${NETWORK_LABELS[platform]} is set up by the operator for the whole deployment, and this deployment has no ${NETWORK_LABELS[platform]} key yet.`,
+                    ? t("nothingCanPost", { network: NETWORK_LABELS[platform] })
+                    : t("operatorOnly", { network: NETWORK_LABELS[platform] }),
                 400,
                 { platform }
             );
@@ -62,7 +73,7 @@ export async function POST(request: Request) {
         });
 
         if (post.status !== "published") {
-            return fail(post.error ?? "Publish failed", 502, { platform });
+            return fail(post.error ?? t("publishFailed"), 502, { platform });
         }
 
         // Record the publish against the matching history row (fire-and-forget:
@@ -82,6 +93,6 @@ export async function POST(request: Request) {
 
         return ok({ platform, postUrl: post.postUrl, channel: channel.name });
     } catch (error) {
-        return handleRouteError("marketing-pipeline/publish", error);
+        return handleRouteError("marketing-pipeline/publish", error, request);
     }
 }

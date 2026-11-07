@@ -8,6 +8,7 @@
 
 import React, { useEffect, useMemo, useState } from "react";
 import { Search, Share2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
@@ -15,17 +16,13 @@ import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover
 import { Spinner } from "~/components/ui/spinner";
 import { displayFolderPath } from "~/lib/folders/path";
 
-import { errorMessage } from "../settings/people/api";
+import { useErrorText } from "../settings/people/ui";
 import { teamApi, type ShareableItem } from "./api";
 import { itemTarget } from "./format";
 import type { TeamTarget } from "./types";
 import { ItemIcon } from "./ui";
 
-const SECTIONS: { type: ShareableItem["type"]; label: string }[] = [
-    { type: "folder", label: "Folders" },
-    { type: "document", label: "Files" },
-    { type: "chat", label: "Chats" },
-];
+const SECTIONS: readonly ShareableItem["type"][] = ["folder", "document", "chat"];
 
 export function SharePicker({
     personName,
@@ -34,6 +31,9 @@ export function SharePicker({
     personName: string;
     onShare: (target: TeamTarget & { name: string }) => void;
 }) {
+    const t = useTranslations("team.sharePicker");
+    const errorText = useErrorText();
+    const tc = useTranslations("common");
     const [open, setOpen] = useState(false);
     const [items, setItems] = useState<ShareableItem[] | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -50,12 +50,12 @@ export function SharePicker({
                 if (!cancelled) setItems(res.items);
             })
             .catch(err => {
-                if (!cancelled) setError(errorMessage(err, "Couldn't load what you can share."));
+                if (!cancelled) setError(errorText(err, t("loadError")));
             });
         return () => {
             cancelled = true;
         };
-    }, [open]);
+    }, [open, t, errorText]);
 
     const needle = filter.trim().toLowerCase();
     const shown = useMemo(
@@ -81,11 +81,11 @@ export function SharePicker({
                 <Button
                     size="sm"
                     className="h-8 w-full text-[12.5px]"
-                    aria-label={`Share something with ${personName}`}
+                    aria-label={t("label", { name: personName })}
                     data-testid="team-share-something"
                 >
                     <Share2 className="size-3.5" />
-                    Share something…
+                    {t("button")}
                 </Button>
             </PopoverTrigger>
             <PopoverContent align="start" sideOffset={6} className="w-[300px] p-0">
@@ -95,8 +95,8 @@ export function SharePicker({
                         <Input
                             value={filter}
                             onChange={e => setFilter(e.target.value)}
-                            placeholder="Find a folder, file or chat"
-                            aria-label="Find something to share"
+                            placeholder={t("findPlaceholder")}
+                            aria-label={t("findLabel")}
                             className="h-8 pl-8 text-[13px]"
                             autoFocus
                         />
@@ -109,22 +109,23 @@ export function SharePicker({
                         </p>
                     ) : items === null ? (
                         <div className="text-ink-3 flex items-center gap-2 px-3 py-3 text-[12.5px]">
-                            <Spinner className="size-3.5" /> Loading…
+                            <Spinner className="size-3.5" /> {tc("status.loading")}
                         </div>
                     ) : shown.length === 0 ? (
                         <p className="text-ink-3 m-0 px-3 py-3 text-[12.5px] leading-relaxed">
                             {items.length === 0
-                                ? "You don't manage anything you could share yet. Folders and files you add are yours to share."
-                                : `Nothing matches “${filter.trim()}”.`}
+                                ? t("emptyNone")
+                                : t("noMatch", { query: filter.trim() })}
                         </p>
                     ) : (
-                        SECTIONS.map(section => {
-                            const list = shown.filter(i => i.type === section.type);
+                        SECTIONS.map(type => {
+                            const list = shown.filter(i => i.type === type);
                             if (list.length === 0) return null;
+                            const label = t(`sections.${type}`);
                             return (
-                                <div key={section.type} role="group" aria-label={section.label}>
+                                <div key={type} role="group" aria-label={label}>
                                     <div className="text-ink-3 px-3 pb-0.5 pt-2 text-[10.5px] font-semibold uppercase tracking-[0.04em]">
-                                        {section.label}
+                                        {label}
                                     </div>
                                     {list.map(item => (
                                         <button

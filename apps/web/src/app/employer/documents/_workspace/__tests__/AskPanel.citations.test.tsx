@@ -81,11 +81,16 @@ function renderPanel(onOpenCitation: (c: ThreadReference) => void) {
 describe("AskPanel citations", () => {
     it("renders the citation without claiming a page", () => {
         renderPanel(jest.fn());
-        expect(screen.getByText(/Grounded in 1 source/)).toBeInTheDocument();
-        expect(screen.getByText(CITATION.snippet)).toBeInTheDocument();
+        const chip = screen.getByRole("button", {
+            name: "Open Q3 Retrieval Plan.pdf at the cited passage",
+        });
+        expect(chip).toHaveTextContent("Q3 Retrieval Plan.pdf");
+        // The passage itself is the chip's tooltip.
+        expect(chip).toHaveAttribute("title", `“${CITATION.snippet}”`);
         // Every chunk is indexed as page 1, so any page here would be a
         // precise-looking lie. Pinned so re-adding it is deliberate.
         expect(screen.queryByText(/^p\. \d+$/)).not.toBeInTheDocument();
+        expect(chip).not.toHaveTextContent(/p\. \d/);
     });
 
     it("hands the full reference to onOpenCitation on click", async () => {
@@ -93,7 +98,9 @@ describe("AskPanel citations", () => {
         const onOpenCitation = jest.fn();
         renderPanel(onOpenCitation);
 
-        await user.click(screen.getByTitle("Open the source at this passage"));
+        await user.click(
+            screen.getByRole("button", { name: "Open Q3 Retrieval Plan.pdf at the cited passage" })
+        );
 
         expect(onOpenCitation).toHaveBeenCalledTimes(1);
         expect(onOpenCitation).toHaveBeenCalledWith(CITATION);

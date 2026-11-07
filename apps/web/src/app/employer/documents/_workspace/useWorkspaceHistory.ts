@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import {
@@ -10,7 +11,12 @@ import {
     type HistoryKind,
 } from "~/lib/workspace-history";
 
-import type { SessionMessagePayload, StoredSession } from "./sessionApi";
+import type {
+    SessionErrorKey,
+    SessionErrorTranslator,
+    SessionMessagePayload,
+    StoredSession,
+} from "./sessionApi";
 import * as sessionApi from "./sessionApi";
 
 export interface ArchivedHistoryState {
@@ -46,8 +52,16 @@ export interface WorkspaceHistoryState {
     setArchivedOpen: (open: boolean) => void;
 }
 
-const message = (err: unknown, fallback: string) =>
-    err instanceof Error && err.message ? err.message : fallback;
+/**
+ * What to show for a failed call: the session API's own fallback in the
+ * reader's language, else the error's message, else `fallback`. The key is
+ * read by shape (see `sessionErrorKey`): tests replace `sessionApi` whole.
+ */
+function failureMessage(err: unknown, t: SessionErrorTranslator, fallback: string): string {
+    const key = err instanceof Error ? (err as { fallbackKey?: unknown }).fallbackKey : null;
+    if (typeof key === "string") return t(key as SessionErrorKey);
+    return err instanceof Error && err.message ? err.message : fallback;
+}
 
 /**
  * The History feed behind the sidebar.
@@ -61,6 +75,16 @@ const message = (err: unknown, fallback: string) =>
  * moves back, with a toast, if the server says no.
  */
 export function useWorkspaceHistory(enabled: boolean): WorkspaceHistoryState {
+    const t = useTranslations("chat.historyState");
+    const tSession = useTranslations("chat.sessionErrors");
+    const tc = useTranslations("common");
+    /** Read inside callbacks, so a language switch never re-creates them. */
+    const words = useRef({ t, tSession, tc });
+    words.current = { t, tSession, tc };
+    const message = useCallback(
+        (err: unknown, fallback: string) => failureMessage(err, words.current.tSession, fallback),
+        []
+    );
     const [entries, setEntries] = useState<HistoryEntry[]>([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -97,11 +121,11 @@ export function useWorkspaceHistory(enabled: boolean): WorkspaceHistoryState {
             setError(null);
         } catch (err) {
             if (id !== requestId.current) return;
-            setError(message(err, "Couldn't load history"));
+            setError(message(err, words.current.t("loadFailed")));
         } finally {
             if (id === requestId.current) setLoading(false);
         }
-    }, [enabled]);
+    }, [enabled, message]);
 
     const loadArchived = useCallback(async () => {
         if (!enabled) return;
@@ -122,10 +146,10 @@ export function useWorkspaceHistory(enabled: boolean): WorkspaceHistoryState {
             setArchivedState(prev => ({
                 ...prev,
                 loading: false,
-                error: message(err, "Couldn't load archived chats"),
+                error: message(err, words.current.t("archivedLoadFailed")),
             }));
         }
-    }, [enabled]);
+    }, [enabled, message]);
 
     useEffect(() => {
         void refresh();
@@ -180,78 +204,89 @@ export function useWorkspaceHistory(enabled: boolean): WorkspaceHistoryState {
                 .catch(err => {
                     patchEntry(entry.id, before);
                     toast.error(
-                        message(err, pinned ? "Couldn't pin that chat" : "Couldn't unpin that chat")
+                        message(
+                            err,
+                            pinned ? words.current.t("pinFailed") : words.current.t("unpinFailed")
+                        )
                     );
                 });
         },
-        [patchEntry]
+        [patchEntry, message]
     );
 
     // The Undo on the archive toast calls back into the newest `setArchived`.
     const setArchivedRef = useRef<(entry: HistoryEntry, archive: boolean) => void>(() => undefined);
-    const setArchived = useCallback((entry: HistoryEntry, archive: boolean) => {
-        const listSnapshot = entriesRef.current;
-        const archivedSnapshot = archivedRef.current;
-        if (archive) {
-            setEntries(prev => prev.filter(other => other.id !== entry.id));
-            setArchivedState(prev => ({
-                ...prev,
-                entries: [
-                    { ...entry, archived: true, pinned: false, pinRank: null },
-                    ...prev.entries.filter(other => other.id !== entry.id),
-                ],
-                count: (prev.count ?? 0) + 1,
-            }));
-        } else {
-            setArchivedState(prev => ({
-                ...prev,
-                entries: prev.entries.filter(other => other.id !== entry.id),
-                count: prev.count === null ? null : Math.max(0, prev.count - 1),
-            }));
-            setEntries(prev =>
-                [
-                    { ...entry, archived: false },
-                    ...prev.filter(other => other.id !== entry.id),
-                ].sort((a, b) => Date.parse(b.at) - Date.parse(a.at))
-            );
-        }
-        sessionApi
-            .updateSessionState(entry.refId, { archived: archive })
-            .then(() => {
-                if (archive)
-                    toast.success("Archived", {
-                        description: "Find it under Archived at the bottom of History.",
-                        action: {
-                            label: "Undo",
-                            onClick: () => setArchivedRef.current(entry, false),
-                        },
-                    });
-            })
-            .catch(err => {
-                setEntries(listSnapshot);
+    const setArchived = useCallback(
+        (entry: HistoryEntry, archive: boolean) => {
+            const listSnapshot = entriesRef.current;
+            const archivedSnapshot = archivedRef.current;
+            if (archive) {
+                setEntries(prev => prev.filter(other => other.id !== entry.id));
                 setArchivedState(prev => ({
                     ...prev,
-                    entries: archivedSnapshot.entries,
-                    count: archivedSnapshot.count,
+                    entries: [
+                        { ...entry, archived: true, pinned: false, pinRank: null },
+                        ...prev.entries.filter(other => other.id !== entry.id),
+                    ],
+                    count: (prev.count ?? 0) + 1,
                 }));
-                toast.error(
-                    message(
-                        err,
-                        archive ? "Couldn't archive that chat" : "Couldn't restore that chat"
-                    )
+            } else {
+                setArchivedState(prev => ({
+                    ...prev,
+                    entries: prev.entries.filter(other => other.id !== entry.id),
+                    count: prev.count === null ? null : Math.max(0, prev.count - 1),
+                }));
+                setEntries(prev =>
+                    [
+                        { ...entry, archived: false },
+                        ...prev.filter(other => other.id !== entry.id),
+                    ].sort((a, b) => Date.parse(b.at) - Date.parse(a.at))
                 );
-            });
-    }, []);
+            }
+            sessionApi
+                .updateSessionState(entry.refId, { archived: archive })
+                .then(() => {
+                    if (archive)
+                        toast.success(words.current.t("archived"), {
+                            description: words.current.t("archivedHint"),
+                            action: {
+                                label: words.current.tc("actions.undo"),
+                                onClick: () => setArchivedRef.current(entry, false),
+                            },
+                        });
+                })
+                .catch(err => {
+                    setEntries(listSnapshot);
+                    setArchivedState(prev => ({
+                        ...prev,
+                        entries: archivedSnapshot.entries,
+                        count: archivedSnapshot.count,
+                    }));
+                    toast.error(
+                        message(
+                            err,
+                            archive
+                                ? words.current.t("archiveFailed")
+                                : words.current.t("restoreFailed")
+                        )
+                    );
+                });
+        },
+        [message]
+    );
     setArchivedRef.current = setArchived;
 
-    const reorderPins = useCallback((ids: readonly string[]) => {
-        const snapshot = entriesRef.current;
-        setEntries(prev => applyPinOrder(prev, ids));
-        sessionApi.orderPins(ids).catch(err => {
-            setEntries(snapshot);
-            toast.error(message(err, "Couldn't reorder pinned chats"));
-        });
-    }, []);
+    const reorderPins = useCallback(
+        (ids: readonly string[]) => {
+            const snapshot = entriesRef.current;
+            setEntries(prev => applyPinOrder(prev, ids));
+            sessionApi.orderPins(ids).catch(err => {
+                setEntries(snapshot);
+                toast.error(message(err, words.current.t("reorderFailed")));
+            });
+        },
+        [message]
+    );
 
     const markSeen = useCallback(
         (sessionId: string) => {

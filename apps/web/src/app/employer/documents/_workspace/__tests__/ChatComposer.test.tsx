@@ -15,7 +15,7 @@ import {
     modelSearchMatches,
     shouldAttachPaste,
 } from "../composerState";
-import type { ComposerSend } from "../types";
+import type { ComposerSend, WorkspaceSource } from "../types";
 import { heicTo } from "heic-to/csp";
 import { composerJsonToMarkdown } from "../RichChatEditor";
 
@@ -30,16 +30,31 @@ jest.mock("../AskPanel", () => ({
         </span>
     ),
 }));
+/**
+ * What the workspace offers beside Standard and Fast, and whether the menu is
+ * still loading. Tests that need offered models set these and reset them after.
+ */
+const mockChatRoutes: { loading: boolean; failed: boolean; offeredModels: unknown[] } = {
+    loading: false,
+    failed: false,
+    offeredModels: [],
+};
 jest.mock("../../hooks/useChatRoutes", () => ({
     useChatRoutes: () => ({
-        loading: false,
+        loading: mockChatRoutes.loading,
+        failed: mockChatRoutes.failed,
+        offeredModels: mockChatRoutes.offeredModels,
         visionEnabled: true,
         reasoningEnabled: true,
         config: {
             // `model` mimics an older server that still sent the id: the
             // composer must never render it.
             routes: {
-                default: { available: true, model: "Default model" },
+                default: {
+                    available: true,
+                    model: "Default model",
+                    reasoning: { controllable: true, mode: "effort", efforts: ["low", "high"] },
+                },
                 fast: { available: true, model: "Speed model" },
                 reasoning: {
                     available: true,
@@ -604,16 +619,18 @@ describe("Composer uploads and completion", () => {
         );
     });
 
-    it("chooses configured models and only supported reasoning efforts", async () => {
+    it("offers Standard and Fast, with reasoning set by effort on Standard", async () => {
         const user = userEvent.setup();
         const { box, onSend } = mount();
         await user.click(screen.getByRole("button", { name: "Choose model" }));
         expect(
             screen.queryByText(/Default model|Speed model|Thinking model|Image model/)
         ).not.toBeInTheDocument();
-        await user.type(screen.getByRole("textbox", { name: "Search models" }), "Reason");
-        await user.click(screen.getByRole("option", { name: /Reasoning/ }));
-        await user.click(screen.getByRole("button", { name: "Choose model" }));
+        expect(
+            within(screen.getByRole("listbox", { name: "Configured models" }))
+                .getAllByRole("option")
+                .map(option => option.textContent)
+        ).toEqual([expect.stringMatching(/^Standard/), expect.stringMatching(/^Fast/)]);
         await user.selectOptions(
             screen.getByRole("combobox", { name: "Reasoning effort" }),
             "high"
@@ -626,8 +643,44 @@ describe("Composer uploads and completion", () => {
         fireEvent.change(box, { target: { value: "Think carefully" } });
         fireEvent.keyDown(box, { key: "Enter" });
         expect(onSend).toHaveBeenCalledWith(
-            expect.objectContaining({ modelRoute: "reasoning", reasoningEffort: "high" })
+            expect.objectContaining({ modelRoute: "default", reasoningEffort: "high" })
         );
+    });
+
+    it("restores a draft saved on a retired tier as Standard with its effort", () => {
+        localStorage.setItem(
+            "launchstack:composer:retired-tier",
+            JSON.stringify({
+                text: "Old reasoning draft",
+                attachments: [],
+                refs: [],
+                webSearch: true,
+                thinking: true,
+                agentKey: null,
+                modelRoute: "reasoning",
+                modelRoutes: ["reasoning", "vision"],
+                reasoningEffort: "high",
+            })
+        );
+        const { box, onSend } = mount({ draftKey: "retired-tier" });
+        expect(screen.getByRole("button", { name: "Choose model" })).toHaveTextContent("Standard");
+        fireEvent.keyDown(box, { key: "Enter" });
+        const sent = onSend.mock.calls[0]![0];
+        expect(sent).toMatchObject({ modelRoute: "default", reasoningEffort: "high" });
+        expect(sent).not.toHaveProperty("modelRoutes");
+    });
+
+    it("sends an image on Fast to the vision route when Fast can't read it", async () => {
+        const user = userEvent.setup();
+        const { box, onSend } = mount();
+        await user.click(screen.getByRole("button", { name: "Choose model" }));
+        await user.click(screen.getByRole("option", { name: /Fast/ }));
+        attach(new File(["png"], "chart.png", { type: "image/png" }));
+        await waitFor(() => expect(UploadRequest.requests).toHaveLength(1));
+        act(() => UploadRequest.requests[0]!.complete());
+        fireEvent.change(box, { target: { value: "What does this show?" } });
+        fireEvent.keyDown(box, { key: "Enter" });
+        expect(onSend).toHaveBeenCalledWith(expect.objectContaining({ modelRoute: "vision" }));
     });
 
     it("queues during an active turn and offers Stop for an empty draft", () => {
@@ -648,8 +701,8 @@ describe("Composer uploads and completion", () => {
         fireEvent.keyDown(box, { key: "Enter" });
         expect(box.value).toContain("Revenue planning");
         fireEvent.click(screen.getByRole("button", { name: "Choose model" }));
-        fireEvent.click(screen.getByRole("checkbox", { name: "Compare default model" }));
-        fireEvent.click(screen.getByRole("checkbox", { name: "Compare fast model" }));
+        fireEvent.click(screen.getByRole("checkbox", { name: "Compare Standard" }));
+        fireEvent.click(screen.getByRole("checkbox", { name: "Compare Fast" }));
         fireEvent.change(box, { target: { value: "Compare this question" } });
         fireEvent.keyDown(box, { key: "Enter" });
         expect(onSend).toHaveBeenCalledWith(
@@ -955,6 +1008,259 @@ describe("Composer uploads and completion", () => {
     });
 });
 
+describe("Composer offered workspace models", () => {
+    // Fixtures carry a provider id the way an older server might have sent
+    // one: the composer must never put it on screen.
+    const teamWriter = {
+        key: "team-writer",
+        label: "Team writer",
+        available: true,
+        model: "acme/secret-writer-70b",
+        vision: { supported: false },
+        reasoning: { mode: "effort", controllable: true, efforts: ["low", "medium", "high"] },
+    };
+    const chartReader = {
+        key: "chart-reader",
+        label: "Chart reader",
+        available: true,
+        model: "acme/secret-vision-8b",
+        vision: { supported: true, mimeTypes: ["image/png"], maxImages: 4 },
+        reasoning: { mode: "none", controllable: false },
+    };
+    const offered = [teamWriter, chartReader];
+    const trigger = () => screen.getByRole("button", { name: "Choose model" });
+    const optionTexts = (scope: HTMLElement) =>
+        within(scope)
+            .getAllByRole("option")
+            .map(option => option.textContent);
+    beforeEach(() => {
+        mockChatRoutes.loading = false;
+        mockChatRoutes.failed = false;
+        mockChatRoutes.offeredModels = offered;
+    });
+    afterEach(() => {
+        mockChatRoutes.loading = false;
+        mockChatRoutes.failed = false;
+        mockChatRoutes.offeredModels = [];
+    });
+
+    it("lists Standard and Fast, then the workspace's models under their admin-given names", async () => {
+        const user = userEvent.setup();
+        mount();
+        await user.click(trigger());
+        const listbox = screen.getByRole("listbox", { name: "Configured models" });
+        expect(optionTexts(listbox)).toEqual([
+            expect.stringMatching(/^Standard/),
+            expect.stringMatching(/^Fast/),
+            "Team writerReasons before answering",
+            "Chart readerReads images",
+        ]);
+        const group = within(listbox).getByRole("group", { name: "Your workspace's models" });
+        expect(optionTexts(group)).toEqual([
+            expect.stringMatching(/^Team writer/),
+            expect.stringMatching(/^Chart reader/),
+        ]);
+        expect(document.body.innerHTML).not.toMatch(/secret|acme/);
+    });
+
+    it("sends a picked offered model as the main route plus its key, with its own efforts", async () => {
+        const user = userEvent.setup();
+        const { box, onSend } = mount();
+        await user.click(trigger());
+        await user.click(screen.getByRole("option", { name: /Team writer/ }));
+        expect(trigger()).toHaveTextContent("Team writer");
+        await user.click(trigger());
+        const effort = screen.getByRole("combobox", { name: "Reasoning effort" });
+        // Standard offers low and high; the offered model's own levels show.
+        expect(within(effort).getAllByRole("option")).toHaveLength(4);
+        await user.selectOptions(effort, "medium");
+        fireEvent.change(box, { target: { value: "Draft the update" } });
+        fireEvent.keyDown(box, { key: "Enter" });
+        expect(onSend).toHaveBeenCalledWith(
+            expect.objectContaining({
+                modelRoute: "default",
+                modelKey: "team-writer",
+                reasoningEffort: "medium",
+            })
+        );
+        expect(JSON.stringify(onSend.mock.calls)).not.toMatch(/secret|acme/);
+    });
+
+    it("picks offered models with Alt+3 onwards, after the two tiers", async () => {
+        const user = userEvent.setup();
+        mount();
+        await user.click(trigger());
+        fireEvent.keyDown(screen.getByRole("listbox", { name: "Configured models" }), {
+            key: "4",
+            code: "Digit4",
+            altKey: true,
+        });
+        expect(trigger()).toHaveTextContent("Chart reader");
+    });
+
+    it("searches offered models by name and puts favourites first", async () => {
+        const user = userEvent.setup();
+        mount({ draftKey: "chat:user-1:company-1:thread-1" });
+        await user.click(trigger());
+        const search = screen.getByRole("textbox", { name: "Search models" });
+        await user.type(search, "chart");
+        const listbox = screen.getByRole("listbox", { name: "Configured models" });
+        expect(optionTexts(listbox)).toEqual([expect.stringMatching(/^Chart reader/)]);
+        await user.clear(search);
+        await user.click(screen.getByRole("button", { name: "Favorite Chart reader" }));
+        expect(
+            optionTexts(within(listbox).getByRole("group", { name: "Your workspace's models" }))
+        ).toEqual([expect.stringMatching(/^Chart reader/), expect.stringMatching(/^Team writer/)]);
+        expect(screen.getByRole("button", { name: "Unfavorite Chart reader" })).toBeVisible();
+        expect(
+            JSON.parse(
+                localStorage.getItem("launchstack:composer-preferences:chat:user-1:company-1")!
+            ).favorites
+        ).toEqual(["model:chart-reader"]);
+    });
+
+    it("compares a tier with an offered model", async () => {
+        const user = userEvent.setup();
+        const { box, onSend } = mount();
+        await user.click(trigger());
+        await user.click(screen.getByRole("checkbox", { name: "Compare Fast" }));
+        await user.click(screen.getByRole("checkbox", { name: "Compare Team writer" }));
+        expect(trigger()).toHaveTextContent("2 models");
+        fireEvent.change(box, { target: { value: "Compare these" } });
+        fireEvent.keyDown(box, { key: "Enter" });
+        const sent = onSend.mock.calls[0]![0];
+        expect(sent).toMatchObject({
+            modelRoute: "default",
+            modelRoutes: ["fast", "model:team-writer"],
+        });
+        expect(sent.modelKey).toBeUndefined();
+    });
+
+    async function sendImageWith(label: RegExp) {
+        const user = userEvent.setup();
+        const { box, onSend } = mount();
+        await user.click(trigger());
+        await user.click(screen.getByRole("option", { name: label }));
+        attach(new File(["png"], "chart.png", { type: "image/png" }));
+        await waitFor(() => expect(UploadRequest.requests).toHaveLength(1));
+        act(() => UploadRequest.requests[0]!.complete());
+        fireEvent.change(box, { target: { value: "What does this show?" } });
+        fireEvent.keyDown(box, { key: "Enter" });
+        return onSend.mock.calls[0]![0];
+    }
+
+    it("keeps an offered pick that reads images: the server sends them to it", async () => {
+        const sent = await sendImageWith(/Chart reader/);
+        expect(sent).toMatchObject({ modelRoute: "default", modelKey: "chart-reader" });
+    });
+
+    it("hands an image to the vision route when the offered pick can't read it", async () => {
+        const sent = await sendImageWith(/Team writer/);
+        expect(sent.modelRoute).toBe("vision");
+        expect(sent.modelKey).toBeUndefined();
+    });
+
+    it("falls back to Standard once loaded when a draft names a model no longer offered", () => {
+        localStorage.setItem(
+            "launchstack:composer:removed-model",
+            JSON.stringify({
+                text: "Old question",
+                attachments: [],
+                refs: [],
+                webSearch: true,
+                thinking: true,
+                agentKey: null,
+                modelRoute: "default",
+                modelKey: "retired-writer",
+                modelRoutes: ["fast", "model:retired-writer"],
+            })
+        );
+        mockChatRoutes.loading = true;
+        const { box, onSend, props, rerender } = mount({ draftKey: "removed-model" });
+        // While the menu loads nothing is dropped.
+        expect(trigger()).toHaveTextContent("2 models");
+        expect(
+            JSON.parse(localStorage.getItem("launchstack:composer:removed-model")!)
+        ).toMatchObject({
+            modelKey: "retired-writer",
+            modelRoutes: ["fast", "model:retired-writer"],
+        });
+        mockChatRoutes.loading = false;
+        rerender(<Composer {...props} />);
+        expect(trigger()).toHaveTextContent("Standard");
+        fireEvent.keyDown(box, { key: "Enter" });
+        const sent = onSend.mock.calls[0]![0];
+        expect(sent).toMatchObject({ modelRoute: "default", text: "Old question" });
+        expect(sent.modelKey).toBeUndefined();
+        expect(sent).not.toHaveProperty("modelRoutes");
+    });
+
+    it("keeps an offered pick when the model menu couldn't be read", () => {
+        localStorage.setItem(
+            "launchstack:composer:menu-failed",
+            JSON.stringify({
+                text: "Question",
+                attachments: [],
+                refs: [],
+                webSearch: true,
+                thinking: true,
+                agentKey: null,
+                modelRoute: "default",
+                modelKey: "team-writer",
+            })
+        );
+        mockChatRoutes.failed = true;
+        mockChatRoutes.offeredModels = [];
+        const { box, onSend } = mount({ draftKey: "menu-failed" });
+        expect(trigger()).toHaveTextContent("Workspace model");
+        fireEvent.keyDown(box, { key: "Enter" });
+        expect(onSend).toHaveBeenCalledWith(
+            expect.objectContaining({ modelRoute: "default", modelKey: "team-writer" })
+        );
+    });
+
+    it("restores a queued turn's offered model from its seed", () => {
+        const { box, props, rerender, onSend } = mount();
+        rerender(
+            <Composer
+                {...props}
+                seed={{
+                    nonce: 77,
+                    text: "Queued question",
+                    mode: "replace",
+                    modelRoute: "default",
+                    modelKey: "chart-reader",
+                }}
+            />
+        );
+        expect(trigger()).toHaveTextContent("Chart reader");
+        fireEvent.keyDown(box, { key: "Enter" });
+        expect(onSend).toHaveBeenCalledWith(
+            expect.objectContaining({ modelRoute: "default", modelKey: "chart-reader" })
+        );
+    });
+
+    it("accepts drafts that compare offered models and rejects unknown entries", () => {
+        const draft = {
+            text: "",
+            attachments: [],
+            refs: [],
+            webSearch: true,
+            thinking: true,
+            agentKey: null,
+        };
+        expect(
+            isComposerDraft({
+                ...draft,
+                modelKey: "team-writer",
+                modelRoutes: ["fast", "model:team-writer"],
+            })
+        ).toBe(true);
+        expect(isComposerDraft({ ...draft, modelRoutes: ["model:Not A Key"] })).toBe(false);
+        expect(isComposerDraft({ ...draft, modelKey: 7 })).toBe(false);
+    });
+});
+
 describe("Composer utility boundaries", () => {
     it("derives rich recall text without quote, source, conversation or attachment chip context", () => {
         const document = {
@@ -1031,5 +1337,97 @@ describe("Composer utility boundaries", () => {
             replacement: "\n- [ ] ",
         });
         expect(listContinuation("- ", 2)).toEqual({ start: 0, end: 2, replacement: "" });
+    });
+});
+
+describe("rich editor: sources in the message", () => {
+    const deck: WorkspaceSource = {
+        id: "d1",
+        documentId: 1,
+        title: "Q3 board deck",
+        type: "doc",
+        size: "1 KB",
+        added: "Today",
+        folder: "Board",
+        tags: [],
+        domain: "General",
+    };
+    const CHIP = "Source context: Q3 board deck";
+
+    beforeAll(() => {
+        // ProseMirror measures ranges; jsdom has no layout.
+        Range.prototype.getClientRects = () =>
+            ({ length: 0, item: () => null, [Symbol.iterator]: function* () {} }) as DOMRectList;
+        Range.prototype.getBoundingClientRect = () => ({
+            x: 0,
+            y: 0,
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+            width: 0,
+            height: 0,
+            toJSON: () => ({}),
+        });
+    });
+
+    async function mountRich(overrides: Partial<ComposerProps> = {}) {
+        const onSend = jest.fn<void, [ComposerSend]>();
+        const props: ComposerProps = {
+            sources: [deck],
+            selected: [],
+            setSelected: jest.fn(),
+            onSend,
+            agents: [],
+            agentKey: null,
+            onChangeAgent: jest.fn(),
+            defaultEditorMode: "rich",
+            ...overrides,
+        };
+        const result = render(<Composer {...props} />);
+        const box = await screen.findByRole("textbox", { name: "Rich chat message" });
+        return { ...result, props, onSend, box };
+    }
+
+    it("shows the chat's carried sources as one line, never as a Context row or chips", async () => {
+        await mountRich({ selected: ["d1"], carriedRefs: ["d1"] });
+        expect(screen.getByTestId("composer-scope")).toHaveTextContent("Asking over 1 source");
+        expect(screen.getByRole("button", { name: "Change" })).toBeInTheDocument();
+        expect(screen.queryByText("Context")).toBeNull();
+        expect(screen.queryByRole("button", { name: CHIP })).toBeNull();
+    });
+
+    it("turns a source added while composing into a chip in the words", async () => {
+        const { rerender, props } = await mountRich();
+        rerender(<Composer {...props} selected={["d1"]} />);
+        expect(await screen.findByRole("button", { name: CHIP })).toBeInTheDocument();
+        expect(screen.queryByTestId("composer-scope")).toBeNull();
+    });
+
+    it("sends chips alone as an attachment, with the chip's stored form as the words", async () => {
+        const { rerender, props, onSend } = await mountRich();
+        rerender(<Composer {...props} selected={["d1"]} />);
+        await screen.findByRole("button", { name: CHIP });
+        await userEvent.click(screen.getByRole("button", { name: "Send message" }));
+        expect(onSend).toHaveBeenCalledWith(
+            expect.objectContaining({
+                origin: "attachment",
+                refs: ["d1"],
+                text: "[Source: Q3 board deck](#launchstack-source-d1)",
+            })
+        );
+    });
+
+    it("keeps a carried source's unavailable twin removable from the scope line", async () => {
+        const setSelected = jest.fn();
+        // Carried and gone (deleted since): no chip to delete, so the line offers the removal.
+        await mountRich({ selected: ["d1", "d404"], carriedRefs: ["d1", "d404"], setSelected });
+        expect(screen.getByTestId("composer-scope")).toHaveTextContent("Unavailable source · d404");
+        await userEvent.click(
+            screen.getByRole("button", { name: "Remove unavailable source d404" })
+        );
+        expect(setSelected).toHaveBeenCalled();
+        const update = setSelected.mock.calls[0]![0] as (previous: string[]) => string[];
+        expect(update(["d1", "d404"])).toEqual(["d1"]);
     });
 });

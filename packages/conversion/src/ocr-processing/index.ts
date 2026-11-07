@@ -3,5 +3,6 @@ export * from "./config-types";
 export * from "./types";
 export * from "./config";
 export * from "./complexity";
+export * from "./provider-order";
 export * from "./enrichment";
 export * from "./trigger";

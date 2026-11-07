@@ -539,6 +539,31 @@ describe("collab agents routes", () => {
             );
         });
 
+        it("names the refused fields in the reader's language", async () => {
+            mockCtx.role = "member";
+            seedRoster();
+
+            const request = new Request("http://localhost/api/collab/agents", {
+                method: "PATCH",
+                headers: { "content-type": "application/json", cookie: "ls-locale=zh-CN.1" },
+                body: JSON.stringify({ key: "money", autonomy: "full", tools: null }),
+            });
+            const response = await PATCH(request, at("p_finance"));
+
+            expect(response.status).toBe(403);
+            expect(((await response.json()) as { error: string }).error).toBe(
+                "只有可以管理工作区设置的成员才能更改智能体的标识名、自主程度和工具。"
+            );
+
+            const english = await PATCH(
+                jsonRequest({ key: "money", autonomy: "full", tools: null }, "PATCH"),
+                at("p_finance")
+            );
+            expect(((await english.json()) as { error: string }).error).toBe(
+                "Only people who can manage workspace settings can change an agent's handle, autonomy and tools."
+            );
+        });
+
         it.each([
             ["handle", { key: "money" }],
             ["tools", { tools: null }],

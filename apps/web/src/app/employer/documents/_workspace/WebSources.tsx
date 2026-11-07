@@ -1,3 +1,4 @@
+import { useTranslations } from "next-intl";
 import { Globe } from "lucide-react";
 
 function hostOf(url: string): string {
@@ -10,15 +11,16 @@ function hostOf(url: string): string {
 
 /** The web pages an answer was shown, numbered as its [Source N] citations. */
 export function WebSources({ sources }: { sources: { title: string; url: string }[] }) {
+    const t = useTranslations("sources.webSources");
     if (sources.length === 0) return null;
     return (
         <section
-            aria-label="Web sources"
+            aria-label={t("aria")}
             className="border-line bg-line-2 mt-3.5 rounded-[10px] border px-3.5 py-3"
         >
             <div className="mono text-ink-3 mb-2 flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.08em]">
                 <Globe className="size-3" aria-hidden />
-                {sources.length} web source{sources.length === 1 ? "" : "s"}
+                {t("count", { count: sources.length })}
             </div>
             <ol className="m-0 list-none p-0">
                 {sources.map((source, index) => (

@@ -1,3 +1,4 @@
+import { isOfferedModelPick } from "~/lib/ai/model-picks";
 import { isChatPassage, type ChatPassage } from "~/lib/chat-passages";
 import type { ComposerSend, EphemeralAttachment } from "./types";
 import type { JSONContent } from "@tiptap/react";
@@ -67,6 +68,9 @@ export interface ComposerDraft {
     attachments: EphemeralAttachment[];
     refs: string[];
     modelRoute?: ComposerSend["modelRoute"];
+    /** The offered workspace model picked, by key; read back with `pickOfRequest`. */
+    modelKey?: string;
+    /** Compare mode: tiers and `model:<key>` picks. */
     modelRoutes?: ComposerSend["modelRoutes"];
     threadRefs?: string[];
     /** Selected passages waiting to be asked about. */
@@ -91,7 +95,15 @@ export interface ComposerPreferences {
     favorites: string[];
     followUp?: "queue" | "interrupt";
     editorMode?: "plain" | "rich";
+    /**
+     * Whether the person picked the editor themselves. The mode is written
+     * back on every change, so without this an old automatic default would
+     * pass for a choice and keep a new default from ever applying.
+     */
+    editorModeChosen?: boolean;
     modelRoute?: ComposerSend["modelRoute"];
+    /** The offered workspace model last picked, by key. */
+    modelKey?: string;
     reasoningEffort?: string;
 }
 
@@ -235,10 +247,15 @@ export function isComposerDraft(value: unknown): value is ComposerDraft {
         typeof draft.webSearch === "boolean" &&
         typeof draft.thinking === "boolean" &&
         (draft.agentKey === null || typeof draft.agentKey === "string") &&
+        // A key the workspace no longer offers still reads: the composer
+        // falls back to Standard once it knows the key is gone.
+        (draft.modelKey === undefined || typeof draft.modelKey === "string") &&
         (draft.modelRoutes === undefined ||
             (Array.isArray(draft.modelRoutes) &&
-                draft.modelRoutes.every(route =>
-                    ["default", "fast", "reasoning", "vision"].includes(route)
+                draft.modelRoutes.every(
+                    route =>
+                        ["default", "fast", "reasoning", "vision"].includes(route) ||
+                        isOfferedModelPick(route)
                 ))) &&
         (draft.threadRefs === undefined ||
             (Array.isArray(draft.threadRefs) &&

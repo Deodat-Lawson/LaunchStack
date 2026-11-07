@@ -258,7 +258,7 @@ export async function deleteFile(keyOrUrl: string, provider?: StorageBackend): P
  * This is the friendlier counterpart to `deleteFile(key, provider)` — most
  * callers only have the URL stored in the DB (e.g. `document_versions.url`)
  * and don't know which provider put it there. This helper inspects the URL,
- * strips the SeaweedFS endpoint prefix to recover the object key when needed,
+ * strips the endpoint and bucket prefixes to recover the object key when needed,
  * and dispatches to `deleteFile` with the correct provider.
  *
  * Database-backed URLs (`/api/files/{id}`) are silently ignored because there
@@ -272,12 +272,36 @@ export async function deleteFileByUrl(url: string): Promise<void> {
 
     const s3Endpoint = env.server.NEXT_PUBLIC_S3_ENDPOINT ?? env.client.NEXT_PUBLIC_S3_ENDPOINT;
 
-    if (s3Endpoint && url.startsWith(s3Endpoint)) {
-        // SeaweedFS is S3-compatible; recover the object key from the endpoint prefix.
-        // e.g. "http://localhost:8333/pdr-documents/documents/abc-file.pdf"
-        //   -> "pdr-documents/documents/abc-file.pdf"
-        const key = url.slice(s3Endpoint.replace(/\/+$/, "").length + 1);
-        return deleteFile(key, "s3");
+    if (s3Endpoint) {
+        let endpoint: URL;
+        let storedUrl: URL;
+        try {
+            endpoint = new URL(s3Endpoint);
+            storedUrl = new URL(url);
+        } catch {
+            return deleteFile(url, "database");
+        }
+        const bucket = env.server.S3_BUCKET_NAME;
+        const basePath = endpoint.pathname.replace(/\/+$/, "");
+        const pathStylePrefix = `${basePath}/${bucket ? `${bucket}/` : ""}`;
+        const virtualHostPrefix = `${basePath}/`;
+        const isVirtualHost =
+            bucket &&
+            storedUrl.protocol === endpoint.protocol &&
+            storedUrl.port === endpoint.port &&
+            (storedUrl.hostname === `${bucket}.${endpoint.hostname}` ||
+                (endpoint.hostname.startsWith(`${bucket}.`) &&
+                    storedUrl.hostname === endpoint.hostname));
+        let key: string | undefined;
+        if (
+            storedUrl.origin === endpoint.origin &&
+            storedUrl.pathname.startsWith(pathStylePrefix)
+        ) {
+            key = storedUrl.pathname.slice(pathStylePrefix.length);
+        } else if (isVirtualHost && storedUrl.pathname.startsWith(virtualHostPrefix)) {
+            key = storedUrl.pathname.slice(virtualHostPrefix.length);
+        }
+        if (key) return deleteFile(decodeURIComponent(key), "s3");
     }
 
     // Vercel Blob has no delete handler wired up; fall through as a no-op via

@@ -1,0 +1,2 @@
+ALTER TABLE "pdr_ai_v2_call_notes_zoom_connections" ALTER COLUMN "encrypted_access_token" DROP NOT NULL;--> statement-breakpoint
+ALTER TABLE "pdr_ai_v2_call_notes_zoom_connections" ADD COLUMN "disconnected_at" timestamp with time zone;

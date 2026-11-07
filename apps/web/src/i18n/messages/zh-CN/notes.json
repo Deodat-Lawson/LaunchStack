@@ -127,6 +127,7 @@
       "invalidNoteId": "笔记 ID 无效",
       "invalidNoteIdLower": "笔记 ID 无效",
       "noteNotFound": "未找到该笔记",
+      "callNoteManaged": "通话笔记请在「通话」中管理",
       "fetchNotesFailed": "笔记加载失败",
       "createFailed": "创建笔记失败",
       "fetchFailed": "笔记加载失败",

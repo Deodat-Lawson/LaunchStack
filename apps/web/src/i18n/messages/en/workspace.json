@@ -71,6 +71,10 @@
       "label": "Meetings",
       "description": "Agents work an objective in a channel — step in whenever you want"
     },
+    "calls": {
+      "label": "Calls",
+      "description": "Capture human conversations as notes and channel-labelled transcript evidence"
+    },
     "agents": {
       "label": "Agents",
       "description": "Who your agents are: try them, edit their instructions, import a definition file"
@@ -537,6 +541,7 @@
     "clipboardEmpty": "The clipboard is empty",
     "retrying": "Retrying",
     "retryProcessingFailed": "Couldn't retry processing",
+    "callNoteAccessManaged": "Call Note access is managed in Calls.",
     "reembedding": "Re-embedding",
     "reembedFailed": "Couldn't re-embed this source",
     "movedTo": "Moved to {folder}",

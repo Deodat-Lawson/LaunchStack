@@ -100,6 +100,9 @@ export const document = pgTable(
     table => ({
         companyIdIdx: index("document_company_id_idx").on(table.companyId),
         companyIdIdIdx: index("document_company_id_id_idx").on(table.companyId, table.id),
+        companyCallNoteIdIdx: index("document_company_call_note_id_idx")
+            .on(table.companyId, table.id)
+            .where(sql`${table.ocrMetadata} ? 'callNote'`),
         companyIdCategoryIdx: index("document_company_id_category_idx").on(
             table.companyId,
             table.category

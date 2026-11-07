@@ -71,6 +71,10 @@
       "label": "会议",
       "description": "智能体在频道中推进一个目标——你可以随时加入"
     },
+    "calls": {
+      "label": "通话",
+      "description": "将真人对话保存为笔记，以及标有音频通道的转录证据"
+    },
     "agents": {
       "label": "智能体",
       "description": "你的智能体：试用、编辑指令、导入定义文件"
@@ -537,6 +541,7 @@
     "clipboardEmpty": "剪贴板为空",
     "retrying": "正在重试",
     "retryProcessingFailed": "无法重试处理",
+    "callNoteAccessManaged": "通话笔记的访问权限请在「通话」中管理。",
     "reembedding": "正在重新嵌入",
     "reembedFailed": "无法重新嵌入此来源",
     "movedTo": "已移到 {folder}",

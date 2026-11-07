@@ -17,7 +17,7 @@
  *   preventing duplicate writes on replay (Fix 1.15)
  */
 
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { inngest } from "../client";
 import { db } from "~/server/db";
 import { document } from "@launchstack/store/schema";
@@ -43,11 +43,14 @@ export const modifyDocument = inngest.createFunction(
                     .update(document)
                     .set({
                         updatedAt: new Date(),
-                        ocrMetadata: {
-                            error: "editing_failed",
-                            errorMessage: error instanceof Error ? error.message : String(error),
-                            failedAt: new Date().toISOString(),
-                        },
+                        ocrMetadata: sql`COALESCE(${document.ocrMetadata}, '{}'::jsonb) || ${JSON.stringify(
+                            {
+                                error: "editing_failed",
+                                errorMessage:
+                                    error instanceof Error ? error.message : String(error),
+                                failedAt: new Date().toISOString(),
+                            }
+                        )}::jsonb`,
                     })
                     .where(eq(document.id, documentId));
             } catch (dbErr) {
@@ -117,11 +120,13 @@ export const modifyDocument = inngest.createFunction(
                     .update(document)
                     .set({
                         updatedAt: new Date(),
-                        ocrMetadata: {
-                            error: "editing_failed",
-                            errorMessage: result.validationError,
-                            failedAt: new Date().toISOString(),
-                        },
+                        ocrMetadata: sql`COALESCE(${document.ocrMetadata}, '{}'::jsonb) || ${JSON.stringify(
+                            {
+                                error: "editing_failed",
+                                errorMessage: result.validationError,
+                                failedAt: new Date().toISOString(),
+                            }
+                        )}::jsonb`,
                     })
                     .where(eq(document.id, documentId));
             });

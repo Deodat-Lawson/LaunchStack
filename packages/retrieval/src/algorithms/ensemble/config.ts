@@ -22,6 +22,13 @@ import type { BaseRetriever } from "@langchain/core/retrievers";
 import type { DocumentScope, EmbeddingsProvider } from "../../search-types";
 
 export interface NotesLegProvider {
+    /**
+     * Notes use a fixed-width legacy index even when the document legs have
+     * moved to a dimension-table index. `undefined` keeps the caller's
+     * embedding provider for hosts that do not need a separate notes index;
+     * `null` disables the notes leg when that fixed provider is unavailable.
+     */
+    embeddingProvider?: EmbeddingsProvider | null;
     createDocumentLeg(
         documentId: number,
         embeddings: EmbeddingsProvider,

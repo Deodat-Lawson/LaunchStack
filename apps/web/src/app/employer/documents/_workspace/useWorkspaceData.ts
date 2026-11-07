@@ -4,12 +4,17 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useFormatter, useTranslations } from "next-intl";
 import type { Permission } from "~/lib/authz/permissions";
 import { usePermissions } from "~/lib/use-permissions";
+import { isCallNoteDocument } from "~/lib/call-note-document";
 import {
     compareFolderPaths,
     expandFolderPaths,
     folderLeafName,
     normalizeFolderPath,
 } from "~/lib/folders/path";
+import {
+    WorkspaceCallNoteFilesSchema,
+    type WorkspaceCallNoteFile,
+} from "@launchstack/pipelines/call-notes/files";
 import type { MindmapSummary } from "../_mindmap/lib/api";
 import type { DocumentType } from "../types/document";
 import { getDocumentDisplayType } from "../types/document";
@@ -172,6 +177,42 @@ export function mapDocument(doc: DocumentRow, labels: SourceRowLabels): Workspac
     };
 }
 
+function mapCallNoteFile(
+    file: WorkspaceCallNoteFile,
+    indexedDocument: DocumentRow | undefined,
+    labels: SourceRowLabels
+): WorkspaceSource {
+    return {
+        id: `call-note:${file.callId}`,
+        callId: file.callId,
+        documentId: file.documentId ?? undefined,
+        noteId: file.noteId,
+        visibility: file.visibility,
+        revision: file.revision,
+        updatedAt: file.updatedAt,
+        preview: file.preview,
+        title: file.title,
+        type: "call-note",
+        size: "",
+        added: humanDate(file.updatedAt, labels),
+        folder: "Calls",
+        tags: [],
+        domain: "General",
+        citability: file.documentId === null ? "none" : "citable",
+        indexStatus: indexedDocument ? documentIndexStatus(indexedDocument) : undefined,
+        errorMessage: indexedDocument ? documentIndexError(indexedDocument) : undefined,
+        processing: indexedDocument?.processing ?? undefined,
+        access: {
+            audience: file.visibility === "private" ? "private" : "workspace",
+            ownAudience: true,
+            principalCount: 0,
+            canEdit: false,
+            canManage: false,
+            canDelete: false,
+        },
+    };
+}
+
 /**
  * A mindmap is citable only through its published copy, and only faithfully
  * when that copy was made from the revision on screen.
@@ -266,6 +307,7 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
     const [documents, setDocuments] = useState<DocumentRow[]>([]);
     const [mindmaps, setMindmaps] = useState<MindmapSummary[]>([]);
     const [folderRows, setFolderRows] = useState<FolderRow[]>([]);
+    const [callNoteFiles, setCallNoteFiles] = useState<WorkspaceCallNoteFile[]>([]);
     const [optimistic, setOptimistic] = useState<WorkspaceSource[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -291,10 +333,20 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
     } = usePermissions();
 
     const fetchSources = useCallback(async () => {
-        if (!userId) return;
+        if (!userId) {
+            // Keep unresolved sessions loading so URL sync does not discard a
+            // deep link before its source list can be requested.
+            setLoading(true);
+            setDocuments([]);
+            setMindmaps([]);
+            setFolderRows([]);
+            setCallNoteFiles([]);
+            setOptimistic([]);
+            return;
+        }
         setError(null);
         try {
-            const [docsRes, foldersRes, mapsRes] = await Promise.all([
+            const [docsRes, foldersRes, mapsRes, callFilesRes] = await Promise.all([
                 fetch("/api/fetchDocument", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -304,6 +356,9 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
                 // Mindmaps are sources too. A failure here must not take the
                 // documents down with it — the list degrades to uploads only.
                 fetch("/api/mindmaps?scope=active").catch(() => null),
+                // Call Notes keep their own actions. If this endpoint fails,
+                // their marker-tagged retrieval copies still stay out of uploads.
+                fetch("/api/call-notes/files", { cache: "no-store" }).catch(() => null),
             ]);
             if (!docsRes.ok)
                 throw new Error(tRef.current("sourceRows.fetchFailed", { status: docsRes.status }));
@@ -311,8 +366,6 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
             activity.current = processingActivity(docs);
             setDocuments(docs);
 
-            // Folders that exist while empty only come from here; the rest are
-            // implied by the documents themselves, so a failure degrades to that.
             if (foldersRes.ok) {
                 const body = (await foldersRes.json()) as { data?: { folders?: FolderRow[] } };
                 setFolderRows(body.data?.folders ?? []);
@@ -323,6 +376,13 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
                 setMindmaps(body.mindmaps ?? []);
             } else if (mapsRes) {
                 console.warn(`[workspace] mindmaps list failed (${mapsRes.status})`);
+                setMindmaps([]);
+            }
+
+            if (callFilesRes?.ok) {
+                setCallNoteFiles(WorkspaceCallNoteFilesSchema.parse(await callFilesRes.json()));
+            } else {
+                setCallNoteFiles([]);
             }
 
             // Prune optimistic rows that now exist in the server response (by title).
@@ -350,22 +410,26 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
     }, [fetchSources]);
 
     useEffect(() => {
-        if (!userId) return;
         void refresh();
-    }, [userId, refresh]);
+    }, [refresh]);
 
     const sources = useMemo<WorkspaceSource[]>(() => {
-        // A published map's Markdown copy is the map, not a second source: it
-        // is hidden here and reached through the map's `documentId`.
+        // A published map or indexed Call Note is one source, not a second
+        // Markdown document. Retrieval reaches it through its `documentId`.
         const claimed = new Set<number>();
         const documentsById = new Map<number, DocumentRow>();
         for (const doc of documents) documentsById.set(doc.id, doc);
         for (const map of mindmaps) {
             if (map.publishedDocumentId !== null) claimed.add(map.publishedDocumentId);
         }
+        for (const file of callNoteFiles) {
+            if (file.documentId !== null) claimed.add(file.documentId);
+        }
         return [
             ...optimistic,
-            ...documents.filter(d => !claimed.has(d.id)).map(doc => mapDocument(doc, labels)),
+            ...documents
+                .filter(d => !claimed.has(d.id) && !isCallNoteDocument(d))
+                .map(doc => mapDocument(doc, labels)),
             ...mindmaps.map(map =>
                 mapMindmap(
                     map,
@@ -375,8 +439,15 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
                     labels
                 )
             ),
+            ...callNoteFiles.map(file =>
+                mapCallNoteFile(
+                    file,
+                    file.documentId === null ? undefined : documentsById.get(file.documentId),
+                    labels
+                )
+            ),
         ];
-    }, [documents, mindmaps, optimistic, labels]);
+    }, [documents, mindmaps, callNoteFiles, optimistic, labels]);
 
     // Which sources are still processing. The poll schedule restarts whenever
     // this changes — something finished or started — and backs off otherwise.
@@ -451,13 +522,23 @@ export function useWorkspaceData(userId: string | null | undefined): UseWorkspac
         ]);
         return paths.sort(compareFolderPaths).map(path => {
             const row = byPath.get(path);
+            const system = path === "Calls";
             return {
                 id: `f-${path}`,
                 name: path,
                 color: folderColor(folderLeafName(path)),
+                system,
                 restricted: row?.restricted === true,
                 categoryId: row?.categoryId ?? null,
-                access: row?.access,
+                access: system
+                    ? {
+                          audience: "workspace",
+                          ownAudience: false,
+                          principalCount: 0,
+                          canEdit: false,
+                          canManage: false,
+                      }
+                    : row?.access,
             };
         });
     }, [sources, folderRows]);

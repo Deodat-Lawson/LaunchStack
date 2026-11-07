@@ -27,7 +27,7 @@
  */
 
 import { NextResponse } from "next/server";
-import { and, desc, eq } from "drizzle-orm";
+import { and, desc, eq, getTableColumns } from "drizzle-orm";
 import { z } from "zod";
 
 import { db } from "~/server/db";
@@ -43,6 +43,8 @@ import { RateLimitPresets } from "~/lib/rate-limiter";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import type { Permission } from "~/lib/authz/permissions";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
+import { callNotesCalls } from "@launchstack/pipelines/call-notes";
+import { callNoteDocumentReference, isCallNoteDocument } from "~/lib/call-note-document";
 import type { Locale } from "~/i18n/locales";
 import { localeOfRequest } from "~/i18n/server";
 import { translatorFor, wordOr } from "~/i18n/translate";
@@ -106,7 +108,7 @@ async function authorizeDocumentAccess(
           companyId: bigint;
           /** May the caller replace this document (ADR-014 `canEditDocument`)? */
           canEditDocument: () => Promise<boolean>;
-          doc: typeof document.$inferSelect;
+          doc: typeof document.$inferSelect & { indexedCallNote: boolean };
       }
     | { ok: false; response: NextResponse }
 > {
@@ -116,7 +118,10 @@ async function authorizeDocumentAccess(
     }
 
     const [doc] = await db
-        .select()
+        .select({
+            ...getTableColumns(document),
+            indexedCallNote: callNoteDocumentReference(document, callNotesCalls),
+        })
         .from(document)
         .where(
             and(
@@ -161,6 +166,13 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
             if (!authResult.ok) return authResult.response;
 
             const { userId, doc } = authResult;
+
+            if (isCallNoteDocument(doc)) {
+                return NextResponse.json(
+                    { error: translatorFor(locale, "sources.server.errors")("callNoteManaged") },
+                    { status: 409 }
+                );
+            }
 
             // A new version replaces the file: it takes edit access to the
             // document (its own grant, or its folder's level).

@@ -5,7 +5,7 @@
  * "processing". Mirrors the completion writes to both source records.
  * Both metadata writes are best-effort: neither blocks the other on failure.
  */
-import { and, eq, inArray } from "drizzle-orm";
+import { and, eq, inArray, sql } from "drizzle-orm";
 
 import type { ClaimedEvent } from "@launchstack/orchestration";
 import type { LoggerPort } from "@launchstack/runtime";
@@ -61,7 +61,8 @@ export function createDeadEventHandler(logger: LoggerPort) {
                     .update(document)
                     .set({
                         ocrProcessed: false,
-                        ocrMetadata,
+                        // Keep Call Note provenance and other ingestion metadata.
+                        ocrMetadata: sql`COALESCE(${document.ocrMetadata}, '{}'::jsonb) || ${JSON.stringify(ocrMetadata)}::jsonb`,
                     })
                     .where(
                         and(
@@ -84,7 +85,10 @@ export function createDeadEventHandler(logger: LoggerPort) {
                 // Mirror the same current-version guard onto the version row.
                 await db
                     .update(documentVersions)
-                    .set({ ocrProcessed: false, ocrMetadata })
+                    .set({
+                        ocrProcessed: false,
+                        ocrMetadata: sql`COALESCE(${documentVersions.ocrMetadata}, '{}'::jsonb) || ${JSON.stringify(ocrMetadata)}::jsonb`,
+                    })
                     .where(
                         and(
                             eq(documentVersions.id, payload.sourceVersionId),

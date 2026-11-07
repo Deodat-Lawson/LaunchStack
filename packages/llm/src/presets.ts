@@ -16,8 +16,8 @@
  * different contract; declare that model explicitly instead.
  *
  * Contributing: add an entry with a first-party source URL, set `verifiedOn`
- * to the date you checked it, and cover it in the app-level preset test
- * (`apps/web/__tests__/lib/llm/chat-config.test.ts`).
+ * to the date you checked it, and cover it in `packages/llm` tests or the
+ * app-level preset test (`apps/web/__tests__/lib/llm/chat-config.test.ts`).
  */
 
 import type { ChatModelBehavior } from "./types";
@@ -242,6 +242,27 @@ const PRESETS: readonly ChatModelPreset[] = [
         name: "openai/gpt-5.1",
         source: OPENAI_REASONING_DOC,
         verifiedOn: "2026-05-01",
+        notes:
+            "Reasoning family: rejects `temperature` and requires " +
+            "`max_completion_tokens` rather than `max_tokens`.",
+        behavior: {
+            input: ["text", "image"],
+            image: { mimeTypes: OPENAI_IMAGE_MIME_TYPES },
+            reasoning: OPENAI_REASONING_EFFORT,
+            nativeStructuredOutput: ["json-object", "json-schema", "tool-calling"],
+            parameters: {
+                temperature: "unsupported",
+                systemMessages: "supported",
+                streaming: "supported",
+                maxOutputTokens: "supported",
+                maxOutputTokensField: "max_completion_tokens",
+            },
+        },
+    },
+    {
+        name: "openai/gpt-5.4-mini",
+        source: OPENAI_REASONING_DOC,
+        verifiedOn: "2026-09-02",
         notes:
             "Reasoning family: rejects `temperature` and requires " +
             "`max_completion_tokens` rather than `max_tokens`.",

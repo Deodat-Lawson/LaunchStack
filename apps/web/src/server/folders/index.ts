@@ -11,6 +11,7 @@
  */
 
 import { folderSettings, mindmaps } from "~/server/db/schema";
+import { scopedDocumentWhere } from "~/lib/authz/scope";
 import { scopeAllowsCategory, type DocumentScope } from "~/lib/authz/scope-types";
 import { and, eq, inArray, like, or, sql } from "drizzle-orm";
 import { category, document } from "@launchstack/store/schema";
@@ -114,8 +115,8 @@ function rewritePrefix(
     return sql<string>`${to} || substr(${column}, ${from.length + 1})`;
 }
 
-/** The rows behind the tree: persisted folders, document counts, restricted settings. */
-async function loadFolderTable(companyId: bigint) {
+/** The rows behind the tree, counting only documents in the caller's scope when given. */
+async function loadFolderTable(companyId: bigint, scope?: DocumentScope) {
     const [rows, counts, restrictedRows] = await Promise.all([
         db
             .select({ id: category.id, name: category.name })
@@ -124,7 +125,9 @@ async function loadFolderTable(companyId: bigint) {
         db
             .select({ path: document.category, count: sql<number>`count(*)::int` })
             .from(document)
-            .where(eq(document.companyId, companyId))
+            .where(
+                scope ? scopedDocumentWhere(companyId, scope) : eq(document.companyId, companyId)
+            )
             .groupBy(document.category),
         db
             .select({ categoryId: folderSettings.categoryId })
@@ -196,7 +199,7 @@ export async function listVisibleFolders(
     scope: DocumentScope,
     subject?: AccessSubject
 ): Promise<FolderRecord[] | VisibleFolderRecord[]> {
-    const table = await loadFolderTable(companyId);
+    const table = await loadFolderTable(companyId, scope);
     const all = toRecords(table);
     const visible =
         scope.kind === "everything"
@@ -289,6 +292,12 @@ export async function renameFolder(
     const from = normalizeFolderPath(rawFrom);
     const to = normalizeFolderPath(rawTo);
 
+    if (from === "Calls") {
+        throw new FolderError("call_notes_managed", 409, {
+            key: "sources.server.folders.callsManaged",
+        });
+    }
+
     if (isUnfiledFolder(from)) {
         throw new FolderError("unfiled_reserved", 400, {
             key: "sources.server.folders.unfiledCantMove",
@@ -361,6 +370,11 @@ export async function deleteFolder(
     beforeMove?: (tx: Tx, path: string) => Promise<void>
 ): Promise<DeleteFolderResult> {
     const path = normalizeFolderPath(rawPath);
+    if (path === "Calls") {
+        throw new FolderError("call_notes_managed", 409, {
+            key: "sources.server.folders.callsManaged",
+        });
+    }
     if (isUnfiledFolder(path)) {
         throw new FolderError("unfiled_reserved", 400, {
             key: "sources.server.folders.unfiledCantDelete",

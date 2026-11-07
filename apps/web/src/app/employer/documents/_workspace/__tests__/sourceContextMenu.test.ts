@@ -1,6 +1,6 @@
 import { createTranslator } from "use-intl";
 
-import { englishMessages } from "~/i18n/messages";
+import { englishMessages, loadMessages } from "~/i18n/messages";
 
 import {
     buildBlankRailMenuItems,
@@ -42,6 +42,17 @@ describe("isPersistedSource", () => {
         expect(isPersistedSource(source({ documentId: undefined }))).toBe(false);
         expect(isPersistedSource(source({ documentId: 0 }))).toBe(false);
         expect(isPersistedSource(source({ documentId: 9 }))).toBe(true);
+    });
+
+    it("recognizes saved Call Notes independently of their indexed document", () => {
+        expect(
+            isPersistedSource(
+                source({ type: "call-note", callId: "call-1", documentId: undefined })
+            )
+        ).toBe(true);
+        expect(
+            isPersistedSource(source({ type: "call-note", callId: undefined, documentId: 9 }))
+        ).toBe(false);
     });
 });
 
@@ -123,6 +134,97 @@ describe("buildSourceMenuItems", () => {
             if (unfiled?.type === "item") unfiled.onSelect();
         }
         expect(onMoveToFolder).toHaveBeenCalledWith("d1", "Unfiled");
+    });
+});
+
+describe("Call Note source menus", () => {
+    const callNote = source({
+        id: "call-note:call-1",
+        type: "call-note",
+        callId: "call-1",
+        folder: "Calls",
+        documentId: 41,
+    });
+    const handlers = {
+        onOpen: jest.fn(),
+        onOpenBeside: jest.fn(),
+        onToggleContext: jest.fn(),
+        onCopyTitle: jest.fn(),
+        onCopyLink: jest.fn(),
+        onShowInKnowledge: jest.fn(),
+        onOpenInNewTab: jest.fn(),
+        onRename: jest.fn(),
+        onMoveToFolder: jest.fn(),
+        onCut: jest.fn(),
+        onRestrictAccess: jest.fn(),
+        onDelete: jest.fn(),
+    };
+
+    it("offers only navigation, context, and copying for an indexed Call Note", () => {
+        const items = buildSourceMenuItems(t, callNote, folders, [], handlers);
+        expect(items.map(item => item.id)).toEqual([
+            "title",
+            "open",
+            "context",
+            "copy",
+            "copy-link",
+        ]);
+        expect(items.find(item => item.id === "open")).toMatchObject({
+            label: "Open in Calls",
+        });
+        expect(items.find(item => item.id === "context")).toMatchObject({
+            label: "Add to context",
+        });
+        const selected = buildSourceMenuItems(t, callNote, folders, [callNote.id], handlers);
+        expect(selected.find(item => item.id === "context")).toMatchObject({
+            label: "Remove from context",
+        });
+    });
+
+    it("keeps private or unindexed Call Notes navigable without offering context or document actions", () => {
+        const items = buildSourceMenuItems(
+            t,
+            { ...callNote, documentId: undefined, visibility: "private" },
+            folders,
+            [],
+            handlers
+        );
+        expect(items.map(item => item.id)).toEqual(["title", "open", "copy", "copy-link"]);
+        expect(
+            items.some(item => (item.type === "item" || item.type === "submenu") && item.disabled)
+        ).toBe(false);
+    });
+
+    it("localizes Calls navigation, context actions, and its managed collection", async () => {
+        const zh = createTranslator({
+            locale: "zh-CN",
+            messages: await loadMessages("zh-CN"),
+            namespace: "sources.contextMenu",
+        });
+        const items = buildSourceMenuItems(zh, callNote, folders, [], handlers);
+        expect(items.find(item => item.id === "open")).toMatchObject({
+            label: "在「通话」中打开",
+        });
+        expect(items.find(item => item.id === "context")).toMatchObject({
+            label: "添加到上下文",
+        });
+        expect(items.find(item => item.id === "copy")).toMatchObject({
+            label: "复制标题",
+        });
+        expect(buildFolderMenuItems(zh, "Calls", {})[0]).toMatchObject({
+            label: "通话",
+        });
+        const selection = buildSelectionMenuItems(
+            zh,
+            [callNote, source({ documentId: undefined })],
+            folders,
+            { onMoveToFolder: jest.fn(), onDelete: jest.fn() }
+        );
+        expect(selection.find(item => item.id === "delete")).toMatchObject({
+            disabled: true,
+            disabledReason:
+                "通话笔记请在「通话」中管理。其他来源必须完成索引且你有编辑权限，才能移动或删除。",
+        });
     });
 });
 
@@ -425,6 +527,45 @@ describe("buildSelectionMenuItems", () => {
             disabled: true,
             disabledReason: "These sources are still being indexed.",
         });
+    });
+
+    it("keeps Call Notes in context but never moves or deletes their indexed documents", () => {
+        const callNote = source({
+            id: "call-note:call-1",
+            type: "call-note",
+            callId: "call-1",
+            folder: "Calls",
+            documentId: 41,
+        });
+        const onRemoveFromContext = jest.fn();
+        const onMoveToFolder = jest.fn();
+        const onDelete = jest.fn();
+        const items = buildSelectionMenuItems(t, [a, callNote], folders, {
+            onRemoveFromContext,
+            onMoveToFolder,
+            onDelete,
+        });
+        const context = items.find(item => item.id === "context");
+        if (context?.type === "item") context.onSelect();
+        expect(onRemoveFromContext).toHaveBeenCalledWith([a.id, callNote.id]);
+
+        const move = items.find(item => item.id === "move");
+        expect(move).toMatchObject({ label: "Move 1 of 2 to folder" });
+        const legal =
+            move?.type === "submenu" ? move.items.find(item => item.id === "move-Legal") : null;
+        if (legal?.type === "item") legal.onSelect();
+        expect(onMoveToFolder).toHaveBeenCalledWith([a.id], "Legal");
+
+        const deletion = items.find(item => item.id === "delete");
+        if (deletion?.type === "item") deletion.onSelect();
+        expect(onDelete).toHaveBeenCalledWith([a]);
+
+        const callsOnly = buildSelectionMenuItems(t, [callNote], folders, {
+            onRemoveFromContext,
+            onMoveToFolder,
+            onDelete,
+        });
+        expect(callsOnly.map(item => item.id)).toEqual(["title", "context"]);
     });
 });
 

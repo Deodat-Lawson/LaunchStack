@@ -24,6 +24,15 @@ const normalize = (value: unknown) =>
 const requiredString = () => z.preprocess(normalize, z.string().min(1, "Value is required"));
 
 const optionalString = () => z.preprocess(normalize, z.string().min(1).optional());
+const localCaptureBoolean = (defaultValue: boolean) =>
+    z.preprocess(value => {
+        const normalized = normalize(value);
+        if (normalized === undefined) return undefined;
+        if (normalized === true || normalized === false) return normalized;
+        if (normalized === "true" || normalized === "1") return true;
+        if (normalized === "false" || normalized === "0") return false;
+        return normalized;
+    }, z.boolean().default(defaultValue));
 
 /** The literal `.env.example` once shipped; it is public, so it never signs anything. */
 const AUTH_SECRET_PLACEHOLDER = "BETTER_AUTH_SECRET";
@@ -438,6 +447,32 @@ const serverSchema = z.object({
     SLACK_BOT_TOKEN: optionalString(),
     SLACK_SIGNING_SECRET: optionalString(),
     SLACK_WEBHOOK_URL: optionalString(),
+    // Local audio capture is fail-closed unless explicitly enabled. The worker
+    // posts normalized microphone and system-audio events back to this app.
+    CALL_NOTES_CAPTURE_ENABLED: localCaptureBoolean(false),
+    CALL_NOTES_MIN_APP_VERSION: optionalString(),
+    CALL_NOTES_MAX_CAPTURE_MINUTES: z.preprocess(
+        normalize,
+        z.coerce.number().int().positive().default(240)
+    ),
+    CALL_NOTES_CAPTURE_APP_STORAGE_CONNECTION_STRING: optionalString(),
+    CALL_NOTES_CAPTURE_APP_CONTAINER: z.preprocess(
+        normalize,
+        z.string().min(1).default("capture-app")
+    ),
+    // Capture-only provider override. Unset keeps the shared transcription
+    // registry; Azure credentials are held by this server, never the worker.
+    CALL_NOTES_TRANSCRIPTION_PROVIDER: z.preprocess(normalize, z.enum(["azure_speech"]).optional()),
+    CALL_NOTES_TRANSCRIPTION_BASE_URL: z.preprocess(
+        normalize,
+        z
+            .string()
+            .url()
+            .refine(value => /^https?:\/\//i.test(value), "Must be an HTTP(S) URL")
+            .optional()
+    ),
+    CALL_NOTES_TRANSCRIPTION_API_KEY: optionalString(),
+    CALL_NOTES_TRANSCRIPTION_LANGUAGE: optionalString(),
     // Drive-linked files: PDFs and Word docs manually editable via a durable
     // Google Drive sync. Dark until GOOGLE_DOCS_EDITING_ENABLED=true AND the
     // OAuth client below exists — the GCP consent screen is the one real
@@ -499,6 +534,21 @@ const serverSchemaRefined = serverSchema.superRefine((data, ctx) => {
                     ? error.message
                     : "Configure an OpenAI-compatible chat endpoint",
         });
+    }
+
+    if (data.CALL_NOTES_TRANSCRIPTION_PROVIDER === "azure_speech") {
+        for (const key of [
+            "CALL_NOTES_TRANSCRIPTION_BASE_URL",
+            "CALL_NOTES_TRANSCRIPTION_API_KEY",
+        ] as const) {
+            if (!data[key]) {
+                ctx.addIssue({
+                    code: z.ZodIssueCode.custom,
+                    path: [key],
+                    message: `${key} is required when CALL_NOTES_TRANSCRIPTION_PROVIDER is "azure_speech"`,
+                });
+            }
+        }
     }
 
     if (data.NEXT_PUBLIC_STORAGE_PROVIDER === "s3") {
@@ -684,6 +734,7 @@ function parseServerEnv() {
         TRANSCRIPTION_API_KEY: process.env.TRANSCRIPTION_API_KEY,
         TRANSCRIPTION_MODEL: process.env.TRANSCRIPTION_MODEL,
         GEMINI_TTS_VOICE: process.env.GEMINI_TTS_VOICE,
+
         TRANSCRIPTION_PROVIDER: process.env.TRANSCRIPTION_PROVIDER as
             | "cloud"
             | "sidecar"
@@ -708,6 +759,18 @@ function parseServerEnv() {
         SLACK_BOT_TOKEN: process.env.SLACK_BOT_TOKEN,
         SLACK_SIGNING_SECRET: process.env.SLACK_SIGNING_SECRET,
         SLACK_WEBHOOK_URL: process.env.SLACK_WEBHOOK_URL,
+        CALL_NOTES_CAPTURE_ENABLED: process.env.CALL_NOTES_CAPTURE_ENABLED,
+        CALL_NOTES_MIN_APP_VERSION: process.env.CALL_NOTES_MIN_APP_VERSION,
+        CALL_NOTES_MAX_CAPTURE_MINUTES: process.env.CALL_NOTES_MAX_CAPTURE_MINUTES,
+        CALL_NOTES_CAPTURE_APP_STORAGE_CONNECTION_STRING:
+            process.env.CALL_NOTES_CAPTURE_APP_STORAGE_CONNECTION_STRING,
+        CALL_NOTES_CAPTURE_APP_CONTAINER: process.env.CALL_NOTES_CAPTURE_APP_CONTAINER,
+        CALL_NOTES_TRANSCRIPTION_PROVIDER: process.env.CALL_NOTES_TRANSCRIPTION_PROVIDER as
+            | "azure_speech"
+            | undefined,
+        CALL_NOTES_TRANSCRIPTION_BASE_URL: process.env.CALL_NOTES_TRANSCRIPTION_BASE_URL,
+        CALL_NOTES_TRANSCRIPTION_API_KEY: process.env.CALL_NOTES_TRANSCRIPTION_API_KEY,
+        CALL_NOTES_TRANSCRIPTION_LANGUAGE: process.env.CALL_NOTES_TRANSCRIPTION_LANGUAGE,
         NEXT_PUBLIC_STORAGE_PROVIDER: process.env.NEXT_PUBLIC_STORAGE_PROVIDER as
             | "s3"
             | "database"

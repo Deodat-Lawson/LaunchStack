@@ -79,7 +79,7 @@ export async function POST(request: Request) {
     const authorName = validation.data.authorName ?? "LaunchStack Review";
     const partial = validation.data.partial ?? false;
 
-    const loaded = await loadDocument(documentId, { request });
+    const loaded = await loadDocument(documentId, { forMutation: true, request });
     if (!loaded.ok) return loaded.response;
 
     // Phase 1 of Drive-linked files: while a document lives in Google Drive,

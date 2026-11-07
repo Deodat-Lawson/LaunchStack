@@ -25,6 +25,8 @@ import {
 import { UNFILED_FOLDER, compareFolderPaths, displayFolderPath } from "~/lib/folders/path";
 
 import type { ActionMenuItem } from "~/components/ui/action-menu";
+import { Checkbox } from "~/components/ui/checkbox";
+import { Button } from "~/components/ui/button";
 import { useContextTarget } from "~/components/context-menu";
 import { buildSelectionMenuItems, buildSourceMenuItems } from "./sourceContextMenu";
 import { DOC_DOMAINS, SOURCE_META } from "./types";
@@ -39,6 +41,7 @@ function collectionOf(source: WorkspaceSource): string {
 
 /** A collection as this surface names it: its path, or Unfiled in the reader's words. */
 function collectionLabel(t: KnowledgeTranslator, path: string): string {
+    if (path === "Calls") return t("calls");
     return path === UNFILED_FOLDER ? t("unfiled") : displayFolderPath(path);
 }
 
@@ -126,6 +129,7 @@ export function KnowledgePane({
                 onOpen: onOpenSource,
                 onOpenBeside: onOpenSourceBeside,
                 onToggleContext: s => {
+                    if (s.type === "call-note" && !s.documentId) return;
                     if (selected.includes(s.id)) {
                         setSelected(prev => prev.filter(id => id !== s.id));
                         return;
@@ -192,6 +196,7 @@ export function KnowledgePane({
             if (!needle) return true;
             return (
                 source.title.toLowerCase().includes(needle) ||
+                source.preview?.toLowerCase().includes(needle) === true ||
                 source.tags.some(tag => tag.toLowerCase().includes(needle)) ||
                 (source.folder ?? "").toLowerCase().includes(needle) ||
                 (source.searchText ?? "").toLowerCase().includes(needle)
@@ -202,9 +207,11 @@ export function KnowledgePane({
     const indexing = sources.filter(s => s.pending ?? s.syncing).length;
     const filtersActive = folder !== null || type !== null || query.trim().length > 0;
 
-    const toggle = (id: string) =>
+    const toggle = (id: string) => {
+        const source = sources.find(item => item.id === id);
+        if (!source || (source.type === "call-note" && !source.documentId)) return;
         setSelected(prev => (prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]));
-
+    };
     return (
         <div
             style={{
@@ -385,26 +392,33 @@ export function KnowledgePane({
                             <span style={{ fontSize: 11.5, color: "var(--ink-3)" }}>
                                 {t("selectedCount", { count: selected.length })}
                             </span>
-                            <button
-                                onClick={() => onAskAbout(selected)}
-                                style={{
-                                    padding: "6px 12px",
-                                    borderRadius: 7,
-                                    border: "1px solid var(--accent)",
-                                    color: "var(--accent-ink)",
-                                    background: "var(--accent-soft)",
-                                    fontSize: 12,
-                                    fontWeight: 600,
-                                }}
+                            <Button
+                                onClick={() =>
+                                    onAskAbout(
+                                        selected.filter(id =>
+                                            sources.some(
+                                                source =>
+                                                    source.id === id &&
+                                                    (source.type !== "call-note" ||
+                                                        Boolean(source.documentId))
+                                            )
+                                        )
+                                    )
+                                }
+                                variant="outline"
+                                size="sm"
+                                className="border-brand bg-brand/10 text-brand"
                             >
                                 {t("askAboutThese")}
-                            </button>
-                            <button
+                            </Button>
+                            <Button
                                 onClick={() => setSelected([])}
-                                style={{ fontSize: 11.5, color: "var(--ink-3)" }}
+                                variant="ghost"
+                                size="sm"
+                                className="text-ink-3"
                             >
                                 {tc("actions.clear")}
-                            </button>
+                            </Button>
                         </div>
                     )}
                 </div>
@@ -670,6 +684,7 @@ function SourceCard({
     menuItems?: (source: WorkspaceSource) => ActionMenuItem[];
 }) {
     const t = useTranslations("sources.knowledgePane");
+    const tCallNotes = useTranslations("sources.callNotes");
     const tTypes = useTranslations("sources.sourceTypes");
     const tDomains = useTranslations("sources.domains");
     const meta = SOURCE_META[source.type];
@@ -695,6 +710,7 @@ function SourceCard({
             data-testid={`knowledge-card-${source.id}`}
             {...ctxTarget}
             onKeyDown={e => {
+                if (e.target !== e.currentTarget) return;
                 if (e.key === "Enter" || e.key === " ") {
                     e.preventDefault();
                     onOpen();
@@ -779,26 +795,21 @@ function SourceCard({
                         {source.added ? ` · ${source.added}` : ""}
                     </div>
                 </div>
-                <button
-                    onClick={e => {
-                        e.stopPropagation();
-                        onToggle();
-                    }}
-                    aria-label={selected ? t("deselectSource") : t("selectSource")}
-                    style={{
-                        width: 17,
-                        height: 17,
-                        borderRadius: 4,
-                        border: `1.5px solid ${selected ? "var(--accent)" : "var(--ink-4, var(--ink-3))"}`,
-                        background: selected ? "var(--accent)" : "var(--panel)",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        flexShrink: 0,
-                    }}
-                >
-                    {selected && <IconCheck size={11} style={{ color: "white" }} />}
-                </button>
+                {source.type === "call-note" && !source.documentId ? (
+                    <span
+                        title={tCallNotes("unavailableAsContext")}
+                        aria-label={tCallNotes("openLabel")}
+                        className="size-[17px] shrink-0"
+                    />
+                ) : (
+                    <Checkbox
+                        checked={selected}
+                        onClick={e => e.stopPropagation()}
+                        onCheckedChange={() => onToggle()}
+                        aria-label={selected ? t("deselectSource") : t("selectSource")}
+                        className="size-[17px]"
+                    />
+                )}
             </div>
 
             <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
@@ -871,6 +882,21 @@ function SourceCard({
                     ))}
                 </div>
             )}
+            {source.preview && (
+                <div
+                    style={{
+                        fontSize: 11,
+                        lineHeight: 1.45,
+                        color: "var(--ink-3)",
+                        display: "-webkit-box",
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: "vertical",
+                        overflow: "hidden",
+                    }}
+                >
+                    {source.preview}
+                </div>
+            )}
         </div>
     );
 }
@@ -930,6 +956,7 @@ function SourceTable({
     menuItems?: (source: WorkspaceSource) => ActionMenuItem[];
 }) {
     const t = useTranslations("sources.knowledgePane");
+    const tCallNotes = useTranslations("sources.callNotes");
     const tTypes = useTranslations("sources.sourceTypes");
     const tDomains = useTranslations("sources.domains");
     return (
@@ -967,31 +994,25 @@ function SourceTable({
                                     menuItems={menuItems}
                                 >
                                     <Td>
-                                        <button
-                                            onClick={e => {
-                                                e.stopPropagation();
-                                                onToggle(source.id);
-                                            }}
-                                            aria-label={
-                                                isSelected ? t("deselectSource") : t("selectSource")
-                                            }
-                                            style={{
-                                                width: 15,
-                                                height: 15,
-                                                borderRadius: 4,
-                                                border: `1.5px solid ${isSelected ? "var(--accent)" : "var(--ink-4, var(--ink-3))"}`,
-                                                background: isSelected
-                                                    ? "var(--accent)"
-                                                    : "var(--panel)",
-                                                display: "flex",
-                                                alignItems: "center",
-                                                justifyContent: "center",
-                                            }}
-                                        >
-                                            {isSelected && (
-                                                <IconCheck size={10} style={{ color: "white" }} />
-                                            )}
-                                        </button>
+                                        {source.type === "call-note" && !source.documentId ? (
+                                            <span
+                                                title={tCallNotes("unavailableAsContext")}
+                                                aria-label={tCallNotes("openLabel")}
+                                                className="inline-block size-[15px]"
+                                            />
+                                        ) : (
+                                            <Checkbox
+                                                checked={isSelected}
+                                                onClick={e => e.stopPropagation()}
+                                                onCheckedChange={() => onToggle(source.id)}
+                                                aria-label={
+                                                    isSelected
+                                                        ? t("deselectSource")
+                                                        : t("selectSource")
+                                                }
+                                                className="size-[15px]"
+                                            />
+                                        )}
                                     </Td>
                                     <Td>
                                         <span

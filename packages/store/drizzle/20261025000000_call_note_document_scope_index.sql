@@ -1,0 +1,1 @@
+CREATE INDEX "document_company_call_note_id_idx" ON "pdr_ai_v2_document" USING btree ("company_id","id") WHERE "pdr_ai_v2_document"."ocr_metadata" ? 'callNote';

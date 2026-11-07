@@ -42,7 +42,7 @@ yarn-error.log*
 .env
 .env.bak*
 .env.backup*
-.env*.lo
+.env*.local
 
 # vercel
 .vercel
@@ -56,6 +56,12 @@ packages/*/dist/
 # pattern above no longer matched. Workspace consumers import src/ (see the
 # package's exports); dist/ is only built for publishing.
 pipelines/dist/
+apps/call-worker/dist/
+**/.build/
+
+# Native Capture build products and verified toolchain downloads
+/dist/capture-mac/
+/.cache/capture-mac/
 
 # idea files
 .idea

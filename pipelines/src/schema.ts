@@ -15,6 +15,7 @@ export * from "./client-prospector/schema";
 export * from "./company-metadata/schema";
 export * from "./marketing/schema";
 export * from "./founder-weekly-review/schema";
+export * from "./call-notes/schema";
 export * from "./email/schema";
 export * from "./repo-workspace/schema";
 export * from "./distribution/schema";

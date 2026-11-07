@@ -1,5 +1,6 @@
 {
   "sourceRail": {
+    "calls": "Calls",
     "actionsFor": "Actions for {title}",
     "actions": "Actions",
     "unavailableAsContext": "Unavailable as context: indexing failed",
@@ -43,6 +44,7 @@
     "resizeTitle": "Drag to resize · double-click to reset"
   },
   "knowledgePane": {
+    "calls": "Calls",
     "heading": "Everything this workspace can reason over",
     "statSources": "<b>{count}</b> {count, plural, one {source} other {sources}}",
     "statCollections": "<b>{count}</b> {count, plural, one {collection} other {collections}}",
@@ -763,13 +765,19 @@
     "noSlash": "A folder name can't contain “/”.",
     "pathProblem": "{path}: {problem}"
   },
+  "callNotes": {
+    "unavailableAsContext": "This Call Note is private, not indexed yet, or not available to you for chat context",
+    "openLabel": "Call Note — open in Calls"
+  },
   "contextMenu": {
+    "calls": "Calls",
     "indexing": "This source is still being indexed.",
     "viewOnly": "You can view this file but not change it.",
     "folderLocked": "You can't add files to this folder.",
     "deleteReserved": "Only the person who added this file, or someone who manages it, can delete it.",
     "unfiled": "Unfiled",
     "open": "Open",
+    "openInCalls": "Open in Calls",
     "openBeside": "Open to the side",
     "removeFromContext": "Remove from context",
     "addToContext": "Add to context",
@@ -798,6 +806,7 @@
     "addKnowledge": "Add knowledge",
     "newFolder": "New folder",
     "selectionViewOnlyAll": "You can view these but not change them.",
+    "selectionCallNotesManaged": "Call Notes are managed in Calls. Other sources must be indexed and editable to move or delete.",
     "selectionViewOnlySome": "{count, plural, one {You can view # of these but not change it; it will be skipped.} other {You can view # of these but not change them; they will be skipped.}}",
     "selectionIndexingAll": "These sources are still being indexed.",
     "selectionIndexingSome": "{count, plural, one {# of these is still being indexed and will be skipped.} other {# of these are still being indexed and will be skipped.}}",
@@ -836,6 +845,7 @@
     "connectionLost": "{name}: the connection dropped during the upload"
   },
   "sourceTypes": {
+    "call-note": "Call Note",
     "doc": "File",
     "audio": "Audio",
     "video": "Video",
@@ -890,6 +900,7 @@
       "folderEditDenied": "You do not have edit access to this folder.",
       "documentEditDenied": "You can view this file but not change it.",
       "documentDeleteDenied": "Only the person who added this file, or someone who manages it, can delete it.",
+      "callNoteManaged": "Call Note documents are managed from Calls",
       "invalidDocumentId": "Invalid document id",
       "noMutableFields": "No mutable fields provided",
       "updateDocumentFailed": "Failed to update document",
@@ -931,6 +942,7 @@
       "archive": "An archive is split into the files inside it. Re-embed those files instead."
     },
     "folders": {
+      "callsManaged": "Calls is managed by Call Notes",
       "pathRequired": "A folder path is required.",
       "bothPathsRequired": "Both the current and the new folder path are required.",
       "cycle": "A folder can't be moved into itself.",

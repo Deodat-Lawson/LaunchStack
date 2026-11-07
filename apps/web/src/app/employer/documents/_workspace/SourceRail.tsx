@@ -188,6 +188,7 @@ function Checkbox({ state, onClick, title, disabled }: CheckboxProps) {
 interface SourceRowProps {
     source: WorkspaceSource;
     selected: boolean;
+    active?: boolean;
     toggleSelected: (id: string) => void;
     onOpen?: (source: WorkspaceSource) => void;
     /** ⌘/Ctrl-click: open it in a pane beside what is showing, as an editor would. */
@@ -205,6 +206,7 @@ interface SourceRowProps {
 function SourceRow({
     source,
     selected,
+    active = false,
     toggleSelected,
     onOpen,
     onOpenBeside,
@@ -214,6 +216,7 @@ function SourceRow({
     onRetry,
 }: SourceRowProps) {
     const t = useTranslations("sources.sourceRail");
+    const tCallNotes = useTranslations("sources.callNotes");
     const meta = SOURCE_META[source.type] ?? SOURCE_META.doc;
     const Icon = meta.Icon;
     const [hover, setHover] = useState(false);
@@ -241,6 +244,7 @@ function SourceRow({
     return (
         <div
             data-testid={`source-row-${source.id}`}
+            aria-current={active ? "page" : undefined}
             {...ctxTarget}
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
@@ -250,26 +254,35 @@ function SourceRow({
                 gap: 8,
                 padding: "5px 10px",
                 borderRadius: 6,
-                background: selected
-                    ? "var(--accent-soft)"
-                    : hover
-                      ? "var(--line-2)"
-                      : "transparent",
+                background:
+                    active || selected
+                        ? "var(--accent-soft)"
+                        : hover
+                          ? "var(--line-2)"
+                          : "transparent",
                 transition: "background 100ms",
             }}
         >
-            <Checkbox
-                state={!failed && selected ? "all" : "none"}
-                disabled={failed}
-                onClick={() => toggleSelected(source.id)}
-                title={
-                    failed
-                        ? t("unavailableAsContext")
-                        : selected
-                          ? t("removeFromContext")
-                          : t("addToContext")
-                }
-            />
+            {source.type === "call-note" && !source.documentId ? (
+                <span
+                    title={tCallNotes("unavailableAsContext")}
+                    aria-label={tCallNotes("openLabel")}
+                    className="size-[15px] shrink-0"
+                />
+            ) : (
+                <Checkbox
+                    state={!failed && selected ? "all" : "none"}
+                    disabled={failed}
+                    onClick={() => toggleSelected(source.id)}
+                    title={
+                        failed
+                            ? t("unavailableAsContext")
+                            : selected
+                              ? t("removeFromContext")
+                              : t("addToContext")
+                    }
+                />
+            )}
             <div
                 onClick={event => {
                     if ((event.metaKey || event.ctrlKey) && onOpenBeside) onOpenBeside(source);
@@ -286,14 +299,17 @@ function SourceRow({
                         <span
                             className={cn(
                                 "min-w-0 flex-1 truncate text-[13px] leading-[1.35]",
-                                selected ? "text-brand-ink font-semibold" : "text-ink"
+                                active || selected ? "text-brand-ink font-semibold" : "text-ink"
                             )}
                         >
                             {source.title}
                         </span>
                         {glyph && <AudienceGlyph glyph={glyph} />}
                     </div>
-                    {(visibleTags.length > 0 || failed || (source.gaps?.length ?? 0) > 0) && (
+                    {(visibleTags.length > 0 ||
+                        failed ||
+                        (source.gaps?.length ?? 0) > 0 ||
+                        Boolean(source.preview)) && (
                         <div className="text-ink-3 mt-px flex items-center gap-1 overflow-hidden whitespace-nowrap text-[11px]">
                             {failed && <SourceFailureStatus source={source} onRetry={onRetry} />}
                             {visibleTags.map((tag, i) => (
@@ -304,6 +320,11 @@ function SourceRow({
                             ))}
                             {extra > 0 && (
                                 <span style={{ fontSize: 10, opacity: 0.6 }}>+{extra}</span>
+                            )}
+                            {source.preview && (
+                                <span title={source.preview} className="truncate">
+                                    {source.preview}
+                                </span>
                             )}
                             {(source.gaps?.length ?? 0) > 0 && (
                                 <span
@@ -369,12 +390,18 @@ function SourceRow({
 
 type SourceNode = FolderTreeNode<WorkspaceSource>;
 
-/** Every source id in a subtree; context selection excludes failed documents. */
-function collectItemIds(node: SourceNode, excludeFailed = false, ids: string[] = []): string[] {
+/** Every source id in a subtree; context selection excludes unavailable sources. */
+function collectItemIds(node: SourceNode, contextOnly = false, ids: string[] = []): string[] {
     for (const item of node.items) {
-        if (!excludeFailed || item.indexStatus !== "failed") ids.push(item.id);
+        if (
+            !contextOnly ||
+            (item.indexStatus !== "failed" &&
+                (item.type !== "call-note" || Boolean(item.documentId)))
+        ) {
+            ids.push(item.id);
+        }
     }
-    for (const child of node.children) collectItemIds(child, excludeFailed, ids);
+    for (const child of node.children) collectItemIds(child, contextOnly, ids);
     return ids;
 }
 
@@ -413,7 +440,11 @@ function FolderHeader({
     const [menuFocus, setMenuFocus] = useState(false);
     const menu = useActionMenu();
     const isUnfiled = node.path === UNFILED_FOLDER;
-    const folderName = isUnfiled ? t("unfiled") : displayFolderPath(node.path);
+    const folderName = isUnfiled
+        ? t("unfiled")
+        : node.path === "Calls"
+          ? t("calls")
+          : displayFolderPath(node.path);
     const menuLabel = t("actionsForFolder", { path: folderName });
     const ctxTarget = useContextTarget(
         menuItems
@@ -564,6 +595,8 @@ export interface SourceRailProps {
     onOpenAdd: () => void;
     /** Straight to the mindmap template picker — creating, not uploading. */
     onOpenSource?: (source: WorkspaceSource) => void;
+    /** The source open in the workspace, highlighted in the tree. */
+    activeSourceId?: string;
     /** Open it in a column beside the chat instead of over the workspace. */
     onOpenSourceBeside?: (source: WorkspaceSource) => void;
     /**
@@ -665,6 +698,7 @@ const RAIL_TAB_KEY = "workspace.railTab.v1";
 
 /** Everything a branch of the tree needs from the rail, passed once per level. */
 interface BranchContext {
+    activeSourceId?: string;
     selected: string[];
     collapsed: Record<string, boolean>;
     toggleCollapsed: (path: string) => void;
@@ -716,8 +750,9 @@ function SourceRows({
             {items.map(s => (
                 <div
                     key={s.id}
-                    draggable
+                    draggable={s.type !== "call-note"}
                     onDragStart={e => {
+                        if (s.type === "call-note") return;
                         e.stopPropagation();
                         ctx.setDrag({ kind: "source", id: s.id });
                         // Also a drag the workspace's panes can take: drop it
@@ -737,6 +772,7 @@ function SourceRows({
                     <SourceRow
                         source={s}
                         selected={ctx.selected.includes(s.id)}
+                        active={s.id === ctx.activeSourceId}
                         toggleSelected={ctx.toggleSelected}
                         onOpen={ctx.onOpenSource}
                         onOpenBeside={ctx.onOpenSourceBeside}
@@ -906,6 +942,7 @@ export function SourceRail({
     folders,
     selected,
     setSelected,
+    activeSourceId,
     onOpenAdd,
     onOpenSource,
     onOpenSourceBeside,
@@ -1022,17 +1059,24 @@ export function SourceRail({
     // (a staged upload, an implied folder) is not refused here: the server
     // still decides, and the rail does not hide what it cannot judge.
     const canManageFolder = useCallback(
-        (path: string) => folderFor(path).access?.canManage !== false,
+        (path: string) => {
+            const folder = folderFor(path);
+            return !folder.system && folder.access?.canManage !== false;
+        },
         [folderFor]
     );
     const canEditFolder = useCallback(
-        (path: string) => path === UNFILED_FOLDER || folderFor(path).access?.canEdit !== false,
+        (path: string) => {
+            const folder = folderFor(path);
+            return path === UNFILED_FOLDER || (!folder.system && folder.access?.canEdit !== false);
+        },
         [folderFor]
     );
 
     const folderGlyph = useCallback(
         (path: string, topLevel: boolean): Glyph | null => {
             const folder = folderFor(path);
+            if (folder.system) return null;
             const access = folder.access;
             if (!access) {
                 // From a server without per-caller access: the old lock.
@@ -1122,7 +1166,9 @@ export function SourceRail({
                 onOpen: onOpenSource,
                 onOpenBeside: onOpenSourceBeside,
                 onToggleContext:
-                    source.indexStatus === "failed" && !selected.includes(source.id)
+                    (source.indexStatus === "failed" ||
+                        (source.type === "call-note" && !source.documentId)) &&
+                    !selected.includes(source.id)
                         ? undefined
                         : s => {
                               setSelected(prev =>
@@ -1233,7 +1279,9 @@ export function SourceRail({
                 onDelete:
                     onDeleteFolder && manages ? () => onDeleteFolder(folderFor(path)) : undefined,
                 onShare:
-                    onShareFolder && !isUnfiled ? () => onShareFolder(folderFor(path)) : undefined,
+                    onShareFolder && !isUnfiled && !folderFor(path).system
+                        ? () => onShareFolder(folderFor(path))
+                        : undefined,
                 onSelectAll: add => {
                     setSelected(prev => {
                         if (add) {
@@ -1338,7 +1386,7 @@ export function SourceRail({
             if (activeTag && !(s.tags ?? []).includes(activeTag)) return false;
             if (q) {
                 const hay =
-                    `${s.title} ${s.folder ?? ""} ${(s.tags ?? []).join(" ")} ${s.searchText ?? ""}`.toLowerCase();
+                    `${s.title} ${s.folder ?? ""} ${(s.tags ?? []).join(" ")} ${s.searchText ?? ""} ${s.preview ?? ""}`.toLowerCase();
                 if (!hay.includes(q)) return false;
             }
             return true;
@@ -1367,7 +1415,14 @@ export function SourceRail({
     const filtering = Boolean(search) || Boolean(activeTag);
 
     const toggle = (id: string) => {
-        if (sources.some(source => source.id === id && source.indexStatus === "failed")) return;
+        const source = sources.find(item => item.id === id);
+        if (
+            !source ||
+            source.indexStatus === "failed" ||
+            (source.type === "call-note" && !source.documentId)
+        ) {
+            return;
+        }
         setSelected(prev => (prev.includes(id) ? prev.filter(x => x !== id) : [...prev, id]));
     };
 
@@ -1406,6 +1461,7 @@ export function SourceRail({
 
     const branchCtx: BranchContext = {
         selected,
+        activeSourceId,
         collapsed,
         toggleCollapsed,
         folderGlyph,
@@ -1630,7 +1686,9 @@ export function SourceRail({
                             {activeFolder
                                 ? activeFolder === UNFILED_FOLDER
                                     ? t("unfiled")
-                                    : displayFolderPath(activeFolder)
+                                    : activeFolder === "Calls"
+                                      ? t("calls")
+                                      : displayFolderPath(activeFolder)
                                 : `#${activeTag}`}
                         </span>
                         <IconX size={11} style={{ opacity: 0.5 }} />

@@ -14,6 +14,7 @@ import type { AIChatResponse, AIChatStreamEvent } from "../hooks/useAIChat";
 import type { ComposerSend, ThreadMessage, WorkspaceSource } from "./types";
 import type { ChatAgentOption } from "./collab/types";
 import * as sessions from "./sessionApi";
+import { resolveSourceReference } from "./sourceReferences";
 import { applyStep, settleSteps } from "./turnTrace";
 
 type RuntimeTranslator = ReturnType<typeof useTranslations<"chat.runtime">>;
@@ -306,12 +307,23 @@ export function useChatRuntime(input: {
 
     runRef.current = async (context, send, persistedUser) => {
         if (context.busy || contexts.current.get(context.key) !== context) return false;
-        send = { ...send, webSearch: true, thinking: true };
+        const sourceList = currentInput.current.sources;
+        const chatSources = send.refs
+            .map(id => resolveSourceReference(sourceList, id))
+            .filter(
+                (source): source is WorkspaceSource & { documentId: number } =>
+                    typeof source?.documentId === "number"
+            );
+        send = {
+            ...send,
+            refs: [...new Set(chatSources.map(source => source.id))],
+            webSearch: true,
+            thinking: true,
+        };
         context.busy = true;
         context.controller = new AbortController();
         const signal = context.controller.signal;
         const started = performance.now();
-        const sourceList = currentInput.current.sources;
         // Earlier turns reach the model with each chip as "Title" (d12), the
         // name the route gives this turn's chips (lib/source-mentions.ts).
         const renderTurn = renderMentionsFor(sourceList);
@@ -470,9 +482,7 @@ export function useChatRuntime(input: {
                 );
                 emit(context);
             }
-            const ids = send.refs
-                .map(id => sourceList.find(s => s.id === id)?.documentId)
-                .filter((id): id is number => typeof id === "number");
+            const ids = [...new Set(chatSources.map(source => source.documentId))];
             const scope = ids.length > 1 ? "selected" : ids.length === 1 ? "document" : "none";
             // The chips in the words, each mapped to the document it stands
             // for, so the route names it by id (server/chat-mentions.ts).

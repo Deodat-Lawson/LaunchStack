@@ -25,6 +25,7 @@ export type SourceMenuTranslator = ReturnType<typeof useTranslations<"sources.co
 
 /** A folder as a menu names it: "Contracts / 2026", or Unfiled in the reader's words. */
 function folderLabel(t: SourceMenuTranslator, path: string): string {
+    if (path === "Calls") return t("calls");
     return path === UNFILED_FOLDER ? t("unfiled") : displayFolderPath(path);
 }
 
@@ -58,9 +59,9 @@ export const VIEW_ONLY_REASON = "You can view this file but not change it.";
 /** Why a folder is not offered as a destination. */
 export const FOLDER_LOCKED_REASON = "You can't add files to this folder.";
 
-/** May the caller rename, move or delete it? Unknown (no access reported) reads as yes; the server decides. */
+/** Generic file changes exclude Call Notes; unknown file access is decided by the server. */
 export function canChangeSource(source: WorkspaceSource): boolean {
-    return source.access?.canEdit !== false;
+    return source.type !== "call-note" && source.access?.canEdit !== false;
 }
 
 /** Why a file the caller can edit still can't be deleted by them. */
@@ -73,10 +74,13 @@ export function canDeleteSource(source: WorkspaceSource): boolean {
 }
 
 export function isPersistedSource(source: WorkspaceSource): boolean {
-    // A mindmap is persisted by its own row, published or not; everything
-    // else is persisted by a document row.
+    // Mindmaps and Call Notes are persisted by their own rows, independently
+    // of whether they have a retrievable document.
     if (source.type === "mindmap") {
         return typeof source.mindmapId === "number" && source.mindmapId > 0;
+    }
+    if (source.type === "call-note") {
+        return Boolean(source.callId);
     }
     return typeof source.documentId === "number" && source.documentId > 0;
 }
@@ -102,10 +106,44 @@ export function buildSourceMenuItems(
         items.push({
             type: "item",
             id: "open",
-            label: t("open"),
+            label: source.type === "call-note" ? t("openInCalls") : t("open"),
             icon: "open",
             onSelect: () => handlers.onOpen?.(source),
         });
+    }
+    if (source.type === "call-note") {
+        if (
+            handlers.onToggleContext &&
+            source.documentId &&
+            (source.indexStatus !== "failed" || inContext)
+        ) {
+            items.push({
+                type: "item",
+                id: "context",
+                label: inContext ? t("removeFromContext") : t("addToContext"),
+                icon: "ask",
+                onSelect: () => handlers.onToggleContext?.(source),
+            });
+        }
+        if (handlers.onCopyTitle) {
+            items.push({
+                type: "item",
+                id: "copy",
+                label: t("copyTitle"),
+                icon: "copy",
+                onSelect: () => handlers.onCopyTitle?.(source),
+            });
+        }
+        if (handlers.onCopyLink) {
+            items.push({
+                type: "item",
+                id: "copy-link",
+                label: t("copyLink"),
+                icon: "link",
+                onSelect: () => handlers.onCopyLink?.(source),
+            });
+        }
+        return items;
     }
 
     if (handlers.onOpenBeside) {
@@ -118,7 +156,7 @@ export function buildSourceMenuItems(
         });
     }
 
-    if (handlers.onToggleContext) {
+    if (handlers.onToggleContext && (source.indexStatus !== "failed" || inContext)) {
         items.push({
             type: "item",
             id: "context",
@@ -481,9 +519,9 @@ export interface SelectionMenuHandlers {
 
 /**
  * The menu for a right-click inside a multi-selection: every verb acts on
- * the whole selection, and says so. Sources still being indexed cannot be
- * moved or deleted yet, so those verbs act on the persisted subset and say
- * how many that is.
+ * the whole selection, and says so. Call Notes are managed in Calls; sources
+ * still being indexed cannot be moved or deleted yet. Those verbs act only
+ * on the persisted, workspace-managed subset and say how many that is.
  */
 export function buildSelectionMenuItems(
     t: SourceMenuTranslator,
@@ -492,22 +530,26 @@ export function buildSelectionMenuItems(
     handlers: SelectionMenuHandlers
 ): SourceContextMenuItem[] {
     const count = sources.length;
+    const editable = sources.filter(source => source.type !== "call-note");
     // What the verbs below act on: rows that exist and that the caller may change.
-    const persisted = sources.filter(s => isPersistedSource(s) && canChangeSource(s));
+    const persisted = editable.filter(s => isPersistedSource(s) && canChangeSource(s));
     const pending = count - persisted.length;
-    const viewOnly = sources.filter(s => isPersistedSource(s) && !canChangeSource(s)).length;
+    const viewOnly = editable.filter(s => isPersistedSource(s) && !canChangeSource(s)).length;
     const pendingReason =
-        viewOnly > 0
-            ? pending === count
-                ? t("selectionViewOnlyAll")
-                : t("selectionViewOnlySome", { count: viewOnly })
-            : pending === count
-              ? t("selectionIndexingAll")
-              : t("selectionIndexingSome", { count: pending });
+        editable.length !== count
+            ? t("selectionCallNotesManaged")
+            : viewOnly > 0
+              ? pending === count
+                  ? t("selectionViewOnlyAll")
+                  : t("selectionViewOnlySome", { count: viewOnly })
+              : pending === count
+                ? t("selectionIndexingAll")
+                : t("selectionIndexingSome", { count: pending });
     const folderOf = (source: WorkspaceSource) => source.folder?.trim() || "Unfiled";
-    const sharedFolder = sources.every(s => folderOf(s) === folderOf(sources[0]!))
-        ? folderOf(sources[0]!)
-        : null;
+    const sharedFolder =
+        persisted.length > 0 && persisted.every(s => folderOf(s) === folderOf(persisted[0]!))
+            ? folderOf(persisted[0]!)
+            : null;
 
     const items: SourceContextMenuItem[] = [
         { type: "label", id: "title", label: t("selectedCount", { count }) },
@@ -523,7 +565,7 @@ export function buildSelectionMenuItems(
         });
     }
 
-    if (handlers.onMoveToFolder) {
+    if (handlers.onMoveToFolder && editable.length > 0) {
         const folderNames = uniqueFolderNames(folders, sharedFolder ?? "Unfiled");
         const locked = lockedFolders(folders);
         items.push({
@@ -554,7 +596,7 @@ export function buildSelectionMenuItems(
         });
     }
 
-    if (handlers.onDelete) {
+    if (handlers.onDelete && editable.length > 0) {
         items.push({ type: "separator", id: "sep-danger" });
         items.push({
             type: "item",
@@ -582,7 +624,11 @@ export function buildSelectionMenuItems(
 
 /** Folders the caller may not add files to — a move into one would be refused. */
 function lockedFolders(folders: WorkspaceFolder[]): Set<string> {
-    return new Set(folders.filter(f => f.access?.canEdit === false).map(f => f.name.trim()));
+    return new Set(
+        folders
+            .filter(f => f.system === true || f.access?.canEdit === false)
+            .map(f => f.name.trim())
+    );
 }
 
 function uniqueFolderNames(folders: WorkspaceFolder[], currentFolder: string): string[] {

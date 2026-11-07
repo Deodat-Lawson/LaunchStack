@@ -146,6 +146,20 @@ const COVERAGE: Record<string, Coverage> = Object.fromEntries<Coverage>([
     self(`${API}/document-generator/outline/route.ts`, "POST body after auth"),
 
     // --- Notes, meetings, company profile, Vantage --------------------------
+    self(
+        `${API}/call-notes/[callId]/chat/route.ts`,
+        "POST: resolve the Calls assistant under the caller's workspace scope"
+    ),
+    ...[
+        "apps/web/src/server/call-notes/enrichment-model.ts",
+        "apps/web/src/server/call-notes/enrichment-compaction.ts",
+    ].map((file): [string, Coverage] => [
+        file,
+        {
+            scopedBy: ["apps/web/src/server/call-notes/enrichment-runner.ts"],
+            note: "the queued enrichment runner scopes generation and bounded transcript compaction to the call's workspace",
+        },
+    ]),
     [
         "apps/web/src/server/notes/ai-capture.ts",
         { scopedBy: [`${API}/notes/ai-capture/route.ts`], note: "POST body after auth" },

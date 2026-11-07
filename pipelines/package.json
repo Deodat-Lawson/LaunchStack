@@ -1,7 +1,7 @@
 {
   "name": "@launchstack/pipelines",
   "version": "0.1.0",
-  "description": "The compositions \u2014 level two: chains of LaunchStack bricks toward business outcomes. Thirteen verticals: marketing, email outreach, founder weekly review, legal templates, company metadata, client prospector, trend search, knowledge connectors, repo workspaces, the repo explainer, the distribution pipeline, and proposals, and Vantage (the weekly founder-meeting loop).",
+  "description": "The compositions — level two: chains of LaunchStack bricks toward business outcomes. Thirteen verticals: marketing, email outreach, founder weekly review, legal templates, company metadata, client prospector, trend search, knowledge connectors, repo workspaces, the repo explainer, the distribution pipeline, and proposals, and Vantage (the weekly founder-meeting loop).",
   "license": "Apache-2.0",
   "type": "module",
   "sideEffects": false,
@@ -30,6 +30,10 @@
     "./client-prospector": "./src/client-prospector/index.ts",
     "./client-prospector/db": "./src/client-prospector/db.ts",
     "./founder-weekly-review": "./src/founder-weekly-review/index.ts",
+    "./call-notes": "./src/call-notes/index.ts",
+    "./call-notes/contracts": "./src/call-notes/contracts.ts",
+    "./call-notes/files": "./src/call-notes/files.ts",
+    "./call-notes/enrichment": "./src/call-notes/enrichment.ts",
     "./marketing": "./src/marketing/index.ts",
     "./marketing/benchmark": "./src/marketing/benchmark/index.ts",
     "./marketing/posts": "./src/marketing/posts.ts",
@@ -168,6 +172,22 @@
         "types": "./dist/founder-weekly-review/index.d.ts",
         "default": "./dist/founder-weekly-review/index.js"
       },
+      "./call-notes": {
+        "types": "./dist/call-notes/index.d.ts",
+        "default": "./dist/call-notes/index.js"
+      },
+      "./call-notes/contracts": {
+        "types": "./dist/call-notes/contracts.d.ts",
+        "default": "./dist/call-notes/contracts.js"
+      },
+      "./call-notes/files": {
+        "types": "./dist/call-notes/files.d.ts",
+        "default": "./dist/call-notes/files.js"
+      },
+      "./call-notes/enrichment": {
+        "types": "./dist/call-notes/enrichment.d.ts",
+        "default": "./dist/call-notes/enrichment.js"
+      },
       "./marketing": {
         "types": "./dist/marketing/index.d.ts",
         "default": "./dist/marketing/index.js"
@@ -228,6 +248,14 @@
         "types": "./dist/connectors/agent-sessions/index.d.ts",
         "default": "./dist/connectors/agent-sessions/index.js"
       },
+      "./connectors/google-drive": {
+        "types": "./dist/connectors/google-drive/index.d.ts",
+        "default": "./dist/connectors/google-drive/index.js"
+      },
+      "./connectors/gmail": {
+        "types": "./dist/connectors/gmail/index.d.ts",
+        "default": "./dist/connectors/gmail/index.js"
+      },
       "./connectors/notion": {
         "types": "./dist/connectors/notion/index.d.ts",
         "default": "./dist/connectors/notion/index.js"
@@ -252,6 +280,10 @@
       "./distribution/schema": {
         "types": "./dist/distribution/schema.d.ts",
         "default": "./dist/distribution/schema.js"
+      },
+      "./distribution/stages": {
+        "types": "./dist/distribution/stages.d.ts",
+        "default": "./dist/distribution/stages.js"
       },
       "./distribution/locate": {
         "types": "./dist/distribution/locate.d.ts",

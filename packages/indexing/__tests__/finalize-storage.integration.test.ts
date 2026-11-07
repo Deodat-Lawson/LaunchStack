@@ -15,7 +15,7 @@ import {
     createDocumentLifecycle,
     createDocumentVersionLifecycle,
 } from "@launchstack/orchestration";
-import { finalizeStorage } from "@launchstack/conversion/ocr/processor";
+import { finalizeStorage, storeDocument } from "@launchstack/conversion/ocr/processor";
 
 const url = process.env.TEST_DATABASE_URL ?? process.env.DATABASE_URL;
 
@@ -50,6 +50,7 @@ describe.skipIf(!url)("finalizeStorage version guard (integration)", () => {
             url: "/api/files/finalize-guard",
             creationKey: "upload:/api/files/finalize-guard",
             mimeType: "application/pdf",
+            ocrMetadata: { callNote: { callId: "finalize-call" }, customProvenance: "retained" },
             processing: { originalFilename: "guarded.pdf" },
         });
         documentId = created.documentId;
@@ -143,6 +144,11 @@ describe.skipIf(!url)("finalizeStorage version guard (integration)", () => {
     });
 
     it("finalizing the current version updates the document row", async () => {
+        await handle.db
+            .update(documentVersions)
+            .set({ ocrMetadata: { versionOwner: "retained" } })
+            .where(eq(documentVersions.id, v2.versionId));
+
         await finalizeStorage(
             documentId,
             v2.jobId,
@@ -162,21 +168,79 @@ describe.skipIf(!url)("finalizeStorage version guard (integration)", () => {
                 totalChunks: 5,
                 totalPages: 1,
                 embeddingIndexKey: "legacy-openai-1536",
+                callNote: { callId: "finalize-call" },
+                customProvenance: "retained",
             })
         );
 
         const version = await versionRow(v2.versionId);
         expect(version.ocrProcessed).toBe(true);
         expect(version.ocrJobId).toBe(v2.jobId);
+        expect(version.ocrMetadata).toEqual(
+            expect.objectContaining({ versionOwner: "retained", totalChunks: 5 })
+        );
 
         const job = await jobRow(v2.jobId);
         expect(job.status).toBe("completed");
+    });
+
+    it("retains Call Note provenance when storing vectorized chunks through the legacy path", async () => {
+        const created = await createDocumentLifecycle({
+            companyId,
+            userId: "user_test",
+            title: "Legacy Call Note",
+            category: "Calls",
+            url: "/api/files/legacy-call-note",
+            creationKey: "call-note:legacy-storage",
+            mimeType: "text/markdown",
+            ocrMetadata: { callNote: { callId: "legacy-storage" }, customProvenance: "retained" },
+            processing: { originalFilename: "legacy-call-note.md" },
+        });
+
+        await storeDocument(
+            created.documentId,
+            created.jobId!,
+            [
+                {
+                    content: "Call summary",
+                    metadata: {
+                        pageNumber: 1,
+                        chunkIndex: 0,
+                        totalChunksInPage: 1,
+                        isTable: false,
+                    },
+                    vector: [],
+                },
+            ],
+            {
+                pages: [{ pageNumber: 1, textBlocks: ["Call summary"], tables: [] }],
+                provider: "NATIVE_PDF",
+                processingTimeMs: 10,
+            },
+            Date.now() - 10,
+            created.versionId
+        );
+
+        const [stored] = await handle.db
+            .select()
+            .from(document)
+            .where(eq(document.id, created.documentId));
+        expect(stored!.ocrProcessed).toBe(true);
+        expect(stored!.ocrMetadata).toEqual(
+            expect.objectContaining({
+                callNote: { callId: "legacy-storage" },
+                customProvenance: "retained",
+                totalPages: 1,
+                totalChunks: 1,
+            })
+        );
     });
 
     it("drops a failure stamp when a replayed run succeeds, keeping the row's provenance", async () => {
         // What the dead-event handler leaves, on a row that also carries its own metadata.
         const stamp = {
             marker: "keep-me",
+            callNote: { callId: "finalize-call" },
             error: "processing_failed",
             errorMessage: "pipeline event dead: OpenAI API error: 429 - RESOURCE_EXHAUSTED",
             failedAt: "2026-10-23T00:00:00.000Z",
@@ -185,6 +249,10 @@ describe.skipIf(!url)("finalizeStorage version guard (integration)", () => {
             .update(document)
             .set({ ocrProcessed: false, ocrMetadata: stamp })
             .where(eq(document.id, documentId));
+        await handle.db
+            .update(documentVersions)
+            .set({ ocrMetadata: { ...stamp, versionOwner: "retained" } })
+            .where(eq(documentVersions.id, v2.versionId));
         await handle.db
             .update(ocrJobs)
             .set({ status: "failed", errorMessage: stamp.errorMessage })
@@ -205,12 +273,19 @@ describe.skipIf(!url)("finalizeStorage version guard (integration)", () => {
             (await versionRow(v2.versionId)).ocrMetadata,
         ]) {
             expect(metadata).toEqual(
-                expect.objectContaining({ marker: "keep-me", totalChunks: 5 })
+                expect.objectContaining({
+                    marker: "keep-me",
+                    callNote: { callId: "finalize-call" },
+                    totalChunks: 5,
+                })
             );
             expect(metadata).not.toHaveProperty("error");
             expect(metadata).not.toHaveProperty("errorMessage");
             expect(metadata).not.toHaveProperty("failedAt");
         }
+        expect((await versionRow(v2.versionId)).ocrMetadata).toEqual(
+            expect.objectContaining({ versionOwner: "retained" })
+        );
         expect(await jobRow(v2.jobId)).toEqual(
             expect.objectContaining({ status: "completed", errorMessage: null })
         );

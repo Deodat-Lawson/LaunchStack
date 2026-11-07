@@ -6,12 +6,18 @@
  * stamped with failure metadata — but only when the dead version is still
  * the document's current version. Each metadata write is best-effort.
  */
-import { Column, Param, is, sql } from "drizzle-orm";
+import { randomUUID } from "node:crypto";
+
+import { Column, Param, SQL, eq, is, sql } from "drizzle-orm";
+import { PgDialect } from "drizzle-orm/pg-core";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import type { ClaimedEvent } from "@launchstack/orchestration";
 import type { LoggerPort } from "@launchstack/runtime";
-import { document, documentVersions, ocrJobs } from "@launchstack/store/schema";
+import { createDb } from "@launchstack/store/client";
+import type { DbClient } from "@launchstack/store/client";
+import type * as StoreClient from "@launchstack/store/client";
+import { company, document, documentVersions, ocrJobs } from "@launchstack/store/schema";
 
 type Predicate = { columns: string[]; params: unknown[] };
 
@@ -48,6 +54,7 @@ function inspectPredicate(value: unknown, acc: Predicate = { columns: [], params
 
 const updates: UpdateRecord[] = [];
 const getDbCalls = { count: 0 };
+const integrationDatabase = { current: null as DbClient | null };
 
 /**
  * Stateful fake: an update "applies" only when the captured WHERE params
@@ -77,6 +84,24 @@ const state = {
     versionUpdateError: null as Error | null,
 };
 
+const dialect = new PgDialect();
+
+function applyMetadataPatch(row: { ocrMetadata: unknown }, patch: Record<string, unknown>) {
+    const current = row.ocrMetadata;
+    Object.assign(row, patch);
+    if (!is(patch.ocrMetadata, SQL)) return;
+
+    // Model the JSONB merge for state assertions; Postgres exercises it below.
+    const { sql: expression, params } = dialect.sqlToQuery(patch.ocrMetadata);
+    expect(expression).toContain("COALESCE(");
+    expect(expression).toContain(" || ");
+    expect(params).toHaveLength(1);
+    row.ocrMetadata = {
+        ...(current as Record<string, unknown> | null),
+        ...JSON.parse(params[0] as string),
+    };
+}
+
 const fakeDb = {
     select: (fields: Record<string, unknown>) => ({
         from: (table: unknown) => ({
@@ -99,7 +124,7 @@ const fakeDb = {
                     applied =
                         predicate.params.includes(state.document.id) &&
                         predicate.params.includes(state.document.currentVersionId);
-                    if (applied) Object.assign(state.document, patch);
+                    if (applied) applyMetadataPatch(state.document, patch);
                 } else if (table === documentVersions) {
                     applied =
                         predicate.params.includes(state.version.id) &&
@@ -108,7 +133,7 @@ const fakeDb = {
                         predicate.columns.includes("current_version_id") &&
                         state.version.documentId === BigInt(state.document.id) &&
                         BigInt(state.version.id) === state.document.currentVersionId;
-                    if (applied) Object.assign(state.version, patch);
+                    if (applied) applyMetadataPatch(state.version, patch);
                 } else if (table === ocrJobs) {
                     applied =
                         predicate.params.includes(state.job.id) &&
@@ -122,10 +147,11 @@ const fakeDb = {
     }),
 };
 
-vi.mock("@launchstack/store/client", () => ({
+vi.mock("@launchstack/store/client", async importOriginal => ({
+    ...(await importOriginal<typeof StoreClient>()),
     getDb: () => {
         getDbCalls.count += 1;
-        return fakeDb;
+        return integrationDatabase.current ?? fakeDb;
     },
 }));
 
@@ -450,5 +476,94 @@ describe("createDeadEventHandler", () => {
             expect.objectContaining({ ocrJobId: "job-1" }),
             expect.any(String)
         );
+    });
+});
+
+const integrationUrl = process.env.TEST_DATABASE_URL;
+
+describe.skipIf(!integrationUrl)("dead-event failure metadata (Postgres integration)", () => {
+    it.each([
+        {
+            name: "Call Note",
+            metadata: { callNote: { callId: "failed-call" }, totalPages: 3 },
+        },
+        { name: "ordinary", metadata: null },
+    ])("preserves provenance on $name documents", async ({ metadata }) => {
+        const host = new URL(integrationUrl!).hostname;
+        if (!["localhost", "127.0.0.1", "::1", "[::1]", "postgres", "db"].includes(host)) {
+            throw new Error("TEST_DATABASE_URL must point at a local disposable database");
+        }
+        const handle = createDb({ url: integrationUrl! });
+        const rollback = new Error("rollback failure metadata fixture");
+        try {
+            await handle.db
+                .transaction(async tx => {
+                    integrationDatabase.current = tx as unknown as DbClient;
+                    const [co] = await tx
+                        .insert(company)
+                        .values({ name: "Failure metadata fixture", numberOfEmployees: "1" })
+                        .returning({ id: company.id });
+                    const [doc] = await tx
+                        .insert(document)
+                        .values({
+                            companyId: BigInt(co!.id),
+                            title: "Failed source",
+                            category: "Calls",
+                            url: "local://failed-source.md",
+                            ocrProcessed: true,
+                            ocrMetadata: metadata,
+                        })
+                        .returning({ id: document.id });
+                    const [version] = await tx
+                        .insert(documentVersions)
+                        .values({
+                            documentId: BigInt(doc!.id),
+                            versionNumber: 1,
+                            url: "local://failed-source.md",
+                            mimeType: "text/markdown",
+                            ocrProcessed: true,
+                            ocrMetadata: metadata,
+                        })
+                        .returning({ id: documentVersions.id });
+                    await tx
+                        .update(document)
+                        .set({ currentVersionId: BigInt(version!.id) })
+                        .where(eq(document.id, doc!.id));
+
+                    await createDeadEventHandler(makeLogger())(
+                        makeClaimed("evidence.version.extracted", {
+                            ocrJobId: randomUUID(),
+                            sourceId: doc!.id,
+                            sourceVersionId: version!.id,
+                        }),
+                        "provider unavailable"
+                    );
+
+                    const [failed] = await tx
+                        .select()
+                        .from(document)
+                        .where(eq(document.id, doc!.id));
+                    expect(failed!.ocrProcessed).toBe(false);
+                    expect(failed!.ocrMetadata).toEqual({
+                        ...metadata,
+                        error: "processing_failed",
+                        errorMessage: "pipeline event dead: provider unavailable",
+                        failedAt: expect.any(String),
+                    });
+                    const [failedVersion] = await tx
+                        .select()
+                        .from(documentVersions)
+                        .where(eq(documentVersions.id, version!.id));
+                    expect(failedVersion!.ocrProcessed).toBe(false);
+                    expect(failedVersion!.ocrMetadata).toEqual(failed!.ocrMetadata);
+                    throw rollback;
+                })
+                .catch(error => {
+                    if (error !== rollback) throw error;
+                });
+        } finally {
+            integrationDatabase.current = null;
+            await handle.close();
+        }
     });
 });

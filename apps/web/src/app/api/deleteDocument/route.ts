@@ -6,11 +6,13 @@ import { translatorFor } from "~/i18n/translate";
 import { db } from "../../../server/db/index";
 import { document } from "@launchstack/store/schema";
 import { validateRequestBody, DeleteDocumentSchema } from "~/lib/validation";
-import { reassembleAfterDelete } from "~/server/company-profile/service";
-import { deleteDocumentCore } from "~/server/services/document-delete";
+import { deleteDocumentBlobs, deleteDocumentCore } from "~/server/services/document-delete";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import { recordAuditEvent } from "~/lib/authz/audit";
+import { callNotesCalls } from "@launchstack/pipelines/call-notes";
+import { callNoteDocumentReference, isCallNoteDocument } from "~/lib/call-note-document";
+import { reassembleAfterDelete } from "~/server/company-profile/service";
 import { recordActivity } from "~/server/workspace/activity";
 import { canDeleteAtLevel, documentAccess, levelAtLeast } from "~/server/workspace/item-access";
 
@@ -39,7 +41,13 @@ export async function DELETE(request: Request) {
         // A document the caller cannot see is one they cannot delete, and it
         // reads exactly like one that does not exist.
         const [doc] = await db
-            .select({ id: document.id, title: document.title, category: document.category })
+            .select({
+                id: document.id,
+                title: document.title,
+                category: document.category,
+                ocrMetadata: document.ocrMetadata,
+                indexedCallNote: callNoteDocumentReference(document, callNotesCalls),
+            })
             .from(document)
             .where(
                 and(
@@ -52,6 +60,13 @@ export async function DELETE(request: Request) {
             return NextResponse.json(
                 { success: false, error: translatorFor(locale, "errors.api")("documentNotFound") },
                 { status: 404 }
+            );
+        }
+
+        if (isCallNoteDocument(doc)) {
+            return NextResponse.json(
+                { success: false, error: t("callNoteManaged") },
+                { status: 409 }
             );
         }
 
@@ -70,8 +85,8 @@ export async function DELETE(request: Request) {
             );
         }
 
-        await db.transaction(async tx => {
-            await deleteDocumentCore(tx, documentId);
+        const blobDeletions = await db.transaction(async tx => {
+            const pendingBlobs = await deleteDocumentCore(tx, documentId);
             await recordAuditEvent(tx, {
                 companyId: ctx.data.companyId,
                 actorUserId: ctx.data.authUserId,
@@ -92,7 +107,9 @@ export async function DELETE(request: Request) {
                 targetPath: doc.category,
                 detail: { wasWorkspace: access.audience === "workspace" },
             });
+            return pendingBlobs;
         });
+        await deleteDocumentBlobs(blobDeletions);
         // The company profile drops what the deleted documents said.
         reassembleAfterDelete(ctx.data.companyId, ctx.data.authUserId);
 

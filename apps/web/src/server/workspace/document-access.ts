@@ -12,9 +12,11 @@ import { documentGrants, documentSettings } from "~/server/db/schema";
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
 import { recordAuditEvent } from "~/lib/authz/audit";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
+import { callNotesCalls } from "@launchstack/pipelines/call-notes";
+import { callNoteDocumentReference, isCallNoteDocument } from "~/lib/call-note-document";
 
 import { recordActivity } from "./activity";
-import { forbidden, notFound } from "./errors";
+import { conflict, forbidden, notFound } from "./errors";
 import { notifyShared } from "./notifications";
 import {
     canManageDocument as canManageDocumentAccess,
@@ -59,6 +61,11 @@ interface DocumentRef {
     category: string;
 }
 
+interface VisibleDocument extends DocumentRef {
+    ocrMetadata: unknown;
+    indexedCallNote: boolean;
+}
+
 // ---------------------------------------------------------------------------
 // Reads
 // ---------------------------------------------------------------------------
@@ -66,15 +73,27 @@ interface DocumentRef {
 async function loadVisibleDocument(
     ctx: WorkspaceContext,
     documentId: number
-): Promise<DocumentRef> {
+): Promise<VisibleDocument> {
     const scope = await ctx.documentScope();
     const [row] = await db
-        .select({ id: document.id, title: document.title, category: document.category })
+        .select({
+            id: document.id,
+            title: document.title,
+            category: document.category,
+            ocrMetadata: document.ocrMetadata,
+            indexedCallNote: callNoteDocumentReference(document, callNotesCalls),
+        })
         .from(document)
         .where(and(scopedDocumentWhere(ctx.companyId, scope), eq(document.id, documentId)))
         .limit(1);
     if (!row) throw notFound(copy("team.server.errors.documentNotFound"));
-    return { id: Number(row.id), title: row.title, category: row.category };
+    return {
+        id: Number(row.id),
+        title: row.title,
+        category: row.category,
+        ocrMetadata: row.ocrMetadata,
+        indexedCallNote: row.indexedCallNote,
+    };
 }
 
 async function documentRestricted(documentId: number): Promise<boolean> {
@@ -124,7 +143,7 @@ async function buildView(ctx: WorkspaceContext, doc: DocumentRef): Promise<Docum
         canManageDocument(ctx, doc),
     ]);
     return {
-        document: doc,
+        document: { id: doc.id, title: doc.title, category: doc.category },
         restricted,
         grants: toGrantViews(grants, names),
         audienceCount,
@@ -153,6 +172,9 @@ export async function setDocumentAccess(
     input: { restricted: boolean; grants: GrantInput[] }
 ): Promise<DocumentAccessView> {
     const doc = await loadVisibleDocument(ctx, documentId);
+    if (isCallNoteDocument(doc)) {
+        throw conflict(copy("sources.server.errors.callNoteManaged"));
+    }
     const [groupIds, existing, currentlyRestricted] = await Promise.all([
         callerGroupIds(ctx.userPk),
         documentGrantRows(doc.id),

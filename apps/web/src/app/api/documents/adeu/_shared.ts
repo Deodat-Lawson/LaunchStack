@@ -19,6 +19,8 @@ import { db } from "~/server/db";
 import { fetchFile } from "~/lib/storage";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
+import { callNotesCalls } from "@launchstack/pipelines/call-notes";
+import { callNoteDocumentReference, isCallNoteDocument } from "~/lib/call-note-document";
 
 export const DOCX_MIME = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 
@@ -59,7 +61,7 @@ export function isDocx(fileType: string | null, mimeType: string | null, title: 
 export async function loadDocument(
     documentId: number,
     /** `request` words the refusals in its reader's language. */
-    options?: { withBytes?: boolean; request?: Request }
+    options?: { withBytes?: boolean; forMutation?: boolean; request?: Request }
 ): Promise<LoadResult> {
     const locale = localeOf(options?.request);
     const t = translatorFor(locale, "viewers.server.errors");
@@ -77,6 +79,8 @@ export async function loadDocument(
             companyId: document.companyId,
             mimeType: document.mimeType,
             fileType: document.fileType,
+            ocrMetadata: document.ocrMetadata,
+            indexedCallNote: callNoteDocumentReference(document, callNotesCalls),
         })
         .from(document)
         .where(
@@ -97,6 +101,13 @@ export async function loadDocument(
                 "not_found",
                 translatorFor(locale, "errors.api")("documentNotFound")
             ),
+        };
+    }
+
+    if (options?.forMutation && isCallNoteDocument(row)) {
+        return {
+            ok: false,
+            response: fail(409, sources("callNoteManaged"), sources("callNoteManaged")),
         };
     }
 

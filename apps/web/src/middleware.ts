@@ -1,9 +1,9 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { getSessionCookie } from "better-auth/cookies";
-import postgres from "postgres";
 import { drizzle } from "drizzle-orm/postgres-js";
 import { eq, count } from "drizzle-orm";
 import { users, userCompanyMemberships } from "~/server/db/schema";
+import { sharedPostgresClient } from "~/server/db/shared-client";
 import { getSessionFromHeaders } from "~/server/auth";
 
 // Same matching semantics as the Clerk helper this file used to import:
@@ -57,6 +57,13 @@ const isPublicApiRoute = createRouteMatcher([
     "/api/webhooks(.*)",
     // Authenticated by the Inngest signing key.
     "/api/inngest",
+    // Capture pairing and device-token routes authenticate at their own boundary.
+    "/api/internal/call-notes/local",
+    "/api/call-notes/devices/pair",
+    "/api/call-notes/devices/commands",
+    "/api/call-notes/devices/transcribe",
+    "/api/call-notes/devices/appcast.xml",
+    "/api/call-notes/devices/updates/(.*)",
     // Pre-auth join UX: an invitation or join link is previewed (workspace
     // name, role) before the person has an account. Neither route consumes
     // anything; accepting requires a session.
@@ -104,13 +111,13 @@ const employerTwin = (pathname: string): string => {
     return `/employer${rest}`;
 };
 
-// Lazy singleton for middleware (postgres.js works with standard PostgreSQL)
+// Lazy singleton for middleware over a per-process client (see shared-client).
 let _middlewareDb: ReturnType<
     typeof drizzle<{ users: typeof users; userCompanyMemberships: typeof userCompanyMemberships }>
 > | null = null;
 const getDb = () => {
     if (!_middlewareDb) {
-        const client = postgres(process.env.DATABASE_URL!, { max: 5 });
+        const client = sharedPostgresClient("middleware", process.env.DATABASE_URL!, 5);
         _middlewareDb = drizzle(client, { schema: { users, userCompanyMemberships } });
     }
     return _middlewareDb;
@@ -321,7 +328,10 @@ export default async function middleware(req: NextRequest) {
         if (shouldLogPerf) {
             const totalMs = Date.now() - requestStart;
             const dbSegment = dbQueryMs == null ? "n/a" : `${dbQueryMs}ms`;
-            console.info(`[perf] middleware path=${pathname} total=${totalMs}ms db=${dbSegment}`);
+            const logPath = pathname.startsWith("/api/call-notes/capture-app/d/")
+                ? "/api/call-notes/capture-app/d/[code]/[filename]"
+                : pathname;
+            console.info(`[perf] middleware path=${logPath} total=${totalMs}ms db=${dbSegment}`);
         }
     }
 }

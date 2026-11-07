@@ -340,7 +340,11 @@ services:
     ports:
       - "8000:8000"
     healthcheck:
-      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/health')\""]
+      test:
+        [
+          "CMD-SHELL",
+          'python -c "import urllib.request; urllib.request.urlopen(''http://localhost:8000/health'')"',
+        ]
       interval: 15s
       timeout: 5s
       retries: 5
@@ -363,7 +367,11 @@ services:
     ports:
       - "8003:8000"
     healthcheck:
-      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/health')\""]
+      test:
+        [
+          "CMD-SHELL",
+          'python -c "import urllib.request; urllib.request.urlopen(''http://localhost:8000/health'')"',
+        ]
       interval: 15s
       timeout: 5s
       retries: 5
@@ -522,6 +530,17 @@ services:
       - ./apps/web/config:/app/apps/web/config:ro
     environment:
       <<: *shared-env
+      # Per-device enrollment; release blobs stay private to the web server.
+      CALL_NOTES_CAPTURE_ENABLED: ${CALL_NOTES_CAPTURE_ENABLED:-false}
+      CALL_NOTES_MIN_APP_VERSION: ${CALL_NOTES_MIN_APP_VERSION:-}
+      CALL_NOTES_MAX_CAPTURE_MINUTES: ${CALL_NOTES_MAX_CAPTURE_MINUTES:-240}
+      CALL_NOTES_CAPTURE_APP_STORAGE_CONNECTION_STRING: ${CALL_NOTES_CAPTURE_APP_STORAGE_CONNECTION_STRING:-}
+      CALL_NOTES_CAPTURE_APP_CONTAINER: ${CALL_NOTES_CAPTURE_APP_CONTAINER:-capture-app}
+      # Capture transcription is server-side; keys never reach the Mac app.
+      CALL_NOTES_TRANSCRIPTION_PROVIDER: ${CALL_NOTES_TRANSCRIPTION_PROVIDER:-}
+      CALL_NOTES_TRANSCRIPTION_BASE_URL: ${CALL_NOTES_TRANSCRIPTION_BASE_URL:-}
+      CALL_NOTES_TRANSCRIPTION_API_KEY: ${CALL_NOTES_TRANSCRIPTION_API_KEY:-}
+      CALL_NOTES_TRANSCRIPTION_LANGUAGE: ${CALL_NOTES_TRANSCRIPTION_LANGUAGE:-}
     ports:
       - "3000:3000"
 

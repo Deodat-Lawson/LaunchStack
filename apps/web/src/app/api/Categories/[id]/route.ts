@@ -9,6 +9,7 @@ import { db } from "~/server/db";
 import { category } from "@launchstack/store/schema";
 import { validateRequestBody } from "~/lib/validation";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
+import { normalizeFolderPath } from "~/lib/folders/path";
 import { FolderError } from "~/server/folders";
 import { folderErrorText } from "~/server/folders/words";
 import { renameFolderAs } from "~/server/workspace/folder-actions";
@@ -58,6 +59,14 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
         if (!existing) {
             return NextResponse.json({ error: t("categoryNotFound") }, { status: 404 });
         }
+
+        if (normalizeFolderPath(existing.name) === "Calls") {
+            return NextResponse.json(
+                { error: translatorFor(locale, "sources.server.folders")("callsManaged") },
+                { status: 409 }
+            );
+        }
+
         if (existing.name === name) {
             return NextResponse.json({ success: true, id: parsed.id, name }, { status: 200 });
         }

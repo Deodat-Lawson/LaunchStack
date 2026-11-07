@@ -13,6 +13,7 @@ export const STUDIO_PANE_IDS = [
     "knowledge",
     "processing",
     "meetings",
+    "calls",
     "agents",
     "team",
     "growth",

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { callNotesCalls } from "@launchstack/pipelines/schema";
 import { requestTranslator } from "~/i18n/server";
 import { db } from "~/server/db";
 import { documentNotes, documentNoteEmbeddings, noteLinks } from "~/server/db/schema";
@@ -76,14 +77,21 @@ export async function PUT(request: Request, { params }: { params: Promise<{ note
         // document left the caller's scope reads as missing.
         const scope = await ctx.data.documentScope();
         const [existing] = await db
-            .select({ documentId: documentNotes.documentId })
+            .select({
+                documentId: documentNotes.documentId,
+                callId: callNotesCalls.id,
+            })
             .from(documentNotes)
+            .leftJoin(callNotesCalls, eq(callNotesCalls.documentNoteId, documentNotes.id))
             .where(noteOwnershipFilter(id, ctx.data.authUserId, ctx.data.companyId));
         if (
             !existing ||
             !(await isNoteDocumentVisible(existing.documentId, ctx.data.companyId, scope))
         ) {
             return NextResponse.json({ error: t("noteNotFound") }, { status: 404 });
+        }
+        if (existing.callId !== null) {
+            return NextResponse.json({ error: t("callNoteManaged") }, { status: 409 });
         }
 
         const [updated] = await db
@@ -168,6 +176,18 @@ export async function DELETE(
         const id = parseInt(noteId, 10);
         if (isNaN(id)) {
             return NextResponse.json({ error: t("invalidNoteId") }, { status: 400 });
+        }
+
+        const [existing] = await db
+            .select({ callId: callNotesCalls.id })
+            .from(documentNotes)
+            .leftJoin(callNotesCalls, eq(callNotesCalls.documentNoteId, documentNotes.id))
+            .where(noteOwnershipFilter(id, ctx.data.authUserId, ctx.data.companyId));
+        if (!existing) {
+            return NextResponse.json({ error: t("noteNotFound") }, { status: 404 });
+        }
+        if (existing.callId !== null) {
+            return NextResponse.json({ error: t("callNoteManaged") }, { status: 409 });
         }
 
         const [deleted] = await db

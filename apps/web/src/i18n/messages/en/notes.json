@@ -127,6 +127,7 @@
       "invalidNoteId": "Invalid note ID",
       "invalidNoteIdLower": "Invalid note id",
       "noteNotFound": "Note not found",
+      "callNoteManaged": "Call Notes are managed from Calls",
       "fetchNotesFailed": "Failed to fetch notes",
       "createFailed": "Failed to create note",
       "fetchFailed": "Failed to fetch note",

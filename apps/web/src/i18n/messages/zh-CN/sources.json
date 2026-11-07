@@ -1,5 +1,6 @@
 {
   "sourceRail": {
+    "calls": "通话",
     "actionsFor": "“{title}”的操作",
     "actions": "操作",
     "unavailableAsContext": "无法用作上下文：索引失败",
@@ -43,6 +44,7 @@
     "resizeTitle": "拖动以调整宽度 · 双击恢复默认"
   },
   "knowledgePane": {
+    "calls": "通话",
     "heading": "此工作区可用于推理的全部内容",
     "statSources": "<b>{count}</b> {count, plural, other {个来源}}",
     "statCollections": "<b>{count}</b> {count, plural, other {个文件夹}}",
@@ -763,13 +765,19 @@
     "noSlash": "文件夹名称不能包含“/”。",
     "pathProblem": "{path}：{problem}"
   },
+  "callNotes": {
+    "unavailableAsContext": "此通话笔记为私有笔记、尚未完成索引，或你无权将其用作聊天上下文",
+    "openLabel": "通话笔记 — 在「通话」中打开"
+  },
   "contextMenu": {
+    "calls": "通话",
     "indexing": "此来源仍在索引中。",
     "viewOnly": "你可以查看此文件，但不能修改。",
     "folderLocked": "你无法向此文件夹添加文件。",
     "deleteReserved": "只有添加此文件的人或它的管理者才能删除。",
     "unfiled": "未归档",
     "open": "打开",
+    "openInCalls": "在「通话」中打开",
     "openBeside": "在侧边打开",
     "removeFromContext": "从上下文中移除",
     "addToContext": "添加到上下文",
@@ -798,6 +806,7 @@
     "addKnowledge": "添加知识",
     "newFolder": "新建文件夹",
     "selectionViewOnlyAll": "你可以查看这些来源，但不能修改。",
+    "selectionCallNotesManaged": "通话笔记请在「通话」中管理。其他来源必须完成索引且你有编辑权限，才能移动或删除。",
     "selectionViewOnlySome": "{count, plural, other {其中 # 个你只能查看、不能修改，将被跳过。}}",
     "selectionIndexingAll": "这些来源仍在索引中。",
     "selectionIndexingSome": "{count, plural, other {其中 # 个仍在索引中，将被跳过。}}",
@@ -836,6 +845,7 @@
     "connectionLost": "{name}：上传时连接中断"
   },
   "sourceTypes": {
+    "call-note": "通话笔记",
     "doc": "文件",
     "audio": "音频",
     "video": "视频",
@@ -890,6 +900,7 @@
       "folderEditDenied": "你没有此文件夹的编辑权限。",
       "documentEditDenied": "你可以查看此文件，但不能修改它。",
       "documentDeleteDenied": "只有添加此文件的人，或管理此文件的人，才能删除它。",
+      "callNoteManaged": "通话笔记文档请在「通话」中管理",
       "invalidDocumentId": "文档 ID 无效",
       "noMutableFields": "没有提供可修改的字段",
       "updateDocumentFailed": "更新文档失败",
@@ -931,6 +942,7 @@
       "archive": "压缩包会拆分为其中的各个文件。请改为重新嵌入这些文件。"
     },
     "folders": {
+      "callsManaged": "「通话」由通话笔记管理",
       "pathRequired": "请提供文件夹路径。",
       "bothPathsRequired": "请同时提供当前文件夹路径和新的文件夹路径。",
       "cycle": "不能把文件夹移到它自身之中。",

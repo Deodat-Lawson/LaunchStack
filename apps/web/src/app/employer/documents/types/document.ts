@@ -2,6 +2,7 @@
 
 import { isArtifactDocument } from "~/lib/artifact-document";
 import { isMindmapDocument } from "~/lib/mindmap-document";
+import type { CallNoteDocumentMarker } from "~/lib/call-note-document";
 import { websiteMarkerOf } from "~/lib/website-document";
 import { isConversationConnector } from "~/lib/session-transcript";
 import {
@@ -51,6 +52,8 @@ export interface DocumentType {
         language?: string;
         confidence?: number;
         segments?: { start: number; end: number; text: string }[];
+        /** The index-owned retrieval copy of a Call Note, managed from Calls. */
+        callNote?: CallNoteDocumentMarker["callNote"];
         [key: string]: unknown;
     } | null;
     /** When set, this document was extracted from a ZIP archive with this name */

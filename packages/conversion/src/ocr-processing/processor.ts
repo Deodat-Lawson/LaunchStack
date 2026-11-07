@@ -1080,9 +1080,6 @@ function toStoredConfidencePercent(confidence: number | undefined): number | und
  * record, and mark the OCR job as completed.  Needs only counts and metadata,
  * not vectors or chunk content.
  */
-/** The keys apps/worker's dead-event handler stamps on a failed source. */
-const FAILURE_STAMP_KEYS = new Set(["error", "errorMessage", "failedAt"]);
-
 export async function finalizeStorage(
     documentId: number,
     jobId: string,
@@ -1138,30 +1135,22 @@ export async function finalizeStorage(
                 },
             });
 
-        // Merge, never replace: the row's metadata carries provenance written
-        // at creation — a connector's marker, a published mindmap's id — and
-        // the viewer picks a renderer by it. Overwriting it here turned every
-        // imported session back into a plain Markdown file the moment it
-        // finished indexing.
+        // Merge atomically: ingestion must not erase provenance stamped by a
+        // connector, published mindmap, or indexed Call Note during processing.
+        // Keep the document's provenance on the version too, without replacing
+        // anything stamped on that version while this run was processing.
         const [existing] = await getDb()
             .select({ ocrMetadata: documentTable.ocrMetadata })
             .from(documentTable)
             .where(eq(documentTable.id, documentId))
             .limit(1);
-        // ...except the dead-event handler's failure stamp: a run that
-        // succeeds after it (an operator replay, a re-upload, Retry) must not
-        // carry a stale "processing_failed" and its error message forward.
-        const preserved = Object.fromEntries(
-            Object.entries(
-                existing?.ocrMetadata &&
-                    typeof existing.ocrMetadata === "object" &&
-                    !Array.isArray(existing.ocrMetadata)
-                    ? (existing.ocrMetadata as Record<string, unknown>)
-                    : {}
-            ).filter(([key]) => !FAILURE_STAMP_KEYS.has(key))
-        );
+        const documentProvenance =
+            existing?.ocrMetadata &&
+            typeof existing.ocrMetadata === "object" &&
+            !Array.isArray(existing.ocrMetadata)
+                ? existing.ocrMetadata
+                : {};
         const ocrMetadataPayload = {
-            ...preserved,
             totalPages: meta.totalPages,
             totalChunks,
             processingTimeMs: meta.processingTimeMs,
@@ -1177,7 +1166,9 @@ export async function finalizeStorage(
                 ocrJobId: jobId,
                 ocrProvider: meta.provider,
                 ocrConfidenceScore: toStoredConfidencePercent(meta.confidenceScore),
-                ocrMetadata: ocrMetadataPayload,
+                // A successful replay removes the dead-event handler's failure
+                // stamp from the latest row, not a stale read of its metadata.
+                ocrMetadata: sql`(COALESCE(${documentTable.ocrMetadata}, '{}'::jsonb) - 'error' - 'errorMessage' - 'failedAt') || ${JSON.stringify(ocrMetadataPayload)}::jsonb`,
             })
             .where(
                 and(
@@ -1195,7 +1186,7 @@ export async function finalizeStorage(
                 ocrProcessed: true,
                 ocrJobId: jobId,
                 ocrProvider: meta.provider,
-                ocrMetadata: ocrMetadataPayload,
+                ocrMetadata: sql`((${JSON.stringify(documentProvenance)}::jsonb || COALESCE(${documentVersions.ocrMetadata}, '{}'::jsonb)) - 'error' - 'errorMessage' - 'failedAt') || ${JSON.stringify(ocrMetadataPayload)}::jsonb`,
             })
             .where(
                 and(
@@ -1387,12 +1378,14 @@ export async function storeDocument(
             ocrJobId: jobId,
             ocrProvider: normalizationResult.provider,
             ocrConfidenceScore: toStoredConfidencePercent(normalizationResult.confidenceScore),
-            ocrMetadata: {
-                totalPages: normalizationResult.pages.length,
-                totalChunks: vectorizedChunks.length,
-                processingTimeMs: normalizationResult.processingTimeMs,
-                processedAt: new Date().toISOString(),
-            },
+            ocrMetadata: sql`COALESCE(${documentTable.ocrMetadata}, '{}'::jsonb) || ${JSON.stringify(
+                {
+                    totalPages: normalizationResult.pages.length,
+                    totalChunks: vectorizedChunks.length,
+                    processingTimeMs: normalizationResult.processingTimeMs,
+                    processedAt: new Date().toISOString(),
+                }
+            )}::jsonb`,
         })
         .where(
             and(

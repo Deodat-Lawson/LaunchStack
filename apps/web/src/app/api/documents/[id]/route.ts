@@ -14,7 +14,7 @@
  */
 
 import { NextResponse } from "next/server";
-import { and, eq } from "drizzle-orm";
+import { and, eq, getTableColumns } from "drizzle-orm";
 import { normalizeFolderPath } from "~/lib/folders/path";
 import { z } from "zod";
 
@@ -29,6 +29,8 @@ import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
+import { callNotesCalls } from "@launchstack/pipelines/call-notes";
+import { callNoteDocumentReference, isCallNoteDocument } from "~/lib/call-note-document";
 import { canEditFolder } from "~/server/services/folder-access";
 import { recordActivity } from "~/server/workspace/activity";
 import { canEditDocument } from "~/server/workspace/item-access";
@@ -77,7 +79,10 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
             // Scoped in SQL: a cross-company or out-of-scope id reads exactly
             // like a missing document.
             const [doc] = await db
-                .select()
+                .select({
+                    ...getTableColumns(document),
+                    indexedCallNote: callNoteDocumentReference(document, callNotesCalls),
+                })
                 .from(document)
                 .where(
                     and(
@@ -91,6 +96,10 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
                     { error: translatorFor(locale, "errors.api")("documentNotFound") },
                     { status: 404 }
                 );
+            }
+
+            if (isCallNoteDocument(doc)) {
+                return NextResponse.json({ error: t("callNoteManaged") }, { status: 409 });
             }
 
             const validation = await validateRequestBody(request, PatchDocumentSchema);

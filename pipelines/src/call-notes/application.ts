@@ -1,0 +1,3267 @@
+import { and, asc, desc, eq, isNull, or, sql } from "drizzle-orm";
+import { createHash, randomUUID } from "node:crypto";
+import { isDeepStrictEqual } from "node:util";
+
+import type { DbClient } from "@launchstack/store/client";
+
+import {
+    CALL_NOTES_SCHEMA_VERSION,
+    CallListQuerySchema,
+    CallNotesCommandSchema,
+    CallQuerySchema,
+    CallSnapshotSchema,
+    CaptureEventSchema,
+    CompleteEnrichmentInputSchema,
+    DetectedCallCandidateSchema,
+    LocalCapturePollInputSchema,
+    LocalCapturePollResultSchema,
+    LocalCaptureWorkerStatusSchema,
+    TranscriptSearchQuerySchema,
+    type AudioChannel,
+    type CallListQuery,
+    type CallNotesCommand,
+    type CallQuery,
+    type CallSnapshot,
+    type CallStatus,
+    type CaptureEvent,
+    type CompleteEnrichmentInput,
+    type DetectedCallCandidate,
+    type EnrichmentInput,
+    type Gap,
+    type GapKind,
+    type LocalCapturePollInput,
+    type LocalCaptureWorkerStatus,
+    type LocalCapturePollResult,
+    type ParticipantIdentity,
+    type TranscriptSearchQuery,
+    type TranscriptSegment,
+} from "./contracts";
+import type {
+    CallNotesApplication,
+    CallNotesClock,
+    CallNotesIdSource,
+    CallNoteIndex,
+} from "./ports";
+import {
+    callNotesCalls,
+    callNotesCaptureAttempts,
+    callNotesCaptures,
+    callNotesEnrichmentRuns,
+    callNotesGaps,
+    callNotesNoteRevisions,
+    callNotesParticipants,
+    callNotesTranscriptSegments,
+    callNotesCaptureDevices,
+    callNotesWorkItems,
+    type CallNotesCallRow,
+    type CallNotesCaptureRow,
+    type CallNotesCaptureAttemptRow,
+    type CallNotesGapRow,
+    type CallNotesParticipantRow,
+    type CallNotesTranscriptSegmentRow,
+} from "./schema";
+import { CallNotesWorkItems, type CallNotesWorkItemKind } from "./work-items";
+
+/** Roles understood by the application adapter; `member` is normalized to `editor` at the host edge. */
+export type CallNotesMembershipRole = "owner" | "admin" | "editor" | "viewer" | "guest";
+
+export interface CallNotesMembershipStore {
+    getRole(companyId: string, actorUserId: string): Promise<CallNotesMembershipRole | null>;
+}
+
+export interface CallNotesDocumentNoteRecord {
+    id: number;
+    title: string;
+    contentMarkdown: string;
+    contentRich: Record<string, unknown>;
+}
+
+export interface CallNotesDocumentNoteInput {
+    companyId: string;
+    userId: string;
+    title: string;
+    contentMarkdown: string;
+    contentRich: Record<string, unknown>;
+}
+
+export interface CallNotesDocumentNoteUpdate {
+    title: string;
+    contentMarkdown: string;
+    contentRich: Record<string, unknown>;
+}
+
+export type CallNotesDocumentNoteExecutor = Pick<
+    DbClient,
+    "select" | "insert" | "update" | "delete"
+>;
+
+export interface CallNotesDocumentNoteStore {
+    create(
+        input: CallNotesDocumentNoteInput,
+        executor?: CallNotesDocumentNoteExecutor
+    ): Promise<CallNotesDocumentNoteRecord>;
+    get(
+        id: number,
+        executor?: CallNotesDocumentNoteExecutor
+    ): Promise<CallNotesDocumentNoteRecord | null>;
+    update(
+        id: number,
+        input: CallNotesDocumentNoteUpdate,
+        executor?: CallNotesDocumentNoteExecutor
+    ): Promise<CallNotesDocumentNoteRecord>;
+    delete(id: number, executor?: CallNotesDocumentNoteExecutor): Promise<void>;
+}
+
+export interface DetectedCallSource {
+    list(query: CallListQuery): Promise<readonly DetectedCallCandidate[]>;
+}
+
+export type CallNotesApplicationErrorCode =
+    | "not_found"
+    | "forbidden"
+    | "conflict"
+    | "invalid_transition"
+    | "unavailable";
+
+export class CallNotesApplicationError extends Error {
+    readonly code: CallNotesApplicationErrorCode;
+
+    constructor(code: CallNotesApplicationErrorCode, message: string) {
+        super(message);
+        this.name = "CallNotesApplicationError";
+        this.code = code;
+    }
+}
+
+export interface CallNotesApplicationOptions {
+    db: DbClient;
+    memberships: CallNotesMembershipStore;
+    documentNotes: CallNotesDocumentNoteStore;
+    callNoteIndex: CallNoteIndex;
+    detectedCalls: DetectedCallSource;
+    clock?: CallNotesClock;
+    ids?: CallNotesIdSource;
+    maxCaptureMinutes?: number;
+}
+type ParticipantCaptureEvent = Exclude<
+    Extract<CaptureEvent, { participant: ParticipantIdentity }>,
+    Extract<CaptureEvent, { kind: "transcript_segment" }>
+>;
+
+const defaultClock: CallNotesClock = { now: () => new Date() };
+const defaultIds: CallNotesIdSource = {
+    next(prefix: string) {
+        return `${prefix}_${randomUUID().replace(/-/g, "")}`;
+    },
+};
+
+const EMPTY_RICH_TEXT: Record<string, unknown> = { type: "doc", content: [] };
+const FALLBACK_SPEAKER_NAMES: Record<AudioChannel, string> = {
+    microphone: "Me",
+    system: "Meeting",
+};
+
+function companyNumber(companyId: string): bigint {
+    if (!/^\d+$/.test(companyId)) {
+        throw new CallNotesApplicationError(
+            "invalid_transition",
+            `Invalid company id ${companyId}`
+        );
+    }
+    return BigInt(companyId);
+}
+
+function asDate(value: Date | string): Date {
+    return value instanceof Date ? value : new Date(value);
+}
+
+function iso(value: Date | string): string {
+    return asDate(value).toISOString();
+}
+
+function errorMessage(error: unknown): string {
+    return error instanceof Error ? error.message : String(error);
+}
+
+function isApplicationError(error: unknown): error is CallNotesApplicationError {
+    return error instanceof CallNotesApplicationError;
+}
+
+function sourceTime(value: number | null): number {
+    return value ?? Number.POSITIVE_INFINITY;
+}
+
+function sortTranscriptRows<
+    T extends {
+        sourceStartMs: number | null;
+        receiveOrder: number;
+        receivedAt: Date;
+        id: string;
+    },
+>(rows: T[]): T[] {
+    return rows.sort((left, right) => {
+        const start = sourceTime(left.sourceStartMs) - sourceTime(right.sourceStartMs);
+        if (start !== 0) return start;
+        if (left.receiveOrder !== right.receiveOrder) return left.receiveOrder - right.receiveOrder;
+        const received = asDate(left.receivedAt).getTime() - asDate(right.receivedAt).getTime();
+        if (received !== 0) return received;
+        return left.id.localeCompare(right.id);
+    });
+}
+
+function normalizeNote(record: CallNotesDocumentNoteRecord): CallNotesDocumentNoteRecord {
+    if (!Number.isInteger(record.id) || record.id <= 0) {
+        throw new CallNotesApplicationError(
+            "unavailable",
+            "Document note adapter returned an invalid id"
+        );
+    }
+    return {
+        id: record.id,
+        title: record.title ?? "",
+        contentMarkdown: record.contentMarkdown ?? "",
+        contentRich: record.contentRich ?? {},
+    };
+}
+
+function toTranscriptSegments(
+    rows: readonly CallNotesTranscriptSegmentRow[],
+    participants: readonly CallNotesParticipantRow[]
+): TranscriptSegment[] {
+    const participantById = new Map(
+        participants.map(participant => [participant.id, participant] as const)
+    );
+    return sortTranscriptRows([...rows]).map(row => {
+        const participant = row.participantId ? participantById.get(row.participantId) : undefined;
+        return {
+            id: row.id,
+            attemptId: row.attemptId,
+            audioChannel: row.audioChannel,
+            participantId: row.participantId,
+            speakerName:
+                row.speakerName ??
+                participant?.displayName ??
+                FALLBACK_SPEAKER_NAMES[row.audioChannel],
+            sourceStartMs: row.sourceStartMs ?? null,
+            sourceEndMs: row.sourceEndMs ?? null,
+            receivedAt: iso(row.receivedAt),
+            receiveOrder: row.receiveOrder,
+            text: row.text,
+            language: row.language ?? null,
+        };
+    });
+}
+
+function toGaps(rows: readonly CallNotesGapRow[]): Gap[] {
+    return rows.map(gap => ({
+        id: gap.id,
+        attemptId: gap.attemptId,
+        kind: gap.kind,
+        startedAt: iso(gap.startedAt),
+        endedAt: gap.endedAt ? iso(gap.endedAt) : null,
+    }));
+}
+
+function toCallNote(
+    call: Pick<
+        CallNotesCallRow,
+        "documentNoteId" | "noteOwnerUserId" | "noteVisibility" | "currentNoteRevision"
+    >,
+    record: CallNotesDocumentNoteRecord
+): NonNullable<CallSnapshot["note"]> {
+    const normalized = normalizeNote(record);
+    return {
+        documentNoteId: normalized.id,
+        ownerUserId: call.noteOwnerUserId,
+        visibility: call.noteVisibility,
+        revision: call.currentNoteRevision,
+        title: normalized.title,
+        contentMarkdown: normalized.contentMarkdown,
+        contentRich: normalized.contentRich,
+        saveState: "saved",
+    };
+}
+
+type EnrichmentFingerprintInput = Pick<EnrichmentInput, "transcript" | "gaps" | "note">;
+
+function enrichmentFingerprint(input: EnrichmentFingerprintInput): string {
+    return createHash("sha256").update(JSON.stringify(input)).digest("hex");
+}
+
+function commandWorkKind(command: CallNotesCommand): CallNotesWorkItemKind {
+    switch (command.kind) {
+        case "start_capture":
+        case "dismiss_detected_occurrence":
+            return "start";
+        case "pause_capture":
+            return "pause";
+        case "resume_capture":
+            return "resume";
+        case "request_enrichment":
+        case "reject_enrichment":
+        case "accept_enrichment":
+            return "enrich";
+        default:
+            return "finalize";
+    }
+}
+
+function commandCallId(command: CallNotesCommand): string | null {
+    return "callId" in command ? command.callId : null;
+}
+
+function isActiveAttemptLifecycle(value: string): boolean {
+    return value === "connecting" || value === "live" || value === "reconnecting";
+}
+
+const LOCAL_CAPTURE_TIMEOUT_MS = 15_000;
+const CAPTURE_DEVICE_ONLINE_MS = 60_000;
+const LOCAL_CAPTURE_FAILURE_CODE = "worker_unavailable";
+const LOCAL_CAPTURE_FAILURE_MESSAGE = "Local capture worker became unavailable";
+const LOCAL_CAPTURE_STOP_DRAIN_TIMEOUT_MS = 30_000;
+
+type CallNotesExecutor = Pick<DbClient, "select" | "insert" | "update" | "delete">;
+
+/** PostgreSQL-backed Call Notes policy, state machine, and snapshot boundary. */
+export class PostgresCallNotesApplication implements CallNotesApplication {
+    private readonly clock: CallNotesClock;
+    private readonly ids: CallNotesIdSource;
+    private readonly workItems: CallNotesWorkItems;
+
+    constructor(private readonly options: CallNotesApplicationOptions) {
+        this.clock = options.clock ?? defaultClock;
+        this.ids = options.ids ?? defaultIds;
+        this.workItems = new CallNotesWorkItems(options.db, {
+            clock: this.clock,
+            ids: this.ids,
+        });
+    }
+
+    async execute(command: CallNotesCommand): Promise<CallSnapshot | null> {
+        const parsed = CallNotesCommandSchema.parse(command);
+        await this.requireMutationMembership(parsed.companyId, parsed.actorUserId);
+        const kind = commandWorkKind(parsed);
+        const key =
+            parsed.kind === "dismiss_detected_occurrence"
+                ? `dismiss:${parsed.actorUserId}:${parsed.source}:${parsed.sourceOccurrenceKey}`
+                : parsed.requestId;
+        const receipt = await this.workItems.enqueue({
+            companyId: parsed.companyId,
+            callId: parsed.kind === "delete_call" ? null : commandCallId(parsed),
+            kind,
+            idempotencyKey: key,
+            payload: { command: parsed },
+        });
+        if (receipt.status === "completed") {
+            const resultActorUserId =
+                typeof receipt.payload.resultActorUserId === "string"
+                    ? receipt.payload.resultActorUserId
+                    : null;
+            if (resultActorUserId !== parsed.actorUserId) {
+                throw new CallNotesApplicationError(
+                    "forbidden",
+                    "A completed Call Notes receipt belongs to another actor"
+                );
+            }
+            const resultCallId = receipt.payload.resultCallId;
+            if (typeof resultCallId === "string") {
+                await this.requireCallAccess(parsed.companyId, parsed.actorUserId, resultCallId);
+            }
+            return this.resultFromReceipt(receipt.payload, parsed.actorUserId);
+        }
+        if (commandCallId(parsed)) {
+            await this.requireCallAccess(
+                parsed.companyId,
+                parsed.actorUserId,
+                commandCallId(parsed)!
+            );
+        }
+        if (receipt.status === "failed") await this.workItems.reopenReceipt(receipt.id);
+
+        try {
+            let result: CallSnapshot | null;
+            let recoveredNoteCallId: string | null = null;
+            switch (parsed.kind) {
+                case "start_capture":
+                    result = await this.startCapture(parsed);
+                    break;
+                case "dismiss_detected_occurrence":
+                    result = null;
+                    break;
+                case "pause_capture":
+                    result = await this.controlCapture(parsed, "paused");
+                    break;
+                case "resume_capture":
+                    result = await this.controlCapture(parsed, "running");
+                    break;
+                case "stop_capture":
+                    result = await this.stopCapture(parsed);
+                    break;
+                case "update_note":
+                    if (
+                        receipt.status === "failed" &&
+                        (await this.hasLegacyCommittedNoteUpdate(parsed))
+                    ) {
+                        recoveredNoteCallId = parsed.callId;
+                        result = await this.snapshot(parsed.callId, parsed.actorUserId);
+                    } else {
+                        result = await this.updateNote(parsed);
+                    }
+                    break;
+                case "set_note_visibility":
+                    result = await this.setNoteVisibility(parsed);
+                    break;
+                case "request_enrichment":
+                    result = await this.requestEnrichment(parsed);
+                    break;
+                case "reject_enrichment":
+                    result = await this.rejectEnrichment(parsed);
+                    break;
+                case "accept_enrichment":
+                    result = await this.acceptEnrichment(parsed);
+                    break;
+                case "delete_call":
+                    result = await this.deleteCall(parsed);
+                    break;
+                default:
+                    throw new CallNotesApplicationError(
+                        "invalid_transition",
+                        "Unsupported Call Notes command"
+                    );
+            }
+            await this.workItems.completeReceipt(receipt.id, {
+                resultCallId: result?.id ?? null,
+                resultActorUserId: parsed.actorUserId,
+            });
+            if (recoveredNoteCallId) {
+                await this.syncCallNoteIndex(parsed.companyId, recoveredNoteCallId);
+            }
+            return result;
+        } catch (error) {
+            await this.markReceiptFailed(receipt.id, error);
+            throw error;
+        }
+    }
+
+    private async touchCaptureDevice(
+        executor: CallNotesExecutor,
+        companyId: string,
+        userId: string,
+        deviceId: string,
+        now: Date
+    ): Promise<void> {
+        const [device] = await executor
+            .update(callNotesCaptureDevices)
+            .set({ lastSeenAt: now })
+            .where(
+                and(
+                    eq(callNotesCaptureDevices.id, deviceId),
+                    eq(callNotesCaptureDevices.companyId, companyNumber(companyId)),
+                    eq(callNotesCaptureDevices.userId, userId),
+                    isNull(callNotesCaptureDevices.revokedAt)
+                )
+            )
+            .returning({ id: callNotesCaptureDevices.id });
+        if (!device) {
+            throw new CallNotesApplicationError("forbidden", "Capture device is unavailable");
+        }
+    }
+
+    private async requireAvailableCaptureDevice(
+        executor: CallNotesExecutor,
+        company: bigint,
+        userId: string,
+        now: Date,
+        targetDeviceId?: string
+    ): Promise<string> {
+        const [device] = await executor
+            .select({
+                id: callNotesCaptureDevices.id,
+                lastSeenAt: callNotesCaptureDevices.lastSeenAt,
+            })
+            .from(callNotesCaptureDevices)
+            .where(
+                and(
+                    eq(callNotesCaptureDevices.companyId, company),
+                    eq(callNotesCaptureDevices.userId, userId),
+                    isNull(callNotesCaptureDevices.revokedAt),
+                    sql`${callNotesCaptureDevices.lastSeenAt} > ${new Date(now.getTime() - CAPTURE_DEVICE_ONLINE_MS).toISOString()}::timestamptz`,
+                    targetDeviceId ? eq(callNotesCaptureDevices.id, targetDeviceId) : undefined
+                )
+            )
+            .orderBy(desc(callNotesCaptureDevices.lastSeenAt), asc(callNotesCaptureDevices.id))
+            .limit(1);
+        if (!device) {
+            throw new CallNotesApplicationError(
+                "unavailable",
+                "Local capture worker is unavailable; open LaunchStack Capture and retry"
+            );
+        }
+        return device.id;
+    }
+
+    private async recordWorkerFailure(
+        executor: CallNotesExecutor,
+        capture: CallNotesCaptureRow,
+        attempt: CallNotesCaptureAttemptRow | null,
+        now: Date,
+        code: string,
+        message: string | null
+    ): Promise<void> {
+        const segments = await executor
+            .select({ receivedAt: callNotesTranscriptSegments.receivedAt })
+            .from(callNotesTranscriptSegments)
+            .where(
+                and(
+                    eq(callNotesTranscriptSegments.callId, capture.callId),
+                    eq(callNotesTranscriptSegments.companyId, capture.companyId)
+                )
+            );
+        const latestEvidenceAt = segments.reduce<Date | null>((latest, segment) => {
+            const receivedAt = asDate(segment.receivedAt);
+            return latest === null || receivedAt > latest ? receivedAt : latest;
+        }, null);
+        const gapStartCandidates = [
+            latestEvidenceAt,
+            attempt?.leaseExpiresAt
+                ? new Date(asDate(attempt.leaseExpiresAt).getTime() - LOCAL_CAPTURE_TIMEOUT_MS)
+                : null,
+            attempt?.endedAt,
+            attempt?.startedAt,
+            capture.updatedAt,
+            capture.startedAt,
+        ].filter((value): value is Date => value !== null && value !== undefined);
+        const gapStartedAt = gapStartCandidates.reduce(
+            (latest, candidate) => (candidate > latest ? candidate : latest),
+            gapStartCandidates[0] ?? now
+        );
+        const [openGap] = await executor
+            .select({ id: callNotesGaps.id })
+            .from(callNotesGaps)
+            .where(
+                and(
+                    eq(callNotesGaps.callId, capture.callId),
+                    eq(callNotesGaps.kind, "worker_unavailable"),
+                    isNull(callNotesGaps.endedAt),
+                    attempt
+                        ? eq(callNotesGaps.attemptId, attempt.id)
+                        : isNull(callNotesGaps.attemptId)
+                )
+            )
+            .limit(1);
+        if (!openGap) {
+            await executor.insert(callNotesGaps).values({
+                id: this.ids.next("gap"),
+                callId: capture.callId,
+                captureId: capture.id,
+                attemptId: attempt?.id ?? null,
+                companyId: capture.companyId,
+                kind: "worker_unavailable",
+                startedAt: gapStartedAt,
+                endedAt: null,
+                details: { code, message },
+            });
+        }
+        if (attempt && isActiveAttemptLifecycle(attempt.lifecycle)) {
+            await executor
+                .update(callNotesCaptureAttempts)
+                .set({
+                    lifecycle: "failed",
+                    endedAt: now,
+                    failureCode: code,
+                    failureMessage: message,
+                })
+                .where(eq(callNotesCaptureAttempts.id, attempt.id));
+        }
+    }
+
+    private async pauseCaptureForWorkerError(
+        executor: CallNotesExecutor,
+        capture: CallNotesCaptureRow,
+        attempt: CallNotesCaptureAttemptRow | null,
+        now: Date,
+        code: string,
+        message: string | null
+    ): Promise<void> {
+        await this.recordWorkerFailure(executor, capture, attempt, now, code, message);
+        await executor
+            .update(callNotesCaptures)
+            .set({
+                desiredMode: "paused",
+                pausedReason:
+                    capture.desiredMode === "paused" && capture.pausedReason === "user"
+                        ? "user"
+                        : "worker_error",
+                lifecycle: "interrupted",
+                activeAttemptId: null,
+                updatedAt: now,
+            })
+            .where(eq(callNotesCaptures.id, capture.id));
+        await executor
+            .update(callNotesCalls)
+            .set({ status: "active", updatedAt: now })
+            .where(
+                and(
+                    eq(callNotesCalls.id, capture.callId),
+                    eq(callNotesCalls.companyId, capture.companyId)
+                )
+            );
+    }
+
+    private async reinstateLocalCaptureAttempt(
+        executor: CallNotesExecutor,
+        capture: CallNotesCaptureRow,
+        attemptKey: string,
+        now: Date,
+        workerId?: string
+    ): Promise<boolean> {
+        if (
+            capture.activeAttemptId !== null ||
+            !(
+                (capture.desiredMode === "paused" && capture.pausedReason === "worker_error") ||
+                (capture.desiredMode === "running" && capture.lifecycle === "connecting")
+            )
+        ) {
+            return false;
+        }
+        const [attempt] = await executor
+            .select()
+            .from(callNotesCaptureAttempts)
+            .where(
+                and(
+                    eq(callNotesCaptureAttempts.captureId, capture.id),
+                    eq(callNotesCaptureAttempts.companyId, capture.companyId)
+                )
+            )
+            .orderBy(desc(callNotesCaptureAttempts.startedAt), desc(callNotesCaptureAttempts.id))
+            .for("update")
+            .limit(1);
+        if (
+            !attempt ||
+            attempt.sourceAttemptKey !== attemptKey ||
+            attempt.lifecycle !== "failed" ||
+            attempt.failureCode !== LOCAL_CAPTURE_FAILURE_CODE ||
+            attempt.leaseOwner === null ||
+            (workerId !== undefined && attempt.leaseOwner !== workerId)
+        ) {
+            return false;
+        }
+        const leaseExpiresAt = new Date(now.getTime() + LOCAL_CAPTURE_TIMEOUT_MS);
+        await executor
+            .update(callNotesCaptureAttempts)
+            .set({
+                lifecycle: "live",
+                endedAt: null,
+                failureCode: null,
+                failureMessage: null,
+                leaseExpiresAt,
+            })
+            .where(eq(callNotesCaptureAttempts.id, attempt.id));
+        await executor
+            .update(callNotesCaptures)
+            .set({
+                activeAttemptId: attempt.id,
+                desiredMode: "running",
+                pausedReason: null,
+                lifecycle: "live",
+                updatedAt: now,
+            })
+            .where(eq(callNotesCaptures.id, capture.id));
+        await executor
+            .delete(callNotesGaps)
+            .where(
+                and(
+                    eq(callNotesGaps.captureId, capture.id),
+                    eq(callNotesGaps.attemptId, attempt.id),
+                    eq(callNotesGaps.kind, "worker_unavailable"),
+                    isNull(callNotesGaps.endedAt)
+                )
+            );
+        await executor
+            .update(callNotesCalls)
+            .set({ updatedAt: now })
+            .where(eq(callNotesCalls.id, capture.callId));
+        return true;
+    }
+
+    private async reconcileStaleCaptures(
+        executor: CallNotesExecutor,
+        company: bigint,
+        captureUserId: string,
+        now: Date
+    ): Promise<string[]> {
+        const captures = await executor
+            .select()
+            .from(callNotesCaptures)
+            .where(
+                and(
+                    eq(callNotesCaptures.companyId, company),
+                    eq(callNotesCaptures.captureUserId, captureUserId),
+                    sql`${callNotesCaptures.lifecycle} not in ('completed', 'failed')`
+                )
+            )
+            .for("update");
+        const finalizedCallIds: string[] = [];
+        for (const capture of captures) {
+            if (
+                capture.desiredMode === "running" &&
+                asDate(capture.startedAt).getTime() +
+                    (this.options.maxCaptureMinutes ?? 240) * 60_000 <=
+                    now.getTime()
+            ) {
+                await executor
+                    .update(callNotesCaptures)
+                    .set({
+                        desiredMode: "stopped",
+                        pausedReason: null,
+                        stopReason: "max_duration",
+                        lifecycle: "finalizing",
+                        updatedAt: now,
+                    })
+                    .where(eq(callNotesCaptures.id, capture.id));
+                await executor
+                    .update(callNotesCalls)
+                    .set({ status: "finalizing", updatedAt: now })
+                    .where(eq(callNotesCalls.id, capture.callId));
+                capture.desiredMode = "stopped";
+                capture.stopReason = "max_duration";
+                capture.lifecycle = "finalizing";
+                capture.updatedAt = now;
+            }
+            if (capture.desiredMode === "paused" && capture.activeAttemptId === null) continue;
+            const [call] = await executor
+                .select()
+                .from(callNotesCalls)
+                .where(
+                    and(
+                        eq(callNotesCalls.id, capture.callId),
+                        eq(callNotesCalls.companyId, company)
+                    )
+                )
+                .for("update")
+                .limit(1);
+            if (!call || call.status === "completed" || call.status === "failed") continue;
+
+            let attempt: CallNotesCaptureAttemptRow | null = null;
+            let missingActiveAttempt = false;
+            if (capture.activeAttemptId !== null) {
+                const [activeAttempt] = await executor
+                    .select()
+                    .from(callNotesCaptureAttempts)
+                    .where(
+                        and(
+                            eq(callNotesCaptureAttempts.id, capture.activeAttemptId),
+                            eq(callNotesCaptureAttempts.captureId, capture.id),
+                            eq(callNotesCaptureAttempts.companyId, company)
+                        )
+                    )
+                    .for("update")
+                    .limit(1);
+                attempt = activeAttempt ?? null;
+                missingActiveAttempt = activeAttempt === undefined;
+            }
+            if (!attempt) {
+                const [latestAttempt] = await executor
+                    .select()
+                    .from(callNotesCaptureAttempts)
+                    .where(
+                        and(
+                            eq(callNotesCaptureAttempts.captureId, capture.id),
+                            eq(callNotesCaptureAttempts.companyId, company)
+                        )
+                    )
+                    .orderBy(
+                        desc(callNotesCaptureAttempts.startedAt),
+                        desc(callNotesCaptureAttempts.id)
+                    )
+                    .limit(1);
+                attempt = latestAttempt ?? null;
+            }
+
+            const claimedLocalAttempt = attempt?.leaseOwner != null;
+            let stale = missingActiveAttempt;
+            const [latestDevice] = await executor
+                .select({ lastSeenAt: callNotesCaptureDevices.lastSeenAt })
+                .from(callNotesCaptureDevices)
+                .where(
+                    and(
+                        eq(callNotesCaptureDevices.companyId, company),
+                        eq(callNotesCaptureDevices.userId, capture.captureUserId),
+                        isNull(callNotesCaptureDevices.revokedAt),
+                        capture.targetDeviceId
+                            ? eq(callNotesCaptureDevices.id, capture.targetDeviceId)
+                            : undefined
+                    )
+                )
+                .orderBy(desc(callNotesCaptureDevices.lastSeenAt))
+                .limit(1);
+            const workerAvailable =
+                latestDevice?.lastSeenAt != null &&
+                asDate(latestDevice.lastSeenAt).getTime() >
+                    now.getTime() - CAPTURE_DEVICE_ONLINE_MS;
+            const finalizationTimeout =
+                capture.lifecycle === "finalizing" && capture.desiredMode === "stopped"
+                    ? workerAvailable
+                        ? LOCAL_CAPTURE_STOP_DRAIN_TIMEOUT_MS
+                        : LOCAL_CAPTURE_TIMEOUT_MS
+                    : LOCAL_CAPTURE_TIMEOUT_MS;
+            if (attempt && claimedLocalAttempt) {
+                const startedAt = asDate(attempt.startedAt).getTime();
+                const leaseExpired =
+                    attempt.leaseExpiresAt === null ||
+                    asDate(attempt.leaseExpiresAt).getTime() <= now.getTime();
+                const connectingExpired =
+                    attempt.lifecycle === "connecting" &&
+                    startedAt + LOCAL_CAPTURE_TIMEOUT_MS <= now.getTime();
+                if (!isActiveAttemptLifecycle(attempt.lifecycle)) {
+                    const reference = capture.updatedAt ?? attempt.endedAt ?? attempt.startedAt;
+                    stale =
+                        stale || asDate(reference).getTime() + finalizationTimeout <= now.getTime();
+                } else {
+                    stale = stale || leaseExpired || connectingExpired;
+                }
+            } else if (!attempt) {
+                const canExpireWithoutAttempt =
+                    capture.lifecycle === "connecting" ||
+                    (capture.lifecycle === "finalizing" && capture.desiredMode === "stopped");
+                if (canExpireWithoutAttempt) {
+                    const reference = capture.updatedAt ?? capture.startedAt;
+                    stale =
+                        stale || asDate(reference).getTime() + finalizationTimeout <= now.getTime();
+                }
+            }
+            if (!stale) continue;
+
+            if (capture.desiredMode === "stopped") {
+                await this.recordWorkerFailure(
+                    executor,
+                    capture,
+                    attempt,
+                    now,
+                    LOCAL_CAPTURE_FAILURE_CODE,
+                    LOCAL_CAPTURE_FAILURE_MESSAGE
+                );
+                await this.finalizeOccurrence(call.id, company, capture, now, executor);
+                finalizedCallIds.push(call.id);
+            } else {
+                await this.pauseCaptureForWorkerError(
+                    executor,
+                    capture,
+                    attempt,
+                    now,
+                    LOCAL_CAPTURE_FAILURE_CODE,
+                    LOCAL_CAPTURE_FAILURE_MESSAGE
+                );
+            }
+        }
+        return finalizedCallIds;
+    }
+
+    private async reconcileStaleCaptureForCall(companyId: string, callId: string): Promise<void> {
+        const company = companyNumber(companyId);
+        const [capture] = await this.options.db
+            .select({ captureUserId: callNotesCaptures.captureUserId })
+            .from(callNotesCaptures)
+            .where(
+                and(eq(callNotesCaptures.callId, callId), eq(callNotesCaptures.companyId, company))
+            )
+            .limit(1);
+        if (!capture) return;
+        const now = this.clock.now();
+        const finalizedCallIds = await this.options.db.transaction(async tx => {
+            await tx.execute(
+                sql`SELECT pg_advisory_xact_lock(hashtext(${`call-notes:capture:${companyId}:${capture.captureUserId}`}))`
+            );
+            return this.reconcileStaleCaptures(
+                tx as unknown as CallNotesExecutor,
+                company,
+                capture.captureUserId,
+                now
+            );
+        });
+        for (const finalizedCallId of finalizedCallIds) {
+            await this.syncCallNoteIndex(companyId, finalizedCallId);
+        }
+    }
+
+    async getLocalCaptureWorkerStatus(input: {
+        companyId: string;
+        userId: string;
+    }): Promise<LocalCaptureWorkerStatus> {
+        await this.requireMembership(input.companyId, input.userId);
+        const company = companyNumber(input.companyId);
+        const rows = await this.options.db
+            .select()
+            .from(callNotesCaptureDevices)
+            .where(
+                and(
+                    eq(callNotesCaptureDevices.companyId, company),
+                    eq(callNotesCaptureDevices.userId, input.userId),
+                    isNull(callNotesCaptureDevices.revokedAt)
+                )
+            )
+            .orderBy(desc(callNotesCaptureDevices.lastSeenAt));
+        const now = this.clock.now();
+        const devices = rows.map(device => ({
+            id: device.id,
+            name: device.name,
+            appVersion: device.appVersion,
+            os: device.os,
+            arch: device.arch,
+            online:
+                device.lastSeenAt !== null &&
+                asDate(device.lastSeenAt).getTime() > now.getTime() - CAPTURE_DEVICE_ONLINE_MS,
+            lastSeenAt: device.lastSeenAt ? iso(device.lastSeenAt) : null,
+            createdAt: iso(device.createdAt),
+        }));
+        return LocalCaptureWorkerStatusSchema.parse({
+            available: devices.some(device => device.online),
+            lastSeenAt: devices.find(device => device.lastSeenAt !== null)?.lastSeenAt ?? null,
+            devices,
+        });
+    }
+
+    async pollLocalCapture(input: LocalCapturePollInput): Promise<LocalCapturePollResult> {
+        const parsed = LocalCapturePollInputSchema.parse(input);
+        await this.requireMutationMembership(parsed.companyId, parsed.userId);
+        const company = companyNumber(parsed.companyId);
+        const now = this.clock.now();
+        let finalizedCallIds: string[] = [];
+        const capture = await this.options.db.transaction(async tx => {
+            // A worker may only claim one active capture for its configured user.
+            // The advisory lock serializes starts, polls, and stale-capture recovery
+            // for this company/user scope.
+            await tx.execute(
+                sql`SELECT pg_advisory_xact_lock(hashtext(${`call-notes:capture:${parsed.companyId}:${parsed.userId}`}))`
+            );
+            const executor = tx as unknown as CallNotesExecutor;
+            await this.touchCaptureDevice(
+                executor,
+                parsed.companyId,
+                parsed.userId,
+                parsed.deviceId,
+                now
+            );
+            finalizedCallIds = await this.reconcileStaleCaptures(
+                executor,
+                company,
+                parsed.userId,
+                now
+            );
+            const captures = await tx
+                .select()
+                .from(callNotesCaptures)
+                .where(
+                    and(
+                        eq(callNotesCaptures.companyId, company),
+                        eq(callNotesCaptures.captureUserId, parsed.userId),
+                        or(
+                            eq(callNotesCaptures.targetDeviceId, parsed.deviceId),
+                            isNull(callNotesCaptures.targetDeviceId)
+                        ),
+                        sql`${callNotesCaptures.lifecycle} not in ('completed', 'failed')`
+                    )
+                )
+                .orderBy(asc(callNotesCaptures.startedAt), asc(callNotesCaptures.id))
+                .for("update");
+
+            for (const candidate of captures) {
+                const [call] = await tx
+                    .select()
+                    .from(callNotesCalls)
+                    .where(
+                        and(
+                            eq(callNotesCalls.id, candidate.callId),
+                            eq(callNotesCalls.companyId, company)
+                        )
+                    )
+                    .limit(1);
+                if (!call || call.status === "completed" || call.status === "failed") continue;
+
+                if (parsed.activeAttemptKey !== undefined) {
+                    const reinstated = await this.reinstateLocalCaptureAttempt(
+                        executor,
+                        candidate,
+                        parsed.activeAttemptKey,
+                        now,
+                        parsed.workerId
+                    );
+                    if (reinstated) {
+                        return {
+                            callId: call.id,
+                            captureId: candidate.id,
+                            occurrenceKey: call.sourceOccurrenceKey,
+                            attemptKey: parsed.activeAttemptKey,
+                            startedAt: iso(candidate.startedAt),
+                            title: call.title,
+                            desiredMode: "running",
+                        } satisfies LocalCapturePollResult["capture"];
+                    }
+                }
+
+                if (candidate.activeAttemptId !== null) {
+                    const [attempt] = await tx
+                        .select()
+                        .from(callNotesCaptureAttempts)
+                        .where(
+                            and(
+                                eq(callNotesCaptureAttempts.id, candidate.activeAttemptId),
+                                eq(callNotesCaptureAttempts.captureId, candidate.id),
+                                eq(callNotesCaptureAttempts.companyId, company)
+                            )
+                        )
+                        .for("update")
+                        .limit(1);
+                    if (!attempt || !isActiveAttemptLifecycle(attempt.lifecycle)) continue;
+                    if (attempt.leaseOwner !== parsed.workerId) return null;
+                    const streamLost =
+                        parsed.activeAttemptKey === undefined
+                            ? attempt.lifecycle !== "connecting"
+                            : parsed.activeAttemptKey !== attempt.sourceAttemptKey;
+                    if (streamLost) {
+                        // Unlike an expired lease, an idle/mismatched worker
+                        // confirms its stream is gone. A stale active poll or
+                        // queued event must not reinstate this failed Attempt.
+                        const message = "Local capture worker lost its capture stream";
+                        if (candidate.desiredMode === "stopped") {
+                            await this.recordWorkerFailure(
+                                executor,
+                                candidate,
+                                attempt,
+                                now,
+                                "capture_stream_lost",
+                                message
+                            );
+                            await this.finalizeOccurrence(
+                                call.id,
+                                company,
+                                candidate,
+                                now,
+                                executor
+                            );
+                            finalizedCallIds.push(call.id);
+                        } else {
+                            await this.pauseCaptureForWorkerError(
+                                executor,
+                                candidate,
+                                attempt,
+                                now,
+                                "capture_stream_lost",
+                                message
+                            );
+                        }
+                        return null;
+                    }
+                    const [renewed] = await tx
+                        .update(callNotesCaptureAttempts)
+                        .set({
+                            leaseExpiresAt: new Date(now.getTime() + LOCAL_CAPTURE_TIMEOUT_MS),
+                        })
+                        .where(
+                            and(
+                                eq(callNotesCaptureAttempts.id, attempt.id),
+                                eq(callNotesCaptureAttempts.captureId, candidate.id),
+                                eq(callNotesCaptureAttempts.companyId, company),
+                                eq(callNotesCaptureAttempts.leaseOwner, parsed.workerId),
+                                sql`${callNotesCaptureAttempts.lifecycle} in ('connecting', 'live', 'reconnecting')`
+                            )
+                        )
+                        .returning();
+                    if (!renewed) return null;
+                    return {
+                        callId: call.id,
+                        captureId: candidate.id,
+                        occurrenceKey: call.sourceOccurrenceKey,
+                        attemptKey: attempt.sourceAttemptKey,
+                        startedAt: iso(candidate.startedAt),
+                        title: call.title,
+                        desiredMode: candidate.desiredMode,
+                    } satisfies LocalCapturePollResult["capture"];
+                }
+
+                if (
+                    candidate.desiredMode !== "running" ||
+                    candidate.lifecycle !== "connecting" ||
+                    call.status !== "active"
+                ) {
+                    continue;
+                }
+
+                const attemptId = this.ids.next("attempt");
+                const [attempt] = await tx
+                    .insert(callNotesCaptureAttempts)
+                    .values({
+                        id: attemptId,
+                        captureId: candidate.id,
+                        callId: call.id,
+                        companyId: company,
+                        sourceAttemptKey: `${parsed.workerId}:${attemptId}`,
+                        sourceStreamKey: null,
+                        lifecycle: "connecting",
+                        leaseToken: this.ids.next("attempt_lease"),
+                        leaseOwner: parsed.workerId,
+                        leaseExpiresAt: new Date(now.getTime() + LOCAL_CAPTURE_TIMEOUT_MS),
+                        startedAt: now,
+                    })
+                    .returning();
+                if (!attempt) {
+                    throw new CallNotesApplicationError(
+                        "unavailable",
+                        "Unable to claim Call capture"
+                    );
+                }
+                const [updated] = await tx
+                    .update(callNotesCaptures)
+                    .set({
+                        activeAttemptId: attempt.id,
+                        targetDeviceId: parsed.deviceId,
+                        pausedReason: null,
+                        lifecycle: "connecting",
+                        updatedAt: now,
+                    })
+                    .where(
+                        and(
+                            eq(callNotesCaptures.id, candidate.id),
+                            isNull(callNotesCaptures.activeAttemptId),
+                            eq(callNotesCaptures.desiredMode, "running")
+                        )
+                    )
+                    .returning();
+                if (!updated) {
+                    throw new CallNotesApplicationError(
+                        "conflict",
+                        "Call capture was claimed by another worker"
+                    );
+                }
+                return {
+                    callId: call.id,
+                    captureId: candidate.id,
+                    occurrenceKey: call.sourceOccurrenceKey,
+                    attemptKey: attempt.sourceAttemptKey,
+                    startedAt: iso(candidate.startedAt),
+                    title: call.title,
+                    desiredMode: updated.desiredMode,
+                } satisfies LocalCapturePollResult["capture"];
+            }
+            return null;
+        });
+        for (const callId of finalizedCallIds) {
+            await this.syncCallNoteIndex(parsed.companyId, callId);
+        }
+        return LocalCapturePollResultSchema.parse({ capture });
+    }
+
+    /**
+     * Local HTTP ingress has a stronger identity contract than the generic
+     * application event sink: every attempt event must name a persisted
+     * claimed attempt, and queued transcript evidence may arrive after the
+     * attempt has ended while the capture is finalizing.
+     */
+    async ingestLocalCaptureEvent(companyId: string, event: CaptureEvent): Promise<void> {
+        const parsed = CaptureEventSchema.parse(event);
+        const company = companyNumber(companyId);
+        const [call] = await this.options.db
+            .select()
+            .from(callNotesCalls)
+            .where(
+                and(
+                    eq(callNotesCalls.companyId, company),
+                    eq(callNotesCalls.source, parsed.source),
+                    eq(callNotesCalls.sourceOccurrenceKey, parsed.sourceOccurrenceKey)
+                )
+            )
+            .limit(1);
+        if (!call) throw new CallNotesApplicationError("not_found", "Call occurrence not found");
+        const [scope] = await this.options.db
+            .select({ captureUserId: callNotesCaptures.captureUserId })
+            .from(callNotesCaptures)
+            .where(
+                and(eq(callNotesCaptures.callId, call.id), eq(callNotesCaptures.companyId, company))
+            )
+            .limit(1);
+        if (!scope) throw new CallNotesApplicationError("unavailable", "Call capture is missing");
+        await this.options.db.transaction(async tx => {
+            await tx.execute(
+                sql`SELECT pg_advisory_xact_lock(hashtext(${`call-notes:capture:${companyId}:${scope.captureUserId}`}))`
+            );
+            const executor = tx as unknown as CallNotesExecutor;
+            const [capture] = await tx
+                .select()
+                .from(callNotesCaptures)
+                .where(
+                    and(
+                        eq(callNotesCaptures.callId, call.id),
+                        eq(callNotesCaptures.companyId, company)
+                    )
+                )
+                .for("update")
+                .limit(1);
+            if (!capture)
+                throw new CallNotesApplicationError("unavailable", "Call capture is missing");
+            if (capture.lifecycle === "completed" || capture.lifecycle === "failed") {
+                throw new CallNotesApplicationError(
+                    "forbidden",
+                    "Capture event belongs to a terminal capture"
+                );
+            }
+            const attempts = await tx
+                .select()
+                .from(callNotesCaptureAttempts)
+                .where(
+                    and(
+                        eq(callNotesCaptureAttempts.captureId, capture.id),
+                        eq(callNotesCaptureAttempts.companyId, company)
+                    )
+                )
+                .for("update");
+            if (attempts.length === 0) {
+                throw new CallNotesApplicationError(
+                    "forbidden",
+                    "Call capture has not been claimed by a local worker"
+                );
+            }
+            if (parsed.kind === "occurrence_ended") {
+                if (capture.activeAttemptId !== null || capture.desiredMode !== "stopped") {
+                    throw new CallNotesApplicationError(
+                        "invalid_transition",
+                        "Capture attempt must end before the occurrence"
+                    );
+                }
+                return;
+            }
+            const attempt = attempts.find(
+                candidate => candidate.sourceAttemptKey === parsed.sourceAttemptKey
+            );
+            if (attempt?.leaseOwner == null) {
+                throw new CallNotesApplicationError(
+                    "forbidden",
+                    "Capture event does not belong to a claimed worker attempt"
+                );
+            }
+            const now = this.clock.now();
+            const reinstated = await this.reinstateLocalCaptureAttempt(
+                executor,
+                capture,
+                attempt.sourceAttemptKey,
+                now
+            );
+            const queuedTranscript =
+                parsed.kind === "transcript_segment" &&
+                capture.activeAttemptId === null &&
+                capture.desiredMode === "stopped" &&
+                capture.lifecycle === "finalizing" &&
+                attempt.lifecycle === "ended" &&
+                attempt.endedAt !== null;
+            if (
+                !reinstated &&
+                !queuedTranscript &&
+                (capture.activeAttemptId !== attempt.id ||
+                    !isActiveAttemptLifecycle(attempt.lifecycle))
+            ) {
+                throw new CallNotesApplicationError(
+                    "forbidden",
+                    "Capture event does not belong to the active worker attempt"
+                );
+            }
+            if (!queuedTranscript) {
+                // An event from the still-active pipeline proves liveness even
+                // when the last control poll's lease has expired.
+                await tx
+                    .update(callNotesCaptureAttempts)
+                    .set({ leaseExpiresAt: new Date(now.getTime() + LOCAL_CAPTURE_TIMEOUT_MS) })
+                    .where(eq(callNotesCaptureAttempts.id, attempt.id));
+            }
+            if (capture.targetDeviceId) {
+                await this.touchCaptureDevice(
+                    executor,
+                    companyId,
+                    capture.captureUserId,
+                    capture.targetDeviceId,
+                    now
+                );
+            }
+        });
+        await this.ingestCaptureEvent(companyId, parsed);
+    }
+    async ingestCaptureEvent(companyId: string, event: CaptureEvent): Promise<void> {
+        const parsed = CaptureEventSchema.parse(event);
+        const company = companyNumber(companyId);
+        const receipt = await this.workItems.enqueue({
+            companyId,
+            kind: "capture_event",
+            idempotencyKey: parsed.eventId,
+            payload: { event: parsed },
+        });
+
+        if (receipt.status === "completed") return;
+        if (receipt.status === "failed") await this.workItems.reopenReceipt(receipt.id);
+        const claim = await this.workItems.claimById(
+            receipt.id,
+            this.ids.next(`capture_event_${parsed.eventId}`),
+            {
+                companyId,
+                kind: "capture_event",
+                leaseMs: 5 * 60_000,
+            }
+        );
+        if (!claim) return;
+        try {
+            const [call] = await this.options.db
+                .select()
+                .from(callNotesCalls)
+                .where(
+                    and(
+                        eq(callNotesCalls.companyId, company),
+                        eq(callNotesCalls.source, parsed.source),
+                        eq(callNotesCalls.sourceOccurrenceKey, parsed.sourceOccurrenceKey)
+                    )
+                )
+                .limit(1);
+            if (!call) {
+                throw new CallNotesApplicationError("not_found", "Call occurrence not found");
+            }
+            await this.applyCaptureEvent(call.id, company, parsed);
+            await this.workItems.complete(claim.id, claim.leaseToken);
+        } catch (error) {
+            try {
+                await this.workItems.fail(claim.id, claim.leaseToken, {
+                    code: isApplicationError(error) ? error.code : "unavailable",
+                    message: errorMessage(error).slice(0, 1024),
+                });
+            } catch {
+                // A stale claimant cannot overwrite a newer retry.
+            }
+            throw error;
+        }
+    }
+
+    async completeEnrichment(input: CompleteEnrichmentInput): Promise<void> {
+        const parsed = CompleteEnrichmentInputSchema.parse(input);
+        const company = companyNumber(parsed.companyId);
+        const result = parsed.result;
+        const [call] = await this.options.db
+            .select()
+            .from(callNotesCalls)
+            .where(and(eq(callNotesCalls.id, parsed.callId), eq(callNotesCalls.companyId, company)))
+            .limit(1);
+        if (!call) throw new CallNotesApplicationError("not_found", "Call not found");
+        const [run] = await this.options.db
+            .select()
+            .from(callNotesEnrichmentRuns)
+            .where(
+                and(
+                    eq(callNotesEnrichmentRuns.id, parsed.enrichmentRunId),
+                    eq(callNotesEnrichmentRuns.callId, parsed.callId),
+                    eq(callNotesEnrichmentRuns.companyId, company)
+                )
+            )
+            .limit(1);
+        if (!run) throw new CallNotesApplicationError("not_found", "Enrichment run not found");
+        if (run.status === "accepted" || run.status === "rejected" || run.status === "ready")
+            return;
+        try {
+            await this.options.db
+                .update(callNotesEnrichmentRuns)
+                .set({
+                    status: "ready",
+                    originalOutput: result.proposal,
+                    editableProposal: result.proposal,
+                    modelMetadata: result.modelMetadata,
+                    generatedAt: this.clock.now(),
+                    errorCode: null,
+                    errorMessage: null,
+                })
+                .where(eq(callNotesEnrichmentRuns.id, parsed.enrichmentRunId));
+        } catch (error) {
+            throw new CallNotesApplicationError(
+                "unavailable",
+                `Unable to complete enrichment: ${errorMessage(error)}`
+            );
+        }
+    }
+    async getCall(query: CallQuery): Promise<CallSnapshot> {
+        const parsed = CallQuerySchema.parse(query);
+        await this.requireMembership(parsed.companyId, parsed.actorUserId);
+        const [call] = await this.options.db
+            .select()
+            .from(callNotesCalls)
+            .where(
+                and(
+                    eq(callNotesCalls.id, parsed.callId),
+                    eq(callNotesCalls.companyId, companyNumber(parsed.companyId))
+                )
+            )
+            .limit(1);
+        if (!call) throw new CallNotesApplicationError("not_found", "Call not found");
+        await this.reconcileStaleCaptureForCall(parsed.companyId, call.id);
+        return this.snapshot(call.id, parsed.actorUserId);
+    }
+
+    async listCalls(query: CallListQuery): Promise<readonly CallSnapshot[]> {
+        const parsed = CallListQuerySchema.parse(query);
+        await this.requireMembership(parsed.companyId, parsed.actorUserId);
+        const rows = await this.options.db
+            .select({ id: callNotesCalls.id })
+            .from(callNotesCalls)
+            .where(eq(callNotesCalls.companyId, companyNumber(parsed.companyId)))
+            .orderBy(desc(callNotesCalls.createdAt), desc(callNotesCalls.id))
+            .limit(parsed.limit);
+        const snapshots: CallSnapshot[] = [];
+        for (const row of rows) {
+            await this.reconcileStaleCaptureForCall(parsed.companyId, row.id);
+            snapshots.push(await this.snapshot(row.id, parsed.actorUserId));
+        }
+        return snapshots;
+    }
+
+    async listDetectedCalls(query: CallListQuery): Promise<readonly DetectedCallCandidate[]> {
+        const parsed = CallListQuerySchema.parse(query);
+        await this.requireMembership(parsed.companyId, parsed.actorUserId);
+        let candidates: readonly DetectedCallCandidate[];
+        try {
+            candidates = await this.options.detectedCalls.list(parsed);
+        } catch (error) {
+            throw new CallNotesApplicationError(
+                "unavailable",
+                `Detected calls unavailable: ${errorMessage(error)}`
+            );
+        }
+        const output: DetectedCallCandidate[] = [];
+        for (const candidate of candidates) {
+            const parsedCandidate = DetectedCallCandidateSchema.parse(candidate);
+            const [dismissed] = await this.options.db
+                .select({ id: callNotesWorkItems.id })
+                .from(callNotesWorkItems)
+                .where(
+                    and(
+                        eq(callNotesWorkItems.companyId, companyNumber(parsed.companyId)),
+                        eq(callNotesWorkItems.kind, "start"),
+                        eq(
+                            callNotesWorkItems.idempotencyKey,
+                            `dismiss:${parsed.actorUserId}:${parsedCandidate.source}:${parsedCandidate.sourceOccurrenceKey}`
+                        ),
+                        eq(callNotesWorkItems.status, "completed")
+                    )
+                )
+                .limit(1);
+            if (!dismissed) output.push(Object.freeze(parsedCandidate));
+            if (output.length >= parsed.limit) break;
+        }
+        return output;
+    }
+
+    async searchTranscript(query: TranscriptSearchQuery): Promise<readonly TranscriptSegment[]> {
+        const parsed = TranscriptSearchQuerySchema.parse(query);
+        const call = await this.getCall(parsed);
+        const needle = parsed.query.toLocaleLowerCase();
+        return call.transcript.filter(segment => segment.text.toLocaleLowerCase().includes(needle));
+    }
+
+    private async requireMembership(
+        companyId: string,
+        actorUserId: string
+    ): Promise<CallNotesMembershipRole> {
+        let role: CallNotesMembershipRole | null;
+        try {
+            role = await this.options.memberships.getRole(companyId, actorUserId);
+        } catch (error) {
+            throw new CallNotesApplicationError(
+                "unavailable",
+                `Membership unavailable: ${errorMessage(error)}`
+            );
+        }
+        if (!role)
+            throw new CallNotesApplicationError("forbidden", "Company membership is required");
+        return role;
+    }
+    private async requireMutationMembership(
+        companyId: string,
+        actorUserId: string
+    ): Promise<CallNotesMembershipRole> {
+        const role = await this.requireMembership(companyId, actorUserId);
+        if (role === "viewer" || role === "guest") {
+            throw new CallNotesApplicationError(
+                "forbidden",
+                "Your workspace role cannot change Call Notes"
+            );
+        }
+        return role;
+    }
+
+    private async requireCallAccess(
+        companyId: string,
+        actorUserId: string,
+        callId: string
+    ): Promise<CallNotesMembershipRole> {
+        const [call] = await this.options.db
+            .select({ id: callNotesCalls.id })
+            .from(callNotesCalls)
+            .where(
+                and(
+                    eq(callNotesCalls.id, callId),
+                    eq(callNotesCalls.companyId, companyNumber(companyId))
+                )
+            )
+            .limit(1);
+        if (!call) throw new CallNotesApplicationError("not_found", "Call not found");
+        return this.requireMembership(companyId, actorUserId);
+    }
+
+    private async resultFromReceipt(
+        payload: Record<string, unknown>,
+        actorUserId: string
+    ): Promise<CallSnapshot | null> {
+        const resultCallId = payload.resultCallId;
+        if (typeof resultCallId !== "string") return null;
+        return this.snapshot(resultCallId, actorUserId);
+    }
+
+    private async markReceiptFailed(id: string, error: unknown): Promise<void> {
+        try {
+            await this.options.db
+                .update(callNotesWorkItems)
+                .set({
+                    status: "failed",
+                    errorCode: isApplicationError(error) ? error.code : "unavailable",
+                    errorMessage: errorMessage(error).slice(0, 1024),
+                })
+                .where(eq(callNotesWorkItems.id, id));
+        } catch {
+            // Preserve the domain error; the durable receipt can be retried by a worker.
+        }
+    }
+
+    private async hasLegacyCommittedNoteUpdate(
+        command: Extract<CallNotesCommand, { kind: "update_note" }>
+    ): Promise<boolean> {
+        const company = companyNumber(command.companyId);
+        const revision = command.baseRevision + 1;
+        const [revisionRow] = await this.options.db
+            .select()
+            .from(callNotesNoteRevisions)
+            .where(
+                and(
+                    eq(callNotesNoteRevisions.callId, command.callId),
+                    eq(callNotesNoteRevisions.companyId, company),
+                    eq(callNotesNoteRevisions.revision, revision)
+                )
+            )
+            .limit(1);
+        if (
+            !revisionRow ||
+            revisionRow.createdByUserId !== command.actorUserId ||
+            revisionRow.origin !== "manual" ||
+            revisionRow.title !== command.title ||
+            revisionRow.contentMarkdown !== command.contentMarkdown ||
+            JSON.stringify(revisionRow.contentRich) !== JSON.stringify(command.contentRich)
+        ) {
+            return false;
+        }
+
+        // Pre-cutover edits committed a reindex receipt in the same transaction.
+        // Matching content alone is not enough to recover a stale Note edit.
+        const [legacyReindex] = await this.options.db
+            .select({ id: callNotesWorkItems.id })
+            .from(callNotesWorkItems)
+            .where(
+                and(
+                    eq(callNotesWorkItems.companyId, company),
+                    sql`${callNotesWorkItems.kind} = ${"reindex"}`,
+                    eq(callNotesWorkItems.idempotencyKey, `reindex:${command.callId}:${revision}`)
+                )
+            )
+            .limit(1);
+        return legacyReindex !== undefined;
+    }
+
+    private async syncCallNoteIndex(companyId: string, callId: string): Promise<void> {
+        try {
+            await this.options.callNoteIndex.sync({ companyId, callId });
+        } catch (error) {
+            console.error(
+                "[call-notes] Failed to sync Call Note document",
+                { companyId, callId },
+                error
+            );
+        }
+    }
+
+    private async startCapture(
+        command: Extract<CallNotesCommand, { kind: "start_capture" }>
+    ): Promise<CallSnapshot> {
+        const company = companyNumber(command.companyId);
+        let createdDocumentNoteId: number | null = null;
+        const committed = await this.options.db
+            .transaction(async tx => {
+                await tx.execute(
+                    sql`SELECT pg_advisory_xact_lock(hashtext(${`call-notes:capture:${command.companyId}:${command.actorUserId}`}))`
+                );
+                await tx.execute(
+                    sql`SELECT pg_advisory_xact_lock(hashtext(${`call-notes:occurrence:${command.companyId}:${command.source}:${command.sourceOccurrenceKey}`}))`
+                );
+                const now = this.clock.now();
+                const executor = tx as unknown as CallNotesExecutor;
+                const finalizedCallIds = await this.reconcileStaleCaptures(
+                    executor,
+                    company,
+                    command.actorUserId,
+                    now
+                );
+                const [existing] = await tx
+                    .select()
+                    .from(callNotesCalls)
+                    .where(
+                        and(
+                            eq(callNotesCalls.companyId, company),
+                            eq(callNotesCalls.source, command.source),
+                            eq(callNotesCalls.sourceOccurrenceKey, command.sourceOccurrenceKey)
+                        )
+                    )
+                    .for("update")
+                    .limit(1);
+                if (existing) {
+                    if (existing.noteOwnerUserId !== command.actorUserId) {
+                        throw new CallNotesApplicationError(
+                            "forbidden",
+                            "Only the Call Note owner may replay this occurrence"
+                        );
+                    }
+                    return { callId: existing.id, finalizedCallIds };
+                }
+
+                const targetDeviceId = await this.requireAvailableCaptureDevice(
+                    executor,
+                    company,
+                    command.actorUserId,
+                    now,
+                    command.targetDeviceId
+                );
+
+                const activeCaptures = await tx
+                    .select()
+                    .from(callNotesCaptures)
+                    .where(
+                        and(
+                            eq(callNotesCaptures.companyId, company),
+                            eq(callNotesCaptures.captureUserId, command.actorUserId),
+                            sql`${callNotesCaptures.lifecycle} not in ('completed', 'failed')`
+                        )
+                    )
+                    .for("update");
+                for (const activeCapture of activeCaptures) {
+                    const [activeCall] = await tx
+                        .select({
+                            id: callNotesCalls.id,
+                            status: callNotesCalls.status,
+                            sourceOccurrenceKey: callNotesCalls.sourceOccurrenceKey,
+                        })
+                        .from(callNotesCalls)
+                        .where(
+                            and(
+                                eq(callNotesCalls.id, activeCapture.callId),
+                                eq(callNotesCalls.companyId, company)
+                            )
+                        )
+                        .limit(1);
+                    if (
+                        activeCall &&
+                        (activeCall.status === "active" || activeCall.status === "finalizing")
+                    ) {
+                        throw new CallNotesApplicationError(
+                            "conflict",
+                            `An active local capture already exists for occurrence ${activeCall.sourceOccurrenceKey}`
+                        );
+                    }
+                }
+
+                const title = command.title ?? "Local audio call";
+                let documentNote: CallNotesDocumentNoteRecord;
+                try {
+                    documentNote = normalizeNote(
+                        await this.options.documentNotes.create(
+                            {
+                                companyId: command.companyId,
+                                userId: command.actorUserId,
+                                title,
+                                contentMarkdown: "",
+                                contentRich: { ...EMPTY_RICH_TEXT },
+                            },
+                            tx as unknown as CallNotesDocumentNoteExecutor
+                        )
+                    );
+                    createdDocumentNoteId = documentNote.id;
+                } catch (error) {
+                    throw new CallNotesApplicationError(
+                        "unavailable",
+                        `Unable to create Call Note: ${errorMessage(error)}`
+                    );
+                }
+
+                const newCallId = this.ids.next("call");
+                const captureId = this.ids.next("capture");
+                await tx.insert(callNotesCalls).values({
+                    id: newCallId,
+                    companyId: company,
+                    source: command.source,
+                    sourceOccurrenceKey: command.sourceOccurrenceKey,
+                    title,
+                    status: "active",
+                    documentNoteId: documentNote.id,
+                    noteOwnerUserId: command.actorUserId,
+                    noteVisibility: "company",
+                    currentNoteRevision: 0,
+                    startedAt: now,
+                    createdAt: now,
+                    updatedAt: now,
+                });
+                await tx.insert(callNotesCaptures).values({
+                    id: captureId,
+                    callId: newCallId,
+                    companyId: company,
+                    captureUserId: command.actorUserId,
+                    targetDeviceId,
+                    desiredMode: "running",
+                    pausedReason: null,
+                    lifecycle: "connecting",
+                    startedAt: now,
+                    updatedAt: now,
+                });
+                await tx.insert(callNotesNoteRevisions).values({
+                    id: this.ids.next("note_revision"),
+                    callId: newCallId,
+                    companyId: company,
+                    documentNoteId: documentNote.id,
+                    revision: 0,
+                    origin: "manual",
+                    enrichmentRunId: null,
+                    title,
+                    contentMarkdown: "",
+                    contentRich: { ...EMPTY_RICH_TEXT },
+                    createdByUserId: command.actorUserId,
+                    createdAt: now,
+                });
+                return { callId: newCallId, finalizedCallIds };
+            })
+            .catch(async error => {
+                if (createdDocumentNoteId !== null) {
+                    try {
+                        await this.options.documentNotes.delete(createdDocumentNoteId);
+                    } catch {
+                        // Preserve the transaction error and let the caller retry.
+                    }
+                }
+                if (isApplicationError(error)) throw error;
+                const [converged] = await this.options.db
+                    .select()
+                    .from(callNotesCalls)
+                    .where(
+                        and(
+                            eq(callNotesCalls.companyId, company),
+                            eq(callNotesCalls.source, command.source),
+                            eq(callNotesCalls.sourceOccurrenceKey, command.sourceOccurrenceKey)
+                        )
+                    )
+                    .limit(1);
+                if (converged && converged.noteOwnerUserId === command.actorUserId) {
+                    return { callId: converged.id, finalizedCallIds: [] };
+                }
+                throw new CallNotesApplicationError(
+                    "unavailable",
+                    `Unable to persist Call: ${errorMessage(error)}`
+                );
+            });
+        for (const callId of committed.finalizedCallIds) {
+            await this.syncCallNoteIndex(command.companyId, callId);
+        }
+        return this.snapshot(committed.callId, command.actorUserId);
+    }
+
+    private async stopCapture(
+        command: Extract<CallNotesCommand, { kind: "stop_capture" }>
+    ): Promise<CallSnapshot> {
+        const company = companyNumber(command.companyId);
+        const now = this.clock.now();
+        const finalizedCallIds = await this.options.db.transaction(async tx => {
+            await tx.execute(
+                sql`SELECT pg_advisory_xact_lock(hashtext(${`call-notes:capture:${command.companyId}:${command.actorUserId}`}))`
+            );
+            const finalized = await this.reconcileStaleCaptures(
+                tx as unknown as CallNotesExecutor,
+                company,
+                command.actorUserId,
+                now
+            );
+            const [call] = await tx
+                .select()
+                .from(callNotesCalls)
+                .where(
+                    and(
+                        eq(callNotesCalls.id, command.callId),
+                        eq(callNotesCalls.companyId, company)
+                    )
+                )
+                .for("update")
+                .limit(1);
+            if (!call) throw new CallNotesApplicationError("not_found", "Call not found");
+            const [capture] = await tx
+                .select()
+                .from(callNotesCaptures)
+                .where(
+                    and(
+                        eq(callNotesCaptures.callId, call.id),
+                        eq(callNotesCaptures.companyId, company)
+                    )
+                )
+                .for("update")
+                .limit(1);
+            if (!capture) throw new CallNotesApplicationError("not_found", "Capture not found");
+            if (capture.captureUserId !== command.actorUserId) {
+                throw new CallNotesApplicationError(
+                    "forbidden",
+                    "Only the Capture User may stop capture"
+                );
+            }
+            if (
+                call.status === "completed" ||
+                call.status === "failed" ||
+                capture.lifecycle === "completed" ||
+                capture.lifecycle === "failed"
+            ) {
+                return finalized;
+            }
+
+            if (capture.activeAttemptId === null) {
+                const [attempt] = await tx
+                    .select({ id: callNotesCaptureAttempts.id })
+                    .from(callNotesCaptureAttempts)
+                    .where(eq(callNotesCaptureAttempts.captureId, capture.id))
+                    .limit(1);
+                if (attempt) {
+                    await tx
+                        .update(callNotesCaptures)
+                        .set({
+                            desiredMode: "stopped",
+                            pausedReason: null,
+                            stopReason: capture.stopReason ?? "user",
+                            updatedAt: now,
+                        })
+                        .where(eq(callNotesCaptures.id, capture.id));
+                    await this.finalizeOccurrence(
+                        call.id,
+                        company,
+                        capture,
+                        now,
+                        tx as unknown as CallNotesExecutor
+                    );
+                    finalized.push(call.id);
+                    return finalized;
+                }
+                await tx
+                    .update(callNotesCaptures)
+                    .set({
+                        desiredMode: "stopped",
+                        pausedReason: null,
+                        stopReason: capture.stopReason ?? "user",
+                        lifecycle: "failed",
+                        outcome: "failed",
+                        activeAttemptId: null,
+                        endedAt: now,
+                        updatedAt: now,
+                    })
+                    .where(eq(callNotesCaptures.id, capture.id));
+                await tx
+                    .update(callNotesCalls)
+                    .set({
+                        status: "failed",
+                        failureCode: "capture_stopped_before_start",
+                        failureMessage: "Capture stopped before a worker claimed an attempt",
+                        finalizedAt: now,
+                        updatedAt: now,
+                    })
+                    .where(eq(callNotesCalls.id, call.id));
+                finalized.push(call.id);
+                return finalized;
+            }
+
+            await tx
+                .update(callNotesCaptures)
+                .set({
+                    desiredMode: "stopped",
+                    pausedReason: null,
+                    stopReason: capture.stopReason ?? "user",
+                    lifecycle: "finalizing",
+                    updatedAt: now,
+                })
+                .where(eq(callNotesCaptures.id, capture.id));
+            await tx
+                .update(callNotesCalls)
+                .set({ status: "finalizing", updatedAt: now })
+                .where(eq(callNotesCalls.id, call.id));
+            return finalized;
+        });
+        for (const callId of finalizedCallIds) {
+            await this.syncCallNoteIndex(command.companyId, callId);
+        }
+        return this.snapshot(command.callId, command.actorUserId);
+    }
+
+    private async controlCapture(
+        command: Extract<CallNotesCommand, { kind: "pause_capture" | "resume_capture" }>,
+        desiredMode: "paused" | "running"
+    ): Promise<CallSnapshot> {
+        const company = companyNumber(command.companyId);
+        await this.options.db.transaction(async tx => {
+            await tx.execute(
+                sql`SELECT pg_advisory_xact_lock(hashtext(${`call-notes:capture:${command.companyId}:${command.actorUserId}`}))`
+            );
+            const [capture] = await tx
+                .select()
+                .from(callNotesCaptures)
+                .where(
+                    and(
+                        eq(callNotesCaptures.callId, command.callId),
+                        eq(callNotesCaptures.companyId, company)
+                    )
+                )
+                .for("update")
+                .limit(1);
+            if (!capture) throw new CallNotesApplicationError("not_found", "Capture not found");
+            if (capture.lifecycle === "completed" || capture.lifecycle === "failed") {
+                throw new CallNotesApplicationError(
+                    "invalid_transition",
+                    "Capture has already ended"
+                );
+            }
+            if (capture.desiredMode === "stopped") {
+                throw new CallNotesApplicationError(
+                    "invalid_transition",
+                    "Stopped capture cannot be resumed"
+                );
+            }
+            const now = this.clock.now();
+            const targetDeviceId =
+                desiredMode === "running"
+                    ? await this.requireAvailableCaptureDevice(
+                          tx as unknown as CallNotesExecutor,
+                          company,
+                          capture.captureUserId,
+                          now,
+                          command.kind === "resume_capture" ? command.targetDeviceId : undefined
+                      )
+                    : capture.targetDeviceId;
+            if (
+                desiredMode === "running" &&
+                capture.activeAttemptId !== null &&
+                targetDeviceId !== capture.targetDeviceId
+            ) {
+                throw new CallNotesApplicationError(
+                    "conflict",
+                    "Capture is still draining on another device"
+                );
+            }
+            await tx
+                .update(callNotesCaptures)
+                .set({
+                    desiredMode,
+                    pausedReason: desiredMode === "paused" ? "user" : null,
+                    targetDeviceId,
+                    ...(capture.activeAttemptId === null
+                        ? { lifecycle: desiredMode === "paused" ? "interrupted" : "connecting" }
+                        : {}),
+                    updatedAt: now,
+                })
+                .where(eq(callNotesCaptures.id, capture.id));
+        });
+        return this.snapshot(command.callId, command.actorUserId);
+    }
+
+    private async updateNote(
+        command: Extract<CallNotesCommand, { kind: "update_note" }>
+    ): Promise<CallSnapshot> {
+        const company = companyNumber(command.companyId);
+        await this.options.db.transaction(async tx => {
+            const executor = tx as unknown as CallNotesDocumentNoteExecutor;
+            const [call] = await tx
+                .select()
+                .from(callNotesCalls)
+                .where(
+                    and(
+                        eq(callNotesCalls.id, command.callId),
+                        eq(callNotesCalls.companyId, company)
+                    )
+                )
+                .for("update")
+                .limit(1);
+            if (!call) throw new CallNotesApplicationError("not_found", "Call not found");
+            if (call.noteOwnerUserId !== command.actorUserId) {
+                throw new CallNotesApplicationError(
+                    "forbidden",
+                    "Only the Call Note owner may edit it"
+                );
+            }
+            if (call.documentNoteId === null)
+                throw new CallNotesApplicationError("invalid_transition", "Call has no Note");
+            if (call.currentNoteRevision !== command.baseRevision) {
+                throw new CallNotesApplicationError("conflict", "Call Note revision is stale");
+            }
+            try {
+                const existing = await this.options.documentNotes.get(
+                    call.documentNoteId,
+                    executor
+                );
+                if (!existing)
+                    throw new CallNotesApplicationError("not_found", "Document Note not found");
+                await this.options.documentNotes.update(
+                    call.documentNoteId,
+                    {
+                        title: command.title,
+                        contentMarkdown: command.contentMarkdown,
+                        contentRich: command.contentRich,
+                    },
+                    executor
+                );
+            } catch (error) {
+                if (isApplicationError(error)) throw error;
+                throw new CallNotesApplicationError(
+                    "unavailable",
+                    `Unable to update Call Note: ${errorMessage(error)}`
+                );
+            }
+            const revision = command.baseRevision + 1;
+            const now = this.clock.now();
+            const [updated] = await tx
+                .update(callNotesCalls)
+                .set({ currentNoteRevision: revision, updatedAt: now })
+                .where(
+                    and(
+                        eq(callNotesCalls.id, command.callId),
+                        eq(callNotesCalls.companyId, company),
+                        eq(callNotesCalls.currentNoteRevision, command.baseRevision)
+                    )
+                )
+                .returning();
+            if (!updated)
+                throw new CallNotesApplicationError("conflict", "Call Note revision is stale");
+            await tx.insert(callNotesNoteRevisions).values({
+                id: this.ids.next("note_revision"),
+                callId: command.callId,
+                companyId: company,
+                documentNoteId: call.documentNoteId,
+                revision,
+                origin: "manual",
+                enrichmentRunId: null,
+                title: command.title,
+                contentMarkdown: command.contentMarkdown,
+                contentRich: command.contentRich,
+                createdByUserId: command.actorUserId,
+                createdAt: now,
+            });
+        });
+        await this.syncCallNoteIndex(command.companyId, command.callId);
+        return this.snapshot(command.callId, command.actorUserId);
+    }
+
+    private async setNoteVisibility(
+        command: Extract<CallNotesCommand, { kind: "set_note_visibility" }>
+    ): Promise<CallSnapshot> {
+        const company = companyNumber(command.companyId);
+        const [call] = await this.options.db
+            .select()
+            .from(callNotesCalls)
+            .where(
+                and(eq(callNotesCalls.id, command.callId), eq(callNotesCalls.companyId, company))
+            )
+            .limit(1);
+        if (!call) throw new CallNotesApplicationError("not_found", "Call not found");
+        if (call.noteOwnerUserId !== command.actorUserId) {
+            throw new CallNotesApplicationError(
+                "forbidden",
+                "Only the Call Note owner may change visibility"
+            );
+        }
+        await this.options.db
+            .update(callNotesCalls)
+            .set({
+                noteVisibility: command.visibility,
+                updatedAt: this.clock.now(),
+            })
+            .where(
+                and(eq(callNotesCalls.id, command.callId), eq(callNotesCalls.companyId, company))
+            );
+        await this.syncCallNoteIndex(command.companyId, command.callId);
+        return this.snapshot(command.callId, command.actorUserId);
+    }
+
+    private async requestEnrichment(
+        command: Extract<CallNotesCommand, { kind: "request_enrichment" }>
+    ): Promise<CallSnapshot> {
+        const company = companyNumber(command.companyId);
+        const [call] = await this.options.db
+            .select()
+            .from(callNotesCalls)
+            .where(
+                and(eq(callNotesCalls.id, command.callId), eq(callNotesCalls.companyId, company))
+            )
+            .limit(1);
+        if (!call) throw new CallNotesApplicationError("not_found", "Call not found");
+        if (call.noteOwnerUserId !== command.actorUserId) {
+            throw new CallNotesApplicationError(
+                "forbidden",
+                "Only the Call Note owner may request enrichment"
+            );
+        }
+        if (call.status === "active" || call.status === "finalizing") {
+            throw new CallNotesApplicationError(
+                "invalid_transition",
+                "Call must be finalized before requesting enrichment"
+            );
+        }
+        if (call.documentNoteId === null)
+            throw new CallNotesApplicationError("invalid_transition", "Call has no Note");
+        const [active] = await this.options.db
+            .select({ id: callNotesEnrichmentRuns.id })
+            .from(callNotesEnrichmentRuns)
+            .where(
+                and(
+                    eq(callNotesEnrichmentRuns.callId, command.callId),
+                    sql`${callNotesEnrichmentRuns.status} in ('queued', 'generating', 'ready')`
+                )
+            )
+            .orderBy(desc(callNotesEnrichmentRuns.createdAt))
+            .limit(1);
+        if (active) return this.snapshot(command.callId, command.actorUserId);
+        const transcriptRows = await this.transcriptRows(command.callId, company);
+        const participants = await this.options.db
+            .select()
+            .from(callNotesParticipants)
+            .where(eq(callNotesParticipants.callId, command.callId));
+        const transcript = toTranscriptSegments(transcriptRows, participants);
+        const gapRows = await this.options.db
+            .select()
+            .from(callNotesGaps)
+            .where(eq(callNotesGaps.callId, command.callId))
+            .orderBy(asc(callNotesGaps.startedAt), asc(callNotesGaps.id));
+        const documentNote = await this.options.documentNotes.get(call.documentNoteId);
+        if (!documentNote)
+            throw new CallNotesApplicationError("not_found", "Document Note not found");
+        const fingerprint = enrichmentFingerprint({
+            transcript,
+            gaps: toGaps(gapRows),
+            note: toCallNote(call, documentNote),
+        });
+        await this.options.db.insert(callNotesEnrichmentRuns).values({
+            id: this.ids.next("enrichment"),
+            callId: command.callId,
+            companyId: company,
+            requestedByUserId: command.actorUserId,
+            baseNoteRevision: call.currentNoteRevision,
+            transcriptFingerprint: fingerprint,
+            status: "queued",
+            originalOutput: null,
+            editableProposal: null,
+            modelMetadata: null,
+            createdAt: this.clock.now(),
+        });
+        return this.snapshot(command.callId, command.actorUserId);
+    }
+
+    private async rejectEnrichment(
+        command: Extract<CallNotesCommand, { kind: "reject_enrichment" }>
+    ): Promise<CallSnapshot> {
+        const company = companyNumber(command.companyId);
+        await this.options.db.transaction(async tx => {
+            const [call] = await tx
+                .select()
+                .from(callNotesCalls)
+                .where(
+                    and(
+                        eq(callNotesCalls.id, command.callId),
+                        eq(callNotesCalls.companyId, company)
+                    )
+                )
+                .for("update")
+                .limit(1);
+            if (!call) throw new CallNotesApplicationError("not_found", "Call not found");
+            if (call.noteOwnerUserId !== command.actorUserId) {
+                throw new CallNotesApplicationError(
+                    "forbidden",
+                    "Only the Call Note owner may reject enrichment"
+                );
+            }
+            const [run] = await tx
+                .select()
+                .from(callNotesEnrichmentRuns)
+                .where(
+                    and(
+                        eq(callNotesEnrichmentRuns.id, command.enrichmentRunId),
+                        eq(callNotesEnrichmentRuns.callId, command.callId),
+                        eq(callNotesEnrichmentRuns.companyId, company)
+                    )
+                )
+                .for("update")
+                .limit(1);
+            if (!run) throw new CallNotesApplicationError("not_found", "Enrichment run not found");
+            if (run.status !== "ready") {
+                throw new CallNotesApplicationError(
+                    run.status === "accepted" || run.status === "rejected"
+                        ? "conflict"
+                        : "invalid_transition",
+                    "Enrichment is not reviewable"
+                );
+            }
+            const [resolved] = await tx
+                .update(callNotesEnrichmentRuns)
+                .set({
+                    status: "rejected",
+                    resolvedByUserId: command.actorUserId,
+                    resolvedAt: this.clock.now(),
+                })
+                .where(
+                    and(
+                        eq(callNotesEnrichmentRuns.id, command.enrichmentRunId),
+                        eq(callNotesEnrichmentRuns.status, "ready")
+                    )
+                )
+                .returning();
+            if (!resolved)
+                throw new CallNotesApplicationError(
+                    "conflict",
+                    "Enrichment was resolved by another request"
+                );
+        });
+        return this.snapshot(command.callId, command.actorUserId);
+    }
+
+    private async acceptEnrichment(
+        command: Extract<CallNotesCommand, { kind: "accept_enrichment" }>
+    ): Promise<CallSnapshot> {
+        const company = companyNumber(command.companyId);
+        await this.options.db.transaction(async tx => {
+            const executor = tx as unknown as CallNotesDocumentNoteExecutor;
+            const [call] = await tx
+                .select()
+                .from(callNotesCalls)
+                .where(
+                    and(
+                        eq(callNotesCalls.id, command.callId),
+                        eq(callNotesCalls.companyId, company)
+                    )
+                )
+                .for("update")
+                .limit(1);
+            if (!call) throw new CallNotesApplicationError("not_found", "Call not found");
+            if (call.noteOwnerUserId !== command.actorUserId) {
+                throw new CallNotesApplicationError(
+                    "forbidden",
+                    "Only the Call Note owner may accept enrichment"
+                );
+            }
+            const [run] = await tx
+                .select()
+                .from(callNotesEnrichmentRuns)
+                .where(
+                    and(
+                        eq(callNotesEnrichmentRuns.id, command.enrichmentRunId),
+                        eq(callNotesEnrichmentRuns.callId, command.callId),
+                        eq(callNotesEnrichmentRuns.companyId, company)
+                    )
+                )
+                .for("update")
+                .limit(1);
+            if (!run) throw new CallNotesApplicationError("not_found", "Enrichment run not found");
+            if (run.status === "accepted") {
+                const [acceptedRevision] = await tx
+                    .select()
+                    .from(callNotesNoteRevisions)
+                    .where(
+                        and(
+                            eq(callNotesNoteRevisions.callId, command.callId),
+                            eq(callNotesNoteRevisions.enrichmentRunId, run.id)
+                        )
+                    )
+                    .limit(1);
+                if (
+                    !acceptedRevision ||
+                    acceptedRevision.contentMarkdown !== command.contentMarkdown ||
+                    !isDeepStrictEqual(acceptedRevision.contentRich, command.contentRich)
+                ) {
+                    throw new CallNotesApplicationError(
+                        "conflict",
+                        "Accepted enrichment content does not match the committed revision"
+                    );
+                }
+                return;
+            }
+            if (run.status !== "ready") {
+                throw new CallNotesApplicationError(
+                    run.status === "rejected" ? "conflict" : "invalid_transition",
+                    "Enrichment is not reviewable"
+                );
+            }
+            if (call.documentNoteId === null)
+                throw new CallNotesApplicationError("not_found", "Call Note not found");
+            if (run.baseNoteRevision !== call.currentNoteRevision) {
+                throw new CallNotesApplicationError(
+                    "conflict",
+                    "Enrichment was generated from a stale Note revision"
+                );
+            }
+            let note: CallNotesDocumentNoteRecord;
+            try {
+                const existing = await this.options.documentNotes.get(
+                    call.documentNoteId,
+                    executor
+                );
+                if (!existing)
+                    throw new CallNotesApplicationError("not_found", "Document Note not found");
+                note = normalizeNote(
+                    await this.options.documentNotes.update(
+                        call.documentNoteId,
+                        {
+                            title: existing.title,
+                            contentMarkdown: command.contentMarkdown,
+                            contentRich: command.contentRich,
+                        },
+                        executor
+                    )
+                );
+            } catch (error) {
+                if (isApplicationError(error)) throw error;
+                throw new CallNotesApplicationError(
+                    "unavailable",
+                    `Unable to update Call Note: ${errorMessage(error)}`
+                );
+            }
+            const revision = call.currentNoteRevision + 1;
+            const now = this.clock.now();
+            const [updated] = await tx
+                .update(callNotesCalls)
+                .set({ currentNoteRevision: revision, updatedAt: now })
+                .where(
+                    and(
+                        eq(callNotesCalls.id, command.callId),
+                        eq(callNotesCalls.companyId, company),
+                        eq(callNotesCalls.currentNoteRevision, call.currentNoteRevision)
+                    )
+                )
+                .returning();
+            if (!updated)
+                throw new CallNotesApplicationError("conflict", "Call Note revision is stale");
+            await tx.insert(callNotesNoteRevisions).values({
+                id: this.ids.next("note_revision"),
+                callId: command.callId,
+                companyId: company,
+                documentNoteId: call.documentNoteId,
+                revision,
+                origin: "enrichment",
+                enrichmentRunId: run.id,
+                title: note.title,
+                contentMarkdown: command.contentMarkdown,
+                contentRich: command.contentRich,
+                createdByUserId: command.actorUserId,
+                createdAt: now,
+            });
+            const [resolved] = await tx
+                .update(callNotesEnrichmentRuns)
+                .set({
+                    status: "accepted",
+                    resolvedByUserId: command.actorUserId,
+                    resolvedAt: now,
+                })
+                .where(
+                    and(
+                        eq(callNotesEnrichmentRuns.id, run.id),
+                        eq(callNotesEnrichmentRuns.status, "ready")
+                    )
+                )
+                .returning();
+            if (!resolved)
+                throw new CallNotesApplicationError(
+                    "conflict",
+                    "Enrichment was resolved by another request"
+                );
+        });
+        await this.syncCallNoteIndex(command.companyId, command.callId);
+        return this.snapshot(command.callId, command.actorUserId);
+    }
+
+    private async deleteCall(
+        command: Extract<CallNotesCommand, { kind: "delete_call" }>
+    ): Promise<null> {
+        const company = companyNumber(command.companyId);
+        const role = await this.requireMembership(command.companyId, command.actorUserId);
+        const [call] = await this.options.db
+            .select()
+            .from(callNotesCalls)
+            .where(
+                and(eq(callNotesCalls.id, command.callId), eq(callNotesCalls.companyId, company))
+            )
+            .limit(1);
+        if (!call) {
+            await this.syncCallNoteIndex(command.companyId, command.callId);
+            return null;
+        }
+        const transcript = await this.options.db
+            .select({ id: callNotesTranscriptSegments.id })
+            .from(callNotesTranscriptSegments)
+            .where(eq(callNotesTranscriptSegments.callId, command.callId))
+            .limit(1);
+        if (
+            role !== "admin" &&
+            role !== "owner" &&
+            (call.noteOwnerUserId !== command.actorUserId ||
+                call.status !== "failed" ||
+                transcript.length > 0)
+        ) {
+            throw new CallNotesApplicationError("forbidden", "Only admins may delete this Call");
+        }
+        if (call.documentNoteId !== null) {
+            try {
+                await this.options.documentNotes.delete(call.documentNoteId);
+            } catch (error) {
+                throw new CallNotesApplicationError(
+                    "unavailable",
+                    `Unable to delete Call Note: ${errorMessage(error)}`
+                );
+            }
+        }
+        await this.options.db
+            .delete(callNotesCalls)
+            .where(
+                and(eq(callNotesCalls.id, command.callId), eq(callNotesCalls.companyId, company))
+            );
+        await this.syncCallNoteIndex(command.companyId, command.callId);
+        return null;
+    }
+
+    private async applyCaptureEvent(
+        callId: string,
+        company: bigint,
+        event: CaptureEvent
+    ): Promise<void> {
+        const [capture] = await this.options.db
+            .select()
+            .from(callNotesCaptures)
+            .where(
+                and(eq(callNotesCaptures.callId, callId), eq(callNotesCaptures.companyId, company))
+            )
+            .limit(1);
+        if (!capture) {
+            throw new CallNotesApplicationError("unavailable", "Call capture is missing");
+        }
+        if (
+            (capture.lifecycle === "completed" || capture.lifecycle === "failed") &&
+            event.kind !== "transcript_segment" &&
+            event.kind !== "occurrence_ended"
+        ) {
+            return;
+        }
+        const occurredAt = asDate(event.occurredAt);
+        switch (event.kind) {
+            case "attempt_connected":
+                await this.attemptConnected(callId, company, capture, event, occurredAt);
+                return;
+            case "attempt_paused":
+                if (capture.desiredMode === "stopped") return;
+                await this.openGap(
+                    callId,
+                    company,
+                    capture.id,
+                    event.sourceAttemptKey,
+                    "user_paused",
+                    occurredAt
+                );
+                await this.options.db
+                    .update(callNotesCaptures)
+                    .set({
+                        desiredMode: "paused",
+                        pausedReason: "user",
+                        lifecycle: "interrupted",
+                        updatedAt: occurredAt,
+                    })
+                    .where(eq(callNotesCaptures.id, capture.id));
+                return;
+            case "attempt_resumed":
+                if (capture.desiredMode === "stopped") return;
+                await this.closeGap(callId, "user_paused", event.sourceAttemptKey, occurredAt);
+                await this.options.db
+                    .update(callNotesCaptures)
+                    .set({
+                        desiredMode: "running",
+                        pausedReason: null,
+                        lifecycle: "live",
+                        updatedAt: occurredAt,
+                    })
+                    .where(eq(callNotesCaptures.id, capture.id));
+                return;
+            case "transport_interrupted":
+                await this.openGap(
+                    callId,
+                    company,
+                    capture.id,
+                    event.sourceAttemptKey,
+                    "transport_interruption",
+                    occurredAt
+                );
+                await this.options.db
+                    .update(callNotesCaptureAttempts)
+                    .set({ lifecycle: "reconnecting" })
+                    .where(
+                        and(
+                            eq(callNotesCaptureAttempts.captureId, capture.id),
+                            eq(callNotesCaptureAttempts.sourceAttemptKey, event.sourceAttemptKey)
+                        )
+                    );
+                await this.options.db
+                    .update(callNotesCaptures)
+                    .set({
+                        pausedReason: capture.pausedReason,
+                        lifecycle: capture.desiredMode === "stopped" ? "finalizing" : "interrupted",
+                        updatedAt: occurredAt,
+                    })
+                    .where(eq(callNotesCaptures.id, capture.id));
+                return;
+            case "transport_reconnected":
+                if (capture.desiredMode === "stopped") return;
+                await this.closeGap(
+                    callId,
+                    "transport_interruption",
+                    event.sourceAttemptKey,
+                    occurredAt
+                );
+                await this.options.db
+                    .update(callNotesCaptureAttempts)
+                    .set({ lifecycle: "live" })
+                    .where(
+                        and(
+                            eq(callNotesCaptureAttempts.captureId, capture.id),
+                            eq(callNotesCaptureAttempts.sourceAttemptKey, event.sourceAttemptKey)
+                        )
+                    );
+                await this.options.db
+                    .update(callNotesCaptures)
+                    .set({
+                        lifecycle: "live",
+                        pausedReason: capture.pausedReason,
+                        updatedAt: occurredAt,
+                    })
+                    .where(eq(callNotesCaptures.id, capture.id));
+                return;
+            case "attempt_ended": {
+                await this.options.db.transaction(async tx => {
+                    await tx.execute(
+                        sql`SELECT pg_advisory_xact_lock(hashtext(${`call-notes:capture:${company.toString()}:${capture.captureUserId}`}))`
+                    );
+                    const [current] = await tx
+                        .select()
+                        .from(callNotesCaptures)
+                        .where(eq(callNotesCaptures.id, capture.id))
+                        .for("update")
+                        .limit(1);
+                    if (!current) return;
+                    const serverNow = this.clock.now();
+                    const [ended] = await tx
+                        .update(callNotesCaptureAttempts)
+                        .set({ lifecycle: "ended", endedAt: occurredAt })
+                        .where(
+                            and(
+                                eq(callNotesCaptureAttempts.captureId, capture.id),
+                                eq(
+                                    callNotesCaptureAttempts.sourceAttemptKey,
+                                    event.sourceAttemptKey
+                                ),
+                                sql`${callNotesCaptureAttempts.lifecycle} in ('connecting', 'live', 'reconnecting')`
+                            )
+                        )
+                        .returning({ id: callNotesCaptureAttempts.id });
+                    if (!ended) return;
+                    const autoStop =
+                        current.desiredMode === "running" &&
+                        (event.reason === "silence_timeout" || event.reason === "source_stopped");
+                    const stopped = current.desiredMode === "stopped" || autoStop;
+                    await tx
+                        .update(callNotesCaptures)
+                        .set({
+                            activeAttemptId: null,
+                            desiredMode: stopped ? "stopped" : current.desiredMode,
+                            pausedReason: stopped ? null : current.pausedReason,
+                            stopReason: autoStop
+                                ? event.reason === "silence_timeout"
+                                    ? "silence"
+                                    : "call_ended"
+                                : current.stopReason,
+                            lifecycle: stopped ? "finalizing" : "interrupted",
+                            updatedAt: serverNow,
+                        })
+                        .where(eq(callNotesCaptures.id, capture.id));
+                    if (stopped) {
+                        await tx
+                            .update(callNotesCalls)
+                            .set({ status: "finalizing", updatedAt: serverNow })
+                            .where(eq(callNotesCalls.id, callId));
+                    }
+                });
+                if (event.reason === "user_paused") {
+                    await this.openGap(
+                        callId,
+                        company,
+                        capture.id,
+                        event.sourceAttemptKey,
+                        "user_paused",
+                        occurredAt
+                    );
+                }
+                return;
+            }
+            case "attempt_failed": {
+                const finalized = await this.options.db.transaction(async tx => {
+                    await tx.execute(
+                        sql`SELECT pg_advisory_xact_lock(hashtext(${`call-notes:capture:${company.toString()}:${capture.captureUserId}`}))`
+                    );
+                    const [currentCapture] = await tx
+                        .select()
+                        .from(callNotesCaptures)
+                        .where(eq(callNotesCaptures.id, capture.id))
+                        .for("update")
+                        .limit(1);
+                    if (
+                        !currentCapture ||
+                        currentCapture.lifecycle === "completed" ||
+                        currentCapture.lifecycle === "failed"
+                    ) {
+                        return false;
+                    }
+                    const [attempt] = await tx
+                        .select()
+                        .from(callNotesCaptureAttempts)
+                        .where(
+                            and(
+                                eq(callNotesCaptureAttempts.captureId, currentCapture.id),
+                                eq(
+                                    callNotesCaptureAttempts.sourceAttemptKey,
+                                    event.sourceAttemptKey
+                                )
+                            )
+                        )
+                        .for("update")
+                        .limit(1);
+                    if (!attempt || !isActiveAttemptLifecycle(attempt.lifecycle)) return false;
+                    const executor = tx as unknown as CallNotesExecutor;
+                    if (currentCapture.desiredMode === "stopped") {
+                        await this.recordWorkerFailure(
+                            executor,
+                            currentCapture,
+                            attempt,
+                            occurredAt,
+                            event.code,
+                            event.message ?? null
+                        );
+                        await this.finalizeOccurrence(
+                            callId,
+                            company,
+                            currentCapture,
+                            occurredAt,
+                            executor
+                        );
+                        return true;
+                    }
+                    await this.pauseCaptureForWorkerError(
+                        executor,
+                        currentCapture,
+                        attempt,
+                        occurredAt,
+                        event.code,
+                        event.message ?? null
+                    );
+                    return false;
+                });
+                if (finalized) await this.syncCallNoteIndex(company.toString(), callId);
+                return;
+            }
+            case "participant_joined":
+            case "participant_returned":
+                await this.participantObserved(callId, company, capture.id, event, occurredAt);
+                if (
+                    event.kind === "participant_returned" &&
+                    event.participant.sourceParticipantKey === capture.captureUserId
+                ) {
+                    await this.closeGap(
+                        callId,
+                        "capture_user_absent",
+                        event.sourceAttemptKey,
+                        occurredAt
+                    );
+                }
+                return;
+            case "participant_left":
+                await this.participantLeft(capture.id, event, occurredAt);
+                if (event.participant.sourceParticipantKey === capture.captureUserId) {
+                    await this.openGap(
+                        callId,
+                        company,
+                        capture.id,
+                        event.sourceAttemptKey,
+                        "capture_user_absent",
+                        occurredAt
+                    );
+                }
+                return;
+            case "transcript_segment":
+                await this.transcriptSegment(callId, company, capture, event);
+                return;
+            case "occurrence_ended":
+                await this.finalizeOccurrence(callId, company, capture, occurredAt);
+                await this.syncCallNoteIndex(company.toString(), callId);
+                return;
+            default:
+                throw new CallNotesApplicationError(
+                    "invalid_transition",
+                    "Unsupported capture event"
+                );
+        }
+    }
+
+    private async attemptConnected(
+        callId: string,
+        company: bigint,
+        capture: CallNotesCaptureRow,
+        event: Extract<CaptureEvent, { kind: "attempt_connected" }>,
+        occurredAt: Date
+    ): Promise<void> {
+        const [existing] = await this.options.db
+            .select()
+            .from(callNotesCaptureAttempts)
+            .where(
+                and(
+                    eq(callNotesCaptureAttempts.captureId, capture.id),
+                    eq(callNotesCaptureAttempts.sourceAttemptKey, event.sourceAttemptKey)
+                )
+            )
+            .limit(1);
+        if (existing) {
+            if (!isActiveAttemptLifecycle(existing.lifecycle)) return;
+            await this.options.db
+                .update(callNotesCaptureAttempts)
+                .set({
+                    lifecycle: "live",
+                    sourceStreamKey: event.sourceStreamKey,
+                })
+                .where(eq(callNotesCaptureAttempts.id, existing.id));
+            await this.closeOpenCallGaps(callId, occurredAt);
+            await this.options.db
+                .update(callNotesCaptures)
+                .set({
+                    activeAttemptId: existing.id,
+                    pausedReason: capture.pausedReason,
+                    lifecycle: capture.desiredMode === "stopped" ? "finalizing" : "live",
+                    updatedAt: occurredAt,
+                })
+                .where(eq(callNotesCaptures.id, capture.id));
+            if (capture.desiredMode === "stopped") {
+                await this.options.db
+                    .update(callNotesCalls)
+                    .set({ status: "finalizing", updatedAt: occurredAt })
+                    .where(
+                        and(eq(callNotesCalls.id, callId), eq(callNotesCalls.companyId, company))
+                    );
+            }
+            return;
+        }
+        const [active] = await this.options.db
+            .select()
+            .from(callNotesCaptureAttempts)
+            .where(
+                and(
+                    eq(callNotesCaptureAttempts.captureId, capture.id),
+                    sql`${callNotesCaptureAttempts.lifecycle} in ('connecting', 'live', 'reconnecting')`
+                )
+            )
+            .limit(1);
+        if (active) {
+            await this.options.db
+                .update(callNotesCaptureAttempts)
+                .set({
+                    lifecycle: "ended",
+                    endedAt: occurredAt,
+                })
+                .where(eq(callNotesCaptureAttempts.id, active.id));
+        }
+        const attemptId = this.ids.next("attempt");
+        await this.options.db.insert(callNotesCaptureAttempts).values({
+            id: attemptId,
+            captureId: capture.id,
+            callId,
+            companyId: company,
+            sourceAttemptKey: event.sourceAttemptKey,
+            sourceStreamKey: event.sourceStreamKey,
+            lifecycle: "live",
+            startedAt: occurredAt,
+        });
+        await this.closeOpenCallGaps(callId, occurredAt);
+        await this.options.db
+            .update(callNotesCaptures)
+            .set({
+                activeAttemptId: attemptId,
+                pausedReason: capture.pausedReason,
+                lifecycle: capture.desiredMode === "stopped" ? "finalizing" : "live",
+                updatedAt: occurredAt,
+            })
+            .where(eq(callNotesCaptures.id, capture.id));
+        if (capture.desiredMode === "stopped") {
+            await this.options.db
+                .update(callNotesCalls)
+                .set({ status: "finalizing", updatedAt: occurredAt })
+                .where(and(eq(callNotesCalls.id, callId), eq(callNotesCalls.companyId, company)));
+        }
+    }
+
+    private async participantObserved(
+        callId: string,
+        company: bigint,
+        captureId: string,
+        event: ParticipantCaptureEvent,
+        occurredAt: Date
+    ): Promise<void> {
+        const [attempt] = await this.options.db
+            .select({ id: callNotesCaptureAttempts.id })
+            .from(callNotesCaptureAttempts)
+            .where(
+                and(
+                    eq(callNotesCaptureAttempts.captureId, captureId),
+                    eq(callNotesCaptureAttempts.sourceAttemptKey, event.sourceAttemptKey)
+                )
+            )
+            .limit(1);
+        if (!attempt) return;
+        const [existing] = await this.options.db
+            .select({ id: callNotesParticipants.id })
+            .from(callNotesParticipants)
+            .where(
+                and(
+                    eq(callNotesParticipants.attemptId, attempt.id),
+                    eq(
+                        callNotesParticipants.sourceParticipantKey,
+                        event.participant.sourceParticipantKey
+                    ),
+                    ...(event.participant.sourceSessionKey
+                        ? [
+                              eq(
+                                  callNotesParticipants.sourceSessionKey,
+                                  event.participant.sourceSessionKey
+                              ),
+                          ]
+                        : []),
+                    eq(callNotesParticipants.observedAt, occurredAt)
+                )
+            )
+            .limit(1);
+        if (existing) return;
+        await this.options.db.insert(callNotesParticipants).values({
+            id: this.ids.next("participant"),
+            callId,
+            attemptId: attempt.id,
+            companyId: company,
+            sourceParticipantKey: event.participant.sourceParticipantKey,
+            sourceSessionKey: event.participant.sourceSessionKey,
+            displayName: event.participant.displayName,
+            observedAt: occurredAt,
+            leftAt: null,
+        });
+    }
+
+    private async participantLeft(
+        captureId: string,
+        event: ParticipantCaptureEvent,
+        occurredAt: Date
+    ): Promise<void> {
+        const [attempt] = await this.options.db
+            .select({ id: callNotesCaptureAttempts.id })
+            .from(callNotesCaptureAttempts)
+            .where(
+                and(
+                    eq(callNotesCaptureAttempts.captureId, captureId),
+                    eq(callNotesCaptureAttempts.sourceAttemptKey, event.sourceAttemptKey)
+                )
+            )
+            .limit(1);
+        if (!attempt) return;
+        const [participant] = await this.options.db
+            .select({ id: callNotesParticipants.id })
+            .from(callNotesParticipants)
+            .where(
+                and(
+                    eq(callNotesParticipants.attemptId, attempt.id),
+                    eq(
+                        callNotesParticipants.sourceParticipantKey,
+                        event.participant.sourceParticipantKey
+                    ),
+                    ...(event.participant.sourceSessionKey
+                        ? [
+                              eq(
+                                  callNotesParticipants.sourceSessionKey,
+                                  event.participant.sourceSessionKey
+                              ),
+                          ]
+                        : []),
+                    isNull(callNotesParticipants.leftAt)
+                )
+            )
+            .orderBy(desc(callNotesParticipants.observedAt))
+            .limit(1);
+        if (participant) {
+            await this.options.db
+                .update(callNotesParticipants)
+                .set({ leftAt: occurredAt })
+                .where(eq(callNotesParticipants.id, participant.id));
+        }
+    }
+
+    private async transcriptSegment(
+        callId: string,
+        company: bigint,
+        capture: CallNotesCaptureRow,
+        event: Extract<CaptureEvent, { kind: "transcript_segment" }>
+    ): Promise<void> {
+        let [attempt] = await this.options.db
+            .select()
+            .from(callNotesCaptureAttempts)
+            .where(
+                and(
+                    eq(callNotesCaptureAttempts.captureId, capture.id),
+                    eq(callNotesCaptureAttempts.sourceAttemptKey, event.sourceAttemptKey)
+                )
+            )
+            .limit(1);
+        if (!attempt) {
+            const attemptId = this.ids.next("attempt");
+            [attempt] = await this.options.db
+                .insert(callNotesCaptureAttempts)
+                .values({
+                    id: attemptId,
+                    captureId: capture.id,
+                    callId,
+                    companyId: company,
+                    sourceAttemptKey: event.sourceAttemptKey,
+                    sourceStreamKey: null,
+                    lifecycle: "live",
+                    startedAt: asDate(event.occurredAt),
+                })
+                .returning();
+        }
+        if (!attempt)
+            throw new CallNotesApplicationError("unavailable", "Unable to create capture attempt");
+        const participantId: string | null = null;
+        const [inserted] = await this.options.db
+            .insert(callNotesTranscriptSegments)
+            .values({
+                id: this.ids.next("segment"),
+                callId,
+                attemptId: attempt.id,
+                participantId,
+                companyId: company,
+                sourcePacketHash: event.sourcePacketHash,
+                sourceKind: event.sourceKind,
+                audioChannel: event.audioChannel,
+                speakerName: null,
+                sourceStartMs: event.sourceStartMs ?? null,
+                sourceEndMs: event.sourceEndMs ?? null,
+                receivedAt: asDate(event.receivedAt),
+                receiveOrder: event.receiveOrder,
+                text: event.text,
+                language: event.language ?? null,
+                createdAt: this.clock.now(),
+            })
+            .onConflictDoNothing({
+                target: [
+                    callNotesTranscriptSegments.attemptId,
+                    callNotesTranscriptSegments.sourcePacketHash,
+                ],
+            })
+            .returning({ id: callNotesTranscriptSegments.id });
+        if (inserted && (capture.lifecycle === "completed" || capture.lifecycle === "failed")) {
+            await this.finalizeOccurrence(
+                callId,
+                company,
+                capture,
+                capture.endedAt ?? asDate(event.occurredAt)
+            );
+            await this.syncCallNoteIndex(company.toString(), callId);
+        }
+    }
+
+    private async openGap(
+        callId: string,
+        company: bigint,
+        captureId: string,
+        sourceAttemptKey: string | undefined,
+        kind: GapKind,
+        startedAt: Date
+    ): Promise<void> {
+        let attemptId: string | null = null;
+        if (sourceAttemptKey) {
+            const [attempt] = await this.options.db
+                .select({ id: callNotesCaptureAttempts.id })
+                .from(callNotesCaptureAttempts)
+                .where(
+                    and(
+                        eq(callNotesCaptureAttempts.captureId, captureId),
+                        eq(callNotesCaptureAttempts.sourceAttemptKey, sourceAttemptKey)
+                    )
+                )
+                .limit(1);
+            attemptId = attempt?.id ?? null;
+        }
+        const [open] = await this.options.db
+            .select({ id: callNotesGaps.id })
+            .from(callNotesGaps)
+            .where(
+                and(
+                    eq(callNotesGaps.callId, callId),
+                    eq(callNotesGaps.kind, kind),
+                    isNull(callNotesGaps.endedAt),
+                    attemptId ? eq(callNotesGaps.attemptId, attemptId) : sql`true`
+                )
+            )
+            .limit(1);
+        if (open) return;
+        await this.options.db.insert(callNotesGaps).values({
+            id: this.ids.next("gap"),
+            callId,
+            captureId,
+            attemptId,
+            companyId: company,
+            kind,
+            startedAt,
+            endedAt: null,
+            details: null,
+        });
+    }
+
+    private async closeGap(
+        callId: string,
+        kind: GapKind,
+        sourceAttemptKey: string | undefined,
+        endedAt: Date
+    ): Promise<void> {
+        const predicates = [
+            eq(callNotesGaps.callId, callId),
+            eq(callNotesGaps.kind, kind),
+            isNull(callNotesGaps.endedAt),
+        ];
+        if (sourceAttemptKey) {
+            const [attempt] = await this.options.db
+                .select({ id: callNotesCaptureAttempts.id })
+                .from(callNotesCaptureAttempts)
+                .where(
+                    and(
+                        eq(callNotesCaptureAttempts.callId, callId),
+                        eq(callNotesCaptureAttempts.sourceAttemptKey, sourceAttemptKey)
+                    )
+                )
+                .limit(1);
+            if (!attempt) return;
+            predicates.push(eq(callNotesGaps.attemptId, attempt.id));
+        }
+        await this.options.db
+            .update(callNotesGaps)
+            .set({ endedAt })
+            .where(and(...predicates));
+    }
+
+    private async closeOpenCallGaps(
+        callId: string,
+        endedAt: Date,
+        executor: CallNotesExecutor = this.options.db
+    ): Promise<void> {
+        // Gap starts and attempt connections come from different clocks (server
+        // reaper vs. worker); a gap never ends before it started.
+        await executor
+            .update(callNotesGaps)
+            .set({
+                endedAt: sql`greatest(${callNotesGaps.startedAt}, ${endedAt.toISOString()}::timestamptz)`,
+            })
+            .where(and(eq(callNotesGaps.callId, callId), isNull(callNotesGaps.endedAt)));
+    }
+
+    private async finalizeOccurrence(
+        callId: string,
+        company: bigint,
+        capture: CallNotesCaptureRow,
+        endedAt: Date,
+        executor: CallNotesExecutor = this.options.db
+    ): Promise<void> {
+        const gaps = await executor
+            .select()
+            .from(callNotesGaps)
+            .where(eq(callNotesGaps.callId, callId));
+        await this.closeOpenCallGaps(callId, endedAt, executor);
+        const segments = await executor
+            .select({ id: callNotesTranscriptSegments.id })
+            .from(callNotesTranscriptSegments)
+            .where(eq(callNotesTranscriptSegments.callId, callId));
+        const hasGap = gaps.length > 0;
+        const outcome = segments.length === 0 ? "failed" : hasGap ? "partial" : "complete";
+        const status: CallStatus = outcome === "failed" ? "failed" : "completed";
+        await executor
+            .update(callNotesCaptureAttempts)
+            .set({
+                lifecycle: "ended",
+                endedAt,
+            })
+            .where(
+                and(
+                    eq(callNotesCaptureAttempts.captureId, capture.id),
+                    sql`${callNotesCaptureAttempts.lifecycle} in ('connecting', 'live', 'reconnecting')`
+                )
+            );
+        await executor
+            .update(callNotesCaptures)
+            .set({
+                activeAttemptId: null,
+                pausedReason: null,
+                lifecycle: outcome === "failed" ? "failed" : "completed",
+                outcome,
+                endedAt,
+                updatedAt: endedAt,
+            })
+            .where(eq(callNotesCaptures.id, capture.id));
+        await executor
+            .update(callNotesCalls)
+            .set({
+                status,
+                finalizedAt: endedAt,
+                updatedAt: endedAt,
+                failureCode: outcome === "failed" ? "empty_capture" : null,
+                failureMessage: outcome === "failed" ? "No transcript evidence" : null,
+            })
+            .where(and(eq(callNotesCalls.id, callId), eq(callNotesCalls.companyId, company)));
+    }
+
+    private async transcriptRows(callId: string, company: bigint) {
+        const rows = await this.options.db
+            .select()
+            .from(callNotesTranscriptSegments)
+            .where(
+                and(
+                    eq(callNotesTranscriptSegments.callId, callId),
+                    eq(callNotesTranscriptSegments.companyId, company)
+                )
+            );
+        return sortTranscriptRows(rows);
+    }
+
+    private async snapshot(callId: string, actorUserId: string): Promise<CallSnapshot> {
+        const [call] = await this.options.db
+            .select()
+            .from(callNotesCalls)
+            .where(eq(callNotesCalls.id, callId))
+            .limit(1);
+        if (!call) throw new CallNotesApplicationError("not_found", "Call not found");
+        const [capture] = await this.options.db
+            .select()
+            .from(callNotesCaptures)
+            .where(eq(callNotesCaptures.callId, call.id))
+            .limit(1);
+        if (!capture) throw new CallNotesApplicationError("unavailable", "Call capture is missing");
+        const attempts = await this.options.db
+            .select({ id: callNotesCaptureAttempts.id })
+            .from(callNotesCaptureAttempts)
+            .where(eq(callNotesCaptureAttempts.captureId, capture.id));
+        const rows = await this.transcriptRows(call.id, call.companyId);
+        const participants = await this.options.db
+            .select()
+            .from(callNotesParticipants)
+            .where(eq(callNotesParticipants.callId, call.id));
+        const transcript = toTranscriptSegments(rows, participants);
+        const membershipRole = await this.options.memberships.getRole(
+            call.companyId.toString(),
+            actorUserId
+        );
+        if (!membershipRole) {
+            throw new CallNotesApplicationError("not_found", "Call not found");
+        }
+        const isNoteOwner = call.noteOwnerUserId === actorUserId;
+        const isCaptureUser = capture.captureUserId === actorUserId;
+        const isCompanyAdmin = membershipRole === "owner" || membershipRole === "admin";
+        const canDelete =
+            isCompanyAdmin || (isNoteOwner && call.status === "failed" && rows.length === 0);
+        const gapRows = await this.options.db
+            .select()
+            .from(callNotesGaps)
+            .where(eq(callNotesGaps.callId, call.id))
+            .orderBy(asc(callNotesGaps.startedAt), asc(callNotesGaps.id));
+        const runRows = await this.options.db
+            .select()
+            .from(callNotesEnrichmentRuns)
+            .where(eq(callNotesEnrichmentRuns.callId, call.id))
+            .orderBy(desc(callNotesEnrichmentRuns.createdAt), desc(callNotesEnrichmentRuns.id))
+            .limit(1);
+        let note: CallSnapshot["note"] = null;
+        if (
+            call.documentNoteId !== null &&
+            call.noteOwnerUserId &&
+            (call.noteVisibility === "company" || call.noteOwnerUserId === actorUserId)
+        ) {
+            const documentNote = await this.options.documentNotes.get(call.documentNoteId);
+            if (documentNote) {
+                note = toCallNote(call, documentNote);
+            }
+        }
+        const run = runRows[0];
+        const canViewEnrichment =
+            call.noteVisibility === "company" || call.noteOwnerUserId === actorUserId;
+        const enrichment =
+            run && canViewEnrichment
+                ? {
+                      id: run.id,
+                      status: run.status,
+                      baseNoteRevision: run.baseNoteRevision,
+                      transcriptFingerprint: run.transcriptFingerprint,
+                      proposal: run.editableProposal ?? run.originalOutput,
+                      modelMetadata: run.modelMetadata,
+                      createdAt: iso(run.createdAt),
+                      resolvedAt: run.resolvedAt ? iso(run.resolvedAt) : null,
+                  }
+                : null;
+        return CallSnapshotSchema.parse({
+            schemaVersion: CALL_NOTES_SCHEMA_VERSION,
+            id: call.id,
+            companyId: call.companyId.toString(),
+            source: call.source,
+            sourceOccurrenceKey: call.sourceOccurrenceKey,
+            title: call.title,
+            status: call.status,
+            capture: {
+                id: capture.id,
+                desiredMode: capture.desiredMode,
+                pausedReason: capture.pausedReason,
+                stopReason: capture.stopReason,
+                lifecycle: capture.lifecycle,
+                outcome: capture.outcome,
+                activeAttemptId: capture.activeAttemptId,
+                attemptCount: attempts.length,
+            },
+            viewerCapabilities: {
+                canEditNote: isNoteOwner,
+                canControlCapture: isCaptureUser,
+                canRequestEnrichment:
+                    isNoteOwner && (call.status === "completed" || call.status === "failed"),
+                canResolveEnrichment: isNoteOwner,
+                canChangeVisibility: isNoteOwner,
+                canDelete,
+            },
+            transcript,
+            gaps: toGaps(gapRows),
+            note,
+            enrichment,
+            createdAt: iso(call.createdAt),
+            updatedAt: iso(call.updatedAt ?? call.createdAt),
+        });
+    }
+}
+
+export function createPostgresCallNotesApplication(
+    options: CallNotesApplicationOptions
+): CallNotesApplication {
+    return new PostgresCallNotesApplication(options);
+}

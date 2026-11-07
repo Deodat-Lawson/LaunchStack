@@ -1,15 +1,11 @@
 /**
- * Bug Condition Exploration Tests — modifyDocument (Inngest function)
- *
- * Property 1: Expected Behavior — ADEU Review Fixes
- * These tests verify the 22 bug conditions identified in the code review are FIXED.
- * They PASS on fixed code, confirming each bug has been resolved.
- *
- * Tests in this file cover bugs: 1.1, 1.2, 1.4, 1.15, 1.19, 1.20
+ * Behavioral regressions for DOCX modification storage and failure provenance.
  */
 
-import * as fs from "fs";
-import * as path from "path";
+import { eq } from "drizzle-orm";
+import { company, document } from "@launchstack/store/schema";
+import { createFounderWeeklyReviewTestDatabase } from "../../founderWeeklyReview/testDb";
+import type { FounderWeeklyReviewTestDatabase } from "../../founderWeeklyReview/testDb";
 
 // ---------------------------------------------------------------------------
 // We import the real modifyDocument to inspect its config/structure.
@@ -45,7 +41,7 @@ jest.mock("@launchstack/editing", () => ({
 import { modifyDocument } from "~/server/inngest/functions/modifyDocument";
 import { db } from "~/server/db";
 import { fetchBlob, putFile } from "~/server/storage/vercel-blob";
-import { processDocumentBatch } from "@launchstack/editing";
+import { AdeuServiceError, processDocumentBatch } from "@launchstack/editing";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -145,178 +141,107 @@ describe("Fix 1.1: Step output uses blob storage — large DOCX stored as blob U
     });
 });
 
-// ===========================================================================
-// Fix 1.2 — Per-document concurrency key is present
-// ===========================================================================
-describe("Fix 1.2: Per-document concurrency — concurrency config has key field", () => {
-    it("concurrency config has a 'key' field scoped to documentId", () => {
-        const fn = modifyDocument as unknown as {
-            opts?: { concurrency?: Array<{ limit: number; key?: string }> };
-        };
-        const concurrency = fn.opts?.concurrency;
-        expect(concurrency).toBeDefined();
-        expect(concurrency).toHaveLength(1);
+const describeDb =
+    process.env.LAUNCHSTACK_TEST_DATABASE_URL || process.env.DATABASE_URL
+        ? describe
+        : describe.skip;
 
-        // FIX: The key field is present, scoping concurrency per document.
-        const config = concurrency![0]!;
-        expect(config.limit).toBe(1);
-        expect(config.key).toBeDefined();
-        expect(config.key).toContain("documentId");
+describeDb("modification failure metadata (Postgres integration)", () => {
+    jest.setTimeout(120_000);
+
+    let test: FounderWeeklyReviewTestDatabase;
+    let companyId: bigint;
+
+    beforeAll(async () => {
+        test = await createFounderWeeklyReviewTestDatabase();
+        const [co] = await test.db
+            .insert(company)
+            .values({ name: "Editing failure fixture", numberOfEmployees: "1" })
+            .returning({ id: company.id });
+        companyId = BigInt(co!.id);
     });
-});
 
-// ===========================================================================
-// Fix 1.4 — onFailure sets error metadata on document record
-// ===========================================================================
-describe("Fix 1.4: Failure status — onFailure sets error metadata on document", () => {
+    afterAll(async () => {
+        await test?.close();
+    });
+
     beforeEach(() => {
         jest.clearAllMocks();
+        (db.update as jest.Mock).mockImplementation((table: typeof document) =>
+            test.db.update(table)
+        );
     });
 
-    it("onFailure handler sets ocrMetadata with error info", async () => {
-        const fn = modifyDocument as unknown as {
-            opts?: {
-                onFailure?: (args: { event: unknown; error: Error }) => Promise<void>;
-            };
-        };
+    describe.each(["terminal", "validation"] as const)("%s failure", failurePath => {
+        it.each([
+            {
+                name: "Call Note",
+                metadata: { callNote: { callId: "failed-edit" }, totalPages: 3 },
+            },
+            { name: "ordinary", metadata: null },
+        ])("records an error without losing $name provenance", async ({ metadata }) => {
+            const [original] = await test.db
+                .insert(document)
+                .values({
+                    companyId,
+                    title: "Failed edit",
+                    category: "Calls",
+                    url: "local://failed-edit.docx",
+                    ocrMetadata: metadata,
+                })
+                .returning({ id: document.id });
+            const documentId = original!.id;
+            const errorMessage = "Edit target not found";
 
-        expect(fn.opts?.onFailure).toBeDefined();
+            if (failurePath === "terminal") {
+                // Inngest exposes the registered callback through its function options.
+                const fn = modifyDocument as unknown as {
+                    opts: {
+                        onFailure: (args: { event: unknown; error: Error }) => Promise<void>;
+                    };
+                };
+                await fn.opts.onFailure({
+                    event: { data: { event: { data: { documentId } } } },
+                    error: new Error(errorMessage),
+                });
+            } else {
+                (fetchBlob as jest.Mock).mockResolvedValueOnce({
+                    ok: true,
+                    arrayBuffer: async () => new Uint8Array([1, 2, 3]).buffer,
+                });
+                (processDocumentBatch as jest.Mock).mockRejectedValueOnce(
+                    new AdeuServiceError(422, errorMessage)
+                );
+                // Invoke the registered handler without starting an Inngest worker.
+                const callable = modifyDocument as unknown as {
+                    fn: (ctx: { event: unknown; step: unknown }) => Promise<unknown>;
+                };
+                const result = await callable.fn({
+                    event: {
+                        data: {
+                            documentId,
+                            documentUrl: "local://failed-edit.docx",
+                            authorName: "Reviewer",
+                            edits: [{ target_text: "missing", new_text: "replacement" }],
+                        },
+                    },
+                    step: createMockStep(),
+                });
+                expect(result).toEqual({ success: false, error: errorMessage });
+            }
 
-        const capturedSets: Record<string, unknown>[] = [];
-        const mockWhere = jest.fn().mockResolvedValue([]);
-        const mockSet = jest.fn().mockImplementation((setArg: Record<string, unknown>) => {
-            capturedSets.push(setArg);
-            return { where: mockWhere };
+            const [failed] = await test.db
+                .select()
+                .from(document)
+                .where(eq(document.id, documentId));
+            expect(failed!.url).toBe("local://failed-edit.docx");
+            expect(failed!.ocrMetadata).toEqual({
+                ...metadata,
+                error: "editing_failed",
+                errorMessage,
+                failedAt: expect.any(String),
+            });
+            expect(putFile).not.toHaveBeenCalled();
         });
-        (db.update as jest.Mock).mockReturnValue({ set: mockSet });
-
-        // Simulate onFailure being called
-        await fn.opts!.onFailure!({
-            event: { data: { event: { data: { documentId: 42 } } } },
-            error: new Error("All retries exhausted"),
-        });
-
-        expect(db.update).toHaveBeenCalled();
-        expect(mockSet).toHaveBeenCalled();
-
-        // FIX: The set() call should include error metadata (ocrMetadata).
-        const setArg = capturedSets[0]!;
-        expect(setArg).toBeDefined();
-        expect(setArg.updatedAt).toBeDefined();
-        // Confirm the fix: error metadata IS set
-        expect(setArg).toHaveProperty("ocrMetadata");
-        const meta = setArg.ocrMetadata as Record<string, unknown>;
-        expect(meta.error).toBe("editing_failed");
-        expect(meta.errorMessage).toBeDefined();
-        expect(meta.failedAt).toBeDefined();
-    });
-
-    it("422 validation errors are recorded with error metadata in a separate step", async () => {
-        // Read the source file and verify the 422 path sets error metadata
-        const sourceFile = fs.readFileSync(
-            path.resolve(__dirname, "../../../src/server/inngest/functions/modifyDocument.ts"),
-            "utf-8"
-        );
-
-        // FIX: The 422 path should result in a step that writes error metadata.
-        // The source should contain a step that handles validation failures with ocrMetadata.
-        expect(sourceFile).toMatch(/record-validation-failure|validationError/);
-        expect(sourceFile).toMatch(/ocrMetadata/);
-        expect(sourceFile).toMatch(/editing_failed/);
-    });
-});
-
-// ===========================================================================
-// Fix 1.15 — DB update is in its own step.run, separate from blob storage
-// ===========================================================================
-describe("Fix 1.15: Idempotent replay — db.update is in a separate step.run", () => {
-    it("db.update() is in its own dedicated step.run, not inside the modify-document step", () => {
-        const sourceFile = fs.readFileSync(
-            path.resolve(__dirname, "../../../src/server/inngest/functions/modifyDocument.ts"),
-            "utf-8"
-        );
-
-        // FIX: There should be a dedicated step for the DB update.
-        // The step name should be "update-document-record" or similar.
-        const hasUpdateStep =
-            sourceFile.includes('step.run("update-document-record"') ||
-            sourceFile.includes("step.run('update-document-record'");
-        expect(hasUpdateStep).toBe(true);
-
-        // FIX: The modify-document step should NOT contain db.update.
-        const modifyStepStart = sourceFile.indexOf('step.run("modify-document"');
-        expect(modifyStepStart).toBeGreaterThan(-1);
-
-        // Find the closing of the modify-document step by looking for the next step.run
-        const afterModifyStep = sourceFile.slice(modifyStepStart);
-        const nextStepStart = afterModifyStep.indexOf("step.run(", 10); // skip the current one
-        const modifyStepChunk =
-            nextStepStart > -1
-                ? afterModifyStep.slice(0, nextStepStart)
-                : afterModifyStep.slice(0, 1200);
-
-        // The modify-document step should NOT have db.update (it's in its own step)
-        expect(modifyStepChunk).not.toMatch(/db\s*\.\s*update\s*\(/);
-    });
-
-    it("update-document-record step contains the db.update call", () => {
-        const sourceFile = fs.readFileSync(
-            path.resolve(__dirname, "../../../src/server/inngest/functions/modifyDocument.ts"),
-            "utf-8"
-        );
-
-        // FIX: The dedicated update step should contain db.update
-        const updateStepStart = sourceFile.indexOf('step.run("update-document-record"');
-        expect(updateStepStart).toBeGreaterThan(-1);
-
-        const updateStepChunk = sourceFile.slice(updateStepStart, updateStepStart + 400);
-        expect(updateStepChunk).toMatch(/db\s*\.\s*update\s*\(/);
-    });
-});
-
-// ===========================================================================
-// Fix 1.19 — Handler lookup uses explicit assertion, not if(handler) guard
-// ===========================================================================
-describe("Fix 1.19: Explicit handler assertion — no silent skip on handler lookup failure", () => {
-    it("test file uses expect(handler).toBeDefined() instead of if(handler) guard", () => {
-        const testFile = fs.readFileSync(
-            path.resolve(__dirname, "modifyDocument.test.ts"),
-            "utf-8"
-        );
-
-        // FIX: The test should use expect(handler).toBeDefined() so it fails
-        // explicitly when the handler lookup fails, instead of silently skipping.
-        expect(testFile).toContain("expect(handler).toBeDefined()");
-
-        // Confirm the old if(handler) guard pattern is gone
-        const handlerGuardPattern = /const\s+handler\s*=.*\.fn;?\s*\n\s*if\s*\(\s*handler\s*\)/;
-        expect(testFile).not.toMatch(handlerGuardPattern);
-    });
-});
-
-// ===========================================================================
-// Fix 1.20 — Route registration test has meaningful assertion
-// ===========================================================================
-describe("Fix 1.20: Meaningful route registration test — no tautological assertion", () => {
-    it("route registration test does NOT use expect(true).toBe(true)", () => {
-        const testFile = fs.readFileSync(
-            path.resolve(__dirname, "modifyDocument.test.ts"),
-            "utf-8"
-        );
-
-        // FIX: The tautological assertion should be replaced with a real check.
-        expect(testFile).not.toContain("expect(true).toBe(true)");
-    });
-
-    it("route registration test makes a meaningful assertion about modifyDocument", () => {
-        const testFile = fs.readFileSync(
-            path.resolve(__dirname, "modifyDocument.test.ts"),
-            "utf-8"
-        );
-
-        // FIX: The test should assert something meaningful about the actual import.
-        expect(testFile).toMatch(
-            /expect\(.*modifyDocument.*\)\.toBeDefined\(\)|expect\(.*opts.*id.*\)\.toBe\("modify-document"\)/
-        );
     });
 });

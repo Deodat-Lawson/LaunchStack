@@ -1,0 +1,1 @@
+ALTER TABLE "pdr_ai_v2_call_notes_enrichment_runs" ADD COLUMN IF NOT EXISTS "preview_markdown" text;

@@ -39,6 +39,16 @@ jest.mock("@launchstack/store/schema", () => ({
     },
 }));
 
+jest.mock("@launchstack/pipelines/schema", () => ({
+    callNotesCalls: {
+        id: "callNotesCalls.id",
+        companyId: "callNotesCalls.companyId",
+        status: "callNotesCalls.status",
+        noteVisibility: "callNotesCalls.noteVisibility",
+        indexedDocumentId: "callNotesCalls.indexedDocumentId",
+    },
+}));
+
 jest.mock("drizzle-orm", () => ({
     and: (...conditions: unknown[]) => ({ op: "and", conditions }),
     eq: (...args: unknown[]) => ({ op: "eq", args }),

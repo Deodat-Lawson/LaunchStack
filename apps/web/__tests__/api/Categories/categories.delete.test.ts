@@ -65,6 +65,22 @@ describe("DELETE /api/Categories/DeleteCategories", () => {
         expect(deleteFolderAs).toHaveBeenCalledWith(expect.anything(), "Plans");
     });
 
+    it("returns the authentication failure without deleting a folder", async () => {
+        mockRequireWorkspaceContext.mockResolvedValue({
+            success: false,
+            response: new Response(JSON.stringify({ error: "Unauthorized" }), {
+                status: 401,
+                headers: { "Content-Type": "application/json" },
+            }),
+        });
+
+        const res = await DELETE(request({ id: 123 }));
+
+        expect(res.status).toBe(401);
+        await expect(res.json()).resolves.toEqual({ error: "Unauthorized" });
+        expect(deleteFolderAs).not.toHaveBeenCalled();
+    });
+
     it("answers 404 for an id outside the workspace", async () => {
         mockCtx("owner");
         const res = await DELETE(request({ id: 9 }));
@@ -95,6 +111,20 @@ describe("DELETE /api/Categories/DeleteCategories", () => {
         const res = await DELETE(request({ id: 3 }));
 
         expect(res.status).toBe(403);
+    });
+
+    it("refuses to delete the Calls collection through the shared folder rules", async () => {
+        mockCtx("owner");
+        mockRows = [{ name: "Calls" }];
+        jest.mocked(deleteFolderAs).mockRejectedValue(
+            new FolderError("call_notes_managed", 409, "Calls is managed by Call Notes")
+        );
+
+        const res = await DELETE(request({ id: 123 }));
+
+        expect(res.status).toBe(409);
+        await expect(res.json()).resolves.toEqual({ error: "Calls is managed by Call Notes" });
+        expect(deleteFolderAs).toHaveBeenCalledWith(expect.anything(), "Calls");
     });
 
     it("refuses a viewer outright", async () => {

@@ -115,6 +115,50 @@ test("normal follow-ups carry real prior turns and use general chat with no read
     expect(sessions.appendMessages).toHaveBeenCalledTimes(3);
 });
 
+test("restored document refs keep indexed Call Notes scoped and persist only available context", async () => {
+    const sources: WorkspaceSource[] = [
+        {
+            id: "call-note:call-1",
+            documentId: 42,
+            callId: "call-1",
+            title: "Launch review",
+            type: "call-note",
+            size: "1 KB",
+            added: "Today",
+            folder: "Calls",
+            tags: [],
+            domain: "General",
+        },
+        {
+            id: "call-note:private-call",
+            callId: "private-call",
+            title: "Private note",
+            type: "call-note",
+            size: "1 KB",
+            added: "Today",
+            folder: "Calls",
+            tags: [],
+            domain: "General",
+        },
+    ];
+    const { result } = harness([], sources);
+    await act(async () => {
+        await result.current.runtime.submit({
+            ...send("What did we decide?"),
+            refs: ["d42", "call-note:call-1", "call-note:private-call", "d99"],
+        });
+    });
+
+    expect(mockRequest.mock.calls[0][0]).toMatchObject({
+        searchScope: "document",
+        documentId: 42,
+    });
+    expect(sessions.createSession).toHaveBeenCalledWith(
+        expect.objectContaining({ contextSourceIds: ["call-note:call-1"] })
+    );
+    expect(result.current.thread[0]?.refs).toEqual(["call-note:call-1"]);
+});
+
 test("records the answer's steps, reasoning and first-word time, and saves them with the turn", async () => {
     const clock = jest.spyOn(performance, "now");
     let now = 1_000;

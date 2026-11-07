@@ -41,6 +41,23 @@ describe("createTtlCache", () => {
         expect(cache.get("a")).toBeNull();
         expect(cache.get("d")).toBe(4);
     });
+
+    it("never holds more than maxEntries fresh entries, evicting the oldest write", () => {
+        const cache = createTtlCache<number>({ ttlMs: 60_000, maxEntries: 2 });
+        cache.set("a", 1);
+        cache.set("b", 2);
+        cache.set("c", 3);
+        expect(cache.get("a")).toBeNull();
+        expect(cache.get("b")).toBe(2);
+        expect(cache.get("c")).toBe(3);
+
+        // Rewriting a key makes it the newest write, so "c" is evicted next.
+        cache.set("b", 20);
+        cache.set("d", 4);
+        expect(cache.get("c")).toBeNull();
+        expect(cache.get("b")).toBe(20);
+        expect(cache.get("d")).toBe(4);
+    });
 });
 
 describe("executeSearch", () => {

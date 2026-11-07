@@ -11,7 +11,7 @@
  */
 
 import { NextResponse } from "next/server";
-import { and, eq } from "drizzle-orm";
+import { and, eq, getTableColumns } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import { document, documentVersions } from "@launchstack/store/schema";
@@ -23,6 +23,8 @@ import { localeOfRequest } from "~/i18n/server";
 import { translatorFor } from "~/i18n/translate";
 import { canEditDocument } from "~/server/workspace/item-access";
 import { getActiveDriveLink } from "~/server/services/google-drive/links";
+import { callNotesCalls } from "@launchstack/pipelines/call-notes";
+import { callNoteDocumentReference, isCallNoteDocument } from "~/lib/call-note-document";
 
 export async function POST(
     request: Request,
@@ -50,7 +52,10 @@ export async function POST(
             // Scoped in SQL: a cross-company or out-of-scope id reads exactly
             // like a missing document.
             const [doc] = await db
-                .select()
+                .select({
+                    ...getTableColumns(document),
+                    indexedCallNote: callNoteDocumentReference(document, callNotesCalls),
+                })
                 .from(document)
                 .where(
                     and(
@@ -64,6 +69,10 @@ export async function POST(
                     { error: translatorFor(locale, "errors.api")("documentNotFound") },
                     { status: 404 }
                 );
+            }
+
+            if (isCallNoteDocument(doc)) {
+                return NextResponse.json({ error: s("callNoteManaged") }, { status: 409 });
             }
 
             // Changing which version is live is changing the file (ADR-014).

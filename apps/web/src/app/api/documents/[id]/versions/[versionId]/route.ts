@@ -23,7 +23,7 @@
  */
 
 import { NextResponse } from "next/server";
-import { and, eq } from "drizzle-orm";
+import { and, eq, getTableColumns } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import { document, documentVersions } from "@launchstack/store/schema";
@@ -32,6 +32,8 @@ import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
+import { callNotesCalls } from "@launchstack/pipelines/call-notes";
+import { callNoteDocumentReference, isCallNoteDocument } from "~/lib/call-note-document";
 import { localeOfRequest } from "~/i18n/server";
 import { translatorFor } from "~/i18n/translate";
 import { canEditDocument } from "~/server/workspace/item-access";
@@ -62,7 +64,10 @@ export async function DELETE(
             // Scoped in SQL: a cross-company or out-of-scope id reads exactly
             // like a missing document.
             const [doc] = await db
-                .select()
+                .select({
+                    ...getTableColumns(document),
+                    indexedCallNote: callNoteDocumentReference(document, callNotesCalls),
+                })
                 .from(document)
                 .where(
                     and(
@@ -76,6 +81,10 @@ export async function DELETE(
                     { error: translatorFor(locale, "errors.api")("documentNotFound") },
                     { status: 404 }
                 );
+            }
+
+            if (isCallNoteDocument(doc)) {
+                return NextResponse.json({ error: s("callNoteManaged") }, { status: 409 });
             }
 
             // Throwing a version away is changing the file (ADR-014).

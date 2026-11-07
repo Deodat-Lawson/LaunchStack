@@ -1,3 +1,4 @@
+import type { NoteVisibility } from "@launchstack/pipelines/call-notes";
 import { SHORTCUT_COMMANDS_BY_ID, formatKeys } from "~/lib/shortcuts/commands";
 import { useMemo, type ComponentType } from "react";
 import { useTranslations } from "next-intl";
@@ -17,6 +18,7 @@ import {
     Building2 as IconBuilding,
     ChartColumn as IconChart,
     File as IconFile,
+    FileText as IconNote,
     Folder as IconFolder,
     Globe as IconGlobe,
     HandCoins as IconInvestors,
@@ -65,6 +67,7 @@ export type SourceTypeId =
     | "web"
     | "youtube"
     | "paste"
+    | "call-note"
     | "mindmap"
     | "artifact";
 
@@ -87,6 +90,7 @@ export const SOURCE_META: Record<SourceTypeId, SourceMeta> = {
     web: { label: "Website", Icon: IconGlobe, color: "oklch(0.55 0.08 200)" },
     youtube: { label: "YouTube", Icon: IconYoutube, color: "oklch(0.55 0.18 25)" },
     paste: { label: "Note", Icon: IconPaste, color: "oklch(0.5 0.02 280)" },
+    "call-note": { label: "Call Note", Icon: IconNote, color: "oklch(0.52 0.16 185)" },
     mindmap: { label: "Mindmap", Icon: IconMindmap, color: "oklch(0.55 0.2 290)" },
     artifact: { label: "Claude artifact", Icon: IconArtifact, color: "var(--accent)" },
 };
@@ -156,16 +160,24 @@ export interface SourceAddedBy {
 export interface WorkspaceSource {
     /**
      * Unique within the UI — DB-backed rows prefix with "d", staged locals
-     * with "s", mindmaps with "m". `sourceApi` is the one place that switches
-     * on the prefix.
+     * with "s", call notes with "call-note:", mindmaps with "m". `sourceApi`
+     * is the one place that switches on the prefix.
      */
     id: string;
     /**
-     * DB primary key if this source came from the document table. For a
-     * mindmap this is the *published* document, when there is one — the row
-     * the retrieval layer cites — so citations resolve back to the map.
+     * DB primary key of the retrievable document. For a mindmap this is its
+     * published copy; for a Call Note, its indexed canonical note. Citations
+     * resolve back to the source rather than a separate Markdown document.
      */
     documentId?: number;
+    /** Call Note identity. Call Note sources always open in Calls. */
+    callId?: string;
+    noteId?: number;
+    visibility?: NoteVisibility;
+    revision?: number;
+    updatedAt?: string;
+    /** Bounded canonical note text used by workspace search and palette discovery. */
+    preview?: string;
     /** Mindmap primary key, for sources of type `mindmap`. */
     mindmapId?: number;
     /**
@@ -210,6 +222,8 @@ export interface WorkspaceFolder {
     id: string;
     name: string;
     color: string;
+    /** System collections (currently Calls) cannot be renamed or deleted. */
+    system?: boolean;
     /** Visible only to people, groups, or roles granted access. */
     restricted?: boolean;
     /** The `category` row behind a persisted folder; null while only implied by its contents. */
@@ -662,6 +676,12 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 desc: "Agents work an objective in a channel — step in whenever you want",
             },
             {
+                id: "calls",
+                label: "Calls",
+                Icon: IconAudio,
+                desc: "Capture human conversations as notes and channel-labelled transcript evidence",
+            },
+            {
                 id: "agents",
                 label: "Agents",
                 Icon: IconAgents,
@@ -1033,6 +1053,7 @@ const STUDIO_APP_MESSAGE_KEYS = {
     knowledge: "knowledge",
     processing: "processing",
     meetings: "meetings",
+    calls: "calls",
     agents: "agents",
     team: "team",
     investors: "investors",

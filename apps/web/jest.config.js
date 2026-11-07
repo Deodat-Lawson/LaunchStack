@@ -4,6 +4,7 @@
 // one spelling matches both the hoisted dir (@scope/name) and pnpm's
 // flattened store dir (@scope+name@version).
 const esmDeps = [
+    "marked",
     "react-markdown",
     "remark-[\\w-]+",
     "rehype-[\\w-]+",

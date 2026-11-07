@@ -19,9 +19,12 @@ import { Document } from "@langchain/core/documents";
 import type { CallbackManagerForRetrieverRun } from "@langchain/core/callbacks/manager";
 
 import { db, toRows } from "~/server/db/index";
-import type { EmbeddingsProvider, SearchScope } from "@launchstack/retrieval/search-types";
-import { documentScopeSqlForAlias } from "@launchstack/retrieval/algorithms/scope";
-import type { DocumentScope } from "~/lib/authz/scope-types";
+import type {
+    DocumentScope,
+    EmbeddingsProvider,
+    SearchScope,
+} from "@launchstack/retrieval/search-types";
+import { documentScopeSqlForAlias } from "@launchstack/retrieval";
 
 /**
  * Notes retrievers extend the global `SearchScope` with a "user" branch so
@@ -136,10 +139,12 @@ export class NotesRetriever extends BaseRetriever {
             (ne.embedding <-> ${fullLiteral}) as distance
           FROM ${T.noteEmbeddings} ne
           JOIN ${T.notes} n ON n.id = ne.note_id
+          LEFT JOIN ${T.callNotesCalls} c ON c.document_note_id = n.id
           WHERE ${where}
             AND ne.embedding IS NOT NULL
             AND ne.embedding_short IS NOT NULL
             AND COALESCE(n.anchor_status, 'resolved') <> 'orphaned'
+            AND c.id IS NULL
           ORDER BY ne.embedding_short <-> ${shortLiteral}
           LIMIT ${this.topK}
         `)

@@ -12,7 +12,7 @@ import { parseProvider } from "@launchstack/conversion/ocr/trigger";
 import { detectStorageType, toAbsoluteUrl, type StorageType } from "./detect-storage-type";
 import { authorizeInternalFileRef } from "./internal-file-ref";
 import { createDocumentLifecycle, type CreatedDocumentLifecycle } from "./document-creation";
-import { deleteDocumentCore } from "./document-delete";
+import { deleteDocumentBlobs, deleteDocumentCore } from "./document-delete";
 import { db } from "~/server/db";
 import { hasTokens } from "~/lib/credits";
 import { isMeteringEnforced } from "@launchstack/store/credits";
@@ -296,6 +296,7 @@ export async function processDocumentUpload({
             if (audioLifecycle.created) {
                 await db
                     .transaction(tx => deleteDocumentCore(tx, audioLifecycle.document.id))
+                    .then(deleteDocumentBlobs)
                     .catch((cleanupError: unknown) =>
                         console.error(
                             `[DocumentUpload] Could not remove recording ${audioLifecycle.document.id} after its transcript failed:`,

@@ -8,14 +8,17 @@ import { debitTokens } from "~/lib/credits";
 
 export function createProposalPorts(companyId: bigint): ProposalPorts {
     return createDefaultPorts({
-        debitCredits: async ({ amount, description, referenceId }) => {
-            await debitTokens({
-                companyId,
-                amount,
-                service: "proposal_writing",
-                description,
-                referenceId,
-            });
+        debitCredits: async ({ amount, description, referenceId }, executor) => {
+            await debitTokens(
+                {
+                    companyId,
+                    amount,
+                    service: "proposal_writing",
+                    description,
+                    referenceId,
+                },
+                executor
+            );
         },
     });
 }

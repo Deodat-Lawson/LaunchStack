@@ -422,7 +422,7 @@ describe("lookalikes", () => {
         ]);
         expect(result.sources.find(s => s.source === "lookalike")).toMatchObject({
             status: "skipped",
-            detail: "needs EXA_API_KEY",
+            detail: "needs Exa as the search engine",
         });
     });
 });

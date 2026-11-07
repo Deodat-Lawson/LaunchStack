@@ -213,9 +213,9 @@
     "title": "契合你的",
     "accent": "资助方",
     "subGrantsAndWeb": "搜索 Grants.gov 和网页",
-    "subGrantsNoWeb": "搜索 Grants.gov · 网页搜索需要 EXA 或 SERPER 密钥",
+    "subGrantsNoWeb": "搜索 Grants.gov · 网页搜索未开启（请设置 SEARCH_PROVIDER 及其密钥）",
     "subWebOnly": "未接入联邦来源，仅搜索网页",
-    "subNone": "未接入联邦来源 · 网页搜索需要 EXA 或 SERPER 密钥",
+    "subNone": "未接入联邦来源 · 网页搜索未开启（请设置 SEARCH_PROVIDER 及其密钥）",
     "addByHand": "手动添加",
     "source": {
       "grants_gov": "Grants.gov",

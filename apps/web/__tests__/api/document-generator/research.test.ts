@@ -1,7 +1,7 @@
 /**
  * /api/document-generator/research: the web leg is general web search
- * (@launchstack/tools/web-research `searchWeb`, Exa first, Serper as the
- * fallback), not a hand-rolled Exa call — and with no search key it is
+ * (@launchstack/tools/web-research `searchWeb`, on the server's engine,
+ * SEARCH_PROVIDER), not a hand-rolled Exa call — and with no engine it is
  * skipped, leaving documents and arXiv to answer. The work runs in the
  * person's workspace scope, so each paid search is counted against them.
  */
@@ -52,7 +52,14 @@ function request(body: Record<string, unknown>): Request {
     });
 }
 
-const SEARCH_ENV = ["EXA_API_KEY", "SERPER_API_KEY", "SEARCH_PROVIDER"] as const;
+const SEARCH_ENV = [
+    "EXA_API_KEY",
+    "SERPER_API_KEY",
+    "BRAVE_SEARCH_API_KEY",
+    "TAVILY_API_KEY",
+    "SEARXNG_URL",
+    "SEARCH_PROVIDER",
+] as const;
 const savedEnv = Object.fromEntries(SEARCH_ENV.map(name => [name, process.env[name]]));
 const realFetch = global.fetch;
 const mockFetch = jest.fn<Promise<Response>, Parameters<typeof fetch>>();

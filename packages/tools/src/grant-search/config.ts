@@ -17,8 +17,3 @@ export function isGrantsGovEnabled(): boolean {
     const value = process.env.GRANTS_GOV_ENABLED?.trim().toLowerCase();
     return !(value === "0" || value === "false" || value === "off");
 }
-
-/** The web provider needs a search key; the web-research tool owns those reads. */
-export function hasWebSearchKey(): boolean {
-    return Boolean(process.env.EXA_API_KEY?.trim()) || Boolean(process.env.SERPER_API_KEY?.trim());
-}

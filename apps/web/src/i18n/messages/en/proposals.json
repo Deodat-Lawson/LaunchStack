@@ -213,9 +213,9 @@
     "title": "Funders that",
     "accent": "fit",
     "subGrantsAndWeb": "Searches Grants.gov and the web",
-    "subGrantsNoWeb": "Searches Grants.gov · web search needs an EXA or SERPER key",
+    "subGrantsNoWeb": "Searches Grants.gov · web search is off (set SEARCH_PROVIDER and its key)",
     "subWebOnly": "Searches no federal source and the web",
-    "subNone": "Searches no federal source · web search needs an EXA or SERPER key",
+    "subNone": "Searches no federal source · web search is off (set SEARCH_PROVIDER and its key)",
     "addByHand": "Add by hand",
     "source": {
       "grants_gov": "Grants.gov",

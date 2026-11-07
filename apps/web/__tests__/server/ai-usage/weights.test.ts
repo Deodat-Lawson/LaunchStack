@@ -146,8 +146,14 @@ describe("the defaults, against a $1.00 chat token", () => {
     });
 
     it("prices a search from a provider it does not list at Exa's rate", () => {
-        expect(weighUsage(search("brave")).weightedTokens).toBe(7_000);
+        expect(weighUsage(search("bing")).weightedTokens).toBe(7_000);
         expect(webUnitPrice("web_search", undefined)).toBeCloseTo(0.007, 10);
+    });
+
+    it("prices every SEARCH_PROVIDER engine at its own list price, SearXNG at nothing", () => {
+        expect(weighUsage(search("brave")).weightedTokens).toBe(5_000);
+        expect(weighUsage(search("tavily")).weightedTokens).toBe(8_000);
+        expect(weighUsage(search("searxng")).weightedTokens).toBe(0);
     });
 
     it("prices no pages for a provider with no contents endpoint", () => {

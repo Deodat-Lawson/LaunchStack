@@ -24,8 +24,6 @@
     "./trend-search/cache": "./src/trend-search/cache.ts",
     "./trend-search/synthesizer": "./src/trend-search/synthesizer.ts",
     "./trend-search/query-planner": "./src/trend-search/query-planner.ts",
-    "./trend-search/providers/serper": "./src/trend-search/providers/serper.ts",
-    "./trend-search/providers/registry": "./src/trend-search/providers/registry.ts",
     "./trend-search/providers/types": "./src/trend-search/providers/types.ts",
     "./client-prospector": "./src/client-prospector/index.ts",
     "./client-prospector/db": "./src/client-prospector/db.ts",
@@ -143,14 +141,6 @@
       "./trend-search/query-planner": {
         "types": "./dist/trend-search/query-planner.d.ts",
         "default": "./dist/trend-search/query-planner.js"
-      },
-      "./trend-search/providers/serper": {
-        "types": "./dist/trend-search/providers/serper.d.ts",
-        "default": "./dist/trend-search/providers/serper.js"
-      },
-      "./trend-search/providers/registry": {
-        "types": "./dist/trend-search/providers/registry.d.ts",
-        "default": "./dist/trend-search/providers/registry.js"
       },
       "./trend-search/providers/types": {
         "types": "./dist/trend-search/providers/types.d.ts",

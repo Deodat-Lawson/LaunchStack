@@ -1,8 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { runWithChatModelsScope, type ChatUsageEvent } from "@launchstack/llm";
 
-import { callExa } from "./providers/exa";
-import { callSerper } from "./providers/serper";
+import { executeSearch } from "./index";
 import {
     companySearchAvailable,
     configuredWebSearchProvider,
@@ -10,6 +9,15 @@ import {
     searchCompanies,
     searchWeb,
 } from "./web-search";
+
+const SEARCH_ENV = [
+    "SEARCH_PROVIDER",
+    "EXA_API_KEY",
+    "SERPER_API_KEY",
+    "BRAVE_SEARCH_API_KEY",
+    "TAVILY_API_KEY",
+    "SEARXNG_URL",
+] as const;
 
 function jsonResponse(body: unknown, status = 200): Response {
     return new Response(JSON.stringify(body), {
@@ -20,9 +28,7 @@ function jsonResponse(body: unknown, status = 200): Response {
 
 describe("configuredWebSearchProvider", () => {
     beforeEach(() => {
-        vi.stubEnv("EXA_API_KEY", "");
-        vi.stubEnv("SERPER_API_KEY", "");
-        vi.stubEnv("SEARCH_PROVIDER", "");
+        for (const name of SEARCH_ENV) vi.stubEnv(name, "");
     });
     afterEach(() => vi.unstubAllEnvs());
 
@@ -42,13 +48,17 @@ describe("configuredWebSearchProvider", () => {
         vi.stubEnv("SERPER_API_KEY", "serper-test");
         expect(configuredWebSearchProvider()).toBe("serper");
     });
+
+    it("is off when SEARCH_PROVIDER names a provider without its key, never another engine", () => {
+        vi.stubEnv("EXA_API_KEY", "exa-test");
+        vi.stubEnv("SEARCH_PROVIDER", "serper");
+        expect(configuredWebSearchProvider()).toBeNull();
+    });
 });
 
 describe("searchWeb", () => {
     beforeEach(() => {
-        vi.stubEnv("EXA_API_KEY", "");
-        vi.stubEnv("SERPER_API_KEY", "");
-        vi.stubEnv("SEARCH_PROVIDER", "");
+        for (const name of SEARCH_ENV) vi.stubEnv(name, "");
     });
     afterEach(() => vi.unstubAllEnvs());
 
@@ -136,17 +146,23 @@ describe("searchWeb", () => {
 
 describe("searchCompanies", () => {
     beforeEach(() => {
-        vi.stubEnv("EXA_API_KEY", "");
-        vi.stubEnv("SERPER_API_KEY", "");
+        for (const name of SEARCH_ENV) vi.stubEnv(name, "");
     });
     afterEach(() => vi.unstubAllEnvs());
 
-    it("needs an Exa key; Serper alone does not do company search", async () => {
+    it("needs a provider with a company index; Serper has none", async () => {
         vi.stubEnv("SERPER_API_KEY", "serper-test");
         expect(companySearchAvailable()).toBe(false);
         await expect(searchCompanies("produce wholesalers in Houston")).rejects.toThrow(
-            "Company search needs an Exa key"
+            "Company search needs a provider with a company index; Serper has none"
         );
+    });
+
+    it("is off when another provider is chosen, even with an Exa key", () => {
+        vi.stubEnv("EXA_API_KEY", "exa-test");
+        vi.stubEnv("SEARXNG_URL", "http://searxng:8080");
+        vi.stubEnv("SEARCH_PROVIDER", "searxng");
+        expect(companySearchAvailable()).toBe(false);
     });
 
     it("asks Exa's company index in the country, never for excluded hosts", async () => {
@@ -218,7 +234,10 @@ describe("searchCompanies", () => {
 });
 
 describe("describeCompanies", () => {
-    beforeEach(() => vi.stubEnv("EXA_API_KEY", "exa-test"));
+    beforeEach(() => {
+        for (const name of SEARCH_ENV) vi.stubEnv(name, "");
+        vi.stubEnv("EXA_API_KEY", "exa-test");
+    });
     afterEach(() => vi.unstubAllEnvs());
 
     it("reads each homepage once and keeps Exa's summary, or the page start", async () => {
@@ -283,11 +302,14 @@ describe("describeCompanies", () => {
     });
 });
 
-describe("counting paid searches", () => {
+describe("counting searches", () => {
     beforeEach(() => {
+        for (const name of SEARCH_ENV) vi.stubEnv(name, "");
         vi.stubEnv("EXA_API_KEY", "exa-test");
         vi.stubEnv("SERPER_API_KEY", "serper-test");
-        vi.stubEnv("SEARCH_PROVIDER", "");
+        vi.stubEnv("BRAVE_SEARCH_API_KEY", "brave-test");
+        vi.stubEnv("TAVILY_API_KEY", "tvly-test");
+        vi.stubEnv("SEARXNG_URL", "http://searxng:8080");
     });
     afterEach(() => {
         vi.unstubAllEnvs();
@@ -311,7 +333,7 @@ describe("counting paid searches", () => {
         return { events, error };
     }
 
-    const searched = (provider: "exa" | "serper"): ChatUsageEvent => ({
+    const searched = (provider: string): ChatUsageEvent => ({
         kind: "web_search",
         calls: 1,
         modelId: provider,
@@ -320,17 +342,29 @@ describe("counting paid searches", () => {
         outputTokens: 0,
     });
 
-    it("counts one search per answered request, on the deployment's key", async () => {
-        const fetchImpl = vi.fn(async () => jsonResponse({ results: [], organic: [] }));
+    it("counts one search per answered request, on whichever engine is chosen", async () => {
+        const fetchImpl = vi.fn(async () =>
+            jsonResponse({ results: [], organic: [], web: { results: [] } })
+        );
 
-        const { events } = await counting(async () => {
-            await searchWeb("q", { fetchImpl });
-            vi.stubEnv("SEARCH_PROVIDER", "serper");
-            await searchWeb("q", { fetchImpl });
+        const { events, error } = await counting(async () => {
+            for (const engine of ["exa", "serper", "brave", "tavily", "searxng"]) {
+                vi.stubEnv("SEARCH_PROVIDER", engine);
+                await searchWeb("q", { fetchImpl });
+            }
+            vi.stubEnv("SEARCH_PROVIDER", "exa");
             await searchCompanies("roasters", { fetchImpl });
         });
 
-        expect(events).toEqual([searched("exa"), searched("serper"), searched("exa")]);
+        expect(error).toBeUndefined();
+        expect(events).toEqual([
+            searched("exa"),
+            searched("serper"),
+            searched("brave"),
+            searched("tavily"),
+            searched("searxng"),
+            searched("exa"),
+        ]);
     });
 
     it("counts each page Exa was asked to read, once per distinct URL", async () => {
@@ -363,7 +397,7 @@ describe("counting paid searches", () => {
         ]);
     });
 
-    it("counts nothing for a request the vendor refused", async () => {
+    it("counts nothing for a request the engine refused", async () => {
         const fetchImpl = vi.fn(async () => jsonResponse({ error: "over quota" }, 429));
 
         const results = await Promise.all([
@@ -383,38 +417,41 @@ describe("counting paid searches", () => {
         await expect(searchWeb("q", { fetchImpl })).resolves.toMatchObject({ provider: "exa" });
     });
 
-    it("counts one news search for each of Exa's and Serper's news calls", async () => {
+    it("counts one news search per sub-query answered, on the chosen engine", async () => {
         vi.stubGlobal(
             "fetch",
             vi.fn(async () => jsonResponse({ results: [], news: [] }))
         );
+        const news = [
+            { searchQuery: "launch news", category: "news", rationale: "t" },
+            { searchQuery: "pricing news", category: "news", rationale: "t" },
+        ];
 
         const { events } = await counting(async () => {
-            await callExa("launch news");
-            await callSerper("launch news");
+            await executeSearch(news);
+            vi.stubEnv("SEARCH_PROVIDER", "serper");
+            await executeSearch(news);
         });
 
-        // One call each, so no `calls` (the recorder reads its absence as 1).
-        const news = (provider: "exa" | "serper"): ChatUsageEvent => ({
-            kind: "web_search",
-            modelId: provider,
-            owner: "deployment",
-            inputTokens: 0,
-            outputTokens: 0,
-        });
-        expect(events).toEqual([news("exa"), news("serper")]);
+        expect(events).toEqual([
+            searched("exa"),
+            searched("exa"),
+            searched("serper"),
+            searched("serper"),
+        ]);
     });
 
-    it("counts no news search the vendor refused", async () => {
+    it("counts no news search the engine refused, retries included", async () => {
         vi.stubGlobal(
             "fetch",
             vi.fn(async () => new Response("over quota", { status: 429 }))
         );
+        vi.spyOn(console, "warn").mockImplementation(() => undefined);
+        vi.spyOn(console, "error").mockImplementation(() => undefined);
 
-        const { events } = await counting(async () => {
-            await expect(callExa("launch news")).rejects.toThrow(/429/);
-            await expect(callSerper("launch news")).rejects.toThrow(/429/);
-        });
+        const { events } = await counting(() =>
+            executeSearch([{ searchQuery: "launch news", category: "news", rationale: "t" }])
+        );
 
         expect(events).toEqual([]);
     });

@@ -44,6 +44,11 @@ export interface AIChatRequest {
     /** Auto enables reasoning only when the selected model and agent allow it. */
     thinkingMode?: boolean | "auto";
     modelRoute?: "default" | "fast" | "reasoning" | "vision";
+    /**
+     * A model the workspace offers in Ask, by its key (`~/lib/ai/model-picks`);
+     * it answers on the main route, so it travels with `modelRoute: "default"`.
+     */
+    modelKey?: string;
     reasoningEffort?: string;
     chatMode?: "default" | "plan";
     attachments?: AIChatAttachmentPayload[];
@@ -199,6 +204,7 @@ export function useAIChat() {
                         aiPersona: params.aiPersona,
                         thinkingMode: params.thinkingMode,
                         modelRoute: params.modelRoute,
+                        modelKey: params.modelKey,
                         reasoningEffort: params.reasoningEffort,
                         chatMode: params.chatMode,
                         stream: options.stream ? true : undefined,

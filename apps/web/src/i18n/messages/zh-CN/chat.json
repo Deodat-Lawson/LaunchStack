@@ -175,6 +175,13 @@
         "blurb": "更快、更轻量的回答"
       }
     },
+    "offered": {
+      "heading": "本工作区的模型",
+      "readsImages": "可读取图片",
+      "reasons": "回答前会推理",
+      "textOnly": "仅文本",
+      "unknown": "工作区模型"
+    },
     "commands": {
       "new": "开始新对话",
       "model": "选择已配置的模型",
@@ -275,8 +282,11 @@
     "unavailable": "不可用",
     "favorite": "收藏{route, select, default {标准} fast {快速} reasoning {推理} vision {视觉} other {{route}}}模型",
     "unfavorite": "取消收藏{route, select, default {标准} fast {快速} reasoning {推理} vision {视觉} other {{route}}}模型",
+    "favoriteModel": "收藏{label}",
+    "unfavoriteModel": "取消收藏{label}",
     "compareLegend": "对比各模型的独立回答",
     "compareRoute": "对比{route, select, default {标准} fast {快速} reasoning {推理} vision {视觉} other {{route}}}模型",
+    "compareModel": "对比{label}",
     "compareHint": "选择两个或以上。每个回答都会保存在各自的对话中。",
     "loadingModels": "正在加载模型配置…",
     "reasoningEffort": "推理强度",

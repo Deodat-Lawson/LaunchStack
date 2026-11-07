@@ -175,6 +175,13 @@
         "blurb": "Quicker, lighter answers"
       }
     },
+    "offered": {
+      "heading": "Your workspace's models",
+      "readsImages": "Reads images",
+      "reasons": "Reasons before answering",
+      "textOnly": "Text only",
+      "unknown": "Workspace model"
+    },
     "commands": {
       "new": "Start a new conversation",
       "model": "Choose a configured model",
@@ -275,8 +282,11 @@
     "unavailable": "unavailable",
     "favorite": "Favorite {route} model",
     "unfavorite": "Unfavorite {route} model",
+    "favoriteModel": "Favorite {label}",
+    "unfavoriteModel": "Unfavorite {label}",
     "compareLegend": "Compare independent model responses",
     "compareRoute": "Compare {route} model",
+    "compareModel": "Compare {label}",
     "compareHint": "Select two or more. Each response is saved in its own conversation.",
     "loadingModels": "Loading model configuration…",
     "reasoningEffort": "Reasoning effort",

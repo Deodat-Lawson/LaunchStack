@@ -42,14 +42,23 @@ function configWith(fetchImpl: typeof globalThis.fetch): ImageToolConfig {
     };
 }
 
-function store(): ImageAssetStore & { uploads: Array<{ filename: string; size: number }> } {
-    const uploads: Array<{ filename: string; size: number }> = [];
+interface RecordedUpload {
+    filename: string;
+    size: number;
+    userId?: string;
+    companyId?: bigint;
+}
+
+function store(): ImageAssetStore & { uploads: RecordedUpload[] } {
+    const uploads: RecordedUpload[] = [];
     return {
         uploads,
         async upload(input) {
             uploads.push({
                 filename: input.filename,
                 size: Buffer.from(input.data as Uint8Array).byteLength,
+                userId: input.userId,
+                companyId: input.companyId,
             });
             return { url: `https://cdn.test/${input.filename}`, pathname: `a/${input.filename}` };
         },
@@ -143,6 +152,23 @@ describe("generate and persist", () => {
         });
         expect(JSON.stringify(result.data)).not.toContain(PNG);
         expect(storage.uploads[0]?.filename).toMatch(/^a-duck-on-a-bicycle-\d+\.png$/);
+    });
+
+    it("stamps the owner and workspace on every upload", async () => {
+        const { fetchImpl } = fakeFetch(imageResponse(2));
+        const storage = store();
+
+        await generateImage(
+            { prompt: "x", count: 2 },
+            { storage, config: configWith(fetchImpl), userId: "user_1", companyId: BigInt(42) }
+        );
+
+        // Storage that gates reads by workspace serves an unstamped asset to no
+        // member session.
+        expect(storage.uploads).toHaveLength(2);
+        for (const upload of storage.uploads) {
+            expect(upload).toMatchObject({ userId: "user_1", companyId: BigInt(42) });
+        }
     });
 
     it("stamps provenance so a run can be traced to a model", async () => {

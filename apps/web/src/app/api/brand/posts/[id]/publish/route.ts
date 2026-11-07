@@ -8,8 +8,8 @@ import { publishForWorkspace } from "~/server/brand/publish";
 
 import { brandPublishContext, handleBrandError, json } from "../../../_http";
 
-export async function POST(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-    const auth = await brandPublishContext();
+export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+    const auth = await brandPublishContext(request);
     if (!auth.ok) return auth.response;
     try {
         const { id } = await params;
@@ -19,6 +19,6 @@ export async function POST(_request: NextRequest, { params }: { params: Promise<
         const [view] = await toPostViews(auth.ctx.companyId, [post]);
         return json({ post: view }, post.status === "published" ? 200 : 502);
     } catch (err) {
-        return handleBrandError("POST publish", err);
+        return handleBrandError("POST publish", err, request);
     }
 }

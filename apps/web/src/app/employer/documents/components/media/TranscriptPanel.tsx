@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Check, FileText, Languages, Loader2, LocateFixed, RotateCw, X } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 
 import { Button } from "~/components/ui/button";
 import {
@@ -115,6 +116,13 @@ export function TranscriptPanel({
     onCite,
     highlight,
 }: TranscriptPanelProps) {
+    const t = useTranslations("viewers.transcript");
+    const tc = useTranslations("common");
+    const locale = useLocale();
+    const nameOf = (code: string) => languageName(code, locale);
+    // The translate request reads the words through this, keeping its identity.
+    const tRef = useRef(t);
+    tRef.current = t;
     const segments = transcript.segments;
     const scrollRef = useRef<HTMLDivElement>(null);
     const bodyRef = useRef<HTMLDivElement>(null);
@@ -171,7 +179,7 @@ export function TranscriptPanel({
                     const message =
                         body && typeof body.error === "string"
                             ? body.error
-                            : `Translation failed (HTTP ${res.status})`;
+                            : tRef.current("translateFailed", { status: res.status });
                     setTranslation({ status: "error", language, message });
                     return;
                 }
@@ -184,7 +192,7 @@ export function TranscriptPanel({
                     setTranslation({
                         status: "error",
                         language,
-                        message: "Couldn't reach the server. Check your connection and try again.",
+                        message: tRef.current("unreachable"),
                     });
                 }
             }
@@ -333,24 +341,28 @@ export function TranscriptPanel({
     const visibleText = shown && !segments ? shown.lines.join("\n") : text;
 
     return (
-        <section aria-label="Transcript" className="flex min-h-0 flex-1 flex-col">
+        <section aria-label={t("title")} className="flex min-h-0 flex-1 flex-col">
             <header className="border-line flex flex-wrap items-center gap-x-2 gap-y-1 border-b px-4 py-2">
                 <FileText className="text-ink-3 size-4 shrink-0" aria-hidden />
-                <h3 className="text-ink text-sm font-semibold">Transcript</h3>
+                <h3 className="text-ink text-sm font-semibold">{t("title")}</h3>
                 {spoken && (
                     <span
                         className="bg-panel-2 text-ink-2 rounded px-1.5 py-0.5 text-[11px] font-medium"
-                        title={`Spoken: ${[spoken, ...otherLanguages].map(languageName).join(", ")}`}
+                        title={t("spoken", {
+                            languages: [spoken, ...otherLanguages]
+                                .map(nameOf)
+                                .join(t("listSeparator")),
+                        })}
                         data-testid="transcript-language"
                     >
-                        {languageLabel(spoken)}
+                        {languageLabel(spoken, locale)}
                         {otherLanguages.length > 0 &&
-                            ` + ${otherLanguages.map(languageName).join(", ")}`}
+                            ` + ${otherLanguages.map(nameOf).join(t("listSeparator"))}`}
                     </span>
                 )}
                 {segments && (
                     <span className="text-ink-4 text-xs">
-                        {segments.length} line{segments.length === 1 ? "" : "s"}
+                        {t("lineCount", { count: segments.length })}
                     </span>
                 )}
                 <span className="flex-1" />
@@ -361,23 +373,25 @@ export function TranscriptPanel({
                                 variant="ghost"
                                 size="sm"
                                 className={cn("text-xs", shown ? "text-brand-ink" : "text-ink-3")}
-                                aria-label="Translate transcript"
+                                aria-label={t("translateLabel")}
                             >
                                 {translation.status === "loading" ? (
                                     <Loader2 className="animate-spin" />
                                 ) : (
                                     <Languages />
                                 )}
-                                {shown ? languageName(shown.language) : "Translate"}
+                                {shown ? nameOf(shown.language) : t("translate")}
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="max-h-80 w-60 overflow-y-auto">
                             <DropdownMenuLabel className="text-ink-3 text-xs font-medium">
-                                Show the transcript in
+                                {t("showIn")}
                             </DropdownMenuLabel>
                             <DropdownMenuItem onSelect={showOriginal}>
                                 <span className="flex-1">
-                                    Original{spoken ? ` (${languageName(spoken)})` : ""}
+                                    {spoken
+                                        ? t("originalIn", { language: nameOf(spoken) })
+                                        : t("original")}
                                 </span>
                                 {!shown && <Check className="text-brand-ink" aria-hidden />}
                             </DropdownMenuItem>
@@ -389,12 +403,12 @@ export function TranscriptPanel({
                                     lang={code}
                                 >
                                     <span className="flex-1">{nativeLanguageName(code)}</span>
-                                    <span className="text-ink-4 text-[11px]" lang="en">
+                                    <span className="text-ink-4 text-[11px]" lang={locale}>
                                         {shown?.language === code
-                                            ? "showing"
+                                            ? t("showing")
                                             : readyTranslations.includes(code)
-                                              ? "ready"
-                                              : languageName(code)}
+                                              ? t("ready")
+                                              : nameOf(code)}
                                     </span>
                                 </DropdownMenuItem>
                             ))}
@@ -406,7 +420,7 @@ export function TranscriptPanel({
                         variant="ghost"
                         size="sm"
                         aria-pressed={follow}
-                        title="Keep the playing line in view"
+                        title={t("followTitle")}
                         className={cn("text-xs", follow ? "text-brand-ink" : "text-ink-3")}
                         onClick={() => {
                             lastManualScroll.current = 0;
@@ -414,7 +428,7 @@ export function TranscriptPanel({
                         }}
                     >
                         <LocateFixed />
-                        Follow along
+                        {t("follow")}
                     </Button>
                 )}
             </header>
@@ -433,8 +447,7 @@ export function TranscriptPanel({
                         <>
                             <Loader2 className="size-3.5 animate-spin" aria-hidden />
                             <span className="flex-1">
-                                Translating into {languageName(translation.language)}… a long
-                                recording takes up to a minute.
+                                {t("translating", { language: nameOf(translation.language) })}
                             </span>
                         </>
                     )}
@@ -448,14 +461,13 @@ export function TranscriptPanel({
                                 onClick={() => void translateTo(translation.language)}
                             >
                                 <RotateCw />
-                                Try again
+                                {tc("actions.tryAgain")}
                             </Button>
                         </>
                     )}
                     {translation.status === "shown" && (
                         <span className="flex-1">
-                            Machine translation into {languageName(translation.language)}. Search
-                            and citations use the original.
+                            {t("machineTranslation", { language: nameOf(translation.language) })}
                         </span>
                     )}
                     {translation.status !== "loading" && (
@@ -466,7 +478,7 @@ export function TranscriptPanel({
                             onClick={showOriginal}
                         >
                             <X />
-                            Show original
+                            {t("showOriginal")}
                         </Button>
                     )}
                 </div>
@@ -493,12 +505,15 @@ export function TranscriptPanel({
                                             data-segment-index={i}
                                             data-cited={isCited || undefined}
                                             aria-current={isActive ? "time" : undefined}
-                                            aria-label={`Play from ${formatMediaTime(segment.start)}: ${lineText}`}
+                                            aria-label={t("playFrom", {
+                                                time: formatMediaTime(segment.start),
+                                                text: lineText,
+                                            })}
                                             onClick={() => onSeek(segment.start)}
                                             className={cn(
-                                                "group flex w-full items-start gap-3 rounded-lg border-l-2 border-transparent px-3 py-1.5 text-left transition-colors",
+                                                "group flex w-full items-start gap-3 rounded-lg px-3 py-1.5 text-left transition-colors",
                                                 "hover:bg-panel-2 focus-visible:ring-brand/50 outline-none focus-visible:ring-[3px]",
-                                                isActive && "border-brand bg-brand-soft",
+                                                isActive && "bg-brand-soft",
                                                 isCited && "bg-warn-soft ring-warn/60 ring-1"
                                             )}
                                         >
@@ -527,18 +542,18 @@ export function TranscriptPanel({
                     ) : textState === "loading" ? (
                         <div className="text-ink-3 flex items-center justify-center gap-2 py-10 text-sm">
                             <Loader2 className="size-4 animate-spin" aria-hidden />
-                            Loading transcript…
+                            {t("loading")}
                         </div>
                     ) : textState === "error" ? (
                         <div className="text-ink-3 flex flex-col items-center gap-3 py-10 text-sm">
-                            Couldn&apos;t load the transcript.
+                            {t("loadFailed")}
                             <Button
                                 variant="outline"
                                 size="sm"
                                 onClick={() => setReload(n => n + 1)}
                             >
                                 <RotateCw />
-                                Try again
+                                {tc("actions.tryAgain")}
                             </Button>
                         </div>
                     ) : visibleText ? (
@@ -565,9 +580,7 @@ export function TranscriptPanel({
                             </p>
                         </>
                     ) : (
-                        <p className="text-ink-3 px-3 py-10 text-center text-sm">
-                            No speech was transcribed from this recording.
-                        </p>
+                        <p className="text-ink-3 px-3 py-10 text-center text-sm">{t("noSpeech")}</p>
                     )}
                 </div>
             </div>

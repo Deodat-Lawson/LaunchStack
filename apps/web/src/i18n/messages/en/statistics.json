@@ -1,0 +1,39 @@
+{
+  "details": {
+    "viewsSeries": "Views",
+    "justNow": "Just now",
+    "minutesAgo": "{count}m ago",
+    "hoursAgo": "{count}h ago",
+    "daysAgo": "{count}d ago",
+    "created": "Created {date}",
+    "viewDoc": "View document",
+    "loadFailed": "Failed to load details: {error}",
+    "loadFailedFallback": "Failed to fetch document details",
+    "loading": "Loading statistics…",
+    "tiles": {
+      "views": "Views",
+      "allTime": "All time",
+      "unique": "Unique",
+      "viewers": "Viewers",
+      "thirtyDays": "30 days",
+      "recent": "Recent"
+    },
+    "activity": "30-day activity",
+    "recentViewers": "Recent viewers",
+    "shown": "{count, number} shown",
+    "columns": {
+      "user": "User",
+      "when": "When"
+    },
+    "noViews": "No views yet"
+  },
+  "server": {
+    "errors": {
+      "internal": "Internal Server Error"
+    },
+    "viewers": {
+      "unknownUser": "Unknown User",
+      "noEmail": "No Email"
+    }
+  }
+}

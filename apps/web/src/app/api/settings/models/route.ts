@@ -8,10 +8,11 @@ import { NextResponse } from "next/server";
 
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { modelsOverview } from "~/server/settings/models";
+import { requestTranslator } from "~/i18n/server";
 
 export const dynamic = "force-dynamic";
 
-export async function GET() {
+export async function GET(request: Request) {
     const ctx = await requireWorkspacePermission("settings.manage");
     if (!ctx.success) return ctx.response;
     try {
@@ -22,7 +23,7 @@ export async function GET() {
         console.error("[settings/models] chat model configuration is invalid:", error);
         return NextResponse.json(
             {
-                error: "The chat model configuration could not be read. The server log has the details.",
+                error: requestTranslator(request, "settings.server.errors")("chatModelsUnreadable"),
             },
             { status: 500 }
         );

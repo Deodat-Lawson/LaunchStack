@@ -67,7 +67,8 @@ type Coverage =
 const API = "apps/web/src/app/api";
 const JOBS = "apps/web/src/server/inngest/functions";
 
-const MARKETING_RUN = `${API}/marketing-pipeline/route.ts`;
+/** The post writer runs off the request: the executor enters the scope in after() and on the worker. */
+const MARKETING_RUN = "apps/web/src/server/marketing/executor.ts";
 const MARKETING_EVALUATE = `${API}/marketing-pipeline/evaluate/route.ts`;
 const MARKETING_REFINE = `${API}/marketing-pipeline/refine/route.ts`;
 /** Every route that drafts an email template (generateTemplate / prepareEmailCampaign). */
@@ -100,6 +101,13 @@ const COVERAGE: Record<string, Coverage> = Object.fromEntries<Coverage>([
         `${API}/config/ai-models/route.ts`,
         "GET: the picker's routes for the caller's workspace; signed out gets the deployment's"
     ),
+    [
+        "apps/web/src/server/chat-source-data.ts",
+        {
+            scopedBy: [`${API}/agents/documentQ&A/AIChat/query/route.ts`],
+            note: "ask_each's per-source reads, resolved during the answer's tool loop",
+        },
+    ],
     [
         "apps/web/src/server/ask-starters/index.ts",
         { scopedBy: [`${API}/ask/starters/route.ts`], note: "GET /api/ask/starters" },
@@ -253,6 +261,13 @@ const COVERAGE: Record<string, Coverage> = Object.fromEntries<Coverage>([
         { scopedBy: [CLIENT_PROSPECTOR_JOB], note: "run-pipeline step" },
     ],
     [
+        "pipelines/src/distribution/judge.ts",
+        {
+            scopedBy: [DISTRIBUTION_JOB, "apps/web/src/server/prospects/keyless-run.ts"],
+            note: "the shortlist's fit check, inside the prepare step or the keyless run's scope",
+        },
+    ],
+    [
         "pipelines/src/distribution/plan.ts",
         { scopedBy: [DISTRIBUTION_JOB], note: "prepareRun in the prepare step" },
     ],
@@ -310,7 +325,7 @@ const COVERAGE: Record<string, Coverage> = Object.fromEntries<Coverage>([
     // --- Deliberately unscoped ----------------------------------------------
     [
         "apps/web/src/server/settings/models.ts",
-        { unscoped: "Settings › Models shows the deployment's default models" },
+        { unscoped: "Workspace › Models shows the deployment's default models" },
     ],
     [
         "apps/web/src/server/workspace-models/probe.ts",
@@ -414,6 +429,8 @@ const NO_MODEL_CALL: Record<string, string> = {
             "reads and edits prospect rows or answers 409; the service reaches the email pipeline only for draftOutreach (prospects/outreach)",
         ])
     ),
+    [`${API}/marketing-pipeline/runs/route.ts`]:
+        "POST only queues a post-writer run (the executor scopes it in after() or on the worker); the barrel import is for its input schema",
     [`${API}/client-prospector/route.ts`]:
         "POST only queues client-prospector/run.requested (the job scopes run-pipeline); the barrel import is for its input schema",
     [`${API}/trend-search/route.ts`]:
@@ -424,8 +441,6 @@ const NO_MODEL_CALL: Record<string, string> = {
         "sample and keyless runs use fixture or keyless ports (no model); live runs queue distribution/run.requested, whose steps scope",
     [`${API}/company/onboarding/route.ts`]:
         "saves profile facts; the reassembly it asks for enters the scope itself in company-profile/service's after()",
-    [`${API}/document-generator/research/route.ts`]:
-        "takes getEmbeddings from the Q&A services barrel; Exa, arXiv and retrieval only, no chat model",
     [`${API}/email-campaigns/[campaignId]/route.ts`]: "getCampaign reads rows",
     [`${API}/email-campaigns/[campaignId]/approve/route.ts`]:
         "approveEmailCampaign records a human approval of an existing version; nothing is generated",

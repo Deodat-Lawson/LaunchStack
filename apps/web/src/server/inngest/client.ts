@@ -31,6 +31,8 @@ export type PredictiveAnalysisEvent = {
         includeRelatedDocs: boolean;
         timeoutMs?: number;
         jobId: string;
+        /** Auth id of whoever asked; their AI allowance is charged. Absent on older events. */
+        userId?: string;
     };
 };
 
@@ -116,6 +118,17 @@ export type ScenarioRunEvent = {
         runId: number;
         /** Serialized bigint — event payloads must be JSON. */
         companyId: string;
+        /** Auth id of whoever started the run; their AI allowance is charged. Absent on older events. */
+        userId?: string;
+    };
+};
+
+export type MarketingRunEvent = {
+    name: "marketing/run.requested";
+    data: {
+        runId: string;
+        /** Serialized bigint — event payloads must be JSON. */
+        companyId: string;
     };
 };
 
@@ -139,6 +152,16 @@ export type GmailSyncEvent = {
     };
 };
 
+export type NotionSyncEvent = {
+    name: "notion/sync.requested";
+    data: {
+        /** Serialized bigint — event payloads must be JSON. */
+        connectionId: string;
+        companyId: string;
+        force?: boolean;
+    };
+};
+
 export type Events =
     | TrendSearchEvent
     | ClientProspectorEvent
@@ -152,9 +175,11 @@ export type Events =
     | RepoExplainerJobEvent
     | GoogleDriveSyncEvent
     | GmailSyncEvent
+    | NotionSyncEvent
     | DistributionRunEvent
     | ProposalsRunEvent
-    | ScenarioRunEvent;
+    | ScenarioRunEvent
+    | MarketingRunEvent;
 
 /**
  * Create the Inngest client.

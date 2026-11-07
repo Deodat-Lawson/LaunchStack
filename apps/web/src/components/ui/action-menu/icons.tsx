@@ -7,6 +7,7 @@ import {
     Bell,
     Bookmark,
     Brain,
+    Bug,
     Check,
     ClipboardPaste,
     Clock,
@@ -152,6 +153,9 @@ export const ACTION_MENU_ICONS = {
     bookmark: Bookmark,
     flag: Flag,
     bell: Bell,
+    // Feedback: "Report a bug", "Request a feature".
+    bug: Bug,
+    idea: Lightbulb,
     clock: Clock,
     search: Search,
     filter: ListFilter,

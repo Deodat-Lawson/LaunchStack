@@ -434,87 +434,151 @@ function toggleTextFlag(store: EditorStore, flag: "bold" | "italic" | "underline
 // ---------------------------------------------------------------------------
 
 export interface ShortcutRow {
+    /** The keys as printed — key names and symbols, the same in every language. */
     keys: string;
-    label: string;
+    /** Keys with a word in them ("Arrows", "Double-click"): `mindmap.help.keys.<keysKey>`. */
+    keysKey?: ShortcutKeysKey;
+    /** What the keys do: `mindmap.help.rows.<label>`. */
+    label: ShortcutLabelKey;
 }
 
 export interface ShortcutGroup {
-    title: string;
+    /** `mindmap.help.groups.<title>`. */
+    title: "tools" | "topics" | "editing" | "arrange" | "view";
     rows: ShortcutRow[];
 }
 
+type ShortcutKeysKey =
+    | "arrows"
+    | "doubleClick"
+    | "type"
+    | "altArrow"
+    | "shiftCmdArrow"
+    | "cmdScroll"
+    | "scroll"
+    | "find";
+
+type ShortcutLabelKey =
+    | "select"
+    | "toolPan"
+    | "connector"
+    | "text"
+    | "sticky"
+    | "frame"
+    | "pen"
+    | "eraser"
+    | "quickShapes"
+    | "finishNext"
+    | "topicBefore"
+    | "addChild"
+    | "outdent"
+    | "nearest"
+    | "moveTopic"
+    | "collapse"
+    | "deleteBranch"
+    | "deleteKeep"
+    | "editText"
+    | "replaceText"
+    | "editSelected"
+    | "newLine"
+    | "finishTyping"
+    | "clipboard"
+    | "duplicate"
+    | "deleteSelection"
+    | "undoRedo"
+    | "textStyle"
+    | "groupUngroup"
+    | "forwardBackward"
+    | "frontBack"
+    | "lock"
+    | "tidy"
+    | "nudge"
+    | "nudgeTopic"
+    | "align"
+    | "zoomActual"
+    | "fit"
+    | "zoomSelection"
+    | "zoomInOut"
+    | "zoomCursor"
+    | "scrollPan"
+    | "find"
+    | "palette"
+    | "save"
+    | "export"
+    | "thisDialog";
+
 export const SHORTCUTS: readonly ShortcutGroup[] = [
     {
-        title: "Tools",
+        title: "tools",
         rows: [
-            { keys: "V", label: "Select" },
-            { keys: "H / Space", label: "Pan" },
-            { keys: "C", label: "Connector" },
-            { keys: "T", label: "Text" },
-            { keys: "N", label: "Sticky note" },
-            { keys: "F", label: "Frame" },
-            { keys: "P", label: "Pen" },
-            { keys: "E", label: "Eraser" },
-            { keys: "R / O / D / S", label: "Rectangle / ellipse / diamond / rounded" },
+            { keys: "V", label: "select" },
+            { keys: "H / Space", label: "toolPan" },
+            { keys: "C", label: "connector" },
+            { keys: "T", label: "text" },
+            { keys: "N", label: "sticky" },
+            { keys: "F", label: "frame" },
+            { keys: "P", label: "pen" },
+            { keys: "E", label: "eraser" },
+            { keys: "R / O / D / S", label: "quickShapes" },
         ],
     },
     {
-        title: "Topics",
+        title: "topics",
         rows: [
-            { keys: "Enter", label: "Finish typing · again for the next topic" },
-            { keys: "⇧Enter", label: "New topic before this one" },
-            { keys: "Tab", label: "Add child topic" },
-            { keys: "⇧Tab", label: "Outdent topic" },
-            { keys: "Arrows", label: "Go to the nearest topic that way" },
-            { keys: "⌘↑ / ⌘↓", label: "Move topic up / down" },
-            { keys: "⌘/", label: "Collapse / expand branch" },
-            { keys: "Delete", label: "Delete topic and its branch" },
-            { keys: "⌥Delete", label: "Delete topic, keep its children" },
+            { keys: "Enter", label: "finishNext" },
+            { keys: "⇧Enter", label: "topicBefore" },
+            { keys: "Tab", label: "addChild" },
+            { keys: "⇧Tab", label: "outdent" },
+            { keys: "Arrows", keysKey: "arrows", label: "nearest" },
+            { keys: "⌘↑ / ⌘↓", label: "moveTopic" },
+            { keys: "⌘/", label: "collapse" },
+            { keys: "Delete", label: "deleteBranch" },
+            { keys: "⌥Delete", label: "deleteKeep" },
         ],
     },
     {
-        title: "Editing",
+        title: "editing",
         rows: [
-            { keys: "Double-click", label: "Edit text · new topic on empty canvas" },
-            { keys: "Type", label: "Replace the selected shape's text" },
-            { keys: "Enter / F2 / ⌘Enter", label: "Edit the selected shape's text" },
-            { keys: "⇧Enter / ⌥Enter", label: "New line while typing" },
-            { keys: "Esc", label: "Finish typing" },
-            { keys: "⌘C / ⌘X / ⌘V", label: "Copy / cut / paste" },
-            { keys: "⌘D", label: "Duplicate" },
-            { keys: "Delete", label: "Delete selection" },
-            { keys: "⌘Z / ⇧⌘Z", label: "Undo / redo" },
-            { keys: "⌘B / ⌘I / ⌘U", label: "Bold / italic / underline" },
+            { keys: "Double-click", keysKey: "doubleClick", label: "editText" },
+            { keys: "Type", keysKey: "type", label: "replaceText" },
+            { keys: "Enter / F2 / ⌘Enter", label: "editSelected" },
+            { keys: "⇧Enter / ⌥Enter", label: "newLine" },
+            { keys: "Esc", label: "finishTyping" },
+            { keys: "⌘C / ⌘X / ⌘V", label: "clipboard" },
+            { keys: "⌘D", label: "duplicate" },
+            { keys: "Delete", label: "deleteSelection" },
+            { keys: "⌘Z / ⇧⌘Z", label: "undoRedo" },
+            { keys: "⌘B / ⌘I / ⌘U", label: "textStyle" },
         ],
     },
     {
-        title: "Arrange",
+        title: "arrange",
         rows: [
-            { keys: "⌘G / ⇧⌘G", label: "Group / ungroup" },
-            { keys: "⌘] / ⌘[", label: "Bring forward / send backward" },
-            { keys: "⇧⌘] / ⇧⌘[", label: "Bring to front / send to back" },
-            { keys: "⌘L", label: "Lock / unlock" },
-            { keys: "⇧⌘L", label: "Tidy up (auto-layout)" },
-            { keys: "Arrows", label: "Nudge · ⇧ for a larger step" },
-            { keys: "⌥ + arrow", label: "Nudge a topic" },
-            { keys: "⇧⌘ + arrow", label: "Align selection" },
+            { keys: "⌘G / ⇧⌘G", label: "groupUngroup" },
+            { keys: "⌘] / ⌘[", label: "forwardBackward" },
+            { keys: "⇧⌘] / ⇧⌘[", label: "frontBack" },
+            { keys: "⌘L", label: "lock" },
+            { keys: "⇧⌘L", label: "tidy" },
+            { keys: "Arrows", keysKey: "arrows", label: "nudge" },
+            { keys: "⌥ + arrow", keysKey: "altArrow", label: "nudgeTopic" },
+            { keys: "⇧⌘ + arrow", keysKey: "shiftCmdArrow", label: "align" },
         ],
     },
     {
-        title: "View",
+        title: "view",
         rows: [
-            { keys: "⌘0", label: "Zoom to 100%" },
-            { keys: "⌘1", label: "Fit to screen" },
-            { keys: "⌘2", label: "Zoom to selection" },
-            { keys: "+ / −", label: "Zoom in / out" },
-            { keys: "⌘= / ⌘-", label: "Zoom in / out" },
-            { keys: "⌘-scroll", label: "Zoom at the cursor" },
-            { keys: "Scroll", label: "Pan · ⇧ for sideways" },
-            { keys: "⌘F or /", label: "Find on canvas" },
-            { keys: "⌘K", label: "Command palette" },
-            { keys: "⌘S", label: "Save now" },
-            { keys: "⌘E", label: "Export" },
-            { keys: "?", label: "This dialog" },
+            { keys: "⌘0", label: "zoomActual" },
+            { keys: "⌘1", label: "fit" },
+            { keys: "⌘2", label: "zoomSelection" },
+            { keys: "+ / −", label: "zoomInOut" },
+            { keys: "⌘= / ⌘-", label: "zoomInOut" },
+            { keys: "⌘-scroll", keysKey: "cmdScroll", label: "zoomCursor" },
+            { keys: "Scroll", keysKey: "scroll", label: "scrollPan" },
+            { keys: "⌘F or /", keysKey: "find", label: "find" },
+            { keys: "⌘K", label: "palette" },
+            { keys: "⌘S", label: "save" },
+            { keys: "⌘E", label: "export" },
+            { keys: "?", label: "thisDialog" },
         ],
     },
 ];

@@ -255,21 +255,29 @@ export const founderWeeklyReviewGenerationJob = inngest.createFunction(
                         status: collecting.status,
                         retryCount: collecting.retryCount,
                     });
+                    // Embedding the evidence queries counts toward whoever asked for the review.
+                    const collectUse = {
+                        feature: "vantage",
+                        userId: collecting.collectionInput?.actorExternalUserId ?? null,
+                        enforce: false,
+                    } as const;
                     const snapshot = await step.run("collect-evidence", () =>
-                        canonicalFounderWeeklyReviewEvidenceCollector.collectFounderWeeklyReviewEvidence(
-                            {
-                                companyId: collecting.companyId,
-                                reportingPeriod: collecting.reportingPeriod,
-                                workspaceTimezone:
-                                    collecting.collectionInput?.workspaceTimezone ?? "UTC",
-                                founderContext: collecting.collectionInput?.founderContext,
-                                actor: {
-                                    externalUserId:
-                                        collecting.collectionInput?.actorExternalUserId ??
-                                        "unknown",
-                                },
-                                requestKey: collecting.requestKey,
-                            }
+                        withWorkspaceChatModels(collecting.companyId, collectUse, () =>
+                            canonicalFounderWeeklyReviewEvidenceCollector.collectFounderWeeklyReviewEvidence(
+                                {
+                                    companyId: collecting.companyId,
+                                    reportingPeriod: collecting.reportingPeriod,
+                                    workspaceTimezone:
+                                        collecting.collectionInput?.workspaceTimezone ?? "UTC",
+                                    founderContext: collecting.collectionInput?.founderContext,
+                                    actor: {
+                                        externalUserId:
+                                            collecting.collectionInput?.actorExternalUserId ??
+                                            "unknown",
+                                    },
+                                    requestKey: collecting.requestKey,
+                                }
+                            )
                         )
                     );
                     await step.run("persist-evidence", () =>
@@ -329,8 +337,14 @@ export const founderWeeklyReviewGenerationJob = inngest.createFunction(
                 throw new Error("Evidence snapshot is required before generation.");
             // A step body runs outside the handler's async context, so the
             // workspace's models are entered here rather than around the handler.
+            // Counted against whoever requested the review, never stopped midway.
+            const aiUse = {
+                feature: "vantage",
+                userId: claimed.createdByActorId?.replace(/^user:/, "") ?? null,
+                enforce: false,
+            } as const;
             const generated = await step.run("generate", () =>
-                withWorkspaceChatModels(context.companyId, () =>
+                withWorkspaceChatModels(context.companyId, aiUse, () =>
                     generateFounderWeeklyReview({
                         evidenceSnapshot,
                         generate: generateFounderWeeklyReviewStructured,

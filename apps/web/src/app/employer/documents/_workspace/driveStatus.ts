@@ -1,19 +1,27 @@
 /**
- * The Drive panel's reading of `/api/connectors/google-drive/status`: the
- * payload's shape, and the pure decisions the panel makes from it — which
- * folder-access notice to show, which picked folders came back empty, and
- * where each picked item's files are. Kept out of the component so they can
- * be tested without rendering it.
+ * The Drive status (`/api/connectors/google-drive/status`) as Add source's
+ * Drive buttons and Settings' DriveSyncPanel read it: the payload's shape,
+ * and the pure decisions made from it — which folder-access notice to show,
+ * which picked folders came back empty, and where each picked item's files
+ * are. Kept out of the components so they can be tested without rendering.
  */
 
+import type { useTranslations } from "next-intl";
+
 import { displayFolderPath } from "~/lib/folders/path";
+
+/** `useTranslations("sources.driveConnect")`. */
+export type DriveTranslator = ReturnType<typeof useTranslations<"sources.driveConnect">>;
 
 export interface DrivePickedItem {
     readonly fileId: string;
     readonly kind: string;
     readonly name: string;
     readonly mimeType: string | null;
-    /** A picked folder's LaunchStack folder; null until its first sync. */
+    /**
+     * A picked folder's LaunchStack folder (null until its first sync); for a
+     * file, the folder it was picked into from Add source.
+     */
     readonly folderPath?: string | null;
     /** Imported into a folder private to someone else, so its name isn't shown. */
     readonly folderHidden?: boolean;
@@ -41,7 +49,8 @@ export interface DriveStatus {
 
 /**
  * - `ready`: folders import whole.
- * - `allow`: the server can, this connection was made before — one reconnect.
+ * - `allow`: the server can, but this connection only holds drive.file — the
+ *   user opts in with "Allow folder access" (a second consent).
  * - `files-only`: the server can't (operator flag off): only picked files come in.
  */
 export type FolderAccessState = "ready" | "allow" | "files-only";
@@ -72,19 +81,29 @@ export function emptyFolderNames(status: DriveStatus): string[] {
 }
 
 /** The line under a picked item: where its files are in LaunchStack. */
-export function pickedItemDestination(item: DrivePickedItem, access: FolderAccessState): string {
-    if (item.kind !== "folder") return "In Google Drive";
-    if (item.folderPath) return `In ${displayFolderPath(item.folderPath)}`;
-    if (item.folderHidden) return "In a private folder of whoever picked it";
-    return access === "ready"
-        ? "Becomes its own folder on the next sync"
-        : "Its contents need folder access";
+export function pickedItemDestination(
+    t: DriveTranslator,
+    item: DrivePickedItem,
+    access: FolderAccessState
+): string {
+    if (item.kind !== "folder") {
+        if (item.folderPath) {
+            return t("destination.inFolder", { path: displayFolderPath(item.folderPath) });
+        }
+        return item.folderHidden ? t("destination.inPrivateFolder") : t("destination.inDrive");
+    }
+    if (item.folderPath) {
+        return t("destination.inFolder", { path: displayFolderPath(item.folderPath) });
+    }
+    if (item.folderHidden) return t("destination.inPrivateFolder");
+    return access === "ready" ? t("destination.becomesFolder") : t("destination.needsAccess");
 }
 
-/** "a", "a and b", "a, b and 2 more". */
-export function listNames(names: readonly string[], max = 2): string {
-    const quoted = names.map(name => `“${name}”`);
-    if (quoted.length <= 1) return quoted[0] ?? "";
-    if (quoted.length <= max) return `${quoted.slice(0, -1).join(", ")} and ${quoted.at(-1)}`;
-    return `${quoted.slice(0, max).join(", ")} and ${quoted.length - max} more`;
+/** "“a”", "“a” and “b”", "“a”, “b” and 2 more". */
+export function listNames(t: DriveTranslator, names: readonly string[]): string {
+    const [first, second] = names;
+    if (first === undefined) return "";
+    if (second === undefined) return t("names.one", { name: first });
+    if (names.length === 2) return t("names.two", { first, second });
+    return t("names.more", { first, second, count: names.length - 2 });
 }

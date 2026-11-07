@@ -36,16 +36,16 @@ export async function PATCH(request: Request) {
     try {
         return NextResponse.json(await updateWorkspaceOverride(caller.data, body.data));
     } catch (error) {
-        return workspaceErrorResponse(error, "[profile/workspace PATCH]");
+        return workspaceErrorResponse(error, "[profile/workspace PATCH]", request);
     }
 }
 
-export async function DELETE() {
+export async function DELETE(request: Request) {
     const caller = await workspaceCaller();
     if (!caller.success) return caller.response;
     try {
         return NextResponse.json(await clearWorkspaceOverride(caller.data));
     } catch (error) {
-        return workspaceErrorResponse(error, "[profile/workspace DELETE]");
+        return workspaceErrorResponse(error, "[profile/workspace DELETE]", request);
     }
 }

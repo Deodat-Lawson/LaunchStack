@@ -1,7 +1,9 @@
 import { useState, useCallback, useEffect, useRef } from "react";
+import { useTranslations } from "next-intl";
 import { readChatStream, throwIfChatAborted, type ChatStreamEvent } from "~/lib/chat-stream";
 import type { SourceReference } from "~/app/api/agents/documentQ&A/services";
 import type { ChatPassagePayload } from "~/lib/chat-passages";
+import type { ChatCreatedSource } from "~/lib/chat-turns";
 
 export type { SourceReference };
 
@@ -22,11 +24,17 @@ export interface AIChatRequest {
      * search over exactly those IDs. Required when searchScope === 'selected'.
      */
     selectedDocumentIds?: number[];
+    /** What each source chip in `question` points at (server/chat-mentions.ts). */
+    sourceMentions?: { ref: string; documentId: number }[];
     question: string;
     searchScope: "document" | "company" | "archive" | "selected" | "none";
     style?: string;
     enableWebSearch?: boolean;
     conversationHistory?: string;
+    /** The person's own earlier messages in this chat (lib/chat-turns.ts priorQuestions). */
+    priorQuestions?: string[];
+    /** Who wrote `question` when not the person (an "Implement plan" send). */
+    questionOrigin?: "attachment" | "plan-implementation";
     aiPersona?:
         | "general"
         | "learning-coach"
@@ -90,13 +98,31 @@ export interface AIChatResponse {
     searchScope?: "document" | "company" | "archive" | "selected" | "none";
     webSources?: WebSource[];
     webSearch?: WebSearchInfo;
+    /** Documents the answer created in the workspace. */
+    createdSources?: ChatCreatedSource[];
     agent?: AIChatAgentInfo | null;
     message?: string;
     error?: string;
     details?: string;
+    /**
+     * Why a failed request was refused, when the server named it — e.g.
+     * `ai_allowance_reached` (HTTP 429) for a person at their AI limit.
+     */
+    code?: string;
 }
 
 export type AIChatStreamEvent = ChatStreamEvent<AIChatResponse>;
+
+/** A failed request, carrying the server's `code` (if it sent one) past the catch. */
+class ChatRequestError extends Error {
+    constructor(
+        message: string,
+        readonly code?: string
+    ) {
+        super(message);
+        this.name = "ChatRequestError";
+    }
+}
 
 export interface AIChatSendOptions {
     stream?: boolean;
@@ -106,6 +132,7 @@ export interface AIChatSendOptions {
 }
 
 export function useAIChat() {
+    const t = useTranslations("workspace.aiChat");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const activeRequest = useRef<{ id: number; controller: AbortController } | null>(null);
@@ -157,11 +184,18 @@ export function useAIChat() {
                         companyId: params.companyId,
                         archiveName: params.archiveName,
                         selectedDocumentIds: params.selectedDocumentIds,
+                        sourceMentions: params.sourceMentions?.length
+                            ? params.sourceMentions
+                            : undefined,
                         question: params.question,
                         searchScope: params.searchScope,
                         style: params.style,
                         enableWebSearch: params.enableWebSearch,
                         conversationHistory: params.conversationHistory,
+                        priorQuestions: params.priorQuestions?.length
+                            ? params.priorQuestions
+                            : undefined,
+                        questionOrigin: params.questionOrigin,
                         aiPersona: params.aiPersona,
                         thinkingMode: params.thinkingMode,
                         modelRoute: params.modelRoute,
@@ -178,11 +212,13 @@ export function useAIChat() {
                     const errorData = (await response.json().catch(() => ({}))) as {
                         message?: string;
                         error?: string;
+                        code?: unknown;
                     };
-                    throw new Error(
+                    throw new ChatRequestError(
                         errorData.message ??
                             errorData.error ??
-                            `Request failed with status ${response.status}`
+                            t("requestFailed", { status: response.status }),
+                        typeof errorData.code === "string" ? errorData.code : undefined
                     );
                 }
 
@@ -196,7 +232,10 @@ export function useAIChat() {
                 if (!options.independent && !isCurrent())
                     throw new DOMException("Response stopped", "AbortError");
                 if (!data.success)
-                    throw new Error(data.message ?? data.error ?? "Failed to get AI response");
+                    throw new ChatRequestError(
+                        data.message ?? data.error ?? t("noResponse"),
+                        typeof data.code === "string" ? data.code : undefined
+                    );
                 return data;
             } catch (err) {
                 if (
@@ -204,11 +243,12 @@ export function useAIChat() {
                     (!options.independent && !isCurrent()) ||
                     (err instanceof Error && err.name === "AbortError")
                 ) {
-                    return { success: false, cancelled: true, message: "Response stopped" };
+                    return { success: false, cancelled: true, message: t("stopped") };
                 }
-                const errorMessage = err instanceof Error ? err.message : "Failed to send query";
+                const errorMessage = err instanceof Error ? err.message : t("sendFailed");
                 if (isCurrent()) setError(errorMessage);
-                return { success: false, message: errorMessage };
+                const code = err instanceof ChatRequestError ? err.code : undefined;
+                return { success: false, message: errorMessage, ...(code ? { code } : {}) };
             } finally {
                 options.signal?.removeEventListener("abort", abortFromCaller);
                 controllers.current.delete(id);
@@ -218,7 +258,7 @@ export function useAIChat() {
                 }
             }
         },
-        []
+        [t]
     );
 
     return { loading, error, sendQuery, cancelQuery, stop: cancelQuery };

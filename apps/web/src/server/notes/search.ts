@@ -9,6 +9,7 @@ import { sql } from "drizzle-orm";
 import { T } from "~/server/db/tables";
 
 import { db, toRows } from "~/server/db/index";
+import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 import {
     createNotesEmbeddingsProvider,
     EMBEDDING_DIM,
@@ -69,7 +70,12 @@ export async function searchNotes(args: SearchArgs): Promise<NoteSearchHit[]> {
     const provider = createNotesEmbeddingsProvider();
     if (!provider) return [];
 
-    const embedding = await provider.embedQuery(trimmed);
+    // Embedding the query counts toward the person searching.
+    const embedding = await withWorkspaceChatModels(
+        args.companyId ?? null,
+        { feature: "notes", userId, enforce: false },
+        () => provider.embedQuery(trimmed)
+    );
     if (!embedding || embedding.length !== EMBEDDING_DIM) return [];
     const short = embedding.slice(0, EMBEDDING_SHORT_DIM);
 

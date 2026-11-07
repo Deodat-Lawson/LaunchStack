@@ -12,6 +12,12 @@
 
 import { NextResponse } from "next/server";
 
+import type { Copy } from "~/i18n/copy";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor, wordOr } from "~/i18n/translate";
+import { isAiAllowanceExceededError } from "~/server/ai-usage/errors";
+import { allowanceRefusalBody } from "~/server/ai-usage/refusal";
+
 export function fail(message: string, status: number, extra?: object) {
     return NextResponse.json({ success: false, message, ...extra }, { status });
 }
@@ -65,6 +71,8 @@ export async function readJson(request: Request): Promise<unknown> {
 export interface StatusCarryingError extends Error {
     readonly code: string;
     readonly status: number;
+    /** The sentence as a message key and values, when a screen shows it (~/i18n/copy). */
+    readonly copy?: Copy | null;
 }
 
 /**
@@ -84,10 +92,16 @@ export function isStatusCarryingError(error: unknown): error is StatusCarryingEr
  * server errors. Everything else is logged in full and reported generically:
  * driver, SQL and provider messages must never reach a client.
  */
-export function handleRouteError(tag: string, error: unknown) {
+export function handleRouteError(tag: string, error: unknown, request?: Request) {
+    const locale = request ? localeOfRequest(request) : "en";
+    // Before the generic branch: its `message` is English, and the screen
+    // needs which limit, when it resets and who can raise it.
+    if (isAiAllowanceExceededError(error)) {
+        return NextResponse.json(allowanceRefusalBody(error.allowance, locale), { status: 429 });
+    }
     if (isStatusCarryingError(error)) {
-        return fail(error.message, error.status, { code: error.code });
+        return fail(wordOr(error.copy, error.message, locale), error.status, { code: error.code });
     }
     console.error(`[${tag}] failed:`, error);
-    return fail("Request failed", 500);
+    return fail(translatorFor(locale, "errors.api")("requestFailed"), 500);
 }

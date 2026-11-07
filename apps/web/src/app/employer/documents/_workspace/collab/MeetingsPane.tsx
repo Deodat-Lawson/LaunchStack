@@ -12,6 +12,7 @@
  */
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useFormatter, useTranslations } from "next-intl";
 import {
     Home,
     ListChecks,
@@ -33,13 +34,20 @@ import {
     X as IconX,
 } from "lucide-react";
 
+import { useAgentCopy } from "~/lib/agents/i18n";
 import { cn } from "~/lib/utils";
 
 import { IconSlack } from "~/components/icons/brand";
 import { AgentAvatar } from "./AgentAvatar";
 import { MeetingsHome } from "./MeetingsHome";
 import { NewMeetingDialog } from "./NewMeetingDialog";
-import { useAgents, useMeeting, useMeetingList, type ControlAction } from "./useMeetings";
+import {
+    useAgents,
+    useMeeting,
+    useMeetingList,
+    useWorkflowTitle,
+    type ControlAction,
+} from "./useMeetings";
 import {
     MEETING_STATUS_META,
     personaColor,
@@ -161,6 +169,9 @@ function ChannelList({
     onHome: () => void;
     onNew: () => void;
 }) {
+    const t = useTranslations("collab.meetingsPane");
+    const ts = useTranslations("collab.shared");
+    const tc = useTranslations("common");
     const live = meetings.filter(m => m.status === "running" || m.status === "human_control");
     const other = meetings.filter(m => !live.includes(m));
 
@@ -186,16 +197,16 @@ function ChannelList({
                             color: "var(--ink-3)",
                         }}
                     >
-                        Channels
+                        {t("channels")}
                     </div>
                     <div style={{ fontSize: 12.5, color: "var(--ink-2)", marginTop: 2 }}>
-                        {meetings.length} meeting{meetings.length === 1 ? "" : "s"}
+                        {t("meetingCount", { count: meetings.length })}
                     </div>
                 </div>
                 <button
                     onClick={onNew}
-                    title="New meeting"
-                    aria-label="New meeting"
+                    title={ts("newMeeting")}
+                    aria-label={ts("newMeeting")}
                     style={{
                         width: 28,
                         height: 28,
@@ -233,19 +244,19 @@ function ChannelList({
                     )}
                 >
                     <Home className="size-3.5 shrink-0 opacity-70" />
-                    Home
+                    {t("home")}
                     <span
                         className={cn(
                             "ml-auto text-[10.5px] font-normal",
                             selectedId === null ? "text-brand-ink/70" : "text-ink-3"
                         )}
                     >
-                        workflows
+                        {t("homeHint")}
                     </span>
                 </button>
                 {loading && meetings.length === 0 && (
                     <div style={{ padding: "12px 8px", fontSize: 12.5, color: "var(--ink-3)" }}>
-                        Loading…
+                        {tc("status.loading")}
                     </div>
                 )}
                 {error && (
@@ -262,11 +273,11 @@ function ChannelList({
                             lineHeight: 1.6,
                         }}
                     >
-                        No meetings yet. Pick a workflow on the home screen to start one.
+                        {t("empty")}
                     </div>
                 )}
 
-                {live.length > 0 && <ListGroup label="Live now" />}
+                {live.length > 0 && <ListGroup label={ts("liveNow")} />}
                 {live.map(m => (
                     <ChannelRow
                         key={m.id}
@@ -276,7 +287,7 @@ function ChannelList({
                     />
                 ))}
 
-                {other.length > 0 && live.length > 0 && <ListGroup label="Recent" />}
+                {other.length > 0 && live.length > 0 && <ListGroup label={ts("recent")} />}
                 {other.map(m => (
                     <ChannelRow
                         key={m.id}
@@ -317,6 +328,8 @@ function ChannelRow({
     active: boolean;
     onClick: () => void;
 }) {
+    const t = useTranslations("collab.meetingsPane");
+    const tStatus = useTranslations("collab.meetingStatus");
     const meta = MEETING_STATUS_META[meeting.status];
     const isLive = meeting.status === "running" || meeting.status === "human_control";
 
@@ -379,11 +392,9 @@ function ChannelRow({
                     paddingLeft: 19,
                 }}
             >
-                <span>{meta.label}</span>
+                <span>{tStatus(meta.labelKey)}</span>
                 <span>·</span>
-                <span>
-                    {meeting.turnIndex}/{meeting.maxTurns} turns
-                </span>
+                <span>{t("turnProgress", { turn: meeting.turnIndex, max: meeting.maxTurns })}</span>
                 {meeting.slackMirrorEnabled && <IconSlack size={10} style={{ opacity: 0.7 }} />}
             </span>
         </button>
@@ -415,6 +426,7 @@ function ChannelView({
         stopRunning,
         running,
     } = controller;
+    const t = useTranslations("collab.meetingsPane");
     const [draft, setDraft] = useState("");
     const [sidePanel, setSidePanel] = useState<"plan" | "minutes" | null>(null);
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -476,7 +488,7 @@ function ChannelView({
                     fontSize: 13,
                 }}
             >
-                Loading channel…
+                {t("loadingChannel")}
             </div>
         );
     }
@@ -491,7 +503,7 @@ function ChannelView({
                     fontSize: 13,
                 }}
             >
-                {error ?? "Meeting unavailable"}
+                {error ?? t("unavailable")}
             </div>
         );
     }
@@ -509,6 +521,7 @@ function ChannelView({
                 busy={busy}
                 running={running}
                 phases={detail.phases}
+                workflowKey={detail.workflowKey}
                 workflowTitle={detail.workflowTitle}
                 slackChannelId={detail.slack?.channelId ?? null}
                 onControl={(action, options) => void control(action, options)}
@@ -553,8 +566,7 @@ function ChannelView({
                                 lineHeight: 1.6,
                             }}
                         >
-                            Nothing said yet. Press <strong>Run</strong> to let the agents take
-                            their turns, or write the first message yourself.
+                            {t.rich("nothingSaid", { b: chunks => <strong>{chunks}</strong> })}
                         </div>
                     )}
                     {messages.map((message, index) => (
@@ -590,6 +602,7 @@ function ChannelView({
                         participants={detail.participants}
                         state={state}
                         maxTurns={detail.maxTurns}
+                        workflowKey={detail.workflowKey}
                         workflowTitle={detail.workflowTitle}
                         onClose={() => setSidePanel(null)}
                     />
@@ -623,6 +636,7 @@ function ChannelHeader({
     busy,
     running,
     phases,
+    workflowKey,
     workflowTitle,
     slackChannelId,
     onControl,
@@ -639,6 +653,7 @@ function ChannelHeader({
     busy: string | null;
     running: boolean;
     phases: MeetingPhase[];
+    workflowKey: string | null;
     workflowTitle: string | null;
     slackChannelId: string | null;
     onControl: (action: ControlAction, options?: { asPersonaId?: string; limit?: number }) => void;
@@ -647,10 +662,16 @@ function ChannelHeader({
     sidePanel: "plan" | "minutes" | null;
     onToggleSidePanel: (panel: "plan" | "minutes") => void;
 }) {
+    const t = useTranslations("collab.meetingsPane");
+    const tStatus = useTranslations("collab.meetingStatus");
+    const tc = useTranslations("common");
+    const copy = useAgentCopy();
+    const shownWorkflowTitle = useWorkflowTitle()(workflowKey, workflowTitle);
     const meta = MEETING_STATUS_META[state.status];
     const finished = state.status === "completed" || state.status === "failed";
     const holdsFloor = state.status === "human_control";
     const phase = state.phaseIndex !== undefined ? phases[state.phaseIndex] : undefined;
+    const phaseWords = phase ? copy.phaseCopy(workflowKey, phase) : undefined;
 
     return (
         <header
@@ -673,28 +694,32 @@ function ChannelHeader({
                         <span style={{ fontSize: 14, fontWeight: 600, color: "var(--ink)" }}>
                             {slug ?? title}
                         </span>
-                        <StatusPill label={meta.label} tone={meta.tone} />
-                        {workflowTitle && (
+                        <StatusPill label={tStatus(meta.labelKey)} tone={meta.tone} />
+                        {shownWorkflowTitle && (
                             <span
-                                title="The workflow this meeting follows"
+                                title={t("workflowTitle")}
                                 className="border-line text-ink-3 inline-flex items-center gap-1 rounded-[5px] border px-1.5 py-px text-[10.5px]"
                             >
-                                <Workflow className="size-2.5" /> {workflowTitle}
+                                <Workflow className="size-2.5" /> {shownWorkflowTitle}
                             </span>
                         )}
-                        {phase && !finished && (
+                        {phaseWords && !finished && (
                             <button
                                 type="button"
                                 onClick={() => onToggleSidePanel("plan")}
-                                title={phase.goal}
+                                title={phaseWords.goal}
                                 className="bg-brand-soft text-brand-ink inline-flex items-center gap-1 rounded-[5px] px-1.5 py-px text-[10.5px] font-semibold"
                             >
-                                Phase {(state.phaseIndex ?? 0) + 1}/{phases.length} · {phase.title}
+                                {t("phaseChip", {
+                                    number: (state.phaseIndex ?? 0) + 1,
+                                    total: phases.length,
+                                    title: phaseWords.title,
+                                })}
                             </button>
                         )}
                         {slackChannelId && (
                             <span
-                                title={`Mirrored to Slack channel ${slackChannelId}`}
+                                title={t("mirroredTitle", { channel: slackChannelId })}
                                 style={{
                                     display: "inline-flex",
                                     alignItems: "center",
@@ -706,7 +731,7 @@ function ChannelHeader({
                                     padding: "1px 6px",
                                 }}
                             >
-                                <IconSlack size={10} /> Mirrored
+                                <IconSlack size={10} /> {t("mirrored")}
                             </span>
                         )}
                     </div>
@@ -738,7 +763,7 @@ function ChannelHeader({
                     {!finished && state.status !== "running" && (
                         <ControlButton
                             icon={<IconPlay size={12} />}
-                            label={state.status === "scheduled" ? "Run" : "Resume"}
+                            label={state.status === "scheduled" ? t("run") : tc("actions.resume")}
                             primary
                             busy={busy === "run" || busy === "resume" || busy === "start"}
                             onClick={() =>
@@ -752,20 +777,20 @@ function ChannelHeader({
                         <>
                             <ControlButton
                                 icon={<Zap size={12} />}
-                                label="Run to the end"
+                                label={t("runToEnd")}
                                 primary
                                 busy={busy === "run"}
                                 onClick={onRunToEnd}
                             />
                             <ControlButton
                                 icon={<IconPlay size={12} />}
-                                label="One turn"
+                                label={t("oneTurn")}
                                 busy={busy === "step"}
                                 onClick={() => onControl("step")}
                             />
                             <ControlButton
                                 icon={<IconPause size={12} />}
-                                label="Pause"
+                                label={tc("actions.pause")}
                                 busy={busy === "pause"}
                                 onClick={() => onControl("pause")}
                             />
@@ -775,11 +800,11 @@ function ChannelHeader({
                         <>
                             <span className="text-ink-3 inline-flex items-center gap-1.5 text-[11.5px]">
                                 <span className="bg-success size-1.5 animate-pulse rounded-full" />
-                                Running…
+                                {t("running")}
                             </span>
                             <ControlButton
                                 icon={<Square size={11} />}
-                                label="Stop after this turn"
+                                label={t("stopAfterTurn")}
                                 onClick={onStop}
                             />
                         </>
@@ -788,14 +813,14 @@ function ChannelHeader({
                         (holdsFloor ? (
                             <ControlButton
                                 icon={<IconCheck size={12} />}
-                                label="Hand back"
+                                label={t("handBack")}
                                 busy={busy === "release"}
                                 onClick={() => onControl("release")}
                             />
                         ) : (
                             <ControlButton
                                 icon={<IconHand size={12} />}
-                                label="Take over"
+                                label={t("takeOver")}
                                 busy={busy === "takeover"}
                                 onClick={() => onControl("takeover")}
                             />
@@ -803,20 +828,20 @@ function ChannelHeader({
                     {!finished && (
                         <ControlButton
                             icon={<IconStop size={12} />}
-                            label="End"
+                            label={t("end")}
                             busy={busy === "complete"}
                             onClick={() => onControl("complete")}
                         />
                     )}
                     <ControlButton
                         icon={<ListChecks size={12} />}
-                        label="Plan"
+                        label={t("plan")}
                         active={sidePanel === "plan"}
                         onClick={() => onToggleSidePanel("plan")}
                     />
                     <ControlButton
                         icon={<IconClock size={12} />}
-                        label="Minutes"
+                        label={t("minutes")}
                         active={sidePanel === "minutes"}
                         onClick={() => onToggleSidePanel("minutes")}
                     />
@@ -847,8 +872,12 @@ function ChannelHeader({
                         }}
                     >
                         <IconHand size={10} />
-                        {state.controller.displayName} has the floor
-                        {state.controller.asPersonaId ? ` as @${state.controller.asPersonaId}` : ""}
+                        {state.controller.asPersonaId
+                            ? t("hasFloorAs", {
+                                  name: state.controller.displayName,
+                                  persona: state.controller.asPersonaId,
+                              })
+                            : t("hasFloor", { name: state.controller.displayName })}
                     </span>
                 )}
             </div>
@@ -951,12 +980,19 @@ function ParticipantChip({
     speaking: boolean;
     occupied: boolean;
 }) {
+    const t = useTranslations("collab.meetingsPane");
     const color = personaColor(participant);
     return (
         <span
-            title={`${participant.displayName} — ${participant.role}${
-                participant.nodeId ? ` · runs on ${participant.nodeId}` : ""
-            }`}
+            title={
+                participant.nodeId
+                    ? t("participantNode", {
+                          name: participant.displayName,
+                          role: participant.role,
+                          node: participant.nodeId,
+                      })
+                    : `${participant.displayName} — ${participant.role}`
+            }
             style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -992,6 +1028,8 @@ function MessageRow({
     /** A human author's profile in this workspace, once looked up. */
     person?: PersonLook;
 }) {
+    const t = useTranslations("collab.meetingsPane");
+    const format = useFormatter();
     if (message.kind === "system") {
         const isPhase = message.meta?.event === "phase";
         if (isPhase) {
@@ -1085,16 +1123,16 @@ function MessageRow({
                             }}
                         >
                             {isHuman ? <IconUser size={9} /> : <IconRobot size={9} />}
-                            {isHuman ? "human" : `@${message.author.id}`}
+                            {isHuman ? t("human") : `@${message.author.id}`}
                         </span>
                         {message.author.onBehalfOfPersonaId && (
                             <span style={{ fontSize: 10, color: "oklch(0.5 0.13 55)" }}>
-                                holding @{message.author.onBehalfOfPersonaId}
+                                {t("holding", { persona: message.author.onBehalfOfPersonaId })}
                             </span>
                         )}
                         {servedBy && (
                             <span
-                                title={`This turn was produced on node "${servedBy}"`}
+                                title={t("servedBy", { node: servedBy })}
                                 style={{
                                     display: "inline-flex",
                                     alignItems: "center",
@@ -1114,7 +1152,7 @@ function MessageRow({
                             className="mono"
                             style={{ fontSize: 9.5, color: "var(--ink-3)", opacity: 0.7 }}
                         >
-                            {formatTime(message.ts)}
+                            {formatTime(format, message.ts)}
                         </span>
                     </div>
                 )}
@@ -1167,6 +1205,7 @@ function TypingHint({
     participant?: MeetingParticipant;
     nextSpeakerId: string;
 }) {
+    const t = useTranslations("collab.meetingsPane");
     return (
         <div style={{ display: "flex", gap: 10, padding: "8px 24px", alignItems: "center" }}>
             <div style={{ width: 26, flexShrink: 0 }}>
@@ -1181,17 +1220,17 @@ function TypingHint({
                 />
             </div>
             <span style={{ fontSize: 12, color: "var(--ink-3)", fontStyle: "italic" }}>
-                {participant?.displayName ?? `@${nextSpeakerId}`} is up next…
+                {t("upNext", { name: participant?.displayName ?? `@${nextSpeakerId}` })}
             </span>
         </div>
     );
 }
 
-function formatTime(iso: string): string {
+function formatTime(format: ReturnType<typeof useFormatter>, iso: string): string {
     const date = new Date(iso);
     return Number.isNaN(date.getTime())
         ? ""
-        : date.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
+        : format.dateTime(date, { hour: "2-digit", minute: "2-digit" });
 }
 
 // ---------------------------------------------------------------------------
@@ -1204,6 +1243,7 @@ function PlanPanel({
     participants,
     state,
     maxTurns,
+    workflowKey,
     workflowTitle,
     onClose,
 }: {
@@ -1212,9 +1252,13 @@ function PlanPanel({
     participants: MeetingParticipant[];
     state: NonNullable<ReturnType<typeof useMeeting>["state"]>;
     maxTurns: number;
+    workflowKey: string | null;
     workflowTitle: string | null;
     onClose: () => void;
 }) {
+    const t = useTranslations("collab.meetingsPane");
+    const copy = useAgentCopy();
+    const shownWorkflowTitle = useWorkflowTitle()(workflowKey, workflowTitle);
     const byId = new Map(participants.map(p => [p.id, p]));
     // Phase boundaries are a pure function of the turn index; recomputing
     // them here keeps the panel honest about progress even between polls.
@@ -1237,29 +1281,31 @@ function PlanPanel({
         <aside className="border-line bg-panel w-[300px] shrink-0 overflow-y-auto border-l px-4 pb-6 pt-3.5">
             <div className="mb-3 flex items-center gap-2">
                 <div className="mono text-ink-3 flex-1 text-[10px] font-bold uppercase tracking-[0.1em]">
-                    Plan{workflowTitle ? ` · ${workflowTitle}` : ""}
+                    {shownWorkflowTitle
+                        ? t("planWithWorkflow", { workflow: shownWorkflowTitle })
+                        : t("plan")}
                 </div>
-                <button onClick={onClose} aria-label="Close plan" className="text-ink-3">
+                <button onClick={onClose} aria-label={t("closePlan")} className="text-ink-3">
                     <IconX size={13} />
                 </button>
             </div>
 
             <div className="text-ink-3 mb-3 text-[11.5px]">
-                Turn {Math.min(state.turnIndex, maxTurns)} of {maxTurns}
-                {state.status === "completed" ? " · ended" : ""}
+                {t(state.status === "completed" ? "turnOfEnded" : "turnOf", {
+                    turn: Math.min(state.turnIndex, maxTurns),
+                    max: maxTurns,
+                })}
             </div>
 
             {rows.length === 0 ? (
-                <div className="text-ink-3 mb-4 text-[12px] leading-relaxed">
-                    No phases — the turn policy runs the whole meeting. Start the next one from a
-                    workflow to get diverge / critique / decide stretches.
-                </div>
+                <div className="text-ink-3 mb-4 text-[12px] leading-relaxed">{t("noPhases")}</div>
             ) : (
                 <ol className="m-0 mb-5 flex list-none flex-col gap-2 p-0">
                     {rows.map(({ phase, index, done, current, complete }) => {
                         const speakers = (phase.speakerIds ?? [])
                             .map(id => byId.get(id))
                             .filter((p): p is MeetingParticipant => Boolean(p));
+                        const words = copy.phaseCopy(workflowKey, phase);
                         return (
                             <li
                                 key={phase.id}
@@ -1278,14 +1324,14 @@ function PlanPanel({
                                         {index + 1}
                                     </span>
                                     <span className="text-ink flex-1 text-[12.5px] font-semibold">
-                                        {phase.title}
+                                        {words.title}
                                     </span>
                                     <span className="mono text-ink-3 text-[10px]">
                                         {done}/{phase.turns}
                                     </span>
                                 </div>
                                 <div className="text-ink-2 mt-1 text-[11.5px] leading-snug">
-                                    {phase.goal}
+                                    {words.goal}
                                 </div>
                                 <div className="bg-line mt-2 h-1 overflow-hidden rounded-full">
                                     <div
@@ -1298,7 +1344,7 @@ function PlanPanel({
                                 <div className="mt-2 flex items-center gap-1">
                                     {speakers.length === 0 ? (
                                         <span className="text-ink-3 text-[10.5px]">
-                                            Everyone speaks
+                                            {t("everyoneSpeaks")}
                                         </span>
                                     ) : (
                                         speakers.map(p => (
@@ -1320,7 +1366,7 @@ function PlanPanel({
             {agenda.length > 0 && (
                 <>
                     <div className="mono text-ink-3 mb-1.5 text-[9.5px] font-bold uppercase tracking-[0.1em]">
-                        Agenda
+                        {t("agenda")}
                     </div>
                     <ol className="text-ink-2 m-0 pl-4 text-[12px] leading-relaxed">
                         {agenda.map((item, index) => (
@@ -1344,6 +1390,7 @@ function MinutesPanel({
     minutes: NonNullable<ReturnType<typeof useMeeting>["minutes"]>;
     onClose: () => void;
 }) {
+    const t = useTranslations("collab.meetingsPane");
     return (
         <aside
             style={{
@@ -1367,18 +1414,18 @@ function MinutesPanel({
                         color: "var(--ink-3)",
                     }}
                 >
-                    Minutes
+                    {t("minutes")}
                 </div>
                 <button
                     onClick={onClose}
-                    aria-label="Close minutes"
+                    aria-label={t("closeMinutes")}
                     style={{ color: "var(--ink-3)" }}
                 >
                     <IconX size={13} />
                 </button>
             </div>
 
-            <MinutesSection title="Decisions" empty="Nothing decided yet.">
+            <MinutesSection title={t("decisions")} empty={t("noDecisions")}>
                 {minutes.decisions.map(d => (
                     <li key={`${d.sourceSeq}-${d.text}`} style={minutesItemStyle}>
                         {d.text}
@@ -1396,7 +1443,7 @@ function MinutesPanel({
                 ))}
             </MinutesSection>
 
-            <MinutesSection title="Action items" empty="No owners assigned yet.">
+            <MinutesSection title={t("actionItems")} empty={t("noActionItems")}>
                 {minutes.actionItems.map(a => (
                     <li key={`${a.sourceSeq}-${a.text}`} style={minutesItemStyle}>
                         {a.text}
@@ -1428,7 +1475,7 @@ function MinutesPanel({
                         marginBottom: 6,
                     }}
                 >
-                    Key points
+                    {t("keyPoints")}
                 </div>
                 <div
                     style={{
@@ -1452,13 +1499,11 @@ function MinutesPanel({
                     lineHeight: 1.7,
                 }}
             >
-                {minutes.turnsTaken} agent turn{minutes.turnsTaken === 1 ? "" : "s"} ·{" "}
-                {minutes.humanInterventions} human message
-                {minutes.humanInterventions === 1 ? "" : "s"}
-                <div style={{ marginTop: 6 }}>
-                    Extracted from the transcript, never generated — every line above was said by
-                    someone in this channel.
-                </div>
+                {t("minutesStats", {
+                    turns: minutes.turnsTaken,
+                    humans: minutes.humanInterventions,
+                })}
+                <div style={{ marginTop: 6 }}>{t("minutesNote")}</div>
             </div>
         </aside>
     );
@@ -1532,13 +1577,15 @@ function Composer({
     seat?: string;
     status: string;
 }) {
+    const t = useTranslations("collab.meetingsPane");
+    const tc = useTranslations("common");
     const placeholder = disabled
-        ? "This meeting has ended."
+        ? t("ended")
         : holdsFloor
           ? seat
-              ? `Speaking as ${seat} — the agents are on hold`
-              : "You have the floor — the agents are on hold"
-          : "Add a comment. The agents will read it on their next turn.";
+              ? t("speakingAs", { seat })
+              : t("haveFloor")
+          : t("addComment");
 
     return (
         <div
@@ -1560,7 +1607,7 @@ function Composer({
                         marginBottom: 7,
                     }}
                 >
-                    <IconHand size={11} /> Agent turns are paused while you hold the floor.
+                    <IconHand size={11} /> {t("pausedNote")}
                 </div>
             )}
             <div
@@ -1620,13 +1667,11 @@ function Composer({
                         flexShrink: 0,
                     }}
                 >
-                    {sending ? "Sending…" : "Send"}
+                    {sending ? t("sending") : tc("actions.send")}
                 </button>
             </div>
             <div style={{ fontSize: 10.5, color: "var(--ink-3)", marginTop: 6 }}>
-                {status === "running"
-                    ? "Enter to send · your message lands in the transcript before the next agent turn"
-                    : "Enter to send · Shift+Enter for a new line"}
+                {status === "running" ? t("hintRunning") : t("hintIdle")}
             </div>
         </div>
     );

@@ -15,7 +15,7 @@ import {
     modelSearchMatches,
     shouldAttachPaste,
 } from "../composerState";
-import type { ComposerSend } from "../types";
+import type { ComposerSend, WorkspaceSource } from "../types";
 import { heicTo } from "heic-to/csp";
 import { composerJsonToMarkdown } from "../RichChatEditor";
 
@@ -39,7 +39,11 @@ jest.mock("../../hooks/useChatRoutes", () => ({
             // `model` mimics an older server that still sent the id: the
             // composer must never render it.
             routes: {
-                default: { available: true, model: "Default model" },
+                default: {
+                    available: true,
+                    model: "Default model",
+                    reasoning: { controllable: true, mode: "effort", efforts: ["low", "high"] },
+                },
                 fast: { available: true, model: "Speed model" },
                 reasoning: {
                     available: true,
@@ -604,16 +608,18 @@ describe("Composer uploads and completion", () => {
         );
     });
 
-    it("chooses configured models and only supported reasoning efforts", async () => {
+    it("offers Standard and Fast, with reasoning set by effort on Standard", async () => {
         const user = userEvent.setup();
         const { box, onSend } = mount();
         await user.click(screen.getByRole("button", { name: "Choose model" }));
         expect(
             screen.queryByText(/Default model|Speed model|Thinking model|Image model/)
         ).not.toBeInTheDocument();
-        await user.type(screen.getByRole("textbox", { name: "Search models" }), "Reason");
-        await user.click(screen.getByRole("option", { name: /Reasoning/ }));
-        await user.click(screen.getByRole("button", { name: "Choose model" }));
+        expect(
+            within(screen.getByRole("listbox", { name: "Configured models" }))
+                .getAllByRole("option")
+                .map(option => option.textContent)
+        ).toEqual([expect.stringMatching(/^Standard/), expect.stringMatching(/^Fast/)]);
         await user.selectOptions(
             screen.getByRole("combobox", { name: "Reasoning effort" }),
             "high"
@@ -626,8 +632,44 @@ describe("Composer uploads and completion", () => {
         fireEvent.change(box, { target: { value: "Think carefully" } });
         fireEvent.keyDown(box, { key: "Enter" });
         expect(onSend).toHaveBeenCalledWith(
-            expect.objectContaining({ modelRoute: "reasoning", reasoningEffort: "high" })
+            expect.objectContaining({ modelRoute: "default", reasoningEffort: "high" })
         );
+    });
+
+    it("restores a draft saved on a retired tier as Standard with its effort", () => {
+        localStorage.setItem(
+            "launchstack:composer:retired-tier",
+            JSON.stringify({
+                text: "Old reasoning draft",
+                attachments: [],
+                refs: [],
+                webSearch: true,
+                thinking: true,
+                agentKey: null,
+                modelRoute: "reasoning",
+                modelRoutes: ["reasoning", "vision"],
+                reasoningEffort: "high",
+            })
+        );
+        const { box, onSend } = mount({ draftKey: "retired-tier" });
+        expect(screen.getByRole("button", { name: "Choose model" })).toHaveTextContent("Standard");
+        fireEvent.keyDown(box, { key: "Enter" });
+        const sent = onSend.mock.calls[0]![0];
+        expect(sent).toMatchObject({ modelRoute: "default", reasoningEffort: "high" });
+        expect(sent).not.toHaveProperty("modelRoutes");
+    });
+
+    it("sends an image on Fast to the vision route when Fast can't read it", async () => {
+        const user = userEvent.setup();
+        const { box, onSend } = mount();
+        await user.click(screen.getByRole("button", { name: "Choose model" }));
+        await user.click(screen.getByRole("option", { name: /Fast/ }));
+        attach(new File(["png"], "chart.png", { type: "image/png" }));
+        await waitFor(() => expect(UploadRequest.requests).toHaveLength(1));
+        act(() => UploadRequest.requests[0]!.complete());
+        fireEvent.change(box, { target: { value: "What does this show?" } });
+        fireEvent.keyDown(box, { key: "Enter" });
+        expect(onSend).toHaveBeenCalledWith(expect.objectContaining({ modelRoute: "vision" }));
     });
 
     it("queues during an active turn and offers Stop for an empty draft", () => {
@@ -1031,5 +1073,97 @@ describe("Composer utility boundaries", () => {
             replacement: "\n- [ ] ",
         });
         expect(listContinuation("- ", 2)).toEqual({ start: 0, end: 2, replacement: "" });
+    });
+});
+
+describe("rich editor: sources in the message", () => {
+    const deck: WorkspaceSource = {
+        id: "d1",
+        documentId: 1,
+        title: "Q3 board deck",
+        type: "doc",
+        size: "1 KB",
+        added: "Today",
+        folder: "Board",
+        tags: [],
+        domain: "General",
+    };
+    const CHIP = "Source context: Q3 board deck";
+
+    beforeAll(() => {
+        // ProseMirror measures ranges; jsdom has no layout.
+        Range.prototype.getClientRects = () =>
+            ({ length: 0, item: () => null, [Symbol.iterator]: function* () {} }) as DOMRectList;
+        Range.prototype.getBoundingClientRect = () => ({
+            x: 0,
+            y: 0,
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+            width: 0,
+            height: 0,
+            toJSON: () => ({}),
+        });
+    });
+
+    async function mountRich(overrides: Partial<ComposerProps> = {}) {
+        const onSend = jest.fn<void, [ComposerSend]>();
+        const props: ComposerProps = {
+            sources: [deck],
+            selected: [],
+            setSelected: jest.fn(),
+            onSend,
+            agents: [],
+            agentKey: null,
+            onChangeAgent: jest.fn(),
+            defaultEditorMode: "rich",
+            ...overrides,
+        };
+        const result = render(<Composer {...props} />);
+        const box = await screen.findByRole("textbox", { name: "Rich chat message" });
+        return { ...result, props, onSend, box };
+    }
+
+    it("shows the chat's carried sources as one line, never as a Context row or chips", async () => {
+        await mountRich({ selected: ["d1"], carriedRefs: ["d1"] });
+        expect(screen.getByTestId("composer-scope")).toHaveTextContent("Asking over 1 source");
+        expect(screen.getByRole("button", { name: "Change" })).toBeInTheDocument();
+        expect(screen.queryByText("Context")).toBeNull();
+        expect(screen.queryByRole("button", { name: CHIP })).toBeNull();
+    });
+
+    it("turns a source added while composing into a chip in the words", async () => {
+        const { rerender, props } = await mountRich();
+        rerender(<Composer {...props} selected={["d1"]} />);
+        expect(await screen.findByRole("button", { name: CHIP })).toBeInTheDocument();
+        expect(screen.queryByTestId("composer-scope")).toBeNull();
+    });
+
+    it("sends chips alone as an attachment, with the chip's stored form as the words", async () => {
+        const { rerender, props, onSend } = await mountRich();
+        rerender(<Composer {...props} selected={["d1"]} />);
+        await screen.findByRole("button", { name: CHIP });
+        await userEvent.click(screen.getByRole("button", { name: "Send message" }));
+        expect(onSend).toHaveBeenCalledWith(
+            expect.objectContaining({
+                origin: "attachment",
+                refs: ["d1"],
+                text: "[Source: Q3 board deck](#launchstack-source-d1)",
+            })
+        );
+    });
+
+    it("keeps a carried source's unavailable twin removable from the scope line", async () => {
+        const setSelected = jest.fn();
+        // Carried and gone (deleted since): no chip to delete, so the line offers the removal.
+        await mountRich({ selected: ["d1", "d404"], carriedRefs: ["d1", "d404"], setSelected });
+        expect(screen.getByTestId("composer-scope")).toHaveTextContent("Unavailable source · d404");
+        await userEvent.click(
+            screen.getByRole("button", { name: "Remove unavailable source d404" })
+        );
+        expect(setSelected).toHaveBeenCalled();
+        const update = setSelected.mock.calls[0]![0] as (previous: string[]) => string[];
+        expect(update(["d1", "d404"])).toEqual(["d1"]);
     });
 });

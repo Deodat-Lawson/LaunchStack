@@ -138,6 +138,29 @@ describe("Chat history routes", () => {
             expect(mockInsert).not.toHaveBeenCalled();
         });
 
+        it("says the document is missing in the reader's language", async () => {
+            mockAuthenticated(BigInt(10), { role: "member", scope: FINANCE_HIDDEN });
+            mockSelect
+                .mockImplementationOnce(() => createLimitedSelect([]))
+                .mockImplementationOnce(() => createLimitedSelect([]));
+            const body = { documentId: 5, question: "Q?", documentTitle: "Doc", response: "A" };
+
+            const english = await addChatHistory(buildRequest(body));
+            expect(await english.json()).toEqual({
+                success: false,
+                message: "Document not found.",
+            });
+
+            const chinese = await addChatHistory(
+                new Request("http://localhost/api/Questions/add", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", cookie: "ls-locale=zh-CN.1" },
+                    body: JSON.stringify(body),
+                })
+            );
+            expect(await chinese.json()).toEqual({ success: false, message: "未找到该文档。" });
+        });
+
         it("refuses a role without documents.read", async () => {
             mockAuthenticated(BigInt(10), { role: "reporting", permissions: ["analytics.view"] });
 

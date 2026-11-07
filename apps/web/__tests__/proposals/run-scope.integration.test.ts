@@ -50,6 +50,7 @@ import { proposalsRunJob } from "~/server/inngest/functions/proposalsRun";
 import { startProposalRun, type ProposalsExecutor } from "~/server/proposals/executor";
 import { newLibraryItem, patchSection, saveSectionToLibrary } from "~/server/proposals/service";
 import { createAppRagPort } from "~/server/rag/port";
+import * as workspaceModels from "~/server/workspace-models/scope";
 
 import {
     createFounderWeeklyReviewTestDatabase,
@@ -63,6 +64,7 @@ const mockPrompts: string[] = [];
 const mockRetrievals: RagSearchResult[][] = [];
 const mockDebitCredits = jest.fn(async (_args: unknown) => undefined);
 let mockDraftUsesPrivateProfile = false;
+let mockModelScope: jest.SpyInstance;
 
 type WorkerHandler = (ctx: {
     event: { data: ProposalRunEventData };
@@ -299,6 +301,7 @@ describeDb("proposal runs keep the stored writer's document scope (integration)"
         test = await createFounderWeeklyReviewTestDatabase();
         mockActiveDb = test.db;
         configureDatabase(test.db);
+        mockModelScope = jest.spyOn(workspaceModels, "withWorkspaceChatModels");
         const realRag = createAppRagPort();
         configureRag({
             async companyEnsembleSearch(query, options) {
@@ -396,6 +399,7 @@ describeDb("proposal runs keep the stored writer's document scope (integration)"
         mockRetrievals.length = 0;
         mockDraftUsesPrivateProfile = false;
         mockDebitCredits.mockClear();
+        mockModelScope.mockClear();
     });
 
     afterEach(() => {
@@ -404,6 +408,7 @@ describeDb("proposal runs keep the stored writer's document scope (integration)"
     });
 
     afterAll(async () => {
+        mockModelScope?.mockRestore();
         mockActiveDb = null;
         await test?.close();
     });
@@ -515,6 +520,11 @@ describeDb("proposal runs keep the stored writer's document scope (integration)"
             // The worker event deliberately names the granted writer, while the
             // persisted run belongs to Bea. An event must not upgrade its actor.
             const outside = await (await schedule(executor, "bea", "ada")).execute();
+            expect(mockModelScope).toHaveBeenLastCalledWith(
+                companyId,
+                { feature: "proposals", userId: "auth_bea", enforce: false },
+                expect.any(Function)
+            );
             expect(outside.run.status).toBe("completed");
             expect(outside.hits.map(documentIdOf)).toContain(publicDocumentId);
             for (const phrase of [PUBLIC_CHUNK, PUBLIC_PROFILE, PUBLIC_ANSWER])

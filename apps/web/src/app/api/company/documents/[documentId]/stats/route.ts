@@ -8,6 +8,7 @@ import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { normalizeRoleSlug } from "~/lib/authz/permissions";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import { workspaceLooks } from "~/server/profile/store";
+import { requestTranslator } from "~/i18n/server";
 
 interface Viewer {
     /** As this workspace sees them: display name, else full name. */
@@ -51,7 +52,10 @@ export async function GET(
         const docId = parseInt(documentId);
         if (isNaN(docId)) {
             return NextResponse.json(
-                { success: false, error: "Invalid document ID" },
+                {
+                    success: false,
+                    error: requestTranslator(request, "errors.api")("invalidDocumentId"),
+                },
                 { status: 400 }
             );
         }
@@ -70,7 +74,10 @@ export async function GET(
 
         if (!doc) {
             return NextResponse.json(
-                { success: false, error: "Document not found" },
+                {
+                    success: false,
+                    error: requestTranslator(request, "errors.api")("documentNotFound"),
+                },
                 { status: 404 }
             );
         }
@@ -166,6 +173,7 @@ export async function GET(
             return result;
         };
 
+        const tStats = requestTranslator(request, "statistics.server.viewers");
         const response: DocumentDetailsResponse = {
             success: true,
             data: {
@@ -176,8 +184,8 @@ export async function GET(
                 totalViews: viewsCount?.count ?? 0,
                 uniqueViewers: uniqueViewers?.count ?? 0,
                 recentViewers: recentViewersData.map(v => ({
-                    name: looks.get(v.authUserId)?.displayName ?? v.name ?? "Unknown User",
-                    email: v.email ?? "No Email",
+                    name: looks.get(v.authUserId)?.displayName ?? v.name ?? tStats("unknownUser"),
+                    email: v.email ?? tStats("noEmail"),
                     avatarUrl: looks.get(v.authUserId)?.avatarUrl ?? null,
                     viewedAt: v.viewedAt.toISOString(),
                     role: v.role ? normalizeRoleSlug(v.role) : "unknown",
@@ -195,7 +203,10 @@ export async function GET(
     } catch (error) {
         console.error("Error fetching document details:", error);
         return NextResponse.json(
-            { success: false, error: "Internal Server Error" },
+            {
+                success: false,
+                error: requestTranslator(request, "statistics.server.errors")("internal"),
+            },
             { status: 500 }
         );
     }

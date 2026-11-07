@@ -65,7 +65,11 @@ export function fakeModel(script: Script): SimulationModel & { requests: ModelRe
     };
 }
 
-/** Every agent likes the first post in its feed, comments on it, and posts once in round 1. */
+/**
+ * Every agent likes the first post in its feed, comments on it, and posts
+ * once in round 1. a1 turns against it (and won't pay); everyone else warms
+ * to it, crediting the first post in their feed, and might pay.
+ */
 export const chattyScript: Script = request => {
     if (request.purpose !== "decide") return {};
     const ids = feedIds(request.prompt);
@@ -83,5 +87,13 @@ export const chattyScript: Script = request => {
             text: `${agent} thinks prices matter`,
             handle: null,
         });
-    return { thought: `${agent} is reading`, stance: agent === "a1" ? -2 : 1, actions };
+    const critic = agent === "a1";
+    return {
+        thought: `${agent} is reading`,
+        stance: critic ? -2 : 1,
+        convincedBy: critic ? null : (ids[0] ?? null),
+        wouldPay: critic ? "no" : "maybe",
+        objection: critic ? "Twenty percent more for the same invoices." : null,
+        actions,
+    };
 };

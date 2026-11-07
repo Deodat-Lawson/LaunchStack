@@ -14,6 +14,8 @@ import {
 import { error, firstIssue, handleVantageError, json, readBody, vantageContext } from "../_http";
 import { PrepareSchema } from "../_schemas";
 import { prepareWeek } from "~/server/vantage/service";
+import { localeOfRequest } from "~/i18n/server";
+import { refuseAtAiAllowance } from "~/server/ai-usage/refusal";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
 export const maxDuration = 120;
@@ -33,7 +35,7 @@ export async function GET(request: NextRequest) {
         ]);
         return json({ week, agenda, agendas });
     } catch (err) {
-        return handleVantageError("GET agendas", err);
+        return handleVantageError("GET agendas", err, request);
     }
 }
 
@@ -42,15 +44,22 @@ export async function POST(request: NextRequest) {
     if (!auth.ok) return auth.response;
     try {
         const parsed = PrepareSchema.safeParse(await readBody(request));
-        if (!parsed.success) return error(firstIssue(parsed.error.issues), 400);
+        if (!parsed.success) return error(firstIssue(parsed.error.issues, request), 400);
         const weekStart = parsed.data.weekStart
             ? weekStartOf(parseIsoDate(parsed.data.weekStart)!)
             : defaultAgendaWeek(new Date());
-        const agenda = await withWorkspaceChatModels(auth.ctx.companyId, () =>
+        const aiUse = { feature: "vantage", userId: auth.ctx.userId } as const;
+        const refused = await refuseAtAiAllowance(
+            auth.ctx.companyId,
+            aiUse.userId,
+            localeOfRequest(request)
+        );
+        if (refused) return refused;
+        const agenda = await withWorkspaceChatModels(auth.ctx.companyId, aiUse, () =>
             prepareWeek({ companyId: auth.ctx.companyId, userId: auth.ctx.userId, weekStart })
         );
         return json({ agenda }, 201);
     } catch (err) {
-        return handleVantageError("POST prepare", err);
+        return handleVantageError("POST prepare", err, request);
     }
 }

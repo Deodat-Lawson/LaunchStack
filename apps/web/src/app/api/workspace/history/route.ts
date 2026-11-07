@@ -21,6 +21,7 @@ import { NextResponse } from "next/server";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { serverError } from "~/lib/validation";
 import { loadWorkspaceHistory, parseKindsParam } from "~/server/history";
+import { localeOfRequest, requestTranslator } from "~/i18n/server";
 
 export const runtime = "nodejs";
 
@@ -37,10 +38,13 @@ export async function GET(request: Request) {
             limit: Number(searchParams.get("limit")) || undefined,
             kinds: parseKindsParam(searchParams.getAll("kind")),
             archived: searchParams.get("archived") === "1",
+            locale: localeOfRequest(request),
         });
         return NextResponse.json(page);
     } catch (error) {
         console.error("[workspace/history] load failed:", error);
-        return serverError("Failed to load history");
+        return serverError(
+            requestTranslator(request, "workspace.server.errors")("loadHistoryFailed")
+        );
     }
 }

@@ -8,6 +8,10 @@
  *
  * Reading filters to what the reader can still open, so an item shared and
  * then unshared does not linger as a dead link.
+ *
+ * The inbox also carries feedback rows (`targetType: "feedback"`, written by
+ * ~/server/feedback/notify when a triager replies to or moves someone's
+ * report). They are kept while the report exists and the reader filed it.
  */
 
 import { and, count, desc, eq, inArray, isNull } from "drizzle-orm";
@@ -16,12 +20,14 @@ import { document } from "@launchstack/store/schema";
 import { category } from "@launchstack/store/schema";
 import { db } from "~/server/db";
 import {
+    feedbackReports,
     users,
     workspaceGroupMembers,
     workspaceGroups,
     workspaceNotifications,
     type WorkspaceNotificationRow,
 } from "~/server/db/schema";
+import { FEEDBACK_NOTIFICATION_TARGET } from "~/lib/feedback/contract";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import { scopeAllowsCategory } from "~/lib/authz/scope-types";
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
@@ -29,7 +35,11 @@ import { readableSessionIds } from "~/server/sessions/access";
 
 import type { Executor } from "./db-types";
 
-export type NotificationTargetType = "document" | "folder" | "chat";
+/** What a share can point at. */
+export type ShareTargetType = "document" | "folder" | "chat";
+
+/** What an inbox row can point at: a share, or a feedback report of the reader's. */
+export type NotificationTargetType = ShareTargetType | typeof FEEDBACK_NOTIFICATION_TARGET;
 
 export interface SharePrincipal {
     principalType: string;
@@ -40,7 +50,7 @@ export interface ShareNotificationInput {
     companyId: bigint;
     /** Auth subject id of the person sharing. */
     actorUserId: string;
-    targetType: NotificationTargetType;
+    targetType: ShareTargetType;
     targetId: string | number | bigint;
     targetLabel: string;
     /** For a folder: its path, so the inbox can open it. */
@@ -162,8 +172,11 @@ async function keepOpenable(
         .filter(e => e.targetType === "folder" && /^\d+$/.test(e.targetId))
         .map(e => Number(e.targetId));
     const chatIds = entries.filter(e => e.targetType === "chat").map(e => e.targetId);
+    const feedbackIds = entries
+        .filter(e => e.targetType === FEEDBACK_NOTIFICATION_TARGET && /^\d+$/.test(e.targetId))
+        .map(e => Number(e.targetId));
 
-    const [docs, folders, chats] = await Promise.all([
+    const [docs, folders, chats, reports] = await Promise.all([
         docIds.length === 0
             ? Promise.resolve([])
             : db
@@ -181,18 +194,38 @@ async function keepOpenable(
                       and(eq(category.companyId, ctx.companyId), inArray(category.id, folderIds))
                   ),
         readableSessionIds(ctx, chatIds),
+        // A reporter can always open their own report, wherever it was filed.
+        feedbackIds.length === 0
+            ? Promise.resolve([])
+            : db
+                  .select({ id: feedbackReports.id })
+                  .from(feedbackReports)
+                  .where(
+                      and(
+                          inArray(feedbackReports.id, feedbackIds),
+                          eq(feedbackReports.reporterUserId, ctx.authUserId)
+                      )
+                  ),
     ]);
     const openDocs = new Set(docs.map(d => String(d.id)));
     const openFolders = new Set(
         folders.filter(f => scopeAllowsCategory(scope, f.name)).map(f => String(f.id))
     );
-    return entries.filter(e =>
-        e.targetType === "document"
-            ? openDocs.has(e.targetId)
-            : e.targetType === "folder"
-              ? openFolders.has(e.targetId)
-              : chats.has(e.targetId)
-    );
+    const openReports = new Set(reports.map(r => String(r.id)));
+    return entries.filter(e => {
+        switch (e.targetType) {
+            case "document":
+                return openDocs.has(e.targetId);
+            case "folder":
+                return openFolders.has(e.targetId);
+            case "chat":
+                return chats.has(e.targetId);
+            case FEEDBACK_NOTIFICATION_TARGET:
+                return openReports.has(e.targetId);
+            default:
+                return false;
+        }
+    });
 }
 
 export async function listNotifications(

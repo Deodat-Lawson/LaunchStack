@@ -35,8 +35,11 @@ import {
 } from "~/server/services/connectors/connection-store";
 import { ConnectorGrantRevokedError } from "~/server/services/connectors/providers/types";
 
+import type { Locale } from "~/i18n/locales";
+
 import { channelCapabilities, linkedInGrantFeatures } from "./capabilities";
 import { linkedInApiOptions } from "./linkedin-options";
+import { brandReasonOrNull } from "./words";
 
 /** The JSON shape `/api/brand/*` returns for a channel (mirrors the client contract). */
 export interface BrandChannelView {
@@ -130,7 +133,9 @@ export function toChannelView(
     row: BrandChannelRow,
     connection: ConnectorConnection | undefined,
     limit: number | null,
-    now = new Date()
+    now = new Date(),
+    /** The reader's language for `statusReason`, stored or worked out here. */
+    locale: Locale = "en"
 ): BrandChannelView {
     const problem = connection ? connectionProblem(connection, now) : "This sign-in was removed.";
     const reconnect = row.status === "reconnect" || problem !== null;
@@ -144,7 +149,7 @@ export function toChannelView(
         profileUrl: row.profileUrl ?? null,
         enabled: row.enabled,
         status: reconnect ? "reconnect" : "active",
-        statusReason: reconnect ? (row.statusReason ?? problem) : null,
+        statusReason: reconnect ? brandReasonOrNull(row.statusReason ?? problem, locale) : null,
         connectionId: row.connectionId,
         capabilities: row.capabilities,
         followers: row.followers ?? null,

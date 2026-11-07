@@ -20,6 +20,6 @@ export async function GET(request: NextRequest) {
             syncedAt: synced.length > 0 ? new Date(Math.max(...synced)) : null,
         });
     } catch (err) {
-        return handleBrandError("GET comments", err);
+        return handleBrandError("GET comments", err, request);
     }
 }

@@ -1,3 +1,5 @@
+import type { useTranslations } from "next-intl";
+
 import type { BrandChannel } from "../api";
 
 /**
@@ -42,12 +44,18 @@ export const MEDIA_ACCEPT = MEDIA_TYPES.join(",");
 export const MEDIA_MAX_BYTES = 5 * 1024 * 1024;
 export const MEDIA_MAX_COUNT = 4;
 
+/** Compose's rule words, `growth.brand.composeRules`; the caller passes its translator. */
+export type ComposeRulesT = ReturnType<typeof useTranslations<"growth.brand.composeRules">>;
+
 /** Why a file cannot be attached, or null when it can. */
-export function mediaRejection(file: { type: string; size: number; name?: string }): string | null {
-    const name = file.name ? `${file.name}: ` : "";
+export function mediaRejection(
+    t: ComposeRulesT,
+    file: { type: string; size: number; name?: string }
+): string | null {
+    const name = file.name;
     if (!(MEDIA_TYPES as readonly string[]).includes(file.type))
-        return `${name}attach a JPEG, PNG, GIF or WebP image.`;
-    if (file.size > MEDIA_MAX_BYTES) return `${name}images can be 5 MB at most.`;
+        return name ? t("wrongTypeNamed", { name }) : t("wrongType");
+    if (file.size > MEDIA_MAX_BYTES) return name ? t("tooBigNamed", { name }) : t("tooBig");
     return null;
 }
 
@@ -67,22 +75,17 @@ export const BLUESKY_MAX_IMAGE_BYTES = 1_000_000;
  * than as a failed post at its scheduled time).
  */
 export function channelMediaNote(
+    t: ComposeRulesT,
     channel: Pick<BrandChannel, "name" | "platform" | "capabilities">,
     media: ReadonlyArray<{ mimeType: string; size?: number }>
 ): { tone: "note" | "error"; text: string } | null {
     if (media.length === 0) return null;
     if (!channel.capabilities.images)
-        return { tone: "note", text: `${channel.name} will post the text only.` };
+        return { tone: "note", text: t("textOnly", { name: channel.name }) };
     if (channel.platform === "linkedin" && media.some(m => m.mimeType === "image/webp"))
-        return {
-            tone: "error",
-            text: "LinkedIn does not take WebP images. Use JPEG, PNG or GIF.",
-        };
+        return { tone: "error", text: t("linkedinWebp") };
     if (channel.platform === "bluesky" && media.some(m => (m.size ?? 0) > BLUESKY_MAX_IMAGE_BYTES))
-        return {
-            tone: "error",
-            text: "Bluesky takes images up to 1 MB. Use a smaller image or leave Bluesky out.",
-        };
+        return { tone: "error", text: t("blueskySize") };
     return null;
 }
 

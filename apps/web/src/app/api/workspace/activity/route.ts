@@ -30,7 +30,7 @@ const ActivityQuerySchema = z.object({
 export async function GET(request: Request) {
     const ctx = await requireWorkspacePermission("documents.read");
     if (!ctx.success) return ctx.response;
-    const query = parseValue(queryObject(request), ActivityQuerySchema);
+    const query = parseValue(queryObject(request), ActivityQuerySchema, request);
     if (!query.success) return query.response;
     try {
         return NextResponse.json(
@@ -42,6 +42,6 @@ export async function GET(request: Request) {
             })
         );
     } catch (error) {
-        return workspaceErrorResponse(error, "[workspace/activity GET]");
+        return workspaceErrorResponse(error, "[workspace/activity GET]", request);
     }
 }

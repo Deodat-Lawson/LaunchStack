@@ -19,6 +19,7 @@ import {
     useState,
     type ReactNode,
 } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { Button } from "~/components/ui/button";
@@ -319,6 +320,7 @@ function ScreenTabs({
     path: string;
     ownRow: boolean;
 }) {
+    const t = useTranslations("tools.frame");
     const row = useRef<HTMLElement | null>(null);
     const [edges, setEdges] = useState({ left: false, right: false });
 
@@ -393,7 +395,7 @@ function ScreenTabs({
     return (
         <nav
             ref={row}
-            aria-label={`${title} screens`}
+            aria-label={t("screensLabel", { title })}
             onScroll={onScroll}
             onWheel={onWheel}
             onFocus={onFocus}
@@ -474,6 +476,7 @@ function GroupSwitch({
     activeGroup: ToolNavGroup | undefined;
     path: string;
 }) {
+    const t = useTranslations("tools.frame");
     const { navigate, search } = useToolNav();
     const lastIn = useRef(new Map<string, string>());
     useEffect(() => {
@@ -488,7 +491,7 @@ function GroupSwitch({
                 if (!group || group === activeGroup) return;
                 navigate(lastIn.current.get(group.id) ?? group.items[0]!.to);
             }}
-            aria-label="Area"
+            aria-label={t("area")}
             className="border-line bg-surface ml-2 shrink-0 gap-0.5 rounded-md border p-0.5"
         >
             {groups.map(group => (
@@ -507,13 +510,14 @@ function GroupSwitch({
 }
 
 function HistoryButtons() {
+    const t = useTranslations("tools.frame");
     const { back, forward, canBack, canForward } = useToolNav();
     return (
         <span className="flex shrink-0 items-center">
-            <HistoryButton label="Back" onClick={back} disabled={!canBack}>
+            <HistoryButton label={t("back")} onClick={back} disabled={!canBack}>
                 <ChevronLeft className="size-4" />
             </HistoryButton>
-            <HistoryButton label="Forward" onClick={forward} disabled={!canForward}>
+            <HistoryButton label={t("forward")} onClick={forward} disabled={!canForward}>
                 <ChevronRight className="size-4" />
             </HistoryButton>
         </span>
@@ -557,15 +561,16 @@ function HistoryButton({
 
 /** The tab's own "⋯": what the tool is for, a link to this screen, or this screen in a browser tab. */
 function FrameMenu({ title, about }: { title: string; about?: ReactNode }) {
+    const t = useTranslations("tools.frame");
     const { linkFor, path, search } = useToolNav();
     const here = `${path}${search}`;
     const copy = async () => {
         const url = new URL(linkFor(here), window.location.origin).toString();
         try {
             await navigator.clipboard.writeText(url);
-            toast.success("Link copied");
+            toast.success(t("linkCopied"));
         } catch {
-            toast.error("Could not copy the link");
+            toast.error(t("linkCopyFailed"));
         }
     };
     return (
@@ -575,7 +580,7 @@ function FrameMenu({ title, about }: { title: string; about?: ReactNode }) {
                     type="button"
                     variant="ghost"
                     size="icon"
-                    aria-label={`${title} options`}
+                    aria-label={t("optionsLabel", { title })}
                     className="text-ink-3 hover:bg-line-2 hover:text-ink data-[state=open]:bg-line-2 size-7 shrink-0 rounded-md"
                 >
                     <MoreHorizontal className="size-4" />
@@ -592,13 +597,13 @@ function FrameMenu({ title, about }: { title: string; about?: ReactNode }) {
                 )}
                 <DropdownMenuItem onSelect={() => void copy()}>
                     <Link2 />
-                    Copy link to this screen
+                    {t("copyLink")}
                 </DropdownMenuItem>
                 <DropdownMenuItem
                     onSelect={() => window.open(linkFor(here), "_blank", "noopener,noreferrer")}
                 >
                     <ExternalLink />
-                    Open in a new browser tab
+                    {t("openInBrowserTab")}
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
@@ -621,6 +626,7 @@ function ScreenMenu({
     activeItem: ToolNavItem | undefined;
     path: string;
 }) {
+    const t = useTranslations("tools.frame");
     const { navigate } = useToolNav();
     return (
         <DropdownMenu>
@@ -628,7 +634,7 @@ function ScreenMenu({
                 <Button
                     type="button"
                     variant="ghost"
-                    aria-label={`${title} screens`}
+                    aria-label={t("screensLabel", { title })}
                     className="hover:bg-line-2 hover:text-ink data-[state=open]:bg-line-2 h-8 min-w-0 flex-1 justify-start gap-2 px-1.5 text-left font-normal"
                 >
                     {mark}
@@ -705,8 +711,8 @@ export function ToolMark({ icon: Icon, className }: { icon: LucideIcon; classNam
 export function ToolNotFound({
     home,
     homeLabel,
-    title = "This screen does not exist",
-    body = "The link may be from an older version of the app, or the thing it pointed at was removed.",
+    title,
+    body,
 }: {
     home: string;
     homeLabel: string;
@@ -714,16 +720,17 @@ export function ToolNotFound({
     title?: string;
     body?: string;
 }) {
+    const t = useTranslations("tools.frame");
     const { navigate, forgetCurrent } = useToolNav();
     // A dead link is not a place to come back to: the tab keeps remembering
     // the last screen that existed.
     useEffect(() => forgetCurrent(), [forgetCurrent]);
     return (
         <div className="border-line bg-panel flex max-w-xl flex-col items-start gap-2 rounded-lg border px-5 py-5">
-            <div className="text-ink text-sm font-medium">{title}</div>
-            <p className="text-ink-2 text-sm">{body}</p>
+            <div className="text-ink text-sm font-medium">{title ?? t("notFoundTitle")}</div>
+            <p className="text-ink-2 text-sm">{body ?? t("notFoundBody")}</p>
             <Button size="sm" variant="outline" className="mt-1" onClick={() => navigate(home)}>
-                Go to {homeLabel}
+                {t("goTo", { label: homeLabel })}
             </Button>
         </div>
     );

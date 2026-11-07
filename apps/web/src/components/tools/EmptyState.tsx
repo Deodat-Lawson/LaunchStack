@@ -1,3 +1,5 @@
+import { useTranslations } from "next-intl";
+
 import { cn } from "~/lib/utils";
 
 import { ProspectsMark } from "~/components/icons/prospects";
@@ -43,6 +45,7 @@ export function InlineError({
     onRetry?: () => void;
     className?: string;
 }) {
+    const tc = useTranslations("common");
     return (
         <div role="alert" className={cn("text-danger flex items-center gap-3 text-sm", className)}>
             <span>{message}</span>
@@ -52,7 +55,7 @@ export function InlineError({
                     onClick={onRetry}
                     className="focus-visible:ring-brand/50 rounded-sm underline underline-offset-2 outline-none focus-visible:ring-2"
                 >
-                    Retry
+                    {tc("actions.retry")}
                 </button>
             )}
         </div>

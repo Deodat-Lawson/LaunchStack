@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
     if (!auth.ok) return auth.response;
     try {
         const parsed = ObservationSchema.safeParse(await readBody(request));
-        if (!parsed.success) return error(firstIssue(parsed.error.issues), 400);
+        if (!parsed.success) return error(firstIssue(parsed.error.issues, request), 400);
         await createObservations({
             companyId: auth.ctx.companyId,
             userId: auth.ctx.userId,
@@ -20,6 +20,6 @@ export async function POST(request: NextRequest) {
         const observations = await listObservations({ companyId: auth.ctx.companyId });
         return json({ observations }, 201);
     } catch (err) {
-        return handleVantageError("POST observation", err);
+        return handleVantageError("POST observation", err, request);
     }
 }

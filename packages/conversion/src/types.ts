@@ -29,6 +29,7 @@ export type IngestionProvider =
     | "crawl4ai"
     | "azure"
     | "landing_ai"
+    | "datalab"
     | "tesseract"
     | "sidecar"
     | "docling"
@@ -198,6 +199,9 @@ export function toNormalizedDocument(doc: StandardizedDocument): NormalizedDocum
         crawl4ai: "NATIVE_PDF",
         azure: "AZURE",
         landing_ai: "LANDING_AI",
+        datalab: "DATALAB",
+        docling: "DOCLING",
+        // Local OCR: no paid provider read it, so it is metered like the text layer.
         tesseract: "NATIVE_PDF",
         sidecar: "AZURE",
     };
@@ -210,7 +214,8 @@ export function toNormalizedDocument(doc: StandardizedDocument): NormalizedDocum
                 | "AZURE"
                 | "LANDING_AI"
                 | "NATIVE_PDF"
-                | "DATALAB",
+                | "DATALAB"
+                | "DOCLING",
             processingTimeMs: doc.metadata.processingTimeMs,
             confidenceScore: doc.metadata.confidenceScore,
         },

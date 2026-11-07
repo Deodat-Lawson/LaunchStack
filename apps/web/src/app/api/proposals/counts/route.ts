@@ -2,12 +2,12 @@
 import { proposalsContext, handleProposalsError, json } from "../_http";
 import { loadCounts } from "~/server/proposals/service";
 
-export async function GET() {
+export async function GET(request: Request) {
     const auth = await proposalsContext();
     if (!auth.ok) return auth.response;
     try {
         return json(await loadCounts(auth.ctx));
     } catch (err) {
-        return handleProposalsError("GET counts", err);
+        return handleProposalsError("GET counts", err, request);
     }
 }

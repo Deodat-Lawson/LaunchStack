@@ -10,18 +10,27 @@
  *   whoever creates it; a new subfolder follows the folder it is made in.
  */
 
+import type { useTranslations } from "next-intl";
+
 import type { GrantLevel, PrincipalType } from "~/lib/authz/permissions";
 import {
     folderAncestors,
     folderLeafName,
+    folderPathIssue,
     isUnfiledFolder,
     joinFolderPath,
     normalizeFolderPath,
     splitFolderPath,
-    validateFolderPath,
 } from "~/lib/folders/path";
 
 import type { ItemAccessView, SourceAudience } from "./types";
+
+/**
+ * `useTranslations("sources")`: the dialog's words live in
+ * `sources.addDestination`, and borrow `sources.audience` and
+ * `sources.folderIssues`.
+ */
+export type DestinationTranslator = ReturnType<typeof useTranslations<"sources">>;
 
 // ---------------------------------------------------------------------------
 // Destination
@@ -154,6 +163,7 @@ const leaf = (path: string) => folderLeafName(path);
  * any request — and null while it is not known.
  */
 export function summarizeAudience(
+    t: DestinationTranslator,
     dest: Destination,
     tone: SourceAudience | null,
     options: {
@@ -163,37 +173,40 @@ export function summarizeAudience(
         count?: number | null;
     } = {}
 ): AudienceSummary | null {
+    const onlyYou = t("audience.onlyYou");
     const everyone = options.workspaceName
-        ? `Everyone at ${options.workspaceName}`
-        : "Everyone in the workspace";
+        ? t("audience.everyoneAt", { workspace: options.workspaceName })
+        : t("audience.everyoneInWorkspace");
 
     if (dest.kind === "unfiled") {
         return {
             tone: "private",
-            headline: "Only you",
-            detail: "Files with no folder stay private until you share them.",
+            headline: onlyYou,
+            detail: t("addDestination.unfiledPrivate"),
         };
     }
     if (dest.kind === "new-top") {
         return {
             tone: "private",
-            headline: "Only you",
-            detail: `${leaf(dest.path)} is a new folder. New folders start private to you.`,
+            headline: onlyYou,
+            detail: t("addDestination.newTopPrivate", { folder: leaf(dest.path) }),
         };
     }
     if (tone === null || dest.audienceFrom === null) return null;
 
     const from = dest.audienceFrom;
     const shared =
-        options.count != null ? `Shared with ${peopleCount(options.count)}` : "Specific people";
-    const headline = tone === "private" ? "Only you" : tone === "workspace" ? everyone : shared;
+        options.count != null
+            ? t("addDestination.sharedWithPeople", { count: options.count })
+            : t("addDestination.specificPeople");
+    const headline = tone === "private" ? onlyYou : tone === "workspace" ? everyone : shared;
 
     if (dest.kind === "new-sub") {
-        const parent = leaf(from);
+        const values = { folder: leaf(dest.path), parent: leaf(from) };
         const detail =
             tone === "private"
-                ? `${leaf(dest.path)} is a new folder inside ${parent}, which is private to you.`
-                : `${leaf(dest.path)} is a new folder inside ${parent}, so it follows ${parent}'s sharing.`;
+                ? t("addDestination.newSubPrivate", values)
+                : t("addDestination.newSubFollows", values);
         return { tone, headline, detail };
     }
 
@@ -207,19 +220,23 @@ export function summarizeAudience(
             tone,
             headline,
             detail: governing
-                ? `${name} follows ${governing}, which is private to you.`
-                : `${name} is private to you.`,
+                ? t("addDestination.followsPrivate", { folder: name, governing })
+                : t("addDestination.privateToYou", { folder: name }),
         };
     }
     if (tone === "workspace") {
-        return { tone, headline, detail: `Anyone in the workspace can open ${name}.` };
+        return {
+            tone,
+            headline,
+            detail: t("addDestination.workspaceCanOpen", { folder: name }),
+        };
     }
     return {
         tone,
         headline,
         detail: governing
-            ? `${name} follows ${governing}'s sharing.`
-            : `Only the people ${name} is shared with can open it.`,
+            ? t("addDestination.followsSharing", { folder: name, governing })
+            : t("addDestination.sharedOnly", { folder: name }),
     };
 }
 
@@ -229,27 +246,28 @@ export function summarizeAudience(
  * a number beside "Shared with 4 people" in the bar would read as a mismatch.
  */
 export function folderAudienceTag(
+    t: DestinationTranslator,
     access: Pick<ItemAccessView, "audience"> | undefined
 ): { tone: SourceAudience; label: string } | null {
     if (!access) return null;
     switch (access.audience) {
         case "private":
-            return { tone: "private", label: "Only you" };
+            return { tone: "private", label: t("addDestination.tagOnlyYou") };
         case "shared":
-            return { tone: "shared", label: "Shared" };
+            return { tone: "shared", label: t("addDestination.tagShared") };
         case "workspace":
-            return { tone: "workspace", label: "Everyone" };
+            return { tone: "workspace", label: t("addDestination.tagEveryone") };
     }
 }
 
 /** "3 people", "1 person". */
-export function peopleCount(n: number): string {
-    return `${n} ${n === 1 ? "person" : "people"}`;
+export function peopleCount(t: DestinationTranslator, n: number): string {
+    return t("addDestination.peopleCount", { count: n });
 }
 
 /** "Q4 planning / Pricing", or "No folder" for Unfiled. */
-export function destinationLabel(path: string): string {
-    return isUnfiledFolder(path) ? "No folder" : splitFolderPath(path).join(" / ");
+export function destinationLabel(t: DestinationTranslator, path: string): string {
+    return isUnfiledFolder(path) ? t("addDestination.noFolder") : splitFolderPath(path).join(" / ");
 }
 
 // ---------------------------------------------------------------------------
@@ -274,6 +292,7 @@ export interface FolderUploadPlan {
  * ("Q3 data/raw/a.csv"); their first segment is the picked folder itself.
  */
 export function planFolderUpload(
+    t: DestinationTranslator,
     destination: string,
     rootName: string,
     relativePaths: readonly string[]
@@ -288,13 +307,14 @@ export function planFolderUpload(
     });
     const distinct = [...new Set(paths)];
     const problems: string[] = [];
-    if (!name) problems.push("Give the new folder a name.");
-    else if (name.includes("/")) problems.push("A folder name can't contain “/”.");
+    if (!name) problems.push(t("addDestination.noName"));
+    else if (name.includes("/")) problems.push(t("addDestination.noSlash"));
     else {
         for (const path of distinct) {
-            const problem = validateFolderPath(path);
-            if (problem) {
-                problems.push(`${path}: ${problem}`);
+            const issue = folderPathIssue(path);
+            if (issue) {
+                const problem = t(`folderIssues.${issue.code}`, issue);
+                problems.push(t("addDestination.pathProblem", { path, problem }));
                 break;
             }
         }

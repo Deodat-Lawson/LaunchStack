@@ -7,6 +7,10 @@ Inline and worker execution resolve active membership at execution time; a worke
 event cannot substitute a more privileged writer. Scope resolution failures do
 not fall back to workspace-wide access.
 
+Preserve AI-allowance admission and usage attribution when entering the current
+workspace model scope. Both document access and AI usage resolve to the stored
+writer; changing a worker event's user ID cannot redirect either.
+
 Require explicit document scope for run contexts, draft inputs, retrieval and
 organisation-profile loading. Filter profile provenance and library answers to
 readable same-workspace sources, check stored request sources, and refuse

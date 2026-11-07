@@ -23,6 +23,15 @@ on:
     branches: [main]
     tags: ["v*.*.*"]
 
+# One build per ref at a time. Two merges to main minutes apart used to build
+# side by side, and whichever pushed last owned :latest — the older commit, on
+# 2026-10-28. Queued, the newest commit pushes last (a queued run that a newer
+# one supersedes is cancelled and gets no sha- tag). A PR's build is cancelled
+# by its next push.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}-web
@@ -81,6 +90,9 @@ jobs:
           push: ${{ github.event_name == 'push' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          # /api/health and feedback reports name the build by its commit.
+          build-args: |
+            GIT_COMMIT_SHA=${{ github.sha }}
           cache-from: type=gha,scope=source
           cache-to: type=gha,scope=source,mode=max
 

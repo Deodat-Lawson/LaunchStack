@@ -16,6 +16,7 @@ import { normalizeRoleSlug, type GrantLevel, type PrincipalType } from "~/lib/au
 import { db } from "~/server/db";
 import { users, workspaceSessionGrants, workspaceSessions } from "~/server/db/schema";
 import { recordActivity } from "~/server/workspace/activity";
+import { copy } from "~/i18n/copy";
 import { forbidden, notFound } from "~/server/workspace/errors";
 import {
     activeMemberPrincipals,
@@ -132,7 +133,7 @@ export async function getChatSharing(
     sessionId: string
 ): Promise<ChatSharingView> {
     const access = await resolveSessionAccess(ctx, sessionId);
-    if (!access) throw notFound("Session not found");
+    if (!access) throw notFound(copy("chat.server.sessions.notFound"));
     return buildView(ctx, access.session, access.level === "owner");
 }
 
@@ -142,9 +143,8 @@ export async function setChatSharing(
     input: ChatSharingInput
 ): Promise<ChatSharingView> {
     const access = await resolveSessionAccess(ctx, sessionId);
-    if (!access) throw notFound("Session not found");
-    if (access.level !== "owner")
-        throw forbidden("Only the person who started this chat can share it.");
+    if (!access) throw notFound(copy("chat.server.sessions.notFound"));
+    if (access.level !== "owner") throw forbidden(copy("chat.server.sessions.ownerOnlyShare"));
     const session = access.session;
 
     // A grant naming the owner is meaningless (they always read it); drop it

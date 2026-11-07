@@ -112,6 +112,11 @@ jest.mock("~/server/brand/post-views", () => ({
     toPostViews: (_companyId: bigint, posts: unknown[]) => Promise.resolve(posts),
 }));
 jest.mock("~/server/brand/publish", () => ({ publishForWorkspace: jest.fn() }));
+const mockClaimGate = jest.fn().mockResolvedValue(null);
+jest.mock("~/server/brand/claim-gate", () => ({
+    CLAIM_GATE_MESSAGE: "Some claims in this post aren't backed by your documents.",
+    claimGate: (...a: unknown[]) => mockClaimGate(...a),
+}));
 jest.mock("~/server/db", () => ({ db: {} }));
 jest.mock("@launchstack/tools/social-publish/bluesky", () => ({ getBlueskyProfile: jest.fn() }));
 
@@ -287,12 +292,12 @@ describe("GET accounts", () => {
             channels: [],
             canManage: false,
         });
-        const response = await getAccounts();
+        const response = await getAccounts(req("/api/brand/accounts", "GET"));
         expect(response.status).toBe(200);
-        expect(mockListBrandAccounts).toHaveBeenCalledWith(BigInt(5), false, true);
+        expect(mockListBrandAccounts).toHaveBeenCalledWith(BigInt(5), false, true, "en");
         as("viewer");
-        await getAccounts();
-        expect(mockListBrandAccounts).toHaveBeenLastCalledWith(BigInt(5), false, false);
+        await getAccounts(req("/api/brand/accounts", "GET"));
+        expect(mockListBrandAccounts).toHaveBeenLastCalledWith(BigInt(5), false, false, "en");
     });
 });
 
@@ -398,7 +403,7 @@ describe("speaking as the company needs social.publish (Viewers and Guests read 
             "POST posts/[id]/publish",
             () => publishPost(req("/api/brand/posts/p1/publish", "POST"), params({ id: "p1" })),
         ],
-        ["POST posts/publish-due", () => publishDue()],
+        ["POST posts/publish-due", () => publishDue(req("/api/brand/posts/publish-due", "POST"))],
         [
             "POST comments/[id]/reply",
             () =>
@@ -416,7 +421,7 @@ describe("speaking as the company needs social.publish (Viewers and Guests read 
                 ),
         ],
         ["POST media", () => uploadMedia(form())],
-        ["POST insights/sync", () => syncNow()],
+        ["POST insights/sync", () => syncNow(req("/api/brand/insights/sync", "POST"))],
         [
             "POST marketing-pipeline/publish (campaign)",
             () =>
@@ -530,5 +535,164 @@ describe("the campaign generator's Publish goes through the workspace's own chan
         );
         expect(response.status).toBe(400);
         expect(mockCreateBrandPosts).not.toHaveBeenCalled();
+    });
+});
+
+describe("the claim gate: unbacked claims don't go out as the company unacknowledged", () => {
+    const BLOCK = {
+        code: "unsupported_claims",
+        unavailable: false,
+        claims: [
+            {
+                claim: "We are SOC 2 certified",
+                support: "unsupported",
+                reason: "The documents only mention plans for an audit.",
+                sourceDoc: "Security overview",
+            },
+        ],
+    };
+
+    beforeEach(() => {
+        mockDefaultChannelFor.mockResolvedValue(PAGE);
+        mockPublishBrandPost.mockResolvedValue({
+            status: "published",
+            postId: "urn:li:share:1",
+            postUrl: "https://li/1",
+            error: null,
+        });
+    });
+
+    it("the generator's Publish answers 409 with the claims, and posts nothing", async () => {
+        as("member");
+        mockClaimGate.mockResolvedValueOnce(BLOCK);
+        const response = await campaignPublish(
+            req("/api/marketing-pipeline/publish", "POST", {
+                platform: "linkedin",
+                message: "We are SOC 2 certified.",
+            })
+        );
+        expect(response.status).toBe(409);
+        await expect(response.json()).resolves.toMatchObject({
+            code: "unsupported_claims",
+            claims: [{ claim: "We are SOC 2 certified", support: "unsupported" }],
+        });
+        expect(mockClaimGate).toHaveBeenCalledWith(
+            BigInt(5),
+            expect.any(String),
+            "We are SOC 2 certified."
+        );
+        expect(mockCreateBrandPosts).not.toHaveBeenCalled();
+        expect(mockPublishBrandPost).not.toHaveBeenCalled();
+    });
+
+    it("a check that could not run blocks the same way (unknown is not clean)", async () => {
+        as("member");
+        mockClaimGate.mockResolvedValueOnce({ ...BLOCK, unavailable: true, claims: [] });
+        const response = await campaignPublish(
+            req("/api/marketing-pipeline/publish", "POST", { platform: "linkedin", message: "Hi" })
+        );
+        expect(response.status).toBe(409);
+        await expect(response.json()).resolves.toMatchObject({ unavailable: true });
+        expect(mockCreateBrandPosts).not.toHaveBeenCalled();
+    });
+
+    it("posts once the member acknowledges, without checking again", async () => {
+        as("member");
+        const response = await campaignPublish(
+            req("/api/marketing-pipeline/publish", "POST", {
+                platform: "linkedin",
+                message: "We are SOC 2 certified.",
+                acknowledgeUnsupportedClaims: true,
+            })
+        );
+        expect(response.status).toBe(200);
+        expect(mockClaimGate).not.toHaveBeenCalled();
+        expect(mockPublishBrandPost).toHaveBeenCalled();
+    });
+
+    it("scheduling a campaign post through Compose is gated too", async () => {
+        as("member");
+        mockClaimGate.mockResolvedValueOnce(BLOCK);
+        const response = await compose(
+            req("/api/brand/posts", "POST", {
+                channels: ["ch-page"],
+                body: "We are SOC 2 certified.",
+                scheduledAt: new Date(Date.now() + 86_400_000).toISOString(),
+                source: { kind: "campaign" },
+            })
+        );
+        expect(response.status).toBe(409);
+        await expect(response.json()).resolves.toMatchObject({ code: "unsupported_claims" });
+        expect(mockCreateBrandPosts).not.toHaveBeenCalled();
+    });
+
+    it("a member's own Compose post is theirs: no claim check", async () => {
+        as("member");
+        const response = await compose(
+            req("/api/brand/posts", "POST", {
+                channels: ["ch-page"],
+                body: "We are SOC 2 certified.",
+                source: { kind: "compose" },
+            })
+        );
+        expect(response.status).toBe(201);
+        expect(mockClaimGate).not.toHaveBeenCalled();
+    });
+});
+
+describe("in the reader's language", () => {
+    function zh(path: string, method: string, body?: unknown) {
+        return new Request(`https://app.test${path}`, {
+            method,
+            headers: { "Content-Type": "application/json", cookie: "ls-locale=zh-CN.1" },
+            body: body === undefined ? undefined : JSON.stringify(body),
+        }) as unknown as Parameters<typeof compose>[0];
+    }
+
+    it("refuses a viewer in Chinese, keeping the code", async () => {
+        as("viewer");
+        const response = await compose(
+            zh("/api/brand/posts", "POST", { channels: ["ch-page"], body: "Hello" })
+        );
+        expect(response.status).toBe(403);
+        expect(await response.json()).toEqual({
+            error: "你的角色可以查看品牌，但不能以公司身份发帖或回复。",
+            code: "forbidden",
+        });
+    });
+
+    it("says a switched-off channel in Chinese, and in English without the cookie", async () => {
+        as("member");
+        mockListBrandChannels.mockResolvedValue([{ ...PAGE, enabled: false }]);
+        const body = { channels: ["ch-page"], body: "Hello" };
+        const chinese = await compose(zh("/api/brand/posts", "POST", body));
+        expect((await chinese.json()).error).toBe("LaunchStack 已在“账号”中关闭。");
+        const english = await compose(req("/api/brand/posts", "POST", body));
+        expect((await english.json()).error).toBe("LaunchStack is switched off under Accounts.");
+        expect(mockListBrandChannels).toHaveBeenLastCalledWith(BigInt(5), undefined, "en");
+    });
+
+    it("words a post error the marketing pipeline threw", async () => {
+        as("member");
+        const refused = Object.assign(new Error("Pick a time that is still ahead."), {
+            status: 400,
+            code: "schedule_past",
+        });
+        mockSpeaks.mockRejectedValue(refused);
+        const patch = { scheduledAt: "2020-01-01T00:00:00Z", status: "scheduled" };
+        const chinese = await patchPost(
+            zh("/api/brand/posts/p1", "PATCH", patch),
+            params({ id: "p1" })
+        );
+        expect(chinese.status).toBe(400);
+        expect(await chinese.json()).toEqual({
+            error: "请选择一个尚未到来的时间。",
+            code: "schedule_past",
+        });
+        const english = await patchPost(
+            req("/api/brand/posts/p1", "PATCH", patch),
+            params({ id: "p1" })
+        );
+        expect((await english.json()).error).toBe("Pick a time that is still ahead.");
     });
 });

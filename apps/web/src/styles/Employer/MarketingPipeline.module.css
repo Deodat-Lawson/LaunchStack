@@ -49,7 +49,11 @@
     font-size: 0.8rem;
     padding: 0.25rem 0.7rem;
     cursor: pointer;
-    transition: all 0.2s;
+    transition:
+        background-color 0.2s,
+        border-color 0.2s,
+        color 0.2s,
+        box-shadow 0.2s;
     font-family: inherit;
 }
 
@@ -87,7 +91,11 @@
     text-align: left;
     padding: 0.6rem 0.7rem;
     cursor: pointer;
-    transition: all 0.2s;
+    transition:
+        background-color 0.2s,
+        border-color 0.2s,
+        color 0.2s,
+        box-shadow 0.2s;
     font-family: inherit;
 }
 
@@ -112,29 +120,6 @@
 .sessionItemMeta {
     font-size: 0.74rem;
     color: var(--ink-3);
-}
-
-/* Back button in nav */
-.backNavButton {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    padding: 0.4rem 0.75rem;
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--ink-2);
-    background: transparent;
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    font-family: inherit;
-}
-
-.backNavButton:hover {
-    color: var(--ink);
-    background: var(--panel-2);
-    border-color: var(--ink-4);
 }
 
 /* ---------------- Page shell ---------------- */
@@ -240,18 +225,6 @@
     padding: 1rem;
 }
 
-.stepTitle {
-    font-size: 1rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: var(--ink);
-}
-
-.helperText {
-    margin: 0 0 0.85rem 0;
-    color: var(--ink-3);
-}
-
 .platformGrid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -259,11 +232,15 @@
     margin-top: 1rem;
 }
 
+/* Cards start at the top, and each text row reserves its lines, so every
+   card's logo, name, subtitle and limit sit on the same lines across the row
+   however long a subtitle runs. (Centred content put a two-line subtitle's
+   logo higher than its neighbours'.) */
 .platformCard {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 10px;
     border: 1px solid var(--line-2);
     border-radius: 16px;
@@ -296,13 +273,11 @@
 .platformLogo {
     width: 44px;
     height: 44px;
+    flex-shrink: 0;
     border-radius: 10px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-weight: 700;
-    font-size: 1.125rem;
-    letter-spacing: 0.02em;
     color: #ffffff;
     transition: transform 160ms ease;
     position: relative;
@@ -318,35 +293,14 @@
 }
 .platformLogoX {
     background: #000000;
+    /* X's tile is black: a hairline keeps it a tile on the dark theme. */
+    box-shadow: inset 0 0 0 1px var(--line);
 }
 .platformLogoLinkedin {
     background: #0a66c2;
 }
 .platformLogoBluesky {
     background: #0085ff;
-}
-
-.platformLogoImgContainer.platformLogoReddit {
-    background: transparent;
-}
-.platformLogoImgContainer {
-    overflow: visible;
-}
-
-.platformCard .platformLogoImgContainer {
-    width: 4rem;
-    height: 4rem;
-}
-
-.platformCard .platformLogoImgContainer .platformLogoImg {
-    object-fit: contain;
-}
-
-.platformLogoImg {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    border-radius: 0.9rem;
 }
 
 .platformName {
@@ -365,6 +319,7 @@
     position: relative;
     z-index: 2;
     line-height: 1.4;
+    min-height: calc(2 * 1.4em);
 }
 
 /* ---------------- Workspace ---------------- */
@@ -387,13 +342,6 @@
     grid-template-columns: minmax(0, 1.5fr) minmax(320px, 1fr);
     gap: 28px;
     align-items: flex-start;
-}
-
-.workspaceLeft {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    min-width: 0;
 }
 
 .workspaceLeftHeader {
@@ -432,17 +380,6 @@
     justify-content: center;
     font-size: 0.8rem;
     color: #fff;
-}
-
-.selectedPlatformPill .platformLogoImgContainer {
-    width: 2rem;
-    height: 2rem;
-    min-width: 2rem;
-    min-height: 2rem;
-}
-
-.selectedPlatformPill .platformLogoImgContainer .platformLogoImg {
-    object-fit: contain;
 }
 
 .selectedPlatformLabel {
@@ -568,90 +505,10 @@
     font-weight: 500;
 }
 
-/* ---------------- Assistant card / output ---------------- */
-
-.workspaceRight {
-    position: sticky;
-    top: 1.5rem;
-}
-
-.assistantCard {
-    background: color-mix(in oklch, var(--panel) 82%, transparent);
-    backdrop-filter: blur(8px);
-    border: 1px solid var(--line-2);
-    border-radius: 16px;
-    padding: 18px 20px 20px;
-    box-shadow: 0 1px 2px oklch(0 0 0 / 0.04);
-}
-
-.assistantHeader {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 12px;
-}
-
 .assistantIcon {
     color: var(--accent);
     width: 16px;
     height: 16px;
-}
-
-.assistantTitle {
-    margin: 0;
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: -0.005em;
-    color: var(--ink);
-}
-
-.assistantHint {
-    color: var(--ink-3);
-    font-size: 0.925rem;
-    line-height: 1.5;
-    margin-bottom: 0.5rem;
-}
-
-.hintList {
-    margin: 1rem 0 0;
-    padding-left: 1.25rem;
-    display: grid;
-    gap: 0.5rem;
-    color: var(--ink-3);
-    font-size: 0.875rem;
-    line-height: 1.4;
-}
-
-.assistantLoading {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    color: var(--ink-3);
-}
-
-.outputHeader {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    font-size: 0.92rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: var(--ink);
-}
-
-.outputBlock {
-    background: var(--panel);
-    backdrop-filter: blur(8px);
-    border: 1px solid var(--line-2);
-    border-radius: 12px;
-    padding: 1rem;
-    white-space: pre-wrap;
-    font-size: 0.9rem;
-    line-height: 1.6;
-    color: var(--ink);
-    box-shadow: 0 4px 16px var(--accent-glow);
-    max-height: 220px;
-    overflow: auto;
 }
 
 /* Platform preview card — post-style display */
@@ -691,10 +548,11 @@
 }
 
 .platformPreviewBadgeReddit {
-    background: transparent;
+    background: #ff4500;
 }
 .platformPreviewBadgeX {
     background: #000;
+    box-shadow: inset 0 0 0 1px var(--line);
 }
 .platformPreviewBadgeLinkedin {
     background: #0a66c2;
@@ -703,27 +561,11 @@
     background: #0085ff;
 }
 
-.platformPreviewBadgeImg {
-    width: 1.1rem;
-    height: 1.1rem;
-}
-
 .platformPreviewLabel {
     flex: 1;
     font-size: 0.8125rem;
     font-weight: 500;
     color: var(--ink-2);
-}
-
-.mediaBadge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    font-size: 0.7rem;
-    color: var(--ink-2);
-    padding: 0.2rem 0.5rem;
-    border-radius: 6px;
-    background: var(--accent-soft);
 }
 
 .platformPreviewBody {
@@ -773,7 +615,11 @@
     background: transparent;
     color: var(--ink-2);
     cursor: pointer;
-    transition: all 0.2s;
+    transition:
+        background-color 0.2s,
+        border-color 0.2s,
+        color 0.2s,
+        box-shadow 0.2s;
     font-family: inherit;
 }
 
@@ -813,204 +659,6 @@
     margin-top: 1rem;
 }
 
-.refineInRewriteButton {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    padding: 0.5rem 1rem;
-    border-radius: 10px;
-    border: 1px solid var(--accent);
-    background: var(--accent-soft);
-    color: var(--accent);
-    font-size: 0.9rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-family: inherit;
-}
-
-.refineInRewriteButton:hover:not(:disabled) {
-    background: color-mix(in oklch, var(--accent) 18%, transparent);
-}
-
-.refineInRewriteButton:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-.refineRow {
-    display: flex;
-    gap: 0.5rem;
-    align-items: stretch;
-}
-
-.refineInput {
-    flex: 1;
-    min-width: 0;
-    padding: 0.5rem 0.75rem;
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    font-size: 0.85rem;
-    background: var(--panel);
-    color: var(--ink);
-    font-family: inherit;
-    outline: none;
-    transition:
-        border-color 160ms ease,
-        box-shadow 160ms ease;
-}
-
-.refineInput:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px var(--accent-glow);
-}
-
-.refineButton {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    padding: 0.5rem 1rem;
-    border-radius: 10px;
-    border: 1px solid var(--accent);
-    background: var(--accent-soft);
-    color: var(--accent);
-    font-size: 0.85rem;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-family: inherit;
-}
-
-.refineButton:hover:not(:disabled) {
-    background: color-mix(in oklch, var(--accent) 22%, transparent);
-}
-
-.refineButton:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-.refineError {
-    margin: 0;
-    font-size: 0.8rem;
-    color: var(--danger);
-}
-
-.refineProposalCard {
-    border: 1px solid var(--accent);
-    border-radius: 12px;
-    background: var(--accent-soft);
-    overflow: hidden;
-}
-
-.refineProposalHeader {
-    padding: 0.5rem 0.75rem;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--ink);
-    border-bottom: 1px solid color-mix(in oklch, var(--accent) 25%, transparent);
-}
-
-.refineProposalBody {
-    padding: 0.75rem 1rem;
-    font-size: 0.875rem;
-    line-height: 1.6;
-    color: var(--ink);
-}
-
-.refineProposalBody p {
-    margin: 0 0 0.5em 0;
-}
-.refineProposalBody p:last-child {
-    margin-bottom: 0;
-}
-
-.refineProposalActions {
-    display: flex;
-    gap: 0.5rem;
-    padding: 0.5rem 0.75rem;
-    border-top: 1px solid color-mix(in oklch, var(--accent) 25%, transparent);
-}
-
-.acceptButton {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    padding: 0.4rem 0.75rem;
-    border-radius: 8px;
-    border: 0;
-    background: var(--success);
-    color: white;
-    font-size: 0.85rem;
-    font-weight: 500;
-    cursor: pointer;
-    font-family: inherit;
-    transition: filter 160ms ease;
-}
-
-.acceptButton:hover {
-    filter: brightness(0.92);
-}
-
-.discardButton {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    padding: 0.4rem 0.75rem;
-    border-radius: 8px;
-    border: 1px solid var(--line);
-    background: transparent;
-    color: var(--ink-2);
-    font-size: 0.85rem;
-    cursor: pointer;
-    font-family: inherit;
-    transition: all 160ms ease;
-}
-
-.discardButton:hover {
-    background: var(--panel-2);
-    color: var(--ink);
-}
-
-.copyButton {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    padding: 7px 12px;
-    border-radius: 10px;
-    border: 0;
-    background: linear-gradient(180deg, var(--accent) 0%, var(--accent-deep) 100%);
-    color: white;
-    font-family: inherit;
-    font-size: 13px;
-    font-weight: 600;
-    letter-spacing: -0.005em;
-    cursor: pointer;
-    box-shadow:
-        0 1px 0 oklch(1 0 0 / 0.35) inset,
-        0 6px 16px var(--accent-glow);
-    transition:
-        transform 100ms ease,
-        box-shadow 160ms ease;
-}
-
-.copyButton:hover:not(:disabled) {
-    transform: translateY(-1px);
-    box-shadow:
-        0 1px 0 oklch(1 0 0 / 0.35) inset,
-        0 10px 22px var(--accent-glow);
-}
-
-.copyButton:active:not(:disabled) {
-    transform: translateY(0);
-}
-
-.copyButton:disabled {
-    opacity: 0.55;
-    cursor: not-allowed;
-}
-
 /* ---------------- Section labels ---------------- */
 
 .assistantSectionHeader {
@@ -1037,7 +685,11 @@
     border: 1px solid var(--line-2);
     border-radius: 12px;
     padding: 0.875rem;
-    transition: all 0.3s ease;
+    transition:
+        background-color 0.3s ease,
+        border-color 0.3s ease,
+        color 0.3s ease,
+        box-shadow 0.3s ease;
     box-shadow: 0 2px 8px oklch(0 0 0 / 0.04);
 }
 
@@ -1137,19 +789,6 @@
     .workspaceShell {
         grid-template-columns: minmax(0, 1fr);
     }
-
-    .workspaceRight {
-        position: static;
-    }
-
-    .workspaceLayout {
-        grid-template-columns: minmax(0, 1fr) !important;
-    }
-
-    .sessionSidebar {
-        position: static;
-        top: auto;
-    }
 }
 
 @container (max-width: 640px) {
@@ -1184,8 +823,7 @@
         gap: 1rem;
     }
 
-    .platformShell,
-    .assistantCard {
+    .platformShell {
         padding: 1rem;
     }
 
@@ -1277,28 +915,6 @@
     color: var(--ink-3);
 }
 
-.promptTextarea {
-    width: 100%;
-    min-height: 100px;
-    resize: vertical;
-    border-radius: 10px;
-    border: 1px solid var(--line);
-    background: var(--panel);
-    color: var(--ink);
-    padding: 0.7rem;
-    line-height: 1.45;
-    font-family: inherit;
-    outline: none;
-    transition:
-        border-color 160ms ease,
-        box-shadow 160ms ease;
-}
-
-.promptTextarea:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px var(--accent-glow);
-}
-
 .inlineAlert {
     margin-top: 0.25rem;
     margin-bottom: 0.1rem;
@@ -1308,12 +924,6 @@
     color: var(--danger);
     border: 1px solid color-mix(in oklch, var(--danger) 30%, transparent);
     font-size: 0.85rem;
-}
-
-.assistantEmptyState {
-    font-size: 0.8125rem;
-    color: var(--ink-3);
-    margin: 0;
 }
 
 .assistantResult {
@@ -1337,10 +947,6 @@
     padding: 20px 20px 22px;
     border-radius: 12px;
     box-shadow: none;
-}
-
-.embeddedRoot .workspaceLeft {
-    gap: 1.25rem;
 }
 
 .embeddedRoot .workspaceLeftHeader {
@@ -1371,15 +977,6 @@
     margin-bottom: 8px;
 }
 
-/* ---------------- Workspace layout overrides ---------------- */
-
-.workspaceLayout {
-    grid-template-columns: 250px minmax(0, 1fr) !important;
-    display: grid;
-    gap: 1.25rem !important;
-    align-items: start;
-}
-
 .workspaceShell {
     grid-template-columns: minmax(0, 1fr) !important;
     display: grid;
@@ -1391,22 +988,6 @@
     grid-template-columns: minmax(0, 1fr) !important;
     gap: 1.25rem !important;
     align-items: start;
-}
-
-.sessionSidebar {
-    position: sticky;
-    top: 1.25rem;
-}
-
-.workspaceMain {
-    display: grid;
-    grid-template-columns: minmax(520px, 1.35fr) minmax(360px, 1fr);
-    gap: 1.25rem;
-    align-items: flex-start;
-}
-
-.workspaceMainSingle {
-    grid-template-columns: minmax(0, 1fr);
 }
 
 .workspaceMainHeader {
@@ -1429,11 +1010,6 @@
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
-}
-
-.workspaceRight {
-    position: static !important;
-    top: auto !important;
 }
 
 /* ---------------- Pipeline stepper (Drift redesign) ----------------
@@ -1564,22 +1140,6 @@
     color: var(--ink-3);
     text-decoration: line-through;
     opacity: 0.7;
-}
-
-.stepperMeta {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-top: 2px;
-}
-
-.stepperDuration {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    color: var(--ink-3);
-    font-variant-numeric: tabular-nums;
-    letter-spacing: 0.04em;
 }
 
 .stepperDetail {
@@ -1832,9 +1392,11 @@
 
 .platformBestFor {
     font-size: 0.78rem;
+    line-height: 1.4;
     color: var(--ink-3);
     position: relative;
     z-index: 2;
+    min-height: calc(2 * 1.4em);
 }
 
 .platformCharLimit {
@@ -1867,7 +1429,11 @@
     color: var(--ink-2);
     font-size: 0.78rem;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease;
     text-align: left;
     line-height: 1.35;
     font-family: inherit;
@@ -1900,7 +1466,11 @@
     font-size: 0.875rem;
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease;
     font-family: inherit;
 }
 
@@ -1998,7 +1568,11 @@
     font-size: 0.8rem;
     font-weight: 500;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease,
+        box-shadow 0.2s ease;
     font-family: inherit;
 }
 
@@ -2137,7 +1711,11 @@
     font-size: 0.78rem;
     cursor: pointer;
     font-family: inherit;
-    transition: all 160ms ease;
+    transition:
+        background-color 160ms ease,
+        border-color 160ms ease,
+        color 160ms ease,
+        box-shadow 160ms ease;
 }
 
 .confirmBarNo:hover {
@@ -2328,7 +1906,11 @@
     border: 1px dashed var(--line);
     border-radius: 9999px;
     cursor: pointer;
-    transition: all 0.15s ease;
+    transition:
+        background-color 0.15s ease,
+        border-color 0.15s ease,
+        color 0.15s ease,
+        box-shadow 0.15s ease;
     font-family: inherit;
 }
 
@@ -2341,96 +1923,60 @@
 /* ---------------- Variant stack ---------------- */
 
 .variantStack {
-    margin-top: 1rem;
-    border: 1px solid var(--line-2);
-    border-radius: 12px;
-    overflow: hidden;
-    background: var(--panel);
+    min-width: 0;
+    padding: 0;
+    margin: 0 0 10px;
+    border: 0;
 }
 
 .variantStackHeader {
-    padding: 0.5rem 0.75rem;
-    font-size: 0.6875rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
+    padding: 0;
+    margin-bottom: 9px;
+    font-size: 12px;
+    font-weight: 500;
     color: var(--ink-3);
-    background: var(--panel-2);
-    border-bottom: 1px solid var(--line-2);
 }
 
-.variantCard {
-    padding: 0.625rem 0.75rem;
-    border-bottom: 1px solid var(--line-2);
-    transition: background 0.15s ease;
+.variantChoices {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
 }
 
-.variantCard:last-child {
-    border-bottom: none;
-}
-
-.variantCard:hover {
-    background: var(--panel-2);
-}
-
-.variantCardActive {
-    background: var(--accent-soft);
-    border-left: 3px solid var(--accent);
-}
-
-.variantCardHeader {
+.variantChoice {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    margin-bottom: 0.25rem;
+    gap: 8px;
+    padding: 8px 10px;
+    min-height: 36px;
+    max-width: 100%;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--ink-2);
+    font-size: 12px;
+    text-align: left;
+    cursor: pointer;
+    transition:
+        border-color 150ms ease,
+        background-color 150ms ease,
+        color 150ms ease;
 }
-
-.variantLabel {
-    font-size: 0.75rem;
-    font-weight: 600;
+.variantChoice span {
+    overflow-wrap: anywhere;
+}
+.variantChoice:hover {
+    background: var(--panel-2);
+    border-color: var(--ink-3);
+}
+.variantChoice[aria-pressed="true"] {
+    border-color: var(--accent);
+    background: var(--accent-soft);
     color: var(--ink);
 }
-
-.variantPreview {
-    font-size: 0.6875rem;
-    color: var(--ink-3);
-    line-height: 1.4;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    margin: 0;
-}
-
-.variantActiveBadge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    padding: 0.125rem 0.5rem;
-    font-size: 0.625rem;
-    font-weight: 600;
+.variantChoice svg {
     color: var(--accent);
-    background: var(--accent-soft);
-    border-radius: 9999px;
-}
-
-.variantUseButton {
-    padding: 0.125rem 0.625rem;
-    font-size: 0.6875rem;
-    font-weight: 500;
-    color: var(--ink-2);
-    background: none;
-    border: 1px solid var(--line);
-    border-radius: 6px;
-    cursor: pointer;
-    transition: all 0.15s ease;
-    font-family: inherit;
-}
-
-.variantUseButton:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-    background: var(--accent-soft);
+    flex-shrink: 0;
 }
 
 /* ---------------- Dark mode polish on platform-specific brand chips ---------------- */
@@ -2458,170 +2004,37 @@
     font-weight: 500;
 }
 
-/* Score pill — mono numeric with colored dot */
-.scoreBadge {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 2px 8px;
-    border-radius: 999px;
-    font-family: var(--font-mono);
-    font-size: 10px;
-    background: var(--panel);
-    border: 1px solid var(--line-2);
-    color: var(--ink-2);
-    letter-spacing: 0.02em;
-    font-variant-numeric: tabular-nums;
-}
-
-.scoreBadge::before {
-    content: "";
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: currentColor;
-    flex-shrink: 0;
-}
-
-.scoreBadgeGood {
-    color: var(--success);
-    border-color: oklch(0.78 0.1 145 / 0.5);
-}
-
-.scoreBadgeWarn {
-    color: var(--warn);
-    border-color: oklch(0.8 0.13 75 / 0.5);
-}
-
-.scoreBadgeNeutral {
-    color: var(--ink-2);
-    border-color: var(--line-2);
-}
-
-/* AI suggestion card — soft violet→magenta wash */
-.aiCard {
-    margin-top: 0.75rem;
-    padding: 12px 14px;
-    border-radius: 12px;
-    background: linear-gradient(135deg, oklch(0.97 0.02 285) 0%, oklch(0.96 0.03 340) 100%);
-    border: 1px solid oklch(0.85 0.05 285);
-    position: relative;
-    overflow: hidden;
-}
-
-:global([data-theme="dark"]) .aiCard {
-    background: linear-gradient(135deg, oklch(0.26 0.05 285) 0%, oklch(0.26 0.06 340) 100%);
-    border-color: oklch(0.4 0.08 285);
-}
-
-.aiCardHead {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-bottom: 6px;
-}
-
-.aiCardTitle {
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--accent);
-    letter-spacing: -0.005em;
-}
-
-.aiCardTitle svg {
-    width: 12px;
-    height: 12px;
-}
-
-.aiCardBody {
-    font-size: 12.5px;
-    color: var(--ink-2);
-    line-height: 1.5;
-}
-
-.aiCardActions {
-    display: flex;
-    gap: 6px;
-    margin-top: 8px;
-}
-
-/* Variant pill tabs — small mono, hairline, subtle hover */
-.variantTabs {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 14px;
-    border-bottom: 1px solid var(--line-2);
-    background: color-mix(in oklch, var(--panel) 60%, transparent);
-    backdrop-filter: blur(8px);
-}
-
-.variantTab {
-    padding: 4px 11px;
-    font-family: var(--font-mono);
-    font-size: 10px;
-    border-radius: 999px;
-    background: transparent;
-    border: 1px solid var(--line-2);
-    color: var(--ink-3);
-    cursor: pointer;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    transition:
-        background 140ms ease,
-        color 140ms ease,
-        border-color 140ms ease;
-    font-family: inherit;
-}
-
-.variantTabActive {
-    background: var(--panel-2);
-    color: var(--ink);
-    border-color: var(--line);
-}
-
-.variantTab:hover:not(.variantTabActive) {
-    color: var(--ink-2);
-    border-color: var(--line);
-}
-
 /* Subtler generate button — drop the heavy gradient + glow halo
    in favor of a flat accent fill (Drift "no fuss"). */
-.generateButton,
-.cfgCtaBtn {
+.generateButton {
     background: var(--accent);
     box-shadow: none;
 }
 
-.generateButton:hover:not(:disabled),
-.cfgCtaBtn:hover:not(:disabled) {
+.generateButton:hover:not(:disabled) {
     background: var(--accent-2);
     transform: none;
     box-shadow: 0 0 0 3px var(--accent-glow);
 }
 
-.generateButton:active:not(:disabled),
-.cfgCtaBtn:active:not(:disabled) {
+.generateButton:active:not(:disabled) {
     transform: translateY(0.5px) scale(0.995);
     box-shadow: none;
 }
 
 .actionPrimary,
-.copyButton,
 .confirmBarYes {
     background: var(--accent);
     box-shadow: none;
 }
 
-.actionPrimary:hover:not(:disabled),
-.copyButton:hover:not(:disabled) {
+.actionPrimary:hover:not(:disabled) {
     background: var(--accent-2);
     transform: none;
     box-shadow: 0 0 0 3px var(--accent-glow);
 }
 
-.actionPrimary:active:not(:disabled),
-.copyButton:active:not(:disabled) {
+.actionPrimary:active:not(:disabled) {
     transform: translateY(0.5px) scale(0.995);
     box-shadow: none;
 }
@@ -2646,7 +2059,6 @@
 
 /* Cleaner translucent cards (Drift card primitive) */
 .promptCard,
-.assistantCard,
 .platformShell,
 .workspaceShell,
 .sessionPanel {
@@ -2673,38 +2085,438 @@
     color: var(--ink);
 }
 
-/* Output rail header eyebrow */
-.outputEyebrow {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--ink-3);
-    margin: 0 0 8px;
-    font-weight: 500;
+/* ---------------- Studio layout (2026-10) ----------------
+   The workspace used to be one column that grew with every section a run
+   produced: prompt, thinking, steps, preview, actions, scores, variants,
+   strategy, stages, claims, research — the draft was pushed below the fold by
+   its own explanation. Now the controls sit on the left and the output on the
+   right, and the output is split into tabs (Draft, Claims, Why it works,
+   Research, Process), so a long run costs a click, not a scroll.
+
+   The grid reserves a compact brief column and gives the remaining width to
+   the draft. Its named container query stacks the panes in narrow workspace
+   tabs, including split views and standalone screens. The document scrolls
+   naturally; neither pane has a fixed height. */
+
+.workspaceLayoutSingle {
+    container-type: inline-size;
+    container-name: campaign-studio;
 }
 
-/* Claim source list (verified post-claim provenance) */
-.claimsBlock {
-    margin-top: 0.875rem;
-    padding: 12px;
-    border-radius: 12px;
-    background: var(--panel-2);
-    border: 1px solid var(--line-2);
+.studio {
+    display: grid;
+    grid-template-columns: minmax(240px, 280px) minmax(0, 1fr);
+    gap: 24px 28px;
+    align-items: start;
 }
 
-.claimsBlockHead {
+.studio > .workspaceMainHeader,
+.studioHeader {
+    grid-column: 1 / -1;
+}
+
+.studioHeader {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     justify-content: space-between;
-    margin-bottom: 8px;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--line);
 }
 
-.claimsBlockTitle {
-    font-family: var(--font-mono);
-    font-size: 10px;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
+.studioControls,
+.studioOutput {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    gap: 16px;
+}
+
+.studio .promptCard {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    backdrop-filter: none;
+    box-shadow: none;
+}
+
+.studio .promptHeaderRow {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    margin-bottom: 14px;
+}
+
+.studio .promptTitle {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.studio .promptHint {
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--ink-3);
+}
+
+.studio .textarea {
+    min-height: 160px;
+    padding: 14px;
+    font-size: 14px;
+    line-height: 1.65;
+    background: var(--panel-2);
+}
+
+.studio .generateButton {
+    width: 100%;
+    min-height: 42px;
+    margin-top: 0;
+}
+
+.studio .generateRow {
+    margin-top: 16px;
+}
+
+.studio .platformPreviewCard {
+    box-shadow: none;
+    background: var(--panel-2);
+    backdrop-filter: none;
+    border-radius: 12px;
+}
+
+.studio .platformPreviewBody {
+    padding: 24px;
+    font-size: 15px;
+    line-height: 1.75;
+    overflow-wrap: anywhere;
+}
+
+.studio .platformPreviewBody p {
+    margin-bottom: 1em;
+}
+
+.studio .viewModeToggle {
+    width: auto;
+    min-height: 32px;
+    padding: 0 9px;
+    gap: 6px;
+    font-size: 12px;
+}
+
+.characterCount {
+    font-size: 11px;
+    color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.postSettings {
+    border-top: 1px solid var(--line);
+    margin-top: 18px;
+    padding-top: 16px;
+}
+
+.postSettings summary {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 32px;
+    color: var(--ink-2);
+    font-size: 13px;
+    cursor: pointer;
+    list-style: none;
+}
+
+.postSettings summary::-webkit-details-marker {
+    display: none;
+}
+.postSettings summary > svg:last-child {
+    margin-left: auto;
+}
+.postSettings[open] summary > svg:last-child {
+    transform: rotate(180deg);
+}
+.postSettings summary:hover {
+    color: var(--ink);
+}
+
+.settingsContent {
+    display: grid;
+    gap: 18px;
+    padding-top: 16px;
+}
+
+.settingsField {
+    display: grid;
+    min-width: 0;
+    gap: 8px;
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+
+.settingsField legend,
+.settingsField label {
+    margin-bottom: 8px;
+    font-size: 12px;
     font-weight: 500;
     color: var(--ink-2);
+}
+
+.settingsField input {
+    width: 100%;
+    min-height: 38px;
+    padding: 8px 10px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--panel-2);
+    color: var(--ink);
+    font-size: 13px;
+}
+
+.settingChoices {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.settingChoices button {
+    padding: 6px 9px;
+    min-height: 32px;
+    border: 1px solid var(--line);
+    border-radius: 7px;
+    background: transparent;
+    color: var(--ink-2);
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.settingChoices button:hover,
+.settingChoices button[aria-pressed="true"] {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    color: var(--accent);
+}
+
+.moreActions {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+    min-height: 36px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    color: var(--ink-2);
+    background: transparent;
+    cursor: pointer;
+}
+
+.moreActions:hover {
+    background: var(--panel-2);
+    color: var(--ink);
+}
+
+.reviewNotice {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 9px;
+    padding: 11px 12px;
+    margin-top: 6px;
+    border: 1px solid color-mix(in oklch, var(--warn) 26%, var(--line));
+    border-radius: 8px;
+    color: var(--ink-2);
+    background: var(--warn-soft);
+    font-size: 12px;
+    text-align: left;
+    cursor: pointer;
+}
+.reviewNotice svg {
+    flex-shrink: 0;
+    color: var(--warn);
+}
+.reviewNotice svg:last-child {
+    margin-left: auto;
+}
+.reviewNotice:hover {
+    border-color: var(--warn);
+}
+
+.studio .draftActions {
+    align-items: center;
+    gap: 7px;
+    margin-top: 10px;
+}
+.studio .draftActions button {
+    min-height: 36px;
+    font-size: 12px;
+}
+.studio .actionPrimary {
+    margin-left: 0;
+}
+
+.studio :is(button, summary, input, textarea):focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+}
+
+@container campaign-studio (max-width: 760px) {
+    .studio {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 20px;
+    }
+    .studioHeader {
+        padding-bottom: 14px;
+    }
+    .studio .textarea {
+        min-height: 128px;
+    }
+    .studio .platformPreviewBody {
+        padding: 18px;
+    }
+    .studio .draftActions {
+        flex-direction: row;
+    }
+    .studio .actionPrimary {
+        width: auto;
+    }
+}
+
+@container campaign-studio (max-width: 420px) {
+    .characterCount {
+        display: none;
+    }
+    .studio .platformPreviewHeader {
+        padding: 10px;
+    }
+    .studio .platformPreviewBody {
+        padding: 14px;
+        font-size: 14px;
+    }
+    .studioHeader {
+        align-items: flex-start;
+    }
+}
+
+.resultTabs {
+    gap: 0.75rem;
+}
+
+/* The tab bar stays in reach while a long tab (research, a long LinkedIn
+   draft) scrolls under it. */
+.resultTabBar {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    padding: 0.25rem 0 0.5rem;
+    background: var(--panel);
+    border-bottom: 1px solid var(--line-2);
+}
+
+.resultTabList {
+    width: 100%;
+    justify-content: flex-start;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.resultTabList::-webkit-scrollbar {
+    display: none;
+}
+
+.resultTabList > * {
+    flex: 0 0 auto;
+}
+
+.tabBadge {
+    min-width: 1.15rem;
+    height: 1.15rem;
+    padding: 0 0.3rem;
+    border-radius: 999px;
+    background: var(--warn-soft);
+    color: var(--warn);
+    font-size: 0.68rem;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tabCount {
+    color: var(--ink-3);
+    font-size: 0.72rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.resultPanel {
+    animation: studioTabIn 160ms ease-out;
+}
+
+@keyframes studioTabIn {
+    from {
+        opacity: 0;
+        transform: translateY(2px);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .resultPanel {
+        animation: none;
+    }
+}
+
+.resultEmpty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 2.5rem 1.5rem;
+    border: 1px dashed var(--line);
+    border-radius: 12px;
+    color: var(--ink-3);
+    font-size: 0.875rem;
+    text-align: center;
+}
+
+.resultEmptyInline {
+    color: var(--ink-3);
+    font-size: 0.85rem;
+    padding: 0.5rem 0;
+}
+
+.workspaceHeaderActions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: flex-end;
+}
+
+/* The sessions list inside its drawer: the drawer is the panel. */
+[data-slot="sheet-content"] .sessionPanel {
+    height: 100%;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+[data-slot="sheet-content"] .sessionList {
+    flex: 1;
+    min-height: 0;
+    max-height: none;
+    overflow-y: auto;
+}
+
+/* Leave room for the drawer's own close button. */
+[data-slot="sheet-content"] .sessionPanelHeader {
+    padding-right: 2.25rem;
 }

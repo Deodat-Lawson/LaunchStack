@@ -9,7 +9,13 @@ import type { NextResponse } from "next/server";
 
 import { DELETE, GET, PATCH, POST } from "~/app/api/folders/route";
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
-import { createFolder, deleteFolder, listVisibleFolders, renameFolder } from "~/server/folders";
+import {
+    FolderError,
+    createFolder,
+    deleteFolder,
+    listVisibleFolders,
+    renameFolder,
+} from "~/server/folders";
 import { makeWorkspaceContext } from "../helpers/workspace-context";
 
 const mockRequireWorkspaceContext = jest.fn();
@@ -69,13 +75,16 @@ function ctx(role: string): WorkspaceContext {
     });
 }
 
-function request(method: string, body?: unknown): Request {
+function request(method: string, body?: unknown, headers: Record<string, string> = {}): Request {
     return new Request("http://localhost/api/folders", {
         method,
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...headers },
         body: body === undefined ? undefined : JSON.stringify(body),
     });
 }
+
+/** A reader who chose Simplified Chinese. */
+const CHINESE = { cookie: "ls-locale=zh-CN.1" };
 
 function expectedOutcome(code: string, status: number, message: string) {
     return Object.assign(new Error(message), { code, status });
@@ -299,5 +308,54 @@ describe("/api/folders", () => {
         const body = (await response.json()) as { message: string };
         expect(body.message).toBe("Request failed");
         consoleError.mockRestore();
+    });
+});
+
+describe("/api/folders in the reader's language", () => {
+    beforeEach(() => {
+        mockRequireWorkspaceContext.mockResolvedValue({ success: true, data: ctx("admin") });
+    });
+
+    it("words a refusal the folder rules threw as English", async () => {
+        mockCanManage.mockResolvedValue(false);
+
+        const chinese = await DELETE(request("DELETE", { path: "Board" }, CHINESE));
+        const english = await DELETE(request("DELETE", { path: "Board" }));
+
+        expect(chinese.status).toBe(403);
+        await expect(chinese.json()).resolves.toMatchObject({
+            message: "你不是此文件夹的管理者。",
+            code: "forbidden",
+        });
+        await expect(english.json()).resolves.toMatchObject({
+            message: "You do not manage this folder.",
+        });
+    });
+
+    it("words a FolderError that carries its sentence as a key", async () => {
+        jest.mocked(renameFolder).mockRejectedValue(
+            new FolderError("folder_exists", 409, {
+                key: "sources.folderDialog.alreadyExists",
+                values: { name: "HR" },
+            })
+        );
+
+        const response = await PATCH(
+            request("PATCH", { path: "Contracts", newPath: "HR" }, CHINESE)
+        );
+
+        expect(response.status).toBe(409);
+        await expect(response.json()).resolves.toEqual({
+            success: false,
+            message: "该位置已有名为“HR”的文件夹。",
+            code: "folder_exists",
+        });
+    });
+
+    it("asks for the path in Chinese", async () => {
+        const response = await POST(request("POST", {}, CHINESE));
+
+        expect(response.status).toBe(400);
+        await expect(response.json()).resolves.toMatchObject({ message: "请提供文件夹路径。" });
     });
 });

@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslations } from "next-intl";
 
 import {
     Dialog,
@@ -21,19 +22,20 @@ export function ShortcutsDialog({
     open: boolean;
     onOpenChange: (open: boolean) => void;
 }) {
+    const t = useTranslations("mindmap.help");
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-[640px]">
                 <DialogHeader>
-                    <DialogTitle>Keyboard shortcuts</DialogTitle>
-                    <DialogDescription>⌘ is Ctrl on Windows and Linux.</DialogDescription>
+                    <DialogTitle>{t("title")}</DialogTitle>
+                    <DialogDescription>{t("description")}</DialogDescription>
                 </DialogHeader>
                 <ScrollArea className="max-h-[60vh]">
                     <div className="grid grid-cols-1 gap-5 pr-3 sm:grid-cols-2">
                         {SHORTCUTS.map(group => (
                             <section key={group.title}>
                                 <h3 className="text-ink-3 mb-2 font-mono text-[10px] font-semibold uppercase tracking-[0.08em]">
-                                    {group.title}
+                                    {t(`groups.${group.title}`)}
                                 </h3>
                                 <dl className="space-y-1">
                                     {group.rows.map(row => (
@@ -42,10 +44,10 @@ export function ShortcutsDialog({
                                             className="flex items-baseline justify-between gap-3"
                                         >
                                             <dt className="text-ink-2 text-[12.5px]">
-                                                {row.label}
+                                                {t(`rows.${row.label}`)}
                                             </dt>
                                             <dd className="border-line bg-panel-2 text-ink-3 shrink-0 rounded border px-1.5 py-0.5 font-mono text-[11px]">
-                                                {row.keys}
+                                                {row.keysKey ? t(`keys.${row.keysKey}`) : row.keys}
                                             </dd>
                                         </div>
                                     ))}

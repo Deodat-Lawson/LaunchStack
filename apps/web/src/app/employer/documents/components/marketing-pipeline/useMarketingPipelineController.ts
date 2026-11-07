@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import type { RewriteWorkflowStateSnapshot } from "~/app/employer/documents/components/generator/RewriteWorkflow";
 import {
     MARKETING_ACTIVE_SESSION_KEY,
@@ -21,12 +22,40 @@ import {
     type PipelineStepState,
     type PlatformMeta,
     type ThinkingEntry,
+    type ClaimGateClaimUI,
 } from "./shared";
 
+/** How often the screen asks a run for new progress. */
+const RUN_POLL_MS = 1000;
+
+/** What a run was started with (the route's MarketingPipelineInput). */
+interface RunInput {
+    platform: NonNullable<MarketingSession["platform"]>;
+    prompt: string;
+    platformMeta?: PlatformMeta;
+    toneOverride?: FormalityLevel;
+    targetAudience?: string;
+    contentType?: ContentType;
+}
+
+/** The poll's view of a run (server/marketing/run-view.ts). */
+interface MarketingRunView {
+    id: string;
+    createdAt: string;
+    status: "queued" | "running" | "completed" | "failed";
+    input: RunInput;
+    events: PipelineSSEEvent[];
+    eventCount: number;
+    result: PipelineData | null;
+    error: string | null;
+}
+
 function buildInitialSteps(): PipelineStepState[] {
+    // The label is the server's, filled in by `step_start`; the screen names
+    // a step by its id.
     return PIPELINE_STEP_ORDER.map(s => ({
         id: s.id,
-        label: s.label,
+        label: "",
         status: "pending" as const,
     }));
 }
@@ -61,6 +90,7 @@ export interface EvalResult {
 
 export function useMarketingPipelineController(options: { debug: boolean }) {
     const { debug } = options;
+    const t = useTranslations("growth.marketingPipeline");
     const router = useRouter();
     const [platform, setPlatform] = useState<MarketingSession["platform"]>(null);
     const [prompt, setPrompt] = useState("");
@@ -83,6 +113,11 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
     const [contentType, setContentType] = useState<ContentType | undefined>(undefined);
     const [thinkingLog, setThinkingLog] = useState<ThinkingEntry[]>([]);
     const [publishing, setPublishing] = useState(false);
+    /** Claims the documents don't back, waiting on "Post anyway" (null: no question open). */
+    const [claimGate, setClaimGate] = useState<{
+        unavailable: boolean;
+        claims: ClaimGateClaimUI[];
+    } | null>(null);
     const [publishResult, setPublishResult] = useState<{
         success: boolean;
         postUrl?: string;
@@ -109,6 +144,7 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
         setEvalError(null);
         setPublishing(false);
         setPublishResult(null);
+        setClaimGate(null);
     }, []);
 
     const applySession = useCallback(
@@ -256,7 +292,7 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
             setMessageVariants(prev => {
                 const newVariant: MessageVariant = {
                     id: variantId,
-                    label: `Rewrite ${prev.length}`,
+                    label: t("variants.rewrite", { n: prev.length }),
                     text: rewrittenText,
                     createdAt: Date.now(),
                 };
@@ -277,7 +313,7 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
                 );
             }
         },
-        [activeSessionId, resetPostFeedback]
+        [activeSessionId, resetPostFeedback, t]
     );
 
     const selectVariant = useCallback(
@@ -325,7 +361,9 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
             sessionStorage.setItem(
                 PENDING_REWRITE_STORAGE_KEY,
                 JSON.stringify({
-                    title: `Campaign Draft (${selectedPlatform?.label ?? "Marketing"})`,
+                    title: t("draftDocTitle", {
+                        platform: selectedPlatform?.label ?? t("draftDocFallback"),
+                    }),
                     content: editableMessage,
                     createdAt: Date.now(),
                     source: "marketing-pipeline",
@@ -335,7 +373,7 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
             // Ignore storage errors and still navigate.
         }
         router.push("/employer/documents?feature=rewrite");
-    }, [editableMessage, router, selectedPlatform?.label]);
+    }, [editableMessage, router, selectedPlatform?.label, t]);
 
     const handleCopy = useCallback(async () => {
         if (!editableMessage.trim()) return;
@@ -397,12 +435,231 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
                 );
                 break;
             case "step_thinking":
-                setThinkingLog(prev => [
-                    ...prev,
-                    { step: event.step, text: event.text, timestamp: Date.now() },
-                ]);
+                // A retried run replays the stages it restored; say each thing once.
+                setThinkingLog(prev =>
+                    prev.some(e => e.step === event.step && e.text === event.text)
+                        ? prev
+                        : [...prev, { step: event.step, text: event.text, timestamp: Date.now() }]
+                );
                 break;
         }
+    }, []);
+
+    /** A server run has one stable history id, including after a fresh browser tab. */
+    const sessionForRun = useCallback(
+        (run: MarketingRunView): MarketingSession | null => {
+            const pipelineResult = run.result;
+            if (run.status !== "completed" || !pipelineResult) return null;
+            const now = Date.now();
+            const createdAt = Date.parse(run.createdAt) || now;
+            const runId = run.id;
+            const input = run.input;
+            const pipelineVariants = pipelineResult.variants;
+            let initialVariants: MessageVariant[];
+            let initialActiveId: string;
+
+            if (pipelineVariants && pipelineVariants.length > 0) {
+                initialVariants = pipelineVariants.map((v, i) => ({
+                    id: v.variantId,
+                    label:
+                        i === 0
+                            ? t("variants.best")
+                            : t("variants.numbered", {
+                                  n: i + 1,
+                                  name: v.variantId.replace(/-/g, " "),
+                              }),
+                    text: v.message,
+                    createdAt: now + i,
+                }));
+                initialActiveId = initialVariants[0]!.id;
+            } else {
+                const originalVariantId = `${runId}-original`;
+                initialVariants = [
+                    {
+                        id: originalVariantId,
+                        label: t("variants.original"),
+                        text: pipelineResult.message,
+                        createdAt: now,
+                    },
+                ];
+                initialActiveId = originalVariantId;
+            }
+
+            return {
+                id: runId,
+                createdAt,
+                updatedAt: now,
+                platform: input.platform,
+                prompt: input.prompt,
+                result: pipelineResult,
+                editableMessage: pipelineResult.message,
+                viewMode: "preview",
+                rewriteWorkflowState: undefined,
+                platformMeta: input.platformMeta,
+                messageVariants: initialVariants,
+                activeVariantId: initialActiveId,
+                toneOverride: input.toneOverride,
+                targetAudience: input.targetAudience,
+                contentType: input.contentType,
+            };
+        },
+        [t]
+    );
+
+    /**
+     * Follow a queued run to its end: poll its progress events (the same
+     * events the stepper always consumed) after a cursor, then take its
+     * result. The run lives on the server, so closing the tab loses nothing;
+     * a reload finds it again (see the effect below) and replays its events.
+     */
+    const followRun = useCallback(
+        async (runId: string, signal: AbortSignal) => {
+            let cursor = 0;
+            let completedRun: MarketingRunView | null = null;
+            while (!signal.aborted) {
+                const response = await fetch(
+                    `/api/marketing-pipeline/runs/${encodeURIComponent(runId)}?after=${cursor}`,
+                    { signal, cache: "no-store" }
+                );
+                if (!response.ok) {
+                    setError(t("errors.generateFailed"));
+                    return;
+                }
+                const { data } = (await response.json()) as { data: { run: MarketingRunView } };
+                const run = data.run;
+                for (const event of run.events) handleSSEEvent(event);
+                cursor = run.eventCount;
+                if (run.status === "failed") {
+                    setError(run.error ?? t("errors.pipelineFailed"));
+                    return;
+                }
+                if (run.status === "completed") {
+                    completedRun = run;
+                    break;
+                }
+                await new Promise(resolve => setTimeout(resolve, RUN_POLL_MS));
+            }
+            if (signal.aborted) return;
+
+            const nextSession = completedRun && sessionForRun(completedRun);
+            if (!nextSession) {
+                setError(t("errors.incomplete"));
+                return;
+            }
+
+            applySession(nextSession);
+            setActiveSessionId(nextSession.id);
+            setSessions(prev =>
+                [
+                    nextSession,
+                    ...prev.filter(
+                        session =>
+                            session.id !== nextSession.id &&
+                            (session.id !== activeSessionId || session.result !== null)
+                    ),
+                ].slice(0, MAX_MARKETING_SESSIONS)
+            );
+        },
+        [activeSessionId, applySession, handleSSEEvent, sessionForRun, t]
+    );
+
+    /** Watch a run from the start or, after a reload, from wherever it got to. */
+    const watchRun = useCallback(
+        async (runId: string, input: RunInput) => {
+            abortRef.current?.abort();
+            const controller = new AbortController();
+            abortRef.current = controller;
+            setPlatform(input.platform);
+            setPrompt(input.prompt ?? "");
+            setPlatformMeta(input.platformMeta ?? {});
+            setToneOverride(input.toneOverride);
+            setTargetAudience(input.targetAudience ?? "");
+            setContentType(input.contentType);
+            setLoading(true);
+            setPipelineSteps(buildInitialSteps());
+            setThinkingLog([]);
+            setGenerationStartTime(Date.now());
+            try {
+                await followRun(runId, controller.signal);
+            } catch (requestError) {
+                if (requestError instanceof DOMException && requestError.name === "AbortError")
+                    return;
+                console.error("[marketing-pipeline] request error:", requestError);
+                setError(t("errors.engine"));
+            } finally {
+                if (abortRef.current === controller) {
+                    setLoading(false);
+                    setGenerationStartTime(null);
+                }
+                // Pipeline steps are intentionally NOT cleared here so the stepper
+                // remains visible after generation completes (transparency).
+            }
+        },
+        [followRun, t]
+    );
+
+    // Restore active work and results that finished while this screen was closed.
+    useEffect(() => {
+        let cancelled = false;
+        const feedbackEpoch = postFeedbackEpochRef.current;
+        void (async () => {
+            try {
+                const response = await fetch("/api/marketing-pipeline/runs", { cache: "no-store" });
+                if (!response.ok || cancelled) return;
+                const { data } = (await response.json()) as {
+                    data: { runs: MarketingRunView[]; completedRuns?: MarketingRunView[] };
+                };
+                if (cancelled) return;
+                const completed = (data.completedRuns ?? [])
+                    .map(sessionForRun)
+                    .filter((session): session is MarketingSession => session !== null);
+                // Preserve this tab's edits. Server results only fill missing history entries.
+                let cached: MarketingSession[] = [];
+                try {
+                    const parsed: unknown = JSON.parse(
+                        sessionStorage.getItem(MARKETING_SESSIONS_STORAGE_KEY) ?? "[]"
+                    );
+                    if (Array.isArray(parsed)) cached = parsed as MarketingSession[];
+                } catch {
+                    // A blocked or malformed cache does not prevent server recovery.
+                }
+                setSessions(prev => {
+                    const ids = new Set(prev.map(session => session.id));
+                    const byId = new Map(completed.map(session => [session.id, session]));
+                    const saved = prev.map(session =>
+                        session.result ? session : (byId.get(session.id) ?? session)
+                    );
+                    return [...saved, ...completed.filter(session => !ids.has(session.id))]
+                        .sort((a, b) => b.createdAt - a.createdAt)
+                        .slice(0, MAX_MARKETING_SESSIONS);
+                });
+                // An interaction while the lookup was in flight takes precedence.
+                if (postFeedbackEpochRef.current !== feedbackEpoch) return;
+                const active = data.runs[0];
+                if (active) {
+                    void watchRun(active.id, active.input);
+                    return;
+                }
+                const latest = completed[0];
+                const newestSavedAt = Math.max(0, ...cached.map(session => session.createdAt));
+                if (
+                    latest &&
+                    latest.createdAt >= newestSavedAt &&
+                    !cached.some(session => session.id === latest.id && session.result !== null)
+                ) {
+                    applySession(latest);
+                    setActiveSessionId(latest.id);
+                }
+            } catch {
+                // Cached sessions still work when the server cannot be reached.
+            }
+        })();
+        return () => {
+            cancelled = true;
+            abortRef.current?.abort();
+        };
+        // Once per mount: later callback identities must not restart recovery.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const runPipeline = useCallback(async () => {
@@ -411,44 +668,37 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
         resetPostFeedback();
 
         if (!platform) {
-            setError("Choose a platform to continue.");
+            setError(t("errors.choosePlatform"));
             return;
         }
 
         const normalizedPrompt = prompt.trim();
         if (!normalizedPrompt) {
-            setError("Add a short description of what you want to promote.");
+            setError(t("errors.addDescription"));
             return;
         }
 
-        abortRef.current?.abort();
-        const controller = new AbortController();
-        abortRef.current = controller;
-
-        setLoading(true);
-        setPipelineSteps(buildInitialSteps());
-        setThinkingLog([]);
-        setGenerationStartTime(Date.now());
+        const input: RunInput = {
+            platform,
+            prompt: normalizedPrompt,
+            platformMeta: Object.keys(platformMeta).length > 0 ? platformMeta : undefined,
+            toneOverride: toneOverride ?? undefined,
+            targetAudience: targetAudience.trim() || undefined,
+            contentType: contentType ?? undefined,
+        };
 
         try {
-            const apiUrl = debug ? "/api/marketing-pipeline?debug=true" : "/api/marketing-pipeline";
+            const apiUrl = debug
+                ? "/api/marketing-pipeline/runs?debug=true"
+                : "/api/marketing-pipeline/runs";
             const response = await fetch(apiUrl, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    platform,
-                    prompt: normalizedPrompt,
-                    platformMeta: Object.keys(platformMeta).length > 0 ? platformMeta : undefined,
-                    toneOverride: toneOverride ?? undefined,
-                    targetAudience: targetAudience.trim() || undefined,
-                    contentType: contentType ?? undefined,
-                }),
-                signal: controller.signal,
+                body: JSON.stringify(input),
             });
-
-            if (!response.ok || !response.body) {
+            if (!response.ok) {
                 const text = await response.text();
-                let message = "We couldn't generate a campaign right now. Please try again.";
+                let message = t("errors.generateFailed");
                 try {
                     const payload = JSON.parse(text) as { message?: string; error?: string };
                     message = payload.message ?? message;
@@ -459,146 +709,45 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
                 setError(message);
                 return;
             }
-
-            const reader = response.body.getReader();
-            const decoder = new TextDecoder();
-            let buffer = "";
-            let pipelineResult: PipelineData | null = null;
-
-            while (true) {
-                const { done, value } = await reader.read();
-                if (done) break;
-
-                buffer += decoder.decode(value, { stream: true });
-                const parts = buffer.split("\n\n");
-                buffer = parts.pop() ?? "";
-
-                for (const part of parts) {
-                    const trimmed = part.trim();
-                    if (!trimmed.startsWith("data: ")) continue;
-                    const json = trimmed.slice(6);
-                    try {
-                        const event = JSON.parse(json) as PipelineSSEEvent;
-
-                        if (
-                            event.type === "step_start" ||
-                            event.type === "step_complete" ||
-                            event.type === "step_data" ||
-                            event.type === "step_thinking"
-                        ) {
-                            handleSSEEvent(event);
-                        } else if (event.type === "result" && event.success) {
-                            pipelineResult = event.data;
-                        } else if (event.type === "error") {
-                            const detail = event.error ? ` ${event.error}` : "";
-                            setError((event.message ?? "Pipeline failed") + detail);
-                            return;
-                        }
-                    } catch {
-                        // skip malformed SSE lines
-                    }
-                }
-            }
-
-            if (!pipelineResult) {
-                setError("Server returned an incomplete response. Please try again.");
-                return;
-            }
-
+            const { data } = (await response.json()) as { data: { run: MarketingRunView } };
             const now = Date.now();
-            const sessionId =
-                activeSessionId ??
-                (typeof crypto !== "undefined" && "randomUUID" in crypto
-                    ? crypto.randomUUID()
-                    : `session-${now}`);
-
-            const pipelineVariants = pipelineResult.variants;
-            let initialVariants: MessageVariant[];
-            let initialActiveId: string;
-
-            if (pipelineVariants && pipelineVariants.length > 0) {
-                initialVariants = pipelineVariants.map((v, i) => ({
-                    id: v.variantId,
-                    label: i === 0 ? "Best" : `Variant ${i + 1}: ${v.variantId.replace(/-/g, " ")}`,
-                    text: v.message,
-                    createdAt: now + i,
-                }));
-                initialActiveId = initialVariants[0]!.id;
-            } else {
-                const originalVariantId =
-                    typeof crypto !== "undefined" && "randomUUID" in crypto
-                        ? crypto.randomUUID()
-                        : `variant-${now}`;
-                initialVariants = [
-                    {
-                        id: originalVariantId,
-                        label: "Original",
-                        text: pipelineResult.message,
-                        createdAt: now,
-                    },
-                ];
-                initialActiveId = originalVariantId;
-            }
-
-            const nextSession: MarketingSession = {
-                id: sessionId,
-                createdAt: now,
+            const pending: MarketingSession = {
+                ...input,
+                id: data.run.id,
+                createdAt: Date.parse(data.run.createdAt) || now,
                 updatedAt: now,
-                platform,
-                prompt: normalizedPrompt,
-                result: pipelineResult,
-                editableMessage: pipelineResult.message,
+                result: null,
+                editableMessage: "",
                 viewMode: "preview",
-                rewriteWorkflowState: undefined,
-                platformMeta: Object.keys(platformMeta).length > 0 ? platformMeta : undefined,
-                messageVariants: initialVariants,
-                activeVariantId: initialActiveId,
-                toneOverride,
-                targetAudience: targetAudience.trim() || undefined,
-                contentType,
             };
-
-            setResult(pipelineResult);
-            setEditableMessage(pipelineResult.message);
-            setViewMode("preview");
-            setMessageVariants(initialVariants);
-            setActiveVariantId(initialActiveId);
-            setActiveSessionId(nextSession.id);
-            setSessions(prev => {
-                const existingIndex = prev.findIndex(session => session.id === nextSession.id);
-                if (existingIndex === -1) {
-                    return [nextSession, ...prev].slice(0, MAX_MARKETING_SESSIONS);
-                }
-
-                const updated = [...prev];
-                const existing = updated[existingIndex];
-                updated[existingIndex] = {
-                    ...nextSession,
-                    createdAt: existing?.createdAt ?? nextSession.createdAt,
-                };
-                return updated;
-            });
+            setSessions(prev =>
+                [
+                    pending,
+                    ...prev.filter(
+                        session =>
+                            session.id !== pending.id &&
+                            (session.id !== activeSessionId || session.result !== null)
+                    ),
+                ].slice(0, MAX_MARKETING_SESSIONS)
+            );
+            setActiveSessionId(pending.id);
+            await watchRun(data.run.id, input);
         } catch (requestError) {
-            if (requestError instanceof DOMException && requestError.name === "AbortError") return;
             console.error("[marketing-pipeline] request error:", requestError);
-            setError("Something went wrong talking to the marketing engine. Try again.");
-        } finally {
-            setLoading(false);
-            setGenerationStartTime(null);
-            // Pipeline steps are intentionally NOT cleared here so the stepper
-            // remains visible after generation completes (transparency).
+            setError(t("errors.engine"));
         }
     }, [
         activeSessionId,
         contentType,
         debug,
-        handleSSEEvent,
         platform,
         platformMeta,
         prompt,
         resetPostFeedback,
+        t,
         targetAudience,
         toneOverride,
+        watchRun,
     ]);
 
     const cancelPipeline = useCallback(() => {
@@ -609,55 +758,102 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
         setGenerationStartTime(null);
     }, []);
 
-    const publishPost = useCallback(async () => {
-        // Publish the currently-visible/edited post to its platform. Reddit posts
-        // default to the user's own profile (`u_me`) server-side; no subreddit is
-        // required here. Uses the existing /api/marketing-pipeline/publish route.
-        // Non-Reddit platforms don't render Markdown, so publish the same
-        // plain-text conversion the copy flow produces.
-        const targetPlatform = result?.platform ?? platform;
-        const message = toPlatformText(targetPlatform, editableMessage).trim();
-        if (!targetPlatform || !message) return;
+    const sendPublish = useCallback(
+        async (acknowledgeUnsupportedClaims: boolean) => {
+            // Publish the currently-visible/edited post to its platform. Reddit posts
+            // default to the user's own profile (`u_me`) server-side; no subreddit is
+            // required here. Uses the existing /api/marketing-pipeline/publish route.
+            // Non-Reddit platforms don't render Markdown, so publish the same
+            // plain-text conversion the copy flow produces.
+            const targetPlatform = result?.platform ?? platform;
+            const message = toPlatformText(targetPlatform, editableMessage).trim();
+            if (!targetPlatform || !message) return;
 
-        const epoch = postFeedbackEpochRef.current;
-        setPublishing(true);
-        setPublishResult(null);
-        try {
-            const response = await fetch("/api/marketing-pipeline/publish", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ platform: targetPlatform, message }),
-            });
-            // The route answers `{ success, data: { postUrl, channel } }`.
-            const payload = (await response.json()) as {
-                success: boolean;
-                data?: { postUrl?: string | null; channel?: string };
-                message?: string;
-                error?: string;
-            };
-            if (epoch !== postFeedbackEpochRef.current) return; // displayed post changed
-            if (response.ok && payload.success) {
-                setPublishResult({
-                    success: true,
-                    postUrl: payload.data?.postUrl ?? undefined,
-                    channel: payload.data?.channel,
+            const epoch = postFeedbackEpochRef.current;
+            setPublishing(true);
+            setPublishResult(null);
+            try {
+                const response = await fetch("/api/marketing-pipeline/publish", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        platform: targetPlatform,
+                        message,
+                        ...(acknowledgeUnsupportedClaims ? { acknowledgeUnsupportedClaims } : {}),
+                    }),
                 });
-            } else {
+                // The route answers `{ success, data: { postUrl, channel } }`, or a 409
+                // with the claims it would not post unacknowledged.
+                const payload = (await response.json()) as {
+                    success: boolean;
+                    data?: { postUrl?: string | null; channel?: string };
+                    message?: string;
+                    error?: string;
+                    code?: string;
+                    unavailable?: boolean;
+                    claims?: ClaimGateClaimUI[];
+                };
+                if (epoch !== postFeedbackEpochRef.current) return; // displayed post changed
+                if (response.status === 409 && payload.code === "unsupported_claims") {
+                    setClaimGate({
+                        unavailable: payload.unavailable === true,
+                        claims: payload.claims ?? [],
+                    });
+                    return;
+                }
+                if (response.ok && payload.success) {
+                    setPublishResult({
+                        success: true,
+                        postUrl: payload.data?.postUrl ?? undefined,
+                        channel: payload.data?.channel,
+                    });
+                } else {
+                    setPublishResult({
+                        success: false,
+                        error: payload.message ?? payload.error ?? t("errors.publishFailed"),
+                    });
+                }
+            } catch (err) {
+                if (epoch !== postFeedbackEpochRef.current) return;
                 setPublishResult({
                     success: false,
-                    error: payload.message ?? payload.error ?? "Publish failed.",
+                    error: err instanceof Error ? err.message : t("errors.publishNetwork"),
                 });
+            } finally {
+                if (epoch === postFeedbackEpochRef.current) setPublishing(false);
             }
-        } catch (err) {
-            if (epoch !== postFeedbackEpochRef.current) return;
-            setPublishResult({
-                success: false,
-                error: err instanceof Error ? err.message : "Network error while publishing.",
+        },
+        [editableMessage, platform, result?.platform, t]
+    );
+
+    /**
+     * Publish, unless the generated post's claims need a person to look first:
+     * then ask (the gate dialog), and post only once they confirm. The server
+     * checks the final text too, so an edit that adds a claim is caught there.
+     */
+    const publishPost = useCallback(async () => {
+        const review = (result?.claimSources ?? []).filter(c => c.support !== "supported");
+        if (review.length > 0 || result?.claimCheckUnavailable) {
+            setClaimGate({
+                unavailable: result?.claimCheckUnavailable === true,
+                claims: review.map(c => ({
+                    claim: c.claim,
+                    support: c.support,
+                    reason: c.reason ?? null,
+                    sourceDoc: c.match?.sourceDoc ?? null,
+                })),
             });
-        } finally {
-            if (epoch === postFeedbackEpochRef.current) setPublishing(false);
+            return;
         }
-    }, [editableMessage, platform, result?.platform]);
+        await sendPublish(false);
+    }, [result?.claimCheckUnavailable, result?.claimSources, sendPublish]);
+
+    const confirmClaimGate = useCallback(async () => {
+        setClaimGate(null);
+        await sendPublish(true);
+    }, [sendPublish]);
+
+    const dismissClaimGate = useCallback(() => setClaimGate(null), []);
 
     const evaluatePost = useCallback(async () => {
         // Score the currently-visible/edited post with the LLM-as-judge pipeline
@@ -690,17 +886,17 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
                 error?: string;
             };
             if (!res.ok || !json.success || !json.data) {
-                throw new Error(json.error ?? json.message ?? "Evaluation failed");
+                throw new Error(json.error ?? json.message ?? t("errors.evaluationFailed"));
             }
             if (epoch !== postFeedbackEpochRef.current) return; // displayed post changed
             setEvalResult(json.data);
         } catch (err) {
             if (epoch !== postFeedbackEpochRef.current) return;
-            setEvalError(err instanceof Error ? err.message : "Evaluation failed");
+            setEvalError(err instanceof Error ? err.message : t("errors.evaluationFailed"));
         } finally {
             if (epoch === postFeedbackEpochRef.current) setEvaluating(false);
         }
-    }, [editableMessage, result]);
+    }, [editableMessage, result, t]);
 
     /**
      * Context-aware rewrite backend for the Refine sheet (unification P3):
@@ -726,11 +922,11 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
                 message?: string;
             };
             if (!res.ok || !json.success || !json.data?.message) {
-                throw new Error(json.message ?? "Refinement failed");
+                throw new Error(json.message ?? t("errors.refinementFailed"));
             }
             return json.data.message;
         },
-        [platform, result]
+        [platform, result, t]
     );
 
     const activeSession = sessions.find(session => session.id === activeSessionId) ?? null;
@@ -785,6 +981,9 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
         publishing,
         publishResult,
         publishPost,
+        claimGate,
+        confirmClaimGate,
+        dismissClaimGate,
         evaluating,
         evalResult,
         evalError,

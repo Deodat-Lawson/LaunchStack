@@ -11,6 +11,9 @@
 
 import { NextResponse } from "next/server";
 
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor, wordEnglish } from "~/i18n/translate";
+
 import {
     AGENT_AUTONOMY_LEVELS,
     DEFAULT_AGENT_AUTONOMY,
@@ -75,11 +78,16 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
     const ctx = await requireWorkspacePermission(AGENT_ROSTER_PERMISSION);
     if (!ctx.success) return ctx.response;
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "collab.server.errors");
 
     const parsed = CreatePersonaSchema.safeParse(await request.json().catch(() => null));
     if (!parsed.success) {
         return NextResponse.json(
-            { error: "Invalid request", details: parsed.error.flatten() },
+            {
+                error: translatorFor(locale, "errors.api")("invalidRequest"),
+                details: parsed.error.flatten(),
+            },
             { status: 400 }
         );
     }
@@ -88,15 +96,15 @@ export async function POST(request: Request) {
         const persona = await createPersona(ctx.data.companyId, parsed.data);
         return NextResponse.json({ persona }, { status: 201 });
     } catch (err) {
-        const message = err instanceof Error ? err.message : "Could not create agent";
+        const message = err instanceof Error ? err.message : t("createAgentFailed");
         // The unique index on (company_id, key) is the real guard; report it as a
         // conflict rather than a 500 so the form can point at the field.
         const conflict = /duplicate key|unique/i.test(message);
         return NextResponse.json(
             {
                 error: conflict
-                    ? `An agent with the handle "${parsed.data.key}" already exists`
-                    : message,
+                    ? t("handleTaken", { handle: parsed.data.key })
+                    : wordEnglish(message, "collab.server.errors", locale),
             },
             { status: conflict ? 409 : 500 }
         );

@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState, useCallback } from "react";
+import { useTranslations } from "next-intl";
 
 import { blobToWav } from "./encodeWav";
 
@@ -11,6 +12,7 @@ interface UseVoiceRecorderOptions {
 
 export function useVoiceRecorder(options: UseVoiceRecorderOptions = {}) {
     const { onTranscription, onError } = options;
+    const t = useTranslations("chat.voice");
 
     const [isRecording, setIsRecording] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
@@ -52,7 +54,7 @@ export function useVoiceRecorder(options: UseVoiceRecorderOptions = {}) {
                 streamRef.current = null;
 
                 if (audioBlob.size < 100) {
-                    onError?.("Recording too short");
+                    onError?.(t("tooShort"));
                     return;
                 }
 
@@ -63,9 +65,9 @@ export function useVoiceRecorder(options: UseVoiceRecorderOptions = {}) {
             setIsRecording(true);
         } catch (err) {
             console.error("Mic access failed:", err);
-            onError?.("Microphone access denied");
+            onError?.(t("micDenied"));
         }
-    }, [isRecording, isProcessing, onError]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [isRecording, isProcessing, onError, t]); // eslint-disable-line react-hooks/exhaustive-deps
 
     const stop = useCallback(() => {
         if (mediaRecorderRef.current && mediaRecorderRef.current.state === "recording") {
@@ -98,11 +100,11 @@ export function useVoiceRecorder(options: UseVoiceRecorderOptions = {}) {
             if (text.length >= 2) {
                 onTranscription?.(text);
             } else {
-                onError?.("Could not understand audio");
+                onError?.(t("notUnderstood"));
             }
         } catch (err) {
             console.error("Transcription error:", err);
-            onError?.("Failed to process speech");
+            onError?.(t("processFailed"));
         } finally {
             setIsProcessing(false);
         }

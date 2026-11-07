@@ -416,12 +416,57 @@ describe("OCR Complexity Module", () => {
 
             const decision = await determineDocumentRouting(DOCUMENT_URL);
 
-            // converter.url is configured, so the local default is DOCLING.
-            expect(decision.provider).toBe("DOCLING");
+            // Docling goes through the converter, so with the converter down
+            // and no other engine configured the text layer is all there is —
+            // not a DOCLING that would 503 and fail the job.
+            expect(decision.provider).toBe("NATIVE_PDF");
             expect(decision.reason).toBe("vision-unavailable");
             expect(decision.pageCount).toBe(0);
             expect(decision.signals).toEqual({});
             expect(decision).not.toHaveProperty("confidence");
+        });
+
+        it("falls back locally to Azure first when it is configured", async () => {
+            configureOcr({
+                converter: { url: CONVERTER_URL, apiKey: API_KEY },
+                azure: { endpoint: "https://azure.test", key: "azure-key" },
+                landingAi: { apiKey: "landing-key" },
+            });
+            (global.fetch as jest.Mock).mockRejectedValue(new Error("connect ECONNREFUSED"));
+
+            const decision = await determineDocumentRouting(DOCUMENT_URL, { forceOCR: true });
+
+            expect(decision.provider).toBe("AZURE");
+            expect(decision.reason).toBe("force-ocr");
+        });
+
+        it("sends forceOCR, mime type and filename on the wire", async () => {
+            (global.fetch as jest.Mock).mockResolvedValue({
+                ok: true,
+                status: 200,
+                json: async () => ({
+                    schemaVersion: 1,
+                    provider: "AZURE",
+                    reason: "force-ocr",
+                    signals: {},
+                }),
+                text: async () => "",
+            } as Response);
+
+            await determineDocumentRouting(DOCUMENT_URL, {
+                forceOCR: true,
+                mimeType: "application/pdf",
+                filename: "scan.pdf",
+            });
+
+            const [, init] = (global.fetch as jest.Mock).mock.calls[0] as [string, RequestInit];
+            expect(JSON.parse(init.body as string)).toEqual({
+                schemaVersion: 1,
+                documentUrl: DOCUMENT_URL,
+                forceOCR: true,
+                mimeType: "application/pdf",
+                filename: "scan.pdf",
+            });
         });
 
         it("falls back without any fetch when no converter is configured", async () => {

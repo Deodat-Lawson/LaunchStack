@@ -13,9 +13,13 @@
  *    answer bubbles, meeting channels, run histories. The body is logged, and
  *    the SDK sees a short message keyed by status, worded so
  *    `describeChatEndpointError` can still classify it.
+ * 3. The provider's usage report on a successful completion goes to the
+ *    scope's recorder (usage-meter.ts), so every call is counted whichever
+ *    feature made it.
  */
 
 import type { ChatEndpointConfig, ChatModelBehavior } from "./types";
+import { prepareUsageMeter, type UsageMeterContext } from "./usage-meter";
 
 type Fetch = typeof globalThis.fetch;
 
@@ -121,13 +125,16 @@ function urlOf(input: Parameters<Fetch>[0]): string {
 }
 
 /**
- * A `fetch` for the OpenAI SDK that applies both rules. `baseFetch` is read
- * per call, so a test that swaps the global after construction is honoured.
+ * A `fetch` for the OpenAI SDK that applies all three rules. `baseFetch` is
+ * read per call, so a test that swaps the global after construction is
+ * honoured. `meter` says what the transport knows about the calls (route,
+ * model, price) for the usage report.
  */
 export function createEndpointFetch(
     endpoint: ChatEndpointConfig,
     behavior: ChatModelBehavior,
-    baseFetch?: Fetch
+    baseFetch?: Fetch,
+    meter?: UsageMeterContext
 ): Fetch {
     const instructions = endpoint.systemInstructions?.trim();
     const systemRole = behavior.parameters.systemMessages === "supported";
@@ -139,8 +146,9 @@ export function createEndpointFetch(
                 ? { ...init, body: addSystemInstructions(init.body, instructions, systemRole) }
                 : init;
 
+        const metered = prepareUsageMeter(input, { owner: endpoint.owner, ...meter });
         const response = await (baseFetch ?? globalThis.fetch)(input, send);
-        if (response.ok) return response;
+        if (response.ok) return metered ? metered(response) : response;
 
         const raw = await response.text().catch(() => "");
         console.error(

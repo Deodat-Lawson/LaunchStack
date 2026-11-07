@@ -1,4 +1,4 @@
-import type { BrandPost, BrandPostStatus } from "../api";
+import type { BrandPost } from "../api";
 
 const DAY = 86_400_000;
 
@@ -30,24 +30,40 @@ export function postMoment(post: BrandPost): Date {
     return new Date(post.scheduledAt ?? post.publishedAt ?? post.createdAt);
 }
 
-export function timeOfDay(d: Date): string {
-    return d.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" });
+/*
+ * The calendar's words for a moment. `locale` is the interface language
+ * (`useLocale()`); the time zone stays the browser's, the same one the
+ * week grid is laid out in.
+ */
+
+export function timeOfDay(d: Date, locale?: string): string {
+    return d.toLocaleTimeString(locale, { hour: "numeric", minute: "2-digit" });
 }
 
-export function weekday(d: Date): string {
-    return d.toLocaleDateString(undefined, { weekday: "short" });
+export function weekday(d: Date, locale?: string): string {
+    return d.toLocaleDateString(locale, { weekday: "short" });
 }
 
-export function dayNumber(d: Date): string {
-    return d.toLocaleDateString(undefined, { day: "numeric" });
+export function dayNumber(d: Date, locale?: string): string {
+    return d.toLocaleDateString(locale, { day: "numeric" });
 }
 
-export function monthYear(d: Date): string {
-    return d.toLocaleDateString(undefined, { month: "long", year: "numeric" });
+export function monthYear(d: Date, locale?: string): string {
+    return d.toLocaleDateString(locale, { month: "long", year: "numeric" });
 }
 
-export function dayAndMonth(d: Date): string {
-    return d.toLocaleDateString(undefined, { weekday: "short", day: "numeric", month: "short" });
+export function dayAndMonth(d: Date, locale?: string): string {
+    return d.toLocaleDateString(locale, { weekday: "short", day: "numeric", month: "short" });
+}
+
+/** The whole date, for a day's accessible name: "Mon, Oct 20, 2026". */
+export function fullDate(d: Date, locale?: string): string {
+    return d.toLocaleDateString(locale, {
+        weekday: "short",
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+    });
 }
 
 /** For `<input type="datetime-local">`: local time without seconds. */
@@ -67,15 +83,6 @@ export function nextSlot(now = new Date()): Date {
 export function weekRange(weekStart: Date): { from: string; to: string } {
     return { from: weekStart.toISOString(), to: addDays(weekStart, 7).toISOString() };
 }
-
-export const STATUS_WORD: Record<BrandPostStatus, string> = {
-    draft: "Draft",
-    scheduled: "Scheduled",
-    publishing: "Publishing",
-    published: "Published",
-    failed: "Failed",
-    cancelled: "Cancelled",
-};
 
 export function isDue(post: BrandPost, now = Date.now()): boolean {
     return (

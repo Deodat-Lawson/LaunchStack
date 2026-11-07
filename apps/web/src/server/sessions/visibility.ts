@@ -17,6 +17,10 @@
  *   *published document*, so when it has one that document must be in scope
  *   too.
  * - Anything else (a staged local `s…`, a malformed id) is dropped: fail closed.
+ *
+ * An answer's thinking trace is free text that can name documents and the
+ * owner's other chats, so a reader gets its steps and timings without the
+ * names (see `readerSteps`).
  */
 
 import { and, inArray } from "drizzle-orm";
@@ -27,6 +31,10 @@ import { mindmaps } from "~/server/db/schema";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import type { DocumentScope } from "~/lib/authz/scope-types";
 import { draftVisibilityWhere } from "~/server/mindmap/access";
+import type { ChatTurnStep } from "~/lib/chat-turns";
+import { HIDDEN_MENTION_LABEL, relabelMentions } from "~/lib/source-mentions";
+
+export { HIDDEN_MENTION_LABEL };
 
 import type { SessionMessage } from "./repository";
 
@@ -128,6 +136,23 @@ function citationSourceId(citation: unknown): string | null {
     return typeof id === "string" ? id : null;
 }
 
+/**
+ * A reader's copy of an answer's steps. A step's detail lists what it read
+ * (document titles, file names, the owner's other chats) and isn't tied to
+ * source ids the scope check could test, so it never leaves for a reader; a
+ * search caught mid-way, and each tool call, says what it did without saying
+ * what it searched for or which file it read.
+ */
+function readerSteps(steps: readonly ChatTurnStep[]): ChatTurnStep[] {
+    return steps.map(({ detail: _detail, ...step }) => {
+        // A search caught mid-way and each tool call name what they looked at
+        // (a file, a query); the reader's chat words them by kind instead.
+        const named =
+            (step.id === "search" && step.state === "active") || /^(web|source|doc)-/.test(step.id);
+        return named ? { ...step, label: "" } : step;
+    });
+}
+
 export interface ReaderMessage extends SessionMessage {
     /** Citations removed because the reader cannot open their source. */
     hiddenCitations?: number;
@@ -142,8 +167,19 @@ export function filterMessagesForReader(
     visible: ReadonlySet<string>
 ): { messages: ReaderMessage[]; hiddenCitations: number } {
     let hiddenCitations = 0;
+    // The asker's words carry their chips as links whose labels are titles.
+    // A source the reader cannot open keeps its ref (the transcript draws an
+    // unavailable chip there) but loses its title; a conversation chip is one
+    // of the owner's other chats and is never named to a reader.
+    const hide = (words: string) =>
+        relabelMentions(words, mention =>
+            mention.kind === "thread" || (mention.kind === "source" && !visible.has(mention.ref))
+                ? HIDDEN_MENTION_LABEL
+                : null
+        );
     const out = messages.map(message => {
         const next: ReaderMessage = { ...message };
+        if (message.role === "user" && message.text) next.text = hide(message.text);
         if (message.refs) next.refs = message.refs.filter(ref => visible.has(ref));
         if (message.citations) {
             const kept = message.citations.filter(citation => {
@@ -164,8 +200,12 @@ export function filterMessagesForReader(
             const readerSend = { ...send };
             delete readerSend.threadRefs;
             if (send.refs) readerSend.refs = send.refs.filter(ref => visible.has(ref));
+            if (typeof send.text === "string") readerSend.text = hide(send.text);
+            if (typeof send.recallText === "string") readerSend.recallText = hide(send.recallText);
             next.metadata = { ...message.metadata, send: readerSend };
         }
+        const steps = message.metadata?.steps;
+        if (steps) next.metadata = { ...next.metadata, steps: readerSteps(steps) };
         return next;
     });
     return { messages: out, hiddenCitations };

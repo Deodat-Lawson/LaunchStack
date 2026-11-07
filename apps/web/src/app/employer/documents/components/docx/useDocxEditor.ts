@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import type { ReviewItem } from "@launchstack/editing";
@@ -66,12 +67,14 @@ interface ApiError {
     message?: string;
 }
 
-function friendlyError(status: number, body: ApiError | null): string {
+type DocxT = ReturnType<typeof useTranslations<"viewers.docx">>;
+
+function friendlyError(status: number, body: ApiError | null, t: DocxT): string {
     if (body?.message) return body.message;
-    if (status === 404) return "This document no longer exists.";
-    if (status === 415) return "The Word editor only opens .docx files.";
-    if (status === 503) return "The document editing service is unavailable.";
-    return `Something went wrong (HTTP ${status}).`;
+    if (status === 404) return t("errors.gone");
+    if (status === 415) return t("errors.notDocx");
+    if (status === 503) return t("errors.unavailable");
+    return t("errors.http", { status });
 }
 
 /** Group raw review items into reviewer-facing entries. */
@@ -137,6 +140,10 @@ export function toEntries(items: ReviewItem[]): ReviewEntry[] {
 }
 
 export function useDocxEditor(documentId: number) {
+    const t = useTranslations("viewers.docx");
+    // Callbacks read the words through this, so they keep their identity.
+    const tRef = useRef(t);
+    tRef.current = t;
     const [state, setState] = useState<DocxEditorState>({
         bytes: null,
         entries: [],
@@ -170,9 +177,12 @@ export function useDocxEditor(documentId: number) {
 
                 if (!contentRes.ok) {
                     const body = (await contentRes.json().catch(() => null)) as ApiError | null;
-                    throw Object.assign(new Error(friendlyError(contentRes.status, body)), {
-                        retryable: contentRes.status >= 500 || contentRes.status === 503,
-                    });
+                    throw Object.assign(
+                        new Error(friendlyError(contentRes.status, body, tRef.current)),
+                        {
+                            retryable: contentRes.status >= 500 || contentRes.status === 503,
+                        }
+                    );
                 }
 
                 const bytes = await contentRes.arrayBuffer();
@@ -219,7 +229,7 @@ export function useDocxEditor(documentId: number) {
                     busy: false,
                     error: {
                         message:
-                            err instanceof Error ? err.message : "Failed to open the document.",
+                            err instanceof Error ? err.message : tRef.current("errors.openFailed"),
                         retryable: (err as { retryable?: boolean })?.retryable ?? true,
                     },
                 }));
@@ -256,7 +266,7 @@ export function useDocxEditor(documentId: number) {
                     | null;
 
                 if (!res.ok) {
-                    throw new Error(friendlyError(res.status, body));
+                    throw new Error(friendlyError(res.status, body, tRef.current));
                 }
 
                 toast.success(options.successMessage);
@@ -264,8 +274,8 @@ export function useDocxEditor(documentId: number) {
                 return true;
             } catch (err) {
                 const message =
-                    err instanceof Error ? err.message : "The change could not be applied.";
-                toast.error("Could not apply the change", { description: message });
+                    err instanceof Error ? err.message : tRef.current("errors.applyFailedDetail");
+                toast.error(tRef.current("errors.applyFailed"), { description: message });
                 setState(s => {
                     const pending = new Set(s.pending);
                     ids.forEach(id => pending.delete(id));
@@ -286,7 +296,10 @@ export function useDocxEditor(documentId: number) {
                 { actions },
                 {
                     ids: entry.ids,
-                    successMessage: decision === "ACCEPT" ? "Change accepted" : "Change rejected",
+                    successMessage:
+                        decision === "ACCEPT"
+                            ? tRef.current("toasts.accepted")
+                            : tRef.current("toasts.rejected"),
                 }
             );
         },
@@ -297,7 +310,7 @@ export function useDocxEditor(documentId: number) {
         (entry: ReviewEntry, text: string) =>
             apply(
                 { actions: [{ action: "REPLY", target_id: entry.id, text }] },
-                { ids: entry.ids, successMessage: "Reply added" }
+                { ids: entry.ids, successMessage: tRef.current("toasts.replied") }
             ),
         [apply]
     );
@@ -309,7 +322,9 @@ export function useDocxEditor(documentId: number) {
                 {
                     ids: [],
                     successMessage:
-                        decision === "accept" ? "All changes accepted" : "All changes rejected",
+                        decision === "accept"
+                            ? tRef.current("toasts.allAccepted")
+                            : tRef.current("toasts.allRejected"),
                 }
             ),
         [apply]

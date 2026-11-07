@@ -7,13 +7,13 @@ import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { loadCompanyProfile, startRebuild } from "~/server/company-profile/service";
 import { handleRouteError, json } from "~/server/distribution/http";
 
-export async function GET() {
+export async function GET(request: Request) {
     const auth = await requireWorkspaceContext();
     if (!auth.success) return auth.response;
     try {
         return json({ profile: await loadCompanyProfile(auth.data) });
     } catch (err) {
-        return handleRouteError("GET company profile", err);
+        return handleRouteError("GET company profile", err, request);
     }
 }
 
@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
             try {
                 return json({ profile: await startRebuild(ctx) }, 202);
             } catch (err) {
-                return handleRouteError("POST company profile", err);
+                return handleRouteError("POST company profile", err, request);
             }
         }
     );

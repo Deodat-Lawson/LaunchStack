@@ -19,13 +19,13 @@ export async function POST(request: Request, { params }: Params) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
     const id = parseIdParam((await params).id);
-    if (id === null) return invalidIdResponse();
+    if (id === null) return invalidIdResponse(request);
     const body = await parseJsonBody(request, GroupMembersSchema);
     if (!body.success) return body.response;
     try {
         return NextResponse.json({ group: await addGroupMembers(ctx.data, id, body.data.userIds) });
     } catch (error) {
-        return workspaceErrorResponse(error, "[workspace/groups/members POST]");
+        return workspaceErrorResponse(error, "[workspace/groups/members POST]", request);
     }
 }
 
@@ -33,7 +33,7 @@ export async function DELETE(request: Request, { params }: Params) {
     const ctx = await requireWorkspaceContext();
     if (!ctx.success) return ctx.response;
     const id = parseIdParam((await params).id);
-    if (id === null) return invalidIdResponse();
+    if (id === null) return invalidIdResponse(request);
     const body = await parseJsonBody(request, GroupMembersSchema);
     if (!body.success) return body.response;
     try {
@@ -41,6 +41,6 @@ export async function DELETE(request: Request, { params }: Params) {
             group: await removeGroupMembers(ctx.data, id, body.data.userIds),
         });
     } catch (error) {
-        return workspaceErrorResponse(error, "[workspace/groups/members DELETE]");
+        return workspaceErrorResponse(error, "[workspace/groups/members DELETE]", request);
     }
 }

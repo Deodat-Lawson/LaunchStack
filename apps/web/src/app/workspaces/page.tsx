@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { and, count, desc, eq, gt, isNull, sql } from "drizzle-orm";
 import { alias } from "drizzle-orm/pg-core";
 
@@ -22,6 +23,7 @@ export default async function WorkspacesPage({
     const session = await getServerSession();
     const userId = session?.user.id;
     if (!userId) redirect("/signin");
+    const t = await getTranslations("auth.workspaces");
 
     const [user] = await db.select({ id: users.id }).from(users).where(eq(users.userId, userId));
     if (!user) redirect("/signup");
@@ -122,13 +124,13 @@ export default async function WorkspacesPage({
             companyName: inv.companyName,
             slug: inv.slug ?? "",
             swatch: inv.swatch ?? 1,
-            invitedBy: inv.invitedByName ?? "a teammate",
+            invitedBy: inv.invitedByName ?? t("aTeammate"),
             invitedAt: inv.createdAt.toISOString(),
             role: inv.role,
         }));
 
     // `.trim()` so a whitespace-only name still falls through to "You".
-    const accountName = session.user.name.trim() || "You";
+    const accountName = session.user.name.trim() || t("you");
 
     return (
         <WorkspaceSelectClient

@@ -4,9 +4,27 @@
  */
 export type OcrProviderName = "DOCLING" | "NATIVE_PDF" | "AZURE" | "LANDING_AI" | "DATALAB";
 
+/**
+ * How a PDF is read. "provider-first" (the default whenever an OCR engine can
+ * run) sends every PDF to OCR — `defaultProvider` first, then the rest of the
+ * engine order — and reads the text layer only when they all fail.
+ * "text-layer-first" uses the PDF's own text when it has one and sends only
+ * scans to OCR.
+ */
+export type OcrPdfStrategy = "text-layer-first" | "provider-first";
+
+/**
+ * Azure Document Intelligence model. "prebuilt-layout" (the default) returns
+ * text, reading order, and tables; "prebuilt-read" returns text only and
+ * costs roughly a seventh as much per page.
+ */
+export type AzureDocumentModel = "prebuilt-layout" | "prebuilt-read";
+
 export interface OcrConfig {
     /** Local-fallback provider pin; the converter honors its own OCR_DEFAULT_PROVIDER. */
     defaultProvider?: OcrProviderName;
+    /** OCR_PDF_STRATEGY; unset means "provider-first" when an OCR engine can run. */
+    pdfStrategy?: OcrPdfStrategy;
     /** Absolute origin of the app — needed by the converter to fetch /api/files/ URLs. */
     appPublicUrl?: string;
     /**
@@ -19,7 +37,7 @@ export interface OcrConfig {
     visionModel?: string;
     /** Adapter-specific credentials. Each is optional; adapters no-op if missing. */
     datalabApiKey?: string;
-    azure?: { endpoint: string; key: string };
+    azure?: { endpoint: string; key: string; model?: AzureDocumentModel };
     landingAi?: { apiKey: string };
     /**
      * services/document-converter (ADR-004): the consolidated routing, vision

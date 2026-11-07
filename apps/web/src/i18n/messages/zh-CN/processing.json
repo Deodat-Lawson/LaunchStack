@@ -1,0 +1,214 @@
+{
+  "frame": {
+    "title": "处理队列",
+    "about": "每个正在进入工作区的文件及其所处阶段：上传、等待处理、读取文本（扫描件和图片会做 OCR）、拆分为段落、建立搜索索引。添加内容时会自动打开。"
+  },
+  "header": {
+    "title": "处理",
+    "accent": "队列",
+    "checking": "正在检查…"
+  },
+  "summary": {
+    "running": "{count} 个处理中",
+    "waiting": "{count} 个排队中",
+    "attention": "{count, plural, other {# 个需要处理}}",
+    "allCaughtUp": "全部完成——过去 24 小时内有 {count, plural, other {# 个文件}}已就绪",
+    "nothing": "没有正在处理的文件",
+    "separator": " · "
+  },
+  "filter": {
+    "label": "谁的文件",
+    "everyone": "所有人",
+    "mine": "我的"
+  },
+  "actions": {
+    "clearFinished": "清除已完成",
+    "addSource": "添加来源"
+  },
+  "overall": {
+    "onTheWay": "{count, plural, other {# 个文件处理中}}",
+    "stepsDone": "已完成全部步骤的 {percent}%",
+    "label": "所有处理中的文件"
+  },
+  "loadError": {
+    "rateLimited": "检查过于频繁——正在放慢。",
+    "http": "队列未能加载（HTTP {status}）。",
+    "network": "队列未能加载。",
+    "behind": "显示的内容可能稍有延迟。",
+    "tryNow": "立即重试"
+  },
+  "empty": {
+    "title": "你添加的文件会显示在这里",
+    "body": "上传的文件、文件夹、链接和 Google Drive 导入在读取和索引期间都会显示在这里，并实时显示每个阶段。添加内容时，这个标签页会自动打开。"
+  },
+  "sections": {
+    "attention": {
+      "title": "需要处理",
+      "aside": "已停止，或即将重试"
+    },
+    "running": {
+      "title": "正在处理",
+      "aside": "多个文件会同时处理"
+    },
+    "waiting": {
+      "title": "排队中",
+      "aside": "有空闲的处理进程时立即开始"
+    },
+    "done": {
+      "title": "已完成",
+      "aside": "过去 24 小时"
+    },
+    "showAll": "显示全部 {count} 个",
+    "showFewer": "收起"
+  },
+  "mineEmpty": {
+    "text": "你没有正在处理的文件。",
+    "showEveryone": "显示所有人的"
+  },
+  "announce": {
+    "ready": "{count, plural, other {{names} 已就绪。}}",
+    "failed": "{count, plural, other {{names} 因错误停止。}}"
+  },
+  "stages": {
+    "added": {
+      "label": "已添加",
+      "about": "文件已存入存储"
+    },
+    "waiting": {
+      "label": "排队",
+      "about": "等待空闲的处理进程"
+    },
+    "reading": {
+      "label": "读取",
+      "about": "读取文本，扫描件和图片会做 OCR"
+    },
+    "splitting": {
+      "label": "拆分",
+      "about": "把文本拆分为段落"
+    },
+    "indexing": {
+      "label": "索引",
+      "about": "为每个段落建立搜索索引"
+    },
+    "ready": {
+      "label": "就绪",
+      "about": "收尾，之后即可引用"
+    }
+  },
+  "stageTiming": {
+    "took": "用时 {duration}",
+    "soFar": "已进行 {duration}"
+  },
+  "progressbar": {
+    "label": "{name}：处理进度",
+    "value": "{headline}——第 {step} 步，共 {total} 步"
+  },
+  "headline": {
+    "ready": "可以搜索了",
+    "stopped": {
+      "added": "添加时停止",
+      "waiting": "排队时停止",
+      "reading": "读取时停止",
+      "splitting": "拆分时停止",
+      "indexing": "索引时停止",
+      "ready": "收尾时停止"
+    },
+    "retryIn": "{duration}后重试",
+    "retryNow": "马上重试",
+    "retrySoon": "即将重试",
+    "waitingTurn": "排队中",
+    "waitingFor": {
+      "reading": "等待开始读取",
+      "splitting": "等待开始拆分",
+      "indexing": "等待开始索引",
+      "ready": "等待收尾"
+    },
+    "reading": "正在读取文本",
+    "splitting": "正在拆分为段落",
+    "indexing": "正在建立搜索索引",
+    "indexingPercent": "正在建立搜索索引 · {percent}%",
+    "finishing": "正在收尾",
+    "starting": "正在开始"
+  },
+  "detail": {
+    "attempt": "第 {attempt} 次尝试，共 {max} 次",
+    "sections": "{done} / {total, plural, other {# 个段落}}",
+    "pages": "{count, plural, other {# 页}}",
+    "took": "用时 {duration}",
+    "separator": " · "
+  },
+  "local": {
+    "waitingUpload": "等待上传",
+    "uploading": "正在上传 · {percent}%",
+    "uploadedOf": "{loaded} / {total}",
+    "failedFile": "上传失败",
+    "failedLink": "无法添加",
+    "uploadFailed": "{name} 无法上传",
+    "linkFailed": "{name} 无法添加",
+    "keepOpen": "这一步在处理开始前完成——请保持此页面打开",
+    "serverFetching": "服务器正在获取",
+    "crawlNote": "{message}——找到的页面会显示在这里"
+  },
+  "work": {
+    "transcribing": "正在转写录音",
+    "starting": "正在开始处理",
+    "fetchingPage": "正在获取网页",
+    "startingCrawl": "正在开始抓取",
+    "downloadingVideo": "正在下载并转写视频"
+  },
+  "time": {
+    "seconds": "{count} 秒",
+    "minutes": "{count} 分钟",
+    "hours": "{hours} 小时",
+    "hoursMinutes": "{hours} 小时 {minutes} 分钟",
+    "justNow": "刚刚",
+    "ago": "{duration}前",
+    "yesterday": "昨天",
+    "waiting": "已等待 {duration}"
+  },
+  "size": {
+    "bytes": "{size} B",
+    "kb": "{size} KB",
+    "mb": "{size} MB",
+    "gb": "{size} GB"
+  },
+  "providers": {
+    "NATIVE_PDF": "原生 PDF",
+    "INGESTION": "文本提取",
+    "AZURE": "Azure",
+    "LANDING_AI": "Landing AI",
+    "DATALAB": "Datalab",
+    "DOCLING": "Docling"
+  },
+  "noFolder": "无文件夹",
+  "row": {
+    "open": "打开",
+    "openFile": "打开 {name}",
+    "retry": "重试",
+    "copyDetails": "复制详情",
+    "dismiss": "忽略",
+    "dismissFile": "忽略 {name}",
+    "addedBy": "由 {name} 添加",
+    "addedByYou": "由你添加",
+    "lastTry": "上次尝试：{message}",
+    "keepsTrying": "它会自动重试，最多 {max} 次；你无需操作。",
+    "retriedBefore": "{count, plural, other {之前已重试 # 次。}}",
+    "contactUs": "联系我们",
+    "copied": "已复制错误详情",
+    "copyFailed": "无法复制——请手动选中文本",
+    "retryStarted": "正在重试 {name}",
+    "retryFailed": "重试未能开始"
+  },
+  "connector": {
+    "syncing": "正在同步——查找新增和更改的文件。每个文件排队后都会显示在下方。",
+    "syncingLabel": "正在同步",
+    "error": "上次同步因错误停止。",
+    "lastSync": "上次同步（{when}）：{parts}。",
+    "queued": "{count} 个已排队",
+    "unchanged": "{count} 个未更改",
+    "skipped": "{count} 个已跳过",
+    "failed": "{count} 个失败",
+    "synced": "已同步。",
+    "separator": "，"
+  }
+}

@@ -13,6 +13,7 @@ import { NextResponse } from "next/server";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { serverError, SessionStateSchema, validateRequestBody } from "~/lib/validation";
 import { setSessionState } from "~/server/sessions/user-state";
+import { requestTranslator } from "~/i18n/server";
 
 export const runtime = "nodejs";
 
@@ -27,9 +28,16 @@ export async function PATCH(request: Request, { params }: Params) {
         const state = await setSessionState(ctx.data, (await params).sessionId, validation.data);
         return state
             ? NextResponse.json({ state })
-            : NextResponse.json({ error: "Session not found" }, { status: 404 });
+            : NextResponse.json(
+                  {
+                      error: requestTranslator(request, "chat.server.sessions")("notFound"),
+                  },
+                  { status: 404 }
+              );
     } catch (error) {
         console.error("[workspace/sessions] state update failed:", error);
-        return serverError("Failed to update this chat");
+        return serverError(
+            requestTranslator(request, "workspace.server.errors")("updateChatFailed")
+        );
     }
 }

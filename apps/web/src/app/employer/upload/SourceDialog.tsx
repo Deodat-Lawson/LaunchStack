@@ -2,6 +2,7 @@
 
 import React, { useEffect } from "react";
 import { X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { GitHubSourceTab } from "./GitHubSourceTab";
 import { PasteSourceTab } from "./PasteSourceTab";
 import { WebsiteSourceTab } from "./WebsiteSourceTab";
@@ -17,28 +18,12 @@ interface SourceDialogProps {
     onFilesAdded: (files: File[]) => void;
 }
 
-const titles: Record<SourceType, { title: string; description: string; wide: boolean }> = {
-    github: {
-        title: "Index a GitHub repository",
-        description: "Enter a repository URL to clone and index it into your knowledge base.",
-        wide: true,
-    },
-    paste: {
-        title: "Paste text",
-        description: "Paste markdown or plain text to add as a document.",
-        wide: false,
-    },
-    website: {
-        title: "Import from website",
-        description: "Fetch a single web page and add its content to your knowledge base.",
-        wide: true,
-    },
-    youtube: {
-        title: "Import from YouTube or video platforms",
-        description:
-            "Paste a video URL — audio will be extracted and transcribed into a searchable document.",
-        wide: false,
-    },
+/** Which dialogs are wide; their words are `upload.sourceDialog.<type>.{title,description}`. */
+const WIDE: Record<SourceType, boolean> = {
+    github: true,
+    paste: false,
+    website: true,
+    youtube: false,
 };
 
 export function SourceDialog({
@@ -48,6 +33,8 @@ export function SourceDialog({
     defaultCategory,
     onFilesAdded,
 }: SourceDialogProps) {
+    const t = useTranslations("upload.sourceDialog");
+    const tc = useTranslations("common");
     useEffect(() => {
         if (!open) return;
         const onKey = (e: KeyboardEvent) => {
@@ -58,7 +45,11 @@ export function SourceDialog({
     }, [open, onClose]);
 
     if (!open) return null;
-    const info = titles[open];
+    const info = {
+        title: t(`${open}.title`),
+        description: t(`${open}.description`),
+        wide: WIDE[open],
+    };
 
     return (
         <div
@@ -115,7 +106,7 @@ export function SourceDialog({
                     </div>
                     <button
                         onClick={onClose}
-                        aria-label="Close"
+                        aria-label={tc("a11y.close")}
                         style={{
                             width: 30,
                             height: 30,

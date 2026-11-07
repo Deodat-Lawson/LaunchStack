@@ -1,12 +1,6 @@
-"use client";
+import { redirect } from "next/navigation";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-
+/** Home is the workspace. Redirect on the server so nothing paints first. */
 export default function EmployerHomePage() {
-    const router = useRouter();
-    useEffect(() => {
-        router.replace("/employer/documents");
-    }, [router]);
-    return null;
+    redirect("/employer/documents");
 }

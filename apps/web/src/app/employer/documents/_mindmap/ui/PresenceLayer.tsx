@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useTranslations } from "next-intl";
 import { RefreshCw, Users } from "lucide-react";
 
 import { ProfileAvatar } from "~/components/ProfileAvatar";
@@ -26,6 +27,7 @@ export function RemoteCursors({
     pageId: string;
     zoom: number;
 }) {
+    const t = useTranslations("mindmap.presence");
     const px = (v: number) => v / zoom;
     const visible = peers.filter(p => p.cursor && p.pageId === pageId);
     if (visible.length === 0) return null;
@@ -35,7 +37,7 @@ export function RemoteCursors({
             {visible.map(peer => {
                 const colour = peerColor(peer.userId);
                 const { x, y } = peer.cursor!;
-                const label = peer.displayName ?? "Someone";
+                const label = peer.displayName ?? t("someone");
                 return (
                     <g key={peer.userId} transform={`translate(${x} ${y})`}>
                         <path
@@ -116,6 +118,7 @@ export function RemoteSelections({
 
 /** Stacked avatars for everyone currently in the document. */
 export function PresenceAvatars({ peers }: { peers: PresencePeer[] }) {
+    const t = useTranslations("mindmap.presence");
     if (peers.length === 0) return null;
     const shown = peers.slice(0, 4);
     const extra = peers.length - shown.length;
@@ -123,7 +126,7 @@ export function PresenceAvatars({ peers }: { peers: PresencePeer[] }) {
     return (
         <Tooltip>
             <TooltipTrigger asChild>
-                <div className="flex items-center -space-x-1.5" aria-label="People in this mindmap">
+                <div className="flex items-center -space-x-1.5" aria-label={t("people")}>
                     {shown.map(peer => (
                         // The ring is the peer's cursor colour, so a face can
                         // be matched to a cursor on the canvas.
@@ -150,7 +153,7 @@ export function PresenceAvatars({ peers }: { peers: PresencePeer[] }) {
             <TooltipContent side="bottom">
                 <span className="flex items-center gap-1.5">
                     <Users className="size-3" />
-                    {peers.map(p => p.displayName ?? "Someone").join(", ")}
+                    {peers.map(p => p.displayName ?? t("someone")).join(t("separator"))}
                 </span>
             </TooltipContent>
         </Tooltip>
@@ -164,19 +167,19 @@ export function PresenceAvatars({ peers }: { peers: PresencePeer[] }) {
  * prevent.
  */
 export function StaleBanner({ staleBy, dirty }: { staleBy: number; dirty: boolean }) {
+    const t = useTranslations("mindmap.presence");
+    const tc = useTranslations("common");
     if (staleBy <= 0) return null;
     return (
         <div className="border-warn bg-panel text-ink-2 shadow-2 absolute left-1/2 top-3 z-20 flex -translate-x-1/2 items-center gap-2 rounded-full border px-3 py-1.5 text-[12px]">
-            <RefreshCw className="text-warn size-3.5" />
-            {dirty
-                ? "Someone else saved a newer version — your changes will conflict."
-                : "A newer version is available."}
+            <RefreshCw className="text-warn-ink size-3.5" />
+            {dirty ? t("staleConflict") : t("stale")}
             <button
                 type="button"
                 onClick={() => window.location.reload()}
                 className="bg-brand text-brand-fg rounded-full px-2 py-0.5 text-[11px] font-medium"
             >
-                Reload
+                {tc("actions.reload")}
             </button>
         </div>
     );

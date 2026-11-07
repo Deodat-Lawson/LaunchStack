@@ -11,8 +11,8 @@ describe("tool registry", () => {
         }
     });
 
-    it("keeps the four chat capabilities the route honours", () => {
-        for (const id of ["retrieval", "web", "reasoning", "attachments"]) {
+    it("keeps the five chat capabilities the route honours", () => {
+        for (const id of ["retrieval", "web", "reasoning", "attachments", "write"]) {
             expect(agentTool(id)?.surfaces).toContain("chat");
         }
         expect(agentTool("nope")).toBeUndefined();

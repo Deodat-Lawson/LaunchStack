@@ -1,5 +1,10 @@
+import type { useTranslations } from "next-intl";
+
 import type { ActionMenuItem } from "~/components/ui/action-menu";
 import type { Invitation, Member } from "./api";
+
+/** `useTranslations("settings.people.menu")`, passed in by the row that opens the menu. */
+export type PeopleMenuT = ReturnType<typeof useTranslations<"settings.people.menu">>;
 
 /**
  * Declarative items for a member row and an invitation row. They mirror the
@@ -29,9 +34,10 @@ export interface MemberMenuHandlers {
 export function buildMemberMenuItems(
     member: Member,
     state: MemberMenuState,
-    handlers: MemberMenuHandlers
+    handlers: MemberMenuHandlers,
+    t: PeopleMenuT
 ): ActionMenuItem[] {
-    const busyReason = state.busy ? "A change is still saving." : undefined;
+    const busyReason = state.busy ? t("stillSaving") : undefined;
     const items: ActionMenuItem[] = [
         { type: "label", id: "title", label: member.name || member.email },
     ];
@@ -39,7 +45,7 @@ export function buildMemberMenuItems(
         items.push({
             type: "submenu",
             id: "role",
-            label: "Change role",
+            label: t("changeRole"),
             icon: "user",
             disabled: state.busy,
             disabledReason: busyReason,
@@ -57,7 +63,7 @@ export function buildMemberMenuItems(
     items.push({
         type: "item",
         id: "copy-email",
-        label: "Copy email",
+        label: t("copyEmail"),
         icon: "mail",
         onSelect: handlers.onCopyEmail,
     });
@@ -68,7 +74,7 @@ export function buildMemberMenuItems(
         access.push({
             type: "item",
             id: "approve",
-            label: "Approve",
+            label: t("approve"),
             icon: "check",
             disabled: state.busy,
             disabledReason: busyReason,
@@ -79,7 +85,7 @@ export function buildMemberMenuItems(
         access.push({
             type: "item",
             id: "suspend",
-            label: "Suspend access…",
+            label: t("suspend"),
             icon: "lock",
             disabled: state.busy,
             disabledReason: busyReason,
@@ -90,7 +96,7 @@ export function buildMemberMenuItems(
         access.push({
             type: "item",
             id: "reinstate",
-            label: "Reinstate access",
+            label: t("reinstate"),
             icon: "restore",
             disabled: state.busy,
             disabledReason: busyReason,
@@ -101,7 +107,7 @@ export function buildMemberMenuItems(
         access.push({
             type: "item",
             id: "transfer",
-            label: "Transfer ownership…",
+            label: t("transfer"),
             icon: "userPlus",
             disabled: state.busy,
             disabledReason: busyReason,
@@ -114,7 +120,7 @@ export function buildMemberMenuItems(
         items.push({
             type: "item",
             id: "remove",
-            label: "Remove from workspace…",
+            label: t("remove"),
             icon: "userMinus",
             danger: true,
             disabled: state.busy,
@@ -134,24 +140,25 @@ export interface InvitationMenuHandlers {
 export function buildInvitationMenuItems(
     invitation: Invitation,
     state: { open: boolean; busy: boolean },
-    handlers: InvitationMenuHandlers
+    handlers: InvitationMenuHandlers,
+    t: PeopleMenuT
 ): ActionMenuItem[] {
     const items: ActionMenuItem[] = [{ type: "label", id: "title", label: invitation.email }];
     if (state.open) {
         items.push({
             type: "item",
             id: "resend",
-            label: "Resend the invitation",
+            label: t("resend"),
             icon: "send",
             disabled: state.busy,
-            disabledReason: state.busy ? "Still resending." : undefined,
+            disabledReason: state.busy ? t("stillResending") : undefined,
             onSelect: handlers.onResend,
         });
     }
     items.push({
         type: "item",
         id: "copy-email",
-        label: "Copy email",
+        label: t("copyEmail"),
         icon: "mail",
         onSelect: handlers.onCopyEmail,
     });
@@ -160,7 +167,7 @@ export function buildInvitationMenuItems(
         items.push({
             type: "item",
             id: "revoke",
-            label: "Revoke…",
+            label: t("revoke"),
             icon: "delete",
             danger: true,
             disabled: state.busy,

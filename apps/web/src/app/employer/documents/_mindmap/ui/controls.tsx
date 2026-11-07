@@ -3,6 +3,7 @@
 import { ChevronRight } from "lucide-react";
 
 import React, { useEffect, useRef, useState } from "react";
+import { useTranslations } from "next-intl";
 import { Check, ChevronDown, Minus } from "lucide-react";
 
 import { Input } from "~/components/ui/input";
@@ -16,6 +17,7 @@ import { cn } from "~/lib/utils";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "~/components/ui/collapsible";
 
 import { DARK_SWATCHES, SWATCHES, THEMES } from "../model/palette";
+import { swatchName, themeName, type MindmapT } from "./EditorContext";
 
 /**
  * Small inspector controls.
@@ -128,6 +130,7 @@ export function NumberField({
     mixed,
     ...rest
 }: NumberFieldProps) {
+    const t = useTranslations("mindmap.controls");
     const [draft, setDraft] = useState<string | null>(null);
     const dragging = useRef<{ startX: number; startValue: number } | null>(null);
 
@@ -143,7 +146,7 @@ export function NumberField({
             <Input
                 {...rest}
                 value={draft ?? (mixed ? "" : String(Math.round(value * 100) / 100))}
-                placeholder={mixed ? "Mixed" : undefined}
+                placeholder={mixed ? t("mixed") : undefined}
                 onChange={e => setDraft(e.target.value)}
                 onBlur={() => {
                     if (draft !== null) {
@@ -207,12 +210,13 @@ export function PresetNumberField({
     presets,
     ...props
 }: NumberFieldProps & { presets: readonly NumberPreset[] }) {
+    const t = useTranslations("mindmap.controls");
     return (
         <div className="flex flex-1 items-center gap-1">
             <NumberField {...props} />
             <DropdownMenu>
                 <DropdownMenuTrigger
-                    aria-label={`${props["aria-label"] ?? "Value"} presets`}
+                    aria-label={t("presets", { name: props["aria-label"] ?? t("value") })}
                     className="border-line text-ink-3 hover:bg-panel-2 hover:text-ink-2 flex h-7 w-5 shrink-0 items-center justify-center rounded-md border"
                 >
                     <ChevronDown className="size-3" />
@@ -301,6 +305,7 @@ export interface ColorFieldProps {
 }
 
 export function ColorField({ value, onChange, allowNone, tone = "fill", label }: ColorFieldProps) {
+    const t = useTranslations("mindmap");
     const [open, setOpen] = useState(false);
     const ref = useRef<HTMLDivElement | null>(null);
 
@@ -340,7 +345,7 @@ export function ColorField({ value, onChange, allowNone, tone = "fill", label }:
                     }}
                 />
                 <span className="text-ink-2 flex-1 truncate text-left text-[11px]">
-                    {value === "none" ? "None" : nameForColor(value, tone)}
+                    {value === "none" ? t("controls.none") : nameForColor(t, value, tone)}
                 </span>
                 <ChevronDown className="text-ink-3 size-3" />
             </button>
@@ -351,7 +356,7 @@ export function ColorField({ value, onChange, allowNone, tone = "fill", label }:
                         {allowNone && (
                             <button
                                 type="button"
-                                title="None"
+                                title={t("controls.none")}
                                 onClick={() => {
                                     onChange("none");
                                     setOpen(false);
@@ -367,7 +372,7 @@ export function ColorField({ value, onChange, allowNone, tone = "fill", label }:
                                 <button
                                     key={swatch.id}
                                     type="button"
-                                    title={swatch.name}
+                                    title={swatchName(t, swatch)}
                                     onClick={() => {
                                         onChange(color);
                                         setOpen(false);
@@ -390,12 +395,12 @@ export function ColorField({ value, onChange, allowNone, tone = "fill", label }:
                     </div>
                     <div className="border-line mt-2 border-t pt-2">
                         <label className="text-ink-3 flex items-center gap-2 text-[11px]">
-                            Custom
+                            {t("controls.custom")}
                             <input
                                 type="color"
                                 onChange={e => onChange(e.target.value)}
                                 className="border-line bg-panel h-6 w-full cursor-pointer rounded border"
-                                aria-label="Custom colour"
+                                aria-label={t("controls.customColour")}
                             />
                         </label>
                     </div>
@@ -405,7 +410,7 @@ export function ColorField({ value, onChange, allowNone, tone = "fill", label }:
     );
 }
 
-function nameForColor(value: string, tone: "fill" | "stroke" | "ink"): string {
+function nameForColor(t: MindmapT, value: string, tone: "fill" | "stroke" | "ink"): string {
     for (const set of [SWATCHES, DARK_SWATCHES]) {
         const match = set.find(s =>
             tone === "fill"
@@ -414,13 +419,13 @@ function nameForColor(value: string, tone: "fill" | "stroke" | "ink"): string {
                   ? s.stroke === value
                   : s.ink === value
         );
-        if (match) return match.name;
+        if (match) return swatchName(t, match);
     }
     // A theme's paper, or a colour someone typed in. Either way the OKLCH
     // components are not a name — "0.992 0.003 80" tells nobody anything.
     const theme = THEMES.find(t => t.background === value);
-    if (theme) return `${theme.name} paper`;
-    return "Custom";
+    if (theme) return t("controls.paper", { theme: themeName(t, theme) });
+    return t("controls.custom");
 }
 
 // ---------------------------------------------------------------------------

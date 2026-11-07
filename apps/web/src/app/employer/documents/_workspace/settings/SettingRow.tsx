@@ -12,6 +12,7 @@
  */
 
 import React, { useCallback, useEffect, useState, type ReactNode } from "react";
+import { useTranslations } from "next-intl";
 import { Layers } from "lucide-react";
 
 import { Badge } from "~/components/ui/badge";
@@ -27,7 +28,7 @@ import {
     SelectValue,
 } from "~/components/ui/select";
 import { Switch } from "~/components/ui/switch";
-import { PERMISSION_DESCRIPTIONS } from "~/lib/authz/permissions";
+import { usePermissionCopy } from "~/lib/authz/i18n";
 import { usePerson } from "~/lib/profile/use-people";
 import { settingsForSection, type SettingDefinition } from "~/lib/settings/registry";
 import type {
@@ -40,11 +41,16 @@ import {
     defaultWriteScope,
     settingAtScope,
     useSetting,
+    useSettingCopy,
     useSettingsPayload,
+    type SettingCopy,
 } from "~/lib/settings/useSettings";
 import { cn } from "~/lib/utils";
 
-import { relativeTime } from "./people/format";
+import { useTimeFormat } from "./people/format";
+
+/** `useTranslations("settings.row")`. */
+type RowT = ReturnType<typeof useTranslations<"settings.row">>;
 
 export interface SettingRowProps {
     settingKey: string;
@@ -60,13 +66,6 @@ export interface SettingRowProps {
     children?: ReactNode;
 }
 
-const SCOPE_LABEL: Record<StoredScope | "default", string> = {
-    default: "Default",
-    workspace: "Workspace",
-    folder: "This folder",
-    member: "You",
-};
-
 function sameValue(a: unknown, b: unknown): boolean {
     return JSON.stringify(a) === JSON.stringify(b);
 }
@@ -79,8 +78,12 @@ export function SettingRow({
     disabledReason = null,
     children,
 }: SettingRowProps) {
+    const t = useTranslations("settings.row");
+    const tc = useTranslations("common");
     const setting = useSetting(settingKey, { folder });
     const { definition, resolved, loaded, saving, saveError } = setting;
+    const copy = useSettingCopy(definition);
+    const permissionCopy = usePermissionCopy();
     const writeScope = scope ?? defaultWriteScope(definition, folder);
     // A row pinned to a broader scope than the winning value shows that
     // scope's value: the workspace row is not where an admin's own choice goes.
@@ -116,12 +119,12 @@ export function SettingRow({
     // settings".
     const permissionReason = !canEdit
         ? definition.permission
-            ? `Changing this takes a role with “${PERMISSION_DESCRIPTIONS[definition.permission]}”.`
-            : "Not editable at this scope."
+            ? t("permissionReason", { permission: permissionCopy(definition.permission) })
+            : t("notEditable")
         : null;
     const readOnlyReason = !loaded ? null : (disabledReason ?? permissionReason);
 
-    const provenance = describeProvenance(resolved, source, writeScope, folder);
+    const provenance = describeProvenance(t, resolved, source, writeScope, folder);
     const showReset =
         canEdit &&
         resolved &&
@@ -150,24 +153,25 @@ export function SettingRow({
                         htmlFor={`control-${definition.key}`}
                         className="text-ink text-[13px] font-semibold"
                     >
-                        {definition.label}
+                        {copy.label}
                     </Label>
                     <p className="text-ink-3 m-0 mt-1 max-w-[560px] text-[12.5px] leading-normal">
-                        {definition.description}
+                        {copy.description}
                     </p>
-                    {definition.consequence && (
+                    {copy.consequence && (
                         <p className="text-ink-2 m-0 mt-1.5 flex max-w-[560px] items-start gap-1.5 text-[12px] leading-normal">
                             <span
                                 aria-hidden
                                 className="bg-warn mt-[5px] inline-block size-1.5 shrink-0 rounded-full"
                             />
-                            {definition.consequence}
+                            {copy.consequence}
                         </p>
                     )}
                 </div>
                 <div className="min-w-0 max-w-[380px] flex-[999_1_280px]">
                     <Control
                         definition={definition}
+                        copy={copy}
                         value={value}
                         options={options}
                         disabled={disabled}
@@ -200,8 +204,8 @@ export function SettingRow({
                         {provenance.resetLabel}
                     </Button>
                 )}
-                {saving && <span>Saving…</span>}
-                {readOnlyReason && <Badge variant="secondary">Read-only</Badge>}
+                {saving && <span>{tc("status.saving")}</span>}
+                {readOnlyReason && <Badge variant="secondary">{t("readOnly")}</Badge>}
                 {readOnlyReason && <span>{readOnlyReason}</span>}
                 {saveError && (
                     <span role="alert" className="text-danger">
@@ -229,73 +233,78 @@ function SetBy({
     updatedAt: string | null;
     folder: string | null;
 }) {
+    const t = useTranslations("settings.row");
+    const time = useTimeFormat();
     const viewerId = useSettingsPayload(folder).payload?.viewer?.authUserId ?? null;
     const isViewer = updatedBy === viewerId;
     const person = usePerson(isViewer ? null : updatedBy);
-    const who = isViewer
-        ? "you"
-        : person.status === "member"
-          ? person.look.displayName
-          : person.status === "gone"
-            ? "someone who has left"
-            : null;
+    const when = time.relative(updatedAt);
     return (
         <span>
-            Set {relativeTime(updatedAt)}
-            {who ? ` by ${who}` : ""}
+            {isViewer
+                ? t("setByYou", { when })
+                : person.status === "member"
+                  ? t("setBy", { when, who: person.look.displayName })
+                  : person.status === "gone"
+                    ? t("setByLeft", { when })
+                    : t("setAt", { when })}
         </span>
     );
 }
 
 function describeProvenance(
+    t: RowT,
     resolved: ReturnType<typeof useSetting>["resolved"],
     /** Where the value this row shows came from, at its write scope. */
     source: SettingScope,
     writeScope: StoredScope,
     folder: string | null
 ): { text: string; resetLabel: string } {
-    if (!resolved) return { text: "Loading…", resetLabel: "Reset" };
-    const inheritsFrom = (): string => {
-        if (writeScope === "member") return "the workspace";
-        if (writeScope === "folder") return "the workspace";
-        return "the default";
-    };
+    if (!resolved) return { text: t("loading"), resetLabel: t("reset") };
+    // A member or folder value falls back to the workspace's; the workspace's to the default.
+    const resetLabel = writeScope === "workspace" ? t("resetToDefault") : t("resetToWorkspace");
     if (source === writeScope) {
         const where =
-            writeScope === "folder" && folder
-                ? `Set on this folder`
-                : `Set at ${SCOPE_LABEL[writeScope].toLowerCase()} level`;
-        return {
-            text: writeScope === "member" ? "Your choice" : where,
-            resetLabel: `Reset to ${inheritsFrom()}`,
-        };
+            writeScope === "folder"
+                ? folder
+                    ? t("setOnFolder")
+                    : t("setAtFolderLevel")
+                : writeScope === "workspace"
+                  ? t("setAtWorkspaceLevel")
+                  : t("yourChoice");
+        return { text: where, resetLabel };
     }
     if (source === "default") {
-        return { text: `${SCOPE_LABEL.default} · nothing set`, resetLabel: "Reset" };
+        return { text: t("defaultNothingSet"), resetLabel: t("reset") };
     }
-    const from =
+    const text =
         source === "folder" && resolved.source === "folder" && resolved.sourceId
-            ? `folder “${resolved.sourceId}”`
-            : SCOPE_LABEL[source].toLowerCase();
-    return {
-        text: `Inherited from ${from}`,
-        resetLabel: `Reset to ${inheritsFrom()}`,
-    };
+            ? t("inheritedFromFolder", { folder: resolved.sourceId })
+            : source === "folder"
+              ? t("inheritedFromThisFolder")
+              : source === "workspace"
+                ? t("inheritedFromWorkspace")
+                : t("inheritedFromYou");
+    return { text, resetLabel };
 }
 
 function Control({
     definition,
+    copy,
     value,
     options,
     disabled,
     onChange,
 }: {
     definition: SettingDefinition;
+    copy: SettingCopy;
     value: unknown;
     options?: readonly SettingOption[];
     disabled: boolean;
     onChange: (next: unknown) => void;
 }) {
+    const t = useTranslations("settings.row");
+    const tc = useTranslations("common");
     const id = `control-${definition.key}`;
     const control = definition.control;
 
@@ -308,34 +317,56 @@ function Control({
                         checked={Boolean(value)}
                         disabled={disabled}
                         onCheckedChange={checked => onChange(checked)}
-                        aria-label={definition.label}
+                        aria-label={copy.label}
                     />
-                    <span className="text-ink-2 text-[12.5px]">{value ? "On" : "Off"}</span>
+                    <span className="text-ink-2 text-[12.5px]">
+                        {value ? tc("status.on") : tc("status.off")}
+                    </span>
                 </div>
             );
         case "select": {
             const list = options ?? control.options;
             const index = list.findIndex(option => sameValue(option.value, value));
+            // A closed menu shows only the label; what the chosen option does
+            // (how an answer style answers, say) is said under it.
+            const chosen = index >= 0 ? list[index] : undefined;
+            const chosenDescription = chosen ? copy.option(chosen).description : undefined;
+            const describedBy = chosenDescription ? `${id}-description` : undefined;
             return (
-                <Select
-                    value={index >= 0 ? String(index) : ""}
-                    disabled={disabled}
-                    onValueChange={next => {
-                        const option = list[Number(next)];
-                        if (option) onChange(option.value);
-                    }}
-                >
-                    <SelectTrigger id={id} className="w-full" aria-label={definition.label}>
-                        <SelectValue placeholder="Choose…" />
-                    </SelectTrigger>
-                    <SelectContent>
-                        {list.map((option, i) => (
-                            <SelectItem key={i} value={String(i)}>
-                                {option.label}
-                            </SelectItem>
-                        ))}
-                    </SelectContent>
-                </Select>
+                <div>
+                    <Select
+                        value={index >= 0 ? String(index) : ""}
+                        disabled={disabled}
+                        onValueChange={next => {
+                            const option = list[Number(next)];
+                            if (option) onChange(option.value);
+                        }}
+                    >
+                        <SelectTrigger
+                            id={id}
+                            className="w-full"
+                            aria-label={copy.label}
+                            aria-describedby={describedBy}
+                        >
+                            <SelectValue placeholder={t("choose")} />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {list.map((option, i) => (
+                                <SelectItem key={i} value={String(i)}>
+                                    {copy.option(option).label}
+                                </SelectItem>
+                            ))}
+                        </SelectContent>
+                    </Select>
+                    {chosenDescription && (
+                        <p
+                            id={describedBy}
+                            className="text-ink-3 m-0 mt-1.5 text-[12px] leading-normal"
+                        >
+                            {chosenDescription}
+                        </p>
+                    )}
+                </div>
             );
         }
         case "radio": {
@@ -345,39 +376,42 @@ function Control({
                 <RadioGroup
                     value={index >= 0 ? String(index) : ""}
                     disabled={disabled}
-                    aria-label={definition.label}
+                    aria-label={copy.label}
                     onValueChange={next => {
                         const option = list[Number(next)];
                         if (option) onChange(option.value);
                     }}
                     className="gap-1.5"
                 >
-                    {list.map((option, i) => (
-                        <label
-                            key={i}
-                            htmlFor={`${id}-${i}`}
-                            className={cn(
-                                "border-line flex items-start gap-3 rounded-lg border px-3 py-2",
-                                disabled ? "opacity-70" : "hover:bg-panel-2 cursor-pointer"
-                            )}
-                        >
-                            <RadioGroupItem
-                                id={`${id}-${i}`}
-                                value={String(i)}
-                                className="mt-0.5"
-                            />
-                            <span>
-                                <span className="text-ink block text-[13px] font-semibold">
-                                    {option.label}
-                                </span>
-                                {option.description && (
-                                    <span className="text-ink-3 block text-[12px] leading-normal">
-                                        {option.description}
-                                    </span>
+                    {list.map((option, i) => {
+                        const shown = copy.option(option);
+                        return (
+                            <label
+                                key={i}
+                                htmlFor={`${id}-${i}`}
+                                className={cn(
+                                    "border-line flex items-start gap-3 rounded-lg border px-3 py-2",
+                                    disabled ? "opacity-70" : "hover:bg-panel-2 cursor-pointer"
                                 )}
-                            </span>
-                        </label>
-                    ))}
+                            >
+                                <RadioGroupItem
+                                    id={`${id}-${i}`}
+                                    value={String(i)}
+                                    className="mt-0.5"
+                                />
+                                <span>
+                                    <span className="text-ink block text-[13px] font-semibold">
+                                        {shown.label}
+                                    </span>
+                                    {shown.description && (
+                                        <span className="text-ink-3 block text-[12px] leading-normal">
+                                            {shown.description}
+                                        </span>
+                                    )}
+                                </span>
+                            </label>
+                        );
+                    })}
                 </RadioGroup>
             );
         }
@@ -389,7 +423,7 @@ function Control({
                     min={control.min}
                     max={control.max}
                     step={control.step}
-                    unit={control.unit}
+                    unit={copy.unit}
                     disabled={disabled}
                     onCommit={next => onChange(next)}
                 />
@@ -399,7 +433,7 @@ function Control({
                 <TextControl
                     id={id}
                     value={typeof value === "string" ? value : ""}
-                    placeholder={control.placeholder}
+                    placeholder={copy.placeholder}
                     disabled={disabled}
                     onCommit={next => onChange(next)}
                 />

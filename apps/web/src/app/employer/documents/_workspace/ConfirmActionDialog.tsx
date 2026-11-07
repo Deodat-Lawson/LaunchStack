@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { useTranslations } from "next-intl";
 
 export interface ConfirmActionDialogProps {
     open: boolean;
@@ -25,6 +26,8 @@ export function ConfirmActionDialog({
     onConfirm,
     onClose,
 }: ConfirmActionDialogProps) {
+    const t = useTranslations("workspace.confirmDialog");
+    const tc = useTranslations("common");
     useEffect(() => {
         if (!open) return;
         const onEsc = (e: KeyboardEvent) => {
@@ -114,7 +117,7 @@ export function ConfirmActionDialog({
                             background: "var(--panel)",
                         }}
                     >
-                        Cancel
+                        {tc("actions.cancel")}
                     </button>
                     <button
                         onClick={onConfirm}
@@ -134,7 +137,7 @@ export function ConfirmActionDialog({
                             cursor: busy ? "not-allowed" : "pointer",
                         }}
                     >
-                        {busy ? "Working…" : confirmLabel}
+                        {busy ? t("working") : confirmLabel}
                     </button>
                 </div>
             </div>

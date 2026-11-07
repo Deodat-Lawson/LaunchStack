@@ -5,6 +5,7 @@
  * fails for good is marked failed so the run sheet never spins forever.
  */
 import { ProposalRunEventDataSchema, failProposalRun } from "@launchstack/pipelines/proposals";
+import { getRun } from "@launchstack/pipelines/proposals/db";
 
 import { executeProposalRunForMember } from "~/server/proposals/executor";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
@@ -47,8 +48,12 @@ export const proposalsRunJob = inngest.createFunction(
         const data = ProposalRunEventDataSchema.parse(event.data);
         const companyId = BigInt(data.companyId);
         const result = await step.run("execute", async () => {
-            // Membership and model scopes must both be entered inside the step.
-            const run = await withWorkspaceChatModels(companyId, () =>
+            // Keep both scopes inside the step. Event identity must not replace
+            // the persisted writer for either document access or usage accounting.
+            const queued = await getRun(data.runId, companyId);
+            if (!queued) throw new Error("Run not found");
+            const aiUse = { feature: "proposals", userId: queued.userId, enforce: false } as const;
+            const run = await withWorkspaceChatModels(companyId, aiUse, () =>
                 executeProposalRunForMember(data.runId, companyId)
             );
             return { status: run.status, headline: run.summary?.headline ?? null };

@@ -1,17 +1,21 @@
 "use client";
 
 import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { useTheme } from "next-themes";
 import {
     ArrowLeftRight,
     BookOpen,
     ChevronsUpDown,
     LogOut,
+    MessageSquareText,
     Moon,
     Settings,
     Sun,
 } from "lucide-react";
 
+import { useFeedback } from "~/components/feedback/FeedbackProvider";
+import { LanguageSubmenu } from "~/components/i18n/LanguageMenu";
 import { ProfileAvatar } from "~/components/ProfileAvatar";
 import {
     DropdownMenu,
@@ -45,8 +49,8 @@ export interface AccountMenuProps {
 }
 
 /**
- * Who is signed in, and what they can do about it: theme, settings, switch
- * workspace, sign out.
+ * Who is signed in, and what they can do about it: theme, language,
+ * settings, switch workspace, send feedback, sign out.
  *
  * It lives at the foot of the sidebar, where Claude, ChatGPT, Slack and VS
  * Code all keep the account. It used to sit at the end of the first column's
@@ -64,10 +68,12 @@ export function AccountMenu({
     onSignOut,
     variant,
 }: AccountMenuProps) {
+    const t = useTranslations("workspace.accountMenu");
     const { resolvedTheme, setTheme } = useTheme();
     const isDark = resolvedTheme === "dark";
     const workspace = useEmployerWorkspaceSwitcher();
-    const name = userName ?? "Your account";
+    const feedback = useFeedback();
+    const name = userName ?? t("fallbackName");
 
     const subtitle = userTitle ?? userEmail;
 
@@ -88,7 +94,7 @@ export function AccountMenu({
                     <button
                         type="button"
                         data-testid="account-menu"
-                        aria-label={`Account: ${name}`}
+                        aria-label={t("triggerLabel", { name })}
                         className="hover:bg-line-2 focus-visible:ring-brand/50 data-[state=open]:bg-line-2 flex w-full min-w-0 items-center gap-2.5 rounded-lg px-2 py-1.5 text-left outline-none transition-colors focus-visible:ring-[3px]"
                     >
                         {avatar}
@@ -108,7 +114,7 @@ export function AccountMenu({
                     <button
                         type="button"
                         data-testid="account-menu"
-                        aria-label={`Account: ${name}`}
+                        aria-label={t("triggerLabel", { name })}
                         title={name}
                         className="focus-visible:ring-brand/50 rounded-full outline-none focus-visible:ring-[3px]"
                     >
@@ -137,10 +143,10 @@ export function AccountMenu({
                 </DropdownMenuLabel>
                 {workspace && (
                     <DropdownMenuItem asChild>
-                        <Link href="/workspaces" title="Switch workspace">
+                        <Link href="/workspaces" title={t("switchWorkspace")}>
                             <ArrowLeftRight />
                             <span className="min-w-0 flex-1 truncate">{workspace.name}</span>
-                            <span className="text-ink-3 text-[11px]">Switch</span>
+                            <span className="text-ink-3 text-[11px]">{t("switch")}</span>
                         </Link>
                     </DropdownMenuItem>
                 )}
@@ -151,25 +157,35 @@ export function AccountMenu({
                     onSelect={() => setTheme(isDark ? "light" : "dark")}
                 >
                     {isDark ? <Sun /> : <Moon />}
-                    Switch to {isDark ? "light" : "dark"} theme
+                    {isDark ? t("lightTheme") : t("darkTheme")}
                 </DropdownMenuItem>
+                <LanguageSubmenu />
                 <DropdownMenuItem onSelect={onOpenSettings}>
                     <Settings />
-                    Settings
+                    {t("settings")}
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                     <a href={DOCS_URL} target="_blank" rel="noopener noreferrer">
                         <BookOpen />
-                        <span className="flex-1">Documentation</span>
+                        <span className="flex-1">{t("documentation")}</span>
                         <span className="text-ink-3 text-[10px]">↗</span>
                     </a>
                 </DropdownMenuItem>
+                {feedback.enabled && (
+                    <DropdownMenuItem
+                        onSelect={() => feedback.open()}
+                        data-testid="account-menu-feedback"
+                    >
+                        <MessageSquareText />
+                        {t("feedback")}
+                    </DropdownMenuItem>
+                )}
                 {onSignOut && (
                     <>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem onSelect={onSignOut}>
                             <LogOut />
-                            Log out
+                            {t("logOut")}
                         </DropdownMenuItem>
                     </>
                 )}

@@ -1340,6 +1340,7 @@ export function tidyUp(store: EditorStore, kind: LayoutKind = "mindmap"): void {
 // Pages
 // ---------------------------------------------------------------------------
 
+/** `name` is the new page's name in the reader's language; English without one. */
 export function addPage(store: EditorStore, name?: string): void {
     store.update(
         doc => {
@@ -1351,7 +1352,12 @@ export function addPage(store: EditorStore, name?: string): void {
     store.clearSelection();
 }
 
-export function duplicatePage(store: EditorStore, pageId: string): void {
+/** `copyName` names the copy from the source's name, in the reader's language. */
+export function duplicatePage(
+    store: EditorStore,
+    pageId: string,
+    copyName: (sourceName: string) => string = name => `${name} copy`
+): void {
     store.update(
         doc => {
             const source = doc.pages.find(p => p.id === pageId);
@@ -1361,7 +1367,7 @@ export function duplicatePage(store: EditorStore, pageId: string): void {
             const copy: DiagramPage = {
                 ...source,
                 id: makeId("p"),
-                name: `${source.name} copy`,
+                name: copyName(source.name),
                 nodes,
                 edges,
             };

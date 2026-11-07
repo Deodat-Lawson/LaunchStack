@@ -172,4 +172,47 @@ describe.skipIf(!url)("finalizeStorage version guard (integration)", () => {
         const job = await jobRow(v2.jobId);
         expect(job.status).toBe("completed");
     });
+
+    it("drops a failure stamp when a replayed run succeeds, keeping the row's provenance", async () => {
+        // What the dead-event handler leaves, on a row that also carries its own metadata.
+        const stamp = {
+            marker: "keep-me",
+            error: "processing_failed",
+            errorMessage: "pipeline event dead: OpenAI API error: 429 - RESOURCE_EXHAUSTED",
+            failedAt: "2026-10-23T00:00:00.000Z",
+        };
+        await handle.db
+            .update(document)
+            .set({ ocrProcessed: false, ocrMetadata: stamp })
+            .where(eq(document.id, documentId));
+        await handle.db
+            .update(ocrJobs)
+            .set({ status: "failed", errorMessage: stamp.errorMessage })
+            .where(eq(ocrJobs.id, v2.jobId));
+
+        await finalizeStorage(
+            documentId,
+            v2.jobId,
+            5,
+            "v2 summary",
+            meta,
+            Date.now() - 10,
+            v2.versionId
+        );
+
+        for (const metadata of [
+            (await documentRow()).ocrMetadata,
+            (await versionRow(v2.versionId)).ocrMetadata,
+        ]) {
+            expect(metadata).toEqual(
+                expect.objectContaining({ marker: "keep-me", totalChunks: 5 })
+            );
+            expect(metadata).not.toHaveProperty("error");
+            expect(metadata).not.toHaveProperty("errorMessage");
+            expect(metadata).not.toHaveProperty("failedAt");
+        }
+        expect(await jobRow(v2.jobId)).toEqual(
+            expect.objectContaining({ status: "completed", errorMessage: null })
+        );
+    });
 });

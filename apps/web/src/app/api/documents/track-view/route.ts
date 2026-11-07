@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { db } from "~/server/db/index";
 import { document } from "@launchstack/store/schema";
 import { users, documentViews } from "~/server/db/schema";
@@ -8,6 +10,7 @@ import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 
 export async function POST(request: Request) {
+    const locale = localeOfRequest(request);
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
@@ -30,7 +33,7 @@ export async function POST(request: Request) {
 
         if (!doc) {
             return NextResponse.json(
-                { success: false, error: "Document not found" },
+                { success: false, error: translatorFor(locale, "errors.api")("documentNotFound") },
                 { status: 404 }
             );
         }
@@ -49,13 +52,19 @@ export async function POST(request: Request) {
             .where(eq(users.userId, ctx.data.authUserId));
 
         return NextResponse.json(
-            { success: true, message: "View tracked successfully" },
+            {
+                success: true,
+                message: translatorFor(locale, "sources.server.errors")("viewTracked"),
+            },
             { status: 200 }
         );
     } catch (error: unknown) {
         console.error("Error tracking document view:", error);
         return NextResponse.json(
-            { success: false, error: "Unable to track document view" },
+            {
+                success: false,
+                error: translatorFor(locale, "sources.server.errors")("trackViewFailed"),
+            },
             { status: 500 }
         );
     }

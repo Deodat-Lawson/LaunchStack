@@ -30,6 +30,7 @@ import type { BaseChatModel } from "@langchain/core/language_models/chat_models"
 import { addTokenUsage, normalizeTokenUsage, type ChatTokenUsage } from "@launchstack/llm";
 
 import { throwIfChatAborted } from "~/lib/chat-stream";
+import { EVIDENCE_REVIEW_REMINDER, TOOLS_UNAVAILABLE_REMINDER } from "~/lib/ai/chat-instructions";
 
 export interface ChatTool {
     name: string;
@@ -39,8 +40,12 @@ export interface ChatTool {
     parameters: Record<string, unknown>;
     /** What the chat shows while this call runs, e.g. `Searching the web for "…"`. */
     describe(args: unknown): string;
-    /** The result text handed back to the model. A throw becomes an error result. */
-    run(args: unknown, signal: AbortSignal): Promise<string>;
+    /**
+     * The result text handed back to the model. A throw becomes an error
+     * result. A long call may report progress ("Reading 37 sources… 12
+     * done"), which replaces the `describe` text in the chat.
+     */
+    run(args: unknown, signal: AbortSignal, progress?: (status: string) => void): Promise<string>;
 }
 
 export interface ToolCallRecord {
@@ -54,6 +59,8 @@ export interface AnswerWithToolsOptions {
     chat: BaseChatModel;
     messages: BaseMessage[];
     tools: readonly ChatTool[];
+    /** Retrieved passages or attachments were supplied before any tool call. */
+    hasInitialEvidence?: boolean;
     signal: AbortSignal;
     /** Present when the answer streams. */
     stream?: {
@@ -84,6 +91,16 @@ export interface AnswerWithToolsResult {
 
 /** Calls the model may make in one round; more than this is a runaway. */
 const MAX_CALLS_PER_ROUND = 4;
+
+/** Built-in tools that inspect sources; an attempt may return no evidence. */
+const EVIDENCE_TOOLS = new Set([
+    "list_sources",
+    "search_sources",
+    "read_source",
+    "ask_each",
+    "search_web",
+    "fetch_page",
+]);
 
 /** Said before a round in which the model may no longer call tools. */
 export const OUT_OF_TOOL_ROUNDS =
@@ -150,6 +167,48 @@ function readToolCalls(message: unknown, round: number): RoundCall[] {
     return calls;
 }
 
+/** A tool call as the endpoint sent it, provider fields included. */
+type WireToolCall = Record<string, unknown> & { id?: unknown; extra_content?: unknown };
+
+/**
+ * The model's tool-calling turn, as it goes back to the model next round.
+ *
+ * Gemini 3 on Google's own OpenAI-compatible endpoint signs every call
+ * (`extra_content.google.thought_signature`) and refuses the next request
+ * with a 400 when a call comes back unsigned. LangChain rebuilds the wire
+ * calls from the parsed ones and drops the field, so when the endpoint's own
+ * records carry one they go back as they came: with no parsed `tool_calls`,
+ * LangChain sends `additional_kwargs.tool_calls` verbatim.
+ */
+function toolCallTurn(content: string, calls: RoundCall[], message: unknown): AIMessage {
+    const parsed = calls.map(call => ({
+        id: call.id,
+        name: call.name,
+        args: (call.args ?? {}) as Record<string, unknown>,
+    }));
+    const wire: unknown = (message as { additional_kwargs?: { tool_calls?: unknown } })
+        .additional_kwargs?.tool_calls;
+    const records = Array.isArray(wire) ? (wire as WireToolCall[]) : [];
+    const sent = calls.map(call => records.find(record => record?.id === call.id));
+    if (sent.some(record => !record) || !sent.some(record => record?.extra_content)) {
+        return new AIMessage({ content, tool_calls: parsed });
+    }
+    const turn = new AIMessage({
+        content,
+        tool_calls: parsed,
+        additional_kwargs: {
+            // A streamed call's `index` places its chunks; it is not part of the call.
+            tool_calls: sent.map(record =>
+                Object.fromEntries(Object.entries(record!).filter(([key]) => key !== "index"))
+            ) as unknown as NonNullable<AIMessage["additional_kwargs"]["tool_calls"]>,
+        },
+    });
+    // Built with the parsed calls (else LangChain re-parses the records and
+    // warns), then cleared so the records go out as sent.
+    turn.tool_calls = [];
+    return turn;
+}
+
 export async function answerWithTools(
     options: AnswerWithToolsOptions
 ): Promise<AnswerWithToolsResult> {
@@ -166,6 +225,9 @@ export async function answerWithTools(
     }));
     const offered = tools.length > 0 && typeof chat.bindTools === "function";
     let withTools = offered ? chat.bindTools!(specs) : null;
+    let toolsUnavailable = tools.length > 0 && !offered;
+    let reviewEvidence = Boolean(options.hasInitialEvidence);
+    let answerNow = false;
     const conversation = [...options.messages];
     const toolCalls: ToolCallRecord[] = [];
     let usage: ChatTokenUsage = {};
@@ -179,13 +241,19 @@ export async function answerWithTools(
         model: Pick<BaseChatModel, "stream" | "invoke">
     ): Promise<{ message: AIMessageChunk | AIMessage; roundText: string }> => {
         modelCalls += 1;
+        // Reminders belong to this request, not to the stored history. One
+        // fresh copy stays nearest generation even across later write calls.
+        const requestMessages = [...conversation];
+        if (reviewEvidence) requestMessages.push(new HumanMessage(EVIDENCE_REVIEW_REMINDER));
+        if (toolsUnavailable) requestMessages.push(new HumanMessage(TOOLS_UNAVAILABLE_REMINDER));
+        if (answerNow) requestMessages.push(new HumanMessage(OUT_OF_TOOL_ROUNDS));
         if (!stream) {
-            const message = (await model.invoke(conversation, { signal })) as AIMessage;
+            const message = (await model.invoke(requestMessages, { signal })) as AIMessage;
             return { message, roundText: contentText(message.content) };
         }
         let combined: AIMessageChunk | undefined;
         let roundText = "";
-        for await (const chunk of await model.stream(conversation, { signal })) {
+        for await (const chunk of await model.stream(requestMessages, { signal })) {
             throwIfChatAborted(signal);
             const wireReasoning = rawReasoningDelta(chunk.additional_kwargs?.__raw_response);
             // Do not retain opaque provider metadata in the final chunk.
@@ -225,7 +293,7 @@ export async function answerWithTools(
         // Out of tool rounds: say so. `tool_choice: "none"` alone is not
         // enough for every endpoint — some ignore it, the model calls a tool
         // anyway, and with that call dropped the answer comes back empty.
-        if (withTools && !mayCall) conversation.push(new HumanMessage(OUT_OF_TOOL_ROUNDS));
+        answerNow = Boolean(withTools) && !mayCall;
         // After the last tool round the tools stay declared (the history
         // holds tool messages) but the model may not call them.
         const model = withTools
@@ -244,6 +312,7 @@ export async function answerWithTools(
                 throw error;
             console.warn("[chat-tools] The endpoint refused the tools; answering without them.");
             withTools = null;
+            toolsUnavailable = true;
             ({ message, roundText } = await callModel(chat));
         }
         throwIfChatAborted(signal);
@@ -269,16 +338,7 @@ export async function answerWithTools(
             };
         }
 
-        conversation.push(
-            new AIMessage({
-                content: roundText,
-                tool_calls: calls.map(call => ({
-                    id: call.id,
-                    name: call.name,
-                    args: (call.args ?? {}) as Record<string, unknown>,
-                })),
-            })
-        );
+        conversation.push(toolCallTurn(roundText, calls, message));
         for (const call of calls) {
             throwIfChatAborted(signal);
             const tool = byName.get(call.name);
@@ -290,9 +350,10 @@ export async function answerWithTools(
             } else if (!tool) {
                 content = `Unknown tool "${call.name}". Available: ${[...byName.keys()].join(", ")}.`;
             } else {
+                if (EVIDENCE_TOOLS.has(call.name)) reviewEvidence = true;
                 onStatus?.(tool.describe(call.args));
                 try {
-                    content = await tool.run(call.args, signal);
+                    content = await tool.run(call.args, signal, status => onStatus?.(status));
                     ok = true;
                 } catch (error) {
                     throwIfChatAborted(signal);

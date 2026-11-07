@@ -3,10 +3,12 @@
 import { useId, useState } from "react";
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "~/components/ui/button";
 import { Label } from "~/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
+import { isBuiltinRole, normalizeRoleSlug } from "~/lib/authz/permissions";
 import type { WorkspaceOption } from "~/server/mcp/connect-request";
 import { FlowError } from "../_components/ConnectShell";
 import { advanceOAuthFlow } from "../_components/flow";
@@ -18,6 +20,14 @@ export function WorkspaceChoice({
     assistant: string;
     workspaces: WorkspaceOption[];
 }) {
+    const t = useTranslations("auth.oauth.workspace");
+    const tFlow = useTranslations("auth.oauth.flow");
+    const tRoles = useTranslations("auth.roles");
+    const tc = useTranslations("common.actions");
+    const roleName = (role: string) => {
+        const slug = normalizeRoleSlug(role);
+        return isBuiltinRole(slug) ? tRoles(slug) : role;
+    };
     const [choice, setChoice] = useState(workspaces[0]?.id ?? "");
     const [pending, setPending] = useState<"continue" | "cancel" | null>(null);
     const [error, setError] = useState<string | null>(null);
@@ -27,11 +37,10 @@ export function WorkspaceChoice({
         return (
             <div className="border-line flex flex-col gap-3 rounded-xl border p-5">
                 <p className="text-ink-2 m-0 text-[13.5px] leading-[1.55]">
-                    You&rsquo;re not an active member of any workspace yet, so there is nothing to
-                    connect {assistant} to.
+                    {t("none", { assistant })}
                 </p>
                 <Button asChild variant="outline" className="self-start">
-                    <Link href="/workspaces">Go to your workspaces</Link>
+                    <Link href="/workspaces">{t("goToWorkspaces")}</Link>
                 </Button>
             </div>
         );
@@ -47,11 +56,11 @@ export function WorkspaceChoice({
         }).catch(() => null);
         if (!saved?.ok) {
             const body = (await saved?.json().catch(() => null)) as { error?: string } | null;
-            setError(body?.error ?? "Couldn't save your choice. Try again.");
+            setError(body?.error ?? t("saveFailed"));
             setPending(null);
             return;
         }
-        const failure = await advanceOAuthFlow("/oauth2/continue", { postLogin: true });
+        const failure = await advanceOAuthFlow("/oauth2/continue", { postLogin: true }, tFlow);
         if (failure) {
             setError(failure);
             setPending(null);
@@ -61,7 +70,7 @@ export function WorkspaceChoice({
     const onCancel = async () => {
         setError(null);
         setPending("cancel");
-        const failure = await advanceOAuthFlow("/oauth2/consent", { accept: false });
+        const failure = await advanceOAuthFlow("/oauth2/consent", { accept: false }, tFlow);
         if (failure) {
             setError(failure);
             setPending(null);
@@ -74,8 +83,7 @@ export function WorkspaceChoice({
                 id={`${groupId}-label`}
                 className="text-ink-2 mb-3 mt-0 text-[13.5px] leading-[1.55]"
             >
-                Which workspace should {assistant} work in? It will see only the files you can open
-                there, and it can&rsquo;t switch workspaces by itself.
+                {t("question", { assistant })}
             </p>
             <RadioGroup
                 aria-labelledby={`${groupId}-label`}
@@ -93,7 +101,9 @@ export function WorkspaceChoice({
                         <span className="text-ink min-w-0 flex-1 truncate text-sm font-medium">
                             {w.name}
                         </span>
-                        <span className="text-ink-3 shrink-0 text-[12px] capitalize">{w.role}</span>
+                        <span className="text-ink-3 shrink-0 text-[12px] capitalize">
+                            {roleName(w.role)}
+                        </span>
                     </Label>
                 ))}
             </RadioGroup>
@@ -107,7 +117,7 @@ export function WorkspaceChoice({
                     {pending === "continue" ? (
                         <Loader2 className="size-4 animate-spin" aria-hidden />
                     ) : null}
-                    Continue
+                    {tc("continue")}
                 </Button>
                 <Button
                     type="button"
@@ -115,7 +125,7 @@ export function WorkspaceChoice({
                     onClick={() => void onCancel()}
                     disabled={pending !== null}
                 >
-                    Cancel
+                    {tc("cancel")}
                 </Button>
             </div>
         </div>

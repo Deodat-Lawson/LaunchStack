@@ -4,6 +4,8 @@
  * database lives here. Tenancy is by the `companyId` on the context, never a
  * value from the request body.
  */
+import { eq } from "drizzle-orm";
+
 import { prepareEmailCampaign, type Recipient } from "@launchstack/pipelines/email";
 import {
     addEvent,
@@ -29,6 +31,7 @@ import {
     ALLOWED_TRANSITIONS,
     StageTransitionError,
 } from "@launchstack/pipelines/distribution/stages";
+import { MAX_CUSTOMER_DOMAINS } from "@launchstack/pipelines/distribution/types";
 import type {
     ProgramInput,
     ProgramPatch,
@@ -37,6 +40,9 @@ import type {
     RunRecord,
     Territory,
 } from "@launchstack/pipelines/distribution/types";
+import { geocodePlace } from "@launchstack/pipelines/distribution/geocode";
+import { parsePlace, parsePlaces, placeLabel } from "@launchstack/pipelines/distribution/locate";
+import { getCompanyIdentity, readFact } from "@launchstack/tools/company-context";
 import { resolveComplianceProvider } from "@launchstack/tools/compliance-screen";
 import { isPlaceSearchConfigured } from "@launchstack/tools/place-search";
 import { isTradeDataConfigured } from "@launchstack/tools/trade-data";
@@ -56,19 +62,24 @@ import type {
     RunDto,
     SalesStage,
     SegmentDto,
+    SegmentSuggestion,
     SegmentSummary,
     SourceRow,
     TodoItem,
 } from "~/app/employer/tools/growth/prospects/api";
 import { env } from "~/env";
+import { db } from "~/server/db";
+import { companyMetadata } from "~/server/db/schema";
+import { copy, isCopy, type Copy } from "~/i18n/copy";
+import { englishCopy } from "~/i18n/translate";
 
 import {
     FIT_THRESHOLD,
-    SALES_OF,
     contactPeople,
+    excludedBlock,
     inMotion,
     latestCompleted,
-    relationshipTarget,
+    parseCustomerDomains,
     searchMatches,
     sortRows,
     sourceRows,
@@ -92,31 +103,45 @@ export interface ProspectsCtx {
     userPk: unknown;
 }
 
+/**
+ * An expected failure with the status the route answers with. The sentence
+ * is a `Copy` where a screen shows it: `message` is its English, and the
+ * route words `copy` (and any `Copy` in `extra`) in the reader's language.
+ */
 export class ProspectsError extends Error {
+    readonly copy: Copy | null;
     constructor(
-        message: string,
+        message: string | Copy,
         readonly status: number,
         readonly extra: Record<string, unknown> = {}
     ) {
-        super(message);
+        super(isCopy(message) ? englishCopy(message) : message);
         this.name = "ProspectsError";
+        this.copy = isCopy(message) ? message : null;
     }
 }
+
+const segmentNotFound = () => new ProspectsError(copy("growth.server.errors.segmentNotFound"), 404);
+const companyNotFound = () => new ProspectsError(copy("growth.server.errors.companyNotFound"), 404);
 
 // ── Availability ──────────────────────────────────────────────────────────
 
 export function availability(): SourceAvailability {
     return {
         web: Boolean(env.server.EXA_API_KEY) || Boolean(env.server.SERPER_API_KEY),
+        lookalike: Boolean(env.server.EXA_API_KEY),
         place: isPlaceSearchConfigured(),
         trade: isTradeDataConfigured(),
         screening: resolveComplianceProvider() !== null,
     };
 }
 
-/** Keyless sources (OpenStreetMap, YC) and sample data are always on; keyed ones when configured. */
+/** Keyless sources (OpenStreetMap) and sample data are always on; keyed ones when configured. */
 function sourcesOn(avail: SourceAvailability): number {
-    return [avail.web, avail.place, avail.trade, avail.screening].filter(Boolean).length + 3;
+    return (
+        [avail.web, avail.lookalike, avail.place, avail.trade, avail.screening].filter(Boolean)
+            .length + 2
+    );
 }
 
 // ── Loading ───────────────────────────────────────────────────────────────
@@ -132,7 +157,7 @@ interface SegmentData {
 
 async function loadSegment(ctx: ProspectsCtx, programId: string): Promise<SegmentData> {
     const program = await getProgram(programId, ctx.companyId);
-    if (!program) throw new ProspectsError("Segment not found", 404);
+    if (!program) throw segmentNotFound();
     const [items, runs, exclusions] = await Promise.all([
         listPartners(ctx.companyId, { programId, limit: 500, orderBy: "fit" }),
         listRuns(ctx.companyId, { programId, limit: 50 }),
@@ -151,9 +176,9 @@ async function loadItem(
     relationshipId: string
 ): Promise<{ item: PartnerListItem; relationship: RelationshipRecord }> {
     const relationship = await getRelationship(relationshipId, ctx.companyId);
-    if (!relationship) throw new ProspectsError("Company not found", 404);
+    if (!relationship) throw companyNotFound();
     const org = await getOrg(relationship.orgId, ctx.companyId);
-    if (!org) throw new ProspectsError("Company not found", 404);
+    if (!org) throw companyNotFound();
     return {
         relationship,
         item: { relationship, org, evidenceCount: 0, stale: isStale(relationship) },
@@ -182,17 +207,27 @@ export async function createSegment(
     ctx: ProspectsCtx,
     input: NewSegmentInput
 ): Promise<SegmentDto> {
+    const home = (await companyHeadquarters(ctx.companyId))?.country ?? null;
+    const territories: Territory[] = [
+        ...(input.countries ?? []).map((c): Territory => ({ country: c.toUpperCase() })),
+        ...(await resolvePlaces(input.places ?? [], home)),
+    ].filter(
+        (t, i, all) => all.findIndex(o => o.country === t.country && o.region === t.region) === i
+    );
+    if (territories.length === 0)
+        throw new ProspectsError(copy("growth.server.errors.sayWhere"), 400);
     const programInput: ProgramInput = {
         name: input.name,
         offering: input.offering,
         categories: input.industries,
         hsCodes: [],
-        targetTerritories: input.countries.map(c => ({ country: c.toUpperCase() })),
+        targetTerritories: territories.slice(0, 20),
         // Until the pipeline reframe, discovery still searches by partner kind;
         // these three are the buyer-shaped ones.
         partnerKinds: ["distributor", "retailer", "wholesaler"],
         constraints: null,
         knownPartnerDomains: [],
+        customerDomains: [],
     };
     const program = await createProgram({
         companyId: ctx.companyId,
@@ -200,6 +235,63 @@ export async function createSegment(
         input: programInput,
     });
     return toSegment(program, [], sourcesOn(availability()));
+}
+
+/** Where the company itself is, from its profile's headquarters fact; null when unknown. */
+async function companyHeadquarters(companyId: bigint): Promise<Territory | null> {
+    const [row] = await db
+        .select({ metadata: companyMetadata.metadata })
+        .from(companyMetadata)
+        .where(eq(companyMetadata.companyId, companyId))
+        .limit(1);
+    const hq = row ? readFact(row.metadata.company?.headquarters) : undefined;
+    if (typeof hq !== "string" || !hq.trim()) return null;
+    return (await geocodePlace(hq)) ?? parsePlace(hq);
+}
+
+/** Nominatim's usage policy: at most one request a second. */
+const GEOCODE_PAUSE_MS = 1_100;
+
+/**
+ * Places as the member typed them, one per line or ";" ("Baltimore, MD",
+ * "Wilmington, DE", "Netherlands"), resolved by OpenStreetMap's geocoder;
+ * an entry it cannot resolve (or a geocoder that cannot be reached) is read
+ * offline instead.
+ */
+async function resolvePlaces(
+    entries: readonly string[],
+    home: string | null
+): Promise<Territory[]> {
+    const out: Territory[] = [];
+    const places = entries
+        .flatMap(e => e.split(/[;\n]+/))
+        .map(e => e.trim())
+        .filter(Boolean);
+    for (const [i, place] of places.entries()) {
+        if (i > 0) await new Promise(resolve => setTimeout(resolve, GEOCODE_PAUSE_MS));
+        const found =
+            (await geocodePlace(place, { homeCountry: home })) ?? parsePlaces(place, home)[0];
+        if (found) out.push(found);
+    }
+    return out;
+}
+
+/**
+ * A first segment drafted from the company's profile: what it sells (its
+ * description) and where it is (its headquarters). Who buys is left to the
+ * member — the seller's own industry says nothing about its customers'.
+ */
+export async function suggestSegment(ctx: ProspectsCtx): Promise<SegmentSuggestion> {
+    const [{ data: identity }, hq] = await Promise.all([
+        getCompanyIdentity({ companyId: Number(ctx.companyId) }),
+        companyHeadquarters(ctx.companyId),
+    ]);
+    const offering = identity.description.trim();
+    return {
+        offering,
+        place: hq ? placeLabel(hq) : null,
+        basis: { profile: offering.length > 0, headquarters: hq !== null },
+    };
 }
 
 function parseTerritory(value: string): Territory | null {
@@ -234,22 +326,37 @@ export async function patchSegment(
                     .map(parseTerritory)
                     .filter((t): t is Territory => t !== null);
                 if (territories.length === 0)
-                    throw new ProspectsError(
-                        "Use two-letter country codes, for example NL, DE, GB",
-                        400
-                    );
+                    throw new ProspectsError(copy("growth.server.errors.countryCodes"), 400);
                 patch.targetTerritories = territories;
                 break;
             }
             case "disqualifiers":
                 patch.constraints = text.trim() || null;
                 break;
+            case "seedDomains": {
+                const parsed = parseCustomerDomains(list);
+                const bad = parsed.invalid[0];
+                if (bad !== undefined)
+                    throw new ProspectsError(
+                        copy("growth.server.errors.customerDomainInvalid", { value: bad }),
+                        400
+                    );
+                if (parsed.tooMany)
+                    throw new ProspectsError(
+                        copy("growth.server.errors.customerDomainsTooMany", {
+                            max: MAX_CUSTOMER_DOMAINS,
+                        }),
+                        400
+                    );
+                patch.customerDomains = parsed.domains;
+                break;
+            }
             default:
                 break;
         }
     }
     const program = await updateProgram(programId, ctx.companyId, patch);
-    if (!program) throw new ProspectsError("Segment not found", 404);
+    if (!program) throw segmentNotFound();
     const data = await loadSegment(ctx, programId);
     return toSegment(data.program, data.rows, sourcesOn(availability()));
 }
@@ -276,13 +383,14 @@ export async function getHome(ctx: ProspectsCtx, programId: string): Promise<Hom
                 .map(r => r.name)
                 .join(", "),
             action: { label: "Review", href: "/companies?view=new" },
+            copy: { key: "review", count: toReview.length, highFit: freshHigh.length > 0 },
         });
 
     const endOfToday = new Date();
     endOfToday.setHours(23, 59, 59, 999);
     const due = data.items.filter(
         i =>
-            inMotion(SALES_OF[i.relationship.stage]) &&
+            inMotion(i.relationship.stage) &&
             i.relationship.nextActionAt !== null &&
             i.relationship.nextActionAt <= endOfToday
     );
@@ -294,6 +402,13 @@ export async function getHome(ctx: ProspectsCtx, programId: string): Promise<Hom
                 .map(i => `${i.org.name}: ${i.relationship.nextAction ?? "follow up"}`)
                 .join(" · "),
             action: { label: "Open deals", href: "/deals" },
+            copy: {
+                key: "due",
+                steps: due.map(i => ({
+                    name: i.org.name,
+                    nextAction: i.relationship.nextAction ?? null,
+                })),
+            },
         });
 
     const stale = live.filter(r => r.staleDays !== null);
@@ -303,6 +418,10 @@ export async function getHome(ctx: ProspectsCtx, programId: string): Promise<Hom
             title: `${stale.length} ${stale.length === 1 ? "deal has" : "deals have"} gone quiet`,
             detail: stale.map(r => `${r.name} for ${r.staleDays} days`).join(" · "),
             action: { label: "Follow up", href: "/deals" },
+            copy: {
+                key: "stale",
+                deals: stale.map(r => ({ name: r.name, days: r.staleDays ?? 0 })),
+            },
         });
 
     const funnelStages: SalesStage[] = [
@@ -318,8 +437,9 @@ export async function getHome(ctx: ProspectsCtx, programId: string): Promise<Hom
         stage,
         count: live.filter(r => r.stage === stage).length,
     }));
-    const median =
-        dashboard.medianDaysInStage.contacted ?? dashboard.medianDaysInStage.in_conversation;
+    // Finished Contacted stints from the stage history: how long it takes a
+    // contacted company to agree to a meeting (or leave the funnel).
+    const median = dashboard.medianDaysInStage.contacted;
 
     return {
         segment: toSegmentSummary(data.program, data.rows, sourcesOn(availability())),
@@ -409,7 +529,7 @@ export async function setExcluded(
             else domains.delete(org.domain);
             await updateProgram(program.id, ctx.companyId, { knownPartnerDomains: [...domains] });
         }
-        const target = excluded ? "declined" : "candidate";
+        const target = excluded ? "lost" : "lead";
         if (
             relationship.stage !== target &&
             ALLOWED_TRANSITIONS[relationship.stage].includes(target)
@@ -470,19 +590,11 @@ export async function patchDeal(
     const nextAction =
         patch.nextStep === undefined ? undefined : patch.nextStep === "" ? null : patch.nextStep;
 
-    if (patch.stage && patch.stage !== SALES_OF[relationship.stage]) {
-        const target = relationshipTarget(relationship.stage, patch.stage);
-        if (!target)
-            throw new ProspectsError(`Cannot move to ${patch.stage}`, 409, {
-                reason:
-                    patch.stage === "proposal"
-                        ? "Not a stage in this workspace yet"
-                        : "Not available from here",
-            });
+    if (patch.stage && patch.stage !== relationship.stage) {
         relationship = await transitionStage({
             companyId: ctx.companyId,
             relationshipId,
-            to: target,
+            to: patch.stage,
             actorUserId: ctx.userId,
             ownerUserId,
             nextAction,
@@ -495,7 +607,7 @@ export async function patchDeal(
         if (nextActionAt !== undefined) fields.nextActionAt = nextActionAt;
         if (Object.keys(fields).length > 0) {
             const updated = await updateRelationship(relationshipId, ctx.companyId, fields);
-            if (!updated) throw new ProspectsError("Company not found", 404);
+            if (!updated) throw companyNotFound();
             relationship = updated;
             if (ownerUserId) {
                 await addEvent({
@@ -526,7 +638,7 @@ export async function patchDeal(
         getOrg(relationship.orgId, ctx.companyId),
         listAgreements(ctx.companyId, relationshipId),
     ]);
-    if (!org) throw new ProspectsError("Company not found", 404);
+    if (!org) throw companyNotFound();
     return toDeal(
         { relationship, org, evidenceCount: 0, stale: isStale(relationship) },
         agreements.length > 0,
@@ -542,7 +654,9 @@ export async function listDeals(ctx: ProspectsCtx, programId: string): Promise<D
         if (row.excluded) continue;
         // Only the won check needs the agreement; skip the query elsewhere.
         const hasAgreement =
-            item.relationship.stage === "negotiating"
+            item.relationship.stage === "negotiating" ||
+            item.relationship.stage === "proposal" ||
+            item.relationship.stage === "nurture"
                 ? (await listAgreements(ctx.companyId, item.relationship.id)).length > 0
                 : false;
         out.push({
@@ -565,11 +679,12 @@ export async function listPeople(
 ): Promise<PersonRow[]> {
     const data = await loadSegment(ctx, programId);
     let people = data.items.flatMap(item => {
-        const row = toCompanyRow(item, data.rowCtx);
+        const blocked = excludedBlock(toCompanyRow(item, data.rowCtx));
         return contactPeople(
             item.relationship,
             item.org,
-            row.excluded ? `Company excluded: ${row.excludedReason ?? "by you"}` : null
+            blocked?.reason ?? null,
+            blocked?.copy ?? null
         );
     });
     if (params.status) people = people.filter(p => p.emailStatus === params.status);
@@ -603,43 +718,46 @@ export async function draftOutreach(
             ...(input.personIds ?? []).map(id => id.split(":")[0]!),
         ]),
     ];
-    if (relationshipIds.length === 0) throw new ProspectsError("Nothing selected", 400);
+    if (relationshipIds.length === 0)
+        throw new ProspectsError(copy("growth.server.errors.nothingSelected"), 400);
 
     const recipients: Recipient[] = [];
     const included: string[] = [];
     const skipped: OutreachResult["skipped"] = [];
+    const skip = (personId: string, reasonCopy: Copy) =>
+        skipped.push({ personId, reason: englishCopy(reasonCopy), reasonCopy });
     let program: ProgramRecord | null = null;
     let excludedDomains = new Set<string>();
 
     for (const relationshipId of relationshipIds) {
         const relationship = await getRelationship(relationshipId, ctx.companyId);
         if (!relationship) {
-            skipped.push({ personId: relationshipId, reason: "Not found" });
+            skip(relationshipId, copy("growth.server.outreach.notFound"));
             continue;
         }
         if (!program) {
             program = await getProgram(relationship.programId, ctx.companyId);
-            if (!program) throw new ProspectsError("Segment not found", 404);
+            if (!program) throw segmentNotFound();
             excludedDomains = new Set((await listExclusions(ctx.companyId, program.id)).domains);
         }
         if (relationship.programId !== program.id) {
-            skipped.push({ personId: relationshipId, reason: "In another segment" });
+            skip(relationshipId, copy("growth.server.outreach.otherSegment"));
             continue;
         }
-        if (["contracted", "active", "declined"].includes(relationship.stage)) {
-            skipped.push({
-                personId: relationshipId,
-                reason: `Deal is ${SALES_OF[relationship.stage]}`,
-            });
+        if (relationship.stage === "won" || relationship.stage === "lost") {
+            skip(
+                relationshipId,
+                copy("growth.server.outreach.dealIs", { stage: relationship.stage })
+            );
             continue;
         }
         const org = await getOrg(relationship.orgId, ctx.companyId);
         if (!org) {
-            skipped.push({ personId: relationshipId, reason: "Company missing" });
+            skip(relationshipId, copy("growth.server.outreach.companyMissing"));
             continue;
         }
         if (org.domain && excludedDomains.has(org.domain)) {
-            skipped.push({ personId: relationshipId, reason: `${org.name} is excluded` });
+            skip(relationshipId, copy("growth.server.outreach.excluded", { name: org.name }));
             continue;
         }
         const emails = (relationship.dossier?.contactChannels ?? [])
@@ -652,10 +770,7 @@ export async function draftOutreach(
                     /^(info|sales|hello|contact|office|purchasing|einkauf|import)@/i.test(v)
             );
         if (emails.length === 0) {
-            skipped.push({
-                personId: relationshipId,
-                reason: `${org.name}: no public mailbox in the profile`,
-            });
+            skip(relationshipId, copy("growth.server.outreach.noMailbox", { name: org.name }));
             continue;
         }
         recipients.push({
@@ -671,7 +786,7 @@ export async function draftOutreach(
         included.push(relationshipId);
     }
     if (!program || recipients.length === 0)
-        throw new ProspectsError("None of the selected companies can be contacted yet", 409, {
+        throw new ProspectsError(copy("growth.server.errors.noneContactable"), 409, {
             skipped,
         });
 

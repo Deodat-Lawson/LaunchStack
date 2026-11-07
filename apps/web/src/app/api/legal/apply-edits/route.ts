@@ -15,6 +15,8 @@ import {
     AdeuServiceError,
     type DocumentEdit,
 } from "@launchstack/editing";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 
 export const runtime = "nodejs";
@@ -125,6 +127,9 @@ function cleanupRemainingTokens(
 }
 
 export async function POST(request: Request) {
+    const locale = localeOfRequest(request);
+    const t = translatorFor(locale, "generator.server.errors");
+    const tApi = translatorFor(locale, "errors.api");
     try {
         const ctx = await requireWorkspaceContext();
         if (!ctx.success) return ctx.response;
@@ -136,7 +141,7 @@ export async function POST(request: Request) {
             return NextResponse.json(
                 {
                     success: false,
-                    error: "Invalid request",
+                    error: tApi("invalidRequest"),
                     details: parsed.error.errors,
                 },
                 { status: 400 }
@@ -225,9 +230,12 @@ export async function POST(request: Request) {
             return NextResponse.json(
                 {
                     success: false,
+                    // English in every language: the editor tells this refusal
+                    // apart by its "not configured" (LegalDocumentEditor.tsx),
+                    // and by ADEU_SERVICE_URL in the message, which every
+                    // language names.
                     error: "Track Changes service not configured",
-                    message:
-                        "The Adeu redlining service is not set up. Add ADEU_SERVICE_URL to your .env file (e.g. http://localhost:8000) and ensure the service is running.",
+                    message: t("trackChangesNotConfigured"),
                 },
                 { status: 503 }
             );
@@ -238,7 +246,7 @@ export async function POST(request: Request) {
             return NextResponse.json(
                 {
                     success: false,
-                    error: "Track Changes service error",
+                    error: t("trackChangesError"),
                     message: error.detail,
                 },
                 { status: 502 }
@@ -248,8 +256,8 @@ export async function POST(request: Request) {
         return NextResponse.json(
             {
                 success: false,
-                error: "Internal server error",
-                message: error instanceof Error ? error.message : "Unknown error",
+                error: tApi("internal"),
+                message: error instanceof Error ? error.message : tApi("unknownError"),
             },
             { status: 500 }
         );

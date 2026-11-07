@@ -2,6 +2,7 @@
 
 import React from "react";
 import { diffWords } from "diff";
+import { useTranslations } from "next-intl";
 import { Check, X, RotateCw, Sparkles } from "lucide-react";
 
 export interface InlineRewriteDiffProps {
@@ -34,6 +35,8 @@ export function InlineRewriteDiff({
     onTryAgain,
     isRetrying = false,
 }: InlineRewriteDiffProps) {
+    const t = useTranslations("generator.inlineDiff");
+    const tc = useTranslations("common");
     const changes = diffWords(originalText, proposedText);
     const editCount = changes.filter(p => p.added || p.removed).length;
 
@@ -69,7 +72,7 @@ export function InlineRewriteDiff({
                             fontWeight: 500,
                         }}
                     >
-                        Rewrite preview
+                        {t("title")}
                     </span>
                     <span
                         style={{
@@ -87,7 +90,7 @@ export function InlineRewriteDiff({
                             color: "var(--ink-3, oklch(0.58 0.015 285))",
                         }}
                     >
-                        {editCount} {editCount === 1 ? "edit" : "edits"}
+                        {t("edits", { count: editCount })}
                     </span>
                 </span>
 
@@ -147,7 +150,7 @@ export function InlineRewriteDiff({
                         style={btnStyle("accent", isRetrying)}
                     >
                         <Check className="h-3 w-3" />
-                        Accept
+                        {t("accept")}
                     </button>
                     <button
                         type="button"
@@ -156,7 +159,7 @@ export function InlineRewriteDiff({
                         style={btnStyle("outline", isRetrying)}
                     >
                         <X className="h-3 w-3" />
-                        Reject
+                        {t("reject")}
                     </button>
                     <button
                         type="button"
@@ -165,7 +168,7 @@ export function InlineRewriteDiff({
                         style={btnStyle("ghost", isRetrying)}
                     >
                         <RotateCw className={`h-3 w-3${isRetrying ? "animate-spin" : ""}`} />
-                        Try again
+                        {tc("actions.tryAgain")}
                     </button>
                 </span>
             </span>

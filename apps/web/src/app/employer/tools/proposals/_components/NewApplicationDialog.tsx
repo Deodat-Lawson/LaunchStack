@@ -1,5 +1,6 @@
 "use client";
 
+import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
@@ -18,6 +19,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "~/components/ui/tabs";
 import { Textarea } from "~/components/ui/textarea";
 import { useToolRouter } from "~/components/tool-app/nav";
 import { cn } from "~/lib/utils";
+import { useErrorText } from "~/lib/tools/errorText";
 
 import { useProposals } from "../_lib/context";
 import { proposalsApi, type FunderRow, type SourceOption } from "../api";
@@ -39,6 +41,10 @@ export function NewApplicationDialog({
     /** Pre-fills from a found funder and links the application to it. */
     funder?: FunderRow | null;
 }) {
+    const t = useTranslations("proposals.newApplication");
+    const errorText = useErrorText();
+    const tp = useTranslations("proposals.common");
+    const tc = useTranslations("common");
     const router = useToolRouter();
     const { href, trackRun, reloadCounts } = useProposals();
     const [title, setTitle] = useState("");
@@ -97,13 +103,11 @@ export function NewApplicationDialog({
             });
             await reloadCounts();
             if (run) trackRun(run, { openSheet: false });
-            toast.success(
-                run ? "Application started; reading the request now" : "Application started"
-            );
+            toast.success(run ? t("startedReading") : t("started"));
             onOpenChange(false);
             router.push(href(`/write/${application.id}`));
         } catch (e) {
-            toast.error(e instanceof Error ? e.message : "Could not start the application");
+            toast.error(errorText(e, t("startFailed")));
         } finally {
             setBusy(false);
         }
@@ -113,11 +117,8 @@ export function NewApplicationDialog({
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="sm:max-w-lg">
                 <DialogHeader>
-                    <DialogTitle>New application</DialogTitle>
-                    <DialogDescription>
-                        Give the funder&apos;s request and it becomes a checklist of everything they
-                        ask for. You can add it later too.
-                    </DialogDescription>
+                    <DialogTitle>{tp("newApplication")}</DialogTitle>
+                    <DialogDescription>{t("description")}</DialogDescription>
                 </DialogHeader>
                 <form
                     className="grid gap-3"
@@ -128,31 +129,31 @@ export function NewApplicationDialog({
                 >
                     <div className="grid gap-1.5">
                         <Label htmlFor="app-title" className="text-xs">
-                            Title
+                            {tp("title")}
                         </Label>
                         <Input
                             id="app-title"
                             value={title}
                             onChange={e => setTitle(e.target.value)}
-                            placeholder="Community Resilience Fund 2026"
+                            placeholder={t("titlePlaceholder")}
                             autoFocus
                         />
                     </div>
                     <div className="grid grid-cols-[minmax(0,1fr)_150px] gap-3">
                         <div className="grid gap-1.5">
                             <Label htmlFor="app-funder" className="text-xs">
-                                Funder
+                                {tp("funder")}
                             </Label>
                             <Input
                                 id="app-funder"
                                 value={funderName}
                                 onChange={e => setFunderName(e.target.value)}
-                                placeholder="Meyer Memorial Trust"
+                                placeholder={t("funderPlaceholder")}
                             />
                         </div>
                         <div className="grid gap-1.5">
                             <Label htmlFor="app-deadline" className="text-xs">
-                                Deadline
+                                {tp("deadline")}
                             </Label>
                             <Input
                                 id="app-deadline"
@@ -163,21 +164,21 @@ export function NewApplicationDialog({
                         </div>
                     </div>
                     <div className="grid gap-1.5">
-                        <Label className="text-xs">The funder&apos;s request</Label>
+                        <Label className="text-xs">{t("request")}</Label>
                         <Tabs value={kind} onValueChange={v => setKind(v as RequestKind)}>
                             <TabsList>
-                                <TabsTrigger value="paste">Paste</TabsTrigger>
-                                <TabsTrigger value="url">Link</TabsTrigger>
-                                <TabsTrigger value="source">From Sources</TabsTrigger>
+                                <TabsTrigger value="paste">{t("paste")}</TabsTrigger>
+                                <TabsTrigger value="url">{t("link")}</TabsTrigger>
+                                <TabsTrigger value="source">{t("fromSources")}</TabsTrigger>
                             </TabsList>
                             <TabsContent value="paste">
                                 <Textarea
                                     value={text}
                                     onChange={e => setText(e.target.value)}
                                     rows={7}
-                                    placeholder="Paste the call, the guidelines or the application form's questions…"
+                                    placeholder={t("pastePlaceholder")}
                                     className="text-[13px]"
-                                    aria-label="The funder's request"
+                                    aria-label={t("request")}
                                 />
                             </TabsContent>
                             <TabsContent value="url">
@@ -185,24 +186,22 @@ export function NewApplicationDialog({
                                     value={url}
                                     onChange={e => setUrl(e.target.value)}
                                     placeholder="https://funder.org/grants/apply"
-                                    aria-label="The request's URL"
+                                    aria-label={t("urlAria")}
                                     inputMode="url"
                                 />
-                                <p className="text-ink-3 mt-1.5 text-xs">
-                                    The page is read once; portals behind a login will not open.
-                                </p>
+                                <p className="text-ink-3 mt-1.5 text-xs">{t("urlHint")}</p>
                             </TabsContent>
                             <TabsContent value="source" className="grid gap-2">
                                 <Input
                                     value={sourceQuery}
                                     onChange={e => setSourceQuery(e.target.value)}
-                                    placeholder="Search your sources"
-                                    aria-label="Search sources"
+                                    placeholder={t("searchPlaceholder")}
+                                    aria-label={t("searchAria")}
                                 />
                                 <div className="border-line max-h-44 overflow-y-auto rounded-md border">
                                     {sources.length === 0 ? (
                                         <p className="text-ink-3 px-3 py-2 text-xs">
-                                            No sources match.
+                                            {t("noSources")}
                                         </p>
                                     ) : (
                                         sources.map(s => (
@@ -235,10 +234,10 @@ export function NewApplicationDialog({
                             onClick={() => onOpenChange(false)}
                             disabled={busy}
                         >
-                            Cancel
+                            {tc("actions.cancel")}
                         </Button>
                         <Button type="submit" disabled={!valid}>
-                            {hasRequest ? "Start and read the request" : "Start application"}
+                            {hasRequest ? t("startAndRead") : t("start")}
                         </Button>
                     </DialogFooter>
                 </form>

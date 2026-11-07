@@ -1,5 +1,9 @@
 import { cn } from "~/lib/utils";
 
+/** Han characters and full-width punctuation: Chinese sets no space between them. */
+const CJK_END = /[\u3000-\u303f\u3400-\u9fff\uff00-\uffef]$/;
+const CJK_START = /^[\u3000-\u303f\u3400-\u9fff\uff00-\uffef]/;
+
 /**
  * The one display line per screen. `accent` is the phrase set in the brand
  * colour, the way the Studio's "What do you want to *ask* yourself?" does
@@ -40,7 +44,7 @@ export function PageHeader({
                     {title}
                     {accent && (
                         <>
-                            {" "}
+                            {CJK_END.test(title) && CJK_START.test(accent) ? null : " "}
                             <em className="text-brand-ink">{accent}</em>
                         </>
                     )}

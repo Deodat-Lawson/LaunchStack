@@ -79,6 +79,9 @@ const ASK_MAX_SOURCES = 300;
 const ASK_SOURCE_CHARS = 24_000;
 const ASK_ANSWER_CHARS = 400;
 const ASK_QUOTE_CHARS = 200;
+/** Closes every `ask_each` result: what the model does with the rows. */
+export const ROWS_ARE_THE_ANSWER =
+    "These rows are the complete result. An answer about the set accounts for every row: name each source whose row answers, with its id, and leave none out; say how many rows had no answer rather than guessing why.";
 
 export interface SourceToolPorts {
     list?: (ctx: WorkspaceContext, input: ListSourcesInput) => Promise<SourceListing>;
@@ -519,9 +522,12 @@ export function createSourceTools(
             return { row: `- ${name}: (couldn't be read this time)`, status: "failed" };
         }
         usage = addTokenUsage(usage, answer.usage);
-        const text = clip(answer.answer, ASK_ANSWER_CHARS);
-        if (!text) return { row: `- ${name}: (no answer in this source)`, status: "none" };
         const quote = clip(answer.quote, ASK_QUOTE_CHARS);
+        // A passage the model copied is the source's answer even when it left
+        // the summary blank: the file said it. Only a source with neither is
+        // one that has no answer.
+        const text = clip(answer.answer, ASK_ANSWER_CHARS) || quote;
+        if (!text) return { row: `- ${name}: (no answer in this source)`, status: "none" };
         // What the answer rests on, for the source list: the quote when the
         // model gave one, else the source's opening.
         passages.push({
@@ -533,7 +539,10 @@ export function createSourceTools(
                 searchScope: "multi-document",
             },
         });
-        return { row: `- ${name}: ${text}${quote ? ` — “${quote}”` : ""}`, status: "answered" };
+        return {
+            row: `- ${name}: ${text}${quote && quote !== text ? ` — “${quote}”` : ""}`,
+            status: "answered",
+        };
     };
 
     const askTool: ChatTool = {
@@ -543,7 +552,7 @@ export function createSourceTools(
             "Use it for any question about every source in a set — list, count, find all, compare all — which search cannot answer, since search returns only the best matches. " +
             "With no ids, folder or from it asks every file attached to the message, or, when none is attached, every source the person can open. " +
             `Sources are read in parallel, ${ASK_PAGE} per call; the result says if more remain and the offset to continue from. ` +
-            'Phrase the question for a single source, e.g. "Whose resume is this? Give the person\'s full name."',
+            'Phrase the question for a single source and about it, in the third person — "Which school does this person attend?", never "Which school do you attend?" — e.g. "Whose resume is this? Give the person\'s full name."',
         parameters: {
             type: "object",
             properties: {
@@ -616,6 +625,7 @@ export function createSourceTools(
             const report = () =>
                 progress?.(status("readingSourcesProgress", { count: batch.length, done }));
             report();
+            const started = Date.now();
             const rows = await inPool(batch, ASK_CONCURRENCY, async target => {
                 throwIfChatAborted(signal);
                 const row = await askOne(target, question, signal);
@@ -625,12 +635,21 @@ export function createSourceTools(
             });
             const answered = rows.filter(row => row.status === "answered").length;
             const failed = rows.filter(row => row.status === "failed").length;
+            const none = batch.length - answered - failed;
             const end = offset + batch.length;
+            // One line per call, in production too: which side loses rows
+            // when a whole-set answer comes back short.
+            console.log(
+                `[AIChat] ask_each: ${batch.length} source(s) asked (${offset + 1}–${end} of ${targets.length}); ${answered} answered, ${none} no answer, ${failed} failed; ${Date.now() - started}ms`
+            );
             const footer = [
-                `Asked ${batch.length} source${batch.length === 1 ? "" : "s"}: ${answered} answered, ${batch.length - answered - failed} had no answer${failed ? `, ${failed} couldn't be read` : ""}.`,
+                `Asked ${batch.length} source${batch.length === 1 ? "" : "s"}: ${answered} answered, ${none} had no answer${failed ? `, ${failed} couldn't be read` : ""}.`,
                 end < targets.length
                     ? `Covered ${offset + 1}–${end} of ${targets.length}. Call ask_each again with the same question and offset=${end}.`
                     : `That covers all ${targets.length} in the set.`,
+                // The rows are the whole result; an answer about the set is
+                // written from them, row by row, not from a sample of them.
+                ROWS_ARE_THE_ANSWER,
             ].join(" ");
             return shown(`${rows.map(row => row.row).join("\n")}\n\n${footer}`);
         },

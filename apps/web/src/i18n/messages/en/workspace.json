@@ -287,7 +287,8 @@
     "navigate": "navigate",
     "open": "open",
     "results": "{count} results",
-    "workspaceSettingSub": "Workspace · {description}"
+    "workspaceSettingSub": "Workspace · {description}",
+    "usageSettingSub": "Models & usage · {description}"
   },
   "contextMenu": {
     "openLinkInNewTab": "Open link in new tab",

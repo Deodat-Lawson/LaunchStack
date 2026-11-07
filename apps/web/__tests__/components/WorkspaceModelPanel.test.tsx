@@ -1,7 +1,8 @@
 /** @jest-environment jsdom */
 
 /**
- * Workspace › Bring your own keys › API key.
+ * Models & usage › API keys (Workspace › Bring your own keys until November
+ * 2026), and the server default it overrides.
  *
  * What a workspace admin sees and sends when bringing their own model: the
  * two ways in, the editor's request body (a blank key keeps the saved one
@@ -15,7 +16,7 @@ import { act, render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 
-// For the Workspace tab test at the end: an owner, with no router.
+// For the Models & usage tab test at the end: an owner, with no router.
 jest.mock("next/navigation", () => ({
     useRouter: () => ({ replace: jest.fn(), push: jest.fn(), refresh: jest.fn() }),
     usePathname: () => "/employer/documents",
@@ -25,7 +26,7 @@ jest.mock("~/lib/use-permissions", () => ({
     setWorkspaceNameLocally: jest.fn(),
 }));
 
-import { WorkspaceTool } from "~/app/employer/documents/_workspace/WorkspaceTool";
+import { UsageTool } from "~/app/employer/documents/_workspace/usage/UsageTool";
 import { KeysSection } from "~/app/employer/documents/_workspace/settings/KeysSection";
 import { ModelsSection } from "~/app/employer/documents/_workspace/settings/ModelsSection";
 import type { SettingsSectionActions } from "~/app/employer/documents/_workspace/settings/contract";
@@ -175,7 +176,7 @@ function priceOf(route: RegExp) {
     };
 }
 
-describe("Workspace › Bring your own keys › API key", () => {
+describe("Models & usage › API keys › API key", () => {
     beforeAll(() => {
         // Radix Select reaches for layout APIs jsdom lacks.
         Element.prototype.scrollIntoView = jest.fn();
@@ -672,18 +673,16 @@ describe("Workspace › Bring your own keys › API key", () => {
         expect(window.location.hash).toBe("#byok");
     });
 
-    it("lands the OpenRouter return on Workspace › Bring your own keys with its outcome", async () => {
-        // The callback sends `?feature=workspace&at=/byok&openrouter=…`; the
-        // shell opens the tab on Bring your own keys and strips `feature` and
-        // `at`, leaving the outcome for the section to read.
+    it("lands the OpenRouter return on Models & usage › API keys with its outcome", async () => {
+        // The callback sends `?feature=usage&at=/keys&openrouter=…`; the
+        // shell opens the tab on API keys and strips `feature` and `at`,
+        // leaving the outcome for the section to read when it mounts.
         window.history.replaceState(null, "", "/employer/documents?openrouter=connected");
         stored = OPENROUTER_FRESH;
-        render(<WorkspaceTool host={{ active: true, request: { at: "/byok", nonce: 1 } }} />);
+        render(<UsageTool host={{ active: true, request: { at: "/keys", nonce: 1 } }} />);
 
         await waitFor(() =>
-            expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(
-                "Bring your own keys"
-            )
+            expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("API keys")
         );
         expect(
             await screen.findByText(
@@ -694,7 +693,7 @@ describe("Workspace › Bring your own keys › API key", () => {
     });
 });
 
-describe("Workspace › Models", () => {
+describe("Models & usage › Models › Server default", () => {
     beforeEach(() => {
         stored = null;
         serve();
@@ -725,7 +724,7 @@ describe("Workspace › Models", () => {
         renderModels();
 
         expect(
-            await screen.findByText(/runs on its own model, set up in Bring your own keys/)
+            await screen.findByText(/runs on its own model, set up in API keys/)
         ).toBeInTheDocument();
     });
 

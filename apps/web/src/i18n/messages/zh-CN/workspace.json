@@ -287,7 +287,8 @@
     "navigate": "导航",
     "open": "打开",
     "results": "{count} 个结果",
-    "workspaceSettingSub": "工作区 · {description}"
+    "workspaceSettingSub": "工作区 · {description}",
+    "usageSettingSub": "模型与用量 · {description}"
   },
   "contextMenu": {
     "openLinkInNewTab": "在新标签页中打开链接",

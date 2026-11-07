@@ -1,7 +1,8 @@
 "use client";
 
 /**
- * Workspace › Bring your own keys.
+ * Models & usage › API keys (Workspace › Bring your own keys until November
+ * 2026).
  *
  * Body only. The workspace's own provider account for chat, drafting,
  * meetings and background work (`WorkspaceModelPanel`), connected through
@@ -14,8 +15,9 @@
  * takes one.
  *
  * OpenRouter's connect flow is a top-level navigation that comes back to the
- * Workspace tab on this screen with `?openrouter=<outcome>`; the section
- * turns that into a note and takes the parameter back out of the address bar.
+ * Models & usage tab on this screen with `?openrouter=<outcome>`; the shell
+ * opens the tab and leaves that on the page, and the section turns it into a
+ * note and takes the parameter back out of the address bar.
  */
 
 import React, { useCallback, useEffect, useState } from "react";

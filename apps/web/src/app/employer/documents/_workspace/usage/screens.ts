@@ -1,18 +1,26 @@
 /**
- * The Usage tab's screens and their paths. Plain data, so deep links are
- * pinned by tests rather than by whoever last clicked through the tab.
+ * The Models & usage tab's screens and their paths, and who may open each.
+ * Plain data, so deep links are pinned by tests rather than by whoever last
+ * clicked through the tab.
  *
- *   /overview          the workspace: who is active, what it asked, what AI it used (admins)
- *   /people            everyone, ranked — Cursor's leaderboard (admins)
- *   /people/<id>       one person's numbers (admins)
- *   /activity          AI use by day, person, feature and route (admins)
- *   /documents         which documents get opened, and by how many people (admins)
+ *   /overview          the workspace: who is active, what it asked, what AI it used (analytics)
+ *   /people            everyone, ranked — Cursor's leaderboard (analytics)
+ *   /people/<id>       one person's numbers (analytics)
+ *   /activity          AI use by day, person, feature and route (analytics)
+ *   /documents         which documents get opened, and by how many people (analytics)
  *   /you               your own numbers beside the workspace median (everyone)
- *   /spending          balance, burn, the ledger, pricing and per-person limits (admins)
+ *   /models            what Ask's model menu offers; managed by `models.manage`,
+ *                      read-only for everyone else (everyone)
+ *   /keys              the workspace's own API key or OpenRouter account — the
+ *                      `byok` settings section (`models.manage`)
+ *   /spending          balance, burn, the ledger, pricing and per-person limits (analytics)
  *
- * Ids are workspace member ids — the same ones the Team tab's `/people/<id>`
- * uses. Someone without `analytics.view` has one screen, `/you`, and lands
- * there from any path.
+ * "analytics" is `analytics.view`. Ids are workspace member ids — the same
+ * ones the Team tab's `/people/<id>` uses. Someone without `analytics.view`
+ * has You and Models (and API keys, should their role manage the models),
+ * and lands on You from any other path. `/keys` without `models.manage`
+ * lands on Models for someone who may see the workspace's numbers, on You
+ * for anyone else.
  */
 
 export const USAGE_ROOTS = [
@@ -21,6 +29,8 @@ export const USAGE_ROOTS = [
     "activity",
     "documents",
     "you",
+    "models",
+    "keys",
     "spending",
 ] as const;
 export const USAGE_HOME = "/overview";
@@ -33,8 +43,13 @@ export type UsageScreen =
     | { kind: "activity" }
     | { kind: "documents" }
     | { kind: "you" }
+    | { kind: "models" }
+    | { kind: "keys" }
     | { kind: "spending" }
     | { kind: "not-found" };
+
+const withFocus = (path: string, focus?: string | null) =>
+    focus ? `${path}?focus=${encodeURIComponent(focus)}` : path;
 
 export const usagePaths = {
     overview: () => "/overview",
@@ -49,8 +64,9 @@ export const usagePaths = {
     },
     documents: () => "/documents",
     you: () => "/you",
-    spending: (focus?: string | null) =>
-        focus ? `/spending?focus=${encodeURIComponent(focus)}` : "/spending",
+    models: () => "/models",
+    keys: (focus?: string | null) => withFocus("/keys", focus),
+    spending: (focus?: string | null) => withFocus("/spending", focus),
 };
 
 function idOf(segment: string | undefined): number | null {
@@ -72,11 +88,42 @@ export function usageScreenFor(path: string): UsageScreen {
     if (root === "activity") return { kind: "activity" };
     if (root === "documents") return { kind: "documents" };
     if (root === "you") return { kind: "you" };
+    if (root === "models") return { kind: "models" };
+    if (root === "keys") return { kind: "keys" };
     if (root === "spending") return { kind: "spending" };
     return { kind: "not-found" };
 }
 
 /** Screens only someone with `analytics.view` may open. */
 export function isTeamScreen(screen: UsageScreen): boolean {
-    return screen.kind !== "you" && screen.kind !== "not-found";
+    switch (screen.kind) {
+        case "you":
+        case "models":
+        case "keys":
+        case "not-found":
+            return false;
+        default:
+            return true;
+    }
+}
+
+/** What the person's role lets them open in the tab. */
+export interface UsageAccess {
+    /** `analytics.view`: the workspace's numbers and its spending. */
+    team: boolean;
+    /** `models.manage`: the API keys, and changing what Models offers. */
+    manageModels: boolean;
+}
+
+/**
+ * Where someone who may not open `screen` is sent instead, or null when they
+ * may open it (a path that names no screen included, for someone with the
+ * workspace's numbers: they are told it doesn't exist).
+ */
+export function usageRedirectFor(screen: UsageScreen, access: UsageAccess): string | null {
+    if (screen.kind === "keys" && !access.manageModels) {
+        return access.team ? usagePaths.models() : USAGE_SELF_HOME;
+    }
+    if (access.team) return null;
+    return isTeamScreen(screen) || screen.kind === "not-found" ? USAGE_SELF_HOME : null;
 }

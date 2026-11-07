@@ -6,7 +6,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { useChangeLocale } from "~/i18n/client";
 import { LOCALES } from "~/i18n/locales";
 import { canSeeSettingsSection } from "~/lib/settings/sections";
-import { isPersonalSection, settingsSectionOfHref } from "~/lib/settings/surfaces";
+import { isPersonalSection, isUsageSection, settingsSectionOfHref } from "~/lib/settings/surfaces";
 import { useSettingCopier, useSettingsSearch, useSettingValue } from "~/lib/settings/useSettings";
 import { Command as CommandIcon, Languages, Settings, Search as IconSearch } from "lucide-react";
 import { ACTION_MENU_ICONS, type ActionMenuItem } from "~/components/ui/action-menu";
@@ -199,10 +199,11 @@ export function CommandPalette({
         }
         DEMOTED_FEATURES.filter(f => f.id !== "audit" || predictiveGaps)
             // A row for an app the person may not open (Team, for a Guest)
-            // would do nothing when picked. Anyone may open Settings and the
-            // Workspace tab, so a row for one of their screens ("Agents &
-            // nodes") carries that screen's gate instead: picked without it,
-            // the row would land on a screen that only says it isn't theirs.
+            // would do nothing when picked. Anyone may open Settings, the
+            // Workspace tab and Models & usage, so a row for one of their
+            // screens ("Agents & nodes", "API keys") carries that screen's
+            // gate instead: picked without it, the row would land on a
+            // screen that only says it isn't theirs, or be sent elsewhere.
             .filter(f => {
                 if (!can(f.requires)) return false;
                 const app = resolveStudioFeature(f.id);
@@ -315,12 +316,15 @@ export function CommandPalette({
                 kind: "setting",
                 id: definition.key,
                 label: copy.label,
-                // Where picking it goes: Settings, or the Workspace tab.
+                // Where picking it goes: Settings, the Workspace tab, or
+                // Models & usage (Spending's rows).
                 sub: t(
-                    isPersonalSection(definition.section) ? "settingSub" : "workspaceSettingSub",
-                    {
-                        description: copy.description,
-                    }
+                    isPersonalSection(definition.section)
+                        ? "settingSub"
+                        : isUsageSection(definition.section)
+                          ? "usageSettingSub"
+                          : "workspaceSettingSub",
+                    { description: copy.description }
                 ),
                 Icon: Settings,
                 onRun: () => {

@@ -7,7 +7,7 @@ import { NextResponse } from "next/server";
 
 import { env } from "~/env";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
-import { workspaceHref } from "~/lib/settings/surfaces";
+import { modelsUsageHref } from "~/lib/settings/surfaces";
 import { publicOrigin } from "~/server/public-origin";
 import {
     OPENROUTER_CALLBACK_PATH,
@@ -34,7 +34,7 @@ export async function GET(request: Request) {
     // hands back; say so before sending the admin away to approve one.
     if (!env.server.EMBEDDING_SECRETS_KEY) {
         const back = new URL(
-            workspaceHref("byok", { query: { openrouter: "unavailable" } }),
+            modelsUsageHref("keys", { query: { openrouter: "unavailable" } }),
             origin
         );
         return NextResponse.redirect(back);

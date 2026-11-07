@@ -41,6 +41,8 @@ import {
     normalizeFolderPath,
 } from "~/lib/folders/path";
 
+import { isPersonalMailboxPath } from "~/server/services/connectors/gmail/config";
+
 import type { Executor } from "./db-types";
 import { loadDocumentFacts, loadFolderLineage, type GrantFact } from "./item-access";
 
@@ -653,6 +655,37 @@ function isManageLevel(level: string): boolean {
 }
 
 /**
+ * A member's mailbox is never handed on. ADR-014 kept the `Gmail` subtree
+ * out of the admin carry-over, and what is still in a mailbox when its owner
+ * goes is deleted with their connection (`closePersonalConnections`). These
+ * two filters are the backstop: no heir is granted anything there, whatever
+ * state an older mailbox was left in.
+ */
+async function withoutMailboxFolders(executor: Executor, ids: bigint[]): Promise<bigint[]> {
+    if (ids.length === 0) return ids;
+    const rows = await executor
+        .select({ id: category.id, name: category.name })
+        .from(category)
+        .where(inArray(category.id, ids.map(Number)));
+    const mailboxes = new Set(
+        rows.filter(row => isPersonalMailboxPath(row.name)).map(row => row.id.toString())
+    );
+    return ids.filter(id => !mailboxes.has(id.toString()));
+}
+
+async function withoutMailboxDocuments(executor: Executor, ids: bigint[]): Promise<bigint[]> {
+    if (ids.length === 0) return ids;
+    const rows = await executor
+        .select({ id: document.id, category: document.category })
+        .from(document)
+        .where(inArray(document.id, ids.map(Number)));
+    const inMailbox = new Set(
+        rows.filter(row => isPersonalMailboxPath(row.category)).map(row => row.id.toString())
+    );
+    return ids.filter(id => !inMailbox.has(id.toString()));
+}
+
+/**
  * Before a member's grants are deleted: every folder or document where they
  * hold the only manage grant gets one for `heirPk`, so nothing they owned is
  * left without anyone able to share it — or, now that admins no longer read
@@ -743,8 +776,11 @@ export async function handOverSoleManaged(
         return out;
     };
 
-    const folders = soleManaged(folderRows, "categoryId");
-    const documents = soleManaged(documentRows, "documentId");
+    const folders = await withoutMailboxFolders(executor, soleManaged(folderRows, "categoryId"));
+    const documents = await withoutMailboxDocuments(
+        executor,
+        soleManaged(documentRows, "documentId")
+    );
     for (const id of folders) await grantFolderManage(executor, heir, id);
     for (const id of documents) await grantDocumentManage(executor, heir, id);
     return { folders: folders.length, documents: documents.length };

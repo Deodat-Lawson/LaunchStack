@@ -19,6 +19,7 @@ import { db } from "~/server/db";
 import { users } from "~/server/db/schema";
 import { markConnectionRevoked } from "~/server/services/google-drive/connections";
 import { getConnectionById } from "../connection-store";
+import { closePersonalConnectionsNow, personalSyncStanding } from "../personal-connections";
 import { GMAIL_PROVIDER } from "./config";
 import { getGmailAccessToken } from "./connections";
 import { ensurePrivateGmailFolder } from "./folder";
@@ -68,6 +69,21 @@ export async function runGmailSync(
     }
     if (connection.ownerUserId == null) {
         return { outcome: "skipped", reason: "gmail connection has no owner" };
+    }
+
+    // A mailbox syncs only for an active member who may add files. One whose
+    // owner has left was missed when they went (removed before the rule
+    // existed), so it is closed now, mail and all, exactly as removal would.
+    const standing = await personalSyncStanding(connection.companyId, connection.ownerUserId);
+    if (standing === "departed") {
+        await closePersonalConnectionsNow(connection.companyId, connection.ownerUserId);
+        return { outcome: "skipped", reason: "owner left the workspace — connection closed" };
+    }
+    if (standing === "paused") {
+        return {
+            outcome: "skipped",
+            reason: "owner is suspended or can no longer add files — paused",
+        };
     }
 
     await ensureSyncState(connectionId);

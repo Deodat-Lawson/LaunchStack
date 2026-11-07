@@ -9,10 +9,10 @@
  * post-retrieval gate keeps the assistant from quoting a mailbox to anyone
  * but its owner.
  *
- * Holders of `folders.manage` (Owners, Admins) see every restricted folder,
- * this one included — the same rule as a Finance folder. That is the
- * model's stated design, not an oversight; a tighter "private even from
- * admins" tier would be a change to `DocumentScope`, not to this file.
+ * Owners and Admins don't see it either: since ADR-014 nobody reads past a
+ * restriction by role. It is never handed on. When its owner is removed or
+ * leaves, the mail still in it is deleted with their connection
+ * (`personal-connections.ts`).
  *
  * Idempotent: called on connect (so the folder shows up immediately) and at
  * the start of every sync (so a manually un-restricted folder is restricted

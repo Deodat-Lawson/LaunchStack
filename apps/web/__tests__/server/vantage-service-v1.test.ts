@@ -19,6 +19,10 @@ jest.mock("@launchstack/pipelines/vantage", () => ({
 jest.mock("~/lib/models", () => ({ resolveConfiguredChatModel: jest.fn() }));
 import { prepareWeekV1, validateGenerationResult } from "~/server/vantage/service-v1";
 import type { GenerationInput, GenerationResult } from "@launchstack/pipelines/vantage";
+import {
+    generateWeeklyAgendaV1,
+    GENERATION_BUDGETS,
+} from "@launchstack/pipelines/vantage/generation-v1";
 const examples = JSON.parse(
     readFileSync(
         resolve(__dirname, "../../../../docs/design/examples/weekly-decision-agenda-v1.json"),
@@ -43,6 +47,22 @@ it("validates the frozen normal and fallback examples", () => {
         validateGenerationResult(examples.enrichmentInput, examples.enrichment).enhancements
     ).toHaveLength(1);
 });
+it.each(["input", "emptyInput", "enrichmentInput"])(
+    "accepts the actual rules adapter's %s result at the host boundary",
+    async name => {
+        const supplied = structuredClone(examples[name]) as GenerationInput;
+        supplied.generationMode = "rules";
+        const before = structuredClone(supplied);
+        const actual = await generateWeeklyAgendaV1(supplied, {
+            resolveModel: () => null,
+            signal: new AbortController().signal,
+            budgets: GENERATION_BUDGETS,
+        });
+        expect(() => validateGenerationResult(supplied, actual)).not.toThrow();
+        expect(supplied).toEqual(before);
+        expect(actual.execution.attempts).toBe(0);
+    }
+);
 it("rejects a result belonging to a different run before mockSave", async () => {
     result.runId = "other";
     await expect(

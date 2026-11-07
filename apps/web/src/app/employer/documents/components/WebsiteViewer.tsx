@@ -332,9 +332,16 @@ export function WebsiteViewer({
         setOpened(prev => (prev.has(next) ? prev : new Set([...prev, next])));
     }, []);
 
+    // The passage the text pane locates. It changes in the same render that
+    // reveals the pane: handed over while the pane is still hidden, the text
+    // viewer would measure an invisible range, and revealing it afterwards
+    // gives the viewer nothing to re-run on.
+    const [textHighlight, setTextHighlight] = useState(highlight);
+
     // A citation clicked while the site is already open goes to its passage.
     useEffect(() => {
         if (highlight) show("text");
+        setTextHighlight(highlight);
     }, [highlight, show]);
 
     return (
@@ -389,7 +396,7 @@ export function WebsiteViewer({
                 )}
                 {opened.has("text") && (
                     <div className="h-full" hidden={view !== "text"}>
-                        <PageTextPane document={document} highlight={highlight} />
+                        <PageTextPane document={document} highlight={textHighlight} />
                     </div>
                 )}
             </div>

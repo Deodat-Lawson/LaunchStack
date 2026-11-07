@@ -19,7 +19,7 @@
 import { NextResponse } from "next/server";
 
 import { requestTranslator } from "~/i18n/server";
-import { and, eq, like, or } from "drizzle-orm";
+import { and, eq, like, or, sql } from "drizzle-orm";
 import { db } from "~/server/db";
 import { document, documentVersions, fileUploads } from "@launchstack/store/schema";
 import { FILE_ACCESS_TOKEN_PARAM, verifyFileAccessToken } from "@launchstack/store/crypto";
@@ -117,8 +117,10 @@ export async function GET(request: Request, { params }: RouteParams) {
                 return NextResponse.json({ error: t("fileNotFound") }, { status: 404 });
             }
             // The file is the bytes behind a document (current or a past
-            // version); serving it would bypass the document's folder. A file
-            // no document references yet (mid-upload) is only company-scoped.
+            // version), or a picture taken of one (a website source's preview,
+            // recorded in its ocrMetadata); serving it would bypass the
+            // document's folder. A file no document references yet
+            // (mid-upload) is only company-scoped.
             if (sessionScope && sessionScope.kind !== "everything") {
                 const pattern = `%/api/files/${fileId}`;
                 const backed = await db
@@ -128,7 +130,14 @@ export async function GET(request: Request, { params }: RouteParams) {
                     .where(
                         and(
                             eq(document.companyId, sessionCompanyId),
-                            or(like(document.url, pattern), like(documentVersions.url, pattern))
+                            or(
+                                like(document.url, pattern),
+                                like(documentVersions.url, pattern),
+                                like(
+                                    sql<string>`${document.ocrMetadata} -> 'websitePreview' ->> 'url'`,
+                                    pattern
+                                )
+                            )
                         )
                     );
                 if (backed.length > 0 && !backed.some(doc => scopeAllows(sessionScope, doc))) {

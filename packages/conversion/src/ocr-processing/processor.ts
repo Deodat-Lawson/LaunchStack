@@ -1160,8 +1160,7 @@ export async function finalizeStorage(
                     : {}
             ).filter(([key]) => !FAILURE_STAMP_KEYS.has(key))
         );
-        const ocrMetadataPayload = {
-            ...preserved,
+        const completion = {
             totalPages: meta.totalPages,
             totalChunks,
             processingTimeMs: meta.processingTimeMs,
@@ -1169,7 +1168,14 @@ export async function finalizeStorage(
             ...(meta.ocrRouting ? { ocrRouting: meta.ocrRouting } : {}),
             processedAt: new Date().toISOString(),
         };
+        const ocrMetadataPayload = { ...preserved, ...completion };
 
+        // The document row is merged in SQL, not written back from the read
+        // above: a key another request adds while this run finishes (a
+        // website's stored preview, written on first open) must survive.
+        const failureStampKeys = sql.raw(
+            [...FAILURE_STAMP_KEYS].map(key => `'${key}'`).join(" - ")
+        );
         await getDb()
             .update(documentTable)
             .set({
@@ -1177,7 +1183,9 @@ export async function finalizeStorage(
                 ocrJobId: jobId,
                 ocrProvider: meta.provider,
                 ocrConfidenceScore: toStoredConfidencePercent(meta.confidenceScore),
-                ocrMetadata: ocrMetadataPayload,
+                ocrMetadata: sql`(CASE WHEN jsonb_typeof(${documentTable.ocrMetadata}) = 'object'
+                    THEN ${documentTable.ocrMetadata} - ${failureStampKeys}
+                    ELSE '{}'::jsonb END) || ${JSON.stringify(completion)}::jsonb`,
             })
             .where(
                 and(

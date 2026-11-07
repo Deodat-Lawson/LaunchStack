@@ -491,7 +491,7 @@ function refresh(app: ApplicationDetail): ApplicationDetail {
         ...app,
         requirements,
         daysLeft: daysLeft(app.deadline),
-        readiness: app.review ? app.review.readiness : readiness({ ...app, requirements }),
+        readiness: readiness({ ...app, requirements }),
         sections: {
             total: app.sectionList.length,
             written: app.sectionList.filter(s => s.status !== "empty").length,
@@ -1393,6 +1393,7 @@ export async function simulateProposals(
             if (method === "PATCH") {
                 const body = await readBody(init);
                 if ("draft" in body) {
+                    const previousDraft = s.draft;
                     s.draft = (body.draft as string | null) ?? null;
                     s.words = s.draft ? s.draft.trim().split(/\s+/).length : 0;
                     if (!s.draft?.trim()) {
@@ -1400,7 +1401,12 @@ export async function simulateProposals(
                         s.cites = [];
                         s.gaps = [];
                         s.evidence = [];
-                    } else if (s.status !== "approved" && !body.status) s.status = "edited";
+                    } else if (
+                        !body.status &&
+                        (s.status !== "approved" || s.draft !== previousDraft)
+                    ) {
+                        s.status = "edited";
+                    }
                 }
                 if (typeof body.status === "string") {
                     if (body.status === "approved" && !s.draft?.trim())

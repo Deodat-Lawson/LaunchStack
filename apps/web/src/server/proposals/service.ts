@@ -84,6 +84,7 @@ import {
     toSectionDto,
 } from "./adapter";
 import { startProposalRun } from "./executor";
+import { canExportApplication, PROPOSALS_EXPORT_CATEGORY } from "./export-audience";
 
 export interface ProposalsCtx {
     companyId: bigint;
@@ -502,6 +503,20 @@ export async function exportApplication(
     if (sections.every(s => !s.draft?.trim()))
         throw fail("nothingWritten", 409, { code: "nothing_written" });
     const exportedAt = new Date();
+    const creationKey = makeApplicationCreationKey(record.id, exportedAt);
+    if (
+        !(await canExportApplication({
+            ...ctx,
+            creationKey,
+            requestDocumentId: record.requestDocumentId,
+            sections,
+        }))
+    )
+        throw new ProposalsError(
+            "Check source access and destination sharing, or redraft answers with unknown sources, before exporting",
+            403,
+            { code: "export_audience_denied" }
+        );
     const markdown = renderApplicationMarkdown({ application: record, sections, exportedAt });
     const filename = makeApplicationFilename(record);
     const stored = await uploadFile({
@@ -515,8 +530,8 @@ export async function exportApplication(
         user: { userId: ctx.userId, companyId: ctx.companyId },
         documentName: `${record.title} — proposal`,
         rawDocumentUrl: stored.url,
-        creationKey: makeApplicationCreationKey(record.id, exportedAt),
-        category: "Proposals",
+        creationKey,
+        category: PROPOSALS_EXPORT_CATEGORY,
         explicitStorageType: stored.provider,
         mimeType: "text/markdown",
         originalFilename: filename,

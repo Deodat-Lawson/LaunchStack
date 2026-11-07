@@ -99,6 +99,43 @@ export interface RenderedPdf {
     trace: string | null;
 }
 
+export type ScreenshotFormat = "png" | "jpeg" | "webp";
+
+export interface HtmlScreenshotParams {
+    /** A complete HTML document; becomes Gotenberg's `index.html`. */
+    html: string;
+    /** Browser window width in CSS pixels. Gotenberg's default is 800. */
+    width?: number;
+    /**
+     * Browser window height in CSS pixels; a page's `100vh` resolves against
+     * it. Gotenberg's default is 600.
+     */
+    height?: number;
+    /**
+     * Capture only the window instead of the whole page. Default false: the
+     * shot runs to the bottom of the page.
+     */
+    clip?: boolean;
+    /** Gotenberg's default is png. */
+    format?: ScreenshotFormat;
+    /** 0–100, for jpeg and webp. */
+    quality?: number;
+    /**
+     * Settle time after the page's load event, as a Go duration ("1s",
+     * "500ms"), for web fonts to swap in.
+     */
+    waitDelay?: string;
+}
+
+export interface RenderedImage {
+    /** The image bytes. */
+    image: Buffer;
+    /** The `Content-Type` Gotenberg answered with. */
+    contentType: string;
+    /** Gotenberg's per-request trace id — quote it when reading the service's logs. */
+    trace: string | null;
+}
+
 /**
  * File extensions the LibreOffice route is asked to handle. Gotenberg accepts
  * many more; this is the curated product surface, and the gate web routes

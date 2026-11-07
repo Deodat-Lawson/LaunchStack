@@ -587,7 +587,7 @@
       "noClients": "未配置任何提供商的 OAuth 客户端。请设置 <code>.env.example</code> 中（Workspace connections 部分）所述的 client-id / client-secret，并设置 <code>EMBEDDING_SECRETS_KEY</code>。",
       "actionsFor": "{label} 的操作",
       "connected": "已连接",
-      "personal": "你的邮箱，仅你可见",
+      "personal": "你的连接，仅你可见",
       "connectedBy": "由 {who} 连接",
       "confirmTitle": "要断开此工作区与 {label} 的连接吗？",
       "confirmBody": "该连接将被移除，其访问权限也会被撤销。如需重新连接，请使用“添加来源 → 连接”。"

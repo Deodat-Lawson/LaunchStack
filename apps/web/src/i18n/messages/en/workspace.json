@@ -551,6 +551,7 @@
     "connectorNoChannels": "{name} connected, but the sign-in gave no permission to post. Check the scopes under Accounts.",
     "connectorPartial": "{name} connected, but its Pages could not be read. Use Refresh Pages under Accounts.",
     "connectorCancelled": "{name} connection was cancelled",
+    "connectorClaimed": "That {name} account is already connected by someone else in this workspace. Connect with your own {name} account.",
     "connectorFailed": "{name} connection failed — try again",
     "agentWillAnswer": "{name} will answer your next message",
     "thisChat": "This chat",

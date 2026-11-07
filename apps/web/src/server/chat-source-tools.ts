@@ -31,6 +31,7 @@ import { throwIfChatAborted } from "~/lib/chat-stream";
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
 import { findWorkspacePassages } from "~/server/mcp/workspace-search";
 import { parseDocumentId } from "~/server/mcp/tools/shared";
+import { isPerUserProvider } from "~/server/db/schema/connectors";
 import { listConnectionsForCompany } from "~/server/services/connectors/connection-store";
 import { getSyncState } from "~/server/services/connectors/google-drive/store";
 import { getSyncState as getNotionSyncState } from "~/server/services/connectors/notion/store";
@@ -696,7 +697,7 @@ export interface SourcesOverview {
 /**
  * What the person can open, by origin, and which source-importing apps are
  * connected. Any member may see a workspace's connections in Settings; a
- * Gmail connection is personal, so only its owner's shows (as there).
+ * Gmail or Notion connection is personal, so only its owner's shows (as there).
  */
 export async function loadSourcesOverview(ctx: WorkspaceContext): Promise<SourcesOverview> {
     const [inventory, connections] = await Promise.all([
@@ -731,12 +732,17 @@ function inventoryLine(inventory: SourceInventory): string {
     return `The person can open ${plural(inventory.total, "source")}${parts.length > 0 ? `: ${parts.join(", ")}` : ""}.`;
 }
 
+/** A per-user connection is the person's own; the others are the workspace's. */
+function connectedTo(app: ConnectedApp): string {
+    return isPerUserProvider(app.provider) ? "for this person" : "to this workspace";
+}
+
 function connectionLines(overview: SourcesOverview): string[] {
     return overview.connected.map(app => {
         const name = originLabel(app.provider) ?? app.provider;
         const imported = overview.inventory.byOrigin.find(row => row.from === app.provider);
         if (app.status !== "active") {
-            return `${name} was connected to this workspace but the connection has lapsed: it needs reconnecting (Add a source → ${name}) before anything new imports.`;
+            return `${name} was connected ${connectedTo(app)} but the connection has lapsed: it needs reconnecting (Add a source → ${name}) before anything new imports.`;
         }
         const synced = app.lastSyncAt
             ? `, last synced ${app.lastSyncAt.toISOString().slice(0, 16).replace("T", " ")} UTC`
@@ -745,7 +751,7 @@ function connectionLines(overview: SourcesOverview): string[] {
             app.provider === "google-drive"
                 ? " LaunchStack imports the files and folders someone chose to add from Google Drive, not the whole Drive, so what you can list is what was imported."
                 : app.provider === "notion"
-                  ? " LaunchStack imports the Notion pages someone shared with it on Notion's consent screen, not the whole Notion workspace, so what you can list is what was imported."
+                  ? " LaunchStack imports the Notion pages this person picked on Notion's consent screen, not the whole Notion workspace, so what you can list is what was imported."
                   : "";
         const where =
             app.provider === "google-drive"
@@ -756,7 +762,7 @@ function connectionLines(overview: SourcesOverview): string[] {
         const none = imported
             ? ""
             : ` None of its files are among the sources this person can open${where}.`;
-        return `${name} is connected to this workspace${synced}.${scope}${none}`;
+        return `${name} is connected ${connectedTo(app)}${synced}.${scope}${none}`;
     });
 }
 

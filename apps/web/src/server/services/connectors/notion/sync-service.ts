@@ -18,10 +18,11 @@ import {
 
 import { DELETED_HERE_DETAIL } from "@launchstack/pipelines/connectors";
 
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
+import { resolvePermissionsForRole } from "~/lib/authz/resolve";
 import { db } from "~/server/db";
-import { users } from "~/server/db/schema";
+import { userCompanyMemberships, users } from "~/server/db/schema";
 import type { OwnerRef } from "~/server/workspace/ownership";
 import {
     getConnectionAccessToken,
@@ -31,7 +32,7 @@ import {
 } from "../connection-store";
 import { listDeletedSourceIds } from "../deleted-items";
 import { ConnectorGrantRevokedError } from "../providers/types";
-import { NOTION_PROVIDER } from "./config";
+import { NOTION_PAUSED, NOTION_PROVIDER } from "./config";
 import { ensureNotionFolder } from "./folder";
 import { createNotionSink, listKnownSourceIds, markMissingDocuments } from "./sink";
 import {
@@ -62,6 +63,21 @@ export function reportCounts(report: NotionSyncResult): Record<string, unknown> 
     };
 }
 
+/** Why the owner can't sync now (one of NOTION_PAUSED); null when they can. */
+async function pauseReason(
+    companyId: bigint,
+    owner: { readonly role: string | null; readonly status: string | null }
+): Promise<string | null> {
+    if (owner.role == null || (owner.status != null && owner.status !== "active")) {
+        return NOTION_PAUSED.ownerLeft;
+    }
+    const permissions = await resolvePermissionsForRole(companyId, owner.role);
+    if (!permissions.has("documents.upload")) {
+        return NOTION_PAUSED.noUpload;
+    }
+    return null;
+}
+
 export async function runNotionSync(
     connectionId: number,
     options?: { readonly force?: boolean }
@@ -80,22 +96,44 @@ export async function runNotionSync(
     }
 
     try {
-        // Pages are attributed to, and their folder owned by, whoever connected Notion.
-        if (connection.grantedByUserId == null) {
-            throw new Error(
-                "The member who connected Notion left the workspace — reconnect required"
-            );
+        // A Notion connection is its owner's: the pages are attributed to
+        // them and land in a folder only they can see until they share it.
+        // The row is deleted with its owner, so a missing one is a bug, not
+        // a departure.
+        if (connection.ownerUserId == null) {
+            throw new Error("This Notion connection has no owner — reconnect required");
         }
-        const [granter] = await db
-            .select({ authUserId: users.userId })
+        const [ownerRow] = await db
+            .select({
+                authUserId: users.userId,
+                role: userCompanyMemberships.role,
+                status: userCompanyMemberships.status,
+            })
             .from(users)
-            .where(eq(users.id, Number(connection.grantedByUserId)))
+            .leftJoin(
+                userCompanyMemberships,
+                and(
+                    eq(userCompanyMemberships.userId, users.id),
+                    eq(userCompanyMemberships.companyId, connection.companyId)
+                )
+            )
+            .where(eq(users.id, Number(connection.ownerUserId)))
             .limit(1);
-        if (!granter) throw new Error("The member who connected Notion no longer exists");
+        if (!ownerRow) throw new Error("The member who connected Notion no longer exists");
+
+        // Syncing adds documents on the owner's behalf, so it stops when they
+        // could no longer add one themselves: they left (leaving deletes the
+        // connection too; this is the backstop) or lost upload access. Paused,
+        // not failed — nothing to retry until someone changes the role.
+        const paused = await pauseReason(connection.companyId, ownerRow);
+        if (paused) {
+            await releaseSyncLease(connectionId, { status: "error", error: paused });
+            return { outcome: "skipped", reason: paused };
+        }
         const owner: OwnerRef = {
             companyId: connection.companyId,
-            userPk: BigInt(connection.grantedByUserId),
-            authUserId: granter.authUserId,
+            userPk: BigInt(connection.ownerUserId),
+            authUserId: ownerRow.authUserId,
         };
 
         const state = await getSyncState(connectionId);
@@ -114,7 +152,7 @@ export async function runNotionSync(
             createNotionSink({
                 companyId: connection.companyId,
                 connectionId,
-                userId: granter.authUserId,
+                userId: ownerRow.authUserId,
                 category: folder.path,
             }),
         ]);

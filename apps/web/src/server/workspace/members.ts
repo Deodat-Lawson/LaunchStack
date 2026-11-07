@@ -32,6 +32,11 @@ import {
     type MembershipStatus,
 } from "~/lib/authz/permissions";
 import { copy } from "~/i18n/copy";
+import {
+    deleteOwnedConnections,
+    type RemovedConnection,
+} from "~/server/services/connectors/connection-store";
+import { revokeConnectionTokens } from "~/server/services/connectors/revoke";
 
 import type { Executor } from "./db-types";
 import { deleteUserSessionGrants, handOverSoleManaged, workspaceOwnerHeir } from "./ownership";
@@ -338,15 +343,19 @@ export async function updateMember(
 /**
  * Everything a departed member leaves behind in this workspace: the
  * membership (with its profile override), their photo for this workspace,
- * their group seats, and grants naming them. The `users` row
- * stays; if it pointed at this workspace as its default, it is repointed at
- * another workspace they still belong to.
+ * their group seats, grants naming them, and their own connections (Gmail,
+ * Notion — a per-user grant must not keep importing for someone who has
+ * gone, and nobody else can see it to stop it). The `users` row stays; if it
+ * pointed at this workspace as its default, it is repointed at another
+ * workspace they still belong to. Returns the removed connections so the
+ * caller can audit them and, once committed, revoke their tokens.
  */
 async function deleteMembershipEverywhere(
     tx: Executor,
     companyId: bigint,
     userId: bigint
-): Promise<void> {
+): Promise<RemovedConnection[]> {
+    const removedConnections = await deleteOwnedConnections(tx, companyId, userId);
     await tx
         .delete(userCompanyMemberships)
         .where(
@@ -420,6 +429,38 @@ async function deleteMembershipEverywhere(
                 .where(eq(users.id, Number(userId)));
         }
     }
+    return removedConnections;
+}
+
+/** One audit line per connection that left with a member. */
+async function recordRemovedConnections(
+    tx: Executor,
+    companyId: bigint,
+    actorUserId: string,
+    memberUserId: bigint,
+    removed: readonly RemovedConnection[]
+): Promise<void> {
+    for (const connection of removed) {
+        await recordAuditEvent(tx, {
+            companyId,
+            actorUserId,
+            action: "connector.disconnected",
+            targetType: "connector",
+            targetId: connection.provider,
+            detail: {
+                connectionId: connection.id,
+                ownerUserId: memberUserId.toString(),
+                reason: "member-departed",
+            },
+        });
+    }
+}
+
+/** Best effort, after the commit: a provider being down must not undo a removal. */
+async function revokeRemovedConnections(removed: readonly RemovedConnection[]): Promise<void> {
+    await Promise.all(
+        removed.map(connection => revokeConnectionTokens(connection.provider, connection))
+    );
 }
 
 export async function removeMember(
@@ -433,14 +474,15 @@ export async function removeMember(
     }
     await assertNotLastOwner(ctx.companyId, target);
 
-    await db.transaction(async tx => {
+    const removed = await db.transaction(async tx => {
         // Their sole-managed files and folders pass to whoever removed them (ADR-014).
         await handOverSoleManaged(tx, ctx.companyId, userId, {
             companyId: ctx.companyId,
             userPk: ctx.userPk,
             authUserId: ctx.authUserId,
         });
-        await deleteMembershipEverywhere(tx, ctx.companyId, userId);
+        const connections = await deleteMembershipEverywhere(tx, ctx.companyId, userId);
+        await recordRemovedConnections(tx, ctx.companyId, ctx.authUserId, userId, connections);
         await recordAuditEvent(tx, {
             companyId: ctx.companyId,
             actorUserId: ctx.authUserId,
@@ -454,7 +496,9 @@ export async function removeMember(
                 status: toStatus(target.status),
             },
         });
+        return connections;
     });
+    await revokeRemovedConnections(removed);
     return { success: true };
 }
 
@@ -468,7 +512,7 @@ export async function leaveWorkspace(
         }
     }
 
-    await db.transaction(async tx => {
+    const removed = await db.transaction(async tx => {
         // Someone leaving on their own hands their sole-managed items to the owner.
         const heir = await workspaceOwnerHeir(tx, ctx.companyId);
         if (heir !== null && heir !== ctx.userPk) {
@@ -485,7 +529,8 @@ export async function leaveWorkspace(
                 });
             }
         }
-        await deleteMembershipEverywhere(tx, ctx.companyId, ctx.userPk);
+        const connections = await deleteMembershipEverywhere(tx, ctx.companyId, ctx.userPk);
+        await recordRemovedConnections(tx, ctx.companyId, ctx.authUserId, ctx.userPk, connections);
         await recordAuditEvent(tx, {
             companyId: ctx.companyId,
             actorUserId: ctx.authUserId,
@@ -494,7 +539,9 @@ export async function leaveWorkspace(
             targetId: ctx.userPk,
             detail: { role: ctx.role },
         });
+        return connections;
     });
+    await revokeRemovedConnections(removed);
     return { success: true, redirectTo: "/workspaces" };
 }
 

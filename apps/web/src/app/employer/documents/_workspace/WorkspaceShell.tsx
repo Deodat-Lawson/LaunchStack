@@ -2052,6 +2052,8 @@ export function WorkspaceShell() {
                 toast.warning(tRef.current("shell.connectorPartial", { name }));
             } else if (connectorResultParam === "denied") {
                 toast.info(tRef.current("shell.connectorCancelled", { name }));
+            } else if (connectorResultParam === "claimed") {
+                toast.error(tRef.current("shell.connectorClaimed", { name }));
             } else {
                 toast.error(tRef.current("shell.connectorFailed", { name }));
             }

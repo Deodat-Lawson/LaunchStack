@@ -95,10 +95,11 @@ import type { IconProps } from "~/components/icons/types";
  *     Drive and opens it in a new tab; the source exists here immediately and
  *     the Drive reconciler folds later edits back in. The tab is hidden unless
  *     `/api/connectors/google` reports the feature enabled.
- *   - Connectors: Slack/GitHub/Notion start the workspace OAuth flow at
- *     `/api/connectors/<provider>/oauth/start`. Notion has its own panel
+ *   - Connectors: Slack/GitHub start the workspace OAuth flow at
+ *     `/api/connectors/<provider>/oauth/start`. Notion uses the same route
+ *     but the connection is the member's own; it has its own panel
  *     (NotionConnectPanel): the pages picked on Notion's consent screen sync
- *     into `Notion/<workspace>`. Gmail has its own panel
+ *     into `Notion/<workspace>`, private to them. Gmail has its own panel
  *     (GmailConnectPanel): the connection is the member's own, started at
  *     `/api/connectors/google/oauth/start?provider=gmail`, and its mail lands
  *     in a folder only they can see. Dropbox remains a coming-soon CTA.

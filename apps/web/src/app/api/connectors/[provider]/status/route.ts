@@ -2,10 +2,13 @@
  * Connector status for the providers with their own panel — the panel's
  * single source of truth. Google Drive: configured / connected / account /
  * picked items / last sync / files deleted here, plus the public Picker
- * config. Notion: every
- * connected Notion workspace with its folder and last sync
- * (`loadNotionStatus`). Other providers have no per-provider detail and are
- * served by GET /api/connectors.
+ * config. Notion: every Notion workspace the caller connected, with its
+ * folder and last sync (`loadNotionStatus`) — Notion connections are
+ * per-user, so any member may read their own (and never another member's),
+ * like Gmail; `canConnect` says whether they may connect, sync or choose
+ * pages, which needs `documents.upload`. Someone who lost that still sees
+ * their connections, so they can disconnect them. Other providers have no
+ * per-provider detail and are served by GET /api/connectors.
  *
  * With several Drive accounts connected, the panel manages the primary
  * (oldest) connection; the rest appear in the generic connections list.
@@ -32,6 +35,7 @@ import {
 } from "~/server/services/connectors/deleted-items";
 import { getSyncState, listPickedItems } from "~/server/services/connectors/google-drive/store";
 import { loadNotionStatus } from "~/server/services/connectors/notion/status";
+import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { requireConnectorAdmin } from "~/server/services/connectors/workspace-guard";
 import { db } from "~/server/db";
 import {
@@ -64,12 +68,14 @@ export async function GET(request: Request, { params }: { params: Promise<{ prov
                 );
             }
 
+            if (provider === "notion") {
+                const context = await requireWorkspaceContext();
+                if (!context.success) return context.response;
+                return createSuccessResponse(await loadNotionStatus(context.data));
+            }
+
             const guard = await requireConnectorAdmin();
             if (!guard.ok) return guard.response;
-
-            if (provider === "notion") {
-                return createSuccessResponse(await loadNotionStatus(guard.ctx));
-            }
 
             const configured = isConnectorConfigured("google-drive");
             const picker = getPickerPublicConfig();

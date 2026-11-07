@@ -270,6 +270,10 @@ import {
     POST as addGmailItems,
 } from "~/app/api/connectors/gmail/items/route";
 import { POST as syncGmail } from "~/app/api/connectors/gmail/sync/route";
+import { GET as startProviderOAuth } from "~/app/api/connectors/[provider]/oauth/start/route";
+import { GET as providerOAuthCallback } from "~/app/api/connectors/[provider]/oauth/callback/route";
+import { GET as providerStatus } from "~/app/api/connectors/[provider]/status/route";
+import { POST as syncProvider } from "~/app/api/connectors/[provider]/sync/route";
 import { POST as openInDrive } from "~/app/api/documents/[id]/google-docs/open/route";
 import {
     GET as previewAgentKnowledge,
@@ -633,7 +637,51 @@ const GATES: readonly Gate[] = [
         deniedRole: "viewer",
         call: () => syncGmail(json("/api/connectors/gmail/sync", "POST", {})),
     },
+    // documents.upload — a Notion connection is the member's own (per-user),
+    // so connecting and syncing ask for upload access. Reading your own
+    // status does not (someone who lost upload access can still disconnect);
+    // see notion-status-route.test.ts.
+    {
+        route: "GET /api/connectors/notion/oauth/start",
+        permission: "documents.upload",
+        deniedRole: "viewer",
+        call: () =>
+            startProviderOAuth(
+                new Request("http://localhost/api/connectors/notion/oauth/start"),
+                params({ provider: "notion" })
+            ),
+    },
+    {
+        route: "POST /api/connectors/notion/sync",
+        permission: "documents.upload",
+        deniedRole: "viewer",
+        call: () =>
+            syncProvider(
+                json("/api/connectors/notion/sync", "POST", {}),
+                params({ provider: "notion" })
+            ),
+    },
     // connectors.manage
+    {
+        route: "GET /api/connectors/slack/oauth/start (a workspace connection)",
+        permission: "connectors.manage",
+        deniedRole: "member",
+        call: () =>
+            startProviderOAuth(
+                new Request("http://localhost/api/connectors/slack/oauth/start"),
+                params({ provider: "slack" })
+            ),
+    },
+    {
+        route: "GET /api/connectors/google-drive/status",
+        permission: "connectors.manage",
+        deniedRole: "member",
+        call: () =>
+            providerStatus(
+                new Request("http://localhost/api/connectors/google-drive/status"),
+                params({ provider: "google-drive" })
+            ),
+    },
     {
         route: "DELETE /api/connectors/google",
         permission: "connectors.manage",
@@ -797,6 +845,20 @@ describe("permission gates", () => {
         if (body.permission !== undefined) {
             expect(body.permission).toBe(gate.permission);
         }
+    });
+
+    it("GET /api/connectors/notion/oauth/callback sends a viewer back with an error flag", async () => {
+        signInAs("viewer");
+
+        const response = await providerOAuthCallback(
+            new Request("http://localhost/api/connectors/notion/oauth/callback?code=c&state=s"),
+            params({ provider: "notion" })
+        );
+
+        expect(response.status).toBe(307);
+        const location = response.headers.get("location") ?? "";
+        expect(location).toContain("connector=notion");
+        expect(location).toContain("result=error");
     });
 
     it("GET /api/connectors/google/oauth/callback sends a member back with an error flag", async () => {

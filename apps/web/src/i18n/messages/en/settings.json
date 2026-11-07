@@ -587,7 +587,7 @@
       "noClients": "No provider OAuth clients are configured. Set the client-id / client-secret pairs described in <code>.env.example</code> (Workspace connections block) plus <code>EMBEDDING_SECRETS_KEY</code>.",
       "actionsFor": "Actions for {label}",
       "connected": "connected",
-      "personal": "your mailbox, private to you",
+      "personal": "yours, private to you",
       "connectedBy": "connected by {who}",
       "confirmTitle": "Disconnect {label} from this workspace?",
       "confirmBody": "The connection is removed and its access revoked. To connect again, use Add source → Connect."

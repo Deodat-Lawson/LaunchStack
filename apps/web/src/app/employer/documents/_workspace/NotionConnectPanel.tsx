@@ -8,6 +8,9 @@
  * decides what LaunchStack may read, and whatever was picked syncs into
  * Sources (read-only, every 15 minutes, first run straight after connect).
  * "Choose pages" runs the same consent again, which reopens the picker.
+ * Connections are per-user: the panel lists only the caller's own, and
+ * anyone who may add files can connect. Someone who has lost that permission
+ * still sees their connections, with Disconnect only (`canConnect`).
  *
  * States: loading → not-configured → not-connected → connected (one card per
  * connected Notion workspace: folder, last sync, pages deleted here with Sync
@@ -34,17 +37,20 @@ interface NotionConnection {
     readonly workspaceName: string | null;
     readonly status: string;
     readonly statusDetail: string | null;
-    readonly connectedBy: string | null;
     readonly folderPath: string | null;
     readonly lastSyncAt: string | null;
     readonly lastSyncStatus: string | null;
     readonly lastSyncError: string | null;
+    /** The last run paused (owner left, or lost upload access); worded here. */
+    readonly paused?: "ownerLeft" | "noUpload" | null;
     readonly lastSyncReport: Record<string, unknown> | null;
     readonly deletedHere?: DeletedHereSummary;
 }
 
 interface NotionStatus {
     readonly configured: boolean;
+    /** False when the caller may not add files: connections show Disconnect only. */
+    readonly canConnect?: boolean;
     readonly connections: readonly NotionConnection[];
 }
 
@@ -89,10 +95,13 @@ function ConnectionCard({
     connection,
     refresh,
     onDisconnected,
+    canConnect,
 }: {
     readonly connection: NotionConnection;
     readonly refresh: () => Promise<unknown>;
     readonly onDisconnected: () => void;
+    /** Sync now, Choose pages, Reconnect and Sync again need upload access. */
+    readonly canConnect: boolean;
 }) {
     const t = useTranslations("sources.notionConnect");
     const tc = useTranslations("common");
@@ -146,16 +155,7 @@ function ConnectionCard({
                 <div className="min-w-0 flex-1">
                     <div className="text-ink truncate text-[13.5px] font-semibold">{name}</div>
                     <div className="text-ink-3 text-[12px]">
-                        {revoked
-                            ? t("revoked")
-                            : [
-                                  syncStatusLabel(phase, connection.lastSyncAt),
-                                  connection.connectedBy
-                                      ? t("connectedBy", { name: connection.connectedBy })
-                                      : null,
-                              ]
-                                  .filter(Boolean)
-                                  .join(" · ")}
+                        {revoked ? t("revoked") : syncStatusLabel(phase, connection.lastSyncAt)}
                     </div>
                     {summary && !revoked && (
                         <div className="text-ink-2 mt-1 text-[12px]">{summary}</div>
@@ -168,7 +168,9 @@ function ConnectionCard({
                     )}
                     {connection.lastSyncStatus === "error" && connection.lastSyncError && (
                         <div className="text-danger mt-1 text-[12px]">
-                            {connection.lastSyncError}
+                            {connection.paused
+                                ? t(`paused.${connection.paused}`)
+                                : connection.lastSyncError}
                         </div>
                     )}
                 </div>
@@ -178,7 +180,7 @@ function ConnectionCard({
                     <SyncStalledNotice />
                 </div>
             )}
-            {!revoked ? (
+            {!revoked && canConnect ? (
                 <DeletedHereList
                     className="mt-3"
                     provider="notion"
@@ -192,7 +194,7 @@ function ConnectionCard({
                 />
             ) : null}
             <div className="mt-3 flex flex-wrap gap-2">
-                {revoked ? (
+                {!canConnect ? null : revoked ? (
                     <Button asChild size="sm">
                         <a href={NOTION_CONNECT_URL}>{t("reconnect")}</a>
                     </Button>
@@ -276,6 +278,7 @@ export function NotionConnectPanel({ tab }: { tab: AddSourceTab }) {
 
     const status = loaded.kind === "ready" ? loaded.status : null;
     const connections = status?.connections ?? [];
+    const canConnect = status?.canConnect ?? true;
 
     return (
         <div>
@@ -306,8 +309,8 @@ export function NotionConnectPanel({ tab }: { tab: AddSourceTab }) {
                 </div>
             )}
 
-            {loaded.kind === "forbidden" && (
-                <p className="text-ink-2 text-[13px]">{t("forbidden")}</p>
+            {(loaded.kind === "forbidden" || (status && !canConnect)) && (
+                <p className="text-ink-2 mb-3.5 text-[13px]">{t("forbidden")}</p>
             )}
 
             {loaded.kind === "error" && <p className="text-danger text-[13px]">{t("loadError")}</p>}
@@ -324,12 +327,13 @@ export function NotionConnectPanel({ tab }: { tab: AddSourceTab }) {
                             connection={connection}
                             refresh={refresh}
                             onDisconnected={() => void refresh()}
+                            canConnect={canConnect}
                         />
                     ))}
                 </ul>
             )}
 
-            {status?.configured && (
+            {status?.configured && canConnect && (
                 <Button
                     asChild
                     className="w-full"

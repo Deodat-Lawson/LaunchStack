@@ -4,7 +4,10 @@
  * imports the file like any new one; the panel then asks for that sync.
  * Body: `{ connectionId, sourceIds }` for named files, or
  * `{ connectionId, all: true }` for everything listed for that connection.
- * Google Drive and Notion only.
+ * Google Drive and Notion only. Drive is the workspace's connection, so it
+ * needs `connectors.manage`; a Notion connection is its owner's (per-user),
+ * so the owner — anyone with `documents.upload` — may bring back their own
+ * pages, and nobody else's connection is in reach.
  *
  * Drive's changes-feed cursor is reset too: nothing changed in Drive, so an
  * idle feed would otherwise call the next run clean and bring nothing back.
@@ -23,14 +26,17 @@ import { translatorFor } from "~/i18n/translate";
 import { validateRequestBody } from "~/lib/validation";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
-import { listConnectionsForCompany } from "~/server/services/connectors/connection-store";
+import {
+    listConnectionsForCompany,
+    listConnectionsForOwner,
+} from "~/server/services/connectors/connection-store";
 import {
     forgetDeletedItems,
     isListableDriveRow,
     listDeletedItems,
 } from "~/server/services/connectors/deleted-items";
 import { resetSyncCursor } from "~/server/services/connectors/google-drive/store";
-import { requireConnectorAdmin } from "~/server/services/connectors/workspace-guard";
+import { requireConnectorGrantor } from "~/server/services/connectors/workspace-guard";
 
 export const runtime = "nodejs";
 
@@ -65,14 +71,18 @@ export async function DELETE(
                 return createValidationError(t("deletedDriveNotionOnly"));
             }
 
-            const guard = await requireConnectorAdmin();
+            const guard = await requireConnectorGrantor(provider);
             if (!guard.ok) return guard.response;
 
             const body = await validateRequestBody(request, RestoreSchema);
             if (!body.success) return body.response;
 
-            // Only this workspace's connections of this provider.
-            const connections = await listConnectionsForCompany(guard.ctx.companyId, provider);
+            // Only this workspace's connections of this provider — for Notion,
+            // only the caller's own.
+            const connections =
+                provider === "notion"
+                    ? await listConnectionsForOwner(guard.ctx.companyId, provider, guard.ctx.userPk)
+                    : await listConnectionsForCompany(guard.ctx.companyId, provider);
             const connection = connections.find(row => String(row.id) === body.data.connectionId);
             if (!connection) return createNotFoundError(t("connectionNotFound"));
 

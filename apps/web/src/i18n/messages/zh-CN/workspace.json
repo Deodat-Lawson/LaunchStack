@@ -551,6 +551,7 @@
     "connectorNoChannels": "{name} 已连接，但登录时未授予发布权限。请在“账户”中检查授权范围。",
     "connectorPartial": "{name} 已连接，但无法读取其主页。请在“账户”中刷新主页。",
     "connectorCancelled": "{name} 连接已取消",
+    "connectorClaimed": "该 {name} 账户已由此工作区的其他成员连接。请使用你自己的 {name} 账户连接。",
     "connectorFailed": "{name} 连接失败——请重试",
     "agentWillAnswer": "{name} 将回答你的下一条消息",
     "thisChat": "此对话",

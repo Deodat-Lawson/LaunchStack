@@ -4,6 +4,9 @@
  * httpOnly cookie, and redirect. Google Drive and Gmail connect through their
  * own flow at /api/connectors/google/oauth/start. For Notion, running this
  * again reopens Notion's page picker, which is how more pages are added.
+ * Notion is a per-user connection, so any member who may upload files may
+ * start it; the others connect for the whole workspace and need
+ * `connectors.manage` (see requireConnectorGrantor).
  */
 
 import { NextResponse } from "next/server";
@@ -25,7 +28,7 @@ import {
 } from "~/server/services/connectors/oauth-state";
 import {
     notConfiguredResponse,
-    requireConnectorAdmin,
+    requireConnectorGrantor,
 } from "~/server/services/connectors/workspace-guard";
 import { publicOrigin } from "~/server/public-origin";
 
@@ -46,7 +49,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ prov
             );
         }
 
-        const guard = await requireConnectorAdmin();
+        const guard = await requireConnectorGrantor(provider);
         if (!guard.ok) return guard.response;
 
         const config = getConnectorConfig(provider, publicOrigin(request));

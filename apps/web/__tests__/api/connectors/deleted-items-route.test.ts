@@ -3,8 +3,9 @@
  * /api/connectors/[provider]/deleted forgets the record on one of this
  * workspace's connections, so the next sync imports the file again. A Drive
  * file picked on its own is never forgotten here (picking it again is how it
- * returns), Drive's cursor is reset so an idle feed can't skip the run, and
- * only connector admins may do it.
+ * returns), Drive's cursor is reset so an idle feed can't skip the run. Drive
+ * is for connector admins; a Notion connection is its owner's, so only the
+ * owner's own connections are in reach.
  */
 import type { NextResponse } from "next/server";
 
@@ -13,10 +14,11 @@ jest.mock("~/lib/rate-limit-middleware", () => ({
         handler(),
 }));
 jest.mock("~/server/services/connectors/workspace-guard", () => ({
-    requireConnectorAdmin: jest.fn(),
+    requireConnectorGrantor: jest.fn(),
 }));
 jest.mock("~/server/services/connectors/connection-store", () => ({
     listConnectionsForCompany: jest.fn(),
+    listConnectionsForOwner: jest.fn(),
 }));
 jest.mock("~/server/services/connectors/google-drive/store", () => ({
     resetSyncCursor: jest.fn(),
@@ -30,14 +32,17 @@ jest.mock("~/server/services/connectors/deleted-items", () => ({
 }));
 
 import { DELETE } from "~/app/api/connectors/[provider]/deleted/route";
-import { listConnectionsForCompany } from "~/server/services/connectors/connection-store";
+import {
+    listConnectionsForCompany,
+    listConnectionsForOwner,
+} from "~/server/services/connectors/connection-store";
 import {
     forgetDeletedItems,
     listDeletedItems,
     type DeletedItemRow,
 } from "~/server/services/connectors/deleted-items";
 import { resetSyncCursor } from "~/server/services/connectors/google-drive/store";
-import { requireConnectorAdmin } from "~/server/services/connectors/workspace-guard";
+import { requireConnectorGrantor } from "~/server/services/connectors/workspace-guard";
 
 import { makeWorkspaceContext } from "../../helpers/workspace-context";
 
@@ -67,10 +72,11 @@ function restore(provider: string, body: Record<string, unknown>) {
 
 beforeEach(() => {
     jest.clearAllMocks();
-    jest.mocked(requireConnectorAdmin).mockResolvedValue({ ok: true, ctx });
+    jest.mocked(requireConnectorGrantor).mockResolvedValue({ ok: true, ctx });
     jest.mocked(listConnectionsForCompany).mockResolvedValue([
         { id: 7, status: "active" },
     ] as never);
+    jest.mocked(listConnectionsForOwner).mockResolvedValue([{ id: 7, status: "active" }] as never);
     jest.mocked(listDeletedItems).mockResolvedValue([
         row("tpl-1", "templates"),
         row("tpl-2", "templates"),
@@ -112,9 +118,20 @@ it("forgets Notion pages without touching Drive's cursor", async () => {
     const res = await restore("notion", { connectionId: "7", sourceIds: ["page-1"] });
 
     expect(res.status).toBe(200);
-    expect(listConnectionsForCompany).toHaveBeenCalledWith(ctx.companyId, "notion");
+    expect(requireConnectorGrantor).toHaveBeenCalledWith("notion");
+    expect(listConnectionsForOwner).toHaveBeenCalledWith(ctx.companyId, "notion", ctx.userPk);
+    expect(listConnectionsForCompany).not.toHaveBeenCalled();
     expect(forgetDeletedItems).toHaveBeenCalledWith(7, { sourceIds: ["page-1"] });
     expect(resetSyncCursor).not.toHaveBeenCalled();
+});
+
+it("never reaches another member's Notion connection", async () => {
+    // The caller owns no Notion connection 7, though the workspace has one.
+    jest.mocked(listConnectionsForOwner).mockResolvedValue([]);
+    const res = await restore("notion", { connectionId: "7", all: true });
+
+    expect(res.status).toBe(404);
+    expect(forgetDeletedItems).not.toHaveBeenCalled();
 });
 
 it("refuses a connection that isn't this workspace's", async () => {
@@ -130,14 +147,15 @@ it("refuses other providers and bad bodies", async () => {
     expect(forgetDeletedItems).not.toHaveBeenCalled();
 });
 
-it("is for connector admins only", async () => {
+it("keeps Drive for connector admins", async () => {
     const { NextResponse } = await import("next/server");
-    jest.mocked(requireConnectorAdmin).mockResolvedValue({
+    jest.mocked(requireConnectorGrantor).mockResolvedValue({
         ok: false,
         response: NextResponse.json({ success: false }, { status: 403 }),
     });
     const res = await restore("google-drive", { connectionId: "7", all: true });
 
+    expect(requireConnectorGrantor).toHaveBeenCalledWith("google-drive");
     expect(res.status).toBe(403);
     expect(forgetDeletedItems).not.toHaveBeenCalled();
 });

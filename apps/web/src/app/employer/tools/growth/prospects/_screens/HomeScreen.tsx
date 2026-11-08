@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { toast } from "sonner";
 
 import { ToolLink } from "~/components/tool-app/ToolLink";
@@ -24,14 +24,23 @@ import { FunnelBar } from "../_components/FunnelBar";
 import { PageHeader, SectionHeading } from "~/components/tools/PageHeader";
 import { SkeletonRows } from "~/components/tools/SkeletonRows";
 
+function sourceIsOff(y: SourceYield): boolean {
+    return y.status === "off" || y.status === "skipped";
+}
+
 function YieldRow({ y, max }: { y: SourceYield; max: number }) {
     const t = useTranslations("growth.prospects");
     const word = useCopyText();
-    const off = y.status === "off" || y.status === "skipped";
+    const off = sourceIsOff(y);
     const found = y.kind === "signal" ? t("common.signals", { count: y.found }) : String(y.found);
     return (
-        <div className="border-line-2 grid grid-cols-[minmax(120px,150px)_1fr_64px_56px] items-center gap-3 border-t px-4 py-2 text-[13px] first:border-t-0">
-            <span className={cn("truncate", off ? "text-ink-3" : "text-ink")}>
+        <div
+            className={cn(
+                "border-line-2 grid grid-cols-[minmax(120px,150px)_1fr_64px_56px] items-center gap-3 border-t px-4 py-2.5 text-[13px] first:border-t-0",
+                off && "bg-panel-2/40"
+            )}
+        >
+            <span className={cn("truncate font-medium", off ? "text-ink-3" : "text-ink")}>
                 {word(y.labelCopy, y.label)}
             </span>
             <span className="bg-line-2 relative h-2 overflow-hidden rounded-full" aria-hidden>
@@ -50,7 +59,7 @@ function YieldRow({ y, max }: { y: SourceYield; max: number }) {
             </span>
             <span className="text-ink-2 text-right tabular-nums">
                 {off ? (
-                    <span className="text-ink-3 text-xs">
+                    <span className="text-ink-3 text-xs leading-snug">
                         {y.detail ? word(y.detailCopy, y.detail) : t("home.off")}
                     </span>
                 ) : (
@@ -92,6 +101,10 @@ export function HomeScreen() {
 
     const headline = d ? segmentText(d.segment).headline : "";
     const maxFound = d ? Math.max(1, ...d.yield.map(y => y.found)) : 1;
+    const yieldRows = useMemo(() => {
+        if (!d) return [];
+        return [...d.yield].sort((a, b) => Number(sourceIsOff(a)) - Number(sourceIsOff(b)));
+    }, [d]);
 
     // No segment yet: ask who you sell to, on the page, instead of a disabled
     // button and a popover to find.
@@ -107,14 +120,11 @@ export function HomeScreen() {
                         d.lastRunAt ? (
                             t("home.subWithRun", {
                                 companies: d.segment.counts.companies,
-                                deals: d.segment.counts.deals,
                                 when: relativeTime(d.lastRunAt),
-                                sources: d.segment.counts.sources,
                             })
                         ) : (
                             t("home.subNoRun", {
                                 companies: d.segment.counts.companies,
-                                deals: d.segment.counts.deals,
                             })
                         )
                     ) : (
@@ -135,6 +145,7 @@ export function HomeScreen() {
 
             {home.error && <InlineError message={home.error} onRetry={() => void home.reload()} />}
 
+            {/* 1. What to do next — the morning job */}
             <section>
                 <SectionHeading
                     title={t("home.todo")}
@@ -186,9 +197,43 @@ export function HomeScreen() {
                 )}
             </section>
 
+            {/* 2. Companies worth opening — next to the job, not buried */}
             <section>
                 <SectionHeading
-                    title={t("common.deals")}
+                    title={t("home.fresh")}
+                    aside={d?.lastRunAt ? t("home.fromLastRun") : undefined}
+                />
+                {home.loading || !d ? (
+                    <SkeletonRows rows={4} height={56} />
+                ) : d.fresh.length === 0 ? (
+                    <EmptyState title={t("home.nothingNew")} body={t("home.nothingNewBody")} />
+                ) : (
+                    <div className="border-line bg-panel overflow-hidden rounded-lg border">
+                        {d.fresh.map(c => (
+                            <ToolLink
+                                key={c.id}
+                                href={href(`/companies/${c.id}`)}
+                                className="border-line-2 hover:bg-panel-2 focus-visible:bg-panel-2 grid grid-cols-[1fr_auto] items-center gap-4 border-t px-4 py-3 outline-none first:border-t-0"
+                            >
+                                <span className="min-w-0">
+                                    <span className="text-ink block truncate text-sm font-medium">
+                                        {c.name}
+                                    </span>
+                                    <span className="text-ink-2 block truncate text-xs">
+                                        {word(c.whyCopy, c.why)}
+                                    </span>
+                                </span>
+                                <FitMeter value={c.fit} threshold={c.fitThreshold} />
+                            </ToolLink>
+                        ))}
+                    </div>
+                )}
+            </section>
+
+            {/* 3. Pipeline — where deals sit */}
+            <section>
+                <SectionHeading
+                    title={t("home.pipeline")}
                     aside={
                         d?.medianDays
                             ? t("home.median", {
@@ -196,7 +241,7 @@ export function HomeScreen() {
                                   from: t(`stages.${d.medianDays.from}`),
                                   to: t(`stages.${d.medianDays.to}`),
                               })
-                            : undefined
+                            : t("home.pipelineHint")
                     }
                 />
                 {home.loading || !d ? (
@@ -206,53 +251,27 @@ export function HomeScreen() {
                 )}
             </section>
 
-            <div className="grid grid-cols-2 gap-7 @max-lg:grid-cols-1">
-                <section className="min-w-0">
-                    <SectionHeading title={t("home.whereFrom")} aside={t("home.whereFromAside")} />
-                    {home.loading || !d ? (
-                        <SkeletonRows rows={6} height={38} />
-                    ) : d.yield.length === 0 ? (
-                        <EmptyState title={t("home.noSources")} body={t("home.noSourcesBody")} />
-                    ) : (
-                        <div className="border-line bg-panel overflow-hidden rounded-lg border">
-                            {d.yield.map(y => (
-                                <YieldRow key={y.sourceId} y={y} max={maxFound} />
-                            ))}
+            {/* 4. Sources last — context, not the job */}
+            <section>
+                <SectionHeading title={t("home.whereFrom")} aside={t("home.whereFromAside")} />
+                {home.loading || !d ? (
+                    <SkeletonRows rows={6} height={38} />
+                ) : yieldRows.length === 0 ? (
+                    <EmptyState title={t("home.noSources")} body={t("home.noSourcesBody")} />
+                ) : (
+                    <div className="border-line bg-panel overflow-hidden rounded-lg border">
+                        <div className="text-ink-3 border-line-2 grid grid-cols-[minmax(120px,150px)_1fr_64px_56px] gap-3 border-b px-4 py-1.5 text-[11.5px]">
+                            <span>{t("home.sourceCol")}</span>
+                            <span />
+                            <span className="text-right">{t("home.foundCol")}</span>
+                            <span className="text-right">{t("home.inDealCol")}</span>
                         </div>
-                    )}
-                </section>
-                <section className="min-w-0">
-                    <SectionHeading
-                        title={t("home.fresh")}
-                        aside={d?.lastRunAt ? t("home.fromLastRun") : undefined}
-                    />
-                    {home.loading || !d ? (
-                        <SkeletonRows rows={4} height={56} />
-                    ) : d.fresh.length === 0 ? (
-                        <EmptyState title={t("home.nothingNew")} body={t("home.nothingNewBody")} />
-                    ) : (
-                        <div className="border-line bg-panel overflow-hidden rounded-lg border">
-                            {d.fresh.map(c => (
-                                <ToolLink
-                                    key={c.id}
-                                    href={href(`/companies/${c.id}`)}
-                                    className="border-line-2 hover:bg-panel-2 focus-visible:bg-panel-2 grid grid-cols-[1fr_auto] items-center gap-4 border-t px-4 py-2.5 outline-none first:border-t-0"
-                                >
-                                    <span className="min-w-0">
-                                        <span className="text-ink block truncate text-sm font-medium">
-                                            {c.name}
-                                        </span>
-                                        <span className="text-ink-2 block truncate text-xs">
-                                            {word(c.whyCopy, c.why)}
-                                        </span>
-                                    </span>
-                                    <FitMeter value={c.fit} threshold={c.fitThreshold} />
-                                </ToolLink>
-                            ))}
-                        </div>
-                    )}
-                </section>
-            </div>
+                        {yieldRows.map(y => (
+                            <YieldRow key={y.sourceId} y={y} max={maxFound} />
+                        ))}
+                    </div>
+                )}
+            </section>
         </div>
     );
 }

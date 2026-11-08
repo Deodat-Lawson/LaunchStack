@@ -12,13 +12,14 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     if (!auth.ok) return auth.response;
     try {
         const { id } = await params;
-        const research = request.nextUrl.searchParams.get("research") === "1";
+        const param = request.nextUrl.searchParams.get("research");
+        const research = param === "refresh" ? "refresh" : param === "1";
         const { company, startedResearch } = await getCompany(auth.ctx, id, { research });
         if (startedResearch) {
             after(() =>
-                runProspectResearch(auth.ctx, id, request.url).catch(error =>
-                    console.error("[prospects] background profile failed:", error)
-                )
+                runProspectResearch(auth.ctx, id, request.url, {
+                    refresh: research === "refresh",
+                }).catch(error => console.error("[prospects] background profile failed:", error))
             );
         }
         return json({ company });

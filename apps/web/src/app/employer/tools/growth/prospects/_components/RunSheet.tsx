@@ -61,7 +61,7 @@ function StepIcon({ status }: { status: RunStep["status"] }) {
     }
 }
 
-function StepRow({ step, child = false }: { step: RunStep; child?: boolean }) {
+export function StepRow({ step, child = false }: { step: RunStep; child?: boolean }) {
     const word = useCopyText();
     return (
         <>
@@ -95,7 +95,7 @@ export function runIsLive(run: RunDto | null): boolean {
     return run !== null && (run.status === "running" || run.status === "queued");
 }
 
-function useElapsed(since: string | null | undefined, live: boolean): number {
+export function useElapsed(since: string | null | undefined, live: boolean): number {
     const [now, setNow] = useState(() => Date.now());
     useEffect(() => {
         if (!live || !since) return;

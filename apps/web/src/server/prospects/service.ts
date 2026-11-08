@@ -18,6 +18,7 @@ import {
     listAgreements,
     listEvents,
     listEvidenceForOrg,
+    listEvidenceForOrgs,
     listExclusions,
     listPartners,
     listPrograms,
@@ -168,6 +169,7 @@ async function loadSegment(ctx: ProspectsCtx, programId: string): Promise<Segmen
     const latest = latestCompleted(runs);
     const rowCtx: RowContext = {
         latestRunId: latest?.id ?? null,
+        latestCandidateIds: new Set(latest?.candidateOrgIds ?? []),
         excludedDomains: new Set(exclusions.domains),
     };
     return { program, items, runs, latest, rowCtx, rows: items.map(i => toCompanyRow(i, rowCtx)) };
@@ -371,7 +373,7 @@ export async function getHome(ctx: ProspectsCtx, programId: string): Promise<Hom
     const live = data.rows.filter(r => !r.excluded);
     const todo: TodoItem[] = [];
 
-    const fresh = live.filter(r => r.isNew).sort((a, b) => (b.fit ?? -1) - (a.fit ?? -1));
+    const fresh = live.filter(r => r.foundInLastRun).sort((a, b) => (b.fit ?? -1) - (a.fit ?? -1));
     const freshHigh = fresh.filter(r => (r.fit ?? 0) >= FIT_THRESHOLD);
     // Keyless profiles rarely clear the live threshold (no brands, no known
     // signal), so a run that found companies still puts them in front of you.
@@ -483,7 +485,7 @@ export async function listCompanies(
 export async function getCompany(
     ctx: ProspectsCtx,
     relationshipId: string,
-    options: { research?: boolean } = {}
+    options: { research?: boolean | "refresh" } = {}
 ): Promise<{ company: CompanyDetail; startedResearch: boolean }> {
     const { item, relationship } = await loadItem(ctx, relationshipId);
     const [evidence, events, agreements, runs, exclusions, research] = await Promise.all([
@@ -492,10 +494,12 @@ export async function getCompany(
         listAgreements(ctx.companyId, relationship.id),
         listRuns(ctx.companyId, { programId: relationship.programId, limit: 50 }),
         listExclusions(ctx.companyId, relationship.programId),
-        claimProspectResearch(ctx, relationshipId, options.research === true),
+        claimProspectResearch(ctx, relationshipId, options.research ?? false),
     ]);
+    const latestRun = latestCompleted(runs);
     const rowCtx: RowContext = {
-        latestRunId: latestCompleted(runs)?.id ?? null,
+        latestRunId: latestRun?.id ?? null,
+        latestCandidateIds: new Set(latestRun?.candidateOrgIds ?? []),
         excludedDomains: new Set(exclusions.domains),
     };
     return {
@@ -686,13 +690,23 @@ export async function listPeople(
     params: { q: string; status: EmailStatusKind | null }
 ): Promise<PersonRow[]> {
     const data = await loadSegment(ctx, programId);
+    const evidence = await listEvidenceForOrgs(ctx.companyId, [
+        ...new Set(data.items.map(item => item.org.id)),
+    ]);
+    const evidenceByOrg = new Map<string, typeof evidence>();
+    for (const item of evidence) {
+        const rows = evidenceByOrg.get(item.orgId) ?? [];
+        rows.push(item);
+        evidenceByOrg.set(item.orgId, rows);
+    }
     let people = data.items.flatMap(item => {
         const blocked = excludedBlock(toCompanyRow(item, data.rowCtx));
         return contactPeople(
             item.relationship,
             item.org,
             blocked?.reason ?? null,
-            blocked?.copy ?? null
+            blocked?.copy ?? null,
+            evidenceByOrg.get(item.org.id) ?? []
         );
     });
     if (params.status) people = people.filter(p => p.emailStatus === params.status);

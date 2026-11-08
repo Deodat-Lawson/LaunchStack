@@ -5,7 +5,19 @@
  */
 import { randomUUID } from "node:crypto";
 
-import { and, asc, desc, eq, gte, inArray, isNotNull, isNull, lt, sql } from "drizzle-orm";
+import {
+    and,
+    asc,
+    desc,
+    eq,
+    gte,
+    inArray,
+    isNotNull,
+    isNull,
+    lt,
+    notInArray,
+    sql,
+} from "drizzle-orm";
 import type { InferInsertModel } from "drizzle-orm";
 
 import { getDb } from "@launchstack/store/client";
@@ -585,6 +597,49 @@ export async function insertEvidence(args: {
     return toEvidence(row);
 }
 
+/**
+ * Drop evidence from earlier reads of this organisation. The ids the dossier
+ * just cited stay, so Find people replaces the last pass instead of stacking
+ * another copy underneath it.
+ */
+export async function deleteUncitedEvidence(
+    companyId: bigint,
+    orgId: string,
+    keepIds: readonly number[]
+): Promise<void> {
+    if (keepIds.length === 0) return;
+    const db = getDb();
+    await db
+        .delete(partnerEvidence)
+        .where(
+            and(
+                eq(partnerEvidence.companyId, companyId),
+                eq(partnerEvidence.orgId, orgId),
+                notInArray(partnerEvidence.id, [...keepIds])
+            )
+        );
+}
+
+/** Evidence for many organisations in one read, for the people list. */
+export async function listEvidenceForOrgs(
+    companyId: bigint,
+    orgIds: readonly string[]
+): Promise<EvidenceRecord[]> {
+    if (orgIds.length === 0) return [];
+    const db = getDb();
+    const rows = await db
+        .select()
+        .from(partnerEvidence)
+        .where(
+            and(
+                eq(partnerEvidence.companyId, companyId),
+                inArray(partnerEvidence.orgId, [...orgIds])
+            )
+        )
+        .orderBy(asc(partnerEvidence.id));
+    return rows.map(toEvidence);
+}
+
 export async function listEvidenceForOrg(
     companyId: bigint,
     orgId: string
@@ -971,6 +1026,19 @@ export async function addEvent(args: {
             );
     }
     return toEvent(row);
+}
+
+/** Replace one event's payload. Used to move a people search from step to step. */
+export async function updateEventPayload(
+    id: number,
+    companyId: bigint,
+    payload: Record<string, unknown>
+): Promise<void> {
+    const db = getDb();
+    await db
+        .update(relationshipEvents)
+        .set({ payload })
+        .where(and(eq(relationshipEvents.id, id), eq(relationshipEvents.companyId, companyId)));
 }
 
 export async function listEvents(

@@ -6,25 +6,26 @@ export type ResearchIntent = "none" | "pending" | "start";
 /**
  * Whether opening a company should start its profile.
  *
- * A dossier means there is nothing to do. A start that is still fresh means
- * one is already running, including for a poll that did not ask to start.
- * Asking again after a finished attempt (or a start that went quiet) begins
- * another. A poll never begins one.
+ * A dossier means there is nothing to do, unless someone asked to read the
+ * site again ("refresh", e.g. to look for people). A start that is still
+ * fresh means one is already running, including for a poll that did not ask
+ * to start. Asking again after a finished attempt (or a start that went
+ * quiet) begins another. A poll never begins one.
  */
 export function researchIntent(
-    events: readonly { type: string; occurredAt: Date }[],
+    events: readonly { type: string; occurredAt: Date; payload?: unknown }[],
     hasDossier: boolean,
-    requested: boolean,
+    requested: boolean | "refresh",
     now = new Date()
 ): ResearchIntent {
-    if (hasDossier) return "none";
     const latest = events[0];
-    if (
+    const running =
         latest?.type === "research_started" &&
-        now.getTime() - latest.occurredAt.getTime() < RESEARCH_FRESH_MS
-    ) {
-        return "pending";
-    }
+        now.getTime() - latest.occurredAt.getTime() < RESEARCH_FRESH_MS;
+    const refreshing =
+        running && (latest.payload as { refresh?: unknown } | undefined)?.refresh === true;
+    if (hasDossier && !refreshing && requested !== "refresh") return "none";
+    if (running) return "pending";
     if (!requested) return "none";
     return "start";
 }

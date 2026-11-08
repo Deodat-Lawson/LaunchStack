@@ -22,12 +22,11 @@ import {
 } from "~/components/ui/dialog";
 import { Input } from "~/components/ui/input";
 import { Skeleton } from "~/components/ui/skeleton";
-import { cn } from "~/lib/utils";
-
 import {
     ProspectsApiError,
     prospectsApi,
     type CompanyDetail,
+    type PeopleSearchProgress,
     type PersonRow,
     type SalesStage,
 } from "../api";
@@ -42,6 +41,7 @@ import { EmailStatus, canOutreach } from "../_components/EmailStatus";
 import { EmptyState, InlineError } from "~/components/tools/EmptyState";
 import { FitMeter } from "~/components/tools/FitMeter";
 import { SkeletonBlock } from "~/components/tools/SkeletonRows";
+import { PeopleSheet } from "../_components/PeopleSheet";
 import { SourceChip } from "../_components/SourceChip";
 import { StageMenu, StagePill } from "../_components/StagePill";
 
@@ -55,8 +55,8 @@ function Block({
     children: React.ReactNode;
 }) {
     return (
-        <section className="mb-7">
-            <h2 className="text-ink mb-2 flex items-baseline gap-2 text-[13px] font-semibold">
+        <section className="border-line border-t py-5 first:border-t-0 first:pt-0">
+            <h2 className="text-ink mb-3 flex items-baseline gap-2 text-sm font-semibold">
                 {title}
                 {aside && <span className="text-ink-3 text-xs font-normal">{aside}</span>}
             </h2>
@@ -76,12 +76,32 @@ function Side({
 }) {
     return (
         <section className="border-line bg-panel mb-3.5 rounded-lg border px-3.5 py-3">
-            <h3 className="text-ink-3 mb-2 flex items-center justify-between text-xs font-medium">
+            <h3 className="text-ink mb-2.5 flex items-center justify-between text-sm font-semibold">
                 <span>{title}</span>
                 {aside}
             </h3>
             {children}
         </section>
+    );
+}
+
+const EVIDENCE_PREVIEW = 3;
+
+function FitPart({ label, value }: { label: string; value: [number, number] }) {
+    const [got, max] = value;
+    return (
+        <div className="grid grid-cols-[92px_1fr_48px] items-center gap-3 text-[13px] tabular-nums">
+            <span className="text-ink-3">{label}</span>
+            <span className="bg-line-2 h-1.5 overflow-hidden rounded-full" aria-hidden>
+                <span
+                    className="bg-ink-3 block h-full rounded-full"
+                    style={{ width: `${max ? (got / max) * 100 : 0}%` }}
+                />
+            </span>
+            <span className="text-ink-2 text-right">
+                {got}/{max}
+            </span>
+        </div>
     );
 }
 
@@ -106,7 +126,23 @@ export function CompanyScreen({ id }: { id: string }) {
     });
     const c = res.data?.company ?? null;
     const [researching, setResearching] = useState(false);
+    const [peopleOpen, setPeopleOpen] = useState(false);
+    const [peopleRun, setPeopleRun] = useState<"running" | "done" | "failed">("done");
+    const [peopleStartedAt, setPeopleStartedAt] = useState<number | null>(null);
+    const [peopleProgress, setPeopleProgress] = useState<PeopleSearchProgress | null>(null);
+    const sawPeopleRunning = useRef(false);
+    const [showAllEvidence, setShowAllEvidence] = useState(false);
     const [outreachOpen, setOutreachOpen] = useState(false);
+    // A company researched twice logs the same line twice; one is enough.
+    const signals = useMemo(() => {
+        const seen = new Set<string>();
+        return (c?.signals ?? []).filter(s => {
+            const key = `${s.at ?? s.when}|${s.text}`;
+            if (seen.has(key)) return false;
+            seen.add(key);
+            return true;
+        });
+    }, [c?.signals]);
     const [nextStep, setNextStep] = useState("");
     const [nextStepAt, setNextStepAt] = useState("");
     const [editingNext, setEditingNext] = useState(false);
@@ -136,7 +172,17 @@ export function CompanyScreen({ id }: { id: string }) {
         setNextStep(c.deal.nextStep ?? "");
         setNextStepAt(c.deal.nextStepAt ? c.deal.nextStepAt.slice(0, 10) : "");
         setResearching(Boolean(c.researching));
+        if (c.peopleSearch) setPeopleProgress(c.peopleSearch);
     }, [c]);
+
+    useEffect(() => {
+        if (peopleRun !== "running") return;
+        if (researching || c?.researching) sawPeopleRunning.current = true;
+        else if (sawPeopleRunning.current) {
+            sawPeopleRunning.current = false;
+            setPeopleRun("done");
+        }
+    }, [peopleRun, researching, c?.researching]);
 
     useEffect(() => {
         if (!researching || !active) return;
@@ -177,6 +223,23 @@ export function CompanyScreen({ id }: { id: string }) {
             toast.success(c.excluded ? t("company.backInSegment") : t("company.excludedToast"));
         } catch (e) {
             toast.error(errorText(e, t("common.updateFailed")));
+        }
+    };
+
+    const findPeople = async () => {
+        if (!c) return;
+        setPeopleOpen(true);
+        setPeopleRun("running");
+        setPeopleStartedAt(Date.now());
+        setPeopleProgress(null);
+        sawPeopleRunning.current = false;
+        try {
+            const { company } = await prospectsApi.company(c.id, { research: "refresh" });
+            res.mutate(() => ({ company }));
+            setResearching(true);
+        } catch (e) {
+            setPeopleRun("failed");
+            toast.error(errorText(e, t("company.findPeopleFailed")));
         }
     };
 
@@ -239,8 +302,13 @@ export function CompanyScreen({ id }: { id: string }) {
 
             <header className="border-line @max-md:grid-cols-1 mb-6 grid grid-cols-[minmax(0,1fr)_auto] items-start gap-4 border-b pb-5">
                 <div className="min-w-0">
-                    <h1 className="text-ink text-[22px] font-semibold tracking-[-0.02em]">
+                    <h1 className="text-ink flex flex-wrap items-center gap-2 text-[22px] font-semibold tracking-[-0.02em]">
                         {c ? c.name : <Skeleton className="h-6 w-72" />}
+                        {c?.foundInLastRun && (
+                            <span className="bg-brand-soft text-brand-ink rounded px-1.5 py-px text-[11px] font-medium">
+                                {t("companies.foundInLastRun")}
+                            </span>
+                        )}
                     </h1>
                     {c && (
                         <div className="text-ink-2 mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px]">
@@ -299,7 +367,7 @@ export function CompanyScreen({ id }: { id: string }) {
                 </p>
             )}
 
-            <div className="@max-lg:grid-cols-1 grid grid-cols-[1fr_340px] gap-8">
+            <div className="@max-lg:grid-cols-1 grid grid-cols-[1fr_340px] gap-5">
                 <div className="min-w-0">
                     {!c ? (
                         <>
@@ -345,10 +413,10 @@ export function CompanyScreen({ id }: { id: string }) {
                                     ))}
                                 </ul>
                             </Block>
-                            {c.signals.length > 0 && (
+                            {signals.length > 0 && (
                                 <Block title={t("company.signals")}>
                                     <div className="max-w-[70ch]">
-                                        {c.signals.map((s, i) => (
+                                        {signals.map((s, i) => (
                                             <div
                                                 key={i}
                                                 className="grid grid-cols-[84px_1fr] gap-3 py-1.5 text-sm"
@@ -383,7 +451,10 @@ export function CompanyScreen({ id }: { id: string }) {
                                 }
                             >
                                 <ol className="max-w-[70ch]">
-                                    {c.evidence.map(e => (
+                                    {(showAllEvidence
+                                        ? c.evidence
+                                        : c.evidence.slice(0, EVIDENCE_PREVIEW)
+                                    ).map(e => (
                                         <li
                                             key={e.n}
                                             id={evidenceAnchorId(e.n)}
@@ -411,6 +482,20 @@ export function CompanyScreen({ id }: { id: string }) {
                                         </li>
                                     ))}
                                 </ol>
+                                {c.evidence.length > EVIDENCE_PREVIEW && (
+                                    <Button
+                                        variant="ghost"
+                                        size="sm"
+                                        className="text-ink-2 mt-1 px-0"
+                                        onClick={() => setShowAllEvidence(v => !v)}
+                                    >
+                                        {showAllEvidence
+                                            ? t("company.showLessEvidence")
+                                            : t("company.showAllEvidence", {
+                                                  count: c.evidence.length,
+                                              })}
+                                    </Button>
+                                )}
                             </Block>
                         </>
                     )}
@@ -543,8 +628,8 @@ export function CompanyScreen({ id }: { id: string }) {
                                                         )}
                                                     </span>
                                                 ) : (
-                                                    <span className="text-ink-3">
-                                                        {t("company.noneYet")}
+                                                    <span className="text-ink-2 decoration-line underline underline-offset-4">
+                                                        {t("company.setNextStep")}
                                                     </span>
                                                 )}
                                             </button>
@@ -556,12 +641,23 @@ export function CompanyScreen({ id }: { id: string }) {
                             <Side
                                 title={t("common.people")}
                                 aside={
-                                    <span
-                                        className="text-ink-4 text-xs"
-                                        title={t("company.findMoreTitle")}
-                                    >
-                                        {t("company.findMore")}
-                                    </span>
+                                    c.excluded ? null : (
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            className="text-ink-2 h-6 px-2 text-xs"
+                                            title={t("company.findPeopleTitle")}
+                                            onClick={() =>
+                                                peopleRun === "running"
+                                                    ? setPeopleOpen(true)
+                                                    : void findPeople()
+                                            }
+                                        >
+                                            {peopleRun === "running"
+                                                ? t("company.findingPeople")
+                                                : t("company.findPeople")}
+                                        </Button>
+                                    )
                                 }
                             >
                                 {c.people.length === 0 ? (
@@ -579,6 +675,36 @@ export function CompanyScreen({ id }: { id: string }) {
                                     {t("company.outreachRule")}
                                 </p>
                             </Side>
+
+                            {c.fitBreakdown && c.fit !== null && (
+                                <Side title={t("company.fitTitle", { fit: c.fit })}>
+                                    <div className="flex flex-col gap-2">
+                                        <FitPart
+                                            label={t("company.buyerType")}
+                                            value={c.fitBreakdown.archetype}
+                                        />
+                                        <FitPart
+                                            label={t("company.size")}
+                                            value={c.fitBreakdown.size}
+                                        />
+                                        <FitPart
+                                            label={t("company.geography")}
+                                            value={c.fitBreakdown.geography}
+                                        />
+                                        <FitPart
+                                            label={t("company.signals")}
+                                            value={c.fitBreakdown.signals}
+                                        />
+                                    </div>
+                                    {c.fitBreakdown.disqualifiers.length > 0 && (
+                                        <p className="text-warn-ink mt-2.5 text-xs">
+                                            {t("company.notAFitList", {
+                                                list: joinList(c.fitBreakdown.disqualifiers),
+                                            })}
+                                        </p>
+                                    )}
+                                </Side>
+                            )}
 
                             <Side title={t("company.foundVia")}>
                                 <div className="flex flex-wrap gap-1.5">
@@ -600,58 +726,32 @@ export function CompanyScreen({ id }: { id: string }) {
                                     </p>
                                 )}
                             </Side>
-
-                            {c.fitBreakdown && c.fit !== null && (
-                                <Side title={t("company.fitTitle", { fit: c.fit })}>
-                                    <dl className="grid grid-cols-[92px_1fr] gap-x-3 gap-y-1.5 text-[13px] tabular-nums">
-                                        <dt className="text-ink-3">{t("company.buyerType")}</dt>
-                                        <dd>
-                                            {c.fitBreakdown.archetype[0]} /{" "}
-                                            {c.fitBreakdown.archetype[1]}
-                                        </dd>
-                                        <dt className="text-ink-3">{t("company.size")}</dt>
-                                        <dd>
-                                            {c.fitBreakdown.size[0]} / {c.fitBreakdown.size[1]}
-                                        </dd>
-                                        <dt className="text-ink-3">{t("company.geography")}</dt>
-                                        <dd>
-                                            {c.fitBreakdown.geography[0]} /{" "}
-                                            {c.fitBreakdown.geography[1]}
-                                        </dd>
-                                        <dt className="text-ink-3">{t("company.signals")}</dt>
-                                        <dd>
-                                            {c.fitBreakdown.signals[0]} /{" "}
-                                            {c.fitBreakdown.signals[1]}
-                                        </dd>
-                                        <dt className="text-ink-3">{t("company.notAFit")}</dt>
-                                        <dd
-                                            className={cn(
-                                                c.fitBreakdown.disqualifiers.length &&
-                                                    "text-warn-ink"
-                                            )}
-                                        >
-                                            {c.fitBreakdown.disqualifiers.length
-                                                ? joinList(c.fitBreakdown.disqualifiers)
-                                                : t("company.none")}
-                                        </dd>
-                                    </dl>
-                                </Side>
-                            )}
                         </>
                     )}
                 </aside>
             </div>
 
             {c && <OutreachDialog open={outreachOpen} onOpenChange={setOutreachOpen} company={c} />}
+            {c && (
+                <PeopleSheet
+                    open={peopleOpen}
+                    onOpenChange={setPeopleOpen}
+                    companyName={c.name}
+                    progress={peopleProgress}
+                    run={peopleRun}
+                    startedAt={peopleStartedAt}
+                />
+            )}
         </div>
     );
 }
 
 function PersonLine({ p }: { p: PersonRow }) {
+    const t = useTranslations("growth.prospects");
     const word = useCopyText();
     return (
-        <li className="border-line-2 grid grid-cols-[28px_1fr_auto] items-center gap-2.5 border-t py-2 text-[13px] first:border-t-0">
-            <Avatar className="size-7">
+        <li className="border-line-2 grid grid-cols-[28px_1fr] items-start gap-2.5 border-t py-2 text-[13px] first:border-t-0">
+            <Avatar className="mt-0.5 size-7">
                 <AvatarFallback>{p.initials}</AvatarFallback>
             </Avatar>
             <span className="min-w-0">
@@ -661,8 +761,51 @@ function PersonLine({ p }: { p: PersonRow }) {
                 <span className="text-ink-3 block truncate text-xs">
                     {word(p.titleCopy, p.title)}
                 </span>
+                <span className="mt-1 flex min-w-0 items-center gap-1.5">
+                    <span
+                        className={
+                            p.email
+                                ? "text-ink-2 truncate font-mono text-[11px]"
+                                : "text-ink-4 text-[11px]"
+                        }
+                    >
+                        {p.email ?? t("company.noEmail")}
+                    </span>
+                    {p.email && <EmailStatus status={p.emailStatus} />}
+                </span>
+                {p.sourceUrl?.includes("linkedin.com") ? (
+                    <a
+                        href={p.sourceUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-ink-2 mt-0.5 inline-flex max-w-full items-center gap-1 text-[11px] underline underline-offset-2"
+                    >
+                        <span className="truncate">{t("company.linkedinLink")}</span>
+                        <ExternalLink className="size-3 shrink-0" aria-hidden />
+                    </a>
+                ) : p.emailStatus === "generic" ? null : p.linkedinSearchUrl ? (
+                    <a
+                        href={p.linkedinSearchUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-ink-2 mt-0.5 inline-flex max-w-full items-center gap-1 text-[11px] underline underline-offset-2"
+                    >
+                        <span className="truncate">{t("company.openLinkedIn")}</span>
+                        <ExternalLink className="size-3 shrink-0" aria-hidden />
+                    </a>
+                ) : (
+                    <span className="text-ink-4 mt-0.5 block text-[11px]">
+                        {t("company.noLinkedIn")}
+                    </span>
+                )}
+                {p.linkedinStatus &&
+                    p.linkedinStatus !== "search_error" &&
+                    p.emailStatus !== "generic" && (
+                    <span className="text-ink-4 mt-0.5 block text-[11px]">
+                        {t(`company.linkedinStatus.${p.linkedinStatus}`)}
+                    </span>
+                )}
             </span>
-            <EmailStatus status={p.emailStatus} />
         </li>
     );
 }

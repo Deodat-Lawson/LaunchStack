@@ -80,6 +80,7 @@ vi.mock("./db", () => ({
         kgEntityId: 1,
     }),
     listEvidenceForOrg: async () => [],
+    deleteUncitedEvidence: async () => undefined,
     setResearchResult: async () => undefined,
     addEvent: async () => undefined,
 }));

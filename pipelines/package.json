@@ -56,6 +56,8 @@
     "./distribution/schema": "./src/distribution/schema.ts",
     "./distribution/types": "./src/distribution/types.ts",
     "./distribution/stages": "./src/distribution/stages.ts",
+    "./distribution/people": "./src/distribution/people.ts",
+    "./distribution/linkedin-search": "./src/distribution/linkedin-search.ts",
     "./distribution/locate": "./src/distribution/locate.ts",
     "./distribution/geocode": "./src/distribution/geocode.ts",
     "./proposals": "./src/proposals/index.ts",
@@ -262,6 +264,14 @@
       "./distribution/types": {
         "types": "./dist/distribution/types.d.ts",
         "default": "./dist/distribution/types.js"
+      },
+      "./distribution/people": {
+        "types": "./dist/distribution/people.d.ts",
+        "default": "./dist/distribution/people.js"
+      },
+      "./distribution/linkedin-search": {
+        "types": "./dist/distribution/linkedin-search.d.ts",
+        "default": "./dist/distribution/linkedin-search.js"
       },
       "./proposals": {
         "types": "./dist/proposals/index.d.ts",

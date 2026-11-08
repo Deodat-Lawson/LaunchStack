@@ -725,6 +725,234 @@ describe("page profiler", () => {
         expect(result.modelId).toBe("keyless/page-reader");
     });
 
+    it("reports the website, the team pages, the people and the save, in that order", async () => {
+        const steps: string[] = [];
+        const team = page(
+            "https://bocca.example/team",
+            "Team",
+            "Our team. Anne Saxelby, Founder of the roastery, leads wholesale and the cafés. She started the company and still buys the green coffee herself for the cafés we supply."
+        );
+        await profileFromPages(
+            {
+                fetchPage: async (url: string) => {
+                    if (url === "https://bocca.example/") return home;
+                    if (url === "https://bocca.example/team") return team;
+                    throw new Error("404");
+                },
+                recordEvidence: async () => 1,
+            },
+            {
+                program,
+                sellerSummary: "Acme Roasters",
+                org,
+                kind: "wholesaler",
+                territory: { country: "NL" },
+                seedUrls: ["https://bocca.example/"],
+                hsCodes: [],
+                onProgress: progress => {
+                    steps.push(`${progress.step}:${progress.people}`);
+                },
+            }
+        );
+        const order = steps.map(step => step.split(":")[0]);
+        expect(order[0]).toBe("site");
+        expect(order.indexOf("team")).toBeGreaterThan(order.indexOf("site"));
+        expect(order.indexOf("named")).toBeGreaterThan(order.indexOf("team"));
+        expect(order.indexOf("slug")).toBeGreaterThan(order.indexOf("named"));
+        expect(order.indexOf("people")).toBeGreaterThan(order.indexOf("slug"));
+        expect(order.at(-1)).toBe("save");
+        expect(steps.at(-1)).toBe("save:1");
+    });
+
+    it("does not guess a LinkedIn address from the person's name", async () => {
+        const fetched: string[] = [];
+        const site = page(
+            "https://ammons.example/",
+            "The Ammons Law Firm",
+            "Profiles https://www.linkedin.com/in/someone-else-999/ . The Ammons Law Firm tries cases. Rob Ammons, Partner, leads the trial team and still tries cases himself for clients across the state."
+        );
+        let nextId = 1;
+        const recorded: Array<{ claim: string; sourceUrl: string }> = [];
+        const result = await profileFromPages(
+            {
+                fetchPage: async (url: string) => {
+                    fetched.push(url);
+                    if (url === "https://ammons.example/") return site;
+                    throw new Error("404");
+                },
+                recordEvidence: async e => {
+                    recorded.push({ claim: e.claim, sourceUrl: e.sourceUrl });
+                    return nextId++;
+                },
+            },
+            {
+                program,
+                sellerSummary: "Acme Roasters",
+                org: { ...org, name: "The Ammons Law Firm", domain: "ammons.example" },
+                kind: "wholesaler",
+                territory: { country: "NL" },
+                seedUrls: ["https://ammons.example/"],
+                hsCodes: [],
+            }
+        );
+        expect(fetched.filter(url => url.includes("linkedin.com"))).toEqual([]);
+        expect(result.outcome.status).toBe("ok");
+        if (result.outcome.status !== "ok") return;
+        expect(result.outcome.dossier.decisionMakers).toEqual([
+            expect.objectContaining({ name: "Rob Ammons", title: "Partner" }),
+        ]);
+        expect(recorded.some(row => row.claim.includes("[linkedin:not_found]"))).toBe(true);
+        expect(recorded.some(row => row.claim.includes("linkedin.com/in/"))).toBe(false);
+    });
+
+    it("does not keep a LinkedIn address it could not check against the organisation", async () => {
+        const site = page(
+            "https://care.example/",
+            "CareMessage",
+            "Our team. Cecilia Corral, Co-founder, leads product. Andrew Principe | President, advises the clinics that write in about the service and the work across the state."
+        );
+        const wall = page(
+            "https://www.linkedin.com/in/ceciliacorral/",
+            "",
+            "window.location.href = https://www.linkedin.com/authwall Agree & Join New to LinkedIn"
+        );
+        wall.status = 999;
+        const someoneElse = page(
+            "https://www.linkedin.com/in/andrew-principe/",
+            "Jane Doe - Other Company | LinkedIn",
+            "Jane Doe is a president at another company. This public profile names her in the heading for anyone who can read the page without signing in."
+        );
+        const recorded: string[] = [];
+        let nextId = 1;
+        const result = await profileFromPages(
+            {
+                fetchPage: async (url: string) => {
+                    if (url === "https://care.example/") return site;
+                    if (url === "https://www.linkedin.com/in/ceciliacorral/") return wall;
+                    if (url === "https://www.linkedin.com/in/andrew-principe/") return someoneElse;
+                    throw new Error("404");
+                },
+                recordEvidence: async evidence => {
+                    recorded.push(evidence.claim);
+                    return nextId++;
+                },
+            },
+            {
+                program,
+                sellerSummary: "Acme Roasters",
+                org: { ...org, name: "CareMessage", domain: "care.example" },
+                kind: "wholesaler",
+                territory: { country: "NL" },
+                seedUrls: ["https://care.example/"],
+                hsCodes: [],
+            }
+        );
+        expect(result.outcome.status).toBe("ok");
+        expect(
+            recorded.some(claim => claim.includes("https://www.linkedin.com/in/ceciliacorral/"))
+        ).toBe(false);
+        expect(recorded.some(claim => claim.includes("andrew-principe"))).toBe(false);
+    });
+
+    it("reads a LinkedIn address from the other organisation named beside the person", async () => {
+        const site = page(
+            "https://care.example/",
+            "CareMessage",
+            "Our board. Sam Brasch | Partner, HealthQuest Capital, has spent years with the firm and still advises the clinics that write in about the service."
+        );
+        const home = page(
+            "https://healthquestcapital.com/",
+            "HealthQuest Capital",
+            "HealthQuest Capital invests in healthcare companies. The people page lists the partners and the work they do with clinics across the country."
+        );
+        home.finalUrl = "https://www.healthquestcapital.com/";
+        const people = page(
+            "https://www.healthquestcapital.com/people",
+            "People",
+            "Sam Brasch, Partner. View on LinkedIn (https://www.linkedin.com/in/sambrasch74/). Sam Brasch joined the firm and works with founders across healthcare services and clinics."
+        );
+        const recorded: string[] = [];
+        let nextId = 1;
+        const result = await profileFromPages(
+            {
+                fetchPage: async (url: string) => {
+                    if (url === "https://care.example/") return site;
+                    if (url === "https://healthquestcapital.com/") return home;
+                    if (url === "https://www.healthquestcapital.com/people") return people;
+                    throw new Error("404");
+                },
+                recordEvidence: async evidence => {
+                    recorded.push(evidence.claim);
+                    return nextId++;
+                },
+            },
+            {
+                program,
+                sellerSummary: "Acme Roasters",
+                org: { ...org, name: "CareMessage", domain: "care.example" },
+                kind: "wholesaler",
+                territory: { country: "NL" },
+                seedUrls: ["https://care.example/"],
+                hsCodes: [],
+            }
+        );
+        expect(result.outcome.status).toBe("ok");
+        expect(
+            recorded.some(claim => claim.includes("https://www.linkedin.com/in/sambrasch74"))
+        ).toBe(true);
+        expect(recorded.some(claim => claim.includes("sam-brasch"))).toBe(false);
+    });
+
+    it("keeps a search result only when it names the person at their organisation", async () => {
+        const site = page(
+            "https://care.example/",
+            "CareMessage",
+            "Our board. Kelly Fitzsimmons | Chief Executive Officer, Project Evident, advises the team and still writes about the clinics the organisation serves."
+        );
+        const recorded: string[] = [];
+        let nextId = 1;
+        const result = await profileFromPages(
+            {
+                fetchPage: async (url: string) => {
+                    if (url === "https://care.example/") return site;
+                    throw new Error("404");
+                },
+                searchLinkedIn: async people => {
+                    const found = new Map<string, { status: "matched"; url: string }>();
+                    for (const person of people) {
+                        if (person.name !== "Kelly Fitzsimmons") continue;
+                        if (!person.orgs.some(org => /project evident/i.test(org))) continue;
+                        found.set(person.name, {
+                            status: "matched",
+                            url: "https://www.linkedin.com/in/kellyfitzsimmonsimpact",
+                        });
+                    }
+                    return found;
+                },
+                recordEvidence: async evidence => {
+                    recorded.push(evidence.claim);
+                    return nextId++;
+                },
+            },
+            {
+                program,
+                sellerSummary: "Acme Roasters",
+                org: { ...org, name: "CareMessage", domain: "care.example" },
+                kind: "wholesaler",
+                territory: { country: "NL" },
+                seedUrls: ["https://care.example/"],
+                hsCodes: [],
+            }
+        );
+        expect(result.outcome.status).toBe("ok");
+        expect(
+            recorded.some(claim =>
+                claim.includes("https://www.linkedin.com/in/kellyfitzsimmonsimpact")
+            )
+        ).toBe(true);
+        expect(recorded.some(claim => claim.endsWith("kellyfitzsimmons)."))).toBe(false);
+    });
+
     it("leaves roles empty when the site names none instead of echoing the requested kind", async () => {
         const quiet = page(
             "https://quiet.example/",

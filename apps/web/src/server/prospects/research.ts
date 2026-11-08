@@ -15,7 +15,9 @@ import {
     getRelationship,
     getRun,
     listEvents,
+    updateEventPayload,
 } from "@launchstack/pipelines/distribution/db";
+import type { ProfileProgress } from "@launchstack/pipelines/distribution";
 import {
     buildCompanyKnowledgeContext,
     formatCompanyIdentity,
@@ -26,6 +28,7 @@ import { debitTokens } from "~/lib/credits";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 
 import { canPublishToSources, publishProspectDossier } from "./keyless-run";
+import { lookupLinkedInProfiles } from "./linkedin-browser";
 import { prospectEmbedder, prospectFitJudge } from "./matching";
 import { researchIntent } from "./research-intent";
 
@@ -58,7 +61,7 @@ async function sellerProfile(companyId: bigint, offering: string): Promise<Selle
 export async function claimProspectResearch(
     ctx: ResearchCtx,
     relationshipId: string,
-    requested: boolean
+    requested: boolean | "refresh"
 ): Promise<"none" | "pending" | "start"> {
     const relationship = await getRelationship(relationshipId, ctx.companyId);
     if (!relationship) return "none";
@@ -69,21 +72,37 @@ export async function claimProspectResearch(
         companyId: ctx.companyId,
         relationshipId,
         type: "research_started",
-        payload: {},
+        payload:
+            requested === "refresh"
+                ? {
+                      refresh: true,
+                      step: "site",
+                      pages: 0,
+                      teamPages: 0,
+                      named: 0,
+                      slug: 0,
+                      people: 0,
+                  }
+                : {},
         actorUserId: ctx.userId,
         touch: false,
     });
     return "start";
 }
 
-/** Read this one company's site and store the dossier. Safe to run after the response. */
+/**
+ * Read this one company's site and store the dossier (with any named people
+ * it lists). Safe to run after the response. `refresh` replaces a dossier
+ * that already exists.
+ */
 export async function runProspectResearch(
     ctx: ResearchCtx,
     relationshipId: string,
-    requestUrl: string
+    requestUrl: string,
+    options: { refresh?: boolean } = {}
 ): Promise<void> {
     const relationship = await getRelationship(relationshipId, ctx.companyId);
-    if (!relationship || relationship.dossier) return;
+    if (!relationship || (relationship.dossier && !options.refresh)) return;
     const [program, org] = await Promise.all([
         getProgram(relationship.programId, ctx.companyId),
         getOrg(relationship.orgId, ctx.companyId),
@@ -119,9 +138,28 @@ export async function runProspectResearch(
                       });
                   },
               })
-            : createKeylessPorts({ publishDossier, debitCredits: null, embed, judgeFit });
+            : createKeylessPorts({
+                  publishDossier,
+                  debitCredits: null,
+                  embed,
+                  judgeFit,
+                  searchLinkedIn: lookupLinkedInProfiles,
+              });
 
     const aiUse = { feature: "prospects" as const, userId: ctx.userId, enforce: false };
+    const started = (await listEvents(ctx.companyId, relationshipId)).find(
+        event => event.type === "research_started"
+    );
+    const onProgress = started
+        ? async (progress: ProfileProgress) => {
+              await updateEventPayload(started.id, ctx.companyId, {
+                  ...started.payload,
+                  ...progress,
+              }).catch(error =>
+                  console.warn("[prospects] could not record people progress:", error)
+              );
+          }
+        : undefined;
     try {
         await withWorkspaceChatModels(ctx.companyId, aiUse, () =>
             enrichCandidate(
@@ -131,7 +169,7 @@ export async function runProspectResearch(
                     programId: program.id,
                 },
                 ports,
-                { relationshipId, profile }
+                { relationshipId, profile, onProgress }
             )
         );
     } catch (error) {

@@ -145,6 +145,8 @@ export interface CompanyRow {
     lastActivityAt: string | null;
     foundVia: FoundVia[];
     isNew: boolean;
+    /** Shortlisted by the latest completed search, including companies already on the list. */
+    foundInLastRun?: boolean;
     excluded: boolean;
     excludedReason: string | null;
     /** Set when `why` is the server's own words rather than the profile's. */
@@ -177,6 +179,9 @@ export interface Signal {
     copy?: Copy;
 }
 
+export type LinkedInSearchStatus =
+    "matched" | "not_found" | "ambiguous" | "search_blocked" | "search_error";
+
 export interface PersonRow {
     id: string;
     companyId: string;
@@ -189,6 +194,10 @@ export interface PersonRow {
     emailStatus: EmailStatusKind;
     source: string;
     sourceUrl: string | null;
+    /** Set after a LinkedIn search. Absent on older profiles and shared inboxes. */
+    linkedinStatus?: LinkedInSearchStatus | null;
+    /** LinkedIn people search for this name and company, when no profile was kept. */
+    linkedinSearchUrl?: string | null;
     /** Set when the person's company is excluded; outreach is refused. */
     blockedReason: string | null;
     nameCopy?: Copy | null;
@@ -235,6 +244,17 @@ export interface FitBreakdown {
     disqualifiers: string[];
 }
 
+export interface PeopleSearchProgress {
+    step: "site" | "team" | "named" | "slug" | "people" | "save";
+    pages: number;
+    teamPages: number;
+    /** People the website writes as a name beside a job title. */
+    named: number;
+    /** Profiles kept from linkedin.com/in/first-last. */
+    slug: number;
+    people: number;
+}
+
 export interface CompanyDetail extends Omit<CompanyRow, "people"> {
     about: Claim[];
     whyFit: Claim[];
@@ -248,6 +268,8 @@ export interface CompanyDetail extends Omit<CompanyRow, "people"> {
     profiledAt: string | null;
     /** True while a profile is being written after open. */
     researching?: boolean;
+    /** Set while "Find people" is re-reading the site, with the step it has reached. */
+    peopleSearch?: PeopleSearchProgress | null;
 }
 
 /**
@@ -438,10 +460,11 @@ export const prospectsApi = {
                 sort: params.sort,
             })}`
         ),
-    company: (id: string, options: { research?: boolean } = {}) =>
+    company: (id: string, options: { research?: boolean | "refresh" } = {}) =>
         call<{ company: CompanyDetail }>(
             `/api/prospects/companies/${id}${q({
-                research: options.research ? "1" : undefined,
+                research:
+                    options.research === "refresh" ? "refresh" : options.research ? "1" : undefined,
             })}`
         ),
     setExcluded: (ids: string[], excluded: boolean) =>

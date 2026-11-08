@@ -507,9 +507,9 @@ function CompanyTableRow({
                     onClick={e => e.stopPropagation()}
                 >
                     {c.name}
-                    {c.isNew && (
+                    {(c.isNew || c.foundInLastRun) && (
                         <span className="bg-brand-soft text-brand-ink ml-2 rounded px-1.5 py-px align-middle text-[10.5px] font-medium">
-                            {t("companies.newBadge")}
+                            {c.isNew ? t("companies.newBadge") : t("companies.thisRun")}
                         </span>
                     )}
                 </ToolLink>
@@ -536,7 +536,9 @@ function CompanyTableRow({
             </TableCell>
             <TableCell className="text-ink-2 text-right tabular-nums">{c.people}</TableCell>
             <TableCell className="text-ink-3 whitespace-normal text-xs">
-                {c.isNew ? t("companies.foundInLastRun") : relativeTime(c.lastActivityAt)}
+                {c.isNew || c.foundInLastRun
+                    ? t("companies.foundInLastRun")
+                    : relativeTime(c.lastActivityAt)}
             </TableCell>
         </TableRow>
     );

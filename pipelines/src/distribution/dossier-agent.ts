@@ -86,6 +86,20 @@ export interface DossierAgentPorts {
     signal?: AbortSignal;
 }
 
+/** Where a keyless profile is, so a people search can show its current step. */
+export type ProfileProgressStep = "site" | "team" | "named" | "slug" | "people" | "save";
+
+export interface ProfileProgress {
+    step: ProfileProgressStep;
+    pages: number;
+    teamPages: number;
+    /** People the website writes as a name beside a job title. */
+    named: number;
+    /** Profiles kept from linkedin.com/in/first-last. */
+    slug: number;
+    people: number;
+}
+
 export interface DossierAgentInput {
     program: ProgramRecord;
     sellerSummary: string;
@@ -96,6 +110,8 @@ export interface DossierAgentInput {
     seedUrls: string[];
     hsCodes: string[];
     limits?: Partial<DossierLimits>;
+    /** Optional. The keyless profiler reports each stage; the model agent ignores it. */
+    onProgress?: (progress: ProfileProgress) => void | Promise<void>;
 }
 
 export type DossierOutcome =
@@ -117,6 +133,21 @@ export interface DossierAgentResult {
 export interface GateError {
     code: "unknown_evidence_id" | "unfetched_source" | "empty_dossier";
     message: string;
+}
+
+/** Evidence ids the dossier actually cites. A later read keeps these and drops the rest. */
+export function dossierEvidenceIds(dossier: Dossier): number[] {
+    const ids = new Set<number>();
+    const collect = (rows: ReadonlyArray<{ evidenceIds: number[] }>) =>
+        rows.forEach(row => row.evidenceIds.forEach(id => ids.add(id)));
+    collect(dossier.brandsCarried);
+    collect(dossier.territories);
+    collect(dossier.retailCoverage);
+    collect(dossier.certifications);
+    collect(dossier.decisionMakers);
+    collect(dossier.contactChannels);
+    collect(dossier.risks);
+    return [...ids];
 }
 
 /** Every evidence id in the dossier must exist and its source must have been fetched this session. */

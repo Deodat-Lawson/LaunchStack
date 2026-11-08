@@ -38,6 +38,18 @@ describe("researchIntent", () => {
         ).toBe("start");
     });
 
+    it("reads the site again when asked to refresh, and waits on that refresh", () => {
+        expect(researchIntent([], true, "refresh", now)).toBe("start");
+        const started = [
+            { type: "research_started", occurredAt: ago(5_000), payload: { refresh: true } },
+        ];
+        expect(researchIntent(started, true, false, now)).toBe("pending");
+        expect(researchIntent(started, true, "refresh", now)).toBe("pending");
+        expect(
+            researchIntent([{ type: "researched", occurredAt: ago(1_000) }], true, false, now)
+        ).toBe("none");
+    });
+
     it("starts again when the previous start went quiet", () => {
         expect(
             researchIntent(

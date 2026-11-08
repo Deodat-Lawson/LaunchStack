@@ -27,6 +27,7 @@ import type { AgentModelPort, ChatTokenUsage } from "@launchstack/llm";
 
 import * as db from "./db";
 import {
+    dossierEvidenceIds,
     runDossierAgent,
     type DossierAgentResult,
     type DossierAgentInput,
@@ -581,7 +582,12 @@ export interface EnrichCandidateResult {
 export async function enrichCandidate(
     ctx: RunContext,
     ports: DistributionPorts,
-    args: { relationshipId: string; profile: SellerProfile; seedUrls?: string[] }
+    args: {
+        relationshipId: string;
+        profile: SellerProfile;
+        seedUrls?: string[];
+        onProgress?: DossierAgentInput["onProgress"];
+    }
 ): Promise<EnrichCandidateResult> {
     const relationship = await db.getRelationship(args.relationshipId, ctx.companyId);
     if (!relationship) throw new Error("Relationship not found");
@@ -640,6 +646,7 @@ export async function enrichCandidate(
             territory: relationship.territory,
             seedUrls,
             hsCodes: program.hsCodes,
+            onProgress: args.onProgress,
         }
     );
 
@@ -666,12 +673,16 @@ export async function enrichCandidate(
     }
 
     // score (deterministic) + rationale (model may only explain)
+    const dossier = agentResult.outcome.status === "ok" ? agentResult.outcome.dossier : null;
+    if (dossier) {
+        const cited = dossierEvidenceIds(dossier);
+        if (cited.length > 0) await db.deleteUncitedEvidence(ctx.companyId, org.id, cited);
+    }
     const evidence = await db.listEvidenceForOrg(ctx.companyId, org.id);
     const newest = evidence.reduce<Date | null>(
         (acc, e) => (!acc || e.capturedAt > acc ? e.capturedAt : acc),
         null
     );
-    const dossier = agentResult.outcome.status === "ok" ? agentResult.outcome.dossier : null;
     // Relevance by meaning, now with what research found (summary, brands).
     let relevance: number | null = null;
     if (ports.embed) {

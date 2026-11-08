@@ -936,6 +936,7 @@ const Message = React.memo(function Message({
                 {isPlan ? (
                     <ProposedPlan
                         text={shownText}
+                        webSources={msg.webSources}
                         onRefine={onEdit}
                         onImplement={onImplementPlan}
                         active={active}
@@ -1072,11 +1073,14 @@ function AnswerProse({
     arriving: boolean;
 }) {
     if (msg.status === "error" || msg.status === "stopped")
-        return <ChatMarkdown text={msg.text} className={ANSWER_PROSE} />;
+        return (
+            <ChatMarkdown text={msg.text} webSources={msg.webSources} className={ANSWER_PROSE} />
+        );
     if (!shown && arriving) return null;
     return (
         <ChatMarkdown
             text={arriving ? closeOpenMarkdown(shown) : shown}
+            webSources={msg.webSources}
             streaming={arriving}
             className={ANSWER_PROSE}
         />

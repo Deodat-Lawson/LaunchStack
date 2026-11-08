@@ -47,6 +47,86 @@ it("renders prices as text while inline math still renders", () => {
     expect(math).toHaveLength(1);
     expect(math[0]?.querySelector("annotation")?.textContent).toBe("\\pi r^2");
 });
+
+const WEB_SOURCES = [
+    { title: "Docker deployment", url: "https://docs.example.com/deploy/docker?version=1#models" },
+    { title: "Supported models", url: "https://docs.example.com/models" },
+];
+
+it("links inline web citations to their numbered sources throughout an answer", () => {
+    render(
+        <ChatMarkdown
+            text={
+                "The runtime is bundled [Source 1]. **Model support [Source 2]**. Again [Source 1]. Unknown [Source 9].\n\n| Evidence |\n| --- |\n| See [Source 2] |"
+            }
+            webSources={WEB_SOURCES}
+        />
+    );
+    for (const [index, source] of WEB_SOURCES.entries()) {
+        const links = screen.getAllByRole("link", { name: `[Source ${index + 1}]` });
+        expect(links).toHaveLength(2);
+        for (const link of links) {
+            expect(link).toHaveAttribute("href", source.url);
+            expect(link).toHaveAttribute("title", source.title);
+            expect(link).toHaveAttribute("target", "_blank");
+            expect(link).toHaveAttribute("rel", "noopener noreferrer");
+        }
+    }
+    expect(screen.queryByRole("link", { name: "[Source 9]" })).not.toBeInTheDocument();
+    expect(screen.getByText(/Unknown \[Source 9\]/)).toBeInTheDocument();
+});
+
+it("leaves citation examples in code and existing links unchanged", () => {
+    const { container } = render(
+        <ChatMarkdown
+            text={
+                '`[Source 1]`\n\n```citation-example\n[Source 2]\n```\n\n[[Source 1]](https://example.com/original)\n\n<a href="https://example.com/html">[Source 2]</a>'
+            }
+            webSources={WEB_SOURCES}
+        />
+    );
+    expect(container.querySelectorAll("code a")).toHaveLength(0);
+    expect(container.querySelectorAll("a a")).toHaveLength(0);
+    expect(screen.getAllByRole("link")).toHaveLength(2);
+    expect(screen.getByRole("link", { name: "[Source 1]" })).toHaveAttribute(
+        "href",
+        "https://example.com/original"
+    );
+    expect(screen.getByRole("link", { name: "[Source 2]" })).toHaveAttribute(
+        "href",
+        "https://example.com/html"
+    );
+});
+
+it("resolves citations when source metadata arrives after streamed text", () => {
+    const { rerender } = render(<ChatMarkdown text="See [Source 1]." streaming />);
+    expect(screen.queryByRole("link")).not.toBeInTheDocument();
+    rerender(<ChatMarkdown text="See [Source 1]." webSources={WEB_SOURCES} />);
+    expect(screen.getByRole("link", { name: "[Source 1]" })).toHaveAttribute(
+        "href",
+        WEB_SOURCES[0]?.url
+    );
+});
+
+it.each([
+    "javascript:alert(1)",
+    "//evil.example",
+    "https://user:pass@example.com",
+    "file:///tmp/source",
+])("does not turn an unsafe source URL into a citation link: %s", url => {
+    render(
+        <ChatMarkdown
+            text="Unsafe [Source 1]. Valid [Source 2]."
+            webSources={[{ title: "Unsafe", url }, WEB_SOURCES[1]!]}
+        />
+    );
+    expect(screen.queryByRole("link", { name: "[Source 1]" })).not.toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "[Source 2]" })).toHaveAttribute(
+        "href",
+        WEB_SOURCES[1]?.url
+    );
+});
+
 it("copies table values as CSV with quote escaping and as Markdown", async () => {
     render(<ChatMarkdown text={'| Name | Value |\n| --- | --- |\n| A, B | Say "yes" |'} />);
     fireEvent.click(screen.getByRole("button", { name: "Copy as CSV" }));

@@ -27,6 +27,7 @@ import { UNFILED_FOLDER, compareFolderPaths, displayFolderPath } from "~/lib/fol
 import type { ActionMenuItem } from "~/components/ui/action-menu";
 import { useContextTarget } from "~/components/context-menu";
 import { buildSelectionMenuItems, buildSourceMenuItems } from "./sourceContextMenu";
+import { useOpenOutside } from "./externalLink";
 import { DOC_DOMAINS, SOURCE_META } from "./types";
 import type { DocDomain, SourceTypeId, WorkspaceFolder, WorkspaceSource } from "./types";
 
@@ -98,6 +99,7 @@ export function KnowledgePane({
 }: KnowledgePaneProps) {
     const t = useTranslations("sources.knowledgePane");
     const tm = useTranslations("sources.contextMenu");
+    const openOutside = useOpenOutside();
     const tr = useTranslations("sources.railCommands");
     const tTypes = useTranslations("sources.sourceTypes");
     const tc = useTranslations("common");
@@ -141,6 +143,7 @@ export function KnowledgePane({
                         );
                     }
                 },
+                onOpenOutside: openOutside,
                 onRename: onRenameSource,
                 onMoveToFolder,
                 onCopyTitle: s => {
@@ -159,6 +162,7 @@ export function KnowledgePane({
         },
         [
             tm,
+            openOutside,
             sources,
             folders,
             selected,

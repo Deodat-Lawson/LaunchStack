@@ -30,6 +30,7 @@ import { canEditFolder } from "~/server/services/folder-access";
 import { recordUpload } from "~/server/workspace/added-documents";
 import { getCompanyAccessToken } from "~/server/services/connectors/connection-store";
 import { UploadAuthorizationError } from "~/server/services/upload-authorization-error";
+import { githubRepoOrigin } from "~/lib/source-external-link";
 
 const GitHubRepoSchema = z.object({
     repoUrl: z.string().url(V.validUrlRequired),
@@ -136,6 +137,8 @@ export async function POST(request: Request) {
                 explicitStorageType: "s3",
                 mimeType: "application/zip",
                 originalFilename: filename,
+                // So every file it expands into can offer "Open on GitHub".
+                ocrMetadata: githubRepoOrigin(owner, repo, branch),
             });
             await recordUpload(ctx.data, uploadResult);
 

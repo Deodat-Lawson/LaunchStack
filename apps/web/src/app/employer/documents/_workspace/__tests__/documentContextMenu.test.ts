@@ -64,6 +64,28 @@ describe("document menu builders", () => {
         });
     });
 
+    it("offers where the file opens outside LaunchStack beside Open in a new tab", () => {
+        const h = { ...handlers(), onOpenOutside: jest.fn() };
+        const link = { kind: "file" as const, url: "/api/files/12" };
+        const items = buildDocumentMenuItems(
+            doc,
+            {
+                isMindmap: false,
+                askable: true,
+                persisted: true,
+                originalUrl: "/api/files/12",
+                outside: { link, label: "Open file" },
+            },
+            h,
+            t
+        );
+        expect(items.map(i => i.id).slice(3, 6)).toEqual(["open-tab", "open-outside", "download"]);
+        const item = items.find(i => i.id === "open-outside");
+        expect(item).toMatchObject({ label: "Open file", icon: "external" });
+        if (item?.type === "item") item.onSelect();
+        expect(h.onOpenOutside).toHaveBeenCalledWith(link);
+    });
+
     it("refuses rename and delete on a file shared with the caller to view", () => {
         const items = buildDocumentMenuItems(
             doc,

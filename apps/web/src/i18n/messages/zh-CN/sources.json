@@ -821,6 +821,27 @@
     "deleteSelection": "{count, plural, other {删除 # 个来源…}}",
     "deleteSelectionSome": "{count, plural, other {删除 # 个来源中的 {movable} 个…}}"
   },
+  "externalLink": {
+    "openGoogleDrive": "在 Google Drive 中打开",
+    "openNotion": "在 Notion 中打开",
+    "openGmail": "在 Gmail 中打开",
+    "openObsidian": "在 Obsidian 中打开",
+    "openGithub": "在 GitHub 上打开",
+    "openYoutube": "在 YouTube 上打开",
+    "openClaude": "在 claude.ai 上打开",
+    "openWeb": "打开原始页面",
+    "openFile": "打开文件",
+    "hintSite": "在新标签页中打开 {host}",
+    "hintObsidian": "在你的 Obsidian 仓库中打开此笔记",
+    "hintFile": "在新的浏览器标签页中打开文件本身",
+    "detailsLabel": "打开位置",
+    "placeGoogleDrive": "Google Drive",
+    "placeNotion": "Notion",
+    "placeGmail": "Gmail",
+    "placeObsidian": "Obsidian",
+    "placeYoutube": "YouTube",
+    "placeFile": "你的浏览器"
+  },
   "connectorSync": {
     "syncing": "正在同步…",
     "starting": "正在启动同步…",

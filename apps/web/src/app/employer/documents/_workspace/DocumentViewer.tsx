@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useFormatter, useTranslations } from "next-intl";
 import {
+    ExternalLink,
     Folder as IconFolder,
     PanelRightClose,
     Pencil,
@@ -51,6 +52,16 @@ import {
     type WorkspaceTranslator,
 } from "./types";
 import { DocumentViewerHeader, type HeaderAction } from "./DocumentViewerHeader";
+import {
+    downloadStoredFile,
+    driveLinkKey,
+    externalLinkHint,
+    externalLinkLabel,
+    externalLinkPlace,
+    openExternalLink,
+    opensAnApp,
+    useDriveChangedOutsideLink,
+} from "./externalLink";
 import { DocumentNotesPanel, type PrefilledAnchor } from "~/components/notes/DocumentNotesPanel";
 import type { DocumentNote } from "~/server/db/schema";
 import { getDocumentDisplayType } from "../types/document";
@@ -315,6 +326,7 @@ export function DocumentViewer({
     const tSourceMenu = useTranslations("sources.contextMenu");
     const tMindmapErrors = useTranslations("mindmap.errors");
     const tDrive = useTranslations("sources.googleDriveBanner");
+    const tOutside = useTranslations("sources.externalLink");
     const driveLinkSummary = useDriveLinkSummary();
     /** A new map's starter text, read by the fetch without making it re-run. */
     const starter = useTranslations("mindmap.starter");
@@ -449,6 +461,23 @@ export function DocumentViewer({
     const drive = useDriveLinkStatus(driveDocumentId);
     const driveBarHidden = useDriveBarHidden();
     const driveLink = drive.status?.link ?? null;
+    /**
+     * Where this opens outside LaunchStack — its origin, or the stored file.
+     * A Drive copy linked or unlinked here changes it, so the server's word
+     * after that comes first; then the fetched row; the rail's row stands
+     * in until that arrives. A map has none: it is drawn here, and its
+     * published copy is a by-product.
+     */
+    const relinkedOutsideLink = useDriveChangedOutsideLink(
+        driveDocumentId,
+        driveLinkKey(drive.status),
+        fullDoc
+    );
+    const outsideLink = isMindmap
+        ? null
+        : relinkedOutsideLink !== undefined
+          ? relinkedOutsideLink
+          : (fullDoc?.externalLink ?? source.externalLink ?? null);
     /**
      * Bring the rail into view for something that happens in it — a new
      * note's draft, a pin's card. Not remembered: it is shown for this, and
@@ -978,6 +1007,9 @@ export function DocumentViewer({
                     persisted,
                     editable,
                     originalUrl: fullDoc?.url ?? null,
+                    outside: outsideLink
+                        ? { link: outsideLink, label: externalLinkLabel(tOutside, outsideLink) }
+                        : null,
                 },
                 {
                     onAskAbout: () => onAskAbout(source),
@@ -993,8 +1025,10 @@ export function DocumentViewer({
                                   "noopener,noreferrer"
                               )
                         : undefined,
+                    onOpenOutside: openExternalLink,
+                    // Saves it: "Open file" is the one that opens it in a tab.
                     onDownload: () => {
-                        if (fullDoc?.url) window.open(fullDoc.url, "_blank", "noopener,noreferrer");
+                        if (fullDoc?.url) downloadStoredFile(fullDoc.url);
                     },
                     onCopyLink: () => {
                         const link = `${window.location.origin}/employer/documents?source=${encodeURIComponent(source.id)}`;
@@ -1101,6 +1135,18 @@ export function DocumentViewer({
                             })
                           : tc("actions.share"),
                       testId: "viewer-share",
+                  },
+              ]
+            : []),
+        ...(outsideLink
+            ? [
+                  {
+                      id: "outside",
+                      label: externalLinkLabel(tOutside, outsideLink),
+                      icon: <ExternalLink className="size-3.5" />,
+                      onSelect: () => openExternalLink(outsideLink),
+                      hint: externalLinkHint(tOutside, outsideLink),
+                      testId: "viewer-open-outside",
                   },
               ]
             : []),
@@ -1930,6 +1976,30 @@ export function DocumentViewer({
                                         </span>
                                     }
                                 />
+                                {outsideLink && (
+                                    <MetaRow
+                                        label={tOutside("detailsLabel")}
+                                        value={
+                                            <a
+                                                href={outsideLink.url}
+                                                // An app link is handed over in place; a
+                                                // new tab would sit blank behind the app.
+                                                target={
+                                                    opensAnApp(outsideLink) ? undefined : "_blank"
+                                                }
+                                                rel="noopener noreferrer"
+                                                title={externalLinkHint(tOutside, outsideLink)}
+                                                data-testid="viewer-outside-link"
+                                                className="text-brand-ink inline-flex min-w-0 max-w-[200px] items-center gap-1 hover:underline"
+                                            >
+                                                <span className="truncate">
+                                                    {externalLinkPlace(tOutside, outsideLink)}
+                                                </span>
+                                                <ExternalLink className="size-3 shrink-0" />
+                                            </a>
+                                        }
+                                    />
+                                )}
                                 <MetaRow
                                     label={t("documentViewer.metaIndexed")}
                                     value={

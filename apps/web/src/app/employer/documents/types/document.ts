@@ -1,6 +1,7 @@
 // Document-related types
 
 import { isArtifactDocument } from "~/lib/artifact-document";
+import type { SourceExternalLink } from "~/lib/source-external-link";
 import { isMindmapDocument } from "~/lib/mindmap-document";
 import { websiteMarkerOf } from "~/lib/website-document";
 import { isConversationConnector } from "~/lib/session-transcript";
@@ -59,6 +60,8 @@ export interface DocumentType {
     restricted?: boolean;
     /** When it was added (ISO time from the API). */
     createdAt?: string;
+    /** Where it opens outside LaunchStack (`/api/fetchDocument` works it out per row). */
+    externalLink?: SourceExternalLink | null;
 }
 
 const CODE_MIME_PREFIXES = [

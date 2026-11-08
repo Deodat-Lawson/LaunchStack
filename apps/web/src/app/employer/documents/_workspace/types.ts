@@ -6,6 +6,7 @@ import type { Permission } from "~/lib/authz/permissions";
 import type { ChatPassage } from "~/lib/chat-passages";
 import type { ChatCreatedSource, ChatTurnStep } from "~/lib/chat-turns";
 import type { SourceProcessingView } from "~/lib/source-progress";
+import type { SourceExternalLink } from "~/lib/source-external-link";
 // Icons: lucide-react for glyphs, ~/components/icons/brand for brand marks.
 import {
     AppWindow as IconArtifact,
@@ -205,6 +206,12 @@ export interface WorkspaceSource {
     access?: ItemAccessView;
     /** Who added it, when a person did. */
     addedBy?: SourceAddedBy | null;
+    /**
+     * Where it opens outside LaunchStack: its origin (Drive, Notion, the
+     * website…) or the stored file in a browser tab. Absent for mindmaps,
+     * staged uploads and rows from an older server.
+     */
+    externalLink?: SourceExternalLink | null;
 }
 
 export interface WorkspaceFolder {

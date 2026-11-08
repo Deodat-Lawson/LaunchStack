@@ -10,6 +10,8 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 const lifecycleCalls: Array<Record<string, unknown>> = [];
 const uploads: Array<{ filename: string; contentType?: string; companyId?: bigint }> = [];
 const deletions: Array<{ table: string }> = [];
+/** The archive row's `ocr_metadata`, as its importer wrote it. */
+let archiveMetadata: Record<string, unknown> | null = null;
 
 vi.mock("@launchstack/orchestration", () => ({
     createDocumentLifecycle: vi.fn(async (params: Record<string, unknown>) => {
@@ -28,6 +30,13 @@ vi.mock("@launchstack/orchestration", () => ({
 
 vi.mock("@launchstack/store/client", () => ({
     getDb: () => ({
+        select: () => ({
+            from: () => ({
+                where: () => ({
+                    limit: async () => [{ ocrMetadata: archiveMetadata }],
+                }),
+            }),
+        }),
         delete: (table: { _: { name?: string } } | object) => {
             deletions.push({ table: "table" in Object(table) ? "t" : "t" });
             return { where: async () => [] };
@@ -58,7 +67,13 @@ vi.mock("@launchstack/runtime", async importOriginal => ({
     }),
 }));
 
-import { expandArchive, isTextFastPathFile, isZipFile } from "./archive-expansion";
+import {
+    archiveEntryOriginUrl,
+    expandArchive,
+    isTextFastPathFile,
+    isZipFile,
+    sharedTopFolder,
+} from "./archive-expansion";
 
 async function makeZip(entries: Record<string, string>): Promise<Buffer> {
     const zip = new JSZip();
@@ -129,6 +144,7 @@ beforeEach(() => {
     lifecycleCalls.length = 0;
     uploads.length = 0;
     deletions.length = 0;
+    archiveMetadata = null;
     vi.clearAllMocks();
 });
 
@@ -181,6 +197,40 @@ describe("expandArchive", () => {
 
         // Original ZIP job + document rows are deleted (two delete calls).
         expect(deletions).toHaveLength(2);
+    });
+
+    it("gives every file from a GitHub import its own page there, and the summary the repo", async () => {
+        // A GitHub zipball wraps the repository in `<owner>-<repo>-<sha>/`.
+        archiveMetadata = {
+            originUrl: "https://github.com/acme/app",
+            originEntryBaseUrl: "https://github.com/acme/app/blob/HEAD/",
+        };
+        const buffer = await makeZip({
+            "acme-app-7fd1a60/README.md": "# App",
+            "acme-app-7fd1a60/src/my file.py": "print('hi')",
+        });
+
+        await expandArchive(archiveInput(buffer));
+
+        const originOf = (entry: string | null) =>
+            (
+                lifecycleCalls.find(c => c.sourceArchiveEntry === entry)?.ocrMetadata as
+                    | { originUrl?: string }
+                    | undefined
+            )?.originUrl;
+        expect(originOf("acme-app-7fd1a60/README.md")).toBe(
+            "https://github.com/acme/app/blob/HEAD/README.md"
+        );
+        expect(originOf("acme-app-7fd1a60/src/my file.py")).toBe(
+            "https://github.com/acme/app/blob/HEAD/src/my%20file.py"
+        );
+        expect(originOf(null)).toBe("https://github.com/acme/app");
+    });
+
+    it("adds no origin to an archive that has none", async () => {
+        const buffer = await makeZip({ "README.md": "# Project" });
+        await expandArchive(archiveInput(buffer));
+        expect(lifecycleCalls.every(c => c.ocrMetadata === undefined)).toBe(true);
     });
 
     it("stamps the archive's workspace on every entry and the summary upload", async () => {
@@ -381,5 +431,20 @@ describe("expandArchive", () => {
                 })
             )
         ).rejects.toThrow(/Failed to fetch ZIP archive: 404/);
+    });
+});
+
+describe("archive origin helpers", () => {
+    it("finds the one folder everything sits in, and only that", () => {
+        expect(sharedTopFolder(["r-1/a.md", "r-1/src/b.ts"])).toBe("r-1/");
+        expect(sharedTopFolder(["a.md", "src/b.ts"])).toBeNull();
+        expect(sharedTopFolder(["x/a.md", "y/b.md"])).toBeNull();
+        expect(sharedTopFolder([])).toBeNull();
+    });
+
+    it("joins the base and the path inside the top folder, encoded per segment", () => {
+        expect(
+            archiveEntryOriginUrl("https://github.com/a/b/blob/main", "r-1/docs/A & B.md", "r-1/")
+        ).toBe("https://github.com/a/b/blob/main/docs/A%20%26%20B.md");
     });
 });

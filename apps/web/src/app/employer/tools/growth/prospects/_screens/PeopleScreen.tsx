@@ -1,5 +1,6 @@
 "use client";
 
+import { ArrowDown, ArrowUp, ExternalLink } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -20,8 +21,8 @@ import {
 } from "~/components/ui/table";
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 
-import { prospectsApi, type EmailStatusKind } from "../api";
-import { useCopyText } from "~/lib/tools/copyText";
+import { prospectsApi, type EmailStatusKind, type PersonRow } from "../api";
+import { useCopyText, type CopyText } from "~/lib/tools/copyText";
 import { useProspects } from "../_lib/context";
 import { useErrorText } from "~/lib/tools/errorText";
 import { useResource } from "~/lib/tools/useResource";
@@ -32,6 +33,39 @@ import { PageHeader } from "~/components/tools/PageHeader";
 import { SkeletonRows } from "~/components/tools/SkeletonRows";
 
 const STATUSES: ReadonlyArray<"all" | EmailStatusKind> = ["all", ...EMAIL_STATUSES];
+type PeopleSort = "name" | "company";
+type SortDir = "asc" | "desc";
+
+function SortHead({
+    label,
+    active,
+    dir,
+    onClick,
+}: {
+    label: string;
+    active: boolean;
+    dir: SortDir;
+    onClick: () => void;
+}) {
+    const Icon = dir === "asc" ? ArrowUp : ArrowDown;
+    return (
+        <TableHead aria-sort={active ? (dir === "asc" ? "ascending" : "descending") : "none"}>
+            <button
+                type="button"
+                onClick={onClick}
+                className="text-ink-3 hover:text-ink inline-flex items-center gap-1 text-xs font-medium"
+            >
+                {label}
+                {active && <Icon className="size-3" aria-hidden />}
+            </button>
+        </TableHead>
+    );
+}
+
+function sortValue(person: PersonRow, sort: PeopleSort, word: CopyText): string {
+    if (sort === "name") return word(person.nameCopy, person.name);
+    return person.companyName;
+}
 
 export function PeopleScreen() {
     const t = useTranslations("growth.prospects");
@@ -40,6 +74,15 @@ export function PeopleScreen() {
     const errorText = useErrorText();
     const { segmentId, href } = useProspects();
     const [status, setStatus] = useState<"all" | EmailStatusKind>("all");
+    const [sort, setSort] = useState<PeopleSort>("name");
+    const [dir, setDir] = useState<SortDir>("asc");
+    const chooseSort = (next: PeopleSort) => {
+        if (next === sort) setDir(current => (current === "asc" ? "desc" : "asc"));
+        else {
+            setSort(next);
+            setDir("asc");
+        }
+    };
     const [q, setQ] = useState("");
     const [debounced, setDebounced] = useState("");
     useEffect(() => {
@@ -54,7 +97,17 @@ export function PeopleScreen() {
             status: status === "all" ? undefined : status,
         })
     );
-    const people = useMemo(() => res.data?.people ?? [], [res.data]);
+    const people = useMemo(() => {
+        const rows = res.data?.people ?? [];
+        return [...rows].sort((a, b) => {
+            const left = sortValue(a, sort, word);
+            const right = sortValue(b, sort, word);
+            if (!left && right) return 1;
+            if (left && !right) return -1;
+            const compared = left.localeCompare(right, undefined, { sensitivity: "base" });
+            return dir === "asc" ? compared : -compared;
+        });
+    }, [res.data, sort, dir, word]);
     const [selected, setSelected] = useState<Set<string>>(new Set());
     useEffect(() => setSelected(new Set()), [status, debounced, segmentId]);
 
@@ -113,7 +166,7 @@ export function PeopleScreen() {
                     onChange={e => setQ(e.target.value)}
                     placeholder={t("people.searchPlaceholder")}
                     aria-label={t("people.searchAria")}
-                    className="h-8 w-[260px] text-[13px]"
+                    className="ml-auto h-8 w-[260px] text-[13px]"
                 />
             </div>
 
@@ -154,17 +207,26 @@ export function PeopleScreen() {
                                         }
                                     />
                                 </TableHead>
-                                <TableHead className="text-ink-3 text-xs font-medium">
-                                    {t("people.person")}
-                                </TableHead>
-                                <TableHead className="text-ink-3 text-xs font-medium">
-                                    {t("common.company")}
-                                </TableHead>
+                                <SortHead
+                                    label={t("people.person")}
+                                    active={sort === "name"}
+                                    dir={dir}
+                                    onClick={() => chooseSort("name")}
+                                />
+                                <SortHead
+                                    label={t("common.company")}
+                                    active={sort === "company"}
+                                    dir={dir}
+                                    onClick={() => chooseSort("company")}
+                                />
                                 <TableHead className="text-ink-3 text-xs font-medium">
                                     {tc("fields.email")}
                                 </TableHead>
                                 <TableHead className="text-ink-3 text-xs font-medium">
                                     {t("common.source")}
+                                </TableHead>
+                                <TableHead className="text-ink-3 text-xs font-medium">
+                                    {t("company.linkedinLink")}
                                 </TableHead>
                             </TableRow>
                         </TableHeader>
@@ -230,18 +292,54 @@ export function PeopleScreen() {
                                             </span>
                                         </TableCell>
                                         <TableCell className="text-ink-3 text-xs">
-                                            {p.sourceUrl ? (
+                                            {source}
+                                        </TableCell>
+                                        <TableCell className="text-xs">
+                                            {p.sourceUrl?.includes("linkedin.com") ? (
                                                 <a
                                                     href={p.sourceUrl}
                                                     target="_blank"
                                                     rel="noreferrer"
-                                                    className="hover:text-brand-ink hover:underline"
+                                                    className="text-ink-2 inline-flex max-w-full items-center gap-1 underline underline-offset-2"
                                                 >
-                                                    {source}
+                                                    <span className="truncate">
+                                                        {t("company.linkedinLink")}
+                                                    </span>
+                                                    <ExternalLink
+                                                        className="size-3 shrink-0"
+                                                        aria-hidden
+                                                    />
+                                                </a>
+                                            ) : p.emailStatus ===
+                                              "generic" ? null : p.linkedinSearchUrl ? (
+                                                <a
+                                                    href={p.linkedinSearchUrl}
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                    className="text-ink-2 inline-flex max-w-full items-center gap-1 underline underline-offset-2"
+                                                >
+                                                    <span className="truncate">
+                                                        {t("company.openLinkedIn")}
+                                                    </span>
+                                                    <ExternalLink
+                                                        className="size-3 shrink-0"
+                                                        aria-hidden
+                                                    />
                                                 </a>
                                             ) : (
-                                                source
+                                                <span className="text-ink-4">
+                                                    {t("company.noLinkedIn")}
+                                                </span>
                                             )}
+                                            {p.linkedinStatus &&
+                                                p.linkedinStatus !== "search_error" &&
+                                                p.emailStatus !== "generic" && (
+                                                    <span className="text-ink-4 mt-0.5 block text-[11px]">
+                                                        {t(
+                                                            `company.linkedinStatus.${p.linkedinStatus}`
+                                                        )}
+                                                    </span>
+                                                )}
                                         </TableCell>
                                     </TableRow>
                                 );

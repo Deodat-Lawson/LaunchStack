@@ -9,6 +9,8 @@ import type { SalesStage } from "../api";
 import { useGrowthFormat } from "../../_lib/format";
 import { FUNNEL_STAGES, stageTone } from "../_lib/stages";
 
+const STAGE_MIN_WIDTH = "min-w-[4.5rem]";
+
 /**
  * One row whose segment widths are the counts, so it needs no legend and no
  * axis. Accent for stages in motion, ok for won, neutral for lead. Empty
@@ -60,7 +62,7 @@ export function FunnelBar({
                         <div
                             key={stage}
                             className={cn(
-                                "min-w-0",
+                                STAGE_MIN_WIDTH,
                                 i < FUNNEL_STAGES.length - 1 && "border-line border-r"
                             )}
                             style={{ flex: `${grow} 1 0` }}
@@ -84,7 +86,7 @@ export function FunnelBar({
                     return (
                         <span
                             key={stage}
-                            className="min-w-0 truncate px-0.5 text-center"
+                            className={cn(STAGE_MIN_WIDTH, "truncate px-0.5 text-center")}
                             style={{ flex: `${grow} 1 0` }}
                         >
                             {ts(stage)}

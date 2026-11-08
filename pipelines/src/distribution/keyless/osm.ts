@@ -2,10 +2,11 @@
  * OpenStreetMap through the public Overpass API: organisations with a
  * website tag, by country (or city) and by what they are. No key, no
  * account. Free under ODbL, which is why every hit carries its OSM id as
- * provenance. The public instance asks for a User-Agent, one query at a
- * time and modest timeouts; this adapter does exactly that.
+ * provenance. The public instance asks for a User-Agent and modest
+ * timeouts; cities of a large country are queried a few at a time.
  */
 import type { PartnerKind } from "../types";
+import { mapInPool } from "../pool";
 import { cosine, type EmbedTexts } from "../semantic";
 import type { OsmCategory } from "./taginfo";
 import { escapeRegExp, overpassAreas } from "./geo";
@@ -19,6 +20,14 @@ export const OVERPASS_MIRRORS = [
 ];
 export const KEYLESS_USER_AGENT =
     "LaunchStack-Prospects/0.1 (+https://github.com/Deodat-Lawson/LaunchStack)";
+
+/** Cities queried at once in a large country. Keeps load modest on public mirrors. */
+const AREA_CONCURRENCY = 2;
+/**
+ * Hard stop when a mirror accepts the POST but never answers. Slightly above
+ * the query's own `[timeout:20]` so a normal slow answer can still land.
+ */
+export const OVERPASS_CLIENT_TIMEOUT_MS = 25_000;
 
 // A plain key filter; a regex over keys is what makes a country-wide query time out.
 const WEBSITE_FILTER = '["website"]';
@@ -243,6 +252,8 @@ export interface OverpassClientOptions {
     /** Instances to try in order; defaults to OVERPASS_MIRRORS. */
     urls?: readonly string[];
     userAgent?: string;
+    /** Abort a hanging POST; defaults to OVERPASS_CLIENT_TIMEOUT_MS. */
+    timeoutMs?: number;
 }
 
 interface OverpassResponse {
@@ -251,47 +262,85 @@ interface OverpassResponse {
     remark?: string;
 }
 
+/** Abort when `ms` elapses or when `parent` aborts, whichever is first. */
+function signalWithTimeout(
+    parent: AbortSignal | undefined,
+    ms: number
+): {
+    signal: AbortSignal;
+    clear: () => void;
+} {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), ms);
+    const onParent = () => controller.abort();
+    parent?.addEventListener("abort", onParent);
+    if (parent?.aborted) controller.abort();
+    return {
+        signal: controller.signal,
+        clear: () => {
+            clearTimeout(timer);
+            parent?.removeEventListener("abort", onParent);
+        },
+    };
+}
+
 async function requestArea(
     url: string,
     query: string,
     options: OverpassClientOptions
 ): Promise<OverpassElement[]> {
-    const response = await (options.fetchImpl ?? fetch)(url, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-            "User-Agent": options.userAgent ?? KEYLESS_USER_AGENT,
-            Accept: "application/json",
-        },
-        body: new URLSearchParams({ data: query }),
-        signal: options.signal,
-    });
-    if (!response.ok) {
-        const text = await response.text().catch(() => "");
-        throw new Error(
-            `Overpass ${response.status}${
-                text
-                    ? `: ${text
-                          .replace(/<[^>]+>/g, " ")
-                          .replace(/\s+/g, " ")
-                          .trim()
-                          .slice(0, 100)}`
-                    : ""
-            }`
-        );
+    const timed = signalWithTimeout(
+        options.signal,
+        options.timeoutMs ?? OVERPASS_CLIENT_TIMEOUT_MS
+    );
+    try {
+        const response = await (options.fetchImpl ?? fetch)(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                "User-Agent": options.userAgent ?? KEYLESS_USER_AGENT,
+                Accept: "application/json",
+            },
+            body: new URLSearchParams({ data: query }),
+            signal: timed.signal,
+        });
+        if (!response.ok) {
+            const text = await response.text().catch(() => "");
+            throw new Error(
+                `Overpass ${response.status}${
+                    text
+                        ? `: ${text
+                              .replace(/<[^>]+>/g, " ")
+                              .replace(/\s+/g, " ")
+                              .trim()
+                              .slice(0, 100)}`
+                        : ""
+                }`
+            );
+        }
+        const json = (await response.json()) as OverpassResponse;
+        const elements = json.elements ?? [];
+        if (elements.length === 0 && json.remark && /timed out|error/i.test(json.remark))
+            throw new Error(`Overpass remark: ${json.remark.slice(0, 120)}`);
+        return elements;
+    } catch (error) {
+        if (timed.signal.aborted && !options.signal?.aborted) {
+            throw new Error(
+                `Overpass client timeout after ${options.timeoutMs ?? OVERPASS_CLIENT_TIMEOUT_MS}ms`
+            );
+        }
+        throw error;
+    } finally {
+        timed.clear();
     }
-    const json = (await response.json()) as OverpassResponse;
-    const elements = json.elements ?? [];
-    if (elements.length === 0 && json.remark && /timed out|error/i.test(json.remark))
-        throw new Error(`Overpass remark: ${json.remark.slice(0, 120)}`);
-    return elements;
 }
 
 /**
  * Runs one Overpass request per area (a country, or the top cities of a big
  * one), trying each public instance in turn when one is overloaded, and
- * merges the places. Throws only when every instance failed for an area,
- * so the gather stage can mark the source failed.
+ * merges the places. Cities of a large country run a few at a time. Throws
+ * only when every instance failed for every area, so the gather stage can
+ * mark the source failed.
  */
 export async function searchOverpass(
     req: OverpassRequest,
@@ -299,27 +348,46 @@ export async function searchOverpass(
 ): Promise<OsmPlace[]> {
     const urls = options.urls ?? OVERPASS_MIRRORS;
     const areas = overpassAreas(req.country, req.region ?? null);
+    const limit = req.limit ?? 40;
     const places: OsmPlace[] = [];
+    const seen = new Set<string>();
     let lastError: Error | null = null;
-    for (const area of areas) {
-        if (options.signal?.aborted) break;
-        const query = buildOverpassQuery(area, req);
-        let elements: OverpassElement[] | null = null;
-        for (const url of urls) {
-            try {
-                elements = await requestArea(url, query, options);
-                break;
-            } catch (error) {
-                lastError = error instanceof Error ? error : new Error(String(error));
-                if (options.signal?.aborted) break;
-            }
+
+    const addPlaces = (batch: OsmPlace[]) => {
+        for (const place of batch) {
+            if (places.length >= limit) return;
+            const key = place.website ?? place.id;
+            if (seen.has(key)) continue;
+            seen.add(key);
+            places.push(place);
         }
-        if (elements === null) continue;
-        places.push(...mapOverpassElements(elements, area));
-        if (places.length >= (req.limit ?? 40)) break;
-    }
+    };
+
+    await mapInPool(
+        areas,
+        AREA_CONCURRENCY,
+        async area => {
+            const query = buildOverpassQuery(area, req);
+            let elements: OverpassElement[] | null = null;
+            for (const url of urls) {
+                try {
+                    elements = await requestArea(url, query, options);
+                    break;
+                } catch (error) {
+                    lastError = error instanceof Error ? error : new Error(String(error));
+                    if (options.signal?.aborted) break;
+                }
+            }
+            if (elements === null) return 0;
+            const mapped = mapOverpassElements(elements, area);
+            addPlaces(mapped);
+            return mapped.length;
+        },
+        () => places.length >= limit || Boolean(options.signal?.aborted)
+    );
+
     if (places.length === 0 && lastError) throw lastError;
-    return places.slice(0, req.limit ?? 40);
+    return places.slice(0, limit);
 }
 
 /** Food service and shops that sell to the public: a retailer for a segment's purposes. */

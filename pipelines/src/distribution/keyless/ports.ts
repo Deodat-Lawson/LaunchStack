@@ -20,6 +20,7 @@
 import type { AgentModelPort } from "@launchstack/llm";
 import { fetchReadable } from "@launchstack/tools/web-research";
 
+import type { LinkedInLookup, LinkedInSearchRequest } from "../linkedin-search";
 import type { DistributionPorts, PublishDossierInput } from "../run";
 import type { EmbedTexts, JudgeFit } from "../semantic";
 import { nativeTermsFor, overpassAreas } from "./geo";
@@ -50,6 +51,15 @@ export interface KeylessPortsOptions {
     judgeFit?: JudgeFit | null;
     /** Pages read per candidate (default 4). */
     pagesPerCandidate?: number;
+    /**
+     * Public search for LinkedIn profiles of people the website already named.
+     * Omitted searches are left unmatched. This is never a paid search API.
+     */
+    searchLinkedIn?:
+        | ((
+              people: readonly LinkedInSearchRequest[]
+          ) => Promise<ReadonlyMap<string, LinkedInLookup>>)
+        | null;
 }
 
 /**
@@ -180,7 +190,11 @@ export function createKeylessPorts(options: KeylessPortsOptions = {}): Distribut
             playbookHash: KEYLESS_PLAYBOOK_HASH,
         }),
         profile: (ports, input) =>
-            profileFromPages(ports, input, { maxPages: options.pagesPerCandidate ?? 4 }),
+            profileFromPages(
+                { ...ports, searchLinkedIn: options.searchLinkedIn ?? null },
+                input,
+                { maxPages: options.pagesPerCandidate ?? 4 }
+            ),
     };
 }
 

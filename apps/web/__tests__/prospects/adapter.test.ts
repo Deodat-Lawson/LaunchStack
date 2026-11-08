@@ -217,8 +217,57 @@ describe("profiles and people", () => {
             },
             null
         );
-        expect(people.map(p => p.emailStatus)).toEqual(["generic", "found"]);
-        expect(people[1]!.name).toBe("jan devries");
+        expect(people.map(p => p.email)).toEqual(["jan.devries@example.test"]);
+        expect(people[0]!.name).toBe("jan devries");
+        expect(people[0]!.emailStatus).toBe("found");
+    });
+
+    it("does not link a guessed linkedin.com/in/first-last address", () => {
+        const people = contactPeople(
+            rel({
+                dossier: {
+                    summary: "A Dutch distributor of specialty food to independent retailers.",
+                    roles: ["distributor"],
+                    brandsCarried: [],
+                    territories: [],
+                    retailCoverage: [],
+                    certifications: [],
+                    contactChannels: [],
+                    decisionMakers: [
+                        {
+                            name: "Kelly Fitzsimmons",
+                            title: "Chief Executive Officer",
+                            evidenceIds: [9],
+                        },
+                    ],
+                    risks: [],
+                    sizeBand: "small",
+                    openQuestions: [],
+                },
+            }),
+            { id: "org-1", name: "CareMessage" } as never,
+            null,
+            null,
+            [
+                {
+                    id: 9,
+                    companyId: 1n,
+                    orgId: "org-1",
+                    runId: null,
+                    kind: "contact",
+                    claim: "CareMessage lists Kelly Fitzsimmons as Chief Executive Officer on LinkedIn (https://www.linkedin.com/in/kelly-fitzsimmons/).",
+                    sourceUrl: "https://www.caremessage.org/about-us/our-team/",
+                    quote: "Kelly Fitzsimmons | Chief Executive Officer, Project Evident",
+                    confidence: 0.7,
+                    capturedAt: new Date("2026-11-08T00:00:00Z"),
+                    provenance: null,
+                },
+            ]
+        );
+        expect(people[0]!.sourceUrl).toBeNull();
+        expect(people[0]!.linkedinSearchUrl).toBe(
+            "https://www.linkedin.com/search/results/people/?keywords=Kelly%20Fitzsimmons%20CareMessage"
+        );
     });
 });
 
@@ -325,6 +374,40 @@ describe("runs", () => {
             ["trade", "Trade data"],
             ["lookalike", "Lookalikes"],
         ]);
+    });
+
+    it("marks profiles as written on open when a live or keyless run enriched none", () => {
+        const summary = {
+            sources: [],
+            mentions: 10,
+            resolved: 5,
+            excluded: 0,
+            shortlisted: 5,
+            enriched: 0,
+            gateRejections: 0,
+            budgetExhausted: 0,
+            screened: 0,
+            flagged: 0,
+            published: 0,
+            degraded: false,
+            warnings: [],
+            tokens: { input: 0, output: 0, total: 0 },
+            wallMs: 12_000,
+        };
+        for (const mode of ["live", "keyless"] as const) {
+            const dto = toRunDto(
+                run({
+                    status: "completed",
+                    completedAt: new Date("2026-09-17T09:01:00Z"),
+                    options: { maxCandidates: 25, mode },
+                    summary,
+                })
+            );
+            const profiles = dto.steps.find(s => s.id === "profiles")!;
+            expect(profiles.status).toBe("skipped");
+            expect(profiles.detail).toBe("written when you open a company");
+            expect(dto.mode).toBe(mode);
+        }
     });
 });
 

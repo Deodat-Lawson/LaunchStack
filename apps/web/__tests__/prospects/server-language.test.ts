@@ -254,13 +254,13 @@ describe("adapter copies say their English field exactly", () => {
             "Company excluded: Excluded from runs",
             copy("growth.server.companies.blockedExcludedFromRuns")
         );
+        expect(people.map(p => p.email)).toEqual(["jan@example.test"]);
         for (const p of people) {
             expect(en(p.nameCopy) ?? p.name).toBe(p.name);
             expect(en(p.titleCopy) ?? p.title).toBe(p.title);
             expect(en(p.sourceCopy)).toBe(p.source);
             expect(en(p.blockedReasonCopy)).toBe(p.blockedReason);
         }
-        expect(zh(people[0]!.titleCopy)).toBe("共享邮箱");
     });
 });
 
@@ -278,9 +278,7 @@ describe("in Chinese", () => {
         expect(zh(sources.children![0]!.rightCopy)).toBe("找到 1200 个");
         expect(zh(sources.children![1]!.detailCopy)).toBe("2 个查询失败");
         expect(zh(dto.capsCopy)).toBe("25 个候选 · 公开来源，无需密钥");
-        expect(zh(dto.steps.find(s => s.id === "people")!.detailCopy)).toBe(
-            "将随联系人查找功能推出"
-        );
+        expect(zh(dto.steps.find(s => s.id === "people")!.detailCopy)).toBe("在公司详情页查找");
         expect(sourceDetailCopy("Exa returned 500")).toBeNull();
     });
 

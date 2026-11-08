@@ -15,10 +15,21 @@ import {
     type DossierAgentInput,
     type DossierAgentPorts,
     type DossierAgentResult,
+    type ProfileProgressStep,
     type RecordedEvidence,
 } from "../dossier-agent";
 import { DossierSchema, type Dossier, type EvidenceKind, type PartnerKind } from "../types";
+import type { LinkedInLookup, LinkedInSearchRequest } from "../linkedin-search";
 import { countriesMentioned, countryName } from "./geo";
+import {
+    TEAM_PATHS,
+    emailForPerson,
+    extractPeople,
+    linkedinUrlForPerson,
+    organisationBeside,
+    organisationPaths,
+    organisationSiteUrls,
+} from "../people";
 
 export const KEYLESS_PROFILE_VERSION = "keyless-profile/v1";
 export const KEYLESS_PROFILER_ID = "keyless/page-reader";
@@ -38,6 +49,10 @@ const EXTRA_PATHS = [
     "/jobs",
     "/vacatures",
     "/karriere",
+    // Shopify keeps a shop's own pages under /pages/.
+    "/pages/about",
+    "/pages/about-us",
+    "/pages/contact",
 ];
 
 const EMAIL_RE = /\b[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}\b/gi;
@@ -224,27 +239,48 @@ const ZERO_USAGE: ChatTokenUsage = { inputTokens: 0, outputTokens: 0, totalToken
 
 export interface KeylessProfileLimits {
     maxPages: number;
+    /** Team or leadership pages read on top of `maxPages`, for named people. */
+    maxTeamPages: number;
     /** Whole-candidate budget; pages after this are not fetched. */
     budgetMs: number;
 }
 
-const DEFAULT_LIMITS: KeylessProfileLimits = { maxPages: 4, budgetMs: 40_000 };
+const DEFAULT_LIMITS: KeylessProfileLimits = { maxPages: 4, maxTeamPages: 2, budgetMs: 40_000 };
 
 /**
  * Fetch the site, extract facts, record each as evidence, assemble the
  * dossier and run it through the same grounding gate the agent faces.
  */
 export async function profileFromPages(
-    ports: Pick<DossierAgentPorts, "fetchPage" | "recordEvidence" | "signal">,
+    ports: Pick<DossierAgentPorts, "fetchPage" | "recordEvidence" | "signal"> & {
+        /** Public web search for profiles. Null skips the search and leaves them unmatched. */
+        searchLinkedIn?:
+            | ((
+                  people: readonly LinkedInSearchRequest[]
+              ) => Promise<ReadonlyMap<string, LinkedInLookup>>)
+            | null;
+    },
     input: DossierAgentInput,
     limits: Partial<KeylessProfileLimits> = {}
 ): Promise<DossierAgentResult> {
-    const { maxPages, budgetMs } = { ...DEFAULT_LIMITS, ...limits };
+    const { maxPages, maxTeamPages, budgetMs } = { ...DEFAULT_LIMITS, ...limits };
     const startedAt = Date.now();
     const fetched = new Set<string>();
     const fetchedUrls: string[] = [];
     const pages: ReadablePage[] = [];
     const evidence = new Map<number, RecordedEvidence>();
+    let teamCount = 0;
+    let namedCount = 0;
+    let slugCount = 0;
+    const report = (step: ProfileProgressStep, people = 0) =>
+        input.onProgress?.({
+            step,
+            pages: pages.length,
+            teamPages: teamCount,
+            named: namedCount,
+            slug: slugCount,
+            people,
+        });
 
     const tryFetch = async (url: string): Promise<ReadablePage | null> => {
         if (ports.signal?.aborted || Date.now() - startedAt > budgetMs) return null;
@@ -269,6 +305,7 @@ export async function profileFromPages(
             : input.org.domain
               ? [`https://${input.org.domain}/`]
               : [];
+    await report("site");
     const home = seeds.length ? await tryFetch(seeds[0]!) : null;
     if (home) {
         const base = home.finalUrl;
@@ -281,6 +318,21 @@ export async function profileFromPages(
                 continue;
             }
             await tryFetch(url);
+        }
+        await report("site");
+        await report("team");
+        for (const path of TEAM_PATHS) {
+            if (teamCount >= maxTeamPages) break;
+            let url: string;
+            try {
+                url = new URL(path, base).href;
+            } catch {
+                continue;
+            }
+            if (await tryFetch(url)) {
+                teamCount++;
+                await report("team");
+            }
         }
     }
 
@@ -307,6 +359,131 @@ export async function profileFromPages(
             ],
         });
     }
+
+    // Route 1: a person exists only when the website writes a name beside a
+    // job title. Anyone the site does not name is not looked up.
+    await report("named");
+    const namedOnSite = new Map<
+        string,
+        {
+            person: ReturnType<typeof extractPeople>[number];
+            page: ReadablePage;
+            slugPage: ReadablePage | null;
+            /** Confirmed profile, published on a page or returned by one search result. */
+            slugUrl: string | null;
+            lookup: LinkedInLookup | null;
+        }
+    >();
+    for (const page of pages) {
+        for (const person of extractPeople(cleanText(page.text), input.org.name)) {
+            const key = person.name.toLowerCase();
+            if (!namedOnSite.has(key))
+                namedOnSite.set(key, { person, page, slugPage: null, slugUrl: null, lookup: null });
+        }
+    }
+    namedCount = namedOnSite.size;
+    await report("named");
+
+    // Route 2: a profile is kept only when the name and the organisation both
+    // appear with it. A guessed address, or a search hit that names someone
+    // else, is left blank.
+    await report("slug");
+    let orgFetches = 0;
+    const pending: LinkedInSearchRequest[] = [];
+    const readOrg = async (url: string): Promise<ReadablePage | null> => {
+        if (ports.signal?.aborted || Date.now() - startedAt > budgetMs || orgFetches >= 12)
+            return null;
+        orgFetches += 1;
+        try {
+            const page = await ports.fetchPage(url);
+            if (page.status >= 400 || page.text.trim().length < 120) return null;
+            return page;
+        } catch {
+            return null;
+        }
+    };
+    for (const named of namedOnSite.values()) {
+        if (ports.signal?.aborted) break;
+        const keep = (url: string) => {
+            named.slugUrl = url;
+            named.lookup = { status: "matched", url };
+            slugCount += 1;
+        };
+        for (const page of pages) {
+            const published = linkedinUrlForPerson(cleanText(page.text), named.person.name);
+            if (published) {
+                keep(published);
+                break;
+            }
+        }
+        if (named.slugUrl) continue;
+        const elsewhere = organisationBeside(
+            cleanText(named.page.text),
+            named.person.name,
+            input.org.name
+        );
+        if (elsewhere) {
+            let origin: string | null = null;
+            for (const site of organisationSiteUrls(elsewhere)) {
+                const home = await readOrg(site);
+                if (!home) continue;
+                origin = new URL(home.finalUrl).origin;
+                const published = linkedinUrlForPerson(home.text, named.person.name);
+                if (published) keep(published);
+                break;
+            }
+            if (!named.slugUrl && origin) {
+                for (const path of organisationPaths(origin).slice(0, 3)) {
+                    const sub = await readOrg(path);
+                    const published = sub && linkedinUrlForPerson(sub.text, named.person.name);
+                    if (published) {
+                        keep(published);
+                        break;
+                    }
+                }
+            }
+        }
+        if (named.slugUrl) continue;
+        // Search "name + company". The organisation written beside the person
+        // is the company when the page names one. The job title is only used
+        // when more than one result has that name at the company.
+        const company = input.org.name;
+        pending.push({
+            name: named.person.name,
+            orgs:
+                elsewhere && elsewhere.toLowerCase() !== company.toLowerCase()
+                    ? [company, elsewhere]
+                    : [company],
+            title: named.person.title,
+        });
+    }
+    if (pending.length > 0 && ports.searchLinkedIn) {
+        let results: ReadonlyMap<string, LinkedInLookup> = new Map();
+        try {
+            results = await ports.searchLinkedIn(pending);
+        } catch {
+            results = new Map();
+        }
+        for (const request of pending) {
+            const named = namedOnSite.get(request.name.toLowerCase());
+            if (!named || named.slugUrl) continue;
+            const found = results.get(request.name) ?? {
+                status: "search_error" as const,
+                url: null,
+            };
+            named.lookup = found;
+            if (found.status === "matched" && found.url) {
+                named.slugUrl = found.url;
+                slugCount += 1;
+            }
+        }
+    } else {
+        for (const request of pending) {
+            const named = namedOnSite.get(request.name.toLowerCase());
+            if (named && !named.lookup) named.lookup = { status: "not_found", url: null };
+        }
+    }
+    await report("slug");
 
     const record = async (
         kind: EvidenceKind,
@@ -423,12 +600,46 @@ export async function profileFromPages(
         }
     }
 
-    // Contact routes: public mailboxes on the site.
+    // Named people beside a job title, and the address the site gives each of them.
+    await report("people");
+    const allEmails = [...new Set(facts.flatMap(f => f.facts.emails))];
+    const decisionMakers: Dossier["decisionMakers"] = [];
     const contactChannels: Dossier["contactChannels"] = [];
     const seenEmail = new Set<string>();
+    for (const named of namedOnSite.values()) {
+        if (decisionMakers.length >= 8) break;
+        const { person } = named;
+        const lookup = named.lookup ?? { status: "not_found" as const, url: null };
+        const linkedinUrl = lookup.status === "matched" ? (lookup.url ?? named.slugUrl) : null;
+        const id = await record(
+            "contact",
+            linkedinUrl
+                ? `[linkedin:matched] ${linkedinUrl} ${input.org.name} lists ${person.name} as ${person.title}.`
+                : `[linkedin:${lookup.status}] ${input.org.name} lists ${person.name} as ${person.title}.`,
+            named.page,
+            person.quote,
+            0.7
+        );
+        decisionMakers.push({ title: person.title, name: person.name, evidenceIds: [id] });
+        const email = emailForPerson(person.name, allEmails);
+        if (email && !seenEmail.has(email)) {
+            seenEmail.add(email);
+            const emailPage = facts.find(x => x.facts.emails.includes(email))?.page ?? named.page;
+            const emailId = await record(
+                "contact",
+                `${input.org.name} publishes ${person.name}'s address: ${email}.`,
+                emailPage,
+                email,
+                0.85
+            );
+            contactChannels.push({ channel: "email", value: email, evidenceIds: [emailId] });
+        }
+    }
+
+    // Contact routes: the remaining public mailboxes on the site.
     for (const f of facts) {
         for (const email of f.facts.emails) {
-            if (seenEmail.has(email) || contactChannels.length >= 4) continue;
+            if (seenEmail.has(email) || contactChannels.length >= 6) continue;
             seenEmail.add(email);
             const local = email.split("@")[0]!;
             const id = await record(
@@ -452,9 +663,11 @@ export async function profileFromPages(
         );
     if (contactChannels.length === 0)
         openQuestions.push("No public email address on the pages read; a contact form may exist.");
-    openQuestions.push(
-        "Brands carried and named decision makers need a person or a model to establish."
-    );
+    if (decisionMakers.length === 0)
+        openQuestions.push("No named owner, buyer or manager on the pages read.");
+    openQuestions.push("Brands carried are not stated on the pages read.");
+
+    await report("save", decisionMakers.length);
 
     const summaryBody =
         description ??
@@ -471,7 +684,7 @@ export async function profileFromPages(
         territories,
         retailCoverage: [],
         certifications,
-        decisionMakers: [],
+        decisionMakers,
         contactChannels,
         risks: [],
         sizeBand,

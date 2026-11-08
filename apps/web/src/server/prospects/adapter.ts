@@ -5,7 +5,8 @@
  *
  * Stages are stored in the funnel's own words (lead … won, lost, nurture),
  * so a deal's stage passes straight through. It never invents data
- * the backend does not have: people are the dossier's public mailboxes,
+ * the backend does not have: people are the dossier's named staff and mailboxes
+ * whose address is a person's name,
  * sources are the ones the gather stage really has, and figures the backend
  * cannot attribute are null rather than zero.
  *
@@ -14,6 +15,15 @@
  * reader's language.
  */
 import type { PartnerListItem } from "@launchstack/pipelines/distribution/db";
+import {
+    linkedInClaimStatus,
+    linkedInProfileUrl,
+} from "@launchstack/pipelines/distribution/linkedin-search";
+import {
+    emailForPerson,
+    linkedinUrlInText,
+    personNameFromMailbox,
+} from "@launchstack/pipelines/distribution/people";
 import {
     ALLOWED_TRANSITIONS,
     IN_MOTION_STAGES,
@@ -48,6 +58,7 @@ import type {
     EvidenceItem,
     FitBreakdown,
     FoundVia,
+    PeopleSearchProgress,
     PersonRow,
     RunDto,
     RunStep,
@@ -211,8 +222,6 @@ function hostOf(url: string): string {
         .replace(/\/$/, "");
 }
 
-const GENERIC_LOCAL =
-    /^(info|sales|hello|contact|office|purchasing|einkauf|import|export|mail|team|support|admin|kontakt|verkoop|inkoop)$/i;
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export function isExcluded(
@@ -351,8 +360,15 @@ export function signalsFromEvents(events: RelationshipEventRecord[]): Signal[] {
     const text = (v: unknown) => (typeof v === "string" && v ? v : null);
     const scalar = (v: unknown, fallback = "?") =>
         typeof v === "number" ? String(v) : typeof v === "string" && v ? v : fallback;
+    let keptResearch = false;
     return events
         .filter(e => SIGNAL_TYPES.has(e.type))
+        .filter(e => {
+            if (e.type !== "researched") return true;
+            if (keptResearch) return false;
+            keptResearch = true;
+            return true;
+        })
         .slice(0, 6)
         .map(e => {
             const p = e.payload;
@@ -445,43 +461,112 @@ export function fitBreakdownOf(rel: RelationshipRecord): FitBreakdown | null {
     };
 }
 
-// ── People (the dossier's public mailboxes) ───────────────────────────────
+const PEOPLE_SEARCH_STEPS = ["site", "team", "named", "slug", "people", "save"] as const;
+
+/** The step a "Find people" re-read has reached, or null when none is running. */
+export function peopleSearchOf(events: RelationshipEventRecord[]): PeopleSearchProgress | null {
+    const latest = events[0];
+    if (latest?.type !== "research_started" || latest.payload.refresh !== true) return null;
+    const step = latest.payload.step;
+    if (typeof step !== "string" || !(PEOPLE_SEARCH_STEPS as readonly string[]).includes(step))
+        return null;
+    const num = (value: unknown) =>
+        typeof value === "number" && Number.isFinite(value) ? value : 0;
+    return {
+        step: step as PeopleSearchProgress["step"],
+        pages: num(latest.payload.pages),
+        teamPages: num(latest.payload.teamPages),
+        named: num(latest.payload.named),
+        slug: num(latest.payload.slug),
+        people: num(latest.payload.people),
+    };
+}
+
+// ── People (named staff from the site, then its public mailboxes) ─────────
 
 export function contactPeople(
     rel: RelationshipRecord,
     org: PartnerOrgRecord,
     blockedReason: string | null,
-    blockedReasonCopy: Copy | null = null
+    blockedReasonCopy: Copy | null = null,
+    evidence: EvidenceRecord[] = []
 ): PersonRow[] {
     const channels = rel.dossier?.contactChannels ?? [];
-    return channels
+    const emails = channels.map(c => c.value.trim().toLowerCase()).filter(v => EMAIL.test(v));
+    const claimed = new Set<string>();
+    const named = (rel.dossier?.decisionMakers ?? [])
+        .filter((d): d is typeof d & { name: string } => Boolean(d.name))
+        .map((d, i) => {
+            const email = emailForPerson(d.name, emails);
+            if (email) claimed.add(email);
+            const cited = evidence.filter(item => d.evidenceIds.includes(item.id));
+            const linkedinStatus =
+                cited
+                    .map(item => linkedInClaimStatus(item.claim))
+                    .find((status): status is NonNullable<typeof status> => Boolean(status)) ??
+                null;
+            const linkedinUrl = linkedinStatus
+                ? linkedinStatus === "matched"
+                    ? (cited
+                          .map(item => linkedinUrlInText(item.claim))
+                          .find((url): url is string => Boolean(url)) ?? null)
+                    : null
+                : (cited
+                      .map(item => linkedinUrlInText([item.sourceUrl, item.quote ?? ""].join("\n")))
+                      .find((url): url is string => Boolean(url)) ?? null);
+            const linkedinSearchUrl = linkedinUrl ? null : linkedInProfileUrl(d.name, [org.name]);
+            const shownStatus =
+                linkedinStatus === "search_error" && (linkedinUrl || linkedinSearchUrl)
+                    ? null
+                    : linkedinStatus;
+            return {
+                id: `${rel.id}:p${i}`,
+                companyId: rel.id,
+                companyName: org.name,
+                name: d.name,
+                initials: initials(d.name),
+                title: d.title,
+                seniority: "—",
+                email,
+                emailStatus: email ? "found" : "guess",
+                source: linkedinUrl ? "LinkedIn" : "Website",
+                sourceUrl: linkedinUrl,
+                linkedinStatus: shownStatus,
+                linkedinSearchUrl,
+                blockedReason,
+                sourceCopy: copy(
+                    linkedinUrl ? "growth.server.people.linkedin" : "growth.server.people.website"
+                ),
+                blockedReasonCopy: blockedReason ? blockedReasonCopy : null,
+            } satisfies PersonRow;
+        });
+    const inboxes = channels
         .map((c, i) => ({ c, i }))
         .filter(({ c }) => EMAIL.test(c.value.trim()))
+        .filter(({ c }) => !claimed.has(c.value.trim().toLowerCase()))
         .map(({ c, i }) => {
             const email = c.value.trim();
-            const local = email.split("@")[0]!;
-            const generic = GENERIC_LOCAL.test(local);
-            const inbox = local.toLowerCase();
-            const name = generic ? `${inbox}@ inbox` : local.replace(/[._-]+/g, " ");
+            const name = personNameFromMailbox(email.split("@")[0]!);
+            if (!name) return null;
             return {
                 id: `${rel.id}:${i}`,
                 companyId: rel.id,
                 companyName: org.name,
                 name,
-                initials: generic ? "@" : initials(name),
-                title: generic ? "Shared inbox" : c.channel,
+                initials: initials(name),
+                title: c.channel,
                 seniority: "—",
                 email,
-                emailStatus: generic ? "generic" : "found",
+                emailStatus: "found",
                 source: "Dossier",
                 sourceUrl: null,
                 blockedReason,
-                nameCopy: generic ? copy("growth.server.people.inbox", { local: inbox }) : null,
-                titleCopy: generic ? copy("growth.server.people.sharedInbox") : null,
                 sourceCopy: copy("growth.server.people.dossier"),
                 blockedReasonCopy: blockedReason ? blockedReasonCopy : null,
             } satisfies PersonRow;
-        });
+        })
+        .filter((row): row is PersonRow => row !== null);
+    return [...named, ...inboxes];
 }
 
 // ── Companies ─────────────────────────────────────────────────────────────
@@ -523,6 +608,8 @@ export function excludedBlock(row: Pick<CompanyRow, "excluded" | "excludedReason
 
 export interface RowContext {
     latestRunId: string | null;
+    /** Relationship ids shortlisted by the latest completed run. */
+    latestCandidateIds: ReadonlySet<string>;
     excludedDomains: ReadonlySet<string>;
     now?: Date;
 }
@@ -574,6 +661,9 @@ export function toCompanyRow(item: PartnerListItem, ctx: RowContext): CompanyRow
             },
         ],
         isNew: ctx.latestRunId !== null && org.firstSeenRunId === ctx.latestRunId,
+        foundInLastRun:
+            ctx.latestCandidateIds.has(rel.id) ||
+            (ctx.latestRunId !== null && org.firstSeenRunId === ctx.latestRunId),
         excluded,
         excludedReason: excluded ? "Excluded from runs" : null,
         whyCopy: whyCopyOf(item),
@@ -587,7 +677,8 @@ export function toCompanyDetail(
     events: RelationshipEventRecord[],
     hasAgreement: boolean,
     viewerId: string,
-    ctx: RowContext
+    ctx: RowContext,
+    researching = false
 ): CompanyDetail {
     const row = toCompanyRow(item, ctx);
     const claims = profileClaims(item.relationship, evidence);
@@ -603,7 +694,8 @@ export function toCompanyDetail(
             item.relationship,
             item.org,
             blocked?.reason ?? null,
-            blocked?.copy ?? null
+            blocked?.copy ?? null,
+            evidence
         ),
         deal: toDeal(item, hasAgreement, viewerId, ctx.now),
         fitBreakdown: fitBreakdownOf(item.relationship),
@@ -611,6 +703,8 @@ export function toCompanyDetail(
             ? `${item.org.name} — dossier`
             : null,
         profiledAt: iso(item.org.lastEnrichedAt),
+        researching,
+        peopleSearch: peopleSearchOf(events),
     };
 }
 
@@ -643,7 +737,7 @@ export function viewMatches(row: CompanyRow, view: CompaniesView): boolean {
         case "all":
             return !row.excluded;
         case "new":
-            return !row.excluded && row.isNew;
+            return !row.excluded && (row.isNew || row.foundInLastRun === true);
         case "highfit":
             return !row.excluded && (row.fit ?? 0) >= FIT_THRESHOLD;
         case "uncontacted":
@@ -1193,33 +1287,58 @@ export function toRunDto(run: RunRecord, progress: RunProgress | null = null): R
                 ? copy("growth.server.runs.excluded", { count: n(summary.excluded) })
                 : null,
         },
-        {
-            id: "profiles",
-            label: "Profiles",
-            detail: summary
-                ? `${summary.enriched} of ${summary.shortlisted}`
-                : progress
-                  ? `${progress.profiled} of ${progress.shortlisted}`
-                  : `0 of ${profileTotal}`,
-            status: statusOf(run, "enriching", "completed"),
-            right: summary?.gateRejections ? `${summary.gateRejections} failed grounding` : null,
-            labelCopy: stepLabel("profiles"),
-            detailCopy: copy(
-                "growth.server.runs.profilesOf",
-                summary
-                    ? { done: n(summary.enriched), total: n(summary.shortlisted) }
+        (() => {
+            // A finished search that never wrote profiles (the default now)
+            // points at open-to-write instead of "0 of N".
+            const profilesOnOpen =
+                Boolean(summary) &&
+                run.options.mode !== "fixture" &&
+                !summary!.enriched &&
+                !summary!.gateRejections;
+            if (profilesOnOpen) {
+                return {
+                    id: "profiles",
+                    label: "Profiles",
+                    detail: "written when you open a company",
+                    status: "skipped" as const,
+                    right: null,
+                    labelCopy: stepLabel("profiles"),
+                    detailCopy: copy("growth.server.runs.profilesOnOpen"),
+                    rightCopy: null,
+                };
+            }
+            return {
+                id: "profiles",
+                label: "Profiles",
+                detail: summary
+                    ? `${summary.enriched} of ${summary.shortlisted}`
                     : progress
-                      ? { done: n(progress.profiled), total: n(progress.shortlisted) }
-                      : { done: "0", total: n(profileTotal) }
-            ),
-            rightCopy: summary?.gateRejections
-                ? copy("growth.server.runs.failedGrounding", { count: n(summary.gateRejections) })
-                : null,
-        },
+                      ? `${progress.profiled} of ${progress.shortlisted}`
+                      : `0 of ${profileTotal}`,
+                status: statusOf(run, "enriching", "completed"),
+                right: summary?.gateRejections
+                    ? `${summary.gateRejections} failed grounding`
+                    : null,
+                labelCopy: stepLabel("profiles"),
+                detailCopy: copy(
+                    "growth.server.runs.profilesOf",
+                    summary
+                        ? { done: n(summary.enriched), total: n(summary.shortlisted) }
+                        : progress
+                          ? { done: n(progress.profiled), total: n(progress.shortlisted) }
+                          : { done: "0", total: n(profileTotal) }
+                ),
+                rightCopy: summary?.gateRejections
+                    ? copy("growth.server.runs.failedGrounding", {
+                          count: n(summary.gateRejections),
+                      })
+                    : null,
+            };
+        })(),
         {
             id: "people",
             label: "People",
-            detail: "arrives with people lookup",
+            detail: "on each company page",
             status: "skipped",
             right: null,
             labelCopy: stepLabel("people"),
@@ -1235,6 +1354,7 @@ export function toRunDto(run: RunRecord, progress: RunProgress | null = null): R
     return {
         id: run.id,
         segmentId: run.programId,
+        mode: run.options.mode,
         status:
             run.status === "completed"
                 ? "completed"

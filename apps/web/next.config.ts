@@ -166,6 +166,7 @@ const config: NextConfig = {
         "jszip",
         "readable-stream",
         // Native bindings
+        "playwright",
         "sharp",
         "@img/sharp-libvips-linuxmusl-x64",
         "@img/sharp-libvips-linux-x64",

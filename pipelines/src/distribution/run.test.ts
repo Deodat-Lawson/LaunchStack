@@ -80,6 +80,7 @@ vi.mock("./db", () => ({
         kgEntityId: 1,
     }),
     listEvidenceForOrg: async () => [],
+    deleteUncitedEvidence: async () => undefined,
     setResearchResult: async () => undefined,
     addEvent: async () => undefined,
 }));
@@ -395,6 +396,19 @@ describe("runDistributionPipeline research", () => {
         expect(seen.orgs).toHaveLength(12);
         expect(summary.shortlisted).toBe(12);
         expect(summary.gateRejections).toBe(12);
+        expect(store.statuses.at(-1)).toBe("completed");
+    });
+
+    it("can stop at the shortlist without researching anyone", async () => {
+        const { ports, seen } = trackingPorts(8);
+        const summary = await runDistributionPipeline(
+            ctx,
+            { ...ports, enrichConcurrency: 3 },
+            { enrich: false }
+        );
+        expect(seen.orgs).toHaveLength(0);
+        expect(summary.shortlisted).toBe(8);
+        expect(summary.enriched).toBe(0);
         expect(store.statuses.at(-1)).toBe("completed");
     });
 

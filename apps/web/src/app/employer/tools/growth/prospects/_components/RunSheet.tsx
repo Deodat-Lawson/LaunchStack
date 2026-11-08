@@ -2,7 +2,7 @@
 
 import { Check, CircleDashed, Loader2, X } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "~/components/ui/button";
@@ -61,7 +61,7 @@ function StepIcon({ status }: { status: RunStep["status"] }) {
     }
 }
 
-function StepRow({ step, child = false }: { step: RunStep; child?: boolean }) {
+export function StepRow({ step, child = false }: { step: RunStep; child?: boolean }) {
     const word = useCopyText();
     return (
         <>
@@ -95,6 +95,17 @@ export function runIsLive(run: RunDto | null): boolean {
     return run !== null && (run.status === "running" || run.status === "queued");
 }
 
+export function useElapsed(since: string | null | undefined, live: boolean): number {
+    const [now, setNow] = useState(() => Date.now());
+    useEffect(() => {
+        if (!live || !since) return;
+        const id = window.setInterval(() => setNow(Date.now()), 1000);
+        return () => window.clearInterval(id);
+    }, [live, since]);
+    if (!since) return 0;
+    return Math.max(0, (live ? now : Date.now()) - new Date(since).getTime());
+}
+
 /**
  * A run is visible work: one row per source as it finishes, then the later
  * stages. The same rows become the run's yield table afterwards. Closing the
@@ -103,13 +114,21 @@ export function runIsLive(run: RunDto | null): boolean {
 export function RunSheet() {
     const t = useTranslations("growth.prospects.runSheet");
     const tc = useTranslations("common.actions");
-    const { money } = useGrowthFormat();
+    const { money, duration } = useGrowthFormat();
     const word = useCopyText();
     const errorText = useErrorText();
     const { activeRun, runSheetOpen, closeRunSheet, noteRunFinished, segment } = useProspects();
     const [stopping, setStopping] = useState(false);
     const run = activeRun;
     const live = runIsLive(run);
+    const elapsedMs = useElapsed(run?.startedAt, live);
+    const tookMs = run?.summary?.durationMs ?? elapsedMs;
+    const expectedLabel =
+        run?.mode === "live"
+            ? t("expectedLive")
+            : run?.mode === "fixture"
+              ? t("expectedFixture")
+              : t("expectedKeyless");
 
     const stop = async () => {
         if (!run) return;
@@ -154,16 +173,40 @@ export function RunSheet() {
                             {run.errorMessage && (
                                 <p className="text-danger mt-3 text-sm">{run.errorMessage}</p>
                             )}
-                            <div className="border-line text-ink-3 mt-4 flex items-center justify-between border-t pt-3 text-xs tabular-nums">
-                                <span>
-                                    {t("spend", {
-                                        spent: money(run.spend.usd),
-                                        cap: money(run.spend.usdCap),
-                                        credits: run.spend.credits,
-                                    })}
-                                </span>
-                                <span>{word(run.capsCopy, run.caps)}</span>
+                            <div className="border-line text-ink-2 mt-4 space-y-1 border-t pt-3 text-xs tabular-nums">
+                                <div className="flex items-center justify-between gap-3">
+                                    <span>
+                                        {live
+                                            ? t("elapsed", { time: duration(elapsedMs) })
+                                            : t("took", { time: duration(tookMs) })}
+                                    </span>
+                                    <span className="text-ink-3">{expectedLabel}</span>
+                                </div>
+                                {(run.spend.usdCap > 0 || run.spend.credits > 0) && (
+                                    <div className="text-ink-3 flex items-center justify-between gap-3">
+                                        <span>
+                                            {t("spend", {
+                                                spent: money(run.spend.usd),
+                                                cap: money(run.spend.usdCap),
+                                                credits: run.spend.credits,
+                                            })}
+                                        </span>
+                                        <span className="ml-auto">
+                                            {word(run.capsCopy, run.caps)}
+                                        </span>
+                                    </div>
+                                )}
+                                {!(run.spend.usdCap > 0 || run.spend.credits > 0) && (
+                                    <div className="text-ink-3 flex justify-end">
+                                        {word(run.capsCopy, run.caps)}
+                                    </div>
+                                )}
                             </div>
+                            {live && run.mode === "keyless" && (
+                                <p className="border-line bg-panel-2 text-ink-2 mt-3 rounded-md border px-3 py-2 text-[13px]">
+                                    {t("keylessNote")}
+                                </p>
+                            )}
                             <div className="mt-5 flex justify-end gap-2">
                                 {live ? (
                                     <>

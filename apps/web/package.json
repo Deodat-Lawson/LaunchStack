@@ -140,6 +140,7 @@
         "pdfjs-serverless": "^1.1.0",
         "pino": "^10.3.1",
         "pizzip": "^3.2.0",
+        "playwright": "^1.55.0",
         "postgres": "^3.4.7",
         "prom-client": "^15.1.3",
         "psql": "^0.0.1",

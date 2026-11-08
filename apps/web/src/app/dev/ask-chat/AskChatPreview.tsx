@@ -60,6 +60,12 @@ const SOURCES: WorkspaceSource[] = [
     },
 ];
 
+const USER_PROFILE = {
+    displayName: "Alex Morgan",
+    email: "alex@example.com",
+    avatarUrl: "/agents/product.jpg",
+};
+
 const STARTERS: AskStartersPayload = {
     starters: [
         {
@@ -269,6 +275,7 @@ function ChatHarness() {
 
     return (
         <AskPanel
+            userProfile={USER_PROFILE}
             sources={SOURCES}
             selected={selected}
             setSelected={setSelected}

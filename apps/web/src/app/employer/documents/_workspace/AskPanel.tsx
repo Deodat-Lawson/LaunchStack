@@ -33,17 +33,17 @@ import {
     ChevronDown,
     Lock,
     Users,
-    Zap as IconBolt,
     Plus as IconPlus,
     Shield as IconShield,
-    User as IconUser,
     X as IconX,
 } from "lucide-react";
 import { toast } from "sonner";
+import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
 import { ProfileAvatar } from "~/components/ProfileAvatar";
 import { Button } from "~/components/ui/button";
 import { isChatPassage, QUOTED_CONTEXT_MARKER, type ChatPassage } from "~/lib/chat-passages";
 import { usePeople } from "~/lib/profile/use-people";
+import type { EffectiveProfile } from "~/lib/profile/resolve";
 import { workspaceHref } from "~/lib/settings/surfaces";
 import type { ChatSendResult } from "~/lib/chat-turns";
 import { stripStreamingSourceLabels } from "~/lib/source-labels";
@@ -279,6 +279,7 @@ function CitationTarget({
 
 interface MessageProps {
     msg: ThreadMessage;
+    userProfile?: Pick<EffectiveProfile, "displayName" | "email" | "avatarUrl">;
     /** The live roster, so a stored handle renders with its current name. */
     agents?: ChatAgentOption[];
     /** Position in the thread — what session-level verbs (branch, ask again) act on. */
@@ -499,6 +500,7 @@ const Message = React.memo(function Message({
     active,
     readOnly = false,
     asker,
+    userProfile,
 }: MessageProps) {
     const t = useTranslations("chat.message");
     const tc = useTranslations("common");
@@ -695,6 +697,7 @@ const Message = React.memo(function Message({
                 {...ctxTarget}
                 id={anchor}
                 data-chat-message={index}
+                className="border-line bg-panel rounded-2xl border p-4 sm:p-5"
                 style={{
                     marginBottom: 28,
                     contentVisibility: "auto",
@@ -706,36 +709,18 @@ const Message = React.memo(function Message({
                         display: "flex",
                         alignItems: "center",
                         flexWrap: "wrap",
-                        gap: 8,
-                        marginBottom: 8,
+                        gap: 10,
+                        marginBottom: 12,
                     }}
                 >
-                    {asker ? (
-                        // Someone else's chat: their question, under their name.
-                        <ProfileAvatar
-                            name={asker.name}
-                            email={asker.email}
-                            src={asker.avatarUrl}
-                            className="size-[22px]"
-                            fallbackClassName="text-[9px]"
-                        />
-                    ) : (
-                        <div
-                            style={{
-                                width: 22,
-                                height: 22,
-                                borderRadius: "50%",
-                                background: "var(--ink)",
-                                color: "var(--panel)",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                            }}
-                        >
-                            <IconUser size={12} />
-                        </div>
-                    )}
-                    <span className="text-[13px] font-semibold">{asker?.name ?? t("you")}</span>
+                    <ProfileAvatar
+                        name={asker ? asker.name : userProfile?.displayName}
+                        email={asker ? asker.email : userProfile?.email}
+                        src={asker ? asker.avatarUrl : userProfile?.avatarUrl}
+                        className="ring-line size-8 ring-1"
+                        fallbackClassName="text-[11px]"
+                    />
+                    <span className="text-sm font-semibold">{asker?.name ?? t("you")}</span>
                     {msg.intent && (
                         <span className="border-line bg-panel text-ink-3 rounded border px-1.5 py-0.5 text-[10px] font-normal">
                             {msg.intent === "interrupt" ? t("intentInterrupt") : t("intentQueued")}
@@ -836,8 +821,8 @@ const Message = React.memo(function Message({
                     display: "flex",
                     alignItems: "center",
                     flexWrap: "wrap",
-                    gap: 8,
-                    marginBottom: 8,
+                    gap: 10,
+                    marginBottom: 12,
                 }}
             >
                 {agent ? (
@@ -848,26 +833,13 @@ const Message = React.memo(function Message({
                             accent: agent.accent,
                             avatarUrl: agent.avatarUrl ?? null,
                         }}
-                        size={22}
+                        size={32}
                         title={`${agent.displayName}${agent.role ? ` — ${agent.role}` : ""}`}
                     />
                 ) : (
-                    <div
-                        style={{
-                            width: 22,
-                            height: 22,
-                            borderRadius: "50%",
-                            background: "var(--accent-soft)",
-                            color: "var(--accent)",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                        }}
-                    >
-                        <IconBolt size={12} />
-                    </div>
+                    <LaunchstackMark size={32} />
                 )}
-                <span style={{ fontSize: 13, fontWeight: 600 }}>
+                <span className="text-sm font-semibold">
                     {agent ? agent.displayName : tc("brand.name")}
                 </span>
                 {timestamp}
@@ -1176,6 +1148,8 @@ function EmptyState({
 /** Public README — same destination as the public site's footer "Documentation"
  *  link (apps/landing, MarketingShell). */
 export interface AskPanelProps {
+    /** The active workspace's profile, shared with the account menu and settings. */
+    userProfile?: MessageProps["userProfile"];
     sources: WorkspaceSource[];
     selected: string[];
     setSelected: Dispatch<SetStateAction<string[]>>;
@@ -1293,6 +1267,7 @@ function SharedByLine({ ownerAuthUserId }: { ownerAuthUserId: string }) {
 }
 
 export function AskPanel({
+    userProfile,
     sources,
     selected,
     setSelected,
@@ -1849,6 +1824,7 @@ export function AskPanel({
                                     <Message
                                         key={m.id ?? i}
                                         msg={m}
+                                        userProfile={userProfile}
                                         index={i}
                                         sources={sources}
                                         selected={selected}

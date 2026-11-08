@@ -326,6 +326,40 @@ describe("runs", () => {
             ["lookalike", "Lookalikes"],
         ]);
     });
+
+    it("marks profiles as written on open when a live or keyless run enriched none", () => {
+        const summary = {
+            sources: [],
+            mentions: 10,
+            resolved: 5,
+            excluded: 0,
+            shortlisted: 5,
+            enriched: 0,
+            gateRejections: 0,
+            budgetExhausted: 0,
+            screened: 0,
+            flagged: 0,
+            published: 0,
+            degraded: false,
+            warnings: [],
+            tokens: { input: 0, output: 0, total: 0 },
+            wallMs: 12_000,
+        };
+        for (const mode of ["live", "keyless"] as const) {
+            const dto = toRunDto(
+                run({
+                    status: "completed",
+                    completedAt: new Date("2026-09-17T09:01:00Z"),
+                    options: { maxCandidates: 25, mode },
+                    summary,
+                })
+            );
+            const profiles = dto.steps.find(s => s.id === "profiles")!;
+            expect(profiles.status).toBe("skipped");
+            expect(profiles.detail).toBe("written when you open a company");
+            expect(dto.mode).toBe(mode);
+        }
+    });
 });
 
 describe("customers like these", () => {

@@ -1,12 +1,12 @@
 /**
  * Run the discovery pipeline in keyless mode for one program, in this
  * process. Keyless mode needs no search key: OpenStreetMap finds real
- * places (shops, cafés, workshops, offices) in the segment's area, each one's
- * own website is read by the page profiler, and persistence, scoring, stages
- * and publishing are the real code. The workspace's embedding model matches
- * companies to the segment by meaning, and its chat model (when there is one)
- * checks the shortlist. It is the path Find companies takes whenever the environment has
- * no model or search provider configured, which is every fresh dev setup.
+ * places (shops, cafés, workshops, offices) in the segment's area.
+ * Persistence, scoring and stages are the real code. The search stops at
+ * the shortlist; a company's website is read when someone opens it
+ * (`research.ts`). The workspace's embedding model matches companies to
+ * the segment by meaning, and its chat model (when there is one) checks
+ * the shortlist.
  *
  * The route calls this through Next's `after()`, so the request returns the
  * queued run at once and the stages update the run row as they go; the UI
@@ -56,6 +56,35 @@ export function canPublishToSources(): boolean {
     return Boolean(process.env.FILE_ACCESS_TOKEN_SECRET);
 }
 
+/** A dossier markdown file, through the same ingestion path a search uses. */
+export async function publishProspectDossier(args: {
+    userId: string;
+    companyId: bigint;
+    programName: string;
+    requestUrl: string;
+    input: PublishDossierInput;
+}): Promise<{ documentId: number }> {
+    const stored = await uploadFile({
+        filename: args.input.filename,
+        data: Buffer.from(args.input.markdown, "utf8"),
+        contentType: "text/markdown",
+        userId: args.userId,
+        companyId: args.companyId,
+    });
+    const upload = await processDocumentUpload({
+        user: { userId: args.userId, companyId: args.companyId },
+        documentName: args.input.title,
+        rawDocumentUrl: stored.url,
+        creationKey: args.input.creationKey,
+        category: `Prospects / ${args.programName}`,
+        explicitStorageType: stored.provider,
+        mimeType: "text/markdown",
+        originalFilename: args.input.filename,
+        requestUrl: args.requestUrl,
+    });
+    return { documentId: upload.document.id };
+}
+
 export async function runKeylessProspects(args: KeylessRunArgs): Promise<RunSummary> {
     const program = await getProgram(args.programId, args.companyId);
     if (!program) throw new Error("Segment not found");
@@ -67,27 +96,14 @@ export async function runKeylessProspects(args: KeylessRunArgs): Promise<RunSumm
     const publishDossier =
         args.skipPublish || !canPublishToSources()
             ? null
-            : async (input: PublishDossierInput) => {
-                  const stored = await uploadFile({
-                      filename: input.filename,
-                      data: Buffer.from(input.markdown, "utf8"),
-                      contentType: "text/markdown",
+            : (input: PublishDossierInput) =>
+                  publishProspectDossier({
                       userId: args.userId,
                       companyId: args.companyId,
-                  });
-                  const upload = await processDocumentUpload({
-                      user: { userId: args.userId, companyId: args.companyId },
-                      documentName: input.title,
-                      rawDocumentUrl: stored.url,
-                      creationKey: input.creationKey,
-                      category: `Prospects / ${program.name}`,
-                      explicitStorageType: stored.provider,
-                      mimeType: "text/markdown",
-                      originalFilename: input.filename,
+                      programName: program.name,
                       requestUrl: args.requestUrl,
+                      input,
                   });
-                  return { documentId: upload.document.id };
-              };
 
     const ports = createKeylessPorts({
         publishDossier,
@@ -100,7 +116,8 @@ export async function runKeylessProspects(args: KeylessRunArgs): Promise<RunSumm
     return withWorkspaceChatModels(args.companyId, aiUse, () =>
         runDistributionPipeline(
             { runId: args.runId, companyId: args.companyId, programId: args.programId },
-            ports
+            ports,
+            { enrich: false }
         )
     );
 }

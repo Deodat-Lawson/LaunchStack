@@ -246,6 +246,8 @@ export interface CompanyDetail extends Omit<CompanyRow, "people"> {
     fitBreakdown: FitBreakdown | null;
     profileDocumentTitle: string | null;
     profiledAt: string | null;
+    /** True while a profile is being written after open. */
+    researching?: boolean;
 }
 
 /**
@@ -298,6 +300,7 @@ export type NextRunMode = "live" | "keyless";
 export interface RunDto {
     id: string;
     segmentId: string;
+    mode?: "live" | "keyless" | "fixture";
     status: RunStatus;
     startedAt: string;
     completedAt: string | null;
@@ -435,7 +438,12 @@ export const prospectsApi = {
                 sort: params.sort,
             })}`
         ),
-    company: (id: string) => call<{ company: CompanyDetail }>(`/api/prospects/companies/${id}`),
+    company: (id: string, options: { research?: boolean } = {}) =>
+        call<{ company: CompanyDetail }>(
+            `/api/prospects/companies/${id}${q({
+                research: options.research ? "1" : undefined,
+            })}`
+        ),
     setExcluded: (ids: string[], excluded: boolean) =>
         call<{ updated: number }>("/api/prospects/companies/exclude", {
             method: "POST",

@@ -76,6 +76,7 @@ export const RELATIONSHIP_EVENT_TYPES = [
     "document_shared",
     "agreement_signed",
     "imported",
+    "research_started",
     "researched",
     "owner_changed",
     "next_action_set",
@@ -281,6 +282,12 @@ export interface RunRecord {
 export const DistributionRunEventDataSchema = z.object({
     /** `keyless` runs on public sources and the page profiler; absent means live. */
     mode: z.enum(["live", "keyless"]).optional(),
+    /**
+     * When true, the worker researches shortlisted companies during the run
+     * (keyless: up to five at a time). Default false: the search stops at the
+     * shortlist and a profile is written when someone opens the company.
+     */
+    enrichOnRun: z.boolean().optional(),
     runId: z.string(),
     programId: z.string(),
     companyId: z.string(),

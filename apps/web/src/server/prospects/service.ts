@@ -73,6 +73,8 @@ import { companyMetadata } from "~/server/db/schema";
 import { copy, isCopy, type Copy } from "~/i18n/copy";
 import { englishCopy } from "~/i18n/translate";
 
+import { claimProspectResearch } from "./research";
+
 import {
     FIT_THRESHOLD,
     contactPeople,
@@ -480,28 +482,34 @@ export async function listCompanies(
 
 export async function getCompany(
     ctx: ProspectsCtx,
-    relationshipId: string
-): Promise<CompanyDetail> {
+    relationshipId: string,
+    options: { research?: boolean } = {}
+): Promise<{ company: CompanyDetail; startedResearch: boolean }> {
     const { item, relationship } = await loadItem(ctx, relationshipId);
-    const [evidence, events, agreements, runs, exclusions] = await Promise.all([
+    const [evidence, events, agreements, runs, exclusions, research] = await Promise.all([
         listEvidenceForOrg(ctx.companyId, relationship.orgId),
         listEvents(ctx.companyId, relationship.id),
         listAgreements(ctx.companyId, relationship.id),
         listRuns(ctx.companyId, { programId: relationship.programId, limit: 50 }),
         listExclusions(ctx.companyId, relationship.programId),
+        claimProspectResearch(ctx, relationshipId, options.research === true),
     ]);
     const rowCtx: RowContext = {
         latestRunId: latestCompleted(runs)?.id ?? null,
         excludedDomains: new Set(exclusions.domains),
     };
-    return toCompanyDetail(
-        { ...item, evidenceCount: evidence.length },
-        evidence,
-        events,
-        agreements.length > 0,
-        ctx.userId,
-        rowCtx
-    );
+    return {
+        company: toCompanyDetail(
+            { ...item, evidenceCount: evidence.length },
+            evidence,
+            events,
+            agreements.length > 0,
+            ctx.userId,
+            rowCtx,
+            research !== "none"
+        ),
+        startedResearch: research === "start",
+    };
 }
 
 /**

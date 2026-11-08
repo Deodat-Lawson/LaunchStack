@@ -926,18 +926,25 @@ export async function failRun(
 
 export async function runDistributionPipeline(
     ctx: RunContext,
-    ports: DistributionPorts
+    ports: DistributionPorts,
+    options: { enrich?: boolean } = {}
 ): Promise<RunSummary> {
     const startedAt = new Date();
     try {
         const prepared = await prepareRun(ctx, ports);
-        const enriched = await mapInPool(
-            prepared.candidateRelationshipIds,
-            ports.enrichConcurrency ?? 1,
-            relationshipId =>
-                enrichCandidate(ctx, ports, { relationshipId, profile: prepared.profile }),
-            () => ctx.signal?.aborted ?? false
-        );
+        const enriched =
+            options.enrich === false
+                ? []
+                : await mapInPool(
+                      prepared.candidateRelationshipIds,
+                      ports.enrichConcurrency ?? 1,
+                      relationshipId =>
+                          enrichCandidate(ctx, ports, {
+                              relationshipId,
+                              profile: prepared.profile,
+                          }),
+                      () => ctx.signal?.aborted ?? false
+                  );
         return await finalizeRun(ctx, prepared, enriched, startedAt);
     } catch (error) {
         await failRun(ctx, error instanceof Error ? error.message : String(error));

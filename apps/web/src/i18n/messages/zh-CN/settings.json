@@ -364,6 +364,11 @@
       "alsoServer": "服务器还限制你每月最多使用 {limit} 个 token（合计你所有的工作区，已用 {used}）。",
       "alsoWorkspace": "此工作区还限制你每月最多使用 {limit} 个 token（已用 {used}）。",
       "reached": "你已达到此上限。在重置或提高上限之前，新的 AI 请求会被拒绝。"
+    },
+    "signInAgain": {
+      "button": "重新登录",
+      "unlink": "为了你的账户安全，取消关联登录方式需要最近登录过。请重新登录后再取消关联。",
+      "password": "为了你的账户安全，设置密码需要最近登录过。请重新登录后再设置。"
     }
   },
   "answerStyle": {
@@ -1863,7 +1868,11 @@
       "keyRevokeFailed": "无法撤销密钥。",
       "accessKeyLimit": "你在一个工作区中最多只能持有 {max} 个访问密钥。",
       "oauthClientLimit": "一个工作区最多只能有 {max} 个 OAuth 客户端。",
-      "chatModelsUnreadable": "无法读取对话模型配置，详情请查看服务器日志。"
+      "chatModelsUnreadable": "无法读取对话模型配置，详情请查看服务器日志。",
+      "listSessionsFailed": "无法加载你的会话。",
+      "endCurrentSession": "要结束当前浏览器的会话，请退出登录。",
+      "sessionNotFound": "该会话已经结束。",
+      "endSessionFailed": "无法结束该会话。"
     },
     "models": {
       "enterAddress": "请输入你的模型端点地址。",

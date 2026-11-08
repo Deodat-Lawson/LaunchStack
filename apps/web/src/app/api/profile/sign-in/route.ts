@@ -60,7 +60,10 @@ export async function POST(request: Request) {
     const { freshAge } = (await auth.$context).sessionConfig;
     const age = Date.now() - new Date(session.session.createdAt).getTime();
     if (freshAge > 0 && age > freshAge * 1000) {
-        return NextResponse.json({ error: t("signInAgainForPassword") }, { status: 403 });
+        return NextResponse.json(
+            { error: t("signInAgainForPassword"), code: "SESSION_NOT_FRESH" },
+            { status: 403 }
+        );
     }
     const body = await parseJsonBody(request, SetPasswordSchema);
     if (!body.success) return body.response;

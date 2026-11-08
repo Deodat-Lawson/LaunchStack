@@ -2611,6 +2611,7 @@ export function WorkspaceShell() {
                             onRevealed={consumeRailReveal}
                             workspaceName={workspaceName}
                             selfAuthId={userId ?? null}
+                            storageScope={layoutScope}
                             history={historyRail}
                             loading={sourcesLoading}
                         />
@@ -2690,6 +2691,7 @@ export function WorkspaceShell() {
                         onRevealed={consumeRailReveal}
                         workspaceName={workspaceName}
                         selfAuthId={userId ?? null}
+                        storageScope={layoutScope}
                         history={historyRail}
                         loading={sourcesLoading}
                     />

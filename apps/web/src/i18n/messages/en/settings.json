@@ -364,6 +364,11 @@
       "alsoServer": "The server also caps you at {limit} tokens a month across all your workspaces ({used} used).",
       "alsoWorkspace": "This workspace also limits you to {limit} tokens a month ({used} used).",
       "reached": "You've reached this limit. New AI requests are refused until it resets or the limit is raised."
+    },
+    "signInAgain": {
+      "button": "Sign in again",
+      "unlink": "For your security, unlinking a sign-in needs a recent sign-in. Sign in again, then unlink it.",
+      "password": "For your security, setting a password needs a recent sign-in. Sign in again, then set it."
     }
   },
   "answerStyle": {
@@ -1863,7 +1868,11 @@
       "keyRevokeFailed": "Could not revoke the key.",
       "accessKeyLimit": "You can hold at most {max} access keys in a workspace.",
       "oauthClientLimit": "A workspace can hold at most {max} OAuth clients.",
-      "chatModelsUnreadable": "The chat model configuration could not be read. The server log has the details."
+      "chatModelsUnreadable": "The chat model configuration could not be read. The server log has the details.",
+      "listSessionsFailed": "Couldn't load your sessions.",
+      "endCurrentSession": "To end this browser's session, sign out.",
+      "sessionNotFound": "That session has already ended.",
+      "endSessionFailed": "Couldn't end that session."
     },
     "models": {
       "enterAddress": "Enter the address of your model endpoint.",

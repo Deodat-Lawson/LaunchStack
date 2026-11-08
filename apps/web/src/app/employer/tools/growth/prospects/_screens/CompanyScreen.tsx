@@ -2,7 +2,7 @@
 
 import { ArrowDown, ArrowUp, ExternalLink } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import { ToolNotFound } from "~/components/tool-app/ToolFrame";
@@ -95,8 +95,17 @@ export function CompanyScreen({ id }: { id: string }) {
     const { href } = useProspects();
     const router = useToolRouter();
     const active = useToolActive();
-    const res = useResource(`company:${id}`, () => prospectsApi.company(id));
+    const opened = useRef<string | null>(null);
+    const res = useResource(`company:${id}`, () => {
+        const research = opened.current !== id;
+        opened.current = id;
+        return prospectsApi.company(id, { research }).catch(error => {
+            if (opened.current === id) opened.current = null;
+            throw error;
+        });
+    });
     const c = res.data?.company ?? null;
+    const [researching, setResearching] = useState(false);
     const [outreachOpen, setOutreachOpen] = useState(false);
     const [nextStep, setNextStep] = useState("");
     const [nextStepAt, setNextStepAt] = useState("");
@@ -126,7 +135,16 @@ export function CompanyScreen({ id }: { id: string }) {
         if (!c) return;
         setNextStep(c.deal.nextStep ?? "");
         setNextStepAt(c.deal.nextStepAt ? c.deal.nextStepAt.slice(0, 10) : "");
+        setResearching(Boolean(c.researching));
     }, [c]);
+
+    useEffect(() => {
+        if (!researching || !active) return;
+        const timer = window.setInterval(() => {
+            void res.reload();
+        }, 2000);
+        return () => window.clearInterval(timer);
+    }, [researching, active, res]);
 
     const patchDeal = async (
         patch: Parameters<typeof prospectsApi.patchDeal>[1],
@@ -291,8 +309,16 @@ export function CompanyScreen({ id }: { id: string }) {
                         </>
                     ) : c.about.length === 0 ? (
                         <EmptyState
-                            title={t("company.notProfiled")}
-                            body={t("company.notProfiledBody")}
+                            title={
+                                c.researching || researching
+                                    ? t("company.researching")
+                                    : t("company.notProfiled")
+                            }
+                            body={
+                                c.researching || researching
+                                    ? t("company.researchingBody")
+                                    : t("company.notProfiledBody")
+                            }
                         />
                     ) : (
                         <>

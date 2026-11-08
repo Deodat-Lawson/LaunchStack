@@ -398,6 +398,19 @@ describe("runDistributionPipeline research", () => {
         expect(store.statuses.at(-1)).toBe("completed");
     });
 
+    it("can stop at the shortlist without researching anyone", async () => {
+        const { ports, seen } = trackingPorts(8);
+        const summary = await runDistributionPipeline(
+            ctx,
+            { ...ports, enrichConcurrency: 3 },
+            { enrich: false }
+        );
+        expect(seen.orgs).toHaveLength(0);
+        expect(summary.shortlisted).toBe(8);
+        expect(summary.enriched).toBe(0);
+        expect(store.statuses.at(-1)).toBe("completed");
+    });
+
     it("stays one at a time when the ports set no limit", async () => {
         const { ports, seen } = trackingPorts(4);
         await runDistributionPipeline(ctx, ports);

@@ -9,8 +9,12 @@
  * Photon ranks by text match and ignores location unless boxed, so every
  * search is confined to a bounding box around a city centre.
  */
+import { mapInPool } from "../pool";
 import { COUNTRIES, countryName } from "./geo";
 import { KEYLESS_USER_AGENT, type OsmPlace } from "./osm";
+
+/** Cities boxed at once. Photon is light; two keeps wall time down without stampeding it. */
+const CITY_CONCURRENCY = 2;
 
 export const PHOTON_URL = "https://photon.komoot.io/api/";
 export const OSM_API_URL = "https://api.openstreetmap.org/api/0.6";
@@ -121,6 +125,7 @@ const BUSINESS_KEYS = new Set([
 /**
  * Category-filtered search inside a box around each city, then tags from
  * the OSM API. Only elements in the requested country with a website survive.
+ * Cities of a large country are boxed a few at a time.
  */
 export async function searchPhoton(
     req: PhotonRequest,
@@ -131,47 +136,57 @@ export async function searchPhoton(
     const words = req.keywords.filter(w => w.length >= 3).slice(0, 2);
     const found = new Map<string, { feature: PhotonFeature; city: string }>();
 
-    for (const city of photonAreas(req.country, req.region ?? null)) {
-        if (options.signal?.aborted) break;
-        const centre = await locateCity(city, req.country, options).catch(() => null);
-        if (!centre) continue;
-        const bbox = [
-            centre.lon - BOX_LON,
-            centre.lat - BOX_LAT,
-            centre.lon + BOX_LON,
-            centre.lat + BOX_LAT,
-        ]
-            .map(n => n.toFixed(4))
-            .join(",");
-        const searches: Array<{ tag: string | null; q: string }> = [
-            ...tags.map(tag => ({ tag, q: tag.split(":")[1]!.replace(/_/g, " ") })),
-            ...words.map(q => ({ tag: null, q })),
-        ];
-        for (const search of searches) {
-            const params = new URLSearchParams({ q: search.q, limit: "50", lang: "en", bbox });
-            if (search.tag) params.append("osm_tag", search.tag);
-            let json: { features: PhotonFeature[] };
-            try {
-                json = await getJson<{ features: PhotonFeature[] }>(
-                    `${options.photonUrl ?? PHOTON_URL}?${params.toString()}`,
-                    options
-                );
-            } catch {
-                continue;
-            }
-            for (const f of json.features) {
-                const p = f.properties;
-                if (!p.osm_id || !p.osm_type || !p.name) continue;
-                if (!BUSINESS_KEYS.has(p.osm_key ?? "")) continue;
-                if ((p.countrycode ?? "").toUpperCase() !== req.country.toUpperCase()) continue;
-                const key = `${p.osm_type}${p.osm_id}`;
-                if (!found.has(key)) found.set(key, { feature: f, city });
-            }
+    const addFeatures = (city: string, features: PhotonFeature[]) => {
+        for (const f of features) {
+            const p = f.properties;
+            if (!p.osm_id || !p.osm_type || !p.name) continue;
+            if (!BUSINESS_KEYS.has(p.osm_key ?? "")) continue;
+            if ((p.countrycode ?? "").toUpperCase() !== req.country.toUpperCase()) continue;
+            const key = `${p.osm_type}${p.osm_id}`;
+            if (!found.has(key)) found.set(key, { feature: f, city });
         }
-        if (found.size >= limit * 3) break;
-    }
-    if (found.size === 0) return [];
+    };
 
+    await mapInPool(
+        photonAreas(req.country, req.region ?? null),
+        CITY_CONCURRENCY,
+        async city => {
+            const centre = await locateCity(city, req.country, options).catch(() => null);
+            if (!centre) return 0;
+            const bbox = [
+                centre.lon - BOX_LON,
+                centre.lat - BOX_LAT,
+                centre.lon + BOX_LON,
+                centre.lat + BOX_LAT,
+            ]
+                .map(n => n.toFixed(4))
+                .join(",");
+            const searches: Array<{ tag: string | null; q: string }> = [
+                ...tags.map(tag => ({ tag, q: tag.split(":")[1]!.replace(/_/g, " ") })),
+                ...words.map(q => ({ tag: null, q })),
+            ];
+            let added = 0;
+            for (const search of searches) {
+                const params = new URLSearchParams({ q: search.q, limit: "50", lang: "en", bbox });
+                if (search.tag) params.append("osm_tag", search.tag);
+                let json: { features: PhotonFeature[] };
+                try {
+                    json = await getJson<{ features: PhotonFeature[] }>(
+                        `${options.photonUrl ?? PHOTON_URL}?${params.toString()}`,
+                        options
+                    );
+                } catch {
+                    continue;
+                }
+                const before = found.size;
+                addFeatures(city, json.features);
+                added += found.size - before;
+            }
+            return added;
+        },
+        () => found.size >= limit * 3 || Boolean(options.signal?.aborted)
+    );
+    if (found.size === 0) return [];
     const byType: Record<"node" | "way" | "relation", number[]> = {
         node: [],
         way: [],

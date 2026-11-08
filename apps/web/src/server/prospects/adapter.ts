@@ -587,7 +587,8 @@ export function toCompanyDetail(
     events: RelationshipEventRecord[],
     hasAgreement: boolean,
     viewerId: string,
-    ctx: RowContext
+    ctx: RowContext,
+    researching = false
 ): CompanyDetail {
     const row = toCompanyRow(item, ctx);
     const claims = profileClaims(item.relationship, evidence);
@@ -611,6 +612,7 @@ export function toCompanyDetail(
             ? `${item.org.name} — dossier`
             : null,
         profiledAt: iso(item.org.lastEnrichedAt),
+        researching,
     };
 }
 
@@ -1193,29 +1195,54 @@ export function toRunDto(run: RunRecord, progress: RunProgress | null = null): R
                 ? copy("growth.server.runs.excluded", { count: n(summary.excluded) })
                 : null,
         },
-        {
-            id: "profiles",
-            label: "Profiles",
-            detail: summary
-                ? `${summary.enriched} of ${summary.shortlisted}`
-                : progress
-                  ? `${progress.profiled} of ${progress.shortlisted}`
-                  : `0 of ${profileTotal}`,
-            status: statusOf(run, "enriching", "completed"),
-            right: summary?.gateRejections ? `${summary.gateRejections} failed grounding` : null,
-            labelCopy: stepLabel("profiles"),
-            detailCopy: copy(
-                "growth.server.runs.profilesOf",
-                summary
-                    ? { done: n(summary.enriched), total: n(summary.shortlisted) }
+        (() => {
+            // A finished search that never wrote profiles (the default now)
+            // points at open-to-write instead of "0 of N".
+            const profilesOnOpen =
+                Boolean(summary) &&
+                run.options.mode !== "fixture" &&
+                !summary!.enriched &&
+                !summary!.gateRejections;
+            if (profilesOnOpen) {
+                return {
+                    id: "profiles",
+                    label: "Profiles",
+                    detail: "written when you open a company",
+                    status: "skipped" as const,
+                    right: null,
+                    labelCopy: stepLabel("profiles"),
+                    detailCopy: copy("growth.server.runs.profilesOnOpen"),
+                    rightCopy: null,
+                };
+            }
+            return {
+                id: "profiles",
+                label: "Profiles",
+                detail: summary
+                    ? `${summary.enriched} of ${summary.shortlisted}`
                     : progress
-                      ? { done: n(progress.profiled), total: n(progress.shortlisted) }
-                      : { done: "0", total: n(profileTotal) }
-            ),
-            rightCopy: summary?.gateRejections
-                ? copy("growth.server.runs.failedGrounding", { count: n(summary.gateRejections) })
-                : null,
-        },
+                      ? `${progress.profiled} of ${progress.shortlisted}`
+                      : `0 of ${profileTotal}`,
+                status: statusOf(run, "enriching", "completed"),
+                right: summary?.gateRejections
+                    ? `${summary.gateRejections} failed grounding`
+                    : null,
+                labelCopy: stepLabel("profiles"),
+                detailCopy: copy(
+                    "growth.server.runs.profilesOf",
+                    summary
+                        ? { done: n(summary.enriched), total: n(summary.shortlisted) }
+                        : progress
+                          ? { done: n(progress.profiled), total: n(progress.shortlisted) }
+                          : { done: "0", total: n(profileTotal) }
+                ),
+                rightCopy: summary?.gateRejections
+                    ? copy("growth.server.runs.failedGrounding", {
+                          count: n(summary.gateRejections),
+                      })
+                    : null,
+            };
+        })(),
         {
             id: "people",
             label: "People",
@@ -1235,6 +1262,7 @@ export function toRunDto(run: RunRecord, progress: RunProgress | null = null): R
     return {
         id: run.id,
         segmentId: run.programId,
+        mode: run.options.mode,
         status:
             run.status === "completed"
                 ? "completed"

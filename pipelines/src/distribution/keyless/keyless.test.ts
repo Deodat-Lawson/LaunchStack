@@ -276,8 +276,10 @@ describe("OpenStreetMap adapter", () => {
     });
 
     it("posts to Overpass with a user agent and merges areas", async () => {
+        let nextId = 0;
         const calls: Array<{ url: string; ua: string | undefined; body: string }> = [];
         const fetchImpl: typeof fetch = async (url, init) => {
+            const id = ++nextId;
             const headers = init?.headers as Record<string, string>;
             calls.push({
                 url: urlOf(url),
@@ -289,12 +291,12 @@ describe("OpenStreetMap adapter", () => {
                     elements: [
                         {
                             type: "node",
-                            id: calls.length,
+                            id,
                             lat: 1,
                             lon: 2,
                             tags: {
-                                name: `Place ${calls.length}`,
-                                website: `p${calls.length}.example`,
+                                name: `Place ${id}`,
+                                website: `p${id}.example`,
                             },
                         },
                     ],
@@ -307,9 +309,71 @@ describe("OpenStreetMap adapter", () => {
             { fetchImpl, urls: ["https://overpass.example"] }
         );
         expect(calls).toHaveLength(4);
-        expect(calls[0]!.ua).toMatch(/LaunchStack-Prospects/);
-        expect(decodeURIComponent(calls[0]!.body)).toContain('area["name"="Berlin"]');
-        expect(places.map(p => p.name)).toEqual(["Place 1", "Place 2", "Place 3", "Place 4"]);
+        expect(calls.every(c => c.ua?.match(/LaunchStack-Prospects/))).toBe(true);
+        expect(calls.some(c => decodeURIComponent(c.body).includes('area["name"="Berlin"]'))).toBe(
+            true
+        );
+        expect(places.map(p => p.name).sort()).toEqual([
+            "Place 1",
+            "Place 2",
+            "Place 3",
+            "Place 4",
+        ]);
+    });
+
+    it("queries cities of a large country a few at a time", async () => {
+        let inFlight = 0;
+        let maxInFlight = 0;
+        const fetchImpl: typeof fetch = async () => {
+            inFlight += 1;
+            maxInFlight = Math.max(maxInFlight, inFlight);
+            await new Promise(resolve => setTimeout(resolve, 40));
+            inFlight -= 1;
+            return new Response(JSON.stringify({ elements: [] }), { status: 200 });
+        };
+        await searchOverpass(
+            { country: "DE", keywords: ["coffee"] },
+            { fetchImpl, urls: ["https://overpass.example"] }
+        );
+        expect(maxInFlight).toBe(2);
+    });
+
+    it("aborts a hanging mirror and tries the next", async () => {
+        const tried: string[] = [];
+        const fetchImpl: typeof fetch = async (url, init) => {
+            tried.push(urlOf(url));
+            if (tried.length === 1) {
+                await new Promise<never>((_, reject) => {
+                    init?.signal?.addEventListener("abort", () =>
+                        reject(Object.assign(new Error("aborted"), { name: "AbortError" }))
+                    );
+                });
+            }
+            return new Response(
+                JSON.stringify({
+                    elements: [
+                        {
+                            type: "node",
+                            id: 9,
+                            lat: 1,
+                            lon: 2,
+                            tags: { name: "Ok", website: "ok.example" },
+                        },
+                    ],
+                }),
+                { status: 200 }
+            );
+        };
+        const places = await searchOverpass(
+            { country: "NL", keywords: ["coffee"] },
+            {
+                fetchImpl,
+                urls: ["https://a.example", "https://b.example"],
+                timeoutMs: 40,
+            }
+        );
+        expect(tried).toEqual(["https://a.example", "https://b.example"]);
+        expect(places.map(p => p.name)).toEqual(["Ok"]);
     });
 });
 

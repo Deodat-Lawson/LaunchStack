@@ -1,10 +1,11 @@
 /**
  * Distribution discovery run on the worker (design §4.6 "Background jobs").
  *
- * Stages 1–4 are one step; every candidate's research is its own step so a
- * retry replays completed candidates instead of re-researching them; the
- * summary is the last step. Publishing dossiers into Sources and metering
- * are host ports because they need apps/web's storage and ledger.
+ * Stages 1–4 are one step. By default the search stops at the shortlist and
+ * a profile is written when someone opens the company. When `enrichOnRun` is
+ * set, candidates are researched in waves (keyless: five at a time) so a
+ * retry still skips completed step ids. Publishing dossiers into Sources and
+ * metering are host ports because they need apps/web's storage and ledger.
  */
 import {
     DistributionRunEventDataSchema,
@@ -25,6 +26,9 @@ import { canPublishToSources } from "~/server/prospects/keyless-run";
 import { prospectEmbedder, prospectFitJudge } from "~/server/prospects/matching";
 import { processDocumentUpload } from "~/server/services/document-upload";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
+
+/** Same bound keyless ports use in-process; live stays one at a time (model cost). */
+const KEYLESS_ENRICH_CONCURRENCY = 5;
 
 function toErrorMessage(error: unknown): string {
     if (error instanceof Error && error.message) return error.message;
@@ -124,16 +128,25 @@ export const distributionRunJob = inngest.createFunction(
         );
 
         const results: EnrichCandidateResult[] = [];
-        for (const [index, relationshipId] of prepared.candidateRelationshipIds.entries()) {
-            const result = await step.run(`enrich-${index}`, () =>
-                inWorkspace(async () =>
-                    enrichCandidate(ctx, await ports(), {
-                        relationshipId,
-                        profile: prepared.profile,
-                    })
-                )
-            );
-            results.push(result);
+        if (data.enrichOnRun) {
+            const concurrency = data.mode === "keyless" ? KEYLESS_ENRICH_CONCURRENCY : 1;
+            const ids = prepared.candidateRelationshipIds;
+            for (let i = 0; i < ids.length; i += concurrency) {
+                const batch = ids.slice(i, i + concurrency);
+                const batchResults = await Promise.all(
+                    batch.map((relationshipId, offset) =>
+                        step.run(`enrich-${i + offset}`, () =>
+                            inWorkspace(async () =>
+                                enrichCandidate(ctx, await ports(), {
+                                    relationshipId,
+                                    profile: prepared.profile,
+                                })
+                            )
+                        )
+                    )
+                );
+                results.push(...batchResults);
+            }
         }
 
         const summary = await step.run("finalize", () =>

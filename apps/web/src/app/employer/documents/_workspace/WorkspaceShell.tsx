@@ -2790,6 +2790,7 @@ export function WorkspaceShell() {
                     }
                     return paneId === "chat" ? (
                         <AskPanel
+                            userProfile={me}
                             leadingChromeInsetPx={0}
                             sources={sources}
                             selected={selected}

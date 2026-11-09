@@ -126,3 +126,27 @@ behavior, older-open priority under a source cap, exact score arithmetic,
 ownership, foreign-hit rejection and revoked-source exclusion. One initial test
 fixture incorrectly retained a revoked excerpt; the contract correctly rejected
 it, and the fixture was corrected to redact that excerpt before the final run.
+
+## PR CI follow-up
+
+The first full CI run for PR #602 exposed failures beyond the focused local suite:
+
+- The inherited Contract v1 migration had no snapshot, and schema-generated
+  foreign-key names differed from its existing SQL. Reused upstream commit
+  `1b552a29` from `fork/vantage/backend-ai-pipeline`, preserving attribution,
+  restoring the snapshot and explicitly declaring the existing constraint names.
+  No applied migration SQL was edited and no new database migration was added.
+- Vantage's company architecture adapter imported sibling implementation files.
+  It now uses the existing public `@launchstack/pipelines/company-metadata` API;
+  the architecture boundary test remains unchanged.
+- The mindmap live embedding evaluation interpreted CI's placeholder API key as
+  permission to call a provider. It now requires `RUN_MINDMAP_EMBEDDING_EVAL=1`
+  plus a key. The three live quality assertions remain available for an explicit
+  evaluation; regular CI makes no embedding call from this suite.
+
+Local checks for this repair: both migration journals pass, `drizzle-kit check`
+passes, both schema generators report no changes, 62 pipeline tests and 26 web
+tests pass, and the three live embedding tests skip with CI's placeholder key.
+Pipeline TypeScript, scoped ESLint and changed-code formatting pass. Docker is
+not running locally, so physical schema equivalence is verified by the next
+GitHub CI run rather than claimed from these local checks.

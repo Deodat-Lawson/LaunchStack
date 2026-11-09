@@ -1,6 +1,7 @@
 import { z } from "zod";
 
 import type { RunStatus, RunStep, RunSummary } from "../types";
+import type { FitAssessmentV1, FitFreshness, ProgramFit } from "./fit";
 
 export const FIELD_TYPES = [
     "long_text",
@@ -17,7 +18,7 @@ export const FIELD_TYPES = [
 export const FieldTypeSchema = z.enum(FIELD_TYPES);
 export type FieldType = z.infer<typeof FieldTypeSchema>;
 
-const IdSchema = z.string().trim().min(1).max(64);
+export const IdSchema = z.string().trim().min(1).max(64);
 const HttpUrlSchema = z
     .string()
     .url()
@@ -262,29 +263,22 @@ export const CatalogueProgramSchema = z
     });
 export type CatalogueProgram = z.infer<typeof CatalogueProgramSchema>;
 
-export const FitAssessmentSchema = z
-    .object({
-        score: z.number().int().min(0).max(100).nullable(),
-        reasons: z.array(z.string()),
-        concerns: z.array(z.string()),
-        unknowns: z.array(z.string()),
-        sourceIds: z.array(IdSchema),
-        companyEvidenceIds: z.array(z.number().int().positive()),
-    })
-    .strict();
-export type FitAssessment = z.infer<typeof FitAssessmentSchema>;
-
 export interface StoredFit {
-    assessment: FitAssessment;
+    /** Null when the saved row was scored under an earlier rubric and cannot be read as fit-v1. */
+    assessment: FitAssessmentV1 | null;
     profileHash: string;
     programHash: string;
+    /** Null for results saved before rubric fit-v1. */
+    rubricVersion: string | null;
     checkedAt: string;
 }
 export interface ProgramView {
     program: CatalogueProgram;
     contentHash: string;
-    fit: StoredFit | null;
-    fitStale: boolean;
+    /** Null when not assessed, or when the saved result predates the current rubric. */
+    fit: ProgramFit | null;
+    /** Decided on the server; the screen never compares hashes. */
+    freshness: FitFreshness;
 }
 export interface HomeResponse {
     programs: ProgramView[];

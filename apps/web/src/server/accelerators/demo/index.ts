@@ -1,11 +1,5 @@
-import { eq } from "drizzle-orm";
-
-import { company } from "@launchstack/store/schema";
-
 import type { DemoLayer, ProgramDetails } from "~/app/employer/tools/accelerators/_lib/demo";
-import { db } from "~/server/db";
 
-import { NORTHWIND_FITS } from "./northwind-fits";
 import { details as fiveHundredGlobal } from "./programs/500-global";
 import { details as a16zSpeedrun } from "./programs/a16z-speedrun";
 import { details as aboveA } from "./programs/abovea-startup-accelerator";
@@ -35,17 +29,4 @@ const DEMO_DETAILS: Record<string, ProgramDetails> = {
     "y-combinator": yCombinator,
 };
 
-/** The seeded workspace the illustrative fit was written for (see scripts/seed-accelerators-demo.ts). */
-const NORTHWIND_WORKSPACE = "Accelerators Demo — Northwind fixture";
-
-export async function loadDemoLayer(companyId: bigint): Promise<DemoLayer> {
-    const [workspace] = await db
-        .select({ name: company.name })
-        .from(company)
-        .where(eq(company.id, Number(companyId)))
-        .limit(1);
-    return {
-        details: DEMO_DETAILS,
-        fits: workspace?.name === NORTHWIND_WORKSPACE ? NORTHWIND_FITS : {},
-    };
-}
+export const DEMO_LAYER: DemoLayer = { details: DEMO_DETAILS };

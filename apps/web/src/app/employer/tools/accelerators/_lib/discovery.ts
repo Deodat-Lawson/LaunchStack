@@ -44,14 +44,26 @@ export function updateDiscoveryParams(
     return next;
 }
 
-function currentScore(view: ProgramView): number | null {
-    return view.fitStale ? null : (view.fit?.assessment.score ?? null);
+/** The overall score only while the result is current; an out-of-date score is not a fit. */
+export function currentScore(view: ProgramView): number | null {
+    return view.freshness.status === "current" ? (view.fit?.overall.score ?? null) : null;
+}
+
+/**
+ * Default order: current scores high to low, then current results without
+ * enough evidence, then out of date, then not assessed; ties by name.
+ */
+function fitRank(view: ProgramView): number {
+    const score = currentScore(view);
+    if (score !== null) return score;
+    if (view.freshness.status === "current") return -1;
+    return view.freshness.status === "out_of_date" ? -2 : -3;
 }
 
 export function rankPrograms(programs: readonly ProgramView[], locale: string): ProgramView[] {
     return [...programs].sort(
         (left, right) =>
-            (currentScore(right) ?? -1) - (currentScore(left) ?? -1) ||
+            fitRank(right) - fitRank(left) ||
             left.program.name.localeCompare(right.program.name, locale)
     );
 }
@@ -63,14 +75,11 @@ export function filterPrograms(
     const terms = filters.q.trim().toLowerCase().split(/\s+/).filter(Boolean);
     return programs.filter(view => {
         const score = currentScore(view);
+        const { status } = view.freshness;
         if (filters.fit === "scored" && score === null) return false;
-        if (filters.fit === "unmatched" && view.fit !== null) return false;
-        if (
-            filters.fit === "unscorable" &&
-            (view.fit === null || view.fitStale || view.fit.assessment.score !== null)
-        )
-            return false;
-        if (filters.fit === "stale" && !view.fitStale) return false;
+        if (filters.fit === "unmatched" && status !== "not_assessed") return false;
+        if (filters.fit === "unscorable" && (status !== "current" || score !== null)) return false;
+        if (filters.fit === "stale" && status !== "out_of_date") return false;
         if (filters.minScore !== null && (score === null || score < filters.minScore)) return false;
 
         if (filters.intake !== "all") {

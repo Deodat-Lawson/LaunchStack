@@ -1,9 +1,8 @@
 /**
- * Demo stand-ins for work that other workstreams own:
- *  - ProgramDetails: the richer, sourced Program record Workstream 1 (Tony) will collect.
- *  - IllustrativeFit: the seven-dimension assessment Workstream 2 (Tiffany) will produce.
- * Both are labelled as demo output in the UI and are replaced, not extended,
- * when that work merges. See docs/plans/2026-11-03-0704-feat-accelerator-sourcing-requirements-plan.md.
+ * Demo stand-in for work another workstream owns: ProgramDetails is the
+ * richer, sourced Program record Workstream 1 (Tony) will collect. It is
+ * labelled as demo output in the UI and is replaced, not extended, when that
+ * work merges. Company fit is real (Workstream 2, rubric fit-v1).
  */
 
 export const INVESTMENT_STAGES = ["idea", "pre_seed", "seed", "series_a", "later"] as const;
@@ -98,60 +97,7 @@ export interface ProgramDetails {
     sources: { title: string; url: string; checkedAt: string }[];
 }
 
-export const FIT_DIMENSIONS = [
-    { key: "sector", weight: 20 },
-    { key: "stage", weight: 15 },
-    { key: "businessModel", weight: 15 },
-    { key: "portfolio", weight: 15 },
-    { key: "deal", weight: 15 },
-    { key: "operations", weight: 10 },
-    { key: "value", weight: 10 },
-] as const;
-export type FitDimensionKey = (typeof FIT_DIMENSIONS)[number]["key"];
-
-export interface FitDimensionResult {
-    /** Anchored rating 0/25/50/75/100; null when the evidence is unknown. */
-    score: number | null;
-    /** False only under a rubric rule, e.g. portfolio similarity outside the Supported accelerators. */
-    applicable: boolean;
-    note: string;
-}
-
-export interface IllustrativeFit {
-    eligibility: "eligible" | "unknown" | "ineligible";
-    eligibilityNote: string;
-    dimensions: Record<FitDimensionKey, FitDimensionResult>;
-}
-
-/** Below this share of applicable weight with evidence, no overall score is shown. */
-export const MIN_FIT_COVERAGE = 70;
-
-/**
- * Weighted mean of rated dimensions and the share of applicable weight that
- * was rated. Unknown is excluded rather than scored, per the scoring spec.
- */
-export function summarizeFit(fit: IllustrativeFit): { overall: number | null; coverage: number } {
-    let applicableWeight = 0;
-    let ratedWeight = 0;
-    let weighted = 0;
-    for (const { key, weight } of FIT_DIMENSIONS) {
-        const dimension = fit.dimensions[key];
-        if (!dimension.applicable) continue;
-        applicableWeight += weight;
-        if (dimension.score === null) continue;
-        ratedWeight += weight;
-        weighted += dimension.score * weight;
-    }
-    const coverage =
-        applicableWeight === 0 ? 0 : Math.round((ratedWeight / applicableWeight) * 100);
-    const overall =
-        coverage >= MIN_FIT_COVERAGE && ratedWeight > 0 ? Math.round(weighted / ratedWeight) : null;
-    return { overall, coverage };
-}
-
-/** What the homepage carries in place of the other workstreams' future data. */
+/** What the homepage carries in place of Workstream 1's future data. */
 export interface DemoLayer {
     details: Record<string, ProgramDetails>;
-    /** Written for the Northwind demo company only; empty for every other company. */
-    fits: Record<string, IllustrativeFit>;
 }

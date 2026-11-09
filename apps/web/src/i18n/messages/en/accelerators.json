@@ -60,15 +60,15 @@
     "unmatched": "Not matched yet",
     "unknown": "Not enough information to score",
     "stale": "Out of date",
-    "staleHint": "The company profile or Program changed since this result. Click Match Programs to update it; no rematch happens automatically.",
+    "staleBecause": "Out of date: {reasons}. Click Match Programs to update it; no rematch happens automatically.",
+    "staleReasons": {
+      "profile_changed": "your company profile changed",
+      "program_changed": "the Program's details changed",
+      "rubric_changed": "the scoring rules changed"
+    },
     "checked": "Matched {date}",
-    "reasons": "Reasons",
-    "concerns": "Concerns",
-    "unknowns": "Unknowns",
-    "evidence": "Company evidence references: {ids}",
     "unmatchedHint": "No saved fit assessment. Matching starts only when you choose Match Programs.",
     "short": "fit",
-    "aiNotes": "AI match notes",
     "about": "About this score"
   },
   "program": {
@@ -135,6 +135,7 @@
     "coverage": "Evidence covers {coverage}% of the weight.",
     "insufficientHint": "Evidence covers {coverage}% of the applicable weight; an overall score needs at least {minimum}%.",
     "weight": "Weight {weight}%.",
+    "sources": "Sources:",
     "notApplicable": "Not applicable",
     "unknown": "Unknown",
     "eligibility": {

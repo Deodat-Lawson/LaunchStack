@@ -1,6 +1,6 @@
 {
-  "id": "93ddf3a1-f0b2-4701-921a-868c26aa18e2",
-  "prevId": "896c24a4-a17f-40a4-a8a6-d70f8cab60ff",
+  "id": "383e31e0-39c6-4e2e-aef7-e330926f014f",
+  "prevId": "90c56bbd-697a-4bf8-b6ee-dcf5c4b59205",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -18145,6 +18145,12 @@
           "primaryKey": false,
           "notNull": true
         },
+        "rubric_version": {
+          "name": "rubric_version",
+          "type": "varchar(32)",
+          "primaryKey": false,
+          "notNull": false
+        },
         "checked_at": {
           "name": "checked_at",
           "type": "timestamp with time zone",
@@ -18351,6 +18357,312 @@
       },
       "indexes": {},
       "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.pdr_ai_v2_accelerator_tracker_opportunities": {
+      "name": "pdr_ai_v2_accelerator_tracker_opportunities",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "company_id": {
+          "name": "company_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "program_id": {
+          "name": "program_id",
+          "type": "varchar(64)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "cycle_id": {
+          "name": "cycle_id",
+          "type": "varchar(64)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "priority": {
+          "name": "priority",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'medium'"
+        },
+        "status": {
+          "name": "status",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'shortlisted'"
+        },
+        "notes": {
+          "name": "notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "''"
+        },
+        "submitted_on": {
+          "name": "submitted_on",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "next_action": {
+          "name": "next_action",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "planned_deadline": {
+          "name": "planned_deadline",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "accelerator_tracker_company_program_cycle_unique": {
+          "name": "accelerator_tracker_company_program_cycle_unique",
+          "columns": [
+            {
+              "expression": "company_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "program_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "cycle_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "\"pdr_ai_v2_accelerator_tracker_opportunities\".\"cycle_id\" IS NOT NULL",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "accelerator_tracker_company_program_only_unique": {
+          "name": "accelerator_tracker_company_program_only_unique",
+          "columns": [
+            {
+              "expression": "company_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "program_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "where": "\"pdr_ai_v2_accelerator_tracker_opportunities\".\"cycle_id\" IS NULL",
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "accelerator_tracker_id_company_unique": {
+          "name": "accelerator_tracker_id_company_unique",
+          "columns": [
+            {
+              "expression": "id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "company_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "pdr_ai_v2_accelerator_tracker_opportunities_company_id_pdr_ai_v2_company_id_fk": {
+          "name": "pdr_ai_v2_accelerator_tracker_opportunities_company_id_pdr_ai_v2_company_id_fk",
+          "tableFrom": "pdr_ai_v2_accelerator_tracker_opportunities",
+          "tableTo": "pdr_ai_v2_company",
+          "columnsFrom": [
+            "company_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "pdr_ai_v2_accelerator_tracker_opportunities_program_id_pdr_ai_v2_accelerator_programs_id_fk": {
+          "name": "pdr_ai_v2_accelerator_tracker_opportunities_program_id_pdr_ai_v2_accelerator_programs_id_fk",
+          "tableFrom": "pdr_ai_v2_accelerator_tracker_opportunities",
+          "tableTo": "pdr_ai_v2_accelerator_programs",
+          "columnsFrom": [
+            "program_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.pdr_ai_v2_accelerator_tracker_tasks": {
+      "name": "pdr_ai_v2_accelerator_tracker_tasks",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true,
+          "default": "gen_random_uuid()"
+        },
+        "company_id": {
+          "name": "company_id",
+          "type": "bigint",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "opportunity_id": {
+          "name": "opportunity_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "due_on": {
+          "name": "due_on",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "priority": {
+          "name": "priority",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'medium'"
+        },
+        "done": {
+          "name": "done",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "completed_at": {
+          "name": "completed_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "accelerator_tracker_tasks_company_opportunity_idx": {
+          "name": "accelerator_tracker_tasks_company_opportunity_idx",
+          "columns": [
+            {
+              "expression": "company_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "opportunity_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "accelerator_tracker_tasks_opportunity_company_fk": {
+          "name": "accelerator_tracker_tasks_opportunity_company_fk",
+          "tableFrom": "pdr_ai_v2_accelerator_tracker_tasks",
+          "tableTo": "pdr_ai_v2_accelerator_tracker_opportunities",
+          "columnsFrom": [
+            "opportunity_id",
+            "company_id"
+          ],
+          "columnsTo": [
+            "id",
+            "company_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {},

@@ -57,15 +57,22 @@ export function ScoreRing({
     );
 }
 
-/** The saved AI match result as a ring or a badge. */
+/**
+ * The saved fit as a ring or a badge. An out-of-date result keeps its previous
+ * score beside a warning; one saved under an older rubric has no score to keep.
+ */
 export function FitStatus({ view, ring = false }: { view: ProgramView; ring?: boolean }) {
     const t = useTranslations("accelerators.fit");
-    const score = view.fit?.assessment.score ?? null;
-    const label = !view.fit
-        ? t("unmatched")
-        : score === null
-          ? t("unknown")
-          : t("score", { score });
+    const score = view.fit?.overall.score ?? null;
+    const stale = view.freshness.status === "out_of_date";
+    const label =
+        view.freshness.status === "not_assessed"
+            ? t("unmatched")
+            : !view.fit
+              ? t("stale")
+              : score === null
+                ? t("unknown")
+                : t("score", { score });
     if (ring) return <ScoreRing score={score} label={label} />;
     return (
         <div className="flex flex-wrap items-center gap-2">
@@ -75,7 +82,7 @@ export function FitStatus({ view, ring = false }: { view: ProgramView; ring?: bo
             >
                 {label}
             </Badge>
-            {view.fitStale && (
+            {stale && view.fit && (
                 <Badge variant="outline" className="border-warn/40 text-warn">
                     {t("stale")}
                 </Badge>

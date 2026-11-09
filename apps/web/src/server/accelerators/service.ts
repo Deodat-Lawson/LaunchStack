@@ -1,4 +1,9 @@
-import { AcceleratorError, hashValue, type ProgramView } from "@launchstack/pipelines/accelerators";
+import {
+    AcceleratorError,
+    hashValue,
+    programFit,
+    type ProgramView,
+} from "@launchstack/pipelines/accelerators";
 import { listCatalogue, listCompanyMatches } from "@launchstack/pipelines/accelerators/db";
 import { PROPOSAL_CREDITS, type RunRecord } from "@launchstack/pipelines/proposals";
 import { findLiveRun, getRun, loadOrgProfile } from "@launchstack/pipelines/proposals/db";
@@ -9,7 +14,7 @@ import type { WorkspaceContext } from "~/lib/require-workspace-context";
 import { startProposalRun } from "~/server/proposals/executor";
 import { runCopy } from "~/server/proposals/copy";
 
-import { loadDemoLayer } from "./demo";
+import { DEMO_LAYER } from "./demo";
 
 export const ACCELERATOR_COSTS = {
     match: PROPOSAL_CREDITS.programs,
@@ -35,37 +40,27 @@ export function toAcceleratorRunView(run: RunRecord): AcceleratorRunView {
 }
 
 export async function loadAccelerators(member: WorkspaceContext): Promise<AcceleratorsHome> {
-    const [catalogue, matches, profile, demo] = await Promise.all([
+    const [catalogue, matches, profile] = await Promise.all([
         listCatalogue(),
         listCompanyMatches(member.companyId),
         loadOrgProfile(member.companyId, await member.documentScope()),
-        loadDemoLayer(member.companyId),
     ]);
     const profileHash = profile ? hashValue(profile) : null;
-    const programs = catalogue
-        .map(({ program, contentHash }): ProgramView => {
-            const fit = matches[program.id] ?? null;
-            return {
-                program,
-                contentHash,
-                fit,
-                fitStale:
-                    fit !== null &&
-                    (fit.profileHash !== profileHash || fit.programHash !== contentHash),
-            };
+    // No ranking here: the homepage sorts and filters, and fit is one field among many.
+    const programs = catalogue.map(
+        ({ program, contentHash }): ProgramView => ({
+            program,
+            contentHash,
+            ...programFit(matches[program.id] ?? null, { profileHash, programHash: contentHash }),
         })
-        .sort((a, b) => {
-            const scoreA = a.fitStale ? -1 : (a.fit?.assessment.score ?? -1);
-            const scoreB = b.fitStale ? -1 : (b.fit?.assessment.score ?? -1);
-            return scoreB - scoreA || a.program.name.localeCompare(b.program.name);
-        });
+    );
     return {
         programs,
         profileReady:
             profile !== null && (profile.facts.length > 0 || profile.summary.trim().length > 0),
         canEdit: member.can("documents.edit"),
         costs: ACCELERATOR_COSTS,
-        demo,
+        demo: DEMO_LAYER,
     };
 }
 

@@ -8,9 +8,9 @@ import { ToolLink } from "~/components/tool-app/ToolLink";
 import { Badge } from "~/components/ui/badge";
 
 import type { ProgramView, TrackerOpportunity } from "../api";
-import { summarizeFit, type DemoLayer } from "../_lib/demo";
-import { daysBetween } from "../_lib/vision-filters";
-import { FitStatus, ScoreRing } from "./ProgramFacts";
+import type { DemoLayer } from "../_lib/demo";
+import { daysBetween, isConfirmedIneligible } from "../_lib/vision-filters";
+import { FitStatus } from "./ProgramFacts";
 
 /** One Program in the list: who, where and for which stage, a score or tracker tick, and only urgent dates. */
 export function ProgramRow({
@@ -32,13 +32,11 @@ export function ProgramRow({
     const format = useFormatter();
     const program = view.program;
     const details = demo.details[program.id];
-    const fit = demo.fits[program.id];
     const stages = details?.stages.map(stage => t(`details.stages.${stage}`)) ?? [];
     const meta = [
         program.location?.text.split(/[;(]/)[0]?.trim(),
         stages.length > 0 ? stages.join(" – ") : null,
     ].filter(Boolean);
-    const overall = fit ? summarizeFit(fit).overall : null;
     return (
         <ToolLink
             href={href}
@@ -57,7 +55,7 @@ export function ProgramRow({
                     <h2 className="text-ink group-hover:text-brand truncate text-sm font-semibold">
                         {program.name}
                     </h2>
-                    {fit?.eligibility === "ineligible" && (
+                    {isConfirmedIneligible(view) && (
                         <Badge variant="danger">{t("dimensions.eligibility.ineligible")}</Badge>
                     )}
                 </div>
@@ -89,22 +87,13 @@ export function ProgramRow({
                     >
                         <Check aria-hidden="true" className="size-5" strokeWidth={3} />
                     </div>
-                ) : fit ? (
-                    <ScoreRing
-                        score={overall}
-                        label={
-                            overall === null
-                                ? t("dimensions.insufficient")
-                                : t("dimensions.overall", { score: overall })
-                        }
-                    />
                 ) : (
                     <FitStatus view={view} ring />
                 )}
                 <span aria-hidden={tracked ? true : undefined} className="text-ink-3 text-[10px]">
                     {tracked
                         ? t(`tracker.statuses.${tracked.status}`)
-                        : view.fitStale && !fit
+                        : view.freshness.status === "out_of_date"
                           ? t("fit.stale")
                           : t("fit.short")}
                 </span>

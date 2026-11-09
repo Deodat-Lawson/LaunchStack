@@ -1,5 +1,9 @@
 import {
     CatalogueProgramSchema,
+    FIT_DIMENSION_KEYS,
+    FIT_RUBRIC_VERSION,
+    type FitDimensionResult,
+    type FitDimensions,
     type ProgramCycle,
     type ProgramView,
 } from "@launchstack/pipelines/accelerators";
@@ -15,6 +19,15 @@ import {
 } from "~/app/employer/tools/accelerators/_lib/discovery";
 
 const program = CatalogueProgramSchema.parse(programFixture);
+const unknownDimension: FitDimensionResult = {
+    score: null,
+    applicable: true,
+    note: "Unknown",
+    evidence: { sourceIds: [], companyEvidenceIds: [] },
+};
+const dimensions = Object.fromEntries(
+    FIT_DIMENSION_KEYS.map(key => [key, unknownDimension])
+) as FitDimensions;
 
 function view(
     id: string,
@@ -32,23 +45,25 @@ function view(
             ...options.program,
         },
         contentHash: "program-version",
-        fitStale: options.stale ?? false,
         fit:
             score === "unmatched"
                 ? null
                 : {
-                      assessment: {
-                          score,
-                          reasons: [],
-                          concerns: [],
-                          unknowns: [],
-                          sourceIds: [],
-                          companyEvidenceIds: [],
-                      },
-                      profileHash: "profile-version",
-                      programHash: "program-version",
-                      checkedAt: "2026-11-02T00:00:00Z",
+                      rubricVersion: FIT_RUBRIC_VERSION,
+                      eligibility: { status: "unknown", note: "Unknown" },
+                      dimensions,
+                      overall: { score, coverage: score === null ? 0 : 100 },
                   },
+        freshness:
+            score === "unmatched"
+                ? { status: "not_assessed", reasons: [], assessedAt: null }
+                : options.stale
+                  ? {
+                        status: "out_of_date",
+                        reasons: ["profile_changed"],
+                        assessedAt: "2026-11-02T00:00:00Z",
+                    }
+                  : { status: "current", reasons: [], assessedAt: "2026-11-02T00:00:00Z" },
     };
 }
 
@@ -255,7 +270,7 @@ it("combines all four controls with AND", () => {
     ).toEqual(["deeptech-match"]);
 });
 
-it("ranks current scores first, keeps a real zero, and sorts remaining ties by locale name", () => {
+it("ranks current scores, then too little evidence, then out of date, then not assessed", () => {
     const programs = Object.freeze([
         view("Zulu", 75),
         view("Unknown", null),
@@ -266,15 +281,15 @@ it("ranks current scores first, keeps a real zero, and sorts remaining ties by l
     ]);
     const before = JSON.stringify(programs);
     const ranked = rankPrograms(programs, "en");
-    expect(ids(ranked)).toEqual(["Alpha", "Zulu", "Zero", "Missing", "Stale", "Unknown"]);
+    expect(ids(ranked)).toEqual(["Alpha", "Zulu", "Zero", "Unknown", "Stale", "Missing"]);
     expect(ids(ranked, { minScore: 75 })).toEqual(["Alpha", "Zulu"]);
     expect(ids(ranked, DEFAULT_DISCOVERY_FILTERS)).toEqual([
         "Alpha",
         "Zulu",
         "Zero",
-        "Missing",
-        "Stale",
         "Unknown",
+        "Stale",
+        "Missing",
     ]);
     expect(JSON.stringify(programs)).toBe(before);
 });

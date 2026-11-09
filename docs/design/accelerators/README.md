@@ -185,7 +185,7 @@ pnpm --filter @launchstack/web accelerators:import -- --installation local-accel
   ../../fixtures/accelerators/demo/programs/*.json
 ```
 
-Program details (deal, batches, contacts, tags) in `apps/web/src/server/accelerators/demo/programs/` and the hand-written seven-dimension fit in `demo/northwind-fits.ts` stand in for Workstreams 1 and 2 and are replaced when that work merges. The UI does not label them as demo data, so do not show this build to anyone as production output. The illustrative fit appears only for the `Accelerators Demo — Northwind fixture` workspace. The tracker and similar-company matching are real features: tracker rows are company-private and need `documents.edit` to change.
+Program details (deal, batches, contacts, tags) in `apps/web/src/server/accelerators/demo/programs/` stand in for Workstream 1's records and are replaced when that work merges. The UI does not label them as demo data, so do not show this build to anyone as production output. Company fit is real: **Match Programs** scores every Program under rubric `fit-v1` (Workstream 2), the homepage sorts and filters on the saved result, and the Program page shows each area with its note and cited sources. Under `fit-v1` the "Similar past companies" area does not count toward the score for any Program, including YC. The tracker and similar-company matching are real features: tracker rows are company-private and need `documents.edit` to change.
 
 ## Development and acceptance guidelines
 

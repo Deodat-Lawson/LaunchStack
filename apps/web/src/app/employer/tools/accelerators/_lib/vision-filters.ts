@@ -3,7 +3,6 @@ import {
     INVESTMENT_STAGES,
     REGIONS,
     SECTOR_TAGS,
-    summarizeFit,
     type DemoLayer,
     type InvestmentStage,
     type Region,
@@ -11,7 +10,7 @@ import {
 } from "./demo";
 
 /**
- * Facets over the demo Program details, illustrative fit and saved tracker.
+ * Facets over the demo Program details, the saved fit and the saved tracker.
  * Applied after the catalogue filters in discovery.ts; OR within a facet, AND
  * across facets. Unknown facts never satisfy a facet.
  */
@@ -159,9 +158,8 @@ export function applyVisionFilters(
     const kept = views.filter(view => {
         const id = view.program.id;
         const details = demo.details[id];
-        const fit = demo.fits[id];
         const mine = trackedBy.get(id) ?? [];
-        if (!filters.includeIneligible && fit?.eligibility === "ineligible") return false;
+        if (!filters.includeIneligible && isConfirmedIneligible(view)) return false;
         if (
             filters.sectors.length > 0 &&
             !(
@@ -200,22 +198,22 @@ export function applyVisionFilters(
     if (filters.sort === "name") {
         return kept.sort((left, right) => left.program.name.localeCompare(right.program.name));
     }
-    // Array.prototype.sort is stable, so ties keep the catalogue ranking they arrived in.
+    // Best fit keeps the order rankPrograms gave the catalogue; sort is stable, so
+    // ties in the other orders keep it too.
+    if (filters.sort === "fit") return kept;
     return kept.sort((left, right) => {
         if (filters.sort === "deadline") {
             const a = nextDeadline(left.program, demo, today) ?? "9999-12-31";
             const b = nextDeadline(right.program, demo, today) ?? "9999-12-31";
             return a.localeCompare(b);
         }
-        if (filters.sort === "priority") {
-            const a = topPriority(trackedBy.get(left.program.id) ?? []);
-            const b = topPriority(trackedBy.get(right.program.id) ?? []);
-            return (a ? PRIORITY_RANK[a] : 3) - (b ? PRIORITY_RANK[b] : 3);
-        }
-        const a = demo.fits[left.program.id];
-        const b = demo.fits[right.program.id];
-        return (
-            (b ? (summarizeFit(b).overall ?? -1) : -1) - (a ? (summarizeFit(a).overall ?? -1) : -1)
-        );
+        const a = topPriority(trackedBy.get(left.program.id) ?? []);
+        const b = topPriority(trackedBy.get(right.program.id) ?? []);
+        return (a ? PRIORITY_RANK[a] : 3) - (b ? PRIORITY_RANK[b] : 3);
     });
+}
+
+/** Only a current result confirms ineligibility; an out-of-date one may no longer hold. */
+export function isConfirmedIneligible(view: ProgramView): boolean {
+    return view.freshness.status === "current" && view.fit?.eligibility.status === "ineligible";
 }

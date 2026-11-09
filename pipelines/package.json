@@ -61,6 +61,7 @@
         "./proposals/types": "./src/proposals/types.ts",
         "./accelerators": "./src/proposals/accelerators/index.ts",
         "./accelerators/db": "./src/proposals/accelerators/db.ts",
+        "./accelerators/fit": "./src/proposals/accelerators/fit.ts",
         "./accelerators/tracker-db": "./src/proposals/accelerators/tracker-db.ts",
         "./accelerators/types": "./src/proposals/accelerators/types.ts",
         "./scenarios": "./src/scenarios/index.ts",
@@ -275,6 +276,10 @@
             "./accelerators/db": {
                 "types": "./dist/proposals/accelerators/db.d.ts",
                 "default": "./dist/proposals/accelerators/db.js"
+            },
+            "./accelerators/fit": {
+                "types": "./dist/proposals/accelerators/fit.d.ts",
+                "default": "./dist/proposals/accelerators/fit.js"
             },
             "./accelerators/tracker-db": {
                 "types": "./dist/proposals/accelerators/tracker-db.d.ts",

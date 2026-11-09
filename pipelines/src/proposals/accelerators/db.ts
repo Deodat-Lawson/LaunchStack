@@ -4,6 +4,7 @@ import { z } from "zod";
 import { getDb } from "@launchstack/store/client";
 
 import type { ProposalDebitExecutor } from "../ports";
+import { FitAssessmentV1Schema, type FitAssessmentV1 } from "./fit";
 import { hashValue } from "./hash";
 import {
     acceleratorApplicationResponses,
@@ -15,9 +16,7 @@ import type { ApplicationResponse, PortfolioCompany } from "./similar-companies"
 import {
     AcceleratorError,
     CatalogueProgramSchema,
-    FitAssessmentSchema,
     type CatalogueProgram,
-    type FitAssessment,
     type StoredFit,
 } from "./types";
 
@@ -104,6 +103,12 @@ export async function importCatalogue(
     });
 }
 
+/** Older rows (pre-fit-v1 single score) read as null rather than failing the page. */
+function readAssessment(value: unknown): FitAssessmentV1 | null {
+    const parsed = FitAssessmentV1Schema.safeParse(value);
+    return parsed.success ? parsed.data : null;
+}
+
 export async function listCompanyMatches(companyId: bigint): Promise<Record<string, StoredFit>> {
     const rows = await getDb()
         .select()
@@ -113,9 +118,10 @@ export async function listCompanyMatches(companyId: bigint): Promise<Record<stri
         rows.map(row => [
             row.programId,
             {
-                assessment: row.assessment,
+                assessment: readAssessment(row.assessment),
                 profileHash: row.profileHash,
                 programHash: row.programHash,
+                rubricVersion: row.rubricVersion,
                 checkedAt: row.checkedAt.toISOString(),
             },
         ])
@@ -125,7 +131,7 @@ export async function listCompanyMatches(companyId: bigint): Promise<Record<stri
 export async function saveCompanyMatches(
     companyId: bigint,
     profileHash: string,
-    results: { programId: string; programHash: string; assessment: FitAssessment }[],
+    results: { programId: string; programHash: string; assessment: FitAssessmentV1 }[],
     executor?: ProposalDebitExecutor
 ): Promise<void> {
     const parsed = z
@@ -134,7 +140,7 @@ export async function saveCompanyMatches(
                 .object({
                     programId: z.string().min(1).max(64),
                     programHash: z.string().regex(/^[a-f0-9]{64}$/),
-                    assessment: FitAssessmentSchema,
+                    assessment: FitAssessmentV1Schema,
                 })
                 .strict()
         )
@@ -151,7 +157,13 @@ export async function saveCompanyMatches(
         for (const result of [...parsed].sort((a, b) => a.programId.localeCompare(b.programId))) {
             await db
                 .insert(acceleratorCompanyMatches)
-                .values({ companyId, profileHash, checkedAt, ...result })
+                .values({
+                    companyId,
+                    profileHash,
+                    checkedAt,
+                    rubricVersion: result.assessment.rubricVersion,
+                    ...result,
+                })
                 .onConflictDoUpdate({
                     target: [
                         acceleratorCompanyMatches.companyId,
@@ -161,6 +173,7 @@ export async function saveCompanyMatches(
                         assessment: result.assessment,
                         profileHash,
                         programHash: result.programHash,
+                        rubricVersion: result.assessment.rubricVersion,
                         checkedAt,
                     },
                 });

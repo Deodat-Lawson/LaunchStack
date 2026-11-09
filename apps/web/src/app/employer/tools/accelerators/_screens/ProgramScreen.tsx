@@ -17,11 +17,10 @@ import {
     OverviewTab,
     ProgramHero,
 } from "../_components/ProgramDetailsSections";
-import { FitStatus, ScoreRing } from "../_components/ProgramFacts";
+import { FitStatus } from "../_components/ProgramFacts";
 import { SimilarCompanies } from "../_components/SimilarCompanies";
 import { TrackerControls } from "../_components/TrackerControls";
 import { useAccelerators } from "../_lib/context";
-import { summarizeFit } from "../_lib/demo";
 import { useTracker } from "../_lib/tracker";
 import { nextDeadline } from "../_lib/vision-filters";
 
@@ -43,24 +42,11 @@ export function ProgramScreen({ id }: { id: string }) {
     if (!home || !view) return <ToolNotFound home={programsHref} homeLabel={t("tool.programs")} />;
     const program = view.program;
     const details = home.demo.details[program.id];
-    const illustrative = home.demo.fits[program.id];
     const today = new Date().toISOString().slice(0, 10);
     const tracked = (opportunities ?? [])
         .filter(item => item.programId === program.id)
         .sort((left, right) => right.updatedAt.localeCompare(left.updatedAt))[0];
-    const overall = illustrative ? summarizeFit(illustrative).overall : null;
-    const mobileScore = illustrative ? (
-        <ScoreRing
-            score={overall}
-            label={
-                overall === null
-                    ? t("dimensions.insufficient")
-                    : t("dimensions.overall", { score: overall })
-            }
-        />
-    ) : (
-        <FitStatus view={view} ring />
-    );
+    const mobileScore = <FitStatus view={view} ring />;
     return (
         <div className="space-y-5">
             <Button asChild variant="ghost" size="sm" className="-ml-2">
@@ -110,11 +96,8 @@ export function ProgramScreen({ id }: { id: string }) {
                         </Tabs>
                     </CardContent>
                 </Card>
-                <aside
-                    aria-label={t("program.sidebar")}
-                    className="min-w-0 space-y-4 self-start"
-                >
-                    <FitPanel view={view} illustrative={illustrative} />
+                <aside aria-label={t("program.sidebar")} className="min-w-0 space-y-4 self-start">
+                    <FitPanel view={view} />
                     <Card className="border-line gap-0 py-0">
                         <CardContent className="space-y-3 p-5">
                             <h2 className="text-ink text-sm font-semibold">

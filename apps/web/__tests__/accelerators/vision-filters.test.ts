@@ -1,15 +1,16 @@
 import {
     CatalogueProgramSchema,
+    FIT_DIMENSION_KEYS,
+    FIT_RUBRIC_VERSION,
+    type FitDimensionResult,
+    type FitDimensions,
+    type FitEligibility,
     type ProgramView,
     type TrackerOpportunity,
 } from "@launchstack/pipelines/accelerators";
 
 import programFixture from "../../../../fixtures/accelerators/programs/abovea-startup-accelerator.json";
-import type {
-    DemoLayer,
-    IllustrativeFit,
-    ProgramDetails,
-} from "~/app/employer/tools/accelerators/_lib/demo";
+import type { DemoLayer, ProgramDetails } from "~/app/employer/tools/accelerators/_lib/demo";
 import {
     DEFAULT_VISION_FILTERS,
     applyVisionFilters,
@@ -27,7 +28,37 @@ function view(id: string, cycles: ProgramView["program"]["cycles"] = []): Progra
         program: { ...program, id, name: id, cycles },
         contentHash: "program-version",
         fit: null,
-        fitStale: false,
+        freshness: { status: "not_assessed", reasons: [], assessedAt: null },
+    };
+}
+
+const unknownDimension: FitDimensionResult = {
+    score: null,
+    applicable: true,
+    note: "Unknown",
+    evidence: { sourceIds: [], companyEvidenceIds: [] },
+};
+const dimensions = Object.fromEntries(
+    FIT_DIMENSION_KEYS.map(key => [key, unknownDimension])
+) as FitDimensions;
+
+/** A saved fit with the given eligibility, current unless `stale`. */
+function assessed(id: string, status: FitEligibility["status"], stale = false): ProgramView {
+    return {
+        ...view(id),
+        fit: {
+            rubricVersion: FIT_RUBRIC_VERSION,
+            eligibility: { status, note: "Published requirement" },
+            dimensions,
+            overall: { score: null, coverage: 0 },
+        },
+        freshness: stale
+            ? {
+                  status: "out_of_date",
+                  reasons: ["program_changed"],
+                  assessedAt: "2026-11-02T00:00:00Z",
+              }
+            : { status: "current", reasons: [], assessedAt: "2026-11-02T00:00:00Z" },
     };
 }
 
@@ -47,26 +78,6 @@ function details(fields: Partial<ProgramDetails> = {}): ProgramDetails {
         deal: null,
         sources: [],
         ...fields,
-    };
-}
-
-function fit(
-    score: number | null,
-    eligibility: IllustrativeFit["eligibility"] = "unknown"
-): IllustrativeFit {
-    const rated = { score, applicable: true, note: "" };
-    return {
-        eligibility,
-        eligibilityNote: "",
-        dimensions: {
-            sector: rated,
-            stage: rated,
-            businessModel: rated,
-            portfolio: { score: null, applicable: false, note: "" },
-            deal: rated,
-            operations: rated,
-            value: rated,
-        },
     };
 }
 
@@ -117,7 +128,6 @@ describe("sector facet", () => {
                 generalist: details({ generalist: true }),
                 fintech: details({ sectors: ["fintech"] }),
             },
-            fits: {},
         };
         expect(
             ids(["climate", "hardware", "generalist", "fintech", "undocumented"], demo, {
@@ -140,7 +150,6 @@ describe("deadline window", () => {
             past: next("2026-11-01"),
             expected: next("2026-11-20", "expected"),
         },
-        fits: {},
     };
     const all = ["inThirty", "inForty", "past", "expected"];
 
@@ -184,7 +193,7 @@ describe("deadline window", () => {
 });
 
 describe("tracker facets", () => {
-    const demo: DemoLayer = { details: {}, fits: {} };
+    const demo: DemoLayer = { details: {} };
     const tracker = [
         opportunity("applied", { status: "applied", priority: "low" }),
         opportunity("interviewing", { status: "interviewing" }),
@@ -210,20 +219,32 @@ describe("tracker facets", () => {
     });
 });
 
-describe("eligibility and fit ordering", () => {
-    const demo: DemoLayer = {
-        details: {},
-        fits: { strong: fit(75), weak: fit(25), excluded: fit(100, "ineligible"), thin: fit(null) },
-    };
-    const all = ["weak", "thin", "strong", "excluded", "unscored"];
+describe("eligibility", () => {
+    const views = [
+        assessed("eligible", "eligible"),
+        assessed("excluded", "ineligible"),
+        assessed("was-excluded", "ineligible", true),
+        view("unassessed"),
+    ];
+    const run = (filters: Partial<VisionFilters>) =>
+        applyVisionFilters(
+            views,
+            { ...DEFAULT_VISION_FILTERS, ...filters },
+            {
+                demo: { details: {} },
+                tracker: [],
+                today: TODAY,
+            }
+        ).map(item => item.program.id);
 
-    it("hides confirmed ineligible Programs unless asked to include them", () => {
-        expect(ids(all, demo, {})).not.toContain("excluded");
-        expect(ids(all, demo, { includeIneligible: true })[0]).toBe("excluded");
-    });
-
-    it("ranks by overall fit and keeps scores without enough evidence after scored ones", () => {
-        expect(ids(all, demo, {})).toEqual(["strong", "weak", "thin", "unscored"]);
+    it("hides only currently confirmed ineligible Programs unless asked to include them", () => {
+        expect(run({})).toEqual(["eligible", "was-excluded", "unassessed"]);
+        expect(run({ includeIneligible: true })).toEqual([
+            "eligible",
+            "excluded",
+            "was-excluded",
+            "unassessed",
+        ]);
     });
 });
 

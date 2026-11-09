@@ -9,9 +9,11 @@ import { configureDatabase, createDb, type Db, type DbClient } from "@launchstac
 import { company } from "@launchstack/store/schema";
 import {
     CatalogueProgramSchema,
+    FIT_DIMENSION_KEYS,
+    FIT_RUBRIC_VERSION,
     hashValue,
     type CatalogueProgram,
-    type FitAssessment,
+    type FitAssessmentV1,
 } from "@launchstack/pipelines/accelerators";
 import {
     getCatalogueProgram,
@@ -83,14 +85,42 @@ jest.mock("~/server/inngest/client", () => ({ inngest: { send: jest.fn() } }));
 
 const describeDb = process.env.LAUNCHSTACK_TEST_DATABASE_URL ? describe : describe.skip;
 
-function assessment(score: number): FitAssessment {
+const NO_EVIDENCE = { sourceIds: [], companyEvidenceIds: [] };
+
+/** A saved fit-v1 result, distinguishable from a new run by its rated sector. */
+function storedAssessment(): FitAssessmentV1 {
     return {
-        score,
-        reasons: ["The company builds a product for the Program's target applicants."],
-        concerns: [],
-        unknowns: ["Admission is not verified."],
-        sourceIds: [],
-        companyEvidenceIds: [],
+        rubricVersion: FIT_RUBRIC_VERSION,
+        eligibility: { status: "unknown", note: "Admission is not verified." },
+        dimensions: Object.fromEntries(
+            FIT_DIMENSION_KEYS.map(key => [
+                key,
+                key === "sector"
+                    ? {
+                          score: 25,
+                          applicable: true,
+                          note: "The company builds a product for the target applicants.",
+                          evidence: { sourceIds: ["official"], companyEvidenceIds: [1] },
+                      }
+                    : { score: null, applicable: true, note: "Unknown.", evidence: NO_EVIDENCE },
+            ])
+        ) as FitAssessmentV1["dimensions"],
+    };
+}
+
+/**
+ * What the model returns for one Program. The fixture profile has no numbered
+ * company evidence, so every grade must be unknown.
+ */
+function modelAssessment() {
+    return {
+        eligibility: { status: "unknown", note: "Admission is not verified." },
+        dimensions: Object.fromEntries(
+            FIT_DIMENSION_KEYS.filter(key => key !== "portfolio").map(key => [
+                key,
+                { score: null, note: "The profile does not say.", ...NO_EVIDENCE },
+            ])
+        ),
     };
 }
 
@@ -228,13 +258,19 @@ describeDb("Accelerator discovery persistence and Grants isolation", () => {
         const preview = await loadAcceleratorProgram(member(), program.id);
         expect(preview.program).toEqual(discovery);
         expect(preview.program.cycles[0]).not.toHaveProperty("form");
-        expect(preview).toMatchObject({ fit: null, fitStale: false });
+        expect(preview).toMatchObject({ fit: null, freshness: { status: "not_assessed" } });
     });
 
     it("keeps historical private Forms outside discovery and Grants without deleting their answers", async () => {
         const { applicationId, sectionId } = await historicalApplication();
         const home = await loadAccelerators(member());
-        expect(Object.keys(home).sort()).toEqual(["canEdit", "costs", "profileReady", "programs"]);
+        expect(Object.keys(home).sort()).toEqual([
+            "canEdit",
+            "costs",
+            "demo",
+            "profileReady",
+            "programs",
+        ]);
         expect(home).toMatchObject({
             profileReady: true,
             canEdit: true,
@@ -394,7 +430,7 @@ describeDb("Accelerator discovery persistence and Grants isolation", () => {
         "debit error",
     ] as const)("commits matching and the actual app debit atomically on %s", async outcome => {
         env.server.DEPLOYMENT_MODE = outcome === "self-host recording" ? "self-hosted" : "cloud";
-        const originalFit = assessment(20);
+        const originalFit = storedAssessment();
         const originalHash = "previous-profile";
         await saveCompanyMatches(companyId, originalHash, [
             {
@@ -430,7 +466,7 @@ describeDb("Accelerator discovery persistence and Grants isolation", () => {
                     });
                 }
                 return {
-                    result: schema.parse({ assessments: { [program.id]: assessment(88) } }),
+                    result: schema.parse({ assessments: { [program.id]: modelAssessment() } }),
                     modelId: "matching-fixture",
                 };
             },
@@ -459,15 +495,22 @@ describeDb("Accelerator discovery persistence and Grants isolation", () => {
             const profile = await loadOrgProfile(companyId, { kind: "everything" });
             expect(await listCompanyMatches(companyId)).toMatchObject({
                 [program.id]: {
-                    assessment: assessment(88),
+                    assessment: {
+                        rubricVersion: FIT_RUBRIC_VERSION,
+                        dimensions: {
+                            sector: { score: null, applicable: true },
+                            portfolio: { score: null, applicable: false },
+                        },
+                    },
+                    rubricVersion: FIT_RUBRIC_VERSION,
                     profileHash: hashValue(profile),
                     programHash: hashValue(program),
                 },
             });
             expect(await listCompanyMatches(otherCompanyId)).toEqual({});
             expect((await loadAccelerators(member())).programs[0]).toMatchObject({
-                fitStale: false,
-                fit: { assessment: { score: 88 } },
+                fit: { overall: { score: null, coverage: 0 } },
+                freshness: { status: "current" },
             });
             expect(state).toEqual({
                 accounts: [

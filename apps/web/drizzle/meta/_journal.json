@@ -278,15 +278,15 @@
     {
       "idx": 39,
       "version": "7",
-      "when": 1794046554347,
-      "tag": "20261107101554_accelerator_similar_companies",
+      "when": 1794248305919,
+      "tag": "20261109181825_accelerator_fit_rubric_version",
       "breakpoints": true
     },
     {
       "idx": 40,
       "version": "7",
-      "when": 1794048441370,
-      "tag": "20261107104721_accelerator_tracker",
+      "when": 1794263024937,
+      "tag": "20261109222344_accelerator_similar_companies_tracker",
       "breakpoints": true
     }
   ]

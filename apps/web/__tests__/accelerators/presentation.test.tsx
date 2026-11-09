@@ -4,7 +4,14 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
-import { CatalogueProgramSchema, type ProgramView } from "@launchstack/pipelines/accelerators";
+import {
+    CatalogueProgramSchema,
+    FIT_DIMENSION_KEYS,
+    FIT_RUBRIC_VERSION,
+    type FitDimensionResult,
+    type FitDimensions,
+    type ProgramView,
+} from "@launchstack/pipelines/accelerators";
 
 import programFixture from "../../../../fixtures/accelerators/programs/abovea-startup-accelerator.json";
 import { FitPanel } from "~/app/employer/tools/accelerators/_components/FitPanel";
@@ -20,26 +27,30 @@ jest.mock("~/app/employer/tools/accelerators/_lib/context", () => ({
 }));
 
 const program = CatalogueProgramSchema.parse(programFixture);
+const unknownDimension: FitDimensionResult = {
+    score: null,
+    applicable: true,
+    note: "Unknown",
+    evidence: { sourceIds: [], companyEvidenceIds: [] },
+};
+const unknownDimensions = Object.fromEntries(
+    FIT_DIMENSION_KEYS.map(key => [key, unknownDimension])
+) as FitDimensions;
 function view(score: number | null, matched = true): ProgramView {
     return {
         program,
         contentHash: "program-version",
-        fitStale: false,
         fit: matched
             ? {
-                  assessment: {
-                      score,
-                      reasons: [],
-                      concerns: [],
-                      unknowns: [],
-                      sourceIds: [],
-                      companyEvidenceIds: [],
-                  },
-                  profileHash: "profile-version",
-                  programHash: "program-version",
-                  checkedAt: "2026-11-02T00:00:00Z",
+                  rubricVersion: FIT_RUBRIC_VERSION,
+                  eligibility: { status: "unknown", note: "Unknown" },
+                  dimensions: unknownDimensions,
+                  overall: { score, coverage: score === null ? 0 : 100 },
               }
             : null,
+        freshness: matched
+            ? { status: "current", reasons: [], assessedAt: "2026-11-02T00:00:00Z" }
+            : { status: "not_assessed", reasons: [], assessedAt: null },
     };
 }
 
@@ -61,59 +72,69 @@ it("distinguishes an unassessed Program from a saved unscorable fit", () => {
     expect(screen.getByRole("img").getAttribute("aria-label")).not.toBe(unmatchedLabel);
 });
 
-it("keeps a genuine zero with its saved evaluation, matched time and evidence references", () => {
+it("keeps a genuine zero with its eligibility and assessed time", () => {
     const saved = view(0);
-    saved.fit!.assessment = {
-        ...saved.fit!.assessment,
-        reasons: ["The company has a working prototype."],
-        concerns: ["The published residency requirement needs review."],
-        unknowns: ["The company has not supplied its runway."],
-        companyEvidenceIds: [13, 27],
-    };
+    saved.fit!.eligibility = { status: "ineligible", note: "Requires a Singapore company." };
 
     const { container } = render(<FitPanel view={saved} />);
 
     expect(screen.getByRole("img")).toHaveAccessibleName(expect.stringContaining("0"));
-    expect(screen.getAllByRole("listitem").map(item => item.textContent)).toEqual([
-        ...saved.fit!.assessment.reasons,
-        ...saved.fit!.assessment.concerns,
-        ...saved.fit!.assessment.unknowns,
-    ]);
-    expect(container.querySelector("time")).toBeVisible();
-    expect(container.querySelector("time")).toHaveAttribute("dateTime", saved.fit!.checkedAt);
-    expect(screen.getByText(/13.*27/)).toBeVisible();
+    expect(screen.getByText("Not eligible")).toBeVisible();
+    expect(container.querySelector("time")).toHaveAttribute("dateTime", "2026-11-02T00:00:00Z");
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
 });
 
-it("retains an unscorable evaluation instead of treating it as an unassessed Program", () => {
-    const saved = view(null);
-    saved.fit!.assessment.unknowns = ["The company has not supplied its runway."];
-    const { container, rerender } = render(<FitPanel view={saved} />);
-    const unscorableLabel = screen.getByRole("img").getAttribute("aria-label");
-
-    expect(screen.getByRole("listitem")).toHaveTextContent(saved.fit!.assessment.unknowns[0]!);
+it("keeps too little evidence apart from a Program that was never assessed", () => {
+    const { container, rerender } = render(<FitPanel view={view(null)} />);
+    const insufficientLabel = screen.getByRole("img").getAttribute("aria-label");
     expect(container.querySelector("time")).toBeVisible();
     expect(screen.queryByText("0", { exact: true })).not.toBeInTheDocument();
 
     rerender(<FitPanel view={view(null, false)} />);
 
-    expect(screen.getByRole("img").getAttribute("aria-label")).not.toBe(unscorableLabel);
-    expect(screen.queryByRole("list")).not.toBeInTheDocument();
+    expect(screen.getByRole("img").getAttribute("aria-label")).not.toBe(insufficientLabel);
     expect(container.querySelector("time")).not.toBeInTheDocument();
+    expect(screen.queryByRole("list")).not.toBeInTheDocument();
     expect(screen.queryByText("0", { exact: true })).not.toBeInTheDocument();
 });
 
-it("warns when a saved evaluation is stale without discarding its previous score or matched time", () => {
-    const saved = { ...view(72), fitStale: true };
-    const { container, rerender } = render(<FitPanel view={saved} />);
+it("says why a result is out of date without discarding its previous score", () => {
+    const saved: ProgramView = {
+        ...view(72),
+        freshness: {
+            status: "out_of_date",
+            reasons: ["profile_changed", "rubric_changed"],
+            assessedAt: "2026-11-02T00:00:00Z",
+        },
+    };
+    const { rerender } = render(<FitPanel view={saved} />);
 
-    expect(screen.getByRole("status")).toBeVisible();
+    expect(screen.getByRole("status")).toHaveTextContent(/company profile changed/);
+    expect(screen.getByRole("status")).toHaveTextContent(/scoring rules changed/);
     expect(screen.getByRole("img")).toHaveAccessibleName(expect.stringContaining("72"));
-    expect(container.querySelector("time")).toHaveAttribute("dateTime", saved.fit!.checkedAt);
 
-    rerender(<FitPanel view={{ ...saved, fitStale: false }} />);
+    rerender(<FitPanel view={view(72)} />);
 
     expect(screen.queryByRole("status")).not.toBeInTheDocument();
     expect(screen.getByRole("img")).toHaveAccessibleName(expect.stringContaining("72"));
+});
+
+it("shows no grades for a result saved under an older rubric", () => {
+    render(
+        <FitPanel
+            view={{
+                ...view(null, false),
+                freshness: {
+                    status: "out_of_date",
+                    reasons: ["rubric_changed"],
+                    assessedAt: "2026-11-02T00:00:00Z",
+                },
+            }}
+        />
+    );
+    expect(screen.getByRole("status")).toHaveTextContent(/scoring rules changed/);
+    expect(screen.queryByRole("list")).not.toBeInTheDocument();
+    expect(screen.queryByText("0", { exact: true })).not.toBeInTheDocument();
 });
 
 it.each([false, true])(

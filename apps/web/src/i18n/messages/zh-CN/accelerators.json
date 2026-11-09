@@ -60,15 +60,15 @@
     "unmatched": "尚未匹配",
     "unknown": "信息不足，无法评分",
     "stale": "已过期",
-    "staleHint": "此结果保存后，公司档案或项目发生了变化。点击“匹配项目”更新；系统不会自动重新匹配。",
+    "staleBecause": "已过期：{reasons}。点击“匹配项目”更新；系统不会自动重新匹配。",
+    "staleReasons": {
+      "profile_changed": "公司档案已更改",
+      "program_changed": "项目信息已更改",
+      "rubric_changed": "评分规则已更改"
+    },
     "checked": "匹配于 {date}",
-    "reasons": "匹配依据",
-    "concerns": "注意事项",
-    "unknowns": "未知信息",
-    "evidence": "公司证据引用：{ids}",
     "unmatchedHint": "尚无已保存的匹配评估。只有你选择“匹配项目”时才会启动匹配。",
     "short": "匹配",
-    "aiNotes": "AI 匹配说明",
     "about": "关于此评分"
   },
   "program": {
@@ -135,6 +135,7 @@
     "coverage": "证据覆盖 {coverage}% 的权重。",
     "insufficientHint": "证据覆盖了 {coverage}% 的适用权重；给出总分至少需要 {minimum}%。",
     "weight": "权重 {weight}%。",
+    "sources": "来源：",
     "notApplicable": "不适用",
     "unknown": "未知",
     "eligibility": {

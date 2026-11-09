@@ -12,3 +12,7 @@ Add a company-private application tracker: one opportunity per company, Program
 and cycle, with priority, manual status, notes, next action, planned deadline and
 tasks. Choosing a cycle upgrades a Program-only opportunity in place; a later cycle
 is tracked separately. Tracking never submits applications or starts paid matching.
+
+Export the fit-v1 rubric from `@launchstack/pipelines/accelerators/fit`, a
+subpath without Node-only dependencies, so browser code can read dimension weights
+and the coverage cutoff.

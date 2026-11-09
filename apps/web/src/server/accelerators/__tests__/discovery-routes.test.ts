@@ -3,8 +3,11 @@ import { join } from "node:path";
 
 import {
     CatalogueProgramSchema,
+    FIT_DIMENSION_KEYS,
+    FIT_RUBRIC_VERSION,
     hashValue,
     type CatalogueProgram,
+    type FitAssessmentV1,
     type StoredFit,
 } from "@launchstack/pipelines/accelerators";
 import {
@@ -57,8 +60,8 @@ jest.mock("~/lib/credits", () => ({
 }));
 jest.mock("~/server/deployment", () => ({ isMeteringEnforced: () => true }));
 jest.mock("~/server/db", () => ({ db: {} }));
-const demoLayer = { details: {}, fits: {} };
-jest.mock("~/server/accelerators/demo", () => ({ loadDemoLayer: async () => demoLayer }));
+const demoLayer = { details: {} };
+jest.mock("~/server/accelerators/demo", () => ({ DEMO_LAYER: { details: {} } }));
 jest.mock("~/lib/storage", () => ({ uploadFile: jest.fn() }));
 jest.mock("~/server/services/document-upload", () => ({ processDocumentUpload: jest.fn() }));
 jest.mock("~/server/inngest/client", () => ({ inngest: { send: jest.fn() } }));
@@ -149,12 +152,43 @@ afterAll(() => {
     else process.env.PROPOSALS_EXECUTOR = originalExecutor;
 });
 
+/** Sector 50, the other applicable dimensions 100, portfolio not applicable: (50·20 + 100·65) / 85 ≈ 88. */
+const ratedAssessment: FitAssessmentV1 = {
+    rubricVersion: FIT_RUBRIC_VERSION,
+    eligibility: { status: "eligible", note: "No published requirement is failed." },
+    dimensions: Object.fromEntries(
+        FIT_DIMENSION_KEYS.map(key => [
+            key,
+            key === "portfolio"
+                ? {
+                      score: null,
+                      applicable: false,
+                      note: "Past-company data is not collected for this accelerator.",
+                      evidence: { sourceIds: [], companyEvidenceIds: [] },
+                  }
+                : {
+                      score: key === "sector" ? 50 : 100,
+                      applicable: true,
+                      note: "Relevant target applicants",
+                      evidence: { sourceIds: ["official"], companyEvidenceIds: [1] },
+                  },
+        ])
+    ) as FitAssessmentV1["dimensions"],
+};
+
 describe("discovery reads", () => {
     it("serves the existing catalogue and sourced Program preview without starting paid work", async () => {
         const response = await home(new NextRequest("http://x/api/accelerators"));
         expect(response.status).toBe(200);
         expect(await response.json()).toEqual({
-            programs: [{ program, contentHash: hashValue(program), fit: null, fitStale: false }],
+            programs: [
+                {
+                    program,
+                    contentHash: hashValue(program),
+                    fit: null,
+                    freshness: { status: "not_assessed", reasons: [], assessedAt: null },
+                },
+            ],
             profileReady: true,
             canEdit: true,
             costs: { match: 2_000 },
@@ -173,21 +207,118 @@ describe("discovery reads", () => {
 
     it("marks stale fit without hiding the score or claiming it is current", async () => {
         const fit: StoredFit = {
-            assessment: {
-                score: 90,
-                reasons: ["Relevant target applicants"],
-                concerns: [],
-                unknowns: [],
-                sourceIds: [],
-                companyEvidenceIds: [],
-            },
+            assessment: ratedAssessment,
             profileHash: "previous-profile",
             programHash: hashValue(program),
+            rubricVersion: FIT_RUBRIC_VERSION,
             checkedAt: "2026-10-24T00:00:00Z",
         };
         mockMatches.mockResolvedValue({ [program.id]: fit });
         const response = await home(new NextRequest("http://x/api/accelerators"));
-        expect(await response.json()).toMatchObject({ programs: [{ fit, fitStale: true }] });
+        expect(await response.json()).toMatchObject({
+            programs: [
+                {
+                    fit: { ...ratedAssessment, overall: { score: 88, coverage: 100 } },
+                    freshness: {
+                        status: "out_of_date",
+                        reasons: ["profile_changed"],
+                        assessedAt: fit.checkedAt,
+                    },
+                },
+            ],
+        });
+        expect(mockQueue).not.toHaveBeenCalled();
+    });
+
+    it("reports a result saved under an earlier rubric as out of date without grades", async () => {
+        mockMatches.mockResolvedValue({
+            [program.id]: {
+                assessment: null,
+                profileHash: "previous-profile",
+                programHash: hashValue(program),
+                rubricVersion: null,
+                checkedAt: "2026-10-24T00:00:00Z",
+            } satisfies StoredFit,
+        });
+        const response = await home(new NextRequest("http://x/api/accelerators"));
+        const [view] = (await response.json()).programs;
+        expect(view.fit).toBeNull();
+        expect(view.freshness).toEqual({
+            status: "out_of_date",
+            reasons: ["profile_changed", "rubric_changed"],
+            assessedAt: "2026-10-24T00:00:00Z",
+        });
+        expect(mockQueue).not.toHaveBeenCalled();
+    });
+
+    async function servedFit(assessment: FitAssessmentV1) {
+        mockMatches.mockResolvedValue({
+            [program.id]: {
+                assessment,
+                profileHash: hashValue(profile),
+                programHash: hashValue(program),
+                rubricVersion: FIT_RUBRIC_VERSION,
+                checkedAt: "2026-11-09T00:00:00Z",
+            } satisfies StoredFit,
+        });
+        const response = await home(new NextRequest("http://x/api/accelerators"));
+        expect(mockQueue).not.toHaveBeenCalled();
+        return (await response.json()).programs[0];
+    }
+
+    // AE7: a confirmed failed hard requirement stays explicit beside a strong score.
+    it("serves an ineligible Program with its score rather than hiding either", async () => {
+        const view = await servedFit({
+            ...ratedAssessment,
+            eligibility: { status: "ineligible", note: "Requires US incorporation." },
+        });
+        expect(view.fit).toMatchObject({
+            eligibility: { status: "ineligible", note: "Requires US incorporation." },
+            overall: { score: 88, coverage: 100 },
+        });
+        expect(view.freshness.status).toBe("current");
+    });
+
+    // AE8: thin evidence leaves unknowns, lowers coverage and asserts no overall score.
+    it("withholds the overall score below the coverage cutoff but keeps the grades", async () => {
+        const unknown = {
+            score: null,
+            applicable: true,
+            note: "The profile does not say.",
+            evidence: { sourceIds: [], companyEvidenceIds: [] },
+        };
+        const view = await servedFit({
+            ...ratedAssessment,
+            dimensions: {
+                ...ratedAssessment.dimensions,
+                stage: unknown,
+                businessModel: unknown,
+                deal: unknown,
+            },
+        });
+        // Rated sector 20 + operations 10 + value 10 = 40 of 85 applicable.
+        expect(view.fit.overall).toEqual({ score: null, coverage: 47 });
+        expect(view.fit.dimensions.sector.score).toBe(50);
+        expect(view.fit.dimensions.deal.score).toBeNull();
+        expect(view.freshness.status).toBe("current");
+    });
+
+    // AE9: a refreshed Program makes the saved result out of date without starting a match.
+    it("marks fit out of date when the Program changes", async () => {
+        mockMatches.mockResolvedValue({
+            [program.id]: {
+                assessment: ratedAssessment,
+                profileHash: hashValue(profile),
+                programHash: "an-earlier-program-version",
+                rubricVersion: FIT_RUBRIC_VERSION,
+                checkedAt: "2026-11-09T00:00:00Z",
+            } satisfies StoredFit,
+        });
+        const response = await home(new NextRequest("http://x/api/accelerators"));
+        expect((await response.json()).programs[0].freshness).toMatchObject({
+            status: "out_of_date",
+            reasons: ["program_changed"],
+        });
         expect(mockQueue).not.toHaveBeenCalled();
     });
 

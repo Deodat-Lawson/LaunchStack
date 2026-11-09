@@ -1,0 +1,1 @@
+ALTER TABLE "pdr_ai_v2_accelerator_company_matches" ADD COLUMN "rubric_version" varchar(32);

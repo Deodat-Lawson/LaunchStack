@@ -1,0 +1,145 @@
+{
+  "schemaVersion": "vantage-context-replay/v1",
+  "fixtureId": "synthetic-orbit-rich-2026-10-26",
+  "syntheticOnly": true,
+  "recordedAt": "2026-10-26T19:12:42.434Z",
+  "originalModelId": "gpt-6-luna-2026-09-22",
+  "originalDeploymentId": "gpt-6-luna",
+  "originalPromptVersion": "vantage/sophia-paired-context/v0.4",
+  "originalResponseContentSha256": "016d3c0ab6122ab5e3fb035213ae5c1bbb8d0e8db4c566c8208adaad3c04549d",
+  "weekStart": "2026-10-12",
+  "sourceBindings": [
+    {
+      "kind": "company",
+      "originalRef": "company:company-metadata/2037@~company-profile-v0\\:3b0272994e46f0ebe125d4139522bcd5696ba88e4df5244798ca96dba26a3f1b",
+      "semanticSha256": "033bb4ed14963d9dd96bc85d35b6279ea69a3606fd38d495e95377455d1f9052",
+      "recordedExcerpt": "{\"adapterVersion\":\"company-profile-adapter/v0.1\",\"companyId\":\"2037\",\"facts\":[{\"basis\":\"source-extracted-unreviewed\",\"label\":\"Name\",\"path\":\"company.name\",\"sources\":[{\"documentId\":\"1118\",\"extractedAt\":\"2026-10-16T16:00:00.000Z\",\"page\":null,\"quote\":\"Synthetic Orbit\",\"snippetRef\":null,\"versionId\":\"1122\"},{\"documentId\":\"2141\",\"extractedAt\":\"2026-10-26T18:59:31.225Z\",\"page\":null,\"quote\":null,\"snippetRef\":null,\"versionId\":\"2145\"}],\"value\":\"Synthetic Orbit\"},{\"basis\":\"source-extracted-unreviewed\",\"label\":\"What it does\",\"path\":\"company.description\",\"sources\":[{\"documentId\":\"2141\",\"extractedAt\":\"2026-10-26T18:59:31.225Z\",\"page\":null,\"quote\":null,\"snippetRef\":null,\"versionId\":\"2145\"}],\"value\":\"Mission: safer pilot onboarding. Subscription SaaS for B2B teams; this profile does not approve a pilot.\"},{\"basis\":\"source-extracted-unreviewed\",\"label\":\"Industry\",\"path\":\"company.industry\",\"sources\":[{\"documentId\":\"2141\",\"extractedAt\":\"2026-10-26T18:59:31.225Z\",\"page\":null,\"quote\":null,\"snippetRef\":null,\"versionId\":\"2145\"}],\"value\":\"B2B SaaS / onboarding assurance.\"},{\"basis\":\"source-extracted-unreviewed\",\"label\":\"0\",\"path\":\"markets.primary.0\",\"sources\":[{\"documentId\":\"2141\",\"extractedAt\":\"2026-10-26T18:59:31.225Z\",\"page\":null,\"quote\":null,\"snippetRef\":null,\"versionId\":\"2145\"}],\"value\":\"Small SaaS operators onboarding business customers.\"},{\"basis\":\"source-extracted-unreviewed\",\"label\":\"Privacy review\",\"path\":\"policies.privacy_review\",\"sources\":[{\"documentId\":\"2141\",\"extractedAt\":\"2026-10-26T18:59:31.225Z\",\"page\":null,\"quote\":null,\"snippetRef\":null,\"versionId\":\"2145\"}],\"value\":\"Minimise personal data; require separate privacy approval before pilot access. Test passes and document edits are not approval.\"},{\"basis\":\"source-extracted-unreviewed\",\"label\":\"Decision authority\",\"path\":\"profile.facts.decision_authority\",\"sources\":[{\"documentId\":\"2141\",\"extractedAt\":\"2026-10-26T18:59:31.225Z\",\"page\":null,\"quote\":null,\"snippetRef\":null,\"versionId\":\"2145\"}],\"value\":\"Privacy may record Go, No-Go or Needs More Evidence; Engineering and Operations supply evidence but cannot authorise pilot access. No person or actual decision is recorded.\"},{\"basis\":\"source-extracted-unreviewed\",\"label\":\"Process and dependencies\",\"path\":\"profile.facts.dependencies\",\"sources\":[{\"documentId\":\"2141\",\"extractedAt\":\"2026-10-26T18:59:31.225Z\",\"page\":null,\"quote\":null,\"snippetRef\":null,\"versionId\":\"2145\"}],\"value\":\"Process: Engineering results -> Operations comparison -> Privacy decision. Shared account IDs and reviewer assignment are dependencies; delivery outcome/date are unknown.\"},{\"basis\":\"source-extracted-unreviewed\",\"label\":\"Priorities\",\"path\":\"profile.facts.priorities\",\"sources\":[{\"documentId\":\"2141\",\"extractedAt\":\"2026-10-26T18:59:31.225Z\",\"page\":null,\"quote\":null,\"snippetRef\":null,\"versionId\":\"2145\"}],\"value\":\"Reconcile run-17 samples before proposing access; validate deletion evidence before scaling.\"},{\"basis\":\"source-extracted-unreviewed\",\"label\":\"Teams and responsibilities\",\"path\":\"profile.facts.responsibilities\",\"sources\":[{\"documentId\":\"2141\",\"extractedAt\":\"2026-10-26T18:59:31.225Z\",\"page\":null,\"quote\":null,\"snippetRef\":null,\"versionId\":\"2145\"}],\"value\":\"Engineering builds/tests deletion; Operations reconciles account samples; Privacy reviews acceptance evidence. Named staff are unknown.\"},{\"basis\":\"source-extracted-unreviewed\",\"label\":\"Status\",\"path\":\"projects.0.status\",\"sources\":[{\"documentId\":\"2141\",\"extractedAt\":\"2026-10-26T18:59:31.225Z\",\"page\":null,\"quote\":null,\"snippetRef\":null,\"versionId\":\"2145\"}],\"subject\":\"Deletion assurance pilot\",\"value\":\"Active assurance workstream; delivery outcome/date unknown.\"},{\"basis\":\"source-extracted-unreviewed\",\"label\":\"Description\",\"path\":\"services.0.description\",\"sources\":[{\"documentId\":\"2141\",\"extractedAt\":\"2026-10-26T18:59:31.225Z\",\"page\":null,\"quote\":null,\"snippetRef\":null,\"versionId\":\"2145\"}],\"subject\":\"Orbit Pilot\",\"value\":\"An evidence workspace for onboarding and deletion checks.\"},{\"basis\":\"source-extracted-unreviewed\",\"label\":\"Name\",\"path\":\"projects.0.name\",\"sources\":[{\"documentId\":\"2141\",\"extractedAt\":\"2026-10-26T18:59:31.225Z\",\"page\":null,\"quote\":null,\"snippetRef\":null,\"versionId\":\"2145\"}],\"value\":\"Deletion assurance pilot\"},{\"basis\":\"source-extracted-unreviewed\",\"label\":\"Name\",\"path\":\"services.0.name\",\"sources\":[{\"documentId\":\"2141\",\"extractedAt\":\"2026-10-26T18:59:31.225Z\",\"page\":null,\"quote\":null,\"snippetRef\":null,\"versionId\":\"2145\"}],\"value\":\"Orbit Pilot\"}],\"reviewState\":\"unreviewed\",\"unknowns\":[{\"code\":\"personnel_unknown\"},{\"code\":\"hierarchy_unknown\"}]}"
+    },
+    {
+      "kind": "doc",
+      "originalRef": "doc:workspace-document/1118@1122",
+      "fixtureKey": "company",
+      "contentSha256": "051f3775576c1f442c60fb968e44f51c8d4ff54ed45c951bb3bc3c26096c0443",
+      "recordedExcerpt": "Synthetic Orbit builds onboarding software for pilot operators. Privacy is a constraint: access needs a deletion acceptance review, not only an engineering test pass."
+    },
+    {
+      "kind": "doc",
+      "originalRef": "doc:workspace-document/1119@1123",
+      "fixtureKey": "privacyStar",
+      "contentSha256": "adb403a7f345786408373e8a3273d78e1fe8a6079ae4b49a71ab1e8963492ca3",
+      "recordedExcerpt": "Human privacy review record: retain the deletion go/no-go question until a named privacy reviewer compares QA and operations samples and records approval. This document contains no approval record."
+    },
+    {
+      "kind": "doc",
+      "originalRef": "doc:workspace-document/1120@1124",
+      "fixtureKey": "deletionQa",
+      "contentSha256": "fb5c1e4c085382d48acfdc64d5ec155818352c9222eb47957f19411156036956",
+      "recordedExcerpt": "QA deletion verification for synthetic run-17: 3 of 3 sample accounts were deleted. QA reports its sample passed. This sample result is not a recorded privacy sign-off."
+    },
+    {
+      "kind": "doc",
+      "originalRef": "doc:workspace-document/1122@1126",
+      "fixtureKey": "independentOps",
+      "contentSha256": "1dc40d3d83c215f033857abdcd92dc1963961d8852abe3911b90a1ed495a9ded",
+      "recordedExcerpt": "Independent operations audit of synthetic run-17: 2 of 3 sample accounts were fully deleted; one record remained. The account list may differ from QA's. No reconciled shared sample was supplied."
+    },
+    {
+      "kind": "doc",
+      "fixtureKey": "olderBlocker",
+      "contentSha256": "9ce5941fd7220466b219f742562bc7e209458d82ad6f1ced4a6864a4596eae0c",
+      "recordedExcerpt": "Engineering deletion reliability blocker: identify which run-17 accounts remain after deletion."
+    }
+  ],
+  "nativeEvidenceSha256": "78af0c0f2c69df825ef20f34b72af07d3f72f29e67f3cce8be5bdcbd588f88f1",
+  "report": {
+    "summary": "Run-17 QA reports deletion for all 3 sampled accounts, while the independent operations audit reports 2 of 3 fully deleted and one record remaining; the audit says the account list may differ, and no shared sample was reconciled. A human privacy review record says the go/no-go question is to remain until a named reviewer compares the samples and records approval, but it contains no approval. This makes sample reconciliation the most concrete focus: determine whether both checks cover the same accounts and what evidence explains the remaining record before considering another targeted check. The company profile is explicitly unreviewed, so its process claims are context rather than verified current events.",
+    "topics": [
+      {
+        "title": "Reconcile run-17 samples before a privacy go/no-go",
+        "facts": [
+          {
+            "text": "QA reports 3 of 3 run-17 sample accounts deleted and says this result is not a recorded privacy sign-off.",
+            "refs": ["doc:workspace-document/1120@1124"]
+          },
+          {
+            "text": "The independent operations audit reports 2 of 3 accounts fully deleted with one record remaining; it says the account list may differ from QA's and no reconciled shared sample was supplied.",
+            "refs": ["doc:workspace-document/1122@1126"]
+          },
+          {
+            "text": "A human privacy review record says to retain the deletion go/no-go question until a named reviewer compares QA and operations samples and records approval; the document contains no approval record.",
+            "refs": ["doc:workspace-document/1119@1123"]
+          }
+        ],
+        "whyItMatters": "The two checks do not establish a common-sample result, and neither is privacy approval. Reconciliation could show whether the reports differ because of sample coverage or whether an account-level deletion issue needs further investigation; the evidence does not establish which explanation is correct.",
+        "decisionQuestion": "Should the next acceptance discussion wait for a named privacy reviewer to compare the reconciled run-17 account-level evidence, and what result would be sufficient to make that comparison useful?",
+        "proposedNextStep": "Suggested check: compare the QA and operations account lists and deletion evidence account by account, focusing on the record operations reports as remaining. Observe whether the samples match and whether that record is still present; if accounts overlap but results differ, consider a targeted repeat check on those accounts before any acceptance decision.",
+        "proposedOwner": null,
+        "proposedDueInDays": null,
+        "helpRequested": null,
+        "unknowns": [
+          "Whether the QA and operations samples contain the same accounts.",
+          "What the remaining operations record was and whether it was later deleted.",
+          "Whether a named privacy reviewer has been assigned or has compared the samples since the supplied review record.",
+          "Whether any privacy go/no-go decision has been recorded."
+        ],
+        "conflicts": [
+          {
+            "text": "QA reports 3 of 3 sampled accounts deleted, while operations reports 2 of 3 fully deleted and one remaining. Operations notes that its account list may differ, so these are conflicting sample results, not evidence of a reliable trend.",
+            "refs": ["doc:workspace-document/1120@1124", "doc:workspace-document/1122@1126"]
+          }
+        ],
+        "rationale": "This combines the two current run-17 sample reports with the human-authored review record that specifies the unresolved comparison and approval question. It avoids treating a test pass as sign-off and proposes a small account-level check tied to the reported discrepancy."
+      },
+      {
+        "title": "Keep pilot-access constraints distinct from test results",
+        "facts": [
+          {
+            "text": "The exact company profile excerpt is marked unreviewed. It states that separate privacy approval is required before pilot access and that test passes and document edits are not approval; it records no person or actual decision.",
+            "refs": [
+              "company:company-metadata/2037@~company-profile-v0\\:3b0272994e46f0ebe125d4139522bcd5696ba88e4df5244798ca96dba26a3f1b"
+            ]
+          },
+          {
+            "text": "A supplied document says privacy is a constraint and access needs a deletion acceptance review, not only an engineering test pass.",
+            "refs": ["doc:workspace-document/1118@1122"]
+          }
+        ],
+        "whyItMatters": "These sources describe an approval constraint, not evidence that access was approved or that a current pilot-access decision is pending. Keeping approval status separate from QA and operations results may prevent a test result from being mistaken for authorization.",
+        "decisionQuestion": "Is there a current, recorded privacy decision about pilot access, separate from the run-17 test results?",
+        "proposedNextStep": "Suggested clarification: check whether an actual privacy decision and named reviewer are recorded for pilot access. Observe whether the record explicitly states a decision; if none is supplied, keep approval status unknown rather than inferring it from test results or document edits.",
+        "proposedOwner": null,
+        "proposedDueInDays": null,
+        "helpRequested": null,
+        "unknowns": [
+          "Whether pilot access has been approved, declined, or is awaiting a decision.",
+          "Whether the unreviewed profile's stated constraint reflects reviewed current policy.",
+          "Who, if anyone, is the named privacy reviewer."
+        ],
+        "conflicts": [],
+        "rationale": "The document describes the distinction between a test pass and access approval, while the company profile is explicitly unreviewed and records no actual decision. This is a useful clarification, but it does not establish that access is currently planned or that approval is absent."
+      }
+    ],
+    "enhancements": []
+  },
+  "recordedNativeEvidence": [
+    {
+      "kind": "note",
+      "title": "Synthetic run-17 QA",
+      "body": "QA deletion verification for synthetic run-17: 3 of 3 sample accounts were deleted. QA reports its sample passed. This sample result is not a recorded privacy sign-off.",
+      "source": "Synthetic run-17 QA",
+      "sourceUrl": null,
+      "observedAt": "2026-10-16",
+      "visibility": "private"
+    },
+    {
+      "kind": "note",
+      "title": "Synthetic run-17 independent operations",
+      "body": "Independent operations audit of synthetic run-17: 2 of 3 sample accounts were fully deleted; one record remained. The account list may differ from QA's. No reconciled shared sample was supplied.",
+      "source": "Synthetic run-17 independent operations",
+      "sourceUrl": null,
+      "observedAt": "2026-10-16",
+      "visibility": "private"
+    }
+  ],
+  "recordedRoleIds": ["engineering", "founder"]
+}

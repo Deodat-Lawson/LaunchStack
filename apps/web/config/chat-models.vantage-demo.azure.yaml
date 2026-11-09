@@ -1,0 +1,41 @@
+# Local synthetic baseline only. Exact inline behavior from origin/main a869cd9fc293612f0d386632733b9649ff59d97f, openai/gpt-6-luna.
+# No preset name is imported into the older Week 2 implementation. No endpoint or credential is stored here.
+version: 1
+models:
+  primary:
+    id: gpt-6-luna
+    behavior:
+      input:
+        - text
+        - image
+      image:
+        mimeTypes:
+          - image/png
+          - image/jpeg
+          - image/webp
+          - image/gif
+      reasoning:
+        mode: effort
+        levels:
+          none:
+            reasoning_effort: none
+          low:
+            reasoning_effort: low
+          medium:
+            reasoning_effort: medium
+          high:
+            reasoning_effort: high
+          xhigh:
+            reasoning_effort: xhigh
+        default: medium
+      nativeStructuredOutput:
+        - json-object
+        - json-schema
+      parameters:
+        temperature: unsupported
+        systemMessages: supported
+        streaming: supported
+        maxOutputTokens: supported
+        maxOutputTokensField: max_completion_tokens
+routes:
+  default: primary

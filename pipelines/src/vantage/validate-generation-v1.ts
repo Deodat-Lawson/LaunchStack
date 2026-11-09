@@ -2,6 +2,8 @@ import { z } from "zod";
 import { VantageError } from "./db";
 import type { GenerationInput, GenerationResult } from "./contract-v1";
 import type { VantageEvidenceRef } from "./types";
+import { eventStateContradictions } from "./event-state-grounding-v1";
+import { computeGenerationSignals, eligibleInput, selectGenerationEvidence } from "./evidence-v1";
 
 const ref = z.object({ ref: z.string().min(1), label: z.string(), date: z.string().nullable() });
 const fact = z.object({
@@ -221,6 +223,20 @@ export function validateGenerationResult(input: GenerationInput, raw: unknown): 
             "generation_failed"
         );
     validateSignals(input, result);
+    const eligible = eligibleInput(input);
+    const { pack } = selectGenerationEvidence(eligible, computeGenerationSignals(eligible));
+    if (
+        eventStateContradictions(
+            { ...result.draft, enhancements: result.enhancements },
+            pack.items,
+            input.reportPeriod.weekStart.slice(0, 4)
+        ).length
+    )
+        throw new VantageError(
+            "Generation contradicts an explicit supplied event state.",
+            500,
+            "generation_failed"
+        );
     const refs = new Map<string, VantageEvidenceRef>();
     for (const e of input.data.currentEvidence)
         refs.set(`ev:${e.id}`, {

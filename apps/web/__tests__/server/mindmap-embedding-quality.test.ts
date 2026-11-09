@@ -8,9 +8,10 @@
  * corpus of several maps plus prose decoys — so a rendering change that
  * makes maps harder to find fails here, not in production.
  *
- * Needs an embeddings key: EMBEDDING_API_KEY or OPENAI_API_KEY in the
- * environment, or in apps/web/.env. Skipped otherwise. Costs a few thousand
- * embedding tokens per run.
+ * Opt in with RUN_MINDMAP_EMBEDDING_EVAL=1 and an embeddings key:
+ * EMBEDDING_API_KEY or OPENAI_API_KEY in the environment, or in apps/web/.env.
+ * Skipped unless explicitly enabled; CI placeholder keys must never trigger
+ * provider calls. Costs a few thousand embedding tokens per run.
  */
 
 import { existsSync, readFileSync } from "node:fs";
@@ -47,7 +48,13 @@ function envFromDotfile(name: string): string | undefined {
     return undefined;
 }
 
-const apiKey = envFromDotfile("EMBEDDING_API_KEY") ?? envFromDotfile("OPENAI_API_KEY");
+const runLiveEvaluation = process.env.RUN_MINDMAP_EMBEDDING_EVAL === "1";
+const apiKey = runLiveEvaluation
+    ? (envFromDotfile("EMBEDDING_API_KEY") ?? envFromDotfile("OPENAI_API_KEY"))
+    : undefined;
+if (runLiveEvaluation && !apiKey) {
+    throw new Error("RUN_MINDMAP_EMBEDDING_EVAL=1 requires an embedding API key.");
+}
 const baseUrl = envFromDotfile("EMBEDDING_API_BASE_URL") ?? "https://api.openai.com/v1";
 const indexKey = envFromDotfile("EMBEDDING_INDEX");
 

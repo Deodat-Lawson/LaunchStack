@@ -1,0 +1,66 @@
+{
+  "fixtureVersion": "pending-historical-questions/synthetic-v1",
+  "evidenceClass": "Synthetic historical human records, not current-world evidence or observed model output",
+  "period": {
+    "weekStart": "2026-10-19",
+    "timeZone": "America/New_York",
+    "startInclusive": "2026-10-19T04:00:00.000Z",
+    "endExclusive": "2026-10-25T15:00:00.000Z",
+    "asOf": "2026-10-25T15:00:00.000Z",
+    "kind": "week-to-date"
+  },
+  "pendingContext": {
+    "contractVersion": "pending-historical-questions/v1",
+    "trust": "historical-human-records",
+    "questions": [
+      {
+        "questionId": "topic-pilot-deletion",
+        "originReportId": "history-pilot-deletion",
+        "originTopicId": "topic-pilot-deletion",
+        "originWeekStart": "2026-10-12",
+        "originGeneratedAt": "2026-10-18T20:00:00.000Z",
+        "title": "Deletion verification before pilot access",
+        "question": "What deletion dry-run result is needed before enabling pilot access?",
+        "origin": "ai",
+        "humanReview": {
+          "kind": "recorded-decision",
+          "contentVersion": 2,
+          "status": "kept",
+          "decision": "Before enabling pilot access on October 30, obtain and review a deletion dry-run result. Do not broaden access until the result has been reviewed.",
+          "decidedAt": "2026-10-18T21:00:00.000Z"
+        },
+        "suggestedDue": "2026-10-23",
+        "sourceRefs": [
+          {
+            "ref": "ev:prior-pilot-deletion",
+            "label": "Previous-week synthetic observation",
+            "date": "2026-10-16"
+          }
+        ]
+      }
+    ],
+    "unavailableCount": 0,
+    "snapshotVersion": "synthetic-pending-state-v1"
+  },
+  "currentEvidence": {
+    "id": "pending-current-cohort",
+    "kind": "note",
+    "title": "Weekly signup observation",
+    "body": "The synthetic signup cohort contains twelve accounts this week.",
+    "source": "Weekly signup observation",
+    "sourceUrl": null,
+    "observedAt": "2026-10-22",
+    "visibility": "private",
+    "tags": ["synthetic", "pending-historical-questions"],
+    "createdAt": "2026-10-22T16:00:00.000Z"
+  },
+  "semanticExpectations": [
+    "A recorded past decision supplies a pending clarification, never proof the dry run happened or remains incomplete.",
+    "Empty current evidence permits a separate pending-question section and must not manufacture factual discussion topics or model calls.",
+    "An unrelated cohort observation must not be cited as support for deletion verification.",
+    "Original report, topic, week and decision identity remain stable across later reporting weeks.",
+    "A bounded prompt may omit questions visibly, while the complete input and persisted pending state remain intact.",
+    "Source-unavailable questions are withheld upstream; generation may communicate only the supplied unavailable count.",
+    "Same-title questions with distinct original IDs remain separate; carried questions are never merged by fuzzy topic matching."
+  ]
+}

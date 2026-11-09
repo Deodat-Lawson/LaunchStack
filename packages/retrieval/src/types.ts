@@ -69,6 +69,9 @@ export interface RagSearchResult {
 
 export interface RagSearchMetadata {
     chunkId?: number;
+    versionId?: number;
+    parentChunkId?: number;
+    mergedSiblings?: number;
     page?: number;
     documentId?: number;
     documentTitle?: string;

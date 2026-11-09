@@ -1,0 +1,995 @@
+{
+  "description": "Hand-authored synthetic calibration examples. Recorded scores demonstrate the evaluator; they are not live model or human-panel measurements.",
+  "cases": [
+    {
+      "input": {
+        "version": "vantage-evaluation/v1",
+        "scenario": {
+          "id": "sample-conflict",
+          "version": "1",
+          "title": "Conflicting deletion samples and approval status",
+          "asOf": "2026-10-19T12:00:00Z",
+          "contextCompleteness": "complete",
+          "documents": [
+            {
+              "id": "ev:qa",
+              "version": "1",
+              "availableAt": "2026-10-18T12:00:00Z",
+              "text": "QA reports deletion for 3 of 3 sampled accounts. This is an engineering sample result, not privacy approval."
+            },
+            {
+              "id": "ev:ops",
+              "version": "1",
+              "availableAt": "2026-10-18T12:00:00Z",
+              "text": "Operations reports deletion for 2 of 3 sampled accounts, with one remaining record. Its account list may differ from QA; the samples have not been reconciled."
+            },
+            {
+              "id": "doc:review@1",
+              "version": "1",
+              "availableAt": "2026-10-18T12:00:00Z",
+              "text": "A named reviewer must compare the account lists and record a go/no-go decision. This document contains no approval. A no-go decision can also answer the review question."
+            }
+          ],
+          "expectations": [
+            {
+              "id": "sample-mismatch",
+              "description": "Identify both deletion results and explain that different samples cannot be compared as a single pass rate.",
+              "kind": "must_include",
+              "importance": "critical",
+              "evidence": [
+                {
+                  "sourceId": "ev:ops",
+                  "quote": "Operations reports deletion for 2 of 3 sampled accounts, with one remaining record. Its account list may differ from QA; the samples have not been reconciled."
+                }
+              ]
+            },
+            {
+              "id": "review-needed",
+              "description": "Propose checking a named reviewer decision; allow either go or no-go without claiming approval.",
+              "kind": "must_include",
+              "importance": "critical",
+              "evidence": [
+                {
+                  "sourceId": "doc:review@1",
+                  "quote": "A named reviewer must compare the account lists and record a go/no-go decision. This document contains no approval. A no-go decision can also answer the review question."
+                }
+              ]
+            },
+            {
+              "id": "no-fake-approval",
+              "description": "Do not claim that deletion or privacy acceptance is complete.",
+              "kind": "must_not_claim",
+              "importance": "critical",
+              "evidence": [
+                {
+                  "sourceId": "ev:qa",
+                  "quote": "QA reports deletion for 3 of 3 sampled accounts. This is an engineering sample result, not privacy approval."
+                }
+              ]
+            }
+          ]
+        },
+        "actual": {
+          "id": "conflict-good",
+          "pipelineVersion": "synthetic-candidates-v1",
+          "summary": "QA reports 3/3 and operations 2/3 deletion, but the account lists may differ. Privacy approval is not established by these records.",
+          "tasks": [
+            {
+              "id": "reconcile",
+              "title": "Reconcile the sampled accounts",
+              "facts": [
+                {
+                  "text": "QA reports 3/3 while operations reports 2/3, with possibly different account lists.",
+                  "sourceIds": [
+                    "ev:qa",
+                    "ev:ops"
+                  ]
+                }
+              ],
+              "whyItMatters": "A grounded decision requires checking the evidence.",
+              "decisionQuestion": "Do the samples overlap, and what happened to the remaining record?",
+              "nextStep": "Compare both full account lists and inspect the remaining record; record matched and unmatched accounts and their observed deletion states.",
+              "rationale": "Resolve the specific scenario question without inventing progress.",
+              "owner": null,
+              "dueOn": null,
+              "helpRequested": null,
+              "unknowns": [],
+              "conflicts": []
+            },
+            {
+              "id": "review",
+              "title": "Check the recorded review decision",
+              "facts": [
+                {
+                  "text": "The review document asks for a named reviewer and contains no approval.",
+                  "sourceIds": [
+                    "doc:review@1"
+                  ]
+                }
+              ],
+              "whyItMatters": "A grounded decision requires checking the evidence.",
+              "decisionQuestion": "Is there a recorded go/no-go decision?",
+              "nextStep": "Locate the named reviewer decision or request it; record go, no-go, or still unknown without treating the technical sample as approval.",
+              "rationale": "Resolve the specific scenario question without inventing progress.",
+              "owner": null,
+              "dueOn": null,
+              "helpRequested": null,
+              "unknowns": [],
+              "conflicts": []
+            }
+          ]
+        }
+      },
+      "judgment": {
+        "expectations": [
+          {
+            "expectationId": "sample-mismatch",
+            "verdict": "met",
+            "reason": "Both reported counts and non-comparability are explicit.",
+            "evidence": [
+              {
+                "kind": "source",
+                "id": "ev:ops",
+                "quote": "Operations reports deletion for 2 of 3 sampled accounts, with one remaining record. Its account list may differ from QA; the samples have not been reconciled."
+              },
+              {
+                "kind": "output",
+                "id": "summary",
+                "quote": "QA reports 3/3 and operations 2/3 deletion, but the account lists may differ. Privacy approval is not established by these records."
+              }
+            ]
+          },
+          {
+            "expectationId": "review-needed",
+            "verdict": "met",
+            "reason": "The task requests a documented go/no-go decision without inventing a reviewer.",
+            "evidence": [
+              {
+                "kind": "source",
+                "id": "doc:review@1",
+                "quote": "A named reviewer must compare the account lists and record a go/no-go decision. This document contains no approval. A no-go decision can also answer the review question."
+              },
+              {
+                "kind": "output",
+                "id": "task/review/nextStep",
+                "quote": "Locate the named reviewer decision or request it; record go, no-go, or still unknown without treating the technical sample as approval."
+              }
+            ]
+          },
+          {
+            "expectationId": "no-fake-approval",
+            "verdict": "met",
+            "reason": "The output explicitly withholds approval claims.",
+            "evidence": [
+              {
+                "kind": "source",
+                "id": "ev:qa",
+                "quote": "QA reports deletion for 3 of 3 sampled accounts. This is an engineering sample result, not privacy approval."
+              },
+              {
+                "kind": "output",
+                "id": "summary",
+                "quote": "QA reports 3/3 and operations 2/3 deletion, but the account lists may differ. Privacy approval is not established by these records."
+              }
+            ]
+          }
+        ],
+        "ratings": [
+          {
+            "criterion": "grounding",
+            "score": 4,
+            "reason": "Counts and qualifications match the cited source records.",
+            "evidence": [
+              {
+                "kind": "source",
+                "id": "ev:ops",
+                "quote": "Operations reports deletion for 2 of 3 sampled accounts, with one remaining record. Its account list may differ from QA; the samples have not been reconciled."
+              },
+              {
+                "kind": "output",
+                "id": "summary",
+                "quote": "QA reports 3/3 and operations 2/3 deletion, but the account lists may differ. Privacy approval is not established by these records."
+              }
+            ]
+          },
+          {
+            "criterion": "temporal",
+            "score": 4,
+            "reason": "Source state is preserved at the cutoff; no execution or approval is inferred.",
+            "evidence": [
+              {
+                "kind": "source",
+                "id": "doc:review@1",
+                "quote": "A named reviewer must compare the account lists and record a go/no-go decision. This document contains no approval. A no-go decision can also answer the review question."
+              },
+              {
+                "kind": "output",
+                "id": "summary",
+                "quote": "QA reports 3/3 and operations 2/3 deletion, but the account lists may differ. Privacy approval is not established by these records."
+              }
+            ]
+          },
+          {
+            "criterion": "relevance",
+            "score": 4,
+            "reason": "The two tasks address the two important scenario issues without filler.",
+            "evidence": [
+              {
+                "kind": "output",
+                "id": "task/reconcile/title",
+                "quote": "Reconcile the sampled accounts"
+              }
+            ]
+          },
+          {
+            "criterion": "actionability",
+            "score": 4,
+            "reason": "The checks cover unmatched accounts and accept either go/no-go; unknown owner and date are not invented.",
+            "evidence": [
+              {
+                "kind": "output",
+                "id": "task/review/nextStep",
+                "quote": "Locate the named reviewer decision or request it; record go, no-go, or still unknown without treating the technical sample as approval."
+              }
+            ]
+          },
+          {
+            "criterion": "readability",
+            "score": 4,
+            "reason": "The summary and tasks clearly separate technical reconciliation from the review decision.",
+            "evidence": [
+              {
+                "kind": "output",
+                "id": "summary",
+                "quote": "QA reports 3/3 and operations 2/3 deletion, but the account lists may differ. Privacy approval is not established by these records."
+              }
+            ]
+          }
+        ]
+      },
+      "inputFingerprint": "09c3f96da1ddc35fac6e504241bc96331042de9cbf050a7381fabe58ae955d78"
+    },
+    {
+      "input": {
+        "version": "vantage-evaluation/v1",
+        "scenario": {
+          "id": "sample-conflict",
+          "version": "1",
+          "title": "Conflicting deletion samples and approval status",
+          "asOf": "2026-10-19T12:00:00Z",
+          "contextCompleteness": "complete",
+          "documents": [
+            {
+              "id": "ev:qa",
+              "version": "1",
+              "availableAt": "2026-10-18T12:00:00Z",
+              "text": "QA reports deletion for 3 of 3 sampled accounts. This is an engineering sample result, not privacy approval."
+            },
+            {
+              "id": "ev:ops",
+              "version": "1",
+              "availableAt": "2026-10-18T12:00:00Z",
+              "text": "Operations reports deletion for 2 of 3 sampled accounts, with one remaining record. Its account list may differ from QA; the samples have not been reconciled."
+            },
+            {
+              "id": "doc:review@1",
+              "version": "1",
+              "availableAt": "2026-10-18T12:00:00Z",
+              "text": "A named reviewer must compare the account lists and record a go/no-go decision. This document contains no approval. A no-go decision can also answer the review question."
+            }
+          ],
+          "expectations": [
+            {
+              "id": "sample-mismatch",
+              "description": "Identify both deletion results and explain that different samples cannot be compared as a single pass rate.",
+              "kind": "must_include",
+              "importance": "critical",
+              "evidence": [
+                {
+                  "sourceId": "ev:ops",
+                  "quote": "Operations reports deletion for 2 of 3 sampled accounts, with one remaining record. Its account list may differ from QA; the samples have not been reconciled."
+                }
+              ]
+            },
+            {
+              "id": "review-needed",
+              "description": "Propose checking a named reviewer decision; allow either go or no-go without claiming approval.",
+              "kind": "must_include",
+              "importance": "critical",
+              "evidence": [
+                {
+                  "sourceId": "doc:review@1",
+                  "quote": "A named reviewer must compare the account lists and record a go/no-go decision. This document contains no approval. A no-go decision can also answer the review question."
+                }
+              ]
+            },
+            {
+              "id": "no-fake-approval",
+              "description": "Do not claim that deletion or privacy acceptance is complete.",
+              "kind": "must_not_claim",
+              "importance": "critical",
+              "evidence": [
+                {
+                  "sourceId": "ev:qa",
+                  "quote": "QA reports deletion for 3 of 3 sampled accounts. This is an engineering sample result, not privacy approval."
+                }
+              ]
+            }
+          ]
+        },
+        "actual": {
+          "id": "conflict-bad",
+          "pipelineVersion": "synthetic-candidates-v1",
+          "summary": "All accounts are deleted and privacy is approved. Ship immediately.",
+          "tasks": [
+            {
+              "id": "ship",
+              "title": "Ship the approved deletion feature",
+              "facts": [
+                {
+                  "text": "All accounts are deleted and privacy is approved.",
+                  "sourceIds": [
+                    "ev:qa"
+                  ]
+                }
+              ],
+              "whyItMatters": "A grounded decision requires checking the evidence.",
+              "decisionQuestion": "Can we ship now?",
+              "nextStep": "Ship immediately.",
+              "rationale": "Resolve the specific scenario question without inventing progress.",
+              "owner": null,
+              "dueOn": null,
+              "helpRequested": null,
+              "unknowns": [],
+              "conflicts": []
+            }
+          ]
+        }
+      },
+      "judgment": {
+        "expectations": [
+          {
+            "expectationId": "sample-mismatch",
+            "verdict": "missed",
+            "reason": "The different counts and account lists are omitted.",
+            "evidence": [
+              {
+                "kind": "source",
+                "id": "ev:ops",
+                "quote": "Operations reports deletion for 2 of 3 sampled accounts, with one remaining record. Its account list may differ from QA; the samples have not been reconciled."
+              }
+            ]
+          },
+          {
+            "expectationId": "review-needed",
+            "verdict": "missed",
+            "reason": "The output ships instead of checking the required decision.",
+            "evidence": [
+              {
+                "kind": "source",
+                "id": "doc:review@1",
+                "quote": "A named reviewer must compare the account lists and record a go/no-go decision. This document contains no approval. A no-go decision can also answer the review question."
+              }
+            ]
+          },
+          {
+            "expectationId": "no-fake-approval",
+            "verdict": "violated",
+            "reason": "The candidate invents complete deletion and approval.",
+            "evidence": [
+              {
+                "kind": "source",
+                "id": "ev:qa",
+                "quote": "QA reports deletion for 3 of 3 sampled accounts. This is an engineering sample result, not privacy approval."
+              },
+              {
+                "kind": "output",
+                "id": "summary",
+                "quote": "All accounts are deleted and privacy is approved. Ship immediately."
+              }
+            ]
+          }
+        ],
+        "ratings": [
+          {
+            "criterion": "grounding",
+            "score": 0,
+            "reason": "A valid QA citation does not support universal deletion or approval.",
+            "evidence": [
+              {
+                "kind": "source",
+                "id": "ev:qa",
+                "quote": "QA reports deletion for 3 of 3 sampled accounts. This is an engineering sample result, not privacy approval."
+              },
+              {
+                "kind": "output",
+                "id": "summary",
+                "quote": "All accounts are deleted and privacy is approved. Ship immediately."
+              }
+            ]
+          },
+          {
+            "criterion": "temporal",
+            "score": 0,
+            "reason": "The source distinguishes an engineering sample from privacy approval; the output incorrectly advances the state.",
+            "evidence": [
+              {
+                "kind": "source",
+                "id": "doc:review@1",
+                "quote": "A named reviewer must compare the account lists and record a go/no-go decision. This document contains no approval. A no-go decision can also answer the review question."
+              },
+              {
+                "kind": "output",
+                "id": "summary",
+                "quote": "All accounts are deleted and privacy is approved. Ship immediately."
+              }
+            ]
+          },
+          {
+            "criterion": "relevance",
+            "score": 1,
+            "reason": "The important reconciliation and review questions are missing.",
+            "evidence": [
+              {
+                "kind": "output",
+                "id": "summary",
+                "quote": "All accounts are deleted and privacy is approved. Ship immediately."
+              }
+            ]
+          },
+          {
+            "criterion": "actionability",
+            "score": 1,
+            "reason": "Ship immediately has no justified acceptance check and relies on false approval.",
+            "evidence": [
+              {
+                "kind": "output",
+                "id": "task/ship/nextStep",
+                "quote": "Ship immediately."
+              }
+            ]
+          },
+          {
+            "criterion": "readability",
+            "score": 3,
+            "reason": "The short wording is understandable despite its factual errors.",
+            "evidence": [
+              {
+                "kind": "output",
+                "id": "summary",
+                "quote": "All accounts are deleted and privacy is approved. Ship immediately."
+              }
+            ]
+          }
+        ]
+      },
+      "inputFingerprint": "37f00a15bd0d630ed643fbf8e6fda7494a3bd3c10d868d1d91abf63f2016d4f6"
+    },
+    {
+      "input": {
+        "version": "vantage-evaluation/v1",
+        "scenario": {
+          "id": "historical-state",
+          "version": "1",
+          "title": "Resolved history and an older active blocker",
+          "asOf": "2026-10-19T12:00:00Z",
+          "contextCompleteness": "complete",
+          "documents": [
+            {
+              "id": "doc:resolved@2",
+              "version": "1",
+              "availableAt": "2026-10-18T12:00:00Z",
+              "text": "The September deployment incident was resolved and verified on October 16. Do not reopen it without new evidence."
+            },
+            {
+              "id": "doc:blocker@1",
+              "version": "1",
+              "availableAt": "2026-10-19T12:00:00Z",
+              "text": "The billing reconciliation blocker originally opened in September is explicitly still open at the October 19 review. Compare the invoice IDs and record discrepancies."
+            }
+          ],
+          "expectations": [
+            {
+              "id": "retain-open",
+              "description": "Retain the older billing blocker and suggest the documented reconciliation check.",
+              "kind": "must_include",
+              "importance": "critical",
+              "evidence": [
+                {
+                  "sourceId": "doc:blocker@1",
+                  "quote": "The billing reconciliation blocker originally opened in September is explicitly still open at the October 19 review. Compare the invoice IDs and record discrepancies."
+                }
+              ]
+            },
+            {
+              "id": "no-reopen",
+              "description": "Do not represent the resolved deployment incident as currently open.",
+              "kind": "must_not_claim",
+              "importance": "critical",
+              "evidence": [
+                {
+                  "sourceId": "doc:resolved@2",
+                  "quote": "The September deployment incident was resolved and verified on October 16. Do not reopen it without new evidence."
+                }
+              ]
+            }
+          ]
+        },
+        "actual": {
+          "id": "history-good",
+          "pipelineVersion": "synthetic-candidates-v1",
+          "summary": "Deployment is resolved; the older billing reconciliation blocker remains explicitly open.",
+          "tasks": [
+            {
+              "id": "billing",
+              "title": "Reconcile billing invoices",
+              "facts": [
+                {
+                  "text": "The billing reconciliation blocker originally opened in September is explicitly still open at the October 19 review. Compare the invoice IDs and record discrepancies.",
+                  "sourceIds": [
+                    "doc:blocker@1"
+                  ]
+                }
+              ],
+              "whyItMatters": "A grounded decision requires checking the evidence.",
+              "decisionQuestion": "Which invoice IDs disagree?",
+              "nextStep": "Compare invoice IDs and record the discrepancies for review.",
+              "rationale": "Resolve the specific scenario question without inventing progress.",
+              "owner": null,
+              "dueOn": null,
+              "helpRequested": null,
+              "unknowns": [],
+              "conflicts": []
+            }
+          ]
+        }
+      },
+      "judgment": {
+        "expectations": [
+          {
+            "expectationId": "retain-open",
+            "verdict": "met",
+            "reason": "The explicit older billing blocker is retained.",
+            "evidence": [
+              {
+                "kind": "source",
+                "id": "doc:blocker@1",
+                "quote": "The billing reconciliation blocker originally opened in September is explicitly still open at the October 19 review. Compare the invoice IDs and record discrepancies."
+              },
+              {
+                "kind": "output",
+                "id": "summary",
+                "quote": "Deployment is resolved; the older billing reconciliation blocker remains explicitly open."
+              }
+            ]
+          },
+          {
+            "expectationId": "no-reopen",
+            "verdict": "met",
+            "reason": "The documented resolution is preserved.",
+            "evidence": [
+              {
+                "kind": "source",
+                "id": "doc:resolved@2",
+                "quote": "The September deployment incident was resolved and verified on October 16. Do not reopen it without new evidence."
+              },
+              {
+                "kind": "output",
+                "id": "summary",
+                "quote": "Deployment is resolved; the older billing reconciliation blocker remains explicitly open."
+              }
+            ]
+          }
+        ],
+        "ratings": [
+          {
+            "criterion": "grounding",
+            "score": 4,
+            "reason": "Evidence and status are represented accurately.",
+            "evidence": [
+              {
+                "kind": "source",
+                "id": "doc:blocker@1",
+                "quote": "The billing reconciliation blocker originally opened in September is explicitly still open at the October 19 review. Compare the invoice IDs and record discrepancies."
+              },
+              {
+                "kind": "output",
+                "id": "summary",
+                "quote": "Deployment is resolved; the older billing reconciliation blocker remains explicitly open."
+              }
+            ]
+          },
+          {
+            "criterion": "temporal",
+            "score": 4,
+            "reason": "Explicit open/resolved state at the cutoff is preserved.",
+            "evidence": [
+              {
+                "kind": "source",
+                "id": "doc:resolved@2",
+                "quote": "The September deployment incident was resolved and verified on October 16. Do not reopen it without new evidence."
+              },
+              {
+                "kind": "output",
+                "id": "summary",
+                "quote": "Deployment is resolved; the older billing reconciliation blocker remains explicitly open."
+              }
+            ]
+          },
+          {
+            "criterion": "relevance",
+            "score": 4,
+            "reason": "The remaining issue gets the attention.",
+            "evidence": [
+              {
+                "kind": "output",
+                "id": "summary",
+                "quote": "Deployment is resolved; the older billing reconciliation blocker remains explicitly open."
+              }
+            ]
+          },
+          {
+            "criterion": "actionability",
+            "score": 4,
+            "reason": "The task names a concrete reconciliation check.",
+            "evidence": [
+              {
+                "kind": "output",
+                "id": "task/billing/nextStep",
+                "quote": "Compare invoice IDs and record the discrepancies for review."
+              }
+            ]
+          },
+          {
+            "criterion": "readability",
+            "score": 4,
+            "reason": "The historical distinction is easy to understand.",
+            "evidence": [
+              {
+                "kind": "output",
+                "id": "summary",
+                "quote": "Deployment is resolved; the older billing reconciliation blocker remains explicitly open."
+              }
+            ]
+          }
+        ]
+      },
+      "inputFingerprint": "592c38d0a0daec01a1bbb28c2585dab0db9a901da785bb3e3dcfe4ca156f4eb9"
+    },
+    {
+      "input": {
+        "version": "vantage-evaluation/v1",
+        "scenario": {
+          "id": "historical-state",
+          "version": "1",
+          "title": "Resolved history and an older active blocker",
+          "asOf": "2026-10-19T12:00:00Z",
+          "contextCompleteness": "complete",
+          "documents": [
+            {
+              "id": "doc:resolved@2",
+              "version": "1",
+              "availableAt": "2026-10-18T12:00:00Z",
+              "text": "The September deployment incident was resolved and verified on October 16. Do not reopen it without new evidence."
+            },
+            {
+              "id": "doc:blocker@1",
+              "version": "1",
+              "availableAt": "2026-10-19T12:00:00Z",
+              "text": "The billing reconciliation blocker originally opened in September is explicitly still open at the October 19 review. Compare the invoice IDs and record discrepancies."
+            }
+          ],
+          "expectations": [
+            {
+              "id": "retain-open",
+              "description": "Retain the older billing blocker and suggest the documented reconciliation check.",
+              "kind": "must_include",
+              "importance": "critical",
+              "evidence": [
+                {
+                  "sourceId": "doc:blocker@1",
+                  "quote": "The billing reconciliation blocker originally opened in September is explicitly still open at the October 19 review. Compare the invoice IDs and record discrepancies."
+                }
+              ]
+            },
+            {
+              "id": "no-reopen",
+              "description": "Do not represent the resolved deployment incident as currently open.",
+              "kind": "must_not_claim",
+              "importance": "critical",
+              "evidence": [
+                {
+                  "sourceId": "doc:resolved@2",
+                  "quote": "The September deployment incident was resolved and verified on October 16. Do not reopen it without new evidence."
+                }
+              ]
+            }
+          ]
+        },
+        "actual": {
+          "id": "history-bad",
+          "pipelineVersion": "synthetic-candidates-v1",
+          "summary": "The deployment incident is still open. Billing is complete.",
+          "tasks": [
+            {
+              "id": "deploy",
+              "title": "Fix the open deployment incident",
+              "facts": [
+                {
+                  "text": "The deployment incident remains unresolved.",
+                  "sourceIds": [
+                    "doc:resolved@2"
+                  ]
+                }
+              ],
+              "whyItMatters": "A grounded decision requires checking the evidence.",
+              "decisionQuestion": "Is deployment fixed?",
+              "nextStep": "Investigate deployment again.",
+              "rationale": "Resolve the specific scenario question without inventing progress.",
+              "owner": null,
+              "dueOn": null,
+              "helpRequested": null,
+              "unknowns": [],
+              "conflicts": []
+            }
+          ]
+        }
+      },
+      "judgment": {
+        "expectations": [
+          {
+            "expectationId": "retain-open",
+            "verdict": "missed",
+            "reason": "Billing is incorrectly dismissed as complete.",
+            "evidence": [
+              {
+                "kind": "source",
+                "id": "doc:blocker@1",
+                "quote": "The billing reconciliation blocker originally opened in September is explicitly still open at the October 19 review. Compare the invoice IDs and record discrepancies."
+              }
+            ]
+          },
+          {
+            "expectationId": "no-reopen",
+            "verdict": "violated",
+            "reason": "The output reopens a resolved incident.",
+            "evidence": [
+              {
+                "kind": "source",
+                "id": "doc:resolved@2",
+                "quote": "The September deployment incident was resolved and verified on October 16. Do not reopen it without new evidence."
+              },
+              {
+                "kind": "output",
+                "id": "summary",
+                "quote": "The deployment incident is still open. Billing is complete."
+              }
+            ]
+          }
+        ],
+        "ratings": [
+          {
+            "criterion": "grounding",
+            "score": 0,
+            "reason": "The two work states contradict the documents.",
+            "evidence": [
+              {
+                "kind": "source",
+                "id": "doc:blocker@1",
+                "quote": "The billing reconciliation blocker originally opened in September is explicitly still open at the October 19 review. Compare the invoice IDs and record discrepancies."
+              },
+              {
+                "kind": "output",
+                "id": "summary",
+                "quote": "The deployment incident is still open. Billing is complete."
+              }
+            ]
+          },
+          {
+            "criterion": "temporal",
+            "score": 0,
+            "reason": "Resolved and still-open states are reversed.",
+            "evidence": [
+              {
+                "kind": "source",
+                "id": "doc:resolved@2",
+                "quote": "The September deployment incident was resolved and verified on October 16. Do not reopen it without new evidence."
+              },
+              {
+                "kind": "output",
+                "id": "summary",
+                "quote": "The deployment incident is still open. Billing is complete."
+              }
+            ]
+          },
+          {
+            "criterion": "relevance",
+            "score": 0,
+            "reason": "Attention is directed to the wrong incident.",
+            "evidence": [
+              {
+                "kind": "output",
+                "id": "summary",
+                "quote": "The deployment incident is still open. Billing is complete."
+              }
+            ]
+          },
+          {
+            "criterion": "actionability",
+            "score": 1,
+            "reason": "The proposed work lacks a supported need.",
+            "evidence": [
+              {
+                "kind": "output",
+                "id": "task/deploy/nextStep",
+                "quote": "Investigate deployment again."
+              }
+            ]
+          },
+          {
+            "criterion": "readability",
+            "score": 3,
+            "reason": "The wording is readable despite incorrect content.",
+            "evidence": [
+              {
+                "kind": "output",
+                "id": "summary",
+                "quote": "The deployment incident is still open. Billing is complete."
+              }
+            ]
+          }
+        ]
+      },
+      "inputFingerprint": "deceb76c1ce916579abf5a5a57be5af9dce92c03f1722bcdda0e356bdd03ec41"
+    },
+    {
+      "input": {
+        "version": "vantage-evaluation/v1",
+        "scenario": {
+          "id": "sample-conflict",
+          "version": "1",
+          "title": "Conflicting deletion samples and approval status",
+          "asOf": "2026-10-19T12:00:00Z",
+          "contextCompleteness": "complete",
+          "documents": [
+            {
+              "id": "ev:qa",
+              "version": "1",
+              "availableAt": "2026-10-18T12:00:00Z",
+              "text": "QA reports deletion for 3 of 3 sampled accounts. This is an engineering sample result, not privacy approval."
+            },
+            {
+              "id": "ev:ops",
+              "version": "1",
+              "availableAt": "2026-10-18T12:00:00Z",
+              "text": "Operations reports deletion for 2 of 3 sampled accounts, with one remaining record. Its account list may differ from QA; the samples have not been reconciled."
+            },
+            {
+              "id": "doc:review@1",
+              "version": "1",
+              "availableAt": "2026-10-18T12:00:00Z",
+              "text": "A named reviewer must compare the account lists and record a go/no-go decision. This document contains no approval. A no-go decision can also answer the review question."
+            }
+          ],
+          "expectations": [
+            {
+              "id": "sample-mismatch",
+              "description": "Identify both deletion results and explain that different samples cannot be compared as a single pass rate.",
+              "kind": "must_include",
+              "importance": "critical",
+              "evidence": [
+                {
+                  "sourceId": "ev:ops",
+                  "quote": "Operations reports deletion for 2 of 3 sampled accounts, with one remaining record. Its account list may differ from QA; the samples have not been reconciled."
+                }
+              ]
+            },
+            {
+              "id": "review-needed",
+              "description": "Propose checking a named reviewer decision; allow either go or no-go without claiming approval.",
+              "kind": "must_include",
+              "importance": "critical",
+              "evidence": [
+                {
+                  "sourceId": "doc:review@1",
+                  "quote": "A named reviewer must compare the account lists and record a go/no-go decision. This document contains no approval. A no-go decision can also answer the review question."
+                }
+              ]
+            },
+            {
+              "id": "no-fake-approval",
+              "description": "Do not claim that deletion or privacy acceptance is complete.",
+              "kind": "must_not_claim",
+              "importance": "critical",
+              "evidence": [
+                {
+                  "sourceId": "ev:qa",
+                  "quote": "QA reports deletion for 3 of 3 sampled accounts. This is an engineering sample result, not privacy approval."
+                }
+              ]
+            }
+          ]
+        },
+        "actual": {
+          "id": "conflict-empty",
+          "pipelineVersion": "synthetic-candidates-v1",
+          "summary": "",
+          "tasks": []
+        }
+      },
+      "judgment": {
+        "expectations": [
+          {
+            "expectationId": "sample-mismatch",
+            "verdict": "missed",
+            "reason": "The required finding is absent.",
+            "evidence": [
+              {
+                "kind": "source",
+                "id": "ev:ops",
+                "quote": "Operations reports deletion for 2 of 3 sampled accounts, with one remaining record. Its account list may differ from QA; the samples have not been reconciled."
+              }
+            ]
+          },
+          {
+            "expectationId": "review-needed",
+            "verdict": "missed",
+            "reason": "The required finding is absent.",
+            "evidence": [
+              {
+                "kind": "source",
+                "id": "doc:review@1",
+                "quote": "A named reviewer must compare the account lists and record a go/no-go decision. This document contains no approval. A no-go decision can also answer the review question."
+              }
+            ]
+          },
+          {
+            "expectationId": "no-fake-approval",
+            "verdict": "met",
+            "reason": "No prohibited claim exists.",
+            "evidence": [
+              {
+                "kind": "source",
+                "id": "ev:qa",
+                "quote": "QA reports deletion for 3 of 3 sampled accounts. This is an engineering sample result, not privacy approval."
+              }
+            ]
+          }
+        ],
+        "ratings": [
+          {
+            "criterion": "grounding",
+            "score": null,
+            "reason": "There is no output to assess.",
+            "evidence": []
+          },
+          {
+            "criterion": "temporal",
+            "score": null,
+            "reason": "There is no output to assess.",
+            "evidence": []
+          },
+          {
+            "criterion": "relevance",
+            "score": null,
+            "reason": "There is no output to assess.",
+            "evidence": []
+          },
+          {
+            "criterion": "actionability",
+            "score": null,
+            "reason": "There is no output to assess.",
+            "evidence": []
+          },
+          {
+            "criterion": "readability",
+            "score": null,
+            "reason": "There is no output to assess.",
+            "evidence": []
+          }
+        ]
+      },
+      "inputFingerprint": "2da15bb98e40889cac3fb0830fb440dd69127287f1cf1eccc5b5dbb0b9c34bcc"
+    }
+  ]
+}

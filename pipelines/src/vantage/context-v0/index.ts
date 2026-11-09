@@ -10,3 +10,5 @@ export * from "./evidence-snapshot";
 export * from "./ports";
 export * from "./adapters";
 export * from "./mocks";
+export * from "./company-architecture";
+export * from "../dynamic-retrieval";

@@ -1,0 +1,156 @@
+{
+  "fixtureVersion": "previous-vantage/two-week-v1",
+  "evidenceClass": "Synthetic inputs and qualitative expectations; not observed model outputs",
+  "period": {
+    "weekStart": "2026-10-19",
+    "timeZone": "America/New_York",
+    "startInclusive": "2026-10-19T04:00:00.000Z",
+    "endExclusive": "2026-10-24T14:00:00.000Z",
+    "asOf": "2026-10-24T14:00:00.000Z",
+    "kind": "week-to-date"
+  },
+  "history": {
+    "id": "agenda-synthetic-previous",
+    "weekStart": "2026-10-12",
+    "generatedAt": "2026-10-19T12:00:00.000Z",
+    "summary": "The previous AI suggested that an invoice export confirmation problem might deserve a test.",
+    "topicId": "topic-synthetic-invoice",
+    "topicTitle": "Invoice export confirmation",
+    "interpretation": "The previous AI speculated that missing confirmation might prevent successful invoice export.",
+    "proposedNextStep": "Run five invoice export confirmation tests and implement a new notification.",
+    "proposedDue": "2026-10-16",
+    "sourceRef": "ev:ev-synthetic-previous",
+    "sourceBody": "One synthetic tester did not see invoice export confirmation.",
+    "decision": "Verify the invoice export confirmation before deciding whether to change it.",
+    "decidedAt": "2026-10-17T16:00:00.000Z",
+    "commitmentId": "cm-synthetic-invoice",
+    "recordedActionStatus": "open"
+  },
+  "scenarios": [
+    {
+      "id": "completion-indicated",
+      "currentActionStatus": "open",
+      "description": "A dated current source explicitly reports completion while the recorded action remains open.",
+      "title": "Invoice export confirmation acceptance check",
+      "body": "On October 21, all five synthetic invoice export confirmation checks passed after the fix. Before the fix one tester did not see confirmation. This report indicates the fix worked in the recorded checks; no action-status update has been recorded.",
+      "expected": "Quote the current acceptance result and question whether recorded confirmation is needed. Do not repeat the old five-test implementation recommendation, mark the old action done, or infer widespread success.",
+      "relatedCurrentEvidence": true
+    },
+    {
+      "id": "no-progress-evidence",
+      "description": "The previous report exists but there is no new evidence about progress.",
+      "title": null,
+      "body": null,
+      "expected": "No fact-bearing topic or action may be created from history alone. Progress remains unknown, not failed or completed.",
+      "relatedCurrentEvidence": false
+    },
+    {
+      "id": "prior-ai-contradicted",
+      "description": "Current evidence contradicts the earlier AI interpretation, while identifying a narrower remaining problem.",
+      "interpretation": "The previous AI concluded that invoice export was unavailable.",
+      "title": "Invoice export confirmation follow-up",
+      "body": "The synthetic tester successfully exported the invoice on October 22. Invoice export is available; only its confirmation notification is absent. The previous interpretation that export was unavailable does not match this test.",
+      "expected": "Use the new successful-export observation rather than assume the old AI conclusion is true. A fresh clarification may concern the missing notification, not implementing export again.",
+      "relatedCurrentEvidence": true
+    },
+    {
+      "id": "expired-no-current-relevance",
+      "description": "A historical recommendation expired and there is no current evidence that it remains useful.",
+      "topicTitle": "Prepare synthetic pitch rehearsal",
+      "proposedNextStep": "Prepare the October 15 synthetic pitch rehearsal.",
+      "proposedDue": "2026-10-15",
+      "title": "Signup cohort snapshot",
+      "body": "The synthetic signup cohort contains twelve accounts this week.",
+      "expected": "Omit the pitch recommendation. Do not claim its deadline was met, failed, or proves irrelevance.",
+      "relatedCurrentEvidence": false
+    },
+    {
+      "id": "expired-still-important",
+      "description": "A passed deadline does not erase a currently evidenced unresolved problem.",
+      "proposedDue": "2026-10-15",
+      "title": "Invoice export confirmation blocker",
+      "body": "The synthetic finance reviewer still cannot confirm invoice export on October 23. This blocks the October 30 reconciliation check. The earlier October 15 target has passed, but the current reconciliation problem remains unresolved.",
+      "expected": "Retain a fresh question grounded in the current blocker. Do not copy the old deadline or mark the recorded action missed automatically.",
+      "relatedCurrentEvidence": true
+    },
+    {
+      "id": "changed-document-relevant",
+      "description": "An older issue has a related document-change report; workspace document verification may be unavailable.",
+      "title": "Invoice export confirmation document update",
+      "body": "An authorized synthetic Vantage note reports that invoice export confirmation is discussed in document version doc-v2 dated October 23. This note supplies no document excerpt and does not establish that the fix was completed.",
+      "document": {
+        "id": "doc-synthetic-invoice",
+        "previousVersion": "doc-v1",
+        "currentVersion": "doc-v2",
+        "changedAt": "2026-10-23T15:00:00.000Z",
+        "contentVerification": "unavailable"
+      },
+      "expected": "Treat the related Vantage note as the source. Do not claim document content was read or verified, or that a changed version proves completion.",
+      "relatedCurrentEvidence": true
+    },
+    {
+      "id": "document-change-not-completion",
+      "description": "An updated document records only an edit and explicitly does not establish completion.",
+      "title": "Invoice export confirmation document edit",
+      "body": "The synthetic document-change note records a title rename and date-label correction for invoice export confirmation. It explicitly says no implementation result or acceptance test was added. A changed document is not proof of completion.",
+      "document": {
+        "id": "doc-synthetic-invoice",
+        "previousVersion": "doc-v2",
+        "currentVersion": "doc-v3",
+        "changedAt": "2026-10-23T16:00:00.000Z",
+        "contentVerification": "unavailable"
+      },
+      "expected": "Keep the edit separate from task completion and reported action state. Cite the current note only; automatic workspace-document verification remains unavailable.",
+      "relatedCurrentEvidence": true
+    },
+    {
+      "id": "no-human-decision",
+      "description": "The previous AI proposal was kept but no decision or action link was recorded.",
+      "decision": null,
+      "decidedAt": null,
+      "commitmentId": null,
+      "title": "Invoice export confirmation observation",
+      "body": "One synthetic reviewer again asks whether invoice export confirmation is visible. No decision or implementation outcome is recorded in this observation.",
+      "expected": "The previous interpretation and next step remain AI suggestions. Never describe them as a recorded human decision or completed plan.",
+      "relatedCurrentEvidence": true
+    },
+    {
+      "id": "same-week-regeneration",
+      "description": "An attempted current-week draft is not valid previous-week historical context.",
+      "historyWeekStart": "2026-10-19",
+      "historySummary": "SELF_FEEDBACK_SENTINEL: the current draft claims an urgent invoice export failure.",
+      "title": "Signup cohort snapshot",
+      "body": "The synthetic signup cohort contains twelve accounts this week.",
+      "expected": "Exclude the same-week draft from historical context and prompt. Regeneration must not reinforce its own prior generated suggestion.",
+      "relatedCurrentEvidence": false
+    },
+    {
+      "id": "historical-sources-unavailable",
+      "description": "Historical sources are missing, revoked or unauthorized for the actor.",
+      "sourceStatuses": ["missing", "revoked", "unauthorized"],
+      "historySummary": "PRIVATE_HISTORY_SENTINEL: the old report repeated a restricted source.",
+      "title": "Signup cohort snapshot",
+      "body": "The synthetic signup cohort contains twelve accounts this week.",
+      "expected": "No unavailable source body or derived sensitive historical text reaches the prompt. Report verification unavailable rather than invent access or completion.",
+      "relatedCurrentEvidence": false
+    },
+    {
+      "id": "no-previous-vantage",
+      "description": "No previous saved Vantage exists.",
+      "noHistory": true,
+      "title": "Invoice export confirmation observation",
+      "body": "A synthetic tester reports seeing invoice export confirmation this week.",
+      "expected": "Continue ordinary current-evidence generation with no historical premise or extra model invocation.",
+      "relatedCurrentEvidence": false
+    },
+    {
+      "id": "historical-state-changes-during-generation",
+      "description": "Historical source or recorded decision changes after the generation snapshot.",
+      "title": "Invoice export confirmation acceptance check",
+      "body": "The synthetic reviewer records an invoice export confirmation result this week.",
+      "raceVariants": ["source-content", "human-decision", "source-access"],
+      "expected": "A changed source/report/decision fingerprint rejects persistence and preserves old reports and actions. A result generated from the original snapshot cannot be saved against new history.",
+      "relatedCurrentEvidence": true
+    }
+  ]
+}

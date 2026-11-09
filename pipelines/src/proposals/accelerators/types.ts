@@ -17,7 +17,7 @@ export const FIELD_TYPES = [
 export const FieldTypeSchema = z.enum(FIELD_TYPES);
 export type FieldType = z.infer<typeof FieldTypeSchema>;
 
-const IdSchema = z.string().trim().min(1).max(64);
+export const IdSchema = z.string().trim().min(1).max(64);
 const HttpUrlSchema = z
     .string()
     .url()

@@ -9,8 +9,9 @@
  * makes maps harder to find fails here, not in production.
  *
  * Needs an embeddings key: EMBEDDING_API_KEY or OPENAI_API_KEY in the
- * environment, or in apps/web/.env. Skipped otherwise. Costs a few thousand
- * embedding tokens per run.
+ * environment, or in apps/web/.env, AND explicit RUN_LIVE_EMBEDDING_EVAL=1
+ * after separate spending approval. Ordinary PR checks do not opt in. Costs a
+ * few thousand embedding tokens per run; a skipped evaluation proves no quality.
  */
 
 import { existsSync, readFileSync } from "node:fs";
@@ -51,7 +52,10 @@ const apiKey = envFromDotfile("EMBEDDING_API_KEY") ?? envFromDotfile("OPENAI_API
 const baseUrl = envFromDotfile("EMBEDDING_API_BASE_URL") ?? "https://api.openai.com/v1";
 const indexKey = envFromDotfile("EMBEDDING_INDEX");
 
-const describeWithKey = apiKey ? describe : describe.skip;
+const runLiveEvaluation = process.env.RUN_LIVE_EMBEDDING_EVAL === "1";
+if (runLiveEvaluation && !apiKey)
+    throw new Error("Live embedding evaluation requires an approved provider configuration");
+const describeWithKey = runLiveEvaluation && apiKey ? describe : describe.skip;
 
 // ---------------------------------------------------------------------------
 // Corpus

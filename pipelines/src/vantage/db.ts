@@ -3,7 +3,7 @@
  * in the predicate; a wrong-workspace id answers "not found", never a row.
  * Rows go out as DTOs (dates as ISO strings) so routes stay thin.
  */
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 
 import { and, asc, desc, eq, gte, inArray, sql } from "drizzle-orm";
 
@@ -16,6 +16,7 @@ import {
     VANTAGE_TOPIC_STATUSES,
     VANTAGE_VISIBILITIES,
     vantageAgendaTopics,
+    vantageDecisionOperations,
     vantageAgendas,
     vantageCommitments,
     vantageEvidence,
@@ -475,6 +476,7 @@ export function toCommitmentDto(
 ): CommitmentDto {
     return {
         id: row.id,
+        contentVersion: row.contentVersion,
         agendaId: row.agendaId ?? null,
         topicId: row.topicId ?? null,
         topicTitle,
@@ -532,29 +534,100 @@ export async function createCommitment(args: {
     companyId: bigint;
     userId: string;
     input: CommitmentInput;
+    idempotencyKey: string;
 }): Promise<CommitmentDto> {
-    const [row] = await getDb()
-        .insert(vantageCommitments)
-        .values({
-            id: randomUUID(),
+    if (!args.input.test?.trim())
+        throw new VantageError("An acceptance test is required.", 400, "test_required");
+    if (!/^[A-Za-z0-9_-]{16,128}$/.test(args.idempotencyKey))
+        throw new VantageError(
+            "A valid submission key is required.",
+            400,
+            "idempotency_key_required"
+        );
+    const operationId = createHash("sha256")
+        .update(
+            JSON.stringify([
+                "commitment-create",
+                String(args.companyId),
+                args.userId,
+                args.idempotencyKey,
+            ])
+        )
+        .digest("hex");
+    const requestHash = createHash("sha256").update(JSON.stringify(args.input)).digest("hex");
+    return getDb().transaction(async tx => {
+        await tx.execute(sql`SELECT pg_advisory_xact_lock(hashtextextended(${operationId}, 0))`);
+        const [prior] = await tx
+            .select()
+            .from(vantageDecisionOperations)
+            .where(eq(vantageDecisionOperations.id, operationId));
+        if (prior) {
+            if (prior.requestHash !== requestHash)
+                throw new VantageError(
+                    "Submission key has different content.",
+                    409,
+                    "idempotency_conflict"
+                );
+            return prior.result as CommitmentDto;
+        }
+        if (args.input.agendaId) {
+            const [agenda] = await tx
+                .select({ id: vantageAgendas.id })
+                .from(vantageAgendas)
+                .where(
+                    and(
+                        eq(vantageAgendas.id, args.input.agendaId),
+                        eq(vantageAgendas.companyId, args.companyId)
+                    )
+                );
+            if (!agenda) throw new VantageError("That agenda is not here.", 404, "not_found");
+        }
+        if (args.input.topicId) {
+            const [topic] = await tx
+                .select()
+                .from(vantageAgendaTopics)
+                .where(
+                    and(
+                        eq(vantageAgendaTopics.id, args.input.topicId),
+                        eq(vantageAgendaTopics.companyId, args.companyId)
+                    )
+                );
+            if (!topic || (args.input.agendaId && topic.agendaId !== args.input.agendaId))
+                throw new VantageError("That topic is not here.", 404, "not_found");
+        }
+        const [row] = await tx
+            .insert(vantageCommitments)
+            .values({
+                id: randomUUID(),
+                companyId: args.companyId,
+                createdByUserId: args.userId,
+                agendaId: args.input.agendaId ?? null,
+                topicId: args.input.topicId ?? null,
+                title: args.input.title.trim(),
+                owner: args.input.owner.trim(),
+                dueOn: args.input.dueOn,
+                test: orNull(args.input.test),
+                shared: args.input.shared ?? false,
+            })
+            .returning();
+        const result = toCommitmentDto(row!, null);
+        await tx.insert(vantageDecisionOperations).values({
+            id: operationId,
             companyId: args.companyId,
-            createdByUserId: args.userId,
-            agendaId: args.input.agendaId ?? null,
-            topicId: args.input.topicId ?? null,
-            title: args.input.title.trim(),
-            owner: args.input.owner.trim(),
-            dueOn: args.input.dueOn,
-            test: orNull(args.input.test),
-            shared: args.input.shared ?? false,
-        })
-        .returning();
-    return toCommitmentDto(row!, null);
+            topicId: "commitment-create",
+            actorId: args.userId,
+            requestHash,
+            result,
+        });
+        return result;
+    });
 }
 
 export async function updateCommitment(args: {
     companyId: bigint;
     id: string;
     patch: {
+        expectedContentVersion: number;
         title?: string;
         owner?: string;
         dueOn?: string;
@@ -566,12 +639,21 @@ export async function updateCommitment(args: {
 }): Promise<CommitmentDto> {
     const set: Partial<typeof vantageCommitments.$inferInsert> = {};
     const p = args.patch;
+    if (!Number.isInteger(p.expectedContentVersion) || p.expectedContentVersion < 1)
+        throw new VantageError("Reload this action before editing.", 409, "stale_commitment");
+    set.contentVersion = sql`${vantageCommitments.contentVersion} + 1` as never;
     if (p.title !== undefined) set.title = p.title.trim();
     if (p.owner !== undefined) set.owner = p.owner.trim();
     if (p.dueOn !== undefined) set.dueOn = p.dueOn;
     if (p.test !== undefined) set.test = orNull(p.test);
     if (p.shared !== undefined) set.shared = p.shared;
     if (p.outcome !== undefined) set.outcome = orNull(p.outcome);
+    if (p.status !== undefined && p.status !== "open" && !p.outcome?.trim())
+        throw new VantageError(
+            "Record an outcome before resolving this action.",
+            400,
+            "outcome_required"
+        );
     if (p.status !== undefined) {
         set.status = p.status;
         set.resolvedAt = p.status === "open" ? null : new Date();
@@ -582,35 +664,27 @@ export async function updateCommitment(args: {
         .where(
             and(
                 eq(vantageCommitments.id, args.id),
-                eq(vantageCommitments.companyId, args.companyId)
+                eq(vantageCommitments.companyId, args.companyId),
+                eq(vantageCommitments.contentVersion, p.expectedContentVersion)
             )
         )
         .returning();
-    if (!row) throw new VantageError("That commitment is not here.", 404, "not_found");
+    if (!row) throw new VantageError("Reload this action before editing.", 409, "stale_commitment");
     return toCommitmentDto(row, null);
 }
 
 export async function deleteCommitment(args: { companyId: bigint; id: string }): Promise<void> {
-    const deleted = await getDb()
-        .delete(vantageCommitments)
-        .where(
-            and(
-                eq(vantageCommitments.id, args.id),
-                eq(vantageCommitments.companyId, args.companyId)
-            )
-        )
-        .returning({ id: vantageCommitments.id });
-    if (deleted.length === 0)
-        throw new VantageError("That commitment is not here.", 404, "not_found");
+    throw new VantageError(
+        "Deletion is unavailable while audit records must be preserved.",
+        409,
+        "archive_required"
+    );
 }
-
-// ---------------------------------------------------------------------------
-// Agendas and topics
-// ---------------------------------------------------------------------------
 
 export function toTopicDto(row: VantageAgendaTopicRow, commitmentId: string | null): TopicDto {
     return {
         id: row.id,
+        contentVersion: row.contentVersion,
         agendaId: row.agendaId,
         position: row.position,
         status: row.status,
@@ -925,10 +999,16 @@ export async function addTopic(args: {
 export async function updateTopic(args: {
     companyId: bigint;
     id: string;
-    patch: Partial<TopicInput> & { status?: "kept" | "dismissed" | "suggested" };
+    patch: Partial<TopicInput> & {
+        expectedContentVersion: number;
+        status?: "kept" | "dismissed" | "suggested";
+    };
 }): Promise<TopicDto> {
     const set: Partial<typeof vantageAgendaTopics.$inferInsert> = {};
     const p = args.patch;
+    if (!Number.isInteger(p.expectedContentVersion) || p.expectedContentVersion < 1)
+        throw new VantageError("Reload this topic before editing.", 409, "stale_topic");
+    set.contentVersion = sql`${vantageAgendaTopics.contentVersion} + 1` as never;
     if (p.title !== undefined) set.title = p.title.trim().slice(0, 300);
     if (p.facts !== undefined) set.facts = p.facts;
     if (p.whyItMatters !== undefined) set.whyItMatters = p.whyItMatters;
@@ -960,10 +1040,11 @@ export async function updateTopic(args: {
         .where(
             and(
                 eq(vantageAgendaTopics.id, args.id),
-                eq(vantageAgendaTopics.companyId, args.companyId)
+                eq(vantageAgendaTopics.companyId, args.companyId),
+                eq(vantageAgendaTopics.contentVersion, p.expectedContentVersion)
             )
         );
-    if (!current) throw new VantageError("That topic is not here.", 404, "not_found");
+    if (!current) throw new VantageError("Reload this topic before editing.", 409, "stale_topic");
     if (edited && p.status === undefined && current.status === "suggested") set.status = "kept";
     const [row] = await db
         .update(vantageAgendaTopics)
@@ -971,11 +1052,12 @@ export async function updateTopic(args: {
         .where(
             and(
                 eq(vantageAgendaTopics.id, args.id),
-                eq(vantageAgendaTopics.companyId, args.companyId)
+                eq(vantageAgendaTopics.companyId, args.companyId),
+                eq(vantageAgendaTopics.contentVersion, p.expectedContentVersion)
             )
         )
         .returning();
-    if (!row) throw new VantageError("That topic is not here.", 404, "not_found");
+    if (!row) throw new VantageError("Reload this topic before editing.", 409, "stale_topic");
     const [link] = await db
         .select({ id: vantageCommitments.id })
         .from(vantageCommitments)
@@ -990,28 +1072,38 @@ export async function updateTopic(args: {
 }
 
 export async function deleteTopic(args: { companyId: bigint; id: string }): Promise<void> {
-    const deleted = await getDb()
-        .delete(vantageAgendaTopics)
-        .where(
-            and(
-                eq(vantageAgendaTopics.id, args.id),
-                eq(vantageAgendaTopics.companyId, args.companyId)
-            )
-        )
-        .returning({ id: vantageAgendaTopics.id });
-    if (deleted.length === 0) throw new VantageError("That topic is not here.", 404, "not_found");
+    throw new VantageError(
+        "Deletion is unavailable while audit records must be preserved.",
+        409,
+        "archive_required"
+    );
 }
 
-/** Reorder: `ids` in the order wanted; anything not listed keeps its place after them. */
 export async function reorderTopics(args: {
     companyId: bigint;
     agendaId: string;
     ids: string[];
+    expectedVersions: Record<string, number>;
 }): Promise<void> {
     const db = getDb();
     await db.transaction(async tx => {
+        const [agenda] = await tx
+            .select({ id: vantageAgendas.id })
+            .from(vantageAgendas)
+            .where(
+                and(
+                    eq(vantageAgendas.id, args.agendaId),
+                    eq(vantageAgendas.companyId, args.companyId)
+                )
+            )
+            .for("update");
+        if (!agenda) throw new VantageError("That agenda is not here.", 404, "not_found");
         const rows = await tx
-            .select({ id: vantageAgendaTopics.id, position: vantageAgendaTopics.position })
+            .select({
+                id: vantageAgendaTopics.id,
+                position: vantageAgendaTopics.position,
+                contentVersion: vantageAgendaTopics.contentVersion,
+            })
             .from(vantageAgendaTopics)
             .where(
                 and(
@@ -1019,7 +1111,16 @@ export async function reorderTopics(args: {
                     eq(vantageAgendaTopics.companyId, args.companyId)
                 )
             )
-            .orderBy(asc(vantageAgendaTopics.position));
+            .orderBy(asc(vantageAgendaTopics.position))
+            .for("update");
+        if (
+            args.ids.length !== rows.length ||
+            new Set(args.ids).size !== rows.length ||
+            rows.some(
+                r => !args.ids.includes(r.id) || args.expectedVersions[r.id] !== r.contentVersion
+            )
+        )
+            throw new VantageError("Reload this agenda before reordering.", 409, "stale_topic");
         const owned = new Set(rows.map(r => r.id));
         const ordered = [
             ...args.ids.filter(id => owned.has(id)),
@@ -1028,7 +1129,10 @@ export async function reorderTopics(args: {
         for (let i = 0; i < ordered.length; i++) {
             await tx
                 .update(vantageAgendaTopics)
-                .set({ position: i })
+                .set({
+                    position: i,
+                    contentVersion: sql`${vantageAgendaTopics.contentVersion} + 1`,
+                })
                 .where(eq(vantageAgendaTopics.id, ordered[i]!));
         }
     });
@@ -1045,6 +1149,8 @@ export async function recordDecision(args: {
     userId: string;
     topicId: string;
     decision: string;
+    expectedContentVersion: number;
+    idempotencyKey: string;
     commitment: {
         title: string;
         owner: string;
@@ -1054,10 +1160,53 @@ export async function recordDecision(args: {
     } | null;
 }): Promise<TopicDto> {
     const db = getDb();
+    if (!/^[A-Za-z0-9_-]{16,128}$/.test(args.idempotencyKey))
+        throw new VantageError(
+            "A valid submission key is required.",
+            400,
+            "idempotency_key_required"
+        );
+    if (args.commitment && !args.commitment.test?.trim())
+        throw new VantageError("An acceptance test is required.", 400, "test_required");
+    const operationId = createHash("sha256")
+        .update(
+            JSON.stringify([String(args.companyId), args.userId, args.topicId, args.idempotencyKey])
+        )
+        .digest("hex");
+    const requestHash = createHash("sha256")
+        .update(JSON.stringify([args.expectedContentVersion, args.decision, args.commitment]))
+        .digest("hex");
     return db.transaction(async tx => {
+        const [locked] = await tx
+            .select()
+            .from(vantageAgendaTopics)
+            .where(
+                and(
+                    eq(vantageAgendaTopics.id, args.topicId),
+                    eq(vantageAgendaTopics.companyId, args.companyId)
+                )
+            )
+            .for("update");
+        if (!locked) throw new VantageError("That topic is not here.", 404, "not_found");
+        const [replay] = await tx
+            .select()
+            .from(vantageDecisionOperations)
+            .where(eq(vantageDecisionOperations.id, operationId));
+        if (replay) {
+            if (replay.requestHash !== requestHash)
+                throw new VantageError(
+                    "Submission key has different content.",
+                    409,
+                    "idempotency_conflict"
+                );
+            return replay.result as TopicDto;
+        }
+        if (locked.contentVersion !== args.expectedContentVersion)
+            throw new VantageError("Reload this topic before deciding.", 409, "stale_topic");
         const [topic] = await tx
             .update(vantageAgendaTopics)
             .set({
+                contentVersion: locked.contentVersion + 1,
                 decision: args.decision.trim(),
                 decidedAt: new Date(),
                 status: "kept",
@@ -1101,7 +1250,16 @@ export async function recordDecision(args: {
                 .limit(1);
             commitmentId = existing?.id ?? null;
         }
-        return toTopicDto(topic, commitmentId);
+        const result = toTopicDto(topic, commitmentId);
+        await tx.insert(vantageDecisionOperations).values({
+            id: operationId,
+            companyId: args.companyId,
+            topicId: args.topicId,
+            actorId: args.userId,
+            requestHash,
+            result,
+        });
+        return result;
     });
 }
 
@@ -1115,43 +1273,13 @@ export async function undoDecision(args: {
     companyId: bigint;
     topicId: string;
     commitmentId?: string | null;
+    expectedContentVersion: number;
 }): Promise<TopicDto> {
-    const db = getDb();
-    return db.transaction(async tx => {
-        const [topic] = await tx
-            .update(vantageAgendaTopics)
-            .set({ decision: null, decidedAt: null })
-            .where(
-                and(
-                    eq(vantageAgendaTopics.id, args.topicId),
-                    eq(vantageAgendaTopics.companyId, args.companyId)
-                )
-            )
-            .returning();
-        if (!topic) throw new VantageError("That topic is not here.", 404, "not_found");
-        if (args.commitmentId) {
-            await tx
-                .delete(vantageCommitments)
-                .where(
-                    and(
-                        eq(vantageCommitments.id, args.commitmentId),
-                        eq(vantageCommitments.topicId, topic.id),
-                        eq(vantageCommitments.companyId, args.companyId)
-                    )
-                );
-        }
-        const [link] = await tx
-            .select({ id: vantageCommitments.id })
-            .from(vantageCommitments)
-            .where(
-                and(
-                    eq(vantageCommitments.topicId, topic.id),
-                    eq(vantageCommitments.companyId, args.companyId)
-                )
-            )
-            .limit(1);
-        return toTopicDto(topic, link?.id ?? null);
-    });
+    throw new VantageError(
+        "Deletion is unavailable while audit records must be preserved.",
+        409,
+        "archive_required"
+    );
 }
 
 export async function updateAgendaStatus(args: {

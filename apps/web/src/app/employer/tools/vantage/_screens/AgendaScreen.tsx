@@ -28,14 +28,7 @@ import { AllCaughtUp, DraftingCard, SuggestionMark } from "../_components/Sugges
 import { AgendaTopicRow, IgnoredTopicRow, TopicSuggestion } from "../_components/TopicCard";
 import { DecisionDialog, TopicDialog } from "../_components/TopicDialogs";
 import { WeekSteps } from "../_components/WeekSteps";
-import {
-    commitToNextStep,
-    ignoreTopic,
-    keepTopic,
-    setAside,
-    SET_ASIDE_DAYS,
-    useOneClick,
-} from "../_lib/actions";
+import { ignoreTopic, keepTopic, setAside, SET_ASIDE_DAYS, useOneClick } from "../_lib/actions";
 import { addDaysIso, useVantageFormat } from "../_lib/format";
 import { unhideSuggestion, useHiddenSuggestions } from "../_lib/hidden";
 import { vantagePath } from "../_lib/paths";
@@ -138,11 +131,14 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
 
     const patch = (
         topic: TopicDto,
-        p: Parameters<typeof vantageApi.patchTopic>[1],
+        p: Omit<Parameters<typeof vantageApi.patchTopic>[1], "expectedContentVersion">,
         done?: string
     ) =>
         run(async () => {
-            const { topic: next } = await vantageApi.patchTopic(topic.id, p);
+            const { topic: next } = await vantageApi.patchTopic(topic.id, {
+                ...p,
+                expectedContentVersion: topic.contentVersion,
+            });
             setTopic(next);
         }, done);
 
@@ -172,25 +168,13 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
             const a = ids.indexOf(topic.id);
             const b = ids.indexOf(other.id);
             [ids[a], ids[b]] = [ids[b]!, ids[a]!];
-            const { agenda: next } = await vantageApi.reorder(agenda.id, ids);
+            const { agenda: next } = await vantageApi.reorder(
+                agenda.id,
+                ids,
+                Object.fromEntries(topics.map(t => [t.id, t.contentVersion]))
+            );
             setAgenda(next);
         });
-
-    const remove = (topic: TopicDto) =>
-        run(async () => {
-            await vantageApi.deleteTopic(topic.id);
-            res.mutate(c =>
-                c.agenda
-                    ? {
-                          ...c,
-                          agenda: {
-                              ...c.agenda,
-                              topics: c.agenda.topics.filter(x => x.id !== topic.id),
-                          },
-                      }
-                    : c
-            );
-        }, t("deleted"));
 
     const setStatus = (status: VantageAgendaStatus) =>
         run(
@@ -339,6 +323,8 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
                 }
             />
 
+            <p className="text-ink-3 text-sm">{t("retainedForHistory")}</p>
+
             {res.error && <InlineError message={res.error} onRetry={() => void res.reload()} />}
 
             {/* Skeleton, not "No agenda", until the overview has answered (useResource
@@ -422,7 +408,6 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
                                         }
                                         onEdit={() => setEditing(topic)}
                                         onDecide={() => setDeciding(topic)}
-                                        onDelete={() => void remove(topic)}
                                     />
                                 ))}
                             </div>
@@ -454,34 +439,13 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
                                         first={i === 0}
                                         last={i === kept.length - 1}
                                         busy={busy || gone.has(`commit:${topic.id}`)}
-                                        onCommit={() =>
-                                            void act(`commit:${topic.id}`, () =>
-                                                commitToNextStep(fmt, topic)
-                                            )
-                                        }
-                                        nextStepHidden={hidden.has(`commit:${topic.id}`)}
-                                        onIgnoreNextStep={() =>
-                                            void act(`commit:${topic.id}`, () =>
-                                                setAside(
-                                                    `commit:${topic.id}`,
-                                                    SET_ASIDE_DAYS.nextStep,
-                                                    t("ignoredOwnWay")
-                                                )
-                                            )
-                                        }
-                                        onShowNextStep={() =>
-                                            unhideSuggestion(`commit:${topic.id}`)
-                                        }
+                                        onCommit={() => setDeciding(topic)}
                                         onDecide={() => setDeciding(topic)}
-                                        onEdit={() => setEditing(topic)}
-                                        onMove={dir => void move(topic, dir)}
-                                        onShare={shared => share(topic, shared)}
                                         onIgnore={() =>
                                             void act(`topic:${topic.id}`, () =>
                                                 ignoreTopic(fmt, topic)
                                             )
                                         }
-                                        onDelete={() => void remove(topic)}
                                     />
                                 ))}
                             </div>
@@ -529,7 +493,6 @@ export function AgendaScreen({ week: weekParam = null }: { week?: string | null 
                                             onRestore={() =>
                                                 void patch(topic, { status: "kept" }, t("restored"))
                                             }
-                                            onDelete={() => void remove(topic)}
                                         />
                                     ))}
                                 </div>

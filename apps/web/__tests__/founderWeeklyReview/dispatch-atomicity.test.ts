@@ -26,7 +26,7 @@ const actor = (companyId: bigint) => ({
     externalUserId: "u",
     internalUserId: 1n,
     companyId,
-    role: "owner" as const,
+    role: "owner" as const, canMutate: true,
 });
 async function companyId(
     db: Awaited<ReturnType<typeof createFounderWeeklyReviewTestDatabase>>["db"]

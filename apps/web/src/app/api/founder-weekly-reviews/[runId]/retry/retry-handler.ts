@@ -64,7 +64,7 @@ export function createFounderWeeklyReviewRetryPostHandler(
                 });
             }
             await deps.sendDispatchRequested();
-            return ok({ run: safeRun(run) }, 202);
+            return ok({ run: await safeRun(run) }, 202);
         } catch (error) {
             return handleWeeklyReviewError(error, request);
         }

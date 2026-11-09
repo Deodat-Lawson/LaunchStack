@@ -635,6 +635,8 @@
     },
     "errors": {
       "loadHistoryFailed": "Failed to load history",
+      "reviewDeleteForbidden": "You do not have permission to delete review history",
+      "reviewHistoryRetained": "Review history must be retained",
       "unknownHistoryKind": "Unknown history kind",
       "deleteChatViaSessions": "Delete a chat through the sessions API",
       "missingId": "Missing id",

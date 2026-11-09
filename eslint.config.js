@@ -5,12 +5,17 @@ import tsParser from "@typescript-eslint/parser";
 // @ts-ignore - eslint-plugin-drizzle doesn't have type declarations
 import drizzle from "eslint-plugin-drizzle";
 import path from "node:path";
+import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const compat = new FlatCompat({
     baseDirectory: __dirname,
+    // pnpm keeps Next's plugins beside its config rather than hoisting them.
+    resolvePluginsRelativeTo: path.dirname(
+        createRequire(import.meta.url).resolve("eslint-config-next")
+    ),
     recommendedConfig: js.configs.recommended,
     allConfig: js.configs.all,
 });

@@ -63,7 +63,11 @@ function post(url: string, body: unknown, headers: Record<string, string> = {}) 
     return new NextRequest(`http://localhost${url}`, {
         method: "POST",
         body: JSON.stringify(body),
-        headers: { "content-type": "application/json", ...headers },
+        headers: {
+            "content-type": "application/json",
+            "Idempotency-Key": "locale-test-decision",
+            ...headers,
+        },
     });
 }
 
@@ -84,7 +88,11 @@ beforeEach(() => {
 describe("a form's field message", () => {
     it("is the schema's own sentence in Chinese, with the field name as it is", async () => {
         const response = await decide(
-            post("/api/vantage/topics/t1/decide", { decision: "", commitment: null }, ZH),
+            post(
+                "/api/vantage/topics/t1/decide",
+                { expectedContentVersion: 1, decision: "", commitment: null },
+                ZH
+            ),
             params
         );
         expect(response.status).toBe(400);
@@ -93,7 +101,11 @@ describe("a form's field message", () => {
 
     it("is unchanged in English", async () => {
         const response = await decide(
-            post("/api/vantage/topics/t1/decide", { decision: "", commitment: null }),
+            post("/api/vantage/topics/t1/decide", {
+                expectedContentVersion: 1,
+                decision: "",
+                commitment: null,
+            }),
             params
         );
         expect(await response.json()).toEqual({ error: "decision: write the decision" });
@@ -101,7 +113,11 @@ describe("a form's field message", () => {
 
     it("rewords zod's own default when the schema gave none", async () => {
         const response = await decide(
-            post("/api/vantage/topics/t1/decide", { decision: "Ship it", commitment: 5 }, ZH),
+            post(
+                "/api/vantage/topics/t1/decide",
+                { expectedContentVersion: 1, decision: "Ship it", commitment: 5 },
+                ZH
+            ),
             params
         );
         const body = (await response.json()) as { error: string };
@@ -116,7 +132,11 @@ describe("a VantageError", () => {
             new VantageError("That topic is not here.", 404, "not_found")
         );
         const response = await decide(
-            post("/api/vantage/topics/t1/decide", { decision: "Ship it", commitment: null }, ZH),
+            post(
+                "/api/vantage/topics/t1/decide",
+                { expectedContentVersion: 1, decision: "Ship it", commitment: null },
+                ZH
+            ),
             params
         );
         expect(response.status).toBe(404);
@@ -128,7 +148,11 @@ describe("a VantageError", () => {
             new VantageError('A metric with the key "mrr" already exists.', 409, "conflict")
         );
         const response = await decide(
-            post("/api/vantage/topics/t1/decide", { decision: "Ship it", commitment: null }, ZH),
+            post(
+                "/api/vantage/topics/t1/decide",
+                { expectedContentVersion: 1, decision: "Ship it", commitment: null },
+                ZH
+            ),
             params
         );
         expect(await response.json()).toEqual({
@@ -140,7 +164,11 @@ describe("a VantageError", () => {
     it("leaves a sentence the catalogue does not know as it came", async () => {
         mockRecordDecision.mockRejectedValue(new VantageError("Something new.", 409, "conflict"));
         const response = await decide(
-            post("/api/vantage/topics/t1/decide", { decision: "Ship it", commitment: null }, ZH),
+            post(
+                "/api/vantage/topics/t1/decide",
+                { expectedContentVersion: 1, decision: "Ship it", commitment: null },
+                ZH
+            ),
             params
         );
         expect(await response.json()).toEqual({ error: "Something new.", code: "conflict" });

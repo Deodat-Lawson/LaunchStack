@@ -50,6 +50,9 @@ importers:
       eslint-plugin-drizzle:
         specifier: ^0.2.3
         version: 0.2.3(eslint@9.34.0(jiti@2.5.1))(typescript@5.9.2)
+      eslint-plugin-react-hooks:
+        specifier: 5.2.0
+        version: 5.2.0(eslint@9.34.0(jiti@2.5.1))
       prettier:
         specifier: ^3.6.2
         version: 3.6.2
@@ -73,7 +76,7 @@ importers:
         version: link:../../packages/design-tokens
       '@vercel/analytics':
         specifier: ^1.6.1
-        version: 1.6.1(next@15.5.7(patch_hash=1ad9fafb9dc2c4a1051395a0286e951a16cd1b9e70744be5e2cda5012a718f83)(@opentelemetry/api@1.9.1)(@playwright/test@1.55.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        version: 1.6.1(next@15.5.7(patch_hash=1ad9fafb9dc2c4a1051395a0286e951a16cd1b9e70744be5e2cda5012a718f83)(@babel/core@7.28.5)(@opentelemetry/api@1.9.1)(@playwright/test@1.55.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       dotenv:
         specifier: ^17.3.1
         version: 17.3.1
@@ -314,7 +317,7 @@ importers:
         version: 7.3.3(next@15.5.7(patch_hash=1ad9fafb9dc2c4a1051395a0286e951a16cd1b9e70744be5e2cda5012a718f83)(@babel/core@7.28.5)(@opentelemetry/api@1.9.1)(@playwright/test@1.55.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)(uploadthing@7.7.4(next@15.5.7(patch_hash=1ad9fafb9dc2c4a1051395a0286e951a16cd1b9e70744be5e2cda5012a718f83)(@babel/core@7.28.5)(@opentelemetry/api@1.9.1)(@playwright/test@1.55.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(tailwindcss@3.4.17))
       '@vercel/analytics':
         specifier: ^1.6.1
-        version: 1.6.1(next@15.5.7(patch_hash=1ad9fafb9dc2c4a1051395a0286e951a16cd1b9e70744be5e2cda5012a718f83)(@opentelemetry/api@1.9.1)(@playwright/test@1.55.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
+        version: 1.6.1(next@15.5.7(patch_hash=1ad9fafb9dc2c4a1051395a0286e951a16cd1b9e70744be5e2cda5012a718f83)(@babel/core@7.28.5)(@opentelemetry/api@1.9.1)(@playwright/test@1.55.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)
       '@vercel/blob':
         specifier: ^2.3.0
         version: 2.3.0
@@ -2153,6 +2156,7 @@ packages:
 
   '@browserbasehq/stagehand@1.9.0':
     resolution: {integrity: sha512-0wIFnwOVnUEgVkPKW0RX7NoOt98qaRJ8+l1m9ppk1f5E03GtefDQTMiQwwT9WQn163bpZT5cOhyA1I3jZNfFeA==}
+    deprecated: This version is no longer maintained. Please upgrade to the latest version of @browserbasehq/stagehand.
     peerDependencies:
       '@playwright/test': ^1.42.1
       deepmerge: ^4.3.1
@@ -5980,6 +5984,9 @@ packages:
   '@smithy/smithy-client@4.12.9':
     resolution: {integrity: sha512-ovaLEcTU5olSeHcRXcxV6viaKtpkHZumn6Ps0yn7dRf2rRSfy794vpjOtrWDO0d1auDSvAqxO+lyhERSXQ03EQ==}
     engines: {node: '>=18.0.0'}
+    deprecated: |-
+      Deprecated due to a bug in custom logger data redaction. Upgrade to the latest version. If you used a custom logger with
+        this version, review your logs and rotate any credentials or other secrets. See https://github.com/aws/aws-sdk-js-v3/issues/8393.
 
   '@smithy/types@4.14.0':
     resolution: {integrity: sha512-OWgntFLW88kx2qvf/c/67Vno1yuXm/f9M7QFAtVkkO29IJXGBIg0ycEaBTH0kvCtwmvZxRujrgP5a86RvsXJAQ==}
@@ -17900,7 +17907,7 @@ snapshots:
       d3-selection: 3.0.0
       d3-transition: 3.0.1(d3-selection@3.0.0)
 
-  '@vercel/analytics@1.6.1(next@15.5.7(patch_hash=1ad9fafb9dc2c4a1051395a0286e951a16cd1b9e70744be5e2cda5012a718f83)(@opentelemetry/api@1.9.1)(@playwright/test@1.55.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)':
+  '@vercel/analytics@1.6.1(next@15.5.7(patch_hash=1ad9fafb9dc2c4a1051395a0286e951a16cd1b9e70744be5e2cda5012a718f83)(@babel/core@7.28.5)(@opentelemetry/api@1.9.1)(@playwright/test@1.55.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react@18.3.1)':
     optionalDependencies:
       next: 15.5.7(patch_hash=1ad9fafb9dc2c4a1051395a0286e951a16cd1b9e70744be5e2cda5012a718f83)(@babel/core@7.28.5)(@opentelemetry/api@1.9.1)(@playwright/test@1.55.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       react: 18.3.1

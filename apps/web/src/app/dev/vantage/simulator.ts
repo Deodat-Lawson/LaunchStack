@@ -105,6 +105,7 @@ function makeCommitment(
 ): CommitmentDto {
     return {
         id: id("cm"),
+        contentVersion: 1,
         agendaId: null,
         topicId: null,
         topicTitle: null,
@@ -125,6 +126,7 @@ function makeTopic(
 ): TopicDto {
     return {
         id: id("tp"),
+        contentVersion: 1,
         agendaId,
         position,
         status: "suggested",

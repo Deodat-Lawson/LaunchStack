@@ -168,6 +168,10 @@ const COVERAGE: Record<string, Coverage> = Object.fromEntries<Coverage>([
             note: "POST prepareWeek; overview and triage resolve no model",
         },
     ],
+    self(
+        "apps/web/src/server/vantage/weekly-review-service.ts",
+        "generateWeeklyReview resolves Generation and Judge inside the authenticated company's workspace scope"
+    ),
     [
         "apps/web/src/lib/llm/generate.ts",
         {

@@ -225,6 +225,13 @@ describeIfDatabase("founder weekly review dispatch claiming", () => {
             const outcome = await recordDispatchFailure("d_exhausted", "dispatch_failed");
             expect(outcome?.status).toBe("failed");
             expect((await statusOf("d_exhausted")).status).toBe("failed");
+            // A terminal outbox failure must leave the owning run retryable,
+            // not permanently queued with no event left to deliver.
+            const [run] = await testDb.db.execute(sql`
+                SELECT status, error_code FROM "pdr_ai_v2_founder_weekly_review_runs"
+                WHERE id = 'fwr_dispatch' AND company_id = 1
+            `);
+            expect(run).toMatchObject({ status: "failed", error_code: "dispatch_exhausted" });
 
             // Terminal means terminal: even with available_at in the past, a
             // claim must not pick it back up. `failed` used to be reclaimable,

@@ -1,13 +1,7 @@
 /** @jest-environment jsdom */
 
-/**
- * A kept topic on the agenda, wired the way AgendaScreen wires it. Vantage's
- * proposed next step is a marked suggestion with Commit and Ignore; a next
- * step the founder wrote is theirs — unmarked, no Ignore. Ignoring
- * Vantage's step on a row hides it on this browser and offers a plain
- * decision, with a way to show the step again. A double-clicked Commit
- * opens one commitment.
- */
+/** Agenda proposals open explicit human review. Recording requires a decision,
+ * owner, deadline and test; busy submissions cannot duplicate actions. */
 import React, { useCallback, useState } from "react";
 import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import "@testing-library/jest-dom";
@@ -28,14 +22,10 @@ jest.mock("~/app/employer/tools/vantage/api", () => ({
     },
 }));
 
+import { DecisionDialog } from "~/app/employer/tools/vantage/_components/TopicDialogs";
 import { AgendaTopicRow } from "~/app/employer/tools/vantage/_components/TopicCard";
-import {
-    SET_ASIDE_DAYS,
-    commitToNextStep,
-    setAside,
-    useOneClick,
-} from "~/app/employer/tools/vantage/_lib/actions";
-import { addDaysIso, todayIso, useVantageFormat } from "~/app/employer/tools/vantage/_lib/format";
+import { SET_ASIDE_DAYS, setAside, useOneClick } from "~/app/employer/tools/vantage/_lib/actions";
+import { addDaysIso, todayIso } from "~/app/employer/tools/vantage/_lib/format";
 import { unhideSuggestion, useHiddenSuggestions } from "~/app/employer/tools/vantage/_lib/hidden";
 
 import { topic } from "../vantage/factories";
@@ -64,37 +54,44 @@ const founderStep = topic({
 let stored: TopicDto;
 const onDecide = jest.fn();
 
-/**
- * One agenda row with AgendaScreen's wiring. `busyWhileAnswering` mirrors
- * the screen's `busy || gone.has("commit:…")`; without it only the
- * in-flight guard in `useOneClick` stands between a double click and two
- * commitments.
- */
+/** Mirrors AgendaScreen's row callbacks and mounts its real DecisionDialog. */
 function Row({ busyWhileAnswering = false }: { busyWhileAnswering?: boolean }) {
     const [t, setT] = useState(() => stored);
     const refresh = useCallback(async () => {
         await Promise.resolve();
         setT(stored);
     }, []);
-    const { act: answer, gone } = useOneClick(refresh);
-    const fmt = useVantageFormat();
+    const { act: answer } = useOneClick(refresh);
+    const [decisionOpen, setDecisionOpen] = useState(false);
+    const decide = () => {
+        onDecide(t);
+        setDecisionOpen(true);
+    };
     const hidden = useHiddenSuggestions();
     const id = `commit:${t.id}`;
     return (
-        <AgendaTopicRow
-            topic={t}
-            index={0}
-            busy={busyWhileAnswering && gone.has(id)}
-            onCommit={() => void answer(id, () => commitToNextStep(fmt, t))}
-            nextStepHidden={hidden.has(id)}
-            onIgnoreNextStep={() =>
-                void answer(id, () =>
-                    setAside(id, SET_ASIDE_DAYS.nextStep, "Ignored — decide it your own way")
-                )
-            }
-            onShowNextStep={() => unhideSuggestion(id)}
-            onDecide={() => onDecide(t)}
-        />
+        <>
+            <AgendaTopicRow
+                topic={t}
+                index={0}
+                busy={busyWhileAnswering}
+                onCommit={decide}
+                nextStepHidden={hidden.has(id)}
+                onIgnoreNextStep={() =>
+                    void answer(id, () =>
+                        setAside(id, SET_ASIDE_DAYS.nextStep, "Ignored — decide it your own way")
+                    )
+                }
+                onShowNextStep={() => unhideSuggestion(id)}
+                onDecide={decide}
+            />
+            <DecisionDialog
+                open={decisionOpen}
+                onOpenChange={setDecisionOpen}
+                topic={t}
+                onSaved={setT}
+            />
+        </>
     );
 }
 
@@ -132,7 +129,7 @@ describe("AgendaTopicRow next step", () => {
 
         expect(within(r).getByText("Suggested next step")).toBeInTheDocument();
         expect(within(r).getByText("Ship the SSO beta to Acme")).toBeInTheDocument();
-        expect(within(r).getByRole("button", { name: "Commit" })).toBeVisible();
+        expect(within(r).getByRole("button", { name: "Commit\u2026" })).toBeVisible();
         expect(within(r).getByRole("button", { name: "Ignore" })).toBeVisible();
         expect(within(r).getByRole("button", { name: "Decide something else…" })).toBeVisible();
     });
@@ -146,7 +143,7 @@ describe("AgendaTopicRow next step", () => {
         expect(within(r).queryByText("Suggested next step")).toBeNull();
         expect(container.querySelector(".lucide-sparkles")).toBeNull();
         expect(within(r).queryByRole("button", { name: "Ignore" })).toBeNull();
-        expect(within(r).getByRole("button", { name: "Commit" })).toBeVisible();
+        expect(within(r).getByRole("button", { name: "Commit\u2026" })).toBeVisible();
         expect(within(r).getByRole("button", { name: "Decide something else…" })).toBeVisible();
     });
 
@@ -176,63 +173,81 @@ describe("AgendaTopicRow next step", () => {
         ).toBeNull();
     });
 
-    it("commits once however often Commit is clicked while the first is on its way", async () => {
+    it("opens one explicit decision dialog and submits once with the observed version and human test", async () => {
         const answer = deferred<void>();
-        mockDecide.mockImplementationOnce(async (id: string, input: { decision: string }) => {
+        mockDecide.mockImplementationOnce(async (_id: string, input: { decision: string }) => {
             await answer.promise;
-            stored = { ...stored, decision: input.decision, commitmentId: "c-new" };
+            stored = {
+                ...stored,
+                decision: input.decision,
+                commitmentId: "c-new",
+                contentVersion: stored.contentVersion + 1,
+            };
             return { topic: stored };
         });
         render(<Row />);
-        const commit = within(row(vantageStep.title)).getByRole("button", { name: "Commit" });
-
-        fireEvent.click(commit);
-        fireEvent.click(commit);
-        fireEvent.click(commit);
-
-        expect(commit).toBeEnabled();
+        fireEvent.click(
+            within(row(vantageStep.title)).getByRole("button", { name: "Commit\u2026" })
+        );
+        expect(screen.getAllByRole("dialog")).toHaveLength(1);
+        expect(mockDecide).not.toHaveBeenCalled();
+        const dialog = screen.getByRole("dialog");
+        const record = within(dialog).getByRole("button", { name: "Record" });
+        expect(record).toBeDisabled();
+        fireEvent.change(within(dialog).getByLabelText("What was decided"), {
+            target: { value: "Ship the pilot beta" },
+        });
+        expect(record).toBeDisabled();
+        fireEvent.change(within(dialog).getByLabelText("The test"), {
+            target: { value: "Acme completes an SSO login" },
+        });
+        fireEvent.click(record);
+        fireEvent.click(record);
+        expect(record).toBeDisabled();
         expect(mockDecide).toHaveBeenCalledTimes(1);
-
+        expect(mockDecide).toHaveBeenCalledWith(vantageStep.id, {
+            expectedContentVersion: vantageStep.contentVersion,
+            decision: "Ship the pilot beta",
+            commitment: {
+                title: vantageStep.proposedNextStep,
+                owner: "Dana",
+                dueOn: vantageStep.proposedDue,
+                test: "Acme completes an SSO login",
+                shared: vantageStep.shared,
+            },
+        });
         await act(async () => answer.resolve());
         await settle();
-
+        expect(screen.queryByRole("dialog")).toBeNull();
+        expect(within(row(vantageStep.title)).getByText("Ship the pilot beta")).toBeInTheDocument();
         expect(mockDecide).toHaveBeenCalledTimes(1);
-        expect(within(row(vantageStep.title)).getByText("Decided")).toBeInTheDocument();
-        expect(
-            within(row(vantageStep.title)).getByText("Agreed: Ship the SSO beta to Acme")
-        ).toBeInTheDocument();
     });
 
-    it("disables Commit while it is answered when the screen marks the row busy", () => {
-        mockDecide.mockReturnValueOnce(new Promise(() => undefined));
+    it("disables starting a decision while the screen marks the row busy", () => {
         render(<Row busyWhileAnswering />);
-        const commit = within(row(vantageStep.title)).getByRole("button", { name: "Commit" });
-
-        fireEvent.click(commit);
-
+        const commit = within(row(vantageStep.title)).getByRole("button", { name: "Commit\u2026" });
         expect(commit).toBeDisabled();
-        expect(mockDecide).toHaveBeenCalledTimes(1);
+        fireEvent.click(commit);
+        expect(onDecide).not.toHaveBeenCalled();
+        expect(mockDecide).not.toHaveBeenCalled();
+        expect(screen.queryByRole("dialog")).toBeNull();
     });
 
-    it("Undo after a Commit takes the decision back and shows the next step again", async () => {
+    it("cancelling explicit review preserves the proposal and offers no destructive Undo", () => {
         render(<Row />);
-
-        await act(async () => {
-            fireEvent.click(within(row(vantageStep.title)).getByRole("button", { name: "Commit" }));
+        fireEvent.click(
+            within(row(vantageStep.title)).getByRole("button", { name: "Commit\u2026" })
+        );
+        fireEvent.change(screen.getByLabelText("What was decided"), {
+            target: { value: "Unsubmitted human draft" },
         });
-        await settle();
-        expect(within(row(vantageStep.title)).getByText("Decided")).toBeInTheDocument();
-
-        const [, options] = mockToast.mock.calls.at(-1) as unknown as [
-            string,
-            { action: { label: string; onClick: () => void } },
-        ];
-        expect(options.action.label).toBe("Undo");
-        act(() => options.action.onClick());
-        await settle();
-
-        expect(mockUndoDecision).toHaveBeenCalledWith("t-sso", "c-new");
+        fireEvent.click(screen.getByRole("button", { name: "Cancel" }));
+        expect(screen.queryByRole("dialog")).toBeNull();
+        expect(stored).toEqual(vantageStep);
         expect(within(row(vantageStep.title)).getByText("Suggested next step")).toBeInTheDocument();
+        expect(mockDecide).not.toHaveBeenCalled();
+        expect(mockUndoDecision).not.toHaveBeenCalled();
+        expect(mockToast).not.toHaveBeenCalled();
     });
 
     it("asks for an owner instead of committing when none was proposed", () => {

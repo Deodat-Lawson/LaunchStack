@@ -69,7 +69,7 @@ function setup(
                 externalUserId: "u",
                 internalUserId: 1n,
                 companyId: 1n,
-                role: "owner",
+                role: "owner", canMutate: true,
             }),
         },
         evidenceCollector: collector,

@@ -39,6 +39,21 @@ export async function DELETE(
         return NextResponse.json({ error: t("deleteChatViaSessions") }, { status: 400 });
     }
 
+    // Generated review records are audit data, not disposable sidebar entries.
+    // The owning workflow must implement an audited archive operation instead.
+    if (kind === "weekly-review" || kind === "vantage") {
+        if (!ctx.data.can("documents.edit")) {
+            return NextResponse.json(
+                { error: t("reviewDeleteForbidden"), code: "forbidden" },
+                { status: 403 }
+            );
+        }
+        return NextResponse.json(
+            { error: t("reviewHistoryRetained"), code: "review_history_retained" },
+            { status: 409 }
+        );
+    }
+
     const decoded = decodeURIComponent(refId);
     if (!decoded) return NextResponse.json({ error: t("missingId") }, { status: 400 });
 

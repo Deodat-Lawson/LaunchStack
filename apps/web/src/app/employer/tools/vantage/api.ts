@@ -95,9 +95,13 @@ export interface TopicInput {
     shared?: boolean;
 }
 
-export type TopicPatch = Partial<TopicInput> & { status?: "kept" | "dismissed" | "suggested" };
+export type TopicPatch = Partial<TopicInput> & {
+    expectedContentVersion: number;
+    status?: "kept" | "dismissed" | "suggested";
+};
 
 export interface DecisionInput {
+    expectedContentVersion: number;
     decision: string;
     commitment: {
         title: string;
@@ -117,6 +121,7 @@ export interface CommitmentInput {
 }
 
 export type CommitmentPatch = Partial<CommitmentInput> & {
+    expectedContentVersion: number;
     status?: VantageCommitmentStatus;
     outcome?: string | null;
 };
@@ -224,8 +229,11 @@ export const vantageApi = {
         post<{ agenda: AgendaDto }>(`/api/vantage/agendas/${id}`, { status }, "PATCH"),
     addTopic: (agendaId: string, input: TopicInput) =>
         post<{ topic: TopicDto }>(`/api/vantage/agendas/${agendaId}/topics`, input),
-    reorder: (agendaId: string, ids: string[]) =>
-        post<{ agenda: AgendaDto }>(`/api/vantage/agendas/${agendaId}/reorder`, { ids }),
+    reorder: (agendaId: string, ids: string[], expectedVersions: Record<string, number>) =>
+        post<{ agenda: AgendaDto }>(`/api/vantage/agendas/${agendaId}/reorder`, {
+            ids,
+            expectedVersions,
+        }),
     weeklyUpdate: (agendaId: string, includePrivate = false) =>
         call<{ markdown: string }>(
             `/api/vantage/agendas/${agendaId}/update${includePrivate ? "?private=1" : ""}`
@@ -234,19 +242,43 @@ export const vantageApi = {
         post<{ topic: TopicDto }>(`/api/vantage/topics/${id}`, patch, "PATCH"),
     deleteTopic: (id: string) =>
         call<{ ok: true }>(`/api/vantage/topics/${id}`, { method: "DELETE" }),
-    decide: (topicId: string, input: DecisionInput) =>
-        post<{ topic: TopicDto }>(`/api/vantage/topics/${topicId}/decide`, input),
+    decide: async (topicId: string, input: DecisionInput) => {
+        const body = JSON.stringify(input);
+        const digest = await crypto.subtle.digest(
+            "SHA-256",
+            new TextEncoder().encode(topicId + body)
+        );
+        const key = Array.from(new Uint8Array(digest), n => n.toString(16).padStart(2, "0")).join(
+            ""
+        );
+        return call<{ topic: TopicDto }>(`/api/vantage/topics/${topicId}/decide`, {
+            method: "POST",
+            body,
+            headers: { "Content-Type": "application/json", "Idempotency-Key": key },
+        });
+    },
     /** The Undo after a one-click commit: undecided again, that commitment removed. */
-    undoDecision: (topicId: string, commitmentId: string | null) =>
+    undoDecision: (topicId: string, commitmentId: string | null, expectedContentVersion: number) =>
         call<{ topic: TopicDto }>(
-            `/api/vantage/topics/${topicId}/decide${q({ commitment: commitmentId ?? undefined })}`,
+            `/api/vantage/topics/${topicId}/decide${q({ commitment: commitmentId ?? undefined, version: String(expectedContentVersion) })}`,
             { method: "DELETE" }
         ),
 
     commitments: (status?: string) =>
         call<{ commitments: CommitmentDto[] }>(`/api/vantage/commitments${q({ status })}`),
-    addCommitment: (input: CommitmentInput) =>
-        post<{ commitment: CommitmentDto }>("/api/vantage/commitments", input),
+    addCommitment: async (input: CommitmentInput) => {
+        const body = JSON.stringify(input);
+        const slot = "vantage:commitment:" + body;
+        const key = sessionStorage.getItem(slot) ?? crypto.randomUUID();
+        sessionStorage.setItem(slot, key);
+        const result = await call<{ commitment: CommitmentDto }>("/api/vantage/commitments", {
+            method: "POST",
+            body,
+            headers: { "Content-Type": "application/json", "Idempotency-Key": key },
+        });
+        sessionStorage.removeItem(slot);
+        return result;
+    },
     patchCommitment: (id: string, patch: CommitmentPatch) =>
         post<{ commitment: CommitmentDto }>(`/api/vantage/commitments/${id}`, patch, "PATCH"),
     deleteCommitment: (id: string) =>

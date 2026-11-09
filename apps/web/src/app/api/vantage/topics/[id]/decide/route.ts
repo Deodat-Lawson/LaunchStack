@@ -21,6 +21,8 @@ type Params = { params: Promise<{ id: string }> };
 export async function POST(request: NextRequest, { params }: Params) {
     const auth = await vantageContext();
     if (!auth.ok) return auth.response;
+    if (!auth.ctx.can("documents.edit"))
+        return error("You cannot change this workspace content.", 403);
     try {
         const { id } = await params;
         const parsed = DecisionSchema.safeParse(await readBody(request));
@@ -29,6 +31,8 @@ export async function POST(request: NextRequest, { params }: Params) {
             companyId: auth.ctx.companyId,
             userId: auth.ctx.userId,
             topicId: id,
+            expectedContentVersion: parsed.data.expectedContentVersion,
+            idempotencyKey: request.headers.get("Idempotency-Key") ?? "",
             decision: parsed.data.decision,
             commitment: parsed.data.commitment,
         });
@@ -41,12 +45,15 @@ export async function POST(request: NextRequest, { params }: Params) {
 export async function DELETE(request: NextRequest, { params }: Params) {
     const auth = await vantageContext();
     if (!auth.ok) return auth.response;
+    if (!auth.ctx.can("documents.edit"))
+        return error("You cannot change this workspace content.", 403);
     try {
         const { id } = await params;
         const topic = await undoDecision({
             companyId: auth.ctx.companyId,
             topicId: id,
             commitmentId: request.nextUrl.searchParams.get("commitment"),
+            expectedContentVersion: Number(request.nextUrl.searchParams.get("version")),
         });
         return json({ topic });
     } catch (err) {

@@ -13,6 +13,7 @@ import { createEngine, type CoreConfig, type Engine } from "@launchstack/engine"
 import { env } from "~/env";
 import { configureProviders } from "@launchstack/llm/providers/registry";
 import { configureSecretBox } from "@launchstack/store/crypto";
+import { parseSecretBoxConfiguration } from "./secret-box-config";
 import { configureOcr } from "@launchstack/conversion/ocr/config";
 import { configureEntityExtraction } from "@launchstack/indexing";
 import { configureEmbeddingIndexRegistry } from "@launchstack/llm/embeddings";
@@ -282,7 +283,13 @@ export function getEngine(): Engine {
     });
 
     // Register the encryption key used by company-credentials secret-box.
-    configureSecretBox({ key: config.embeddings.secretsKey });
+    configureSecretBox(
+        parseSecretBoxConfiguration({
+            key: config.embeddings.secretsKey,
+            currentVersion: env.server.SECRET_BOX_CURRENT_VERSION,
+            previousKeys: env.server.SECRET_BOX_PREVIOUS_KEYS,
+        })
+    );
 
     // Register the full OcrConfig so the complexity router and the
     // document-converter adapters all read from the same source.

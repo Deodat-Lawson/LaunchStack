@@ -32,6 +32,7 @@ export type WeeklyReviewAuthorityActor = WeeklyReviewActor & {
     role: string;
     canRead: boolean;
     canMutate: boolean;
+    canConfigure?: boolean;
     documentScope: DocumentScope;
 };
 
@@ -39,13 +40,18 @@ export function createWeeklyReviewAuthority(
     database: WeeklyReviewDatabase,
     loadActor: () => Promise<WeeklyReviewAuthorityActor>
 ) {
-    async function fresh(query: WeeklyReviewQuery, expected: WeeklyReviewActor) {
+    async function fresh(
+        query: WeeklyReviewQuery,
+        expected: WeeklyReviewActor,
+        configurationWrite = false
+    ) {
         await query(
             "INSERT INTO pdr_ai_v2_vantage_weekly_review_epochs(company_id) VALUES($1::bigint) ON CONFLICT DO NOTHING",
             [expected.companyId]
         );
         const epoch = await query(
-            "SELECT version FROM pdr_ai_v2_vantage_weekly_review_epochs WHERE company_id=$1::bigint FOR SHARE",
+            "SELECT version FROM pdr_ai_v2_vantage_weekly_review_epochs WHERE company_id=$1::bigint " +
+                (configurationWrite ? "FOR UPDATE" : "FOR SHARE"),
             [expected.companyId]
         );
         const actor = await loadActor();
@@ -110,14 +116,28 @@ export function createWeeklyReviewAuthority(
             architectureId: string,
             requiredIds: string[]
         ) {
-            const { actor } = await fresh(query, expected);
-            if (!actor.canMutate) throw new WeeklyReviewConflict("review_mutation_denied", 403);
+            const { actor } = await fresh(query, expected, true);
+            if (actor.canConfigure !== true)
+                throw new WeeklyReviewConflict("review_configuration_denied", 403);
             if (requiredIds.length > 12) throw new WeeklyReviewConflict("context_budget_exceeded");
             const sources = [
                 await readDocument(query, actor, architectureId, null, "company-architecture"),
             ];
             for (const id of [...new Set(requiredIds)].filter(id => id !== architectureId))
                 sources.push(await readDocument(query, actor, id, null, "workspace-required"));
+            return sources;
+        },
+        async validatePreferenceSources(
+            query: WeeklyReviewQuery,
+            expected: WeeklyReviewActor,
+            starIds: string[]
+        ) {
+            const { actor } = await fresh(query, expected, true);
+            if (!actor.canMutate) throw new WeeklyReviewConflict("review_mutation_denied", 403);
+            if (starIds.length > 8) throw new WeeklyReviewConflict("context_budget_exceeded");
+            const sources: WeeklyReviewSource[] = [];
+            for (const id of new Set(starIds))
+                sources.push(await readDocument(query, actor, id, null, "personal-star"));
             return sources;
         },
         async listReadableDocuments(expected: WeeklyReviewActor) {

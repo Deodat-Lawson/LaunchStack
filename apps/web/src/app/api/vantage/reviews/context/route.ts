@@ -118,6 +118,11 @@ export async function PATCH(request: Request) {
             )[0];
             if (Number(existing?.version ?? 0) !== body.expectedVersion)
                 throw new WeeklyReviewConflict("stale_context_preferences");
+            await weeklyReviewServices().authority.validatePreferenceSources(
+                query,
+                auth.actor,
+                body.starDocumentIds
+            );
             const rows = await query(
                 "INSERT INTO pdr_ai_v2_vantage_weekly_review_preferences(company_id,actor_id,star_document_ids) VALUES($1::bigint,$2,$3::jsonb) ON CONFLICT(company_id,actor_id) DO UPDATE SET star_document_ids=EXCLUDED.star_document_ids,version=pdr_ai_v2_vantage_weekly_review_preferences.version+1 WHERE pdr_ai_v2_vantage_weekly_review_preferences.version=$4 RETURNING version",
                 [

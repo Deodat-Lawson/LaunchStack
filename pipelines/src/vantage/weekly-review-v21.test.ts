@@ -119,6 +119,14 @@ function ports() {
 const run = (p: ReturnType<typeof ports>) =>
     runWeeklyReviewV21(input(), { ...p, invoke: p.invoke as never });
 describe("canonical V2.1 contract and admission", () => {
+    it("rejects evaluator-incompatible source text before admitting any provider dispatch", async () => {
+        const candidate = input();
+        candidate.sources[0]!.text = "x".repeat(6001);
+        const p = ports();
+        await expect(runWeeklyReviewV21(candidate, { ...p, invoke: p.invoke as never })).rejects.toThrow();
+        expect(p.authorizeDispatch).not.toHaveBeenCalled();
+        expect(p.invoke).not.toHaveBeenCalled();
+    });
     it("accepts one report, rejects companion and wrapped reports", () => {
         expect(WeeklyReviewV21Schema.safeParse(report()).success).toBe(true);
         expect(WeeklyReviewV21Schema.safeParse({ ...report(), native: {} }).success).toBe(false);

@@ -249,6 +249,36 @@ export async function runWeeklyReviewV21(
     const timeoutMs = Math.max(1, Math.min(30000, ports.generationTimeoutMs ?? 30000));
     const controller = new AbortController();
     const signal = controller.signal;
+    const provisional: WeeklyReviewV21 = {
+        schemaVersion: "vantage-weekly-review/v2.1",
+        headline: "Preflight",
+        brief: "Preflight",
+        summary: "Preflight",
+        keyFigures: [],
+        topics: [
+            {
+                title: "Preflight",
+                facts: [{ text: "Preflight", refs: [input.sources[0]!.ref] }],
+                conflicts: [],
+                whyItMatters: "Preflight",
+                whyNow: "Preflight",
+                decisionQuestion: "Preflight",
+                rationale: "Preflight",
+                recommendation: null,
+                proposedNextStep: "",
+                unknowns: [],
+                proposedOwner: null,
+                proposedDue: null,
+                helpRequested: null,
+            },
+        ],
+    };
+    const preview = weeklyReviewEvaluation(provisional, input);
+    const evaluationOverhead =
+        Buffer.byteLength(JSON.stringify(preview)) -
+        Buffer.byteLength(JSON.stringify(preview.actual));
+    const maxReportBytes = Math.floor((14000 - evaluationOverhead - 512) / 2);
+    if (maxReportBytes < 1500) throw Error("context_budget_exceeded");
     await ports.authorizeDispatch("generation");
     let timer: ReturnType<typeof setTimeout> | undefined;
     const deadline = new Promise<never>((_, reject) => {
@@ -261,7 +291,15 @@ export async function runWeeklyReviewV21(
         invoke(
             ports.generation,
             WeeklyReviewV21Schema,
-            [new SystemMessage(WEEKLY_REVIEW_SYSTEM_PROMPT), new HumanMessage(payload)],
+            [
+                new SystemMessage(
+                    WEEKLY_REVIEW_SYSTEM_PROMPT +
+                        " Maximum serialized UTF-8 report bytes: " +
+                        maxReportBytes +
+                        ". Prefer fewer topics to fit this bound."
+                ),
+                new HumanMessage(payload),
+            ],
             { signal, timeoutMs, maxOutputTokens: 3600 }
         ),
         deadline,
@@ -269,6 +307,8 @@ export async function runWeeklyReviewV21(
         if (timer) clearTimeout(timer);
     });
     const parsed = validateWeeklyReviewV21(answer.result, input);
+    if (Buffer.byteLength(JSON.stringify(parsed)) > maxReportBytes)
+        throw Error("report_budget_exceeded");
     const report = {
         ...parsed,
         topics: parsed.topics.map((topic, index) => ({ ...topic, id: "topic-" + index })),
@@ -294,6 +334,15 @@ export async function runWeeklyReviewV21(
         report,
         evidence: {
             schemaVersion: "vantage-admission/v1",
+            inputSnapshot: structuredClone(input),
+            sourceRegistry: input.sources.map(({ ref, version, hash, purpose, title }) => ({
+                ref,
+                version,
+                hash,
+                purpose,
+                title,
+            })),
+            freezeHash: reviewFingerprint(input.sources),
             candidateId: input.candidateId,
             inputHash: reviewFingerprint(input),
             reportHash: reviewFingerprint(report),

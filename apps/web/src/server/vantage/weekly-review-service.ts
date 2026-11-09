@@ -52,6 +52,7 @@ async function currentActor() {
         role: ctx.role,
         canRead: ctx.can("documents.read"),
         canMutate: ctx.can("documents.edit"),
+        canConfigure: ctx.can("settings.manage"),
         documentScope: await ctx.documentScope(),
     };
 }
@@ -61,7 +62,8 @@ export function weeklyReviewServices() {
         authority,
         repository: createWeeklyReviewRepository(
             weeklyReviewDatabase,
-            (query, actor, dependencies, phase) => authority.assertCurrentWeeklyReviewAuthority(query, actor, dependencies, phase)
+            (query, actor, dependencies, phase) =>
+                authority.assertCurrentWeeklyReviewAuthority(query, actor, dependencies, phase)
         ),
     };
 }
@@ -138,6 +140,11 @@ export async function generateWeeklyReview(
                     maxOutputTokens: 6000,
                     timeoutMs: 30000,
                 });
+                if (
+                    generation.behavior.parameters.maxOutputTokens !== "supported" ||
+                    judge.behavior.parameters.maxOutputTokens !== "supported"
+                )
+                    throw Error("review_model_unavailable");
                 return runWeeklyReviewV21(input, {
                     generation,
                     judge,

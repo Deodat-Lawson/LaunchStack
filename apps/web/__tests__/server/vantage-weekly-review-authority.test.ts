@@ -3,10 +3,70 @@ import {
     assertSourcePurpose,
     sourceHash,
     createWeeklyReviewAuthority,
+    type WeeklyReviewAuthorityActor,
 } from "~/server/vantage/weekly-review-authority";
 import type { WeeklyReviewQuery } from "~/server/vantage/weekly-review-types";
 
 describe("Weekly Review source authority", () => {
+    it.each(["configuration", "preferences"] as const)(
+        "rechecks %s capability after the authority-lock barrier",
+        async kind => {
+            let actor: WeeklyReviewAuthorityActor = {
+                companyId: "1",
+                userId: "u",
+                role: "admin",
+                canRead: true,
+                canMutate: true,
+                canConfigure: true,
+                documentScope: { kind: "everything" },
+            };
+            let entered!: () => void, release!: () => void;
+            const atLock = new Promise<void>(resolve => {
+                entered = resolve;
+            });
+            const unlocked = new Promise<void>(resolve => {
+                release = resolve;
+            });
+            const queries: string[] = [];
+            const query: WeeklyReviewQuery = async text => {
+                queries.push(text);
+                if (text.includes("SELECT version")) {
+                    entered();
+                    await unlocked;
+                    return [{ version: 2 }];
+                }
+                return [];
+            };
+            const authority = createWeeklyReviewAuthority(
+                { transaction: work => work(query) },
+                async () => actor
+            );
+            const validation =
+                kind === "configuration"
+                    ? authority.validateCompanySources(
+                          query,
+                          { companyId: "1", userId: "u" },
+                          "31",
+                          []
+                      )
+                    : authority.validatePreferenceSources(query, { companyId: "1", userId: "u" }, [
+                          "31",
+                      ]);
+            await atLock;
+            actor = {
+                ...actor,
+                role: kind === "configuration" ? "member" : "viewer",
+                canConfigure: false,
+                canMutate: kind === "configuration",
+            };
+            const assertion = expect(validation).rejects.toThrow(
+                kind === "configuration" ? "review_configuration_denied" : "review_mutation_denied"
+            );
+            release();
+            await assertion;
+            expect(queries.some(text => text.includes("FROM pdr_ai_v2_document d"))).toBe(false);
+        }
+    );
     it("never promotes an actor-readable personal star into company policy", () => {
         expect(() =>
             assertSourcePurpose({

@@ -60,7 +60,32 @@ describe("Weekly Review per-company PostgreSQL authority locks", () => {
                     "utf8"
                 )
             );
+            await a.unsafe(
+                await readFile(
+                    resolve(
+                        process.cwd(),
+                        "drizzle/20261109230000_vantage_authority_after_write.sql"
+                    ),
+                    "utf8"
+                )
+            );
             await a.unsafe("INSERT INTO pdr_ai_v2_document(id,company_id) VALUES(1,1),(2,2)");
+            const beforeNoop = (
+                await a.unsafe(
+                    "SELECT version FROM pdr_ai_v2_vantage_weekly_review_epochs WHERE company_id=1"
+                )
+            )[0]?.version;
+            await a.unsafe(
+                "INSERT INTO pdr_ai_v2_document(id,company_id) VALUES(1,1) ON CONFLICT DO NOTHING"
+            );
+            expect(
+                (
+                    await a.unsafe(
+                        "SELECT version FROM pdr_ai_v2_vantage_weekly_review_epochs WHERE company_id=1"
+                    )
+                )[0]?.version
+            ).toBe(beforeNoop);
+
             let entered!: () => void, release!: () => void;
             const locked = new Promise<void>(resolve => {
                 entered = resolve;

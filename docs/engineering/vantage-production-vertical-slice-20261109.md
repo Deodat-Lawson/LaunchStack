@@ -4,7 +4,7 @@ Branch: integration/vantage-production-vertical-slice-20261109.
 Starting main/integration SHA: eb91aa7bd198b6e119e778ce1f91890eecdfdf2a.
 Reference M3 SHA: 1a3bec58b6abcaa76151bb2aca67727d48e358dc.
 Fresh standalone clone; no objects borrowed from the damaged desktop checkout.
-No production deployment, merge, live Generation/Judge/embedding or research call.
+No production deployment, merge, or live Vantage Generation/Judge call. An inherited CI job ran an unrelated real embedding evaluation; the spending-boundary incident is disclosed below.
 
 ## Canonical application path
 
@@ -41,7 +41,7 @@ to the explicitly disabled-in-production deterministic provider seam.
 - A provider dispatch is admitted when its durable reservation and fresh authority
   check commit under the company epoch lock. Revocations committed before that
   admission prevent it. An already admitted/in-flight request cannot be recalled.
-- BEFORE mutation triggers acquire only affected company epoch rows. Historical
+- AFTER mutation triggers acquire only affected company epoch rows and publish authority before the writing transaction commits. Historical
   read/decision rechecks frozen source versions and hashes without requiring
   current role/star/head equality. New dispatch/activation also require unchanged
   preparation epoch.
@@ -170,10 +170,10 @@ The final acceptance commit follows these; Git history is authoritative.
 | Formerly blocked FWR route/native one-click  | 2 suites / 23 tests PASS after Windows ESM correction                                                                                                      |
 | Authority and real PostgreSQL                | 2 suites / 7 tests PASS; includes configuration-demotion barriers, per-company concurrency, forged admission, restore and recovery                         |
 | Native action real PostgreSQL                | 1 integration test PASS with concurrent receipt/CAS/action assertions                                                                                      |
-| Authenticated HTTP/Chromium/PG               | 1 extended test PASS; final post-CI-correction repeat 1.7 minutes, with exact encrypted snapshot and registry assertions                                   |
+| Authenticated HTTP/Chromium/PG               | 1 extended test PASS; final post-CI-correction repeat 1.4 minutes against final AFTER guards, with exact encrypted snapshot and registry assertions        |
 | Production build                             | PASS, including PDF worker prebuild, optimized compile, type validation, 202 static pages and traces; feature/test-provider flags false                    |
-| Migration up and safe rollback               | 6 engine + 49 product migrations applied through official runner; isolated guarded downgrade preserves accepted rows, blocks absent/on feature attestation |
-| Diff whitespace                              | Three trailing-blank-line notices in newly introduced SQL migrations remain; applied migration bytes were preserved rather than rewriting checksums        |
+| Migration up and safe rollback               | 6 engine + 50 product migrations applied through official runner; isolated guarded downgrade preserves accepted rows, blocks absent/on feature attestation |
+| Diff whitespace                              | Four trailing-blank-line notices in newly introduced SQL migrations remain; applied migration bytes were preserved rather than rewriting checksums         |
 
 Counts overlap across focused/full runs and are not added into a fabricated total. Local verification did not run the entire monorepo suite or representative load. The first remote CI run additionally passed full-repository lint, all workspace type checks, generated wire schemas and existing feature/orchestration PostgreSQL suites; follow-up status is recorded below. Lint warnings include retained fixture unused symbols, legacy UI unused helpers, import-type style and an ignored config notice. No lint/security rule was disabled.
 
@@ -204,7 +204,7 @@ runner; the separate guarded operator rollback is not a forward migration.
 
 Fresh isolated PostgreSQL reconstruction passed: migration-built and TypeScript-
 built schemas have identical 4,186-line normalized dumps, SHA256
-B9891E3C34A7A4325276DBC0362289CAAE8B848A80A61F0E68D392540AADD532.
+D2243AED3540C1599A9B2B8E7BDE065A3E01B6D3F33A377DAF5A481FC696E6A8.
 Only the existing CI exclusions for migration ledgers, comments, SET and dump
 restriction tokens were applied. Full source and authority guards were retained.
 
@@ -215,7 +215,7 @@ The dedicated synthetic PostgreSQL prerequisite is now wired into CI so the new
 authority suite runs rather than failing for a missing environment variable.
 
 N5 remains an explicit launch gate: request/token limits do not establish an
-enforceable monetary budget. No live spending approval or model dispatch occurred.
+enforceable monetary budget. No live Vantage canary was authorized or dispatched. The unrelated CI embedding dispatch is disclosed below; its monetary cost is unverified.
 
 Final post-correction verification: extended authenticated Chromium acceptance
 passed in 1.7 minutes; the production build passed again (optimized compile,
@@ -226,3 +226,64 @@ Targeted lint of the changed TypeScript passed; the two helper .mjs files are
 ignored by the existing lint configuration and instead pass their Node tests.
 The updated branch requires a fresh remote CI run; GitHub checks remain the
 authoritative current status and are not implied green by local results.
+
+## Full-suite reconciliation and final authority protocol
+
+The first remote complete web run reported 676 passed suites, eight failed and
+one skipped (7,841 passed tests, 25 failed and one skipped). Those failures were
+not hidden. Four old native route/component suites still expected unsafe direct
+commitment creation, invented dates, or destructive Undo. They now exercise real
+decision/outcome dialogs, observed versions, in-flight duplicate prevention and
+archive-required refusal: 38 tests pass, zero skipped. Locale fixtures now carry
+the current version/idempotency contract, and the workspace-model scope registry
+records the real service scope: those two suites pass all 18 tests. The missing
+dedicated PostgreSQL prerequisite was fixed in CI separately.
+
+The remaining failure was a real document-version creation deadlock caused by
+the new BEFORE authority trigger on INSERT ON CONFLICT DO NOTHING. A retry held
+the epoch while waiting for the document; a version writer held the document and
+waited for the epoch. It was reproduced red on the isolated database. Additive
+migration 20261109230000_vantage_authority_after_write.sql changes all 15 guards
+to AFTER row triggers. Only actual mutations acquire the epoch, still inside the
+same writing transaction before commit. Dispatch admission remains ordered against
+committed revocations. No global locks were added; no general impossibility of
+multi-row deadlocks is claimed.
+
+The exact failed race is green, all 19 document-lifecycle PostgreSQL tests pass,
+and the seven authority tests pass on the final AFTER protocol. The latter also
+asserts that a no-op conflict insert does not bump the epoch. Journal/snapshot
+count is now 50, official generation reports no drift, and the complete physical
+schema comparison remains identical (4,186 lines, final SHA256 above). The strict
+helper includes the immutable additive upgrade; all six helper tests pass.
+Final authenticated Chromium acceptance passes again in 1.4 minutes on these
+guards. The task-owned app server is stopped. Application TypeScript passes;
+application source is unchanged from the last successful production build.
+
+All eight formerly failing CI suites were then rerun together against the final
+protocol: 76 tests passed, zero failures or skips, in 14.364 seconds. The current
+full web TypeScript check also passed. Four SQL EOF blank-line notices remain
+across the immutable applied migrations; these are recorded rather than changing
+their already-applied bytes and pinned checksums.
+
+## Spending-boundary incident and unresolved scanner finding
+
+The inherited generic CI job supplied OPENAI_API_KEY from repository secrets.
+Its unrelated mindmap-embedding-quality evaluation ran three tests configured for
+text-embedding-3-large in workflow 42697415603, around 2026-11-09 21:04 UTC.
+This was not authorized by the implementation task. Provider billing, request
+count and token usage were not captured or verified; no zero-spend claim is made.
+Vantage Generation/Judge acceptance continued to use deterministic responses.
+
+On discovery, follow-up workflow 42700311524 was cancelled; its logs contain no
+mindmap evaluation. Generic PR checks now receive only a placeholder OpenAI key,
+and the existing paid embedding evaluation requires RUN_LIVE_EMBEDDING_EVAL=1
+plus configured credentials after separate spending approval. CI explicitly sets
+both that flag and RUN_LLM_BENCHMARK to zero. The embedding suite's three tests
+are deliberately deferred, not reported as passing; the existing campaign-model
+benchmark also remains deferred. No security check was disabled or dismissed.
+
+GitGuardian still reports the historical synthetic-password occurrence 311459900,
+incident 39876019, from ancestor 7d8b4f90. Latest code uses a random-only value,
+but the scanner examines commit history. The incident remains Triggered and
+unresolved; no history rewrite, scanner exception or false-positive dismissal
+was performed. This PR remains Draft and must not be treated as green CI.

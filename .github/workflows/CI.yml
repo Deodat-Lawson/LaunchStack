@@ -56,7 +56,10 @@ jobs:
       # translation, so CI exercises the canonical variables.
       CHAT_BASE_URL: https://ci.invalid/v1
       CHAT_API_KEY: chat-ci-placeholder
-      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY || 'ci-placeholder' }}
+      # Generic PR checks must never inherit billable provider credentials.
+      OPENAI_API_KEY: ci-placeholder
+      RUN_LIVE_EMBEDDING_EVAL: "0"
+      RUN_LLM_BENCHMARK: "0"
       BETTER_AUTH_SECRET: ci-better-auth-secret-placeholder
       INNGEST_EVENT_KEY: ci-placeholder
 
@@ -332,11 +335,12 @@ jobs:
           for f in $changed; do
             [ -f "$f" ] || continue
             scan="$f"
-            # This exact immutable migration defines an authority trigger. Its
+            # These exact immutable migrations define/upgrade authority triggers. Their
             # function-body INSERT and trigger-creation DO are DDL, not backfills.
             # The helper pins the whole file and removes only reviewed blocks;
             # changed bytes or statement boundaries fail closed.
-            if [ "$f" = "apps/web/drizzle/20261109200000_vantage_weekly_reviews.sql" ]; then
+            if [ "$f" = "apps/web/drizzle/20261109200000_vantage_weekly_reviews.sql" ] \
+               || [ "$f" = "apps/web/drizzle/20261109230000_vantage_authority_after_write.sql" ]; then
               scan=$(mktemp)
               node scripts/ci/vantage-guard-ddl.mjs --ddl-remainder "$f" > "$scan" || exit 1
             fi

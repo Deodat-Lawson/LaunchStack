@@ -1,10 +1,6 @@
-/**
- * DELETE /api/vantage/topics/:id/decide is the Undo after a one-click
- * Commit: the topic goes back to undecided and the commitment it opened is
- * removed. It must act only inside the caller's workspace, take the topic
- * from the path and the commitment from `?commitment=`, and map the
- * pipeline's errors to their own status.
- */
+/** Legacy destructive Undo must preserve audit history: the pipeline rejects it
+ * with archive_required, and the route preserves workspace/version boundaries
+ * and error statuses. */
 
 import type * as MockRequireWorkspaceContext from "../../helpers/mock-require-workspace-context";
 import type * as NextServer from "next/server";
@@ -52,15 +48,6 @@ import { VantageError } from "@launchstack/pipelines/vantage";
 
 import { DELETE } from "~/app/api/vantage/topics/[id]/decide/route";
 
-const undone = {
-    id: "t1",
-    agendaId: "a1",
-    title: "SSO for design partners",
-    decision: null,
-    decidedAt: null,
-    commitmentId: null,
-};
-
 function signIn() {
     mockRequireWorkspaceContext.mockResolvedValue({
         success: true,
@@ -80,32 +67,39 @@ function undo(topicId: string, query = "") {
 beforeEach(() => {
     jest.clearAllMocks();
     signIn();
-    mockUndoDecision.mockResolvedValue(undone);
+    mockUndoDecision.mockRejectedValue(
+        new VantageError("Archive this decision instead.", 409, "archive_required")
+    );
 });
 
 describe("DELETE /api/vantage/topics/:id/decide", () => {
-    it("undoes the decision in the caller's workspace and removes the named commitment", async () => {
-        const response = await undo("t1", "?commitment=c9");
+    it("preserves decision and commitment history by returning the archive-required conflict", async () => {
+        const response = await undo("t1", "?commitment=c9&version=7");
 
-        expect(response.status).toBe(200);
-        expect(await response.json()).toEqual({ topic: undone });
+        expect(response.status).toBe(409);
+        expect(await response.json()).toEqual({
+            error: "Archive this decision instead.",
+            code: "archive_required",
+        });
         expect(mockUndoDecision).toHaveBeenCalledTimes(1);
         expect(mockUndoDecision).toHaveBeenCalledWith({
             companyId: BigInt(42),
             topicId: "t1",
             commitmentId: "c9",
+            expectedContentVersion: 7,
         });
         expect(mockRecordDecision).not.toHaveBeenCalled();
     });
 
     it("passes no commitment when the query has none", async () => {
-        const response = await undo("t2");
+        const response = await undo("t2", "?version=9");
 
-        expect(response.status).toBe(200);
+        expect(response.status).toBe(409);
         expect(mockUndoDecision).toHaveBeenCalledWith({
             companyId: BigInt(42),
             topicId: "t2",
             commitmentId: null,
+            expectedContentVersion: 9,
         });
     });
 

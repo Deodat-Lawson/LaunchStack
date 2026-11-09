@@ -41,12 +41,16 @@ jest.mock("~/components/tool-app/ToolLink", () => {
 const mockOverview = jest.fn<Promise<OverviewDto>, []>();
 const mockPrepare = jest.fn<Promise<{ agenda: AgendaDto }>, [string | undefined]>();
 const mockPatchTopic = jest.fn();
+const mockDecide = jest.fn();
+const mockPatchCommitment = jest.fn();
 jest.mock("~/app/employer/tools/vantage/api", () => ({
     ...jest.requireActual<typeof VantageApi>("~/app/employer/tools/vantage/api"),
     vantageApi: {
         overview: () => mockOverview(),
         prepare: (week?: string) => mockPrepare(week),
         patchTopic: (...args: unknown[]) => mockPatchTopic(...args),
+        decide: (...args: unknown[]) => mockDecide(...args),
+        patchCommitment: (...args: unknown[]) => mockPatchCommitment(...args),
     },
 }));
 
@@ -54,9 +58,11 @@ import { OverviewScreen } from "~/app/employer/tools/vantage/_screens/OverviewSc
 import { resetAutoDraftForTests } from "~/app/employer/tools/vantage/_lib/useAutoDraft";
 
 import {
+    LAST_WEEK,
     WEEK,
     WEEK_END,
     agenda,
+    commitment,
     englishFormat,
     overview,
     signals,
@@ -159,10 +165,112 @@ describe("OverviewScreen", () => {
         expect(screen.queryByRole("article", { name: pricing.title })).toBeNull();
         await act(async () => {});
 
-        expect(mockPatchTopic).toHaveBeenCalledWith(pricing.id, { status: "kept" });
+        expect(mockPatchTopic).toHaveBeenCalledWith(pricing.id, {
+            expectedContentVersion: pricing.contentVersion,
+            status: "kept",
+        });
         await waitFor(() => expect(mockOverview.mock.calls.length).toBeGreaterThan(loads));
         expect(screen.queryByRole("article", { name: pricing.title })).toBeNull();
         expect(mockPrepare).not.toHaveBeenCalled();
+    });
+
+    it("opens and saves the real decision dialog from a proposed commitment without inventing a deadline or test", async () => {
+        const proposed = topic({
+            id: "t-proposed",
+            agendaId: "a-prev",
+            status: "kept",
+            proposedNextStep: "Interview five customers",
+            proposedOwner: "Dana",
+            proposedDue: null,
+            contentVersion: 12,
+        });
+        current = {
+            ...withMaterial(),
+            agenda: drafted,
+            previousAgenda: agenda({
+                id: "a-prev",
+                weekStart: LAST_WEEK,
+                status: "held",
+                topics: [proposed],
+            }),
+        };
+        mockDecide.mockResolvedValue({
+            topic: { ...proposed, decision: "Run interviews before repricing", contentVersion: 13 },
+        });
+        render(<OverviewScreen />);
+        const suggestion = await screen.findByRole("article", {
+            name: "Commit: Interview five customers",
+        });
+        fireEvent.click(within(suggestion).getByRole("button", { name: "Commit\u2026" }));
+        const dialog = screen.getByRole("dialog", { name: "Record the decision" });
+        const record = within(dialog).getByRole("button", { name: "Record" });
+        expect(mockDecide).not.toHaveBeenCalled();
+        expect(within(dialog).getByLabelText("Due")).toHaveValue("");
+        expect(within(dialog).getByLabelText("The test")).toHaveValue("");
+        fireEvent.change(within(dialog).getByLabelText("What was decided"), {
+            target: { value: "Run interviews before repricing" },
+        });
+        expect(record).toBeDisabled();
+        fireEvent.change(within(dialog).getByLabelText("Due"), { target: { value: "2026-10-09" } });
+        expect(record).toBeDisabled();
+        fireEvent.change(within(dialog).getByLabelText("The test"), {
+            target: { value: "Five interviews recorded" },
+        });
+        await act(async () => fireEvent.click(record));
+        expect(mockDecide).toHaveBeenCalledTimes(1);
+        expect(mockDecide).toHaveBeenCalledWith(proposed.id, {
+            expectedContentVersion: 12,
+            decision: "Run interviews before repricing",
+            commitment: {
+                title: "Interview five customers",
+                owner: "Dana",
+                dueOn: "2026-10-09",
+                test: "Five interviews recorded",
+                shared: proposed.shared,
+            },
+        });
+        expect(screen.queryByRole("dialog")).toBeNull();
+    });
+
+    it("saves a human check-in outcome through the real Overview parent and refreshes", async () => {
+        const promise = commitment({
+            id: "c-reviewed",
+            title: "Send the update",
+            contentVersion: 8,
+            outcome: null,
+        });
+        current = { ...withMaterial(), agenda: drafted, checkIns: [promise] };
+        mockPatchCommitment.mockResolvedValue({
+            commitment: {
+                ...promise,
+                status: "done",
+                outcome: "Delivered to the board",
+                contentVersion: 9,
+            },
+        });
+        render(<OverviewScreen />);
+        const suggestion = await screen.findByRole("article", {
+            name: "Check in: Send the update",
+        });
+        fireEvent.click(within(suggestion).getByRole("button", { name: "Check in" }));
+        fireEvent.click(screen.getByRole("button", { name: "Done" }));
+        expect(screen.getByRole("button", { name: "Save check-in" })).toBeDisabled();
+        expect(mockPatchCommitment).not.toHaveBeenCalled();
+        fireEvent.change(screen.getByLabelText("What was learned"), {
+            target: { value: "Delivered to the board" },
+        });
+        current = { ...current, checkIns: [] };
+        const loads = mockOverview.mock.calls.length;
+        await act(async () =>
+            fireEvent.click(screen.getByRole("button", { name: "Save check-in" }))
+        );
+        expect(mockPatchCommitment).toHaveBeenCalledWith(promise.id, {
+            expectedContentVersion: 8,
+            status: "done",
+            outcome: "Delivered to the board",
+        });
+        await waitFor(() => expect(mockOverview.mock.calls.length).toBeGreaterThan(loads));
+        expect(screen.queryByRole("article", { name: "Check in: Send the update" })).toBeNull();
     });
 
     it("asks for something to read, without drafting or doubling its nudges, when nothing is on file", async () => {

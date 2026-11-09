@@ -1,21 +1,21 @@
 // ESM-only packages jest must run through babel: the unified/remark/rehype
 // graph that react-markdown pulls in, plus better-auth and its dependency
-// graph. Entries are regex fragments; scoped packages use a `[\w+.-]*` tail so
+// graph. Entries are regex fragments; scoped packages use a `[A-Za-z0-9_+.-]*` tail so
 // one spelling matches both the hoisted dir (@scope/name) and pnpm's
 // flattened store dir (@scope+name@version).
 const esmDeps = [
     "react-markdown",
-    "remark-[\\w-]+",
-    "rehype-[\\w-]+",
-    "micromark[\\w-]*",
-    "mdast-util[\\w-]*",
-    "unist-[\\w-]+",
-    "hast-util[\\w-]*",
+    "remark-[A-Za-z0-9_-]+",
+    "rehype-[A-Za-z0-9_-]+",
+    "micromark[A-Za-z0-9_-]*",
+    "mdast-util[A-Za-z0-9_-]*",
+    "unist-[A-Za-z0-9_-]+",
+    "hast-util[A-Za-z0-9_-]*",
     "unified",
     "bail",
     "is-plain-obj",
     "trough",
-    "vfile[\\w-]*",
+    "vfile[A-Za-z0-9_-]*",
     "devlop",
     "html-url-attributes",
     "html-void-elements",
@@ -29,7 +29,7 @@ const esmDeps = [
     "escape-string-regexp",
     "markdown-table",
     "decode-named-character-reference",
-    "character-entities[\\w-]*",
+    "character-entities[A-Za-z0-9_-]*",
     "character-reference-invalid",
     "parse-entities",
     "stringify-entities",
@@ -40,13 +40,13 @@ const esmDeps = [
     "trim-lines",
     "longest-streak",
     "zwitch",
-    "estree-util[\\w-]*",
+    "estree-util[A-Za-z0-9_-]*",
     "hastscript",
     "web-namespaces",
     "better-auth",
-    "@better-auth[\\w+.-]*",
-    "@better-fetch[\\w+.-]*",
-    "@noble[\\w+.-]*",
+    "@better-auth[A-Za-z0-9_+.-]*",
+    "@better-fetch[A-Za-z0-9_+.-]*",
+    "@noble[A-Za-z0-9_+.-]*",
     "nanostores",
     "kysely",
     "defu",
@@ -57,8 +57,8 @@ const esmDeps = [
     "next-intl",
     "intl-messageformat",
     "icu-minify",
-    "@formatjs[\\w+.-]*",
-    "@dicebear[\\w+.-]*",
+    "@formatjs[A-Za-z0-9_+.-]*",
+    "@dicebear[A-Za-z0-9_+.-]*",
 ];
 
 /** @type {import('jest').Config} */
@@ -75,7 +75,7 @@ export const config = {
     // is skipped when EITHER pattern matches, so both carry the same list.
     transformIgnorePatterns: [
         `node_modules/(?!\\.pnpm|(?:${esmDeps.join("|")})/)`,
-        `node_modules/\\.pnpm/(?!(?:${esmDeps.join("|")})@)`,
+        `node_modules/\\.pnpm/(?!(?:${esmDeps.join("|")})[@_])`,
     ],
     // Keep ~/* pointed at apps/web src. The @launchstack/* mappings resolve the
     // workspace subpaths (e.g. @launchstack/core/ocr/trigger → the TS source)

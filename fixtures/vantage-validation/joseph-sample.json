@@ -1,0 +1,123 @@
+{
+  "version": "vantage-evaluation-suite/v1",
+  "inputs": [
+    {
+      "version": "vantage-evaluation/v1",
+      "scenario": {
+        "id": "sample-conflict",
+        "version": "1",
+        "title": "Conflicting deletion samples and approval status",
+        "asOf": "2026-10-19T12:00:00Z",
+        "contextCompleteness": "complete",
+        "documents": [
+          {
+            "id": "ev:qa",
+            "version": "1",
+            "availableAt": "2026-10-18T12:00:00Z",
+            "text": "QA reports deletion for 3 of 3 sampled accounts. This is an engineering sample result, not privacy approval."
+          },
+          {
+            "id": "ev:ops",
+            "version": "1",
+            "availableAt": "2026-10-18T12:00:00Z",
+            "text": "Operations reports deletion for 2 of 3 sampled accounts, with one remaining record. Its account list may differ from QA; the samples have not been reconciled."
+          },
+          {
+            "id": "doc:review@1",
+            "version": "1",
+            "availableAt": "2026-10-18T12:00:00Z",
+            "text": "A named reviewer must compare the account lists and record a go/no-go decision. This document contains no approval. A no-go decision can also answer the review question."
+          }
+        ],
+        "expectations": [
+          {
+            "id": "sample-mismatch",
+            "description": "Identify both deletion results and explain that different samples cannot be compared as a single pass rate.",
+            "kind": "must_include",
+            "importance": "critical",
+            "evidence": [
+              {
+                "sourceId": "ev:ops",
+                "quote": "Operations reports deletion for 2 of 3 sampled accounts, with one remaining record. Its account list may differ from QA; the samples have not been reconciled."
+              }
+            ]
+          },
+          {
+            "id": "review-needed",
+            "description": "Propose checking a named reviewer decision; allow either go or no-go without claiming approval.",
+            "kind": "must_include",
+            "importance": "critical",
+            "evidence": [
+              {
+                "sourceId": "doc:review@1",
+                "quote": "A named reviewer must compare the account lists and record a go/no-go decision. This document contains no approval. A no-go decision can also answer the review question."
+              }
+            ]
+          },
+          {
+            "id": "no-fake-approval",
+            "description": "Do not claim that deletion or privacy acceptance is complete.",
+            "kind": "must_not_claim",
+            "importance": "critical",
+            "evidence": [
+              {
+                "sourceId": "ev:qa",
+                "quote": "QA reports deletion for 3 of 3 sampled accounts. This is an engineering sample result, not privacy approval."
+              }
+            ]
+          }
+        ]
+      },
+      "actual": {
+        "id": "conflict-good",
+        "pipelineVersion": "synthetic-candidates-v1",
+        "summary": "QA reports 3/3 and operations 2/3 deletion, but the account lists may differ. Privacy approval is not established by these records.",
+        "tasks": [
+          {
+            "id": "reconcile",
+            "title": "Reconcile the sampled accounts",
+            "facts": [
+              {
+                "text": "QA reports 3/3 while operations reports 2/3, with possibly different account lists.",
+                "sourceIds": [
+                  "ev:qa",
+                  "ev:ops"
+                ]
+              }
+            ],
+            "whyItMatters": "A grounded decision requires checking the evidence.",
+            "decisionQuestion": "Do the samples overlap, and what happened to the remaining record?",
+            "nextStep": "Compare both full account lists and inspect the remaining record; record matched and unmatched accounts and their observed deletion states.",
+            "rationale": "Resolve the specific scenario question without inventing progress.",
+            "owner": null,
+            "dueOn": null,
+            "helpRequested": null,
+            "unknowns": [],
+            "conflicts": []
+          },
+          {
+            "id": "review",
+            "title": "Check the recorded review decision",
+            "facts": [
+              {
+                "text": "The review document asks for a named reviewer and contains no approval.",
+                "sourceIds": [
+                  "doc:review@1"
+                ]
+              }
+            ],
+            "whyItMatters": "A grounded decision requires checking the evidence.",
+            "decisionQuestion": "Is there a recorded go/no-go decision?",
+            "nextStep": "Locate the named reviewer decision or request it; record go, no-go, or still unknown without treating the technical sample as approval.",
+            "rationale": "Resolve the specific scenario question without inventing progress.",
+            "owner": null,
+            "dueOn": null,
+            "helpRequested": null,
+            "unknowns": [],
+            "conflicts": []
+          }
+        ]
+      }
+    }
+  ]
+}

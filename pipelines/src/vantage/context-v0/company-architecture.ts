@@ -5,10 +5,13 @@ import type {
     CompanyProfileSourceRow,
     MetadataFact,
 } from "@launchstack/tools/company-context/schema";
-import { flattenFacts } from "../../company-metadata/assemble";
-import { labelFor, MIN_VIEW_CONFIDENCE } from "../../company-metadata/views";
-import { READER_VERSION } from "../../company-metadata/prompts";
-import { METADATA_SCHEMA_VERSION } from "../../company-metadata/types";
+import {
+    flattenFacts,
+    labelFor,
+    MIN_VIEW_CONFIDENCE,
+    READER_VERSION,
+    METADATA_SCHEMA_VERSION,
+} from "@launchstack/pipelines/company-metadata";
 import type {
     CompanyArchitectureRefV0,
     ContextBudgetsV0,

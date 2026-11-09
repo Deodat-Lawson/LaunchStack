@@ -39,6 +39,8 @@ export interface RetrievalSearchPortV0 {
     search(request: RetrievalSearchRequestV0): Promise<{
         hits: RetrievalMetadataV0[];
         truncated: boolean;
+        /** Some backend hits could not be bound to authorized exact versions. */
+        incomplete?: boolean;
     }>;
 }
 
@@ -49,9 +51,27 @@ export interface RetrievalDiagnosticsV0 {
     excerptChars: number;
     /** UTF-8 bytes are a conservative token ceiling; no model call is needed. */
     tokenUpperBound: number;
+    excluded: {
+        source: ContextSourceRefV0;
+        reason: "irrelevant-recent" | "older-resolved";
+    }[];
     scores: {
         source: ContextSourceRefV0;
         relevance: number;
+        /** Exact inputs to the deterministic relevance calculation, not model confidence. */
+        roleScores: {
+            roleId: string;
+            matchedTerms: string[];
+            totalTerms: number;
+            explicitRoleMatch: boolean;
+            score: number;
+        }[];
+        /** Ownership admits relevant material but does not increase keyword relevance. */
+        ownerMatch: boolean;
+        /** Present only for the explicit primary-role preference condition. */
+        primaryRoleScore?: number;
+        primaryRoleMatched?: boolean;
+        primaryRoleId?: string | null;
         trust: number;
         recent: boolean;
         olderOpen: boolean;

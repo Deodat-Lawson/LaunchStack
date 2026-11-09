@@ -66,25 +66,29 @@ function researchOptions(tools?: ContextResearchToolsV0) {
 }
 
 describe("bounded context research", () => {
-    it("reserves the shared source budget for mandatory context before retrieval", async () => {
-        const ports = createFixtureV0Ports(normal as unknown as FixtureV0Input);
-        const output = await runDynamicContextV0(
-            {
-                principalRef: normal.retrievalInput.actor.principalRef,
-                companyId: normal.retrievalInput.actor.companyId,
-                reportWindow: normal.retrievalInput.reportWindow,
-                budgets: { ...normal.retrievalInput.budgets, maxTokens: 8000, maxSources: 3 },
-                runId: "reserved-budget",
-                inputVersion: "dynamic-v1",
-            },
-            ports
-        );
-        expect(output.manifest.selectedRefs).toHaveLength(3);
-        expect(output.manifest.selectedRefs.some(ref => ref.id === "doc-starred-roadmap")).toBe(
-            true
-        );
-        expect(output.manifest.retrievalState.selectedRefs).toEqual([]);
-    });
+    it.each(["broad", "focused"] as const)(
+        "reserves mandatory context before %s retrieval",
+        async selectionPolicy => {
+            const ports = createFixtureV0Ports(normal as unknown as FixtureV0Input);
+            const output = await runDynamicContextV0(
+                {
+                    principalRef: normal.retrievalInput.actor.principalRef,
+                    companyId: normal.retrievalInput.actor.companyId,
+                    reportWindow: normal.retrievalInput.reportWindow,
+                    budgets: { ...normal.retrievalInput.budgets, maxTokens: 8000, maxSources: 3 },
+                    runId: "reserved-budget",
+                    inputVersion: "dynamic-v1",
+                },
+                ports,
+                { retrieval: { selectionPolicy } }
+            );
+            expect(output.manifest.selectedRefs).toHaveLength(3);
+            expect(output.manifest.selectedRefs.some(ref => ref.id === "doc-starred-roadmap")).toBe(
+                true
+            );
+            expect(output.manifest.retrievalState.selectedRefs).toEqual([]);
+        }
+    );
 
     it("rejects a research context assembled from mismatched report windows", async () => {
         const input = await context();

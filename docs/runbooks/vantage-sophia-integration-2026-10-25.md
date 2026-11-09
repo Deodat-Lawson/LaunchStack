@@ -357,4 +357,3 @@ Conflicts:
 None generated.
 
 Rationale: The supplied human review record explicitly keeps the go/no-go question open pending a named review and recorded approval, while the QA result expressly is not a sign-off. This suggests a distinct clarification from reconciling the technical samples.
-

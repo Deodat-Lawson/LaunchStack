@@ -28,6 +28,10 @@ export interface DynamicRetrievalOptionsV0 {
     maxCandidates?: number;
     signal?: AbortSignal;
     now?: () => number;
+    /** Opt-in: omit unrelated recent updates and explicitly resolved older work. */
+    selectionPolicy?: "broad" | "focused";
+    /** Opt-in primary perspective within the already authorized multi-role candidate set. */
+    primaryRolePreference?: boolean;
 }
 
 function metadataIdentity(item: RetrievalMetadataV0): string {
@@ -86,6 +90,15 @@ export function createDynamicRetrievalProviderV0(options: DynamicRetrievalOption
                     ),
                 }))
                 .sort((a, b) => compareText(a.roleId, b.roleId));
+            const preferredPrimary =
+                options.primaryRolePreference &&
+                input.verifiedRoleContext.userConfirmed &&
+                !input.verifiedRoleContext.fallback &&
+                input.verifiedRoleContext.provenance.kind !== "fallback" &&
+                input.verifiedRoleContext.primaryRoleId &&
+                input.verifiedRoleContext.roleIds.includes(input.verifiedRoleContext.primaryRoleId)
+                    ? input.verifiedRoleContext.primaryRoleId
+                    : undefined;
             const output: RankedRetrievalBundleV0 = {
                 contractVersion: "v0-proposed",
                 actor,
@@ -104,6 +117,7 @@ export function createDynamicRetrievalProviderV0(options: DynamicRetrievalOption
                     selected: 0,
                     excerptChars: 0,
                     tokenUpperBound: 0,
+                    excluded: [],
                     scores: [],
                 },
             };
@@ -155,10 +169,17 @@ export function createDynamicRetrievalProviderV0(options: DynamicRetrievalOption
                                       metadata.get(key(entry.source)) ?? { source: entry.source }
                               ),
                               truncated: false,
+                              incomplete: false,
                           };
                     if (!Array.isArray(result.hits) || result.hits.length > maxCandidates)
                         throw new Error("Invalid bounded search response");
                     if (result.truncated) output.omissions.push({ reason: "budget" });
+                    if (result.incomplete)
+                        output.failures.push({
+                            code: "invalid_source",
+                            message:
+                                "Some search hits could not be verified against the source catalog.",
+                        });
                     for (const hit of result.hits) {
                         const id = key(hit.source);
                         const entry = catalog.get(id);
@@ -229,6 +250,9 @@ export function createDynamicRetrievalProviderV0(options: DynamicRetrievalOption
                 metadata: RetrievalMetadataV0;
                 roleIds: string[];
                 relevance: number;
+                roleScores: RankedRetrievalBundleV0["diagnostics"]["scores"][number]["roleScores"];
+                ownerMatch: boolean;
+                primaryRoleScore: number;
                 trust: number;
                 recent: boolean;
                 olderOpen: boolean;
@@ -260,17 +284,26 @@ export function createDynamicRetrievalProviderV0(options: DynamicRetrievalOption
                 const words = new Set(
                     terms([meta.title ?? "", ...(meta.topics ?? []), entry.excerpt].join(" "))
                 );
-                const matches = roles.map(role => ({
-                    roleId: role.roleId,
-                    score: meta.roleIds?.includes(role.roleId)
-                        ? 1
-                        : role.terms.filter(term => words.has(term)).length /
-                          Math.max(1, role.terms.length),
-                }));
+                const matches = roles.map(role => {
+                    const matchedTerms = role.terms.filter(term => words.has(term));
+                    const explicitRoleMatch = meta.roleIds?.includes(role.roleId) === true;
+                    return {
+                        roleId: role.roleId,
+                        matchedTerms,
+                        totalTerms: role.terms.length,
+                        explicitRoleMatch,
+                        score: explicitRoleMatch
+                            ? 1
+                            : matchedTerms.length / Math.max(1, role.terms.length),
+                    };
+                });
                 const roleIds = matches.filter(role => role.score > 0).map(role => role.roleId);
                 const relevance = Math.max(0, ...matches.map(role => role.score));
-                const relevant =
-                    relevance > 0 || meta.ownerPrincipalRefs?.includes(actor.principalRef) === true;
+                const primaryRoleScore = preferredPrimary
+                    ? (matches.find(role => role.roleId === preferredPrimary)?.score ?? 0)
+                    : 0;
+                const ownerMatch = meta.ownerPrincipalRefs?.includes(actor.principalRef) === true;
+                const relevant = relevance > 0 || ownerMatch;
                 const recent = memberships.has("recent") && changedAt >= start && changedAt < end;
                 const olderOpen =
                     memberships.has("role") &&
@@ -279,11 +312,26 @@ export function createDynamicRetrievalProviderV0(options: DynamicRetrievalOption
                     meta.state?.value === "open";
                 const roleMatch = memberships.has("role") && relevant;
                 if (!roleMatch && !recent && !olderOpen) continue;
+                if (options.selectionPolicy === "focused") {
+                    const reason =
+                        changedAt < start && meta.state?.value === "resolved"
+                            ? "older-resolved"
+                            : recent && !relevant
+                              ? "irrelevant-recent"
+                              : undefined;
+                    if (reason) {
+                        output.diagnostics.excluded.push({ source: entry.source, reason });
+                        continue;
+                    }
+                }
                 candidates.push({
                     entry,
                     metadata: meta,
                     roleIds,
                     relevance,
+                    roleScores: matches,
+                    ownerMatch,
+                    primaryRoleScore,
                     trust: meta.trust ?? 0.5,
                     recent,
                     olderOpen,
@@ -296,6 +344,7 @@ export function createDynamicRetrievalProviderV0(options: DynamicRetrievalOption
             candidates.sort(
                 (a, b) =>
                     Number(b.olderOpen) - Number(a.olderOpen) ||
+                    b.primaryRoleScore - a.primaryRoleScore ||
                     b.relevance - a.relevance ||
                     b.trust - a.trust ||
                     Number(b.recent) - Number(a.recent) ||
@@ -345,7 +394,7 @@ export function createDynamicRetrievalProviderV0(options: DynamicRetrievalOption
                     roleIds: candidate.roleIds,
                     rank: output.sourceRegistry.length + 1,
                     dedupKey: key(entry.source),
-                    selectionReason: `${candidate.olderOpen ? "Older unresolved item; " : ""}lanes=${candidate.lanes.join(",")}; roleRelevance=${candidate.relevance.toFixed(3)}; trust=${candidate.trust.toFixed(3)}; recent=${candidate.recent}`,
+                    selectionReason: `${candidate.olderOpen ? "Older unresolved item; " : ""}lanes=${candidate.lanes.join(",")}; roleRelevance=${candidate.relevance.toFixed(3)}; trust=${candidate.trust.toFixed(3)}; recent=${candidate.recent}${options.primaryRolePreference ? `; primaryRole=${preferredPrimary ?? "neutral"}; primaryRoleScore=${candidate.primaryRoleScore.toFixed(3)}` : ""}`,
                 };
                 output[category].push(item);
                 output.sourceRegistry.push(entry);
@@ -355,6 +404,15 @@ export function createDynamicRetrievalProviderV0(options: DynamicRetrievalOption
                 output.diagnostics.scores.push({
                     source: entry.source,
                     relevance: candidate.relevance,
+                    roleScores: candidate.roleScores,
+                    ownerMatch: candidate.ownerMatch,
+                    ...(options.primaryRolePreference
+                        ? {
+                              primaryRoleScore: candidate.primaryRoleScore,
+                              primaryRoleMatched: candidate.primaryRoleScore > 0,
+                              primaryRoleId: preferredPrimary ?? null,
+                          }
+                        : {}),
                     trust: candidate.trust,
                     recent: candidate.recent,
                     olderOpen: candidate.olderOpen,

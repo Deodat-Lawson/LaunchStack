@@ -3,8 +3,7 @@ import type {
     CompanyProfileSourceRow,
     MetadataFact,
 } from "@launchstack/tools/company-context/schema";
-import { createEmptyMetadata } from "../../company-metadata/types";
-import { READER_VERSION } from "../../company-metadata/prompts";
+import { createEmptyMetadata, READER_VERSION } from "@launchstack/pipelines/company-metadata";
 import { createSourceRegistryV0 } from "./registry";
 import {
     collectCompanyArchitectureDocumentIds,

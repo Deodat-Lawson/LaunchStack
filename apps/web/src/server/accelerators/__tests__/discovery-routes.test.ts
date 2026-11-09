@@ -248,6 +248,77 @@ describe("discovery reads", () => {
         expect(mockQueue).not.toHaveBeenCalled();
     });
 
+    async function servedFit(assessment: FitAssessmentV1) {
+        mockMatches.mockResolvedValue({
+            [program.id]: {
+                assessment,
+                profileHash: hashValue(profile),
+                programHash: hashValue(program),
+                rubricVersion: FIT_RUBRIC_VERSION,
+                checkedAt: "2026-11-09T00:00:00Z",
+            } satisfies StoredFit,
+        });
+        const response = await home(new NextRequest("http://x/api/accelerators"));
+        expect(mockQueue).not.toHaveBeenCalled();
+        return (await response.json()).programs[0];
+    }
+
+    // AE7: a confirmed failed hard requirement stays explicit beside a strong score.
+    it("serves an ineligible Program with its score rather than hiding either", async () => {
+        const view = await servedFit({
+            ...ratedAssessment,
+            eligibility: { status: "ineligible", note: "Requires US incorporation." },
+        });
+        expect(view.fit).toMatchObject({
+            eligibility: { status: "ineligible", note: "Requires US incorporation." },
+            overall: { score: 88, coverage: 100 },
+        });
+        expect(view.freshness.status).toBe("current");
+    });
+
+    // AE8: thin evidence leaves unknowns, lowers coverage and asserts no overall score.
+    it("withholds the overall score below the coverage cutoff but keeps the grades", async () => {
+        const unknown = {
+            score: null,
+            applicable: true,
+            note: "The profile does not say.",
+            evidence: { sourceIds: [], companyEvidenceIds: [] },
+        };
+        const view = await servedFit({
+            ...ratedAssessment,
+            dimensions: {
+                ...ratedAssessment.dimensions,
+                stage: unknown,
+                businessModel: unknown,
+                deal: unknown,
+            },
+        });
+        // Rated sector 20 + operations 10 + value 10 = 40 of 85 applicable.
+        expect(view.fit.overall).toEqual({ score: null, coverage: 47 });
+        expect(view.fit.dimensions.sector.score).toBe(50);
+        expect(view.fit.dimensions.deal.score).toBeNull();
+        expect(view.freshness.status).toBe("current");
+    });
+
+    // AE9: a refreshed Program makes the saved result out of date without starting a match.
+    it("marks fit out of date when the Program changes", async () => {
+        mockMatches.mockResolvedValue({
+            [program.id]: {
+                assessment: ratedAssessment,
+                profileHash: hashValue(profile),
+                programHash: "an-earlier-program-version",
+                rubricVersion: FIT_RUBRIC_VERSION,
+                checkedAt: "2026-11-09T00:00:00Z",
+            } satisfies StoredFit,
+        });
+        const response = await home(new NextRequest("http://x/api/accelerators"));
+        expect((await response.json()).programs[0].freshness).toMatchObject({
+            status: "out_of_date",
+            reasons: ["program_changed"],
+        });
+        expect(mockQueue).not.toHaveBeenCalled();
+    });
+
     it("returns 404 for a Program that is not in the catalogue", async () => {
         const response = await preview(
             new NextRequest("http://x/api/accelerators/programs/missing"),

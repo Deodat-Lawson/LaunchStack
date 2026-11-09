@@ -82,6 +82,7 @@ function cm(
     status: VantageCommitmentRow["status"] = "open"
 ): VantageCommitmentRow {
     return {
+        contentVersion: 1,
         id,
         companyId: COMPANY,
         createdByUserId: "u1",

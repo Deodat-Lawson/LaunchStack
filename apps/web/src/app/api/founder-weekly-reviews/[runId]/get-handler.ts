@@ -28,7 +28,7 @@ export function createFounderWeeklyReviewGetHandler(deps: FounderWeeklyReviewGet
             const actor = await deps.actorResolver.resolve(userId);
             const { runId } = await params;
             const run = await deps.getRun(actor, runId);
-            return ok({ run: safeRun(run) });
+            return ok({ run: await safeRun(run) });
         } catch (error) {
             return handleWeeklyReviewError(error, request);
         }

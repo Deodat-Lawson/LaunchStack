@@ -78,6 +78,8 @@ const serverSchema = z.object({
     // its own API key through the settings UI. Generate with:
     //   node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
     EMBEDDING_SECRETS_KEY: optionalString(),
+    SECRET_BOX_CURRENT_VERSION: optionalString(),
+    SECRET_BOX_PREVIOUS_KEYS: optionalString(),
     OPENROUTER_API_KEY: optionalString(),
     GOOGLE_AI_API_KEY: optionalString(),
     GOOGLE_MODEL: optionalString(),
@@ -581,6 +583,8 @@ function parseServerEnv() {
         CHAT_MODELS_CONFIG: process.env.CHAT_MODELS_CONFIG,
         EMBEDDING_INDEX: process.env.EMBEDDING_INDEX,
         EMBEDDING_SECRETS_KEY: process.env.EMBEDDING_SECRETS_KEY,
+        SECRET_BOX_CURRENT_VERSION: process.env.SECRET_BOX_CURRENT_VERSION,
+        SECRET_BOX_PREVIOUS_KEYS: process.env.SECRET_BOX_PREVIOUS_KEYS,
         OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY,
         GOOGLE_AI_API_KEY: process.env.GOOGLE_AI_API_KEY,
         GOOGLE_MODEL: process.env.GOOGLE_MODEL,

@@ -12,6 +12,8 @@ type Params = { params: Promise<{ id: string }> };
 export async function PATCH(request: NextRequest, { params }: Params) {
     const auth = await vantageContext();
     if (!auth.ok) return auth.response;
+    if (!auth.ctx.can("documents.edit"))
+        return error("You cannot change this workspace content.", 403);
     try {
         const { id } = await params;
         const parsed = CommitmentPatchSchema.safeParse(await readBody(request));
@@ -30,6 +32,8 @@ export async function PATCH(request: NextRequest, { params }: Params) {
 export async function DELETE(request: NextRequest, { params }: Params) {
     const auth = await vantageContext();
     if (!auth.ok) return auth.response;
+    if (!auth.ctx.can("documents.edit"))
+        return error("You cannot change this workspace content.", 403);
     try {
         const { id } = await params;
         await deleteCommitment({ companyId: auth.ctx.companyId, id });

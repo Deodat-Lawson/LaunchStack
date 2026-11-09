@@ -25,6 +25,7 @@ export interface FounderWeeklyReviewActor {
     companyId: bigint;
     /** Membership role slug, normalised (`owner` | `admin` | `member` | custom). */
     role: string;
+    canMutate: boolean;
 }
 
 /**
@@ -63,6 +64,7 @@ export class FounderWeeklyReviewActorResolver {
             internalUserId: BigInt(user.id),
             companyId,
             role: normalizeRoleSlug(membership.role),
+            canMutate: permissions.has(GENERATION_PERMISSION),
         };
     }
 }

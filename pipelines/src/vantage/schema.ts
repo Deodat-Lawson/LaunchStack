@@ -245,6 +245,7 @@ export const vantageAgendaTopics = pgTable(
         /** Founder's choice: an administrator or mentor may see this topic. */
         shared: boolean("shared").notNull().default(false),
         /** Recorded after the meeting. */
+        contentVersion: integer("content_version").notNull().default(1),
         decision: text("decision"),
         decidedAt: timestamp("decided_at", { withTimezone: true }),
         createdAt: timestamp("created_at", { withTimezone: true })
@@ -281,6 +282,7 @@ export const vantageCommitments = pgTable(
             .notNull()
             .default("open"),
         /** What was learned, recorded at check-in. */
+        contentVersion: integer("content_version").notNull().default(1),
         outcome: text("outcome"),
         shared: boolean("shared").notNull().default(false),
         resolvedAt: timestamp("resolved_at", { withTimezone: true }),
@@ -324,3 +326,14 @@ export type VantageAgendaRow = InferSelectModel<typeof vantageAgendas>;
 export type VantageAgendaTopicRow = InferSelectModel<typeof vantageAgendaTopics>;
 export type VantageCommitmentRow = InferSelectModel<typeof vantageCommitments>;
 export type VantageProgramDeadlineRow = InferSelectModel<typeof vantageProgramDeadlines>;
+
+/** Durable operation receipts survive later edits; tenant and actor scoped. */
+export const vantageDecisionOperations = pgTable("vantage_decision_operations", {
+    id: text("id").primaryKey(),
+    companyId: bigint("company_id", { mode: "bigint" }).notNull(),
+    topicId: text("topic_id").notNull(),
+    actorId: text("actor_id").notNull(),
+    requestHash: text("request_hash").notNull(),
+    result: jsonb("result").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});

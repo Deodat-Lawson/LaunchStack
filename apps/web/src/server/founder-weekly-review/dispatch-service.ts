@@ -4,6 +4,7 @@ import { db } from "~/server/db";
 import type { DbClient } from "@launchstack/store/client";
 import {
     founderWeeklyReviewDispatches,
+    founderWeeklyReviewRuns,
     type FounderWeeklyReviewDispatchRow,
 } from "~/server/db/schema";
 import {
@@ -331,7 +332,7 @@ export async function recordDispatchFailure(
         attempt_count: number | string;
         available_at: Date | string;
     }>(sql`
-        UPDATE ${founderWeeklyReviewDispatches}
+        WITH retired AS (UPDATE ${founderWeeklyReviewDispatches}
         SET "status" = CASE
                 WHEN "attempt_count" >= ${MAX_DISPATCH_ATTEMPTS} THEN 'failed'
                 ELSE 'pending'
@@ -345,7 +346,18 @@ export async function recordDispatchFailure(
             ),
             "updated_at" = ${now}::timestamptz
         WHERE "id" = ${dispatchId}
-        RETURNING "status", "attempt_count", "available_at"
+        RETURNING "status", "attempt_count", "available_at", "run_id", "company_id"
+        ), failed_run AS (
+            UPDATE ${founderWeeklyReviewRuns} AS run
+            SET "status" = 'failed', "error_code" = 'dispatch_exhausted',
+                "failure_sequence" = run."failure_sequence" + 1,
+                "updated_at" = ${now}::timestamptz
+            FROM retired
+            WHERE retired."status" = 'failed' AND run."id" = retired."run_id"
+              AND run."company_id" = retired."company_id" AND run."status" = 'queued'
+            RETURNING run."id"
+        )
+        SELECT "status", "attempt_count", "available_at" FROM retired
     `);
 
     const row = [...rows][0];

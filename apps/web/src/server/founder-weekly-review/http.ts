@@ -10,6 +10,8 @@
 
 import type { FounderWeeklyReviewRunRecord } from "@launchstack/pipelines/founder-weekly-review";
 
+import { authorizeLegacyReviewRead } from "./read-authority";
+
 import { localeOfRequest } from "~/i18n/server";
 import { translatorFor, wordEnglish } from "~/i18n/translate";
 import { fail, handleRouteError, isStatusCarryingError } from "~/server/api/responses";
@@ -47,7 +49,8 @@ export function handleWeeklyReviewError(error: unknown, request: Request) {
  * never exposed — a failed run reports its code, and the client turns that into
  * language a founder can act on.
  */
-export function safeRun(run: FounderWeeklyReviewRunRecord) {
+export async function safeRun(run: FounderWeeklyReviewRunRecord) {
+    await authorizeLegacyReviewRead(run);
     return {
         id: run.id,
         status: run.status,

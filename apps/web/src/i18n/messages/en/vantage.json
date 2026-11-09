@@ -357,6 +357,7 @@
     "ignoredStays": "Ignored — it stays on the agenda"
   },
   "agenda": {
+    "retainedForHistory": "Topics and decisions are retained in history. You can set a topic aside or restore it without deleting its record.",
     "status": {
       "draft": "Draft",
       "ready": "Ready for the meeting",
@@ -629,6 +630,10 @@
       "metricNotInWorkspace": "One of those metrics is not in this workspace.",
       "numberNotHere": "That number is not here.",
       "commitmentNotHere": "That commitment is not here.",
+      "legacySourceAccessUnavailable": "Report source access is unavailable",
+      "legacyMutationForbidden": "You do not have permission to change this review",
+      "canonicalWeeklyReviewRequired": "Use Vantage Weekly Review",
+      "reviewHistoryRetained": "Review history must be retained",
       "agendaNotHere": "That agenda is not here.",
       "topicNotHere": "That topic is not here.",
       "deadlineNotHere": "That deadline is not here.",
@@ -670,5 +675,38 @@
       "periodMismatch": "Evidence snapshot reporting period must match the run reporting period.",
       "collectorUnavailable": "Founder weekly review evidence collection is not configured."
     }
+  },
+  "weeklyReview": {
+    "title": "Weekly Review",
+    "description": "Review authorized company evidence and record human decisions. Recording a decision does not verify execution.",
+    "week": "Reporting week",
+    "generate": "Generate review",
+    "history": "Report history",
+    "selectReport": "Select a report",
+    "requiredContext": "Required company context",
+    "contextHelp": "Choose documents readable by company members. Required documents are company policy; personal stars remain separate.",
+    "architecture": "Company Architecture",
+    "requiredDocuments": "Other required company documents",
+    "saveContext": "Save required context",
+    "synthetic": "Deterministic provider fixture ? engineering integration evidence only.",
+    "conflict": "Conflict",
+    "why": "Why it matters",
+    "whyNow": "Why now",
+    "owner": "Proposed owner",
+    "due": "Proposed due date",
+    "help": "Help requested",
+    "unknown": "Unknown",
+    "decision": "Human decision",
+    "saveDecision": "Record decision",
+    "recordedDecision": "Recorded decision",
+    "requestFailed": "The request could not be completed. Reload and try again.",
+    "required_context_incomplete": "Required company context is incomplete.",
+    "source_access_denied": "Current access does not permit this report.",
+    "candidate_not_admitted": "The candidate did not pass admission. The previous accepted report is unchanged.",
+    "stale_review": "The review changed. Reload before recording another decision.",
+    "selectDocument": "Select a document",
+    "personalStars": "Personal starred documents",
+    "starHelp": "Choose up to eight readable documents to prioritize for your review. This does not make them company policy.",
+    "saveStars": "Save personal stars"
   }
 }

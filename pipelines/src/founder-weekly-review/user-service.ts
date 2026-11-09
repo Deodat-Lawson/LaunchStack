@@ -20,8 +20,6 @@ import {
 } from "./errors";
 import { FounderWeeklyReviewRepository } from "./repository";
 
-const ALLOWED_WORKSPACE_ROLES = new Set(["owner", "admin", "editor"]);
-
 export interface CreateFounderWeeklyReviewRunRequest {
     requestKey: string;
     reportingPeriod: {
@@ -40,8 +38,8 @@ export interface RetryFounderWeeklyReviewRunResult {
     transitionApplied: boolean;
 }
 
-function assertWorkspaceMutationRole(role: string): void {
-    if (!ALLOWED_WORKSPACE_ROLES.has(role)) {
+function assertWorkspaceMutationRole(actor: FounderWeeklyReviewUserActor): void {
+    if (actor.canMutate !== true) {
         throw new FounderWeeklyReviewForbiddenError();
     }
 }
@@ -67,7 +65,7 @@ export class FounderWeeklyReviewUserService {
         actor: FounderWeeklyReviewUserActor,
         input: CreateFounderWeeklyReviewRunRequest
     ): Promise<FounderWeeklyReviewRunRecord> {
-        assertWorkspaceMutationRole(actor.role);
+        assertWorkspaceMutationRole(actor);
         let evidenceSnapshot: FounderWeeklyReviewEvidenceSnapshot | undefined;
         try {
             evidenceSnapshot = input.evidenceSnapshot
@@ -101,7 +99,7 @@ export class FounderWeeklyReviewUserService {
         actor: FounderWeeklyReviewUserActor,
         input: CreateFounderWeeklyReviewRunRequest
     ): Promise<CreateFounderWeeklyReviewRunResult> {
-        assertWorkspaceMutationRole(actor.role);
+        assertWorkspaceMutationRole(actor);
         let evidenceSnapshot: FounderWeeklyReviewEvidenceSnapshot | undefined;
         try {
             evidenceSnapshot = input.evidenceSnapshot
@@ -148,7 +146,7 @@ export class FounderWeeklyReviewUserService {
         runId: string,
         requestKey: string
     ): Promise<FounderWeeklyReviewRunRecord> {
-        assertWorkspaceMutationRole(actor.role);
+        assertWorkspaceMutationRole(actor);
         const result = await this.repository.retryFailedRun({
             operationId: `fwrop_${randomUUID()}`,
             companyId: actor.companyId,
@@ -181,7 +179,7 @@ export class FounderWeeklyReviewUserService {
         runId: string,
         requestKey: string
     ): Promise<RetryFounderWeeklyReviewRunResult> {
-        assertWorkspaceMutationRole(actor.role);
+        assertWorkspaceMutationRole(actor);
         const result = await this.repository.retryFailedRun({
             operationId: `fwrop_${randomUUID()}`,
             companyId: actor.companyId,
@@ -209,7 +207,7 @@ export class FounderWeeklyReviewUserService {
         runId: string,
         reviewPayload: FounderWeeklyReviewPayload
     ): Promise<FounderWeeklyReviewRunRecord> {
-        assertWorkspaceMutationRole(actor.role);
+        assertWorkspaceMutationRole(actor);
         let payload: FounderWeeklyReviewPayload;
         try {
             payload = parseFounderWeeklyReviewPayload(reviewPayload);
@@ -241,7 +239,7 @@ export class FounderWeeklyReviewUserService {
         actor: FounderWeeklyReviewUserActor,
         runId: string
     ): Promise<FounderWeeklyReviewRunRecord> {
-        assertWorkspaceMutationRole(actor.role);
+        assertWorkspaceMutationRole(actor);
         const result = await this.repository.publishConditionally(actor.companyId, runId);
 
         if (!result.run) {

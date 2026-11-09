@@ -9,12 +9,9 @@ import { cn } from "~/lib/utils";
 
 import type { CommitmentDto, TopicDto } from "../api";
 import {
-    canCommitInOneClick,
-    commitToNextStep,
     ignoreTopic,
     keepTopic,
     markReady,
-    resolveCommitment,
     setAside,
     SET_ASIDE_DAYS,
     type Outcome,
@@ -22,6 +19,7 @@ import {
 import { useVantageFormat } from "../_lib/format";
 import type { SuggestionGroup, WeekSuggestion } from "../_lib/suggestions";
 import { SuggestionCard, SuggestionNudge } from "./Suggestion";
+import { CheckInRow } from "./CheckInRow";
 import { TopicDetails, TopicSuggestion } from "./TopicCard";
 
 /**
@@ -251,10 +249,8 @@ function Suggestion({
 
 /** A promise due or overdue, as a question with its answers on the card. */
 export function CheckInSuggestion({
-    id,
     commitment,
     late,
-    act,
 }: {
     id: string;
     commitment: CommitmentDto;
@@ -282,38 +278,10 @@ export function CheckInSuggestion({
                 </>
             }
             actions={
-                <>
-                    <Button
-                        size="sm"
-                        onClick={() =>
-                            void act(id, () => resolveCommitment(fmt, commitment, "done"))
-                        }
-                    >
-                        <Check aria-hidden="true" />
-                        {t("done")}
-                    </Button>
-                    <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() =>
-                            void act(id, () => resolveCommitment(fmt, commitment, "missed"))
-                        }
-                    >
-                        {t("missed")}
-                    </Button>
-                    <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={() =>
-                            void act(id, () =>
-                                setAside(id, SET_ASIDE_DAYS.snooze, t("askingTomorrow"))
-                            )
-                        }
-                    >
-                        <Clock aria-hidden="true" />
-                        {t("notYet")}
-                    </Button>
-                </>
+                <CheckInRow
+                    commitment={commitment}
+                    onChange={() => window.dispatchEvent(new Event("vantage:changed"))}
+                />
             }
         />
     );
@@ -336,7 +304,6 @@ export function CommitSuggestion({
     const t = useTranslations("vantage.weekSuggestions");
     const tt = useTranslations("vantage.topicCard");
     const fmt = useVantageFormat();
-    const oneClick = canCommitInOneClick(topic);
     const owner = topic.proposedOwner ?? tt("noOwner");
     return (
         <SuggestionCard
@@ -365,16 +332,9 @@ export function CommitSuggestion({
             }
             actions={
                 <>
-                    <Button
-                        size="sm"
-                        onClick={() =>
-                            oneClick
-                                ? void act(id, () => commitToNextStep(fmt, topic))
-                                : onDecide(topic)
-                        }
-                    >
+                    <Button size="sm" onClick={() => onDecide(topic)}>
                         <Check aria-hidden="true" />
-                        {oneClick ? tt("commit") : tt("commitAsk")}
+                        {tt("commitAsk")}
                     </Button>
                     <Button
                         size="sm"

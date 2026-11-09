@@ -466,7 +466,7 @@ export function IgnoredTopicRow({
     topic: TopicDto;
     busy: boolean;
     onRestore: () => void;
-    onDelete: () => void;
+    onDelete?: () => void;
 }) {
     const t = useTranslations("vantage.topicCard");
     const fmt = useVantageFormat();
@@ -480,16 +480,18 @@ export function IgnoredTopicRow({
                 <RotateCcw aria-hidden="true" />
                 {t("addToAgenda")}
             </Button>
-            <Button
-                size="sm"
-                variant="ghost"
-                className="text-ink-3"
-                onClick={onDelete}
-                disabled={busy}
-                aria-label={t("deleteAria", { title: topic.title })}
-            >
-                <X aria-hidden="true" />
-            </Button>
+            {onDelete && (
+                <Button
+                    size="sm"
+                    variant="ghost"
+                    className="text-ink-3"
+                    onClick={onDelete}
+                    disabled={busy}
+                    aria-label={t("deleteAria", { title: topic.title })}
+                >
+                    <X aria-hidden="true" />
+                </Button>
+            )}
         </div>
     );
 }

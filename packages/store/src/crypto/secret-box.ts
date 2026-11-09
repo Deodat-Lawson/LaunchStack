@@ -14,14 +14,24 @@ import { createSlot } from "@launchstack/runtime";
 // clear a previously-registered key (matches the prior `_keyBase64 = ... ?? null`
 // behavior used by tests).
 const keySlot = createSlot<string | null>("crypto/keyBase64");
+const ringSlot = createSlot<{ version: number; keys: Record<number, string> }>("crypto/keyring");
 
 export interface SecretBoxConfig {
     /** EMBEDDING_SECRETS_KEY — base64-encoded 32-byte random value. */
     key: string | undefined;
+    currentVersion?: number;
+    previousKeys?: Record<number, string>;
 }
 
 export function configureSecretBox(config: SecretBoxConfig): void {
     keySlot.set(config.key ?? null);
+    const version = config.currentVersion ?? 1;
+    if (!Number.isInteger(version) || version < 1 || version > 255)
+        throw new Error("Invalid encryption key version");
+    ringSlot.set({
+        version,
+        keys: { ...config.previousKeys, ...(config.key ? { [version]: config.key } : {}) },
+    });
 }
 
 /**
@@ -62,15 +72,9 @@ export class CiphertextDecodeError extends Error {
 }
 
 function resolveKey(version: number): Buffer {
-    if (version !== CURRENT_KEY_VERSION) {
-        throw new CiphertextDecodeError(
-            `Unknown encryption key version ${version}; expected ${CURRENT_KEY_VERSION}`
-        );
-    }
-    const raw = keySlot.get();
-    if (!raw) {
-        throw new MissingSecretsKeyError();
-    }
+    const ring = ringSlot.get();
+    const raw = ring?.keys[version] ?? (version === CURRENT_KEY_VERSION ? keySlot.get() : null);
+    if (!raw) throw new MissingSecretsKeyError();
     const key = Buffer.from(raw, "base64");
     if (key.length !== KEY_LENGTH) {
         throw new CiphertextDecodeError(
@@ -85,22 +89,27 @@ function resolveKey(version: number): Buffer {
  * that was used — callers should persist both so future key rotations can
  * find the right key to decrypt each row.
  */
-export function encryptSecret(plaintext: string): {
+export function encryptSecret(
+    plaintext: string,
+    context?: string
+): {
     ciphertext: string;
     keyVersion: number;
 } {
     if (plaintext.length === 0) {
         throw new Error("Refusing to encrypt empty plaintext");
     }
-    const key = resolveKey(CURRENT_KEY_VERSION);
+    const version = ringSlot.get()?.version ?? CURRENT_KEY_VERSION;
+    const key = resolveKey(version);
     const iv = randomBytes(IV_LENGTH);
     const cipher = createCipheriv("aes-256-gcm", key, iv);
+    if (context !== undefined) cipher.setAAD(Buffer.from(context, "utf8"));
     const encrypted = Buffer.concat([cipher.update(plaintext, "utf8"), cipher.final()]);
     const tag = cipher.getAuthTag();
-    const payload = Buffer.concat([Buffer.from([CURRENT_KEY_VERSION]), iv, tag, encrypted]);
+    const payload = Buffer.concat([Buffer.from([version]), iv, tag, encrypted]);
     return {
         ciphertext: payload.toString("base64"),
-        keyVersion: CURRENT_KEY_VERSION,
+        keyVersion: version,
     };
 }
 
@@ -108,7 +117,7 @@ export function encryptSecret(plaintext: string): {
  * Decrypt a secret produced by `encryptSecret`. Throws if the payload is
  * malformed, the auth tag doesn't verify, or the key version is unknown.
  */
-export function decryptSecret(ciphertext: string): string {
+export function decryptSecret(ciphertext: string, context?: string): string {
     const payload = Buffer.from(ciphertext, "base64");
     if (payload.length < 1 + IV_LENGTH + TAG_LENGTH + 1) {
         throw new CiphertextDecodeError("Ciphertext payload is too short");
@@ -120,6 +129,7 @@ export function decryptSecret(ciphertext: string): string {
     const key = resolveKey(version);
     const decipher = createDecipheriv("aes-256-gcm", key, iv);
     decipher.setAuthTag(tag);
+    if (context !== undefined) decipher.setAAD(Buffer.from(context, "utf8"));
     try {
         const decrypted = Buffer.concat([decipher.update(body), decipher.final()]);
         return decrypted.toString("utf8");

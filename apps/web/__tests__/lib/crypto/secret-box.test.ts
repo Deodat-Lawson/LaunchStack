@@ -62,3 +62,25 @@ describe("secret-box", () => {
         expect(() => decryptSecret("dG9vc2hvcnQ=")).toThrow(CiphertextDecodeError);
     });
 });
+
+describe("secret-box key rotation and domain binding", () => {
+    afterEach(() => configureSecretBox({ key: undefined }));
+    it("reads old ciphertext after rotation and uses the new key version", () => {
+        const oldKey = Buffer.alloc(32, 1).toString("base64");
+        configureSecretBox({ key: oldKey });
+        const legacy = encryptSecret("historical");
+        configureSecretBox({
+            key: Buffer.alloc(32, 2).toString("base64"),
+            currentVersion: 2,
+            previousKeys: { 1: oldKey },
+        });
+        expect(decryptSecret(legacy.ciphertext)).toBe("historical");
+        const next = encryptSecret("new", "vantage:company:1:run:2");
+        expect(next.keyVersion).toBe(2);
+        expect(decryptSecret(next.ciphertext, "vantage:company:1:run:2")).toBe("new");
+        expect(() => decryptSecret(next.ciphertext, "vantage:company:2:run:2")).toThrow(
+            CiphertextDecodeError
+        );
+        expect(() => decryptSecret(next.ciphertext)).toThrow(CiphertextDecodeError);
+    });
+});

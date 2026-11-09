@@ -66,7 +66,7 @@ export function createFounderWeeklyReviewPostHandler(deps: FounderWeeklyReviewRo
                 actor.companyId,
                 parsed.data.requestKey
             );
-            if (existing) return ok({ run: safeRun(existing) }, 202);
+            if (existing) return ok({ run: await safeRun(existing) }, 202);
             const refused = await refuseAtAiAllowance(
                 actor.companyId,
                 actor.externalUserId,
@@ -98,7 +98,7 @@ export function createFounderWeeklyReviewPostHandler(deps: FounderWeeklyReviewRo
                 status: run.status,
             });
             await deps.sendDispatchRequested();
-            return ok({ run: safeRun(run) }, 202);
+            return ok({ run: await safeRun(run) }, 202);
         } catch (error) {
             return handleWeeklyReviewError(error, request);
         }

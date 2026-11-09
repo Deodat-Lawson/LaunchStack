@@ -1,3 +1,6 @@
+jest.mock("~/server/founder-weekly-review/read-authority", () => ({
+    authorizeLegacyReviewRead: jest.fn().mockResolvedValue(undefined),
+}));
 jest.mock("~/server/auth", () => ({ getServerSession: jest.fn() }));
 jest.mock("~/server/founder-weekly-review/actor-resolver", () => ({
     productionFounderWeeklyReviewActorResolver: { resolve: jest.fn() },
@@ -15,7 +18,7 @@ import {
     type FounderWeeklyReviewRunRecord,
 } from "@launchstack/pipelines/founder-weekly-review";
 const mockAuth = getServerSession as unknown as jest.Mock;
-const actor = { externalUserId: "u", internalUserId: 1n, companyId: 1n, role: "owner" as const };
+const actor = { externalUserId: "u", internalUserId: 1n, companyId: 1n, role: "owner" as const, canMutate: true };
 function run(
     status: FounderWeeklyReviewRunRecord["status"] = "queued"
 ): FounderWeeklyReviewRunRecord {

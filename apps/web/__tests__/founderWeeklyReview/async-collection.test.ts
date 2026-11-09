@@ -35,7 +35,7 @@ describeDb("Founder Weekly Review async evidence workflow", () => {
                 externalUserId: "u",
                 internalUserId: 1n,
                 companyId: BigInt(companyRow!.id),
-                role: "owner",
+                role: "owner", canMutate: true,
             };
             const created = await createFounderWeeklyReviewDispatchService(
                 test.db
@@ -90,7 +90,7 @@ describeDb("Founder Weekly Review async evidence workflow", () => {
                 externalUserId: "u",
                 internalUserId: 1n,
                 companyId: BigInt(companyRow!.id),
-                role: "owner",
+                role: "owner", canMutate: true,
             };
             const service = createFounderWeeklyReviewDispatchService(test.db);
             const created = await service.createRunWithDispatch({

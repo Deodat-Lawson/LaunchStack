@@ -401,6 +401,8 @@ export interface FounderWeeklyReviewUserActor {
     internalUserId?: bigint;
     companyId: bigint;
     role: string;
+    /** Fresh server-resolved documents.edit capability, never client input. */
+    canMutate?: boolean;
 }
 
 export function buildFounderWeeklyReviewActorId(

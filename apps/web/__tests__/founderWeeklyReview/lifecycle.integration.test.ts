@@ -212,13 +212,13 @@ describeIfDatabase("Founder Weekly Review lifecycle integration", () => {
                 externalUserId: "clerk_alpha",
                 internalUserId: 101n,
                 companyId: companyAId,
-                role: "owner",
+                role: "owner", canMutate: true,
             };
             const actorB = {
                 externalUserId: "clerk_beta",
                 internalUserId: 202n,
                 companyId: companyBId,
-                role: "owner",
+                role: "owner", canMutate: true,
             };
 
             const snapshot = createEvidenceSnapshot();
@@ -527,7 +527,7 @@ describeIfDatabase("Founder Weekly Review lifecycle integration", () => {
             const actor = {
                 externalUserId: "clerk_v2",
                 companyId,
-                role: "owner",
+                role: "owner", canMutate: true,
             };
             const evidenceSnapshot = createEvidenceSnapshot();
             const run = await userService.createOrGetRun(actor, {

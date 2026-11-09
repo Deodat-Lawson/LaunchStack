@@ -15,7 +15,13 @@ import {
 } from "@launchstack/pipelines/founder-weekly-review";
 
 const mockAuth = getServerSession as unknown as jest.Mock;
-const actor = { externalUserId: "u", internalUserId: 1n, companyId: 1n, role: "owner" };
+const actor = {
+    externalUserId: "u",
+    internalUserId: 1n,
+    companyId: 1n,
+    role: "owner",
+    canMutate: true,
+};
 const ZH = { cookie: "ls-locale=zh-CN.1" };
 const params = { params: Promise.resolve({ runId: "fwr_1" }) };
 

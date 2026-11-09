@@ -6,6 +6,7 @@ export * from "./chat-model-factory";
 export * from "./chat-scope";
 export * from "./auxiliary-model";
 export * from "./structured-output";
+export * from "./structured-attempt";
 export * from "./public-config";
 export * from "./usage";
 export {

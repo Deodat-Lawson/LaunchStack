@@ -573,3 +573,18 @@ describe("Re-embed", () => {
         expect(reembed.disabled).toBe(false);
     });
 });
+
+describe("Open in Google Drive", () => {
+    it("is offered only for a source with a Drive page", () => {
+        const onOpenInDrive = jest.fn();
+        const synced = source({ driveUrl: "https://drive.google.com/file/d/abc1234567/view" });
+        const items = buildSourceMenuItems(t, synced, folders, [], { onOpenInDrive });
+        const item = items.find(i => i.id === "open-drive");
+        expect(item).toMatchObject({ label: "Open in Google Drive" });
+        if (item?.type === "item") item.onSelect();
+        expect(onOpenInDrive).toHaveBeenCalledWith(synced);
+
+        const plain = buildSourceMenuItems(t, source(), folders, [], { onOpenInDrive });
+        expect(plain.some(i => i.id === "open-drive")).toBe(false);
+    });
+});

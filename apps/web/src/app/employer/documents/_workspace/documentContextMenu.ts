@@ -25,6 +25,8 @@ export interface DocumentMenuState {
     editable?: boolean;
     /** The original file's URL, when it is loaded. */
     originalUrl: string | null;
+    /** Its page in Google Drive — a file the connector syncs, or one linked to Drive. */
+    driveUrl?: string | null;
 }
 
 export interface DocumentMenuHandlers {
@@ -94,6 +96,16 @@ export function buildDocumentMenuItems(
             disabled: !state.originalUrl,
             disabledReason: state.originalUrl ? undefined : t("documentMenu.originalLoading"),
             onSelect: () => handlers.onDownload?.(),
+        });
+    }
+    if (state.driveUrl && !state.isMindmap) {
+        const driveUrl = state.driveUrl;
+        items.push({
+            type: "item",
+            id: "open-drive",
+            label: t("documentMenu.openInDrive"),
+            icon: "external",
+            onSelect: () => window.open(driveUrl, "_blank", "noopener,noreferrer"),
         });
     }
     items.push({

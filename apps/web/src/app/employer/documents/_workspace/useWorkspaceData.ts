@@ -19,6 +19,7 @@ import {
     mediaKindOfName,
     transcriptMarkerOf,
 } from "~/lib/media-document";
+import { driveUrlOfSyncedDocument } from "~/lib/integrations/google-drive-link";
 import { mediaEmbedFor } from "~/lib/media-embed";
 import type { SourceProcessingView } from "~/lib/source-progress";
 import { nextSourcePollDelay, processingActivity } from "./sourcePolling";
@@ -169,6 +170,7 @@ export function mapDocument(doc: DocumentRow, labels: SourceRowLabels): Workspac
         indexStatus: mediaOriginal ? undefined : documentIndexStatus(doc),
         errorMessage: mediaOriginal ? undefined : documentIndexError(doc),
         processing: mediaOriginal ? undefined : (doc.processing ?? null),
+        driveUrl: driveUrlOfSyncedDocument(doc.ocrMetadata) ?? undefined,
     };
 }
 

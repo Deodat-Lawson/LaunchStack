@@ -133,3 +133,18 @@ describe("document menu builders", () => {
         expect(current.find(i => i.id === "restore")).toMatchObject({ disabled: true });
     });
 });
+
+describe("Open in Google Drive", () => {
+    it("appears beside Copy link when the document has a Drive page", () => {
+        const state = { isMindmap: false, askable: true, persisted: true, originalUrl: null };
+        const withDrive = buildDocumentMenuItems(
+            doc,
+            { ...state, driveUrl: "https://docs.google.com/document/d/abc1234567/edit" },
+            handlers(),
+            t
+        ).map(i => i.id);
+        expect(withDrive.indexOf("open-drive")).toBe(withDrive.indexOf("copy-link") - 1);
+        const without = buildDocumentMenuItems(doc, state, handlers(), t).map(i => i.id);
+        expect(without).not.toContain("open-drive");
+    });
+});

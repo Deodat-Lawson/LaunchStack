@@ -141,6 +141,9 @@ export function KnowledgePane({
                         );
                     }
                 },
+                onOpenInDrive: s => {
+                    if (s.driveUrl) window.open(s.driveUrl, "_blank", "noopener,noreferrer");
+                },
                 onRename: onRenameSource,
                 onMoveToFolder,
                 onCopyTitle: s => {

@@ -19,6 +19,7 @@ import { ConfirmDialog } from "~/components/ui/confirm-dialog";
 import { useAuth } from "~/lib/auth-client";
 import { usePeople } from "~/lib/profile/use-people";
 import { IconDrive } from "~/components/icons/brand";
+import { driveUrlOfSyncedDocument } from "~/lib/integrations/google-drive-link";
 import {
     GoogleDriveBanner,
     setDriveBarHidden,
@@ -449,6 +450,15 @@ export function DocumentViewer({
     const drive = useDriveLinkStatus(driveDocumentId);
     const driveBarHidden = useDriveBarHidden();
     const driveLink = drive.status?.link ?? null;
+    /**
+     * A file the Drive connector syncs already lives in Drive, so it has no
+     * Drive bar (nothing to link); it opens straight in Drive instead.
+     */
+    const syncedDriveUrl = isMindmap
+        ? null
+        : (source.driveUrl ?? driveUrlOfSyncedDocument(fullDoc?.ocrMetadata));
+    const driveUrl =
+        syncedDriveUrl ?? (driveLink?.status === "linked" ? (driveLink.url ?? null) : null);
     /**
      * Bring the rail into view for something that happens in it — a new
      * note's draft, a pin's card. Not remembered: it is shown for this, and
@@ -978,6 +988,7 @@ export function DocumentViewer({
                     persisted,
                     editable,
                     originalUrl: fullDoc?.url ?? null,
+                    driveUrl,
                 },
                 {
                     onAskAbout: () => onAskAbout(source),
@@ -1121,6 +1132,19 @@ export function DocumentViewer({
                               : tDrive("showHint")
                           : tDrive("hideToggleHint"),
                       testId: "viewer-drive-toggle",
+                  },
+              ]
+            : []),
+        ...(syncedDriveUrl && !drive.status?.linkable
+            ? [
+                  {
+                      id: "open-drive",
+                      label: tDrive("openInDrive"),
+                      icon: <IconDrive size={14} />,
+                      onSelect: () => window.open(syncedDriveUrl, "_blank", "noopener,noreferrer"),
+                      iconOnly: true,
+                      hint: tDrive("openSyncedHint"),
+                      testId: "viewer-open-in-drive",
                   },
               ]
             : []),

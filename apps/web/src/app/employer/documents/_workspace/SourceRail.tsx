@@ -1140,6 +1140,9 @@ export function SourceRail({
                         );
                     }
                 },
+                onOpenInDrive: s => {
+                    if (s.driveUrl) window.open(s.driveUrl, "_blank", "noopener,noreferrer");
+                },
                 onShowInKnowledge: onOpenKnowledge ? () => onOpenKnowledge() : undefined,
                 onRename: onRenameSource,
                 onMoveToFolder,

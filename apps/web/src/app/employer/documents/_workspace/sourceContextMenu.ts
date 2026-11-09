@@ -38,6 +38,8 @@ export interface SourceMenuHandlers {
     onCopyTitle?: (source: WorkspaceSource) => void;
     onOpenInNewTab?: (source: WorkspaceSource) => void;
     onCopyLink?: (source: WorkspaceSource) => void;
+    /** Open the file in Google Drive — offered only when the source has a `driveUrl`. */
+    onOpenInDrive?: (source: WorkspaceSource) => void;
     /** Browse this source in the full Knowledge surface. */
     onShowInKnowledge?: (source: WorkspaceSource) => void;
     /** Pick the source up, to drop it on a folder with "Paste". */
@@ -137,6 +139,16 @@ export function buildSourceMenuItems(
             disabled: !persisted,
             disabledReason: persisted ? undefined : indexingReason,
             onSelect: () => handlers.onOpenInNewTab?.(source),
+        });
+    }
+
+    if (handlers.onOpenInDrive && source.driveUrl) {
+        items.push({
+            type: "item",
+            id: "open-drive",
+            label: t("openInDrive"),
+            icon: "external",
+            onSelect: () => handlers.onOpenInDrive?.(source),
         });
     }
 

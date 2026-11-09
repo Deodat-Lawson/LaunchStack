@@ -204,6 +204,8 @@ export interface WorkspaceSource {
     access?: ItemAccessView;
     /** Who added it, when a person did. */
     addedBy?: SourceAddedBy | null;
+    /** Its page in Google Drive, for a file the Drive connector syncs. */
+    driveUrl?: string;
 }
 
 export interface WorkspaceFolder {

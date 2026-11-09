@@ -67,24 +67,24 @@ and final delivery; no self-referential commit hash is embedded in its own file.
 
 ## Requirement-to-test evidence
 
-| Requirement / audit IDs | Implementation and executed evidence |
-|---|---|
-| F1: source-authorized FWR reads | read-authority module, current DocumentScope for frozen dependencies; six focused authority tests. Missing lineage fails closed; unscoped historical founder/manual text creator-private. |
-| N8: history mutation capability | generic history DELETE 403 for read-only callers, 409 retaining generated history even for authorized editors; three tests and authenticated HTTP denial. |
-| N1/N3: required company context | actual source audience check, separate policy/stars, full mandatory coverage and purpose in model input. Four authority tests plus actual SQL/private-star/required tests and authenticated private-required denial. |
-| N2: dispatch/activation/read revocation | fresh actor/source epoch at each durable dispatch admission and activation; frozen-version read authority. V2.1 auth-barrier tests, PostgreSQL epoch tests and authenticated revocation denial. |
-| N9: tenant locking | real PG holds company-one epoch while company-two writes complete; same-company mutation blocks then succeeds. No global SHARE locks. |
-| F2/F3/F4/F5/F9/N4 | configured V2.1 model transport, native durable receipts, explicit test/outcome, observed versions and safe status Undo. Three schema/client tests plus actual native PostgreSQL concurrency/idempotency/CAS suite. |
-| F6 | outbox exhaustion atomically fails queued FWR run; seven real PostgreSQL dispatch tests. FWR workers are outside the new synchronous Vantage flow. |
-| F7 | historical native enhancement finding not applicable to the new canonical report; main UI retained. No claim of M3 enhancement UI port. |
-| F8 | new path uses normalized capabilities, not owner/admin/editor string disagreement. Legacy FWR mutations also require an explicit freshly resolved mutation capability; missing or false capability is denied even for a privileged role alias. |
-| N6: human review audit | immutable decision entries with actor/time/version/key; actual PG replay/conflict/stale tests and UI decision/reload. |
-| N7: V2.1 only | no Native companion or carrier requested/persisted; 22 V2.1 contract tests including Judge output coverage, bad refs/numeric support, same-model refusal, failed/invalid Judge and abort-ignoring timeout. |
-| N10: historical availability | actual HTTP old-head replacement and harmless preference change keep frozen report readable; revoked source denies. |
-| N11: key lifecycle/retention | retained keyring parsing and crypto tests (18 combined), report AAD and key version PG checks; frozen dependencies retained for reauthorization. No automatic plaintext attempt capture. |
-| Activation/admission | candidate ID/report hash/error-free passing Judge required; forged/missing/failed Judge PG tests; loser cannot replace active pointer. |
-| Recovery/rollback | two-request durable flags, crash-uncertain expiry, DB-only retry, authenticated recover/restore/replay, active-pointer DB assertion, SQL downgrade retains reports and requires explicit feature-off attestation. |
-| Real boundaries | one extended Chromium test uses true signup/company, actual APIs/DB, visible human decision, reload, cross-company denial, 201/409 concurrent generation and restore/recovery. Provider is deterministic, clearly labeled. |
+| Requirement / audit IDs                 | Implementation and executed evidence                                                                                                                                                                                                           |
+| --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| F1: source-authorized FWR reads         | read-authority module, current DocumentScope for frozen dependencies; six focused authority tests. Missing lineage fails closed; unscoped historical founder/manual text creator-private.                                                      |
+| N8: history mutation capability         | generic history DELETE 403 for read-only callers, 409 retaining generated history even for authorized editors; three tests and authenticated HTTP denial.                                                                                      |
+| N1/N3: required company context         | actual source audience check, separate policy/stars, full mandatory coverage and purpose in model input. Four authority tests plus actual SQL/private-star/required tests and authenticated private-required denial.                           |
+| N2: dispatch/activation/read revocation | fresh actor/source epoch at each durable dispatch admission and activation; frozen-version read authority. V2.1 auth-barrier tests, PostgreSQL epoch tests and authenticated revocation denial.                                                |
+| N9: tenant locking                      | real PG holds company-one epoch while company-two writes complete; same-company mutation blocks then succeeds. No global SHARE locks.                                                                                                          |
+| F2/F3/F4/F5/F9/N4                       | configured V2.1 model transport, native durable receipts, explicit test/outcome, observed versions and safe status Undo. Three schema/client tests plus actual native PostgreSQL concurrency/idempotency/CAS suite.                            |
+| F6                                      | outbox exhaustion atomically fails queued FWR run; seven real PostgreSQL dispatch tests. FWR workers are outside the new synchronous Vantage flow.                                                                                             |
+| F7                                      | historical native enhancement finding not applicable to the new canonical report; main UI retained. No claim of M3 enhancement UI port.                                                                                                        |
+| F8                                      | new path uses normalized capabilities, not owner/admin/editor string disagreement. Legacy FWR mutations also require an explicit freshly resolved mutation capability; missing or false capability is denied even for a privileged role alias. |
+| N6: human review audit                  | immutable decision entries with actor/time/version/key; actual PG replay/conflict/stale tests and UI decision/reload.                                                                                                                          |
+| N7: V2.1 only                           | no Native companion or carrier requested/persisted; 23 V2.1 contract tests including Judge output coverage, bad refs/numeric support, same-model refusal, failed/invalid Judge and abort-ignoring timeout.                                     |
+| N10: historical availability            | actual HTTP old-head replacement and harmless preference change keep frozen report readable; revoked source denies.                                                                                                                            |
+| N11: key lifecycle/retention            | retained keyring parsing and crypto tests (18 combined), report AAD and key version PG checks; frozen dependencies retained for reauthorization. No automatic plaintext attempt capture.                                                       |
+| Activation/admission                    | candidate ID/report hash/error-free passing Judge required; forged/missing/failed Judge PG tests; loser cannot replace active pointer.                                                                                                         |
+| Recovery/rollback                       | two-request durable flags, crash-uncertain expiry, DB-only retry, authenticated recover/restore/replay, active-pointer DB assertion, SQL downgrade retains reports and requires explicit feature-off attestation.                              |
+| Real boundaries                         | one extended Chromium test uses true signup/company, actual APIs/DB, visible human decision, reload, cross-company denial, 201/409 concurrent generation and restore/recovery. Provider is deterministic, clearly labeled.                     |
 
 ## Observed failures and verification limits
 
@@ -103,8 +103,7 @@ and final delivery; no self-referential commit hash is embedded in its own file.
   increase or production configuration bypass was used. Production load/pool
   soak remains a release gate.
 - Initial Jest route/UI suites hit @formatjs ESM loading before assertions.
-  These are reported failures, not skips. Focused authority/action suites and
-  real PostgreSQL/browser boundaries were executed separately.
+  The root cause was Jest Windows path normalization doubling \w inside character classes in the pnpm ESM allowlist. Explicit ASCII classes fix it. Both formerly blocked suites now pass (23 tests); the complete FWR run passes 31 suites / 180 tests, zero skips.
 - Baseline lint configuration could not resolve its React Hooks/Next plugins
   through pnpm. The existing locked Hooks plugin is declared directly; FlatCompat
   resolves Next's plugins beside its config. Final lint result recorded below.
@@ -151,5 +150,35 @@ save, authorized UI readback and a human decision. An invalid or unjudged result
 must leave the last accepted report active. No launch readiness claim follows from
 deterministic provider acceptance alone.
 
-
 Legacy V1 compatibility: creator-private manual reports remain readable without reinterpretation. Native V1 document-derived reports lack a reliable immutable dependency registry; the compatibility reader withholds those rather than inventing source authority. Legacy report exports and overview bodies use the same guard. Legacy raw capture/sharing policies are not expanded by this work.
+
+## Final verification and release gates
+
+Checkpoint 1: 07131ea0db7277871fded2f77d2dcd41f4720e6a.
+Checkpoint 2: fba7771e (full SHA in Git). Additional review corrections: 28541d03.
+The final acceptance commit follows these; Git history is authoritative.
+
+| Check                                        | Actual result                                                                                                                                              |
+| -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Web TypeScript                               | PASS; production build also performs type validation                                                                                                       |
+| Pipeline TypeScript                          | PASS                                                                                                                                                       |
+| Changed TS/JS lint                           | 88 files, zero errors, 16 warnings; narrow review corrections separately zero errors                                                                       |
+| V2.1 contract/admission                      | 23 tests PASS, including zero-dispatch evaluator preflight, abort-ignoring timeout and failed Judge                                                        |
+| Existing signals/week/update/CSV             | 22 tests PASS                                                                                                                                              |
+| Focused crypto/history/action/legacy guards  | 6 suites / 39 tests PASS                                                                                                                                   |
+| Full FWR regression with isolated PostgreSQL | 31 suites / 180 tests PASS, zero skipped                                                                                                                   |
+| Formerly blocked FWR route/native one-click  | 2 suites / 23 tests PASS after Windows ESM correction                                                                                                      |
+| Authority and real PostgreSQL                | 2 suites / 7 tests PASS; includes configuration-demotion barriers, per-company concurrency, forged admission, restore and recovery                         |
+| Native action real PostgreSQL                | 1 integration test PASS with concurrent receipt/CAS/action assertions                                                                                      |
+| Authenticated HTTP/Chromium/PG               | 1 extended test PASS, 41.7s, final frozen source with exact encrypted snapshot and registry assertions                                                     |
+| Production build                             | PASS, including PDF worker prebuild, optimized compile, type validation, 202 static pages and traces; feature/test-provider flags false                    |
+| Migration up and safe rollback               | 6 engine + 49 product migrations applied through official runner; isolated guarded downgrade preserves accepted rows, blocks absent/on feature attestation |
+| Diff whitespace                              | Three trailing-blank-line notices in newly introduced SQL migrations remain; applied migration bytes were preserved rather than rewriting checksums        |
+
+Counts overlap across focused/full runs and are not added into a fabricated total. Full monorepo unit/lint/load coverage was not run; the relevant scopes above were. Lint warnings include retained fixture unused symbols, legacy UI unused helpers, import-type style and an ignored config notice. No lint/security rule was disabled.
+
+A bounded independent pre-PR review found two issues, both corrected: admin-to-member demotion before company policy update (fresh capability now required under lock, with a matching preference barrier), and evaluator-incompatible context that could consume Generation before failing (shared evaluator preflight and conservative dynamic report-byte bound now precede dispatch). Full frozen input and registry are retained only inside the encrypted accepted envelope; external dependency metadata omits source text.
+
+This PR stays Draft and is not a production-ready/deployed claim. Before launch: obtain spending approval and run the bounded real-model canary; verify actual serving identities and independence, pricing and worst-case cost; agree company context and UTC reporting policy; review the richer business-role/profile gap (membership role is the current trusted input); set retention/purge policy and rehearse operator restore with the real keyring; run representative production pool/load checks and CI. The observed HMR pool exhaustion was isolated to repeated development reloads and is not a measured production SLO.
+
+The new path is off by default. When enabled, legacy V1 Generation is rejected; protected V1 historical readers remain. When disabled, legacy main behavior remains subject to the added source/ownership guards. This flag/rollback behavior must be reviewed explicitly for rollout. There is no automatic action execution.

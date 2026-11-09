@@ -170,15 +170,59 @@ The final acceptance commit follows these; Git history is authoritative.
 | Formerly blocked FWR route/native one-click  | 2 suites / 23 tests PASS after Windows ESM correction                                                                                                      |
 | Authority and real PostgreSQL                | 2 suites / 7 tests PASS; includes configuration-demotion barriers, per-company concurrency, forged admission, restore and recovery                         |
 | Native action real PostgreSQL                | 1 integration test PASS with concurrent receipt/CAS/action assertions                                                                                      |
-| Authenticated HTTP/Chromium/PG               | 1 extended test PASS, 41.7s, final frozen source with exact encrypted snapshot and registry assertions                                                     |
+| Authenticated HTTP/Chromium/PG               | 1 extended test PASS; final post-CI-correction repeat 1.7 minutes, with exact encrypted snapshot and registry assertions                                   |
 | Production build                             | PASS, including PDF worker prebuild, optimized compile, type validation, 202 static pages and traces; feature/test-provider flags false                    |
 | Migration up and safe rollback               | 6 engine + 49 product migrations applied through official runner; isolated guarded downgrade preserves accepted rows, blocks absent/on feature attestation |
 | Diff whitespace                              | Three trailing-blank-line notices in newly introduced SQL migrations remain; applied migration bytes were preserved rather than rewriting checksums        |
 
-Counts overlap across focused/full runs and are not added into a fabricated total. Full monorepo unit/lint/load coverage was not run; the relevant scopes above were. Lint warnings include retained fixture unused symbols, legacy UI unused helpers, import-type style and an ignored config notice. No lint/security rule was disabled.
+Counts overlap across focused/full runs and are not added into a fabricated total. Local verification did not run the entire monorepo suite or representative load. The first remote CI run additionally passed full-repository lint, all workspace type checks, generated wire schemas and existing feature/orchestration PostgreSQL suites; follow-up status is recorded below. Lint warnings include retained fixture unused symbols, legacy UI unused helpers, import-type style and an ignored config notice. No lint/security rule was disabled.
 
 A bounded independent pre-PR review found two issues, both corrected: admin-to-member demotion before company policy update (fresh capability now required under lock, with a matching preference barrier), and evaluator-incompatible context that could consume Generation before failing (shared evaluator preflight and conservative dynamic report-byte bound now precede dispatch). Full frozen input and registry are retained only inside the encrypted accepted envelope; external dependency metadata omits source text.
 
 This PR stays Draft and is not a production-ready/deployed claim. Before launch: obtain spending approval and run the bounded real-model canary; verify actual serving identities and independence, pricing and worst-case cost; agree company context and UTC reporting policy; review the richer business-role/profile gap (membership role is the current trusted input); set retention/purge policy and rehearse operator restore with the real keyring; run representative production pool/load checks and CI. The observed HMR pool exhaustion was isolated to repeated development reloads and is not a measured production SLO.
 
 The new path is off by default. When enabled, legacy V1 Generation is rejected; protected V1 historical readers remain. When disabled, legacy main behavior remains subject to the added source/ownership guards. This flag/rollback behavior must be reviewed explicitly for rollout. There is no automatic action execution.
+
+## CI follow-up after Checkpoint 3
+
+Checkpoint 3 was committed as 7d8b4f90. Its first remote CI run exposed missing
+snapshots and a bigint-default serialization error in schema reconstruction.
+The follow-up adds the three snapshot states (49 journal entries / 49 snapshots),
+uses an equivalent SQL bigint default, and matches TypeScript constraint names
+and physical column order to the already-applied SQL. Applied migrations 46–48
+were not rewritten. Official journal/check/generate gates now pass with no drift.
+
+The sequential engine/product Drizzle pushes also exposed a serial-sequence
+filtering failure. A CI-only, guarded combined schema config reconstructs both
+sets in a newly created empty test database. Production migration runners remain
+separate. A hash-pinned helper adds only the immutable authority function and
+trigger definitions that Drizzle cannot model. The full schema comparison still
+includes functions, triggers, sequences, constraints and indexes; no object class
+is filtered out. Three helper tests verify selection and fail-closed rejection of
+tampering. The forward DDL gate uses top-level migration paths matching the journal
+runner; the separate guarded operator rollback is not a forward migration.
+
+Fresh isolated PostgreSQL reconstruction passed: migration-built and TypeScript-
+built schemas have identical 4,186-line normalized dumps, SHA256
+B9891E3C34A7A4325276DBC0362289CAAE8B848A80A61F0E68D392540AADD532.
+Only the existing CI exclusions for migration ledgers, comments, SET and dump
+restriction tokens were applied. Full source and authority guards were retained.
+
+GitGuardian flagged the browser fixture's password template at line 31, incident 39876019. It was already generated randomly per run, not a reusable credential.
+The fixed template fragments were removed; cryptographic random generation is
+preserved. No scanner finding was dismissed and no ignore rule was added.
+The dedicated synthetic PostgreSQL prerequisite is now wired into CI so the new
+authority suite runs rather than failing for a missing environment variable.
+
+N5 remains an explicit launch gate: request/token limits do not establish an
+enforceable monetary budget. No live spending approval or model dispatch occurred.
+
+Final post-correction verification: extended authenticated Chromium acceptance
+passed in 1.7 minutes; the production build passed again (optimized compile,
+type validation, 202 static pages and traces). The task-owned app server was
+stopped. Matching CI commands also passed locally: one authority PostgreSQL suite
+and 24 pipeline tests (23 V2.1 plus one real PostgreSQL native action test).
+Targeted lint of the changed TypeScript passed; the two helper .mjs files are
+ignored by the existing lint configuration and instead pass their Node tests.
+The updated branch requires a fresh remote CI run; GitHub checks remain the
+authoritative current status and are not implied green by local results.

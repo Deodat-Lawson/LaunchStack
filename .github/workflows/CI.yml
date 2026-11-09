@@ -31,8 +31,25 @@ jobs:
           --health-timeout 5s
           --health-retries 5
 
+      vantage-postgres:
+        image: pgvector/pgvector:pg17
+        env:
+          POSTGRES_USER: vantage_test
+          POSTGRES_DB: vantage_production_acceptance
+          # Dedicated ephemeral fixture service; never an application database.
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports:
+          - 55569:5432
+        options: >-
+          --health-cmd "pg_isready -U vantage_test -d vantage_production_acceptance"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     env:
       DATABASE_URL: postgresql://postgres:postgres@localhost:5432/launchstack_test
+      VANTAGE_PRODUCTION_TEST_DATABASE_URL: postgres://vantage_test:vantage_test_only@127.0.0.1:55569/vantage_production_acceptance
+      VANTAGE_PRODUCTION_PG_URL: postgres://vantage_test:vantage_test_only@127.0.0.1:55569/vantage_production_acceptance
       SKIP_ENV_VALIDATION: "1"
       # CI never calls the endpoint; these only satisfy env.ts's chat check.
       # Set explicitly rather than relying on the deprecated OPENAI_API_KEY
@@ -78,6 +95,12 @@ jobs:
       - name: Apply migrations to test database
         run: pnpm --filter @launchstack/web db:migrate
 
+      - name: Apply official migrations to isolated Vantage acceptance database
+        env:
+          DATABASE_URL: ${{ env.VANTAGE_PRODUCTION_TEST_DATABASE_URL }}
+          MIGRATE_DATABASE_URL: ${{ env.VANTAGE_PRODUCTION_TEST_DATABASE_URL }}
+        run: pnpm --filter @launchstack/web db:migrate
+
       # Blocking (ADR-006). The legacy `continue-on-error` here hid a fully
       # red lint state on main for months.
       - name: Lint
@@ -121,6 +144,12 @@ jobs:
       # suites are fixed and run with everything else.
       - name: Web tests
         run: pnpm --filter @launchstack/web exec jest --runInBand --forceExit
+
+      - name: Vantage V2.1 contract and PostgreSQL action integrity
+        run: >-
+          pnpm --filter @launchstack/pipelines exec vitest run
+          src/vantage/weekly-review-v21.test.ts
+          src/vantage/action-integrity.integration.test.ts
 
   python-services:
     runs-on: ubuntu-latest
@@ -253,6 +282,9 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
 
+      - name: Reviewed PostgreSQL-only DDL boundary
+        run: node --test scripts/ci/vantage-guard-ddl.test.mjs
+
       - name: Journal and snapshot integrity
         run: |
           pnpm --filter @launchstack/store db:check
@@ -289,15 +321,27 @@ jobs:
           # checkout was shallow, the base commit was absent, `git diff` died,
           # and the empty result meant the loop inspected nothing while the step
           # reported success. Both gates below were silently vacuous.
-          if ! changed=$(git diff --name-only "$base"...HEAD -- 'packages/store/drizzle/*.sql' 'apps/web/drizzle/*.sql'); then
+          # Match only top-level forward SQL, exactly as check-journal and
+          # the official migration runner do. rollback/ holds separately tested
+          # operator scripts, not executable forward journal entries.
+          if ! changed=$(git diff --name-only "$base"...HEAD -- ':(glob)packages/store/drizzle/*.sql' ':(glob)apps/web/drizzle/*.sql'); then
             echo "::error::Could not diff migrations against $base. The gate cannot run, so it fails."
             exit 1
           fi
           status=0
           for f in $changed; do
             [ -f "$f" ] || continue
+            scan="$f"
+            # This exact immutable migration defines an authority trigger. Its
+            # function-body INSERT and trigger-creation DO are DDL, not backfills.
+            # The helper pins the whole file and removes only reviewed blocks;
+            # changed bytes or statement boundaries fail closed.
+            if [ "$f" = "apps/web/drizzle/20261109200000_vantage_weekly_reviews.sql" ]; then
+              scan=$(mktemp)
+              node scripts/ci/vantage-guard-ddl.mjs --ddl-remainder "$f" > "$scan" || exit 1
+            fi
             if ! grep -q 'launchstack:allow-dml' "$f" \
-               && grep -qEi '^[[:space:]]*(UPDATE|INSERT INTO|DELETE FROM|DO \$\$)' "$f"; then
+               && grep -qEi '^[[:space:]]*(UPDATE|INSERT INTO|DELETE FROM|DO \$\$)' "$scan"; then
               echo "::error file=$f::Migration contains DML. Move it to a backfill."
               status=1
             fi
@@ -391,12 +435,15 @@ jobs:
       - name: Build the same schema from TypeScript
         run: |
           psql "$PGURL/ls_push" -c 'CREATE EXTENSION IF NOT EXISTS vector'
-          # Both configs push into the same empty database: engine tables first
-          # so the product config's foreign keys resolve.
-          DATABASE_URL="$PGURL/ls_push" LAUNCHSTACK_ALLOW_PUSH=1 \
-            pnpm --filter @launchstack/store exec drizzle-kit push --force
-          DATABASE_URL="$PGURL/ls_push" LAUNCHSTACK_ALLOW_PUSH=1 \
-            pnpm --filter @launchstack/web exec drizzle-kit push --force
+          # Push the combined engine/product declaration once. Sequential
+          # filtered pushes can attempt to remove another set's sequences.
+          CI=true DATABASE_URL="$PGURL/ls_push" LAUNCHSTACK_ALLOW_PUSH=1 \
+            pnpm --filter @launchstack/web exec drizzle-kit push --config=drizzle.parity.config.ts --force
+          # Drizzle has no representation for PostgreSQL trigger functions.
+          # Add ONLY the hash-pinned immutable authority guard DDL to this
+          # EMPTY TS-built side; pg_dump still compares all functions/triggers.
+          node scripts/ci/vantage-guard-ddl.mjs --emit > /tmp/vantage-guard-ddl.sql
+          psql "$PGURL/ls_push" -v ON_ERROR_STOP=1 -f /tmp/vantage-guard-ddl.sql
 
       - name: Assert the two schemas are identical
         run: |

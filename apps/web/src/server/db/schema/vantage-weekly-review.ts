@@ -4,6 +4,7 @@ import {
     boolean,
     check,
     date,
+    foreignKey,
     index,
     integer,
     jsonb,
@@ -37,13 +38,17 @@ export const vantageWeeklyReviewRuns = pgTable(
         acceptedAt: timestamp("accepted_at", { withTimezone: true }),
     },
     t => ({
-        operation: unique().on(t.companyId, t.ownerId, t.idempotencyKey),
+        operation: unique("pdr_ai_v2_vantage_weekly_revi_company_id_owner_id_idempoten_key").on(
+            t.companyId,
+            t.ownerId,
+            t.idempotencyKey
+        ),
         statusValid: check(
-            "vantage_weekly_review_status",
+            "pdr_ai_v2_vantage_weekly_review_runs_status_check",
             sql`${t.status} IN ('reserved','accepted','failed')`
         ),
         ciphertextValid: check(
-            "vantage_weekly_review_ciphertext",
+            "pdr_ai_v2_vantage_weekly_review_runs_check",
             sql`(${t.status}='accepted') = (${t.ciphertext} IS NOT NULL)`
         ),
         history: index("vantage_weekly_review_owner_history").on(
@@ -59,20 +64,26 @@ export const vantageWeeklyReviewActive = pgTable(
         companyId: bigint("company_id", { mode: "bigint" }).notNull(),
         ownerId: text("owner_id").notNull(),
         weekStart: date("week_start").notNull(),
-        runId: uuid("run_id")
-            .notNull()
-            .references(() => vantageWeeklyReviewRuns.id),
+        runId: uuid("run_id").notNull(),
     },
-    t => ({ pk: primaryKey({ columns: [t.companyId, t.ownerId, t.weekStart] }) })
+    t => ({
+        pk: primaryKey({
+            name: "pdr_ai_v2_vantage_weekly_review_active_pkey",
+            columns: [t.companyId, t.ownerId, t.weekStart],
+        }),
+        run: foreignKey({
+            name: "pdr_ai_v2_vantage_weekly_review_active_run_id_fkey",
+            columns: [t.runId],
+            foreignColumns: [vantageWeeklyReviewRuns.id],
+        }),
+    })
 );
 export const vantageWeeklyReviewDecisions = pgTable(
     "vantage_weekly_review_decisions",
     {
         id: uuid("id").primaryKey(),
         companyId: bigint("company_id", { mode: "bigint" }).notNull(),
-        runId: uuid("run_id")
-            .notNull()
-            .references(() => vantageWeeklyReviewRuns.id),
+        runId: uuid("run_id").notNull(),
         actorId: text("actor_id").notNull(),
         idempotencyKey: text("idempotency_key").notNull(),
         payloadHash: text("payload_hash").notNull(),
@@ -81,13 +92,28 @@ export const vantageWeeklyReviewDecisions = pgTable(
         createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
     },
     t => ({
-        operation: unique().on(t.companyId, t.runId, t.actorId, t.idempotencyKey),
-        revision: unique().on(t.runId, t.version),
+        operation: unique("pdr_ai_v2_vantage_weekly_revi_company_id_run_id_actor_id_id_key").on(
+            t.companyId,
+            t.runId,
+            t.actorId,
+            t.idempotencyKey
+        ),
+        revision: unique("pdr_ai_v2_vantage_weekly_review_decisions_run_id_version_key").on(
+            t.runId,
+            t.version
+        ),
+        run: foreignKey({
+            name: "pdr_ai_v2_vantage_weekly_review_decisions_run_id_fkey",
+            columns: [t.runId],
+            foreignColumns: [vantageWeeklyReviewRuns.id],
+        }),
     })
 );
 export const vantageWeeklyReviewEpochs = pgTable("vantage_weekly_review_epochs", {
     companyId: bigint("company_id", { mode: "bigint" }).primaryKey(),
-    version: bigint("version", { mode: "bigint" }).notNull().default(1n),
+    version: bigint("version", { mode: "bigint" })
+        .notNull()
+        .default(sql`1`),
 });
 export const vantageWeeklyReviewPolicy = pgTable("vantage_weekly_review_policy", {
     companyId: bigint("company_id", { mode: "bigint" }).primaryKey(),
@@ -107,7 +133,12 @@ export const vantageWeeklyReviewPreferences = pgTable(
             .default(sql`'[]'::jsonb`),
         version: integer("version").notNull().default(1),
     },
-    t => ({ pk: primaryKey({ columns: [t.companyId, t.actorId] }) })
+    t => ({
+        pk: primaryKey({
+            name: "pdr_ai_v2_vantage_weekly_review_preferences_pkey",
+            columns: [t.companyId, t.actorId],
+        }),
+    })
 );
 
 export const vantageWeeklyReviewActivationEvents = pgTable(
@@ -121,16 +152,28 @@ export const vantageWeeklyReviewActivationEvents = pgTable(
         idempotencyKey: text("idempotency_key").notNull(),
         payloadHash: text("payload_hash").notNull(),
         kind: text("kind").notNull(),
-        previousRunId: uuid("previous_run_id").references(() => vantageWeeklyReviewRuns.id),
-        runId: uuid("run_id")
-            .notNull()
-            .references(() => vantageWeeklyReviewRuns.id),
+        previousRunId: uuid("previous_run_id"),
+        runId: uuid("run_id").notNull(),
         createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
     },
     t => ({
-        operation: unique().on(t.companyId, t.ownerId, t.idempotencyKey),
+        operation: unique("pdr_ai_v2_vantage_weekly_revi_company_id_owner_id_idempote_key1").on(
+            t.companyId,
+            t.ownerId,
+            t.idempotencyKey
+        ),
+        run: foreignKey({
+            name: "pdr_ai_v2_vantage_weekly_review_activation_events_run_id_fkey",
+            columns: [t.runId],
+            foreignColumns: [vantageWeeklyReviewRuns.id],
+        }),
+        previous: foreignKey({
+            name: "pdr_ai_v2_vantage_weekly_review_activation_previous_run_id_fkey",
+            columns: [t.previousRunId],
+            foreignColumns: [vantageWeeklyReviewRuns.id],
+        }),
         kindValid: check(
-            "vantage_review_activation_kind",
+            "pdr_ai_v2_vantage_weekly_review_activation_events_kind_check",
             sql`${t.kind} IN ('accepted','restored')`
         ),
     })

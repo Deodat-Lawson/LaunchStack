@@ -20,6 +20,7 @@ import type { InferSelectModel } from "drizzle-orm";
 import {
     bigint,
     boolean,
+    check,
     date,
     doublePrecision,
     index,
@@ -245,17 +246,21 @@ export const vantageAgendaTopics = pgTable(
         /** Founder's choice: an administrator or mentor may see this topic. */
         shared: boolean("shared").notNull().default(false),
         /** Recorded after the meeting. */
-        contentVersion: integer("content_version").notNull().default(1),
         decision: text("decision"),
         decidedAt: timestamp("decided_at", { withTimezone: true }),
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
         updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
+        contentVersion: integer("content_version").notNull().default(1),
     },
     table => [
         index("vantage_agenda_topics_agenda_position_idx").on(table.agendaId, table.position),
         index("vantage_agenda_topics_company_shared_idx").on(table.companyId, table.shared),
+        check(
+            "pdr_ai_v2_vantage_agenda_topics_content_version_check",
+            sql`${table.contentVersion} > 0`
+        ),
     ]
 );
 
@@ -282,7 +287,6 @@ export const vantageCommitments = pgTable(
             .notNull()
             .default("open"),
         /** What was learned, recorded at check-in. */
-        contentVersion: integer("content_version").notNull().default(1),
         outcome: text("outcome"),
         shared: boolean("shared").notNull().default(false),
         resolvedAt: timestamp("resolved_at", { withTimezone: true }),
@@ -290,6 +294,7 @@ export const vantageCommitments = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
         updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
+        contentVersion: integer("content_version").notNull().default(1),
     },
     table => [
         index("vantage_commitments_company_status_due_idx").on(
@@ -298,6 +303,10 @@ export const vantageCommitments = pgTable(
             table.dueOn
         ),
         index("vantage_commitments_agenda_idx").on(table.agendaId),
+        check(
+            "pdr_ai_v2_vantage_commitments_content_version_check",
+            sql`${table.contentVersion} > 0`
+        ),
     ]
 );
 

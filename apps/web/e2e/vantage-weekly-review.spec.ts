@@ -28,7 +28,7 @@ test("authenticated V2.1 review, decision replay, reload and company isolation",
     const sql = createPostgres(database);
     const stamp = randomUUID();
     const companyName = `Vantage acceptance ${stamp}`;
-    const password = `E2e-${randomBytes(24).toString("base64url")}!`;
+    const password = randomBytes(24).toString("base64url");
     const email = `vantage-${stamp}@example.test`;
     try {
         const signup = await page.request.post("/api/auth/sign-up/email", {

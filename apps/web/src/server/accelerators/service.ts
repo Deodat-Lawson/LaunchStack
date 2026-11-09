@@ -1,6 +1,7 @@
 import {
     AcceleratorError,
     hashValue,
+    programFit,
     type HomeResponse,
     type ProgramView,
 } from "@launchstack/pipelines/accelerators";
@@ -44,23 +45,14 @@ export async function loadAccelerators(member: WorkspaceContext): Promise<HomeRe
         loadOrgProfile(member.companyId, await member.documentScope()),
     ]);
     const profileHash = profile ? hashValue(profile) : null;
-    const programs = catalogue
-        .map(({ program, contentHash }): ProgramView => {
-            const fit = matches[program.id] ?? null;
-            return {
-                program,
-                contentHash,
-                fit,
-                fitStale:
-                    fit !== null &&
-                    (fit.profileHash !== profileHash || fit.programHash !== contentHash),
-            };
+    // No ranking here: the homepage sorts and filters, and fit is one field among many.
+    const programs = catalogue.map(
+        ({ program, contentHash }): ProgramView => ({
+            program,
+            contentHash,
+            ...programFit(matches[program.id] ?? null, { profileHash, programHash: contentHash }),
         })
-        .sort((a, b) => {
-            const scoreA = a.fitStale ? -1 : (a.fit?.assessment.score ?? -1);
-            const scoreB = b.fitStale ? -1 : (b.fit?.assessment.score ?? -1);
-            return scoreB - scoreA || a.program.name.localeCompare(b.program.name);
-        });
+    );
     return {
         programs,
         profileReady:

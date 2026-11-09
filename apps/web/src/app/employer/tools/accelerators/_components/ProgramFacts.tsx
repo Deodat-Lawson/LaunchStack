@@ -29,8 +29,14 @@ export function Narrative({ title, narrative }: { title: string; narrative: Sour
 export function FitStatus({ view, ring = false }: { view: ProgramView; ring?: boolean }) {
     const t = useTranslations("accelerators.fit");
     const format = useFormatter();
-    const score = view.fit?.assessment.score;
-    const label = !view.fit ? t("unmatched") : score == null ? t("unknown") : t("score", { score });
+    const score = view.fit?.overall.score;
+    const stale = view.freshness.status === "out_of_date";
+    const label =
+        view.freshness.status === "not_assessed"
+            ? t("unmatched")
+            : score == null
+              ? t("unknown")
+              : t("score", { score });
     if (ring) {
         return (
             <div className="flex w-36 shrink-0 items-center gap-2">
@@ -68,7 +74,7 @@ export function FitStatus({ view, ring = false }: { view: ProgramView; ring?: bo
                 </div>
                 <div className="space-y-0.5 text-xs">
                     <p className="text-ink-3">{score == null ? label : t("title")}</p>
-                    {view.fitStale && <p className="text-warn">{t("stale")}</p>}
+                    {stale && <p className="text-warn">{t("stale")}</p>}
                 </div>
             </div>
         );
@@ -77,14 +83,11 @@ export function FitStatus({ view, ring = false }: { view: ProgramView; ring?: bo
         <div className="flex flex-wrap items-center gap-2">
             <Badge
                 variant="outline"
-                className={cn(
-                    view.fit?.assessment.score != null &&
-                        "border-brand/30 bg-brand-soft text-brand-ink"
-                )}
+                className={cn(score != null && "border-brand/30 bg-brand-soft text-brand-ink")}
             >
                 {label}
             </Badge>
-            {view.fitStale && (
+            {stale && (
                 <Badge variant="outline" className="border-warn/40 text-warn">
                     {t("stale")}
                 </Badge>
@@ -96,51 +99,28 @@ export function FitStatus({ view, ring = false }: { view: ProgramView; ring?: bo
 export function FitDetails({ view }: { view: ProgramView }) {
     const t = useTranslations("accelerators.fit");
     const format = useFormatter();
-    const fit = view.fit;
+    const { assessedAt, status } = view.freshness;
     return (
         <section className="border-line bg-panel space-y-4 rounded-xl border p-5">
             <h2 className="text-ink text-base font-semibold">{t("title")}</h2>
             <FitStatus view={view} />
-            {!fit && <p className="text-ink-3 text-sm">{t("unmatchedHint")}</p>}
-            {view.fitStale && <p className="text-warn text-sm">{t("staleHint")}</p>}
-            {fit && (
-                <>
-                    <p className="text-ink-3 text-xs">
-                        {t("checked", {
-                            date: format.dateTime(new Date(fit.checkedAt), {
-                                dateStyle: "medium",
-                                timeStyle: "short",
-                            }),
-                        })}
-                    </p>
-                    {(["reasons", "concerns", "unknowns"] as const).map(
-                        key =>
-                            fit.assessment[key].length > 0 && (
-                                <div key={key} className="space-y-1.5">
-                                    <h3 className="text-ink text-sm font-medium">{t(key)}</h3>
-                                    <ul className="text-ink-2 list-disc space-y-1 pl-5 text-sm leading-relaxed">
-                                        {fit.assessment[key].map((text, index) => (
-                                            <li key={index}>{text}</li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            )
-                    )}
-                    {fit.assessment.companyEvidenceIds.length > 0 && (
-                        <p className="text-ink-3 text-xs">
-                            {t("evidence", {
-                                ids: format.list(
-                                    fit.assessment.companyEvidenceIds.map(id => format.number(id))
-                                ),
-                            })}
-                        </p>
-                    )}
-                </>
+            {status === "not_assessed" && (
+                <p className="text-ink-3 text-sm">{t("unmatchedHint")}</p>
+            )}
+            {status === "out_of_date" && <p className="text-warn text-sm">{t("staleHint")}</p>}
+            {assessedAt && (
+                <p className="text-ink-3 text-xs">
+                    {t("checked", {
+                        date: format.dateTime(new Date(assessedAt), {
+                            dateStyle: "medium",
+                            timeStyle: "short",
+                        }),
+                    })}
+                </p>
             )}
         </section>
     );
 }
-
 export function Notice({ children, danger = false }: { children: ReactNode; danger?: boolean }) {
     return (
         <div

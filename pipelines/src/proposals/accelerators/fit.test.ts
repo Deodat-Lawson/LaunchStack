@@ -7,7 +7,9 @@ import {
     FitDimensionResultSchema,
     fitFreshness,
     portfolioDimension,
+    programFit,
     summarizeFit,
+    type FitAssessmentV1,
     type FitBasis,
     type FitDimensionResult,
     type FitDimensions,
@@ -239,5 +241,53 @@ describe("portfolioDimension", () => {
     it("leaves the total without lowering coverage", async () => {
         const portfolio = await portfolioDimension("antler", () => Promise.resolve(false));
         expect(summarizeFit({ ...example, portfolio })).toEqual(summarizeFit(example));
+    });
+});
+
+describe("programFit", () => {
+    const assessment: FitAssessmentV1 = {
+        rubricVersion: FIT_RUBRIC_VERSION,
+        eligibility: { status: "eligible", note: "No failed requirement" },
+        dimensions: example,
+    };
+    const basis: FitBasis = {
+        profileHash: "p1",
+        programHash: "g1",
+        rubricVersion: FIT_RUBRIC_VERSION,
+        checkedAt: "2026-11-09T10:00:00Z",
+    };
+    const current = { profileHash: "p1", programHash: "g1" };
+
+    it("is not assessed without a saved row", () => {
+        expect(programFit(null, current)).toEqual({
+            fit: null,
+            freshness: { status: "not_assessed", reasons: [], assessedAt: null },
+        });
+    });
+
+    it("serves the grades with the computed overall result", () => {
+        const { fit, freshness } = programFit({ ...basis, assessment }, current);
+        expect(fit).toEqual({ ...assessment, overall: { score: 46, coverage: 82 } });
+        expect(freshness.status).toBe("current");
+    });
+
+    it("keeps out-of-date grades visible, with the reason", () => {
+        const { fit, freshness } = programFit(
+            { ...basis, assessment },
+            { ...current, programHash: "g2" }
+        );
+        expect(fit?.overall.score).toBe(46);
+        expect(freshness).toMatchObject({ status: "out_of_date", reasons: ["program_changed"] });
+    });
+
+    it("shows no grades for an unreadable row, even if it claims the current rubric", () => {
+        expect(programFit({ ...basis, assessment: null }, current)).toEqual({
+            fit: null,
+            freshness: {
+                status: "out_of_date",
+                reasons: ["rubric_changed"],
+                assessedAt: basis.checkedAt,
+            },
+        });
     });
 });

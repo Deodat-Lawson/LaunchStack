@@ -4,7 +4,7 @@ import { bigint, jsonb, text, timestamp, uniqueIndex, varchar } from "drizzle-or
 import { company } from "@launchstack/store/schema";
 import { pgTable } from "@launchstack/store/schema/helpers";
 
-import type { CatalogueProgram, FitAssessment } from "./types";
+import type { CatalogueProgram } from "./types";
 
 /** Installation-wide public catalogue; it must never contain company answers or credentials. */
 export const acceleratorPrograms = pgTable("accelerator_programs", {
@@ -27,7 +27,8 @@ export const acceleratorCompanyMatches = pgTable(
         programId: varchar("program_id", { length: 64 })
             .notNull()
             .references(() => acceleratorPrograms.id, { onDelete: "cascade" }),
-        assessment: jsonb("assessment").$type<FitAssessment>().notNull(),
+        /** fit-v1 assessment; rows saved before fit-v1 hold an older shape, so readers must parse. */
+        assessment: jsonb("assessment").$type<unknown>().notNull(),
         profileHash: text("profile_hash").notNull(),
         programHash: varchar("program_hash", { length: 64 }).notNull(),
         /** Rubric the assessment was scored under; null for rows saved before fit-v1. */

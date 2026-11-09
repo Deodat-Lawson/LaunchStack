@@ -24,11 +24,12 @@ export function ProgramsScreen() {
     const [refreshing, setRefreshing] = useState(false);
     const [failure, setFailure] = useState<unknown>(null);
     if (!home) return null;
+    // Missing or out-of-date fit never ranks as current fit.
+    const rank = (view: (typeof home.programs)[number]) =>
+        view.freshness.status === "current" ? (view.fit?.overall.score ?? -1) : -1;
     const ranked = [...home.programs].sort(
         (left, right) =>
-            (right.fitStale ? -1 : (right.fit?.assessment.score ?? -1)) -
-                (left.fitStale ? -1 : (left.fit?.assessment.score ?? -1)) ||
-            left.program.name.localeCompare(right.program.name, locale)
+            rank(right) - rank(left) || left.program.name.localeCompare(right.program.name, locale)
     );
     const matchPrograms = async () => {
         if (pendingRef.current) return;

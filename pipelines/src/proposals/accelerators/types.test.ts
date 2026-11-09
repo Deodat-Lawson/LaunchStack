@@ -3,7 +3,6 @@ import { describe, expect, it } from "vitest";
 import { hashValue } from "./hash";
 import {
     CatalogueProgramSchema,
-    FitAssessmentSchema,
     FormFieldSchema,
     type CatalogueProgram,
     type FormField,
@@ -152,21 +151,6 @@ describe("Catalogue and Form validation", () => {
         expect(CatalogueProgramSchema.parse(dated).cycles[0]!.deadlineAt).toBeNull();
         dated.cycles[0]!.dateOnly = "2026-02-30";
         expect(CatalogueProgramSchema.safeParse(dated).success).toBe(false);
-    });
-});
-
-describe("fit assessment validation", () => {
-    it("rejects scores outside the match range", () => {
-        expect(
-            FitAssessmentSchema.safeParse({
-                score: 101,
-                reasons: [],
-                concerns: [],
-                unknowns: [],
-                sourceIds: [],
-                companyEvidenceIds: [],
-            }).success
-        ).toBe(false);
     });
 });
 

@@ -4,7 +4,14 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
 
-import { CatalogueProgramSchema, type ProgramView } from "@launchstack/pipelines/accelerators";
+import {
+    CatalogueProgramSchema,
+    FIT_DIMENSION_KEYS,
+    FIT_RUBRIC_VERSION,
+    type FitDimensionResult,
+    type FitDimensions,
+    type ProgramView,
+} from "@launchstack/pipelines/accelerators";
 
 import programFixture from "../../../../fixtures/accelerators/programs/abovea-startup-accelerator.json";
 import { FitStatus, Narrative } from "~/app/employer/tools/accelerators/_components/ProgramFacts";
@@ -19,27 +26,30 @@ jest.mock("~/app/employer/tools/accelerators/_lib/context", () => ({
 }));
 
 const program = CatalogueProgramSchema.parse(programFixture);
+const unknownDimension: FitDimensionResult = {
+    score: null,
+    applicable: true,
+    note: "Unknown",
+    evidence: { sourceIds: [], companyEvidenceIds: [] },
+};
+const unknownDimensions = Object.fromEntries(
+    FIT_DIMENSION_KEYS.map(key => [key, unknownDimension])
+) as FitDimensions;
 function view(score: number | null, matched = true): ProgramView {
     return {
         program,
         contentHash: "program-version",
-        fitStale: false,
         fit: matched
             ? {
-                  assessment: {
-                      score,
-                      reasons: [],
-                      concerns: [],
-                      unknowns: [],
-                      sourceIds: [],
-                      companyEvidenceIds: [],
-                  },
-                  profileHash: "profile-version",
-                  programHash: "program-version",
-                  rubricVersion: null,
-                  checkedAt: "2026-11-02T00:00:00Z",
+                  rubricVersion: FIT_RUBRIC_VERSION,
+                  eligibility: { status: "unknown", note: "Unknown" },
+                  dimensions: unknownDimensions,
+                  overall: { score, coverage: score === null ? 0 : 100 },
               }
             : null,
+        freshness: matched
+            ? { status: "current", reasons: [], assessedAt: "2026-11-02T00:00:00Z" }
+            : { status: "not_assessed", reasons: [], assessedAt: null },
     };
 }
 

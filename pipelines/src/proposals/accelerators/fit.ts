@@ -176,6 +176,9 @@ export async function portfolioDimension(
     };
 }
 
+/** One Program's fit as served: the stored assessment plus the computed overall result. */
+export type ProgramFit = FitAssessmentV1 & { overall: FitOverall };
+
 export const FIT_STALE_REASONS = ["profile_changed", "program_changed", "rubric_changed"] as const;
 export type FitStaleReason = (typeof FIT_STALE_REASONS)[number];
 
@@ -208,4 +211,21 @@ export function fitFreshness(
     return reasons.length
         ? { status: "out_of_date", reasons, assessedAt: saved.checkedAt }
         : { status: "current", reasons: [], assessedAt: saved.checkedAt };
+}
+
+/**
+ * The fit and freshness one Program serves. A saved row that cannot be read under
+ * the current rubric shows no grades and is out of date with `rubric_changed`.
+ */
+export function programFit(
+    saved: (FitBasis & { assessment: FitAssessmentV1 | null }) | null,
+    current: { profileHash: string | null; programHash: string }
+): { fit: ProgramFit | null; freshness: FitFreshness } {
+    if (!saved) return { fit: null, freshness: fitFreshness(null, current) };
+    const { assessment } = saved;
+    const freshness = fitFreshness(assessment ? saved : { ...saved, rubricVersion: null }, current);
+    return {
+        fit: assessment ? { ...assessment, overall: summarizeFit(assessment.dimensions) } : null,
+        freshness,
+    };
 }

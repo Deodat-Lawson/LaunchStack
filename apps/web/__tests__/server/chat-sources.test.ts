@@ -24,6 +24,7 @@ import {
     labelScopeFiles,
     onePerSource,
     passageResult,
+    partialCoverageReminder,
     passageText,
     sourcesPrompt,
     type ScopeFile,
@@ -280,6 +281,40 @@ describe("what the model is told about how much it saw", () => {
         expect(prompt).toContain("<attachments> are files uploaded with this message");
         expect(prompt).not.toContain("Cite a source");
         expect(prompt).not.toContain("You were given");
+    });
+});
+
+describe("the note said after the words when only part of the set was shown", () => {
+    it("names how much was seen and sends a whole-set question to ask_each", () => {
+        const note = partialCoverageReminder(
+            { mode: "excerpts", passages: 10, filesShown: 4 },
+            37,
+            true
+        );
+        expect(note).toBe(
+            "You were shown parts of 4 of the 37 sources in scope. If the question asks about each or all of them — a list, a count, what every one says — call `ask_each` before answering; don't answer it from the ones shown."
+        );
+        expect(
+            partialCoverageReminder(
+                { mode: "mixed", whole: 2, passages: 6, filesShown: 3 },
+                37,
+                true
+            )
+        ).toContain("parts of 5 of the 37 sources");
+    });
+
+    it("says nothing when everything was seen, there is one source, or ask_each is not offered", () => {
+        expect(partialCoverageReminder({ mode: "full" }, 37, true)).toBeNull();
+        expect(
+            partialCoverageReminder({ mode: "excerpts", passages: 9, filesShown: 37 }, 37, true)
+        ).toBeNull();
+        expect(
+            partialCoverageReminder({ mode: "excerpts", passages: 3, filesShown: 1 }, 1, true)
+        ).toBeNull();
+        expect(
+            partialCoverageReminder({ mode: "excerpts", passages: 10, filesShown: 4 }, 37, false)
+        ).toBeNull();
+        expect(partialCoverageReminder({ mode: "passage-only" }, 37, true)).toBeNull();
     });
 });
 

@@ -662,6 +662,15 @@ describe("what the model is told", () => {
         expect(sourceToolsPrompt(DRIVE, true)).toContain(
             "The person attached sources to this message"
         );
+        // Seen live: with 10 passages from 4 of 37 resumes in view, the model
+        // answered "which school does each go to?" from them, without ask_each.
+        expect(sourceToolsPrompt(DRIVE, true)).toContain(
+            "Excerpts never cover a question about every attached source"
+        );
+        expect(sourceToolsPrompt(DRIVE, true)).toContain(
+            "call `ask_each` for it before you answer, even when some excerpts already show part of the answer"
+        );
+        expect(prompt).not.toContain("Excerpts never cover");
         // Search is a sample; a question about every source goes to ask_each.
         expect(prompt).toContain("`ask_each` (one question asked of every source in a set");
         expect(prompt).toContain("Search returns only the best matches, never everything");

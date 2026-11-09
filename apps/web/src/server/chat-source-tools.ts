@@ -791,7 +791,7 @@ export function sourceToolsPrompt(overview: SourcesOverview, attached: boolean):
         inventoryLine(overview.inventory),
         ...connectionLines(overview),
         attached
-            ? "The person attached sources to this message, and what you were given from them is in the message. Answer from that content when it covers the question; use the tools when a part is missing or its full context needs checking."
+            ? "The person attached sources to this message, and what you were given from them is in the message. Answer from that content when it covers the question; use the tools when a part is missing or its full context needs checking. Excerpts never cover a question about every attached source — each one's school, owner, date, a list or count across them: call `ask_each` for it before you answer, even when some excerpts already show part of the answer."
             : "No source is attached to this message, so nothing has been searched yet.",
         "Search returns only the best matches, never everything: for a question about every source in a set — list, count, find all, compare all — use `ask_each`, and never say something isn't there from search results alone.",
         "Use the compact company profile directly for basic company identity and positioning when it answers the question. When the question needs details beyond that profile, or asks about the person's files, folders, Google Drive or email, call a source tool before answering unless the provided passages already suffice. Try the available tools before claiming that you cannot access a source. Answer questions that need no company evidence (writing, arithmetic, general knowledge) directly, without a tool.",

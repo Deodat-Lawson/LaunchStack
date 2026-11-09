@@ -61,6 +61,8 @@ export interface AnswerWithToolsOptions {
     tools: readonly ChatTool[];
     /** Retrieved passages or attachments were supplied before any tool call. */
     hasInitialEvidence?: boolean;
+    /** Said after the conversation until the model calls a tool (e.g. partial coverage). */
+    beforeFirstTool?: string | null;
     signal: AbortSignal;
     /** Present when the answer streams. */
     stream?: {
@@ -245,6 +247,8 @@ export async function answerWithTools(
         // fresh copy stays nearest generation even across later write calls.
         const requestMessages = [...conversation];
         if (reviewEvidence) requestMessages.push(new HumanMessage(EVIDENCE_REVIEW_REMINDER));
+        if (options.beforeFirstTool && withTools && toolCalls.length === 0 && !answerNow)
+            requestMessages.push(new HumanMessage(options.beforeFirstTool));
         if (toolsUnavailable) requestMessages.push(new HumanMessage(TOOLS_UNAVAILABLE_REMINDER));
         if (answerNow) requestMessages.push(new HumanMessage(OUT_OF_TOOL_ROUNDS));
         if (!stream) {

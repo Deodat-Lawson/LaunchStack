@@ -58,6 +58,20 @@ export interface RetrievalDiagnosticsV0 {
     scores: {
         source: ContextSourceRefV0;
         relevance: number;
+        /** Exact inputs to the deterministic relevance calculation, not model confidence. */
+        roleScores: {
+            roleId: string;
+            matchedTerms: string[];
+            totalTerms: number;
+            explicitRoleMatch: boolean;
+            score: number;
+        }[];
+        /** Ownership admits relevant material but does not increase keyword relevance. */
+        ownerMatch: boolean;
+        /** Present only for the explicit primary-role preference condition. */
+        primaryRoleScore?: number;
+        primaryRoleMatched?: boolean;
+        primaryRoleId?: string | null;
         trust: number;
         recent: boolean;
         olderOpen: boolean;

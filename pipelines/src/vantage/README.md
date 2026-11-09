@@ -218,3 +218,9 @@ still `"broad"`; required company context and personal stars retain priority in
 
 See the [Sophia audit and integration handoff](../../../docs/design/vantage-sophia-retrieval-followup-2026-11-01.md)
 for the wiring example, proposed weekly priorities, validation and backend limits.
+
+`primaryRolePreference: true` optionally orders eligible evidence by the confirmed
+primary role after older-open priority. Selected-source diagnostics expose each
+role's matched terms, denominator and explicit-tag override, plus ownership.
+See the [retrieval score and Joseph role review](../../../docs/design/vantage-retrieval-role-review-2026-11-09.md)
+for the complete ranking formula, merge provenance, usage and remaining host gaps.

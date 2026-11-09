@@ -147,6 +147,35 @@ export function summarizeFit(dimensions: Pick<FitDimensions, FitDimensionKey>): 
     return { score: enough ? Math.round(weightedSum / ratedWeight) : null, coverage };
 }
 
+/**
+ * Answers "has this Program's past-company data been collected?". Passed in rather
+ * than looked up here, so scoring never depends on how or where that data is stored.
+ */
+export type IsSupportedAccelerator = (programId: string) => Promise<boolean>;
+
+const NO_PORTFOLIO_EVIDENCE: FitEvidence = { sourceIds: [], companyEvidenceIds: [] };
+
+/**
+ * The portfolio dimension is decided by rubric rule, not by the model.
+ * Under fit-v1 it does not apply to any Program: unsupported Programs have no
+ * past-company data, and similar-company results are not yet connected for
+ * supported ones. Connecting them changes the rules, so it needs a new rubric version.
+ */
+export async function portfolioDimension(
+    programId: string,
+    isSupported: IsSupportedAccelerator
+): Promise<FitDimensionResult> {
+    const supported = await isSupported(programId);
+    return {
+        score: null,
+        applicable: false,
+        note: supported
+            ? "Similar past companies are not yet part of the score."
+            : "Past-company data is not collected for this accelerator.",
+        evidence: NO_PORTFOLIO_EVIDENCE,
+    };
+}
+
 export const FIT_STALE_REASONS = ["profile_changed", "program_changed", "rubric_changed"] as const;
 export type FitStaleReason = (typeof FIT_STALE_REASONS)[number];
 

@@ -6,6 +6,7 @@ import {
     FitAssessmentV1Schema,
     FitDimensionResultSchema,
     fitFreshness,
+    portfolioDimension,
     summarizeFit,
     type FitBasis,
     type FitDimensionResult,
@@ -213,5 +214,30 @@ describe("fitFreshness", () => {
             reasons,
             assessedAt: saved.checkedAt,
         });
+    });
+});
+
+describe("portfolioDimension", () => {
+    it.each([true, false])("does not apply under fit-v1 (supported: %s)", async supported => {
+        const asked: string[] = [];
+        const result = await portfolioDimension("y-combinator", id => {
+            asked.push(id);
+            return Promise.resolve(supported);
+        });
+        expect(asked).toEqual(["y-combinator"]);
+        expect(result.applicable).toBe(false);
+        expect(result.score).toBeNull();
+        expect(FitDimensionResultSchema.safeParse(result).success).toBe(true);
+    });
+
+    it("explains supported and unsupported Programs differently", async () => {
+        const supported = await portfolioDimension("y-combinator", () => Promise.resolve(true));
+        const unsupported = await portfolioDimension("antler", () => Promise.resolve(false));
+        expect(supported.note).not.toBe(unsupported.note);
+    });
+
+    it("leaves the total without lowering coverage", async () => {
+        const portfolio = await portfolioDimension("antler", () => Promise.resolve(false));
+        expect(summarizeFit({ ...example, portfolio })).toEqual(summarizeFit(example));
     });
 });

@@ -7,6 +7,7 @@ import { configureDatabase, createDb } from "@launchstack/store/client";
 import { company } from "@launchstack/store/schema";
 import {
     vantageAgendas as agendas,
+    vantageAgendaTopics as agendaTopics,
     vantageCommitments as actions,
     vantageContractState as states,
     vantageEvidence as evidence,
@@ -23,18 +24,23 @@ import {
     deleteTopicV1,
     fingerprint,
     generationSnapshot,
+    getPendingHistoricalQuestionsV1,
     getAgendaV1,
     listCommitmentsV1,
     patchTopicV1,
     reorderTopicsV1,
     reviewEnhancement,
+    reviewPendingHistoricalQuestionV1,
     saveGeneration,
     setAgendaStatusV1,
     updateCommitmentV1,
 } from "./repository-v1";
 import { getCommitment, getEvidence, getObservation } from "./db";
 import { reportPeriod } from "./period-v1";
+import { previousVantageFingerprint } from "./previous-context-v1";
 import type { GenerationResult } from "./contract-v1";
+import { validateGenerationResult } from "./validate-generation-v1";
+import { computeGenerationSignals, eligibleInput } from "./evidence-v1";
 
 const target = process.env.VANTAGE_TL_TEST_DATABASE_URL;
 describe.skipIf(!target)("Contract v1 real PostgreSQL persistence", () => {
@@ -149,6 +155,259 @@ describe.skipIf(!target)("Contract v1 real PostgreSQL persistence", () => {
             commitment: action,
         });
 
+    async function previousReport(
+        options: { sourceCompany?: bigint; document?: boolean; extraTopics?: number } = {}
+    ) {
+        const id = randomUUID(),
+            topicId = randomUUID(),
+            sourceId = randomUUID(),
+            actionId = randomUUID();
+        const stamp = new Date("2026-10-09T14:00:00Z");
+        await connection.db.insert(evidence).values({
+            id: sourceId,
+            companyId: options.sourceCompany ?? ours,
+            createdByUserId: userId,
+            kind: options.document ? "document" : "note",
+            title: "Historical source",
+            body: "Historical source content",
+            observedAt: "2026-10-09",
+            visibility: "private",
+            createdAt: stamp,
+            updatedAt: null,
+        });
+        await connection.db.insert(agendas).values({
+            id,
+            companyId: ours,
+            createdByUserId: userId,
+            weekStart: "2026-10-05",
+            status: "held",
+            summary: "PRIVATE derived prior AI summary",
+            generatedAt: stamp,
+            createdAt: stamp,
+            updatedAt: null,
+        });
+        const topic = {
+            companyId: ours,
+            agendaId: id,
+            origin: "ai" as const,
+            status: "kept" as const,
+            title: "PRIVATE derived prior issue",
+            whyItMatters: "PRIVATE interpretation",
+            proposedNextStep: "PRIVATE historical proposal",
+            proposedDue: "2026-10-10",
+            facts: [
+                {
+                    text: "Historical assertion",
+                    refs: [{ ref: `ev:${sourceId}`, label: "Prior source", date: "2026-10-09" }],
+                },
+            ],
+            createdAt: stamp,
+            updatedAt: null,
+        };
+        await connection.db.insert(agendaTopics).values({ ...topic, id: topicId, position: 0 });
+        for (let n = 0; n < (options.extraTopics ?? 0); n++)
+            await connection.db
+                .insert(agendaTopics)
+                .values({ ...topic, id: `${topicId}-${n}`, position: n + 1 });
+        await connection.db.insert(actions).values({
+            id: actionId,
+            companyId: ours,
+            createdByUserId: userId,
+            agendaId: id,
+            topicId,
+            title: "Original recorded action",
+            owner: "Founder",
+            dueOn: "2026-10-10",
+            test: "Record the original result",
+            status: "open",
+            outcome: null,
+            createdAt: stamp,
+            updatedAt: null,
+        });
+        await connection.db.insert(states).values({
+            agendaId: id,
+            companyId: ours,
+            version: 2,
+            payload: { topicVersions: { [topicId]: 2 }, enhancements: [], submissions: {} },
+        });
+        return { id, topicId, sourceId, actionId };
+    }
+
+    it("loads exact prior-week history and preserves the old report and action across new generation", async () => {
+        const prior = await previousReport();
+        const oldReport = await getAgendaV1(ours, { id: prior.id });
+        const oldActions = await listCommitmentsV1({ companyId: ours });
+        const s = await generationSnapshot(ours, period, "rules", { actorId: userId });
+        expect(s.input.previousVantageContext).toMatchObject({
+            reportId: prior.id,
+            weekStart: "2026-10-05",
+            reportVersion: 2,
+            topics: [
+                {
+                    topicId: prior.topicId,
+                    recordedDecision: null,
+                    reportedActions: [{ id: prior.actionId, status: "open" }],
+                },
+            ],
+        });
+        const current = await saveGeneration(ours, userId, s, result(s));
+        expect(current.id).not.toBe(prior.id);
+        expect(await getAgendaV1(ours, { id: prior.id })).toEqual(oldReport);
+        expect(await listCommitmentsV1({ companyId: ours })).toEqual(oldActions);
+        const regenerated = await generationSnapshot(ours, period, "rules", { actorId: userId });
+        expect(regenerated.input.previousVantageContext!.reportId).toBe(prior.id);
+        expect(regenerated.input.previousVantageContext!.reportId).not.toBe(current.id);
+        await saveGeneration(ours, userId, regenerated, result(regenerated));
+        expect(await getAgendaV1(ours, { id: prior.id })).toEqual(oldReport);
+        expect(await listCommitmentsV1({ companyId: ours })).toEqual(oldActions);
+    });
+
+    it("binds history to the requesting actor without breaking legacy snapshot readers", async () => {
+        await previousReport();
+        expect((await snapshot()).input.previousVantageContext).toBeNull();
+        const s = await generationSnapshot(ours, period, "rules", { actorId: userId });
+        await expect(saveGeneration(ours, "different-actor", s, result(s))).rejects.toMatchObject({
+            code: "generation_failed",
+        });
+        expect(await getAgendaV1(ours, { weekStart: period.weekStart })).toBeNull();
+    });
+
+    it.each(["foreign", "document", "deleted"] as const)(
+        "masks prior derived content for %s sources",
+        async kind => {
+            const prior = await previousReport({
+                sourceCompany: kind === "foreign" ? other : ours,
+                document: kind === "document",
+            });
+            if (kind === "deleted")
+                await connection.db
+                    .delete(evidence)
+                    .where(and(eq(evidence.companyId, ours), eq(evidence.id, prior.sourceId)));
+            const s = await generationSnapshot(ours, period, "rules", { actorId: userId });
+            expect(s.input.previousVantageContext!.topics).toEqual([]);
+            expect(s.input.previousVantageContext!.summary).toBeNull();
+            expect(s.input.previousVantageContext!.unavailableSources).toHaveLength(1);
+            expect(JSON.stringify(s.input.previousVantageContext)).not.toContain("PRIVATE");
+            expect(await getAgendaV1(ours, { id: prior.id })).not.toBeNull();
+        }
+    );
+
+    it.each(["evidence", "observation"] as const)(
+        "withholds future-dated prior %s references even when created before cutoff",
+        async kind => {
+            const prior = await previousReport();
+            if (kind === "evidence") {
+                await connection.db
+                    .update(evidence)
+                    .set({ observedAt: "2026-10-17", updatedAt: null })
+                    .where(and(eq(evidence.companyId, ours), eq(evidence.id, prior.sourceId)));
+            } else {
+                const metricId = randomUUID(),
+                    observationId = randomUUID(),
+                    stamp = new Date("2026-10-09T14:00Z");
+                await connection.db.insert(definitions).values({
+                    id: metricId,
+                    companyId: ours,
+                    key: "historical-" + ours,
+                    name: "Historical metric",
+                    definition: "Synthetic count",
+                    unit: "count",
+                    createdAt: stamp,
+                    updatedAt: null,
+                });
+                await connection.db.insert(observations).values({
+                    id: observationId,
+                    companyId: ours,
+                    metricId,
+                    createdByUserId: userId,
+                    value: 10,
+                    periodStart: "2026-10-12",
+                    periodEnd: "2026-10-17",
+                    createdAt: stamp,
+                });
+                await connection.db
+                    .update(agendaTopics)
+                    .set({
+                        facts: [
+                            {
+                                text: "Historical claim",
+                                refs: [
+                                    {
+                                        ref: `obs:${observationId}`,
+                                        label: "Prior metric",
+                                        date: "2026-10-17",
+                                    },
+                                ],
+                            },
+                        ],
+                        updatedAt: null,
+                    })
+                    .where(
+                        and(eq(agendaTopics.companyId, ours), eq(agendaTopics.id, prior.topicId))
+                    );
+            }
+            const s = await generationSnapshot(ours, period, "rules", { actorId: userId });
+            expect(s.input.previousVantageContext!.topics).toEqual([]);
+            expect(s.input.previousVantageContext!.summary).toBeNull();
+            expect(s.input.previousVantageContext!.unavailableSources[0]!.status).toBe(
+                "after-cutoff"
+            );
+        }
+    );
+
+    it.each(["decision", "source", "omitted-topic", "report-delete", "source-delete"] as const)(
+        "rejects persistence after prior %s changes during generation",
+        async kind => {
+            const prior = await previousReport({ extraTopics: 7 });
+            const s = await generationSnapshot(ours, period, "rules", { actorId: userId });
+            if (kind === "decision")
+                await decideV1({
+                    companyId: ours,
+                    userId,
+                    topicId: prior.topicId,
+                    key: "past-decision",
+                    decision: "Changed human choice",
+                    commitment: null,
+                });
+            if (kind === "source")
+                await connection.db
+                    .update(evidence)
+                    .set({ body: "Changed full source body", updatedAt: null })
+                    .where(and(eq(evidence.companyId, ours), eq(evidence.id, prior.sourceId)));
+            if (kind === "omitted-topic")
+                await connection.db
+                    .update(agendaTopics)
+                    .set({ whyItMatters: "Changed beyond bounded history", updatedAt: null })
+                    .where(
+                        and(
+                            eq(agendaTopics.companyId, ours),
+                            eq(agendaTopics.id, `${prior.topicId}-6`)
+                        )
+                    );
+            if (kind === "report-delete")
+                await connection.db
+                    .delete(agendas)
+                    .where(and(eq(agendas.companyId, ours), eq(agendas.id, prior.id)));
+            if (kind === "source-delete")
+                await connection.db
+                    .delete(evidence)
+                    .where(and(eq(evidence.companyId, ours), eq(evidence.id, prior.sourceId)));
+            await expect(saveGeneration(ours, userId, s, result(s))).rejects.toMatchObject({
+                code: "stale_context",
+            });
+            expect(await getAgendaV1(ours, { weekStart: period.weekStart })).toBeNull();
+        }
+    );
+
+    it("rejects a pending generation if a previously missing prior report appears", async () => {
+        const s = await generationSnapshot(ours, period, "rules", { actorId: userId });
+        expect(s.input.previousVantageContext).toBeNull();
+        await previousReport();
+        await expect(saveGeneration(ours, userId, s, result(s))).rejects.toMatchObject({
+            code: "stale_context",
+        });
+    });
+
     it("has applied both migration sets and the SQL/schema primary-action invariant", async () => {
         const [engine] =
             await connection.client`SELECT count(*)::int AS count FROM _launchstack_migrations WHERE state='applied'`;
@@ -221,6 +480,13 @@ describe.skipIf(!target)("Contract v1 real PostgreSQL persistence", () => {
                 period: input.reportPeriod,
                 data: input.data,
                 reviewedTopics: input.reviewedTopics,
+                previousVantageContext: null,
+                previousVantageStateFingerprint: previousVantageFingerprint({
+                    actorId: null,
+                    weekStart: "2026-10-05",
+                    missing: true,
+                }),
+                actorId: null,
             })
         );
     });
@@ -735,4 +1001,368 @@ describe.skipIf(!target)("Contract v1 real PostgreSQL persistence", () => {
         expect(stored).toHaveLength(1);
         expect((await connection.db.execute(sql`SELECT 1 AS ok`))[0]).toMatchObject({ ok: 1 });
     });
+
+    const rollingPeriod = (week = "2026-10-12") =>
+        reportPeriod(new Date("2026-11-16T17:00:00Z"), week);
+    async function pendingPrior() {
+        const prior = await previousReport();
+        await connection.db
+            .update(agendaTopics)
+            .set({
+                decisionQuestion: "Should pilot access wait for the deletion dry-run result?",
+                decision: "Keep the go/no-go question until the result is reviewed.",
+                decidedAt: new Date("2026-10-09T15:00:00Z"),
+                updatedAt: null,
+            })
+            .where(eq(agendaTopics.id, prior.topicId));
+        return prior;
+    }
+    async function saveNoTopics(week = "2026-10-12") {
+        const s = await generationSnapshot(ours, rollingPeriod(week), "rules", { actorId: userId });
+        const r = result(s);
+        r.draft.topics = [];
+        r.signals = {
+            ...r.signals,
+            weekStart: s.input.reportPeriod.weekStart,
+            since: s.input.reportPeriod.weekStart,
+            computedAt: s.input.reportPeriod.asOf,
+        };
+        const agenda = await saveGeneration(ours, userId, s, r);
+        return { s, agenda };
+    }
+    it("rolls the exact original question through a saved zero-topic second week into the third week", async () => {
+        const prior = await pendingPrior();
+        const old = await getAgendaV1(ours, { id: prior.id });
+        const second = await saveNoTopics();
+        expect(second.agenda.topics).toEqual([]);
+        const third = await generationSnapshot(ours, rollingPeriod("2026-10-19"), "rules", {
+            actorId: userId,
+        });
+        expect(third.input.pendingHistoricalQuestions!.questions).toMatchObject([
+            {
+                questionId: prior.topicId,
+                originReportId: prior.id,
+                originTopicId: prior.topicId,
+                originWeekStart: "2026-10-05",
+                question: "Should pilot access wait for the deletion dry-run result?",
+            },
+        ]);
+        expect(third.pendingHistoricalState.questions).toHaveLength(1);
+        expect(await getAgendaV1(ours, { id: prior.id })).toEqual(old);
+    });
+    it("persists and exposes more than one validation batch even when the model outputs no topics", async () => {
+        const prior = await previousReport({ extraTopics: 104 });
+        await connection.db
+            .update(agendaTopics)
+            .set({
+                decisionQuestion: "What evidence will justify the requested go/no-go decision?",
+                updatedAt: null,
+            })
+            .where(eq(agendaTopics.agendaId, prior.id));
+        const second = await saveNoTopics();
+        expect(second.s.pendingHistoricalState.questions).toHaveLength(105);
+        expect(second.s.input.pendingHistoricalQuestions!.questions).toHaveLength(105);
+        const view = await getPendingHistoricalQuestionsV1({
+            companyId: ours,
+            agendaId: second.agenda.id,
+            actorId: userId,
+        });
+        expect(view.questions).toHaveLength(105);
+        const last = view.questions.at(-1)!;
+        const reviewed = await reviewPendingHistoricalQuestionV1({
+            companyId: ours,
+            userId,
+            agendaId: second.agenda.id,
+            questionId: last.questionId,
+            expectedVersion: view.version,
+            status: "dismissed",
+        });
+        expect(reviewed.questions).toHaveLength(104);
+        expect(second.s.pendingHistoricalState.questions).toHaveLength(105);
+    });
+    it("rolls the latest saved predecessor across a skipped week and never seeds same-week topics as history", async () => {
+        const prior = await pendingPrior();
+        const second = await saveNoTopics();
+        const skippedPeriod = rollingPeriod("2026-10-26");
+        const skipped = await generationSnapshot(ours, skippedPeriod, "rules", { actorId: userId });
+        // No report exists for October 19. Older AI prose stays out, but saved human lineage survives.
+        expect(skipped.input.previousVantageContext).toBeNull();
+        expect(skipped.input.pendingHistoricalQuestions!.questions).toMatchObject([
+            { questionId: prior.topicId, originReportId: prior.id, originWeekStart: "2026-10-05" },
+        ]);
+        const current = await saveGeneration(ours, userId, skipped, result(skipped));
+        await decideV1({
+            companyId: ours,
+            userId,
+            topicId: current.topics[0]!.id,
+            key: "same-week-not-history",
+            decision: "A current-week decision must not self-seed its own pending history.",
+            commitment: null,
+        });
+        const regenerated = await generationSnapshot(ours, skippedPeriod, "rules", {
+            actorId: userId,
+        });
+        expect(
+            regenerated.input.pendingHistoricalQuestions!.questions.map(
+                question => question.questionId
+            )
+        ).toEqual([prior.topicId]);
+        expect(regenerated.input.previousVantageContext).toBeNull();
+        expect(regenerated.input.reviewedTopics.map(topic => topic.topic.id)).toContain(
+            current.topics[0]!.id
+        );
+        expect(await getAgendaV1(ours, { id: second.agenda.id })).toEqual(second.agenda);
+    });
+    it.each(["dismissed", "addressed"] as const)(
+        "human %s persists across same-week and next-week generation without changing the original report or action",
+        async status => {
+            const prior = await pendingPrior();
+            const old = await getAgendaV1(ours, { id: prior.id });
+            const oldActions = await listCommitmentsV1({ companyId: ours });
+            const second = await saveNoTopics();
+            const view = await getPendingHistoricalQuestionsV1({
+                companyId: ours,
+                agendaId: second.agenda.id,
+                actorId: userId,
+            });
+            const dismissed = await reviewPendingHistoricalQuestionV1({
+                companyId: ours,
+                userId,
+                agendaId: second.agenda.id,
+                questionId: prior.topicId,
+                expectedVersion: view.version,
+                status,
+                reason: "Synthetic human review",
+            });
+            expect(dismissed.questions).toEqual([]);
+            await saveNoTopics();
+            const third = await generationSnapshot(ours, rollingPeriod("2026-10-19"), "rules", {
+                actorId: userId,
+            });
+            expect(third.input.pendingHistoricalQuestions!.questions).toEqual([]);
+            expect(third.pendingHistoricalState.reviews[prior.topicId]!.status).toBe(status);
+            expect(await getAgendaV1(ours, { id: prior.id })).toEqual(old);
+            expect(await listCommitmentsV1({ companyId: ours })).toEqual(oldActions);
+        }
+    );
+    it("checks review CAS, actor/company scope, and exact original identity", async () => {
+        const prior = await pendingPrior();
+        const second = await saveNoTopics();
+        const base = {
+            companyId: ours,
+            userId,
+            agendaId: second.agenda.id,
+            questionId: prior.topicId,
+            expectedVersion: second.agenda.version,
+            status: "dismissed" as const,
+        };
+        await expect(
+            getPendingHistoricalQuestionsV1({
+                companyId: other,
+                agendaId: second.agenda.id,
+                actorId: userId,
+            })
+        ).rejects.toMatchObject({ code: "not_found" });
+        await expect(
+            getPendingHistoricalQuestionsV1({
+                companyId: ours,
+                agendaId: second.agenda.id,
+                actorId: "",
+            })
+        ).rejects.toMatchObject({ status: 403 });
+        await expect(
+            reviewPendingHistoricalQuestionV1({ ...base, questionId: randomUUID() })
+        ).rejects.toMatchObject({ code: "not_found" });
+        await reviewPendingHistoricalQuestionV1(base);
+        await expect(reviewPendingHistoricalQuestionV1(base)).rejects.toMatchObject({
+            code: "stale_agenda",
+        });
+    });
+    it("does not infer closure from an expired due date or a done commitment", async () => {
+        const prior = await pendingPrior();
+        await updateCommitmentV1({
+            companyId: ours,
+            id: prior.actionId,
+            patch: {
+                status: "done",
+                outcome: "An action result was reported; the decision still needs review.",
+            },
+        });
+        const second = await saveNoTopics();
+        expect(second.s.input.pendingHistoricalQuestions!.questions).toHaveLength(1);
+        expect(second.s.input.pendingHistoricalQuestions!.questions[0]!.suggestedDue).toBe(
+            "2026-10-10"
+        );
+        expect(second.s.pendingHistoricalState.reviews).toEqual({});
+    });
+    it.each(["deleted-source", "document", "foreign-origin", "future-origin", "future-source"])(
+        "withholds %s question content while retaining the full persisted lineage",
+        async change => {
+            const prior = await pendingPrior();
+            const second = await saveNoTopics();
+            if (change === "deleted-source")
+                await connection.db.delete(evidence).where(eq(evidence.id, prior.sourceId));
+            if (change === "document")
+                await connection.db
+                    .update(evidence)
+                    .set({ kind: "document" })
+                    .where(eq(evidence.id, prior.sourceId));
+            if (change === "foreign-origin")
+                await connection.db
+                    .update(agendaTopics)
+                    .set({ companyId: other })
+                    .where(eq(agendaTopics.id, prior.topicId));
+            if (change === "future-origin")
+                await connection.db
+                    .update(agendaTopics)
+                    .set({ updatedAt: new Date("2026-12-01T00:00:00Z") })
+                    .where(eq(agendaTopics.id, prior.topicId));
+            if (change === "future-source")
+                await connection.db
+                    .update(evidence)
+                    .set({ observedAt: "2026-12-01" })
+                    .where(eq(evidence.id, prior.sourceId));
+            const third = await generationSnapshot(ours, rollingPeriod("2026-10-19"), "rules", {
+                actorId: userId,
+            });
+            expect(third.pendingHistoricalState.questions).toHaveLength(1);
+            expect(third.input.pendingHistoricalQuestions!.questions).toEqual([]);
+            expect(third.input.pendingHistoricalQuestions!.unavailableCount).toBe(1);
+            const view = await getPendingHistoricalQuestionsV1({
+                companyId: ours,
+                agendaId: second.agenda.id,
+                actorId: userId,
+            });
+            expect(view.questions).toEqual([]);
+            expect(view.unavailableCount).toBe(1);
+            expect(JSON.stringify(view)).not.toContain(prior.topicId);
+            expect(JSON.stringify(view)).not.toContain("PRIVATE");
+        }
+    );
+    it("treats an explicit original-topic dismissal as a human tombstone without rewriting it", async () => {
+        const prior = await pendingPrior();
+        await saveNoTopics();
+        await connection.db
+            .update(agendaTopics)
+            .set({ status: "dismissed" })
+            .where(eq(agendaTopics.id, prior.topicId));
+        const third = await generationSnapshot(ours, rollingPeriod("2026-10-19"), "rules", {
+            actorId: userId,
+        });
+        expect(third.input.pendingHistoricalQuestions!.questions).toEqual([]);
+        expect(third.input.pendingHistoricalQuestions!.unavailableCount).toBe(0);
+        expect(third.pendingHistoricalState.reviews[prior.topicId]!.status).toBe("dismissed");
+    });
+    it("withholds lineage from a previous carrier report generated after the reporting cutoff", async () => {
+        await pendingPrior();
+        const second = await saveNoTopics();
+        await connection.db
+            .update(agendas)
+            .set({ generatedAt: new Date("2026-12-01T00:00:00Z"), updatedAt: null })
+            .where(eq(agendas.id, second.agenda.id));
+        const third = await generationSnapshot(ours, rollingPeriod("2026-10-19"), "rules", {
+            actorId: userId,
+        });
+        expect(third.pendingHistoricalState.questions).toHaveLength(1);
+        expect(third.input.pendingHistoricalQuestions!.questions).toEqual([]);
+        expect(third.input.pendingHistoricalQuestions!.unavailableCount).toBe(1);
+        expect(JSON.stringify(third.input.pendingHistoricalQuestions)).not.toContain("PRIVATE");
+    });
+    it("rejects a source-bound event promotion before persistence and retains reports, ledger, decisions and actions", async () => {
+        const prior = await pendingPrior();
+        const current = await saveNoTopics();
+        const sourceId = randomUUID();
+        await connection.db.insert(evidence).values({
+            id: sourceId,
+            companyId: ours,
+            createdByUserId: userId,
+            kind: "note",
+            title: "Synthetic pilot scheduling request",
+            body: "The customer requested moving the pilot start from November 20 to November 27.",
+            observedAt: "2026-10-16",
+            visibility: "private",
+            createdAt: new Date("2026-10-16T16:00:00Z"),
+            updatedAt: null,
+        });
+        const beforeReport = await getAgendaV1(ours, { id: current.agenda.id });
+        const beforeOrigin = await getAgendaV1(ours, { id: prior.id });
+        const beforeActions = await listCommitmentsV1({ companyId: ours });
+        const beforeState = await connection.db
+            .select()
+            .from(states)
+            .where(eq(states.companyId, ours))
+            .orderBy(states.agendaId);
+        const s = await generationSnapshot(ours, rollingPeriod(), "configured-model", {
+            actorId: userId,
+        });
+        expect(s.input.data.currentEvidence.map(item => item.id)).toContain(sourceId);
+        const contradictory = result(s);
+        contradictory.signals = computeGenerationSignals(eligibleInput(s.input));
+        contradictory.draft = {
+            summary: "The customer moved the pilot start from November 20 to November 27.",
+            topics: [],
+            origin: "ai",
+            modelMetadata: { mode: "ai" },
+        };
+        contradictory.execution = {
+            outcome: "generated",
+            mode: "ai",
+            fallbackReason: null,
+            modelId: "synthetic-boundary-test",
+            promptVersion: "synthetic-boundary-test",
+            attempts: 1,
+            durationMs: 1,
+        };
+        let reachedPersistence = false;
+        await expect(
+            (async () => {
+                const checked = validateGenerationResult(s.input, contradictory);
+                reachedPersistence = true;
+                return saveGeneration(ours, userId, s, checked);
+            })()
+        ).rejects.toMatchObject({ code: "generation_failed" });
+        expect(reachedPersistence).toBe(false);
+        expect(await getAgendaV1(ours, { id: current.agenda.id })).toEqual(beforeReport);
+        expect(await getAgendaV1(ours, { id: prior.id })).toEqual(beforeOrigin);
+        expect(await listCommitmentsV1({ companyId: ours })).toEqual(beforeActions);
+        expect(
+            await connection.db
+                .select()
+                .from(states)
+                .where(eq(states.companyId, ours))
+                .orderBy(states.agendaId)
+        ).toEqual(beforeState);
+    });
+    it.each(["old-origin", "old-source", "carried-review"])(
+        "rejects generation if %s changes after its rolling snapshot",
+        async change => {
+            const prior = await pendingPrior();
+            const second = await saveNoTopics();
+            const third = await generationSnapshot(ours, rollingPeriod("2026-10-19"), "rules", {
+                actorId: userId,
+            });
+            if (change === "old-origin")
+                await patchTopicV1(ours, prior.topicId, {
+                    decisionQuestion: "Edited original question",
+                    expectedContentVersion: 2,
+                });
+            if (change === "old-source")
+                await connection.db
+                    .update(evidence)
+                    .set({ body: "Changed content far beyond any prompt projection" })
+                    .where(eq(evidence.id, prior.sourceId));
+            if (change === "carried-review")
+                await reviewPendingHistoricalQuestionV1({
+                    companyId: ours,
+                    userId,
+                    agendaId: second.agenda.id,
+                    questionId: prior.topicId,
+                    expectedVersion: second.agenda.version,
+                    status: "addressed",
+                });
+            await expect(saveGeneration(ours, userId, third, result(third))).rejects.toMatchObject({
+                code: "stale_context",
+            });
+        }
+    );
 });

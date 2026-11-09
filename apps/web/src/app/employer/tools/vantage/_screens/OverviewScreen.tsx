@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowRight } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import { ToolLink } from "~/components/tool-app/ToolLink";
 import { useToolRouter } from "~/components/tool-app/nav";
@@ -24,6 +24,7 @@ import { KindPill, StatusWord } from "../_components/Primitives";
 import { AllCaughtUp, DraftingCard, SuggestionMark } from "../_components/Suggestion";
 import { DecisionDialog } from "../_components/TopicDialogs";
 import { WeekSuggestions } from "../_components/WeekSuggestions";
+import { PendingQuestions } from "../_components/PendingQuestions";
 import { useOneClick } from "../_lib/actions";
 import {
     agoWords,
@@ -72,10 +73,19 @@ export function OverviewScreen() {
     const { act, gone } = useOneClick(overview.reload);
     const [adding, setAdding] = useState<VantageEvidenceKind | null>(null);
     const [deciding, setDeciding] = useState<TopicDto | null>(null);
+    const [pendingStatus, setPendingStatus] = useState<{
+        key: string | null;
+        count: number | null;
+    } | null>(null);
     const today = todayIso();
 
     const data = overview.data;
     const agenda = data?.agenda ?? null;
+    const pendingKey = agenda ? `${agenda.id}:${agenda.generatedAt ?? ""}` : null;
+    const receivePendingCount = useCallback(
+        (count: number | null) => setPendingStatus({ key: pendingKey, count }),
+        [pendingKey]
+    );
     const material = data ? hasMaterial(data) : false;
     const auto = useAutoDraft({
         week: data?.agendaWeek ?? null,
@@ -186,6 +196,11 @@ export function OverviewScreen() {
                                             Enter numbers
                                         </ToolLink>
                                     </Button>
+                                    <Button size="sm" variant="outline" onClick={auto.draft}>
+                                        {data.previousAgenda
+                                            ? "Draft this week with previous review context"
+                                            : "Draft this week"}
+                                    </Button>
                                 </>
                             }
                         />
@@ -203,6 +218,13 @@ export function OverviewScreen() {
                         />
                     ) : null}
 
+                    {agenda && (
+                        <PendingQuestions
+                            key={pendingKey}
+                            agendaId={agenda.id}
+                            onPendingCount={receivePendingCount}
+                        />
+                    )}
                     {!auto.drafting && waiting > 0 && (
                         <WeekSuggestions
                             groups={groups}
@@ -214,7 +236,11 @@ export function OverviewScreen() {
                             onRecordNumbers={() => router.push(vantagePath("/metrics"))}
                         />
                     )}
-                    {!auto.drafting && waiting === 0 && agenda !== null && <AllCaughtUp />}
+                    {!auto.drafting &&
+                        waiting === 0 &&
+                        agenda !== null &&
+                        pendingStatus?.key === pendingKey &&
+                        pendingStatus.count === 0 && <AllCaughtUp />}
                 </div>
             )}
 

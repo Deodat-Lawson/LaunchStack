@@ -1,7 +1,7 @@
 "use client";
 
-import { CalendarCheck, ChartLine, Handshake, Inbox } from "lucide-react";
-import { useMemo } from "react";
+import { CalendarCheck, ChartLine, Handshake, Inbox, Sparkles } from "lucide-react";
+import { useMemo, useState } from "react";
 
 import { VantageMark } from "~/components/icons/vantage";
 import { EmptyState } from "~/components/tools/EmptyState";
@@ -14,6 +14,7 @@ import { AgendaScreen } from "./_screens/AgendaScreen";
 import { CommitmentsScreen } from "./_screens/CommitmentsScreen";
 import { EvidenceScreen } from "./_screens/EvidenceScreen";
 import { MetricsScreen } from "./_screens/MetricsScreen";
+import { ContextDemoScreen, ContextNativeReview } from "./_screens/ContextDemoScreen";
 
 /**
  * Vantage, the evidence-backed weekly meeting loop, as a tab of the
@@ -22,10 +23,21 @@ import { MetricsScreen } from "./_screens/MetricsScreen";
  * workspace renders this, the tab keeps its own history, and the old URLs
  * redirect here (see `[[...slug]]/page.tsx`).
  */
-export function VantageTool({ host }: { host?: ToolHost }) {
+export function VantageTool({
+    host,
+    contextDemoEnabled = false,
+}: {
+    host?: ToolHost;
+    /** Only supplied by the server-gated local demonstration page. */
+    contextDemoEnabled?: boolean;
+}) {
     return (
-        <ToolNavProvider toolId="vantage" roots={VANTAGE_ROOTS} host={host}>
-            <VantageFrame />
+        <ToolNavProvider
+            toolId="vantage"
+            roots={contextDemoEnabled ? [...VANTAGE_ROOTS, "context-demo"] : VANTAGE_ROOTS}
+            host={host}
+        >
+            <VantageFrame contextDemoEnabled={contextDemoEnabled} />
         </ToolNavProvider>
     );
 }
@@ -34,12 +46,15 @@ export function VantageTool({ host }: { host?: ToolHost }) {
  * The v1 navigation names the product loop. The older paths remain valid for
  * saved links and week queries, but the primary bar stays deliberately small.
  */
-function screenGroups(): ToolNavGroup[] {
+function screenGroups(contextDemoEnabled: boolean): ToolNavGroup[] {
     const groups: ToolNavGroup[] = [
         {
             id: "vantage-loop",
             label: "Vantage",
             items: [
+                ...(contextDemoEnabled
+                    ? [{ to: "/context-demo", label: "Context-Aware Demo", icon: Sparkles }]
+                    : []),
                 { to: vantagePath(""), label: "Weekly Review", icon: CalendarCheck, exact: true },
                 { to: vantagePath("/commitments"), label: "Weekly Actions", icon: Handshake },
                 { to: vantagePath("/evidence"), label: "Evidence", icon: Inbox },
@@ -50,25 +65,50 @@ function screenGroups(): ToolNavGroup[] {
     return groups;
 }
 
-function VantageFrame() {
+function VantageFrame({ contextDemoEnabled }: { contextDemoEnabled: boolean }) {
     const { path, search } = useToolNav();
-    const groups = useMemo(() => screenGroups(), []);
+    const [demoWeek, setDemoWeek] = useState<string | undefined>();
+    const groups = useMemo(() => screenGroups(contextDemoEnabled), [contextDemoEnabled]);
     const screen = vantageScreenFor(`${path}${search}`);
     return (
         <ToolFrame title="Vantage" mark={<VantageMark size={15} tile />} groups={groups}>
-            <Screen screen={screen} />
+            {contextDemoEnabled && path === "/context-demo" ? (
+                <ContextDemoScreen onSelectedWeek={setDemoWeek} />
+            ) : (
+                <Screen
+                    screen={screen}
+                    contextDemoEnabled={contextDemoEnabled}
+                    demoWeek={demoWeek}
+                />
+            )}
         </ToolFrame>
     );
 }
 
-function Screen({ screen }: { screen: VantageScreen }) {
+function Screen({
+    screen,
+    demoWeek,
+    contextDemoEnabled,
+}: {
+    screen: VantageScreen;
+    demoWeek?: string;
+    contextDemoEnabled: boolean;
+}) {
     const { searchParams } = useToolNav();
     const actionId = searchParams.get("action");
     switch (screen.kind) {
         case "overview":
-            return <AgendaScreen />;
+            return contextDemoEnabled ? (
+                <ContextNativeReview week={searchParams.get("week") ?? demoWeek} />
+            ) : (
+                <AgendaScreen />
+            );
         case "agenda":
-            return <AgendaScreen week={screen.week} />;
+            return contextDemoEnabled ? (
+                <ContextNativeReview week={screen.week ?? demoWeek} />
+            ) : (
+                <AgendaScreen week={screen.week} />
+            );
         case "commitments":
             return <CommitmentsScreen key={actionId ?? "all"} actionId={actionId} />;
         case "evidence":

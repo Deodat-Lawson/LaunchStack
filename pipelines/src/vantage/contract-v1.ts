@@ -1,4 +1,11 @@
 import type { ResolvedChatModel } from "@launchstack/llm";
+import type { PreviousVantageContext } from "./previous-context-v1";
+import type { PendingHistoricalQuestionsContextV1 } from "./pending-questions-v1";
+export type {
+    PreviousVantageContext,
+    PreviousVantageTopic,
+    PreviousVantageSource,
+} from "./previous-context-v1";
 import type {
     AgendaDto,
     AgendaDraft,
@@ -56,6 +63,10 @@ export interface GenerationInput {
         carryForwardCommitments: CommitmentDto[];
     };
     reviewedTopics: { topic: TopicDto; contentVersion: number }[];
+    /** Additive internal context only; previous AI prose is never current evidence. */
+    previousVantageContext?: PreviousVantageContext | null;
+    /** Internal authorized pending records; persistence is independent of prompt projection. */
+    pendingHistoricalQuestions?: PendingHistoricalQuestionsContextV1 | null;
 }
 export interface GenerationResult {
     runId: string;

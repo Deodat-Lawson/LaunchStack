@@ -22,4 +22,5 @@ export {
     invokeStructuredAttempt,
     InvalidStructuredAttemptError,
     StructuredAttemptSetupError,
+    structuredSchemaInstruction,
 } from "./structured-attempt";

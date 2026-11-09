@@ -290,7 +290,7 @@ describe("topic suggestions", () => {
         // Gone before the server has answered.
         expect(queryCard(pricing.title)).toBeNull();
         expect(mockApi.patchTopic).toHaveBeenCalledTimes(1);
-        expect(mockApi.patchTopic).toHaveBeenCalledWith(pricing.id, { status: "kept" });
+        expect(mockApi.patchTopic).toHaveBeenCalledWith(pricing.id, { status: "kept" }, 1);
 
         await act(async () => answer.resolve());
 
@@ -301,7 +301,7 @@ describe("topic suggestions", () => {
 
         await clickUndo();
 
-        expect(mockApi.patchTopic).toHaveBeenLastCalledWith(pricing.id, { status: "suggested" });
+        expect(mockApi.patchTopic).toHaveBeenLastCalledWith(pricing.id, { status: "suggested" }, 1);
         expect(mockApi.patchTopic).toHaveBeenCalledTimes(2);
         expect(card(pricing.title)).toBeInTheDocument();
     });
@@ -313,13 +313,13 @@ describe("topic suggestions", () => {
         expect(queryCard(sso.title)).toBeNull();
         await act(async () => {});
 
-        expect(mockApi.patchTopic).toHaveBeenCalledWith(sso.id, { status: "dismissed" });
+        expect(mockApi.patchTopic).toHaveBeenCalledWith(sso.id, { status: "dismissed" }, 1);
         expect(queryCard(sso.title)).toBeNull();
         expect(lastToast().message).toBe("Ignored");
 
         await clickUndo();
 
-        expect(mockApi.patchTopic).toHaveBeenLastCalledWith(sso.id, { status: "suggested" });
+        expect(mockApi.patchTopic).toHaveBeenLastCalledWith(sso.id, { status: "suggested" }, 1);
         expect(card(sso.title)).toBeInTheDocument();
     });
 

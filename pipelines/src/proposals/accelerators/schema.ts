@@ -30,6 +30,8 @@ export const acceleratorCompanyMatches = pgTable(
         assessment: jsonb("assessment").$type<FitAssessment>().notNull(),
         profileHash: text("profile_hash").notNull(),
         programHash: varchar("program_hash", { length: 64 }).notNull(),
+        /** Rubric the assessment was scored under; null for rows saved before fit-v1. */
+        rubricVersion: varchar("rubric_version", { length: 32 }),
         checkedAt: timestamp("checked_at", { withTimezone: true }).notNull(),
     },
     table => [

@@ -36,6 +36,7 @@ function view(score: number | null, matched = true): ProgramView {
                   },
                   profileHash: "profile-version",
                   programHash: "program-version",
+                  rubricVersion: null,
                   checkedAt: "2026-11-02T00:00:00Z",
               }
             : null,

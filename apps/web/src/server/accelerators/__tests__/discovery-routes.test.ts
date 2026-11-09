@@ -180,6 +180,7 @@ describe("discovery reads", () => {
             },
             profileHash: "previous-profile",
             programHash: hashValue(program),
+            rubricVersion: null,
             checkedAt: "2026-10-24T00:00:00Z",
         };
         mockMatches.mockResolvedValue({ [program.id]: fit });

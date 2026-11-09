@@ -110,6 +110,7 @@ export async function listCompanyMatches(companyId: bigint): Promise<Record<stri
                 assessment: row.assessment,
                 profileHash: row.profileHash,
                 programHash: row.programHash,
+                rubricVersion: row.rubricVersion,
                 checkedAt: row.checkedAt.toISOString(),
             },
         ])

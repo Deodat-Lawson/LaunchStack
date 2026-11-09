@@ -278,6 +278,8 @@ export interface StoredFit {
     assessment: FitAssessment;
     profileHash: string;
     programHash: string;
+    /** Null for results saved before rubric fit-v1. */
+    rubricVersion: string | null;
     checkedAt: string;
 }
 export interface ProgramView {

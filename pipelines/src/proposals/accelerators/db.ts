@@ -1,11 +1,17 @@
-import { asc, eq } from "drizzle-orm";
+import { and, asc, cosineDistance, eq, inArray, isNotNull, sql } from "drizzle-orm";
 import { z } from "zod";
 
 import { getDb } from "@launchstack/store/client";
 
 import type { ProposalDebitExecutor } from "../ports";
 import { hashValue } from "./hash";
-import { acceleratorCompanyMatches, acceleratorPrograms } from "./schema";
+import {
+    acceleratorApplicationResponses,
+    acceleratorCompanyMatches,
+    acceleratorPortfolioCompanies,
+    acceleratorPrograms,
+} from "./schema";
+import type { ApplicationResponse, PortfolioCompany } from "./similar-companies";
 import {
     AcceleratorError,
     CatalogueProgramSchema,
@@ -162,4 +168,246 @@ export async function saveCompanyMatches(
     };
     if (executor) await save(executor);
     else await getDb().transaction(save);
+}
+
+export interface ImportCounts {
+    inserted: number;
+    updated: number;
+    unchanged: number;
+}
+
+const INSERT_CHUNK = 500;
+
+/**
+ * Upsert one Supported accelerator's past companies in a single transaction.
+ * Companies absent from this collection are kept, like catalogue Programs.
+ * Operator command only; no company API calls this.
+ */
+export async function importPortfolioCompanies(
+    programId: string,
+    companies: PortfolioCompany[]
+): Promise<ImportCounts> {
+    if (new Set(companies.map(company => company.id)).size !== companies.length) {
+        throw new AcceleratorError(
+            "A collection cannot repeat a company",
+            400,
+            "duplicate_company"
+        );
+    }
+    if (companies.some(company => company.programId !== programId)) {
+        throw new AcceleratorError(
+            "Every company must belong to the imported Program",
+            400,
+            "wrong_program"
+        );
+    }
+    return getDb().transaction(async tx => {
+        const existing = new Map(
+            (
+                await tx
+                    .select({
+                        id: acceleratorPortfolioCompanies.id,
+                        contentHash: acceleratorPortfolioCompanies.contentHash,
+                    })
+                    .from(acceleratorPortfolioCompanies)
+                    .where(eq(acceleratorPortfolioCompanies.programId, programId))
+                    .for("update")
+            ).map(row => [row.id, row.contentHash])
+        );
+        const counts: ImportCounts = { inserted: 0, updated: 0, unchanged: 0 };
+        const fresh = [];
+        for (const company of companies) {
+            const contentHash = hashValue(company);
+            const known = existing.get(company.id);
+            if (known === undefined) {
+                fresh.push({
+                    id: company.id,
+                    programId,
+                    company,
+                    batchStartsOn: company.batchStartsOn,
+                    contentHash,
+                });
+            } else if (known === contentHash) {
+                counts.unchanged++;
+            } else {
+                await tx
+                    .update(acceleratorPortfolioCompanies)
+                    .set({ company, batchStartsOn: company.batchStartsOn, contentHash })
+                    .where(eq(acceleratorPortfolioCompanies.id, company.id));
+                counts.updated++;
+            }
+        }
+        for (let start = 0; start < fresh.length; start += INSERT_CHUNK) {
+            await tx
+                .insert(acceleratorPortfolioCompanies)
+                .values(fresh.slice(start, start + INSERT_CHUNK));
+        }
+        counts.inserted = fresh.length;
+        return counts;
+    });
+}
+
+/** Companies whose stored embedding is missing or was made from different text or model. */
+export async function listPortfolioEmbeddingWork(
+    programId: string,
+    embeddingHashOf: (company: PortfolioCompany) => string
+): Promise<{ id: string; company: PortfolioCompany; embeddingHash: string }[]> {
+    const rows = await getDb()
+        .select({
+            id: acceleratorPortfolioCompanies.id,
+            company: acceleratorPortfolioCompanies.company,
+            embeddingHash: acceleratorPortfolioCompanies.embeddingHash,
+        })
+        .from(acceleratorPortfolioCompanies)
+        .where(eq(acceleratorPortfolioCompanies.programId, programId))
+        .orderBy(asc(acceleratorPortfolioCompanies.id));
+    return rows
+        .map(row => ({ ...row, wanted: embeddingHashOf(row.company) }))
+        .filter(row => row.embeddingHash !== row.wanted)
+        .map(row => ({ id: row.id, company: row.company, embeddingHash: row.wanted }));
+}
+
+export async function savePortfolioEmbeddings(
+    rows: { id: string; embedding: number[]; embeddingHash: string }[]
+): Promise<void> {
+    await getDb().transaction(async tx => {
+        for (const row of rows) {
+            await tx
+                .update(acceleratorPortfolioCompanies)
+                .set({ embedding: row.embedding, embeddingHash: row.embeddingHash })
+                .where(eq(acceleratorPortfolioCompanies.id, row.id));
+        }
+    });
+}
+
+/** Upsert published applications; a company link that does not resolve is stored as null. */
+export async function importApplicationResponses(
+    responses: ApplicationResponse[]
+): Promise<ImportCounts> {
+    if (new Set(responses.map(response => response.id)).size !== responses.length) {
+        throw new AcceleratorError(
+            "A collection cannot repeat an application",
+            400,
+            "duplicate_application"
+        );
+    }
+    return getDb().transaction(async tx => {
+        const linked = responses.map(response => response.companyId).filter(id => id !== null);
+        const known = new Set(
+            linked.length === 0
+                ? []
+                : (
+                      await tx
+                          .select({ id: acceleratorPortfolioCompanies.id })
+                          .from(acceleratorPortfolioCompanies)
+                          .where(inArray(acceleratorPortfolioCompanies.id, linked))
+                  ).map(row => row.id)
+        );
+        const counts: ImportCounts = { inserted: 0, updated: 0, unchanged: 0 };
+        for (const candidate of responses) {
+            const response =
+                candidate.companyId && !known.has(candidate.companyId)
+                    ? { ...candidate, companyId: null }
+                    : candidate;
+            const contentHash = hashValue(response);
+            const [existing] = await tx
+                .select({ contentHash: acceleratorApplicationResponses.contentHash })
+                .from(acceleratorApplicationResponses)
+                .where(eq(acceleratorApplicationResponses.id, response.id))
+                .for("update");
+            if (existing?.contentHash === contentHash) {
+                counts.unchanged++;
+                continue;
+            }
+            await tx
+                .insert(acceleratorApplicationResponses)
+                .values({
+                    id: response.id,
+                    programId: response.programId,
+                    companyId: response.companyId,
+                    response,
+                    contentHash,
+                })
+                .onConflictDoUpdate({
+                    target: acceleratorApplicationResponses.id,
+                    set: { companyId: response.companyId, response, contentHash },
+                });
+            if (existing) counts.updated++;
+            else counts.inserted++;
+        }
+        return counts;
+    });
+}
+
+export async function countPortfolio(
+    programId: string
+): Promise<{ companies: number; embedded: number; applications: number }> {
+    const [companies] = await getDb()
+        .select({
+            total: sql<number>`count(*)::int`,
+            embedded: sql<number>`count(${acceleratorPortfolioCompanies.embedding})::int`,
+        })
+        .from(acceleratorPortfolioCompanies)
+        .where(eq(acceleratorPortfolioCompanies.programId, programId));
+    const [applications] = await getDb()
+        .select({ total: sql<number>`count(*)::int` })
+        .from(acceleratorApplicationResponses)
+        .where(
+            and(
+                eq(acceleratorApplicationResponses.programId, programId),
+                sql`${acceleratorApplicationResponses.companyId} is not null`
+            )
+        );
+    return {
+        companies: companies?.total ?? 0,
+        embedded: companies?.embedded ?? 0,
+        applications: applications?.total ?? 0,
+    };
+}
+
+/** A Program is Supported only once its past companies are collected and embedded. */
+export async function isSupportedAccelerator(programId: string): Promise<boolean> {
+    const [row] = await getDb()
+        .select({ id: acceleratorPortfolioCompanies.id })
+        .from(acceleratorPortfolioCompanies)
+        .where(
+            and(
+                eq(acceleratorPortfolioCompanies.programId, programId),
+                isNotNull(acceleratorPortfolioCompanies.embedding)
+            )
+        )
+        .limit(1);
+    return row !== undefined;
+}
+
+/** Nearest past companies by cosine similarity. */
+export async function findSimilarPortfolioCompanies(
+    programId: string,
+    embedding: number[],
+    options: { limit: number }
+): Promise<{ company: PortfolioCompany; similarity: number }[]> {
+    const distance = cosineDistance(acceleratorPortfolioCompanies.embedding, embedding);
+    return getDb()
+        .select({
+            company: acceleratorPortfolioCompanies.company,
+            similarity: sql<number>`1 - (${distance})`,
+        })
+        .from(acceleratorPortfolioCompanies)
+        .where(
+            and(
+                eq(acceleratorPortfolioCompanies.programId, programId),
+                isNotNull(acceleratorPortfolioCompanies.embedding)
+            )
+        )
+        .orderBy(distance)
+        .limit(options.limit);
+}
+
+export async function listApplicationResponses(programId: string): Promise<ApplicationResponse[]> {
+    const rows = await getDb()
+        .select({ response: acceleratorApplicationResponses.response })
+        .from(acceleratorApplicationResponses)
+        .where(eq(acceleratorApplicationResponses.programId, programId))
+        .orderBy(asc(acceleratorApplicationResponses.id));
+    return rows.map(row => row.response);
 }

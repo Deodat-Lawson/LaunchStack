@@ -15,11 +15,11 @@ import {
     AcceleratorsApiError,
     acceleratorsApi,
     type AcceleratorRunView,
-    type HomeResponse,
+    type AcceleratorsHome,
 } from "../api";
 
 interface AcceleratorsContextValue {
-    home: HomeResponse | null;
+    home: AcceleratorsHome | null;
     loading: boolean;
     error: unknown;
     denied: boolean;
@@ -45,7 +45,7 @@ export function AcceleratorsProvider({
     storageScope?: string | null;
 }) {
     const t = useTranslations("accelerators.errors");
-    const [home, setHome] = useState<HomeResponse | null>(null);
+    const [home, setHome] = useState<AcceleratorsHome | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<unknown>(null);
     const [denied, setDenied] = useState(false);

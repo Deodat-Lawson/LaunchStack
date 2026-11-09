@@ -1,0 +1,124 @@
+{
+  "schemaVersion": 2,
+  "id": "berkeley-skydeck",
+  "name": "Berkeley SkyDeck Accelerator",
+  "logo": {
+    "path": "/accelerators/logos/demo-berkeley-skydeck.png",
+    "sourceId": "official-logo"
+  },
+  "location": {
+    "text": "Berkeley, California, United States",
+    "sourceIds": ["program-overview"],
+    "interpretation": true
+  },
+  "websiteUrl": "https://skydeck.berkeley.edu/program/",
+  "applyUrl": "https://skydeck.berkeley.edu/apply/",
+  "description": {
+    "text": "AI-written synthesis of the cited official pages, prepared by the collecting assistant: Berkeley SkyDeck's six-month Accelerator Cohort Program pairs startups with advisors, required events, workspace and a Demo Day to prepare for institutional venture funding. Roughly twenty Cohort startups are selected every six months. The current general Program FAQ states an investment of $210,000 for 7.25%, structured as a standard post-money cap SAFE or another form as needed, plus a $7,500 Program fee. Investment requires the Berkeley SkyDeck Fund's separate review, and the Fund has an option to invest up to 10% of the first institutional funding round. Some older specialized-track text still lists $200,000; this record uses the current general Cohort FAQ rather than silently applying those older figures. Batch 23 runs November 2, 2026 to April 15, 2027. Batch 24 applications are advertised to open in January without an exact date or deadline.",
+    "sourceIds": [
+      "program-overview",
+      "cohort-terms",
+      "program-fee",
+      "investment-review",
+      "older-track-terms",
+      "batch-23-schedule",
+      "batch-24-status"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written synthesis of the cited official pages, prepared by the collecting assistant: SkyDeck accepts companies across all industries and from around the world, with UC-affiliated companies and international startups remaining priorities. The Accelerator is intended for companies approaching their first institutional seed investment. Its fit guidance asks whether the team can work full-time and show significant revenue or major product milestones within six months. This record concerns the funded Accelerator Cohort, not the separate Pad-13 incubator or Innovation Partners Program; their different funding and fees should not be assumed to apply.",
+    "sourceIds": ["applicant-eligibility", "program-overview", "cohort-fit"],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://skydeck.berkeley.edu/apply/",
+      "title": "Berkeley SkyDeck — official site icon linked in page metadata",
+      "quote": "https://skydeck.berkeley.edu/wp-content/uploads/2019/10/cropped-NewBSkyDeck-Favicon1-192x192.png",
+      "checkedAt": "2026-11-07T00:00:00Z"
+    },
+    {
+      "id": "program-overview",
+      "url": "https://skydeck.berkeley.edu/program/",
+      "title": "Berkeley SkyDeck — funded Accelerator Cohort overview",
+      "quote": "Berkeley SkyDeck is UC Berkeley’s global hub for entrepreneurship.\nRoughly twenty Cohort startups are selected every six months to receive a $210,000 investment from the Berkeley SkyDeck Fund.\nThe program specializes in helping get startups ready for that first institutional seed check, then introducing the cohort to many of the top VCs in Silicon Valley and beyond.\nCohort startups are paired with Key Advisors, go through the six-month BAM Program, attend weekly required events, and receive guided access to the SkyDeck community.",
+      "checkedAt": "2026-11-07T00:00:00Z"
+    },
+    {
+      "id": "cohort-terms",
+      "url": "https://skydeck.berkeley.edu/program/",
+      "title": "Berkeley SkyDeck — general FAQ investment terms",
+      "quote": "Berkeley SkyDeck’s investment fund will invest $210k for 7.25% of companies accepted into the six month Cohort Program. This can be structured as a standard post-money cap SAFE, or other forms as needed.\nThe Fund also has the option to invest up to 10% of your first institutional funding round, helping accelerate your fundraising process even more.",
+      "checkedAt": "2026-11-07T00:00:00Z"
+    },
+    {
+      "id": "program-fee",
+      "url": "https://skydeck.berkeley.edu/program/",
+      "title": "Berkeley SkyDeck — Cohort Program fee",
+      "quote": "Berkeley SkyDeck charges a $7.5K program fee to each startup in its cohort program.",
+      "checkedAt": "2026-11-07T00:00:00Z"
+    },
+    {
+      "id": "investment-review",
+      "url": "https://skydeck.berkeley.edu/program/",
+      "title": "Berkeley SkyDeck — separate investment review",
+      "quote": "The Berkeley SkyDeck Fund, for legal reasons, has its own investment review process. The SkyDeck review process is carefully designed to select teams that should be eligible for investment. Each company selected for investment will receive $210K in funding from Berkeley SkyDeck Fund",
+      "checkedAt": "2026-11-07T00:00:00Z"
+    },
+    {
+      "id": "older-track-terms",
+      "url": "https://skydeck.berkeley.edu/program/",
+      "title": "Berkeley SkyDeck — differing older Bio+Health track text",
+      "quote": "Startups accepted into the Bio+Health Track receive:\n$200K in equity investment from the Berkeley SkyDeck Fund",
+      "checkedAt": "2026-11-07T00:00:00Z"
+    },
+    {
+      "id": "applicant-eligibility",
+      "url": "https://skydeck.berkeley.edu/apply/",
+      "title": "Berkeley SkyDeck — industries and global eligibility",
+      "quote": "SkyDeck is industry-agnostic: we accept applications from companies in all industries.\nStartups from all over the world are eligible and encouraged to apply.\nUC-affiliated companies and international startups continue to be a priority for SkyDeck.",
+      "checkedAt": "2026-11-07T00:00:00Z"
+    },
+    {
+      "id": "cohort-fit",
+      "url": "https://skydeck.berkeley.edu/program/",
+      "title": "Berkeley SkyDeck — fit and full-time expectations",
+      "quote": "If your company is ready to raise institutional funds within the next six months (with our support), then you are a fit for SkyDeck.\nEvery company situation is different, but within the next six months you should be able to either show significant revenues, or achieve major product milestones.\nIs my core team able to work on this full time over the next six months?",
+      "checkedAt": "2026-11-07T00:00:00Z"
+    },
+    {
+      "id": "batch-23-schedule",
+      "url": "https://skydeck.berkeley.edu/apply/",
+      "title": "Berkeley SkyDeck — Batch 23 published schedule",
+      "quote": "Batch 23 Application Timeline\nApplications Open July 20, 2026 – August 21, 2026\nInterviews September 8, 2026 – October 5, 2026\nOrientation Monday, November 2, 2026\nStart & End Dates November 2, 2026 – April 15, 2027\nCohort Demo Day April, 2027",
+      "checkedAt": "2026-11-07T00:00:00Z"
+    },
+    {
+      "id": "batch-24-status",
+      "url": "https://skydeck.berkeley.edu/apply/",
+      "title": "Berkeley SkyDeck — next application window announcement",
+      "quote": "Applications for Batch 24 open in January!",
+      "checkedAt": "2026-11-07T00:00:00Z"
+    },
+    {
+      "id": "program-contact",
+      "url": "https://skydeck.berkeley.edu/program/",
+      "title": "Berkeley SkyDeck — public Program contact",
+      "quote": "Have more questions? Contact us directly and we’ll get back to you.\nmailto:SkyDeck@Berkeley.edu",
+      "checkedAt": "2026-11-07T00:00:00Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "cohort-batch-23",
+      "label": "Batch 23 — November 2026 to April 2027 (past deadline)",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "dateOnly": "2026-08-21",
+      "rolling": false,
+      "sourceIds": ["batch-23-schedule"]
+    }
+  ]
+}

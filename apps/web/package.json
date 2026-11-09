@@ -32,7 +32,8 @@
         "inngest:dev": "pnpm dlx inngest-cli@latest dev -u http://localhost:8020/api/inngest",
         "distribution:fixture": "tsx ./scripts/run-distribution-fixture.ts",
         "accelerators:import": "tsx ./scripts/import-accelerators.ts",
-        "accelerators:demo": "tsx ./scripts/seed-accelerators-demo.ts"
+        "accelerators:demo": "tsx ./scripts/seed-accelerators-demo.ts",
+        "accelerators:collect-yc": "tsx ./scripts/collect-yc-companies.ts"
     },
     "dependencies": {
         "@aws-sdk/client-s3": "^3.1004.0",

@@ -1,6 +1,6 @@
 "use client";
 
-import { Loader2, Rocket, ShieldAlert } from "lucide-react";
+import { ListChecks, Loader2, Rocket, ShieldAlert } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import {
@@ -19,19 +19,23 @@ import { AcceleratorsProvider, runIsLive, useAccelerators } from "./_lib/context
 import { ACCELERATORS_ROOTS, acceleratorsScreenFor } from "./_lib/screens";
 import { ProgramScreen } from "./_screens/ProgramScreen";
 import { ProgramsScreen } from "./_screens/ProgramsScreen";
+import { TrackerScreen } from "./_screens/TrackerScreen";
+import { TrackerProvider } from "./_lib/tracker";
 
 export function AcceleratorsTool({ host }: { host?: ToolHost }) {
     return (
-        <ToolNavProvider
-            toolId="accelerators"
-            roots={ACCELERATORS_ROOTS}
-            home="/programs"
-            host={host}
-        >
-            <AcceleratorsProvider storageScope={host?.storageScope}>
-                <AcceleratorsFrame />
-            </AcceleratorsProvider>
-        </ToolNavProvider>
+        <div className="h-full min-h-0 w-full [container-type:size]">
+            <ToolNavProvider
+                toolId="accelerators"
+                roots={ACCELERATORS_ROOTS}
+                home="/programs"
+                host={host}
+            >
+                <AcceleratorsProvider storageScope={host?.storageScope}>
+                    <AcceleratorsFrame />
+                </AcceleratorsProvider>
+            </ToolNavProvider>
+        </div>
     );
 }
 
@@ -44,7 +48,10 @@ function AcceleratorsFrame() {
     const groups: ToolNavGroup[] = [
         {
             id: "accelerators",
-            items: [{ to: "/programs", label: t("tool.programs"), icon: Rocket }],
+            items: [
+                { to: "/programs", label: t("tool.programs"), icon: Rocket },
+                { to: "/tracker", label: t("tool.tracker"), icon: ListChecks },
+            ],
         },
     ];
     const screen = acceleratorsScreenFor(path);
@@ -112,17 +119,19 @@ function AcceleratorsFrame() {
                         </Notice>
                     )}
                     {home && (
-                        <>
+                        <TrackerProvider>
                             {!home.canEdit && <Notice>{t("common.readOnly")}</Notice>}
                             <RunStatus />
                             {screen.kind === "programs" ? (
                                 <ProgramsScreen />
                             ) : screen.kind === "program" ? (
                                 <ProgramScreen key={screen.id} id={screen.id} />
+                            ) : screen.kind === "tracker" ? (
+                                <TrackerScreen />
                             ) : (
                                 <ToolNotFound home="/programs" homeLabel={t("tool.programs")} />
                             )}
-                        </>
+                        </TrackerProvider>
                     )}
                 </div>
             )}

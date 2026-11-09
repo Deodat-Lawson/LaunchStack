@@ -274,6 +274,20 @@
       "when": 1792987570002,
       "tag": "20261026040609_proposal_run_result",
       "breakpoints": true
+    },
+    {
+      "idx": 39,
+      "version": "7",
+      "when": 1794046554347,
+      "tag": "20261107101554_accelerator_similar_companies",
+      "breakpoints": true
+    },
+    {
+      "idx": 40,
+      "version": "7",
+      "when": 1794048441370,
+      "tag": "20261107104721_accelerator_tracker",
+      "breakpoints": true
     }
   ]
 }

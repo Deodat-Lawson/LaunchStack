@@ -1,0 +1,94 @@
+{
+  "schemaVersion": 2,
+  "id": "south-park-commons",
+  "name": "South Park Commons Founder Fellowship",
+  "logo": {
+    "path": "/accelerators/logos/demo-south-park-commons.png",
+    "sourceId": "official-logo"
+  },
+  "location": {
+    "text": "San Francisco and New York City, United States; Bangalore, India",
+    "sourceIds": ["fellowship-logistics"],
+    "interpretation": false
+  },
+  "websiteUrl": "https://www.southparkcommons.com/founder-fellowship",
+  "applyUrl": "https://www.southparkcommons.com/apply",
+  "description": {
+    "text": "AI-written synthesis of the cited official pages, prepared by the collecting assistant: South Park Commons' Founder Fellowship is the funded route into its community, pairing early funding with direct partner support. Its published terms are $400,000 upfront for 7% on a standard SAFE plus $600,000 guaranteed in the next external funding round; the full $1 million is not exchanged for only 7%. The Fellowship starts with an eight-week in-person bootcamp followed by a Fellow Residency without a fixed end date. Fall 2026 applications are closed. The application page says Spring 2027 applications will open later in 2026, but does not publish their deadline.",
+    "sourceIds": ["fellowship-terms", "fellowship-duration", "application-status"],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written synthesis of the cited official pages, prepared by the collecting assistant: The Fellowship is for founders ready to start a venture-scale company, including people still exploring ideas. Applicants need not already have an idea, but should be able to explain how they generate and evaluate ideas. SPC states that the Fellowship is not limited to particular industries or founder profiles and accepts solo founders, with a strong preference for solo applicants who can build and prototype. Fellows work from San Francisco, New York City, or Bangalore during bootcamp, with a Northern California and San Francisco kickoff. This record describes the funded Fellowship, not the separate fee-free and equity-free Member Residency.",
+    "sourceIds": ["fellowship-applicants", "fellowship-logistics", "fellowship-paths"],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.southparkcommons.com/news/f26-founder-fellowship",
+      "title": "SPC — publisher logo in official article structured metadata",
+      "quote": "https://www.southparkcommons.com/assets/icons/spc-gold-256.png",
+      "checkedAt": "2026-11-07T00:00:00Z"
+    },
+    {
+      "id": "fellowship-terms",
+      "url": "https://www.southparkcommons.com/news/f26-founder-fellowship",
+      "title": "SPC Founder Fellowship Fall 2026 — funding terms",
+      "quote": "$400K upfront for 7% on a standard SAFE, plus $600K guaranteed in your next external funding round.",
+      "checkedAt": "2026-11-07T00:00:00Z"
+    },
+    {
+      "id": "fellowship-duration",
+      "url": "https://www.southparkcommons.com/news/f26-founder-fellowship",
+      "title": "SPC Founder Fellowship — bootcamp and open-ended residency",
+      "quote": "The Fellowship has no fixed end date, but has two distinct phases: bootcamp and residency.\nEight weeks, in person, in a small cohort. Each company works with SPC partners on everything from customer discovery and product development to branding, storytelling, and pitching, alongside regular demo practice and exclusive events.\nWe want you to work on the right idea, not necessarily the first idea. That can take time, so the residency phase lasts as long as you need.",
+      "checkedAt": "2026-11-07T00:00:00Z"
+    },
+    {
+      "id": "fellowship-applicants",
+      "url": "https://www.southparkcommons.com/news/f26-founder-fellowship",
+      "title": "SPC Founder Fellowship — ideas, industries, and solo founders",
+      "quote": "Do I need an idea to apply?\nNo, but you do need to show us how you generate ideas.\nIs the Fellowship limited to specific industries or founder profiles?\nNo. Our only strict requirement is the ambition to build at the frontier.\nCan I apply as a solo founder?\nYes. If you're solo, we have a strong bias for applicants who can build and prototype.",
+      "checkedAt": "2026-11-07T00:00:00Z"
+    },
+    {
+      "id": "fellowship-paths",
+      "url": "https://www.southparkcommons.com/news/f26-founder-fellowship",
+      "title": "SPC — funded Fellowship versus Member Residency",
+      "quote": "The Fellowship is for founders who know they want to start a venture-scale company and are ready for early funding to get started.\nIf you're not ready to fundraise yet or haven't decided a company is how you want to build the future, the Member Residency is built for exactly that: six months, no cost, no equity rights, with full access to all of our offices, programming, and members.",
+      "checkedAt": "2026-11-07T00:00:00Z"
+    },
+    {
+      "id": "fellowship-logistics",
+      "url": "https://www.southparkcommons.com/news/f26-founder-fellowship",
+      "title": "SPC Founder Fellowship Fall 2026 — deadline and locations",
+      "quote": "Application deadline: 11:59pm PT on Sunday, August 2nd.\nProgram dates: The Fall 2026 bootcamp runs late September to late November.\nKickoff: Programming begins with a kickoff week at a private retreat in Northern California and at our San Francisco office.\nLocation: All Fellows work from one of our offices in San Francisco, New York City, or Bangalore for the duration of the bootcamp. Afterward, teams can relocate to wherever they plan to build, though we encourage staying in a city with an SPC location.",
+      "checkedAt": "2026-11-07T00:00:00Z"
+    },
+    {
+      "id": "application-status",
+      "url": "https://www.southparkcommons.com/apply",
+      "title": "SPC application page — current Fellowship availability",
+      "quote": "We accept applications for our $1M Founder Fellowship twice per year. Our Fall 2026 applications are closed; we will open applications for our Spring 2027 Fellowship later this year.",
+      "checkedAt": "2026-11-07T00:00:00Z"
+    },
+    {
+      "id": "fellowship-cadence",
+      "url": "https://www.southparkcommons.com/faq",
+      "title": "SPC FAQ — spring and fall Fellowship cohorts",
+      "quote": "We meet people throughout the year and welcome applications anytime. We accept new members on a rolling basis, but the Fellowship runs as defined cohorts in the spring and fall. We have application cutoffs ahead of each program start, and we run concentrated interview periods around those windows with fast turnaround.",
+      "checkedAt": "2026-11-07T00:00:00Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "fellowship-fall-2026",
+      "label": "Founder Fellowship — Fall 2026 (applications closed)",
+      "deadlineAt": "2026-08-02T23:59:00-07:00",
+      "deadlineTimezone": "America/Los_Angeles",
+      "rolling": false,
+      "sourceIds": ["fellowship-logistics", "application-status"]
+    }
+  ]
+}

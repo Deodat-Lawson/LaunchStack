@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Accelerator discovery controls** - search existing Program information and
+  combine saved-fit status, minimum-score, and factual intake filters; keep
+  filters when opening a Program and returning to the Catalogue.
+  - Program details separate the sticky company-fit evaluation from sourced
+    information and deadlines, adapting to narrow and vertically split Studio
+    panes. Filtering uses saved data only; classification and Form filling are
+    not added.
+
 - **Watch and listen to media sources** - audio and video play in the source
   viewer, opened from the recording or from its transcript
   - Video plays in the browser's player; audio in a themed deck (play, skip

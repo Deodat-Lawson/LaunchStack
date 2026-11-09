@@ -24,7 +24,7 @@ This scope replaces the Form-related assignments in [issue #510](https://github.
 ## What this branch must do
 
 - Show compact, fully clickable Program rows with official logos, sourced locations when available, and saved fit rings.
-- Open a Program detail preview with its description, target applicants, fit reasons, concerns, unknowns, available Cycle/deadline information, and official website/application links.
+- Open a Program detail preview with a sticky company-fit evaluation on the left and sourced Program information, Cycles/deadlines, and official links in the main column. Narrow panes stack these sections without clipping the evaluation.
 - Read saved fit results without starting paid work. Matching starts only when the user selects **Match Programs**.
 - Mark affected results out of date when the Core profile or Program record changes. Do not present an unknown score as zero.
 - Keep the public Catalogue separate from company-private fit results.
@@ -34,7 +34,17 @@ This scope replaces the Form-related assignments in [issue #510](https://github.
 
 The existing matching price is **2,000 credits per successful matching run**, shown before the action. Opening a Program does not run matching. A Program remains useful even when its application Form is inaccessible or unknown.
 
-The current base provides Catalogue browsing and fit ranking. New text search, filters, automated collection schedules, application assistance, and extension support are not delivered by this cutover.
+The current base provides Catalogue browsing, text search, factual filters, and saved-fit ranking. Classification, automated collection schedules, application assistance, and extension support remain outside this delivery.
+
+### Search and filters
+
+- Search matches all entered terms across the Program name, description, target applicants, optional location, and Cycle labels, without case sensitivity.
+- Saved-fit filters distinguish current numeric scores, unmatched Programs, current unscorable results, and out-of-date results. A genuine score of zero remains a score.
+- Minimum-score filters include only current numeric scores at or above the selected threshold. **Any score** also includes unknown, unmatched, and out-of-date results.
+- Intake filters use recorded facts: rolling intake, a recorded deadline, or neither confirmed. A Program can have both rolling and dated Cycles. A recorded deadline is not a claim that applications are open.
+- Search and filters combine with AND, show the result count, and can be reset together. They survive opening a Program and returning with **All Programs**.
+- Filtering only reads saved data. It does not classify Programs, infer eligibility, or start paid matching.
+- Wide-pane evaluation cards stay visible while Program information scrolls, with keyboard-accessible scrolling for long assessments. Short Studio panes size the card to the pane, not the browser window.
 
 ## Team responsibilities
 
@@ -57,12 +67,12 @@ A one-off collector is acceptable. A maintained pipeline is welcome but not requ
 The next main-product lane is making the existing finder useful with a larger Catalogue, not continuing the removed selected-text workflow.
 
 - Build on the existing Program list/detail surfaces and shared matcher rather than creating a second implementation.
-- Develop agreed discovery improvements, such as name/description search and filters backed by reliable data, on a fresh branch.
+- Extend the existing search and factual filters only for agreed discovery needs backed by reliable data; do not rebuild the controls already in this base.
 - Make fit reasons, concerns, missing information, and outdated results clear to users.
 - Exercise representative startup profiles with different stages, sectors, locations, and incomplete information.
 - Own the agreed matching or presentation fixes those cases reveal, not just a QA report. Do not make fit scores imply admission probability or invented company facts.
 
-These are follow-on tasks, not claims that the new controls or a production-quality matching evaluation already exist in this base. Agree the specific acceptance cases with Kien before expanding the matcher or its data contract.
+Search, factual filters, and the separated evaluation/detail layout are delivered in this base. Broader classification and production-quality matching evaluation remain follow-on work. Agree the specific acceptance cases with Kien before expanding the matcher or its data contract.
 
 ### Kien — product scope, integration, and application-assistance research
 
@@ -158,6 +168,24 @@ PROPOSALS_EXECUTOR=inline pnpm --filter @launchstack/web dev
 The demo seeder requires a named workspace and loopback database, and refuses to overwrite an existing Core profile. It uses synthetic Northwind facts; its fit results are not evidence of production matching accuracy. Configure the existing model provider and credit balance, open `/employer/documents?feature=accelerators&at=/programs`, and explicitly select **Match Programs** for real model output. For local execution without a configured worker, use the existing `PROPOSALS_EXECUTOR=inline` setting; production must use its configured worker and credit policy.
 
 YC, aboveA Startup Accelerator, and Techstars London remain reference records. They demonstrate the record format, logos, descriptions, fit inputs, and location/Cycle metadata where known. They do not establish adequate release coverage or current accuracy for every deadline. Recheck sources for the target release.
+
+### Similar YC companies and the vision demo
+
+Y Combinator is the only Supported accelerator. Its past companies come from the public [yc-oss](https://github.com/yc-oss/api) mirror of YC's directory, and published applications come from the founders' own pages or collection sites listed in `apps/web/scripts/yc-application-sources.ts`. The collector never requests ycombinator.com: YC's Terms of Use forbid scraping its site, so YC-hosted applications stay links. The data lands only in the target database and is never committed; neither yc-oss nor the founders grant reuse rights, so do not republish it.
+
+A Program's **Similar companies** tab lists the twelve past companies closest to the Core profile. Each row shows how the company pitches itself in YC's directory (its yc-oss description) and, when that company published its application, a link to read it. Applications of companies outside that list are not shown.
+
+```sh
+# After importing the y-combinator Program. Embeddings use EMBEDDING_API_BASE_URL/EMBEDDING_API_KEY
+# and wait out per-minute rate limits; re-runs embed only changed companies.
+pnpm --filter @launchstack/web accelerators:collect-yc -- --installation local-accelerators
+
+# Nine more Programs researched for the demo, standing in for Workstream 1's records.
+pnpm --filter @launchstack/web accelerators:import -- --installation local-accelerators \
+  ../../fixtures/accelerators/demo/programs/*.json
+```
+
+Program details (deal, batches, contacts, tags) in `apps/web/src/server/accelerators/demo/programs/` and the hand-written seven-dimension fit in `demo/northwind-fits.ts` stand in for Workstreams 1 and 2 and are replaced when that work merges. The UI does not label them as demo data, so do not show this build to anyone as production output. The illustrative fit appears only for the `Accelerators Demo — Northwind fixture` workspace. The tracker and similar-company matching are real features: tracker rows are company-private and need `documents.edit` to change.
 
 ## Development and acceptance guidelines
 

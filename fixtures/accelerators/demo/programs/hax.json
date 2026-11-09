@@ -1,0 +1,107 @@
+{
+  "schemaVersion": 2,
+  "id": "hax",
+  "name": "HAX",
+  "logo": {
+    "path": "/accelerators/logos/demo-hax.svg",
+    "sourceId": "official-logo"
+  },
+  "location": {
+    "text": "Newark, New Jersey, United States; global engineering support",
+    "sourceIds": ["hax-program"],
+    "interpretation": true
+  },
+  "websiteUrl": "https://hax.co/",
+  "applyUrl": "https://sosv.com/apply/hax/",
+  "description": {
+    "text": "AI-written synthesis of the cited official pages, prepared by the collecting assistant: HAX is SOSV's hard-tech startup development program, combining investment with hands-on engineering, labs, prototyping, sourcing, and commercialization support. The current program page advertises up to $550,000 in initial pre-seed funding and a six-month residency anchored at its Newark headquarters, with engineering and manufacturing support from Pune and Shenzhen. The FAQ says teams are admitted on a rolling basis, typically two or three each month. Its older Deal section still describes a $250,000 first investment split between $150,000 cash and $100,000 in-kind support, while SOSV's legal FAQ describes separate Cash and Program SAFEs and possible discretionary additional capital. These sources do not establish one verified current cash amount or fixed ownership percentage for the advertised $550,000 package; those values are intentionally left unknown.",
+    "sourceIds": [
+      "hax-overview",
+      "hax-program",
+      "hax-intake",
+      "hax-faq-deal",
+      "sosv-legal-structure"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written synthesis of the cited official pages, prepared by the collecting assistant: HAX focuses on technical teams building hardware-enabled solutions at the intersection of science and engineering. Its stated areas include climate technology, healthcare, and industrial independence, with examples spanning energy, advanced materials, robotics, biomanufacturing, and sustainable manufacturing. The FAQ describes pre-seed and seed companies, asks for a validated customer problem, strong engineering ability combined with customer understanding, and a working prototype rather than a polished final product. It lists concept-only submissions and products unrelated to hardware among common rejection reasons. HAX works with startups from around the world, but the program includes a Newark-based residency rather than a purely remote offer.",
+    "sourceIds": ["hax-overview", "hax-fit", "hax-program", "hax-contact"],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://hax.co/",
+      "title": "HAX official site — HAX organization logo asset in structured data",
+      "quote": "https://hax.co/wp-content/uploads/2026/04/sosv-hax-social-logo-1.svg",
+      "checkedAt": "2026-11-07T00:00:00Z"
+    },
+    {
+      "id": "hax-overview",
+      "url": "https://hax.co/",
+      "title": "HAX — SOSV affiliation, pre-seed hard-tech focus, and industrial sectors",
+      "quote": "HAX is a part of SOSV, the world’s most active pre-seed deep-tech venture capital firm.\n\n[…]\n\nHAX is the world’s first and most active program built for pre-seed startups working at the intersection of science and engineering. We back founders tackling the hardest industrial-scale challenges, in fields like energy, advanced compute, transportation, health tech, and manufacturing, employing the most innovative new technologies, including everything from plasma and physical AI to advanced chemistry.",
+      "checkedAt": "2026-11-07T00:00:00Z"
+    },
+    {
+      "id": "hax-program",
+      "url": "https://hax.co/program/",
+      "title": "HAX Program — current advertised funding, residency, and engineering support",
+      "quote": "We provided up to $550,000 in initial pre-seed funding, specifically structured to help you hit the critical technical milestones that traditional investors often find too risky. Beyond that first check, we participate in follow-on rounds and give you access to SOSV’s network of 7,700+ global investors.\n\n[…]\n\nOur founders receive a six-month residency at our state-of-the-art facilities, anchored by our 35,000 sq. ft. Newark headquarters.\n\n[…]\n\nWe help you close the gap between a lab breakthrough and a commercial product with hands-on R&D and engineering support. You build alongside our in-house team of mechanical, electrical, and chemical engineers. By synchronizing our on-site NJ team with specialized engineering, design, supply chain, and manufacturing experts in Pune and Shenzhen, we run a 24/7 global operation that never sleeps, ensuring you build better, smarter, and faster than the competition.",
+      "checkedAt": "2026-11-07T00:00:00Z"
+    },
+    {
+      "id": "hax-fit",
+      "url": "https://hax.co/faq/",
+      "title": "HAX FAQ — hardware, stages, focus areas, and applicant expectations",
+      "quote": "HAX is SOSV’s hard tech startup development program. We make multi-stage investments in pre-seed and seed companies that are addressing challenges in human & planetary health.\n\n[…]\n\nWe have a bias towards technical teams building products for validated problems in three main areas:\n\n[…]\n\nClimate Tech\n\n[…]\n\nHealthcare\n\n[…]\n\nIndustrial Independence\n\n[…]\n\nWe only invest in hardware companies.\n\n[…]\n\nA validated problem: We love it when teams have discovered a large, urgent problem by speaking with lots of potential customers (or from their own personal experience).\n\nA strong founding team: The typical HAX team has strong engineering ability combined with customer obsession.\n\n[…]\n\nA working prototype: We want to see what you’ve built so far to get a sense for where you’d be able to get to with our resources. We don’t expect your prototype to be overly polished but we would like it to be a working hypothesis for how your target customer’s problem would ultimately be solved.\n\n[…]\n\nThe company is still at concept stage and the team hasn’t submitted a demo of a working prototype.\n\n[…]\n\nThe product has no relevance to hardware (eg: an e-commerce app).",
+      "checkedAt": "2026-11-07T00:00:00Z"
+    },
+    {
+      "id": "hax-intake",
+      "url": "https://hax.co/faq/",
+      "title": "HAX FAQ — rolling admission rather than a published cohort deadline",
+      "quote": "How often do cohorts start?\n\nWe invest into teams on a rolling basis, and typically admit 2-3 teams every month.",
+      "checkedAt": "2026-11-07T00:00:00Z"
+    },
+    {
+      "id": "hax-faq-deal",
+      "url": "https://hax.co/faq/",
+      "title": "HAX FAQ — older detailed deal and variable technical development period",
+      "quote": "In 6 to 18 months (depending on the level of technical complexity of the product), we work with startups to de-risk the cost, performance and manufacturing challenges, positioning founders to start converting customers and raising your next round of capital.\n\n[…]\n\nOur first investment in your startup is $250,000 which converts to a pre-negotiated equity stake at a later date. We use an instrument called a Post Money SAFE which has no valuation cap and instead specifies our target ownership outright so as to keep cap table calculations clean. Unlike a loan agreement or convertible loan note, a SAFE is typically non repayable and is interest free.\n\n[…]\n\nIt’s important to note that the $250k investment is broken up into $150k in cash and $100k in in-kind support. The investment is paid out at thirty day intervals over the course of the program.",
+      "checkedAt": "2026-11-07T00:00:00Z"
+    },
+    {
+      "id": "sosv-legal-structure",
+      "url": "https://sosv.com/legal-faqs/",
+      "title": "SOSV Legal FAQs — typical Cash SAFE, Program SAFE, and discretionary additional cash",
+      "quote": "The SOSV Program investment is typically made in the form of two separate SAFEs, being (i) the Cash SAFE (ii) the Program SAFE. There is also the potential in certain circumstances for SOSV to make available, at its discretion and subject to such milestones as may be agreed on a case by case basis, an Additional Cash SAFE.\n\n[…]\n\nThe Cash SAFE will convert to preferred equity in the Company on the basis of the stated valuation cap or discount. Whichever calculation (either the valuation cap or the discount) results in the most number of shares for the Investor is the calculation that will be applied for the conversion of the Cash SAFE.\n\n[…]\n\nThe Program SAFE relates specifically to the program costs of the relevant SOSV Program (either SOSV HAX, SOSV NY, or SOSV SF). These Program Costs are paid directly to the SOSV Program on the Company’s behalf by SOSV.\n\n[…]\n\nThe Program SAFE will convert to a fixed percentage of preferred equity in the Company.\n\n[…]\n\nAs part of the SOSV Program investment, teams may be eligible for a further fixed percentage SAFE investment of $250,000 at a $6m post money cap and 20% discount. SOSV may offer this Additional Cash SAFE at its sole discretion and such offer is contingent on performance over the course of the SOSV Program and such other milestones as SOSV may require.",
+      "checkedAt": "2026-11-07T00:00:00Z"
+    },
+    {
+      "id": "hax-application",
+      "url": "https://sosv.com/apply/hax/",
+      "title": "SOSV — public HAX application entry point",
+      "quote": "Apply to HAX - SOSV\n\n* indicates required fields",
+      "checkedAt": "2026-11-07T00:00:00Z"
+    },
+    {
+      "id": "hax-contact",
+      "url": "https://hax.co/contact/",
+      "title": "HAX — public contact form and worldwide startup reach",
+      "quote": "We work with startups, investors and corporates from all over the world.\n\nLet us know what you’re up to and we’ll get back to you shortly!",
+      "checkedAt": "2026-11-07T00:00:00Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "rolling-intake",
+      "label": "Rolling intake — typically 2–3 teams admitted monthly",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": true,
+      "sourceIds": ["hax-intake"]
+    }
+  ]
+}

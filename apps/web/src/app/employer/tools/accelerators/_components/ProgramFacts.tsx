@@ -8,79 +8,70 @@ import { cn } from "~/lib/utils";
 
 import type { ProgramView, SourcedNarrative } from "../api";
 
-export function Narrative({ title, narrative }: { title: string; narrative: SourcedNarrative }) {
-    const t = useTranslations("accelerators.program");
-    const text = narrative.text.replace(/^AI-written (?:synthesis|interpretation)\b[^:]*:\s*/i, "");
+/** A 0–100 score as a ring; an unknown score is an empty ring, never zero. */
+export function ScoreRing({
+    score,
+    label,
+    size = "md",
+}: {
+    score: number | null;
+    label: string;
+    size?: "sm" | "md" | "lg";
+}) {
+    const format = useFormatter();
     return (
-        <section className="space-y-3">
-            <div className="flex flex-wrap items-center gap-2">
-                <h2 className="text-ink text-base font-semibold">{title}</h2>
-                {narrative.interpretation && (
-                    <Badge role="note" variant="outline" className="text-ink-3 font-normal">
-                        {t("interpretation")}
-                    </Badge>
+        <div
+            role="img"
+            aria-label={label}
+            className={cn(
+                "relative flex shrink-0 items-center justify-center",
+                size === "sm" && "size-10 text-xs",
+                size === "md" && "size-12 text-sm",
+                size === "lg" && "size-20 text-2xl"
+            )}
+        >
+            <svg
+                aria-hidden="true"
+                viewBox="0 0 64 64"
+                className="absolute inset-0 size-full -rotate-90"
+                fill="none"
+                strokeWidth={size === "lg" ? 5 : 4}
+            >
+                <circle cx="32" cy="32" r="28" className="stroke-line" />
+                {score !== null && (
+                    <circle
+                        cx="32"
+                        cy="32"
+                        r="28"
+                        pathLength="100"
+                        strokeDasharray={`${score} 100`}
+                        strokeLinecap="round"
+                        className="stroke-brand"
+                    />
                 )}
-            </div>
-            <p className="text-ink-2 whitespace-pre-wrap text-sm leading-relaxed">{text}</p>
-        </section>
+            </svg>
+            <span aria-hidden="true" className="text-ink font-semibold tabular-nums">
+                {score === null ? "—" : format.number(score)}
+            </span>
+        </div>
     );
 }
 
+/** The saved AI match result as a ring or a badge. */
 export function FitStatus({ view, ring = false }: { view: ProgramView; ring?: boolean }) {
     const t = useTranslations("accelerators.fit");
-    const format = useFormatter();
-    const score = view.fit?.assessment.score;
-    const label = !view.fit ? t("unmatched") : score == null ? t("unknown") : t("score", { score });
-    if (ring) {
-        return (
-            <div className="flex w-36 shrink-0 items-center gap-2">
-                <div
-                    role="img"
-                    aria-label={label}
-                    className="relative flex size-12 shrink-0 items-center justify-center"
-                >
-                    <svg
-                        aria-hidden="true"
-                        viewBox="0 0 64 64"
-                        className="absolute inset-0 size-full -rotate-90"
-                        fill="none"
-                        strokeWidth="4"
-                    >
-                        <circle cx="32" cy="32" r="28" className="stroke-line" />
-                        {score != null && (
-                            <circle
-                                cx="32"
-                                cy="32"
-                                r="28"
-                                pathLength="100"
-                                strokeDasharray={`${score} 100`}
-                                strokeLinecap="round"
-                                className="stroke-brand"
-                            />
-                        )}
-                    </svg>
-                    <span
-                        aria-hidden="true"
-                        className="text-ink text-sm font-semibold tabular-nums"
-                    >
-                        {score == null ? "—" : format.number(score)}
-                    </span>
-                </div>
-                <div className="space-y-0.5 text-xs">
-                    <p className="text-ink-3">{score == null ? label : t("title")}</p>
-                    {view.fitStale && <p className="text-warn">{t("stale")}</p>}
-                </div>
-            </div>
-        );
-    }
+    const score = view.fit?.assessment.score ?? null;
+    const label = !view.fit
+        ? t("unmatched")
+        : score === null
+          ? t("unknown")
+          : t("score", { score });
+    if (ring) return <ScoreRing score={score} label={label} />;
     return (
         <div className="flex flex-wrap items-center gap-2">
             <Badge
                 variant="outline"
-                className={cn(
-                    view.fit?.assessment.score != null &&
-                        "border-brand/30 bg-brand-soft text-brand-ink"
-                )}
+                className={cn(score !== null && "border-brand/30 bg-brand-soft text-brand-ink")}
             >
                 {label}
             </Badge>
@@ -93,50 +84,22 @@ export function FitStatus({ view, ring = false }: { view: ProgramView; ring?: bo
     );
 }
 
-export function FitDetails({ view }: { view: ProgramView }) {
-    const t = useTranslations("accelerators.fit");
-    const format = useFormatter();
-    const fit = view.fit;
+export function Narrative({ title, narrative }: { title: string; narrative: SourcedNarrative }) {
+    const t = useTranslations("accelerators.program");
+    const text = narrative.text.replace(/^AI-written (?:synthesis|interpretation)\b[^:]*:\s*/i, "");
     return (
-        <section className="border-line bg-panel space-y-4 rounded-xl border p-5">
-            <h2 className="text-ink text-base font-semibold">{t("title")}</h2>
-            <FitStatus view={view} />
-            {!fit && <p className="text-ink-3 text-sm">{t("unmatchedHint")}</p>}
-            {view.fitStale && <p className="text-warn text-sm">{t("staleHint")}</p>}
-            {fit && (
-                <>
-                    <p className="text-ink-3 text-xs">
-                        {t("checked", {
-                            date: format.dateTime(new Date(fit.checkedAt), {
-                                dateStyle: "medium",
-                                timeStyle: "short",
-                            }),
-                        })}
-                    </p>
-                    {(["reasons", "concerns", "unknowns"] as const).map(
-                        key =>
-                            fit.assessment[key].length > 0 && (
-                                <div key={key} className="space-y-1.5">
-                                    <h3 className="text-ink text-sm font-medium">{t(key)}</h3>
-                                    <ul className="text-ink-2 list-disc space-y-1 pl-5 text-sm leading-relaxed">
-                                        {fit.assessment[key].map((text, index) => (
-                                            <li key={index}>{text}</li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            )
-                    )}
-                    {fit.assessment.companyEvidenceIds.length > 0 && (
-                        <p className="text-ink-3 text-xs">
-                            {t("evidence", {
-                                ids: format.list(
-                                    fit.assessment.companyEvidenceIds.map(id => format.number(id))
-                                ),
-                            })}
-                        </p>
-                    )}
-                </>
-            )}
+        <section className="space-y-2">
+            <div className="flex flex-wrap items-center gap-2">
+                <h3 className="text-ink text-sm font-semibold">{title}</h3>
+                {narrative.interpretation && (
+                    <Badge role="note" variant="outline" className="text-ink-3 font-normal">
+                        {t("interpretation")}
+                    </Badge>
+                )}
+            </div>
+            <p className="text-ink-2 whitespace-pre-wrap break-words text-sm leading-relaxed">
+                {text}
+            </p>
         </section>
     );
 }

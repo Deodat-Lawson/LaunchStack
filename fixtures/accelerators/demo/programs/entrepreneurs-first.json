@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 2,
+  "id": "entrepreneurs-first",
+  "name": "Entrepreneurs First",
+  "logo": {
+    "path": "/accelerators/logos/demo-entrepreneurs-first.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.joinef.com/",
+  "applyUrl": "https://apply.joinef.com",
+  "location": {
+    "text": "London, Bangalore, and San Francisco; pathway-dependent",
+    "sourceIds": ["london-format", "bangalore-format", "us-pathways"],
+    "interpretation": true
+  },
+  "description": {
+    "text": "AI-written synthesis of the cited official pages, prepared by the collecting assistant: Entrepreneurs First invests in individuals before they necessarily have a company, idea, or cofounder, then supports cofounder matching, company building, and fundraising. Its London and Bangalore routes have a 12-week FORM phase, with funded teams moving to San Francisco for a further 12-week LAUNCH phase. Its U.S. offer instead describes funding from day one or an exploratory fellowship, with three months in San Francisco. The advertised investment is up to $250,000: $125,000 for a fixed 8%, plus an optional $125,000 uncapped MFN SAFE with additional conditions. It is not $250,000 for only 8%. Equity-free grants and legal instruments depend on location. Applications are reviewed on a rolling basis; no exact upcoming cohort deadline is established by these sources.",
+    "sourceIds": [
+      "general-program",
+      "london-format",
+      "bangalore-format",
+      "us-pathways",
+      "investment-terms"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written synthesis of the cited official pages, prepared by the collecting assistant: EF assesses individuals rather than requiring an existing company, cofounder, or idea. Its general FAQ emphasizes exceptional outcomes relative to peers, ambition, founder aptitude, and technology-building ability, with most participants having technical backgrounds. The Program is full-time and in person on the local-hub routes. Its U.S. FAQ explicitly describes sector-agnostic investing, including deep tech, robotics, and consumer gaming. Applicants must choose the route appropriate to their location; the U.S. exploratory fellowship differs from the full-time company-building route. London and Bangalore visa support is conditional, not a promise of a visa. These are sourced applicant expectations, not a personalized eligibility decision.",
+    "sourceIds": [
+      "general-applicants",
+      "general-program",
+      "us-pathways",
+      "us-sectors",
+      "london-format",
+      "bangalore-format"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.joinef.com/",
+      "title": "Entrepreneurs First official site — linked brand icon",
+      "quote": "<link rel=\"icon\" href=\"https://www.joinef.com/wp-content/uploads/2025/03/web-app-manifest-512x512-1-300x300.png\" sizes=\"192x192\" />",
+      "checkedAt": "2026-11-07T00:00:00.000Z"
+    },
+    {
+      "id": "general-program",
+      "url": "https://www.joinef.com/faqs/",
+      "title": "EF General FAQs — program, funding conditions, commitment, and rolling review",
+      "quote": "We run programs in our hub cities across North America, Europe and Asia.\n\nAccess to a shared office space in a prime location for the duration of the 12 week FORM program in your local hub and subsequent 12 week LAUNCH program in San Francisco.\n\nUp to $250,000 of equity investment* for all teams that pass our Investment Committee and move to San Francisco as part of our LAUNCH program (visa assistance and relocation support provided).\n\nThat’s why we expect you to commit full-time to the program, and move to one of our hub cities to take part in person.\n\nWe review applications on a rolling basis.",
+      "checkedAt": "2026-11-07T00:00:00.000Z"
+    },
+    {
+      "id": "general-applicants",
+      "url": "https://www.joinef.com/faqs/",
+      "title": "EF General FAQs — individual applicants and technical background",
+      "quote": "Our programs are most valuable for people in the early stages of their career, who can demonstrate that they’ve achieved exceptional outcomes relative to their peers.\n\nWe assess all applicants as individuals, before they have a business, cofounder or an idea.\n\nAt EF, we build technology companies. The majority of individuals who join EF will have a technical background, from self-taught developer through to a Computer Science PhD. We do take a small number of non-technical individuals who demonstrate solid technical understanding, even if they don’t have the means of production.\n\nPlease only apply for one program, in one hub city, at a time.",
+      "checkedAt": "2026-11-07T00:00:00.000Z"
+    },
+    {
+      "id": "london-format",
+      "url": "https://www.joinef.com/faqs/london/",
+      "title": "EF London FAQs — location, duration, grant, and visa caveats",
+      "quote": "FORM, the first 12 weeks of our program, takes place in our London office. Teams that receive funding from our Investment Committee then relocate to San Francisco for LAUNCH, the final 12 weeks of our program.\n\nUpon signing your offer to join the program*, you will receive a £6,000 Talent Investment.\n\nIf you later don’t form a company or we choose not to invest further, we don’t take any equity and you don’t owe us anything.\n\nWe do not provide visas for the EF program. However, in many circumstances, we can offer support to help you apply for a visa, if required. This is dependent on your circumstance and background.",
+      "checkedAt": "2026-11-07T00:00:00.000Z"
+    },
+    {
+      "id": "bangalore-format",
+      "url": "https://www.joinef.com/faqs/bangalore/",
+      "title": "EF Bangalore FAQs — location, grant, tax, and visa caveats",
+      "quote": "FORM, the first 12 weeks of our program, takes place in our Bangalore office. Teams that receive funding from our Investment Committee then relocate to San Francisco for LAUNCH, the final 12 weeks of our program.\n\nUpon joining the program*, you will receive an INR 360,000 Talent Investment.\n\nUnder Indian regulations, the payment will be subject to a tax deduction at source (10% as of April 2026), and the net amount after tax deduction will be credited to your bank account.\n\nWe do not provide visas for the EF program. However, in many circumstances, we can offer support to help you apply for a visa, if required. This is dependent on your circumstance and background.",
+      "checkedAt": "2026-11-07T00:00:00.000Z"
+    },
+    {
+      "id": "investment-terms",
+      "url": "https://www.joinef.com/faqs/london/",
+      "title": "EF London FAQs — fixed SAFE, optional MFN investment, local instruments, and documentation",
+      "quote": "$125,000 investment from EF via a post-money SAFE* (Simple Agreement for Future Equity) for 8% of your company. This will immediately convert prior to closing a priced round where preferred shares are issued and will be diluted by that round but not by any warrants, employee share option pools or other convertible investments.\n\nA further $125,000 investment from us and our partner Transpose Platform via an uncapped MFN (Most Favoured Nation) SAFE. This is optional for you and is available if your team relocates to San Francisco as part of our LAUNCH program (second 12 weeks) and incorporates as a Delaware C-corp. An MFN SAFE converts in the same priced round as the EF SAFE at the price of that round unless your company has entered into another SAFE which has agreed a discount or cap to the price, in which case the MFN SAFE inherits the terms of the SAFE which give it the best outcome.\n\nFurther details as to how and when these investments are made, as well as EF’s standard investor rights, and a cap table calculator will be communicated to all founders upon receiving an offer to join the program.\n\nNote that if you incorporate your company in France, UK or India and EF decides to invest, you will receive a local investment instrument on equivalent terms (i.e. rather than a SAFE, you’ll receive a BSA Air in France, a Convertible Loan Note in the UK or Compulsory Convertible Preference Shares in India).",
+      "checkedAt": "2026-11-07T00:00:00.000Z"
+    },
+    {
+      "id": "us-pathways",
+      "url": "https://www.joinef.com/faqs/us/",
+      "title": "EF U.S. FAQs — upfront investment versus exploratory fellowship",
+      "quote": "We will invest in you on Day 1, upfront. You’ll live and work in San Francisco for your first three months, surrounded by other world-class founders.\n\nFor individuals who are still exploring what to build, or even whether to build, we offer an equity free $10K grant and housing for three months.\n\n$125K via a post-money SAFE for 8% of your company (from EF)\n$125K via an uncapped MFN SAFE (from us and our partner, Transpose Platform). This second investment is optional and available if you relocate to San Francisco and incorporate as a Delaware C-Corp\n\nWe accept applications on a rolling basis and review every submission carefully.",
+      "checkedAt": "2026-11-07T00:00:00.000Z"
+    },
+    {
+      "id": "us-sectors",
+      "url": "https://www.joinef.com/faqs/us/",
+      "title": "EF U.S. FAQs — sector-agnostic investing",
+      "quote": "We’re sector agnostic, which means we build and invest in everything. We care about big problems, huge ambition and hard technical challenges. Our portfolio spans deep tech, robotics, consumer gaming, and more.",
+      "checkedAt": "2026-11-07T00:00:00.000Z"
+    },
+    {
+      "id": "europe-pathway",
+      "url": "https://www.joinef.com/faqs/europe/",
+      "title": "EF Europe FAQs — separate eight-week Bay Area route",
+      "quote": "We run a program for young Europeans who have graduated in 2023 or later. This is an 8-week residency program in the Bay Area for Europe’s next founders who are ready to start now. You don’t need to have a cofounder or an idea to apply.",
+      "checkedAt": "2026-11-07T00:00:00.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "rolling",
+      "label": "Rolling application review — choose a local pathway",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": true,
+      "sourceIds": ["general-program", "us-pathways"]
+    }
+  ]
+}

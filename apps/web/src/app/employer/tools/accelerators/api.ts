@@ -1,6 +1,17 @@
+import type {
+    CreateTrackerTask,
+    SaveTrackerOpportunity,
+    SimilarCompaniesView,
+    TrackerOpportunity,
+    TrackerTask,
+    UpdateTrackerOpportunity,
+    UpdateTrackerTask,
+} from "@launchstack/pipelines/accelerators";
 import type { HomeResponse, ProgramView, RunView } from "@launchstack/pipelines/accelerators/types";
 
 import type { Copy } from "~/i18n/copy";
+
+import type { DemoLayer } from "./_lib/demo";
 
 export type {
     HomeResponse,
@@ -8,8 +19,22 @@ export type {
     ProgramView,
     SourcedNarrative,
 } from "@launchstack/pipelines/accelerators/types";
+export type {
+    ApplicationResponse,
+    ApplicationSection,
+    PortfolioCompany,
+    SimilarCompaniesView,
+    SimilarCompany,
+    TrackerOpportunity,
+    TrackerPriority,
+    TrackerStatus,
+    TrackerTask,
+    UpdateTrackerOpportunity,
+} from "@launchstack/pipelines/accelerators";
 
 export type AcceleratorRunView = RunView & { errorCopy?: Copy };
+/** The catalogue home plus demo stand-ins for other workstreams' data. */
+export type AcceleratorsHome = HomeResponse & { demo: DemoLayer };
 export class AcceleratorsApiError extends Error {
     constructor(
         message: string,
@@ -57,7 +82,7 @@ async function call<T>(url: string, init?: RequestInit): Promise<T> {
 }
 
 export const acceleratorsApi = {
-    home: () => call<HomeResponse>("/api/accelerators"),
+    home: () => call<AcceleratorsHome>("/api/accelerators"),
     program: (id: string) =>
         call<{ program: ProgramView }>(`/api/accelerators/programs/${encodeURIComponent(id)}`),
     match: () =>
@@ -67,4 +92,47 @@ export const acceleratorsApi = {
         }),
     run: (id: string) =>
         call<{ run: AcceleratorRunView }>(`/api/accelerators/runs/${encodeURIComponent(id)}`),
+    similar: (id: string) =>
+        call<{ similar: SimilarCompaniesView }>(
+            `/api/accelerators/programs/${encodeURIComponent(id)}/similar`
+        ),
+    tracker: {
+        list: () => call<{ opportunities: TrackerOpportunity[] }>("/api/accelerators/tracker"),
+        get: (id: string) =>
+            call<{ opportunity: TrackerOpportunity }>(
+                `/api/accelerators/tracker/${encodeURIComponent(id)}`
+            ),
+        save: (input: SaveTrackerOpportunity) =>
+            call<{ opportunity: TrackerOpportunity }>("/api/accelerators/tracker", {
+                method: "POST",
+                body: JSON.stringify(input),
+            }),
+        update: (id: string, patch: UpdateTrackerOpportunity) =>
+            call<{ opportunity: TrackerOpportunity }>(
+                `/api/accelerators/tracker/${encodeURIComponent(id)}`,
+                { method: "PATCH", body: JSON.stringify(patch) }
+            ),
+        remove: (id: string) =>
+            call<{ deleted: true }>(`/api/accelerators/tracker/${encodeURIComponent(id)}`, {
+                method: "DELETE",
+            }),
+        addTask: (id: string, input: CreateTrackerTask) =>
+            call<{ task: TrackerTask }>(
+                `/api/accelerators/tracker/${encodeURIComponent(id)}/tasks`,
+                {
+                    method: "POST",
+                    body: JSON.stringify(input),
+                }
+            ),
+        updateTask: (id: string, taskId: string, patch: UpdateTrackerTask) =>
+            call<{ task: TrackerTask }>(
+                `/api/accelerators/tracker/${encodeURIComponent(id)}/tasks/${encodeURIComponent(taskId)}`,
+                { method: "PATCH", body: JSON.stringify(patch) }
+            ),
+        removeTask: (id: string, taskId: string) =>
+            call<{ deleted: true }>(
+                `/api/accelerators/tracker/${encodeURIComponent(id)}/tasks/${encodeURIComponent(taskId)}`,
+                { method: "DELETE" }
+            ),
+    },
 };

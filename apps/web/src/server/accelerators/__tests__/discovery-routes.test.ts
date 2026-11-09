@@ -57,6 +57,8 @@ jest.mock("~/lib/credits", () => ({
 }));
 jest.mock("~/server/deployment", () => ({ isMeteringEnforced: () => true }));
 jest.mock("~/server/db", () => ({ db: {} }));
+const demoLayer = { details: {}, fits: {} };
+jest.mock("~/server/accelerators/demo", () => ({ loadDemoLayer: async () => demoLayer }));
 jest.mock("~/lib/storage", () => ({ uploadFile: jest.fn() }));
 jest.mock("~/server/services/document-upload", () => ({ processDocumentUpload: jest.fn() }));
 jest.mock("~/server/inngest/client", () => ({ inngest: { send: jest.fn() } }));
@@ -156,6 +158,7 @@ describe("discovery reads", () => {
             profileReady: true,
             canEdit: true,
             costs: { match: 2_000 },
+            demo: demoLayer,
         });
         const detail = await preview(
             new NextRequest(`http://x/api/accelerators/programs/${program.id}`),

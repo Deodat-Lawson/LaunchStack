@@ -1,18 +1,15 @@
-import {
-    AcceleratorError,
-    hashValue,
-    type HomeResponse,
-    type ProgramView,
-} from "@launchstack/pipelines/accelerators";
+import { AcceleratorError, hashValue, type ProgramView } from "@launchstack/pipelines/accelerators";
 import { listCatalogue, listCompanyMatches } from "@launchstack/pipelines/accelerators/db";
 import { PROPOSAL_CREDITS, type RunRecord } from "@launchstack/pipelines/proposals";
 import { findLiveRun, getRun, loadOrgProfile } from "@launchstack/pipelines/proposals/db";
 
-import type { AcceleratorRunView } from "~/app/employer/tools/accelerators/api";
+import type { AcceleratorRunView, AcceleratorsHome } from "~/app/employer/tools/accelerators/api";
 
 import type { WorkspaceContext } from "~/lib/require-workspace-context";
 import { startProposalRun } from "~/server/proposals/executor";
 import { runCopy } from "~/server/proposals/copy";
+
+import { loadDemoLayer } from "./demo";
 
 export const ACCELERATOR_COSTS = {
     match: PROPOSAL_CREDITS.programs,
@@ -37,11 +34,12 @@ export function toAcceleratorRunView(run: RunRecord): AcceleratorRunView {
     };
 }
 
-export async function loadAccelerators(member: WorkspaceContext): Promise<HomeResponse> {
-    const [catalogue, matches, profile] = await Promise.all([
+export async function loadAccelerators(member: WorkspaceContext): Promise<AcceleratorsHome> {
+    const [catalogue, matches, profile, demo] = await Promise.all([
         listCatalogue(),
         listCompanyMatches(member.companyId),
         loadOrgProfile(member.companyId, await member.documentScope()),
+        loadDemoLayer(member.companyId),
     ]);
     const profileHash = profile ? hashValue(profile) : null;
     const programs = catalogue
@@ -67,6 +65,7 @@ export async function loadAccelerators(member: WorkspaceContext): Promise<HomeRe
             profile !== null && (profile.facts.length > 0 || profile.summary.trim().length > 0),
         canEdit: member.can("documents.edit"),
         costs: ACCELERATOR_COSTS,
+        demo,
     };
 }
 

@@ -1,0 +1,93 @@
+{
+  "schemaVersion": 2,
+  "id": "antler",
+  "name": "Antler",
+  "logo": {
+    "path": "/accelerators/logos/demo-antler.svg",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.antler.co/",
+  "applyUrl": "https://www.antler.co/pitch",
+  "location": {
+    "text": "Global; U.S. residencies in San Francisco, New York City, and Austin",
+    "sourceIds": ["official-overview", "us-residency"],
+    "interpretation": true
+  },
+  "description": {
+    "text": "AI-written synthesis of the cited official pages, prepared by the collecting assistant: Antler is a global early-stage investor backing founders from inception and supporting companies after its first investment. Its residency model helps founders form teams, validate ideas, and pitch an Investment Committee; admission is not a guarantee of funding. Check sizes, equity stakes, and residency arrangements vary by location. As a location-specific example, its U.S. page advertises an in-person residency of up to three months, monthly intake and year-round application review, and an opportunity to receive an initial investment commitment of $500,000–$1 million. Those U.S. terms are not a global standard deal. The public application route currently resolves to Antler's Pitch Us page.",
+    "sourceIds": [
+      "official-overview",
+      "investment-model",
+      "us-residency",
+      "us-investment",
+      "official-logo"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written synthesis of the cited official pages, prepared by the collecting assistant: Antler backs founders at pre-idea, pre-team, and pre-seed stages. The U.S. residency welcomes solo founders and cofounders, expects genuine intent to build an investable company, and requires at least one founder to participate full-time. Its U.S. page lists AI, enterprise SaaS, consumer, fintech, climate, deep tech, health, and emerging categories. For that U.S. residency, at least one cofounder must already have independent, indefinite, unrestricted U.S. work authorization; Antler says it does not sponsor visas. These are U.S.-specific requirements, not restrictions inferred for Antler's other locations. Applicants should check their chosen location's terms.",
+    "sourceIds": ["investment-model", "us-applicants", "us-work-authorization"],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.antler.co/pitch",
+      "title": "Apply to Antler — official linked Antler wordmark and application route",
+      "quote": "https://cdn.prod.website-files.com/68c1084e137e63873a526f0f/69fcf1860f74984bbb90854e_antler-logo-default.svg\n\nGET INVESTMENT FROM ANTLER\n\nTell us who you are and what you’re building.",
+      "checkedAt": "2026-11-07T00:00:00.000Z"
+    },
+    {
+      "id": "official-overview",
+      "url": "https://www.antler.co/",
+      "title": "Antler — global inception-stage investor",
+      "quote": "Antler is a global early-stage VC investing in the world's best founders from first check to IPO.\n\nWith a presence in major technology ecosystems across the world we back the most driven entrepreneurs and give them the platform, capital, and community needed to create lasting impact.",
+      "checkedAt": "2026-11-07T00:00:00.000Z"
+    },
+    {
+      "id": "investment-model",
+      "url": "https://www.antler.co/blog/antler-beyond-traditional-vc",
+      "title": "Antler goes beyond traditional VC investing — August 31, 2023 explanation of location-dependent terms",
+      "quote": "Whether it’s pre-idea, pre-team, or pre-seed, Antler backs the best founders from the very beginning.\n\nIf successful at the Investment Committee, founders will receive funding from Antler for an equity stake. While each location’s check size and stake may vary, we share our full term sheet when accepting a founder into our residency to be transparent about terms up front.\n\nUnlike traditional venture capital firms, accelerators, or incubators our goal is to support the founders and the companies we invest in from pre-seed to series C, and beyond.",
+      "checkedAt": "2026-11-07T00:00:00.000Z"
+    },
+    {
+      "id": "us-residency",
+      "url": "https://www.antler.co/location/us",
+      "title": "Antler U.S. — residency location, duration, and cadence",
+      "quote": "Work alongside exceptional founders at our offices in NYC, SF, and Austin. Antler is a focused, in-person community of builders, with direct access to operators, investors, and domain experts.\n\nOn a monthly basis, we invite a select group of operators, builders, and founders looking to join a community of like-minded peers to work together in person for up to 3 months. Antler is one of the most selective founder residency programs in the world and we review applications year-round.",
+      "checkedAt": "2026-11-07T00:00:00.000Z"
+    },
+    {
+      "id": "us-investment",
+      "url": "https://www.antler.co/location/us",
+      "title": "Antler U.S. — investment opportunity, credits, and no residency fee",
+      "quote": "We are the first investor in most companies that we back. Our initial commitment is typically $500K-$1M plus $650K in partner credits.\n\nPitch to our IC with the opportunity to receive an initial commitment of $500K-$1M to get your company off the ground.\n\nNo, there is no fee to join the Antler Residency.",
+      "checkedAt": "2026-11-07T00:00:00.000Z"
+    },
+    {
+      "id": "us-applicants",
+      "url": "https://www.antler.co/location/us",
+      "title": "Antler U.S. — founder expectations and sectors",
+      "quote": "Outlier achievers with edge, velocity, and deep domain strength. Builders who move fast and take big swings. We back founders across AI, enterprise SaaS, consumer, fintech, climate, deep tech, health, and emerging new categories.\n\nYou don’t need a fully formed or incorporated startup on day one, but you should be deeply motivated to create one.\n\nCo-founders are welcome, but at least one founder needs to be full-time in residency. Solo founders are also welcome. The residency is perfect for networking and meeting potential co-founders as well.",
+      "checkedAt": "2026-11-07T00:00:00.000Z"
+    },
+    {
+      "id": "us-work-authorization",
+      "url": "https://www.antler.co/location/us",
+      "title": "Antler U.S. — work authorization, not a global eligibility rule",
+      "quote": "To join the Antler residency, at least one co-founder will need to already have work authorization that lets you build your company here. Antler does not provide visa sponsorship. We welcome founders to apply if they are U.S. citizens, permanent residents, or otherwise hold a status that provides independent, indefinite, and unrestricted work authorization.",
+      "checkedAt": "2026-11-07T00:00:00.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "us-rolling",
+      "label": "U.S. residency — year-round review, monthly intake",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": true,
+      "sourceIds": ["us-residency"]
+    }
+  ]
+}

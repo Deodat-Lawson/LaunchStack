@@ -1,6 +1,6 @@
 # @launchstack/pipelines
 
-The compositions — level two. Thirteen verticals, each chaining the LaunchStack bricks toward a business outcome: marketing, email outreach, founder weekly review, legal templates, company metadata, client prospector, trend search, knowledge connectors, the repo explainer, repo workspaces, the distribution pipeline, proposals, and Vantage (the weekly founder-meeting loop). It deliberately does not contain bricks — a composition may import any brick, and no brick may import a composition (lint-enforced).
+The compositions — level two. Twelve verticals, each chaining the LaunchStack bricks toward a business outcome: marketing, email outreach, founder weekly review, company metadata, client prospector, trend search, knowledge connectors, the repo explainer, repo workspaces, the distribution pipeline, proposals, and Vantage (the weekly founder-meeting loop). It deliberately does not contain bricks — a composition may import any brick, and no brick may import a composition (lint-enforced).
 
 ## Install
 
@@ -22,7 +22,6 @@ import { runClientProspector } from "@launchstack/pipelines/client-prospector";
 | `./marketing`             | (company, platform) → verified post variants                                                                                                                                                                                                 |
 | `./email`                 | (campaign, recipients) → reviewed, rendered, sent emails                                                                                                                                                                                     |
 | `./founder-weekly-review` | (company, week) → published review, every claim cited                                                                                                                                                                                        |
-| `./legal-templates`       | (template, data) → validated DOCX                                                                                                                                                                                                            |
 | `./company-metadata`      | document chunks → merged canonical company facts                                                                                                                                                                                             |
 | `./client-prospector`     | ICP description → scored prospect list                                                                                                                                                                                                       |
 | `./trend-search`          | question → synthesized answer + sources                                                                                                                                                                                                      |
@@ -60,7 +59,7 @@ Verticals may read process.env — they are product code, not engine code.
 
 ## Stability
 
-0.x across the board. A vertical graduates to its own package when a consumer outside this repository depends on it; legal-templates (no engine, no Drizzle) is the first candidate.
+0.x across the board. A vertical graduates to its own package when a consumer outside this repository depends on it.
 
 ## License
 

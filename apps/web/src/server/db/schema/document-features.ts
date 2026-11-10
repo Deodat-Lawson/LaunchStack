@@ -175,6 +175,12 @@ export const documentViewsRelations = relations(documentViews, ({ one }) => ({
 // Generated Documents (Document Generator feature)
 // ============================================================================
 
+/**
+ * @deprecated Templated Drafts and Rewrite were removed (2026-11); nothing
+ * reads or writes this table any more. It is kept so existing rows survive
+ * until someone decides to export or drop them — drop it in its own
+ * migration, not as a side effect of other schema work.
+ */
 export const generatedDocuments = pgTable(
     "generated_documents",
     {

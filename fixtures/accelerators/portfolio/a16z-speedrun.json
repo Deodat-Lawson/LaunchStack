@@ -1,0 +1,13 @@
+{
+  "programId": "a16z-speedrun",
+  "checkedAt": "2026-11-09T22:40:59Z",
+  "source": {
+    "url": "https://speedrun.a16z.com/companies",
+    "title": "speedrun Companies",
+    "checkedAt": "2026-11-09T22:40:59Z"
+  },
+  "result": "unavailable",
+  "relationshipNote": "The fetched companies page rendered a search shell and no company identities. No portfolio company, investment, or return was added.",
+  "completeness": "Checked and unavailable.",
+  "companies": []
+}

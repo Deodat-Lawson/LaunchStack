@@ -32,6 +32,8 @@
         "inngest:dev": "pnpm dlx inngest-cli@latest dev -u http://localhost:8020/api/inngest",
         "distribution:fixture": "tsx ./scripts/run-distribution-fixture.ts",
         "accelerators:import": "tsx ./scripts/import-accelerators.ts",
+        "accelerators:publish-intelligence": "tsx ./scripts/publish-accelerator-intelligence.ts",
+        "accelerators:import-intelligence": "tsx ./scripts/import-program-intelligence.ts",
         "accelerators:demo": "tsx ./scripts/seed-accelerators-demo.ts"
     },
     "dependencies": {

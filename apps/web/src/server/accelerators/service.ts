@@ -1,6 +1,5 @@
 import {
     AcceleratorError,
-    hashValue,
     type HomeResponse,
     type ProgramView,
     type RunView,
@@ -10,7 +9,6 @@ import {
     getCatalogueProgram,
     listAcceleratorApplications,
     listCatalogue,
-    listCompanyMatches,
 } from "@launchstack/pipelines/accelerators/db";
 import { PROPOSAL_CREDITS, type RunRecord } from "@launchstack/pipelines/proposals";
 import { findLiveRun, getRun, loadOrgProfile } from "@launchstack/pipelines/proposals/db";
@@ -40,30 +38,21 @@ export function toAcceleratorRunView(run: RunRecord): RunView {
 }
 
 export async function loadAccelerators(member: WorkspaceContext): Promise<HomeResponse> {
-    const [catalogue, matches, applications, profile] = await Promise.all([
+    const [catalogue, applications, profile] = await Promise.all([
         listCatalogue(),
-        listCompanyMatches(member.companyId),
         listAcceleratorApplications(member.companyId),
         loadOrgProfile(member.companyId, await member.documentScope()),
     ]);
-    const profileHash = profile ? hashValue(profile) : null;
     const programs = catalogue
-        .map(({ program, contentHash }): ProgramView => {
-            const fit = matches[program.id] ?? null;
-            return {
+        .map(
+            ({ program, contentHash }): ProgramView => ({
                 program,
                 contentHash,
-                fit,
-                fitStale:
-                    fit !== null &&
-                    (fit.profileHash !== profileHash || fit.programHash !== contentHash),
-            };
-        })
-        .sort((a, b) => {
-            const scoreA = a.fitStale ? -1 : (a.fit?.assessment.score ?? -1);
-            const scoreB = b.fitStale ? -1 : (b.fit?.assessment.score ?? -1);
-            return scoreB - scoreA || a.program.name.localeCompare(b.program.name);
-        });
+                fit: null,
+                fitStale: false,
+            })
+        )
+        .sort((a, b) => a.program.name.localeCompare(b.program.name));
     return {
         programs,
         applications,
@@ -88,25 +77,6 @@ async function assertNoLiveRun(companyId: bigint): Promise<void> {
     if (await findLiveRun(companyId, { includeAccelerators: true })) {
         throw new AcceleratorError("A company run is already in progress", 409, "run_in_progress");
     }
-}
-
-export async function matchPrograms(member: WorkspaceContext): Promise<RunView> {
-    const profile = await loadOrgProfile(member.companyId, await member.documentScope());
-    if (!profile || (!profile.facts.length && !profile.summary.trim())) {
-        throw new AcceleratorError("Build the company profile first", 409, "profile_required");
-    }
-    if (!(await listCatalogue()).length) {
-        throw new AcceleratorError("Import Programs before matching", 409, "catalogue_empty");
-    }
-    await assertNoLiveRun(member.companyId);
-    return toAcceleratorRunView(
-        await startProposalRun({
-            companyId: member.companyId,
-            userId: member.authUserId,
-            kind: "programs",
-            input: {},
-        })
-    );
 }
 
 export async function draftAcceleratorField(

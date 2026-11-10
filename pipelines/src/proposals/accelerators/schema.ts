@@ -4,6 +4,7 @@ import { bigint, jsonb, text, timestamp, uniqueIndex, varchar } from "drizzle-or
 import { company } from "@launchstack/store/schema";
 import { pgTable } from "@launchstack/store/schema/helpers";
 
+import type { ProgramIntelligence } from "./intelligence";
 import type { CatalogueProgram, FitAssessment } from "./types";
 
 /** Installation-wide public catalogue; it must never contain company answers or credentials. */
@@ -39,3 +40,19 @@ export const acceleratorCompanyMatches = pgTable(
         ),
     ]
 );
+
+/**
+ * Public program-intelligence dossier. Company fit and tracker rows do not live here.
+ * The program id is the stable identity shared with Cycles, evidence, and tags.
+ */
+export const acceleratorProgramIntelligence = pgTable("accelerator_program_intelligence", {
+    programId: varchar("program_id", { length: 64 })
+        .primaryKey()
+        .references(() => acceleratorPrograms.id, { onDelete: "cascade" }),
+    dossier: jsonb("dossier").$type<ProgramIntelligence>().notNull(),
+    contentHash: varchar("content_hash", { length: 64 }).notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+        .notNull()
+        .default(sql`CURRENT_TIMESTAMP`),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
+});

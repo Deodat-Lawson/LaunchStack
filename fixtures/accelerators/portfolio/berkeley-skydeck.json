@@ -1,0 +1,94 @@
+{
+  "programId": "berkeley-skydeck",
+  "checkedAt": "2026-11-09T22:40:59Z",
+  "source": {
+    "url": "https://skydeck.berkeley.edu/companies/",
+    "title": "Berkeley SkyDeck Companies",
+    "checkedAt": "2026-11-09T22:40:59Z"
+  },
+  "relationshipNote": "These names are linked from the companies index. The page author byline was not treated as a founder. The program page's $210,000 cohort investment is not restated as a completed investment in each listed company. Further index pages were not opened.",
+  "completeness": "Cards on the first companies index page only.",
+  "companies": [
+    {
+      "id": "vectorial-ai",
+      "name": "Vectorial AI",
+      "website": "https://www.runvectorial.com/",
+      "relationship": "listed-on-companies-page",
+      "investment": null,
+      "returns": null,
+      "quote": "Vectorial AI"
+    },
+    {
+      "id": "solidsky",
+      "name": "SolidSky",
+      "website": "https://www.solid-sky.com",
+      "relationship": "listed-on-companies-page",
+      "investment": null,
+      "returns": null,
+      "quote": "SolidSky"
+    },
+    {
+      "id": "skyline",
+      "name": "Skyline",
+      "website": "https://withskyline.com/",
+      "relationship": "listed-on-companies-page",
+      "investment": null,
+      "returns": null,
+      "quote": "Skyline"
+    },
+    {
+      "id": "revreply",
+      "name": "RevReply",
+      "website": "https://www.revreply.com/",
+      "relationship": "listed-on-companies-page",
+      "investment": null,
+      "returns": null,
+      "quote": "RevReply"
+    },
+    {
+      "id": "miido",
+      "name": "MIIDO",
+      "website": "https://www.miido.cl/",
+      "relationship": "listed-on-companies-page",
+      "investment": null,
+      "returns": null,
+      "quote": "MIIDO"
+    },
+    {
+      "id": "manifest",
+      "name": "Manifest",
+      "website": "https://manifest.build",
+      "relationship": "listed-on-companies-page",
+      "investment": null,
+      "returns": null,
+      "quote": "Manifest"
+    },
+    {
+      "id": "handbook",
+      "name": "Handbook",
+      "website": "https://www.handbookai.io/",
+      "relationship": "listed-on-companies-page",
+      "investment": null,
+      "returns": null,
+      "quote": "Handbook"
+    },
+    {
+      "id": "genexgen",
+      "name": "Genexgen",
+      "website": "https://www.genexgen.com/",
+      "relationship": "listed-on-companies-page",
+      "investment": null,
+      "returns": null,
+      "quote": "Genexgen"
+    },
+    {
+      "id": "fusion-dynamics",
+      "name": "Fusion Dynamics",
+      "website": "https://fusiondynamicscorporation.com/",
+      "relationship": "listed-on-companies-page",
+      "investment": null,
+      "returns": null,
+      "quote": "Fusion Dynamics"
+    }
+  ]
+}

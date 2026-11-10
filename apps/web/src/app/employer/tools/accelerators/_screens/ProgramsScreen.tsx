@@ -1,49 +1,26 @@
 "use client";
 
-import { ArrowRight, FileText, Loader2, RefreshCw, Sparkles } from "lucide-react";
+import { ArrowRight, FileText, RefreshCw } from "lucide-react";
 import Image from "next/image";
-import { useFormatter, useLocale, useTranslations } from "next-intl";
-import { useRef, useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
+import { useState } from "react";
 
 import { ToolLink } from "~/components/tool-app/ToolLink";
-import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
-import { useErrorText } from "~/lib/tools/errorText";
 
-import { FitStatus, Notice } from "../_components/ProgramFacts";
+import { Notice } from "../_components/ProgramFacts";
 import { useAccelerators } from "../_lib/context";
 import { applicationPath, programPath } from "../_lib/screens";
 
 export function ProgramsScreen() {
     const t = useTranslations("accelerators");
-    const format = useFormatter();
     const locale = useLocale();
-    const errorText = useErrorText();
-    const { home, runBusy, match, refresh } = useAccelerators();
-    const [pending, setPending] = useState(false);
-    const pendingRef = useRef(false);
+    const { home, refresh } = useAccelerators();
     const [refreshing, setRefreshing] = useState(false);
-    const [failure, setFailure] = useState<unknown>(null);
     if (!home) return null;
-    const ranked = [...home.programs].sort(
-        (left, right) =>
-            (right.fit?.assessment.score ?? -1) - (left.fit?.assessment.score ?? -1) ||
-            left.program.name.localeCompare(right.program.name, locale)
+    const programs = [...home.programs].sort((left, right) =>
+        left.program.name.localeCompare(right.program.name, locale)
     );
-    const matchPrograms = async () => {
-        if (pendingRef.current) return;
-        pendingRef.current = true;
-        setPending(true);
-        setFailure(null);
-        try {
-            await match();
-        } catch (error) {
-            setFailure(error);
-        } finally {
-            pendingRef.current = false;
-            setPending(false);
-        }
-    };
     return (
         <div className="space-y-8">
             <header className="flex flex-wrap items-start justify-between gap-5">
@@ -77,49 +54,14 @@ export function ProgramsScreen() {
                     {t("common.refresh")}
                 </Button>
             </header>
-            <section className="border-brand/20 bg-brand-soft/30 space-y-3 rounded-xl border p-5">
-                <div className="flex flex-wrap items-center justify-between gap-4">
-                    <p className="text-ink-2 max-w-xl text-sm leading-relaxed">
-                        {t("home.matchHint")}
-                    </p>
-                    <Button
-                        type="button"
-                        disabled={
-                            !home.canEdit ||
-                            !home.profileReady ||
-                            home.programs.length === 0 ||
-                            pending ||
-                            runBusy
-                        }
-                        onClick={matchPrograms}
-                    >
-                        {pending ? (
-                            <Loader2 className="size-4 animate-spin motion-reduce:animate-none" />
-                        ) : (
-                            <Sparkles className="size-4" />
-                        )}
-                        {pending
-                            ? t("home.matching")
-                            : t("home.match", { credits: format.number(home.costs.match) })}
-                    </Button>
-                </div>
-                {!home.profileReady && (
-                    <p className="text-ink-2 text-sm">{t("home.profileMissing")}</p>
-                )}
-                {failure != null && (
-                    <p role="alert" className="text-danger text-sm">
-                        {errorText(failure, t("common.actionFailed"))}
-                    </p>
-                )}
-            </section>
-            {ranked.length === 0 ? (
+            {programs.length === 0 ? (
                 <Notice>
                     <h2 className="font-medium">{t("home.emptyTitle")}</h2>
                     <p className="mt-1">{t("home.emptyBody")}</p>
                 </Notice>
             ) : (
                 <div className="grid gap-4 [@container(min-width:750px)]:grid-cols-2">
-                    {ranked.map(view => (
+                    {programs.map(view => (
                         <article
                             key={view.program.id}
                             className="border-line bg-panel flex flex-col gap-4 rounded-xl border p-5"
@@ -142,21 +84,11 @@ export function ProgramsScreen() {
                                         </ToolLink>
                                     </h2>
                                 </div>
-                                <FitStatus view={view} />
                             </div>
                             <p className="text-ink-2 line-clamp-4 text-sm leading-relaxed">
                                 {view.program.description.text}
                             </p>
-                            {view.fit?.assessment.reasons[0] && (
-                                <p className="text-ink-3 line-clamp-3 text-sm">
-                                    {view.fit.assessment.reasons[0]}
-                                </p>
-                            )}
-                            {view.fitStale && (
-                                <p className="text-warn text-xs">{t("fit.staleHint")}</p>
-                            )}
                             <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-1">
-                                <Badge variant="outline">{t("home.savedOnly")}</Badge>
                                 <Button asChild variant="ghost" size="sm">
                                     <ToolLink href={programPath(view.program.id)}>
                                         {t("common.viewProgram")}

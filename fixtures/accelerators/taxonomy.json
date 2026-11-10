@@ -1,0 +1,82 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-11-09T22:40:59Z",
+  "note": "A tag is present only where the named source quote supports it. Aliases are labels for the same tag, not extra claims. No tag is a company-fit score.",
+  "tags": [
+    {
+      "id": "instrument.post-money-safe",
+      "facet": "instrument",
+      "label": "Post-money SAFE",
+      "aliases": ["post-money SAFE", "6% post-money SAFE"],
+      "evidence": [
+        { "programId": "entrepreneurs-roundtable-accelerator", "sourceId": "apply" },
+        { "programId": "y-combinator", "sourceId": "yc-standard-deal" }
+      ]
+    },
+    {
+      "id": "instrument.safe",
+      "facet": "instrument",
+      "label": "SAFE",
+      "aliases": ["SAFE"],
+      "evidence": [
+        { "programId": "a16z-speedrun", "sourceId": "sr-faq-terms" },
+        { "programId": "y-combinator", "sourceId": "yc-standard-deal" }
+      ]
+    },
+    {
+      "id": "instrument.mfn-safe",
+      "facet": "instrument",
+      "label": "MFN SAFE",
+      "aliases": ["uncapped SAFE with a Most Favored Nation"],
+      "evidence": [{ "programId": "y-combinator", "sourceId": "yc-standard-deal" }]
+    },
+    {
+      "id": "instrument.equity-free-grant",
+      "facet": "instrument",
+      "label": "Equity-free grant",
+      "aliases": ["equity-free grant"],
+      "evidence": [{ "programId": "entrepreneurs-first", "sourceId": "ef-homepage-investment" }]
+    },
+    {
+      "id": "benefit.partner-credits",
+      "facet": "benefit",
+      "label": "Partner credits",
+      "aliases": ["credits", "cloud credits"],
+      "evidence": [
+        { "programId": "a16z-speedrun", "sourceId": "sr-faq-terms" },
+        { "programId": "entrepreneurs-first", "sourceId": "ef-homepage-investment" }
+      ]
+    },
+    {
+      "id": "stage.very-early",
+      "facet": "stage",
+      "label": "Very early",
+      "aliases": ["idea", "prototype"],
+      "evidence": [{ "programId": "a16z-speedrun", "sourceId": "sr-faq-stage" }]
+    },
+    {
+      "id": "stage.pre-company",
+      "facet": "stage",
+      "label": "Pre-company",
+      "aliases": ["ideating", "before a company is formed"],
+      "evidence": [{ "programId": "entrepreneurs-first", "sourceId": "ef-homepage-investment" }]
+    },
+    {
+      "id": "geography.san-francisco",
+      "facet": "geography",
+      "label": "San Francisco",
+      "aliases": ["SF"],
+      "evidence": [
+        { "programId": "a16z-speedrun", "sourceId": "sr-faq-overview" },
+        { "programId": "y-combinator", "sourceId": "yc-apply-cycle" }
+      ]
+    },
+    {
+      "id": "geography.london-bangalore-san-francisco",
+      "facet": "geography",
+      "label": "London, Bangalore, and San Francisco",
+      "aliases": ["London", "Bangalore", "San Francisco"],
+      "evidence": [{ "programId": "entrepreneurs-first", "sourceId": "ef-homepage-investment" }]
+    }
+  ]
+}

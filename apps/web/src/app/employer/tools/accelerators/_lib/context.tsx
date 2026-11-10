@@ -36,7 +36,6 @@ interface AcceleratorsContextValue {
     runBusy: boolean;
     pollError: unknown;
     resumePolling: () => void;
-    match: () => Promise<void>;
     start: (programId: string, cycleId: string) => Promise<AcceleratorApplication>;
     loadApplication: (id: string) => Promise<AcceleratorApplication>;
     buffers: Record<string, AnswerBuffer>;
@@ -298,8 +297,6 @@ export function AcceleratorsProvider({
         [trackRun, guardError, t]
     );
 
-    const match = useCallback(() => launchRun(acceleratorsApi.match), [launchRun]);
-
     const start = useCallback(
         async (programId: string, cycleId: string) => {
             try {
@@ -427,7 +424,6 @@ export function AcceleratorsProvider({
                 pollError,
                 runBusy: startingRun || live,
                 resumePolling: () => setPollNonce(value => value + 1),
-                match,
                 start,
                 loadApplication,
                 buffers,

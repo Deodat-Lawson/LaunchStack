@@ -1,7 +1,7 @@
 {
   "tool": {
     "programs": "Programs",
-    "about": "Match accelerator Programs to your company, then write an Application from a checked Form. Results and answers are shared with colleagues who have full document access. Submit on the Program's own website."
+    "about": "Review sourced accelerator Programs and, where a checked Form is available, save an Application. Answers are shared with colleagues who have full document access. Submit on the Program's own website."
   },
   "common": {
     "loading": "Loading Accelerators…",
@@ -21,32 +21,14 @@
   },
   "home": {
     "title": "Accelerator Programs",
-    "description": "Explore sourced Programs and your company's saved fit results. Opening this screen never starts paid matching.",
-    "match": "Match Programs · {credits} credits",
-    "matching": "Matching Programs…",
-    "matchHint": "Matching compares all available Programs with the current company profile. A fit score is not a probability of acceptance.",
-    "profileMissing": "Build the company profile in Settings → Company before matching or drafting with AI.",
+    "description": "Explore sourced Programs and the facts collected for each one.",
+    "profileMissing": "Build the company profile in Settings → Company before drafting with AI.",
     "emptyTitle": "No Programs imported yet",
     "emptyBody": "A trusted installation operator must import reviewed Program records. There are no sample or automatically generated results here.",
     "applications": "Saved Applications",
     "applicationsHint": "One company-shared Application per Program and Cycle. These answers are saved separately from grant proposals.",
     "noApplications": "No Applications yet. Open a Program to see whether a checked Form is available.",
-    "answers": "{answered} of {total} Fields answered",
-    "savedOnly": "Saved results"
-  },
-  "fit": {
-    "title": "Company fit",
-    "score": "{score} / 100 fit",
-    "unmatched": "Not matched yet",
-    "unknown": "Not enough information to score",
-    "stale": "Out of date",
-    "staleHint": "The company profile or Program changed since this result. Click Match Programs to update it; no rematch happens automatically.",
-    "checked": "Matched {date}",
-    "reasons": "Reasons",
-    "concerns": "Concerns",
-    "unknowns": "Unknowns",
-    "evidence": "Company evidence references: {ids}",
-    "unmatchedHint": "No saved fit assessment. Matching starts only when you choose Match Programs."
+    "answers": "{answered} of {total} Fields answered"
   },
   "program": {
     "description": "About this Program",

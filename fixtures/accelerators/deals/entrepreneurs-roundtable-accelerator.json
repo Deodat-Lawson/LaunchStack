@@ -1,0 +1,18 @@
+{
+  "programId": "entrepreneurs-roundtable-accelerator",
+  "sourceId": "apply",
+  "checkedAt": "2026-10-27T00:25:00.000Z",
+  "interpretation": true,
+  "summary": "ERA states a $150,000 investment on a post-money SAFE for 6%. Alumni capital raised and market capitalization in the same quote are not the investment and are not a return.",
+  "formattedTerms": "ERA invests $150,000 on a post-money SAFE in return for 6% of each company.\n\nThe companies selected to participate in the four-month program will receive an initial investment of $150K on a 6% post-money SAFE and the potential for follow-on funding.\n\nSince its founding in 2011, ERA alumni companies have raised more than $2.5 billion in investor capital and collectively exceed $10 billion in market capitalization.",
+  "parts": [
+    {
+      "kind": "post-money-safe",
+      "amount": "150000",
+      "currency": "USD",
+      "equity": "6%",
+      "contingent": false
+    }
+  ],
+  "notReturns": ["$2.5 billion in investor capital", "$10 billion in market capitalization"]
+}

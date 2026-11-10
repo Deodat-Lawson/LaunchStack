@@ -1,0 +1,78 @@
+{
+  "checkedAt": "2026-11-09T22:40:59Z",
+  "items": [
+    {
+      "programId": "antler",
+      "group": "identity",
+      "field": "locationCount",
+      "state": "conflict",
+      "sourceIds": ["antler-homepage"],
+      "detail": "The homepage says Antler is active across 30 locations and also says 26 locations worldwide. Neither number was chosen."
+    },
+    {
+      "programId": "antler",
+      "group": "portfolio",
+      "state": "unavailable",
+      "sourceIds": ["antler-homepage"],
+      "detail": "The homepage says 2,000+ portfolio companies and does not name them. No company identity was recorded from that count."
+    },
+    {
+      "programId": "antler",
+      "group": "deal",
+      "state": "unavailable",
+      "sourceIds": ["antler-homepage", "antler-cohort-dates"],
+      "detail": "The checked global pages do not state an investment amount or an equity term. Per-location terms were not collected."
+    },
+    {
+      "programId": "a16z-speedrun",
+      "group": "batches",
+      "field": "residencyEnd",
+      "state": "conflict",
+      "sourceIds": ["sr-apply-window", "sr-faq-residency-dates"],
+      "detail": "The apply page says SR008 runs February 1 to April 16, 2027. The FAQ says the SR008 residency runs February 1 to April 18, 2027. Neither date was chosen."
+    },
+    {
+      "programId": "a16z-speedrun",
+      "group": "portfolio",
+      "state": "unavailable",
+      "sourceIds": [],
+      "detail": "https://speedrun.a16z.com/companies was fetched on 2026-11-09 and contained no company identities."
+    },
+    {
+      "programId": "a16z-speedrun",
+      "group": "selectivity",
+      "state": "unavailable",
+      "sourceIds": ["sr-faq-selection"],
+      "detail": "The selection FAQ describes what the team looks for and says review is rolling. It does not state an acceptance rate or an applicant count."
+    },
+    {
+      "programId": "berkeley-skydeck",
+      "group": "batches",
+      "field": "nextDeadline",
+      "state": "unavailable",
+      "sourceIds": ["homepage"],
+      "detail": "Batch 24 is announced as applications opening in January, with no year, day, or clock. That was not stored as a deadline. The six-month cohort pattern on the program page stays historical."
+    },
+    {
+      "programId": "berkeley-skydeck",
+      "group": "portfolio",
+      "state": "partial",
+      "sourceIds": [],
+      "detail": "Only the first companies index page was opened. Later pages were not collected, so the company list is not complete."
+    },
+    {
+      "programId": "entrepreneurs-first",
+      "group": "portfolio",
+      "state": "partial",
+      "sourceIds": [],
+      "detail": "The fetched portfolio page lists company tiles and does not give websites, investment amounts, or returns."
+    },
+    {
+      "programId": "entrepreneurs-roundtable-accelerator",
+      "group": "portfolio",
+      "state": "partial",
+      "sourceIds": ["apply"],
+      "detail": "Company cards show participation and a cohort. They do not confirm the post-money SAFE, a round, an exit, or a return for each company. The alumni capital and market-cap sentences are not returns."
+    }
+  ]
+}

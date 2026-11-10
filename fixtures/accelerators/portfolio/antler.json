@@ -1,0 +1,14 @@
+{
+  "programId": "antler",
+  "checkedAt": "2026-10-26T23:19:30.000Z",
+  "source": {
+    "id": "antler-homepage",
+    "url": "https://www.antler.co/",
+    "title": "Antler homepage — portfolio count without company names",
+    "checkedAt": "2026-10-26T23:19:30.000Z"
+  },
+  "result": "unavailable",
+  "relationshipNote": "The homepage says 2,000+ portfolio companies and a 12,000+ founder community. It does not name the companies, give their websites, or say whether each relationship is participation or an investment. No company identity, round, exit, or return was added from that sentence.",
+  "completeness": "Count stated. Identities unavailable from the checked page.",
+  "companies": []
+}

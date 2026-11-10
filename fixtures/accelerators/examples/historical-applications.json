@@ -1,0 +1,21 @@
+{
+  "checkedAt": "2026-11-09T22:40:59Z",
+  "programs": [
+    {
+      "programId": "y-combinator",
+      "result": "published-historical-example",
+      "company": "Dropbox",
+      "cycleLabel": "Summer 2007",
+      "url": "https://www.ycombinator.com/apply/dropbox",
+      "acceptanceEvidence": {
+        "url": "https://www.ycombinator.com/howtoapply.html",
+        "quote": "Here’s an example of a successful application: Dropbox’s Summer 2007 application",
+        "checkedAt": "2026-11-09T22:40:59Z"
+      },
+      "identifyingQuote": "Dropbox's original YC application. Company name: Dropbox.",
+      "answersCopied": false,
+      "completeness": "YC publishes the original application at the URL above. This record does not reproduce the questions or the responses. It is not the current application form, and it is not a template for generating answers.",
+      "programRecordEdited": false
+    }
+  ]
+}

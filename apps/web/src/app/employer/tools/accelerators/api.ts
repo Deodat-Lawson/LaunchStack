@@ -78,7 +78,6 @@ export const acceleratorsApi = {
     home: () => call<HomeResponse>("/api/accelerators"),
     program: (id: string) =>
         call<{ program: ProgramView }>(`/api/accelerators/programs/${encodeURIComponent(id)}`),
-    match: () => send<{ run: AcceleratorRunView }>("/api/accelerators/match", {}),
     start: (programId: string, cycleId: string) =>
         send<{ application: AcceleratorApplication }>("/api/accelerators/applications", {
             programId,

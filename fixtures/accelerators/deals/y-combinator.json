@@ -1,0 +1,25 @@
+{
+  "programId": "y-combinator",
+  "sourceId": "yc-standard-deal",
+  "checkedAt": "2026-10-25T07:43:02.304Z",
+  "interpretation": true,
+  "summary": "YC invests $500,000 as two SAFEs. $125,000 converts into a fixed 7% on a post-money SAFE. $375,000 is an uncapped MFN SAFE whose extra equity is fixed later. The whole $500,000 is not a fixed 7% purchase.",
+  "formattedTerms": "We have a standard deal for every company that is accepted to Y Combinator. We invest $500,000, and our investment gives YC 7% of your company plus an incremental equity amount that will be fixed when you raise money from other investors.\n\nThe way it works is this: we invest $500,000. $125,000 of our investment converts into a fixed 7%, and the other $375,000 is invested on an uncapped MFN SAFE.\n\nWe invest $125,000 on a post-money SAFE in return for 7% of your company (the \"$125k SAFE\")\nWe invest $375,000 on an uncapped SAFE with a Most Favored Nation (\"MFN\") provision (the \"MFN SAFE\")",
+  "parts": [
+    {
+      "kind": "safe",
+      "amount": "125000",
+      "currency": "USD",
+      "equity": "7%",
+      "contingent": false
+    },
+    {
+      "kind": "safe",
+      "amount": "375000",
+      "currency": "USD",
+      "equity": null,
+      "contingent": true,
+      "condition": "uncapped SAFE with a Most Favored Nation"
+    }
+  ]
+}

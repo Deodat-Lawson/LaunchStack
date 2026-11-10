@@ -77,6 +77,10 @@ backups/
 # test output
 test-output/
 
+# Local fake company used to try the app on localhost. Anchored to the
+# repository root so it does not ignore a same-named folder elsewhere.
+/local-company/
+
 # Personal working notes — never committed. Anchored to the repository root:
 # a bare `notes/` matches any directory of that name at any depth, which
 # silently swallowed apps/web/src/server/notes/ and let a commit ship three

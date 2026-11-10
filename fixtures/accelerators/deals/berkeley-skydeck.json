@@ -1,0 +1,11 @@
+{
+  "programId": "berkeley-skydeck",
+  "sourceId": "program",
+  "checkedAt": "2026-10-27T00:25:00.000Z",
+  "interpretation": true,
+  "summary": "The program page says roughly twenty cohort startups are selected every six months to receive a $210,000 investment. It does not state an instrument, a valuation cap, or an equity percentage. The six-month cadence is a historical pattern, not a deadline for Batch 24.",
+  "formattedTerms": "Roughly twenty Cohort startups are selected every six months to receive a $210,000 investment from the Berkeley SkyDeck Fund.",
+  "parts": [
+    { "kind": "investment", "amount": "210000", "currency": "USD", "equity": null, "contingent": false }
+  ]
+}

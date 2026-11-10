@@ -63,3 +63,28 @@ Then open `/employer/documents?feature=accelerators&at=/programs` and check logo
 A later pass retrieved public homepages for additional accelerators, incubators, fellowships, and startup programs and kept every page that returned visible text plus a downloadable official image. Pages that were empty, blocked, or had no logo were skipped. Two redirects that landed on a page already kept (Elemental Impact, and Chinaccelerator onto Orbit) were not stored twice.
 
 These records quote that visible text and mark the summary as interpretation. They do not store a deadline, and they do not include application fields. Start Application stays blocked. The catalogue files under `programs/` are the full set; validate and import them together with the command above.
+
+Y Combinator, Techstars London, and aboveA stay as the reference records already in the shared catalogue. This delivery does not edit them.
+
+The shared Program record stays schema version 2. Program intelligence is a separate public contract, `program-intelligence/v1`, keyed by the same Program id. It carries source excerpts, fact versus interpretation, and explicit missing, conflicting, stale, inaccessible, not-applicable, partial, unavailable, and not-checked states. Conflicting sources stay on the operator review queue. This delivery does not score company fit and does not change screens.
+
+| File | What it holds |
+| --- | --- |
+| `deals/` | Formatted terms for speedrun, Y Combinator, ERA, Entrepreneur First, and SkyDeck. Cash, SAFEs, grants, and credits stay separate. |
+| `portfolio/` | Company identities from the ERA companies page, the EF portfolio page, and the first SkyDeck companies page. speedrun's companies page and Antler's count had no company identities. |
+| `taxonomy.json` | Tags whose labels or aliases appear in a cited source quote. Facets stay separate. |
+| `examples/historical-applications.json` | The public Dropbox Summer 2007 YC application. Acceptance is a separate excerpt. The answers are not copied. |
+| `gaps.json` | Conflicts and checks that came back unavailable or partial. |
+| `intelligence/manifest.json` | Stable Program, Cycle, portfolio-company, and tag ids, plus the content hash. |
+| `intelligence/review.json` | Open conflicts for an operator. |
+| `COVERAGE.md` | Counts by information group. |
+
+```sh
+python3 fixtures/accelerators/collect.py --self-test
+python3 fixtures/accelerators/collect.py --discover a16z-speedrun
+python3 fixtures/accelerators/refresh.py --check a16z-speedrun
+pnpm --filter @launchstack/web accelerators:publish-intelligence
+pnpm --filter @launchstack/web accelerators:import-intelligence -- --validate
+```
+
+`collect.py` records linked official pages for details, terms, portfolio, batches, and application routes. A secondary URL is stored only when `--gap` names the hole it fills. `refresh.py` re-checks stored quotes. A quote that is still present can update `checkedAt`. A missing quote or a failed fetch is recorded as stale or inaccessible and does not replace the excerpt or create a Program, Cycle, or portfolio-company id. Import the schema-version-2 Programs before importing intelligence. The intelligence table is `accelerator_program_intelligence`.

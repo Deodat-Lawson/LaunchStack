@@ -14,7 +14,7 @@ import { Button } from "~/components/ui/button";
 import { useErrorText } from "~/lib/tools/errorText";
 
 import type { ProgramCycle, ProgramView } from "../api";
-import { FitDetails, Narrative, Notice, SourceLinks } from "../_components/ProgramFacts";
+import { Narrative, Notice, SourceLinks } from "../_components/ProgramFacts";
 import { useAccelerators } from "../_lib/context";
 import { applicationPath } from "../_lib/screens";
 
@@ -71,7 +71,6 @@ export function ProgramScreen({ id }: { id: string }) {
                 narrative={program.targetApplicants}
                 sources={program.sources}
             />
-            <FitDetails view={view} />
             <section className="space-y-4">
                 <h2 className="text-ink text-lg font-semibold">{t("program.cycles")}</h2>
                 {program.cycles.length === 0 ? (

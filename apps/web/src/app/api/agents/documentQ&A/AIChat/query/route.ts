@@ -80,6 +80,7 @@ import {
     labelScopeFiles,
     onePerSource,
     passageResult,
+    partialCoverageReminder,
     sourcesPrompt,
     type AttachmentEntry,
     type Coverage,
@@ -1784,6 +1785,14 @@ export async function POST(request: Request) {
                     // Checking every file can take a listing, a fan-out and a
                     // second page of it before the answer.
                     maxToolRounds: sourceTools ? 6 : 3,
+                    beforeFirstTool:
+                        scopeFiles.length > 0
+                            ? partialCoverageReminder(
+                                  coverage,
+                                  scopeFiles.length,
+                                  tracked.some(tool => tool.name === "ask_each")
+                              )
+                            : null,
                     hasInitialEvidence:
                         documents.length > 0 ||
                         passages.length > 0 ||

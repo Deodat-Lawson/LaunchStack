@@ -3,9 +3,10 @@
 /**
  * ⌘K offers only what the person may open. A row for a gated app — Team, for
  * a Guest who can't see the member list — would do nothing when picked, so it
- * isn't offered. Anyone may open Settings and the Workspace tab, so a row for
- * one of their screens ("Agents & nodes", or a setting such as the theme) is
- * offered to whoever may see that screen, and to no one else.
+ * isn't offered. Anyone may open Settings, the Workspace tab and Models &
+ * usage, so a row for one of their screens ("Agents & nodes", "API keys", or
+ * a setting such as the theme) is offered to whoever may see that screen, and
+ * to no one else.
  */
 
 import React from "react";
@@ -126,21 +127,47 @@ describe("CommandPalette permissions", () => {
         expect(screen.getByText("Workspace")).toBeInTheDocument();
     });
 
-    it("offers Bring your own keys to an admin, found by BYOK, and opens it by id", () => {
+    it("offers API keys to an admin, found by BYOK and by its old name, and opens it by id", () => {
         mockPerms = new Set(ADMIN);
         const onPickFeature = search("byok");
         expect(screen.queryByText("Self-host / BYOK")).not.toBeInTheDocument();
-        fireEvent.click(screen.getByText("Bring your own keys"));
+        fireEvent.click(screen.getByText("API keys"));
         expect(onPickFeature).toHaveBeenCalledWith("byok");
+        cleanup();
+        search("bring your own keys");
+        expect(screen.getByText("API keys")).toBeInTheDocument();
         cleanup();
         search("vercel");
         expect(screen.queryByText(/Vercel, Docker/)).not.toBeInTheDocument();
     });
 
-    it("keeps Bring your own keys from a Member", () => {
+    it("keeps API keys from a Member", () => {
         mockPerms = new Set(MEMBER);
-        search("own keys");
-        expect(screen.queryByText("Bring your own keys")).not.toBeInTheDocument();
+        search("api keys");
+        expect(screen.queryByText("API keys")).not.toBeInTheDocument();
+        cleanup();
+        search("byok");
+        expect(screen.queryByText("API keys")).not.toBeInTheDocument();
+    });
+
+    it("offers API keys by models.manage, not by managing the rest of the workspace", () => {
+        // A custom role that manages the settings and sees the numbers, not the models.
+        mockPerms = new Set<Permission>([...MEMBER, "settings.manage", "analytics.view"]);
+        search("api keys");
+        expect(screen.queryByText("API keys")).not.toBeInTheDocument();
+        cleanup();
+
+        mockPerms = new Set<Permission>([...MEMBER, "models.manage"]);
+        const onPickFeature = search("api keys");
+        fireEvent.click(screen.getByText("API keys"));
+        expect(onPickFeature).toHaveBeenCalledWith("byok");
+    });
+
+    it("says a Spending setting lives in Models & usage", () => {
+        mockPerms = new Set(ADMIN);
+        search("price per million");
+        const row = screen.getByText("Price per million tokens");
+        expect(row.closest("button") ?? row.parentElement).toHaveTextContent(/Models & usage ·/);
     });
 
     it("finds the theme for a Guest by what people call it, and opens it", () => {

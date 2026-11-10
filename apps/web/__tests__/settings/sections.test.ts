@@ -1,8 +1,8 @@
 /**
  * Who sees which settings section, per built-in role.
  *
- * Settings (yours alone) and the Workspace tab are open to everyone; each
- * section carries its own gate. The table below is the contract a reviewer
+ * Settings (yours alone), the Workspace tab and Models & usage are open to
+ * everyone; each section carries its own gate. The table below is the contract a reviewer
  * reads: You is everyone's, a section whose data is refused to a role is
  * left out for it, and a section a role may only read is shown read-only.
  */
@@ -89,8 +89,8 @@ describe("SETTINGS_SECTION_ACCESS", () => {
         // The API gates behind each section's mount-time GET. A section is
         // never shown to someone its data would answer 403.
         const refusedReads: Partial<Record<SettingsSectionId, Permission>> = {
-            byok: "settings.manage", // GET /api/settings/models/workspace
-            models: "settings.manage", // GET /api/settings/models
+            byok: "models.manage", // GET /api/settings/models/workspace
+            models: "models.manage", // GET /api/settings/models
             usage: "analytics.view", // GET /api/settings/usage
             archive: "settings.manage", // GET /api/settings/archive
             people: "members.view", // GET /api/workspace/members
@@ -98,6 +98,29 @@ describe("SETTINGS_SECTION_ACCESS", () => {
         for (const [section, permission] of Object.entries(refusedReads)) {
             expect(SETTINGS_SECTION_ACCESS[section as SettingsSectionId].view).toBe(permission);
         }
+    });
+
+    it("keeps API keys and Models to models.manage, whatever else a role may manage", () => {
+        for (const section of ["byok", "models"] as const) {
+            expect(SETTINGS_SECTION_ACCESS[section]).toMatchObject({
+                view: "models.manage",
+                edit: "models.manage",
+            });
+        }
+        const only =
+            (...held: Permission[]) =>
+            (p: Permission | undefined) =>
+                p === undefined || held.includes(p);
+        // A custom role that manages the workspace's settings but not its models.
+        const settingsOnly = only("settings.manage", "analytics.view", "members.view");
+        expect(canSeeSettingsSection("byok", settingsOnly)).toBe(false);
+        expect(canSeeSettingsSection("models", settingsOnly)).toBe(false);
+        expect(canSeeSettingsSection("usage", settingsOnly)).toBe(true);
+        // One that manages the models and nothing else.
+        const modelsOnly = only("models.manage");
+        expect(canSeeSettingsSection("byok", modelsOnly)).toBe(true);
+        expect(canSeeSettingsSection("models", modelsOnly)).toBe(true);
+        expect(canSeeSettingsSection("archive", modelsOnly)).toBe(false);
     });
 
     it("keeps the registry's write permission and its section's edit gate in step", () => {

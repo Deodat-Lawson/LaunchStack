@@ -162,6 +162,26 @@ export type Coverage =
     | { mode: "passage-only" };
 
 /**
+ * Said after the person's words while the model has called no tool, when it
+ * holds only part of a set it could ask whole with `ask_each`. A line in the
+ * system prompt said the same and a small model passed it by: shown 10
+ * passages from 4 of 37 resumes and asked for "every one" of their schools,
+ * it answered from the 4. What it reads last, it weighs most.
+ */
+export function partialCoverageReminder(
+    coverage: Coverage,
+    total: number,
+    hasAskEach: boolean
+): string | null {
+    if (!hasAskEach || total < 2) return null;
+    if (coverage.mode !== "excerpts" && coverage.mode !== "mixed") return null;
+    const seen =
+        coverage.mode === "mixed" ? coverage.whole + coverage.filesShown : coverage.filesShown;
+    if (seen >= total) return null;
+    return `You were shown parts of ${seen} of the ${total} sources in scope. If the question asks about each or all of them — a list, a count, what every one says — call \`ask_each\` before answering; don't answer it from the ones shown.`;
+}
+
+/**
  * The sources, in the order given, that fit the full-read budget together:
  * the ones the person named in their words are read whole first when the
  * whole set cannot be. One with nothing indexed is skipped.

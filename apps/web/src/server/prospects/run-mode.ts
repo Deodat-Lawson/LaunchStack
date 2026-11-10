@@ -20,7 +20,7 @@ export interface RunEnvironment {
 
 export function readRunEnvironment(
     env: Record<string, string | undefined>,
-    /** The workspace brought its own working model (Workspace › Bring your own keys). */
+    /** The workspace brought its own working model (Models & usage › API keys). */
     workspaceHasOwnModel = false,
     /** The server's search engine (SEARCH_PROVIDER) can run. */
     hasWebSearch = configuredWebSearchProvider() !== null

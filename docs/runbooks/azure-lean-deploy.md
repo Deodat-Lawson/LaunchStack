@@ -294,6 +294,20 @@ services when their sources changed. After changing `.env`, add
 `--force-recreate app worker` — Compose does not restart containers for env
 changes on its own.
 
+**Releases whose migration changes an index the running app writes through**
+need the app and worker stopped first, or the old containers fail those
+writes until they are replaced. `notion_per_user_connections` is one: it
+narrows the per-member connection index to Gmail, and the old app's Gmail
+connect no longer matches it (a Notion connect from the old app would also
+be stored without an owner). For such a release:
+
+```bash
+C="docker compose -f docker-compose.yml -f docker-compose.prod.yml --env-file .env"
+$C pull app worker && $C stop app worker && $C up -d --build
+```
+
+`up` runs `migrate` to completion before it starts the new app and worker.
+
 ---
 
 ## Secrets: Azure Key Vault
@@ -433,8 +447,11 @@ docker exec pdr_ai_v2-postgres psql -U postgres -d pdr_ai_v2 -c \
 
 Members connect Notion from **Add source › Notion**: one click, Notion's own
 consent screen (with Notion's page picker), and the picked pages sync into
-`Notion/<workspace>` every 15 minutes. For that button to work, the
-deployment needs one **public** Notion connection. This is a one-time setup.
+`Notion/<workspace>` every 15 minutes. Each connection belongs to the member
+who made it, as with Gmail: anyone who can add files may connect, only they
+see the connection, and its folder is private to them until they share it.
+For that button to work, the deployment needs one **public** Notion
+connection. This is a one-time setup.
 Design notes: [`docs/design/notion-connector.md`](../design/notion-connector.md).
 
 1. **Create the connection.** At
@@ -464,8 +481,9 @@ Design notes: [`docs/design/notion-connector.md`](../design/notion-connector.md)
    ```
 
 3. **Deploy and load it on the VM.** The code ships in the images, and the
-   `notion_connector` migration applies through the one-shot `migrate`
-   service as usual:
+   `notion_connector` and `notion_per_user_connections` migrations apply
+   through the one-shot `migrate` service (stop the app and worker first the
+   first time — see [Deploying updates](#deploying-updates)):
 
    ```bash
    cd LaunchStack && git pull
@@ -497,6 +515,9 @@ Design notes: [`docs/design/notion-connector.md`](../design/notion-connector.md)
 | "The sync was requested … still hasn't started" | The worker or Inngest is down; see [Background jobs](#background-jobs-self-hosted-inngest). |
 | Card says access was revoked | The member removed LaunchStack in Notion, or the grant expired. **Reconnect** on the card. |
 | Some pages are missing | Only pages shared with the connection sync. **Choose pages** on the card reopens Notion's picker. |
+| "That Notion account is already connected by someone else" | Another member already connected with that Notion login. Connect with your own Notion account. The member who connected it can disconnect it from Add source › Notion. Removing a member from the workspace deletes and revokes their Notion and Gmail connections. |
+| A teammate can't see my Notion pages | They are in your private `Notion/<workspace>` folder. Share the folder with them. |
+| Card says "Paused: you can no longer add files" | Your role lost upload access. An admin can give it back; until then you can still disconnect. |
 
 Obsidian needs no setup: **Add source › Obsidian** imports a vault in the
 browser, and nothing leaves the deployment.

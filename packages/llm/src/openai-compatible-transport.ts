@@ -199,7 +199,7 @@ export function describeChatEndpointError(
     // A workspace's own endpoint is fixed by its admins in the Workspace tab, not by
     // whoever runs the server, so its failures say so.
     const ownedByWorkspace = endpoint.owner === "workspace";
-    const fixInSettings = "A workspace admin can fix it in Workspace › Bring your own keys.";
+    const fixInSettings = "A workspace admin can fix it in Models & usage › API keys.";
 
     if (
         status === 402 ||

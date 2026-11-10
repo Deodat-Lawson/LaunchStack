@@ -8,6 +8,7 @@ import {
     isFolderOrDescendant,
     normalizeFolderPath,
 } from "~/lib/folders/path";
+import type { OpenOutside } from "./externalLink";
 import type { WorkspaceFolder, WorkspaceSource } from "./types";
 
 import type { ActionMenuItem } from "~/components/ui/action-menu";
@@ -37,9 +38,9 @@ export interface SourceMenuHandlers {
     onMoveToFolder?: (sourceId: string, folderName: string) => void;
     onCopyTitle?: (source: WorkspaceSource) => void;
     onOpenInNewTab?: (source: WorkspaceSource) => void;
+    /** "Open in Notion", "Open file" — where the source opens outside LaunchStack. */
+    onOpenOutside?: OpenOutside;
     onCopyLink?: (source: WorkspaceSource) => void;
-    /** Open the file in Google Drive — offered only when the source has a `driveUrl`. */
-    onOpenInDrive?: (source: WorkspaceSource) => void;
     /** Browse this source in the full Knowledge surface. */
     onShowInKnowledge?: (source: WorkspaceSource) => void;
     /** Pick the source up, to drop it on a folder with "Paste". */
@@ -142,13 +143,15 @@ export function buildSourceMenuItems(
         });
     }
 
-    if (handlers.onOpenInDrive && source.driveUrl) {
+    const outside = source.externalLink;
+    if (handlers.onOpenOutside && outside && source.type !== "mindmap") {
+        const openOutside = handlers.onOpenOutside;
         items.push({
             type: "item",
-            id: "open-drive",
-            label: t("openInDrive"),
+            id: "open-outside",
+            label: openOutside.label(outside),
             icon: "external",
-            onSelect: () => handlers.onOpenInDrive?.(source),
+            onSelect: () => openOutside.open(outside),
         });
     }
 

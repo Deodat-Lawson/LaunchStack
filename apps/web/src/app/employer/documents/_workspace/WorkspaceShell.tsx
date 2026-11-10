@@ -110,7 +110,7 @@ import {
     useStudioText,
     type WorkspaceTranslator,
 } from "./types";
-import { TOOL_ALIASES, toolTargetFromHref } from "~/lib/tool-app/locations";
+import { TOOL_ALIASES, movedToolScreen, toolTargetFromHref } from "~/lib/tool-app/locations";
 import { WORKSPACE_TOOL_ID, settingsDestination, workspaceHref } from "~/lib/settings/surfaces";
 import { useWorkspaceData } from "./useWorkspaceData";
 import { refreshProcessingQueue, useProcessingQueue } from "./processing/queueStore";
@@ -1657,8 +1657,8 @@ export function WorkspaceShell() {
      * Where a `/employer/settings#<hash>` link goes inside the workspace:
      * Settings on one of its own sections, the Workspace tab on the screen a
      * workspace section moved to (with the row or People tab the hash named
-     * as its `focus`), or the Usage tab (Spending, for `#usage…`). Never a
-     * page leave.
+     * as its `focus`), or Models & usage (Spending for `#usage…`, API keys
+     * for `#byok`, Models for `#models`). Never a page leave.
      */
     const openSettingsPlace = useCallback(
         (hash: string) => {
@@ -1995,18 +1995,25 @@ export function WorkspaceShell() {
         }
         if (featureParam === "settings" && !atParam) {
             // `?feature=settings#models` and the old OpenRouter return leg
-            // (`?feature=settings&openrouter=…`) name what is the Workspace
-            // tab now; the hash goes with the cleanup below, so read it first.
+            // (`?feature=settings&openrouter=…`) name what is Models & usage
+            // now (`#byok` is its API keys, `settingsDestination`); the hash
+            // goes with the cleanup below, so read it first. `openrouter`
+            // survives the cleanup for API keys to read when it mounts.
             const hash = window.location.hash;
             openSettingsPlace(searchParams.has("openrouter") && !hash ? "byok" : hash);
         } else if (featureParam) {
-            const feature = resolveStudioFeature(featureParam);
+            // A screen that moved to another tool (`?feature=workspace&at=/byok`
+            // is Models & usage › API keys now) opens there, not in its old tab.
+            const moved = atParam ? movedToolScreen(featureParam, atParam) : null;
+            const toolId = moved?.toolId ?? featureParam;
+            const at = moved?.at ?? atParam;
+            const feature = resolveStudioFeature(toolId);
             // A gated app must not be dropped just because permissions have
             // not landed. Wait for them — the effect re-runs — but only for
             // the feature param, so a connector return still toasts on time.
             if (feature?.requires && !permissionsLoaded) return;
-            if (feature && atParam) requestToolLocation(featureParam, atParam);
-            expandFeature(featureParam);
+            if (feature && at) requestToolLocation(toolId, at);
+            expandFeature(toolId);
         }
         if (addParam) {
             if (tabParam) setAddTab(tabParam);
@@ -2052,6 +2059,8 @@ export function WorkspaceShell() {
                 toast.warning(tRef.current("shell.connectorPartial", { name }));
             } else if (connectorResultParam === "denied") {
                 toast.info(tRef.current("shell.connectorCancelled", { name }));
+            } else if (connectorResultParam === "claimed") {
+                toast.error(tRef.current("shell.connectorClaimed", { name }));
             } else {
                 toast.error(tRef.current("shell.connectorFailed", { name }));
             }
@@ -2602,6 +2611,7 @@ export function WorkspaceShell() {
                             onRevealed={consumeRailReveal}
                             workspaceName={workspaceName}
                             selfAuthId={userId ?? null}
+                            storageScope={layoutScope}
                             history={historyRail}
                             loading={sourcesLoading}
                         />
@@ -2681,6 +2691,7 @@ export function WorkspaceShell() {
                         onRevealed={consumeRailReveal}
                         workspaceName={workspaceName}
                         selfAuthId={userId ?? null}
+                        storageScope={layoutScope}
                         history={historyRail}
                         loading={sourcesLoading}
                     />
@@ -2781,6 +2792,7 @@ export function WorkspaceShell() {
                     }
                     return paneId === "chat" ? (
                         <AskPanel
+                            userProfile={me}
                             leadingChromeInsetPx={0}
                             sources={sources}
                             selected={selected}

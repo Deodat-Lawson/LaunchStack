@@ -64,6 +64,28 @@ describe("document menu builders", () => {
         });
     });
 
+    it("offers where the file opens outside LaunchStack beside Open in a new tab", () => {
+        const h = { ...handlers(), onOpenOutside: jest.fn() };
+        const link = { kind: "file" as const, url: "/api/files/12" };
+        const items = buildDocumentMenuItems(
+            doc,
+            {
+                isMindmap: false,
+                askable: true,
+                persisted: true,
+                originalUrl: "/api/files/12",
+                outside: { link, label: "Open file" },
+            },
+            h,
+            t
+        );
+        expect(items.map(i => i.id).slice(3, 6)).toEqual(["open-tab", "open-outside", "download"]);
+        const item = items.find(i => i.id === "open-outside");
+        expect(item).toMatchObject({ label: "Open file", icon: "external" });
+        if (item?.type === "item") item.onSelect();
+        expect(h.onOpenOutside).toHaveBeenCalledWith(link);
+    });
+
     it("refuses rename and delete on a file shared with the caller to view", () => {
         const items = buildDocumentMenuItems(
             doc,
@@ -131,20 +153,5 @@ describe("document menu builders", () => {
         expect(current[0]).toMatchObject({ label: "v3 (current)" });
         expect(current.find(i => i.id === "preview")).toMatchObject({ disabled: true });
         expect(current.find(i => i.id === "restore")).toMatchObject({ disabled: true });
-    });
-});
-
-describe("Open in Google Drive", () => {
-    it("appears beside Copy link when the document has a Drive page", () => {
-        const state = { isMindmap: false, askable: true, persisted: true, originalUrl: null };
-        const withDrive = buildDocumentMenuItems(
-            doc,
-            { ...state, driveUrl: "https://docs.google.com/document/d/abc1234567/edit" },
-            handlers(),
-            t
-        ).map(i => i.id);
-        expect(withDrive.indexOf("open-drive")).toBe(withDrive.indexOf("copy-link") - 1);
-        const without = buildDocumentMenuItems(doc, state, handlers(), t).map(i => i.id);
-        expect(without).not.toContain("open-drive");
     });
 });

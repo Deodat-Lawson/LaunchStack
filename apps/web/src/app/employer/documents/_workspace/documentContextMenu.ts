@@ -1,4 +1,5 @@
 import type { ActionMenuItem } from "~/components/ui/action-menu";
+import type { SourceExternalLink } from "~/lib/source-external-link";
 import type { WorkspaceSource, WorkspaceTranslator } from "./types";
 
 /**
@@ -25,14 +26,15 @@ export interface DocumentMenuState {
     editable?: boolean;
     /** The original file's URL, when it is loaded. */
     originalUrl: string | null;
-    /** Its page in Google Drive — a file the connector syncs, or one linked to Drive. */
-    driveUrl?: string | null;
+    /** Where it opens outside LaunchStack, worded: "Open in Notion", "Open file". */
+    outside?: { link: SourceExternalLink; label: string } | null;
 }
 
 export interface DocumentMenuHandlers {
     onAskAbout: () => void;
     onRename: () => void;
     onOpenInNewTab?: () => void;
+    onOpenOutside?: (link: SourceExternalLink) => void;
     onDownload?: () => void;
     onCopyLink: () => void;
     onShowVersions?: () => void;
@@ -87,6 +89,16 @@ export function buildDocumentMenuItems(
             onSelect: () => handlers.onOpenInNewTab?.(),
         });
     }
+    const outside = state.outside;
+    if (handlers.onOpenOutside && outside && !state.isMindmap) {
+        items.push({
+            type: "item",
+            id: "open-outside",
+            label: outside.label,
+            icon: "external",
+            onSelect: () => handlers.onOpenOutside?.(outside.link),
+        });
+    }
     if (handlers.onDownload && !state.isMindmap) {
         items.push({
             type: "item",
@@ -96,16 +108,6 @@ export function buildDocumentMenuItems(
             disabled: !state.originalUrl,
             disabledReason: state.originalUrl ? undefined : t("documentMenu.originalLoading"),
             onSelect: () => handlers.onDownload?.(),
-        });
-    }
-    if (state.driveUrl && !state.isMindmap) {
-        const driveUrl = state.driveUrl;
-        items.push({
-            type: "item",
-            id: "open-drive",
-            label: t("documentMenu.openInDrive"),
-            icon: "external",
-            onSelect: () => window.open(driveUrl, "_blank", "noopener,noreferrer"),
         });
     }
     items.push({

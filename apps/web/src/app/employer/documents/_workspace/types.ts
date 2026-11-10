@@ -1,10 +1,12 @@
 import { SHORTCUT_COMMANDS_BY_ID, formatKeys } from "~/lib/shortcuts/commands";
 import { useMemo, type ComponentType } from "react";
 import { useTranslations } from "next-intl";
+import type { OfferedModelPick } from "~/lib/ai/model-picks";
 import type { Permission } from "~/lib/authz/permissions";
 import type { ChatPassage } from "~/lib/chat-passages";
 import type { ChatCreatedSource, ChatTurnStep } from "~/lib/chat-turns";
 import type { SourceProcessingView } from "~/lib/source-progress";
+import type { SourceExternalLink } from "~/lib/source-external-link";
 // Icons: lucide-react for glyphs, ~/components/icons/brand for brand marks.
 import {
     AppWindow as IconArtifact,
@@ -204,8 +206,12 @@ export interface WorkspaceSource {
     access?: ItemAccessView;
     /** Who added it, when a person did. */
     addedBy?: SourceAddedBy | null;
-    /** Its page in Google Drive, for a file the Drive connector syncs. */
-    driveUrl?: string;
+    /**
+     * Where it opens outside LaunchStack: its origin (Drive, Notion, the
+     * website…) or the stored file in a browser tab. Absent for mindmaps,
+     * staged uploads and rows from an older server.
+     */
+    externalLink?: SourceExternalLink | null;
 }
 
 export interface WorkspaceFolder {
@@ -326,10 +332,13 @@ export interface ComposerSend {
     /** The agent this turn is addressed to; null = the workspace's default assistant. */
     agentKey: string | null;
     modelRoute?: "default" | "fast" | "reasoning" | "vision";
+    /** An offered workspace model answering on the main route (`~/lib/ai/model-picks`). */
+    modelKey?: string;
     reasoningEffort?: string;
     chatMode?: "default" | "plan";
     followUp?: "queue" | "interrupt";
-    modelRoutes?: ("default" | "fast" | "reasoning" | "vision")[];
+    /** Compare mode: routes, and `model:<key>` picks, answered side by side. */
+    modelRoutes?: ("default" | "fast" | "reasoning" | "vision" | OfferedModelPick)[];
     threadRefs?: string[];
     /** Passages selected in a document and asked about; never pasted into `text`. */
     passages?: ChatPassage[];
@@ -514,13 +523,13 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
     },
     {
         id: "usage",
-        label: "Usage",
+        label: "Models & usage",
         Icon: IconChart,
-        desc: "Your numbers, and for admins the workspace's and each person's",
+        desc: "Your numbers, and for admins the workspace's and each person's, its models and API keys",
         href: "/employer/documents?feature=usage",
     },
     {
-        // A screen of the Usage tab (`TOOL_ALIASES`): balance, pricing and limits.
+        // A screen of Models & usage (`TOOL_ALIASES`): balance, pricing and limits.
         id: "spending",
         label: "Spending and limits",
         Icon: IconChart,
@@ -535,7 +544,7 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         id: "workspace",
         label: "Workspace",
         Icon: IconWorkspace,
-        desc: "Its name and URL, people and access, your own keys, models, agents, integrations and usage",
+        desc: "Its name and URL, people and access, company profile, agents and integrations",
         href: "/employer/documents?feature=workspace",
     },
     {
@@ -581,12 +590,15 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         href: "/employer/documents?feature=workspace&at=%2Fagents",
     },
     {
-        // The palette also finds a row by its id, so "byok" finds this one.
+        // A screen of Models & usage (`TOOL_ALIASES`), offered to whoever may
+        // see the `byok` section (`models.manage`). The palette also finds a
+        // row by its id, so "byok" finds this one, and its English
+        // description keeps the old name findable.
         id: "byok",
-        label: "Bring your own keys",
+        label: "API keys",
         Icon: IconKey,
-        desc: "Your own API key or OpenRouter account for the workspace's AI",
-        href: "/employer/documents?feature=workspace&at=%2Fbyok",
+        desc: "Bring your own keys: an API key or OpenRouter account for the workspace's AI, in Models & usage",
+        href: "/employer/documents?feature=usage&at=%2Fkeys",
     },
 ] as const;
 
@@ -770,7 +782,7 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 id: "workspace",
                 label: "Workspace",
                 Icon: IconWorkspace,
-                desc: "The workspace's name and details, its people and access, company profile, your own keys, models, agents, integrations and archive",
+                desc: "The workspace's name and details, its people and access, company profile, agents, integrations and archive",
                 href: "/employer/documents?feature=workspace",
             },
             {
@@ -780,13 +792,15 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 desc: "Your account, appearance, shortcuts and privacy",
             },
             {
-                // Cursor's team dashboard for a workspace: your own numbers
-                // for everyone; the workspace's and each person's for
-                // `analytics.view`. Its screens are across the top (`UsageTool`).
+                // Models & usage — Cursor's team dashboard for a workspace:
+                // your own numbers and the models you can pick for everyone;
+                // the workspace's and each person's for `analytics.view`; the
+                // API keys for `models.manage`. Its screens are across the
+                // top (`UsageTool`).
                 id: "usage",
-                label: "Usage",
+                label: "Models & usage",
                 Icon: IconChart,
-                desc: "Who is active, what they ask and add, the AI it takes and what it costs — and your own numbers",
+                desc: "The workspace's API keys and the models people can pick, who is active, what they ask and add, the AI it takes and what it costs — and your own numbers",
             },
         ],
     },

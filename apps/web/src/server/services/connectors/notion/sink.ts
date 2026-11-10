@@ -13,7 +13,11 @@ import type {
     KnowledgeSink,
     StoredKnowledgeItem,
 } from "@launchstack/pipelines/connectors";
-import { contentByteLength, contentToBuffer } from "@launchstack/pipelines/connectors";
+import {
+    contentByteLength,
+    contentToBuffer,
+    SourceDeletedError,
+} from "@launchstack/pipelines/connectors";
 import { document } from "@launchstack/store/schema";
 import { resolveIngestIndexKey } from "@launchstack/llm/embeddings";
 
@@ -27,6 +31,7 @@ import {
     createDocumentVersionLifecycle,
     findDocumentByCreationKey,
 } from "../../document-creation";
+import { isSourceDeleted } from "../deleted-items";
 import { NOTION_PROVIDER } from "./config";
 
 /** Namespace for the document creation key. Keep stable — it is an identity. */
@@ -135,6 +140,10 @@ export async function createNotionSink(context: NotionSinkContext): Promise<Know
             };
 
             const existing = await findDocumentByCreationKey(context.companyId, baseCreationKey);
+            // Deleted while this run was going (the run's list predates it).
+            if (!existing && (await isSourceDeleted(context.connectionId, item.sourceId))) {
+                throw new SourceDeletedError(item.sourceId);
+            }
 
             const blob = await uploadFile({
                 filename,

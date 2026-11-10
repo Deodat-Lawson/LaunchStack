@@ -4,9 +4,9 @@
  * What syncs from Google Drive — Settings → Integrations, under Google
  * Drive. Drive is added from Add source (Files picks files, Folder picks a
  * folder; see useDriveSource), so this card only manages what was picked:
- * the account and the last run, the picked list with Stop syncing, Sync now,
- * and the folder-access notices. Connecting starts in Add source; a revoked
- * grant is reconnected here. Disconnecting is the workspace connection's
+ * the account and the last run, the picked list with Stop syncing, files
+ * deleted here with Sync again, Sync now, and the folder-access notices.
+ * Connecting starts in Add source; a revoked grant is reconnected here. Disconnecting is the workspace connection's
  * own action, in the Google Drive and Connections cards.
  *
  * States: loading → nothing to show (not configured, not allowed, or the
@@ -41,6 +41,7 @@ import {
     reportCount,
     type DriveStatus,
 } from "../driveStatus";
+import { DeletedHereList } from "../DeletedHereList";
 import { SyncStalledNotice } from "../SyncStalledNotice";
 import { useConnectorSync, useSyncStatusLabel } from "../useConnectorSync";
 import {
@@ -264,6 +265,17 @@ export function DriveSyncPanel() {
                     })
                 )}
             </ul>
+
+            <DeletedHereList
+                provider="google-drive"
+                connectionId={status.connectionId}
+                deleted={status.deletedHere}
+                disabled={syncing || starting}
+                onRestored={async () => {
+                    await requestSync();
+                    await refresh();
+                }}
+            />
 
             <Button
                 size="sm"

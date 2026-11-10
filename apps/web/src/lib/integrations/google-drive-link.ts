@@ -39,37 +39,3 @@ export function driveIdFromLink(raw: string): string | null {
     if (queried && DRIVE_ID.test(queried)) return queried;
     return null;
 }
-
-/** Google's own editors, by the Drive MIME type of a native file. */
-const NATIVE_EDITOR_PATHS: Record<string, string> = {
-    "application/vnd.google-apps.document": "document",
-    "application/vnd.google-apps.spreadsheet": "spreadsheets",
-    "application/vnd.google-apps.presentation": "presentation",
-    "application/vnd.google-apps.drawing": "drawings",
-    "application/vnd.google-apps.form": "forms",
-};
-
-/**
- * Where a Drive file opens in Google: a native Doc, Sheet or Slides deck in
- * its editor, anything else (a PDF, a .docx) in Drive's file preview.
- */
-export function driveFileUrl(fileId: string, driveMimeType?: string | null): string {
-    const id = encodeURIComponent(fileId);
-    const editor = driveMimeType ? NATIVE_EDITOR_PATHS[driveMimeType] : undefined;
-    return editor
-        ? `https://docs.google.com/${editor}/d/${id}/edit`
-        : `https://drive.google.com/file/d/${id}/view`;
-}
-
-/**
- * The Google Drive page of a document the Drive connector syncs, read from
- * the metadata the connector stamps on it; null for any other document.
- */
-export function driveUrlOfSyncedDocument(ocrMetadata: unknown): string | null {
-    if (typeof ocrMetadata !== "object" || ocrMetadata === null) return null;
-    const meta = ocrMetadata as Record<string, unknown>;
-    if (meta.connector !== "google-drive") return null;
-    const fileId = meta.driveFileId;
-    if (typeof fileId !== "string" || !DRIVE_ID.test(fileId)) return null;
-    return driveFileUrl(fileId, typeof meta.driveMimeType === "string" ? meta.driveMimeType : null);
-}

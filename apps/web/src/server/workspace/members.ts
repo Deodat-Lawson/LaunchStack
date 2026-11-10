@@ -32,6 +32,11 @@ import {
     type MembershipStatus,
 } from "~/lib/authz/permissions";
 import { copy } from "~/i18n/copy";
+import {
+    closePersonalConnections,
+    revokePersonalGrants,
+    type ClosedPersonalConnections,
+} from "~/server/services/connectors/personal-connections";
 
 import type { Executor } from "./db-types";
 import { deleteUserSessionGrants, handOverSoleManaged, workspaceOwnerHeir } from "./ownership";
@@ -340,7 +345,8 @@ export async function updateMember(
  * membership (with its profile override), their photo for this workspace,
  * their group seats, and grants naming them. The `users` row
  * stays; if it pointed at this workspace as its default, it is repointed at
- * another workspace they still belong to.
+ * another workspace they still belong to. Their own connections (Gmail,
+ * Notion) are closed before this, by `closePersonalConnections`.
  */
 async function deleteMembershipEverywhere(
     tx: Executor,
@@ -422,6 +428,30 @@ async function deleteMembershipEverywhere(
     }
 }
 
+/** One audit line per connection that left with a member. */
+async function recordClosedConnections(
+    tx: Executor,
+    companyId: bigint,
+    actorUserId: string,
+    memberUserId: bigint,
+    personal: ClosedPersonalConnections
+): Promise<void> {
+    for (const connection of personal.closed) {
+        await recordAuditEvent(tx, {
+            companyId,
+            actorUserId,
+            action: "connector.disconnected",
+            targetType: "connector",
+            targetId: connection.provider,
+            detail: {
+                connectionId: connection.id,
+                ownerUserId: memberUserId.toString(),
+                reason: "member-departed",
+            },
+        });
+    }
+}
+
 export async function removeMember(
     ctx: WorkspaceContext,
     userId: bigint
@@ -433,7 +463,10 @@ export async function removeMember(
     }
     await assertNotLastOwner(ctx.companyId, target);
 
-    await db.transaction(async tx => {
+    const closed = await db.transaction(async tx => {
+        // Their own connections end with them, and the mail those brought in
+        // goes too, before anything of theirs is handed on.
+        const personal = await closePersonalConnections(tx, ctx.companyId, userId);
         // Their sole-managed files and folders pass to whoever removed them (ADR-014).
         await handOverSoleManaged(tx, ctx.companyId, userId, {
             companyId: ctx.companyId,
@@ -441,6 +474,7 @@ export async function removeMember(
             authUserId: ctx.authUserId,
         });
         await deleteMembershipEverywhere(tx, ctx.companyId, userId);
+        await recordClosedConnections(tx, ctx.companyId, ctx.authUserId, userId, personal);
         await recordAuditEvent(tx, {
             companyId: ctx.companyId,
             actorUserId: ctx.authUserId,
@@ -452,9 +486,13 @@ export async function removeMember(
                 email: target.email,
                 role: normalizeRoleSlug(target.role),
                 status: toStatus(target.status),
+                closedConnections: personal.connections,
+                deletedMail: personal.documents,
             },
         });
+        return personal;
     });
+    await revokePersonalGrants(closed);
     return { success: true };
 }
 
@@ -468,7 +506,8 @@ export async function leaveWorkspace(
         }
     }
 
-    await db.transaction(async tx => {
+    const closed = await db.transaction(async tx => {
+        const personal = await closePersonalConnections(tx, ctx.companyId, ctx.userPk);
         // Someone leaving on their own hands their sole-managed items to the owner.
         const heir = await workspaceOwnerHeir(tx, ctx.companyId);
         if (heir !== null && heir !== ctx.userPk) {
@@ -486,15 +525,22 @@ export async function leaveWorkspace(
             }
         }
         await deleteMembershipEverywhere(tx, ctx.companyId, ctx.userPk);
+        await recordClosedConnections(tx, ctx.companyId, ctx.authUserId, ctx.userPk, personal);
         await recordAuditEvent(tx, {
             companyId: ctx.companyId,
             actorUserId: ctx.authUserId,
             action: "member.left",
             targetType: "member",
             targetId: ctx.userPk,
-            detail: { role: ctx.role },
+            detail: {
+                role: ctx.role,
+                closedConnections: personal.connections,
+                deletedMail: personal.documents,
+            },
         });
+        return personal;
     });
+    await revokePersonalGrants(closed);
     return { success: true, redirectTo: "/workspaces" };
 }
 

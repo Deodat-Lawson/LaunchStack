@@ -7,12 +7,16 @@
  * knows how to refresh against the shared Google OAuth client and how to
  * flip a row to `revoked` on invalid_grant.
  */
-import { and, eq, sql } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 import { decryptSecret, encryptSecret } from "@launchstack/store/crypto";
 
 import { db } from "~/server/db";
-import { connectorConnections, type ConnectorConnection } from "~/server/db/schema";
+import {
+    connectorConnections,
+    GMAIL_OWNER_INDEX_PREDICATE,
+    type ConnectorConnection,
+} from "~/server/db/schema";
 import { getEngine } from "~/server/engine";
 import { getAccessTokenForConnection } from "~/server/services/google-drive/connections";
 
@@ -115,7 +119,7 @@ export async function upsertGmailConnection(
                 connectorConnections.provider,
                 connectorConnections.ownerUserId,
             ],
-            targetWhere: sql`owner_user_id is not null`,
+            targetWhere: GMAIL_OWNER_INDEX_PREDICATE,
             set: {
                 providerAccountId: params.providerAccountId,
                 providerAccountEmail: params.providerAccountEmail,

@@ -3,11 +3,12 @@
  * anything on it to read.
  *
  * A website source is the page's HTML, kept so ingestion can read it and the
- * company profile and Ask can quote it. It is never shown as HTML: the viewer
- * frames untrusted HTML with scripts off, and most company sites build or
- * reveal their content with JavaScript, so that frame was a white page. The
- * viewer shows the site's address and the text ingestion read instead
- * (WebsiteViewer).
+ * company profile and Ask can quote it. It is never framed as HTML in the
+ * viewer: framed in an isolated sandbox most company sites render as a white
+ * page, and most refuse to be framed live. The viewer (WebsiteViewer) shows a
+ * picture of the page the server takes from this HTML
+ * (`server/website-preview.ts`), and, under "Page text", the text ingestion
+ * read.
  *
  * Nothing else on the row says it came from a website: the creation key is
  * stored hashed, and the file is plain HTML. So the importers write a marker

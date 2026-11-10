@@ -688,6 +688,48 @@ describe("Ask reads a linked page with no search key", () => {
     });
 });
 
+describe("a note said before the first tool call", () => {
+    const NOTE = "You were shown parts of 4 of the 37 sources in scope.";
+    const askEach = (): ChatTool => ({
+        name: "ask_each",
+        description: "ask_each",
+        parameters: { type: "object", properties: {} },
+        describe: () => "Reading",
+        run: jest.fn(async () => "- row"),
+    });
+    const hasNote = (call: ModelCall) => call.messages.some(m => m.content === NOTE);
+
+    it("comes last, after the question and the review, until a tool is called; then it is gone", async () => {
+        const { chat, calls } = scriptedChat([[toolCall("ask_each", {})], [text("All 37.")]]);
+        const messages = [new HumanMessage("Which school does each go to?")];
+        await answerWithTools({
+            chat,
+            messages,
+            tools: [askEach()],
+            hasInitialEvidence: true,
+            beforeFirstTool: NOTE,
+            signal: new AbortController().signal,
+        });
+        expect(calls[0]!.messages.at(-1)?.content).toBe(NOTE);
+        expect(calls[0]!.messages.at(-2)?.content).toBe(EVIDENCE_REVIEW_REMINDER);
+        expect(calls.map(hasNote)).toEqual([true, false]);
+        // A per-request note, never stored in the conversation.
+        expect(messages).toHaveLength(1);
+    });
+
+    it("is not said without tools to call", async () => {
+        const { chat, calls } = scriptedChat([[text("Answer.")]]);
+        await answerWithTools({
+            chat,
+            messages: [new HumanMessage("Q")],
+            tools: [],
+            beforeFirstTool: NOTE,
+            signal: new AbortController().signal,
+        });
+        expect(hasNote(calls[0]!)).toBe(false);
+    });
+});
+
 describe("conditional evidence review", () => {
     const reviewCount = (call: ModelCall) =>
         call.messages.filter(message => message.content === EVIDENCE_REVIEW_REMINDER).length;

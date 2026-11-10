@@ -12,7 +12,7 @@
     "withheldWithRole": "{label} isn't part of your role ({role}). Ask an admin if you need it.",
     "workspacePointer": {
       "label": "Workspace settings",
-      "blurb": "Name, people, your own keys, models, agents and integrations"
+      "blurb": "Name, people, company profile, agents and integrations"
     }
   },
   "groups": {
@@ -57,14 +57,14 @@
       "description": "Read from the sources written by or about your company, each fact with the excerpt that proves it. Agents cite it for company context and Proposals drafts from it. Sources about someone else are set aside, and you can overrule that."
     },
     "byok": {
-      "label": "Bring your own keys",
+      "label": "API keys",
       "blurb": "Your own API key for the workspace's AI",
-      "title": "Bring your own keys",
+      "title": "API keys",
       "description": "Your own provider account for the workspace's AI: chat, drafting, meetings and background work. Optional: left empty, the workspace runs on the server's keys."
     },
     "models": {
-      "label": "Models and routes",
-      "blurb": "Which model answers what",
+      "label": "Models",
+      "blurb": "Which model answers what, and what people can pick in Ask",
       "title": "Which model serves each kind of request",
       "description": "The server's default models and routes, set in its configuration file and shown here read-only. A workspace that brings its own API key runs on that instead."
     },
@@ -357,13 +357,18 @@
       "resets": "Resets on {date}.",
       "noLimit": "No limit",
       "noLimitBody": "No limit applies to you in this workspace. You've used {used} tokens this month.",
-      "sourceDefault": "This is the workspace's limit for everyone. Workspace admins can change it in Usage › Spending.",
-      "sourceMember": "A workspace admin set this limit for you. Workspace admins can change it in Usage › Spending.",
+      "sourceDefault": "This is the workspace's limit for everyone. Workspace admins can change it in Models & usage › Spending.",
+      "sourceMember": "A workspace admin set this limit for you. Workspace admins can change it in Models & usage › Spending.",
       "sourceServer": "This is the server's limit, counted across all your workspaces. Whoever runs this server can change it.",
       "usedHere": "{used} of it in this workspace.",
       "alsoServer": "The server also caps you at {limit} tokens a month across all your workspaces ({used} used).",
       "alsoWorkspace": "This workspace also limits you to {limit} tokens a month ({used} used).",
       "reached": "You've reached this limit. New AI requests are refused until it resets or the limit is raised."
+    },
+    "signInAgain": {
+      "button": "Sign in again",
+      "unlink": "For your security, unlinking a sign-in needs a recent sign-in. Sign in again, then unlink it.",
+      "password": "For your security, setting a password needs a recent sign-in. Sign in again, then set it."
     }
   },
   "answerStyle": {
@@ -587,7 +592,7 @@
       "noClients": "No provider OAuth clients are configured. Set the client-id / client-secret pairs described in <code>.env.example</code> (Workspace connections block) plus <code>EMBEDDING_SECRETS_KEY</code>.",
       "actionsFor": "Actions for {label}",
       "connected": "connected",
-      "personal": "your mailbox, private to you",
+      "personal": "yours, private to you",
       "connectedBy": "connected by {who}",
       "confirmTitle": "Disconnect {label} from this workspace?",
       "confirmBody": "The connection is removed and its access revoked. To connect again, use Add source → Connect."
@@ -650,8 +655,8 @@
     "server": {
       "title": "Server default",
       "description": "The models this server runs any workspace on that hasn't brought its own. One AI endpoint serves every route; its address and credential stay on the server.",
-      "usesOwn": "This workspace runs on its own model, set up in Bring your own keys, so the server default below isn’t used.",
-      "ownNoModel": "This workspace’s own API key has no model chosen yet, so it still runs on the server default. Choose one in Bring your own keys.",
+      "usesOwn": "This workspace runs on its own model, set up in API keys, so the server default below isn’t used.",
+      "ownNoModel": "This workspace’s own API key has no model chosen yet, so it still runs on the server default. Choose one in API keys.",
       "fixFile": "{error} Fix the file named by <code>CHAT_MODELS_CONFIG</code> and re-read.",
       "readingConfig": "Reading the configuration…",
       "fileNote": "Models are set in the server’s chat model file, named by <code>CHAT_MODELS_CONFIG</code>. Edit that file and restart to change a model; nothing here writes to it."
@@ -1863,7 +1868,11 @@
       "keyRevokeFailed": "Could not revoke the key.",
       "accessKeyLimit": "You can hold at most {max} access keys in a workspace.",
       "oauthClientLimit": "A workspace can hold at most {max} OAuth clients.",
-      "chatModelsUnreadable": "The chat model configuration could not be read. The server log has the details."
+      "chatModelsUnreadable": "The chat model configuration could not be read. The server log has the details.",
+      "listSessionsFailed": "Couldn't load your sessions.",
+      "endCurrentSession": "To end this browser's session, sign out.",
+      "sessionNotFound": "That session has already ended.",
+      "endSessionFailed": "Couldn't end that session."
     },
     "models": {
       "enterAddress": "Enter the address of your model endpoint.",
@@ -1890,7 +1899,12 @@
       "chooseModel": "Choose a model to test.",
       "testFailed": "Couldn't run the test.",
       "enterEndpointFirst": "Enter the endpoint address first.",
-      "listFailed": "Couldn't list the models."
+      "listFailed": "Couldn't list the models.",
+      "offeredTooMany": "Offer at most {max} models in Ask.",
+      "offeredNoName": "Give \"{id}\" a name people will see.",
+      "offeredNameTooLong": "Keep the name for \"{id}\" to {max} characters.",
+      "offeredSameName": "Two models are called \"{label}\". Give each its own name.",
+      "offeredNeedsModel": "Choose the main model in API keys before offering models in Ask."
     },
     "photo": {
       "empty": "That file is empty.",
@@ -1922,7 +1936,7 @@
   },
   "workspaceTab": {
     "title": "Workspace",
-    "about": "Everything about this workspace: what it is called, who is in it and what they can see, its own keys, the models and agents it runs and what it connects to. What it uses and spends is the Usage tab. Your own account, theme and shortcuts are in Settings.",
+    "about": "Everything about this workspace: what it is called, who is in it and what they can see, its company profile, the agents it runs and what it connects to. Its API keys, its models and what it uses and spends are the Models & usage tab. Your own account, theme and shortcuts are in Settings.",
     "groups": {
       "basics": "Basics",
       "setup": "Setup",
@@ -1932,8 +1946,6 @@
       "general": "General",
       "people": "People and access",
       "company": "Company profile",
-      "byok": "Bring your own keys",
-      "models": "Models",
       "agents": "Agents",
       "integrations": "Integrations",
       "archive": "Archive",

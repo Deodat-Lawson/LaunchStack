@@ -88,9 +88,9 @@ const LEGACY_TOOL_ROUTES: readonly {
 /**
  * Feature ids that are now a place inside a tool: `?feature=brand` and the
  * palette's Brand row open Growth on Brand. The Workspace tab's palette rows
- * (People and access, Company profile, Agents & nodes, Bring your own keys)
- * are screens of it,
+ * (People and access, Company profile, Agents & nodes) are screens of it,
  * and so is `?feature=metadata`, which was the company profile's own pane.
+ * API keys (`byok`) and Spending are screens of Models & usage.
  */
 export const TOOL_ALIASES: Readonly<Record<string, ToolTarget>> = {
     brand: { toolId: "growth", at: "/brand" },
@@ -102,7 +102,7 @@ export const TOOL_ALIASES: Readonly<Record<string, ToolTarget>> = {
     profile: { toolId: "workspace", at: "/company" },
     metadata: { toolId: "workspace", at: "/company" },
     "agents-nodes": { toolId: "workspace", at: "/agents" },
-    byok: { toolId: "workspace", at: "/byok" },
+    byok: { toolId: "usage", at: "/keys" },
     // Analytics folded into the Usage tab; its links open the Overview.
     analytics: { toolId: "usage", at: "/overview" },
     spending: { toolId: "usage", at: "/spending" },
@@ -111,23 +111,34 @@ export const TOOL_ALIASES: Readonly<Record<string, ToolTarget>> = {
 /**
  * Screens that moved from one tool to another: a link to the old place
  * (`?feature=workspace&at=/usage?focus=…`) opens the new one, its query
- * kept.
+ * kept. The Workspace tab's Usage became Models & usage › Spending in
+ * October 2026, and its Bring your own keys and Models became Models &
+ * usage › API keys and Models in November.
  */
 const MOVED_SCREENS: readonly { from: ToolTarget; to: ToolTarget }[] = [
     { from: { toolId: "workspace", at: "/usage" }, to: { toolId: "usage", at: "/spending" } },
+    { from: { toolId: "workspace", at: "/byok" }, to: { toolId: "usage", at: "/keys" } },
+    { from: { toolId: "workspace", at: "/models" }, to: { toolId: "usage", at: "/models" } },
 ];
 
-function movedScreen(target: ToolTarget): ToolTarget {
-    const location = parseToolHref(target.at);
-    const moved = MOVED_SCREENS.find(
-        m => m.from.toolId === target.toolId && m.from.at === location.path
-    );
+/**
+ * Where a screen that moved to another tool is now, its query kept, or null
+ * when `at` (app-relative, inside `toolId`'s tab) has not moved. The tab a
+ * stale link or its own memory opens on a moved screen sends it on with this.
+ */
+export function movedToolScreen(toolId: string, at: string): ToolTarget | null {
+    const location = parseToolHref(at);
+    const moved = MOVED_SCREENS.find(m => m.from.toolId === toolId && m.from.at === location.path);
     return moved
         ? {
               toolId: moved.to.toolId,
               at: formatToolHref({ path: moved.to.at, search: location.search }),
           }
-        : target;
+        : null;
+}
+
+function movedScreen(target: ToolTarget): ToolTarget {
+    return movedToolScreen(target.toolId, target.at) ?? target;
 }
 
 /**

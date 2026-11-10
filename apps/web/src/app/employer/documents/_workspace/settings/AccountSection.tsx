@@ -5,10 +5,15 @@
  *
  * Body only. The profile (photo, names, title, the per-workspace look) is
  * `ProfileEditor`; your AI allowance this month is `AiAllowanceCard`. The
- * rest is Better Auth's own data, reached through its
- * client: the credential and linked sign-in accounts, and every session
- * that currently holds a cookie for this person, with the device it came
- * from and a way to end it.
+ * rest is Better Auth's own data: the credential and linked sign-in
+ * accounts (through its client), and every session that currently holds a
+ * cookie for this person, with the device it came from and a way to end it
+ * (through `/api/profile/sessions`, which needs no recent sign-in and never
+ * sends a session's token to the page).
+ *
+ * Unlinking a sign-in and setting a password do need a recent sign-in
+ * (Better Auth's `freshAge`, a day); past that, they say so and offer to
+ * sign in again rather than showing Better Auth's "Session is not fresh".
  *
  * The password forms are the person's own forms for their own password: a
  * change goes to `/api/auth/change-password`, and setting one on an account
@@ -31,7 +36,7 @@ import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { Card, Section } from "~/components/layout/page-shell";
 import { Field, TextInput } from "~/components/field";
-import { authClient, useUser } from "~/lib/auth-client";
+import { authClient, useAuth, useUser } from "~/lib/auth-client";
 import { cn } from "~/lib/utils";
 import type { SocialProvider } from "~/server/auth/providers";
 
@@ -42,15 +47,22 @@ import { useTimeFormat } from "./people/format";
 import { ProfileEditor } from "./ProfileEditor";
 import { StatusNote } from "./ui";
 
+/** A row from `/api/profile/sessions`: no token, the current one marked. */
 interface SessionRow {
     id: string;
-    token: string;
-    createdAt: Date | string;
-    updatedAt: Date | string;
-    expiresAt: Date | string;
-    ipAddress?: string | null;
-    userAgent?: string | null;
+    current: boolean;
+    createdAt: string;
+    updatedAt: string;
+    expiresAt: string;
+    ipAddress: string | null;
+    userAgent: string | null;
 }
+
+/** Better Auth's code for a sign-in older than `freshAge`; our routes answer with it too. */
+const SESSION_NOT_FRESH = "SESSION_NOT_FRESH";
+
+/** Back here after signing in again, opened on the Sign-in block. */
+const SIGN_IN_AGAIN_RETURN = "/employer/settings?show=sign-in";
 
 interface AccountRow {
     id: string;
@@ -78,6 +90,36 @@ const PROVIDER_ICON: Record<string, IconComponent> = {
     google: IconGoogle,
     github: IconGithub,
 };
+
+/**
+ * "For your security, sign in again to …" with the button that does it:
+ * signs out, then the sign-in page brings the person back here.
+ */
+function SignInAgainNote({ message }: { message: string }) {
+    const t = useTranslations("settings.account");
+    const { signOut } = useAuth();
+    const [leaving, setLeaving] = useState(false);
+    return (
+        <StatusNote tone="warn">
+            <div className="flex flex-wrap items-center gap-3">
+                <span className="min-w-0 flex-1">{message}</span>
+                <Button
+                    size="sm"
+                    variant="outline"
+                    disabled={leaving}
+                    onClick={() => {
+                        setLeaving(true);
+                        void signOut({
+                            redirectUrl: `/signin?next=${encodeURIComponent(SIGN_IN_AGAIN_RETURN)}`,
+                        });
+                    }}
+                >
+                    {t("signInAgain.button")}
+                </Button>
+            </div>
+        </StatusNote>
+    );
+}
 
 /** Where a "Connect" round trip lands, success or failure. */
 function connectReturnPath(provider: SocialProvider): string {
@@ -149,8 +191,6 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
     const tAuthErrors = useTranslations("auth.errors");
     const time = useTimeFormat();
     const { user } = useUser();
-    const session = authClient.useSession();
-    const currentToken = session.data?.session.token ?? null;
 
     const [sessions, setSessions] = useState<SessionRow[] | null>(null);
     const [accounts, setAccounts] = useState<AccountRow[] | null>(null);
@@ -166,11 +206,22 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
     const [busy, setBusy] = useState<string | null>(null);
     const signInRef = useRef<HTMLDivElement>(null);
     const [showSignIn, setShowSignIn] = useState(false);
+    // Unlink was refused because the sign-in is more than a day old.
+    const [unlinkNeedsSignIn, setUnlinkNeedsSignIn] = useState(false);
 
     const refresh = useCallback(async () => {
         try {
             const [list, linked, signIn] = await Promise.all([
-                authClient.listSessions(),
+                fetch("/api/profile/sessions", { credentials: "same-origin" }).then(async res => {
+                    const body = (await res.json().catch(() => null)) as {
+                        sessions?: SessionRow[];
+                        error?: string;
+                    } | null;
+                    if (!res.ok || !body?.sessions) {
+                        return { data: null, error: { message: body?.error } };
+                    }
+                    return { data: body.sessions, error: null };
+                }),
                 authClient.listAccounts(),
                 fetch("/api/profile/sign-in", { credentials: "same-origin" })
                     .then(res =>
@@ -182,7 +233,7 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
             if (!linked.error) setAccounts((linked.data ?? []) as AccountRow[]);
             setOffered(signIn?.providers ?? []);
             if (list.error) throw new Error(list.error.message ?? t("couldNotListSessions"));
-            setSessions((list.data ?? []) as SessionRow[]);
+            setSessions(list.data ?? []);
             setError(null);
         } catch (err) {
             setError(err instanceof Error ? err.message : t("couldNotLoad"));
@@ -249,11 +300,19 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
         }
     };
 
-    const revoke = async (token: string) => {
-        setBusy(token);
+    const revoke = async (id: string) => {
+        setBusy(id);
         try {
-            const result = await authClient.revokeSession({ token });
-            if (result.error) throw new Error(result.error.message ?? t("couldNotEndSession"));
+            const res = await fetch("/api/profile/sessions", {
+                method: "DELETE",
+                credentials: "same-origin",
+                headers: { "content-type": "application/json" },
+                body: JSON.stringify({ id }),
+            });
+            if (!res.ok) {
+                const body = (await res.json().catch(() => null)) as { error?: string } | null;
+                throw new Error(body?.error ?? t("couldNotEndSession"));
+            }
             toast.success(t("sessionEnded"));
             await refresh();
         } catch (err) {
@@ -281,7 +340,7 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
     const unlinked = offered.filter(
         provider => !accounts?.some(account => account.providerId === provider)
     );
-    const others = (sessions ?? []).filter(row => row.token !== currentToken);
+    const others = (sessions ?? []).filter(row => !row.current);
 
     return (
         <>
@@ -303,6 +362,7 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
                         )}
                     </StatusNote>
                 )}
+                {unlinkNeedsSignIn && <SignInAgainNote message={t("signInAgain.unlink")} />}
                 <Card>
                     {accountsFailed ? (
                         <StatusNote tone="danger" style={{ marginBottom: 0 }}>
@@ -341,10 +401,15 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
                                             disabled={busy === account.id}
                                             onClick={async () => {
                                                 setBusy(account.id);
+                                                setUnlinkNeedsSignIn(false);
                                                 try {
                                                     const result = await authClient.unlinkAccount({
                                                         accountId: account.accountId,
                                                     });
+                                                    if (result.error?.code === SESSION_NOT_FRESH) {
+                                                        setUnlinkNeedsSignIn(true);
+                                                        return;
+                                                    }
                                                     if (result.error) {
                                                         throw new Error(
                                                             result.error.message ??
@@ -413,64 +478,56 @@ export function AccountSection({ onActions }: SettingsSectionProps) {
                             {tc("status.loading")}
                         </div>
                     ) : (
-                        sessions
-                            .slice()
-                            .sort((a, b) =>
-                                a.token === currentToken ? -1 : b.token === currentToken ? 1 : 0
-                            )
-                            .map((row, index) => {
-                                const current = row.token === currentToken;
-                                return (
-                                    <div
-                                        key={row.id}
-                                        className={cn(
-                                            "flex items-center gap-3 px-5 py-3",
-                                            index > 0 && "border-line border-t"
-                                        )}
-                                    >
-                                        <div className="min-w-0 flex-1">
-                                            <div className="text-ink flex items-center gap-2 text-[13px] font-semibold">
-                                                {describeAgent(t, row.userAgent)}
-                                                {current && (
-                                                    <Badge variant="success">
-                                                        {t("sessions.thisBrowser")}
-                                                    </Badge>
-                                                )}
-                                            </div>
-                                            {/* An IPv6 address has no break opportunities of its
-                                                own; without this it widens a narrow pane. */}
-                                            <div className="text-ink-3 text-[12px] [overflow-wrap:anywhere]">
-                                                {row.ipAddress
-                                                    ? t("sessions.metaWithIp", {
-                                                          ip: row.ipAddress,
-                                                          active: time.relative(iso(row.updatedAt)),
-                                                          expires: time.relative(
-                                                              iso(row.expiresAt)
-                                                          ),
-                                                      })
-                                                    : t("sessions.meta", {
-                                                          active: time.relative(iso(row.updatedAt)),
-                                                          expires: time.relative(
-                                                              iso(row.expiresAt)
-                                                          ),
-                                                      })}
-                                            </div>
+                        // The route sorts: this browser first, then by last activity.
+                        sessions.map((row, index) => {
+                            const current = row.current;
+                            return (
+                                <div
+                                    key={row.id}
+                                    className={cn(
+                                        "flex items-center gap-3 px-5 py-3",
+                                        index > 0 && "border-line border-t"
+                                    )}
+                                >
+                                    <div className="min-w-0 flex-1">
+                                        <div className="text-ink flex items-center gap-2 text-[13px] font-semibold">
+                                            {describeAgent(t, row.userAgent)}
+                                            {current && (
+                                                <Badge variant="success">
+                                                    {t("sessions.thisBrowser")}
+                                                </Badge>
+                                            )}
                                         </div>
-                                        {!current && (
-                                            <Button
-                                                size="sm"
-                                                variant="ghost"
-                                                disabled={busy === row.token}
-                                                onClick={() => void revoke(row.token)}
-                                            >
-                                                {busy === row.token
-                                                    ? t("sessions.ending")
-                                                    : t("sessions.end")}
-                                            </Button>
-                                        )}
+                                        {/* An IPv6 address has no break opportunities of its
+                                                own; without this it widens a narrow pane. */}
+                                        <div className="text-ink-3 text-[12px] [overflow-wrap:anywhere]">
+                                            {row.ipAddress
+                                                ? t("sessions.metaWithIp", {
+                                                      ip: row.ipAddress,
+                                                      active: time.relative(row.updatedAt),
+                                                      expires: time.until(row.expiresAt),
+                                                  })
+                                                : t("sessions.meta", {
+                                                      active: time.relative(row.updatedAt),
+                                                      expires: time.until(row.expiresAt),
+                                                  })}
+                                        </div>
                                     </div>
-                                );
-                            })
+                                    {!current && (
+                                        <Button
+                                            size="sm"
+                                            variant="ghost"
+                                            disabled={busy === row.id}
+                                            onClick={() => void revoke(row.id)}
+                                        >
+                                            {busy === row.id
+                                                ? t("sessions.ending")
+                                                : t("sessions.end")}
+                                        </Button>
+                                    )}
+                                </div>
+                            );
+                        })
                     )}
                 </Card>
                 {others.length > 0 && (
@@ -513,10 +570,12 @@ function ProviderMark({ providerId }: { providerId: string }) {
  */
 function SetPasswordCard({ onSet }: { onSet: () => Promise<void> }) {
     const t = useTranslations("settings.account.password");
+    const tAccount = useTranslations("settings.account");
     const [next, setNext] = useState("");
     const [confirm, setConfirm] = useState("");
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const [needsSignIn, setNeedsSignIn] = useState(false);
 
     const canSave = next.length >= 8 && next.length <= 128 && next === confirm;
 
@@ -525,6 +584,7 @@ function SetPasswordCard({ onSet }: { onSet: () => Promise<void> }) {
         if (!canSave) return;
         setSaving(true);
         setError(null);
+        setNeedsSignIn(false);
         try {
             const res = await fetch("/api/profile/sign-in", {
                 method: "POST",
@@ -533,7 +593,14 @@ function SetPasswordCard({ onSet }: { onSet: () => Promise<void> }) {
                 body: JSON.stringify({ newPassword: next }),
             });
             if (!res.ok) {
-                const body = (await res.json().catch(() => null)) as { error?: string } | null;
+                const body = (await res.json().catch(() => null)) as {
+                    error?: string;
+                    code?: string;
+                } | null;
+                if (body?.code === SESSION_NOT_FRESH) {
+                    setNeedsSignIn(true);
+                    return;
+                }
                 throw new Error(body?.error ?? t("couldNotSet"));
             }
             toast.success(t("passwordSet"));
@@ -578,6 +645,11 @@ function SetPasswordCard({ onSet }: { onSet: () => Promise<void> }) {
                         <StatusNote tone="danger" style={{ marginBottom: 0 }}>
                             {error}
                         </StatusNote>
+                    </div>
+                )}
+                {needsSignIn && (
+                    <div className="mt-3 [&>div]:mb-0">
+                        <SignInAgainNote message={tAccount("signInAgain.password")} />
                     </div>
                 )}
                 <div className="mt-4 flex justify-end">

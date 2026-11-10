@@ -3,6 +3,9 @@
  * the first sign a token died. The run refreshes once and retries; a token
  * Notion still refuses after that is a dead grant, and the connection is
  * marked revoked so the panel offers reconnect instead of retrying forever.
+ * Pages deleted here stay out of the run. A connection is its owner's
+ * (per-user): the pages land in their folder, attributed to them, whoever
+ * happened to click last.
  */
 
 import type { NotionClient } from "@launchstack/pipelines/connectors/notion";
@@ -29,6 +32,9 @@ jest.mock("~/server/services/connectors/notion/sink", () => ({
     listKnownSourceIds: jest.fn(),
     markMissingDocuments: jest.fn(),
 }));
+jest.mock("~/server/services/connectors/deleted-items", () => ({
+    listDeletedSourceIds: jest.fn(),
+}));
 jest.mock("~/server/services/connectors/notion/folder", () => ({
     ensureNotionFolder: jest.fn(async () => ({ path: "Notion/Acme HQ", categoryId: 9 })),
 }));
@@ -40,6 +46,11 @@ jest.mock("~/server/db", () => {
     };
     return { db: { select: () => chain } };
 });
+// Whether the owner may still sync here: the rule Gmail uses too.
+jest.mock("~/server/services/connectors/personal-connections", () => ({
+    personalSyncStanding: jest.fn(async () => "active"),
+    closePersonalConnectionsNow: jest.fn(),
+}));
 jest.mock("@launchstack/pipelines/connectors/notion", () => {
     const actual = jest.requireActual<Record<string, unknown>>(
         "@launchstack/pipelines/connectors/notion"
@@ -56,6 +67,9 @@ jest.mock("@launchstack/pipelines/connectors/notion", () => {
 
 import { NotionAuthError } from "@launchstack/pipelines/connectors/notion";
 import * as connectionStoreModule from "~/server/services/connectors/connection-store";
+import { listDeletedSourceIds } from "~/server/services/connectors/deleted-items";
+import * as folderModuleExports from "~/server/services/connectors/notion/folder";
+import * as personalModuleExports from "~/server/services/connectors/personal-connections";
 import * as sinkModuleExports from "~/server/services/connectors/notion/sink";
 import * as syncStoreModule from "~/server/services/connectors/notion/store";
 import { runNotionSync } from "~/server/services/connectors/notion/sync-service";
@@ -63,6 +77,8 @@ import { runNotionSync } from "~/server/services/connectors/notion/sync-service"
 const mockConnectionStore = jest.mocked(connectionStoreModule);
 const mockSyncStore = jest.mocked(syncStoreModule);
 const mockSinkModule = jest.mocked(sinkModuleExports);
+const mockFolderModule = jest.mocked(folderModuleExports);
+const mockPersonal = jest.mocked(personalModuleExports);
 
 const CONNECTION: ConnectorConnection = {
     id: 41,
@@ -70,7 +86,8 @@ const CONNECTION: ConnectorConnection = {
     provider: "notion",
     providerAccountId: "bot-1",
     providerAccountEmail: "Acme HQ",
-    grantedByUserId: 3n,
+    // Who clicked last is attribution; the owner is who the pages belong to.
+    grantedByUserId: 5n,
     refreshTokenCiphertext: "sealed-refresh",
     encryptionKeyVersion: 1,
     scopes: "",
@@ -80,7 +97,7 @@ const CONNECTION: ConnectorConnection = {
     updatedAt: null,
     accessTokenCiphertext: "sealed-access",
     accessTokenExpiresAt: null,
-    ownerUserId: null,
+    ownerUserId: 3n,
 };
 
 const SYNC_STATE: NotionSyncState = {
@@ -126,12 +143,14 @@ const stored: string[] = [];
 
 beforeEach(() => {
     jest.clearAllMocks();
+    mockPersonal.personalSyncStanding.mockResolvedValue("active");
     mockClientsByToken.clear();
     stored.length = 0;
     mockConnectionStore.getConnectionById.mockResolvedValue(CONNECTION);
     mockSyncStore.claimSyncLease.mockResolvedValue(true);
     mockSyncStore.getSyncState.mockResolvedValue(SYNC_STATE);
     mockSinkModule.listKnownSourceIds.mockResolvedValue([]);
+    jest.mocked(listDeletedSourceIds).mockResolvedValue([]);
     mockSinkModule.createNotionSink.mockResolvedValue({
         async store(item: { sourceId: string }) {
             stored.push(item.sourceId);
@@ -202,6 +221,84 @@ describe("runNotionSync", () => {
         await runNotionSync(41);
 
         expect(mockSinkModule.markMissingDocuments).toHaveBeenCalledWith(7n, 41, ["p-gone"]);
+    });
+
+    it("leaves out pages deleted here, and counts them in the report", async () => {
+        mockConnectionStore.getConnectionAccessToken.mockResolvedValue("stored");
+        mockClientsByToken.set("stored", workingClient(["p-1", "p-deleted"]));
+        jest.mocked(listDeletedSourceIds).mockResolvedValue(["p-deleted"]);
+
+        const result = await runNotionSync(41);
+
+        expect(listDeletedSourceIds).toHaveBeenCalledWith(41);
+        expect(stored).toEqual(["p-1"]);
+        expect(result.outcome).toBe("synced");
+        expect(mockSyncStore.releaseSyncLease).toHaveBeenCalledWith(
+            41,
+            expect.objectContaining({ report: expect.objectContaining({ deletedHere: 1 }) })
+        );
+        // Still shared with the connection: not flagged as gone.
+        expect(mockSinkModule.markMissingDocuments).not.toHaveBeenCalled();
+    });
+
+    it("files the pages in the owner's folder, attributed to the owner", async () => {
+        mockConnectionStore.getConnectionAccessToken.mockResolvedValue("stored");
+        mockClientsByToken.set("stored", workingClient(["p-1"]));
+
+        await runNotionSync(41);
+
+        expect(mockFolderModule.ensureNotionFolder).toHaveBeenCalledWith({
+            owner: { companyId: 7n, userPk: 3n, authUserId: "auth-ada" },
+            workspaceName: "Acme HQ",
+            rememberedCategoryId: 9,
+        });
+        expect(mockSinkModule.createNotionSink).toHaveBeenCalledWith(
+            expect.objectContaining({ userId: "auth-ada", category: "Notion/Acme HQ" })
+        );
+    });
+
+    it("refuses a connection with no owner instead of guessing one", async () => {
+        mockConnectionStore.getConnectionById.mockResolvedValue({
+            ...CONNECTION,
+            ownerUserId: null,
+        });
+
+        await expect(runNotionSync(41)).rejects.toThrow(/no owner/);
+
+        expect(mockFolderModule.ensureNotionFolder).not.toHaveBeenCalled();
+        expect(mockSyncStore.releaseSyncLease).toHaveBeenCalledWith(41, {
+            status: "error",
+            error: "This Notion connection has no owner — reconnect required",
+        });
+    });
+
+    it("closes the connection, as removal would, when its owner has already left", async () => {
+        mockPersonal.personalSyncStanding.mockResolvedValue("departed");
+
+        const result = await runNotionSync(41);
+
+        expect(result).toEqual({
+            outcome: "skipped",
+            reason: "owner left the workspace — connection closed",
+        });
+        expect(mockPersonal.personalSyncStanding).toHaveBeenCalledWith(7n, 3n);
+        expect(mockPersonal.closePersonalConnectionsNow).toHaveBeenCalledWith(7n, 3n);
+        expect(mockConnectionStore.getConnectionAccessToken).not.toHaveBeenCalled();
+        expect(mockFolderModule.ensureNotionFolder).not.toHaveBeenCalled();
+    });
+
+    it("pauses when the owner is suspended or can no longer add files, and says so", async () => {
+        mockPersonal.personalSyncStanding.mockResolvedValue("paused");
+
+        const result = await runNotionSync(41);
+
+        expect(result.outcome).toBe("skipped");
+        expect(mockPersonal.closePersonalConnectionsNow).not.toHaveBeenCalled();
+        expect(mockConnectionStore.getConnectionAccessToken).not.toHaveBeenCalled();
+        expect(mockSyncStore.releaseSyncLease).toHaveBeenCalledWith(41, {
+            status: "error",
+            error: expect.stringMatching(/^Paused: you can no longer add files/),
+        });
     });
 
     it("skips a revoked connection without claiming the lease", async () => {

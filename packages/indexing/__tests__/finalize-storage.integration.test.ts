@@ -19,6 +19,33 @@ import { finalizeStorage } from "@launchstack/conversion/ocr/processor";
 
 const url = process.env.TEST_DATABASE_URL ?? process.env.DATABASE_URL;
 
+/**
+ * Wraps a query-builder chain so `before` runs just ahead of the statement it
+ * ends in: another request's write landing between finalizeStorage's read of
+ * the row and its update.
+ */
+function runningFirst<T extends object>(builder: T, before: () => Promise<unknown>): T {
+    return new Proxy(builder, {
+        get(target, prop) {
+            const value = Reflect.get(target, prop, target) as unknown;
+            if (prop === "then") {
+                return (
+                    onFulfilled?: (value: unknown) => unknown,
+                    onRejected?: (reason: unknown) => unknown
+                ) =>
+                    before().then(() =>
+                        (target as unknown as PromiseLike<unknown>).then(onFulfilled, onRejected)
+                    );
+            }
+            if (typeof value !== "function") return value;
+            return (...args: unknown[]) => {
+                const next = (value as (...a: unknown[]) => unknown).apply(target, args);
+                return next && typeof next === "object" ? runningFirst(next, before) : next;
+            };
+        },
+    });
+}
+
 describe.skipIf(!url)("finalizeStorage version guard (integration)", () => {
     let handle: Db;
     let companyId: bigint;
@@ -171,6 +198,80 @@ describe.skipIf(!url)("finalizeStorage version guard (integration)", () => {
 
         const job = await jobRow(v2.jobId);
         expect(job.status).toBe("completed");
+    });
+
+    it("clears the previous run's index key when a later run uses the default index", async () => {
+        // The run before this one finalized on "legacy-openai-1536".
+        expect((await documentRow()).ocrMetadata).toHaveProperty(
+            "embeddingIndexKey",
+            "legacy-openai-1536"
+        );
+
+        await finalizeStorage(
+            documentId,
+            v2.jobId,
+            5,
+            "v2 summary",
+            meta,
+            Date.now() - 10,
+            v2.versionId
+        );
+
+        for (const metadata of [
+            (await documentRow()).ocrMetadata,
+            (await versionRow(v2.versionId)).ocrMetadata,
+        ]) {
+            expect(metadata).toEqual(expect.objectContaining({ totalChunks: 5 }));
+            expect(metadata).not.toHaveProperty("embeddingIndexKey");
+        }
+    });
+
+    it("keeps a key another request merges in while the run is finishing", async () => {
+        // A website source's preview is recorded on first open, which can land
+        // between this run's read of the row and its write.
+        const preview = { url: "/api/files/finalize-preview", source: "/api/files/v2" };
+        let raced = false;
+        const racing = new Proxy(handle.db, {
+            get(target, prop) {
+                const value = Reflect.get(target, prop, target) as unknown;
+                if (prop !== "update") {
+                    return typeof value === "function" ? value.bind(target) : value;
+                }
+                return (table: typeof document) => {
+                    const builder = target.update(table);
+                    if (raced || table !== document) return builder;
+                    raced = true;
+                    return runningFirst(
+                        builder,
+                        () => handle.client`
+                            UPDATE pdr_ai_v2_document
+                            SET ocr_metadata = coalesce(ocr_metadata, '{}'::jsonb)
+                                || ${JSON.stringify({ websitePreview: preview })}::jsonb
+                            WHERE id = ${documentId}`
+                    );
+                };
+            },
+        });
+
+        configureDatabase(racing);
+        try {
+            await finalizeStorage(
+                documentId,
+                v2.jobId,
+                5,
+                "v2 summary",
+                meta,
+                Date.now() - 10,
+                v2.versionId
+            );
+        } finally {
+            configureDatabase(handle.db);
+        }
+
+        expect(raced).toBe(true);
+        expect((await documentRow()).ocrMetadata).toEqual(
+            expect.objectContaining({ websitePreview: preview, totalChunks: 5 })
+        );
     });
 
     it("drops a failure stamp when a replayed run succeeds, keeping the row's provenance", async () => {

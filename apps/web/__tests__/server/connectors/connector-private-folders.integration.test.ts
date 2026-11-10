@@ -6,8 +6,8 @@
  *   owner sees it and other members do not.
  * - Two Notion connections whose workspace names clean to the same path get
  *   separate folders; neither sees the other's pages.
- * - A Notion connection re-authorized by another admin keeps its folder, and
- *   the new admin is granted access to it.
+ * - A Notion connection's folder is followed by its remembered id, and
+ *   following it grants nobody new: the folder stays its owner's.
  * - An Obsidian vault re-imported by its importer finds its folder again; a
  *   second person's vault of the same name gets "(2)".
  * - A root folder that already existed keeps the audience it had.
@@ -117,7 +117,7 @@ describeDb("connector private folders (integration)", () => {
         expect(await visibleFolders("ben")).not.toContain("Notion/Acme");
     });
 
-    it("keeps a re-authorized connection's folder and lets the new admin open it", async () => {
+    it("follows a connection's remembered folder without granting anyone new", async () => {
         const { ensureNotionFolder } = await import("~/server/services/connectors/notion/folder");
         const first = await ensureNotionFolder({
             owner: owner("ada"),
@@ -126,6 +126,8 @@ describeDb("connector private folders (integration)", () => {
         });
         expect(await visibleFolders("ben")).not.toContain(first.path);
 
+        // Even a caller that is not the owner gets the folder back, never a
+        // grant on it: per-user connections only ever sync as their owner.
         const after = await ensureNotionFolder({
             owner: owner("ben"),
             workspaceName: "Globex",
@@ -133,7 +135,8 @@ describeDb("connector private folders (integration)", () => {
         });
 
         expect(after).toEqual(first);
-        expect(await visibleFolders("ben")).toContain(first.path);
+        expect(await visibleFolders("ben")).not.toContain(first.path);
+        expect(await visibleFolders("ada")).toContain(first.path);
     });
 
     it("finds an importer's own vault again, and numbers someone else's of the same name", async () => {

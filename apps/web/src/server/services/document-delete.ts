@@ -28,24 +28,24 @@ import {
     predictiveDocumentAnalysisResults,
 } from "~/server/db/schema";
 import type { db as DbType } from "~/server/db";
+import { rememberDeletedSource } from "~/server/services/connectors/deleted-items";
 
 type Tx = Parameters<Parameters<(typeof DbType)["transaction"]>[0]>[0];
+
+export interface DeleteDocumentOptions {
+    /** Who is deleting it; recorded with a synced file so Settings can name it to them. */
+    readonly deletedByUserPk?: number | null;
+}
 
 /**
  * A file picked from Google Drive on its own syncs for as long as its pick
  * does. Deleting its document is how someone stops it — it was added like an
- * upload, so it is removed like one — and the pick goes with it; otherwise
- * the next sync that walks every pick (each new pick starts one) would bring
- * it straight back. A file reached through a picked folder leaves the
- * folder's pick alone.
+ * upload, so it is removed like one — and the pick goes with it. A file
+ * reached through a picked folder leaves the folder's pick alone: the
+ * deleted-item row written alongside (rememberDeletedSource) is what keeps
+ * the folder's next sync from bringing it straight back.
  */
-async function forgetDrivePick(tx: Tx, docId: number): Promise<void> {
-    const [row] = await tx
-        .select({ metadata: document.ocrMetadata })
-        .from(document)
-        .where(eq(document.id, docId))
-        .limit(1);
-    const metadata = (row?.metadata ?? null) as Record<string, unknown> | null;
+async function forgetDrivePick(tx: Tx, metadata: Record<string, unknown> | null): Promise<void> {
     if (metadata?.connector !== "google-drive") return;
     const fileId = metadata.driveFileId;
     const connectionId = Number(metadata.connectionId);
@@ -61,10 +61,28 @@ async function forgetDrivePick(tx: Tx, docId: number): Promise<void> {
         );
 }
 
-export async function deleteDocumentCore(tx: Tx, docId: number): Promise<void> {
+export async function deleteDocumentCore(
+    tx: Tx,
+    docId: number,
+    options: DeleteDocumentOptions = {}
+): Promise<void> {
     const docIdBig = BigInt(docId);
 
-    await forgetDrivePick(tx, docId);
+    const [row] = await tx
+        .select({ title: document.title, metadata: document.ocrMetadata })
+        .from(document)
+        .where(eq(document.id, docId))
+        .limit(1);
+    if (row) {
+        const metadata = (row.metadata ?? null) as Record<string, unknown> | null;
+        await forgetDrivePick(tx, metadata);
+        // A synced file stays deleted: its next sync would otherwise re-import it.
+        await rememberDeletedSource(tx, {
+            title: row.title,
+            metadata,
+            deletedByUserPk: options.deletedByUserPk ?? null,
+        });
+    }
 
     await tx.delete(ChatHistory).where(eq(ChatHistory.documentId, docIdBig));
     await tx

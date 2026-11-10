@@ -325,7 +325,14 @@ const COVERAGE: Record<string, Coverage> = Object.fromEntries<Coverage>([
     // --- Deliberately unscoped ----------------------------------------------
     [
         "apps/web/src/server/settings/models.ts",
-        { unscoped: "Workspace › Models shows the deployment's default models" },
+        { unscoped: "Models & usage › Models shows the deployment's default models" },
+    ],
+    [
+        "apps/web/src/server/workspace-models/scope.ts",
+        {
+            unscoped:
+                "describes each model a workspace offers in Ask by passing that model's own config (loadWorkspaceOfferedModels); never reads the ambient scope",
+        },
     ],
     [
         "apps/web/src/server/workspace-models/probe.ts",

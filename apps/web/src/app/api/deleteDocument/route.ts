@@ -71,7 +71,9 @@ export async function DELETE(request: Request) {
         }
 
         await db.transaction(async tx => {
-            await deleteDocumentCore(tx, documentId);
+            await deleteDocumentCore(tx, documentId, {
+                deletedByUserPk: Number(ctx.data.userPk),
+            });
             await recordAuditEvent(tx, {
                 companyId: ctx.data.companyId,
                 actorUserId: ctx.data.authUserId,

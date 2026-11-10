@@ -14,7 +14,11 @@ import type {
     KnowledgeSink,
     StoredKnowledgeItem,
 } from "@launchstack/pipelines/connectors";
-import { contentByteLength, contentToBuffer } from "@launchstack/pipelines/connectors";
+import {
+    contentByteLength,
+    contentToBuffer,
+    SourceDeletedError,
+} from "@launchstack/pipelines/connectors";
 import { document } from "@launchstack/store/schema";
 import { resolveIngestIndexKey } from "@launchstack/llm/embeddings";
 
@@ -29,6 +33,7 @@ import {
     findDocumentByCreationKey,
 } from "../../document-creation";
 import { applyDocumentCreationDefaults, type OwnerRef } from "~/server/workspace/ownership";
+import { isSourceDeleted } from "../deleted-items";
 
 export const GOOGLE_DRIVE_CATEGORY = "Google Drive";
 
@@ -156,6 +161,10 @@ export async function createGoogleDriveSink(
             };
 
             const existing = await findDocumentByCreationKey(context.companyId, baseCreationKey);
+            // Deleted while this run was going (the run's list predates it).
+            if (!existing && (await isSourceDeleted(context.connectionId, item.sourceId))) {
+                throw new SourceDeletedError(item.sourceId);
+            }
             const placement: SinkPlacement | null =
                 !existing && context.place ? await context.place(item) : null;
             const userId = placement?.owner?.authUserId ?? context.userId;

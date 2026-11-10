@@ -27,7 +27,12 @@ const FOLDER_LIMIT = 8;
 
 export async function buildWorkspaceBrief(
     companyId: bigint,
-    scope: DocumentScope = SCOPE_EVERYTHING
+    scope: DocumentScope = SCOPE_EVERYTHING,
+    /**
+     * Who the starters are for. A per-user connection (Gmail, Notion) counts
+     * only for its owner; with no viewer, only workspace connections count.
+     */
+    viewerUserPk: bigint | null = null
 ): Promise<WorkspaceBrief> {
     const now = new Date();
     const processedDocumentsWhere = and(
@@ -130,7 +135,15 @@ export async function buildWorkspaceBrief(
     }));
 
     const activeConnections = [
-        ...new Set(connections.filter(c => c.status === "active").map(c => c.provider)),
+        ...new Set(
+            connections
+                .filter(
+                    c =>
+                        c.status === "active" &&
+                        (c.ownerUserId == null || c.ownerUserId === viewerUserPk)
+                )
+                .map(c => c.provider)
+        ),
     ].sort();
 
     const total = Number(totalRows[0]?.total ?? 0);

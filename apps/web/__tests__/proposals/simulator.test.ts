@@ -151,6 +151,134 @@ describe("editing", () => {
         expect(cleared.status).toBe("empty");
     });
 
+    describe("approval after editing", () => {
+        let applicationUrl: string;
+        let sectionUrl: string;
+        let section: SectionDto;
+        const approvedDraft = "We serve 420 children each year.";
+        let before: ApplicationDetail;
+
+        beforeEach(async () => {
+            const created = await call<{ application: ApplicationDetail }>(
+                "/api/proposals/applications",
+                post({ title: "Section approval regression" })
+            );
+            applicationUrl = `/api/proposals/applications/${created.body.application.id}`;
+            section = (
+                await call<{ section: SectionDto }>(
+                    `${applicationUrl}/sections`,
+                    post({ question: "What outcomes will you measure and how?" })
+                )
+            ).body.section;
+            sectionUrl = `${applicationUrl}/sections/${section.id}`;
+            await call(sectionUrl, patch({ draft: approvedDraft, status: "approved" }));
+            before = (await call<{ application: ApplicationDetail }>(applicationUrl)).body
+                .application;
+            expect(before.sectionList.find(s => s.id === section.id)).toMatchObject({
+                draft: approvedDraft,
+                status: "approved",
+            });
+            expect(before.requirements.find(r => r.sectionKey === section.key)).toMatchObject({
+                done: true,
+            });
+        });
+
+        it.each([
+            ["different wording", "We now serve 640 children each year."],
+            ["a whitespace-only change", `${approvedDraft} `],
+        ])("drops approval for %s and refreshes readiness and the checklist", async (_, draft) => {
+            const patched = await call<{ section: SectionDto }>(sectionUrl, patch({ draft }));
+            const after = (await call<{ application: ApplicationDetail }>(applicationUrl)).body
+                .application;
+
+            expect(patched.status).toBe(200);
+            expect(patched.body.section).toMatchObject({ draft, status: "edited" });
+            expect(after.sectionList.find(s => s.id === section.id)).toMatchObject({
+                draft,
+                status: "edited",
+            });
+            expect(after.readiness).toBeLessThan(before.readiness);
+            expect(after.requirements.find(r => r.sectionKey === section.key)).toMatchObject({
+                done: false,
+            });
+        });
+
+        it("lowers readiness after editing an approved answer on a reviewed application", async () => {
+            const started = await call<{ run: RunDto }>(`${applicationUrl}/review`, post());
+            expect(started.status).toBe(202);
+            now += 6000;
+            const completed = await call<{ run: RunDto }>(
+                `/api/proposals/runs/${started.body.run.id}`
+            );
+            expect(completed.body.run.status).toBe("completed");
+            const reviewed = (await call<{ application: ApplicationDetail }>(applicationUrl)).body
+                .application;
+            expect(reviewed.review).not.toBeNull();
+            expect(reviewed.sectionList.find(s => s.id === section.id)?.status).toBe("approved");
+
+            const draft = "We now serve 640 children each year.";
+            await call(sectionUrl, patch({ draft }));
+            const after = (await call<{ application: ApplicationDetail }>(applicationUrl)).body
+                .application;
+
+            expect(after.sectionList.find(s => s.id === section.id)).toMatchObject({
+                draft,
+                status: "edited",
+            });
+            expect(after.requirements.find(r => r.sectionKey === section.key)).toMatchObject({
+                done: false,
+            });
+            expect(after.review).toEqual(reviewed.review);
+            expect(after.readiness).toBeLessThan(reviewed.readiness);
+        });
+
+        it("preserves approval when saving the exact same text", async () => {
+            await call(sectionUrl, patch({ draft: approvedDraft }));
+            const after = (await call<{ application: ApplicationDetail }>(applicationUrl)).body
+                .application;
+
+            expect(after.sectionList.find(s => s.id === section.id)).toMatchObject({
+                draft: approvedDraft,
+                status: "approved",
+            });
+            expect(after.readiness).toBe(before.readiness);
+            expect(after.requirements.find(r => r.sectionKey === section.key)).toMatchObject({
+                done: true,
+            });
+        });
+
+        it.each(["", null, " \n "])("clearing an approved answer to %p empties it", async draft => {
+            await call(sectionUrl, patch({ draft }));
+            const after = (await call<{ application: ApplicationDetail }>(applicationUrl)).body
+                .application;
+
+            expect(after.sectionList.find(s => s.id === section.id)).toMatchObject({
+                draft,
+                status: "empty",
+            });
+            expect(after.readiness).toBeLessThan(before.readiness);
+            expect(after.requirements.find(r => r.sectionKey === section.key)).toMatchObject({
+                done: false,
+            });
+        });
+
+        it("approves changed text when the Approve request includes draft and status", async () => {
+            const draft = "We now serve 640 children each year.";
+            await call(sectionUrl, patch({ draft, status: "approved" }));
+            const after = (await call<{ application: ApplicationDetail }>(applicationUrl)).body
+                .application;
+
+            expect(after.sectionList.find(s => s.id === section.id)).toMatchObject({
+                draft,
+                status: "approved",
+            });
+            expect(after.readiness).toBe(before.readiness);
+            expect(after.requirements.find(r => r.sectionKey === section.key)).toMatchObject({
+                done: true,
+            });
+        });
+    });
+
     it("rewrites a drafted section as a run and refuses an empty one", async () => {
         const empty = await call<{ error: string }>(
             "/api/proposals/applications/app-meyer/sections/s-outcomes/rewrite",

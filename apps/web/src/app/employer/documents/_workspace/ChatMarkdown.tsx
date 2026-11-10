@@ -137,6 +137,53 @@ function safeHtml() {
     };
 }
 
+type WebCitationSource = { title: string; url: string };
+
+/** Resolve tool-issued citation numbers using this answer's sources, never model-written URLs. */
+function linkWebCitations({ sources = [] }: { sources?: readonly WebCitationSource[] }) {
+    // Preserve array positions: rejecting a URL must not renumber later citations.
+    const safeSources = sources.map(source =>
+        /^https?:\/\//i.test(source.url) && safeChatUri(source.url) ? source : undefined
+    );
+    return (tree: Root) => {
+        if (!sources.length) return;
+        const walk = (parent: Root | Element) => {
+            for (let i = 0; i < parent.children.length; i++) {
+                const child = parent.children[i];
+                if (child?.type === "element") {
+                    // Citation examples and existing links keep their original meaning.
+                    if (!["a", "code", "pre"].includes(child.tagName)) walk(child);
+                } else if (child?.type === "text") {
+                    const parts: ElementContent[] = [];
+                    let offset = 0;
+                    for (const match of child.value.matchAll(/\[Source ([1-9]\d*)\]/g)) {
+                        const source = safeSources[Number(match[1]) - 1];
+                        if (!source) continue;
+                        if (match.index > offset)
+                            parts.push({
+                                type: "text",
+                                value: child.value.slice(offset, match.index),
+                            });
+                        parts.push({
+                            type: "element",
+                            tagName: "a",
+                            properties: { href: source.url, title: source.title },
+                            children: [{ type: "text", value: match[0] }],
+                        });
+                        offset = match.index + match[0].length;
+                    }
+                    if (!parts.length) continue;
+                    if (offset < child.value.length)
+                        parts.push({ type: "text", value: child.value.slice(offset) });
+                    parent.children.splice(i, 1, ...parts);
+                    i += parts.length - 1;
+                }
+            }
+        };
+        walk(tree);
+    };
+}
+
 function nodeText(node: ElementContent): string {
     return node.type === "text"
         ? node.value
@@ -440,12 +487,15 @@ export function ChatMarkdown({
     text,
     className,
     streaming = false,
+    webSources,
 }: {
     text: string;
     /** Overrides the default reading size, e.g. for the smaller reasoning text. */
     className?: string;
     /** Draws the typing caret after the last block while an answer is still arriving. */
     streaming?: boolean;
+    /** Tool-returned pages in this answer's [Source N] order, including for saved chats. */
+    webSources?: readonly WebCitationSource[];
 }) {
     const t = useTranslations("chat.markdown");
     const root = useRef<HTMLDivElement>(null);
@@ -453,7 +503,15 @@ export function ChatMarkdown({
     const markdown = useMemo(() => escapeCurrencyDollars(text), [text]);
     const plugins = useMemo<
         NonNullable<React.ComponentProps<typeof ReactMarkdown>["rehypePlugins"]>
-    >(() => [rehypeRaw, safeHtml, [rehypeKatex, { trust: false, strict: "ignore" }]], []);
+    >(
+        () => [
+            rehypeRaw,
+            safeHtml,
+            [linkWebCitations, { sources: webSources }],
+            [rehypeKatex, { trust: false, strict: "ignore" }],
+        ],
+        [webSources]
+    );
     return (
         <div
             ref={root}

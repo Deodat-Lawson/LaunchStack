@@ -1,13 +1,16 @@
 /** @jest-environment jsdom */
 
 /**
- * The Usage tab. What must not regress: an owner gets every screen across the
- * top and a member gets only their own (and never asks for anyone else's
- * numbers); the window carries from screen to screen and reaches the routes;
+ * The Models & usage tab. What must not regress: an owner gets every screen
+ * across the top and a member gets their own numbers and the models, read-only
+ * (and never asks for anyone else's numbers); API keys is only for
+ * `models.manage`, and anyone else who follows a link to it lands where they
+ * may be; the window carries from screen to screen and reaches the routes;
  * the leaderboard sorts, filters, opens a person and exports what it shows
  * (formula-looking names neutralised); Activity keeps its filters in the
- * query; and the Spending screen is the old Workspace › Usage section with
- * its deep-link row in the hash.
+ * query; the Spending screen is the old Workspace › Usage section with its
+ * deep-link row in the hash; and API keys is the old Workspace › Bring your
+ * own keys section.
  */
 
 import React from "react";
@@ -59,6 +62,15 @@ jest.mock("~/app/employer/documents/_workspace/usage/DailyChart", () => ({
 }));
 jest.mock("~/app/employer/documents/_workspace/settings/AiAllowanceCard", () => ({
     AiAllowanceBody: () => <div data-testid="allowance-body" />,
+}));
+jest.mock("~/app/employer/documents/_workspace/settings/KeysSection", () => ({
+    KeysSection: () => <div data-testid="body-keys" />,
+}));
+// The Models screen is checked on its own; here, whether it may manage.
+jest.mock("~/app/employer/documents/_workspace/usage/ModelsScreen", () => ({
+    ModelsScreen: ({ manage }: { manage: boolean }) => (
+        <div data-testid="models-screen" data-manage={String(manage)} />
+    ),
 }));
 jest.mock("~/app/employer/documents/_workspace/settings/UsageSection", () => {
     const { useEffect, useState } = jest.requireActual<typeof React>("react");
@@ -303,7 +315,14 @@ function open(at?: string) {
 const as = (role: BuiltinRole) => {
     mockPermissions = { roleName: ROLE_LABELS[role], permissions: BUILTIN_ROLE_PERMISSIONS[role] };
 };
-const bar = () => screen.queryAllByRole("navigation", { name: "Usage screens" })[0];
+/** A custom role: a Member's permissions and these. */
+const memberWith = (...extra: string[]) => {
+    mockPermissions = {
+        roleName: "Custom",
+        permissions: new Set([...BUILTIN_ROLE_PERMISSIONS.member, ...extra]),
+    };
+};
+const bar = () => screen.queryAllByRole("navigation", { name: "Models & usage screens" })[0];
 const tabs = () =>
     within(bar()!)
         .getAllByRole("link")
@@ -328,10 +347,19 @@ afterAll(() => {
     global.fetch = originalFetch;
 });
 
-describe("the Usage tab", () => {
+describe("the Models & usage tab", () => {
     it("gives an owner every screen across the top and opens on the Overview", async () => {
         open();
-        expect(tabs()).toEqual(["Overview", "People", "Activity", "Documents", "You", "Spending"]);
+        expect(tabs()).toEqual([
+            "Overview",
+            "People",
+            "Activity",
+            "Documents",
+            "You",
+            "Models",
+            "API keys",
+            "Spending",
+        ]);
         const tile = await screen.findByTestId("usage-tile-questions");
         expect(tile).toHaveTextContent("37");
         // 37 against 20 the window before.
@@ -347,12 +375,12 @@ describe("the Usage tab", () => {
         expect(requests.some(r => r.startsWith("/api/usage/summary?days=30"))).toBe(true);
     });
 
-    it("gives a member one screen, their own, wherever a link points, and never asks for anyone else's", async () => {
+    it("gives a member their own numbers and the models, lands on You wherever a link points, and never asks for anyone else's", async () => {
         as("member");
         open("/people");
 
         const you = await screen.findByTestId("usage-you");
-        expect(bar()).toBeUndefined();
+        expect(tabs()).toEqual(["You", "Models"]);
         expect(within(you).getByRole("heading", { level: 1 })).toHaveTextContent("Your usage");
         // 37 questions against a median of 10; tokens below the median.
         expect(await screen.findByTestId("usage-you-questions-above")).toHaveTextContent("above");
@@ -462,6 +490,67 @@ describe("the Usage tab", () => {
         fireEvent.click(within(bar()!).getByRole("link", { name: "Overview" }));
         await screen.findByTestId("usage-overview");
         expect(window.location.hash).toBe("");
+    });
+
+    it("shows a member the models read-only", async () => {
+        as("member");
+        open("/models");
+        const models = await screen.findByTestId("models-screen");
+        expect(models).toHaveAttribute("data-manage", "false");
+        expect(within(bar()!).getByRole("link", { name: "Models" })).toHaveAttribute(
+            "aria-current",
+            "page"
+        );
+    });
+
+    it.each(["/keys", "/spending", "/nope"])(
+        "sends a member who follows a link to %s to their own numbers",
+        async at => {
+            as("member");
+            open(at);
+            await screen.findByTestId("usage-you");
+            expect(screen.queryByTestId("body-keys")).not.toBeInTheDocument();
+            expect(screen.queryByTestId("body-spending")).not.toBeInTheDocument();
+            expect(within(bar()!).queryByRole("link", { name: "API keys" })).toBeNull();
+        }
+    );
+
+    it("draws the old Workspace › Bring your own keys section on API keys for an owner", async () => {
+        open("/keys");
+        expect(await screen.findByTestId("body-keys")).toBeInTheDocument();
+        expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("API keys");
+        expect(within(bar()!).getByRole("link", { name: "API keys" })).toHaveAttribute(
+            "aria-current",
+            "page"
+        );
+    });
+
+    it("lets an owner manage the models", async () => {
+        open("/models");
+        expect(await screen.findByTestId("models-screen")).toHaveAttribute("data-manage", "true");
+    });
+
+    it("sends someone who sees the numbers but may not manage the models from API keys to Models", async () => {
+        memberWith("analytics.view");
+        open("/keys");
+        expect(await screen.findByTestId("models-screen")).toHaveAttribute("data-manage", "false");
+        expect(screen.queryByTestId("body-keys")).not.toBeInTheDocument();
+        expect(tabs()).toEqual([
+            "Overview",
+            "People",
+            "Activity",
+            "Documents",
+            "You",
+            "Models",
+            "Spending",
+        ]);
+    });
+
+    it("gives a role that manages the models without the numbers You, Models and API keys", async () => {
+        memberWith("models.manage");
+        open("/keys");
+        expect(await screen.findByTestId("body-keys")).toBeInTheDocument();
+        expect(tabs()).toEqual(["You", "Models", "API keys"]);
     });
 
     it("exports only the people a filter shows, without the rows that are nobody's", async () => {

@@ -41,7 +41,7 @@ describe("refuseAtAiAllowance", () => {
         expect(body).toMatchObject({ success: false, code: "ai_allowance_reached" });
         expect(body.error).toBe(body.message);
         expect(body.message).toBe(
-            "You've reached your AI limit in this workspace for this month (500,000 of 500,000 tokens). It resets on November 1, 2026. A workspace admin can raise it in Usage › Spending."
+            "You've reached your AI limit in this workspace for this month (500,000 of 500,000 tokens). It resets on November 1, 2026. A workspace admin can raise it in Models & usage › Spending."
         );
         expect(mockLoad).toHaveBeenCalledWith(5n, "u-1");
     });

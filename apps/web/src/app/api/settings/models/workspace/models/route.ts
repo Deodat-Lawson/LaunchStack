@@ -2,7 +2,7 @@
  * The model ids an endpoint lists, to fill the model pickers, and the prices
  * its catalogue carries (OpenRouter's), to fill a chosen model's empty price.
  * Optional for the admin: a server that doesn't list its models still works
- * with a typed id. Gated on `settings.manage`.
+ * with a typed id. Gated on `models.manage`.
  */
 
 import { NextResponse } from "next/server";
@@ -23,7 +23,7 @@ export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
 
 export async function POST(request: Request) {
-    const ctx = await requireWorkspacePermission("settings.manage");
+    const ctx = await requireWorkspacePermission("models.manage");
     if (!ctx.success) return ctx.response;
     const locale = localeOfRequest(request);
     const t = translatorFor(locale, "settings.server.models");

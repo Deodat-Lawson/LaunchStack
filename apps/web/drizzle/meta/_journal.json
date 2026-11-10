@@ -309,6 +309,20 @@
       "when": 1794029861620,
       "tag": "20261107053741_accelerator_catalogue",
       "breakpoints": true
+    },
+    {
+      "idx": 44,
+      "version": "7",
+      "when": 1794074292985,
+      "tag": "20261107175812_connector_deleted_items",
+      "breakpoints": true
+    },
+    {
+      "idx": 45,
+      "version": "7",
+      "when": 1794079023629,
+      "tag": "20261107191703_notion_per_user_connections",
+      "breakpoints": true
     }
   ]
 }

@@ -377,6 +377,17 @@
     "cardTitle": "Synced from Google Drive",
     "notConnected": "Nothing syncs from Google Drive yet. Pick files from Drive in Add source › Files, or a folder in Add source › Folder, and they’re listed here."
   },
+  "deletedHere": {
+    "title": "DELETED HERE ({count})",
+    "body": "{provider, select, notion {These pages stay deleted here: syncing leaves them out. Nothing was changed in Notion.} other {These files stay deleted here: syncing leaves them out. Nothing was changed in Google Drive.}}",
+    "syncAgain": "Sync again",
+    "syncAgainAria": "Sync {name} again",
+    "syncAllAgain": "Sync all {count} again",
+    "othersMore": "{count, plural, one {And # more, deleted by someone else.} other {And # more, deleted by other people.}}",
+    "othersOnly": "{count, plural, one {# deleted by someone else.} other {# deleted by other people.}}",
+    "restored": "{provider, select, notion {{count, plural, =0 {Nothing to bring back.} one {# page will sync again.} other {# pages will sync again.}}} other {{count, plural, =0 {Nothing to bring back.} one {# file will sync again.} other {# files will sync again.}}}}",
+    "restoreFailed": "Sync again didn't go through. Try again."
+  },
   "driveSource": {
     "chooseFiles": "From Google Drive",
     "chooseFolder": "From Google Drive",
@@ -469,7 +480,6 @@
     "disconnected": "{name} disconnected. Pages already synced were kept.",
     "disconnectFailed": "Could not disconnect {name}",
     "revoked": "Access was revoked — reconnect to keep syncing",
-    "connectedBy": "connected by {name}",
     "reconnect": "Reconnect",
     "syncNow": "Sync now",
     "choosePages": "Choose pages",
@@ -477,10 +487,13 @@
     "connectTitle": "Connect Notion",
     "oneClick": "One-click OAuth, revoke anytime.",
     "checking": "Checking Notion…",
-    "forbidden": "Connecting Notion is for workspace admins. Ask one to connect it; the pages they pick will show up in Sources.",
+    "forbidden": "Connecting Notion needs permission to add files to this workspace. Ask a workspace admin for it.",
     "loadError": "Could not load the Notion connection. Try again in a moment.",
     "notConfigured": "Notion is not configured on this server. Whoever runs LaunchStack needs to add NOTION_OAUTH_CLIENT_ID and NOTION_OAUTH_CLIENT_SECRET — the steps are in .env.example.",
-    "connectAnother": "Connect another Notion workspace"
+    "connectAnother": "Connect another Notion workspace",
+    "paused": {
+      "noUpload": "Paused: you can no longer add files in this workspace. Ask an admin for upload access."
+    }
   },
   "obsidianImport": {
     "noNotes": "No Markdown notes found in that pick. Choose the vault's own folder.",
@@ -561,7 +574,6 @@
     "connectPrompt": "Connect a Google account to edit this document in Google Drive.",
     "linking": "Linking…",
     "openInDrive": "Open in Google Drive",
-    "openSyncedHint": "Open in Google Drive — this file syncs from there",
     "connectDrive": "Connect Google Drive",
     "never": "never",
     "orphaned": "The Google Drive copy was deleted or trashed.",
@@ -775,7 +787,6 @@
     "removeFromContext": "Remove from context",
     "addToContext": "Add to context",
     "openInNewTab": "Open in a new tab",
-    "openInDrive": "Open in Google Drive",
     "showInKnowledge": "Show in Knowledge",
     "rename": "Rename…",
     "moveToFolder": "Move to folder",
@@ -809,6 +820,27 @@
     "moveSelectionSome": "Move {movable} of {count} to folder",
     "deleteSelection": "{count, plural, one {Delete # source…} other {Delete # sources…}}",
     "deleteSelectionSome": "{count, plural, one {Delete {movable} of # source…} other {Delete {movable} of # sources…}}"
+  },
+  "externalLink": {
+    "openGoogleDrive": "Open in Google Drive",
+    "openNotion": "Open in Notion",
+    "openGmail": "Open in Gmail",
+    "openObsidian": "Open in Obsidian",
+    "openGithub": "Open on GitHub",
+    "openYoutube": "Open on YouTube",
+    "openClaude": "Open on claude.ai",
+    "openWeb": "Open original",
+    "openFile": "Open file",
+    "hintSite": "Opens {host} in a new tab",
+    "hintObsidian": "Opens this note in your Obsidian vault",
+    "hintFile": "Opens the file itself in a new browser tab",
+    "detailsLabel": "Opens in",
+    "placeGoogleDrive": "Google Drive",
+    "placeNotion": "Notion",
+    "placeGmail": "Gmail",
+    "placeObsidian": "Obsidian",
+    "placeYoutube": "YouTube",
+    "placeFile": "Your browser"
   },
   "connectorSync": {
     "syncing": "Syncing…",
@@ -1009,7 +1041,9 @@
       "obsidianNeedsUpload": "Importing notes needs permission to add documents.",
       "driveConnectsElsewhere": "Google Drive connects via /api/connectors/google/oauth/start.",
       "gmailConnectsElsewhere": "Gmail connects via /api/connectors/google/oauth/start?provider=gmail.",
-      "unknownProvider": "Unknown connector provider: {provider}"
+      "unknownProvider": "Unknown connector provider: {provider}",
+      "deletedDriveNotionOnly": "Deleted files are tracked only for google-drive and notion.",
+      "deletedRestored": "{count, plural, =0 {Nothing to bring back.} one {# file will come back on the next sync.} other {# files will come back on the next sync.}}"
     },
     "gmail": {
       "notConfigured": "The Gmail connector is not enabled on this server. Set GMAIL_CONNECTOR_ENABLED=true, GOOGLE_OAUTH_CLIENT_ID, GOOGLE_OAUTH_CLIENT_SECRET and EMBEDDING_SECRETS_KEY.",

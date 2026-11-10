@@ -17,6 +17,7 @@ import {
     type WorkspaceModelConnection,
     type WorkspaceModelEndpointRow,
     type WorkspaceModelSelection,
+    type WorkspaceOfferedModel,
 } from "~/server/db/schema/workspace-models";
 import { users } from "~/server/db/schema/identity";
 import { getEngine } from "~/server/engine";
@@ -181,6 +182,33 @@ export async function saveWorkspaceEndpoint(
         .onConflictDoUpdate({ target: workspaceModelEndpoints.companyId, set: values })
         .returning();
     return row!;
+}
+
+/**
+ * Replace the models offered in Ask, leaving the address, key and route
+ * models as they are. False when the workspace has no main model to offer
+ * them beside (nothing connected, or no model chosen yet).
+ */
+export async function saveOfferedModels(input: {
+    companyId: bigint | number | string;
+    userId: bigint | number | null;
+    offered: WorkspaceOfferedModel[];
+}): Promise<boolean> {
+    const companyId = toNumericId(input.companyId);
+    const existing = await getWorkspaceEndpointRow(companyId);
+    if (!existing?.models?.default?.id) return false;
+    const models: WorkspaceModelSelection = { ...existing.models };
+    if (input.offered.length) models.offered = input.offered;
+    else delete models.offered;
+    await db
+        .update(workspaceModelEndpoints)
+        .set({
+            models,
+            updatedByUserId: input.userId === null ? null : Number(input.userId),
+            updatedAt: new Date(),
+        })
+        .where(eq(workspaceModelEndpoints.companyId, companyId));
+    return true;
 }
 
 /** Disconnect: the workspace goes back to the deployment's models and the key is gone. */

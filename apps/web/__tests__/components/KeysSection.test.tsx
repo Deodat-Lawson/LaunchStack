@@ -1,8 +1,8 @@
 /** @jest-environment jsdom */
 
 /**
- * Workspace › Bring your own keys: the workspace's own API key, and nothing
- * else. What must not regress: the embedding key it once had stays gone (no
+ * Models & usage › API keys (Workspace › Bring your own keys until November
+ * 2026): the workspace's own API key, and nothing else. What must not regress: the embedding key it once had stays gone (no
  * field, no read of the company's embedding config, no Save of its own), and
  * OpenRouter's return leg still turns into a note here and leaves the
  * address bar. The API key panel itself is `WorkspaceModelPanel.test.tsx`.
@@ -66,7 +66,7 @@ describe("KeysSection", () => {
         window.history.replaceState(
             null,
             "",
-            "/employer/documents?feature=workspace&at=%2Fbyok&openrouter=denied"
+            "/employer/documents?feature=usage&at=%2Fkeys&openrouter=denied"
         );
         respond();
         render(<KeysSection onActions={a => (actions = a)} />);
@@ -74,6 +74,6 @@ describe("KeysSection", () => {
         expect(
             await screen.findByText("OpenRouter sign-in was cancelled. Nothing changed.")
         ).toBeInTheDocument();
-        expect(window.location.search).toBe("?feature=workspace&at=%2Fbyok");
+        expect(window.location.search).toBe("?feature=usage&at=%2Fkeys");
     });
 });

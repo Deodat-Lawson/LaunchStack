@@ -147,8 +147,6 @@ const LEGACY_VIEW_REDIRECTS: Record<string, string> = {
     "with-ai-qa": "/employer/documents",
     "with-ai-qa-history": "/employer/documents",
     "predictive-analysis": "/employer/documents?feature=audit",
-    generator: "/employer/documents?feature=draft",
-    rewrite: "/employer/documents?feature=rewrite",
     upload: "/employer/documents?add=1",
     dashboard: "/employer/home",
     analytics: "/employer/documents?feature=usage",
@@ -184,8 +182,6 @@ const MOUNT_ON_FIRST_SHOW = new Set([
     "vantage",
     "scenarios",
     "investors",
-    "draft",
-    "rewrite",
 ]);
 
 /**

@@ -20,14 +20,6 @@
       "label": "筛选侧边栏",
       "description": "将光标放到侧边栏的筛选框中（来源或历史记录）。"
     },
-    "featureDraft": {
-      "label": "打开起草",
-      "description": "用 AI 生成新文档。"
-    },
-    "featureRewrite": {
-      "label": "打开改写",
-      "description": "优化现有内容。"
-    },
     "featureWorkflows": {
       "label": "打开工作流",
       "description": "在你的来源之间自动执行重复任务。"

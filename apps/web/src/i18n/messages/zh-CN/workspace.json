@@ -79,14 +79,6 @@
       "label": "投资人关系",
       "description": "从 SEC 申报文件中找到正在募资的风投基金，并依据你的来源起草一页纸简介、路演文稿和引荐邮件"
     },
-    "draft": {
-      "label": "模板草稿",
-      "description": "用针对你的来源调校过的模板生成新文档"
-    },
-    "rewrite": {
-      "label": "改写",
-      "description": "以差异对比优先的方式改写，优化现有文字"
-    },
     "settings": {
       "label": "设置",
       "description": "你的账户、外观、快捷键和隐私"
@@ -131,14 +123,6 @@
     "team": {
       "label": "团队",
       "description": "成员、群组，以及工作区里谁做了什么"
-    },
-    "draft": {
-      "label": "起草",
-      "description": "用 AI 生成新文档"
-    },
-    "rewrite": {
-      "label": "改写",
-      "description": "优化现有内容"
     },
     "workflows": {
       "label": "工作流",

@@ -1070,8 +1070,8 @@ interface EmptyStateProps {
     disabled: boolean;
     onAsk: (starter: AskStarter, refs: string[]) => void;
     onOpenProfile: () => void;
-    /** The Processing queue tab: where each processing or failed source is. */
-    onOpenProcessing: () => void;
+    /** Knowledge, whose "In progress" section says where each processing or failed source is. */
+    onOpenKnowledge: () => void;
 }
 
 function EmptyState({
@@ -1081,7 +1081,7 @@ function EmptyState({
     disabled,
     onAsk,
     onOpenProfile,
-    onOpenProcessing,
+    onOpenKnowledge,
 }: EmptyStateProps) {
     const t = useTranslations("chat.emptyState");
     let sourceCount = 0;
@@ -1109,7 +1109,7 @@ function EmptyState({
                             <button
                                 type="button"
                                 className="hover:text-brand-ink underline decoration-dotted underline-offset-2"
-                                onClick={onOpenProcessing}
+                                onClick={onOpenKnowledge}
                             >
                                 {[
                                     ...(processingCount > 0
@@ -1804,8 +1804,8 @@ export function AskPanel({
                             disabled={isSending}
                             onAsk={handleAskStarter}
                             onOpenProfile={() => onStudioNavigate(workspaceHref("company"))}
-                            onOpenProcessing={() =>
-                                onStudioNavigate("/employer/documents?feature=processing")
+                            onOpenKnowledge={() =>
+                                onStudioNavigate("/employer/documents?feature=knowledge")
                             }
                         />
                     ) : (

@@ -1,12 +1,6 @@
 {
-  "frame": {
-    "title": "Processing queue",
-    "about": "Every file on its way into the workspace and the stage it is at: uploading, waiting for a worker, reading the text (OCR for scans and images), splitting into sections, indexing for search. Opens by itself when you add something."
-  },
-  "header": {
-    "title": "Processing",
-    "accent": "queue",
-    "checking": "Checking…"
+  "knowledge": {
+    "title": "In progress"
   },
   "summary": {
     "running": "{count} running",
@@ -21,10 +15,6 @@
     "everyone": "Everyone",
     "mine": "Mine"
   },
-  "actions": {
-    "clearFinished": "Clear finished",
-    "addSource": "Add a source"
-  },
   "overall": {
     "onTheWay": "{count, plural, one {# file on the way} other {# files on the way}}",
     "stepsDone": "{percent}% of all steps done",
@@ -36,10 +26,6 @@
     "network": "The queue didn't load.",
     "behind": "What you see may be a little behind.",
     "tryNow": "Try now"
-  },
-  "empty": {
-    "title": "Files you add show up here",
-    "body": "Uploads, folders, links and Google Drive imports appear while their text is read and indexed, with each stage as it happens. This tab opens by itself when you add something."
   },
   "sections": {
     "attention": {
@@ -53,10 +39,6 @@
     "waiting": {
       "title": "Waiting",
       "aside": "Each starts as soon as a worker is free"
-    },
-    "done": {
-      "title": "Finished",
-      "aside": "Last 24 hours"
     },
     "showAll": "Show all {count}",
     "showFewer": "Show fewer"

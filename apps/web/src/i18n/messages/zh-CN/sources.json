@@ -310,8 +310,8 @@
       }
     },
     "handoff": {
-      "followAlong": "可在“处理队列”中查看进度",
-      "followAlongRecording": "录音会先转写；可在“处理队列”中查看进度"
+      "followAlong": "可在“知识库”中查看进度",
+      "followAlongRecording": "录音会先转写；可在“知识库”中查看进度"
     }
   },
   "addDestinationBar": {

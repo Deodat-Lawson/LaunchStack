@@ -61,11 +61,7 @@
     },
     "knowledge": {
       "label": "知识库",
-      "description": "浏览、筛选并扩充工作区可引用的一切内容"
-    },
-    "processing": {
-      "label": "处理队列",
-      "description": "查看文件的读取与索引进度——哪些正在处理、哪些在排队、哪些需要重试"
+      "description": "浏览、筛选并扩充工作区可引用的一切内容，并查看新文件的读取与索引进度"
     },
     "meetings": {
       "label": "会议",
@@ -123,10 +119,6 @@
     "knowledge": {
       "label": "知识库",
       "description": "浏览并扩充工作区可引用的一切内容"
-    },
-    "processing": {
-      "label": "处理队列",
-      "description": "文件的读取与索引，逐个阶段显示"
     },
     "meetings": {
       "label": "会议",

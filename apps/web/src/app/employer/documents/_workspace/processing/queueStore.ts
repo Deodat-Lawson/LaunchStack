@@ -2,7 +2,7 @@
 
 /**
  * The Processing queue as the server tells it, kept fresh while anything is
- * watching: the Processing tab, and the tab strip's count beside its name.
+ * watching: Knowledge’s In progress section, and the tab strip's count beside its name.
  * One poller however many watchers there are.
  *
  * How often (see `nextQueuePollDelay`):

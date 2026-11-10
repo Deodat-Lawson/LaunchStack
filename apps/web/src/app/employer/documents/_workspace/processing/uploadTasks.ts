@@ -4,7 +4,7 @@
  * Adds that are still in the browser: the bytes of a file on their way to
  * storage, or a request the server works through before any job exists (a
  * recording transcribed, a page fetched, a video downloaded). The Add a source
- * dialog hands them here and closes; the Processing tab shows them as the
+ * dialog hands them here and closes; Knowledge’s In progress section shows them as the
  * first stage of each file's bar, then follows the job the server started.
  *
  * A module-level store, not component state: the dialog that started an
@@ -32,7 +32,7 @@ export type LocalTaskPhase =
 
 /**
  * What the server is doing with a request before any job exists — a key the
- * Processing tab words (`processing.work.<kind>`).
+ * Knowledge tab words (`processing.work.<kind>`).
  */
 export type LocalWork =
     | "transcribing"

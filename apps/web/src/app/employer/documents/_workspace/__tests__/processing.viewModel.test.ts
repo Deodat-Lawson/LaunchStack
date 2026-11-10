@@ -25,7 +25,7 @@ import {
 } from "../processing/viewModel";
 
 /**
- * The Processing tab's words and order: what each row says it is doing, which
+ * The Knowledge tab's words and order: what each row says it is doing, which
  * section it sits in, and how a browser upload hands over to the server's job
  * without showing twice. Read in English, the catalogue every test uses.
  */

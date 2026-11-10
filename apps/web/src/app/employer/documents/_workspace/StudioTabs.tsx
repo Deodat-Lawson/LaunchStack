@@ -27,7 +27,7 @@ export interface PaneTab {
     label: string;
     Icon: ComponentType<IconProps>;
     desc?: string;
-    /** A live count beside the name — the Processing tab's files still moving. */
+    /** A live count beside the name — Knowledge's files still on their way in. */
     count?: number;
     /** `danger` when something in that count needs attention. */
     countTone?: "active" | "danger";

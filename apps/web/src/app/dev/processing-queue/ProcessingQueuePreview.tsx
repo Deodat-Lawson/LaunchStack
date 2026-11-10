@@ -1,7 +1,8 @@
 "use client";
 
 /**
- * Local harness for the Processing tab. Mounts the real pane with its
+ * Local harness for Knowledge and its "In progress" section. Mounts the real
+ * Knowledge pane over a small library, with the queue's
  * session-guarded routes stubbed by a simulated worker, so every state can be
  * looked at without a backend:
  *
@@ -13,7 +14,8 @@
  * - "Simulate an upload" sends a real `File` through the upload store, with
  *   `XMLHttpRequest` faked so the bytes "go up" over three seconds.
  *
- * `?empty=1` starts with nothing; `?error=1` makes the queue request fail.
+ * `?empty=1` starts with nothing in the queue; `?nolib=1` with an empty
+ * library too; `?error=1` makes the queue request fail.
  * Gated by the page.
  */
 
@@ -31,7 +33,8 @@ import type {
 } from "~/lib/processing-queue/types";
 import { QUEUE_STAGE_IDS } from "~/lib/processing-queue/types";
 
-import { ProcessingQueuePane } from "~/app/employer/documents/_workspace/processing/ProcessingQueuePane";
+import { KnowledgePane } from "~/app/employer/documents/_workspace/KnowledgePane";
+import type { WorkspaceFolder, WorkspaceSource } from "~/app/employer/documents/_workspace/types";
 import { startFileUploads } from "~/app/employer/documents/_workspace/processing/uploadTasks";
 
 const VIEWER = "user_owner";
@@ -54,6 +57,39 @@ interface SimJob {
 }
 
 const now = () => Date.now();
+
+/** The library under the queue: what is already in, plus one still being read. */
+function library(): WorkspaceSource[] {
+    const source = (
+        id: string,
+        title: string,
+        folder: string,
+        extra: Partial<WorkspaceSource> = {}
+    ): WorkspaceSource => ({
+        id,
+        documentId: Number(id.slice(1)),
+        title,
+        type: "doc",
+        size: "1.2 MB",
+        added: "Nov 3",
+        folder,
+        tags: [],
+        domain: "General",
+        indexStatus: "ready",
+        ...extra,
+    });
+    return [
+        source("d101", "Founder update — September.pdf", ""),
+        source("d102", "Seed round term sheet.pdf", "Board", { domain: "Financial" }),
+        source("d103", "Hiring plan 2027.docx", "Ops", { domain: "HR" }),
+        source("d104", "Q3 board deck.pdf", "Board", { indexStatus: "processing", pending: true }),
+    ];
+}
+
+const FOLDERS: WorkspaceFolder[] = [
+    { id: "f-board", name: "Board", color: "var(--accent)" },
+    { id: "f-ops", name: "Ops", color: "var(--accent)" },
+];
 
 function seed(): SimJob[] {
     const t = now();
@@ -455,14 +491,32 @@ export function ProcessingQueuePreview() {
                 </Button>
             </div>
             <div className="min-h-0 flex-1 [container-type:inline-size]">
-                <ProcessingQueuePane
-                    viewerId={VIEWER}
-                    storageScope="dev:processing"
-                    onOpenDocument={id => window.alert(`Would open document ${id}`)}
-                    onAddSource={() => window.alert("Would open Add a source")}
-                />
+                <KnowledgePreview />
             </div>
             <Toaster />
         </div>
+    );
+}
+
+function KnowledgePreview() {
+    const [sources] = useState<WorkspaceSource[]>(() =>
+        new URLSearchParams(window.location.search).has("nolib") ? [] : library()
+    );
+    const [selected, setSelected] = useState<string[]>([]);
+    return (
+        <KnowledgePane
+            sources={sources}
+            folders={sources.length ? FOLDERS : []}
+            selected={selected}
+            setSelected={setSelected}
+            onOpenSource={source => window.alert(`Would open ${source.title}`)}
+            onOpenAdd={() => window.alert("Would open Add a source")}
+            onAskAbout={ids => window.alert(`Would ask about ${ids.join(", ")}`)}
+            queue={{
+                viewerId: VIEWER,
+                storageScope: "dev:processing",
+                onOpenDocument: id => window.alert(`Would open document ${id}`),
+            }}
+        />
     );
 }

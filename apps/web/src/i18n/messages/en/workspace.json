@@ -61,11 +61,7 @@
     },
     "knowledge": {
       "label": "Knowledge",
-      "description": "Browse, filter, and grow everything the workspace can cite"
-    },
-    "processing": {
-      "label": "Processing",
-      "description": "Watch files being read and indexed — what is running, what is waiting, and what needs a retry"
+      "description": "Browse, filter, and grow everything the workspace can cite — and watch new files being read and indexed"
     },
     "meetings": {
       "label": "Meetings",
@@ -123,10 +119,6 @@
     "knowledge": {
       "label": "Knowledge",
       "description": "Browse and grow everything the workspace can cite"
-    },
-    "processing": {
-      "label": "Processing queue",
-      "description": "Files being read and indexed, stage by stage"
     },
     "meetings": {
       "label": "Meetings",

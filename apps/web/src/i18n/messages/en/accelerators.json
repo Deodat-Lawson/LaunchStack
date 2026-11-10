@@ -22,7 +22,7 @@
     "description": "Compare accelerators with your company profile, learn from similar companies that got in, and track where you apply.",
     "match": "Match Programs · {credits} credits",
     "matching": "Matching Programs…",
-    "matchHint": "Matching compares all available Programs with the current company profile. A fit score is not a probability of acceptance.",
+    "matchHint": "Matching compares {count, plural, one {# Program} other {# Programs}} with the current company profile; the rest of the list is not matched yet. A fit score is not a probability of acceptance.",
     "profileMissing": "Build the company profile in Settings → Company before matching Programs.",
     "emptyTitle": "No Programs imported yet",
     "emptyBody": "A trusted installation operator must import reviewed Program records. There are no sample or automatically generated results here."

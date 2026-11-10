@@ -15,6 +15,7 @@ import { startProposalRun } from "~/server/proposals/executor";
 import { runCopy } from "~/server/proposals/copy";
 
 import { DEMO_LAYER } from "./demo";
+import { isMatchedProgram } from "./matching-scope";
 
 export const ACCELERATOR_COSTS = {
     match: PROPOSAL_CREDITS.programs,
@@ -60,6 +61,7 @@ export async function loadAccelerators(member: WorkspaceContext): Promise<Accele
             profile !== null && (profile.facts.length > 0 || profile.summary.trim().length > 0),
         canEdit: member.can("documents.edit"),
         costs: ACCELERATOR_COSTS,
+        matchCount: catalogue.filter(({ program }) => isMatchedProgram(program.id)).length,
         demo: DEMO_LAYER,
     };
 }

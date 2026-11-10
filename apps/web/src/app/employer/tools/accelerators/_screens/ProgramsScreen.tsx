@@ -165,7 +165,9 @@ export function ProgramsScreen() {
                             </span>
                         </TooltipTrigger>
                         <TooltipContent className="max-w-64">
-                            {home.profileReady ? t("home.matchHint") : t("home.profileMissing")}
+                            {home.profileReady
+                                ? t("home.matchHint", { count: home.matchCount })
+                                : t("home.profileMissing")}
                         </TooltipContent>
                     </Tooltip>
                 </div>

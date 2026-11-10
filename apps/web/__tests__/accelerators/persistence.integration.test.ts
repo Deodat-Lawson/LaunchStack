@@ -268,6 +268,7 @@ describeDb("Accelerator discovery persistence and Grants isolation", () => {
             "canEdit",
             "costs",
             "demo",
+            "matchCount",
             "profileReady",
             "programs",
         ]);

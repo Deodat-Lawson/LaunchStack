@@ -174,3 +174,21 @@ it("rejects scores off the anchored scale", async () => {
         prepareAcceleratorRun(ctx, ports, run, () => Promise.resolve(false))
     ).rejects.toThrow();
 });
+
+it("scores only the matched Programs and leaves the rest of the catalogue unsaved", async () => {
+    const unmatched = { ...program, id: "not-in-matching-scope" };
+    mockCatalogue.mockResolvedValue([
+        { program, contentHash: hashValue(program) },
+        { program: unmatched, contentHash: hashValue(unmatched) },
+    ]);
+    const { ports, structured } = portsAnswering(
+        modelAnswer({ sourceIds: [program.sources[0]!.id], companyEvidenceIds: ["3"] })
+    );
+    const prepared = await prepareAcceleratorRun(ctx, ports, run, () => Promise.resolve(false));
+    await prepared.commit({} as never);
+    const payload = (structured.mock.calls[0] as unknown[])[3] as string;
+    expect(payload).toContain(program.id);
+    expect(payload).not.toContain(unmatched.id);
+    const [, , results] = mockSave.mock.calls[0]!;
+    expect(results.map((result: { programId: string }) => result.programId)).toEqual([program.id]);
+});

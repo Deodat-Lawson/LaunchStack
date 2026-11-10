@@ -192,6 +192,7 @@ describe("discovery reads", () => {
             profileReady: true,
             canEdit: true,
             costs: { match: 2_000 },
+            matchCount: 1,
             demo: demoLayer,
         });
         const detail = await preview(

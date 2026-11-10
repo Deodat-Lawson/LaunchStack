@@ -25,6 +25,8 @@ import {
 } from "@launchstack/pipelines/proposals";
 import { loadOrgProfile } from "@launchstack/pipelines/proposals/db";
 
+import { isMatchedProgram } from "./matching-scope";
+
 /** The model grades these; portfolio is decided by rubric rule (see portfolioDimension). */
 const MODEL_DIMENSIONS = FIT_DIMENSION_KEYS.filter(
     (key): key is Exclude<FitDimensionKey, "portfolio"> => key !== "portfolio"
@@ -74,7 +76,7 @@ export async function prepareAcceleratorRun(
             "profile_required"
         );
     }
-    const catalogue = await listCatalogue();
+    const catalogue = (await listCatalogue()).filter(({ program }) => isMatchedProgram(program.id));
     if (!catalogue.length) {
         throw new AcceleratorError("The Program Catalogue is empty", 409, "catalogue_empty");
     }

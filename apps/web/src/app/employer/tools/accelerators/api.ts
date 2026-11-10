@@ -33,8 +33,11 @@ export type {
 } from "@launchstack/pipelines/accelerators";
 
 export type AcceleratorRunView = RunView & { errorCopy?: Copy };
-/** The catalogue home plus demo stand-ins for other workstreams' data. */
-export type AcceleratorsHome = HomeResponse & { demo: DemoLayer };
+/**
+ * The catalogue home plus demo stand-ins for other workstreams' data. `matchCount` is
+ * how many of the listed Programs Match Programs scores.
+ */
+export type AcceleratorsHome = HomeResponse & { demo: DemoLayer; matchCount: number };
 export class AcceleratorsApiError extends Error {
     constructor(
         message: string,

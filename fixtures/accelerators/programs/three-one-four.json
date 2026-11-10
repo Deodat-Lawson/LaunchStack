@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "three-one-four",
+  "name": "3one4 Capital",
+  "logo": {
+    "path": "/accelerators/logos/three-one-four.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.3one4capital.com/",
+  "applyUrl": "https://www.3one4capital.com/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Transformative Capital For the New Indian Economy India Consumption Report 2025 - Download Report Home About Us Our Team Our Thesis PrincipleS & Culture Platform & Programs Portfolio Resources Blogs Podcasts Reports Pitch At 3one4, we are biased towards action and channel the relevant resources to support generational innovation engines out of India. We partner with early-stage companies that are mission-oriented and are setting new standards for inclusive value creation and sustainable growth. Pitch To Us Through a pragmatic deep-involvement model grounded in consumer behavioural patterns, actionable insights extracted from power-user networks, and by tapping inorganic growth vectors for opportunity capture, we unshackle founders from constraints on the path to market leadership. Pitch To Us Licious Scimplify Raise Darwinbox OUR PORTFOLIO 3one4’s exponential growth has been driven by partnering with generational companies to transform market segments across the country. View At 3one4 Capital, we focus on select market categories and on the intersection of adjacencies that are large, growing, and ready for unique products and services. Pitch To Us No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.3one4capital.com/",
+      "title": "3one4 Capital — official mark on the retrieved page",
+      "quote": "https://cdn.prod.website-files.com/6269326520418226350c9a99/62a72c79fa0ea124aa2f266b_licious-logo%20new%20white-01.webp",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.3one4capital.com/",
+      "title": "3one4 Capital — visible page text",
+      "quote": "Transformative Capital For the New Indian Economy India Consumption Report 2025 - Download Report Home About Us Our Team Our Thesis PrincipleS & Culture Platform & Programs Portfolio Resources Blogs Podcasts Reports Pitch At 3one4, we are biased towards action and channel the relevant resources to support generational innovation engines out of India. We partner with early-stage companies that are mission-oriented and are setting new standards for inclusive value creation and sustainable growth. Pitch To Us Through a pragmatic deep-involvement model grounded in consumer behavioural patterns, actionable insights extracted from power-user networks, and by tapping inorganic growth vectors for opportunity capture, we unshackle founders from constraints on the path to market leadership. Pitch To Us Licious Scimplify Raise Darwinbox OUR PORTFOLIO 3one4’s exponential growth has been driven by partnering with generational companies to transform market segments across the country. View At 3one4 Capital, we focus on select market categories and on the intersection of adjacencies that are large, growing, and ready for unique products and services. Pitch To Us",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "three-one-four-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.3one4capital.com/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

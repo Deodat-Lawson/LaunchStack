@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "startuplab",
+  "name": "Startuplab",
+  "logo": {
+    "path": "/accelerators/logos/startuplab.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.startuplab.no/",
+  "applyUrl": "https://www.startuplab.no/apply/incubator",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Startuplab | Empowering Tech Founders To Go Further Startuplab is an incubator, accelerator, and early stage investor for Norway's most ambitious technology startups A 3-month sprint with top founders, investors, and experts to sharpen your edge and scale fast. Join 110+ startups in Oslo or Bergen with office space, a strong network, and a community that’s got your back. We invest in teams daring to change the game, both through our programs and directly. A 3-month sprint with top founders, investors, and experts to sharpen your edge and scale fast. No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.startuplab.no/",
+      "title": "Startuplab — official mark on the retrieved page",
+      "quote": "https://www.betal.app/wp-content/uploads/2023/03/Favrit-Logo-768x432.webp",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.startuplab.no/",
+      "title": "Startuplab — visible page text",
+      "quote": "Startuplab | Empowering Tech Founders To Go Further Startuplab is an incubator, accelerator, and early stage investor for Norway's most ambitious technology startups A 3-month sprint with top founders, investors, and experts to sharpen your edge and scale fast. Join 110+ startups in Oslo or Bergen with office space, a strong network, and a community that’s got your back. We invest in teams daring to change the game, both through our programs and directly. A 3-month sprint with top founders, investors, and experts to sharpen your edge and scale fast.",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "startuplab-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.startuplab.no/apply/incubator",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

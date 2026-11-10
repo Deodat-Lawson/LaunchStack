@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "index-ventures",
+  "name": "Index Ventures",
+  "logo": {
+    "path": "/accelerators/logos/index-ventures.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.indexventures.com/",
+  "applyUrl": "https://www.indexventures.com/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Resources Search Submit Search Find a team member, company, Perspectives piece or Index Press resource Back Perspectives Companies Index Press Team Startup Jobs Sorry, your browser doesn't support playback for this video Asher, Aidan and Ben Pathologically curious. Tireless debaters. Cheerful contrarians. Read more Asher, Aidan and Ben Flapping Airplanes Sorry, your browser doesn't support playback for this video Scott Morton Launch pad veteran. Chaser of open waters. Hardware's software renegade. Read more Scott Morton Revel Sorry, your browser doesn't support playback for this video Joon Sung Park Multidisciplinary artist. Agent architect. Simulator of worlds. Read more Joon Sung Park Simile Sorry, your browser doesn't support playback for this video Lin Qiao AI torchbearer. Inference innovator. Open-source evangelist. Read more Lin Qiao Fireworks Sorry, your browser doesn't support playback for this video Jean-Charles Samuelian-Werve Grandchild of refugees. Methodic optimist. Global health maverick. Read more Jean-Charles Samuelian-Werve Alan No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.indexventures.com/",
+      "title": "Index Ventures — official mark on the retrieved page",
+      "quote": "https://www.indexventures.com/media/images/R_cxcbPYH.height-240.format-webp.webp",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.indexventures.com/",
+      "title": "Index Ventures — visible page text",
+      "quote": "Resources Search Submit Search Find a team member, company, Perspectives piece or Index Press resource Back Perspectives Companies Index Press Team Startup Jobs Sorry, your browser doesn't support playback for this video Asher, Aidan and Ben Pathologically curious. Tireless debaters. Cheerful contrarians. Read more Asher, Aidan and Ben Flapping Airplanes Sorry, your browser doesn't support playback for this video Scott Morton Launch pad veteran. Chaser of open waters. Hardware's software renegade. Read more Scott Morton Revel Sorry, your browser doesn't support playback for this video Joon Sung Park Multidisciplinary artist. Agent architect. Simulator of worlds. Read more Joon Sung Park Simile Sorry, your browser doesn't support playback for this video Lin Qiao AI torchbearer. Inference innovator. Open-source evangelist. Read more Lin Qiao Fireworks Sorry, your browser doesn't support playback for this video Jean-Charles Samuelian-Werve Grandchild of refugees. Methodic optimist. Global health maverick. Read more Jean-Charles Samuelian-Werve Alan",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "index-ventures-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.indexventures.com/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

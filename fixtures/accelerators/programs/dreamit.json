@@ -1,0 +1,66 @@
+{
+  "id": "dreamit",
+  "name": "Dreamit",
+  "logo": {
+    "path": "/accelerators/logos/dreamit.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://dreamit.com/",
+  "applyUrl": "https://dreamit.com/pitch-us",
+  "description": {
+    "text": "AI-written synthesis of the homepage and the pitch page, prepared by the collecting assistant: the homepage calls Dreamit an early-stage cybersecurity investor and says it invests in early-stage cybersecurity startups, makes customer introductions, and gives access to capital. It mentions a network of 100+ enterprise partners, quarterly customer sprints, and a focus on companies that are generating revenue or piloting. The pitch page is an application with a stated second page. The first page asks for company name, company email, website, first name, last name, an investor deck file, company stage, how the applicant heard about Dreamit, and one or two Securetech verticals. Those controls were not imported because the second page was not opened and the deck field is a required file. No cheque size or deadline was in the text that was kept.",
+    "sourceIds": ["homepage", "pitch"],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the homepage and the pitch page, prepared by the collecting assistant: the homepage addresses early-stage cybersecurity startups and says customer sprints target companies that are generating revenue or piloting. The pitch page's stage options run from idea phase through revenue, and its verticals are security categories. The revenue-or-piloting line and the idea-phase option are both on official pages and are not collapsed into one rule.",
+    "sourceIds": ["homepage", "pitch"],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://dreamit.com/",
+      "title": "Dreamit homepage — Logo",
+      "quote": "https://cdn.prod.website-files.com/6a4d3ea4411c853ad80f99ba/6a4d4c54ddf3fe861d7fb652_logo.png",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://dreamit.com/",
+      "title": "Dreamit homepage — Cybersecurity investor",
+      "quote": "Dreamit Ventures | Early-Stage Cybersecurity Investor\nInvesting in Transformative Early-Stage Cybersecurity Startups\n\nWe leverage a unique, highly curated process to make meaningful customer introductions and provide access to smart capital to support company growth.\nLeverage our network of 100+ enterprise partners\nTarget revenue-generating or piloting companies\nQuarterly sprints to grow your customer pipeline",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    },
+    {
+      "id": "pitch",
+      "url": "https://dreamit.com/pitch-us",
+      "title": "Dreamit pitch page — First page of a two-page application",
+      "quote": "Tell Us About Your Company\nCompany Name *\nCompany Email * Use the same email address on both pages of the application\nCompany Website *\nFirst Name *\nLast Name *\nInvestor Deck * Upload File Max file size 10MB.\nCompany Stage * Select one... Idea Phase Building Proof of Concept Now Alpha/Beta Ready but Not Launched Pilots or Initial Trials Started At Revenue\nHow Did You Hear About Dreamit\nSelect Your Vertical * Which 1 or 2 areas of Securetech best fits your company's focus?",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "pitch",
+      "label": "Pitch",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": ["pitch"],
+      "form": {
+        "id": "dreamit-pitch-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://dreamit.com/pitch-us",
+        "checkedAt": "2026-10-27T00:25:00.000Z",
+        "supported": false,
+        "limitations": [
+          "The pitch page says to use the same email on both pages of the application. Only the first page was visible. The second page was not opened, so the Form is incomplete.",
+          "The first page requires an investor-deck file. File fields stay manual and were not imported. Text maxlength 256 was visible on several fields and was not stored because the Form is not represented. Stage options and vertical checkboxes were visible and were not imported for the same reason. Nothing was submitted. Fields stay empty and Start Application stays blocked."
+        ],
+        "fields": []
+      }
+    }
+  ],
+  "schemaVersion": 2
+}

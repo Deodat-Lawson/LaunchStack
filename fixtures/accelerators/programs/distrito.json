@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "distrito",
+  "name": "Distrito",
+  "logo": {
+    "path": "/accelerators/logos/distrito.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.distrito.me/",
+  "applyUrl": "https://www.distrito.me/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Distrito: Enterprise AI de Ponta a Ponta TRANSFORME SUA EMPRESA Reports Blog Eventos AI Strategy Estratégia Inteligência de Mercado Inovação Corporativa AI Champions Plataforma ÍON AI Education For Business For Tech AI Factory AI Squad AI Ecosystem GenAI Lab AI Transformation Hub Job Template Help Center Team Member conteúdo Reports Blog Eventos Newsletter QUEM SOMOS O Distrito Vagas CONTATO COMERCIAL Consultoria, capacitação e desenvolvimento de IA para empresas Das decisões estratégicas às soluções em produção, unimos o que há de mais poderoso no mundo: inteligência humana e artificial para transformar como empresas crescem, inovam e se mantêm competitivas em um mercado em constante movimento. Nossos serviços O Distrito Empresas líderes carregam legados que moldam mercados. Na atualidade, garantir esse protagonismo exige adotar inteligência artificial com abordagem estratégica. No Distrito, essa convergência se transforma em soluções que sustentam sua competitividade e ampliam sua capacidade de transformação. Os Pilares da Transformação com Inteligência Artificial Da definição da estratégia à implementação de tecnologia proprietária, estruturamos uma jornada completa para nossos clientes. No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.distrito.me/",
+      "title": "Distrito — official mark on the retrieved page",
+      "quote": "https://cdn.prod.website-files.com/67be0f2cf498bb6c8a7fc5d8/67cb0ee33c25aa8e5f346210_logo-distrito.svg",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.distrito.me/",
+      "title": "Distrito — visible page text",
+      "quote": "Distrito: Enterprise AI de Ponta a Ponta TRANSFORME SUA EMPRESA Reports Blog Eventos AI Strategy Estratégia Inteligência de Mercado Inovação Corporativa AI Champions Plataforma ÍON AI Education For Business For Tech AI Factory AI Squad AI Ecosystem GenAI Lab AI Transformation Hub Job Template Help Center Team Member conteúdo Reports Blog Eventos Newsletter QUEM SOMOS O Distrito Vagas CONTATO COMERCIAL Consultoria, capacitação e desenvolvimento de IA para empresas Das decisões estratégicas às soluções em produção, unimos o que há de mais poderoso no mundo: inteligência humana e artificial para transformar como empresas crescem, inovam e se mantêm competitivas em um mercado em constante movimento. Nossos serviços O Distrito Empresas líderes carregam legados que moldam mercados. Na atualidade, garantir esse protagonismo exige adotar inteligência artificial com abordagem estratégica. No Distrito, essa convergência se transforma em soluções que sustentam sua competitividade e ampliam sua capacidade de transformação. Os Pilares da Transformação com Inteligência Artificial Da definição da estratégia à implementação de tecnologia proprietária, estruturamos uma jornada completa para nossos clientes.",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "distrito-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.distrito.me/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

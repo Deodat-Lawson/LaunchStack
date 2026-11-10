@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "catalyst-fund",
+  "name": "Catalyst Fund",
+  "logo": {
+    "path": "/accelerators/logos/catalyst-fund.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.thecatalystfund.com/",
+  "applyUrl": "https://www.thecatalystfund.com/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: The Catalyst Fund: Pre-seed VC fund and venture builder Who we are Our Story Learn about our mission, vision and journey Our Model We operate under a proven model Our Team Meet the people behind Catalyst Fund Careers We are looking for talented individuals Code of Conduct Our code of conduct for fund investees Portfolio Insights Community Overview Learn more about our community Circle of Investors A group of 250+ investors Catalyst Climate Champions A 12-month program empowering individuals Events Join us at one of our events Past Accelerators Overview Learn more about our Past Accelerators Inclusive Fintech Supported early-stage fintech startups in emerging markets Inclusive Digital Commerce Scaled digital commerce companies in Ghana Assistive Technology Lorem ipsum dolor sit amet consectetur elit Contact us Partner with us We partner with founders building tech solutions for climate adaptation and resilience Insights Why we invested in BIG, the venture turning African factories’ biomass waste into durable carbon removal and healthier soils Insights Why we invested in Mujer Financiera Insights Why we invested in BIG, the venture turning African factories’ biomass waste into durable carbon removal and healthier soils OUR CURRENT BACKERS We invest $200K in pre-seed startups and follow on at Seed and Series A. Thesis-Driven Investor We back founders building climate adaptation an No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.thecatalystfund.com/",
+      "title": "Catalyst Fund — official mark on the retrieved page",
+      "quote": "https://cdn.prod.website-files.com/6704d988d44fef67a9c2878e/6749cd4bf1f583e1b4ab5c5c_%E2%80%8BHorizontal%20logo%2C%20full%20color.png",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.thecatalystfund.com/",
+      "title": "Catalyst Fund — visible page text",
+      "quote": "The Catalyst Fund: Pre-seed VC fund and venture builder Who we are Our Story Learn about our mission, vision and journey Our Model We operate under a proven model Our Team Meet the people behind Catalyst Fund Careers We are looking for talented individuals Code of Conduct Our code of conduct for fund investees Portfolio Insights Community Overview Learn more about our community Circle of Investors A group of 250+ investors Catalyst Climate Champions A 12-month program empowering individuals Events Join us at one of our events Past Accelerators Overview Learn more about our Past Accelerators Inclusive Fintech Supported early-stage fintech startups in emerging markets Inclusive Digital Commerce Scaled digital commerce companies in Ghana Assistive Technology Lorem ipsum dolor sit amet consectetur elit Contact us Partner with us We partner with founders building tech solutions for climate adaptation and resilience Insights Why we invested in BIG, the venture turning African factories’ biomass waste into durable carbon removal and healthier soils Insights Why we invested in Mujer Financiera Insights Why we invested in BIG, the venture turning African factories’ biomass waste into durable carbon removal and healthier soils OUR CURRENT BACKERS We invest $200K in pre-seed startups and follow on at Seed and Series A. Thesis-Driven Investor We back founders building climate adaptation an",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "catalyst-fund-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.thecatalystfund.com/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

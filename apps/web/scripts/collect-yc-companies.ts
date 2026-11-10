@@ -24,7 +24,7 @@ import {
     prepareApplicationText,
     segmentApplication,
     type ApplicationResponse,
-    type PortfolioCompany,
+    type PastCompany,
 } from "@launchstack/pipelines/accelerators";
 import {
     countPortfolio,
@@ -61,14 +61,14 @@ function readArgs(): { installation: string; skipEmbed: boolean } {
     return { installation, skipEmbed: args.includes("--skip-embed") };
 }
 
-async function collectCompanies(now: Date): Promise<PortfolioCompany[]> {
+async function collectCompanies(now: Date): Promise<PastCompany[]> {
     const response = await fetch(YC_OSS_ALL, { signal: AbortSignal.timeout(60_000) });
     if (!response.ok) throw new Error(`yc-oss returned ${response.status}`);
     const records: unknown = await response.json();
     if (!Array.isArray(records)) throw new Error("yc-oss did not return a company list");
     return records
         .map(record => normalizeYcOssCompany(record, PROGRAM_ID))
-        .filter((company): company is PortfolioCompany => company !== null)
+        .filter((company): company is PastCompany => company !== null)
         .filter(company => hasBatchStarted(company.batch, now));
 }
 

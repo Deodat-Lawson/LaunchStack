@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "next-canada",
+  "name": "Next Canada",
+  "logo": {
+    "path": "/accelerators/logos/next-canada.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.nextcanada.com/",
+  "applyUrl": "https://my.nextcanada.com/apply/nai",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: NEXT Canada - Building a more ambitious and competitive Canada CREATING CANADA’S NEXT GENERATION OF HIGH-IMPACT ENTREPRENEURS 1,000+ entrepreneurs launched. 500+ ventures scaled. Canada’s strongest and most dedicated entrepreneurial network made up of 500+ top Canadian academics, entrepreneurs, investors and founders. We rally around the next generation of entrepreneurs, making it hard for them to fail. We uncover Canada’s next generation of entrepreneurs and supercharge their ambition by showing them what’s possible. We accelerate their trajectory with access to education, mentorship and funding. To ensure a more ambitious and competitive Canada. We need to engage, empower and keep our next generation of entrepreneurs in Canada. That’s how we will help grow more Canadian headquarters, jobs and equity. No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.nextcanada.com/",
+      "title": "Next Canada — official mark on the retrieved page",
+      "quote": "https://i0.wp.com/www.nextcanada.com/wp-content/uploads/2019/11/Next_Logo_2019-scaled.png?fit=2560%2C660&ssl=1",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.nextcanada.com/",
+      "title": "Next Canada — visible page text",
+      "quote": "NEXT Canada - Building a more ambitious and competitive Canada CREATING CANADA’S NEXT GENERATION OF HIGH-IMPACT ENTREPRENEURS 1,000+ entrepreneurs launched. 500+ ventures scaled. Canada’s strongest and most dedicated entrepreneurial network made up of 500+ top Canadian academics, entrepreneurs, investors and founders. We rally around the next generation of entrepreneurs, making it hard for them to fail. We uncover Canada’s next generation of entrepreneurs and supercharge their ambition by showing them what’s possible. We accelerate their trajectory with access to education, mentorship and funding. To ensure a more ambitious and competitive Canada. We need to engage, empower and keep our next generation of entrepreneurs in Canada. That’s how we will help grow more Canadian headquarters, jobs and equity.",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "next-canada-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://my.nextcanada.com/apply/nai",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

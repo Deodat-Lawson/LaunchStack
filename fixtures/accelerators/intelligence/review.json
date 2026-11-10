@@ -1,0 +1,30 @@
+{
+  "contract": "program-intelligence/v1",
+  "items": [
+    {
+      "id": "a16z-speedrun:residencyEnd",
+      "programId": "a16z-speedrun",
+      "group": "batches",
+      "field": "residencyEnd",
+      "state": "conflicting",
+      "evidenceIds": [
+        "sr-apply-window",
+        "sr-faq-residency-dates"
+      ],
+      "detail": "The apply page says SR008 runs February 1 to April 16, 2027. The FAQ says the SR008 residency runs February 1 to April 18, 2027. Neither date was chosen.",
+      "status": "open"
+    },
+    {
+      "id": "antler:locationCount",
+      "programId": "antler",
+      "group": "identity",
+      "field": "locationCount",
+      "state": "conflicting",
+      "evidenceIds": [
+        "antler-homepage"
+      ],
+      "detail": "The homepage says Antler is active across 30 locations and also says 26 locations worldwide. Neither number was chosen.",
+      "status": "open"
+    }
+  ]
+}

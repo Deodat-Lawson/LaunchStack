@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "nxtp",
+  "name": "NXTP",
+  "logo": {
+    "path": "/accelerators/logos/nxtp.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.nxtp.vc/",
+  "applyUrl": "https://www.nxtp.vc/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: NXTP | Pioneers of early-stage B2B technology investing in Latin America and globally. Philosophy TEAM PORTFOLIO X CLOSE MENU Philosophy TEAM PORTFOLIO Pioneers of early-stage B2B technology investing in Latin America and globally. 15+ Years Investing in Latin America NXTP Companies 275 Founders 122 Investments 32 Exits to Date 15+ Years Investing in Latin America & Globally $100M Current Fund Size NXTP Fund III 275 Founders Buenos Aires Sao Paulo Mexico City Argentina NOTABLE INVESTMENTS X - CLOSE USA NOTABLE INVESTMENTS X - CLOSE Mexico NOTABLE INVESTMENTS X - CLOSE Colombia NOTABLE INVESTMENTS X - CLOSE Peru NOTABLE INVESTMENTS X - CLOSE Chile NOTABLE INVESTMENTS X - CLOSE Brazil NOTABLE INVESTMENTS X - CLOSE Uruguay NOTABLE INVESTMENTS X - CLOSE México General inquiries info@nxtp.vc X - CLOSE Sao Paulo General inquiries info@nxtp.vc ‍ X - CLOSE Argentina General inquiries info@nxtp.vc X - CLOSE Buenos Aires Sao Paulo Mexico City No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.nxtp.vc/",
+      "title": "NXTP — official mark on the retrieved page",
+      "quote": "https://cdn.prod.website-files.com/6806fc2e9c3566827219de17/6a79e3fc515de437cc5591d8_Logo%20Branco%20NXTP.png",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.nxtp.vc/",
+      "title": "NXTP — visible page text",
+      "quote": "NXTP | Pioneers of early-stage B2B technology investing in Latin America and globally. Philosophy TEAM PORTFOLIO X CLOSE MENU Philosophy TEAM PORTFOLIO Pioneers of early-stage B2B technology investing in Latin America and globally. 15+ Years Investing in Latin America NXTP Companies 275 Founders 122 Investments 32 Exits to Date 15+ Years Investing in Latin America & Globally $100M Current Fund Size NXTP Fund III 275 Founders Buenos Aires Sao Paulo Mexico City Argentina NOTABLE INVESTMENTS X - CLOSE USA NOTABLE INVESTMENTS X - CLOSE Mexico NOTABLE INVESTMENTS X - CLOSE Colombia NOTABLE INVESTMENTS X - CLOSE Peru NOTABLE INVESTMENTS X - CLOSE Chile NOTABLE INVESTMENTS X - CLOSE Brazil NOTABLE INVESTMENTS X - CLOSE Uruguay NOTABLE INVESTMENTS X - CLOSE México General inquiries info@nxtp.vc X - CLOSE Sao Paulo General inquiries info@nxtp.vc ‍ X - CLOSE Argentina General inquiries info@nxtp.vc X - CLOSE Buenos Aires Sao Paulo Mexico City",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "nxtp-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.nxtp.vc/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

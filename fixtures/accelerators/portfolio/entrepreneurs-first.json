@@ -1,0 +1,626 @@
+{
+  "programId": "entrepreneurs-first",
+  "checkedAt": "2026-11-09T22:40:59Z",
+  "source": {
+    "url": "https://www.joinef.com/portfolio/",
+    "title": "Entrepreneurs First Portfolio",
+    "checkedAt": "2026-11-09T22:40:59Z"
+  },
+  "relationshipNote": "The page is EF's portfolio and each card is a listed company. The card does not state an investment amount, instrument, round, exit, or return. The separate homepage quote about an equity-free grant, a later investment, and credits is a program term, not a per-company deal.",
+  "completeness": "Company tiles present in the fetched portfolio document. Company websites were not on these cards.",
+  "companies": [
+    {
+      "id": "tractable",
+      "name": "Tractable",
+      "website": null,
+      "location": "London",
+      "sectors": [
+        "Automotive & Mobility",
+        "Insurance"
+      ],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "AI for accident and disaster recovery."
+    },
+    {
+      "id": "cleo",
+      "name": "Cleo",
+      "website": null,
+      "location": "London",
+      "sectors": [
+        "Financial Services"
+      ],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "AI-powered assistant for personal finances."
+    },
+    {
+      "id": "polyai",
+      "name": "PolyAI",
+      "website": null,
+      "location": "London",
+      "sectors": [
+        "Enterprise Services"
+      ],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "Customer-led voice assistants for enterprises."
+    },
+    {
+      "id": "aztec",
+      "name": "Aztec",
+      "website": null,
+      "location": "London",
+      "sectors": [
+        "Privacy & Cybersecurity",
+        "web3"
+      ],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "Privacy layer for web3."
+    },
+    {
+      "id": "accurx",
+      "name": "Accurx",
+      "website": null,
+      "location": "London",
+      "sectors": [
+        "Healthcare"
+      ],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "Powering communications in the healthcare sector."
+    },
+    {
+      "id": "nivoda",
+      "name": "Nivoda",
+      "website": null,
+      "location": "London",
+      "sectors": [
+        "Retail & Commerce"
+      ],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "The world’s fastest-growing online jewelry marketplace."
+    },
+    {
+      "id": "spore-bio",
+      "name": "Spore.Bio",
+      "website": null,
+      "location": "Paris",
+      "sectors": [
+        "Biotechnology"
+      ],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "Building a new generation of microbiological technologies."
+    },
+    {
+      "id": "sonantic",
+      "name": "Sonantic",
+      "website": null,
+      "location": "London",
+      "sectors": [
+        "Telecoms & Media"
+      ],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "Hyper-realistic AI voices for the entertainment industry."
+    },
+    {
+      "id": "permutive",
+      "name": "Permutive",
+      "website": null,
+      "location": "London",
+      "sectors": [
+        "Marketing & Advertising"
+      ],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "Rebuilding data in advertising to protect privacy."
+    },
+    {
+      "id": "ochre-bio",
+      "name": "Ochre Bio",
+      "website": null,
+      "location": "London",
+      "sectors": [
+        "Biotechnology",
+        "Healthcare"
+      ],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "Genomic medicine for transplanted livers."
+    },
+    {
+      "id": "open-cosmos",
+      "name": "Open Cosmos",
+      "website": null,
+      "location": "London",
+      "sectors": [
+        "Aerospace & Defence",
+        "Climate"
+      ],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "Designing, manufacturing, and operating satellites."
+    },
+    {
+      "id": "gensyn",
+      "name": "Gensyn",
+      "website": null,
+      "location": "London",
+      "sectors": [
+        "web3"
+      ],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "Making compute for AI as accessible as oxygen for humans."
+    },
+    {
+      "id": "opply",
+      "name": "Opply",
+      "website": null,
+      "location": "London",
+      "sectors": [
+        "Food",
+        "Logistics"
+      ],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "Ingredient marketplace for small consumer goods brands."
+    },
+    {
+      "id": "neptune-robotics",
+      "name": "Neptune Robotics",
+      "website": null,
+      "location": "Hong Kong",
+      "sectors": [
+        "Industrial & Manufacturing",
+        "Robotics"
+      ],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "Robotic cleaning for the shipping industry."
+    },
+    {
+      "id": "qantev",
+      "name": "Qantev",
+      "website": null,
+      "location": "Paris",
+      "sectors": [
+        "Insurance"
+      ],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "AI claims platform for health and life insurance."
+    },
+    {
+      "id": "credit-kudos",
+      "name": "Credit Kudos",
+      "website": null,
+      "location": "London",
+      "sectors": [
+        "Financial Services"
+      ],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "Helping credit providers make better decisions using better data."
+    },
+    {
+      "id": "omnea",
+      "name": "Omnea",
+      "website": null,
+      "location": "London",
+      "sectors": [
+        "Enterprise Services"
+      ],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "Effortless procurement automation."
+    },
+    {
+      "id": "intropic",
+      "name": "Intropic",
+      "website": null,
+      "location": "London",
+      "sectors": [
+        "Financial Services"
+      ],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "Providing data refineries for investment management firms."
+    },
+    {
+      "id": "scarlet",
+      "name": "Scarlet",
+      "website": null,
+      "location": "London",
+      "sectors": [
+        "Enterprise Services",
+        "Healthcare"
+      ],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "Hastening the transition to universally accessible healthcare."
+    },
+    {
+      "id": "genomines",
+      "name": "Genomines",
+      "website": null,
+      "location": "Paris",
+      "sectors": [
+        "Biotechnology",
+        "Energy & Utilities"
+      ],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "Efficient plant-based mining."
+    },
+    {
+      "id": "green-li-ion",
+      "name": "Green Li-ion",
+      "website": null,
+      "location": "Singapore",
+      "sectors": [
+        "Climate",
+        "Energy & Utilities"
+      ],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "World-first deep-clean technology to fully rejuvenate lithium-ion batteries."
+    },
+    {
+      "id": "cloudnc",
+      "name": "CloudNC",
+      "website": null,
+      "location": "London",
+      "sectors": [
+        "Industrial & Manufacturing"
+      ],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "Reinventing precision manufacturing."
+    },
+    {
+      "id": "mimica",
+      "name": "Mimica",
+      "website": null,
+      "location": "London",
+      "sectors": [
+        "Enterprise Services"
+      ],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "Building the future of work automation."
+    },
+    {
+      "id": "unitary",
+      "name": "Unitary",
+      "website": null,
+      "location": "London",
+      "sectors": [
+        "Privacy & Cybersecurity"
+      ],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "Redefining how companies run operations."
+    },
+    {
+      "id": "cofibrant-2",
+      "name": "Cofibrant",
+      "website": null,
+      "location": null,
+      "sectors": [],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "Building software that protects Itself."
+    },
+    {
+      "id": "collective-intuition-2",
+      "name": "Collective Intuition",
+      "website": null,
+      "location": null,
+      "sectors": [],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "Turning workflows into RL environments to train and deploy agents with a company’s tacit knowledge."
+    },
+    {
+      "id": "era-compute-2",
+      "name": "Era Compute",
+      "website": null,
+      "location": null,
+      "sectors": [],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "The compute backbone of Europe’s AI future."
+    },
+    {
+      "id": "ex-sentient-2",
+      "name": "Ex Sentient",
+      "website": null,
+      "location": null,
+      "sectors": [],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "Trusted AI agents for critical infrastructure operations."
+    },
+    {
+      "id": "firstocean-2",
+      "name": "Firstocean",
+      "website": null,
+      "location": null,
+      "sectors": [],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "Building the AI-native platform that lets any biotech sell any drug, in any market."
+    },
+    {
+      "id": "hug-2",
+      "name": "hug",
+      "website": null,
+      "location": null,
+      "sectors": [],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "An AI BFF who understands you better than any human ever could."
+    },
+    {
+      "id": "mypip-2",
+      "name": "MyPip",
+      "website": null,
+      "location": null,
+      "sectors": [],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "Vibe coding for video games."
+    },
+    {
+      "id": "seeft",
+      "name": "Seeft",
+      "website": null,
+      "location": null,
+      "sectors": [],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "AI-powered spend and revenue management for real economy businesses."
+    },
+    {
+      "id": "tieout",
+      "name": "Tieout",
+      "website": null,
+      "location": "Bangalore",
+      "sectors": [
+        "Legal & Compliance"
+      ],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "AI native audit firm."
+    },
+    {
+      "id": "stead",
+      "name": "Stead",
+      "website": null,
+      "location": null,
+      "sectors": [],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "Changing the experience of home."
+    },
+    {
+      "id": "shatterdome-energy",
+      "name": "Shatterdome Energy",
+      "website": null,
+      "location": "San Francisco",
+      "sectors": [
+        "Energy",
+        "Infrastructure"
+      ],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "The financial infrastructure layer for modern energy and power."
+    },
+    {
+      "id": "promethee",
+      "name": "Promethee",
+      "website": null,
+      "location": "Europe",
+      "sectors": [
+        "B2c"
+      ],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "A platform for Vibecoders. They use it to track their work and to share what they've built."
+    },
+    {
+      "id": "pragma",
+      "name": "Pragma",
+      "website": null,
+      "location": null,
+      "sectors": [],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "An AI research lab building self-improving companies."
+    },
+    {
+      "id": "open-swarm",
+      "name": "Open Swarm",
+      "website": null,
+      "location": "San Francisco",
+      "sectors": [
+        "Ai",
+        "B2c"
+      ],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "The first AI-Native operating system."
+    },
+    {
+      "id": "omnibook",
+      "name": "Omnibook",
+      "website": null,
+      "location": null,
+      "sectors": [],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "The Financial Prediction Market."
+    },
+    {
+      "id": "narion-technologies",
+      "name": "Narion Technologies",
+      "website": null,
+      "location": null,
+      "sectors": [],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "Aerial droids to perform dangerous physical work beyond safe human reach, starting in defense."
+    },
+    {
+      "id": "mypip",
+      "name": "MyPip",
+      "website": null,
+      "location": "San Francisco",
+      "sectors": [
+        "B2c",
+        "Gaming"
+      ],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "Vibe coding for video games."
+    },
+    {
+      "id": "meadow",
+      "name": "Meadow",
+      "website": null,
+      "location": "San Francisco",
+      "sectors": [
+        "B2B",
+        "Commerce"
+      ],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "Autonomous consumer companies."
+    },
+    {
+      "id": "marv-labs",
+      "name": "Marv Labs",
+      "website": null,
+      "location": null,
+      "sectors": [],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "Autonomous vehicle maintenance."
+    },
+    {
+      "id": "lokantara-space",
+      "name": "Lokantara Space",
+      "website": null,
+      "location": "London",
+      "sectors": [
+        "Aerospace & Defence"
+      ],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "Full-stack space-native compute on novel, power-efficient AI chips."
+    },
+    {
+      "id": "lattice-energy",
+      "name": "Lattice Energy",
+      "website": null,
+      "location": "San Francisco",
+      "sectors": [
+        "Energy & Utilities"
+      ],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "Putting power plants in the sky, to get electricity anywhere on the planet in days, instead of years."
+    },
+    {
+      "id": "isochronic",
+      "name": "Isochronic",
+      "website": null,
+      "location": "London",
+      "sectors": [
+        "Dev Tools / Infra",
+        "Privacy & Cybersecurity"
+      ],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "The decision control system for enterprise agents."
+    },
+    {
+      "id": "invariant-ai",
+      "name": "Invariant AI",
+      "website": null,
+      "location": "Bangalore",
+      "sectors": [
+        "Legal & Compliance"
+      ],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "Autonomous agents to accelerate compliance for the physical economy."
+    },
+    {
+      "id": "hug",
+      "name": "hug",
+      "website": null,
+      "location": "San Francisco",
+      "sectors": [
+        "Ai",
+        "B2c"
+      ],
+      "relationship": "portfolio-listing",
+      "investment": null,
+      "returns": null,
+      "quote": "An AI BFF who understands you better than any human ever could."
+    }
+  ]
+}

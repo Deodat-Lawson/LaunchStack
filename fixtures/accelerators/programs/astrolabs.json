@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "astrolabs",
+  "name": "AstroLabs",
+  "logo": {
+    "path": "/accelerators/logos/astrolabs.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://astrolabs.com/",
+  "applyUrl": "https://astrolabs.com/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Business Expansion in Saudi Arabia & UAE | AstroLabs Products Solutions Company Saudization Calculator Free Sign In Get Started Enquire Now Sign In Get Started Toggle navigation menu Enquire Now Set up, operate, and integrate your business with full compliance and market readiness. Enquire now Launch your Saudi entity with full support compliance and government requirements Set up your business in the most vibrant market of the UAE with 100% foreign ownership Launch your Saudi entity with full support compliance and government requirements Set up your business in the most vibrant market of the UAE with 100% foreign ownership No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://astrolabs.com/",
+      "title": "AstroLabs — official mark on the retrieved page",
+      "quote": "https://astrolabs.com/_next/image?url=https%3A%2F%2Fcdn.sanity.io%2Fimages%2F732yszuw%2Fproduction%2F38a8f9bb6df4a51cdedc0f9f4121ede95bc635ed-1370x470.png&w=384&q=75",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://astrolabs.com/",
+      "title": "AstroLabs — visible page text",
+      "quote": "Business Expansion in Saudi Arabia & UAE | AstroLabs Products Solutions Company Saudization Calculator Free Sign In Get Started Enquire Now Sign In Get Started Toggle navigation menu Enquire Now Set up, operate, and integrate your business with full compliance and market readiness. Enquire now Launch your Saudi entity with full support compliance and government requirements Set up your business in the most vibrant market of the UAE with 100% foreign ownership Launch your Saudi entity with full support compliance and government requirements Set up your business in the most vibrant market of the UAE with 100% foreign ownership",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "astrolabs-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://astrolabs.com/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

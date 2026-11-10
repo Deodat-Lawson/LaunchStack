@@ -288,6 +288,13 @@
       "when": 1794263024937,
       "tag": "20261109222344_accelerator_similar_companies_tracker",
       "breakpoints": true
+    },
+    {
+      "idx": 41,
+      "version": "7",
+      "when": 1794269341895,
+      "tag": "20261110000901_accelerator_program_intelligence",
+      "breakpoints": true
     }
   ]
 }

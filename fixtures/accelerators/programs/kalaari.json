@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "kalaari",
+  "name": "Kalaari Capital",
+  "logo": {
+    "path": "/accelerators/logos/kalaari.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://kalaari.com/",
+  "applyUrl": "https://kalaari.com/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Championing India's Alpha | Kalaari Capital Skip to main content CXXO KStack What’s Your Pitch About About Kalaari Team Portfolio Alpha Archives Fellowship Programs CXXO KStack What's Your Piitch Alpha We back audacious founders on their journey to build iconic companies. Our Vision Portfolio Mosaic Portfolio Mosaic An IIT Madras-incubated startup pioneering industrialized prefab micro-construction to deliver scalable, rapid infrastructure across India. View Blog Articulus Surgical is building affordable, modular surgical robotics for India — where 70% of surgeries are still open procedures and robotic systems have reached fewer than 300 of 70,000 hospitals. Read Blog Kalaari Capital led a $3M seed round in NudgeBee, an AI-agentic platform that unifies SRE, FinOps, and Cloud Ops into a single enterprise context layer to automate complex cloud operations. Read Blog byteXL’s differentiated approach is its deep integration with engineering institutions. Read Blog The gap between when clean electricity is produced and when it is needed is one of the largest unresolved problems in India's renewable energy story. Read Newsletter We explore why compute is moving into space, what makes orbital AI fundamentally different, and where the startup opportunities lie. Read Newsletter Earth observation has an $80B opportunity across agriculture, defense, maritime, and a range of other industri No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://kalaari.com/",
+      "title": "Kalaari Capital — official mark on the retrieved page",
+      "quote": "https://cdn.prod.website-files.com/69932395f46b656c443e9c46/6997f232b3b9541c1e061113_Group%2041535.svg",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://kalaari.com/",
+      "title": "Kalaari Capital — visible page text",
+      "quote": "Championing India's Alpha | Kalaari Capital Skip to main content CXXO KStack What’s Your Pitch About About Kalaari Team Portfolio Alpha Archives Fellowship Programs CXXO KStack What's Your Piitch Alpha We back audacious founders on their journey to build iconic companies. Our Vision Portfolio Mosaic Portfolio Mosaic An IIT Madras-incubated startup pioneering industrialized prefab micro-construction to deliver scalable, rapid infrastructure across India. View Blog Articulus Surgical is building affordable, modular surgical robotics for India — where 70% of surgeries are still open procedures and robotic systems have reached fewer than 300 of 70,000 hospitals. Read Blog Kalaari Capital led a $3M seed round in NudgeBee, an AI-agentic platform that unifies SRE, FinOps, and Cloud Ops into a single enterprise context layer to automate complex cloud operations. Read Blog byteXL’s differentiated approach is its deep integration with engineering institutions. Read Blog The gap between when clean electricity is produced and when it is needed is one of the largest unresolved problems in India's renewable energy story. Read Newsletter We explore why compute is moving into space, what makes orbital AI fundamentally different, and where the startup opportunities lie. Read Newsletter Earth observation has an $80B opportunity across agriculture, defense, maritime, and a range of other industri",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "kalaari-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://kalaari.com/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

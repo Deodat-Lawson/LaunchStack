@@ -1,7 +1,7 @@
 import {
     companyEmbeddingText,
     hashValue,
-    type PortfolioCompany,
+    type PastCompany,
 } from "@launchstack/pipelines/accelerators";
 import { generateEmbeddings } from "@launchstack/llm/embeddings";
 
@@ -11,7 +11,7 @@ export interface SimilarCompanyEmbeddings {
     model: string;
     embed(texts: string[]): Promise<number[][]>;
     /** Changes when the company's text or the model changes, so stale vectors are redone. */
-    hashOf(company: PortfolioCompany): string;
+    hashOf(company: PastCompany): string;
 }
 
 /**

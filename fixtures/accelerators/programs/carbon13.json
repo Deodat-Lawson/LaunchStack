@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "carbon13",
+  "name": "Carbon13",
+  "logo": {
+    "path": "/accelerators/logos/carbon13.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://carbonthirteen.com/",
+  "applyUrl": "https://carbonthirteen.com/programmes/apply-now/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: We believe entrepreneurs will change the trajectory of climate change. The Venture Builder for the Climate Emergency Image Bluemethane ‘s first-of-its kind technology detects and captures methane emissions from water sources to create a new source of bio-power We build ventures capable of mitigating at least 10M tonnes of CO2e per annum once at scale The Venture Builder for the Climate Emergency Image Dr. Nicky Dee , Carbon13 Co-Founder and Chief Sustainability Officer “With the help of Carbon13, we’re able to quantify our carbon footprint and carbon impact.” The Venture Builder for the Climate Emergency Image Gabriele Barteskaite, CPO and Co-founder at Future Greens , is decarbonising our food system by growing fresh produce using food waste. No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://carbonthirteen.com/",
+      "title": "Carbon13 — official mark on the retrieved page",
+      "quote": "https://carbonthirteen.com/wp-content/uploads/2023/01/Carbon13_logo.png",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://carbonthirteen.com/",
+      "title": "Carbon13 — visible page text",
+      "quote": "We believe entrepreneurs will change the trajectory of climate change. The Venture Builder for the Climate Emergency Image Bluemethane ‘s first-of-its kind technology detects and captures methane emissions from water sources to create a new source of bio-power We build ventures capable of mitigating at least 10M tonnes of CO2e per annum once at scale The Venture Builder for the Climate Emergency Image Dr. Nicky Dee , Carbon13 Co-Founder and Chief Sustainability Officer “With the help of Carbon13, we’re able to quantify our carbon footprint and carbon impact.” The Venture Builder for the Climate Emergency Image Gabriele Barteskaite, CPO and Co-founder at Future Greens , is decarbonising our food system by growing fresh produce using food waste.",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "carbon13-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://carbonthirteen.com/programmes/apply-now/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

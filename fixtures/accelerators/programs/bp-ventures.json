@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "bp-ventures",
+  "name": "bp Ventures",
+  "logo": {
+    "path": "/accelerators/logos/bp-ventures.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.bp.com/about-us",
+  "applyUrl": "https://www.bp.com/about-us",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: About us About us Products and services Investors Press and publications Careers Contact us Global bp is a global integrated oil and gas company. We help meet the energy needs of countries, businesses and millions of customers every day We’re working hard across the world every day to help deliver energy to countries and millions of bp customers. Learn more Who we are Our leadership Our history Our brands Our beliefs Our purpose is to deliver energy to the world, today and tomorrow. Find out more BP p.l.c. Copyright © 1996-2026 {\"pageType\":\"Standard\",\"id\":\"4krkfrUR4UFJvRY40QLXqd\",\"locale\":\"en\",\"siteSection\":[\"About us\"],\"datePublished\":1771245621.604} No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.bp.com/about-us",
+      "title": "bp Ventures — official mark on the retrieved page",
+      "quote": "https://www.bp.com/apple-icon.png?9d70f173904839e3",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.bp.com/about-us",
+      "title": "bp Ventures — visible page text",
+      "quote": "About us About us Products and services Investors Press and publications Careers Contact us Global bp is a global integrated oil and gas company. We help meet the energy needs of countries, businesses and millions of customers every day We’re working hard across the world every day to help deliver energy to countries and millions of bp customers. Learn more Who we are Our leadership Our history Our brands Our beliefs Our purpose is to deliver energy to the world, today and tomorrow. Find out more BP p.l.c. Copyright © 1996-2026 {\"pageType\":\"Standard\",\"id\":\"4krkfrUR4UFJvRY40QLXqd\",\"locale\":\"en\",\"siteSection\":[\"About us\"],\"datePublished\":1771245621.604}",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "bp-ventures-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.bp.com/about-us",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

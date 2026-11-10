@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "techstars-anywhere",
+  "name": "Techstars Anywhere",
+  "logo": {
+    "path": "/accelerators/logos/techstars-anywhere.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.techstars.com/accelerators/anywhere",
+  "applyUrl": "https://apply.techstars.com/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Techstars Anywhere Accelerator | Techstars Join Us Portfolio Locations I Am... Resources About Techstars Apply Today Home / Techstars Accelerators / Techstars Anywhere Accelerator ACCELERATORS Techstars’ remote-first Anywhere program was launched in 2017 and supports companies innovating across any industry. The Anywhere model delivers the value of a top-tier Techstars accelerator remotely, to companies in American time zones. Anywhere provides the flexibility to participate in an accelerator program without relocating, and meets for three in-person offsites in startup hubs during the program. Get in Touch ABOUT THIS PROGRAM Techstars Anywhere is a remote-first Techstars accelerator with no relocation necessary. Founders follow the proven Techstars approach to accelerate their business and #domorefaster. We are looking for founders who are domain experts building value-generating technologies across industries, with a strong emphasis on robotics, energy, applied and physical AI, materials science, and beyond. The Techstars Anywhere program provides companies in North American timezones the flexibility to participate in an accelerator program without relocating, while still connecting in person through three offsites in VC hubs during the program. Inside an Accelerator Aug 24 2026 No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.techstars.com/accelerators/anywhere",
+      "title": "Techstars Anywhere — official mark on the retrieved page",
+      "quote": "https://cdn.bfldr.com/CBWQP80B/as/q5uy8g-d6h6u8-53a4zf/1110x740-TS-blog?auto=webp&format=png&width=3840",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.techstars.com/accelerators/anywhere",
+      "title": "Techstars Anywhere — visible page text",
+      "quote": "Techstars Anywhere Accelerator | Techstars Join Us Portfolio Locations I Am... Resources About Techstars Apply Today Home / Techstars Accelerators / Techstars Anywhere Accelerator ACCELERATORS Techstars’ remote-first Anywhere program was launched in 2017 and supports companies innovating across any industry. The Anywhere model delivers the value of a top-tier Techstars accelerator remotely, to companies in American time zones. Anywhere provides the flexibility to participate in an accelerator program without relocating, and meets for three in-person offsites in startup hubs during the program. Get in Touch ABOUT THIS PROGRAM Techstars Anywhere is a remote-first Techstars accelerator with no relocation necessary. Founders follow the proven Techstars approach to accelerate their business and #domorefaster. We are looking for founders who are domain experts building value-generating technologies across industries, with a strong emphasis on robotics, energy, applied and physical AI, materials science, and beyond. The Techstars Anywhere program provides companies in North American timezones the flexibility to participate in an accelerator program without relocating, while still connecting in person through three offsites in VC hubs during the program. Inside an Accelerator Aug 24 2026",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "techstars-anywhere-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://apply.techstars.com/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

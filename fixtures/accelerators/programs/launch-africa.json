@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "launch-africa",
+  "name": "Launch Africa",
+  "logo": {
+    "path": "/accelerators/logos/launch-africa.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.launchafrica.vc/",
+  "applyUrl": "https://www.launchafrica.vc/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: LAUNCH AFRICA VENTURES Investing, growing and scaling the next generation of Launch Africa is a leading Pan-African VC fund solving the significant funding gap in the Seed and pre-Series A investment landscape in Africa. With a decade-long track record of venture building alongside some of the smartest founding teams in Africa, we back startups across multiple sectors, regions, and products that tackle the most meaningful challenges on the continent. Building the Future of African Ventures Our team is comprised of passionate and experienced professionals who bring a diverse range of expertise to the table. Drawing on our collective knowledge and deep understanding of the African market combined with our unique high touch, high scale approach, we identify and back promising startups across multiple sectors and regions. We believe in the power of entrepreneurship and innovation to transform Africa's economic landscape and create sustainable, impactful solutions. OUR PORTFOLIO Launch Africa Ventures was founded by Zachariah George and Janade Du Plessis in 2020. Zach and Janade have been pioneers of early-stage venture capital in Africa since 2014, bridging the funding gap for Seed and pre-Series A startups across the African continent. Zach’s investment banking and Angel investing experience together with Janade's expertise in entrepreneurship, research and banking provided the ea No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.launchafrica.vc/",
+      "title": "Launch Africa — official mark on the retrieved page",
+      "quote": "https://images.squarespace-cdn.com/content/v1/64a7a29028c7470d7e976389/01451a71-eb15-4b7e-9ce4-dd42eb86dc2a/Launch+Africa+Logo%402x.png?format=1500w",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.launchafrica.vc/",
+      "title": "Launch Africa — visible page text",
+      "quote": "LAUNCH AFRICA VENTURES Investing, growing and scaling the next generation of Launch Africa is a leading Pan-African VC fund solving the significant funding gap in the Seed and pre-Series A investment landscape in Africa. With a decade-long track record of venture building alongside some of the smartest founding teams in Africa, we back startups across multiple sectors, regions, and products that tackle the most meaningful challenges on the continent. Building the Future of African Ventures Our team is comprised of passionate and experienced professionals who bring a diverse range of expertise to the table. Drawing on our collective knowledge and deep understanding of the African market combined with our unique high touch, high scale approach, we identify and back promising startups across multiple sectors and regions. We believe in the power of entrepreneurship and innovation to transform Africa's economic landscape and create sustainable, impactful solutions. OUR PORTFOLIO Launch Africa Ventures was founded by Zachariah George and Janade Du Plessis in 2020. Zach and Janade have been pioneers of early-stage venture capital in Africa since 2014, bridging the funding gap for Seed and pre-Series A startups across the African continent. Zach’s investment banking and Angel investing experience together with Janade's expertise in entrepreneurship, research and banking provided the ea",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "launch-africa-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.launchafrica.vc/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

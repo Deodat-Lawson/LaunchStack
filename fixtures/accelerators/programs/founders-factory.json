@@ -1,0 +1,66 @@
+{
+  "id": "founders-factory",
+  "name": "Founders Factory",
+  "logo": {
+    "path": "/accelerators/logos/founders-factory.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://foundersfactory.com/",
+  "applyUrl": "https://foundersfactory.com/accelerator/",
+  "description": {
+    "text": "AI-written synthesis of the cited official pages, prepared by the collecting assistant: the homepage calls Founders Factory a venture studio and startup accelerator that backs founders with capital and support from a team of 60+ operators, and it says the work spans 500+ startups and 5 continents. The accelerator page says it invests capital together with a four-month cohort-based program of operational support, with a chance to pitch at investor showcase events and warm introductions to investor networks. It also lists raise capital, operational support, corporate partnerships and pilots, and community. No cheque size or deadline was in the text that was kept. The homepage and accelerator page also link other named programs; those pages were not opened.",
+    "sourceIds": ["homepage", "accelerator"],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the homepage and accelerator page, prepared by the collecting assistant: the homepage says it funds at idea, pre-seed, and seed, and the accelerator page describes a four-month cohort for startups it invests in. It does not publish a sector test or a geography test on the pages that were read. Separate partner accelerators linked from the site were not reviewed.",
+    "sourceIds": ["homepage", "accelerator"],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://foundersfactory.com/",
+      "title": "Founders Factory homepage — Light wordmark",
+      "quote": "https://a.storyblok.com/f/229494/300x96/42ec629d33/ff-light.svg (fill #FFFFFF). This is the published wordmark. It was not recolored, so it is faint on a light panel.",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://foundersfactory.com/",
+      "title": "Founders Factory homepage — Studio and accelerator",
+      "quote": "Founders Factory backs visionary founders with capital, dedicated support from a team of 60+ operators, and unrivalled access to a coalition of industry leading corporate partners.\n\n500+ startups\n60+ operators\n5 continents\n\nWe fund startups at idea, pre-seed and seed, combining capital with the full backing of Founders Factory through our investment programs.",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    },
+    {
+      "id": "accelerator",
+      "url": "https://foundersfactory.com/accelerator/",
+      "title": "Founders Factory accelerator page — Four-month cohort",
+      "quote": "We're co-pilots in your entrepreneurial journey. Our goal is to drive exponential progress in your venture, and increase the odds of success.\n\nWe invest capital together with a four-month cohort-based program of expert operational support. During the program, you'll be given the opportunity to pitch at our investor showcase events, along with warm introductions to our global investor networks.",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "accelerator-cohort",
+      "label": "Accelerator cohort",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": ["accelerator"],
+      "form": {
+        "id": "founders-factory-accelerator-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://foundersfactory.com/accelerator/",
+        "checkedAt": "2026-10-27T00:25:00.000Z",
+        "supported": false,
+        "limitations": [
+          "The application questions were not opened. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "Named partner programs linked from the site were not opened. No cheque size or deadline was published in the accelerator text that was kept."
+        ],
+        "fields": []
+      }
+    }
+  ],
+  "schemaVersion": 2
+}

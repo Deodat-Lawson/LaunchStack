@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 2,
+  "id": "entrepreneurs-first",
+  "name": "Entrepreneurs First",
+  "logo": {
+    "path": "/accelerators/logos/entrepreneurs-first.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.joinef.com/",
+  "applyUrl": "https://apply.joinef.com/",
+  "description": {
+    "text": "AI-written synthesis of the cited official pages, prepared by the collecting assistant: Entrepreneurs First says it turns exceptional individuals into funded founders, backs the person before a company, and then offers a bridge to Silicon Valley. The homepage says selected people get help finding a cofounder, a weekend residential retreat, advice, a cohort at a global office, and talent events. It says individuals join at the start of founding, with or without an idea, and describes support that includes a dedicated advisor, a San Francisco-based partner, US customer-development workshops, three months of office space in central San Francisco, fundraising preparation, a San Francisco Demo Day, Delaware C Corp incorporation guidance, and relocation support. The same page states an equity-free grant while ideating, up to $250K once a company is formed, up to $5M in follow-on funding through future rounds with support up to Series B, and over $600K in credits, and says office space is for nine months in central London, Bangalore, and San Francisco. It also says companies typically raise between $1-7M within a couple of weeks of the San Francisco Demo Day; that is EF's published characterization, not a term of admission. The application hub says the listed programs are full-time and in person. Two application pages were opened: Bangalore Winter 2027, start February 2027, with text to apply by 02 November 2026 to be considered for the second of three selection rounds; and the Bridge Residency Winter 2027 in San Francisco, an 8-week program starting February 2027, with text to apply by 23 Nov 2026. Neither date is stored as a closing deadline because the pages do not say applications end then. The hub also lists XF2 in London for Fall 2026, a London program starting April 2027, and US funding and fellowships; those forms were not opened.",
+    "sourceIds": [
+      "ef-homepage",
+      "ef-homepage-investment",
+      "ef-apply-hub",
+      "ef-bangalore-page",
+      "ef-bridge-page"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the cited official pages, prepared by the collecting assistant: EF says it is most valuable for people early in their careers who have outperformed their peers, and it describes the traits it looks for as ambition and founder aptitude. It says an idea and a cofounder are not required, and that it assesses individuals before they have a business, cofounder, or idea. Someone who already has a cofounder is told to say so and to have that person apply too. The homepage also says EF is for individuals who have continuously outperformed their peer group, have built products, organizations, or startups, and have the ambition to build a company in the US. The hub says a cofounder is not required, that the programs are full-time and in person in a hub city, and that within eight weeks 80% of participants will find a cofounder; that percentage is EF's statement, not an eligibility rule. Europe-based applicants are pointed to London or the Bridge Residency, US-based applicants to US funding and fellowships, and India-based applicants to Bangalore, with a request to apply to one program in one hub at a time. The Bridge page says that program is for Europe's next founders and that a cofounder or idea is not required. Visa support is described as possible help applying, not a visa provided by EF. These are narrative descriptions, not a closed stage enum or a company-specific fit score. The full application questions behind email verification were not reviewed.",
+    "sourceIds": ["ef-homepage-who", "ef-apply-hub", "ef-faqs", "ef-bridge-page"],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.joinef.com/",
+      "title": "Entrepreneurs First homepage — Header wordmark",
+      "quote": "https://www.joinef.com/wp-content/themes/joinef2023/img/framework/logo-new.svg",
+      "checkedAt": "2026-10-26T23:19:30.000Z"
+    },
+    {
+      "id": "ef-homepage",
+      "url": "https://www.joinef.com/",
+      "title": "Entrepreneurs First homepage — What joining is described as",
+      "quote": "We turn exceptional individuals into funded founders. We back you first, then give you a bridge to Silicon Valley.\n\nYou might have an early idea, or be testing a cofounder. You might have nothing. What we’re most interested in is you and your potential.\n\n[…]\n\nIf you’re selected to join EF, you’ll:\n\nGain access to a pool of exceptional cofounders screened for their skills and behaviour\nAttend our weekend residential retreat to kickstart your founding journey\nReceive expert advice on who to pair with and how to test potential cofounders\nJoin a cohort of peers you’ll work alongside at one of our global offices\n\n[…]\n\nIndividuals join us at the very start of their founding journey. Some may have an idea, others will be working out which idea to pursue.\n\n[…]\n\nFrom getting your visa to accessing venture capital, we help you break into the world’s top startup ecosystem, including:\n\nWorkshops on how to do customer development for the U.S. market\n3 months of office space in central San Francisco\nHands-on support to prepare your fundraising materials, including your pitch and deck\nThe opportunity to pitch at our San Francisco Demo Day attended by 200+ partners from the world’s best VCs\nBespoke introductions to some of the world’s best investors\nDelaware C Corp incorporation guidance and relocation support\n\nOur companies typically raise between $1-7M within a couple of weeks of pitching at our SF Demo Day.",
+      "checkedAt": "2026-10-26T23:19:30.000Z"
+    },
+    {
+      "id": "ef-homepage-investment",
+      "url": "https://www.joinef.com/",
+      "title": "Entrepreneurs First homepage — Published funding and credits",
+      "quote": "We invest early, fast, and on founder-friendly terms.\n\nEquity-free grant to support you while you’re still ideating\nUp to $250K investment once you form a company\nUp to $5M in follow-on funding through your future rounds — and continued support up to Series B\nOver $600K in credits to help you move at warp speed: $350K in Azure credits; $250K+ from OpenAI, Anthropic, GitHub, PostHog, Datadog, ElevenLabs and more\nOffice space for nine months in central London, Bangalore and San Francisco",
+      "checkedAt": "2026-10-26T23:19:30.000Z"
+    },
+    {
+      "id": "ef-homepage-who",
+      "url": "https://www.joinef.com/",
+      "title": "Entrepreneurs First homepage — Who the page says EF is for",
+      "quote": "EF is for individuals who have:\n\ncontinuously outperformed their peer group\nbuilt products, organizations or startups in the past\nthe ambition to build a company in the U.S.",
+      "checkedAt": "2026-10-26T23:19:30.000Z"
+    },
+    {
+      "id": "ef-apply-hub",
+      "url": "https://apply.joinef.com/",
+      "title": "Entrepreneurs First application hub — Listed programs and who should apply",
+      "quote": "Ready to apply? The programs below are full-time and in person.\n\nXF2: Experienced Founders Program in London | Fall 2026\nStart: Fall 2026\nRegister here if you have 7+ years experience and have either founded a startup before or been a key part of its inception.\n\nThe Bridge Residency in San Francisco | Winter 2027\nStart: February 2027\nStart your journey in a residency in San Francisco for an 8-week program for young Europeans.\n\nLondon Program | Spring 2027\nStart: April 2027\nStart your journey in London. After 12 weeks, move to San Francisco for the last 3 months of the program.\n\nFunding & Fellowships\nStart: 2026\nWhether you’re ready to go all in or still exploring ideas, our residencies in San Francisco give you 3 months to build, experiment, and find the right cofounder. We accept applications on a rolling basis and review each one carefully; we’re unable to provide individual feedback.\n\nBangalore Program | Winter 2027\nStart: February 2027\nApply by: 02 November 2026\nStart your journey in Bangalore. After 14 weeks, move to San Francisco for the last 3 months of the program.\nThere will be three selection rounds. Apply by 02 November 2026 to be considered for the second selection round.\n\nDo I need a cofounder to apply?\n\nNo you do not need a cofounder to apply. Our program brings together exceptional individuals to find a cofounder and build a startup from scratch.\nWe assess all applicants as individuals, before they have a business, cofounder or an idea. If you already have a cofounder, please mention this on your application, and ask them submit one too.\n\nWhy is the program full-time and in person?\n\nWithin eight weeks, 80% of participants will find a cofounder.\n\n[…]\n\nThat’s why we expect you to commit full-time to the program, and move to one of our hub cities to take part in person.",
+      "checkedAt": "2026-10-26T23:19:30.000Z"
+    },
+    {
+      "id": "ef-faqs",
+      "url": "https://www.joinef.com/faqs/",
+      "title": "Entrepreneurs First FAQ — Idea, cofounder, program choice, and review",
+      "quote": "Do I need a cofounder to apply?\n\nNo you do not need a cofounder to apply. Our program brings together exceptional individuals to find a cofounder and build a startup from scratch.\n\nWe assess all applicants as individuals, before they have a business, cofounder or an idea. If you already have a cofounder, please mention this on your application, and ask them to submit one too.\n\nDo I need an idea to apply?\n\nNo, you do not need an idea to apply. However, most applicants to EF have a range of areas that they’re interested in, or actively exploring.\n\nWe do not assess individuals based on their ideas; we look for those with the talent, ambition, and founder aptitude to build a globally important startup.\n\n[…]\n\nWhat happens after I apply?\n\nWe review applications on a rolling basis. If we think you might be a good fit for one of our programs, we will invite you to meet our Talent Investing team.",
+      "checkedAt": "2026-10-26T23:19:30.000Z"
+    },
+    {
+      "id": "ef-bangalore-page",
+      "url": "https://apply.joinef.com/app/bangalore-winter/",
+      "title": "Bangalore Winter 2027 — Public first step, remainder behind email",
+      "quote": "This cohort starts in February 2027. It is full-time and in person.\n\nThere will be three selection rounds. Apply by 02 November 2026 to be considered for the second selection round. The earlier you apply, the higher your chances to make it into the program.\n\nStart your application by filling in your details. Check your inbox and use the button in the verification email to access the remainder of the questions.\n\nFirst Name\nLast Name\nEmail Address\nPhone Number\nLinkedIn Profile URL\nIf you do not have a LinkedIn profile please provide a url for your personal website.",
+      "checkedAt": "2026-10-26T23:19:30.000Z"
+    },
+    {
+      "id": "ef-bridge-page",
+      "url": "https://apply.joinef.com/app/san-francisco-thebridge-winter/",
+      "title": "Bridge Residency Winter 2027 — Public first step and inbox continuation",
+      "quote": "San Francisco - The Bridge Residency\nStart February 2027\nApply by 23 Nov 2026\n\nThis is an 8-week residency program in the Bay Area for Europe’s next founders who are ready to start now. You don’t need to have a cofounder or an idea to apply.\n\nFirst Name\nLast Name\nEmail Address\nPhone Number\nLinkedIn Profile URL\n\nCheck your inbox\nYou have not submitted an application yet. To continue and submit your application, please follow the link in the email we've sent to {email}.",
+      "checkedAt": "2026-10-26T23:19:30.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "bangalore-winter-2027",
+      "label": "Bangalore — Winter 2027",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": ["ef-bangalore-page", "ef-apply-hub"],
+      "form": {
+        "id": "ef-bangalore-winter-2027-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://apply.joinef.com/app/bangalore-winter/",
+        "checkedAt": "2026-10-26T23:19:30.000Z",
+        "supported": false,
+        "limitations": [
+          "The public Bangalore Winter 2027 page shows a first step (name, email, phone, LinkedIn) and says to use the verification email to reach the remainder of the questions. No details were entered, Next was not clicked, and no verification email was requested. The remainder of the Form, including its order, required flags, options, and limits, was not seen. Fields are empty and Start Application stays blocked.",
+          "The page says to apply by 02 November 2026 to be considered for the second of three selection rounds. It does not say that applications close on that date, and it does not publish a time or timezone. deadlineAt and dateOnly stay empty so the product does not label that round cutoff as the deadline. rolling is false for this cycle: the FAQ describes rolling review generally, while this page describes three selection rounds. That is not recorded as a single rolling-intake claim.",
+          "The first-step consent and newsletter checkboxes were not accepted. The visible first step was not converted into a partial checked Form."
+        ],
+        "fields": []
+      }
+    },
+    {
+      "id": "bridge-winter-2027",
+      "label": "San Francisco Bridge — Winter 2027",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": ["ef-bridge-page"],
+      "form": {
+        "id": "ef-bridge-winter-2027-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://apply.joinef.com/app/san-francisco-thebridge-winter/",
+        "checkedAt": "2026-10-26T23:19:30.000Z",
+        "supported": false,
+        "limitations": [
+          "The public Bridge Winter 2027 page shows the same kind of first step and an inbox popup that says the application has not been submitted until the email link is followed. No details were entered and the email step was not started. The rest of the Form was not seen. Fields are empty and Start Application stays blocked.",
+          "The page says Apply by 23 Nov 2026 and Start February 2027, without a clock time or timezone, and without stating that 23 November is the final close. Those dates are not stored as deadlineAt or dateOnly. The hub's separate US funding and fellowships text about rolling review was not applied to this cycle."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "climate-launchpad",
+  "name": "ClimateLaunchpad",
+  "logo": {
+    "path": "/accelerators/logos/climate-launchpad.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://climatelaunchpad.org/",
+  "applyUrl": "https://climatelaunchpad.org/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: ClimateLaunchpad Facebook – Instagram – LinkedIn – YouTube Join the world’s largest green business ideas competition Turn your green idea into a successful start-up 540 Boot camps Have an idea for a greener future? This is your place to start. Explore Have a green idea but not sure where to start? ClimateLaunchpad is a free space to explore, test, and shape your concept with expert guidance. Learn Gain practical tools to shape your idea into a real solution. Join boot camps, coaching sessions, and a global community supporting your journey. Apply new skills directly to grow your idea. Meet the trainers Connect ClimateLaunchpad brings people together with bold ideas and big ambitions. Meet fellow innovators, mentors, and experts who believe in climate solutions, and be part of something bigger. Climate-KIC network Pitch No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://climatelaunchpad.org/",
+      "title": "ClimateLaunchpad — official mark on the retrieved page",
+      "quote": "https://climatelaunchpad.org/wp-content/uploads/2026/07/Logo-Round-3-600x595.jpg",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://climatelaunchpad.org/",
+      "title": "ClimateLaunchpad — visible page text",
+      "quote": "ClimateLaunchpad Facebook – Instagram – LinkedIn – YouTube Join the world’s largest green business ideas competition Turn your green idea into a successful start-up 540 Boot camps Have an idea for a greener future? This is your place to start. Explore Have a green idea but not sure where to start? ClimateLaunchpad is a free space to explore, test, and shape your concept with expert guidance. Learn Gain practical tools to shape your idea into a real solution. Join boot camps, coaching sessions, and a global community supporting your journey. Apply new skills directly to grow your idea. Meet the trainers Connect ClimateLaunchpad brings people together with bold ideas and big ambitions. Meet fellow innovators, mentors, and experts who believe in climate solutions, and be part of something bigger. Climate-KIC network Pitch",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "climate-launchpad-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://climatelaunchpad.org/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

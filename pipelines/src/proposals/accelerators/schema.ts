@@ -17,7 +17,8 @@ import {
 import { company } from "@launchstack/store/schema";
 import { pgTable } from "@launchstack/store/schema/helpers";
 
-import type { ApplicationResponse, PortfolioCompany } from "./similar-companies";
+import type { ProgramIntelligence } from "./intelligence";
+import type { ApplicationResponse, PastCompany } from "./similar-companies";
 import type { TrackerPriority, TrackerStatus } from "./tracker";
 import type { CatalogueProgram } from "./types";
 
@@ -69,7 +70,7 @@ export const acceleratorPortfolioCompanies = pgTable(
         programId: varchar("program_id", { length: 64 })
             .notNull()
             .references(() => acceleratorPrograms.id, { onDelete: "cascade" }),
-        company: jsonb("company").$type<PortfolioCompany>().notNull(),
+        company: jsonb("company").$type<PastCompany>().notNull(),
         batchStartsOn: date("batch_starts_on").notNull(),
         contentHash: varchar("content_hash", { length: 64 }).notNull(),
         /** Embedding of `companyEmbeddingText`; null until the collector embeds it. */
@@ -167,3 +168,19 @@ export const acceleratorTrackerTasks = pgTable(
         ),
     ]
 );
+
+/**
+ * Public program-intelligence dossier. Company fit and tracker rows do not live here.
+ * The program id is the stable identity shared with Cycles, evidence, and tags.
+ */
+export const acceleratorProgramIntelligence = pgTable("accelerator_program_intelligence", {
+    programId: varchar("program_id", { length: 64 })
+        .primaryKey()
+        .references(() => acceleratorPrograms.id, { onDelete: "cascade" }),
+    dossier: jsonb("dossier").$type<ProgramIntelligence>().notNull(),
+    contentHash: varchar("content_hash", { length: 64 }).notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+        .notNull()
+        .default(sql`CURRENT_TIMESTAMP`),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
+});

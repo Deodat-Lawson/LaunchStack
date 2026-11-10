@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "surge",
+  "name": "Surge",
+  "logo": {
+    "path": "/accelerators/logos/surge.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://surge.peakxv.com/",
+  "applyUrl": "https://surge.peakxv.com/apply",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Surge by Peak XV | Seed Funding for Day-Zero Founders Startups How we partner People Resources Apply Capital, full-stack support, and a community that builds with you. Apply Where early belief compounds. $ 1 B+ Annual revenue across top 10 Surge companies $ 3 B+ Raised in follow-on funding 95 Net Promoter We invest from $500k up to $5M in seed capital from Peak XV, with an open architecture that welcomes co-investors. Hiring Product Policy Comms & PR Engineering GTM Global Expansion Hands-on, full-stack support across every function that matters for going from zero to one. 170 + Companies 400 + Founders Sector-specific communities, always-on learning, and access to the global leaders shaping the future of technology. No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://surge.peakxv.com/",
+      "title": "Surge — official mark on the retrieved page",
+      "quote": "https://cdn.prod.website-files.com/69df604ef6621ee4c73bad64/69dfcce32c05f177427cd6b8_surge%20logo.png",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://surge.peakxv.com/",
+      "title": "Surge — visible page text",
+      "quote": "Surge by Peak XV | Seed Funding for Day-Zero Founders Startups How we partner People Resources Apply Capital, full-stack support, and a community that builds with you. Apply Where early belief compounds. $ 1 B+ Annual revenue across top 10 Surge companies $ 3 B+ Raised in follow-on funding 95 Net Promoter We invest from $500k up to $5M in seed capital from Peak XV, with an open architecture that welcomes co-investors. Hiring Product Policy Comms & PR Engineering GTM Global Expansion Hands-on, full-stack support across every function that matters for going from zero to one. 170 + Companies 400 + Founders Sector-specific communities, always-on learning, and access to the global leaders shaping the future of technology.",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "surge-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://surge.peakxv.com/apply",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

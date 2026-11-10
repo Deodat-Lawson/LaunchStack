@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "imperial-enterprise",
+  "name": "Imperial Enterprise Lab",
+  "logo": {
+    "path": "/accelerators/logos/imperial-enterprise.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.imperialenterpriselab.com/",
+  "applyUrl": "https://www.imperialenterpriselab.com/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Support Us Select Page Applications are now open for WE Innovate 2027 Apply to Imperial’s award winning programme for female founders. Selected teams will receive expert-led masterclasses, personalised coaching and mentoring , and a chance to win a share of a £30,000 equity-free prize fund. Apply now Welcome to Imperial Enterprise Lab, a dedicated support service for students, staff and alumni who want to develop their entrepreneurial mindset, skills, and networks. More about us How can we help you? We help people just like you test new ideas and launch products, services and ventures that address real-world challenges to make a positive difference to people and planet. I want to... Scale my climate tech business Join our online founder community Meet potential co-founders Find a place to work from See what perks are available Talk to someone about my idea Join an online masterclass Join an entrepreneurship programme Speak to an expert Get a dedicated business mentor Find inspirational reads Find other startup accelerators & networks \"E-Lab events are a brilliant way to showcase our products and get feedback from customers, business experts and investors. It's inspiring to network with other student founders too!\" Thomas Gossner, Co-founder Icenine \"The E-Lab taught us how take an idea, prove its value, talk to customers, and get a lot of important insights from the market. The No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.imperialenterpriselab.com/",
+      "title": "Imperial Enterprise Lab — official mark on the retrieved page",
+      "quote": "https://www.imperialenterpriselab.com/wp-content/uploads/2024/09/ELAB-Logo.svg",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.imperialenterpriselab.com/",
+      "title": "Imperial Enterprise Lab — visible page text",
+      "quote": "Support Us Select Page Applications are now open for WE Innovate 2027 Apply to Imperial’s award winning programme for female founders. Selected teams will receive expert-led masterclasses, personalised coaching and mentoring , and a chance to win a share of a £30,000 equity-free prize fund. Apply now Welcome to Imperial Enterprise Lab, a dedicated support service for students, staff and alumni who want to develop their entrepreneurial mindset, skills, and networks. More about us How can we help you? We help people just like you test new ideas and launch products, services and ventures that address real-world challenges to make a positive difference to people and planet. I want to... Scale my climate tech business Join our online founder community Meet potential co-founders Find a place to work from See what perks are available Talk to someone about my idea Join an online masterclass Join an entrepreneurship programme Speak to an expert Get a dedicated business mentor Find inspirational reads Find other startup accelerators & networks \"E-Lab events are a brilliant way to showcase our products and get feedback from customers, business experts and investors. It's inspiring to network with other student founders too!\" Thomas Gossner, Co-founder Icenine \"The E-Lab taught us how take an idea, prove its value, talk to customers, and get a lot of important insights from the market. The",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "imperial-enterprise-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.imperialenterpriselab.com/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

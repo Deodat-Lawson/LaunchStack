@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "passion-capital",
+  "name": "Passion Capital",
+  "logo": {
+    "path": "/accelerators/logos/passion-capital.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://passioncapital.com/",
+  "applyUrl": "https://passioncapital.com/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Home - Passion Capital Skip to main content Hit enter to search or ESC to close Close Search Menu Backing Outstanding European Founders We are a partnership of entrepreneurs and operators who are applying our experiences to helping founders build great technology companies across AI, FinTech & Risk. PORTFOLIO Our success stories GoCardless lets businesses send and receive payments directly between bank accounts. Mobile-first banking services for small and medium-sized enterprises. Digital insurance company using data to offer better car insurance to expats. A subscription-based service that delivers fresh, high-quality dog meals directly to your door. No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://passioncapital.com/",
+      "title": "Passion Capital — official mark on the retrieved page",
+      "quote": "https://passioncapital.com/wp-content/uploads/2024/09/cropped-Favicon-02@2x-32x32.png",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://passioncapital.com/",
+      "title": "Passion Capital — visible page text",
+      "quote": "Home - Passion Capital Skip to main content Hit enter to search or ESC to close Close Search Menu Backing Outstanding European Founders We are a partnership of entrepreneurs and operators who are applying our experiences to helping founders build great technology companies across AI, FinTech & Risk. PORTFOLIO Our success stories GoCardless lets businesses send and receive payments directly between bank accounts. Mobile-first banking services for small and medium-sized enterprises. Digital insurance company using data to offer better car insurance to expats. A subscription-based service that delivers fresh, high-quality dog meals directly to your door.",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "passion-capital-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://passioncapital.com/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

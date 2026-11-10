@@ -1,0 +1,75 @@
+{
+  "schemaVersion": 2,
+  "id": "antler",
+  "name": "Antler",
+  "logo": {
+    "path": "/accelerators/logos/antler.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.antler.co/",
+  "applyUrl": "https://www.antler.co/apply",
+  "description": {
+    "text": "AI-written synthesis of the cited official pages, prepared by the collecting assistant: Antler's homepage describes Antler as a global early-stage VC investing in founders from first check to IPO, and says it backs entrepreneurs with platform, capital, and community. The same homepage states both that Antler is active across 30 locations and that there are 26 locations worldwide, beside figures of 2,000+ portfolio companies and a 12,000+ founder community. Those location counts conflict, so this record does not choose one. The cohort page says its dates are residency start dates, not deadlines, and asks people to apply early. The visible rows checked on 2026-10-26 were Japan / November 2, 2026 / Tokyo; Canada / Rolling intake / Toronto; US / Rolling intake / San Francisco, Austin, and New York City; Denmark, Finland, Sweden, and Norway / Rolling intake / Copenhagen, Helsinki, Stockholm, and Oslo; Australia / February 8, 2027 / Brisbane, Sydney, and Melbourne; Nigeria / March 15, 2027 / Lagos; Korea / March 15, 2027 / Seoul; Kenya / March 22, 2027 / Nairobi. The footnote says rolling-intake locations work with founders year-round instead of a fixed residency and review applications on an ongoing basis. No single global deadline, investment amount, equity share, or program length is established by these pages. Location residency pages were not folded into one set of terms.",
+    "sourceIds": ["antler-homepage", "antler-cohort-dates"],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the cited official pages, prepared by the collecting assistant: the homepage addresses people who want to build a category-defining company and says Antler backs driven entrepreneurs. The public apply form asks the applicant to say whether they are at 'Idea to Pre-Seed – Founding to first traction' or 'Series A to C – I’m ready for scale-up capital', and to choose a region and city. That stage question is something the applicant answers; it is not published here as a rule that only one of those descriptions can apply, and it is not turned into a closed stage category. The cohort page distinguishes fixed start dates from rolling intake by location and says a visa and the right to be in the chosen place are outside what these two pages specify. Per-location eligibility, time commitment, and investment terms were not confirmed from the global pages and stay unknown.",
+    "sourceIds": ["antler-homepage", "antler-cohort-dates", "antler-public-form"],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.antler.co/",
+      "title": "Antler homepage — Header wordmark",
+      "quote": "Inline header SVG on https://www.antler.co/ with alt=\"Antler logo\" and viewBox=\"0 0 117 28\", inside the nav element class text-color_red. The stylesheet sets .text-color_red { color: var(--swatch--red) } and --swatch--red:#ed4746. No separate logo file URL was published. The committed PNG is a raster of those header paths in #ed4746, with an undefined clip-path reference removed so the paths remain visible.",
+      "checkedAt": "2026-10-26T23:19:30.000Z"
+    },
+    {
+      "id": "antler-homepage",
+      "url": "https://www.antler.co/",
+      "title": "Antler homepage — Official description and conflicting location counts",
+      "quote": "Antler is a global early-stage VC investing in the world's best founders from first check to IPO.\n\n[…]\n\nAntler is active across 30 locations globally, where we specialise in early-stage investments.\n\n[…]\n\nIf you’re looking to build the next category-defining company, there’s no better place to pursue your ambition.\n\n[…]\n\nWith a presence in major technology ecosystems across the world we back the most driven entrepreneurs and give them the platform, capital, and community needed to create lasting impact.\n\n2,000+\nportfolio companies\n12,000+\nfounder community\n26\nlocations worldwide",
+      "checkedAt": "2026-10-26T23:19:30.000Z"
+    },
+    {
+      "id": "antler-cohort-dates",
+      "url": "https://www.antler.co/cohort-start-dates",
+      "title": "Antler cohort start dates — Starts, not deadlines",
+      "quote": "Browse our upcoming Antler residency start dates. Please note that these are the start dates, not deadlines. We strongly encourage you to apply early to secure a seat.\n\nJapan — November 2, 2026 — Tokyo\nCanada — Rolling intake — Toronto\nUS — Rolling intake — San Francisco, Austin, New York City\nDenmark, Finland, Sweden, Norway — Rolling intake — Copenhagen, Helsinki, Stockholm, Oslo\nAustralia — February 8, 2027 — Brisbane, Sydney, Melbourne\nNigeria — March 15, 2027 — Lagos\nKorea — March 15, 2027 — Seoul\nKenya — March 22, 2027 — Nairobi\n\n* Rolling intake: These locations work with founders and teams year-round instead of running fixed residency programs. Applications are reviewed on an ongoing basis.",
+      "checkedAt": "2026-10-26T23:19:30.000Z"
+    },
+    {
+      "id": "antler-public-form",
+      "url": "https://www.antler.co/pitch",
+      "title": "Antler public apply page — Two forms after /apply redirected here",
+      "quote": "Anonymous GET of https://www.antler.co/apply ended at https://www.antler.co/pitch. The page title was Apply to Antler | Further, Faster.\n\nWebflow Apply Form fields included First name, last name, email, Linkedin (optional), What stage are you at? with Idea to Pre-Seed – Founding to first traction (value apply-flow) and Series A to C – I’m ready for scale-up capital (value elevate), then region and city radios.\n\nA second form, Pitch Elevate Form, included an optional company description, Where are you based?, an optional website, and an optional PITCH DECK file. Both forms say that clicking submit agrees to Antler's privacy policy. Nothing was submitted.",
+      "checkedAt": "2026-10-26T23:19:30.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "published-start-dates",
+      "label": "Published residency start dates — no single deadline",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": ["antler-cohort-dates", "antler-public-form"],
+      "form": {
+        "id": "antler-public-pitch-2026-10-26",
+        "status": "checked",
+        "sourceUrl": "https://www.antler.co/pitch",
+        "checkedAt": "2026-10-26T23:19:30.000Z",
+        "supported": false,
+        "limitations": [
+          "Anonymous GET of https://www.antler.co/apply redirected to https://www.antler.co/pitch. The page contains two forms: Webflow Apply Form and Pitch Elevate Form. No account was created, the privacy-policy submit control was not used, and nothing was submitted. The timestamp is this markup review.",
+          "City choices are conditional on region, and the stage control switches between the residency apply flow and the Elevate pitch flow. The Elevate flow includes an optional pitch-deck file. This editor cannot represent that conditional structure or a file upload, so the forms were not flattened. Fields are empty and Start Application stays blocked.",
+          "City radios on the apply form publish the value attribute Radio rather than a distinct city value, so city labels were not stored as options. Several text inputs publish maxlength 256, and the Elevate company description publishes maxlength 5000. Those attributes are not stored as Field limits because no Fields were imported.",
+          "The cohort page says its dates are start dates, not deadlines, and only some locations are rolling. rolling is false because that is not a single global rolling claim. deadlineAt stays null. No investment amount or equity term from these pages is recorded. Individual location residency pages were not used as global terms."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

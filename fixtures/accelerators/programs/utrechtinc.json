@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "utrechtinc",
+  "name": "UtrechtInc",
+  "logo": {
+    "path": "/accelerators/logos/utrechtinc.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://utrechtinc.nl/",
+  "applyUrl": "https://utrechtinc.nl/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Home - UtrechtInc Startup Incubator To main content To navigation UtrechtInc Startup Incubator Don’t build alone. Build with 400+ founders who’ve done it. We connect researchers and founders with the mentors, funding, and community to take it from idea to real company, whatever stage you’re starting from. Building something new can be hard. Having the right people around you makes all the difference. UtrechtInc connects you with 100+ experienced mentors, a community of fellow builders, and the investors and partners who’ve been waiting for someone like you. Whatever stage you’re at – idea, prototype, or first revenue – and whatever background you have – researcher, doctor, student, or entrepreneur – there’s a program built for where you are right now. We offer a vibrant community, free consultations with professionals and a network of mentors, founders, talents and investors. Whether you have just an idea or you're already running a startup, UtrechtInc has a place for you - join our community of 40+ active startups and 400+ graduates. We have several programs available to help founders develop their entrepreneurial skills and validate their research or idea in the market. Free and paid programs for scientists, students, and founders at every stage: Ideation, Validation & Acceleration, in health, education and sustainability. No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://utrechtinc.nl/",
+      "title": "UtrechtInc — official mark on the retrieved page",
+      "quote": "https://utrechtinc.nl/wp-content/uploads/2026/06/Startup-Logos-Vacancies-600x338.jpg",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://utrechtinc.nl/",
+      "title": "UtrechtInc — visible page text",
+      "quote": "Home - UtrechtInc Startup Incubator To main content To navigation UtrechtInc Startup Incubator Don’t build alone. Build with 400+ founders who’ve done it. We connect researchers and founders with the mentors, funding, and community to take it from idea to real company, whatever stage you’re starting from. Building something new can be hard. Having the right people around you makes all the difference. UtrechtInc connects you with 100+ experienced mentors, a community of fellow builders, and the investors and partners who’ve been waiting for someone like you. Whatever stage you’re at – idea, prototype, or first revenue – and whatever background you have – researcher, doctor, student, or entrepreneur – there’s a program built for where you are right now. We offer a vibrant community, free consultations with professionals and a network of mentors, founders, talents and investors. Whether you have just an idea or you're already running a startup, UtrechtInc has a place for you - join our community of 40+ active startups and 400+ graduates. We have several programs available to help founders develop their entrepreneurial skills and validate their research or idea in the market. Free and paid programs for scientists, students, and founders at every stage: Ideation, Validation & Acceleration, in health, education and sustainability.",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "utrechtinc-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://utrechtinc.nl/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

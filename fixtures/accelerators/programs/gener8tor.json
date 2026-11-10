@@ -1,0 +1,59 @@
+{
+  "id": "gener8tor",
+  "name": "gener8tor",
+  "logo": {
+    "path": "/accelerators/logos/gener8tor.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.gener8tor.com/",
+  "applyUrl": "https://www.gener8tor.com/investment-accelerators",
+  "description": {
+    "text": "AI-written synthesis of the investment-accelerators page, prepared by the collecting assistant: gener8tor describes its investment accelerator as a 12-week investment-for-equity program with a concierge, mentorship-driven experience. It says it accepts only five to six companies per cohort, delivers funding and introductions over 12 weeks, and prints \"$100K into your high-growth startup.\" It says alumni have raised $1.9B+ and created 8,300+ jobs. The page then lists many city and vertical programs, including Curql Accelerate, programs in Alabama, California, Georgia, Nebraska, Nevada, and others. Those individual applications were not opened, so no per-city deadline is stored. The $100K line is the page's published figure for the investment accelerator, not a term confirmed on each city page.",
+    "sourceIds": ["investment"],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the investment-accelerators page, prepared by the collecting assistant: the page says the investment accelerators back high-growth startups and tells the reader to find a city or industry vertical. It also distinguishes free accelerators, skills accelerators, and other tracks in the navigation. Those other tracks were not opened. Five to six companies per cohort is the page's description of how small a cohort is, not an eligibility rule.",
+    "sourceIds": ["investment"],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.gener8tor.com/",
+      "title": "gener8tor homepage — Wordmark",
+      "quote": "https://images.squarespace-cdn.com/content/v1/60e4724ea746166606f95abb/c65128bd-85c2-4c1e-8cd9-870affa0a148/gener8tor-logo-full.png",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    },
+    {
+      "id": "investment",
+      "url": "https://www.gener8tor.com/investment-accelerators",
+      "title": "gener8tor investment accelerators — 12 weeks and $100K",
+      "quote": "The gener8tor Accelerator\nA 12-week investment-for-equity accelerator with a concierge, mentorship-driven experience for high-growth startups.\n\ngener8tor’s Investment Accelerators back high-growth startups with meaningful capital and hands-on support. We accept only five to six companies per cohort, enabling a truly concierge-style experience.\n\n$100K into your high-growth startup\n\ngener8tor Accelerator alumni have raised $1.9B+ in capital and created 8,300+ jobs. Find your city or industry vertical to apply for the gener8tor Accelerator program that best fits your needs.",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "investment-accelerator",
+      "label": "Investment accelerator",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": ["investment"],
+      "form": {
+        "id": "gener8tor-investment-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.gener8tor.com/investment-accelerators",
+        "checkedAt": "2026-10-27T00:25:00.000Z",
+        "supported": false,
+        "limitations": [
+          "The page lists many city and vertical programs and tells the reader to apply to the one that fits. Those applications were not opened, so there is no single Form. Fields stay empty and Start Application stays blocked.",
+          "No deadline was published on this overview. The $100K figure is the overview's figure and was not re-checked on each city page."
+        ],
+        "fields": []
+      }
+    }
+  ],
+  "schemaVersion": 2
+}

@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "zinc",
+  "name": "Zinc",
+  "logo": {
+    "path": "/accelerators/logos/zinc.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.zinc.vc/",
+  "applyUrl": "https://www.zinc.vc/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Zinc exists to accelerate Science-for-Impact innovation, partnering with people and organisations to build a better future for people and the planet. Through our venture building , talent initiatives and innovation partnerships , we work across the entire Science-for-Impact ecosystem to create the conditions, capabilities, and coalitions needed for transformative change. Learn More Zinc’s network of Visiting Fellows are experts and advisors from business, academia, design, technology and the public sector. Fellows support Founders and their newly created ventures by offering expertise in the form of talks, workshops, office hours and access to research and partners. Register Your Interest Zinc works with a range of certified and trained executive coaches who support the personal development of the individuals and teams building their ventures at Zinc. Register Your Interest Partners and investors are individuals and organisations who help Founders and their newly created businesses to gain traction with users and partners to drive growth. Register Your Interest Check out current job opportunities with the Zinc team. Job opportunities No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.zinc.vc/",
+      "title": "Zinc — official mark on the retrieved page",
+      "quote": "https://www.zinc.vc/wp-content/uploads/2021/10/cropped-half-32x32.png",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.zinc.vc/",
+      "title": "Zinc — visible page text",
+      "quote": "Zinc exists to accelerate Science-for-Impact innovation, partnering with people and organisations to build a better future for people and the planet. Through our venture building , talent initiatives and innovation partnerships , we work across the entire Science-for-Impact ecosystem to create the conditions, capabilities, and coalitions needed for transformative change. Learn More Zinc’s network of Visiting Fellows are experts and advisors from business, academia, design, technology and the public sector. Fellows support Founders and their newly created ventures by offering expertise in the form of talks, workshops, office hours and access to research and partners. Register Your Interest Zinc works with a range of certified and trained executive coaches who support the personal development of the individuals and teams building their ventures at Zinc. Register Your Interest Partners and investors are individuals and organisations who help Founders and their newly created businesses to gain traction with users and partners to drive growth. Register Your Interest Check out current job opportunities with the Zinc team. Job opportunities",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "zinc-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.zinc.vc/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

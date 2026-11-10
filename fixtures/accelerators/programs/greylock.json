@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "greylock",
+  "name": "Greylock",
+  "logo": {
+    "path": "/accelerators/logos/greylock.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://greylock.com/",
+  "applyUrl": "https://greylock.com/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Figma was just seven people when we partnered with Dylan and Evan. Evan Wallace Dylan Field We backed Tuhin, Amir, and Phil to build AI infrastructure before ChatGPT made it obvious. Phil Howes Tuhin Srivastava Amir Haghighat Nir started Palo Alto Networks from a desk inside Greylock's office. Nir Zuk When we partnered with Mark, Facebook was still only for college students. Mark Zuckerberg Evan and Sanjay turned an improbable idea into Abnormal at Greylock's office. Sanjay Jeyakumar Evan Reiser Each Greylock partner makes only one or two new investments a year because the work demands depth. We bring our full attention, network, and resources to every partnership. No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://greylock.com/",
+      "title": "Greylock — official mark on the retrieved page",
+      "quote": "https://greylock.com/favicon.ico?favicon.12_74lqp1fvbm.ico",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://greylock.com/",
+      "title": "Greylock — visible page text",
+      "quote": "Figma was just seven people when we partnered with Dylan and Evan. Evan Wallace Dylan Field We backed Tuhin, Amir, and Phil to build AI infrastructure before ChatGPT made it obvious. Phil Howes Tuhin Srivastava Amir Haghighat Nir started Palo Alto Networks from a desk inside Greylock's office. Nir Zuk When we partnered with Mark, Facebook was still only for college students. Mark Zuckerberg Evan and Sanjay turned an improbable idea into Abnormal at Greylock's office. Sanjay Jeyakumar Evan Reiser Each Greylock partner makes only one or two new investments a year because the work demands depth. We bring our full attention, network, and resources to every partnership.",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "greylock-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://greylock.com/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

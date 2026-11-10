@@ -1,0 +1,66 @@
+{
+  "id": "boost-vc",
+  "name": "Boost VC",
+  "logo": {
+    "path": "/accelerators/logos/boost-vc.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.boost.vc/",
+  "applyUrl": "https://www.boost.vc/fellowship",
+  "description": {
+    "text": "AI-written synthesis of the homepage and the fellowship page, prepared by the collecting assistant: the homepage says Boost VC leads pre-seed rounds, writes $500k checks, invests in 70+ startups a year, and describes itself as a deep-tech investor. The fellowship page says \"Sometimes all you need is $50k to get started\" and \"Apply for our Winter Fellowship - Due Dec 1st.\" The $500k and $50k figures are different published lines and are not merged. Dec 1st has no year, so it is not stored as a deadline. The fellowship page's examples of people it has backed are color, not an eligibility list.",
+    "sourceIds": ["homepage", "fellowship"],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the two pages, prepared by the collecting assistant: the homepage addresses founders it describes as making aerospace and other deep-tech companies, and the fellowship page invites an application to a winter fellowship. Neither page publishes a closed stage list in the text that was kept. The two cheque sizes stay separate because the pages state both.",
+    "sourceIds": ["homepage", "fellowship"],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.boost.vc/",
+      "title": "Boost VC homepage — Web icon",
+      "quote": "https://cdn.prod.website-files.com/6645316fe16d922afe4494f3/66fae365f0ecc1936777474c_boost-web.png",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.boost.vc/",
+      "title": "Boost VC homepage — Pre-seed checks",
+      "quote": "We Lead Pre-Seed Rounds $500k Checks #1 Deep Tech VC for Founders selected by our peers 70+ Startups invested in every year.",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    },
+    {
+      "id": "fellowship",
+      "url": "https://www.boost.vc/fellowship",
+      "title": "Boost VC fellowship page — $50k and a date without a year",
+      "quote": "Sometimes all you need is $50k to get started.\nBoost VC Fellowship Check: we help you take the first step toward making Sci-Fi a reality. Apply for our Winter Fellowship\n- Due Dec 1st",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "winter-fellowship",
+      "label": "Winter fellowship",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": ["fellowship"],
+      "form": {
+        "id": "boost-vc-fellowship-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.boost.vc/fellowship",
+        "checkedAt": "2026-10-27T00:25:00.000Z",
+        "supported": false,
+        "limitations": [
+          "The application questions were not opened. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "The fellowship page says the winter fellowship is due Dec 1st and does not give a year, a clock, or a timezone. deadlineAt and dateOnly stay empty. The homepage's $500k pre-seed checks and the fellowship page's $50k line are both quoted and are not treated as one instrument."
+        ],
+        "fields": []
+      }
+    }
+  ],
+  "schemaVersion": 2
+}

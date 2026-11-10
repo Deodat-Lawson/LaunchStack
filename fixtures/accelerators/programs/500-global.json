@@ -1,0 +1,66 @@
+{
+  "id": "500-global",
+  "name": "500 Global",
+  "logo": {
+    "path": "/accelerators/logos/500-global.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://500.co/",
+  "applyUrl": "https://500.co/founders/flagship",
+  "description": {
+    "text": "AI-written synthesis of the cited official pages, prepared by the collecting assistant: 500 Global's homepage describes a venture firm with $2.3 billion in assets under management, a figure the page marks with a footnote, investing in founders building for the U.S. and global markets. The same page says it has backed 35+ companies valued at $1B+ and 160+ companies valued at more than $100 million, also footnoted. The flagship page names the 500 Fellowship as the flagship program in San Francisco for early-stage founders, four months with a cohort, and says 500 Global has been backing early-stage founders since 2010, when it was called 500 Startups. It says accepted companies can receive up to $50K right away with the potential for up to $1M more as they progress. The page says applications close October 11th for Flagship Accelerator Batch 36, and the visible text beside Apply now also shows November 30, 2026 - April 9, 2027. October 11th has no year, and the page does not say which of those dates is the deadline versus the program window, so neither is stored as deadlineAt or dateOnly. A block under \"What do you get?\" is lorem ipsum placeholder text and is not treated as a program fact.",
+    "sourceIds": ["homepage", "flagship"],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the flagship page, prepared by the collecting assistant: the page says the fellowship is for the top 0.1% of founders and that 500 meets builders as early as day 0 who have a nonobvious insight and an unfair advantage. It says it looks for founders who have started building and thinking globally, who might have just started or who already have first users, revenue, or pilots, and who are in the U.S. already or plan to be within six months. It also says not every box has to be ticked and that applicants do not need to have all the answers yet. That is the page's narrative, not a closed eligibility rule.",
+    "sourceIds": ["flagship"],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://500.co/founders/flagship",
+      "title": "500 Fellowship page — Black wordmark",
+      "quote": "https://500.co/images/500-logo-black.svg",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://500.co/",
+      "title": "500 Global homepage — Firm description",
+      "quote": "500 Global is a VC firm with $2.3 billion¹ in AUM investing in globally ambitious founders building fast-growing technology companies. We focus on the U.S. and global markets where innovation, capital, and ecosystems can propel startups and unlock long-term value.\n\nWe’ve backed 35+ companies valued at $1B+ and 160+ companies valued at more than $100 million².",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    },
+    {
+      "id": "flagship",
+      "url": "https://500.co/founders/flagship",
+      "title": "500 Fellowship page — Program, dates, and investment",
+      "quote": "Applications close October 11th for Flagship Accelerator Batch 36.\nApply now → November 30, 2026 - April 9, 2027\n\nThe 500 Fellowship is 500 Global's flagship program in San Francisco for early-stage founders building for the U.S. and the world.\n\nIt’s four months in San Francisco, California with your cohort, Unicorn founders, and top VCs in Silicon Valley.\n\n500 Global has been backing early-stage founders since 2010 (when we were called 500 Startups).\n\nThis is for the top 0.1% of founders. We meet builders as early as day 0 who have a nonobvious deep insight on the market and an unfair advantage to get to the people who need it the most.\n\nWe’re looking for founders who've started building and thinking globally already. You might have just started or you already have your first users, revenue or pilots. You're in the U.S. already, or you plan to be within six months.\n\nNot every box ticked? Apply anyway. You don’t need to have all the answers yet.\n\nWhat do you get? Lorem ipsum dolor sit amet consectetur.\n\nCompanies accepted into the 500 Fellowship can receive up to $50K right away with the potential for up to $1M more as you progress.",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "flagship-batch-36",
+      "label": "Flagship Accelerator Batch 36",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": ["flagship"],
+      "form": {
+        "id": "500-flagship-batch-36-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://500.co/founders/flagship",
+        "checkedAt": "2026-10-27T00:25:00.000Z",
+        "supported": false,
+        "limitations": [
+          "The application questions were not opened. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "The page says applications close October 11th for Batch 36 and does not give a year, a clock, or a timezone. Visible text beside Apply now also shows November 30, 2026 - April 9, 2027 without saying whether that range is the deadline or the program dates. deadlineAt and dateOnly stay empty. The lorem ipsum under \"What do you get?\" is placeholder and is not stored as a term."
+        ],
+        "fields": []
+      }
+    }
+  ],
+  "schemaVersion": 2
+}

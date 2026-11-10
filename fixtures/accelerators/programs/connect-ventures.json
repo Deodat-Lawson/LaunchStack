@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "connect-ventures",
+  "name": "Connect Ventures",
+  "logo": {
+    "path": "/accelerators/logos/connect-ventures.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.connectventures.co/",
+  "applyUrl": "https://www.connectventures.co/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Pre-seed specialists backing technical founders from day zero. The brilliant minds driving change, with our support every step of the way. Co-led Seed in 2023 “Right from the start, it was clear that Connect understood that technical depth and product would be at the heart of what we were building, and that conviction has remained constant as Aikido has grown.\" Led the pre-seed in 2025 “Rory, as a person, was the reason we wanted to work with Connect. We knew we'd be partnering together for the next 10+ years, so there needed to be high trust and alignment, as well as someone to act as a sounding board and accountability partner. Over the years, we’d also heard more about Connect and had become big fans.” Led the pre-seed in 2023 “Connect Ventures recognised the huge opportunity we have: as AI has transformed image and video processing in consumer devices, Voice AI can do the same -removing the need for costly mics, studios, and post-production, and giving everyone access to high-quality speech content anywhere.” Led Seed in 2020 \"You know that feeling when you have a groundbreaking idea, but VCs only care about spreadsheets filled with hypothetical numbers? Connect is the opposite of that. They dig deep to truly understand your vision—once they do, they commit fully.\" Led the pre-seed in 2025 No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.connectventures.co/",
+      "title": "Connect Ventures — official mark on the retrieved page",
+      "quote": "https://cdn.prod.website-files.com/66f2f8fe0f106d5686cd1208/66f3a6f8e50b6dd9a12eff55_Connect%20Logo.png",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.connectventures.co/",
+      "title": "Connect Ventures — visible page text",
+      "quote": "Pre-seed specialists backing technical founders from day zero. The brilliant minds driving change, with our support every step of the way. Co-led Seed in 2023 “Right from the start, it was clear that Connect understood that technical depth and product would be at the heart of what we were building, and that conviction has remained constant as Aikido has grown.\" Led the pre-seed in 2025 “Rory, as a person, was the reason we wanted to work with Connect. We knew we'd be partnering together for the next 10+ years, so there needed to be high trust and alignment, as well as someone to act as a sounding board and accountability partner. Over the years, we’d also heard more about Connect and had become big fans.” Led the pre-seed in 2023 “Connect Ventures recognised the huge opportunity we have: as AI has transformed image and video processing in consumer devices, Voice AI can do the same -removing the need for costly mics, studios, and post-production, and giving everyone access to high-quality speech content anywhere.” Led Seed in 2020 \"You know that feeling when you have a groundbreaking idea, but VCs only care about spreadsheets filled with hypothetical numbers? Connect is the opposite of that. They dig deep to truly understand your vision—once they do, they commit fully.\" Led the pre-seed in 2025",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "connect-ventures-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.connectventures.co/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

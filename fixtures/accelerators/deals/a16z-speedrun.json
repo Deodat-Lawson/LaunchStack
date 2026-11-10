@@ -1,0 +1,20 @@
+{
+  "programId": "a16z-speedrun",
+  "sourceId": "sr-faq-terms",
+  "checkedAt": "2026-10-26T23:19:30.000Z",
+  "interpretation": true,
+  "summary": "The published standard deal is up to $1M, split into $500K for 10% upfront on a SAFE and up to another $500K in a later qualifying round of $2M+ within 18 months. The $10M+ partner credits are a separate benefit. They are not cash and not the SAFE. The 10% is not a claim about the whole package.",
+  "formattedTerms": "Our standard deal is up to $1M: $500K for 10% upfront on a SAFE, and up to an additional $500K in your next qualifying round ($2M+) within 18 months. Our current standard deal does not include a board seat. We ask for pro rata rights in future rounds and for an option pool for your early hires.\n\nThrough the speedrun Marketplace, you get access to $10M+ in credits from 200+ partners: cloud providers, model providers, and the software you use every day. For many companies, that goes a long way toward early costs. Credits unlock once your investment is wired. Amounts and terms are set by each partner and can change.",
+  "parts": [
+    { "kind": "safe", "amount": "500000", "currency": "USD", "equity": "10% upfront", "contingent": false },
+    {
+      "kind": "safe",
+      "amount": "500000",
+      "currency": "USD",
+      "equity": null,
+      "contingent": true,
+      "condition": "Next qualifying round of $2M+ within 18 months"
+    },
+    { "kind": "partner-credits", "amount": null, "currency": null, "equity": null, "contingent": true }
+  ]
+}

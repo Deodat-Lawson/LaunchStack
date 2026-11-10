@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "orbit-startups",
+  "name": "Orbit Startups",
+  "logo": {
+    "path": "/accelerators/logos/orbit-startups.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://orbitventures.com/",
+  "applyUrl": "https://orbitventures.com/apply/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: SCALING BREAKTHROUGH TECHNOLOGIES ACROSS EMERGING AND FRONTIER MARKETS LEARN MORE Photo: Pakistan’s B2B marketplace Dastgyr. YourStory Jan 05, 2023 William Bao Bean, Managing General Partner of Orbit Startups, on investing in the GCC region News Oct 22, 2026 The Emerging Markets Playbook: Why Localization Wins Over Replication News Oct 05, 2026 OmicsBank Raises $2.25M to Build Clinical Data Infrastructure for Global Healthcare and AI News Sep 24, 2026 Why Blitzscaling Breaks in Emerging Markets Sep 01, 2026 Sanabil Accelerator by Orbit Selects 13 Companies for Batch 4 Blog Aug 11, 2026 Fincart Raises US$2.8M to Scale AI-Powered E-Commerce Infrastructure in Egypt ALL NEWS Orbit Ventures invests in breakthrough companies and helps them scale across Asia, Africa, the Middle East, and Latin America—where there are the most opportunities for sustained, profitable high growth. Our roots in China, India and Southeast Asia have proved that less successful companies are caught up in much longer iteration cycles and lose out on speed. In contrast, Orbit companies are steeped in a culture of rapid iteration, staying nimble with feedback from the markets. Achieve operational excellence & turbocharge your growth Orbit company enjoys a specialized task force for enterprise sales, fundraising, legal support, and much more. See how we do it No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://orbitventures.com/",
+      "title": "Orbit Startups — official mark on the retrieved page",
+      "quote": "https://orbitventures.com/wp-content/themes/orbit/assets/images/orbit-logo.svg",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://orbitventures.com/",
+      "title": "Orbit Startups — visible page text",
+      "quote": "SCALING BREAKTHROUGH TECHNOLOGIES ACROSS EMERGING AND FRONTIER MARKETS LEARN MORE Photo: Pakistan’s B2B marketplace Dastgyr. YourStory Jan 05, 2023 William Bao Bean, Managing General Partner of Orbit Startups, on investing in the GCC region News Oct 22, 2026 The Emerging Markets Playbook: Why Localization Wins Over Replication News Oct 05, 2026 OmicsBank Raises $2.25M to Build Clinical Data Infrastructure for Global Healthcare and AI News Sep 24, 2026 Why Blitzscaling Breaks in Emerging Markets Sep 01, 2026 Sanabil Accelerator by Orbit Selects 13 Companies for Batch 4 Blog Aug 11, 2026 Fincart Raises US$2.8M to Scale AI-Powered E-Commerce Infrastructure in Egypt ALL NEWS Orbit Ventures invests in breakthrough companies and helps them scale across Asia, Africa, the Middle East, and Latin America—where there are the most opportunities for sustained, profitable high growth. Our roots in China, India and Southeast Asia have proved that less successful companies are caught up in much longer iteration cycles and lose out on speed. In contrast, Orbit companies are steeped in a culture of rapid iteration, staying nimble with feedback from the markets. Achieve operational excellence & turbocharge your growth Orbit company enjoys a specialized task force for enterprise sales, fundraising, legal support, and much more. See how we do it",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "orbit-startups-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://orbitventures.com/apply/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

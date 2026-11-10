@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "corfo",
+  "name": "CORFO",
+  "logo": {
+    "path": "/accelerators/logos/corfo.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.corfo.gob.cl/sites/cpp/",
+  "applyUrl": "https://www.corfo.gob.cl/sites/cpp/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: ver más Encuentra el mejor apoyo para ti ¿Quieres emprender? Si tienes una idea o proyecto que busques concretar, revisa aquí. ¿Buscas financiamiento? Conoce nuestras convocatorias, crédito, garantías y fondos. ¿Necesitas desarrollar tu proyecto de Hidrógeno Verde? Encuentra nuestra oferta para transitar hacia una economía sostenible. ¿Necesitas reconvertir tu negocio? Conoce cómo podemos apoyarte en estos desafíos. Iniciativas destacadas Política de Calidad de Servicio Accede a nuestros sistemas No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.corfo.gob.cl/sites/cpp/",
+      "title": "CORFO — official mark on the retrieved page",
+      "quote": "https://www.corfo.gob.cl/sites/cpp/wp-content/uploads/2025/01/icono-dialogo.png",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.corfo.gob.cl/sites/cpp/",
+      "title": "CORFO — visible page text",
+      "quote": "ver más Encuentra el mejor apoyo para ti ¿Quieres emprender? Si tienes una idea o proyecto que busques concretar, revisa aquí. ¿Buscas financiamiento? Conoce nuestras convocatorias, crédito, garantías y fondos. ¿Necesitas desarrollar tu proyecto de Hidrógeno Verde? Encuentra nuestra oferta para transitar hacia una economía sostenible. ¿Necesitas reconvertir tu negocio? Conoce cómo podemos apoyarte en estos desafíos. Iniciativas destacadas Política de Calidad de Servicio Accede a nuestros sistemas",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "corfo-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.corfo.gob.cl/sites/cpp/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

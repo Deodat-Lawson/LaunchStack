@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "fledge",
+  "name": "Fledge",
+  "logo": {
+    "path": "/accelerators/logos/fledge.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.fledge.co/",
+  "applyUrl": "https://www.fledge.co/apply/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Fledge is a global network of impact accelerators and investment funds , helping entrepreneurs create impactful companies and co-ops at scale through intense, short programs filled with education , guidance , and a massive amount of mentorship . The program runs in many different cities, not all under the Fledge brand. Each city’s program is a bit different from the others’, but all are focused on mission-driven for-profit companies. Th educational curriculum is based on The Next Step books and online classes, taught to fill in any gaps in the key skills entrepreneurs need to know to succeed: strategy, financials, marketing, sales, funding, etc. All our cities share a global network of hundreds of mentors , who share their experiences, advice, and connections in 1-on-1 meetings with participants. Every day, week after week, we push the participants forward, iterating business strategy, financial models, marketing and sales plans, funding options, and investor and sales pitches, plus we put a special focus on storytelling. The result is intense and creates lasting value for years after the companies return home. We have been refining this service since 2012 and, to date, have helped hundreds of companies from dozens of countries . We’re eager for more. Our goal is to help foster a wave of companies that make a measurable impact in the world, collectively improving the lives of e No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.fledge.co/",
+      "title": "Fledge — official mark on the retrieved page",
+      "quote": "https://www.fledge.co/wp-content/uploads/2018/07/Fledge-light-400.png",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.fledge.co/",
+      "title": "Fledge — visible page text",
+      "quote": "Fledge is a global network of impact accelerators and investment funds , helping entrepreneurs create impactful companies and co-ops at scale through intense, short programs filled with education , guidance , and a massive amount of mentorship . The program runs in many different cities, not all under the Fledge brand. Each city’s program is a bit different from the others’, but all are focused on mission-driven for-profit companies. Th educational curriculum is based on The Next Step books and online classes, taught to fill in any gaps in the key skills entrepreneurs need to know to succeed: strategy, financials, marketing, sales, funding, etc. All our cities share a global network of hundreds of mentors , who share their experiences, advice, and connections in 1-on-1 meetings with participants. Every day, week after week, we push the participants forward, iterating business strategy, financial models, marketing and sales plans, funding options, and investor and sales pitches, plus we put a special focus on storytelling. The result is intense and creates lasting value for years after the companies return home. We have been refining this service since 2012 and, to date, have helped hundreds of companies from dozens of countries . We’re eager for more. Our goal is to help foster a wave of companies that make a measurable impact in the world, collectively improving the lives of e",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "fledge-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.fledge.co/apply/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

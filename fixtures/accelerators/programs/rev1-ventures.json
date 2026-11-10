@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "rev1-ventures",
+  "name": "Rev1 Ventures",
+  "logo": {
+    "path": "/accelerators/logos/rev1-ventures.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.rev1ventures.com/",
+  "applyUrl": "https://www.rev1ventures.com/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Venture Studio - Columbus, Ohio | Rev1 Ventures Search for Menu As a Midwest venture studio, we partner with innovators in Saas/AI, deep tech and life sciences to turn bold ideas into scalable companies. We’re a team of builders, investors, operators, and corporate innovators. From day one, we help startups move faster and grow smarter by validating markets, gaining traction, and becoming venture ready. Our team has helped hundreds of startups build and scale. Meet the Team Want to change the world? We can help. We’ve built a best-in-breed venture studio with a vision of making the Midwest a powerful magnet for diverse, high-growth startups. Our clients are building products that solve real problems for markets in need of real solutions. Learn More about SenseICs Redi.health believes every patient has the ability to overcome today’s healthcare barriers if they are given the right tools. We empower patient Learn more about Redi.Health SureImpact, a customizable, cloud-based software platform that allows mission-driven organizations to easily manage their unique social impact. Learn more about SureImpact Developing a therapy and vaccine to treat and prevent pneumonia. Learn more about Clarametyx Biosciences We help you automate your financial data, empowering you with actionable financial intelligence. Learn more about HubiFi Rev1 is the nexus of the startup community. When you h No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.rev1ventures.com/",
+      "title": "Rev1 Ventures — official mark on the retrieved page",
+      "quote": "https://www.rev1ventures.com/wp-content/themes/rev1ventures-2019/dist/images/logo-white.png",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.rev1ventures.com/",
+      "title": "Rev1 Ventures — visible page text",
+      "quote": "Venture Studio - Columbus, Ohio | Rev1 Ventures Search for Menu As a Midwest venture studio, we partner with innovators in Saas/AI, deep tech and life sciences to turn bold ideas into scalable companies. We’re a team of builders, investors, operators, and corporate innovators. From day one, we help startups move faster and grow smarter by validating markets, gaining traction, and becoming venture ready. Our team has helped hundreds of startups build and scale. Meet the Team Want to change the world? We can help. We’ve built a best-in-breed venture studio with a vision of making the Midwest a powerful magnet for diverse, high-growth startups. Our clients are building products that solve real problems for markets in need of real solutions. Learn More about SenseICs Redi.health believes every patient has the ability to overcome today’s healthcare barriers if they are given the right tools. We empower patient Learn more about Redi.Health SureImpact, a customizable, cloud-based software platform that allows mission-driven organizations to easily manage their unique social impact. Learn more about SureImpact Developing a therapy and vaccine to treat and prevent pneumonia. Learn more about Clarametyx Biosciences We help you automate your financial data, empowering you with actionable financial intelligence. Learn more about HubiFi Rev1 is the nexus of the startup community. When you h",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "rev1-ventures-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.rev1ventures.com/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

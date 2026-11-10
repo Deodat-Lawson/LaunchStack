@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "climate-kic-accelerator",
+  "name": "Climate-KIC Accelerator",
+  "logo": {
+    "path": "/accelerators/logos/climate-kic-accelerator.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.climate-kic.org/programmes/climate-entrepreneurship/",
+  "applyUrl": "https://www.climate-kic.org/programmes/climate-entrepreneurship/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Climate entrepreneurship | Climate KIC Initiated by the EIT Climate entrepreneurship What we do Climate entrepreneurship Realising the full potential of climate solutions requires a concerted global effort, a shift in mindsets, and a stronger focus on demand-driven initiatives. At Climate KIC, we prioritise bridging the gap between the supply of climate innovation and the demand for them, thereby accelerating this change across the globe. Our aim is to transform the start-up support landscape , ensuring that climate action is deeply embedded in the fabric of the entrepreneurial ecosystem. We work in support of both demand-side (government agencies, corporates and investors) and supply-side (start-ups, NGOs, entrepreneurship support organisations) in three complementary ways: Building capacities and skills Scaling climate ventures Strengthening innovation clusters We facilitate access to funding specifically tailored for entrepreneurs who are building the high-impact businesses of the future. Our Investing for 1.5C initiative works with a select group of committed impact investment funds to support such businesses that will not only generate transformative climate impact but will form the building blocks of a new economy. Our flagship entrepreneurship programmes support citizens, entrepreneurs and start-ups in kickstarting their climate solutions. We provide them with ideation s No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.climate-kic.org/programmes/climate-entrepreneurship/",
+      "title": "Climate-KIC Accelerator — official mark on the retrieved page",
+      "quote": "https://www.climate-kic.org/wp-content/themes/climate-kic-2025/assets/img/favicons/favicon-96x96.png",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.climate-kic.org/programmes/climate-entrepreneurship/",
+      "title": "Climate-KIC Accelerator — visible page text",
+      "quote": "Climate entrepreneurship | Climate KIC Initiated by the EIT Climate entrepreneurship What we do Climate entrepreneurship Realising the full potential of climate solutions requires a concerted global effort, a shift in mindsets, and a stronger focus on demand-driven initiatives. At Climate KIC, we prioritise bridging the gap between the supply of climate innovation and the demand for them, thereby accelerating this change across the globe. Our aim is to transform the start-up support landscape , ensuring that climate action is deeply embedded in the fabric of the entrepreneurial ecosystem. We work in support of both demand-side (government agencies, corporates and investors) and supply-side (start-ups, NGOs, entrepreneurship support organisations) in three complementary ways: Building capacities and skills Scaling climate ventures Strengthening innovation clusters We facilitate access to funding specifically tailored for entrepreneurs who are building the high-impact businesses of the future. Our Investing for 1.5C initiative works with a select group of committed impact investment funds to support such businesses that will not only generate transformative climate impact but will form the building blocks of a new economy. Our flagship entrepreneurship programmes support citizens, entrepreneurs and start-ups in kickstarting their climate solutions. We provide them with ideation s",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "climate-kic-accelerator-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.climate-kic.org/programmes/climate-entrepreneurship/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

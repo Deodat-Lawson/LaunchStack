@@ -1,0 +1,59 @@
+{
+  "id": "south-park-commons",
+  "name": "South Park Commons",
+  "logo": {
+    "path": "/accelerators/logos/south-park-commons.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.southparkcommons.com/",
+  "applyUrl": "https://www.southparkcommons.com/apply",
+  "description": {
+    "text": "AI-written synthesis of the residency page, prepared by the collecting assistant: South Park Commons says it helps people go from -1 to 0 and describes itself as a community of technologists ideating and validating what to build next. It says members range from exited founders and researchers to new graduates and first-time entrepreneurs, and that over the last decade more than 1,000 technologists have joined to start companies, pursue research, or figure out what is next. Member stories on the page are examples, not terms. No investment amount or deadline was in the residency text that was kept. The apply links distinguish a residency path and a funding path; neither form was opened.",
+    "sourceIds": ["residency"],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the residency page, prepared by the collecting assistant: the page describes members as technologists, including first-time founders, repeat founders, researchers, and people who have not yet decided what to build. It does not publish a stage cutoff or a requirement to already have a company.",
+    "sourceIds": ["residency"],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.southparkcommons.com/",
+      "title": "South Park Commons homepage — Gold mark",
+      "quote": "https://www.southparkcommons.com/assets/icons/spc-gold-256.png",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    },
+    {
+      "id": "residency",
+      "url": "https://www.southparkcommons.com/residency",
+      "title": "South Park Commons residency page — What the community is",
+      "quote": "SPC is a community of technologists ideating and validating what to build next. Our members range from exited founders and highly-cited researchers to new graduates and first-time entrepreneurs. What unites us is ambition, ability, and a mutual commitment to helping each other navigate -1 to 0.\n\nOver the last decade, over 1,000 technologists have joined us to start companies, pursue research, and work on figuring out what's next.",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "residency",
+      "label": "Residency",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": ["residency"],
+      "form": {
+        "id": "spc-residency-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.southparkcommons.com/apply",
+        "checkedAt": "2026-10-27T00:25:00.000Z",
+        "supported": false,
+        "limitations": [
+          "The site links separate apply paths for residency and funding. Neither form was opened. Fields stay empty and Start Application stays blocked.",
+          "No deadline was published on the residency text that was kept."
+        ],
+        "fields": []
+      }
+    }
+  ],
+  "schemaVersion": 2
+}

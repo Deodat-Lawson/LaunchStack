@@ -22,7 +22,7 @@ export type {
 export type {
     ApplicationResponse,
     ApplicationSection,
-    PortfolioCompany,
+    PastCompany,
     SimilarCompaniesView,
     SimilarCompany,
     TrackerOpportunity,

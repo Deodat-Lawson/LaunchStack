@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "rainmaking",
+  "name": "Rainmaking",
+  "logo": {
+    "path": "/accelerators/logos/rainmaking.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.rainmaking.io/",
+  "applyUrl": "https://apply.workable.com/rainmaking-innovation/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: For nearly two decades, Rainmaking has helped ambitious companies, governments, and regions turn entrepreneurship into scaled growth. A systematic process to identify where to focus for new growth, what specific plays unlock it, and how to win across build/partner/buy. A lean startup, entrepreneurial approach that de-risks the building and launching of new products, services and ventures. Identify, partner with, and collaborate with startups, or create JVs with corporates, to unlock strategic impact & financial returns. Identify and invest in or acquire high potential startups and growth businesses relevant to the future of your industry and adjacent growth areas. Depending on who you work with, you get a different answer: banks advise you to buy, tech-consultancies always want to build, accelerators drive partnerships. No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.rainmaking.io/",
+      "title": "Rainmaking — official mark on the retrieved page",
+      "quote": "https://framerusercontent.com/images/cVwxHLdKxySNMTTkQ5TkI35Li4.svg",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.rainmaking.io/",
+      "title": "Rainmaking — visible page text",
+      "quote": "For nearly two decades, Rainmaking has helped ambitious companies, governments, and regions turn entrepreneurship into scaled growth. A systematic process to identify where to focus for new growth, what specific plays unlock it, and how to win across build/partner/buy. A lean startup, entrepreneurial approach that de-risks the building and launching of new products, services and ventures. Identify, partner with, and collaborate with startups, or create JVs with corporates, to unlock strategic impact & financial returns. Identify and invest in or acquire high potential startups and growth businesses relevant to the future of your industry and adjacent growth areas. Depending on who you work with, you get a different answer: banks advise you to buy, tech-consultancies always want to build, accelerators drive partnerships.",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "rainmaking-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://apply.workable.com/rainmaking-innovation/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

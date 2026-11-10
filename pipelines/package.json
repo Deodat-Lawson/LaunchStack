@@ -64,6 +64,8 @@
         "./accelerators/fit": "./src/proposals/accelerators/fit.ts",
         "./accelerators/tracker-db": "./src/proposals/accelerators/tracker-db.ts",
         "./accelerators/types": "./src/proposals/accelerators/types.ts",
+        "./accelerators/intelligence": "./src/proposals/accelerators/intelligence.ts",
+        "./accelerators/catalogue": "./src/proposals/accelerators/catalogue.ts",
         "./scenarios": "./src/scenarios/index.ts",
         "./scenarios/db": "./src/scenarios/db.ts",
         "./scenarios/schema": "./src/scenarios/schema.ts",
@@ -288,6 +290,14 @@
             "./accelerators/types": {
                 "types": "./dist/proposals/accelerators/types.d.ts",
                 "default": "./dist/proposals/accelerators/types.js"
+            },
+            "./accelerators/intelligence": {
+                "types": "./dist/proposals/accelerators/intelligence.d.ts",
+                "default": "./dist/proposals/accelerators/intelligence.js"
+            },
+            "./accelerators/catalogue": {
+                "types": "./dist/proposals/accelerators/catalogue.d.ts",
+                "default": "./dist/proposals/accelerators/catalogue.js"
             },
             "./scenarios": {
                 "types": "./dist/scenarios/index.d.ts",

@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "hustle-fund",
+  "name": "Hustle Fund",
+  "logo": {
+    "path": "/accelerators/logos/hustle-fund.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.hustlefund.vc/",
+  "applyUrl": "https://www.hustlefund.vc/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Hustle Fund | Pre-Seed Venture Capital Camp Hustle Asia is an investor event in Bali, Sep 18-19. GET YOUR TICKET! Pitch us Open navigation Pitch us Founders Meet the Portfolio Pitch Interview Prep Founder FAQ Angel Squad About us Meet our Nerdy Team Hustle Drip (Merch) Sponsor Hustle Fund Founders Meet the Portfolio Pitch Interview Prep Founder FAQ Angel Squad Resources Small Bets Hustle Commons About Us Meet our Nerdy Team Hustle Drip (Merch) Sponsor Hustle Fund You don’t need perfect metrics, a famous network, or a 47-slide deck explaining your TAM. You need an ambitious idea, evidence of hustle, and the nerve to start. What are you hustling? Reap TAPE 01 MEET HUSTLE FUND ● SIGNAL LOCKED LEVEL 01 COMPLETE NEXT QUEST: WHY TAKE OUR MONEY? Great question, and here's why: TAPE 02 Why should you work with Hustle Fund? ● FOUNDER SIGNAL 1–2 MEETINGS · <1 WEEK TO WIRE · NO SPREADSHEETS WERE HARMED No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.hustlefund.vc/",
+      "title": "Hustle Fund — official mark on the retrieved page",
+      "quote": "https://cdn.ploy.ai/929c7c31-3368-48e7-810a-80e6e01bf001/user/81f58617-webflow-linkedin-square-logo.webp",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.hustlefund.vc/",
+      "title": "Hustle Fund — visible page text",
+      "quote": "Hustle Fund | Pre-Seed Venture Capital Camp Hustle Asia is an investor event in Bali, Sep 18-19. GET YOUR TICKET! Pitch us Open navigation Pitch us Founders Meet the Portfolio Pitch Interview Prep Founder FAQ Angel Squad About us Meet our Nerdy Team Hustle Drip (Merch) Sponsor Hustle Fund Founders Meet the Portfolio Pitch Interview Prep Founder FAQ Angel Squad Resources Small Bets Hustle Commons About Us Meet our Nerdy Team Hustle Drip (Merch) Sponsor Hustle Fund You don’t need perfect metrics, a famous network, or a 47-slide deck explaining your TAM. You need an ambitious idea, evidence of hustle, and the nerve to start. What are you hustling? Reap TAPE 01 MEET HUSTLE FUND ● SIGNAL LOCKED LEVEL 01 COMPLETE NEXT QUEST: WHY TAKE OUR MONEY? Great question, and here's why: TAPE 02 Why should you work with Hustle Fund? ● FOUNDER SIGNAL 1–2 MEETINGS · <1 WEEK TO WIRE · NO SPREADSHEETS WERE HARMED",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "hustle-fund-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.hustlefund.vc/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

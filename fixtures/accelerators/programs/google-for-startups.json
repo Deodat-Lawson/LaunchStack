@@ -1,0 +1,59 @@
+{
+  "id": "google-for-startups",
+  "name": "Google for Startups",
+  "logo": {
+    "path": "/accelerators/logos/google-for-startups.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://startup.google.com/",
+  "applyUrl": "https://startup.google.com/programs/accelerator/",
+  "description": {
+    "text": "AI-written synthesis of the programs page, prepared by the collecting assistant: Google for Startups says it offers programs that connect startups of every stage and vertical to people, products, and practices. It says Google for Startups Accelerators serve a selected group of top growth-stage startups with technical, product, and leadership training from Google experts. The same page also describes the Gemini Startup Forum for seed to Series A founders, Immersion as a two-phased program for founders building with AI, and Startup School as live-streamed lessons. The accelerator URL was retrieved and its visible text was site navigation, not a dated cohort. No equity terms or deadline were in the text that was kept. The other named programs were not opened as separate records.",
+    "sourceIds": ["programs"],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the programs page, prepared by the collecting assistant: the accelerator sentence addresses selected growth-stage startups. The forum sentence addresses seed to Series A founders. Immersion addresses founders building with AI. Those are separate descriptions on one page, not one eligibility rule, and they are not stored as a closed stage enum.",
+    "sourceIds": ["programs"],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://startup.google.com/programs/",
+      "title": "Google for Startups programs page — Logo",
+      "quote": "https://www.gstatic.com/marketing-cms/assets/images/c9/1b/04dae563418bab88e2ac370d9618/logo.svg",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    },
+    {
+      "id": "programs",
+      "url": "https://startup.google.com/programs/",
+      "title": "Google for Startups programs page — Accelerator and neighboring programs",
+      "quote": "Google for Startups offers a wide variety of programs and initiatives to help connect startups of every stage and vertical to the right people, products, and best practices they need to grow and scale.\n\nGoogle for Startups Accelerators serve a selected group of top growth-stage startups with tailored technical, product, and leadership training from experts at Google.\n\nGoogle for Startups, in partnership with Google DeepMind and Google Cloud, presents the Gemini Startup Forum. A curated gathering for seed to Series A founders to connect in person with experts from Google AI.\n\nImmersion offers a two-phased program for founders building with AI, moving beyond theory with hands-on implementation of Google's AI tools.",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "accelerator",
+      "label": "Accelerator",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": ["programs"],
+      "form": {
+        "id": "google-for-startups-accelerator-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://startup.google.com/programs/accelerator/",
+        "checkedAt": "2026-10-27T00:25:00.000Z",
+        "supported": false,
+        "limitations": [
+          "The accelerator URL was retrieved. Its visible text was navigation, not application questions. Nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "The programs page describes more than one program. They were not given separate deadlines because none was published in the text that was kept."
+        ],
+        "fields": []
+      }
+    }
+  ],
+  "schemaVersion": 2
+}

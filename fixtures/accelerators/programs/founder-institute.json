@@ -1,0 +1,66 @@
+{
+  "id": "founder-institute",
+  "name": "Founder Institute",
+  "logo": {
+    "path": "/accelerators/logos/founder-institute.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://fi.co/",
+  "applyUrl": "https://fi.co/program",
+  "description": {
+    "text": "AI-written synthesis of the cited official pages, prepared by the collecting assistant: the Founder Institute homepage says no cofounder, team, or finished product is needed, that about 60 percent of a typical cohort are solo founders, and that the program is 10 sessions plus Funding Day, about 15 to 20 hours a week, more in the final stretch, and that participants can keep a day job. The program URL that was opened is the Washington DC - Philadelphia Fall 2026 chapter. That page says the FI Agentic Program is 10 sessions plus Funding Day, that every founder attends the same sessions, and that work between sessions is set by a Playbook. It says applications close Nov 10, 2026, the program starts Nov 17, 2026, and Funding Day is Feb 17, 2027. The same page also shows an Early Application Deadline of Nov 10 and a Final Application Deadline of Nov 17 at 06:00 pm, next to Session 1. Those two closings disagree, and the final deadline's timezone is not established separately from a session-time control, so no deadline is stored. The location menu lists many other chapters. Their dates and forms were not opened.",
+    "sourceIds": ["homepage", "dc-program"],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the homepage, prepared by the collecting assistant: the page says a cofounder, a team, and a finished product are not required, and that a participant can keep a day job. The 60 percent solo-founder figure is the page's description of a typical cohort, not an eligibility rule. The opened cycle is the Washington DC - Philadelphia chapter, not a claim that every chapter has the same dates.",
+    "sourceIds": ["homepage", "dc-program"],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://fi.co/",
+      "title": "Founder Institute homepage — Icon",
+      "quote": "https://fi.co/icon.svg",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://fi.co/",
+      "title": "Founder Institute homepage — Time and who can join",
+      "quote": "No cofounder, team or finished product needed. About 60 percent of a typical cohort are solo founders. 10 sessions plus Funding Day, about 15 to 20 hours a week, more in the final stretch. You can keep your day job.",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    },
+    {
+      "id": "dc-program",
+      "url": "https://fi.co/program",
+      "title": "Washington DC - Philadelphia Fall 2026 — Dates that disagree",
+      "quote": "The FI Agentic Program is 10 sessions plus Funding Day. Every founder in the cohort attends the same sessions; the work between them is set by your Playbook.\n\nWashington DC - Philadelphia Fall 2026 Applications close Nov 10, 2026 Program starts Nov 17, 2026 Funding Day Feb 17, 2027\n\nEarly Application Deadline Nov 10\nFinal Application Deadline Nov 17 06:00 pm Session 1",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "washington-dc-philadelphia-fall-2026",
+      "label": "Washington DC - Philadelphia Fall 2026",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": ["dc-program"],
+      "form": {
+        "id": "fi-dc-philadelphia-fall-2026-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://fi.co/program",
+        "checkedAt": "2026-10-27T00:25:00.000Z",
+        "supported": false,
+        "limitations": [
+          "The application questions were not opened. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "The page says applications close Nov 10, 2026 and also shows a final application deadline of Nov 17 at 06:00 pm. Storing either date would hide the other. deadlineAt and dateOnly stay empty. Other chapters in the location menu were not opened."
+        ],
+        "fields": []
+      }
+    }
+  ],
+  "schemaVersion": 2
+}

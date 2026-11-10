@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "nsf-icorps",
+  "name": "NSF I-Corps",
+  "logo": {
+    "path": "/accelerators/logos/nsf-icorps.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.nsf.gov/funding/initiatives/i-corps",
+  "applyUrl": "https://www.nsf.gov/funding/initiatives/i-corps",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: NSF I-Corps™ | NSF - U.S. National Science Foundation Skip to main content An official website of the United States government A .gov website belongs to an official government organization in the United States. or https:// means you've safely connected to the .gov website. Share sensitive information only on official, secure websites. Search Menu Search search Proposal & Award Policies & Procedures Guide (PAPPG) Computer & Information Science & Engineering (CISE) No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps",
+      "title": "NSF I-Corps — official mark on the retrieved page",
+      "quote": "https://www.nsf.gov/themes/custom/nsf_theme/components/molecules/logo/logo-desktop.png",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.nsf.gov/funding/initiatives/i-corps",
+      "title": "NSF I-Corps — visible page text",
+      "quote": "NSF I-Corps™ | NSF - U.S. National Science Foundation Skip to main content An official website of the United States government A .gov website belongs to an official government organization in the United States. or https:// means you've safely connected to the .gov website. Share sensitive information only on official, secure websites. Search Menu Search search Proposal & Award Policies & Procedures Guide (PAPPG) Computer & Information Science & Engineering (CISE)",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "nsf-icorps-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.nsf.gov/funding/initiatives/i-corps",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

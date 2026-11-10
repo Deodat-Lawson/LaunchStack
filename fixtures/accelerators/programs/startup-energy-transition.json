@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "startup-energy-transition",
+  "name": "Startup Energy Transition",
+  "logo": {
+    "path": "/accelerators/logos/startup-energy-transition.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.startup-energy-transition.com/",
+  "applyUrl": "https://www.startup-energy-transition.com/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Start Up Energy Transition - The Global Innovation Platform Start Up Energy Transition (SET) is a global innovation platform supporting innovation in energy & climate tech for the global energy transition. SET is implemented with the conviction that a sustainable future is directly linked to innovative business models and political will. The SET platform is powered by the German Energy Agency (dena) . We support the global energy & climate tech ecosystem with our three pillars: The SET Award, the SET Tech Festival & the SET Spotlights (SET100 & Newsroom): The annual international competition for startups and young companies innovating for the global energy transition . In the last 10 years , the award has received more than 4.500 applications from more than 100 countries within 5 categories . Discover more Our annual one-day event bringing together innovators shaping the future of energy: the best startups in the field of energy & climate tech solutions, innovation-driven corporates , policy makers , investors , and public organisations leading the energy transition. SET Tech Festival Articles , videos , posts , insights , SET list & publications and events featuring news from the energy & climate tech world , the successes and challenges of SET startups and other trending topics valuable to the global energy transition. Discover more No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.startup-energy-transition.com/",
+      "title": "Startup Energy Transition — official mark on the retrieved page",
+      "quote": "https://www.startup-energy-transition.com/app/themes/p3000-set/assets/images/logos/project_by_dena.png",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.startup-energy-transition.com/",
+      "title": "Startup Energy Transition — visible page text",
+      "quote": "Start Up Energy Transition - The Global Innovation Platform Start Up Energy Transition (SET) is a global innovation platform supporting innovation in energy & climate tech for the global energy transition. SET is implemented with the conviction that a sustainable future is directly linked to innovative business models and political will. The SET platform is powered by the German Energy Agency (dena) . We support the global energy & climate tech ecosystem with our three pillars: The SET Award, the SET Tech Festival & the SET Spotlights (SET100 & Newsroom): The annual international competition for startups and young companies innovating for the global energy transition . In the last 10 years , the award has received more than 4.500 applications from more than 100 countries within 5 categories . Discover more Our annual one-day event bringing together innovators shaping the future of energy: the best startups in the field of energy & climate tech solutions, innovation-driven corporates , policy makers , investors , and public organisations leading the energy transition. SET Tech Festival Articles , videos , posts , insights , SET list & publications and events featuring news from the energy & climate tech world , the successes and challenges of SET startups and other trending topics valuable to the global energy transition. Discover more",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "startup-energy-transition-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.startup-energy-transition.com/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

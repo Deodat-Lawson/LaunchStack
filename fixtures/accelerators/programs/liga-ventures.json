@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "liga-ventures",
+  "name": "Liga Ventures",
+  "logo": {
+    "path": "/accelerators/logos/liga-ventures.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://liga.ventures/",
+  "applyUrl": "https://liga.ventures/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Liga Ventures · Consultoria, dados e ecossistema em uma coisa só Quem Somos Soluções Liga Insights Startup Scanner Fale conosco Quem Somos Soluções Liga Insights Startup Scanner Quero inovar com a Liga Combinamos consultoria, dados e ecossistema em uma coisa só. Há 11 anos colocamos corporações e startups no mesmo time , da estratégia na diretoria à execução no dia a dia. Quero inovar com a Liga Conheça nossas soluções conheça mais Entendemos de estratégia, mas conhecemos a operação. Seis frentes que se combinam conforme o momento de cada empresa: da tese de inovação aos projetos em produção. 01 Tese, roadmap e governança para decidir onde inovar, por quê e com qual orçamento. 02 Do conceito à operação: desenho, validação e lançamento de novas frentes de receita. 03 No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://liga.ventures/",
+      "title": "Liga Ventures — official mark on the retrieved page",
+      "quote": "https://liga.ventures/logos/liga-logo-rosa-escuro-120px.png",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://liga.ventures/",
+      "title": "Liga Ventures — visible page text",
+      "quote": "Liga Ventures · Consultoria, dados e ecossistema em uma coisa só Quem Somos Soluções Liga Insights Startup Scanner Fale conosco Quem Somos Soluções Liga Insights Startup Scanner Quero inovar com a Liga Combinamos consultoria, dados e ecossistema em uma coisa só. Há 11 anos colocamos corporações e startups no mesmo time , da estratégia na diretoria à execução no dia a dia. Quero inovar com a Liga Conheça nossas soluções conheça mais Entendemos de estratégia, mas conhecemos a operação. Seis frentes que se combinam conforme o momento de cada empresa: da tese de inovação aos projetos em produção. 01 Tese, roadmap e governança para decidir onde inovar, por quê e com qual orçamento. 02 Do conceito à operação: desenho, validação e lançamento de novas frentes de receita. 03",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "liga-ventures-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://liga.ventures/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

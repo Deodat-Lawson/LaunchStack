@@ -6,13 +6,15 @@ import { getDb } from "@launchstack/store/client";
 import type { ProposalDebitExecutor } from "../ports";
 import { FitAssessmentV1Schema, type FitAssessmentV1 } from "./fit";
 import { hashValue } from "./hash";
+import { ProgramIntelligenceSchema, type ProgramIntelligence } from "./intelligence";
 import {
     acceleratorApplicationResponses,
     acceleratorCompanyMatches,
     acceleratorPortfolioCompanies,
+    acceleratorProgramIntelligence,
     acceleratorPrograms,
 } from "./schema";
-import type { ApplicationResponse, PortfolioCompany } from "./similar-companies";
+import type { ApplicationResponse, PastCompany } from "./similar-companies";
 import {
     AcceleratorError,
     CatalogueProgramSchema,
@@ -97,6 +99,79 @@ export async function importCatalogue(
                     updatedAt: new Date(),
                 })
                 .where(eq(acceleratorPrograms.id, value.id));
+            counts.updated++;
+        }
+        return counts;
+    });
+}
+
+/** Public program facts only. This does not read or write company fit or tracking. */
+export async function listProgramIntelligence(): Promise<
+    { dossier: ProgramIntelligence; contentHash: string }[]
+> {
+    return getDb()
+        .select({
+            dossier: acceleratorProgramIntelligence.dossier,
+            contentHash: acceleratorProgramIntelligence.contentHash,
+        })
+        .from(acceleratorProgramIntelligence)
+        .orderBy(asc(acceleratorProgramIntelligence.programId));
+}
+
+export async function importProgramIntelligence(
+    records: ProgramIntelligence[]
+): Promise<{ inserted: number; updated: number; unchanged: number }> {
+    const parsed = z.array(ProgramIntelligenceSchema).parse(records);
+    if (new Set(parsed.map(dossier => dossier.programId)).size !== parsed.length) {
+        throw new AcceleratorError(
+            "A program-intelligence import cannot repeat a Program ID",
+            400,
+            "duplicate_program"
+        );
+    }
+    const values = parsed
+        .map(dossier => ({
+            programId: dossier.programId,
+            dossier,
+            contentHash: hashValue(dossier),
+        }))
+        .sort((a, b) => a.programId.localeCompare(b.programId));
+    return getDb().transaction(async tx => {
+        const counts = { inserted: 0, updated: 0, unchanged: 0 };
+        for (const value of values) {
+            const inserted = await tx
+                .insert(acceleratorProgramIntelligence)
+                .values(value)
+                .onConflictDoNothing()
+                .returning({ id: acceleratorProgramIntelligence.programId });
+            if (inserted.length > 0) {
+                counts.inserted++;
+                continue;
+            }
+            const [existing] = await tx
+                .select()
+                .from(acceleratorProgramIntelligence)
+                .where(eq(acceleratorProgramIntelligence.programId, value.programId))
+                .for("update");
+            if (!existing) {
+                throw new AcceleratorError(
+                    "Program intelligence changed during import; retry the batch",
+                    409,
+                    "catalogue_conflict"
+                );
+            }
+            if (existing.contentHash === value.contentHash) {
+                counts.unchanged++;
+                continue;
+            }
+            await tx
+                .update(acceleratorProgramIntelligence)
+                .set({
+                    dossier: value.dossier,
+                    contentHash: value.contentHash,
+                    updatedAt: new Date(),
+                })
+                .where(eq(acceleratorProgramIntelligence.programId, value.programId));
             counts.updated++;
         }
         return counts;
@@ -198,7 +273,7 @@ const INSERT_CHUNK = 500;
  */
 export async function importPortfolioCompanies(
     programId: string,
-    companies: PortfolioCompany[]
+    companies: PastCompany[]
 ): Promise<ImportCounts> {
     if (new Set(companies.map(company => company.id)).size !== companies.length) {
         throw new AcceleratorError(
@@ -263,8 +338,8 @@ export async function importPortfolioCompanies(
 /** Companies whose stored embedding is missing or was made from different text or model. */
 export async function listPortfolioEmbeddingWork(
     programId: string,
-    embeddingHashOf: (company: PortfolioCompany) => string
-): Promise<{ id: string; company: PortfolioCompany; embeddingHash: string }[]> {
+    embeddingHashOf: (company: PastCompany) => string
+): Promise<{ id: string; company: PastCompany; embeddingHash: string }[]> {
     const rows = await getDb()
         .select({
             id: acceleratorPortfolioCompanies.id,
@@ -398,7 +473,7 @@ export async function findSimilarPortfolioCompanies(
     programId: string,
     embedding: number[],
     options: { limit: number }
-): Promise<{ company: PortfolioCompany; similarity: number }[]> {
+): Promise<{ company: PastCompany; similarity: number }[]> {
     const distance = cosineDistance(acceleratorPortfolioCompanies.embedding, embedding);
     return getDb()
         .select({

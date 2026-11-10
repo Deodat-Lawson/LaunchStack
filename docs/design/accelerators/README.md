@@ -180,12 +180,14 @@ A Program's **Similar companies** tab lists the twelve past companies closest to
 # and wait out per-minute rate limits; re-runs embed only changed companies.
 pnpm --filter @launchstack/web accelerators:collect-yc -- --installation local-accelerators
 
-# Nine more Programs researched for the demo, standing in for Workstream 1's records.
+# Workstream 1's catalogue: Program records, then their public dossiers (deal, batches, tags,
+# portfolio listings). Import the records first; the dossier table references them.
 pnpm --filter @launchstack/web accelerators:import -- --installation local-accelerators \
-  ../../fixtures/accelerators/demo/programs/*.json
+  ../../fixtures/accelerators/programs/*.json
+pnpm --filter @launchstack/web accelerators:import-intelligence -- --installation local-accelerators
 ```
 
-Program details (deal, batches, contacts, tags) in `apps/web/src/server/accelerators/demo/programs/` stand in for Workstream 1's records and are replaced when that work merges. The UI does not label them as demo data, so do not show this build to anyone as production output. Company fit is real: **Match Programs** scores every Program under rubric `fit-v1` (Workstream 2), the homepage sorts and filters on the saved result, and the Program page shows each area with its note and cited sources. Under `fit-v1` the "Similar past companies" area does not count toward the score for any Program, including YC. The tracker and similar-company matching are real features: tracker rows are company-private and need `documents.edit` to change.
+Program details shown on screen (deal, batches, contacts, tags) still come from the twelve stand-ins in `apps/web/src/server/accelerators/demo/programs/`; the screens do not read Workstream 1's dossiers (`accelerator_program_intelligence`) yet. The UI does not label the stand-ins as demo data, so do not show this build to anyone as production output. Company fit is real: **Match Programs** scores every Program under rubric `fit-v1` (Workstream 2), the homepage sorts and filters on the saved result, and the Program page shows each area with its note and cited sources. Under `fit-v1` the "Similar past companies" area does not count toward the score for any Program, including YC. The tracker and similar-company matching are real features: tracker rows are company-private and need `documents.edit` to change.
 
 ## Development and acceptance guidelines
 

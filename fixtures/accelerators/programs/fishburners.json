@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "fishburners",
+  "name": "Fishburners",
+  "logo": {
+    "path": "/accelerators/logos/fishburners.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://fishburners.org/",
+  "applyUrl": "https://fishburners.org/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Get direct access to mentors , investors , partners , and fellow founders. Fishburners is the home of Australia’s largest community of tech startups. We connect ambitious founders to the people, opportunities, and networks that drive their growth. From first idea through to Series A, Fishburners is where startups generate revenue, attract capital, and build companies with global ambition—surrounded by others on the same path. FISHBURNERS KEEPS YOU CONNECTED TO THE PEOPLE, OPPORTUNITIES AND INSIGHTS THAT MOVE YOUR BUSINESS FORWARD. 1111212 WE BELIEVE STARTUP SUCCESS SHOULDN'T BE LEFT TO CHANCE OR LUCK. WE BELIEVE STARTUP SUCCESS SHOULDN'T BE LEFT TO CHANGE OR LUCK. No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://fishburners.org/",
+      "title": "Fishburners — official mark on the retrieved page",
+      "quote": "https://framerusercontent.com/images/tyubkAqf0gYJDwxOA3sbcTwAoM.svg",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://fishburners.org/",
+      "title": "Fishburners — visible page text",
+      "quote": "Get direct access to mentors , investors , partners , and fellow founders. Fishburners is the home of Australia’s largest community of tech startups. We connect ambitious founders to the people, opportunities, and networks that drive their growth. From first idea through to Series A, Fishburners is where startups generate revenue, attract capital, and build companies with global ambition—surrounded by others on the same path. FISHBURNERS KEEPS YOU CONNECTED TO THE PEOPLE, OPPORTUNITIES AND INSIGHTS THAT MOVE YOUR BUSINESS FORWARD. 1111212 WE BELIEVE STARTUP SUCCESS SHOULDN'T BE LEFT TO CHANCE OR LUCK. WE BELIEVE STARTUP SUCCESS SHOULDN'T BE LEFT TO CHANGE OR LUCK.",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "fishburners-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://fishburners.org/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

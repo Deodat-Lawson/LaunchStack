@@ -1,0 +1,65 @@
+{
+  "id": "sosv",
+  "name": "SOSV",
+  "logo": {
+    "path": "/accelerators/logos/sosv.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://sosv.com/",
+  "applyUrl": "https://sosv.com/apply",
+  "description": {
+    "text": "AI-written synthesis of the cited official pages, prepared by the collecting assistant: SOSV's about page says its mission is to fund deep tech founders at inception, often their first check, and that general partners work with those founders on companies aimed at human and planetary health. It calls SOSV the most active deep tech, pre-seed venture capital firm and says it offers labs, offices, and event spaces in San Francisco, New York City, and Newark, plus offices in Cork, Pune, Shenzhen, and Tokyo. It says that at the start of 2026 its 800 active portfolio companies had raised $7.3 billion and were valued at $18.2 billion, and that as of 2026 it has $1.5 billion in assets under management. The apply page does not present one form. It asks the reader to click a program logo and describes three routes: SOSV NY for healthcare and engineering biology with wet-lab infrastructure; SOSV SF for deep tech companies that want to build near Silicon Valley; and HAX for hard tech. HAX is also a separate catalogue record. No single SOSV-wide investment amount or deadline was on these pages.",
+    "sourceIds": ["about", "apply"],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the about and apply pages, prepared by the collecting assistant: SOSV describes the people it funds as deep tech founders, often at inception. The apply page splits that into healthcare and engineering biology, a broader deep-tech path in San Francisco, and hard tech through HAX. The about page's figures on nationalities, PhDs, and female founders describe the existing portfolio, not an eligibility rule.",
+    "sourceIds": ["about", "apply"],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://sosv.com/about/",
+      "title": "SOSV about page — Black wordmark published on the site",
+      "quote": "https://sosv.com/wp-content/uploads/2022/06/sosv-logo-black.svg",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    },
+    {
+      "id": "about",
+      "url": "https://sosv.com/about/",
+      "title": "SOSV about page — Firm and facilities",
+      "quote": "SOSV’s mission is to fund amazing deep tech founders right at inception—often their very first check.\n\nSOSV is the world’s most active deep tech, pre-seed venture capital firm, and SOSV uniquely offers its founders deeply resourced labs, offices and events spaces in San Francisco, New York City, and Newark. In addition, SOSV has offices in Cork (Ireland / EU), Pune (India), Shenzhen (China), and Tokyo (Japan). At the start of 2026, SOSV’s 800 active portfolio companies had raised $7.3 billion and were valued at $18.2 billion.\n\nAs of 2026, SOSV has $1.5B in assets under management.",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    },
+    {
+      "id": "apply",
+      "url": "https://sosv.com/apply",
+      "title": "SOSV apply page — Three program routes, not one form",
+      "quote": "Apply to SOSV's Programs Click on the logo of the program you wish to apply to:\n\nCutting-edge healthcare and engineering biology, with wet-lab infrastructure and deep technical, regulatory, and commercial expertise to de-risk biology and bring products toward the clinic or market. Apply to SOSV NY\n\nFull sweep of deep tech for companies that want build in proximity to Silicon Valley’s capital density and talent networks and iterate quickly with customers, partners, and follow-on investors. Apply to SOSV SF\n\nHAX is the world’s first and most active program focused on hard tech startups. HAX helps founders tap into the world’s premier ecosystems for real-world product development, manufacturing and fundraising. Apply to SOSV HAX",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "program-picker",
+      "label": "Apply by choosing a program",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": ["apply"],
+      "form": {
+        "id": "sosv-program-picker-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://sosv.com/apply",
+        "checkedAt": "2026-10-27T00:25:00.000Z",
+        "supported": false,
+        "limitations": [
+          "The apply page is a chooser among SOSV NY, SOSV SF, and HAX. Those three applications were not opened from this page, so there is no single Form to represent. Fields stay empty and Start Application stays blocked."
+        ],
+        "fields": []
+      }
+    }
+  ],
+  "schemaVersion": 2
+}

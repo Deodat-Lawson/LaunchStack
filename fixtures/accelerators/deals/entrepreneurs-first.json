@@ -1,0 +1,14 @@
+{
+  "programId": "entrepreneurs-first",
+  "sourceId": "ef-homepage-investment",
+  "checkedAt": "2026-10-26T23:19:30.000Z",
+  "interpretation": true,
+  "summary": "The homepage lists four different things: an equity-free grant while ideating, an investment of up to $250K after a company is formed, follow-on funding of up to $5M, and more than $600K in partner credits. The grant, the investment, and the credits are not one equity package.",
+  "formattedTerms": "Equity-free grant to support you while you’re still ideating\nUp to $250K investment once you form a company\nUp to $5M in follow-on funding through your future rounds — and continued support up to Series B\nOver $600K in credits to help you move at warp speed: $350K in Azure credits; $250K+ from OpenAI, Anthropic, GitHub, PostHog, Datadog, ElevenLabs and more",
+  "parts": [
+    { "kind": "equity-free-grant", "amount": null, "currency": null, "equity": "none stated", "contingent": false },
+    { "kind": "investment", "amount": "250000", "currency": "USD", "equity": null, "contingent": true, "condition": "Once you form a company" },
+    { "kind": "follow-on", "amount": "5000000", "currency": "USD", "equity": null, "contingent": true },
+    { "kind": "partner-credits", "amount": "600000", "currency": "USD", "equity": null, "contingent": false }
+  ]
+}

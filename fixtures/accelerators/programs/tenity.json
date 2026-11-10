@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "tenity",
+  "name": "Tenity",
+  "logo": {
+    "path": "/accelerators/logos/tenity.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.tenity.com/",
+  "applyUrl": "https://www.tenity.com/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Tenity | Fintech Innovation Platform - Startups, VCs and Corporates Tenity is a fintech innovation platform that backs early-stage founders and partners with corporates at the convergence of fintech, AI, and digital assets. Venture Capital Innovation Services Trend scouting, startup sourcing & evaluation, market insight. 02. Co-designed programs, pilots, startup matching. 03. Early-stage investment, co-investment, global network. 01. Trend scouting, startup sourcing & evaluation, market insight. 02. No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.tenity.com/",
+      "title": "Tenity — official mark on the retrieved page",
+      "quote": "https://www.tenity.com/wp-content/themes/tenity/img/logo-black.svg",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.tenity.com/",
+      "title": "Tenity — visible page text",
+      "quote": "Tenity | Fintech Innovation Platform - Startups, VCs and Corporates Tenity is a fintech innovation platform that backs early-stage founders and partners with corporates at the convergence of fintech, AI, and digital assets. Venture Capital Innovation Services Trend scouting, startup sourcing & evaluation, market insight. 02. Co-designed programs, pilots, startup matching. 03. Early-stage investment, co-investment, global network. 01. Trend scouting, startup sourcing & evaluation, market insight. 02.",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "tenity-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.tenity.com/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

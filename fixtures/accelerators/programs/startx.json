@@ -1,0 +1,59 @@
+{
+  "id": "startx",
+  "name": "StartX",
+  "logo": {
+    "path": "/accelerators/logos/startx.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://web.startx.com/",
+  "applyUrl": "https://web.startx.com/",
+  "description": {
+    "text": "AI-written synthesis of the StartX homepage, prepared by the collecting assistant: the page calls StartX the premier community for Stanford founders and says it takes no equity and charges no fees. A banner says \"Apply to StartX Fellows by Nov 1\" and does not give a year or a time, so that date is not stored. The page prints its own totals: $200B total valuation, $44M raised on average, 144 companies valued at over $100M, and 29 companies valued at over $1B. A separate \"$200K\" line on the page is a donation campaign, not an investment in admitted companies, and it is not stored as a term.",
+    "sourceIds": ["homepage"],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the homepage, prepared by the collecting assistant: the page says StartX is for Stanford's founders and describes itself as a founder-led community. The Fellows banner is a separate apply path. The page does not, in the text that was kept, define which Stanford affiliation is required.",
+    "sourceIds": ["homepage"],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://web.startx.com/",
+      "title": "StartX homepage — Header logo",
+      "quote": "https://cdn.prod.website-files.com/682ec5179358c49410518b45/682ee40fa7ac2225ef13c0e8_logo-hm1.png",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://web.startx.com/",
+      "title": "StartX homepage — No equity, no fees, Fellows date without a year",
+      "quote": "Apply to StartX Fellows by Nov 1\n\nThe Premier Community for Stanford Founders\nStartX is a trusted, founder-led community built on deep collaboration, shared experience, and long-term support. We take no equity and charge no fees.\n\nStartX is dedicated to empowering Stanford’s most accomplished and visionary entrepreneurs.\n$200B Total Valuation\n$44M Raised on Average\n144 Companies valued at over $100M\n29 Companies valued at over $1B",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "community",
+      "label": "Community",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": ["homepage"],
+      "form": {
+        "id": "startx-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://web.startx.com/",
+        "checkedAt": "2026-10-27T00:25:00.000Z",
+        "supported": false,
+        "limitations": [
+          "The application questions were not opened. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "\"Apply to StartX Fellows by Nov 1\" has no year, clock, or timezone. deadlineAt and dateOnly stay empty. The page's $200K fundraising banner is a donation campaign and is not an accelerator investment."
+        ],
+        "fields": []
+      }
+    }
+  ],
+  "schemaVersion": 2
+}

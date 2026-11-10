@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "tech-nexus",
+  "name": "TechNexus",
+  "logo": {
+    "path": "/accelerators/logos/tech-nexus.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.technexus.com/",
+  "applyUrl": "https://www.technexus.com/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: The first-of-its-kind venture collaborative — pioneered in 2007, with 150+ portfolio companies and $4B+ in tracked portfolio value. TechNexus partners with leading corporations and ambitious founders to invest in, build, and scale ventures that transform industries. Our insight comes from the connected entrepreneurial ecosystems . We have been mentoring, building and funding ventures since 2007, and putting our own capital and founder ethos to work alongside yours since 2017. 150+ Active Portfolio Investments More than a Dozen Corporate Partners Two Decades Curating Entrepreneurial Ecosystems $4B+ Follow-on Capital Raised by Portfolio Companies What We Do For Corporations TechNexus invests our resources aligned with yours and coordinates co-investments where it matters Venture strategy through a startup & emerging-tech lens Venture building — co-creating new companies from scratch Corporate spinouts from dormant R&D and IP Learn more For Ventures No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.technexus.com/",
+      "title": "TechNexus — official mark on the retrieved page",
+      "quote": "https://www.technexus.com/images/logos/tnvc-logo-white.webp",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.technexus.com/",
+      "title": "TechNexus — visible page text",
+      "quote": "The first-of-its-kind venture collaborative — pioneered in 2007, with 150+ portfolio companies and $4B+ in tracked portfolio value. TechNexus partners with leading corporations and ambitious founders to invest in, build, and scale ventures that transform industries. Our insight comes from the connected entrepreneurial ecosystems . We have been mentoring, building and funding ventures since 2007, and putting our own capital and founder ethos to work alongside yours since 2017. 150+ Active Portfolio Investments More than a Dozen Corporate Partners Two Decades Curating Entrepreneurial Ecosystems $4B+ Follow-on Capital Raised by Portfolio Companies What We Do For Corporations TechNexus invests our resources aligned with yours and coordinates co-investments where it matters Venture strategy through a startup & emerging-tech lens Venture building — co-creating new companies from scratch Corporate spinouts from dormant R&D and IP Learn more For Ventures",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "tech-nexus-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.technexus.com/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

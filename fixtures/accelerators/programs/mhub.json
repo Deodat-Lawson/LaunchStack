@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "mhub",
+  "name": "mHUB",
+  "logo": {
+    "path": "/accelerators/logos/mhub.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://mhub.org/",
+  "applyUrl": "https://mhub.org/apply-to-be-a-member",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Accelerator Programs Show submenu for Accelerator Programs mHUB is where people come to build the physical technologies that will change the physical world. Through prototyping labs, industry partnerships, and a commitment to U.S. manufacturing, the mHUB ecosystem is changing the landscape of hardtech development. Join the mHUB startup community that has raised over $2.B in capital and launched over 1,700 products. Grow Your Startup Connect with mHUB to advance internal innovation while growing talent and product pipelines. Get Connected Access mHUB’s ecosystem of talent and resources for R&D support on existing and new projects. Outsource Your R&D Invest in seed and early-stage physical product/hardtech startups to advance disruptive technologies. Invest in the Future No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://mhub.org/",
+      "title": "mHUB — official mark on the retrieved page",
+      "quote": "https://mhub.org/hs-fs/hubfs/Brand_Assets/mhub-logo-resize.png?width=130&height=32&name=mhub-logo-resize.png",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://mhub.org/",
+      "title": "mHUB — visible page text",
+      "quote": "Accelerator Programs Show submenu for Accelerator Programs mHUB is where people come to build the physical technologies that will change the physical world. Through prototyping labs, industry partnerships, and a commitment to U.S. manufacturing, the mHUB ecosystem is changing the landscape of hardtech development. Join the mHUB startup community that has raised over $2.B in capital and launched over 1,700 products. Grow Your Startup Connect with mHUB to advance internal innovation while growing talent and product pipelines. Get Connected Access mHUB’s ecosystem of talent and resources for R&D support on existing and new projects. Outsource Your R&D Invest in seed and early-stage physical product/hardtech startups to advance disruptive technologies. Invest in the Future",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "mhub-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://mhub.org/apply-to-be-a-member",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

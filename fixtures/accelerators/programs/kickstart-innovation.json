@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "kickstart-innovation",
+  "name": "Kickstart Innovation",
+  "logo": {
+    "path": "/accelerators/logos/kickstart-innovation.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.kickstart-innovation.com/",
+  "applyUrl": "http://kickstart-innovation.com/apply",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Kickstart Innovation | innovation ecosystems with purpose | Switzerland top of page Login to my We take an open innovation approach to help organizations succeed at becoming more sustainable and inventive by accelerating collaboration with well established startups. Kickstart builds innovation ecosystems with purpose PostFinance created a digital coaching program on the Cognician platform PostFinance and Cognician’s PoC produced exciting results in helping learners reach predefined program learning outcomes. Agile collaboration was key in activating learners’ commitment and planning, to ensure they got maximum value from this blended learning solution. Read the case study here . Better Meat Than Animals: How Planted Is Rethinking Plant-Based Protein read No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.kickstart-innovation.com/",
+      "title": "Kickstart Innovation — official mark on the retrieved page",
+      "quote": "https://static.wixstatic.com/media/930d17_05792f37bc46462da78f83b2c3705159%7Emv2.png/v1/fill/w_192%2Ch_192%2Clg_1%2Cusm_0.66_1.00_0.01/930d17_05792f37bc46462da78f83b2c3705159%7Emv2.png",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.kickstart-innovation.com/",
+      "title": "Kickstart Innovation — visible page text",
+      "quote": "Kickstart Innovation | innovation ecosystems with purpose | Switzerland top of page Login to my We take an open innovation approach to help organizations succeed at becoming more sustainable and inventive by accelerating collaboration with well established startups. Kickstart builds innovation ecosystems with purpose PostFinance created a digital coaching program on the Cognician platform PostFinance and Cognician’s PoC produced exciting results in helping learners reach predefined program learning outcomes. Agile collaboration was key in activating learners’ commitment and planning, to ensure they got maximum value from this blended learning solution. Read the case study here . Better Meat Than Animals: How Planted Is Rethinking Plant-Based Protein read",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "kickstart-innovation-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "http://kickstart-innovation.com/apply",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

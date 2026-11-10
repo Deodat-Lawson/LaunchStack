@@ -10,7 +10,7 @@ import { z } from "zod";
 export const SEASON_START_MONTH = { Winter: 1, Spring: 4, Summer: 6, Fall: 9 } as const;
 type Season = keyof typeof SEASON_START_MONTH;
 
-export interface PortfolioCompany {
+export interface PastCompany {
     /** `${programId}:${slug}` — stable across re-collection. */
     id: string;
     programId: string;
@@ -91,7 +91,7 @@ export interface ApplicationResponse {
 }
 
 export interface SimilarCompany {
-    company: PortfolioCompany;
+    company: PastCompany;
     /** Industries and tags the Core profile also names. */
     sharedTerms: string[];
     /** Application this company published, when one is stored. */
@@ -162,9 +162,9 @@ function list(values: string[] | null | undefined): string[] {
 
 /**
  * Map one yc-oss record (a mirror of YC's public directory index) to a
- * PortfolioCompany. Returns null for records without a dated batch.
+ * PastCompany. Returns null for records without a dated batch.
  */
-export function normalizeYcOssCompany(raw: unknown, programId: string): PortfolioCompany | null {
+export function normalizeYcOssCompany(raw: unknown, programId: string): PastCompany | null {
     const record = YcOssCompanySchema.parse(raw);
     const batch = parseBatchLabel(record.batch);
     if (!batch) return null;
@@ -199,7 +199,7 @@ const EMBEDDING_TEXT_LIMIT = 2_000;
  * classified. The name is left out so a shared name ("Northwind") never makes
  * two unrelated companies look alike.
  */
-export function companyEmbeddingText(company: PortfolioCompany): string {
+export function companyEmbeddingText(company: PastCompany): string {
     const parts = [
         company.oneLiner,
         company.description,
@@ -246,7 +246,7 @@ export function profileEmbeddingText(profile: {
  * A past company's industries and tags that the profile also names, so a match
  * explains itself with evidence rather than a bare similarity number.
  */
-export function sharedTerms(company: PortfolioCompany, profileText: string): string[] {
+export function sharedTerms(company: PastCompany, profileText: string): string[] {
     const haystack = ` ${profileText.toLowerCase().replace(/[^a-z0-9]+/g, " ")} `;
     return [...new Set([...company.industries, ...company.tags])].filter(term => {
         const words = term

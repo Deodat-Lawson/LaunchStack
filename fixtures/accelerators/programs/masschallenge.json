@@ -1,0 +1,59 @@
+{
+  "id": "masschallenge",
+  "name": "MassChallenge",
+  "logo": {
+    "path": "/accelerators/logos/masschallenge.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://masschallenge.org/",
+  "applyUrl": "https://masschallenge.org/our-accelerators/",
+  "description": {
+    "text": "AI-written synthesis of the accelerators page, prepared by the collecting assistant: MassChallenge's accelerators page groups its work into Early Stage, described there as founder-focused and industry agnostic; Challenge Programs, described as industry-specific for mid-to-late stage startups; Additional Programs, described as a variety of mentorship and industry focuses for all stages; and Bridge to MC, described as driving innovation and startup ecosystem development. Several nearby lines on the same page are the placeholder \"Short one liner description here\" and are not treated as program facts. No investment amount, cohort length, or deadline was stated in the text that was kept.",
+    "sourceIds": ["accelerators"],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the accelerators page, prepared by the collecting assistant: the page distinguishes an early-stage, industry-agnostic track from industry-specific challenge programs for mid-to-late stage startups, and it also lists additional programs for all stages. It does not publish a single applicant test, so this is not a closed stage enum.",
+    "sourceIds": ["accelerators"],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://masschallenge.org/our-accelerators/",
+      "title": "MassChallenge accelerators page — Horizontal logo",
+      "quote": "https://masschallenge.org/wp-content/uploads/2022/06/logo-horizontal-1.png",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    },
+    {
+      "id": "accelerators",
+      "url": "https://masschallenge.org/our-accelerators/",
+      "title": "MassChallenge accelerators page — Program groups",
+      "quote": "Early Stage Founder-focused & industry agnostic Challenge Programs Industry-specific for mid-to-late stage startups Additional Programs A variety of mentorship & industry focuses for all stages Bridge to MC Driving innovation & startup ecosystem development",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "accelerators-listed",
+      "label": "Accelerators listed on the official page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": ["accelerators"],
+      "form": {
+        "id": "masschallenge-accelerators-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://masschallenge.org/our-accelerators/",
+        "checkedAt": "2026-10-27T00:25:00.000Z",
+        "supported": false,
+        "limitations": [
+          "The application questions were not opened. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "The page lists more than one accelerator. They were not split into separate Forms, and no per-program deadline was published in the text that was kept. Placeholder lines reading \"Short one liner description here\" were ignored."
+        ],
+        "fields": []
+      }
+    }
+  ],
+  "schemaVersion": 2
+}

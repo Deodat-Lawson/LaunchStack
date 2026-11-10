@@ -1,0 +1,65 @@
+{
+  "schemaVersion": 2,
+  "id": "accelerating-asia",
+  "name": "Accelerating Asia",
+  "logo": {
+    "path": "/accelerators/logos/accelerating-asia.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://www.acceleratingasia.com/",
+  "applyUrl": "https://www.acceleratingasia.com/",
+  "description": {
+    "text": "AI-written synthesis of the official page retrieved in this pass, prepared by the collecting assistant: Asia's early stage accelerator VC fund that invests in high growth startups . Accelerating Asia exists to back the undiscovered. We find high-potential founders in Southeast and South Asia—the ones with real traction and grit, but without the traditional background. Through our accelerator, we provide the capital, credibility, and hands-on partnership they need to get to the next level. For our investor partners, we offer a trusted, systematic way to access and meaningfully engage with the future of innovation in the world's most dynamic markets. Aunkur (iPage) is an AI-powered data mining company, providing farm analytics and linkage for small farmers and ecosystem actors in the agricultural industry. view portfolio ByteGenie helps hospitality companies increase sales revenue & cut procurement costs with our AI agent that can do the work of an entire data team. View Portfolio No application form was opened, and this record does not add a deadline, investment instrument, or eligibility rule beyond that quoted text.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the same official page, prepared by the collecting assistant: who the program addresses is only what that page says in the quoted text. This is not a closed stage list or an eligibility rule. The application questions were not reviewed.",
+    "sourceIds": [
+      "homepage"
+    ],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://www.acceleratingasia.com/",
+      "title": "Accelerating Asia — official mark on the retrieved page",
+      "quote": "https://images.squarespace-cdn.com/content/v1/66a224e901a5112a9af956e1/16479261-3499-49e6-b47c-050666dfecfa/Menu_Logo_AcceleratingAsiaVentures-min.png?format=1500w",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://www.acceleratingasia.com/",
+      "title": "Accelerating Asia — visible page text",
+      "quote": "Asia's early stage accelerator VC fund that invests in high growth startups . Accelerating Asia exists to back the undiscovered. We find high-potential founders in Southeast and South Asia—the ones with real traction and grit, but without the traditional background. Through our accelerator, we provide the capital, credibility, and hands-on partnership they need to get to the next level. For our investor partners, we offer a trusted, systematic way to access and meaningfully engage with the future of innovation in the world's most dynamic markets. Aunkur (iPage) is an AI-powered data mining company, providing farm analytics and linkage for small farmers and ecosystem actors in the agricultural industry. view portfolio ByteGenie helps hospitality companies increase sales revenue & cut procurement costs with our AI agent that can do the work of an entire data team. View Portfolio",
+      "checkedAt": "2026-11-03T00:18:31.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "public-page",
+      "label": "Public page",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": [
+        "homepage"
+      ],
+      "form": {
+        "id": "accelerating-asia-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://www.acceleratingasia.com/",
+        "checkedAt": "2026-11-03T00:18:31.000Z",
+        "supported": false,
+        "limitations": [
+          "This pass retrieved the public page and did not open an application. No account was created, no terms were accepted, and nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "No deadline, clock, or timezone was confirmed in this pass, so deadlineAt and dateOnly stay empty."
+        ],
+        "fields": []
+      }
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "id": "angelpad",
+  "name": "AngelPad",
+  "logo": {
+    "path": "/accelerators/logos/angelpad.png",
+    "sourceId": "official-logo"
+  },
+  "websiteUrl": "https://angelpad.com/",
+  "applyUrl": "https://angelpad.com/#apply",
+  "description": {
+    "text": "AI-written synthesis of the AngelPad homepage, prepared by the collecting assistant: the page calls AngelPad the #1 U.S. accelerator based in San Francisco and NYC, says it is always the first check, and attributes a top U.S. ranking to MIT's Seed Accelerator Benchmark. It says AngelPad companies have raised over $4.4 billion and that the portfolio has $7.2 billion in exits to date. It says AngelPad is a seed-stage accelerator in NYC and San Francisco, that since 2010 it has launched more than 150 companies, and that every six months it selects about 15 teams from a pool it describes as usually around 2000. It says the program is three very intense months. Those rankings and totals are the page's own statements. No current deadline or investment instrument was in the text that was kept.",
+    "sourceIds": ["homepage"],
+    "interpretation": true
+  },
+  "targetApplicants": {
+    "text": "AI-written interpretation of the homepage, prepared by the collecting assistant: the page says it looks for companies whose founders it wants to work with, and it contrasts that with accelerators that take on more companies or more cities. It does not publish a stage checklist, a sector list, or a requirement to already be in San Francisco or New York.",
+    "sourceIds": ["homepage"],
+    "interpretation": true
+  },
+  "sources": [
+    {
+      "id": "official-logo",
+      "url": "https://angelpad.com/",
+      "title": "AngelPad homepage — Wordmark",
+      "quote": "https://angelpad.com/wp-content/uploads/angelpad-small.png",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    },
+    {
+      "id": "homepage",
+      "url": "https://angelpad.com/",
+      "title": "AngelPad homepage — What the program is",
+      "quote": "AngelPad – #1 U.S Accelerator based in SF and NYC\nRanked #1 U.S Accelerator\nSupporting Founders on Day One\nWe are Always the First Check\nRanked Top U.S Accelerator by MIT’s Seed Accelerator Benchmark.\nAngelPad companies have raised over $4.4 Billion in Funding and the Portfolio has $7.2 Billion in Exits to date\n\nAngelPad is a seed-stage accelerator program based in NYC and San Francisco. Since 2010 we have launched more than 150 companies. Every 6 months we select about 15 teams from a huge pool of applicants (usually around 2000) to work with us.\n\nFind awesome companies with founders we like to work with and spend three very intense months with them.",
+      "checkedAt": "2026-10-27T00:25:00.000Z"
+    }
+  ],
+  "cycles": [
+    {
+      "id": "seed-cohort",
+      "label": "Seed cohort",
+      "deadlineAt": null,
+      "deadlineTimezone": null,
+      "rolling": false,
+      "sourceIds": ["homepage"],
+      "form": {
+        "id": "angelpad-unconfirmed",
+        "status": "unavailable",
+        "sourceUrl": "https://angelpad.com/#apply",
+        "checkedAt": "2026-10-27T00:25:00.000Z",
+        "supported": false,
+        "limitations": [
+          "The homepage links Apply to an on-page anchor. The application questions below that anchor were not extracted as a complete Form. Nothing was submitted. Fields stay empty and Start Application stays blocked.",
+          "The page describes a cohort every six months and does not publish the current deadline, clock, or timezone."
+        ],
+        "fields": []
+      }
+    }
+  ],
+  "schemaVersion": 2
+}

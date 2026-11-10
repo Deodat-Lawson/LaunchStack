@@ -1,6 +1,13 @@
 import { createHash } from "node:crypto";
 import { scopeAllowsDocument, type DocumentScope } from "~/lib/authz/scope-types";
 import {
+    boundedInternalQuery,
+    collectInternalWeeklyReviewContext,
+    createInternalSourceReader,
+    validateInternalConfiguration,
+    type ReviewInputIdentity,
+} from "./weekly-review-internal-selection";
+import {
     WeeklyReviewConflict,
     type FrozenDependency,
     type SourcePurpose,
@@ -38,12 +45,14 @@ export type WeeklyReviewAuthorityActor = WeeklyReviewActor & {
 
 export function createWeeklyReviewAuthority(
     database: WeeklyReviewDatabase,
-    loadActor: () => Promise<WeeklyReviewAuthorityActor>
+    loadActor: () => Promise<WeeklyReviewAuthorityActor>,
+    options: { internalRetrievalV1?: boolean } = {}
 ) {
     async function fresh(
         query: WeeklyReviewQuery,
         expected: WeeklyReviewActor,
-        configurationWrite = false
+        configurationWrite = false,
+        actorDeadline?: number
     ) {
         await query(
             "INSERT INTO pdr_ai_v2_vantage_weekly_review_epochs(company_id) VALUES($1::bigint) ON CONFLICT DO NOTHING",
@@ -54,7 +63,29 @@ export function createWeeklyReviewAuthority(
                 (configurationWrite ? "FOR UPDATE" : "FOR SHARE"),
             [expected.companyId]
         );
-        const actor = await loadActor();
+        let actorTimer: ReturnType<typeof setTimeout> | undefined;
+        const remaining = actorDeadline === undefined ? undefined : actorDeadline - Date.now();
+        if (remaining !== undefined && remaining <= 0)
+            throw new WeeklyReviewConflict("retrieval_acquisition_timeout", 503);
+        // Reject and release the epoch transaction when a separate auth read stalls.
+        // The pending read itself cannot be cancelled by this adapter.
+        const actor =
+            remaining === undefined
+                ? await loadActor()
+                : await Promise.race([
+                      loadActor(),
+                      new Promise<never>((_, reject) => {
+                          actorTimer = setTimeout(
+                              () =>
+                                  reject(
+                                      new WeeklyReviewConflict("retrieval_acquisition_timeout", 503)
+                                  ),
+                              remaining
+                          );
+                      }),
+                  ]).finally(() => {
+                      if (actorTimer) clearTimeout(actorTimer);
+                  });
         if (
             actor.companyId !== expected.companyId ||
             actor.userId !== expected.userId ||
@@ -116,6 +147,11 @@ export function createWeeklyReviewAuthority(
             architectureId: string,
             requiredIds: string[]
         ) {
+            if (options.internalRetrievalV1)
+                return validateInternalConfiguration(query, fresh, assertSourcePurpose, expected, {
+                    architectureId,
+                    requiredIds,
+                });
             const { actor } = await fresh(query, expected, true);
             if (actor.canConfigure !== true)
                 throw new WeeklyReviewConflict("review_configuration_denied", 403);
@@ -132,6 +168,10 @@ export function createWeeklyReviewAuthority(
             expected: WeeklyReviewActor,
             starIds: string[]
         ) {
+            if (options.internalRetrievalV1)
+                return validateInternalConfiguration(query, fresh, assertSourcePurpose, expected, {
+                    starIds,
+                });
             const { actor } = await fresh(query, expected, true);
             if (!actor.canMutate) throw new WeeklyReviewConflict("review_mutation_denied", 403);
             if (starIds.length > 8) throw new WeeklyReviewConflict("context_budget_exceeded");
@@ -163,8 +203,20 @@ export function createWeeklyReviewAuthority(
         },
         async collectWeeklyReviewContext(
             expected: WeeklyReviewActor,
-            week: string
+            week: string,
+            identity?: ReviewInputIdentity
         ): Promise<WeeklyReviewContext> {
+            if (options.internalRetrievalV1) {
+                if (!identity) throw new WeeklyReviewConflict("review_input_identity_required");
+                return collectInternalWeeklyReviewContext(
+                    database,
+                    fresh,
+                    assertSourcePurpose,
+                    expected,
+                    week,
+                    identity
+                );
+            }
             return database.transaction(async query => {
                 const { actor, epoch } = await fresh(query, expected);
                 const periodEnd = new Date(week + "T00:00:00.000Z");
@@ -245,7 +297,14 @@ export function createWeeklyReviewAuthority(
             dependencies: FrozenDependency[],
             phase: "prepare" | "dispatch" | "activation" | "read" | "decision" | "recovery" = "read"
         ) {
-            const { actor, epoch } = await fresh(query, expected);
+            // New acquisition limits govern new candidates. Historical reads and
+            // decisions retain the established exact-frozen-dependency reader.
+            const bounded =
+                options.internalRetrievalV1 && phase !== "read" && phase !== "decision"
+                    ? boundedInternalQuery(query)
+                    : null;
+            if (bounded) query = bounded.query;
+            const { actor, epoch } = await fresh(query, expected, false, bounded?.deadlineAt);
             if (
                 (phase === "dispatch" || phase === "activation") &&
                 (!expected.authorityEpoch || expected.authorityEpoch !== epoch)
@@ -255,15 +314,25 @@ export function createWeeklyReviewAuthority(
                 throw new WeeklyReviewConflict("review_mutation_denied", 403);
             if (phase === "recovery") return;
             const current: FrozenDependency[] = [];
+            const read = bounded
+                ? createInternalSourceReader(query, actor, bounded.acquisition, assertSourcePurpose)
+                : null;
             for (const dependency of dependencies)
                 current.push(
-                    await readDocument(
-                        query,
-                        actor,
-                        dependency.id,
-                        dependency.version,
-                        dependency.purpose
-                    )
+                    read
+                        ? await read(
+                              dependency.id,
+                              dependency.purpose,
+                              new Date().toISOString(),
+                              dependency.version
+                          )
+                        : await readDocument(
+                              query,
+                              actor,
+                              dependency.id,
+                              dependency.version,
+                              dependency.purpose
+                          )
                 );
             assertFrozenSources(dependencies, current);
         },

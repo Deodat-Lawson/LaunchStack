@@ -2,6 +2,10 @@ import { createHash, randomUUID } from "node:crypto";
 import { z } from "zod";
 import { decryptSecret, encryptSecret } from "@launchstack/store/crypto";
 import {
+    calculateWeeklyReviewBudget,
+    type WeeklyReviewInput,
+} from "@launchstack/pipelines/vantage/weekly-review-v21";
+import {
     WeeklyReviewConflict,
     type AssertWeeklyReviewAuthority,
     type FrozenDependency,
@@ -55,6 +59,38 @@ const scalarText = (value: unknown): string => {
     throw new WeeklyReviewConflict("review_storage_corrupt", 500);
 };
 const hash = (value: unknown) => createHash("sha256").update(JSON.stringify(value)).digest("hex");
+/** Omitted sources are not read-authority dependencies. Keep their identifiers
+ * only in the encrypted admission record, even if access was allowed at capture. */
+function reportReadEvidence(value: unknown): unknown {
+    if (!value || typeof value !== "object") return value;
+    const evidence = value as Record<string, unknown>;
+    if (
+        evidence.schemaVersion !== "vantage-admission/v2" ||
+        !evidence.selectionDiagnostics ||
+        typeof evidence.selectionDiagnostics !== "object"
+    )
+        return value;
+    const { omitted, ...diagnostics } = evidence.selectionDiagnostics as Record<string, unknown>;
+    const omissionReasonCounts: Record<string, number> = {};
+    if (Array.isArray(omitted))
+        for (const item of omitted as unknown[]) {
+            if (
+                item &&
+                typeof item === "object" &&
+                "reason" in item &&
+                typeof item.reason === "string"
+            )
+                omissionReasonCounts[item.reason] = (omissionReasonCounts[item.reason] ?? 0) + 1;
+        }
+    return {
+        ...evidence,
+        selectionDiagnostics: {
+            ...diagnostics,
+            omittedCount: Array.isArray(omitted) ? omitted.length : 0,
+            omissionReasonCounts,
+        },
+    };
+}
 const dependenciesOf = (row: Record<string, unknown>) =>
     (typeof row.dependencies === "string"
         ? JSON.parse(row.dependencies)
@@ -184,14 +220,15 @@ export function createWeeklyReviewRepository(
             week: string,
             key: string,
             inputHash: string,
-            dependencies: FrozenDependency[]
+            dependencies: FrozenDependency[],
+            candidateId?: string
         ) {
             return transact(async query => {
                 await authority(query, actor, dependencies, "prepare");
                 const rows = await query(
                     "INSERT INTO pdr_ai_v2_vantage_weekly_review_runs(id,company_id,owner_id,week_start,idempotency_key,input_hash,status,dependencies) VALUES($1::uuid,$2::bigint,$3,$4::date,$5,$6,'reserved',$7::jsonb) ON CONFLICT(company_id,owner_id,idempotency_key) DO NOTHING RETURNING *",
                     [
-                        randomUUID(),
+                        candidateId ?? randomUUID(),
                         actor.companyId,
                         actor.userId,
                         week,
@@ -276,6 +313,8 @@ export function createWeeklyReviewRepository(
                     reportHash?: string;
                     inputHash?: string;
                     evaluationHash?: string;
+                    inputSnapshot?: WeeklyReviewInput;
+                    budget?: ReturnType<typeof calculateWeeklyReviewBudget>;
                     evaluation?: {
                         status?: string;
                         verdict?: string;
@@ -285,7 +324,9 @@ export function createWeeklyReviewRepository(
                 } | null;
                 if (
                     !evidence ||
-                    evidence.schemaVersion !== "vantage-admission/v1" ||
+                    !["vantage-admission/v1", "vantage-admission/v2"].includes(
+                        evidence.schemaVersion ?? ""
+                    ) ||
                     evidence.candidateId !== id ||
                     evidence.reportHash !== hash(input.report) ||
                     !/^[a-f0-9]{64}$/.test(evidence.inputHash ?? "") ||
@@ -297,6 +338,24 @@ export function createWeeklyReviewRepository(
                     evidence.evaluation.integrityIssues.some(issue => issue.severity === "error")
                 )
                     throw new WeeklyReviewConflict("candidate_admission_invalid");
+                if (evidence.schemaVersion === "vantage-admission/v2") {
+                    try {
+                        if (
+                            !evidence.inputSnapshot ||
+                            evidence.inputSnapshot.candidateId !== id ||
+                            hash(evidence.inputSnapshot) !== evidence.inputHash
+                        )
+                            throw new Error("invalid_input");
+                        const budget = calculateWeeklyReviewBudget(
+                            evidence.inputSnapshot,
+                            "internal-v1"
+                        );
+                        if (!budget.feasible || hash(budget) !== hash(evidence.budget))
+                            throw new Error("invalid_budget");
+                    } catch {
+                        throw new WeeklyReviewConflict("candidate_admission_invalid");
+                    }
+                }
                 const envelope = {
                     schema: "vantage-weekly-review/v2.1",
                     id,
@@ -359,6 +418,7 @@ export function createWeeklyReviewRepository(
                 );
                 return {
                     ...payload,
+                    evidence: reportReadEvidence(payload.evidence),
                     version: Number(row.review_version),
                     decisions: decisions.map(item =>
                         parseStoredDecision(decryptSecret(String(item.ciphertext)))

@@ -1,3 +1,5 @@
+import type { SelectionDiagnostics } from "./weekly-review-internal-selection";
+
 export interface WeeklyReviewActor {
     companyId: string;
     userId: string;
@@ -51,4 +53,6 @@ export interface WeeklyReviewContext {
     preferenceVersion: number;
     authorityEpoch: string;
     mandatoryCoverage: { required: number; included: number };
+    inputIdentity?: { candidateId: string; asOf: string };
+    selectionDiagnostics?: SelectionDiagnostics;
 }

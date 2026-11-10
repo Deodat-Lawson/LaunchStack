@@ -22,6 +22,9 @@ import { weeklyReviewTestPorts } from "./weekly-review-test-provider";
 export function weeklyReviewEnabled() {
     return process.env.VANTAGE_WEEKLY_REVIEW_ENABLED === "true";
 }
+export function budgetAwareInternalRetrievalEnabled() {
+    return process.env.VANTAGE_INTERNAL_RETRIEVAL_V1_ENABLED === "true";
+}
 export const weeklyReviewDatabase: WeeklyReviewDatabase = {
     async transaction(work) {
         return getEngine().db.transaction(async tx => {
@@ -57,7 +60,9 @@ async function currentActor() {
     };
 }
 export function weeklyReviewServices() {
-    const authority = createWeeklyReviewAuthority(weeklyReviewDatabase, currentActor);
+    const authority = createWeeklyReviewAuthority(weeklyReviewDatabase, currentActor, {
+        internalRetrievalV1: budgetAwareInternalRetrievalEnabled(),
+    });
     return {
         authority,
         repository: createWeeklyReviewRepository(
@@ -73,12 +78,16 @@ export async function generateWeeklyReview(
 ) {
     if (!weeklyReviewEnabled()) throw new WeeklyReviewConflict("weekly_review_disabled", 404);
     const { authority, repository } = weeklyReviewServices();
-    const context = await authority.collectWeeklyReviewContext(actor, args.weekStart);
+    const internalRetrievalV1 = budgetAwareInternalRetrievalEnabled();
+    const identity = internalRetrievalV1
+        ? { candidateId: randomUUID(), asOf: new Date().toISOString() }
+        : undefined;
+    const context = await authority.collectWeeklyReviewContext(actor, args.weekStart, identity);
     const current = { ...actor, authorityEpoch: context.authorityEpoch };
     const input: WeeklyReviewInput = {
-        candidateId: randomUUID(),
+        candidateId: context.inputIdentity?.candidateId ?? randomUUID(),
         week: args.weekStart,
-        asOf: new Date().toISOString(),
+        asOf: context.inputIdentity?.asOf ?? new Date().toISOString(),
         role: context.role,
         mandatoryCoverage: context.mandatoryCoverage,
         sources: context.sources,
@@ -89,6 +98,7 @@ export async function generateWeeklyReview(
         role: context.role,
         sources: context.sources,
         epoch: context.authorityEpoch,
+        ...(internalRetrievalV1 ? { budgetProfile: "internal-v1" } : {}),
     });
     const dependencies = context.sources.map(({ kind, id, version, hash, purpose }) => ({
         kind,
@@ -102,7 +112,8 @@ export async function generateWeeklyReview(
         args.weekStart,
         args.key,
         inputHash,
-        dependencies
+        dependencies,
+        context.inputIdentity?.candidateId
     );
     if (!reserved.created) {
         if (reserved.status === "accepted") return repository.get(actor, reserved.id);
@@ -111,6 +122,12 @@ export async function generateWeeklyReview(
         );
     }
     input.candidateId = reserved.id;
+    const budgetPorts = internalRetrievalV1
+        ? {
+              budgetProfile: "internal-v1" as const,
+              selectionDiagnostics: context.selectionDiagnostics,
+          }
+        : {};
     try {
         const result = await withWorkspaceChatModels(
             BigInt(actor.companyId),
@@ -120,6 +137,7 @@ export async function generateWeeklyReview(
                 if (test)
                     return runWeeklyReviewV21(input, {
                         ...test,
+                        ...budgetPorts,
                         authorizeDispatch: kind =>
                             repository.authorizeDispatch(current, reserved.id, kind),
                     });
@@ -148,6 +166,7 @@ export async function generateWeeklyReview(
                 return runWeeklyReviewV21(input, {
                     generation,
                     judge,
+                    ...budgetPorts,
                     authorizeDispatch: kind =>
                         repository.authorizeDispatch(current, reserved.id, kind),
                 });

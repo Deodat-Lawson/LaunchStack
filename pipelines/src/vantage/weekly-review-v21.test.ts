@@ -123,7 +123,9 @@ describe("canonical V2.1 contract and admission", () => {
         const candidate = input();
         candidate.sources[0]!.text = "x".repeat(6001);
         const p = ports();
-        await expect(runWeeklyReviewV21(candidate, { ...p, invoke: p.invoke as never })).rejects.toThrow();
+        await expect(
+            runWeeklyReviewV21(candidate, { ...p, invoke: p.invoke as never })
+        ).rejects.toThrow();
         expect(p.authorizeDispatch).not.toHaveBeenCalled();
         expect(p.invoke).not.toHaveBeenCalled();
     });
@@ -187,6 +189,55 @@ describe("canonical V2.1 contract and admission", () => {
         expect(result.evidence.reportHash).toBe(reviewFingerprint(result.report));
         expect(p.invoke).toHaveBeenCalledTimes(1);
         expect(p.authorizeDispatch.mock.calls.map(c => c[0])).toEqual(["generation", "judge"]);
+        expect(result.evidence.schemaVersion).toBe("vantage-admission/v1");
+        expect(result.evidence).not.toHaveProperty("budget");
+        expect(result.evidence).not.toHaveProperty("selectionDiagnostics");
+    });
+    it("records private internal diagnostics without putting them into model input", async () => {
+        const p = ports();
+        const selectionDiagnostics = {
+            privateMarker: "server-private-only",
+            omitted: ["unselected-ref"],
+        };
+        const result = await runWeeklyReviewV21(input(), {
+            ...p,
+            invoke: p.invoke as never,
+            budgetProfile: "internal-v1",
+            selectionDiagnostics,
+        });
+        expect(result.evidence.schemaVersion).toBe("vantage-admission/v2");
+        expect(result.evidence.budget?.reportReserveBytes).toBe(2800);
+        expect(result.evidence.selectionDiagnostics).toEqual(selectionDiagnostics);
+        selectionDiagnostics.omitted.push("later-mutation");
+        expect(result.evidence.selectionDiagnostics).not.toEqual(selectionDiagnostics);
+        expect(JSON.stringify(p.invoke.mock.calls)).not.toContain("server-private-only");
+        expect(JSON.stringify(result.evidence.inputSnapshot)).not.toContain("server-private-only");
+    });
+    it("ignores selection diagnostics when the internal profile is disabled", async () => {
+        const p = ports();
+        const result = await runWeeklyReviewV21(input(), {
+            ...p,
+            invoke: p.invoke as never,
+            selectionDiagnostics: { privateMarker: "server-private-only" },
+        });
+        expect(result.evidence.schemaVersion).toBe("vantage-admission/v1");
+        expect(result.evidence).not.toHaveProperty("selectionDiagnostics");
+    });
+    it("refuses an unavailable internal reserve before either provider dispatch", async () => {
+        const candidate = input();
+        candidate.sources[0]!.text = "x".repeat(4500);
+        candidate.sources.push({ ...candidate.sources[0]!, ref: "doc:second@v1" });
+        candidate.mandatoryCoverage = { required: 2, included: 2 };
+        const p = ports();
+        await expect(
+            runWeeklyReviewV21(candidate, {
+                ...p,
+                invoke: p.invoke as never,
+                budgetProfile: "internal-v1",
+            })
+        ).rejects.toThrow("context_budget_exceeded");
+        expect(p.authorizeDispatch).not.toHaveBeenCalled();
+        expect(p.invoke).not.toHaveBeenCalled();
     });
     it("rejects identical model identities before transport", async () => {
         const p = ports();

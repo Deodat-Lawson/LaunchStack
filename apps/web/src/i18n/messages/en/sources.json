@@ -310,8 +310,8 @@
       }
     },
     "handoff": {
-      "followAlong": "follow along in Processing",
-      "followAlongRecording": "recordings are transcribed first; follow along in Processing"
+      "followAlong": "follow along in Knowledge",
+      "followAlongRecording": "recordings are transcribed first; follow along in Knowledge"
     }
   },
   "addDestinationBar": {

@@ -14,7 +14,7 @@ import {
 } from "../processing/queueStore";
 
 /**
- * How often the Processing tab asks: every 2 s while anything moves, slower
+ * How often Knowledge’s In progress section asks: every 2 s while anything moves, slower
  * and slower when nothing does, never while the browser tab is hidden, and
  * one poller however many watchers there are.
  */

@@ -399,7 +399,7 @@ export function AddSourceModal({
     const allTabs: AddSourceTab[] = groups.flatMap(g => g.items);
     const active = allTabs.find(item => item.id === tab) ?? allTabs[0]!;
 
-    /** Added: it is on its way in, and the Processing tab follows it. */
+    /** Added: it is on its way in, and Knowledge’s In progress section follows it. */
     const handleUploaded = () => {
         onUploaded();
         onQueued?.();
@@ -1048,7 +1048,7 @@ function FilesPanel({ kind, userId, category, onUploaded, onSynced }: FilesPanel
 
     const removeStaged = (i: number) => setStaged(prev => prev.filter((_, idx) => idx !== i));
 
-    // The bytes go up after the dialog has closed: the Processing tab shows
+    // The bytes go up after the dialog has closed: Knowledge’s In progress section shows
     // each file's upload, then its processing, stage by stage.
     const submit = () => {
         if (!userId) {
@@ -1337,7 +1337,7 @@ function FolderPanel({
             return;
         }
         if (included.length === 0 || blocked) return;
-        // Every file keeps the subfolder it had on disk; the Processing tab
+        // Every file keeps the subfolder it had on disk; Knowledge’s In progress section
         // follows them up and through processing.
         startFileUploads(included.map((file, i) => ({ file, category: plan.paths[i]! })));
         setPicked(null);
@@ -1621,7 +1621,7 @@ function UrlPanel({ userId, category, onUploaded, initialUrl }: TextPanelProps) 
     useEffect(() => {
         if (initialUrl) setUrl(initialUrl);
     }, [initialUrl]);
-    // The page is fetched after the dialog closes; the Processing tab shows
+    // The page is fetched after the dialog closes; Knowledge’s In progress section shows
     // the fetch, then the page's processing. A crawl (`/**`) queues its
     // pages as it finds them.
     const submit = () => {
@@ -1732,7 +1732,7 @@ function YouTubePanel({ userId, category, onUploaded }: TextPanelProps) {
     const [videoUrl, setVideoUrl] = useState("");
     const [title, setTitle] = useState("");
     // Downloading and transcribing happen after the dialog closes; the
-    // Processing tab shows them, then the transcript's processing.
+    // Knowledge tab shows them, then the transcript's processing.
     const submit = () => {
         if (!userId) {
             toast.error(t("signIn"));

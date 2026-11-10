@@ -23,7 +23,6 @@ import {
     Globe as IconGlobe,
     HandCoins as IconInvestors,
     KeyRound as IconKey,
-    Layers as IconProcessing,
     PenLine as IconProposals,
     Link as IconLink,
     Megaphone as IconMegaphone,
@@ -391,13 +390,6 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         href: "/employer/documents?feature=knowledge",
     },
     {
-        id: "processing",
-        label: "Processing queue",
-        Icon: IconProcessing,
-        desc: "Files being read and indexed, stage by stage",
-        href: "/employer/documents?feature=processing",
-    },
-    {
         id: "meetings",
         label: "Meetings",
         Icon: IconUsers,
@@ -657,17 +649,10 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 id: "knowledge",
                 label: "Knowledge",
                 Icon: IconFolder,
-                desc: "Browse, filter, and grow everything the workspace can cite",
-            },
-            {
-                // Where each file you add is on its way in: uploading,
-                // waiting for a worker, reading the text, splitting,
-                // indexing. Opens by itself when you add something.
-                id: "processing",
-                label: "Processing",
-                Icon: IconProcessing,
-                desc: "Watch files being read and indexed — what is running, what is waiting, and what needs a retry",
-                href: "/employer/documents?feature=processing",
+                // Files still on their way in (uploading, waiting, being
+                // read and indexed) sit at the top. Opens by itself when you
+                // add something.
+                desc: "Browse, filter, and grow everything the workspace can cite — and watch new files being read and indexed",
             },
             {
                 id: "meetings",
@@ -1047,7 +1032,6 @@ const TOOL_REGISTRY_KEYS = {
 const STUDIO_APP_MESSAGE_KEYS = {
     chat: "chat",
     knowledge: "knowledge",
-    processing: "processing",
     meetings: "meetings",
     agents: "agents",
     team: "team",
@@ -1108,7 +1092,6 @@ export function localizedStudioFeature<F extends StudioFeature>(text: StudioText
 
 const PALETTE_LINK_LABEL_KEYS = {
     knowledge: "knowledge",
-    processing: "processing",
     meetings: "meetings",
     agents: "agents",
     team: "team",

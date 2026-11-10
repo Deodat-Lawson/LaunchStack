@@ -209,6 +209,15 @@ const RETIRED_FEATURE_HREFS: Record<string, string> = {
 };
 
 /**
+ * Apps folded into another app: an old `?feature=` link, a shortcut or a
+ * palette row for one opens the app it became. The Processing queue is the
+ * "In progress" section at the top of Knowledge (November 2026).
+ */
+const MERGED_FEATURE_IDS: Record<string, string> = {
+    processing: "knowledge",
+};
+
+/**
  * Points the Settings hub at one of its sections. The hub follows the hash,
  * mounted or not. Setting the hash it already has fires no `hashchange`, so
  * announce it instead: picking a section again, after moving to another
@@ -1688,7 +1697,8 @@ export function WorkspaceShell() {
      * entirely follow that destination.
      */
     const expandFeature = useCallback(
-        (requestedId: string, groupId?: string) => {
+        (asked: string, groupId?: string) => {
+            const requestedId = MERGED_FEATURE_IDS[asked] ?? asked;
             const alias = TOOL_ALIASES[requestedId];
             if (alias) requestToolLocation(alias.toolId, alias.at);
             const featureId = alias?.toolId ?? requestedId;
@@ -1744,11 +1754,12 @@ export function WorkspaceShell() {
 
     /**
      * Something was added (an upload, a folder, a link, a Drive or Gmail
-     * import): show the Processing tab, which follows it from its first byte
-     * to "ready". Asks the queue at once so the file is there when the tab is.
+     * import): show Knowledge, whose "In progress" section follows it from
+     * its first byte to "ready". Asks the queue at once so the file is there
+     * when the tab is.
      */
-    const openProcessing = useCallback(() => {
-        expandFeature("processing");
+    const openKnowledge = useCallback(() => {
+        expandFeature("knowledge");
         void refreshProcessingQueue();
     }, [expandFeature]);
 
@@ -1763,10 +1774,10 @@ export function WorkspaceShell() {
         [refresh]
     );
 
-    // Adding something opens the Processing tab: fetch its code while the
-    // dialog is up, so the tab draws the moment the dialog hands over.
+    // Adding something opens Knowledge: fetch its code while the dialog is
+    // up, so the tab draws the moment the dialog hands over.
     useEffect(() => {
-        if (addOpen) void import("./processing/ProcessingQueuePane");
+        if (addOpen) void import("./KnowledgePane");
     }, [addOpen]);
 
     // Leaving the page drops a file whose bytes are still going up.
@@ -1848,14 +1859,14 @@ export function WorkspaceShell() {
         [openSettingsPlace, openTool, router]
     );
 
-    // The Processing tab says how many files are still moving beside its
-    // name — polled only while that tab is open somewhere.
-    const processingOpen = layout.groups.some(group => group.tabIds.includes("processing"));
-    const processingQueue = useProcessingQueue(processingOpen);
+    // The Knowledge tab says how many files are still on their way in beside
+    // its name — polled only while that tab is open somewhere.
+    const knowledgeOpen = layout.groups.some(group => group.tabIds.includes("knowledge"));
+    const processingQueue = useProcessingQueue(knowledgeOpen);
     const localTasks = useLocalTasks();
-    const processingBadge = useMemo(
-        () => (processingOpen ? queueBadge(processingQueue.data?.items ?? [], localTasks) : null),
-        [processingOpen, processingQueue.data, localTasks]
+    const knowledgeBadge = useMemo(
+        () => (knowledgeOpen ? queueBadge(processingQueue.data?.items ?? [], localTasks) : null),
+        [knowledgeOpen, processingQueue.data, localTasks]
     );
 
     /**
@@ -1881,16 +1892,16 @@ export function WorkspaceShell() {
             const feature = resolveStudioFeature(id);
             if (!feature || !can(feature.requires)) return undefined;
             const localized = localizedStudioFeature(studio, feature);
-            if (id === "processing" && processingBadge) {
+            if (id === "knowledge" && knowledgeBadge) {
                 return {
                     ...localized,
-                    count: processingBadge.count,
-                    countTone: processingBadge.tone,
+                    count: knowledgeBadge.count,
+                    countTone: knowledgeBadge.tone,
                 };
             }
             return localized;
         },
-        [sources, can, studio, tSourceTypes, processingBadge]
+        [sources, can, studio, tSourceTypes, knowledgeBadge]
     );
 
     /**
@@ -2996,6 +3007,19 @@ export function WorkspaceShell() {
                                     onDeleteSources: requestDelete,
                                     onRestrictAccess: openDocumentAccess,
                                     onMoveToFolder: (id, name) => void handleMoveToFolder(id, name),
+                                    queue: {
+                                        viewerId: userId ?? null,
+                                        storageScope: layoutScope ?? undefined,
+                                        onOpenDocument: documentId => {
+                                            const id = `d${documentId}`;
+                                            if (sources.some(source => source.id === id)) {
+                                                openSource(id);
+                                            } else {
+                                                void refresh().then(() => openSource(id));
+                                            }
+                                        },
+                                        onSettled: () => void refresh(),
+                                    },
                                 },
                                 mindmap: { onCreate: () => openAdd("mindmap") },
                                 agents: {
@@ -3022,20 +3046,6 @@ export function WorkspaceShell() {
                                     openAgentRequest,
                                 },
                                 team: teamTab,
-                                processing: {
-                                    viewerId: userId ?? null,
-                                    storageScope: layoutScope ?? undefined,
-                                    onOpenDocument: documentId => {
-                                        const id = `d${documentId}`;
-                                        if (sources.some(source => source.id === id)) {
-                                            openSource(id);
-                                        } else {
-                                            void refresh().then(() => openSource(id));
-                                        }
-                                    },
-                                    onAddSource: () => openAdd(),
-                                    onSettled: () => void refresh(),
-                                },
                                 investors: {
                                     onDraftInChat: prompt => seedComposer(prompt, "replace"),
                                     onSaveAsSource: markdown => {
@@ -3106,7 +3116,7 @@ export function WorkspaceShell() {
                 onUploaded={() => {
                     void refresh();
                 }}
-                onQueued={openProcessing}
+                onQueued={openKnowledge}
                 sessions={{
                     onImported: refresh,
                     onOpenDocument: id => openSource(`d${id}`),

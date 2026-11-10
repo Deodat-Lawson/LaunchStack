@@ -1,6 +1,6 @@
 /**
  * The Processing queue's wire shape: what `GET /api/documents/processing-queue`
- * returns and the Processing tab draws. One item per ingestion job the viewer
+ * returns and Knowledge’s In progress section draws. One item per ingestion job the viewer
  * may see (ADR-014), active or finished in the last 24 hours.
  *
  * A file's trip, as the tab shows it:

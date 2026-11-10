@@ -1,22 +1,23 @@
 "use client";
 
 /**
- * The Processing tab: every file on its way into the workspace, and where it
- * is — uploading, waiting for a worker, having its text read (OCR for scans
- * and images), split into sections, indexed for search, ready.
+ * The "In progress" section at the top of Knowledge: every file on its way
+ * into the workspace, and where it is — uploading, waiting for a worker,
+ * having its text read (OCR for scans and images), split into sections,
+ * indexed for search. It was a Knowledge tab of its own; a file being read
+ * is part of the library, so it lives where the library is.
  *
  * - **Needs attention** first: a file that stopped (with the reason, in
  *   words, and Retry) or one the worker is about to try again.
  * - **Running now**: what is being worked on this moment. Files are worked
  *   on several at a time; uploads go up two at a time.
  * - **Waiting**: in line for a free worker or a free upload slot.
- * - **Finished**: the last 24 hours, newest first; "Clear finished" hides
- *   them for you.
  *
+ * A finished file needs no row here: it is a card in the library below.
  * Everyone's files you can see are listed (yours, teammates' in folders you
- * share, connector syncs); "Mine" narrows it. The tab opens itself when you
- * add something (see WorkspaceShell's `openProcessing`), and the tab strip
- * shows how many files are still moving beside its name.
+ * share, connector syncs); "Mine" narrows it. Nothing in flight, nothing
+ * drawn. Knowledge opens by itself when you add something (WorkspaceShell's
+ * `openKnowledge`), and its tab shows how many files are still moving.
  */
 
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -33,9 +34,7 @@ import {
     FileText,
     FileVideo,
     Globe,
-    Layers,
     Loader2,
-    Plus,
     Presentation,
     RotateCw,
     X,
@@ -45,12 +44,8 @@ import { toast } from "sonner";
 
 import { IconDrive, IconGmail } from "~/components/icons/brand";
 import { ProfileAvatar } from "~/components/ProfileAvatar";
-import { ToolFrame, ToolMark } from "~/components/tool-app/ToolFrame";
 import { ToolLink } from "~/components/tool-app/ToolLink";
 import { ToolNavProvider, type ToolHost } from "~/components/tool-app/nav";
-import { EmptyState } from "~/components/tools/EmptyState";
-import { PageHeader } from "~/components/tools/PageHeader";
-import { SkeletonRows } from "~/components/tools/SkeletonRows";
 import { Button } from "~/components/ui/button";
 import { Progress } from "~/components/ui/progress";
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
@@ -75,30 +70,31 @@ import {
     type QueueRow,
 } from "./viewModel";
 
-export interface ProcessingQueuePaneProps {
-    /** What the workspace hands a tool's tab: focus, memory. */
+export interface KnowledgeQueueProps {
+    /** What the workspace hands a tab: focus, memory, links to other tabs. */
     host?: ToolHost;
     /** The signed-in member's auth id — "Mine", and "you" for their own files. */
     viewerId: string | null;
-    /** Workspace + member, for remembering "Mine" and what was cleared. */
+    /** Workspace + member, for remembering "Mine". */
     storageScope?: string;
-    /** Open a finished (or running) file in a tab of its own. */
+    /** Open a file in a tab of its own. */
     onOpenDocument?: (documentId: number) => void;
-    /** The Add a source dialog. */
-    onAddSource?: () => void;
-    /** A file finished or failed — the sidebar's badges should catch up. */
+    /** A file finished or failed — the library and the sidebar should catch up. */
     onSettled?: () => void;
+    /** Whether the section is drawing anything — Knowledge's empty state waits on it. */
+    onActiveChange?: (active: boolean) => void;
 }
 
-export function ProcessingQueuePane({ host, ...props }: ProcessingQueuePaneProps) {
+export function KnowledgeQueue({ host, ...props }: KnowledgeQueueProps) {
     return (
-        <ToolNavProvider toolId="processing" roots={[]} host={host}>
-            <ProcessingQueueFrame {...props} />
+        <ToolNavProvider toolId="knowledge" roots={[]} host={host}>
+            <KnowledgeQueueSection {...props} />
         </ToolNavProvider>
     );
 }
 
-const MAX_CLEARED = 500;
+/** A finished row is a library card; a cleared set is never needed here. */
+const NONE_CLEARED: ReadonlySet<string> = new Set();
 
 function readStored<T>(key: string | null, fallback: T): T {
     if (!key || typeof window === "undefined") return fallback;
@@ -129,13 +125,13 @@ function useNow(fast: boolean, offsetMs: number): number {
     return now + offsetMs;
 }
 
-function ProcessingQueueFrame({
+function KnowledgeQueueSection({
     viewerId,
     storageScope,
     onOpenDocument,
-    onAddSource,
     onSettled,
-}: Omit<ProcessingQueuePaneProps, "host">) {
+    onActiveChange,
+}: Omit<KnowledgeQueueProps, "host">) {
     const t = useTranslations("processing");
     const tu = useTranslations("sources.sourceUpload");
     const failureCopy = useSourceFailureCopy();
@@ -145,11 +141,10 @@ function ProcessingQueueFrame({
     );
     const queue = useProcessingQueue();
     const local = useLocalTasks();
+    // The key the old Processing tab remembered "Mine" under, kept so the
+    // choice carries over.
     const mineKey = storageScope ? `processing.mine.v1:${storageScope}` : null;
-    const clearedKey = storageScope ? `processing.cleared.v1:${storageScope}` : null;
     const [mineOnly, setMineOnly] = useState<boolean>(() => readStored(mineKey, false));
-    const [cleared, setCleared] = useState<string[]>(() => readStored(clearedKey, []));
-    const clearedSet = useMemo(() => new Set(cleared), [cleared]);
 
     // The server's clock, not the browser's: a laptop five minutes out would
     // otherwise say a file has been "waiting -5 min".
@@ -169,20 +164,30 @@ function ProcessingQueueFrame({
         offset
     );
 
-    const rows = useMemo(
+    // Every row, so a file finishing is still announced; only the
+    // unfinished ones are drawn.
+    const allRows = useMemo(
         () =>
             buildRows({
                 items,
                 local,
                 viewerId,
-                cleared: clearedSet,
-                mineOnly,
+                cleared: NONE_CLEARED,
+                mineOnly: false,
                 now,
                 text,
             }),
-        [items, local, viewerId, clearedSet, mineOnly, now, text]
+        [items, local, viewerId, now, text]
+    );
+    const rows = useMemo(
+        () => (mineOnly ? allRows.filter(row => row.mine) : allRows),
+        [allRows, mineOnly]
     );
     const groups = useMemo(() => groupRows(rows), [rows]);
+    const allGroups = useMemo(() => groupRows(allRows), [allRows]);
+    const inFlight = groups.attention.length + groups.running.length + groups.waiting.length;
+    const anyInFlight =
+        allGroups.attention.length + allGroups.running.length + allGroups.waiting.length > 0;
     const overall = overallProgress(groups);
     const people = usePeople(
         useMemo(
@@ -194,217 +199,152 @@ function ProcessingQueueFrame({
         )
     );
 
-    const announce = useSettledAnnouncements(rows, t, onSettled);
+    const announce = useSettledAnnouncements(allRows, t, onSettled);
+    const retry = useRetry(t, onSettled);
+
+    // A connector earns a line here only while it is doing something or
+    // stuck; a quiet one is just where some of the library came from.
+    const connectors = (queue.data?.connectors ?? []).filter(
+        connector => connector.status === "running" || connector.status === "error"
+    );
+    const active = anyInFlight || connectors.length > 0;
+
+    const activeRef = useRef(onActiveChange);
+    activeRef.current = onActiveChange;
+    useEffect(() => {
+        activeRef.current?.(active);
+    }, [active]);
 
     const setMine = (value: boolean) => {
         setMineOnly(value);
         writeStored(mineKey, value);
     };
-    const clearFinished = () => {
-        const next = [
-            ...new Set([...groups.done.map(row => row.jobId!).filter(Boolean), ...cleared]),
-        ].slice(0, MAX_CLEARED);
-        setCleared(next);
-        writeStored(clearedKey, next);
-    };
-
-    const retry = useRetry(t, onSettled);
-
-    const header = (
-        <PageHeader
-            title={t("header.title")}
-            accent={t("header.accent")}
-            sub={
-                <span data-testid="processing-summary" aria-live="polite">
-                    {queue.loading && !queue.data
-                        ? t("header.checking")
-                        : summarySentence(groups, t)}
-                </span>
-            }
-            actions={
-                <>
-                    <ToggleGroup
-                        type="single"
-                        variant="outline"
-                        size="sm"
-                        value={mineOnly ? "mine" : "everyone"}
-                        onValueChange={value => value && setMine(value === "mine")}
-                        aria-label={t("filter.label")}
-                    >
-                        <ToggleGroupItem
-                            value="everyone"
-                            className="data-[state=on]:bg-brand-soft data-[state=on]:text-brand-ink shrink-0 px-3 text-xs"
-                        >
-                            {t("filter.everyone")}
-                        </ToggleGroupItem>
-                        <ToggleGroupItem
-                            value="mine"
-                            className="data-[state=on]:bg-brand-soft data-[state=on]:text-brand-ink shrink-0 px-3 text-xs"
-                        >
-                            {t("filter.mine")}
-                        </ToggleGroupItem>
-                    </ToggleGroup>
-                    {groups.done.length > 0 && (
-                        <Button variant="outline" size="sm" onClick={clearFinished}>
-                            {t("actions.clearFinished")}
-                        </Button>
-                    )}
-                    {onAddSource && (
-                        <Button size="sm" onClick={onAddSource}>
-                            <Plus className="size-3.5" />
-                            {t("actions.addSource")}
-                        </Button>
-                    )}
-                </>
-            }
-        />
-    );
-
-    const connectors = queue.data?.connectors ?? [];
-    const empty = rows.length === 0 && connectors.length === 0;
 
     return (
-        <ToolFrame
-            title={t("frame.title")}
-            mark={<ToolMark icon={Layers} />}
-            about={t("frame.about")}
-            contentClassName="mx-auto w-full max-w-[1000px]"
-        >
-            <div className="flex flex-col gap-6" data-testid="processing-queue">
-                {header}
-
-                {overall && (
-                    <div
-                        className="border-line bg-panel rounded-lg border px-4 py-3"
-                        data-testid="processing-overall"
-                    >
-                        <div className="mb-2 flex items-baseline justify-between gap-3 text-xs">
-                            <span className="text-ink-2">
-                                {t("overall.onTheWay", { count: overall.count })}
-                            </span>
-                            <span className="text-ink-3 tabular-nums">
-                                {t("overall.stepsDone", {
-                                    percent: Math.round(overall.share * 100),
-                                })}
-                            </span>
-                        </div>
-                        <Progress
-                            value={overall.share * 100}
-                            aria-label={t("overall.label")}
-                            className="h-1.5"
-                        />
-                    </div>
-                )}
-
-                {connectors.map((connector, i) => (
-                    <ConnectorCard
-                        key={`${connector.provider}:${connector.account ?? i}`}
-                        connector={connector}
-                        now={now}
-                        t={t}
-                    />
-                ))}
-
-                {queue.error && (
-                    <div
-                        role="status"
-                        className="border-warn/40 bg-warn-soft text-ink-2 flex items-center gap-2 rounded-lg border px-3 py-2 text-xs"
-                    >
-                        <AlertTriangle className="text-warn size-3.5 shrink-0" />
-                        <span className="min-w-0 flex-1">
-                            {loadErrorText(queue.error, t)} {t("loadError.behind")}
-                        </span>
-                        <Button variant="ghost" size="sm" onClick={queue.refresh}>
-                            {t("loadError.tryNow")}
-                        </Button>
-                    </div>
-                )}
-
-                {queue.loading && !queue.data && local.length === 0 ? (
-                    <SkeletonRows rows={3} height={92} />
-                ) : empty ? (
-                    <EmptyState
-                        title={t("empty.title")}
-                        body={t("empty.body")}
-                        action={
-                            onAddSource ? (
-                                <Button size="sm" onClick={onAddSource}>
-                                    <Plus className="size-3.5" />
-                                    {t("actions.addSource")}
-                                </Button>
-                            ) : undefined
-                        }
-                    />
-                ) : (
-                    <>
-                        <QueueSection
-                            id="attention"
-                            title={t("sections.attention.title")}
-                            rows={groups.attention}
-                            aside={t("sections.attention.aside")}
-                            people={people}
-                            viewerId={viewerId}
-                            now={now}
-                            t={t}
-                            onOpenDocument={onOpenDocument}
-                            onRetry={retry}
-                        />
-                        <QueueSection
-                            id="running"
-                            title={t("sections.running.title")}
-                            rows={groups.running}
-                            aside={t("sections.running.aside")}
-                            people={people}
-                            viewerId={viewerId}
-                            now={now}
-                            t={t}
-                            onOpenDocument={onOpenDocument}
-                            onRetry={retry}
-                        />
-                        <QueueSection
-                            id="waiting"
-                            title={t("sections.waiting.title")}
-                            rows={groups.waiting}
-                            aside={t("sections.waiting.aside")}
-                            people={people}
-                            viewerId={viewerId}
-                            now={now}
-                            t={t}
-                            onOpenDocument={onOpenDocument}
-                            onRetry={retry}
-                        />
-                        <QueueSection
-                            id="done"
-                            title={t("sections.done.title")}
-                            rows={groups.done}
-                            aside={t("sections.done.aside")}
-                            people={people}
-                            viewerId={viewerId}
-                            now={now}
-                            t={t}
-                            onOpenDocument={onOpenDocument}
-                            onRetry={retry}
-                            collapsible
-                        />
-                        {mineOnly && rows.length === 0 && (
-                            <p className="text-ink-3 text-sm">
-                                {t("mineEmpty.text")}{" "}
-                                <button
-                                    type="button"
-                                    className="text-brand-ink underline underline-offset-2"
-                                    onClick={() => setMine(false)}
-                                >
-                                    {t("mineEmpty.showEveryone")}
-                                </button>
+        <>
+            {active && (
+                <section
+                    aria-labelledby="knowledge-queue-title"
+                    className="border-line mb-6 flex flex-col gap-4 border-b pb-6"
+                    data-testid="processing-queue"
+                >
+                    <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+                        <div className="min-w-[min(100%,200px)] flex-1">
+                            <h3
+                                id="knowledge-queue-title"
+                                className="text-ink m-0 text-[14px] font-semibold"
+                            >
+                                {t("knowledge.title")}
+                            </h3>
+                            <p
+                                className="text-ink-3 m-0 mt-0.5 text-xs"
+                                data-testid="processing-summary"
+                                aria-live="polite"
+                            >
+                                {summarySentence(groups, t)}
                             </p>
-                        )}
-                    </>
-                )}
-                <div className="sr-only" aria-live="polite" data-testid="processing-announcer">
-                    {announce}
-                </div>
+                        </div>
+                        <ToggleGroup
+                            type="single"
+                            variant="outline"
+                            size="sm"
+                            value={mineOnly ? "mine" : "everyone"}
+                            onValueChange={value => value && setMine(value === "mine")}
+                            aria-label={t("filter.label")}
+                        >
+                            <ToggleGroupItem
+                                value="everyone"
+                                className="data-[state=on]:bg-brand-soft data-[state=on]:text-brand-ink shrink-0 px-3 text-xs"
+                            >
+                                {t("filter.everyone")}
+                            </ToggleGroupItem>
+                            <ToggleGroupItem
+                                value="mine"
+                                className="data-[state=on]:bg-brand-soft data-[state=on]:text-brand-ink shrink-0 px-3 text-xs"
+                            >
+                                {t("filter.mine")}
+                            </ToggleGroupItem>
+                        </ToggleGroup>
+                    </div>
+
+                    {overall && (
+                        <div data-testid="processing-overall">
+                            <div className="mb-2 flex items-baseline justify-between gap-3 text-xs">
+                                <span className="text-ink-2">
+                                    {t("overall.onTheWay", { count: overall.count })}
+                                </span>
+                                <span className="text-ink-3 tabular-nums">
+                                    {t("overall.stepsDone", {
+                                        percent: Math.round(overall.share * 100),
+                                    })}
+                                </span>
+                            </div>
+                            <Progress
+                                value={overall.share * 100}
+                                aria-label={t("overall.label")}
+                                className="h-1.5"
+                            />
+                        </div>
+                    )}
+
+                    {connectors.map((connector, i) => (
+                        <ConnectorCard
+                            key={`${connector.provider}:${connector.account ?? i}`}
+                            connector={connector}
+                            now={now}
+                            t={t}
+                        />
+                    ))}
+
+                    {queue.error && (
+                        <div
+                            role="status"
+                            className="border-warn/40 bg-warn-soft text-ink-2 flex items-center gap-2 rounded-lg border px-3 py-2 text-xs"
+                        >
+                            <AlertTriangle className="text-warn size-3.5 shrink-0" />
+                            <span className="min-w-0 flex-1">
+                                {loadErrorText(queue.error, t)} {t("loadError.behind")}
+                            </span>
+                            <Button variant="ghost" size="sm" onClick={queue.refresh}>
+                                {t("loadError.tryNow")}
+                            </Button>
+                        </div>
+                    )}
+
+                    {(["attention", "running", "waiting"] as const).map(id => (
+                        <QueueSection
+                            key={id}
+                            id={id}
+                            title={t(`sections.${id}.title`)}
+                            rows={groups[id]}
+                            aside={t(`sections.${id}.aside`)}
+                            people={people}
+                            viewerId={viewerId}
+                            now={now}
+                            t={t}
+                            onOpenDocument={onOpenDocument}
+                            onRetry={retry}
+                        />
+                    ))}
+
+                    {mineOnly && inFlight === 0 && (
+                        <p className="text-ink-3 m-0 text-sm">
+                            {t("mineEmpty.text")}{" "}
+                            <button
+                                type="button"
+                                className="text-brand-ink underline underline-offset-2"
+                                onClick={() => setMine(false)}
+                            >
+                                {t("mineEmpty.showEveryone")}
+                            </button>
+                        </p>
+                    )}
+                </section>
+            )}
+            <div className="sr-only" aria-live="polite" data-testid="processing-announcer">
+                {announce}
             </div>
-        </ToolFrame>
+        </>
     );
 }
 
@@ -510,14 +450,12 @@ function QueueSection({
     title,
     aside,
     rows,
-    collapsible = false,
     ...rowProps
 }: {
     id: string;
     title: string;
     aside: string;
     rows: QueueRow[];
-    collapsible?: boolean;
     people: People;
     viewerId: string | null;
     now: number;
@@ -529,17 +467,17 @@ function QueueSection({
     const { t } = rowProps;
     if (rows.length === 0) return null;
     const LIMIT = 6;
-    const shown = collapsible && !expanded ? rows.slice(0, LIMIT) : rows;
+    const shown = !expanded ? rows.slice(0, LIMIT) : rows;
     const headingId = `processing-${id}`;
     return (
         <section aria-labelledby={headingId} data-testid={`processing-section-${id}`}>
             <div className="mb-2 flex items-baseline justify-between gap-3">
-                <h2 id={headingId} className="text-ink text-[13px] font-semibold">
+                <h4 id={headingId} className="text-ink-2 m-0 text-[12.5px] font-semibold">
                     {title}
                     <span className="text-ink-3 ml-1.5 font-normal tabular-nums">
                         {rows.length}
                     </span>
-                </h2>
+                </h4>
                 <span className="text-ink-3 @max-sm:hidden text-xs">{aside}</span>
             </div>
             <ul className="border-line bg-panel divide-line overflow-hidden rounded-lg border [&>li+li]:border-t">
@@ -547,7 +485,7 @@ function QueueSection({
                     <QueueRowView key={row.key} row={row} {...rowProps} />
                 ))}
             </ul>
-            {collapsible && rows.length > LIMIT && (
+            {rows.length > LIMIT && (
                 <Button
                     variant="ghost"
                     size="sm"

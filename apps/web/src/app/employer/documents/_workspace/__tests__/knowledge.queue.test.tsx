@@ -14,14 +14,16 @@ import {
 
 import { translatorFor } from "~/i18n/translate";
 
-import { ProcessingQueuePane } from "../processing/ProcessingQueuePane";
+import { KnowledgePane } from "../KnowledgePane";
+import { KnowledgeQueue } from "../processing/KnowledgeQueue";
 import { resetProcessingQueueForTests } from "../processing/queueStore";
 import { resetLocalTasksForTests } from "../processing/uploadTasks";
 
 /**
- * The Processing tab against a stubbed queue: sections in the right order,
- * stage bars that assistive tech can read, Retry on a failed file, "Mine",
- * and what it says when there is nothing to show.
+ * Knowledge's "In progress" section against a stubbed queue: sections in the
+ * right order, stage bars that assistive tech can read, Retry on a failed
+ * file, "Mine", nothing drawn when nothing is moving — and Knowledge itself
+ * drawing it above the library.
  */
 
 jest.mock("sonner", () => ({ toast: { success: jest.fn(), error: jest.fn() } }));
@@ -163,16 +165,19 @@ beforeEach(() => {
     global.fetch = fetchMock as unknown as typeof fetch;
 });
 
-function mount(props: Partial<React.ComponentProps<typeof ProcessingQueuePane>> = {}) {
-    return render(<ProcessingQueuePane viewerId="me" storageScope="me:1" {...props} />);
+function mount(props: Partial<React.ComponentProps<typeof KnowledgeQueue>> = {}) {
+    return render(<KnowledgeQueue viewerId="me" storageScope="me:1" {...props} />);
 }
 
-describe("ProcessingQueuePane", () => {
-    it("lists files under Needs attention, Running now, Waiting and Finished, in that order", async () => {
+describe("KnowledgeQueue", () => {
+    it("lists files under Needs attention, Running now and Waiting, in that order", async () => {
         mount();
         expect(await screen.findByText("Q3 board deck.pdf")).toBeInTheDocument();
-        const headings = screen.getAllByRole("heading", { level: 2 }).map(h => h.textContent);
-        expect(headings).toEqual(["Needs attention1", "Running now1", "Waiting1", "Finished1"]);
+        expect(screen.getByRole("heading", { level: 3, name: "In progress" })).toBeInTheDocument();
+        const headings = screen.getAllByRole("heading", { level: 4 }).map(h => h.textContent);
+        expect(headings).toEqual(["Needs attention1", "Running now1", "Waiting1"]);
+        // A finished file is a card in the library, not a row here.
+        expect(screen.queryByText("Update.pdf")).not.toBeInTheDocument();
         expect(screen.getByTestId("processing-summary")).toHaveTextContent(
             "1 running · 1 waiting · 1 needs attention"
         );
@@ -236,37 +241,33 @@ describe("ProcessingQueuePane", () => {
         expect(screen.getByRole("radio", { name: "Mine" })).toHaveAttribute("data-state", "on");
     });
 
-    it("clears finished files for this viewer only", async () => {
-        const user = userEvent.setup();
-        mount();
-        await screen.findByText("Update.pdf");
-        await user.click(screen.getByRole("button", { name: "Clear finished" }));
-        expect(screen.queryByText("Update.pdf")).not.toBeInTheDocument();
-        expect(JSON.parse(window.localStorage.getItem("processing.cleared.v1:me:1")!)).toEqual([
-            "done",
-        ]);
-    });
-
-    it("opens a file, and offers Add a source when nothing is processing", async () => {
+    it("opens a file, and draws nothing once nothing is moving", async () => {
         const user = userEvent.setup();
         const onOpenDocument = jest.fn();
-        const first = mount({ onOpenDocument });
-        await user.click(await screen.findByRole("button", { name: "Open" }));
-        expect(onOpenDocument).toHaveBeenCalledWith(1);
+        const onActiveChange = jest.fn();
+        const first = mount({ onOpenDocument, onActiveChange });
+        await user.click(await screen.findByRole("button", { name: "Vendor contract.docx" }));
+        expect(onOpenDocument).toHaveBeenCalledWith(77);
+        expect(onActiveChange).toHaveBeenLastCalledWith(true);
         first.unmount();
 
         resetProcessingQueueForTests();
         queue = {
             ...queue,
-            items: [],
-            summary: { running: 0, waiting: 0, retrying: 0, failed: 0, done: 0 },
+            items: queue.items.filter(i => i.state === "done"),
+            summary: { running: 0, waiting: 0, retrying: 0, failed: 0, done: 1 },
         };
-        const onAddSource = jest.fn();
-        mount({ onAddSource });
-        expect(await screen.findByText("Files you add show up here")).toBeInTheDocument();
-        expect(screen.getByTestId("processing-summary")).toHaveTextContent("Nothing is processing");
-        await user.click(screen.getAllByRole("button", { name: /Add a source/ })[0]!);
-        expect(onAddSource).toHaveBeenCalled();
+        onActiveChange.mockClear();
+        mount({ onActiveChange });
+        await waitFor(() =>
+            expect(fetchMock).toHaveBeenCalledWith(
+                "/api/documents/processing-queue",
+                expect.anything()
+            )
+        );
+        await waitFor(() => expect(onActiveChange).toHaveBeenCalled());
+        expect(onActiveChange).not.toHaveBeenCalledWith(true);
+        expect(screen.queryByTestId("processing-queue")).not.toBeInTheDocument();
     });
 
     it("announces a file that finishes, and tells the workspace", async () => {
@@ -292,5 +293,53 @@ describe("ProcessingQueuePane", () => {
         );
         expect(onSettled).toHaveBeenCalled();
         jest.useRealTimers();
+    });
+});
+
+describe("KnowledgePane with the queue", () => {
+    const source = {
+        id: "d1",
+        documentId: 1,
+        title: "Seed term sheet.pdf",
+        type: "doc" as const,
+        size: "1 MB",
+        added: "Nov 3",
+        folder: "Board",
+        tags: [],
+        domain: "General" as const,
+    };
+
+    function knowledge(sources: (typeof source)[]) {
+        return render(
+            <KnowledgePane
+                sources={sources}
+                folders={[]}
+                selected={[]}
+                setSelected={() => undefined}
+                onOpenSource={() => undefined}
+                onOpenAdd={() => undefined}
+                onAskAbout={() => undefined}
+                queue={{ viewerId: "me", storageScope: "me:1" }}
+            />
+        );
+    }
+
+    it("draws files on their way in above the library", async () => {
+        knowledge([source]);
+        const inProgress = await screen.findByTestId("processing-queue");
+        const card = screen.getByTestId("knowledge-card-d1");
+        expect(within(inProgress).getByText("Q3 board deck.pdf")).toBeInTheDocument();
+        expect(
+            inProgress.compareDocumentPosition(card) & Node.DOCUMENT_POSITION_FOLLOWING
+        ).toBeTruthy();
+    });
+
+    it("does not call a library empty while its first files are on their way in", async () => {
+        knowledge([]);
+        await screen.findByTestId("processing-queue");
+        expect(screen.queryByText("No knowledge yet")).not.toBeInTheDocument();
+        expect(
+            screen.queryByRole("button", { name: /Add your first source/ })
+        ).not.toBeInTheDocument();
     });
 });

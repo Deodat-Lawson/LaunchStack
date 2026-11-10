@@ -99,7 +99,7 @@ export function GmailConnectPanel({
     onImported,
 }: {
     tab: AddSourceTab;
-    /** A label or search was added, or a sync started by hand: the Processing tab takes over. */
+    /** A label or search was added, or a sync started by hand: Knowledge’s In progress section takes over. */
     onImported?: () => void;
 }) {
     const t = useTranslations("sources.gmailConnect");

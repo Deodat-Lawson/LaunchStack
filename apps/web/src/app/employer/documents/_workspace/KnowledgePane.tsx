@@ -7,7 +7,9 @@
  * opposite job — browsing, auditing, and filling gaps in the corpus. Sources
  * are not a separate concept from knowledge here; a source *is* how knowledge
  * gets in, so uploads, connectors, and indexed documents share one screen and
- * one visual language.
+ * one visual language. That includes files still on their way in: what is
+ * uploading, waiting for a worker or being read sits at the top, stage by
+ * stage (`KnowledgeQueue`), above the library it is about to join.
  */
 
 import React, { useCallback, useMemo, useState } from "react";
@@ -28,6 +30,7 @@ import type { ActionMenuItem } from "~/components/ui/action-menu";
 import { useContextTarget } from "~/components/context-menu";
 import { buildSelectionMenuItems, buildSourceMenuItems } from "./sourceContextMenu";
 import { useOpenOutside } from "./externalLink";
+import { KnowledgeQueue, type KnowledgeQueueProps } from "./processing/KnowledgeQueue";
 import { DOC_DOMAINS, SOURCE_META } from "./types";
 import type { DocDomain, SourceTypeId, WorkspaceFolder, WorkspaceSource } from "./types";
 
@@ -77,6 +80,8 @@ export interface KnowledgePaneProps {
     /** "Restrict access…" — opens the document's access dialog. */
     onRestrictAccess?: (source: WorkspaceSource) => void;
     onMoveToFolder?: (sourceId: string, folderName: string) => void;
+    /** Files on their way in, drawn above the library. Left out, there is no queue. */
+    queue?: Omit<KnowledgeQueueProps, "onActiveChange">;
 }
 
 type Layout = "grid" | "list";
@@ -96,6 +101,7 @@ export function KnowledgePane({
     onDeleteSources,
     onRestrictAccess,
     onMoveToFolder,
+    queue,
 }: KnowledgePaneProps) {
     const t = useTranslations("sources.knowledgePane");
     const tm = useTranslations("sources.contextMenu");
@@ -107,6 +113,8 @@ export function KnowledgePane({
     const [folder, setFolder] = useState<string | null>(null);
     const [type, setType] = useState<SourceTypeId | null>(null);
     const [layout, setLayout] = useState<Layout>("grid");
+    /** Whether "In progress" is drawing anything: a first upload is not an empty library. */
+    const [queueActive, setQueueActive] = useState(false);
     /**
      * A source's menu. Inside a multi-selection every verb acts on the whole
      * selection; otherwise on the one card or row.
@@ -415,9 +423,12 @@ export function KnowledgePane({
             </header>
 
             <div style={{ flex: 1, overflowY: "auto", minHeight: 0, padding: "18px 24px 40px" }}>
+                {queue && <KnowledgeQueue {...queue} onActiveChange={setQueueActive} />}
                 {loading && sources.length === 0 ? (
                     <div style={{ fontSize: 13, color: "var(--ink-3)" }}>{t("loading")}</div>
-                ) : filtered.length === 0 ? (
+                ) : filtered.length === 0 &&
+                  queueActive &&
+                  sources.length === 0 ? null : filtered.length === 0 ? (
                     <EmptyState
                         filtersActive={filtersActive}
                         onClear={() => {

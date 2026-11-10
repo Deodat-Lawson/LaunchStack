@@ -73,10 +73,9 @@ anywhere but a tab.
    which opens it without leaving the page.
 6. **Full-height screens.** An editor or a chat that lays itself out to the
    tab's height and brings its own padding passes `fill` to `ToolFrame` for
-   that screen (Templated Drafts and Rewrite do). A side panel that cannot
-   sit beside the document in a narrow tab moves into a kit `Sheet` — sheets
-   inside the frame cover the tab only and leave the column beside it usable
-   (see `DocumentGeneratorEditor`'s compact mode).
+   that screen. A side panel that cannot sit beside the document in a narrow
+   tab moves into a kit `Sheet` — sheets inside the frame cover the tab only
+   and leave the column beside it usable.
 7. **Layout.** Lay screens out for a full-width tab. Fold them with the
    container variants `@max-xl` (1119px), `@max-lg` (879px), `@max-md`
    (639px), `@max-sm` (519px) and `@max-xs` (379px). Those read the tab's

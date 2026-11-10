@@ -29,10 +29,8 @@ import {
     Megaphone as IconMegaphone,
     MessageSquareText as IconFeedback,
     ClipboardList as IconPaste,
-    Pen as IconPen,
     Settings as IconSettings,
     Shield as IconShield,
-    Sparkles as IconSparkle,
     Users as IconUsers,
     UsersRound as IconTeam,
     Video as IconVideo,
@@ -379,7 +377,7 @@ export interface DemotedFeature {
 }
 
 /**
- * Quick links for the ⌘K command palette (draft, rewrite, notebooks, etc.).
+ * Quick links for the ⌘K command palette (knowledge, workflows, notebooks, etc.).
  * Each links to a real employer route.
  */
 export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
@@ -417,22 +415,6 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         Icon: IconTeam,
         desc: "People, groups, and who did what across the workspace",
         href: "/employer/documents?feature=team",
-    },
-    {
-        id: "draft",
-        label: "Draft",
-        Icon: IconPen,
-        kbd: formatKeys(SHORTCUT_COMMANDS_BY_ID.get("feature.draft")!.defaultKeys),
-        desc: "Generate a new document with AI",
-        href: "/employer/documents?feature=draft",
-    },
-    {
-        id: "rewrite",
-        label: "Rewrite",
-        Icon: IconSparkle,
-        kbd: formatKeys(SHORTCUT_COMMANDS_BY_ID.get("feature.rewrite")!.defaultKeys),
-        desc: "Improve existing content",
-        href: "/employer/documents?feature=rewrite",
     },
     {
         id: "workflows",
@@ -750,18 +732,6 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
                 desc: "Simulate how people built from your records react to a situation — the feed, who changed their mind and why, and a report. Something to think with, not a forecast",
                 href: "/employer/documents?feature=scenarios",
             },
-            {
-                id: "draft",
-                label: "Templated Drafts",
-                Icon: IconPen,
-                desc: "Generate new docs from templates tuned to your sources",
-            },
-            {
-                id: "rewrite",
-                label: "Rewrite",
-                Icon: IconSparkle,
-                desc: "Improve existing prose with a diff-first rewrite",
-            },
         ],
     },
     {
@@ -1052,8 +1022,6 @@ const STUDIO_APP_MESSAGE_KEYS = {
     agents: "agents",
     team: "team",
     investors: "investors",
-    draft: "draft",
-    rewrite: "rewrite",
     workspace: "workspace",
     settings: "settings",
     usage: "usage",
@@ -1112,8 +1080,6 @@ const PALETTE_LINK_LABEL_KEYS = {
     meetings: "meetings",
     agents: "agents",
     team: "team",
-    draft: "draft",
-    rewrite: "rewrite",
     workflows: "workflows",
     mindmap: "mindmap",
     artifacts: "artifacts",

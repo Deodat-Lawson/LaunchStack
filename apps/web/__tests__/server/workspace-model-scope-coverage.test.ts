@@ -135,16 +135,6 @@ const COVERAGE: Record<string, Coverage> = Object.fromEntries<Coverage>([
         },
     ]),
 
-    // --- Document drafting ------------------------------------------------
-    self(`${API}/document-generator/generate/route.ts`, "POST body after auth"),
-    self(`${API}/document-generator/grammar/route.ts`, "POST body after auth"),
-    self(`${API}/document-generator/initialize/route.ts`, "POST body after auth"),
-    self(
-        `${API}/document-generator/legal-chat/route.ts`,
-        "POST: legalChat() in scope, its catch too, so failures are worded for the right endpoint"
-    ),
-    self(`${API}/document-generator/outline/route.ts`, "POST body after auth"),
-
     // --- Notes, meetings, company profile, Vantage --------------------------
     [
         "apps/web/src/server/notes/ai-capture.ts",

@@ -955,8 +955,6 @@
       "draft": "营销活动草稿",
       "preview": "{platform} 预览",
       "messagePlaceholder": "你的营销文案...",
-      "saveAsDocTitle": "将草稿保存到文档工作区以便继续编辑",
-      "saveAsDoc": "保存为文档",
       "hideRewrite": "隐藏改写",
       "refine": "用 AI 优化",
       "copied": "已复制！",
@@ -1006,8 +1004,6 @@
       "evaluationFailed": "评估失败",
       "refinementFailed": "优化失败"
     },
-    "draftDocTitle": "营销活动草稿（{platform}）",
-    "draftDocFallback": "营销",
     "studio": {
       "settings": "帖子设置",
       "characters": "{count, number} 个字符",

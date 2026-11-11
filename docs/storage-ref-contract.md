@@ -84,8 +84,11 @@ arbitrary origin into persistent URLs.
 Normalize existing document/version rows with
 `pnpm --filter @launchstack/web db:backfill --only=2026-11-document-file-urls --batch=500`
 (`DATABASE_URL` required; `--dry-run` supported). It only rewrites exact
-`^https?://[^/]+/api/files/(\d+)$` values, is resumable and idempotent, and leaves
-query strings, fragments, suffixes and external object URLs unchanged.
+`^https?://[^/]+/api/files/(\d+)$` values when the file exists and its non-null
+`company_id` matches the owning document (also for versions, via their document).
+Foreign-company, missing, and unstamped files are unchanged and counted as
+`skipped_unowned` in each batch's log. The backfill is resumable and idempotent;
+query strings, fragments, suffixes and external object URLs remain unchanged.
 
 ## Deletion
 

@@ -63,7 +63,6 @@ vi.mock("@launchstack/runtime", async importOriginal => ({
             }
         ),
         download: vi.fn(),
-        delete: vi.fn(),
     }),
 }));
 

@@ -22,7 +22,9 @@ import sharp from "sharp";
 import { document } from "@launchstack/store/schema";
 import type { GotenbergClient } from "@launchstack/document-conversion-engine";
 
-import { deleteFile, deleteFileByUrl, fetchFile, uploadFile } from "~/lib/storage";
+import { fetchFile, uploadFile } from "~/lib/storage";
+import { deleteStoredObjects } from "~/server/storage/delete-objects";
+import { refFromStoredUrl } from "~/server/storage/stored-url";
 import { db } from "~/server/db";
 
 /** The browser window the page is laid out in: an ordinary laptop. */
@@ -118,8 +120,14 @@ export async function shrinkScreenshot(
 /** Removes a picture this module stored earlier. Best effort: an orphan costs only space. */
 async function forgetStoredPicture(url: string): Promise<void> {
     try {
-        if (url.startsWith("/api/files/")) await deleteFile(url, "database");
-        else await deleteFileByUrl(url);
+        const parsed = refFromStoredUrl(url);
+        if (!parsed.ok) throw new Error(`Stored preview URL is ${parsed.reason}`);
+        const [result] = await deleteStoredObjects([parsed.ref]);
+        if (!result || (result.outcome !== "deleted" && result.outcome !== "not_found")) {
+            throw new Error(
+                result?.message ?? result?.errorCode ?? "Storage deletion returned no result"
+            );
+        }
     } catch (error) {
         console.warn("[website-preview] could not delete an old preview:", error);
     }

@@ -82,7 +82,6 @@ beforeEach(() => {
     configureStorage({
         provider: "test",
         upload: vi.fn(),
-        delete: vi.fn(),
         download: vi.fn(
             async () => new Response("%PDF-1.7", { headers: { "content-type": "application/pdf" } })
         ),
@@ -233,7 +232,6 @@ describe("a PDF over 2,000 pages", () => {
         configureStorage({
             provider: "test",
             upload: vi.fn(),
-            delete: vi.fn(),
             download: vi.fn(
                 async () => new Response(book, { headers: { "content-type": "application/pdf" } })
             ),

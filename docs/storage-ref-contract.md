@@ -225,16 +225,22 @@ lifecycle.
 
 Backfill legacy `file_uploads` pointers with
 `pnpm --filter @launchstack/web db:backfill --only=2026-11-storage-ledger-from-file-uploads --batch=500`.
+**Run it right after deploying this change**: until it has run, a file uploaded
+before the deploy (for example an uploaded-but-uncommitted batch file) cannot be
+attached to a document and gets `fileNotInWorkspace`.
 It requires `DATABASE_URL` and the current S3 endpoint/bucket configuration to
-recognize S3 pointers (including the configured public endpoint alias). Owned
-database rows become `/api/files/{id}` refs; owned `storage_provider = 's3'`
-rows are recorded only when their URL parses to S3 at the current location.
-Null-company rows, other providers, missing/unrecognized S3 URLs and foreign
-buckets are skipped. Insert-only identity conflicts preserve existing inventory,
-including its original URL, owner and deletion marker. The backfill records URL,
-size, MIME type and checksum with source `backfill-file-uploads`. Batches resume
-by file id, and replay is idempotent. `--dry-run` reports pointer rows remaining
-to inspect without writing; this estimate includes S3 URLs that may be skipped.
+recognize S3 pointers (including the configured public endpoint alias); on a
+deployment with S3 pointer rows it stops with an error if S3 is not configured
+in the running process, rather than finishing without them. Owned database rows
+become `/api/files/{id}` refs; owned `storage_provider = 's3'` rows are recorded
+only when their URL parses to S3 at the current location. Null-company rows,
+other providers, missing/unrecognized S3 URLs and foreign buckets are skipped,
+and each batch logs its `recorded` and `skipped` counts. Insert-only identity
+conflicts preserve existing inventory, including its original URL, owner and
+deletion marker. The backfill records URL, size, MIME type and checksum with
+source `backfill-file-uploads`. Batches resume by file id, and replay is
+idempotent. `--dry-run` reports pointer rows remaining to inspect without
+writing; this estimate includes S3 URLs that may be skipped.
 
 At document/version upload ingress, S3, Blob and UploadThing URLs parsed at the
 currently configured provider location must resolve to a live inventory row

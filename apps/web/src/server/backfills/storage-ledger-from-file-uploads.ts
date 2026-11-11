@@ -51,6 +51,7 @@ export async function backfillStorageLedgerFromFileUploads({
         .orderBy(asc(fileUploads.id))
         .limit(batchSize);
     const source: StoredObjectSource = "backfill-file-uploads";
+    const s3Location = currentStorageLocationId("s3");
     const objects: (typeof storageObjects.$inferInsert)[] = [];
     for (const row of rows) {
         let ref: ObjectRef;
@@ -63,12 +64,19 @@ export async function backfillStorageLedgerFromFileUploads({
             };
             url = `/api/files/${row.id}`;
         } else {
+            // A finished backfill is never re-run, so an S3 row met without S3
+            // configuration must stop the run instead of being skipped silently.
+            if (!s3Location) {
+                throw new Error(
+                    `file_uploads row ${row.id} is an S3 pointer, but S3 storage is not configured in this process (set NEXT_PUBLIC_S3_ENDPOINT and S3_BUCKET_NAME)`
+                );
+            }
             if (!row.storageUrl) continue;
             const parsed = refFromStoredUrl(row.storageUrl);
             if (
                 !parsed.ok ||
                 parsed.ref.adapter !== "s3" ||
-                parsed.ref.storageLocationId !== currentStorageLocationId("s3")
+                parsed.ref.storageLocationId !== s3Location
             )
                 continue;
             ref = parsed.ref;
@@ -97,6 +105,11 @@ export async function backfillStorageLedgerFromFileUploads({
                     storageObjects.objectKey,
                 ],
             });
+    }
+    if (rows.length > 0) {
+        console.log(
+            `[backfill-storage-ledger] recorded=${objects.length} skipped=${rows.length - objects.length}`
+        );
     }
     const last = rows.at(-1);
     return { cursor: last ? { id: last.id } : null, processed: rows.length };

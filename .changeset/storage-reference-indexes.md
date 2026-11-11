@@ -2,4 +2,4 @@
 "@launchstack/store": patch
 ---
 
-Index document and version URLs for the durable deletion worker's global shared-reference checks.
+Index document/version URLs and preview/audio metadata, OCR input URLs, and batch storage URLs for durable deletion's exact shared-reference checks. New indexes are built concurrently through the migration runner.

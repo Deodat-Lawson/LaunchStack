@@ -12,6 +12,8 @@ import {
 } from "@launchstack/store/schema";
 
 import { brandMedia } from "~/server/db/schema/brand";
+import { collabAgentPersona } from "~/server/db/schema/collab";
+import { workspaceSessionMessages, workspaceSessions } from "~/server/db/schema/workspace-sessions";
 import {
     storageDeletionItems,
     storageDeletionRequests,
@@ -143,7 +145,7 @@ describeDb("durable storage deletion (integration)", () => {
         return row!;
     }
 
-    it("snapshots owned document, version, job, batch and preview URLs without owning audio metadata", async () => {
+    it("snapshots document, version, job, batch, preview and audio URLs", async () => {
         const bytes = await Promise.all(Array.from({ length: 8 }, () => file()));
         const source = await doc(bytes[0]!.url, {
             websitePreview: { url: bytes[4]!.url },
@@ -178,6 +180,7 @@ describeDb("durable storage deletion (integration)", () => {
             filename: "File",
             documentId: BigInt(source.id),
             storageUrl: bytes[3]!.url,
+            status: "complete",
         });
         await test.db.transaction(tx => deleteDocumentCore(tx, source.id, context));
         expect(await test.db.select().from(document)).toHaveLength(0);
@@ -191,10 +194,7 @@ describeDb("durable storage deletion (integration)", () => {
             ...context,
         });
         expect((await items(requests[0]!.id)).map(item => item.sourceUrl).sort()).toEqual(
-            bytes
-                .slice(0, 6)
-                .map(byte => byte.url)
-                .sort()
+            bytes.map(byte => byte.url).sort()
         );
         expect((await items(requests[0]!.id)).every(item => item.storedObjectId !== null)).toBe(
             true
@@ -206,17 +206,11 @@ describeDb("durable storage deletion (integration)", () => {
             eventId: `storage.deletion.requested:${requests[0]!.id}`,
         });
         await processStorageDeletionRequest(requests[0]!.id);
-        expect((await test.db.select().from(fileUploads)).map(row => row.id).sort()).toEqual(
-            bytes
-                .slice(6)
-                .map(byte => byte.id)
-                .sort()
-        );
+        expect(await test.db.select().from(fileUploads)).toHaveLength(0);
         expect((await request(requests[0]!.id)).status).toBe("completed");
         expect((await items(requests[0]!.id)).every(item => item.state === "deleted")).toBe(true);
         const ledger = await test.db.select().from(storageObjects);
-        expect(ledger.filter(row => row.deletedAt !== null)).toHaveLength(6);
-        expect(ledger.filter(row => row.deletedAt === null)).toHaveLength(2);
+        expect(ledger.filter(row => row.deletedAt !== null)).toHaveLength(8);
     });
 
     it("rolls back plans, outbox events and relational deletion together", async () => {
@@ -405,17 +399,17 @@ describeDb("durable storage deletion (integration)", () => {
                 reason: "version_delete",
             });
             await tx.delete(documentVersions).where(eq(documentVersions.id, version!.id));
+            await tx.delete(ocrJobs).where(eq(ocrJobs.id, "version-job"));
             return id!;
         });
         expect((await items(id)).map(item => item.sourceUrl).sort()).toEqual(
             bytes.map(byte => byte.url).sort()
         );
         await processStorageDeletionRequest(id);
-        // A job whose document remains live still protects its input bytes.
         expect((await items(id)).map(item => item.state)).toEqual([
             "deleted",
             "deleted",
-            "retained",
+            "deleted",
         ]);
         expect(await test.db.select().from(document)).toHaveLength(1);
     });
@@ -444,63 +438,91 @@ describeDb("durable storage deletion (integration)", () => {
         expect(await test.db.select().from(fileUploads)).toHaveLength(2);
     });
 
-    it.each(["preview", "audio", "version-preview", "brand", "job", "batch"])(
-        "retains a live %s reference",
-        async kind => {
-            const bytes = await file();
-            const source = await doc(
-                "https://example.org/page",
-                kind === "preview"
-                    ? { websitePreview: { url: bytes.url } }
-                    : kind === "audio"
-                      ? { audioUrl: bytes.url }
-                      : null
-            );
-            if (kind === "version-preview")
-                await test.db.insert(documentVersions).values({
-                    documentId: BigInt(source.id),
-                    versionNumber: 1,
-                    url: source.url,
-                    mimeType: "text/plain",
-                    ocrMetadata: { websitePreview: { url: bytes.url } },
-                });
-            if (kind === "brand")
-                await test.db.insert(brandMedia).values({
-                    id: "media",
-                    companyId,
-                    uploadedByUserId: "user:test",
-                    storageUrl: bytes.url,
-                    mimeType: "text/plain",
-                    size: 5,
-                });
-            if (kind === "job")
-                await test.db.insert(ocrJobs).values({
-                    id: "live-job",
-                    documentId: BigInt(source.id),
-                    companyId,
-                    userId: "user:test",
-                    documentName: "Live",
-                    documentUrl: bytes.url,
-                });
-            if (kind === "batch") {
-                await test.db
-                    .insert(uploadBatches)
-                    .values({ id: "live-batch", companyId, createdByUserId: "user:test" });
-                await test.db.insert(uploadBatchFiles).values({
-                    batchId: "live-batch",
-                    companyId,
-                    userId: "user:test",
-                    filename: "Live",
-                    documentId: BigInt(source.id),
-                    storageUrl: bytes.url,
-                });
-            }
-            const id = (await objectPlan([bytes.url]))!;
-            await processStorageDeletionRequest(id);
-            expect((await items(id))[0]!.state).toBe("retained");
-            expect(deleteStoredObjects).not.toHaveBeenCalled();
+    it.each(
+        [
+            "document",
+            "version",
+            "preview",
+            "audio",
+            "version-preview",
+            "version-audio",
+            "brand",
+            "persona",
+            "job",
+            "batch",
+        ].flatMap(kind => [false, true].map(legacy => ({ kind, legacy })))
+    )("retains a live $kind reference (legacy=$legacy)", async ({ kind, legacy }) => {
+        const bytes = await file();
+        const liveUrl = legacy
+            ? `https://old-origin.example/api/files/00${bytes.id}/?download=1`
+            : bytes.url;
+        const source = await doc(
+            kind === "document" ? liveUrl : "https://example.org/page",
+            kind === "preview"
+                ? { websitePreview: { url: liveUrl } }
+                : kind === "audio"
+                  ? { audioUrl: liveUrl }
+                  : null
+        );
+        if (kind.startsWith("version"))
+            await test.db.insert(documentVersions).values({
+                documentId: BigInt(source.id),
+                versionNumber: 1,
+                url: kind === "version" ? liveUrl : source.url,
+                mimeType: "text/plain",
+                ocrMetadata:
+                    kind === "version-audio"
+                        ? { audioUrl: liveUrl }
+                        : kind === "version-preview"
+                          ? { websitePreview: { url: liveUrl } }
+                          : null,
+            });
+        if (kind === "brand")
+            await test.db.insert(brandMedia).values({
+                id: "media",
+                companyId,
+                uploadedByUserId: "user:test",
+                storageUrl: liveUrl,
+                mimeType: "text/plain",
+                size: 5,
+            });
+        if (kind === "persona")
+            await test.db.insert(collabAgentPersona).values({
+                id: "persona",
+                companyId,
+                key: "test",
+                displayName: "Test",
+                role: "Test",
+                systemPrompt: "Test",
+                avatarUrl: liveUrl,
+            });
+        if (kind === "job")
+            await test.db.insert(ocrJobs).values({
+                id: "live-job",
+                documentId: BigInt(source.id),
+                companyId,
+                userId: "user:test",
+                documentName: "Live",
+                documentUrl: liveUrl,
+            });
+        if (kind === "batch") {
+            await test.db
+                .insert(uploadBatches)
+                .values({ id: "live-batch", companyId, createdByUserId: "user:test" });
+            await test.db.insert(uploadBatchFiles).values({
+                batchId: "live-batch",
+                companyId,
+                userId: "user:test",
+                filename: "Live",
+                documentId: BigInt(source.id),
+                storageUrl: liveUrl,
+            });
         }
-    );
+        const id = (await objectPlan([bytes.url]))!;
+        await processStorageDeletionRequest(id);
+        expect((await items(id))[0]!.state).toBe("retained");
+        expect(deleteStoredObjects).not.toHaveBeenCalled();
+    });
 
     it.each(["ledger", "file", "unstamped-file"])(
         "blocks foreign ownership from %s",
@@ -571,7 +593,7 @@ describeDb("durable storage deletion (integration)", () => {
             { adapter: "s3", storageLocationId: "s3:http://s3:8333@files", key: "shared-key" },
         ],
     ] as const)(
-        "resolves %s aliases by ref and retains alternate live spellings",
+        "uses canonical %s inventory URLs for ledgered reference checks",
         async (_adapter, canonical, source, live, identity) => {
             await recordStoredObject(test.db, {
                 ref: identity,
@@ -579,18 +601,33 @@ describeDb("durable storage deletion (integration)", () => {
                 companyId,
                 source: "upload-file",
             });
-            await doc(live);
+            await doc(canonical);
             const id = (await objectPlan([source]))!;
             expect((await items(id))[0]!.storedObjectId).not.toBeNull();
             await processStorageDeletionRequest(id);
             expect((await items(id))[0]!.state).toBe("retained");
             expect(deleteStoredObjects).not.toHaveBeenCalled();
+            await test.db.delete(document).where(eq(document.companyId, companyId));
+            await doc(live);
+            const aliasId = (await objectPlan([source]))!;
+            jest.mocked(deleteStoredObjects).mockImplementation(async refs =>
+                refs.map(ref => ({ ref, outcome: "deleted" }))
+            );
+            const parser = jest.spyOn(storedUrl, "refFromStoredUrl");
+            try {
+                await processStorageDeletionRequest(aliasId);
+                expect((await items(aliasId))[0]!.state).toBe("deleted");
+                expect(parser).not.toHaveBeenCalled();
+            } finally {
+                parser.mockRestore();
+            }
         }
     );
 
-    it("prefilters absolute database aliases by bounded numeric id, including leading zeros", async () => {
+    it("protects unledgered database aliases on any origin without requiring the parser", async () => {
         const bytes = await file();
-        const alias = `http://app:3000/api/files/00${bytes.id}/?download=1`;
+        await test.db.delete(storageObjects).where(eq(storageObjects.companyId, companyId));
+        const alias = `https://foreign.example/api/files/00${bytes.id}/nested?download=1`;
         await doc(alias);
         await doc(`http://app:3000/api/files/${bytes.id}0?download=1`);
         const id = (await objectPlan([bytes.url]))!;
@@ -598,7 +635,7 @@ describeDb("durable storage deletion (integration)", () => {
         try {
             await processStorageDeletionRequest(id);
             expect((await items(id))[0]!.state).toBe("retained");
-            expect(parser.mock.calls.map(call => call[0])).toEqual([alias]);
+            expect(parser).not.toHaveBeenCalled();
         } finally {
             parser.mockRestore();
         }
@@ -656,16 +693,10 @@ describeDb("durable storage deletion (integration)", () => {
             );
         }
     });
-    it("prefilters S3 public-endpoint aliases with query strings before parsing live URLs", async () => {
+    it("prefilters legacy S3 aliases by full key and verifies parsed identity", async () => {
         const key = "documents/93411647-cc8e-48aa-8ffa-a65904d5efe8.pdf";
         const canonical = `http://s3:8333/files/${key}`;
         const alias = `https://objects.example/files/${key}?download=1`;
-        await recordStoredObject(test.db, {
-            ref: { adapter: "s3", storageLocationId: "s3:http://s3:8333@files", key },
-            url: canonical,
-            companyId,
-            source: "upload-file",
-        });
         await test.db.insert(document).values(
             Array.from({ length: 100 }, (_, id) => ({
                 companyId,
@@ -687,33 +718,521 @@ describeDb("durable storage deletion (integration)", () => {
         }
     });
 
-    it("deleting a transcript never plans the recording document's audio bytes", async () => {
-        const recordingBytes = await file();
-        const transcriptBytes = await file();
-        const recording = await doc(recordingBytes.url);
-        const transcript = await doc(transcriptBytes.url, { audioUrl: recordingBytes.url });
-        await test.db.transaction(tx => deleteDocumentCore(tx, transcript.id, context));
-        const [row] = await test.db.select().from(storageDeletionRequests);
-        expect((await items(row!.id)).map(item => item.sourceUrl)).toEqual([transcriptBytes.url]);
-        await processStorageDeletionRequest(row!.id);
-        expect((await test.db.select().from(document)).map(row => row.id)).toEqual([recording.id]);
-        expect((await test.db.select().from(fileUploads)).map(row => row.id)).toEqual([
-            recordingBytes.id,
+    it.each(
+        ["recording-first", "transcript-first"].flatMap(order =>
+            ["canonical", "localhost"].map(spelling => ({ order, spelling }))
+        )
+    )(
+        "deletes shared audio after both documents are deleted: $order ($spelling)",
+        async ({ order, spelling }) => {
+            const recordingBytes = await file();
+            const transcriptBytes = await file();
+            const recording = await doc(recordingBytes.url);
+            const audioUrl =
+                spelling === "localhost"
+                    ? `http://localhost:3000${recordingBytes.url}`
+                    : recordingBytes.url;
+            const transcript = await doc(transcriptBytes.url, { audioUrl });
+            const first = order === "recording-first" ? recording : transcript;
+            const last = order === "recording-first" ? transcript : recording;
+            await test.db.transaction(tx => deleteDocumentCore(tx, first.id, context));
+            const [firstRequest] = await test.db.select().from(storageDeletionRequests);
+            await processStorageDeletionRequest(firstRequest!.id);
+            expect(
+                await test.db
+                    .select()
+                    .from(fileUploads)
+                    .where(eq(fileUploads.id, recordingBytes.id))
+            ).toHaveLength(1);
+            expect(
+                (await items(firstRequest!.id)).find(
+                    item => item.objectKey === String(recordingBytes.id)
+                )
+            ).toMatchObject({
+                state: "retained",
+                sourceUrl: first.id === transcript.id ? audioUrl : recordingBytes.url,
+            });
+            await test.db.transaction(tx => deleteDocumentCore(tx, last.id, context));
+            const requests = await test.db.select().from(storageDeletionRequests);
+            const lastRequest = requests.find(row => row.id !== firstRequest!.id)!;
+            await processStorageDeletionRequest(lastRequest.id);
+            expect(
+                (await items(lastRequest.id)).find(
+                    item => item.objectKey === String(recordingBytes.id)
+                )
+            ).toMatchObject({
+                state: "deleted",
+                sourceUrl: last.id === transcript.id ? audioUrl : recordingBytes.url,
+            });
+            expect(await test.db.select().from(fileUploads)).toHaveLength(0);
+        }
+    );
+
+    it.each(["deleted", "not_found"] as const)(
+        "lets confirmed %s supersede concurrent dead lettering and stamps inventory",
+        async outcome => {
+            const url = "https://store.public.blob.vercel-storage.com/unshared";
+            await recordStoredObject(test.db, {
+                ref: {
+                    adapter: "vercel-blob",
+                    storageLocationId: "vercel-blob:store",
+                    key: "unshared",
+                },
+                url,
+                companyId,
+                source: "vercel-blob",
+            });
+            const id = (await objectPlan([url]))!;
+            jest.mocked(deleteStoredObjects).mockImplementation(async refs => {
+                await markStorageDeletionRequestDead(id);
+                return refs.map(ref => ({ ref, outcome }));
+            });
+            await processStorageDeletionRequest(id);
+            expect((await items(id))[0]).toMatchObject({
+                state: outcome,
+                attempts: 1,
+                errorCode: null,
+            });
+            expect((await request(id)).status).toBe("completed");
+            expect((await test.db.select().from(storageObjects))[0]!.deletedAt).not.toBeNull();
+        }
+    );
+
+    it("redelivery retries exhausted items but leaves other blocked decisions unchanged", async () => {
+        const bytes = await file();
+        const blockedBytes = await file();
+        const id = (await objectPlan([bytes.url, blockedBytes.url]))!;
+        const rows = await items(id);
+        await test.db
+            .update(storageDeletionItems)
+            .set({ state: "blocked", errorCode: "foreign_object" })
+            .where(eq(storageDeletionItems.id, rows[1]!.id));
+        await markStorageDeletionRequestDead(id);
+        await processStorageDeletionRequest(id);
+        expect((await items(id)).map(row => [row.state, row.errorCode])).toEqual([
+            ["deleted", null],
+            ["blocked", "foreign_object"],
         ]);
+        expect((await request(id)).status).toBe("blocked");
     });
 
-    it("does not overwrite an item blocked while a network provider call is running", async () => {
+    it.each(
+        (["queued", "processing", "completed", "failed", "needs_review"] as const).flatMap(status =>
+            [false, true].map(legacy => ({ status, legacy }))
+        )
+    )("only busy OCR jobs protect bytes: $status (legacy=$legacy)", async ({ status, legacy }) => {
+        const bytes = await file();
+        const jobUrl = legacy
+            ? `https://old-origin.example/api/files/00${bytes.id}?download=1`
+            : bytes.url;
+        const source = await doc("https://example.org/job-owner");
+        await test.db.insert(ocrJobs).values({
+            id: "status-job",
+            documentId: BigInt(source.id),
+            companyId,
+            userId: "user:test",
+            documentName: "Job",
+            documentUrl: jobUrl,
+            status,
+        });
+        const id = (await objectPlan([bytes.url]))!;
+        await processStorageDeletionRequest(id);
+        expect((await items(id))[0]!.state).toBe(
+            status === "queued" || status === "processing" ? "retained" : "deleted"
+        );
+    });
+
+    it("detached busy OCR history does not protect bytes", async () => {
+        const bytes = await file();
+        await test.db.insert(ocrJobs).values({
+            id: "detached",
+            documentId: null,
+            companyId,
+            userId: "user:test",
+            documentName: "Job",
+            documentUrl: bytes.url,
+            status: "processing",
+        });
+        const id = (await objectPlan([bytes.url]))!;
+        await processStorageDeletionRequest(id);
+        expect((await items(id))[0]!.state).toBe("deleted");
+    });
+
+    it.each(
+        (["queued", "uploaded", "processing", "failed", "complete"] as const).flatMap(status =>
+            [false, true].flatMap(detached =>
+                [false, true].map(legacy => ({ status, detached, legacy }))
+            )
+        )
+    )(
+        "batch status $status protects retryable bytes (detached=$detached, legacy=$legacy)",
+        async ({ status, detached, legacy }) => {
+            const bytes = await file();
+            const batchUrl = legacy
+                ? `https://old-origin.example/api/files/00${bytes.id}?download=1`
+                : bytes.url;
+            const source = detached ? null : await doc("https://example.org/batch-owner");
+            await test.db.insert(uploadBatches).values({
+                id: "status-batch",
+                companyId,
+                createdByUserId: "user:test",
+            });
+            await test.db.insert(uploadBatchFiles).values({
+                batchId: "status-batch",
+                companyId,
+                userId: "user:test",
+                filename: "Batch",
+                documentId: source ? BigInt(source.id) : null,
+                storageUrl: batchUrl,
+                status,
+            });
+            const id = (await objectPlan([bytes.url]))!;
+            await processStorageDeletionRequest(id);
+            expect((await items(id))[0]!.state).toBe(
+                status === "complete" ? "deleted" : "retained"
+            );
+        }
+    );
+
+    it("conservatively protects any-origin database aliases even with inventory", async () => {
+        const bytes = await file();
+        await doc(`https://foreign.example/api/files/00${bytes.id}?download=1`);
+        const id = (await objectPlan([bytes.url]))!;
+        const parser = jest.spyOn(storedUrl, "refFromStoredUrl");
+        try {
+            await processStorageDeletionRequest(id);
+            expect((await items(id))[0]!.state).toBe("retained");
+            expect(parser).not.toHaveBeenCalled();
+        } finally {
+            parser.mockRestore();
+        }
+    });
+
+    async function externalPointer(owner: bigint | null = companyId, ledgered = true) {
+        const pointer = await file(owner);
+        const url = "https://store.public.blob.vercel-storage.com/pointer-bytes";
+        await test.db
+            .update(fileUploads)
+            .set({
+                storageProvider: "vercel-blob",
+                storageUrl: url,
+                fileData: null,
+            })
+            .where(eq(fileUploads.id, pointer.id));
+        if (ledgered)
+            await recordStoredObject(test.db, {
+                ref: {
+                    adapter: "vercel-blob",
+                    storageLocationId: "vercel-blob:store",
+                    key: "pointer-bytes",
+                },
+                url,
+                companyId,
+                source: "vercel-blob",
+            });
+        jest.mocked(deleteStoredObjects).mockImplementation(async (refs, tx) => {
+            if (refs[0]!.adapter === "database") return deleteDatabaseObjects(refs, tx);
+            return refs.map(ref => ({ ref, outcome: "deleted" }));
+        });
+        return { ...pointer, providerUrl: url };
+    }
+
+    it.each([true, false])(
+        "cleans external bytes and their database pointer (ledgered=%s)",
+        async ledgered => {
+            const pointer = await externalPointer(companyId, ledgered);
+            const source = await doc(pointer.url);
+            await test.db.transaction(tx => deleteDocumentCore(tx, source.id, context));
+            const [row] = await test.db.select().from(storageDeletionRequests);
+            expect((await items(row!.id)).map(item => item.sourceUrl).sort()).toEqual(
+                [pointer.url, pointer.providerUrl].sort()
+            );
+            await processStorageDeletionRequest(row!.id);
+            expect((await items(row!.id)).every(item => item.state === "deleted")).toBe(true);
+            expect(await test.db.select().from(fileUploads)).toHaveLength(0);
+        }
+    );
+
+    it.each(["foreign", "unstamped"] as const)(
+        "blocks external expansion through a %s pointer",
+        async kind => {
+            const [other] = await test.db
+                .insert(company)
+                .values({ name: "Other pointer", numberOfEmployees: "1" })
+                .returning();
+            const pointer = await externalPointer(kind === "foreign" ? BigInt(other!.id) : null);
+            const id = (await objectPlan([pointer.url]))!;
+            expect(
+                (await items(id)).find(item => item.sourceUrl === pointer.providerUrl)
+            ).toMatchObject({ state: "blocked", errorCode: "foreign_object" });
+            // The durable block survives even if the pointer disappears before delivery.
+            await test.db.delete(fileUploads).where(eq(fileUploads.id, pointer.id));
+            await processStorageDeletionRequest(id);
+            expect(
+                (await items(id)).find(item => item.sourceUrl === pointer.providerUrl)
+            ).toMatchObject({ state: "blocked", errorCode: "foreign_object" });
+            expect(
+                jest
+                    .mocked(deleteStoredObjects)
+                    .mock.calls.every(([refs]) => refs[0]!.adapter === "database")
+            ).toBe(true);
+        }
+    );
+
+    it.each(["document", "job", "batch"] as const)(
+        "protects external bytes through a shared live database pointer: %s",
+        async kind => {
+            const pointer = await externalPointer();
+            const source = await doc(pointer.url);
+            const live = await doc(
+                kind === "document" ? pointer.url : "https://example.org/live-owner"
+            );
+            if (kind === "job")
+                await test.db.insert(ocrJobs).values({
+                    id: "pointer-job",
+                    documentId: BigInt(live.id),
+                    companyId,
+                    userId: "user:test",
+                    documentName: "Job",
+                    documentUrl: pointer.url,
+                    status: "processing",
+                });
+            if (kind === "batch") {
+                await test.db.insert(uploadBatches).values({
+                    id: "pointer-batch",
+                    companyId,
+                    createdByUserId: "user:test",
+                });
+                await test.db.insert(uploadBatchFiles).values({
+                    batchId: "pointer-batch",
+                    companyId,
+                    userId: "user:test",
+                    filename: "Pointer",
+                    storageUrl: pointer.url,
+                    documentId: null,
+                    status: "failed",
+                });
+            }
+            await test.db.transaction(tx => deleteDocumentCore(tx, source.id, context));
+            const [row] = await test.db.select().from(storageDeletionRequests);
+            await processStorageDeletionRequest(row!.id);
+            expect((await items(row!.id)).map(item => item.state)).toEqual([
+                "retained",
+                "retained",
+            ]);
+            expect(deleteStoredObjects).not.toHaveBeenCalled();
+        }
+    );
+
+    it("does not treat an id prefix as a legacy database reference", async () => {
+        const bytes = await file();
+        await test.db.delete(storageObjects).where(eq(storageObjects.companyId, companyId));
+        await doc(`https://foreign.example/api/files/${bytes.id}0?download=1`);
+        const id = (await objectPlan([bytes.url]))!;
+        await processStorageDeletionRequest(id);
+        expect((await items(id))[0]!.state).toBe("deleted");
+    });
+
+    it("does not protect legacy provider keys by substring or foreign location alone", async () => {
+        const url = "https://testapp.ufs.sh/f/full-key";
+        await doc("https://testapp.ufs.sh/f/full-key-suffix");
+        await doc("https://foreignapp.ufs.sh/f/full-key");
+        const id = (await objectPlan([url]))!;
+        jest.mocked(deleteStoredObjects).mockImplementation(async refs =>
+            refs.map(ref => ({ ref, outcome: "deleted" }))
+        );
+        await processStorageDeletionRequest(id);
+        expect((await items(id))[0]!.state).toBe("deleted");
+    });
+
+    it("uses ledger identity for an opaque external pointer target and deduplicates direct targets", async () => {
+        const pointer = await externalPointer();
+        const opaque = "https://legacy.example/opaque";
+        await test.db
+            .update(fileUploads)
+            .set({ storageUrl: opaque })
+            .where(eq(fileUploads.id, pointer.id));
+        await test.db
+            .update(storageObjects)
+            .set({ url: opaque })
+            .where(eq(storageObjects.adapter, "vercel-blob"));
+        const id = (await objectPlan([pointer.url, opaque]))!;
+        expect((await items(id)).map(item => item.sourceUrl).sort()).toEqual(
+            [opaque, pointer.url].sort()
+        );
+        expect((await items(id)).find(item => item.sourceUrl === opaque)).toMatchObject({
+            adapter: "vercel-blob",
+            objectKey: "pointer-bytes",
+        });
+        await processStorageDeletionRequest(id);
+        expect((await items(id)).every(item => item.state === "deleted")).toBe(true);
+    });
+
+    it("retains provider bytes used through a different shared pointer", async () => {
+        const pointer = await externalPointer();
+        const shared = await file();
+        await test.db
+            .update(fileUploads)
+            .set({
+                storageProvider: "vercel-blob",
+                storageUrl: pointer.providerUrl,
+                fileData: null,
+            })
+            .where(eq(fileUploads.id, shared.id));
+        await doc(shared.url);
+        const id = (await objectPlan([pointer.url]))!;
+        await processStorageDeletionRequest(id);
+        expect(
+            (await items(id)).find(item => item.sourceUrl === pointer.providerUrl)
+        ).toMatchObject({ state: "retained" });
+        expect((await items(id)).find(item => item.sourceUrl === pointer.url)).toMatchObject({
+            state: "deleted",
+        });
+        expect((await test.db.select().from(fileUploads)).map(row => row.id)).toEqual([shared.id]);
+    });
+
+    it("does not overwrite other concurrent blocked outcomes with provider success", async () => {
         const id = (await objectPlan(["https://store.public.blob.vercel-storage.com/unshared"]))!;
         jest.mocked(deleteStoredObjects).mockImplementation(async refs => {
-            await markStorageDeletionRequestDead(id);
+            await test.db
+                .update(storageDeletionItems)
+                .set({ state: "blocked", errorCode: "foreign_object" })
+                .where(eq(storageDeletionItems.requestId, id));
             return refs.map(ref => ({ ref, outcome: "deleted" }));
         });
         await processStorageDeletionRequest(id);
         expect((await items(id))[0]).toMatchObject({
             state: "blocked",
+            errorCode: "foreign_object",
             attempts: 0,
-            errorCode: "retry_budget_exhausted",
         });
+    });
+
+    it.each(["foreign", "unstamped"] as const)(
+        "preserves file ownership checks for historical audio URLs: %s",
+        async kind => {
+            const [other] = await test.db
+                .insert(company)
+                .values({ name: "Audio owner", numberOfEmployees: "1" })
+                .returning();
+            const bytes = await file(kind === "foreign" ? BigInt(other!.id) : null);
+            const audioUrl = `http://localhost:3000/api/files/00${bytes.id}?download=1`;
+            const transcript = await doc("https://example.org/transcript", { audioUrl });
+            await test.db.transaction(tx => deleteDocumentCore(tx, transcript.id, context));
+            const [row] = await test.db.select().from(storageDeletionRequests);
+            const candidate = (await items(row!.id)).find(item => item.sourceUrl === audioUrl)!;
+            expect(candidate).toMatchObject({ adapter: "database", objectKey: String(bytes.id) });
+            await processStorageDeletionRequest(row!.id);
+            expect((await items(row!.id)).find(item => item.id === candidate.id)).toMatchObject({
+                state: "blocked",
+                errorCode: "foreign_object",
+            });
+            expect(deleteStoredObjects).not.toHaveBeenCalled();
+            expect(await test.db.select().from(fileUploads)).toHaveLength(1);
+        }
+    );
+    it("records unrecognized external pointer URLs without inventing a blocked null ref", async () => {
+        const bytes = await file();
+        const external = "https://external.example/not-an-object";
+        await test.db
+            .update(fileUploads)
+            .set({
+                companyId: null,
+                storageProvider: "s3",
+                storageUrl: external,
+            })
+            .where(eq(fileUploads.id, bytes.id));
+        const id = (await objectPlan([bytes.url]))!;
+        expect((await items(id)).find(item => item.sourceUrl === external)).toMatchObject({
+            state: "skipped",
+            adapter: null,
+            errorCode: "unrecognized",
+        });
+        await processStorageDeletionRequest(id);
         expect((await request(id)).status).toBe("blocked");
+        expect(deleteStoredObjects).not.toHaveBeenCalled();
+    });
+    it.each(["canonical", "legacy-origin"] as const)(
+        "retains a deleted document's bytes used by a session attachment: %s",
+        async kind => {
+            const bytes = await file();
+            const source = await doc(bytes.url);
+            await test.db.insert(workspaceSessions).values({
+                id: "chat",
+                companyId,
+                userId: "user:test",
+                title: "Retain attachments",
+            });
+            await test.db.insert(workspaceSessionMessages).values({
+                sessionId: "chat",
+                seq: 1,
+                role: "user",
+                text: "Ask again",
+                attachments: [
+                    {
+                        url:
+                            kind === "canonical"
+                                ? bytes.url
+                                : `http://localhost:3000/api/files/00${bytes.id}`,
+                        filename: "original.txt",
+                    },
+                ],
+            });
+            await test.db.transaction(tx => deleteDocumentCore(tx, source.id, context));
+            const [row] = await test.db.select().from(storageDeletionRequests);
+            await processStorageDeletionRequest(row!.id);
+            expect((await items(row!.id))[0]!.state).toBe("retained");
+            expect(await test.db.select().from(fileUploads)).toHaveLength(1);
+            expect(deleteStoredObjects).not.toHaveBeenCalled();
+        }
+    );
+    it.each([
+        ["metadata", "canonical"],
+        ["metadata", "legacy-origin"],
+        ["queue", "canonical"],
+        ["queue", "legacy-origin"],
+    ] as const)("retains bytes kept only in chat %s with %s URL", async (owner, form) => {
+        const bytes = await file();
+        const source = await doc(bytes.url);
+        const send = {
+            text: "Ask again",
+            refs: [],
+            webSearch: false,
+            thinking: false,
+            agentKey: null,
+            attachments: [
+                {
+                    id: "attachment",
+                    name: "original.txt",
+                    mimeType: "text/plain",
+                    size: 5,
+                    kind: "text" as const,
+                    url:
+                        form === "canonical"
+                            ? bytes.url
+                            : `http://localhost:3000/api/files/${bytes.id}`,
+                },
+            ],
+        };
+        await test.db.insert(workspaceSessions).values({
+            id: "chat",
+            companyId,
+            userId: "user:test",
+            title: "Saved chat controls",
+            queuedMessages: owner === "queue" ? [{ id: "queued", send }] : [],
+        });
+        if (owner === "metadata")
+            await test.db.insert(workspaceSessionMessages).values({
+                sessionId: "chat",
+                seq: 1,
+                role: "user",
+                text: "Ask again",
+                metadata: { send },
+            });
+        await test.db.transaction(tx => deleteDocumentCore(tx, source.id, context));
+        const [row] = await test.db.select().from(storageDeletionRequests);
+        await processStorageDeletionRequest(row!.id);
+        expect((await items(row!.id))[0]!.state).toBe("retained");
+        expect(deleteStoredObjects).not.toHaveBeenCalled();
     });
 });

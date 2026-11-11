@@ -27,24 +27,43 @@ foreign keys: requests are the durable audit record, even after tenant deletion.
 Items reference the request with CASCADE and the inventory with SET NULL.
 
 `deleteDocumentCore` requires `requestedBy`, `reason`, and `traceId`; all document
-purges pass through it. The version DELETE route plans and removes the version
-in one transaction while preserving permissions and current/last-version guards.
+purges pass through it. The version DELETE route plans the version and its jobs,
+then removes those OCR jobs and the version in one transaction; permissions are
+checked first and current/last-version guards are rechecked under lock.
 Archive expansion injects relational cleanup from the application's ingestion
 boundary into the engine pipeline and conversion function; packages never import
-application code. Its existing OCR-job cleanup is preserved.
+application code. Its cleanup explicitly skips connector deletion memory and
+Drive-pick removal (archive expansion is not a user's delete). Replayed archive
+events whose original document has already disappeared converge without reading
+the deleted ZIP.
 
-Repointing a document URL (Adeu or DOCX editing) and replacing a website preview
-plans the old URL in the same transaction as the update. This intentionally also
-plans URLs still held by immutable history: the worker retains shared bytes.
+Repointing a document URL (Adeu, DOCX editing, or version revert) and replacing a
+website preview plans the old URL in the same transaction as the update. This
+intentionally also plans URLs held by immutable history: shared bytes are retained.
 
 ### Planning
 
 Candidates include document and version URLs, attached OCR-job and batch-file
-URLs, and `ocr_metadata.websitePreview.url` on both documents and versions.
-`audioUrl` is not owned by a transcript: it points at the separate recording
-document, so it is never a planner candidate. It remains a live-reference guard.
+URLs, `ocr_metadata.websitePreview.url`, and `ocr_metadata.audioUrl` on documents
+and versions. Audio references are snapshotted even though a transcript does not
+uniquely own recording bytes: whichever document is deleted last must still
+request cleanup. Global references retain the bytes while the other survives.
+Future transcripts store the recording's canonical URL, not its absolute
+processing/fetch URL. The planner also recovers historical any-origin numeric
+audio aliases with the file row's company provenance, preserving their source URL.
 The `websitePreview.source` is provenance, not another preview object.
 Candidates are deduplicated per request. Empty candidates produce no request or event.
+
+Transcript-creation rollback is different: it must not plan the caller's source
+upload, which batch re-commit or client retry may reuse. It only plans storage
+created by the failed attempt (a transcript object), while removing newly-created
+relational rows. An unused original upload is discoverable by orphan audit later.
+
+An internal `/api/files/<id>` row can itself point at external provider storage.
+Planning snapshots both the numeric pointer and the real provider ref from
+`file_uploads.storage_url`; provider cleanup inherits the pointer's company stamp.
+Foreign or null provenance blocks cleanup. Live references to such pointers
+also protect their provider bytes.
 
 The URL parser supplies the canonical ref first, and ref lookup attaches the
 inventory id regardless of URL spelling (S3 public/internal endpoints,
@@ -71,15 +90,22 @@ Requests start `pending`. Items start `pending`, `quarantined` (ambiguous), or
 | pending → not_found | Provider positively confirmed absence. |
 | pending → pending | Retryable provider result; persist attempt/error and throw after commit. |
 | pending → blocked | Outbox dead lettering; `retry_budget_exhausted`. |
+| blocked (retry_budget_exhausted) → pending | Redelivery/replay renews the cleanup attempt. |
+| blocked (retry_budget_exhausted) → deleted/not_found | A concurrent provider success wins: bytes are already gone. |
 
 Every provider attempt increments `attempts`; shared-reference and provenance
 checks do not. Confirmed deleted/not-found refs stamp inventory `deleted_at`.
 Pending items keep the request pending and cause a retryable handler failure.
 Otherwise any blocked/quarantined item makes the request blocked; all other
 outcomes complete it and set `completed_at`. Completed delivery is a no-op.
-Normal and validation-dead outbox callbacks both block remaining pending items;
-terminal item outcomes remain intact. Logs include trace id, request id and
-outcome counts. Repair/replay operator tooling belongs to the next layer.
+Normal and validation-dead callbacks block remaining pending items; confirmed
+provider deletion/absence supersedes a concurrent retry-budget block and stamps
+the inventory. On redelivery, only `retry_budget_exhausted` blocks return to
+pending; provenance/provider blocks and quarantined identities require a
+separate operator decision. An event that is dead makes its request operationally
+blocked even if the callback could not persist the request/item status. Recovery
+is replay of that outbox event after resolving the cause (see the outbox runbook).
+Logs include trace id, request id and outcome counts.
 
 The spec's nullable-ref CHECK allowed only quarantined items while also requiring
 unrecognized URLs to be skipped. The implemented CHECK permits fully null refs
@@ -88,15 +114,24 @@ This is a deliberate consistency correction, not a fabricated placeholder ref.
 
 ### Global shared-reference coverage
 
-The worker first checks the item's original `source_url` and canonical ledger
-URL using indexed equality. On a miss, each protected SQL column is filtered
-before any candidate URL crosses into the application: provider URLs must
-contain the complete object key (`strpos`), and database URLs must match the
-numeric `/api/files/0*<id>/?([?#]|$)` boundary (including the parser's optional
-trailing slash). Only those plausible aliases are
-parsed and compared by complete ref identity. This preserves host/query-string
-aliases without pulling the full live URL population into the worker.
-The check is global, never tenant-filtered.
+Provider upload ingress requires an owned ledger ref's URL to be byte-identical
+to its recorded canonical URL; alternate hosts and percent-encoded spellings are
+rejected with the same workspace 404. A ledgered provider object's live reference
+check therefore uses exact canonical URL equality only.
+
+Each protected column has a separate SQL UNION arm, rather than combining an
+indexed column and unindexed JSON expression with OR. Documents, versions, active
+job inputs, retryable batch inputs, and JSON preview/audio fields all have
+equality indexes. Media/avatar exact checks have hash indexes.
+
+Only legacy provider refs without ledger rows use the bounded full-key `strpos`
+prefilter and final parsed adapter/location/key comparison. Database refs have a
+conservative exception even when ledgered: any origin's URL matching
+`/api/files/0*<id>([/?#]|$)` protects bytes, on every guarded column including
+audio metadata, without requiring trusted-origin parsing. This preserves old
+absolute processing URLs such as `http://localhost:3000/api/files/<id>` when
+APP_PUBLIC_URL was unset. URL candidates are filtered in SQL, never pulled as a
+full URL population into the worker. The checks are global, never tenant-filtered.
 
 There is **no cross-call advisory lock or reserved database connection**.
 The outbox claims an event with `FOR UPDATE SKIP LOCKED`; request/item row locks
@@ -108,7 +143,8 @@ and therefore cannot close that race.
 
 Network adapters run after the precheck transaction commits, outside any SQL
 transaction or row lock. A fresh persistence transaction re-reads the item
-`FOR UPDATE` and only applies an outcome while it remains pending. Database
+`FOR UPDATE`; a pending item or concurrent retry-budget block accepts confirmed
+success, while unrelated terminal/provenance decisions are not overwritten. Database
 bytes are deleted through the existing transaction executor in one short
 transaction with their item/inventory outcome. A supported nested Drizzle
 transaction supplies a savepoint scope, isolating postgres.js's tracking of a
@@ -120,24 +156,81 @@ The engine and product schema review identified these live URL fields:
 - `document_versions.url`
 - `document.ocr_metadata.websitePreview.url` and `.audioUrl`
 - `document_versions.ocr_metadata.websitePreview.url` and `.audioUrl`
-- `ocr_jobs.document_url`, only when `document_id` still joins a live document
-- `upload_batch_files.storage_url`, only when `document_id` still joins a live document
+- `ocr_jobs.document_url`, only queued/processing jobs whose document still exists
+- `upload_batch_files.storage_url`, only queued/uploaded/processing/failed files, even when detached from a document (batch retries reuse the bytes)
 - `brand_media.storage_url`
 - `brand_channels.avatar_url` (conservatively protected even though normally remote)
 - `collab_agent_persona.avatar_url` (can be a configured HTTPS picture)
+- `workspace_session_messages.attachments[*].url`
+- `workspace_session_messages.metadata.send.attachments[*].url`
+- `workspace_sessions.queued_messages[*].send.attachments[*].url`
 
-Detached OCR and upload-batch history does not retain objects forever.
-`file_uploads.storage_url`/`storage_pathname` and `storage_objects.url` are the
-object inventory itself, not independent live usage; counting them would retain
-every recorded object indefinitely. `claude_artifacts.source_url` and generated
+Completed OCR jobs and complete batch files are history, not live processing
+ownership. Detached unfinished batch files still retain their storage objects.
+`file_uploads.storage_url` is not an unconditional live reference: it is pointer
+inventory whose downstream live usage must protect provider bytes.
+`storage_objects.url` is object inventory, not independent ownership.
+`claude_artifacts.source_url` and generated
 document citation `sourceUrl` fields are provenance, not live byte ownership.
 Brand profile URLs, credential/model endpoint URLs and OCR webhooks
 are remote addresses, not stored objects. Profile images and feedback attachments
 store their bytes inline rather than referring to the object-storage adapters.
 
-Btree indexes on `document.url` and `document_versions.url` are generated in the
-append-only engine migration set; product request/item tables are generated in
-the product migration set.
+The append-only engine migrations index document/version URL and preview/audio
+metadata, OCR input URLs, and batch storage URLs. Product migrations index
+media/avatar equality, chat JSON containment, and create request/item tables. New indexes use Drizzle's
+`concurrently()` builder and generated `CREATE INDEX CONCURRENTLY`; the only
+generated-SQL adjustment is the migration runner's `-- launchstack:no-transaction`
+and `-- Reason:` headers. No journal or snapshot is hand-edited. These builds
+avoid blocking existing writers; interrupted nontransactional migrations require
+the runner's partial-state investigation before retry.
+
+### Embedded JSON review
+
+Chat uploads from the composer's `purpose: "chat"` storage route are not Sources.
+The session repository persists their URL in three real byte-owning locations:
+turn attachments, saved `metadata.send` controls used by Ask again, and queued
+`send` payloads. Each has an independent `@>` containment arm backed by a
+concurrent GIN `jsonb_path_ops` index. Legacy/database alias checks expand just
+these attachment arrays and apply the same bounded URL predicate in SQL.
+
+Reviewed and excluded as non-ownership:
+
+- Session context-source ids, refs and created-source ids point at document ids;
+  citations are snippets/page references, web-source URLs are remote web pages,
+  continuation is clipped inline transcript text. Attachment-chip Markdown is
+  written alongside the structured attachment arrays, not a separate upload.
+- `assistant_conversations` has no messages/JSON body: it indexes a saved
+  conversation document by id. MCP message strings become uploaded Markdown
+  owned by that document/version, not another JSON object reference.
+- Agent-AI message content, tool input/output, task result/metadata, memory value,
+  and execution input/output are opaque client JSON with no storage-upload
+  producer or structured file URL field. Request-only query attachments are not
+  persisted there. Model endpoint JSON stores offered model ids/capabilities.
+- Mindmap document/revision images and thumbnails are inline data URIs; hrefs
+  are arbitrary click-through links, presence is node ids. Publishing uploads an
+  outline onto a separately guarded document.
+- Document-note rich content and anchors are prose/selectors; generated-document
+  citations and artifact source URLs are provenance for inline bodies.
+- Collab message/meeting JSON stores event ids, phases, participants and prose;
+  Brand capabilities/refs store flags and network CIDs. Feedback screenshots are
+  inline bytea, not object-storage URLs.
+- Proposal evidence URLs are funder web pages; draft/review/input JSON references
+  document ids and quotes. Trend-cache result source URLs are remote web hits.
+  OCR/batch JSON carries processing results/options; their actual input byte
+  URLs are the separately guarded job/batch columns.
+- Marketing run research URLs are trend-search hits; content-history metadata
+  is not written. Founder snapshots/reviews carry document ids, in-app viewer
+  links, excerpts and model metadata, not uploaded file references.
+  Distribution provenance/event JSON records tools, run ids, statuses and
+  scores; agreements point at their document via a numeric column. Scenario
+  references are document ids/open targets, repo outputs are code text and
+  published document ids, and accelerator/prospector URLs are public websites.
+- OCR dispatch/outbox JSON duplicates `transcriptionMetadata.audioUrl` for
+  processing. It is not an independent owner: these history rows outlive their
+  documents. Guarding them would pin audio after both recording and transcript
+  disappear. OCR results contain text blocks, extraction timing, and chunks;
+  the live job guard is its active `document_url` column.
 
 ### Provenance and residual legacy risk
 
@@ -157,6 +250,17 @@ reference check but before its provider deletion. Reference writers do not take
 a common lock; adding a deletion-only lock would not prevent this. Ingress
 ownership checks and immutable version conventions limit, but do not eliminate,
 that window.
+
+### Known follow-ups
+
+- Brand media, Brand channel avatar, collab persona avatar, and persisted chat
+  attachment/queue owners protect
+  bytes, but their owner deletion paths do not yet plan byte cleanup. Their
+  lifecycle wiring is a known follow-up; orphan audit finds the resulting
+  unreferenced inventory in the meantime.
+- `createDocumentVersionLifecycle` can repoint a document after Adeu produced an
+  in-place URL not held by an immutable version. This package-level replacement
+  leak is deliberately not changed here; orphan audit covers that old object.
 
 ## Consequences
 

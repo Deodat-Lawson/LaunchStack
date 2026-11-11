@@ -241,14 +241,16 @@ writing; this estimate includes S3 URLs that may be skipped.
 
 At document/version upload ingress, S3, Blob and UploadThing URLs parsed at the
 currently configured provider location must resolve to a live inventory row
-(`deleted_at IS NULL`) stamped with the active company. Foreign-company,
-unstamped, missing and deleted objects return the same `fileNotInWorkspace` 404.
-Parsed refs at other locations are external links and remain accepted without a
-ledger check. Database URLs retain their `file_uploads.company_id` check;
-unrecognized external links remain accepted. Consequently legacy unledgered
-objects at our current provider locations cannot be attached through client
-ingress until migrated; existing server-side re-embedding and version revert
-do not create a fresh client reference.
+(`deleted_at IS NULL`) stamped with the active company, and the URL must be
+byte-identical to that row's canonical URL. Foreign-company, unstamped, missing,
+deleted, alternate-host and percent-encoded aliases return the same
+`fileNotInWorkspace` 404. Parsed refs at other locations are external links and
+remain accepted without a ledger check. Database URLs retain their
+`file_uploads.company_id` check; unrecognized external links remain accepted.
+Consequently legacy unledgered objects at our current provider locations cannot
+be attached through client ingress until the ledger backfill above records them;
+existing server-side re-embedding and version revert do not create a fresh
+client reference.
 
 The single unrecorded write path is `POST /api/storage/presign`: it returns a
 direct-upload capability but has no completion callback and no repository caller.
@@ -259,20 +261,26 @@ not in this inventory.
 
 `deletion/plan.ts` accepts a caller-owned transaction and actor/reason/trace
 context. Document plans include current/version URLs, attached OCR and batch
-inputs and website-preview pictures. Audio metadata only protects a separate
-recording's bytes; a transcript deletion never plans them. Version plans snapshot the
-version and its jobs. Object plans clean up replaced URLs. Empty candidates
-produce no plan or event; duplicate URLs produce one item per request.
+inputs, website-preview pictures and audio metadata. Audio is snapshotted by
+both recording/transcript plans so either deletion order eventually frees bytes;
+references retain it until neither survives. Version plans snapshot the version
+and its jobs, which are removed in the same relational transaction.
+Object plans clean up replaced URLs, including version revert.
+Empty candidates produce no plan or event; duplicate URLs produce one item per request.
 
 The worker uses short ordinary transactions to lock and precheck request/items,
 then calls network providers outside SQL transactions or advisory locks. It
-re-reads pending item state under a row lock before storing a provider outcome.
-It protects live document/version URLs and preview/audio metadata, attached OCR
-and batch inputs, brand media and configured avatar URLs across **all** tenants.
-Indexed source/inventory equality is followed by a SQL prefilter (full provider
-key substring or bounded numeric file-id regex) and canonical ref comparison of
-only those plausible alias URLs. Planning resolves refs before falling back to
-exact inventory URL lookup.
+re-reads item state under a row lock before storing a provider outcome. Confirmed
+success can supersede a concurrent retry-budget block. It protects live
+document/version URLs, preview/audio metadata, queued/processing OCR inputs with
+live documents, unfinished batch inputs even when detached, brand media and
+configured avatar URLs across **all** tenants. Persisted chat turn attachments,
+saved send-metadata attachments, and queued-send attachments also retain bytes;
+their JSON containment arms use GIN `jsonb_path_ops` indexes. Every exact protected column has
+its own indexed SQL arm. Ledgered providers use canonical equality only; legacy
+providers use a bounded key prefilter plus ref comparison. Numeric database URLs
+protect bytes on any origin, including historical localhost audio metadata,
+without a trusted-origin parser requirement. Planning still prefers frozen refs.
 A foreign company stamp blocks deletion; database objects additionally require
 matching upload-row provenance. Legacy provider objects without inventory rely
 on the global live-reference check. ADR-015 records the residual race where a
@@ -283,5 +291,12 @@ or `skipped`. Unrecognized links are skipped; ambiguous identities are
 quarantined. Both carry null refs, never invented provider keys. Requests stay
 pending while retryable items exist, become blocked for blocked/quarantined
 items, and otherwise complete. Outbox dead lettering blocks remaining pending
-items with `retry_budget_exhausted`. Plans and items remain as audit records
-after documents, versions and tenants are removed.
+items with `retry_budget_exhausted`. Event replay resets only those blocks to
+pending and resumes cleanup; a dead event is operationally blocked even if its
+request still reads pending because a failure callback could not persist.
+Plans and items remain as audit records after documents, versions and tenants
+are removed. External-backed database upload pointers plan both the pointer and
+its provider object with the upload row's provenance; live pointer usage protects
+the provider bytes. ADR-015 records owner-delete follow-ups for protected Brand,
+persona and chat objects, the reviewed JSON exclusions, and package-level URL
+replacement orphan-audit coverage.

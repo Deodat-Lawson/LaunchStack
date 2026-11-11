@@ -57,6 +57,7 @@ describe("worker ingestion archive cleanup", () => {
             requestedBy: "user1",
             reason: "archive_expanded",
             traceId: "trace-zip",
+            rememberConnectorDeletion: false,
         });
         expect(mocks.deleteJob).toHaveBeenCalledOnce();
         expect(mocks.deleteDocumentCore.mock.invocationCallOrder[0]).toBeLessThan(

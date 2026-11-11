@@ -36,6 +36,7 @@ export function createIngestionPipelinePort(logger: LoggerPort): ExtractionPipel
                 requestedBy: input.userId,
                 reason: "archive_expanded",
                 traceId: input.traceId,
+                rememberConnectorDeletion: false,
             });
             await tx.delete(ocrJobs).where(eq(ocrJobs.id, input.ocrJobId));
         });

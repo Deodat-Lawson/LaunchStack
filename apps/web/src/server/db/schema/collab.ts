@@ -161,6 +161,9 @@ export const collabAgentPersona = pgTable(
             table.companyId,
             table.key
         ),
+        avatarUrlIdx: index("collab_persona_avatar_url_idx")
+            .using("hash", table.avatarUrl)
+            .concurrently(),
     })
 );
 

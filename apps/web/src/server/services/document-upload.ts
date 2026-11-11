@@ -14,6 +14,7 @@ import { detectStorageType, toAbsoluteUrl, type StorageType } from "./detect-sto
 import { authorizeInternalFileRef } from "./internal-file-ref";
 import { createDocumentLifecycle, type CreatedDocumentLifecycle } from "./document-creation";
 import { deleteDocumentCore } from "./document-delete";
+import { planObjectDeletion } from "~/server/storage/deletion/plan";
 import { db } from "~/server/db";
 import { hasTokens } from "~/lib/credits";
 import { isMeteringEnforced } from "@launchstack/store/credits";
@@ -256,7 +257,8 @@ export async function processDocumentUpload({
             source: "transcription",
             audioFilename,
             audioDocumentId: audioLifecycle.document.id,
-            audioUrl: resolvedDocumentUrl,
+            // Persist the recording's canonical reference, not its processing URL.
+            audioUrl: audioLifecycle.document.url,
             // Tells the viewer whether the recording has a picture.
             mediaMimeType: mimeType ?? null,
             language: transcriptionResult.language,
@@ -292,24 +294,33 @@ export async function processDocumentUpload({
                 },
             });
         } catch (error) {
-            // A recording row this request created, with no transcript beside
-            // it, is the orphan the reordering above exists to prevent.
-            if (audioLifecycle.created) {
-                await db
-                    .transaction(tx =>
-                        deleteDocumentCore(tx, audioLifecycle.document.id, {
-                            requestedBy: user.userId,
-                            reason: "transcript_rollback",
-                            traceId: randomUUID(),
-                        })
+            // The source upload belongs to the caller and may be reused on retry.
+            // Only the transcript bytes were created by this attempt.
+            await db
+                .transaction(async tx => {
+                    const deletionContext = {
+                        requestedBy: user.userId,
+                        reason: "transcript_rollback",
+                        traceId: randomUUID(),
+                    };
+                    await planObjectDeletion(tx, {
+                        ...deletionContext,
+                        companyId: user.companyId,
+                        urls: [textBlob.url],
+                    });
+                    if (audioLifecycle.created) {
+                        await deleteDocumentCore(tx, audioLifecycle.document.id, {
+                            ...deletionContext,
+                            planStorageDeletion: false,
+                        });
+                    }
+                })
+                .catch((cleanupError: unknown) =>
+                    console.error(
+                        `[DocumentUpload] Could not roll back recording ${audioLifecycle.document.id} after its transcript failed:`,
+                        cleanupError
                     )
-                    .catch((cleanupError: unknown) =>
-                        console.error(
-                            `[DocumentUpload] Could not remove recording ${audioLifecycle.document.id} after its transcript failed:`,
-                            cleanupError
-                        )
-                    );
-            }
+                );
             throw error;
         }
 

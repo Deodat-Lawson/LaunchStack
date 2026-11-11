@@ -1,5 +1,11 @@
 import { and, asc, eq, inArray } from "drizzle-orm";
-import { document, documentVersions, ocrJobs, uploadBatchFiles } from "@launchstack/store/schema";
+import {
+    document,
+    documentVersions,
+    fileUploads,
+    ocrJobs,
+    uploadBatchFiles,
+} from "@launchstack/store/schema";
 import { enqueueOutboxEventsWithRevive } from "@launchstack/orchestration";
 import { eventIds, PROTOCOL_VERSION } from "@launchstack/orchestration/pipeline-events";
 
@@ -15,11 +21,17 @@ export interface DeletionContext {
     traceId: string;
 }
 
-/** Only owned preview bytes; audioUrl belongs to the separate recording document. */
+function metadataAudioUrls(metadata: unknown): string[] {
+    if (!metadata || typeof metadata !== "object") return [];
+    const audioUrl = (metadata as Record<string, unknown>).audioUrl;
+    return typeof audioUrl === "string" ? [audioUrl] : [];
+}
+
+/** Snapshot candidates, including shared audio; the worker decides whether bytes are live. */
 export function metadataStorageUrls(metadata: unknown): string[] {
     if (!metadata || typeof metadata !== "object") return [];
     const record = metadata as Record<string, unknown>;
-    const urls: string[] = [];
+    const urls = metadataAudioUrls(metadata);
     const preview = record.websitePreview;
     if (
         preview &&
@@ -39,6 +51,7 @@ async function insertPlan(
         documentId?: number;
         documentVersionId?: number;
         urls: readonly (string | null)[];
+        audioUrls?: readonly string[];
     }
 ): Promise<number | null> {
     const urls = [
@@ -47,19 +60,79 @@ async function insertPlan(
         ),
     ];
     if (!urls.length) return null;
-    const parsedUrls = urls.map(sourceUrl => ({ sourceUrl, parsed: refFromStoredUrl(sourceUrl) }));
-    // Canonical identity wins over spelling (public S3 aliases, UploadThing hosts,
-    // and absolute/relative database URLs). Exact URLs are only a legacy fallback.
-    const ledger = await findStoredObjectsByUrls(
-        tx,
-        parsedUrls.filter(candidate => !candidate.parsed.ok).map(candidate => candidate.sourceUrl)
+    type Candidate = {
+        sourceUrl: string;
+        ref?: ObjectRef;
+        reason?: "ambiguous" | "unrecognized";
+        foreign?: boolean;
+    };
+    const resolve = async (sources: readonly string[]): Promise<Candidate[]> => {
+        const parsedUrls = sources.map(sourceUrl => ({
+            sourceUrl,
+            parsed: refFromStoredUrl(sourceUrl),
+        }));
+        const ledger = await findStoredObjectsByUrls(
+            tx,
+            parsedUrls
+                .filter(candidate => !candidate.parsed.ok)
+                .map(candidate => candidate.sourceUrl)
+        );
+        return parsedUrls.map<Candidate>(({ sourceUrl, parsed }) => {
+            if (parsed.ok) return { sourceUrl, ref: parsed.ref };
+            // Only historical audio metadata may recover a former app origin.
+            // Keep the original source URL and independently check file ownership.
+            const databaseId = input.audioUrls?.includes(sourceUrl)
+                ? /\/api\/files\/(\d+)(?:[/?#]|$)/.exec(sourceUrl)?.[1]
+                : undefined;
+            if (
+                parsed.reason === "unrecognized" &&
+                databaseId &&
+                Number.isSafeInteger(Number(databaseId))
+            ) {
+                return {
+                    sourceUrl,
+                    ref: {
+                        adapter: "database",
+                        storageLocationId: "database:file_uploads",
+                        key: BigInt(databaseId).toString(),
+                    },
+                };
+            }
+            const rows = ledger.filter(row => row.url === sourceUrl);
+            if (rows.length === 1) return { sourceUrl, ref: storedObjectRef(rows[0]!) };
+            return { sourceUrl, reason: rows.length > 1 ? "ambiguous" : parsed.reason };
+        });
+    };
+    const direct = await resolve(urls);
+    const pointerIds = direct.flatMap(candidate =>
+        candidate.ref?.adapter === "database" &&
+        /^\d+$/.test(candidate.ref.key) &&
+        Number.isSafeInteger(Number(candidate.ref.key))
+            ? [Number(candidate.ref.key)]
+            : []
     );
-    const candidates = parsedUrls.map(({ sourceUrl, parsed }) => {
-        if (parsed.ok) return { sourceUrl, ref: parsed.ref };
-        const rows = ledger.filter(row => row.url === sourceUrl);
-        if (rows.length === 1) return { sourceUrl, ref: storedObjectRef(rows[0]!) };
-        return { sourceUrl, reason: rows.length > 1 ? ("ambiguous" as const) : parsed.reason };
-    });
+    const pointers = pointerIds.length
+        ? await tx.select().from(fileUploads).where(inArray(fileUploads.id, pointerIds))
+        : [];
+    const external = new Map<string, boolean>();
+    for (const pointer of pointers) {
+        if (pointer.storageProvider === "database" || !pointer.storageUrl) continue;
+        external.set(
+            pointer.storageUrl,
+            external.get(pointer.storageUrl) === true ||
+                pointer.companyId !== BigInt(input.companyId)
+        );
+    }
+    const expanded = (await resolve([...external.keys()])).map(candidate => ({
+        ...candidate,
+        foreign: external.get(candidate.sourceUrl) === true,
+    }));
+    // Check provider bytes while their pointer rows still exist. A foreign/null
+    // pointer's block is durable even if its row disappears before delivery.
+    const candidates = [
+        ...expanded,
+        ...direct.filter(candidate => !external.has(candidate.sourceUrl)),
+    ];
     const refs = candidates.flatMap(candidate => (candidate.ref ? [candidate.ref] : []));
     const byRef = await findStoredObjectsByRefs(tx, refs);
     const refRows = new Map(byRef.map(row => [refIdentity(storedObjectRef(row)), row]));
@@ -86,12 +159,15 @@ async function insertPlan(
                 adapter: ref?.adapter,
                 storageLocationId: ref?.storageLocationId,
                 objectKey: ref?.key,
-                state: ref
-                    ? ("pending" as const)
-                    : candidate.reason === "ambiguous"
-                      ? ("quarantined" as const)
-                      : ("skipped" as const),
-                errorCode: candidate.reason ?? null,
+                state:
+                    candidate.foreign && ref
+                        ? ("blocked" as const)
+                        : ref
+                          ? ("pending" as const)
+                          : candidate.reason === "ambiguous"
+                            ? ("quarantined" as const)
+                            : ("skipped" as const),
+                errorCode: candidate.foreign && ref ? "foreign_object" : (candidate.reason ?? null),
             };
         })
     );
@@ -140,6 +216,10 @@ export async function planDocumentDeletion(
             companyId: doc.companyId,
             scope: "document",
             documentId: doc.id,
+            audioUrls: [
+                ...metadataAudioUrls(doc.ocrMetadata),
+                ...versions.flatMap(version => metadataAudioUrls(version.metadata)),
+            ],
             urls: [
                 doc.url,
                 ...metadataStorageUrls(doc.ocrMetadata),
@@ -186,6 +266,7 @@ export async function planVersionDeletion(
         companyId: doc.companyId,
         scope: "version",
         documentVersionId: version.id,
+        audioUrls: metadataAudioUrls(version.ocrMetadata),
         urls: [
             version.url,
             ...metadataStorageUrls(version.ocrMetadata),

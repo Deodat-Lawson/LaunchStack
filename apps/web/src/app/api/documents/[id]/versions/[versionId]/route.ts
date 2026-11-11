@@ -27,7 +27,8 @@ import { and, eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import { document, documentVersions } from "@launchstack/store/schema";
-import { deleteFileByUrl } from "~/lib/storage";
+import { deleteStoredObjects } from "~/server/storage/delete-objects";
+import { refFromStoredUrl } from "~/server/storage/stored-url";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
@@ -140,7 +141,20 @@ export async function DELETE(
             // be retried. A missing blob (404 from storage) is logged but does not
             // block DB cleanup — we still want the row and embeddings gone.
             try {
-                await deleteFileByUrl(targetVersion.url);
+                const parsed = refFromStoredUrl(targetVersion.url);
+                if (!parsed.ok) {
+                    throw new Error(
+                        `Stored file URL is ${parsed.reason}; cannot identify the object to delete`
+                    );
+                }
+                const [result] = await deleteStoredObjects([parsed.ref]);
+                if (!result || (result.outcome !== "deleted" && result.outcome !== "not_found")) {
+                    throw new Error(
+                        result?.message ??
+                            result?.errorCode ??
+                            "Storage deletion returned no result"
+                    );
+                }
             } catch (blobError) {
                 console.warn(
                     `[Versions] Blob delete failed for doc=${documentId} version=${versionId} url=${targetVersion.url}:`,

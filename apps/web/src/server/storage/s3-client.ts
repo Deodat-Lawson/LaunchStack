@@ -2,7 +2,8 @@ import {
     S3Client,
     PutObjectCommand,
     GetObjectCommand,
-    DeleteObjectCommand,
+    DeleteObjectsCommand,
+    type DeleteObjectsCommandOutput,
     CreateBucketCommand,
     HeadBucketCommand,
 } from "@aws-sdk/client-s3";
@@ -91,21 +92,14 @@ export function getObjectUrl(key: string): string {
     return `${endpoint.replace(/\/+$/, "")}/${bucket}/${key}`;
 }
 
-export async function deleteObject(key: string): Promise<void> {
-    const client = getS3Client();
-    const bucket = getS3BucketName();
-    try {
-        await client.send(
-            new DeleteObjectCommand({
-                Bucket: bucket,
-                Key: key,
-            })
-        );
-    } catch (err) {
-        throw new Error(
-            `Failed to delete object "${key}" from S3 at ${env.server.NEXT_PUBLIC_S3_ENDPOINT}: ${err instanceof Error ? err.message : String(err)}`
-        );
-    }
+/** Low-level batch operation; adapters enforce location identity and batch size. */
+export async function deleteObjects(keys: readonly string[]): Promise<DeleteObjectsCommandOutput> {
+    return getS3Client().send(
+        new DeleteObjectsCommand({
+            Bucket: getS3BucketName(),
+            Delete: { Objects: keys.map(Key => ({ Key })), Quiet: false },
+        })
+    );
 }
 
 // ---------------------------------------------------------------------------

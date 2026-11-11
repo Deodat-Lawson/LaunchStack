@@ -45,30 +45,23 @@ jest.mock("~/env", () => ({
 
 const mockPutObject = jest.fn().mockResolvedValue(undefined);
 const mockGetObjectUrl = jest.fn((key: string) => `${TEST_ENDPOINT}/${TEST_BUCKET}/${key}`);
-const mockDeleteObject = jest.fn().mockResolvedValue(undefined);
 const mockEnsureBucketExists = jest.fn().mockResolvedValue(undefined);
 
 jest.mock("~/server/storage/s3-client", () => ({
     putObject: (...args: unknown[]) => (mockPutObject as (...a: unknown[]) => unknown)(...args),
     getObjectUrl: (key: string) => mockGetObjectUrl(key),
-    deleteObject: (...args: unknown[]) =>
-        (mockDeleteObject as (...a: unknown[]) => unknown)(...args),
     ensureBucketExists: () => mockEnsureBucketExists(),
 }));
 
 // ─── Mock database ───────────────────────────────────────────────────────────
 
 const mockInsertReturning = jest.fn(() => Promise.resolve([{ id: 42 }]));
-const mockDelete = jest.fn().mockResolvedValue(undefined);
 
 const mockDb = {
     insert: jest.fn(() => ({
         values: jest.fn(() => ({
             returning: mockInsertReturning,
         })),
-    })),
-    delete: jest.fn(() => ({
-        where: mockDelete,
     })),
 };
 
@@ -129,7 +122,6 @@ beforeEach(() => {
     mockGetObjectUrl
         .mockClear()
         .mockImplementation((key: string) => `${TEST_ENDPOINT}/${TEST_BUCKET}/${key}`);
-    mockDeleteObject.mockClear().mockResolvedValue(undefined);
     mockEnsureBucketExists.mockClear().mockResolvedValue(undefined);
     mockInsertReturning.mockClear().mockImplementation(() => Promise.resolve([{ id: 42 }]));
     mockFetchBlob.mockClear().mockResolvedValue(new Response("blob-content"));
@@ -138,7 +130,6 @@ beforeEach(() => {
 
 import {
     uploadFile,
-    getFileUrl,
     fetchFile,
     StorageError,
     resolveStorageBackend,
@@ -167,6 +158,11 @@ describe("Feature: storage unification, Property 5: Upload result shape consiste
                     expect(result.provider).toBe("s3");
                     expect(result.url).toContain(TEST_ENDPOINT);
                     expect(result.pathname).toMatch(/^documents\/.+/);
+                    expect(result.ref).toEqual({
+                        adapter: "s3",
+                        storageLocationId: `s3:${TEST_ENDPOINT}@${TEST_BUCKET}`,
+                        key: result.pathname,
+                    });
                 }
             ),
             { numRuns: 50 }
@@ -188,6 +184,11 @@ describe("Feature: storage unification, Property 5: Upload result shape consiste
                     expect(result.url).toMatch(/^\/api\/files\/\d+$/);
                     expect(result.provider).toBe("database");
                     expect(result.pathname).toMatch(/^documents\/.+/);
+                    expect(result.ref).toEqual({
+                        adapter: "database",
+                        storageLocationId: "database:file_uploads",
+                        key: "42",
+                    });
                 }
             ),
             { numRuns: 50 }
@@ -264,26 +265,6 @@ describe("Feature: storage unification, Property 6: Upload error propagation", (
 // ─── Property 9: Mixed-provider document retrieval ───────────────────────────
 
 describe("Feature: storage unification, Property 9: URL resolution and fetching", () => {
-    it("getFileUrl resolves S3 keys via endpoint and passes /api/files URLs through", () => {
-        setProvider("s3");
-
-        fc.assert(
-            fc.property(
-                fc
-                    .string({ minLength: 1, maxLength: 80, unit: "grapheme" })
-                    .map(s => `documents/${s.replace(/[^a-zA-Z0-9_-]/g, "x") || "file"}`),
-                key => {
-                    const s3Url = getFileUrl(key, "s3");
-                    expect(s3Url).toBe(`${TEST_ENDPOINT}/${TEST_BUCKET}/${key}`);
-
-                    const dbUrl = getFileUrl("/api/files/42", "database");
-                    expect(dbUrl).toBe("/api/files/42");
-                }
-            ),
-            { numRuns: 50 }
-        );
-    });
-
     it("fetchFile routes S3 URLs to plain fetch and legacy private-blob URLs to fetchBlob", async () => {
         setProvider("s3");
 

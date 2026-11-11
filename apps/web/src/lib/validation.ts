@@ -859,13 +859,10 @@ export const UpdateArtifactSchema = z
 // ---------------------------------------------------------------------------
 
 /**
- * One stored turn. `citations` and `attachments` travel as opaque JSON: they
- * are the UI's own render payload (`ThreadReference`, `EphemeralAttachment`),
- * replayed verbatim when the session is reopened, and pinning their shape here
- * would mean a schema change every time a citation gains a field. They are
- * bounded instead of parsed — an array cap plus the text cap is what keeps a
- * session row from becoming a dumping ground.
+ * Stored attachments retain their render payload, but must expose a URL so
+ * the repository can authorize every reference before persisting it.
  */
+const SessionAttachmentSchema = z.object({ url: z.string().min(1).max(4096) }).passthrough();
 export const ChatSendPayloadSchema = z.object({
     recallText: z.string().max(120_000).optional(),
     origin: z.enum(["user", "attachment", "plan-implementation"]).optional(),
@@ -946,7 +943,7 @@ export const SessionMessageSchema = z.object({
     refs: z.array(z.string().max(64)).max(200).optional(),
     // One per cited source: an answer about every attached file cites each one.
     citations: z.array(z.unknown()).max(100).optional(),
-    attachments: z.array(z.unknown()).max(100).optional(),
+    attachments: z.array(SessionAttachmentSchema).max(100).optional(),
     model: z.string().max(120).nullable().optional(),
     tokens: z.number().int().nonnegative().nullable().optional(),
     /** Agent handle that produced (assistant) or was addressed by (user) the turn. */

@@ -164,6 +164,9 @@ export const collabAgentPersona = pgTable(
         avatarUrlIdx: index("collab_persona_avatar_url_idx")
             .using("hash", table.avatarUrl)
             .concurrently(),
+        avatarFileIdIdx: index("collab_persona_avatar_file_id_idx")
+            .on(sql`((regexp_match(${table.avatarUrl}, '/api/files/0*([0-9]+)([/?#]|$)'))[1])`)
+            .concurrently(),
     })
 );
 

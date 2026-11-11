@@ -49,9 +49,9 @@ and versions. Audio references are snapshotted even though a transcript does not
 uniquely own recording bytes: whichever document is deleted last must still
 request cleanup. Global references retain the bytes while the other survives.
 Future transcripts store the recording's canonical URL, not its absolute
-processing/fetch URL. The planner also recovers historical any-origin numeric
-audio aliases with the file row's company provenance, preserving their source URL.
-The `websitePreview.source` is provenance, not another preview object.
+processing/fetch URL. The planner recovers historical any-origin numeric file
+aliases in every candidate column with the file row's company provenance,
+preserving their source URL.
 Candidates are deduplicated per request. Empty candidates produce no request or event.
 
 Transcript-creation rollback is different: it must not plan the caller's source
@@ -82,16 +82,16 @@ event, with payload `{ requestId }` and the command's trace/company envelope.
 Requests start `pending`. Items start `pending`, `quarantined` (ambiguous), or
 `skipped` (unrecognized). The worker processes only pending items:
 
-| Transition | Meaning |
-| --- | --- |
-| pending → retained | Any live reference still uses these bytes; do not delete. |
-| pending → blocked | Foreign ownership or provider authorization/configuration refusal. |
-| pending → deleted | Provider acknowledged deletion. |
-| pending → not_found | Provider positively confirmed absence. |
-| pending → pending | Retryable provider result; persist attempt/error and throw after commit. |
-| pending → blocked | Outbox dead lettering; `retry_budget_exhausted`. |
-| blocked (retry_budget_exhausted) → pending | Redelivery/replay renews the cleanup attempt. |
-| blocked (retry_budget_exhausted) → deleted/not_found | A concurrent provider success wins: bytes are already gone. |
+| Transition                                           | Meaning                                                                  |
+| ---------------------------------------------------- | ------------------------------------------------------------------------ |
+| pending → retained                                   | Any live reference still uses these bytes; do not delete.                |
+| pending → blocked                                    | Foreign ownership or provider authorization/configuration refusal.       |
+| pending → deleted                                    | Provider acknowledged deletion.                                          |
+| pending → not_found                                  | Provider positively confirmed absence.                                   |
+| pending → pending                                    | Retryable provider result; persist attempt/error and throw after commit. |
+| pending → blocked                                    | Outbox dead lettering; `retry_budget_exhausted`.                         |
+| blocked (retry_budget_exhausted) → pending           | Redelivery/replay renews the cleanup attempt.                            |
+| blocked (retry_budget_exhausted) → deleted/not_found | A concurrent provider success wins: bytes are already gone.              |
 
 Every provider attempt increments `attempts`; shared-reference and provenance
 checks do not. Confirmed deleted/not-found refs stamp inventory `deleted_at`.
@@ -103,8 +103,15 @@ provider deletion/absence supersedes a concurrent retry-budget block and stamps
 the inventory. On redelivery, only `retry_budget_exhausted` blocks return to
 pending; provenance/provider blocks and quarantined identities require a
 separate operator decision. An event that is dead makes its request operationally
-blocked even if the callback could not persist the request/item status. Recovery
-is replay of that outbox event after resolving the cause (see the outbox runbook).
+blocked even if the callback could not persist the request/item status.
+`storageDeletionOperationalState` also reports pending requests without their
+outbox event as blocked (`event_missing`). The outbox company FK cascades on
+tenant removal, while cleanup requests intentionally survive. There is no
+in-product tenant-delete path. Operators must stop tenant removal until cleanup
+finishes; for an already removed tenant, inspect surviving inventory and requests
+and explicitly waive or perform approved manual cleanup rather than waiting for
+a vanished event. A surviving tenant's missing event can be recreated by the
+operator tooling; dead events use outbox replay after resolving the cause.
 Logs include trace id, request id and outcome counts.
 
 The spec's nullable-ref CHECK allowed only quarantined items while also requiring
@@ -114,24 +121,32 @@ This is a deliberate consistency correction, not a fabricated placeholder ref.
 
 ### Global shared-reference coverage
 
-Provider upload ingress requires an owned ledger ref's URL to be byte-identical
-to its recorded canonical URL; alternate hosts and percent-encoded spellings are
-rejected with the same workspace 404. A ledgered provider object's live reference
-check therefore uses exact canonical URL equality only.
+Every protected reference writer (document ingress, persona/channel avatars,
+persisted/queued chat attachments, and upload-batch registration) authorizes
+stored URLs through the shared `authorizeStoredObjectUrl` rule. Provider refs at
+the configured current location must be byte-identical to a live owned ledger
+row; aliases, deleted ledger rows and foreign owners are rejected with each
+caller's existing error convention. Provider refs at other locations are external
+links. Database refs must have owned file rows. Ledgered provider reference
+checks can therefore use exact canonical equality.
 
 Each protected column has a separate SQL UNION arm, rather than combining an
 indexed column and unindexed JSON expression with OR. Documents, versions, active
 job inputs, retryable batch inputs, and JSON preview/audio fields all have
 equality indexes. Media/avatar exact checks have hash indexes.
 
-Only legacy provider refs without ledger rows use the bounded full-key `strpos`
-prefilter and final parsed adapter/location/key comparison. Database refs have a
-conservative exception even when ledgered: any origin's URL matching
-`/api/files/0*<id>([/?#]|$)` protects bytes, on every guarded column including
-audio metadata, without requiring trusted-origin parsing. This preserves old
-absolute processing URLs such as `http://localhost:3000/api/files/<id>` when
-APP_PUBLIC_URL was unset. URL candidates are filtered in SQL, never pulled as a
-full URL population into the worker. The checks are global, never tenant-filtered.
+Only legacy provider refs without ledger rows use a case-insensitive prefilter
+matching every key character literally or percent-encoded, followed by parsed
+adapter/location/key comparison. The worker batches this legacy scan once per
+request. Database refs conservatively protect any origin on every guarded scalar
+column via `(regexp_match(col, '/api/files/0*([0-9]+)([/?#]|$)'))[1]` equality
+and concurrent expression indexes. Only historical database chat attachments need
+JSON-array scans; today's chat upload route is S3-only. Pointer matching has a
+separate indexed `file_uploads.storage_url` equality arm, with legacy prefilters
+only for unledgered provider refs. Checks are global, never tenant-filtered.
+Inventory rows imported by `backfill-file-uploads` retain this legacy matching
+path: their historical owners never passed canonical ingress validation. Their
+company stamp still participates in the normal provenance checks.
 
 There is **no cross-call advisory lock or reserved database connection**.
 The outbox claims an event with `FOR UPDATE SKIP LOCKED`; request/item row locks
@@ -176,14 +191,16 @@ Brand profile URLs, credential/model endpoint URLs and OCR webhooks
 are remote addresses, not stored objects. Profile images and feedback attachments
 store their bytes inline rather than referring to the object-storage adapters.
 
-The append-only engine migrations index document/version URL and preview/audio
-metadata, OCR input URLs, and batch storage URLs. Product migrations index
-media/avatar equality, chat JSON containment, and create request/item tables. New indexes use Drizzle's
-`concurrently()` builder and generated `CREATE INDEX CONCURRENTLY`; the only
-generated-SQL adjustment is the migration runner's `-- launchstack:no-transaction`
-and `-- Reason:` headers. No journal or snapshot is hand-edited. These builds
-avoid blocking existing writers; interrupted nontransactional migrations require
-the runner's partial-state investigation before retry.
+The regenerated, unshipped engine migration builds all URL, preview/audio,
+extracted database-file-id, OCR/batch input, and pointer URL indexes concurrently.
+Product migrations index media/avatar equality and extracted file ids, chat JSON
+containment, and create request/item tables. All index additions to existing
+tables use Drizzle's `concurrently()` builder and generated
+`CREATE INDEX CONCURRENTLY`; the only generated-SQL adjustment is the migration
+runner's `-- launchstack:no-transaction` and `-- Reason:` headers. No journal or
+snapshot is hand-edited. These builds avoid blocking existing writers;
+interrupted nontransactional migrations require the runner's partial-state
+investigation before retry.
 
 ### Embedded JSON review
 
@@ -239,6 +256,10 @@ Database refs additionally require the existing `file_uploads.company_id` to
 match; null and foreign stamps block with `foreign_object`. An already absent
 file may safely produce not-found. These checks run before provider invocation,
 even if the request acquired a URL from a malicious relational attachment.
+Every provider attempt also rechecks `file_uploads` pointer provenance, blocking
+if any matching pointer has a null or foreign company stamp, even after an item
+was forcibly reset to pending. Confirmed S3 deletion/absence removes same-company
+pointer rows in the outcome transaction so they cannot remain dangling.
 Layer 2 blocks new foreign/unledgered provider URL attachments at client ingress.
 
 Legacy provider refs without inventory cannot prove historical ownership.

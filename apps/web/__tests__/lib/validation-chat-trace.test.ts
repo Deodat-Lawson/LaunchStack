@@ -37,3 +37,33 @@ describe("SessionMessageSchema thinking trace", () => {
         expect(SessionMessageSchema.safeParse(turn(metadata)).success).toBe(false);
     });
 });
+
+describe("SessionMessageSchema stored attachments", () => {
+    it.each([null, "https://example.test/a", {}, { url: 12 }, { url: "" }])(
+        "rejects an attachment without an authorizable URL: %p",
+        attachment => {
+            expect(
+                SessionMessageSchema.safeParse({
+                    role: "user",
+                    text: "See this",
+                    attachments: [attachment],
+                }).success
+            ).toBe(false);
+        }
+    );
+
+    it("preserves the exact URL and the existing render payload", () => {
+        const attachment = {
+            id: "a1",
+            url: "https://s3.example/files/%61.png",
+            name: "a.png",
+            mimeType: "image/png",
+            kind: "image",
+            size: 20,
+        };
+        expect(
+            SessionMessageSchema.parse({ role: "user", text: "", attachments: [attachment] })
+                .attachments
+        ).toEqual([attachment]);
+    });
+});

@@ -8,6 +8,7 @@ import {
 } from "~/lib/validation";
 import { changeQueue, getSession } from "~/server/sessions/repository";
 import { requestTranslator } from "~/i18n/server";
+import { UploadAuthorizationError } from "~/server/services/upload-authorization-error";
 
 export const runtime = "nodejs";
 type Params = { params: Promise<{ sessionId: string }> };
@@ -58,7 +59,13 @@ async function update(request: Request, { params }: Params, claim: boolean) {
                   },
                   { status: 404 }
               );
-    } catch {
+    } catch (error) {
+        if (error instanceof UploadAuthorizationError) {
+            return NextResponse.json(
+                { error: requestTranslator(request, "upload.server.errors")("fileNotInWorkspace") },
+                { status: error.status }
+            );
+        }
         return serverError(
             requestTranslator(request, "workspace.server.errors")("updateQueueFailed")
         );

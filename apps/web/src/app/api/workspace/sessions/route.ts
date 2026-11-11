@@ -13,6 +13,7 @@ import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { CreateSessionSchema, serverError, validateRequestBody } from "~/lib/validation";
 import { createSession, listSessions } from "~/server/sessions/repository";
 import { requestTranslator } from "~/i18n/server";
+import { UploadAuthorizationError } from "~/server/services/upload-authorization-error";
 
 export const runtime = "nodejs";
 
@@ -49,6 +50,12 @@ export async function POST(request: Request) {
         );
         return NextResponse.json({ session }, { status: 201 });
     } catch (error) {
+        if (error instanceof UploadAuthorizationError) {
+            return NextResponse.json(
+                { error: requestTranslator(request, "upload.server.errors")("fileNotInWorkspace") },
+                { status: error.status }
+            );
+        }
         console.error("[workspace/sessions] create failed:", error);
         return serverError(requestTranslator(request, "workspace.server.errors")("saveChatFailed"));
     }

@@ -28,6 +28,7 @@ import {
     requireWorkspacePermission,
 } from "~/lib/require-workspace-context";
 import { UpdatePersonaSchema } from "~/server/collab/agent-schemas";
+import { UploadAuthorizationError } from "~/server/services/upload-authorization-error";
 import { archivePersona, getPersonaById, updatePersona } from "~/server/collab/personas";
 
 export const dynamic = "force-dynamic";
@@ -102,6 +103,12 @@ export async function PATCH(
         if (!persona) return NextResponse.json({ error: t("agentNotFound") }, { status: 404 });
         return NextResponse.json({ persona });
     } catch (err) {
+        if (err instanceof UploadAuthorizationError) {
+            return NextResponse.json(
+                { error: translatorFor(locale, "upload.server.errors")("fileNotInWorkspace") },
+                { status: err.status }
+            );
+        }
         const message = err instanceof Error ? err.message : t("saveAgentFailed");
         const conflict = /duplicate key|unique/i.test(message);
         return NextResponse.json(

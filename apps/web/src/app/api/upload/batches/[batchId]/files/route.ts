@@ -18,6 +18,8 @@ import {
     toFileSizeBigint,
     updateBatchStatus,
 } from "~/server/services/upload-batches";
+import { authorizeStoredObjectUrl } from "~/server/storage/authorize-stored-object-url";
+import { UploadAuthorizationError } from "~/server/services/upload-authorization-error";
 
 const RegisterFilesSchema = z.object({
     files: z
@@ -57,6 +59,20 @@ export async function POST(request: Request, { params }: { params: Promise<{ bat
         const batch = await findBatchOwnedByUser(batchId, ctx.data.authUserId);
         if (!batch) {
             return NextResponse.json({ error: t("batchNotFound") }, { status: 404 });
+        }
+
+        try {
+            for (const file of files) {
+                await authorizeStoredObjectUrl(file.storageUrl, ctx.data.companyId);
+            }
+        } catch (error) {
+            if (error instanceof UploadAuthorizationError) {
+                return NextResponse.json(
+                    { error: t("fileNotInWorkspace") },
+                    { status: error.status }
+                );
+            }
+            throw error;
         }
 
         const failedUpdates: { filename: string; relativePath?: string; reason: string }[] = [];

@@ -239,18 +239,15 @@ source `backfill-file-uploads`. Batches resume by file id, and replay is
 idempotent. `--dry-run` reports pointer rows remaining to inspect without
 writing; this estimate includes S3 URLs that may be skipped.
 
-At document/version upload ingress, S3, Blob and UploadThing URLs parsed at the
-currently configured provider location must resolve to a live inventory row
-(`deleted_at IS NULL`) stamped with the active company, and the URL must be
-byte-identical to that row's canonical URL. Foreign-company, unstamped, missing,
-deleted, alternate-host and percent-encoded aliases return the same
-`fileNotInWorkspace` 404. Parsed refs at other locations are external links and
-remain accepted without a ledger check. Database URLs retain their
-`file_uploads.company_id` check; unrecognized external links remain accepted.
-Consequently legacy unledgered objects at our current provider locations cannot
-be attached through client ingress until the ledger backfill above records them;
-existing server-side re-embedding and version revert do not create a fresh
-client reference.
+All protected client URL writers (documents/versions, persona/channel avatars,
+chat attachments including saved and queued sends, and upload batch files) use
+`authorizeStoredObjectUrl`. Recognized S3, Blob and UploadThing refs at the current
+configured location must resolve to a live inventory row stamped with the active
+company, and be byte-identical to its canonical URL. Deleted rows, foreign,
+unstamped, missing, alternate-host and encoded aliases are rejected using the
+caller's existing error convention. Provider refs at other locations remain
+external links. Database URLs require owned `file_uploads` rows. Existing
+server-side re-embedding and version revert do not create fresh client references.
 
 The single unrecorded write path is `POST /api/storage/presign`: it returns a
 direct-upload capability but has no completion callback and no repository caller.
@@ -278,9 +275,16 @@ configured avatar URLs across **all** tenants. Persisted chat turn attachments,
 saved send-metadata attachments, and queued-send attachments also retain bytes;
 their JSON containment arms use GIN `jsonb_path_ops` indexes. Every exact protected column has
 its own indexed SQL arm. Ledgered providers use canonical equality only; legacy
-providers use a bounded key prefilter plus ref comparison. Numeric database URLs
-protect bytes on any origin, including historical localhost audio metadata,
-without a trusted-origin parser requirement. Planning still prefers frozen refs.
+providers use one request-wide, encoding-safe case-insensitive key prefilter plus
+ref comparison. Numeric database URLs protect bytes on any origin with indexed
+extracted-id equality on scalar fields (JSON-array scans only for historical
+database chat attachments; chat uploads are S3-only today). Pointer lookup splits
+indexed exact URL equality from the unledgered-only legacy alias arm.
+Planning recovers historical numeric file URLs in every candidate column while
+preserving source spelling and preferring frozen refs.
+Rows sourced from `backfill-file-uploads` count as legacy for reference matching,
+but their company stamp still authorizes provenance; historical references to
+those objects were never canonicalized at ingress.
 A foreign company stamp blocks deletion; database objects additionally require
 matching upload-row provenance. Legacy provider objects without inventory rely
 on the global live-reference check. ADR-015 records the residual race where a
@@ -294,6 +298,11 @@ items, and otherwise complete. Outbox dead lettering blocks remaining pending
 items with `retry_budget_exhausted`. Event replay resets only those blocks to
 pending and resumes cleanup; a dead event is operationally blocked even if its
 request still reads pending because a failure callback could not persist.
+Pending requests whose outbox event disappeared are operationally blocked with
+`event_missing`; tenant deletion can cascade the event but never the audit rows.
+See ADR-015 for operator handling and the absence of an in-product tenant-delete
+path. Provider attempts recheck null/foreign pointer provenance, and confirmed S3
+deletion removes same-company pointer rows transactionally.
 Plans and items remain as audit records after documents, versions and tenants
 are removed. External-backed database upload pointers plan both the pointer and
 its provider object with the upload row's provenance; live pointer usage protects

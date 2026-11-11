@@ -4,6 +4,7 @@ import {
     UploadAuthorizationError,
 } from "~/server/services/internal-file-ref";
 import { configureOcr } from "@launchstack/conversion/ocr/config";
+import { authorizeStoredObjectUrl } from "~/server/storage/authorize-stored-object-url";
 
 const mockDbSelect = jest.fn();
 
@@ -18,7 +19,7 @@ jest.mock("~/env", () => ({
         server: {
             NEXT_PUBLIC_S3_ENDPOINT: "https://s3.example",
             S3_BUCKET_NAME: "files",
-            BLOB_READ_WRITE_TOKEN: "vercel_blob_rw_store_secret",
+            BLOB_READ_WRITE_TOKEN: "vercel_blob_rw_store_test",
             UPLOADTHING_TOKEN: Buffer.from(
                 JSON.stringify({ appId: "app", apiKey: "test", regions: ["iad1"] })
             ).toString("base64"),
@@ -27,7 +28,7 @@ jest.mock("~/env", () => ({
 }));
 
 function setupFileQuery(rows: Record<string, unknown>[]) {
-    const where = jest.fn().mockResolvedValue(rows);
+    const where = jest.fn().mockResolvedValue(rows.map(row => ({ deletedAt: null, ...row })));
     const from = jest.fn().mockReturnValue({ where });
     mockDbSelect.mockReturnValueOnce({ from });
 }
@@ -243,5 +244,41 @@ describe("authorizeInternalFileRef", () => {
         await expect(
             authorizeInternalFileRef("/api/files/123", COMPANY, "DOCLING")
         ).rejects.toMatchObject({ status: 503 });
+    });
+});
+
+describe("authorizeStoredObjectUrl", () => {
+    beforeEach(() => {
+        jest.clearAllMocks();
+        configureOcr({});
+    });
+
+    afterEach(() => configureOcr({}));
+
+    it("authorizes an owned database reference without requiring the OCR secret", async () => {
+        setupFileQuery([{ companyId: COMPANY }]);
+        await expect(authorizeStoredObjectUrl("/api/files/123", COMPANY)).resolves.toBe(123);
+    });
+
+    it.each([
+        "https://s3.example/other/documents/owned.pdf",
+        "https://another.public.blob.vercel-storage.com/owned.pdf",
+        "https://another.ufs.sh/f/owned",
+    ])("keeps parsed non-current provider locations external: %s", async url => {
+        await expect(authorizeStoredObjectUrl(url, COMPANY)).resolves.toBeNull();
+        expect(mockDbSelect).not.toHaveBeenCalled();
+    });
+
+    it("rejects a byte-identical owned provider URL after its ledger row is deleted", async () => {
+        const url = "https://s3.example/files/documents/owned.pdf";
+        setupFileQuery([{ companyId: COMPANY, url, deletedAt: new Date() }]);
+        await expect(authorizeStoredObjectUrl(url, COMPANY)).rejects.toMatchObject({ status: 404 });
+    });
+
+    it("does not let another company's database file become a reference", async () => {
+        setupFileQuery([{ companyId: 999n }]);
+        await expect(authorizeStoredObjectUrl("/api/files/123", COMPANY)).rejects.toMatchObject({
+            status: 404,
+        });
     });
 });

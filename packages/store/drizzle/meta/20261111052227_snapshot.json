@@ -1,6 +1,6 @@
 {
-  "id": "5786b30b-2231-4ba8-9fcc-0db3125c5e16",
-  "prevId": "51d959ab-82b6-443b-afc0-5299860326e5",
+  "id": "6e82a0a7-7449-4dd1-aba2-7779b7be422a",
+  "prevId": "312fb5c9-10d0-45ca-a0a1-cc1518bc2962",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -450,7 +450,22 @@
             }
           ],
           "isUnique": false,
-          "concurrently": false,
+          "concurrently": true,
+          "method": "btree",
+          "with": {}
+        },
+        "document_file_id_idx": {
+          "name": "document_file_id_idx",
+          "columns": [
+            {
+              "expression": "((regexp_match(\"url\", '/api/files/0*([0-9]+)([/?#]|$)'))[1])",
+              "asc": true,
+              "isExpression": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": true,
           "method": "btree",
           "with": {}
         },
@@ -474,6 +489,36 @@
           "columns": [
             {
               "expression": "(\"ocr_metadata\"->>'audioUrl')",
+              "asc": true,
+              "isExpression": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": true,
+          "method": "btree",
+          "with": {}
+        },
+        "document_website_preview_file_id_idx": {
+          "name": "document_website_preview_file_id_idx",
+          "columns": [
+            {
+              "expression": "((regexp_match(\"ocr_metadata\"->'websitePreview'->>'url', '/api/files/0*([0-9]+)([/?#]|$)'))[1])",
+              "asc": true,
+              "isExpression": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": true,
+          "method": "btree",
+          "with": {}
+        },
+        "document_audio_file_id_idx": {
+          "name": "document_audio_file_id_idx",
+          "columns": [
+            {
+              "expression": "((regexp_match(\"ocr_metadata\"->>'audioUrl', '/api/files/0*([0-9]+)([/?#]|$)'))[1])",
               "asc": true,
               "isExpression": true,
               "nulls": "last"
@@ -624,7 +669,22 @@
             }
           ],
           "isUnique": false,
-          "concurrently": false,
+          "concurrently": true,
+          "method": "btree",
+          "with": {}
+        },
+        "doc_versions_file_id_idx": {
+          "name": "doc_versions_file_id_idx",
+          "columns": [
+            {
+              "expression": "((regexp_match(\"url\", '/api/files/0*([0-9]+)([/?#]|$)'))[1])",
+              "asc": true,
+              "isExpression": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": true,
           "method": "btree",
           "with": {}
         },
@@ -648,6 +708,36 @@
           "columns": [
             {
               "expression": "(\"ocr_metadata\"->>'audioUrl')",
+              "asc": true,
+              "isExpression": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": true,
+          "method": "btree",
+          "with": {}
+        },
+        "doc_versions_website_preview_file_id_idx": {
+          "name": "doc_versions_website_preview_file_id_idx",
+          "columns": [
+            {
+              "expression": "((regexp_match(\"ocr_metadata\"->'websitePreview'->>'url', '/api/files/0*([0-9]+)([/?#]|$)'))[1])",
+              "asc": true,
+              "isExpression": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": true,
+          "method": "btree",
+          "with": {}
+        },
+        "doc_versions_audio_file_id_idx": {
+          "name": "doc_versions_audio_file_id_idx",
+          "columns": [
+            {
+              "expression": "((regexp_match(\"ocr_metadata\"->>'audioUrl', '/api/files/0*([0-9]+)([/?#]|$)'))[1])",
               "asc": true,
               "isExpression": true,
               "nulls": "last"
@@ -829,6 +919,21 @@
           ],
           "isUnique": false,
           "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "file_uploads_storage_url_idx": {
+          "name": "file_uploads_storage_url_idx",
+          "columns": [
+            {
+              "expression": "storage_url",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": true,
           "method": "btree",
           "with": {}
         }
@@ -1222,6 +1327,21 @@
               "expression": "document_url",
               "isExpression": false,
               "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": true,
+          "method": "btree",
+          "with": {}
+        },
+        "ocr_jobs_document_file_id_idx": {
+          "name": "ocr_jobs_document_file_id_idx",
+          "columns": [
+            {
+              "expression": "((regexp_match(\"document_url\", '/api/files/0*([0-9]+)([/?#]|$)'))[1])",
+              "asc": true,
+              "isExpression": true,
               "nulls": "last"
             }
           ],
@@ -1787,6 +1907,21 @@
               "expression": "storage_url",
               "isExpression": false,
               "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": true,
+          "method": "btree",
+          "with": {}
+        },
+        "upload_batch_files_storage_file_id_idx": {
+          "name": "upload_batch_files_storage_file_id_idx",
+          "columns": [
+            {
+              "expression": "((regexp_match(\"storage_url\", '/api/files/0*([0-9]+)([/?#]|$)'))[1])",
+              "asc": true,
+              "isExpression": true,
               "nulls": "last"
             }
           ],

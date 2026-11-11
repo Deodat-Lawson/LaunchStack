@@ -29,6 +29,7 @@ import { createPersona, ensureStarterPersonas, listPersonas } from "~/server/col
 import { readWorkspaceSetting } from "~/server/settings/store";
 import { getHub, listKnownNodes } from "~/server/collab/runtime";
 import { getSlackStatus } from "~/server/collab/slack";
+import { UploadAuthorizationError } from "~/server/services/upload-authorization-error";
 
 export const dynamic = "force-dynamic";
 
@@ -96,6 +97,12 @@ export async function POST(request: Request) {
         const persona = await createPersona(ctx.data.companyId, parsed.data);
         return NextResponse.json({ persona }, { status: 201 });
     } catch (err) {
+        if (err instanceof UploadAuthorizationError) {
+            return NextResponse.json(
+                { error: translatorFor(locale, "upload.server.errors")("fileNotInWorkspace") },
+                { status: err.status }
+            );
+        }
         const message = err instanceof Error ? err.message : t("createAgentFailed");
         // The unique index on (company_id, key) is the real guard; report it as a
         // conflict rather than a 500 so the form can point at the field.

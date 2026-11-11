@@ -64,6 +64,7 @@ import {
     PUT as writeQueue,
     POST as claimQueue,
 } from "~/app/api/workspace/sessions/[sessionId]/queue/route";
+import { UploadAuthorizationError } from "~/server/services/upload-authorization-error";
 
 const OWNER = { companyId: BigInt(42), userId: "user-a" };
 
@@ -131,6 +132,39 @@ describe("POST /api/workspace/sessions", () => {
 
         expect(response.status).toBe(400);
         expect(mockRepo.createSession).not.toHaveBeenCalled();
+    });
+});
+
+describe("stored attachment authorization responses", () => {
+    const refusal = () =>
+        new UploadAuthorizationError({ key: "upload.server.errors.fileNotInWorkspace" }, 404);
+    it("maps session creation refusals to the existing error response shape", async () => {
+        mockRepo.createSession.mockRejectedValueOnce(refusal());
+        const response = await createSessionRoute(
+            post("http://t", {
+                messages: [{ role: "user", text: "See this" }],
+            })
+        );
+        expect(response.status).toBe(404);
+        expect(await response.json()).toEqual({ error: expect.any(String) });
+    });
+    it("maps append refusals to 404 rather than a server error", async () => {
+        mockRepo.appendMessages.mockRejectedValueOnce(refusal());
+        const response = await appendRoute(
+            post("http://t", {
+                messages: [{ role: "user", text: "See this" }],
+            }),
+            params("s1")
+        );
+        expect(response.status).toBe(404);
+    });
+    it.each(["write", "claim"])("maps queue %s refusals to 404", async operation => {
+        mockRepo.changeQueue.mockRejectedValueOnce(refusal());
+        const response =
+            operation === "write"
+                ? await writeQueue(post("http://t", { revision: 0, items: [] }), params("s1"))
+                : await claimQueue(post("http://t", { revision: 0, id: "q1" }), params("s1"));
+        expect(response.status).toBe(404);
     });
 });
 

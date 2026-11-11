@@ -29,6 +29,7 @@ import {
 import { STARTER_AGENTS, starterDefinition, type StarterAgent } from "~/lib/agents/starter-agents";
 import { collabAgentPersona } from "~/server/db/schema";
 import { db } from "~/server/db";
+import { authorizeStoredObjectUrl } from "~/server/storage/authorize-stored-object-url";
 
 type PersonaRow = typeof collabAgentPersona.$inferSelect;
 
@@ -165,6 +166,7 @@ function temperatureColumn(value: number | null | undefined): number | null {
 }
 
 export async function createPersona(companyId: bigint, input: PersonaInput) {
+    if (input.avatarUrl) await authorizeStoredObjectUrl(input.avatarUrl, companyId);
     const [row] = await db
         .insert(collabAgentPersona)
         .values({
@@ -197,6 +199,7 @@ export async function updatePersona(
     personaDbId: string,
     patch: Partial<PersonaInput> & { archived?: boolean }
 ) {
+    if (patch.avatarUrl) await authorizeStoredObjectUrl(patch.avatarUrl, companyId);
     const [row] = await db
         .update(collabAgentPersona)
         .set({

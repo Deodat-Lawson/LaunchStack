@@ -358,6 +358,13 @@
       "when": 1794374889330,
       "tag": "20261111052809_storage_owner_file_id_indexes",
       "breakpoints": true
+    },
+    {
+      "idx": 51,
+      "version": "7",
+      "when": 1794375545943,
+      "tag": "20261111053905_storage_deletion_operations",
+      "breakpoints": true
     }
   ]
 }

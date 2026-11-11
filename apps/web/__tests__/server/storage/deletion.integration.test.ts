@@ -41,6 +41,13 @@ import {
 } from "~/server/storage/deletion/references";
 import { storageDeletionOperationalState } from "~/server/storage/deletion/status";
 import * as storedUrl from "~/server/storage/stored-url";
+import { requeueStorageDeletionRequest } from "~/server/storage/deletion/admin";
+import {
+    storageDeletionItemsProcessed,
+    storageDeletionOldestPendingAge,
+    storageDeletionPendingItems,
+    storageDeletionRequestsFinished,
+} from "~/server/metrics/storage-deletion";
 import {
     createFounderWeeklyReviewTestDatabase,
     type FounderWeeklyReviewTestDatabase,
@@ -150,6 +157,13 @@ describeDb("durable storage deletion (integration)", () => {
             .from(storageDeletionRequests)
             .where(eq(storageDeletionRequests.id, requestId));
         return row!;
+    }
+    async function deadDelivery(requestId: number) {
+        await test.db
+            .update(eventOutbox)
+            .set({ status: "dead" })
+            .where(eq(eventOutbox.eventId, `storage.deletion.requested:${requestId}`));
+        await markStorageDeletionRequestDead(requestId);
     }
 
     it("snapshots document, version, job, batch, preview and audio URLs", async () => {
@@ -370,7 +384,7 @@ describeDb("durable storage deletion (integration)", () => {
 
     it("dead lettering blocks remaining pending items but preserves terminal audit outcomes", async () => {
         const id = (await objectPlan([(await file()).url, "https://example.org/page"]))!;
-        await markStorageDeletionRequestDead(id);
+        await deadDelivery(id);
         expect((await items(id)).map(item => item.state)).toEqual(["blocked", "skipped"]);
         expect((await items(id))[0]!.errorCode).toBe("retry_budget_exhausted");
         expect((await request(id)).status).toBe("blocked");
@@ -791,7 +805,7 @@ describeDb("durable storage deletion (integration)", () => {
             });
             const id = (await objectPlan([url]))!;
             jest.mocked(deleteStoredObjects).mockImplementation(async refs => {
-                await markStorageDeletionRequestDead(id);
+                await deadDelivery(id);
                 return refs.map(ref => ({ ref, outcome }));
             });
             await processStorageDeletionRequest(id);
@@ -814,7 +828,7 @@ describeDb("durable storage deletion (integration)", () => {
             .update(storageDeletionItems)
             .set({ state: "blocked", errorCode: "foreign_object" })
             .where(eq(storageDeletionItems.id, rows[1]!.id));
-        await markStorageDeletionRequestDead(id);
+        await deadDelivery(id);
         await processStorageDeletionRequest(id);
         expect((await items(id)).map(row => [row.state, row.errorCode])).toEqual([
             ["deleted", null],
@@ -1937,4 +1951,63 @@ describeDb("durable storage deletion (integration)", () => {
             execute.mockRestore();
         }
     }, 15_000);
+
+    it("completes mixed waived and deleted items and records committed worker metrics", async () => {
+        const waived = await file();
+        const deleted = await file();
+        const id = (await objectPlan([waived.url, deleted.url]))!;
+        await test.db
+            .update(storageDeletionItems)
+            .set({
+                state: "waived",
+                resolvedBy: "operator:test",
+                resolutionNote: "Accepted residual bytes",
+                resolvedAt: new Date(),
+            })
+            .where(eq(storageDeletionItems.sourceUrl, waived.url));
+        const before = await storageDeletionItemsProcessed.get();
+        const countBefore =
+            before.values.find(value => value.labels.outcome === "deleted")?.value ?? 0;
+        const finishedBefore = await storageDeletionRequestsFinished.get();
+        const completedBefore =
+            finishedBefore.values.find(value => value.labels.status === "completed")?.value ?? 0;
+        await processStorageDeletionRequest(id);
+        expect((await request(id)).status).toBe("completed");
+        expect((await items(id)).map(item => item.state)).toEqual(["waived", "deleted"]);
+        const after = await storageDeletionItemsProcessed.get();
+        expect(after.values.find(value => value.labels.outcome === "deleted")?.value).toBe(
+            countBefore + 1
+        );
+        const finishedAfter = await storageDeletionRequestsFinished.get();
+        expect(finishedAfter.values.find(value => value.labels.status === "completed")?.value).toBe(
+            completedBefore + 1
+        );
+        expect((await storageDeletionPendingItems.get()).values[0]?.value).toBe(0);
+        expect((await storageDeletionOldestPendingAge.get()).values[0]?.value).toBe(0);
+        expect((await test.db.select().from(fileUploads)).map(row => row.id)).toEqual([waived.id]);
+    });
+
+    it("ignores a delayed dead callback after an operator requeue has committed", async () => {
+        const id = (await objectPlan([(await file()).url]))!;
+        await test.db
+            .update(eventOutbox)
+            .set({ status: "dead", attemptCount: 8 })
+            .where(eq(eventOutbox.eventId, `storage.deletion.requested:${id}`));
+        await test.db
+            .update(storageDeletionItems)
+            .set({ attempts: 8 })
+            .where(eq(storageDeletionItems.requestId, id));
+        await requeueStorageDeletionRequest(test.db, id, {
+            actor: "operator:race",
+            note: "Credentials restored",
+        });
+        await markStorageDeletionRequestDead(id);
+        expect((await items(id))[0]).toMatchObject({ state: "pending", attempts: 0 });
+        expect((await request(id)).status).toBe("pending");
+        const [delivery] = await test.db
+            .select()
+            .from(eventOutbox)
+            .where(eq(eventOutbox.eventId, `storage.deletion.requested:${id}`));
+        expect(delivery).toMatchObject({ status: "pending", attemptCount: 0 });
+    });
 });

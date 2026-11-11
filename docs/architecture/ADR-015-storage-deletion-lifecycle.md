@@ -115,10 +115,15 @@ and explicitly waive or perform approved manual cleanup rather than waiting for
 a vanished event. A surviving tenant's missing event can be recreated by the
 operator tooling; dead events use outbox replay after resolving the cause.
 Logs include trace id, request id and outcome counts.
+Operators can waive blocked/quarantined items with actor, note and resolution
+timestamp. `waived` is terminal success for request status, not confirmation of
+byte deletion; it never stamps the inventory deleted.
+See the [storage deletion runbook](../runbooks/storage-deletion.md) for inspection,
+requeue, audited waivers, and bounded orphan audits.
 
 The spec's nullable-ref CHECK allowed only quarantined items while also requiring
 unrecognized URLs to be skipped. The implemented CHECK permits fully null refs
-for **both quarantined and skipped**, and otherwise requires all three fields.
+for **quarantined, skipped, and operator-waived** items, and otherwise requires all three fields.
 This is a deliberate consistency correction, not a fabricated placeholder ref.
 
 ### Global shared-reference coverage
@@ -321,3 +326,15 @@ resolves it. Shared bytes remain until the last relevant deletion request sees n
 live references. A provider may complete just before a database failure; retry
 must tolerate already-missing bytes. Existing provider contracts provide that
 idempotency. No serving gates, UI polling, or deferred SQL purge are needed.
+
+### Operations deployment
+
+The lifecycle table-creation migration and operations CHECK replacement ship
+together in this stack, in journal order. The CHECK replacement targets the new
+deletion-items table; it is not an independent upgrade for an older lifecycle.
+Operator-safety additions persist requeue actor/note/time and index the active-plan
+identity lookups. The worker and orphan audit share one protected-source and
+alias policy in `deletion/references.ts`, including the persisted chat arms and
+external-backed upload pointers. Worker `/metrics` serves its own registry with
+the web metrics route's authentication policy; scrape failures/backlog metric
+refresh failures never determine a deletion outcome.

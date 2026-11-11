@@ -281,16 +281,23 @@ providers use request-wide, encoding-safe case-insensitive basename prefilters
 plus parsed ref comparison. Each statement binds one constant alternation regex
 of at most 64 alternatives, never one regex per candidate/table row pair.
 Numeric database URLs use indexed extracted-id equality plus a normalization-aware
-historical fallback. Canonical relative/internal-origin URLs protect globally;
+historical fallback, including path-relative forms such as `api/files/{id}` and
+`./api/files/{id}`, plus whitespace/control-character normalization, run once per
+request (only historical rows hold these spellings). Canonical relative/internal-origin URLs protect globally;
 other spellings protect only when the reference owner and file owner companies
 match. Versions and chat messages inherit ownership from their document/session.
-JSON-array scans remain for historical database chat attachments; chat uploads
+JSON-array scans for historical database chat attachments run only request-wide;
+per-item refresh excludes those extracted-id arms and retains indexed GIN exact
+containment for canonical chat references. Chat replay/queue/Ask-again validation
+accepts canonical `/api/files/<digits>` alongside absolute URLs. Chat uploads
 are S3-only today. Pointer lookup splits indexed exact URL equality from the
 unledgered-only legacy alias arm. The worker refreshes the indexed exact and
 extracted-id arms under each item's lock immediately before its attempt, while
 expensive legacy scans stay request-wide.
-Planning recovers historical numeric file URLs in every candidate column while
-preserving source spelling and preferring frozen refs.
+Planning recovers historical any-origin numeric file URLs only when the file row
+exists, preserving source spelling and preferring frozen refs. Nonexistent
+external ids are skipped. Upload ids use PostgreSQL bigint and reference SQL
+casts match that width; ids beyond JS-safe integer precision remain unrecognized.
 Rows sourced from `backfill-file-uploads` count as legacy for reference matching,
 but their company stamp still authorizes provenance; historical references to
 those objects were never canonicalized at ingress.

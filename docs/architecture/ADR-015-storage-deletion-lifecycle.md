@@ -50,8 +50,10 @@ uniquely own recording bytes: whichever document is deleted last must still
 request cleanup. Global references retain the bytes while the other survives.
 Future transcripts store the recording's canonical URL, not its absolute
 processing/fetch URL. The planner recovers historical any-origin numeric file
-aliases in every candidate column with the file row's company provenance,
-preserving their source URL.
+aliases in every candidate column only when their file row exists, preserving
+the source URL and file-company provenance. Missing external ids are skipped,
+not invented as local byte ownership. `file_uploads.id` is PostgreSQL bigint;
+reference joins cast to bigint, while parser/planner ids must remain JS-safe integers.
 Candidates are deduplicated per request. Empty candidates produce no request or event.
 
 Transcript-creation rollback is different: it must not plan the caller's source
@@ -145,16 +147,24 @@ regex with at most 64 alternatives per statement, not a candidate-by-table regex
 join. Matching URLs are parsed once and mapped back to candidates by identity.
 The worker batches these legacy scans once per request. Database refs use
 `(regexp_match(col, '/api/files/0*([0-9]+)([/?#]|$)'))[1]` equality and concurrent
-expression indexes, plus a bounded historical fallback for dot segments,
-percent escapes, backslashes and whitespace normalized by the same WHATWG parser.
+expression indexes, plus a bounded historical fallback for path-relative forms
+(`api/files/<id>`, `./api/files/<id>`), dot segments, percent escapes, backslashes
+and whitespace/control characters normalized by the same WHATWG parser. Only historical rows can
+hold those spellings (ingress now persists canonical URLs), so this fallback runs
+once per request alongside the legacy provider alias scans; the per-item refresh
+re-runs only the indexed arms.
 Canonical relative/internal-origin database URLs protect bytes globally. Other
 spellings count only when the referencing row's company equals the file owner's
 company, preventing arbitrary external `/api/files/<id>` links from pinning a
 different tenant's file. Versions inherit company from their document; message
 attachments/replay payloads inherit company from their session. Every protected
 source has an owner path; none require a tenant-blind alias exception.
-Only historical database chat attachments need JSON-array scans; today's chat
-upload route is S3-only. Pointer matching has a separate indexed
+Only historical database chat attachments need JSON-array scans, which remain
+request-wide. Per-item extracted-id matching excludes all three JSON-array
+sources; the GIN containment arms still refresh canonical chat URLs, the only
+relative spelling current ingress persists. Chat payload validation accepts
+those canonical `/api/files/<digits>` URLs when queued/claimed sends or Ask again
+are echoed back. Today's chat upload route is S3-only. Pointer matching has a separate indexed
 `file_uploads.storage_url` equality arm, with constant legacy prefilters only for
 unledgered provider refs. The indexed exact/extracted-id arms, including new
 provider pointers' downstream references, are re-read for each item inside its

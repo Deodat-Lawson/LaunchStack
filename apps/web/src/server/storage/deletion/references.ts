@@ -180,7 +180,7 @@ async function findDirectReferences(
             WITH candidates AS (
                 SELECT input.*, referenced_file.company_id AS file_company_id
                 FROM (VALUES ${sql.join(values, sql`, `)}) AS input(id, source_url, file_id)
-                LEFT JOIN ${fileUploads} AS referenced_file ON referenced_file.id = input.file_id::integer
+                LEFT JOIN ${fileUploads} AS referenced_file ON referenced_file.id = input.file_id::bigint
             )
             ${sql.join(
                 sources.map(
@@ -212,31 +212,35 @@ async function findDirectReferences(
             WITH candidates AS (
                 SELECT input.*, referenced_file.company_id AS file_company_id
                 FROM (VALUES ${sql.join(databaseValues, sql`, `)}) AS input(id, file_id)
-                LEFT JOIN ${fileUploads} AS referenced_file ON referenced_file.id = input.file_id::integer
+                LEFT JOIN ${fileUploads} AS referenced_file ON referenced_file.id = input.file_id::bigint
             )
             ${sql.join(
-                sources.map(
-                    source => sql`
+                sources
+                    .filter(source => !indexedOnly || !source.aliasFrom)
+                    .map(
+                        source => sql`
                 SELECT candidate.id FROM ${source.aliasFrom ?? source.from}
                 INNER JOIN candidates AS candidate ON (regexp_match(${source.column}, '/api/files/0*([0-9]+)([/?#]|$)'))[1] = candidate.file_id
                 WHERE ${databaseOwnerGuard(source, sql`${source.column}`, sql`candidate.file_id`)}
                 ${source.guard ? sql`AND ${source.guard}` : sql``}
             `
-                ),
+                    ),
                 sql` UNION ALL `
             )}
         `);
         for (const row of rows) referenced.add(row.id);
-        if (!indexedOnly) {
-            // Parse only historical paths for which raw extracted-id matching can
-            // disagree with WHATWG normalization (including pre-prefix aliases).
+        if (!indexedOnly && databases.some(candidate => !referenced.has(candidate.id))) {
+            // Path-relative and normalization-suspicious aliases can be invisible
+            // to extracted-id matching. Only historical rows hold them (ingress now
+            // persists canonical URLs), so this scan stays request-wide; the
+            // per-item refresh only needs the indexed arms.
             const normalizedAliases = await tx.execute<{ url: string; company_id: bigint }>(sql`
                 ${sql.join(
                     sources.map(
                         source => sql`
                     SELECT ${source.column} AS url, ${source.companyId} AS company_id FROM ${source.aliasFrom ?? source.from}
-                    WHERE (${source.column} LIKE '%/api/files/%' OR ${source.column} LIKE '%files%' OR ${source.column} ~ '[[:space:]]')
-                      AND (${source.column} LIKE '%..%' OR ${source.column} LIKE '%/./%' OR position('%' in ${source.column}) > 0 OR position(chr(92) in ${source.column}) > 0 OR ${source.column} ~ '[[:space:]]')
+                    WHERE (${source.column} LIKE '%/api/files/%' OR ${source.column} LIKE '%files%' OR ${source.column} ~ '[[:space:][:cntrl:]]')
+                      AND ((${source.column} NOT LIKE '/%' AND ${source.column} !~* '^https?://') OR ${source.column} LIKE '%..%' OR ${source.column} LIKE '%/./%' OR position('%' in ${source.column}) > 0 OR position(chr(92) in ${source.column}) > 0 OR ${source.column} ~ '[[:space:][:cntrl:]]')
                       ${source.guard ? sql`AND ${source.guard}` : sql``}
                 `
                     ),

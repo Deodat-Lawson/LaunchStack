@@ -109,8 +109,13 @@ const aiPersonaOptions = [
     "legal-expert",
     "math-reasoning",
 ] as const;
+const AttachmentUrlSchema = z.union([
+    z.string().url(V.attachmentUrlInvalid),
+    // A strict end assertion also rejects the trailing newline that `$` permits.
+    z.string().regex(/^\/api\/files\/\d+(?![\s\S])/, V.attachmentUrlInvalid),
+]);
 const AttachmentPayloadSchema = z.object({
-    url: z.string().url(V.attachmentUrlInvalid),
+    url: AttachmentUrlSchema,
     name: z.string().min(1).max(512),
     mimeType: z.string().min(1).max(256),
     kind: z.enum(["image", "text"]),
@@ -878,7 +883,7 @@ export const ChatSendPayloadSchema = z.object({
                     .number()
                     .nonnegative()
                     .max(50 * 1024 * 1024),
-                url: z.string().url().max(4096),
+                url: z.string().max(4096).pipe(AttachmentUrlSchema),
                 kind: z.enum(["image", "text"]),
             })
         )

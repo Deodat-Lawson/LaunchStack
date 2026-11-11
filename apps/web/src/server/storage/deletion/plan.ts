@@ -69,6 +69,7 @@ async function insertPlan(
         const parsedUrls = sources.map(sourceUrl => ({
             sourceUrl,
             parsed: refFromStoredUrl(sourceUrl),
+            databaseId: /^https?:\/\/[^/]+\/api\/files\/0*([0-9]+)(?:[/?#]|$)/.exec(sourceUrl)?.[1],
         }));
         const ledger = await findStoredObjectsByUrls(
             tx,
@@ -76,18 +77,28 @@ async function insertPlan(
                 .filter(candidate => !candidate.parsed.ok)
                 .map(candidate => candidate.sourceUrl)
         );
-        return parsedUrls.map<Candidate>(({ sourceUrl, parsed }) => {
+        // An external link is only recoverable as a historical local file when
+        // the row exists. bigint ids must also fit the application's JS number
+        // representation; never pass an arbitrary external id to a SQL cast.
+        const historicalIds = parsedUrls.flatMap(({ parsed, databaseId }) =>
+            !parsed.ok && databaseId && Number.isSafeInteger(Number(databaseId))
+                ? [Number(databaseId)]
+                : []
+        );
+        const historicalFiles = historicalIds.length
+            ? await tx
+                  .select({ id: fileUploads.id })
+                  .from(fileUploads)
+                  .where(inArray(fileUploads.id, [...new Set(historicalIds)]))
+            : [];
+        const existingFileIds = new Set(historicalFiles.map(file => file.id));
+        return parsedUrls.map<Candidate>(({ sourceUrl, parsed, databaseId }) => {
             if (parsed.ok) return { sourceUrl, ref: parsed.ref };
-            // Historical absolute file URLs on every candidate column retain
-            // their original spelling; worker provenance authorizes the bytes.
-            const databaseId = /^https?:\/\/[^/]+\/api\/files\/0*([0-9]+)(?:[/?#]|$)/.exec(
-                sourceUrl
-            )?.[1];
-            if (
-                parsed.reason === "unrecognized" &&
-                databaseId &&
-                Number.isSafeInteger(Number(databaseId))
-            ) {
+            // Preserve any-origin source spelling, but do not invent local
+            // byte ownership for an external link with no matching file row.
+            if (parsed.reason === "unrecognized" && databaseId) {
+                if (!existingFileIds.has(Number(databaseId)))
+                    return { sourceUrl, reason: "unrecognized" };
                 return {
                     sourceUrl,
                     ref: {

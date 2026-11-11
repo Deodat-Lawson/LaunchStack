@@ -20,8 +20,11 @@ jest.mock("~/server/db", () => ({
     db: {
         update: jest.fn(),
         select: jest.fn(),
+        transaction: (callback: (tx: unknown) => Promise<unknown>) =>
+            callback(jest.requireMock("~/server/db").db),
     },
 }));
+jest.mock("~/server/storage/deletion/plan", () => ({ planObjectDeletion: jest.fn() }));
 
 jest.mock("~/server/storage/vercel-blob", () => ({
     fetchBlob: jest.fn(),
@@ -47,18 +50,6 @@ import { db } from "~/server/db";
 import { fetchBlob, putFile } from "~/server/storage/vercel-blob";
 import { processDocumentBatch } from "@launchstack/editing";
 
-// ---------------------------------------------------------------------------
-// Helpers
-// ---------------------------------------------------------------------------
-
-function createMockStep(): { run: jest.Mock } {
-    return {
-        run: jest.fn(async (_name: string, fn: () => Promise<unknown>) => {
-            return await fn();
-        }),
-    };
-}
-
 // ===========================================================================
 // Fix 1.1 — Step output uses blob storage, NOT full base64
 // ===========================================================================
@@ -69,6 +60,11 @@ describe("Fix 1.1: Step output uses blob storage — large DOCX stored as blob U
             from: jest.fn().mockReturnValue({
                 where: jest.fn().mockReturnValue({
                     limit: jest.fn().mockResolvedValue([{ companyId: BigInt(7) }]),
+                    for: jest
+                        .fn()
+                        .mockResolvedValue([
+                            { companyId: BigInt(7), url: "/api/files/old-current" },
+                        ]),
                 }),
             }),
         });
@@ -266,18 +262,19 @@ describe("Fix 1.15: Idempotent replay — db.update is in a separate step.run", 
         expect(modifyStepChunk).not.toMatch(/db\s*\.\s*update\s*\(/);
     });
 
-    it("update-document-record step contains the db.update call", () => {
+    it("update-document-record step contains the transactional update", () => {
         const sourceFile = fs.readFileSync(
             path.resolve(__dirname, "../../../src/server/inngest/functions/modifyDocument.ts"),
             "utf-8"
         );
 
-        // FIX: The dedicated update step should contain db.update
+        // The dedicated step contains the transaction and its row update.
         const updateStepStart = sourceFile.indexOf('step.run("update-document-record"');
         expect(updateStepStart).toBeGreaterThan(-1);
 
-        const updateStepChunk = sourceFile.slice(updateStepStart, updateStepStart + 400);
-        expect(updateStepChunk).toMatch(/db\s*\.\s*update\s*\(/);
+        const updateStepChunk = sourceFile.slice(updateStepStart);
+        expect(updateStepChunk).toMatch(/db\s*\.\s*transaction\s*\(/);
+        expect(updateStepChunk).toMatch(/tx\s*\.\s*update\s*\(/);
     });
 });
 

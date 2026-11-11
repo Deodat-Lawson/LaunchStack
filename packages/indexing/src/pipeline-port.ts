@@ -41,7 +41,12 @@ import type {
 } from "@launchstack/orchestration";
 
 import { runExtractionStage, runIndexingStage } from "./doc-ingestion";
-import { expandArchive, isTextFastPathFile, isZipFile } from "@launchstack/conversion";
+import {
+    expandArchive,
+    isTextFastPathFile,
+    isZipFile,
+    type ExpandArchiveInput,
+} from "@launchstack/conversion";
 
 interface StoredDispatchOptions {
     archiveIdentity?: string;
@@ -61,7 +66,10 @@ async function loadJobRow(ocrJobId: string) {
 }
 
 export class DocIngestionPipeline implements ExtractionPipelinePort {
-    constructor(private readonly logger: LoggerPort) {}
+    constructor(
+        private readonly logger: LoggerPort,
+        private readonly cleanupArchive: ExpandArchiveInput["cleanupArchive"]
+    ) {}
 
     async extract(job: ExtractionJob): Promise<ExtractionOutcome> {
         const routingName = job.options.originalFilename ?? job.documentName;
@@ -80,6 +88,7 @@ export class DocIngestionPipeline implements ExtractionPipelinePort {
                 embeddingIndexKey: job.options.embeddingIndexKey,
                 traceId: job.traceId,
                 fetchArchive: url => storage.download(url),
+                cleanupArchive: this.cleanupArchive,
             });
             this.logger.info(
                 {

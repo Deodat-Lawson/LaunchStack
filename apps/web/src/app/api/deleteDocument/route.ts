@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import { NextResponse } from "next/server";
 import { and, eq } from "drizzle-orm";
 
@@ -72,6 +73,9 @@ export async function DELETE(request: Request) {
 
         await db.transaction(async tx => {
             await deleteDocumentCore(tx, documentId, {
+                requestedBy: ctx.data.authUserId,
+                reason: "user_delete",
+                traceId: randomUUID(),
                 deletedByUserPk: Number(ctx.data.userPk),
             });
             await recordAuditEvent(tx, {

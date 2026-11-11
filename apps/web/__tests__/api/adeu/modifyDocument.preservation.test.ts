@@ -17,8 +17,11 @@ jest.mock("~/server/db", () => ({
     db: {
         update: jest.fn(),
         select: jest.fn(),
+        transaction: (callback: (tx: unknown) => Promise<unknown>) =>
+            callback(jest.requireMock("~/server/db").db),
     },
 }));
+jest.mock("~/server/storage/deletion/plan", () => ({ planObjectDeletion: jest.fn() }));
 
 jest.mock("~/server/storage/vercel-blob", () => ({
     fetchBlob: jest.fn(),
@@ -49,6 +52,9 @@ beforeEach(() => {
         from: jest.fn().mockReturnValue({
             where: jest.fn().mockReturnValue({
                 limit: jest.fn().mockResolvedValue([{ companyId: BigInt(7) }]),
+                for: jest
+                    .fn()
+                    .mockResolvedValue([{ companyId: BigInt(7), url: "/api/files/old-current" }]),
             }),
         }),
     });

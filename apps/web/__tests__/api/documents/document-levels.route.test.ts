@@ -248,6 +248,9 @@ describe("DELETE /api/deleteDocument", () => {
 
         expect(response.status).toBe(200);
         expect(deleteDocumentCore).toHaveBeenCalledWith(expect.anything(), 12, {
+            requestedBy: admin.authUserId,
+            reason: "user_delete",
+            traceId: expect.any(String),
             deletedByUserPk: 7,
         });
         expect(recordActivity).toHaveBeenCalledWith(
@@ -282,6 +285,9 @@ describe("DELETE /api/deleteDocument — who may throw a file away", () => {
 
         expect(response.status).toBe(200);
         expect(deleteDocumentCore).toHaveBeenCalledWith(expect.anything(), 12, {
+            requestedBy: member.authUserId,
+            reason: "user_delete",
+            traceId: expect.any(String),
             deletedByUserPk: 7,
         });
     });
@@ -320,15 +326,30 @@ describe("DELETE /api/documents/batchDelete", () => {
 
     it("deletes every file the caller may edit and records each", async () => {
         fakeDb.reset();
-        fakeDb.onSelect(document, [ROW, { ...ROW, id: 13, title: "Board.pdf" }]);
+        fakeDb.onSelect(document, [{ ...ROW, id: 13, title: "Board.pdf" }, ROW]);
         jest.mocked(documentAccess)
-            .mockResolvedValueOnce(access("edit", "workspace"))
-            .mockResolvedValueOnce(access("manage", "shared"));
+            .mockResolvedValueOnce(access("manage", "shared"))
+            .mockResolvedValueOnce(access("edit", "workspace"));
 
         const response = await batchDelete(del("/api/documents/batchDelete", { docIds: [12, 13] }));
 
         expect(response.status).toBe(200);
         expect(deleteDocumentCore).toHaveBeenCalledTimes(2);
+        expect(jest.mocked(deleteDocumentCore).mock.calls.map(([, id]) => id)).toEqual([12, 13]);
+        const contexts = jest.mocked(deleteDocumentCore).mock.calls.map(([, , context]) => context);
+        expect(contexts).toEqual([
+            expect.objectContaining({
+                requestedBy: admin.authUserId,
+                reason: "batch_delete",
+                traceId: expect.any(String),
+            }),
+            expect.objectContaining({
+                requestedBy: admin.authUserId,
+                reason: "batch_delete",
+                traceId: expect.any(String),
+            }),
+        ]);
+        expect(contexts[0]!.traceId).toBe(contexts[1]!.traceId);
         expect(jest.mocked(recordActivity).mock.calls.map(([, input]) => input.detail)).toEqual([
             { wasWorkspace: true },
             { wasWorkspace: false },

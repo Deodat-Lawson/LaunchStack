@@ -2,8 +2,8 @@
 
 This ports the storage identity and deletion contract from PRs #337 and #357 by
 Tiffany Wei (@t1ffnyw), with karMareal1 and sfloody1, onto the current storage
-implementation. It addresses the byte-cleanup defects described in issue #313;
-the durable document-deletion lifecycle is a separate layer.
+implementation. It addresses the byte-cleanup defects described in issue #313.
+The durable deletion lifecycle is specified in ADR-015.
 
 ## Identity
 
@@ -92,11 +92,14 @@ query strings, fragments, suffixes and external object URLs remain unchanged.
 
 ## Deletion
 
-`deleteStoredObjects(refs: readonly ObjectRef[]): Promise<DeleteResult[]>`
+`deleteStoredObjects(refs: readonly ObjectRef[], databaseExecutor?: Executor): Promise<DeleteResult[]>`
 groups requests by provider and returns exactly one result per input occurrence
 in **input order**, including duplicates. Each provider's `deleteObjects` has
 the same signature and ordering guarantee. Provider failures become results,
 not thrown exceptions.
+The optional database executor lets the lifecycle delete database bytes inside
+its existing short transaction without acquiring a second connection.
+Other providers ignore it. Direct provider callers can omit it.
 
 | Outcome     | Meaning                                                                                           |
 | ----------- | ------------------------------------------------------------------------------------------------- |
@@ -142,20 +145,13 @@ ambiguous: both keys already deleted by the batch and keys that never existed
 can return **not_found** on the individual retry.
 
 The runtime `StoragePort` retains upload/download only. URL/key deletion shims
-are removed. The version-delete route keeps its current synchronous behavior
-and its current/only-version 409 guards. Before deleting bytes it checks all
-documents and other versions for the URL, including stored website-preview URLs
-in either row's OCR metadata. Shared bytes are retained while the version row
-is removed. Database bytes additionally require `file_uploads.company_id` to
-match the caller's workspace; foreign or unstamped files are retained.
-The reference guard also retains matching absolute/relative internal-file
-aliases while that backfill is in progress; this never expands which origins
-`refFromStoredUrl` trusts for deletion.
-For an unshared, owned object, unrecognized/ambiguous refs and blocked/retryable
-deletes return 502 and retain the version row; deleted/not-found permits cleanup.
-Website-preview replacement uses the same global reference guard before
-best-effort deletion, so a version's copied preview survives replacement.
-Internal signed reads, workspace stamping, and byte-range forwarding are unchanged.
+are removed. Document and version deletion now snapshot refs and enqueue
+`storage.deletion.requested` in the same transaction as relational removal.
+The outbox worker performs provider deletion with global shared-reference and
+company-provenance checks. Website-preview and in-place document URL replacement
+enqueue old-object cleanup transactionally as well. User-facing deletes remain
+synchronous; internal signed reads, workspace stamping, and byte-range forwarding
+are unchanged.
 
 ## Ledger
 
@@ -220,8 +216,9 @@ before persisting the URL and uses its existing upload-failed error path.
 `company_id` is nullable and intentionally has **no foreign key**. Neither tenant
 nor document deletion may erase the inventory needed to clean up or audit bytes.
 There are no document ownership columns: later deletion planning derives
-references from relational rows. `deleted_at` is reserved for the deletion
-lifecycle.
+references from relational rows. The deletion worker stamps `deleted_at` only
+after a provider confirms deletion or absence. Old objects are resolved from
+stored URLs when no inventory exists.
 
 Backfill legacy `file_uploads` pointers with
 `pnpm --filter @launchstack/web db:backfill --only=2026-11-storage-ledger-from-file-uploads --batch=500`.
@@ -257,3 +254,34 @@ The single unrecorded write path is `POST /api/storage/presign`: it returns a
 direct-upload capability but has no completion callback and no repository caller.
 Objects uploaded with it remain deletable via URL-to-ref recognition, but are
 not in this inventory.
+
+## Durable deletion
+
+`deletion/plan.ts` accepts a caller-owned transaction and actor/reason/trace
+context. Document plans include current/version URLs, attached OCR and batch
+inputs and website-preview pictures. Audio metadata only protects a separate
+recording's bytes; a transcript deletion never plans them. Version plans snapshot the
+version and its jobs. Object plans clean up replaced URLs. Empty candidates
+produce no plan or event; duplicate URLs produce one item per request.
+
+The worker uses short ordinary transactions to lock and precheck request/items,
+then calls network providers outside SQL transactions or advisory locks. It
+re-reads pending item state under a row lock before storing a provider outcome.
+It protects live document/version URLs and preview/audio metadata, attached OCR
+and batch inputs, brand media and configured avatar URLs across **all** tenants.
+Indexed source/inventory equality is followed by a SQL prefilter (full provider
+key substring or bounded numeric file-id regex) and canonical ref comparison of
+only those plausible alias URLs. Planning resolves refs before falling back to
+exact inventory URL lookup.
+A foreign company stamp blocks deletion; database objects additionally require
+matching upload-row provenance. Legacy provider objects without inventory rely
+on the global live-reference check. ADR-015 records the residual race where a
+request body attaches a URL after the reference check but before deletion.
+
+Items are `pending`, `deleted`, `not_found`, `retained`, `blocked`, `quarantined`,
+or `skipped`. Unrecognized links are skipped; ambiguous identities are
+quarantined. Both carry null refs, never invented provider keys. Requests stay
+pending while retryable items exist, become blocked for blocked/quarantined
+items, and otherwise complete. Outbox dead lettering blocks remaining pending
+items with `retry_budget_exhausted`. Plans and items remain as audit records
+after documents, versions and tenants are removed.

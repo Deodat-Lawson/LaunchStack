@@ -9,7 +9,10 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const lifecycleCalls: Array<Record<string, unknown>> = [];
 const uploads: Array<{ filename: string; contentType?: string; companyId?: bigint }> = [];
-const deletions: Array<{ table: string }> = [];
+const cleanupArchive = vi.fn(
+    async (_input: { sourceId: number; ocrJobId: string; userId: string; traceId: string }) =>
+        undefined
+);
 /** The archive row's `ocr_metadata`, as its importer wrote it. */
 let archiveMetadata: Record<string, unknown> | null = null;
 
@@ -37,10 +40,6 @@ vi.mock("@launchstack/store/client", () => ({
                 }),
             }),
         }),
-        delete: (table: { _: { name?: string } } | object) => {
-            deletions.push({ table: "table" in Object(table) ? "t" : "t" });
-            return { where: async () => [] };
-        },
     }),
 }));
 
@@ -135,6 +134,7 @@ function archiveInput(
         archiveIdentity: "archive:test-1",
         traceId: "trace-zip",
         fetchArchive: async () => new Response(new Uint8Array(buffer), { status: 200 }),
+        cleanupArchive,
         ...overrides,
     };
 }
@@ -142,7 +142,7 @@ function archiveInput(
 beforeEach(() => {
     lifecycleCalls.length = 0;
     uploads.length = 0;
-    deletions.length = 0;
+    cleanupArchive.mockReset().mockResolvedValue(undefined);
     archiveMetadata = null;
     vi.clearAllMocks();
 });
@@ -194,8 +194,13 @@ describe("expandArchive", () => {
         const summaryUpload = uploads.find(u => u.filename.startsWith("_summary_"));
         expect(summaryUpload).toBeDefined();
 
-        // Original ZIP job + document rows are deleted (two delete calls).
-        expect(deletions).toHaveLength(2);
+        expect(cleanupArchive).toHaveBeenCalledOnce();
+        expect(cleanupArchive).toHaveBeenCalledWith({
+            sourceId: 7,
+            ocrJobId: "zip-job-1",
+            userId: "user_test",
+            traceId: "trace-zip",
+        });
     });
 
     it("gives every file from a GitHub import its own page there, and the summary the repo", async () => {
@@ -283,7 +288,7 @@ describe("expandArchive", () => {
         );
         expect(uploads).toHaveLength(0);
         expect(lifecycleCalls).toHaveLength(0);
-        expect(deletions).toHaveLength(0);
+        expect(cleanupArchive).not.toHaveBeenCalled();
     });
 
     it("rejects exact duplicate central-directory entries before any upload", async () => {
@@ -292,7 +297,7 @@ describe("expandArchive", () => {
         );
         expect(uploads).toHaveLength(0);
         expect(lifecycleCalls).toHaveLength(0);
-        expect(deletions).toHaveLength(0);
+        expect(cleanupArchive).not.toHaveBeenCalled();
     });
 
     it("indexes high-value files first when the archive exceeds the extraction cap", async () => {
@@ -420,6 +425,15 @@ describe("expandArchive", () => {
         // stats.indexed counts archive entries only; extracted adds the summary.
         expect(result.stats.indexed).toBe(1);
         expect(result.extracted).toBe(2);
+    });
+
+    it("propagates host cleanup failures so archive extraction is retried", async () => {
+        const buffer = await makeZip({ "notes.txt": "hello" });
+        cleanupArchive.mockRejectedValueOnce(new Error("deletion planning failed"));
+        await expect(expandArchive(archiveInput(buffer))).rejects.toThrow(
+            "deletion planning failed"
+        );
+        expect(cleanupArchive).toHaveBeenCalledOnce();
     });
 
     it("throws when the archive cannot be fetched", async () => {

@@ -5,6 +5,17 @@ The ingestion pipeline (ADR-003) is driven by `pdr_ai_v2_event_outbox`.
 the source version; `apps/worker` claims rows, runs handlers, and chains the
 next event transactionally. This runbook covers observing and repairing it.
 
+Storage cleanup uses the same outbox: `storage.deletion.requested` carries
+`{ requestId }` and has the deterministic event id
+`storage.deletion.requested:<requestId>`. The deletion plan, outbox row, and
+relational removal commit together; the document disappears immediately,
+while the worker processes its stored-object snapshot in the background.
+This event is terminal (no follow-up events). Retryable provider failures
+use the same retry/backoff policy below. When the event dies, including a
+payload-validation death, remaining pending deletion items become `blocked`
+with `retry_budget_exhausted`, and the deletion request becomes `blocked`.
+OCR failure handling below applies only to ingestion events.
+
 ## Health signals
 
 - `GET :8020/healthz` — worker process is up.

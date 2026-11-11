@@ -27,6 +27,7 @@ import type {
     LoggerPort,
     NoteEmbeddingPort,
     NoteRehydrationPort,
+    StorageDeletionPort,
 } from "../ports";
 
 export interface PipelineProcessorDeps {
@@ -34,6 +35,7 @@ export interface PipelineProcessorDeps {
     projection: CompanyProjectionPort;
     noteRehydration: NoteRehydrationPort;
     noteEmbedding: NoteEmbeddingPort;
+    storageDeletion: StorageDeletionPort;
     clock: ClockPort;
     logger: LoggerPort;
 }
@@ -68,7 +70,8 @@ function extractionJobFromEvent(event: SourceVersionCreatedEvent): ExtractionJob
 }
 
 export function createPipelineProcessor(deps: PipelineProcessorDeps) {
-    const { pipeline, projection, noteRehydration, noteEmbedding, clock, logger } = deps;
+    const { pipeline, projection, noteRehydration, noteEmbedding, storageDeletion, clock, logger } =
+        deps;
 
     return {
         async process(claimed: ClaimedEvent): Promise<ProcessResult> {
@@ -204,6 +207,14 @@ export function createPipelineProcessor(deps: PipelineProcessorDeps) {
                 case "note.embedding.requested": {
                     await noteEmbedding.embedNote({
                         noteId: event.payload.noteId,
+                        traceId: event.traceId,
+                    });
+                    return { followUps: [] };
+                }
+
+                case "storage.deletion.requested": {
+                    await storageDeletion.process({
+                        requestId: event.payload.requestId,
                         traceId: event.traceId,
                     });
                     return { followUps: [] };

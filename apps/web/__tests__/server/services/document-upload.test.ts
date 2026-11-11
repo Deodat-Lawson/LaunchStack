@@ -177,7 +177,11 @@ describe("processDocumentUpload when transcription fails", () => {
                 })
             ).rejects.toBe(rowFailure);
 
-            expect(mockDeleteDocumentCore).toHaveBeenCalledWith("tx", 41);
+            expect(mockDeleteDocumentCore).toHaveBeenCalledWith("tx", 41, {
+                requestedBy: "user-1",
+                reason: "transcript_rollback",
+                traceId: expect.any(String),
+            });
             // The transcript text was stored before either row.
             expect(mockUploadFile.mock.invocationCallOrder[0]).toBeLessThan(
                 mockCreateDocumentLifecycle.mock.invocationCallOrder[0]!

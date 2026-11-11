@@ -217,3 +217,8 @@ export interface NoteRehydrationPort {
 export interface NoteEmbeddingPort {
     embedNote(input: { noteId: number; traceId: string }): Promise<void>;
 }
+
+/** Processes a durable storage deletion plan (consumer of storage.deletion.requested). */
+export interface StorageDeletionPort {
+    process(input: { requestId: number; traceId: string }): Promise<void>;
+}

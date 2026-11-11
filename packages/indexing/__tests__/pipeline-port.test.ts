@@ -6,6 +6,7 @@ const mocks = vi.hoisted(() => ({
     expandArchive: vi.fn(),
     download: vi.fn(),
     runExtractionStage: vi.fn(),
+    sourceRows: vi.fn(),
 }));
 vi.mock("@launchstack/conversion", () => ({
     expandArchive: mocks.expandArchive,
@@ -13,7 +14,13 @@ vi.mock("@launchstack/conversion", () => ({
     isTextFastPathFile: () => false,
 }));
 vi.mock("@launchstack/runtime", () => ({ getStoragePort: () => ({ download: mocks.download }) }));
-vi.mock("@launchstack/store/client", () => ({ getDb: vi.fn() }));
+vi.mock("@launchstack/store/client", () => ({
+    getDb: () => ({
+        select: () => ({
+            from: () => ({ where: () => ({ limit: mocks.sourceRows }) }),
+        }),
+    }),
+}));
 vi.mock("../src/doc-ingestion", () => ({
     runExtractionStage: mocks.runExtractionStage,
     runIndexingStage: vi.fn(),
@@ -36,6 +43,7 @@ const logger: LoggerPort = { info: vi.fn(), warn: vi.fn(), error: vi.fn(), debug
 beforeEach(() => {
     vi.clearAllMocks();
     mocks.expandArchive.mockResolvedValue({ extracted: 2, stats: { indexed: 1 } });
+    mocks.sourceRows.mockResolvedValue([{ id: 7 }]);
 });
 describe("archive cleanup injection", () => {
     it("passes the host cleanup callback and job trace through archive expansion", async () => {
@@ -67,5 +75,41 @@ describe("archive cleanup injection", () => {
         await expect(new DocIngestionPipeline(logger, cleanupArchive).extract(job)).rejects.toThrow(
             "plan unavailable"
         );
+    });
+    it("converges a missing archive source replay without fetching deleted bytes", async () => {
+        mocks.sourceRows.mockResolvedValueOnce([]);
+        const cleanupArchive = vi.fn();
+        const result = await new DocIngestionPipeline(logger, cleanupArchive).extract(job);
+        // This outcome makes source.version.created finish without indexing follow-ups.
+        expect(result).toEqual({
+            provider: "INGESTION",
+            usedFastTextPath: false,
+            expandedArchive: true,
+        });
+        expect(logger.info).toHaveBeenCalledWith(
+            { sourceId: 7, traceId: "trace-archive" },
+            "archive source no longer exists; skipping replay"
+        );
+        expect(mocks.expandArchive).not.toHaveBeenCalled();
+        expect(mocks.download).not.toHaveBeenCalled();
+        expect(cleanupArchive).not.toHaveBeenCalled();
+        expect(mocks.runExtractionStage).not.toHaveBeenCalled();
+    });
+    it("does not swallow archive storage failures while its source still exists", async () => {
+        mocks.expandArchive.mockRejectedValueOnce(new Error("storage download failed"));
+        await expect(new DocIngestionPipeline(logger, vi.fn()).extract(job)).rejects.toThrow(
+            "storage download failed"
+        );
+    });
+    it("does not treat unrelated extraction failures as missing archive replays", async () => {
+        mocks.runExtractionStage.mockRejectedValueOnce(new Error("OCR unavailable"));
+        await expect(
+            new DocIngestionPipeline(logger, vi.fn()).extract({
+                ...job,
+                documentName: "report.pdf",
+                options: { mimeType: "application/pdf" },
+            })
+        ).rejects.toThrow("OCR unavailable");
+        expect(mocks.sourceRows).not.toHaveBeenCalled();
     });
 });

@@ -16,6 +16,15 @@ payload-validation death, remaining pending deletion items become `blocked`
 with `retry_budget_exhausted`, and the deletion request becomes `blocked`.
 OCR failure handling below applies only to ingestion events.
 
+A dead storage event is operationally blocked even if its failure callback
+could not persist the deletion request/item status (the request can still read
+`pending`). Inspect the outbox alongside the request, not its status alone.
+After resolving the cause, replay that same event with a fresh attempt budget.
+Redelivery resets only `retry_budget_exhausted` items to `pending` and resumes
+them; `foreign_object`, provider authorization/configuration blocks, and
+quarantined identities are not automatically waived. Confirmed provider
+`deleted`/`not_found` outcomes win over a concurrent retry-budget block.
+
 ## Health signals
 
 - `GET :8020/healthz` — worker process is up.
@@ -47,7 +56,8 @@ ids), so replay converges rather than duplicating work:
 
 ```sql
 UPDATE pdr_ai_v2_event_outbox
-SET status = 'pending', available_at = CURRENT_TIMESTAMP, claimed_at = NULL
+SET status = 'pending', available_at = CURRENT_TIMESTAMP, claimed_at = NULL,
+    attempt_count = 0, last_error = NULL
 WHERE event_id = '<eventId>';
 ```
 

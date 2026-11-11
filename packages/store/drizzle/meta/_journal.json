@@ -50,6 +50,13 @@
       "when": 1794366375493,
       "tag": "20261111030615_storage_reference_indexes",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1794370005966,
+      "tag": "20261111040645_storage_guard_indexes",
+      "breakpoints": true
     }
   ]
 }

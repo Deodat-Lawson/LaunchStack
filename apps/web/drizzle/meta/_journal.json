@@ -337,6 +337,20 @@
       "when": 1794366375749,
       "tag": "20261111030615_storage_deletion_lifecycle",
       "breakpoints": true
+    },
+    {
+      "idx": 48,
+      "version": "7",
+      "when": 1794370058517,
+      "tag": "20261111040738_storage_product_guard_indexes",
+      "breakpoints": true
+    },
+    {
+      "idx": 49,
+      "version": "7",
+      "when": 1794371093193,
+      "tag": "20261111042453_storage_chat_reference_indexes",
+      "breakpoints": true
     }
   ]
 }

@@ -19,7 +19,9 @@ jest.mock("~/env", () => ({
             NEXT_PUBLIC_S3_ENDPOINT: "https://s3.example",
             S3_BUCKET_NAME: "files",
             BLOB_READ_WRITE_TOKEN: "vercel_blob_rw_store_secret",
-            UPLOADTHING_TOKEN: Buffer.from(JSON.stringify({ appId: "app" })).toString("base64"),
+            UPLOADTHING_TOKEN: Buffer.from(
+                JSON.stringify({ appId: "app", apiKey: "test", regions: ["iad1"] })
+            ).toString("base64"),
         },
     },
 }));
@@ -71,7 +73,7 @@ describe("authorizeInternalFileRef", () => {
         "https://store.public.blob.vercel-storage.com/owned.pdf",
         "https://app.ufs.sh/f/owned",
     ])("accepts a provider URL ledgered to this workspace: %s", async url => {
-        setupFileQuery([{ companyId: COMPANY }]);
+        setupFileQuery([{ companyId: COMPANY, url }]);
         await expect(authorizeInternalFileRef(url, COMPANY)).resolves.toBeNull();
         expect(mockDbSelect).toHaveBeenCalledTimes(1);
     });
@@ -90,12 +92,32 @@ describe("authorizeInternalFileRef", () => {
         "https://store.public.blob.vercel-storage.com/deleted.pdf",
         "https://app.ufs.sh/f/deleted",
     ])("rejects a deleted ledger object even in this workspace: %s", async url => {
-        setupFileQuery([{ companyId: COMPANY, deletedAt: new Date() }]);
+        setupFileQuery([{ companyId: COMPANY, url, deletedAt: new Date() }]);
         await expect(authorizeInternalFileRef(url, COMPANY)).rejects.toMatchObject({
             status: 404,
             copy: { key: "upload.server.errors.fileNotInWorkspace" },
         });
     });
+
+    it.each([
+        {
+            canonical: "https://s3.example/files/documents/owned.pdf",
+            alias: "https://s3.example/files/documents/%6fwned.pdf",
+        },
+        {
+            canonical: "https://app.ufs.sh/f/owned",
+            alias: "https://utfs.io/f/owned",
+        },
+    ])(
+        "rejects noncanonical spellings of an owned provider object: $alias",
+        async ({ canonical, alias }) => {
+            setupFileQuery([{ companyId: COMPANY, url: canonical }]);
+            await expect(authorizeInternalFileRef(alias, COMPANY)).rejects.toMatchObject({
+                status: 404,
+                copy: { key: "upload.server.errors.fileNotInWorkspace" },
+            });
+        }
+    );
 
     it("rejects a ledgered S3 URL belonging to another company", async () => {
         setupFileQuery([{ companyId: 999n }]);

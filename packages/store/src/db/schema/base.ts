@@ -110,6 +110,12 @@ export const document = pgTable(
         ),
         currentVersionIdIdx: index("document_current_version_id_idx").on(table.currentVersionId),
         urlIdx: index("document_url_idx").on(table.url),
+        websitePreviewUrlIdx: index("document_website_preview_url_idx")
+            .on(sql`(${table.ocrMetadata}->'websitePreview'->>'url')`)
+            .concurrently(),
+        audioUrlIdx: index("document_audio_url_idx")
+            .on(sql`(${table.ocrMetadata}->>'audioUrl')`)
+            .concurrently(),
     })
 );
 
@@ -144,6 +150,12 @@ export const documentVersions = pgTable(
     table => ({
         documentIdIdx: index("doc_versions_document_id_idx").on(table.documentId),
         urlIdx: index("doc_versions_url_idx").on(table.url),
+        websitePreviewUrlIdx: index("doc_versions_website_preview_url_idx")
+            .on(sql`(${table.ocrMetadata}->'websitePreview'->>'url')`)
+            .concurrently(),
+        audioUrlIdx: index("doc_versions_audio_url_idx")
+            .on(sql`(${table.ocrMetadata}->>'audioUrl')`)
+            .concurrently(),
         documentCreationKeyUnique: uniqueIndex("doc_versions_document_creation_key_unique").on(
             table.documentId,
             table.creationKey
@@ -338,6 +350,7 @@ export const ocrJobs = pgTable(
         companyIdIdx: index("ocr_jobs_company_id_idx").on(table.companyId),
         userIdIdx: index("ocr_jobs_user_id_idx").on(table.userId),
         documentIdIdx: index("ocr_jobs_document_id_idx").on(table.documentId),
+        documentUrlIdx: index("ocr_jobs_document_url_idx").on(table.documentUrl).concurrently(),
         versionIdIdx: index("ocr_jobs_version_id_idx").on(table.versionId),
         statusIdx: index("ocr_jobs_status_idx").on(table.status),
         createdAtIdx: index("ocr_jobs_created_at_idx").on(table.createdAt),
@@ -505,6 +518,9 @@ export const uploadBatchFiles = pgTable(
         statusIdx: index("upload_batch_files_status_idx").on(table.status),
         jobIdx: index("upload_batch_files_job_idx").on(table.jobId),
         documentIdx: index("upload_batch_files_document_idx").on(table.documentId),
+        storageUrlIdx: index("upload_batch_files_storage_url_idx")
+            .on(table.storageUrl)
+            .concurrently(),
     })
 );
 

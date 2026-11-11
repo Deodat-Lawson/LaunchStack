@@ -91,6 +91,7 @@ export const brandChannels = pgTable(
             table.externalId
         ),
         index("brand_channels_connection_idx").on(table.connectionId),
+        index("brand_channels_avatar_url_idx").using("hash", table.avatarUrl).concurrently(),
     ]
 );
 export type BrandChannelRow = InferSelectModel<typeof brandChannels>;
@@ -116,7 +117,10 @@ export const brandMedia = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
     },
-    table => [index("brand_media_company_idx").on(table.companyId)]
+    table => [
+        index("brand_media_company_idx").on(table.companyId),
+        index("brand_media_storage_url_idx").using("hash", table.storageUrl).concurrently(),
+    ]
 );
 export type BrandMediaRow = InferSelectModel<typeof brandMedia>;
 

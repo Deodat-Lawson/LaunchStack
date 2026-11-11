@@ -10,6 +10,7 @@
  * Reverting to the already-current version is a no-op and returns success.
  */
 
+import { randomUUID } from "node:crypto";
 import { NextResponse } from "next/server";
 import { and, eq } from "drizzle-orm";
 
@@ -23,6 +24,7 @@ import { localeOfRequest } from "~/i18n/server";
 import { translatorFor } from "~/i18n/translate";
 import { canEditDocument } from "~/server/workspace/item-access";
 import { getActiveDriveLink } from "~/server/services/google-drive/links";
+import { planObjectDeletion } from "~/server/storage/deletion/plan";
 
 export async function POST(
     request: Request,
@@ -47,16 +49,14 @@ export async function POST(
             const ctx = await requireWorkspacePermission("documents.edit");
             if (!ctx.success) return ctx.response;
 
+            const scope = await ctx.data.documentScope();
             // Scoped in SQL: a cross-company or out-of-scope id reads exactly
             // like a missing document.
             const [doc] = await db
                 .select()
                 .from(document)
                 .where(
-                    and(
-                        eq(document.id, documentId),
-                        scopedDocumentWhere(ctx.data.companyId, await ctx.data.documentScope())
-                    )
+                    and(eq(document.id, documentId), scopedDocumentWhere(ctx.data.companyId, scope))
                 );
 
             if (!doc) {
@@ -85,80 +85,98 @@ export async function POST(
                 );
             }
 
-            // Look up the target version and verify it actually belongs to this
-            // document. Without this check a caller could revert Document A to use
-            // a version row from Document B.
-            // Also pull url + mimeType so we can mirror them onto the document row
-            // below, keeping the legacy `document.url` / `document.mimeType`
-            // denormalized cache in lockstep with the currently-selected version.
-            const [targetVersion] = await db
-                .select({
-                    id: documentVersions.id,
-                    versionNumber: documentVersions.versionNumber,
-                    url: documentVersions.url,
-                    mimeType: documentVersions.mimeType,
-                })
-                .from(documentVersions)
-                .where(
-                    and(
-                        eq(documentVersions.id, versionId),
-                        eq(documentVersions.documentId, BigInt(documentId))
+            return await db.transaction(async tx => {
+                // Serialize pointer/URL changes with version creation and deletion.
+                const [lockedDoc] = await tx
+                    .select()
+                    .from(document)
+                    .where(
+                        and(
+                            eq(document.id, documentId),
+                            scopedDocumentWhere(ctx.data.companyId, scope)
+                        )
                     )
+                    .for("update");
+                if (!lockedDoc) {
+                    return NextResponse.json(
+                        { error: translatorFor(locale, "errors.api")("documentNotFound") },
+                        { status: 404 }
+                    );
+                }
+
+                // A version must belong to this document. Mirror its URL and MIME
+                // type onto the legacy cache used by non-version-aware readers.
+                const [targetVersion] = await tx
+                    .select({
+                        id: documentVersions.id,
+                        versionNumber: documentVersions.versionNumber,
+                        url: documentVersions.url,
+                        mimeType: documentVersions.mimeType,
+                    })
+                    .from(documentVersions)
+                    .where(
+                        and(
+                            eq(documentVersions.id, versionId),
+                            eq(documentVersions.documentId, BigInt(documentId))
+                        )
+                    )
+                    .for("update");
+
+                if (!targetVersion) {
+                    return NextResponse.json({ error: t("versionNotFound") }, { status: 404 });
+                }
+
+                // Recheck under lock: a concurrent revert may already have won.
+                if (
+                    lockedDoc.currentVersionId !== null &&
+                    Number(lockedDoc.currentVersionId) === targetVersion.id
+                ) {
+                    return NextResponse.json(
+                        {
+                            success: true,
+                            documentId,
+                            versionId: targetVersion.id,
+                            versionNumber: targetVersion.versionNumber,
+                            alreadyCurrent: true,
+                        },
+                        { status: 200 }
+                    );
+                }
+
+                if (lockedDoc.url !== targetVersion.url) {
+                    await planObjectDeletion(tx, {
+                        companyId: lockedDoc.companyId,
+                        urls: [lockedDoc.url],
+                        requestedBy: ctx.data.authUserId,
+                        reason: "version_revert",
+                        traceId: randomUUID(),
+                    });
+                }
+                await tx
+                    .update(document)
+                    .set({
+                        currentVersionId: BigInt(targetVersion.id),
+                        url: targetVersion.url,
+                        mimeType: targetVersion.mimeType,
+                    })
+                    .where(eq(document.id, documentId));
+
+                console.log(
+                    `[Versions] Reverted doc=${documentId} to v${targetVersion.versionNumber} ` +
+                        `(versionId=${targetVersion.id}) by user=${ctx.data.authUserId}`
                 );
 
-            if (!targetVersion) {
-                return NextResponse.json({ error: t("versionNotFound") }, { status: 404 });
-            }
-
-            // No-op if the target is already current — return 200 rather than an
-            // error so the client can call this unconditionally from a menu.
-            if (
-                doc.currentVersionId !== null &&
-                Number(doc.currentVersionId) === targetVersion.id
-            ) {
                 return NextResponse.json(
                     {
                         success: true,
                         documentId,
                         versionId: targetVersion.id,
                         versionNumber: targetVersion.versionNumber,
-                        alreadyCurrent: true,
+                        alreadyCurrent: false,
                     },
                     { status: 200 }
                 );
-            }
-
-            // Flip the current-version pointer AND refresh the legacy url/mimeType
-            // fields so every non-version-aware read path sees the right blob.
-            // Same rationale as the versions POST route: `document.url` is the
-            // legacy "document's blob" field used by DocumentViewer, fetchDocument,
-            // and anything else that predates versioning. Leaving it stale causes
-            // the main viewer to keep showing the previously-current version after
-            // revert.
-            await db
-                .update(document)
-                .set({
-                    currentVersionId: BigInt(targetVersion.id),
-                    url: targetVersion.url,
-                    mimeType: targetVersion.mimeType,
-                })
-                .where(eq(document.id, documentId));
-
-            console.log(
-                `[Versions] Reverted doc=${documentId} to v${targetVersion.versionNumber} ` +
-                    `(versionId=${targetVersion.id}) by user=${ctx.data.authUserId}`
-            );
-
-            return NextResponse.json(
-                {
-                    success: true,
-                    documentId,
-                    versionId: targetVersion.id,
-                    versionNumber: targetVersion.versionNumber,
-                    alreadyCurrent: false,
-                },
-                { status: 200 }
-            );
+            });
         } catch (error) {
             console.error("[Versions] revert failed:", error);
             return NextResponse.json(

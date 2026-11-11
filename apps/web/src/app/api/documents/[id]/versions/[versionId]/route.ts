@@ -25,7 +25,7 @@ import { NextResponse } from "next/server";
 import { and, eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { document, documentVersions } from "@launchstack/store/schema";
+import { document, documentVersions, ocrJobs } from "@launchstack/store/schema";
 import { planVersionDeletion } from "~/server/storage/deletion/plan";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
@@ -59,6 +59,27 @@ export async function DELETE(
             if (!ctx.success) return ctx.response;
 
             const scope = await ctx.data.documentScope();
+            // Resolve item permissions before holding database locks.
+            const [editableDoc] = await db
+                .select()
+                .from(document)
+                .where(
+                    and(eq(document.id, documentId), scopedDocumentWhere(ctx.data.companyId, scope))
+                );
+            if (!editableDoc) {
+                return NextResponse.json(
+                    { error: translatorFor(locale, "errors.api")("documentNotFound") },
+                    { status: 404 }
+                );
+            }
+            if (
+                !(await canEditDocument(ctx.data, {
+                    id: documentId,
+                    category: editableDoc.category,
+                }))
+            ) {
+                return NextResponse.json({ error: s("documentEditDenied") }, { status: 403 });
+            }
             return await db.transaction(async tx => {
                 // Scoped in SQL: a cross-company or out-of-scope id reads exactly
                 // like a missing document.
@@ -78,13 +99,6 @@ export async function DELETE(
                         { error: translatorFor(locale, "errors.api")("documentNotFound") },
                         { status: 404 }
                     );
-                }
-
-                // Throwing a version away is changing the file (ADR-014).
-                if (
-                    !(await canEditDocument(ctx.data, { id: documentId, category: doc.category }))
-                ) {
-                    return NextResponse.json({ error: s("documentEditDenied") }, { status: 403 });
                 }
 
                 // Must belong to this document — prevents cross-document row deletion.
@@ -148,6 +162,9 @@ export async function DELETE(
                     reason: "version_delete",
                     traceId: randomUUID(),
                 });
+                // Jobs are not version-cascaded; remove their reference only after
+                // the planner has snapshotted any processing URL they own.
+                await tx.delete(ocrJobs).where(eq(ocrJobs.versionId, BigInt(versionId)));
 
                 // Deleting the document_versions row cascades to all RLM tables that
                 // FK against it (structure, context_chunks, retrieval_chunks, metadata,

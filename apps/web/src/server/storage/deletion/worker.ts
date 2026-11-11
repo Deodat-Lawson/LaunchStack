@@ -1,4 +1,4 @@
-import { and, eq, inArray, sql, type SQLWrapper } from "drizzle-orm";
+import { and, eq, inArray, or, sql, type SQLWrapper } from "drizzle-orm";
 import {
     document,
     documentVersions,
@@ -10,6 +10,7 @@ import {
 import { getEngine } from "~/server/engine";
 import { brandChannels, brandMedia } from "~/server/db/schema/brand";
 import { collabAgentPersona } from "~/server/db/schema/collab";
+import { workspaceSessionMessages, workspaceSessions } from "~/server/db/schema/workspace-sessions";
 import {
     storageDeletionItems,
     storageDeletionRequests,
@@ -21,32 +22,47 @@ import { findStoredObjectsByRefs } from "../ledger";
 import { refIdentity, type DeleteResult, type ObjectRef } from "../object-ref";
 import { refFromStoredUrl } from "../stored-url";
 
-/** Inventory and detached job/batch history are not live references. Never tenant-filter this query. */
-async function isReferenced(tx: Executor, urls: string[], ref: ObjectRef): Promise<boolean> {
+/** Inventory and completed history are not live references. Never tenant-filter this query. */
+async function isReferenced(
+    tx: Executor,
+    { urls, ref, ledgered }: { urls: string[]; ref: ObjectRef; ledgered: boolean }
+): Promise<boolean> {
     const matched = await tx.execute<{ referenced: boolean }>(sql`
         SELECT EXISTS (
             SELECT 1 FROM ${document} WHERE ${inArray(document.url, urls)}
-                OR ${inArray(sql`${document.ocrMetadata}->'websitePreview'->>'url'`, urls)}
-                OR ${inArray(sql`${document.ocrMetadata}->>'audioUrl'`, urls)}
-            UNION ALL
-            SELECT 1 FROM ${documentVersions} WHERE ${inArray(documentVersions.url, urls)}
-                OR ${inArray(sql`${documentVersions.ocrMetadata}->'websitePreview'->>'url'`, urls)}
-                OR ${inArray(sql`${documentVersions.ocrMetadata}->>'audioUrl'`, urls)}
+            UNION ALL SELECT 1 FROM ${document}
+                WHERE ${inArray(sql`${document.ocrMetadata}->'websitePreview'->>'url'`, urls)}
+            UNION ALL SELECT 1 FROM ${document}
+                WHERE ${inArray(sql`${document.ocrMetadata}->>'audioUrl'`, urls)}
+            UNION ALL SELECT 1 FROM ${documentVersions} WHERE ${inArray(documentVersions.url, urls)}
+            UNION ALL SELECT 1 FROM ${documentVersions}
+                WHERE ${inArray(sql`${documentVersions.ocrMetadata}->'websitePreview'->>'url'`, urls)}
+            UNION ALL SELECT 1 FROM ${documentVersions}
+                WHERE ${inArray(sql`${documentVersions.ocrMetadata}->>'audioUrl'`, urls)}
             UNION ALL
             SELECT 1 FROM ${ocrJobs} INNER JOIN ${document} ON ${ocrJobs.documentId} = ${document.id}
                 WHERE ${inArray(ocrJobs.documentUrl, urls)}
+                    AND ${inArray(ocrJobs.status, ["queued", "processing"])}
             UNION ALL
-            SELECT 1 FROM ${uploadBatchFiles} INNER JOIN ${document} ON ${uploadBatchFiles.documentId} = ${document.id}
+            SELECT 1 FROM ${uploadBatchFiles}
                 WHERE ${inArray(uploadBatchFiles.storageUrl, urls)}
+                    AND ${inArray(uploadBatchFiles.status, ["queued", "uploaded", "processing", "failed"])}
             UNION ALL SELECT 1 FROM ${brandMedia} WHERE ${inArray(brandMedia.storageUrl, urls)}
             UNION ALL SELECT 1 FROM ${brandChannels} WHERE ${inArray(brandChannels.avatarUrl, urls)}
             UNION ALL SELECT 1 FROM ${collabAgentPersona} WHERE ${inArray(collabAgentPersona.avatarUrl, urls)}
+            UNION ALL SELECT 1 FROM ${workspaceSessionMessages}
+                WHERE ${or(...urls.map(url => sql`${workspaceSessionMessages.attachments} @> ${JSON.stringify([{ url }])}::jsonb`))}
+            UNION ALL SELECT 1 FROM ${workspaceSessionMessages}
+                WHERE ${or(...urls.map(url => sql`${workspaceSessionMessages.metadata} @> ${JSON.stringify({ send: { attachments: [{ url }] } })}::jsonb`))}
+            UNION ALL SELECT 1 FROM ${workspaceSessions}
+                WHERE ${or(...urls.map(url => sql`${workspaceSessions.queuedMessages} @> ${JSON.stringify([{ send: { attachments: [{ url }] } }])}::jsonb`))}
         ) AS referenced`);
     if (matched[0]?.referenced === true) return true;
-    // Only plausible aliases cross the database boundary; final parsing still
-    // verifies the complete adapter/location/key identity, never a substring.
+    // Provider ingress requires the inventory URL. Database paths remain a
+    // conservative guard on every origin, including historical audio metadata.
+    if (ledgered && ref.adapter !== "database") return false;
     const databasePattern = /^\d+$/.test(ref.key)
-        ? `/api/files/0*${BigInt(ref.key).toString()}/?([?#]|$)`
+        ? `/api/files/0*${BigInt(ref.key).toString()}([/?#]|$)`
         : null;
     const plausibleAlias = (column: SQLWrapper) =>
         ref.adapter === "database"
@@ -61,18 +77,76 @@ async function isReferenced(tx: Executor, urls: string[], ref: ObjectRef): Promi
         UNION SELECT ${document.ocrMetadata}->>'audioUrl' FROM ${document} WHERE ${plausibleAlias(sql`${document.ocrMetadata}->>'audioUrl'`)}
         UNION SELECT ${documentVersions.ocrMetadata}->'websitePreview'->>'url' FROM ${documentVersions} WHERE ${plausibleAlias(sql`${documentVersions.ocrMetadata}->'websitePreview'->>'url'`)}
         UNION SELECT ${documentVersions.ocrMetadata}->>'audioUrl' FROM ${documentVersions} WHERE ${plausibleAlias(sql`${documentVersions.ocrMetadata}->>'audioUrl'`)}
-        UNION SELECT ${ocrJobs.documentUrl} FROM ${ocrJobs} INNER JOIN ${document} ON ${ocrJobs.documentId} = ${document.id} WHERE ${plausibleAlias(ocrJobs.documentUrl)}
-        UNION SELECT ${uploadBatchFiles.storageUrl} FROM ${uploadBatchFiles} INNER JOIN ${document} ON ${uploadBatchFiles.documentId} = ${document.id} WHERE ${plausibleAlias(uploadBatchFiles.storageUrl)}
+        UNION SELECT ${ocrJobs.documentUrl} FROM ${ocrJobs} INNER JOIN ${document} ON ${ocrJobs.documentId} = ${document.id}
+            WHERE ${plausibleAlias(ocrJobs.documentUrl)} AND ${inArray(ocrJobs.status, ["queued", "processing"])}
+        UNION SELECT ${uploadBatchFiles.storageUrl} FROM ${uploadBatchFiles}
+            WHERE ${plausibleAlias(uploadBatchFiles.storageUrl)} AND ${inArray(uploadBatchFiles.status, ["queued", "uploaded", "processing", "failed"])}
         UNION SELECT ${brandMedia.storageUrl} FROM ${brandMedia} WHERE ${plausibleAlias(brandMedia.storageUrl)}
         UNION SELECT ${brandChannels.avatarUrl} FROM ${brandChannels} WHERE ${plausibleAlias(brandChannels.avatarUrl)}
         UNION SELECT ${collabAgentPersona.avatarUrl} FROM ${collabAgentPersona} WHERE ${plausibleAlias(collabAgentPersona.avatarUrl)}
+        UNION SELECT attachment->>'url' FROM ${workspaceSessionMessages},
+            LATERAL jsonb_array_elements(${workspaceSessionMessages.attachments}) AS attachment
+            WHERE ${plausibleAlias(sql`attachment->>'url'`)}
+        UNION SELECT attachment->>'url' FROM ${workspaceSessionMessages},
+            LATERAL jsonb_array_elements(${workspaceSessionMessages.metadata}->'send'->'attachments') AS attachment
+            WHERE ${plausibleAlias(sql`attachment->>'url'`)}
+        UNION SELECT attachment->>'url' FROM ${workspaceSessions},
+            LATERAL jsonb_array_elements(${workspaceSessions.queuedMessages}) AS queued,
+            LATERAL jsonb_array_elements(queued->'send'->'attachments') AS attachment
+            WHERE ${plausibleAlias(sql`attachment->>'url'`)}
     `);
+    if (ref.adapter === "database") return candidates.length > 0;
     const identity = refIdentity(ref);
     return candidates.some(candidate => {
         if (typeof candidate.url !== "string") return false;
         const parsed = refFromStoredUrl(candidate.url);
         return parsed.ok && refIdentity(parsed.ref) === identity;
     });
+}
+
+/** A live /api/files pointer also protects the provider bytes it serves. */
+async function hasReferencedPointer(
+    tx: Executor,
+    urls: string[],
+    ref: ObjectRef
+): Promise<boolean> {
+    const pointers = await tx
+        .select()
+        .from(fileUploads)
+        .where(
+            and(
+                sql`${fileUploads.storageProvider} <> 'database'`,
+                or(
+                    inArray(fileUploads.storageUrl, urls),
+                    sql`strpos(${fileUploads.storageUrl}, ${ref.key}) > 0`
+                )
+            )
+        );
+    const identity = refIdentity(ref);
+    const matching = pointers.filter(pointer => {
+        if (!pointer.storageUrl) return false;
+        if (urls.includes(pointer.storageUrl)) return true;
+        const parsed = refFromStoredUrl(pointer.storageUrl);
+        return parsed.ok && refIdentity(parsed.ref) === identity;
+    });
+    const pointerRefs = matching.map(pointer => ({
+        adapter: "database" as const,
+        storageLocationId: "database:file_uploads",
+        key: String(pointer.id),
+    }));
+    const ledger = await findStoredObjectsByRefs(tx, pointerRefs);
+    for (const pointerRef of pointerRefs) {
+        const rows = ledger.filter(row => row.objectKey === pointerRef.key);
+        if (
+            await isReferenced(tx, {
+                urls: rows.length ? rows.map(row => row.url) : [`/api/files/${pointerRef.key}`],
+                ref: pointerRef,
+                ledgered: rows.length > 0,
+            })
+        )
+            return true;
+    }
+    return false;
 }
 
 async function saveOutcome(
@@ -90,7 +164,20 @@ async function saveOutcome(
             lastError: result.message ?? null,
             updatedAt: new Date(),
         })
-        .where(and(eq(storageDeletionItems.id, id), eq(storageDeletionItems.state, "pending")));
+        .where(
+            and(
+                eq(storageDeletionItems.id, id),
+                result.outcome === "deleted" || result.outcome === "not_found"
+                    ? or(
+                          eq(storageDeletionItems.state, "pending"),
+                          and(
+                              eq(storageDeletionItems.state, "blocked"),
+                              eq(storageDeletionItems.errorCode, "retry_budget_exhausted")
+                          )
+                      )
+                    : eq(storageDeletionItems.state, "pending")
+            )
+        );
     if (result.outcome === "deleted" || result.outcome === "not_found") {
         await tx
             .update(storageObjects)
@@ -113,6 +200,16 @@ export async function processStorageDeletionRequest(requestId: number): Promise<
         .from(storageDeletionRequests)
         .where(eq(storageDeletionRequests.id, requestId));
     if (!request || request.status === "completed") return;
+    await db
+        .update(storageDeletionItems)
+        .set({ state: "pending", errorCode: null, lastError: null, updatedAt: new Date() })
+        .where(
+            and(
+                eq(storageDeletionItems.requestId, requestId),
+                eq(storageDeletionItems.state, "blocked"),
+                eq(storageDeletionItems.errorCode, "retry_budget_exhausted")
+            )
+        );
     const pending = await db
         .select({ id: storageDeletionItems.id })
         .from(storageDeletionItems)
@@ -121,7 +218,8 @@ export async function processStorageDeletionRequest(requestId: number): Promise<
                 eq(storageDeletionItems.requestId, requestId),
                 eq(storageDeletionItems.state, "pending")
             )
-        );
+        )
+        .orderBy(storageDeletionItems.id);
     for (const { id } of pending) {
         const networkRef = await db.transaction(async tx => {
             const [currentRequest] = await tx
@@ -171,8 +269,13 @@ export async function processStorageDeletionRequest(requestId: number): Promise<
                     .where(eq(storageDeletionItems.id, id));
                 return null;
             }
-            const urls = [...new Set([item.sourceUrl, ...ledger.map(row => row.url)])];
-            if (await isReferenced(tx, urls, ref)) {
+            const urls = ledger.length
+                ? [...new Set(ledger.map(row => row.url))]
+                : [item.sourceUrl];
+            if (
+                (await isReferenced(tx, { urls, ref, ledgered: ledger.length > 0 })) ||
+                (ref.adapter !== "database" && (await hasReferencedPointer(tx, urls, ref)))
+            ) {
                 await tx
                     .update(storageDeletionItems)
                     .set({
@@ -215,7 +318,13 @@ export async function processStorageDeletionRequest(requestId: number): Promise<
                     .from(storageDeletionItems)
                     .where(eq(storageDeletionItems.id, id))
                     .for("update");
-                if (item?.state === "pending") await saveOutcome(tx, id, item.attempts, result);
+                if (
+                    item?.state === "pending" ||
+                    (item?.state === "blocked" &&
+                        item.errorCode === "retry_budget_exhausted" &&
+                        (result.outcome === "deleted" || result.outcome === "not_found"))
+                )
+                    await saveOutcome(tx, id, item.attempts, result);
             });
         }
     }

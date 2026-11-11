@@ -60,7 +60,8 @@ export async function authorizeInternalFileRef(
             if (
                 object?.companyId == null ||
                 object.companyId !== companyId ||
-                object.deletedAt != null
+                object.deletedAt != null ||
+                object.url !== url
             ) {
                 throw new UploadAuthorizationError(
                     { key: "upload.server.errors.fileNotInWorkspace" },

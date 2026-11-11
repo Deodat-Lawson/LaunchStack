@@ -39,6 +39,10 @@ export interface DeleteDocumentOptions {
     readonly traceId: string;
     /** Who is deleting it; recorded with a synced file so Settings can name it to them. */
     readonly deletedByUserPk?: number | null;
+    /** Rollback may remove rows that reference a caller-owned, reusable upload. */
+    readonly planStorageDeletion?: boolean;
+    /** Internal transformations must not register an intentional connector deletion. */
+    readonly rememberConnectorDeletion?: boolean;
 }
 
 /**
@@ -71,19 +75,21 @@ export async function deleteDocumentCore(
     options: DeleteDocumentOptions
 ): Promise<void> {
     const docIdBig = BigInt(docId);
-    await planDocumentDeletion(tx, {
-        documentIds: [docId],
-        requestedBy: options.requestedBy,
-        reason: options.reason,
-        traceId: options.traceId,
-    });
+    if (options.planStorageDeletion !== false) {
+        await planDocumentDeletion(tx, {
+            documentIds: [docId],
+            requestedBy: options.requestedBy,
+            reason: options.reason,
+            traceId: options.traceId,
+        });
+    }
 
     const [row] = await tx
         .select({ title: document.title, metadata: document.ocrMetadata })
         .from(document)
         .where(eq(document.id, docId))
         .limit(1);
-    if (row) {
+    if (row && options.rememberConnectorDeletion !== false) {
         const metadata = (row.metadata ?? null) as Record<string, unknown> | null;
         await forgetDrivePick(tx, metadata);
         // A synced file stays deleted: its next sync would otherwise re-import it.

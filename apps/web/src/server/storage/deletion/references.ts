@@ -155,10 +155,25 @@ function candidatesByIdentity(candidates: readonly StorageReferenceCandidate[]) 
     return byIdentity;
 }
 
+function appOrigin(): string {
+    return new URL(env.server.APP_PUBLIC_URL ?? "http://app:3000").origin;
+}
+
 /** Only canonical internal URLs are unconditional global references. */
 function databaseOwnerGuard(source: ProtectedReferenceSource, url: SQL, fileId: SQL): SQL {
-    const origin = new URL(env.server.APP_PUBLIC_URL ?? "http://app:3000").origin;
-    return sql`(${url} = '/api/files/' || ${fileId} OR ${url} = ${origin + "/api/files/"} || ${fileId} OR ${source.companyId} = candidate.file_company_id)`;
+    return sql`(${url} = '/api/files/' || ${fileId} OR ${url} = ${appOrigin() + "/api/files/"} || ${fileId} OR ${source.companyId} = candidate.file_company_id)`;
+}
+
+/**
+ * Exact-match inputs. A database candidate also matches its canonical
+ * spellings, which is what every current writer persists, whatever URL the
+ * deleted row happened to hold.
+ */
+function exactUrls(candidate: StorageReferenceCandidate): string[] {
+    if (candidate.ref.adapter !== "database" || !/^\d+$/.test(candidate.ref.key))
+        return [...new Set(candidate.urls)];
+    const canonical = `/api/files/${BigInt(candidate.ref.key).toString()}`;
+    return [...new Set([...candidate.urls, canonical, appOrigin() + canonical])];
 }
 
 async function findDirectReferences(
@@ -170,7 +185,7 @@ async function findDirectReferences(
     if (!candidates.length) return referenced;
     const sources = protectedStorageReferenceSources();
     const values = candidates.flatMap(candidate =>
-        [...new Set(candidate.urls)].map(
+        exactUrls(candidate).map(
             url =>
                 sql`(${candidate.id}::text, ${url}::text, ${candidate.ref.adapter === "database" ? candidate.ref.key : null}::text)`
         )

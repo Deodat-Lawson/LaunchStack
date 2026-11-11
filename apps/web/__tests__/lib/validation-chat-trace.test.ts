@@ -129,6 +129,7 @@ describe("canonical stored attachment URL round trips", () => {
         "/api/files/7\u2028",
         "/another/path",
         "//example.com/api/files/7",
+        "/api/files/9007199254740993",
     ])("does not widen relative attachment validation to %j", url => {
         expect(ChatSendPayloadSchema.safeParse(send(url)).success).toBe(false);
         expect(

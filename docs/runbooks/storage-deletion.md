@@ -133,8 +133,10 @@ Ledgered provider objects use exact canonical URL matching, except rows sourced
 from `backfill-file-uploads`: those historical references retain the conservative
 parsed alias path, including mixed percent-encoding and live `/api/files` pointers
 whose provider URL is an alias. Unledgered provider inventory uses the same legacy
-protection. Database `/api/files` paths conservatively protect every origin even
-when ledgered. Exact SQL arms are separate from aliases so equality/JSON-containment
+protection. Database `/api/files` paths protect from any company when spelled
+canonically (`/api/files/<id>` or the app origin); any other spelling, from any
+origin, protects only when the referencing row belongs to the file owner's
+company. Exact SQL arms are separate from aliases so equality/JSON-containment
 indexes can be used. Inventory rows are a superset of successful writes, so known
 byte totals are potential reclaimable storage, not proof those bytes still exist.
 Unknown sizes are not estimated.

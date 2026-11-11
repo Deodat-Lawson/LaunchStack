@@ -1535,6 +1535,163 @@ describeDb("durable storage deletion (integration)", () => {
         }
     );
 
+    it.each(["api/files/", "./api/files/"])(
+        "retains a live same-company document with historical path-relative URL %s",
+        async prefix => {
+            const bytes = await file();
+            await doc(`${prefix}${bytes.id}`);
+            const candidates = [
+                { id: "relative", ref: ref(bytes.id), urls: [bytes.url], ledgered: true },
+            ];
+            expect(await findReferencedStorageObjects(test.db, candidates, [])).toEqual(
+                new Set(["relative"])
+            );
+            const id = (await objectPlan([bytes.url]))!;
+            await processStorageDeletionRequest(id);
+            expect((await items(id))[0]!.state).toBe("retained");
+            expect(deleteStoredObjects).not.toHaveBeenCalled();
+            expect(await test.db.select().from(fileUploads)).toHaveLength(1);
+        }
+    );
+
+    it.each(["api/files/", "./api/files/"])(
+        "does not let a foreign-company path-relative document URL %s pin bytes",
+        async prefix => {
+            const bytes = await file();
+            const [other] = await test.db
+                .insert(company)
+                .values({ name: "Relative foreign ref", numberOfEmployees: "1" })
+                .returning();
+            await doc(`${prefix}${bytes.id}`, null, BigInt(other!.id));
+            const candidates = [
+                { id: "relative", ref: ref(bytes.id), urls: [bytes.url], ledgered: true },
+            ];
+            expect(await findReferencedStorageObjects(test.db, candidates, [])).toEqual(new Set());
+            expect(await findReferencedStorageObjects(test.db, candidates, [], true)).toEqual(
+                new Set()
+            );
+            const id = (await objectPlan([bytes.url]))!;
+            await processStorageDeletionRequest(id);
+            expect((await items(id))[0]!.state).toBe("deleted");
+            expect(await test.db.select().from(fileUploads)).toHaveLength(0);
+        }
+    );
+
+    it("retains a historical URL normalized by trimming a trailing control character", async () => {
+        const bytes = await file();
+        await doc(`${bytes.url}\u0001`);
+        const id = (await objectPlan([bytes.url]))!;
+        await processStorageDeletionRequest(id);
+        expect((await items(id))[0]!.state).toBe("retained");
+        expect(deleteStoredObjects).not.toHaveBeenCalled();
+        expect(await test.db.select().from(fileUploads)).toHaveLength(1);
+    });
+
+    it("keeps historical chat array scans request-wide while refreshing canonical containment", async () => {
+        const bytes = await file();
+        await test.db.insert(workspaceSessions).values({
+            id: "bounded-chat",
+            companyId,
+            userId: "user:test",
+            title: "Bounded chat scan",
+        });
+        await test.db.insert(workspaceSessionMessages).values({
+            sessionId: "bounded-chat",
+            seq: 0,
+            role: "user",
+            text: "Replay",
+            attachments: [{ url: `https://old.example/api/files/00${bytes.id}` }],
+        });
+        const candidates = [{ id: "chat", ref: ref(bytes.id), urls: [bytes.url], ledgered: true }];
+        expect(await findReferencedStorageObjects(test.db, candidates, [])).toEqual(
+            new Set(["chat"])
+        );
+        const execute = jest.spyOn(test.db, "execute");
+        try {
+            expect(await findReferencedStorageObjects(test.db, candidates, [], true)).toEqual(
+                new Set()
+            );
+            const statements = execute.mock.calls.map(([query]) =>
+                typeof query === "string" ? query : new PgDialect().sqlToQuery(query.getSQL()).sql
+            );
+            expect(statements.some(statement => statement.includes("regexp_match"))).toBe(true);
+            expect(statements.some(statement => statement.includes("@>"))).toBe(true);
+            expect(statements.join("\n")).not.toContain("jsonb_array_elements");
+        } finally {
+            execute.mockRestore();
+        }
+        await test.db
+            .update(workspaceSessionMessages)
+            .set({ attachments: [{ url: bytes.url }] })
+            .where(eq(workspaceSessionMessages.sessionId, "bounded-chat"));
+        expect(await findReferencedStorageObjects(test.db, candidates, [], true)).toEqual(
+            new Set(["chat"])
+        );
+    });
+
+    it.each(["2147483648", "99999999999", "9007199254740992", "9223372036854775808"])(
+        "deletes a document with a nonexistent or unrepresentable external file id %s as skipped",
+        async id => {
+            const sourceUrl = `https://x.example/api/files/${id}`;
+            const source = await doc(sourceUrl);
+            await test.db.transaction(tx => deleteDocumentCore(tx, source.id, context));
+            expect(await test.db.select().from(document)).toHaveLength(0);
+            const [request] = await test.db.select().from(storageDeletionRequests);
+            expect(await items(request!.id)).toEqual([
+                expect.objectContaining({
+                    sourceUrl,
+                    state: "skipped",
+                    errorCode: "unrecognized",
+                    adapter: null,
+                    objectKey: null,
+                }),
+            ]);
+            await processStorageDeletionRequest(request!.id);
+            expect(deleteStoredObjects).not.toHaveBeenCalled();
+        }
+    );
+
+    it.each(["owned", "foreign", "unstamped"] as const)(
+        "recovers an existing bigint file id on an any-origin URL with %s provenance",
+        async kind => {
+            const [other] = await test.db
+                .insert(company)
+                .values({ name: "Bigint owner", numberOfEmployees: "1" })
+                .returning();
+            const owner =
+                kind === "owned" ? companyId : kind === "foreign" ? BigInt(other!.id) : null;
+            const fileId = 99999999999;
+            await test.db.insert(fileUploads).values({
+                id: fileId,
+                userId: "user:test",
+                companyId: owner,
+                filename: "bigint.txt",
+                mimeType: "text/plain",
+                fileSize: 5,
+                fileData: "aGVsbG8=",
+            });
+            await recordStoredObject(test.db, {
+                ref: ref(fileId),
+                url: `/api/files/${fileId}`,
+                companyId: owner,
+                source: "upload-file",
+            });
+            const source = await doc(`https://x.example/api/files/${fileId}`);
+            await test.db.transaction(tx => deleteDocumentCore(tx, source.id, context));
+            const [request] = await test.db.select().from(storageDeletionRequests);
+            expect((await items(request!.id))[0]).toMatchObject({
+                adapter: "database",
+                objectKey: String(fileId),
+            });
+            await processStorageDeletionRequest(request!.id);
+            expect((await items(request!.id))[0]).toMatchObject({
+                state: kind === "owned" ? "deleted" : "blocked",
+                errorCode: kind === "owned" ? null : "foreign_object",
+            });
+            expect(await test.db.select().from(fileUploads)).toHaveLength(kind === "owned" ? 0 : 1);
+        }
+    );
+
     it.each(["direct", "pointer"] as const)(
         "retains a dot-segment legacy provider alias via %s",
         async kind => {

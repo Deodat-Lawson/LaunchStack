@@ -63,6 +63,9 @@ const mockDb = {
             returning: mockInsertReturning,
         })),
     })),
+    transaction: jest.fn(
+        async (run: (tx: unknown) => Promise<unknown>): Promise<unknown> => run(mockDb)
+    ),
 };
 
 jest.mock("~/server/db", () => ({ db: mockDb }));
@@ -78,6 +81,15 @@ jest.mock("~/server/engine", () => ({
 
 jest.mock("@launchstack/store/schema", () => ({
     fileUploads: { id: "id" },
+}));
+
+const mockRecordStoredObject = jest.fn().mockResolvedValue(undefined);
+const mockDeleteStoredObjects = jest.fn().mockResolvedValue([{ outcome: "deleted" }]);
+jest.mock("~/server/storage/ledger", () => ({
+    recordStoredObject: (...args: unknown[]) => mockRecordStoredObject(...args),
+}));
+jest.mock("~/server/storage/delete-objects", () => ({
+    deleteStoredObjects: (...args: unknown[]) => mockDeleteStoredObjects(...args),
 }));
 
 jest.mock("drizzle-orm", () => ({
@@ -125,6 +137,8 @@ beforeEach(() => {
     mockEnsureBucketExists.mockClear().mockResolvedValue(undefined);
     mockInsertReturning.mockClear().mockImplementation(() => Promise.resolve([{ id: 42 }]));
     mockFetchBlob.mockClear().mockResolvedValue(new Response("blob-content"));
+    mockRecordStoredObject.mockReset().mockResolvedValue(undefined);
+    mockDeleteStoredObjects.mockReset().mockResolvedValue([{ outcome: "deleted" }]);
     setProvider("s3");
 });
 
@@ -259,6 +273,53 @@ describe("Feature: storage unification, Property 6: Upload error propagation", (
             ),
             { numRuns: 50 }
         );
+    });
+
+    it("deletes the just-written S3 object and rethrows when recording fails", async () => {
+        const error = new Error("ledger unavailable");
+        mockRecordStoredObject.mockRejectedValueOnce(error);
+        await expect(
+            uploadFile({
+                filename: "compensate.pdf",
+                data: Buffer.from("stored bytes"),
+                userId: "user",
+                companyId: 7n,
+            })
+        ).rejects.toMatchObject({ name: "StorageError", provider: "s3", cause: error });
+        const key = mockPutObject.mock.calls[0]![0] as string;
+        expect(mockDeleteStoredObjects).toHaveBeenCalledWith([
+            {
+                adapter: "s3",
+                storageLocationId: `s3:${TEST_ENDPOINT}@${TEST_BUCKET}`,
+                key,
+            },
+        ]);
+        expect(mockRecordStoredObject.mock.calls[0]![1]).toMatchObject({
+            url: `${TEST_ENDPOINT}/${TEST_BUCKET}/${key}`,
+            companyId: 7n,
+            source: "upload-file",
+            sizeBytes: Buffer.byteLength("stored bytes"),
+        });
+    });
+
+    it("warns when compensation is not confirmed without hiding the ledger failure", async () => {
+        mockRecordStoredObject.mockRejectedValueOnce(new Error("ledger unavailable"));
+        mockDeleteStoredObjects.mockResolvedValueOnce([{ outcome: "retryable" }]);
+        const warn = jest.spyOn(console, "warn").mockImplementation(() => {});
+        try {
+            await expect(
+                uploadFile({
+                    filename: "retry.txt",
+                    data: Buffer.from("bytes"),
+                    userId: "user",
+                })
+            ).rejects.toThrow("ledger unavailable");
+            expect(warn).toHaveBeenCalledWith("Failed to compensate unrecorded S3 upload", [
+                { outcome: "retryable" },
+            ]);
+        } finally {
+            warn.mockRestore();
+        }
     });
 });
 

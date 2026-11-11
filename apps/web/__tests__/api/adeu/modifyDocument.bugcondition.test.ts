@@ -65,6 +65,13 @@ function createMockStep(): { run: jest.Mock } {
 describe("Fix 1.1: Step output uses blob storage — large DOCX stored as blob URL", () => {
     beforeEach(() => {
         jest.clearAllMocks();
+        (db.select as jest.Mock).mockReturnValue({
+            from: jest.fn().mockReturnValue({
+                where: jest.fn().mockReturnValue({
+                    limit: jest.fn().mockResolvedValue([{ companyId: BigInt(7) }]),
+                }),
+            }),
+        });
     });
 
     it("step.run('modify-document') returns blobUrl, not fileBase64", async () => {

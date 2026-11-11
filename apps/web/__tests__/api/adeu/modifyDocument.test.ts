@@ -66,6 +66,13 @@ function createMockStep(): { run: jest.Mock } {
 describe("modifyDocument Inngest function", () => {
     beforeEach(() => {
         jest.clearAllMocks();
+        (db.select as jest.Mock).mockReturnValue({
+            from: jest.fn().mockReturnValue({
+                where: jest.fn().mockReturnValue({
+                    limit: jest.fn().mockResolvedValue([{ companyId: BigInt(7) }]),
+                }),
+            }),
+        });
     });
 
     // =========================================================================
@@ -159,6 +166,7 @@ describe("modifyDocument Inngest function", () => {
             await handler({ event, step });
 
             expect(fetchBlob).toHaveBeenCalledWith("https://blob.store/original.docx");
+            expect(putFile).toHaveBeenCalledWith(expect.objectContaining({ companyId: BigInt(7) }));
         });
 
         it("throws when Blob fetch returns non-ok", async () => {
@@ -185,6 +193,47 @@ describe("modifyDocument Inngest function", () => {
     // Step 2: modify-document
     // =========================================================================
     describe("modify-document step", () => {
+        it("skips modification, blob writing, and record updates when the document no longer exists", async () => {
+            (fetchBlob as jest.Mock).mockResolvedValueOnce({
+                ok: true,
+                arrayBuffer: async () => new ArrayBuffer(0),
+            });
+            (db.select as jest.Mock).mockReturnValueOnce({
+                from: jest.fn().mockReturnValue({
+                    where: jest.fn().mockReturnValue({
+                        limit: jest.fn().mockResolvedValue([]),
+                    }),
+                }),
+            });
+            const step = createMockStep();
+            // Inngest keeps its handler behind an internal function-object property.
+            const rawFunction = modifyDocument as unknown as {
+                fn: (ctx: { event: unknown; step: unknown }) => Promise<unknown>;
+            };
+            const handler = rawFunction.fn;
+
+            await expect(
+                handler({
+                    event: {
+                        data: {
+                            documentId: 42,
+                            documentUrl: "https://blob.store/deleted.docx",
+                            authorName: "Author",
+                            edits: [],
+                        },
+                    },
+                    step,
+                })
+            ).resolves.toEqual({ success: false, error: "Document not found" });
+
+            expect(processDocumentBatch).not.toHaveBeenCalled();
+            expect(putFile).not.toHaveBeenCalled();
+            expect(db.update).not.toHaveBeenCalled();
+            expect(step.run).toHaveBeenCalledTimes(2);
+            expect(step.run).toHaveBeenNthCalledWith(1, "fetch-document", expect.any(Function));
+            expect(step.run).toHaveBeenNthCalledWith(2, "modify-document", expect.any(Function));
+        });
+
         it("calls processDocumentBatch with correct params", async () => {
             const docBuffer = Buffer.from("docx-content");
             const summary = {
@@ -358,6 +407,7 @@ describe("modifyDocument Inngest function", () => {
                 const stored = await putFile({
                     filename: "modified-42.docx",
                     data: modifiedBuffer,
+                    companyId: BigInt(7),
                     contentType:
                         "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                 });
@@ -391,6 +441,7 @@ describe("modifyDocument Inngest function", () => {
                     await putFile({
                         filename: "test.docx",
                         data: Buffer.from("data"),
+                        companyId: null,
                     });
                 })
             ).rejects.toThrow("Upload quota exceeded");

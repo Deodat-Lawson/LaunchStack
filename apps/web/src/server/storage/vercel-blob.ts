@@ -2,12 +2,16 @@ import { put, type PutBlobResult } from "@vercel/blob";
 import { randomUUID } from "node:crypto";
 
 import { env } from "~/env";
+import { StorageError } from "~/lib/storage";
+import { deleteStoredObjects } from "./delete-objects";
+import { recordStoredObject } from "./ledger";
 import { currentStorageLocationId } from "./location";
 import type { ObjectRef } from "./object-ref";
 
 export interface PutFileInput {
     filename: string;
     data: ArrayBuffer | Uint8Array | Buffer;
+    companyId: bigint | null;
     contentType?: string;
 }
 
@@ -40,6 +44,7 @@ let detectedAccess: "public" | "private" | null = null;
 export async function putFile({
     filename,
     data,
+    companyId,
     contentType,
 }: PutFileInput): Promise<StoredBlobMetadata> {
     const token = getBlobToken();
@@ -71,11 +76,43 @@ export async function putFile({
     }
 
     const extended = blob as PutBlobResult & { contentHash?: string | null };
+    const ref: ObjectRef = { adapter: "vercel-blob", storageLocationId, key: blob.pathname };
+    try {
+        // Defer the engine across its storage-port initialization cycle.
+        const { getEngine } = await import("~/server/engine");
+        await recordStoredObject(getEngine().db, {
+            ref,
+            url: blob.url,
+            companyId,
+            source: "vercel-blob",
+            contentType: blob.contentType,
+            sizeBytes: body.byteLength,
+            checksum: extended.contentHash ?? null,
+        });
+    } catch (error) {
+        try {
+            const results = await deleteStoredObjects([ref]);
+            if (
+                results.some(
+                    result => result.outcome === "blocked" || result.outcome === "retryable"
+                )
+            ) {
+                console.warn("Failed to compensate unrecorded Vercel Blob upload", results);
+            }
+        } catch (cleanupError) {
+            console.warn("Failed to compensate unrecorded Vercel Blob upload", cleanupError);
+        }
+        throw new StorageError(
+            error instanceof Error ? error.message : String(error),
+            "vercel-blob",
+            error instanceof Error ? error : undefined
+        );
+    }
 
     return {
         url: blob.url,
         pathname: blob.pathname,
-        ref: { adapter: "vercel-blob", storageLocationId, key: blob.pathname },
+        ref,
         contentType: blob.contentType,
         checksum: extended.contentHash ?? null,
     };

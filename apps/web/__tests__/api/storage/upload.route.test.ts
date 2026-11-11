@@ -1,5 +1,6 @@
 import { POST } from "~/app/api/storage/upload/route";
 import { fileUploads } from "@launchstack/store/schema";
+import { refFromStoredUrl } from "~/server/storage/stored-url";
 import { makeWorkspaceContext } from "../../helpers/workspace-context";
 
 const mockWorkspaceContext = jest.fn();
@@ -7,33 +8,37 @@ const mockPutObject = jest.fn();
 const mockEnsureBucketExists = jest.fn();
 const mockValues = jest.fn();
 const mockInsert = jest.fn(() => ({ values: mockValues }));
-const mockTx = { insert: mockInsert };
-const mockTransaction = jest.fn();
+const mockDb = { insert: mockInsert };
 const mockRecordStoredObject = jest.fn();
-const mockDeleteStoredObjects = jest.fn();
+const mockRemoveStoredObject = jest.fn();
+const mockDiscardUnrecordedObject = jest.fn();
 const mockIsS3Storage = jest.fn();
 
+jest.mock("~/env", () => ({
+    env: {
+        server: {
+            NEXT_PUBLIC_S3_ENDPOINT: "https://s3.internal/objects/",
+            S3_PUBLIC_ENDPOINT: "https://files.example/objects/",
+            S3_BUCKET_NAME: "documents",
+        },
+    },
+}));
 jest.mock("~/lib/require-workspace-context", () => ({
     requireWorkspaceContext: () => mockWorkspaceContext(),
 }));
-jest.mock("~/server/engine", () => ({
-    getEngine: () => ({ db: { transaction: (...args: unknown[]) => mockTransaction(...args) } }),
-}));
+jest.mock("~/server/engine", () => ({ getEngine: () => ({ db: mockDb }) }));
 jest.mock("~/lib/storage", () => ({ isS3Storage: () => mockIsS3Storage() }));
 jest.mock("~/server/storage/s3-client", () => ({
+    ...jest.requireActual("~/server/storage/s3-client"),
     putObject: (...args: unknown[]) => mockPutObject(...args),
     ensureBucketExists: () => mockEnsureBucketExists(),
-    getS3BucketName: () => "documents",
-    getObjectUrl: (key: string) => `https://s3.example/documents/${key}`,
-}));
-jest.mock("~/server/storage/location", () => ({
-    currentStorageLocationId: () => "s3:https://s3.internal@documents",
 }));
 jest.mock("~/server/storage/ledger", () => ({
     recordStoredObject: (...args: unknown[]) => mockRecordStoredObject(...args),
+    removeStoredObject: (...args: unknown[]) => mockRemoveStoredObject(...args),
 }));
-jest.mock("~/server/storage/delete-objects", () => ({
-    deleteStoredObjects: (...args: unknown[]) => mockDeleteStoredObjects(...args),
+jest.mock("~/server/storage/compensate", () => ({
+    discardUnrecordedObject: (...args: unknown[]) => mockDiscardUnrecordedObject(...args),
 }));
 
 function multipart() {
@@ -41,39 +46,40 @@ function multipart() {
     form.append("file", new File(["memo"], "memo.pdf", { type: "application/pdf" }));
     return new Request("http://localhost/api/storage/upload", { method: "POST", body: form });
 }
-
 beforeEach(() => {
-    jest.clearAllMocks();
+    jest.resetAllMocks();
+    mockInsert.mockImplementation(() => ({ values: mockValues }));
     mockWorkspaceContext.mockResolvedValue({ success: true, data: makeWorkspaceContext() });
     mockIsS3Storage.mockReturnValue(true);
     mockPutObject.mockResolvedValue(undefined);
     mockEnsureBucketExists.mockResolvedValue(undefined);
     mockValues.mockResolvedValue(undefined);
     mockRecordStoredObject.mockResolvedValue(undefined);
-    mockDeleteStoredObjects.mockResolvedValue([{ outcome: "deleted" }]);
-    mockTransaction.mockImplementation((work: (tx: typeof mockTx) => Promise<void>) =>
-        work(mockTx)
-    );
+    mockRemoveStoredObject.mockResolvedValue(undefined);
+    mockDiscardUnrecordedObject.mockResolvedValue(true);
     jest.spyOn(console, "error").mockImplementation(() => {});
     jest.spyOn(console, "warn").mockImplementation(() => {});
 });
-
 afterEach(() => jest.restoreAllMocks());
 
-it("records file ownership and the durable object in the same transaction", async () => {
+it("commits the ledger before S3 bytes, then ownership, with a round-trippable ref", async () => {
     const response = await POST(multipart());
     expect(response.status).toBe(200);
     const body = (await response.json()) as { objectKey: string; bucket: string; url: string };
+    const ref = {
+        adapter: "s3",
+        storageLocationId: "s3:https://s3.internal/objects@documents",
+        key: body.objectKey,
+    };
     expect(body).toEqual({
         objectKey: expect.stringMatching(/^documents\/.+-memo\.pdf$/),
         bucket: "documents",
-        url: `https://s3.example/documents/${body.objectKey}`,
+        url: `https://s3.internal/objects/documents/${body.objectKey}`,
     });
-    expect(mockTransaction).toHaveBeenCalledTimes(1);
     expect(mockInsert).toHaveBeenCalledWith(fileUploads);
     expect(mockValues).toHaveBeenCalledWith({
         userId: "user-a",
-        companyId: BigInt(5),
+        companyId: 5n,
         filename: "memo.pdf",
         mimeType: "application/pdf",
         fileSize: 4,
@@ -81,70 +87,66 @@ it("records file ownership and the durable object in the same transaction", asyn
         storageUrl: body.url,
         storagePathname: body.objectKey,
     });
-    expect(mockRecordStoredObject).toHaveBeenCalledWith(mockTx, {
-        ref: {
-            adapter: "s3",
-            storageLocationId: "s3:https://s3.internal@documents",
-            key: body.objectKey,
-        },
+    expect(mockRecordStoredObject).toHaveBeenCalledWith(mockDb, {
+        ref,
         url: body.url,
-        companyId: BigInt(5),
+        companyId: 5n,
         source: "storage-upload-route",
         contentType: "application/pdf",
         sizeBytes: 4,
     });
-    expect(mockDeleteStoredObjects).not.toHaveBeenCalled();
+    expect(refFromStoredUrl(body.url)).toEqual({ ok: true, ref });
+    expect(refFromStoredUrl(body.url.replace("s3.internal", "files.example"))).toEqual({
+        ok: true,
+        ref,
+    });
+    expect(mockRecordStoredObject.mock.invocationCallOrder[0]).toBeLessThan(
+        mockPutObject.mock.invocationCallOrder[0]!
+    );
+    expect(mockPutObject.mock.invocationCallOrder[0]).toBeLessThan(
+        mockInsert.mock.invocationCallOrder[0]!
+    );
+    expect(mockDiscardUnrecordedObject).not.toHaveBeenCalled();
 });
 
-it.each(["ownership insert", "ledger insert", "transaction commit"])(
-    "compensates a failed %s and preserves the error response",
-    async failure => {
-        if (failure === "ownership insert")
-            mockValues.mockRejectedValueOnce(new Error("record failed"));
-        if (failure === "ledger insert")
-            mockRecordStoredObject.mockRejectedValueOnce(new Error("record failed"));
-        if (failure === "transaction commit")
-            mockTransaction.mockImplementationOnce(
-                async (work: (tx: typeof mockTx) => Promise<void>) => {
-                    await work(mockTx);
-                    throw new Error("record failed");
-                }
-            );
-        const response = await POST(multipart());
-        expect(response.status).toBe(500);
-        expect(await response.json()).toEqual({
-            error: expect.any(String),
-            details: "record failed",
-        });
-        const key = mockPutObject.mock.calls[0]![0] as string;
-        expect(mockDeleteStoredObjects).toHaveBeenCalledWith([
-            {
-                adapter: "s3",
-                storageLocationId: "s3:https://s3.internal@documents",
-                key,
-            },
-        ]);
-    }
-);
-
-it.each(["blocked", "retryable", "throw"])(
-    "warns when compensation fails with %s without masking the insert failure",
-    async outcome => {
-        mockRecordStoredObject.mockRejectedValueOnce(new Error("record failed"));
-        if (outcome === "throw")
-            mockDeleteStoredObjects.mockRejectedValueOnce(new Error("delete failed"));
-        else mockDeleteStoredObjects.mockResolvedValueOnce([{ outcome }]);
-        const response = await POST(multipart());
-        expect(response.status).toBe(500);
-        expect(((await response.json()) as { details: string }).details).toBe("record failed");
-        expect(console.warn).toHaveBeenCalled();
-    }
-);
-
-it("does not attempt recording or compensation when the object write fails", async () => {
-    mockPutObject.mockRejectedValueOnce(new Error("write failed"));
+it("does not write bytes or ownership when the ledger insert fails", async () => {
+    mockRecordStoredObject.mockRejectedValueOnce(new Error("ledger failed"));
     const response = await POST(multipart());
     expect(response.status).toBe(500);
-    expect(mockTransaction).not.toHaveBeenCalled();
-    expect(mockDeleteStoredObjects).not.toHaveBeenCalled();
+    expect(mockPutObject).not.toHaveBeenCalled();
+    expect(mockInsert).not.toHaveBeenCalled();
+    expect(mockDiscardUnrecordedObject).not.toHaveBeenCalled();
+});
+
+it.each(["put", "ownership"])(
+    "compensates a failed %s and removes the ledger only after deletion",
+    async failure => {
+        if (failure === "put") mockPutObject.mockRejectedValueOnce(new Error("write failed"));
+        else mockValues.mockRejectedValueOnce(new Error("write failed"));
+        const response = await POST(multipart());
+        expect(response.status).toBe(500);
+        expect(((await response.json()) as { details: string }).details).toBe("write failed");
+        const ref = mockRecordStoredObject.mock.calls[0]![1].ref;
+        expect(mockDiscardUnrecordedObject).toHaveBeenCalledWith(ref, expect.any(String));
+        expect(mockRemoveStoredObject).toHaveBeenCalledWith(mockDb, ref);
+        expect(mockDiscardUnrecordedObject.mock.invocationCallOrder[0]).toBeLessThan(
+            mockRemoveStoredObject.mock.invocationCallOrder[0]!
+        );
+        if (failure === "put") expect(mockInsert).not.toHaveBeenCalled();
+    }
+);
+
+it("retains the ledger when provider cleanup is unconfirmed", async () => {
+    mockValues.mockRejectedValueOnce(new Error("ownership failed"));
+    mockDiscardUnrecordedObject.mockResolvedValueOnce(false);
+    expect((await POST(multipart())).status).toBe(500);
+    expect(mockRemoveStoredObject).not.toHaveBeenCalled();
+});
+
+it("preserves the write error if ledger-row cleanup fails", async () => {
+    mockPutObject.mockRejectedValueOnce(new Error("write failed"));
+    mockRemoveStoredObject.mockRejectedValueOnce(new Error("ledger delete failed"));
+    const response = await POST(multipart());
+    expect(((await response.json()) as { details: string }).details).toBe("write failed");
+    expect(console.warn).toHaveBeenCalled();
 });

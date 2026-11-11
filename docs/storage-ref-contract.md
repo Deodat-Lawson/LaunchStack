@@ -179,11 +179,36 @@ and available checksum:
 | `POST /api/storage/upload`      | `storage-upload-route` | Authorized workspace                           |
 
 Database uploads insert `file_uploads` and the inventory in the same transaction.
-Provider writes happen first; a failed inventory insert triggers best-effort
-deletion of the new object and fails the write. Unconfirmed compensation is
-logged rather than silently leaving bytes behind. UploadThing records and returns
-`ufsUrl`, including for private ACL uploads (URL identity does not bypass ACL).
-Its company stamp comes from signed callback metadata, not callback cookies.
+S3 and Vercel Blob writes commit a write-ahead inventory row **before** the
+provider put: **the ledger is a superset of the objects we wrote**. A crash before
+the put may leave a row for bytes that were never written; deleting a missing S3
+key (or Blob pathname) is harmless. A crash after the put cannot hide those bytes
+from inventory. Failed puts trigger best-effort provider cleanup (a failed
+request can still have reached the provider), and remove the ledger row only
+after deletion is confirmed. Unconfirmed cleanup retains the inventory for audit.
+The S3 upload route inserts `file_uploads` only after the put; ownership-insert
+failure uses the same object-and-ledger cleanup, without rolling back the
+write-ahead record prematurely.
+
+Vercel Blob uses a locally generated UUID pathname and explicitly passes
+`addRandomSuffix: false`. Installed `@vercel/blob` v2.3 documents that `put`
+defaults this option to false and sends `x-add-random-suffix: 0` when explicit,
+so the pathname is known before the put. The attempted public/private access URL
+is recorded first; a private-store rejection changes the row's URL before the
+private retry, and successful completion finalizes returned metadata. Repeated
+`recordStoredObject` calls remain insert-only.
+
+UploadThing cannot write ahead: the browser has already uploaded bytes when the
+server completion callback runs. It records and returns `ufsUrl`, including for
+private ACL uploads (URL identity does not bypass ACL). Its company stamp comes
+from signed callback metadata, not callback cookies. A failed ledger insert is
+logged with the ref before compensation; rejected URLs also attempt cleanup
+using the configured app and provider key when no parsed ref is available. If no
+app location is recoverable, the key is logged for operator cleanup. A process
+crash before the callback records remains an unavoidable unledgered-object window.
+All compensating provider deletes share `discardUnrecordedObject`: only `deleted`
+and `not_found` confirm cleanup; absent results, other outcomes and thrown errors
+are logged without masking the original write failure.
 
 UploadThing v7.7.4 logs thrown completion errors without sending
 `/callback-result`, potentially leaving `awaitServerData` clients pending (the

@@ -120,6 +120,10 @@ timestamp. `waived` is terminal success for request status, not confirmation of
 byte deletion; it never stamps the inventory deleted.
 See the [storage deletion runbook](../runbooks/storage-deletion.md) for inspection,
 requeue, audited waivers, and bounded orphan audits.
+Operator requeue never clears `foreign_object` provenance decisions; the command
+reports those items as skipped. A missing delivery is recreated only while its
+company still exists. Inventory whose company has been removed remains visible
+in orphan reports but is not enqueued under an invented tenant.
 
 The spec's nullable-ref CHECK allowed only quarantined items while also requiring
 unrecognized URLs to be skipped. The implemented CHECK permits fully null refs

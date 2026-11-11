@@ -27,9 +27,13 @@ pending item's age, blocked/quarantined items, and dead deletion outbox rows.
 A rising pending age indicates lag or retries; blocked items require a decision,
 not simply more time. Dead events and blocked requests are related but not
 identical: an event can finish processing a request whose provider refused an
-item. A request with a dead event is stuck even if its status still says pending:
-`summary` reports stuck requests and `list --status blocked` includes them.
-Inspect the request's item errors and the event's `last_error` together.
+item. A request with a dead event or a pending request whose deterministic event
+is missing is operationally blocked even if its persisted status still says
+pending: `summary` reports stuck requests and `list --status blocked` includes
+them. A missing event is reported as `event_missing`. Inspect the request's item
+errors and, when present, the event's `last_error` together. Tenant deletion
+cascades outbox rows, but not the deletion audit records; there is currently no
+in-product tenant-delete path.
 
 | Item state    | Meaning                                                                                                   |
 | ------------- | --------------------------------------------------------------------------------------------------------- |
@@ -57,17 +61,26 @@ location stamp just to make deletion proceed.
 pnpm --filter @launchstack/web exec tsx scripts/storage-deletion.ts requeue 456 --actor operator@example.com --note 'Restored S3 credentials; incident INC-123'
 ```
 
-Requeue atomically resets blocked items to pending with a fresh attempt budget,
-sets the request pending, and enqueues/revives its deterministic event using the
-normal outbox helper. Deleted, retained, skipped, waived and quarantined items
-are not reset. If the event is dead, pending items' attempt/error state is also
-reset. Repeating the command after revival does not reset live pending item
-attempts or duplicate an active event. A `processing` delivery refuses requeue
-with “delivery in flight, retry shortly”; let the current handler finish before
-retrying. Completed requests refuse mutation. Affected items durably store
-`requeued_by`, `requeue_note` and `requeued_at`, independently of waiver resolution.
-Delayed dead callbacks re-read the event under the request lock and cannot undo
-a committed requeue.
+Requeue atomically resets retry-budget-exhausted and provider-classified blocked
+items to pending with a fresh attempt budget, sets the request pending, and
+enqueues/revives its deterministic event using the normal outbox helper.
+`foreign_object` provenance blocks are **never requeueable** and are reported as
+skipped in the command output; do not clear their error or force them pending.
+Deleted, retained, skipped, waived and quarantined items are not reset. If the
+event is dead, eligible pending items' attempt/error state is also reset.
+Repeating the command after revival does not reset live pending item attempts or
+duplicate an active event. A `processing` delivery refuses requeue with “delivery
+in flight, retry shortly”; let the current handler finish before retrying.
+Completed requests refuse mutation. Affected items durably store `requeued_by`,
+`requeue_note` and `requeued_at`, independently of waiver resolution. Delayed
+dead callbacks re-read the event under the request lock and cannot undo a
+committed requeue.
+
+For `event_missing`, requeue recreates the event only if the stamped company
+still exists. If the company has been removed, requeue refuses rather than
+inventing a tenant or failing an outbox foreign-key insert. Investigate the
+remaining items and use `waive` to record acceptance of residual bytes; restoring
+a different company's identity is not recovery.
 
 The [outbox runbook](outbox.md) covers dead rows and stale claims. For storage
 cleanup, use this command rather than its raw SQL replay example: replaying only
@@ -86,9 +99,13 @@ ambiguous ownership claim you have not investigated.
 pnpm --filter @launchstack/web exec tsx scripts/storage-deletion.ts waive 789 --actor operator@example.com --note 'Provider account retired; accepted residual bytes under INC-124'
 ```
 
-Only blocked/quarantined items can be waived. The item stores `resolved_by`,
-`resolution_note` and `resolved_at`, preserving its original error details. Its
-request is recomputed and can complete if this was its last unresolved item.
+Blocked/quarantined items can be waived. A pending item can also be waived only
+when the shared operational check reports its request blocked with `event_missing`
+or `event_dead` (including a tenant deletion that removed the outbox row).
+Pending items of a live request still refuse waiver. Actor and note are required
+in every case. The item stores `resolved_by`, `resolution_note` and `resolved_at`,
+preserving its original error details. Its request is recomputed and can complete
+if this was its last unresolved item.
 Waiving never calls a provider and never marks inventory bytes deleted. An
 already-waived item is unchanged when its request remains open; a completed
 request refuses even repeated mutations.
@@ -112,12 +129,15 @@ or ref. The audit keyset-pages inventory and checks protected URL columns in
 set-based SQL per page, sharing the worker's protected-column definition across
 all companies, including all three persisted chat-attachment copies, busy OCR
 jobs, active/failed batch files and live external-backed database pointers.
-Ledgered provider objects use exact canonical URL matching; only legacy provider
-inventory uses parsed alias identities. Database `/api/files` paths conservatively
-protect every origin even when ledgered. Exact SQL arms are separate from aliases
-so equality/JSON-containment indexes can be used. Inventory rows are a superset of
-successful writes, so known byte totals are potential reclaimable storage, not
-proof those bytes still exist. Unknown sizes are not estimated.
+Ledgered provider objects use exact canonical URL matching, except rows sourced
+from `backfill-file-uploads`: those historical references retain the conservative
+parsed alias path, including mixed percent-encoding and live `/api/files` pointers
+whose provider URL is an alias. Unledgered provider inventory uses the same legacy
+protection. Database `/api/files` paths conservatively protect every origin even
+when ledgered. Exact SQL arms are separate from aliases so equality/JSON-containment
+indexes can be used. Inventory rows are a superset of successful writes, so known
+byte totals are potential reclaimable storage, not proof those bytes still exist.
+Unknown sizes are not estimated.
 
 `--inventory` additionally scans population B: paginated `documents/` objects
 from the configured S3 bucket and keyset-paged database `file_uploads` ids,
@@ -142,8 +162,15 @@ pnpm --filter @launchstack/web exec tsx scripts/storage-orphan-audit.ts --grace-
 
 This explicit write mode creates normal `scope: object`, `reason: orphan_audit`
 plans and outbox events for population A only. The worker rechecks live
-references and provenance before deleting. Rows without a company stamp are
-reported but cannot safely acquire an invented tenant; they are not enqueued.
+references and provenance before deleting. Rows without a company stamp or whose
+stamped company no longer exists remain reported as candidates but are not
+enqueued. `ledger.notEnqueueable.count` includes both cases, with separate
+`reasonCounts.company_id_null` and `reasonCounts.company_missing` counts in both
+read-only and enqueue reports. The enqueue transaction rechecks company existence
+and holds `FOR KEY SHARE` on eligible company rows through planner/event insertion,
+preventing tenant deletion from racing the outbox foreign key. Ledger pages use
+ordered `FOR NO KEY UPDATE` locks to serialize competing audits without blocking
+other transactions' deletion-item foreign-key inserts (`FOR KEY SHARE`).
 Population B is report-only, including when `--inventory --enqueue` are combined.
 Repeated runs exclude objects already covered by active plans. Retained or
 waived bytes can appear in later audits because those outcomes do not stamp the

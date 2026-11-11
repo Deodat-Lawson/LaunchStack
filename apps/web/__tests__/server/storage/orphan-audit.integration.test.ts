@@ -13,6 +13,7 @@ import {
 } from "~/server/db/schema/storage";
 import { auditStorageOrphans } from "~/server/storage/audit";
 import { planObjectDeletion } from "~/server/storage/deletion/plan";
+import * as deletionPlanner from "~/server/storage/deletion/plan";
 import { getS3Client } from "~/server/storage/s3-client";
 import {
     createFounderWeeklyReviewTestDatabase,
@@ -160,6 +161,34 @@ describeDb("storage orphan audit (integration)", () => {
         expect(report.ledger.sampleKeys[0]?.key).toBe("documents/ledger-alias");
     });
 
+    it.each(["document", "pointer"] as const)(
+        "protects backfilled provider bytes with a mixed-encoded live %s alias",
+        async owner => {
+            const object = await ledger("documents/legacy-alias.pdf", {
+                source: "backfill-file-uploads",
+            });
+            const alias = "https://objects.example/files/doc%75ments/legacy%2dalias.pdf?download=1";
+            if (owner === "document") {
+                await doc(alias);
+            } else {
+                const pointer = await legacyFile(old, "s3");
+                await test.db
+                    .update(fileUploads)
+                    .set({ storageUrl: alias })
+                    .where(eq(fileUploads.id, pointer.id));
+                await doc(`/api/files/${pointer.id}`);
+            }
+            const report = await auditStorageOrphans(test.db, {
+                now,
+                enqueue: true,
+                actor: "operator:test",
+            });
+            expect(report.ledger).toMatchObject({ count: 0, requestIds: [] });
+            expect(await test.db.select().from(storageDeletionRequests)).toHaveLength(0);
+            expect(await test.db.select().from(storageObjects)).toEqual([object]);
+        }
+    );
+
     it("excludes active work by original URL or ledger id, not only ref", async () => {
         const byId = await ledger("documents/by-id");
         const byUrl = await ledger("documents/by-url");
@@ -216,7 +245,8 @@ describeDb("storage orphan audit (integration)", () => {
         expect(report.ledger.count).toBe(2);
         expect(report.ledger.notEnqueueable).toEqual({
             count: 1,
-            reason: "company_id is null; no tenant can be inferred",
+            reason: "company_id is null or company no longer exists; no tenant can be inferred",
+            reasonCounts: { company_id_null: 1, company_missing: 0 },
         });
         expect(report.ledger.requestIds).toHaveLength(1);
         const [request] = await test.db.select().from(storageDeletionRequests);
@@ -245,6 +275,55 @@ describeDb("storage orphan audit (integration)", () => {
         expect(await test.db.select().from(storageObjects)).toHaveLength(2);
     });
 
+    it("reports missing tenants without rolling back valid candidates on the same enqueue page", async () => {
+        const [removed] = await test.db
+            .insert(company)
+            .values({ name: "Removed tenant", numberOfEmployees: "1" })
+            .returning();
+        const missing = await ledger("documents/missing-tenant", {
+            companyId: BigInt(removed!.id),
+        });
+        await test.db.delete(company).where(eq(company.id, removed!.id));
+        const valid = await ledger("documents/valid-tenant");
+        await ledger("documents/null-tenant", { companyId: null });
+
+        const readOnly = await auditStorageOrphans(test.db, { now });
+        expect(readOnly.ledger).toMatchObject({
+            count: 3,
+            requestIds: [],
+            notEnqueueable: {
+                count: 2,
+                reasonCounts: { company_id_null: 1, company_missing: 1 },
+            },
+        });
+        expect(await test.db.select().from(storageDeletionRequests)).toHaveLength(0);
+
+        const report = await auditStorageOrphans(test.db, {
+            now,
+            enqueue: true,
+            actor: "operator:test",
+            pageSize: 3,
+        });
+        expect(report.ledger).toMatchObject({
+            count: 3,
+            notEnqueueable: {
+                count: 2,
+                reasonCounts: { company_id_null: 1, company_missing: 1 },
+            },
+        });
+        expect(report.ledger.requestIds).toHaveLength(1);
+        expect(await test.db.select().from(storageDeletionRequests)).toEqual([
+            expect.objectContaining({ id: report.ledger.requestIds[0], companyId }),
+        ]);
+        expect(await test.db.select().from(storageDeletionItems)).toEqual([
+            expect.objectContaining({ storedObjectId: valid.id }),
+        ]);
+        expect(await test.db.select().from(eventOutbox)).toHaveLength(1);
+        expect(
+            await test.db.select().from(storageObjects).where(eq(storageObjects.id, missing.id))
+        ).toEqual([missing]);
+    });
+
     it("serializes concurrent enqueue audits and requires an explicit actor", async () => {
         await ledger("documents/concurrent");
         await expect(auditStorageOrphans(test.db, { now, enqueue: true })).rejects.toThrow("actor");
@@ -257,6 +336,84 @@ describeDb("storage orphan audit (integration)", () => {
             expect(reports.flatMap(report => report.ledger.requestIds)).toHaveLength(1);
             expect(await test.db.select().from(storageDeletionRequests)).toHaveLength(1);
         } finally {
+            await second.close();
+        }
+    });
+
+    it("allows deletion-item FK inserts while audit locks inventory and protects the tenant until planning commits", async () => {
+        const object = await ledger("documents/lock-compatibility");
+        const [request] = await test.db
+            .insert(storageDeletionRequests)
+            .values({
+                companyId,
+                scope: "object",
+                requestedBy: "test",
+                reason: "test",
+                traceId: "test",
+                status: "completed",
+            })
+            .returning();
+        const second = await test.createSession();
+        let enterPlanner!: () => void;
+        const enteredPlanner = new Promise<void>(resolve => {
+            enterPlanner = resolve;
+        });
+        let resumePlanner!: () => void;
+        const resumedPlanner = new Promise<void>(resolve => {
+            resumePlanner = resolve;
+        });
+        const originalPlanner = deletionPlanner.planObjectDeletion;
+        const planner = jest
+            .spyOn(deletionPlanner, "planObjectDeletion")
+            .mockImplementation(async (tx, input) => {
+                enterPlanner();
+                await resumedPlanner;
+                return originalPlanner(tx, input);
+            });
+        const audit = auditStorageOrphans(test.db, {
+            now,
+            enqueue: true,
+            actor: "operator:test",
+        });
+        try {
+            await Promise.race([
+                enteredPlanner,
+                audit.then(() => {
+                    throw new Error("Audit finished before entering its planner");
+                }),
+            ]);
+            // Audit is paused inside its real transaction after acquiring page
+            // locks. This insert takes FOR KEY SHARE on the ledger FK target.
+            const inserted = await second.db.transaction(async tx => {
+                await tx.execute(sql`SET LOCAL lock_timeout = '1s'`);
+                return tx
+                    .insert(storageDeletionItems)
+                    .values({
+                        requestId: request!.id,
+                        storedObjectId: object.id,
+                        sourceUrl: "unknown:lock-probe",
+                        state: "skipped",
+                    })
+                    .returning();
+            });
+            expect(inserted).toHaveLength(1);
+            // The company lock, unlike the compatible ledger lock, must stop
+            // tenant deletion until the audit's event FK insert commits.
+            await expect(
+                second.db.transaction(async tx => {
+                    await tx.execute(sql`SET LOCAL lock_timeout = '1s'`);
+                    await tx.delete(company).where(eq(company.id, Number(companyId)));
+                })
+            ).rejects.toMatchObject({
+                cause: expect.objectContaining({ code: "55P03" }),
+            });
+            resumePlanner();
+            expect((await audit).ledger.requestIds).toHaveLength(1);
+            expect(await test.db.select().from(eventOutbox)).toHaveLength(1);
+        } finally {
+            resumePlanner();
+            await Promise.allSettled([audit]);
+            planner.mockRestore();
             await second.close();
         }
     });

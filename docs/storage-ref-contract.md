@@ -334,3 +334,8 @@ summary/list/show/requeue/waive operator CLI, dead-event repair, metrics, and th
 bounded read-only ledger/provider audit. Only explicit `--enqueue` creates
 population-A object plans through the normal planner/outbox; provider inventory
 is report-only.
+Requeue skips `foreign_object` items without clearing their state or error.
+Missing events can be recreated only for an existing company; orphan-audit
+enqueue reports absent company stamps/rows as not enqueueable. These operations
+use the lifecycle's shared operational-state and reference definitions rather
+than maintaining a second interpretation of delivery health or legacy URLs.

@@ -42,11 +42,12 @@ jest.mock("~/server/storage/vercel-blob", () => ({
 // Each route proxies (rather than redirects) under a different backend: the
 // document route for S3, the version route for database storage.
 const mockIsS3Storage = jest.fn(() => true);
+const mockIsLocalStorage = jest.fn(() => true);
 
 jest.mock("~/lib/storage", () => ({
     fetchFile: jest.fn(),
     isS3Storage: () => mockIsS3Storage(),
-    isLocalStorage: () => true,
+    isLocalStorage: () => mockIsLocalStorage(),
 }));
 
 const fetchFileMock = jest.mocked(fetchFile);
@@ -67,6 +68,7 @@ function storageReturns(body: string, type: string) {
 beforeEach(() => {
     jest.clearAllMocks();
     mockIsS3Storage.mockReturnValue(true);
+    mockIsLocalStorage.mockReturnValue(true);
     mockRequireWorkspaceContext.mockResolvedValue({ success: true, data: makeWorkspaceContext() });
 });
 
@@ -211,6 +213,21 @@ describe("GET /api/documents/[id]/versions/[versionId]/content", () => {
 
         expect(response.headers.get("Content-Security-Policy")).toBeNull();
         expect(response.headers.get("Content-Type")).toBe("application/pdf");
+    });
+
+    it("proxies a relative internal version URL after switching to S3 storage", async () => {
+        mockIsLocalStorage.mockReturnValue(false);
+        selectReturns(
+            [{ companyId: BigInt(5), title: "Report" }],
+            [{ url: "/api/files/41", mimeType: "application/pdf", versionNumber: 2 }]
+        );
+        storageReturns("%PDF-1.7", "application/pdf");
+
+        const response = await get();
+
+        expect(response.status).toBe(200);
+        expect(fetchFileMock).toHaveBeenCalledWith("/api/files/41", undefined);
+        expect(response.headers.get("Location")).toBeNull();
     });
 
     it("forwards a seek's range and relays the 206", async () => {

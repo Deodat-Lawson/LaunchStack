@@ -18,6 +18,7 @@ import { and, eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import { document, documentVersions } from "@launchstack/store/schema";
+import { isInternalFileUrl } from "@launchstack/store/crypto";
 import { isPrivateBlobUrl } from "~/server/storage/vercel-blob";
 import { fetchFile, isLocalStorage } from "~/lib/storage";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
@@ -112,10 +113,11 @@ export async function GET(
             return NextResponse.json({ error: t("versionNotFound") }, { status: 404 });
         }
 
-        // Public cloud URL — redirect the browser directly and let the CDN serve.
-        // Private Vercel Blob URLs and local SeaweedFS URLs must be proxied so
-        // we can attach the private-blob auth header / reach the private network.
-        if (!isLocalStorage() && !isPrivateBlobUrl(version.url)) {
+        // Public external URLs can use the CDN directly. Internal file references
+        // must still be fetched with a fresh token after a storage-backend switch;
+        // legacy private blobs likewise need the proxy's authorization header.
+        const internalFile = isInternalFileUrl(version.url, new URL(request.url).origin);
+        if (!internalFile && !isLocalStorage() && !isPrivateBlobUrl(version.url)) {
             return NextResponse.redirect(version.url, { status: 307 });
         }
 

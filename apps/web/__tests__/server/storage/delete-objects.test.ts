@@ -27,6 +27,8 @@ jest.mock("drizzle-orm", () => ({
     inArray: (column: unknown, ids: number[]) => ({ column, ids }),
 }));
 
+import { UTApi } from "uploadthing/server";
+
 import { deleteStoredObjects } from "~/server/storage/delete-objects";
 import { deleteObjects as deleteS3Objects } from "~/server/storage/adapters/s3";
 import { deleteObjects as deleteDatabaseObjects } from "~/server/storage/adapters/database";
@@ -57,7 +59,7 @@ beforeEach(() => {
             JSON.stringify({ appId: "app1", apiKey: "sk_test", regions: ["iad1"] })
         ).toString("base64"),
     });
-    mockSend.mockResolvedValue({ Deleted: [] });
+    mockSend.mockImplementation(async command => ({ Deleted: command.input.Delete.Objects }));
     mockReturning.mockResolvedValue([{ id: 1 }]);
     mockBlobDel.mockResolvedValue(undefined);
     mockUtDeleteFiles.mockResolvedValue({ success: true, deletedCount: 1 });
@@ -159,6 +161,45 @@ describe("S3", () => {
         ]);
     });
 
+    it.each([[undefined], [[]], [[{ Key: "other" }]]])(
+        "keeps keys without a Deleted acknowledgement retryable (%j)",
+        async deleted => {
+            mockSend.mockResolvedValue({ Deleted: deleted });
+            const input = ref("s3", "unacknowledged");
+            expect(await deleteS3Objects([input])).toEqual([
+                { ref: input, outcome: "retryable", errorCode: "s3_delete_unconfirmed" },
+            ]);
+        }
+    );
+
+    it("requires acknowledgements per key while preserving duplicate occurrences", async () => {
+        mockSend.mockResolvedValue({
+            Deleted: [{ Key: "ok" }, { Key: "denied" }],
+            Errors: [{ Key: "denied", Code: "AccessDenied" }],
+        });
+        const inputs = ["ok", "unknown", "ok", "denied"].map(key => ref("s3", key));
+        expect((await deleteS3Objects(inputs)).map(result => result.outcome)).toEqual([
+            "deleted",
+            "retryable",
+            "deleted",
+            "blocked",
+        ]);
+    });
+
+    it.each([
+        ["S3_ACCESS_KEY", undefined],
+        ["S3_ACCESS_KEY", ""],
+        ["S3_SECRET_KEY", undefined],
+        ["S3_SECRET_KEY", ""],
+    ])("blocks missing credential %s (%j) before calling the SDK", async (key, value) => {
+        mockServer[key] = value;
+        const input = ref("s3", "key");
+        expect(await deleteS3Objects([input])).toEqual([
+            { ref: input, outcome: "blocked", errorCode: "storage_unconfigured" },
+        ]);
+        expect(mockSend).not.toHaveBeenCalled();
+    });
+
     it.each([
         "AccessDenied",
         "InvalidAccessKeyId",
@@ -173,11 +214,17 @@ describe("S3", () => {
         });
     });
 
-    it("classifies HTTP 403 as blocked and network errors as retryable", async () => {
-        mockSend
-            .mockRejectedValueOnce({ $metadata: { httpStatusCode: 403 } })
-            .mockRejectedValueOnce(new Error("ECONNRESET"));
-        expect((await deleteS3Objects([ref("s3", "key")]))[0]?.outcome).toBe("blocked");
+    it.each([
+        [401, "blocked"],
+        [403, "blocked"],
+        [500, "retryable"],
+    ])("classifies HTTP %i as %s", async (status, outcome) => {
+        mockSend.mockRejectedValue({ $metadata: { httpStatusCode: status } });
+        expect((await deleteS3Objects([ref("s3", "key")]))[0]?.outcome).toBe(outcome);
+    });
+
+    it("keeps network errors retryable", async () => {
+        mockSend.mockRejectedValue(new Error("ECONNRESET"));
         expect((await deleteS3Objects([ref("s3", "key")]))[0]?.outcome).toBe("retryable");
     });
 });
@@ -210,21 +257,111 @@ describe("database", () => {
 });
 
 describe("UploadThing", () => {
-    it("falls back from a partial batch to individual deletes to identify missing keys", async () => {
+    it("chunks 501 keys into batches of at most 500 and preserves duplicates", async () => {
+        mockUtDeleteFiles.mockImplementation(async keys => ({
+            success: true,
+            deletedCount: keys.length,
+        }));
+        const inputs = Array.from({ length: 501 }, (_, i) => ref("uploadthing", `key-${i % 500}`));
+        expect(await deleteUploadThingObjects(inputs)).toEqual(
+            inputs.map(input => ({ ref: input, outcome: "deleted" }))
+        );
+        expect(mockUtDeleteFiles.mock.calls.map(call => call[0])).toEqual([
+            inputs.slice(0, 500).map(input => input.key),
+            [inputs[500]!.key],
+        ]);
+    });
+
+    it("reports already batch-deleted and never-existing keys as not_found on a partial pass", async () => {
         mockUtDeleteFiles
             .mockResolvedValueOnce({ success: true, deletedCount: 1 })
-            .mockResolvedValueOnce({ success: true, deletedCount: 1 })
+            .mockResolvedValueOnce({ success: true, deletedCount: 0 })
             .mockResolvedValueOnce({ success: true, deletedCount: 0 });
-        const inputs = [ref("uploadthing", "present"), ref("uploadthing", "missing")];
+        const inputs = [ref("uploadthing", "batch-deleted"), ref("uploadthing", "never-existed")];
         expect(await deleteUploadThingObjects(inputs)).toEqual([
-            { ref: inputs[0], outcome: "deleted" },
+            { ref: inputs[0], outcome: "not_found" },
             { ref: inputs[1], outcome: "not_found" },
         ]);
         expect(mockUtDeleteFiles.mock.calls.map(call => call[0])).toEqual([
-            ["present", "missing"],
-            "present",
-            "missing",
+            ["batch-deleted", "never-existed"],
+            "batch-deleted",
+            "never-existed",
         ]);
+    });
+
+    it("classifies each partial-pass response without mistaking failures for absence", async () => {
+        mockUtDeleteFiles
+            .mockResolvedValueOnce({ success: true, deletedCount: 0 })
+            .mockResolvedValueOnce({ success: true, deletedCount: 1 })
+            .mockResolvedValueOnce({ success: false, deletedCount: 0 })
+            .mockRejectedValueOnce(new Error("ECONNRESET"));
+        const inputs = ["deleted", "failed", "network"].map(key => ref("uploadthing", key));
+        expect((await deleteUploadThingObjects(inputs)).map(result => result.outcome)).toEqual([
+            "deleted",
+            "retryable",
+            "retryable",
+        ]);
+        expect(mockUtDeleteFiles).toHaveBeenCalledTimes(4);
+    });
+
+    it.each([
+        [401, "blocked"],
+        [403, "blocked"],
+        [500, "retryable"],
+    ])(
+        "classifies ResponseError HTTP %i as %s without a per-key fallback",
+        async (status, outcome) => {
+            // UploadThing's Effect ResponseError keeps HTTP status on response,
+            // not status/statusCode; its message does not name auth failures.
+            const error = Object.assign(
+                new Error(
+                    `StatusCode: non 2xx status code (${status} POST https://api.uploadthing.com/v6/deleteFiles)`
+                ),
+                {
+                    name: "ResponseError",
+                    _tag: "ResponseError",
+                    reason: "StatusCode",
+                    request: { method: "POST", url: "https://api.uploadthing.com/v6/deleteFiles" },
+                    response: { status },
+                }
+            );
+            mockUtDeleteFiles.mockRejectedValue(error);
+            const inputs = [ref("uploadthing", "one"), ref("uploadthing", "two")];
+            expect(await deleteUploadThingObjects(inputs)).toEqual(
+                inputs.map(input => ({
+                    ref: input,
+                    outcome,
+                    errorCode: "ResponseError",
+                    message: error.message,
+                }))
+            );
+            expect(mockUtDeleteFiles).toHaveBeenCalledTimes(1);
+        }
+    );
+
+    it("classifies a thrown chunk without fallback and continues with the next chunk", async () => {
+        mockUtDeleteFiles
+            .mockRejectedValueOnce(new Error("ECONNRESET"))
+            .mockResolvedValueOnce({ success: true, deletedCount: 1 });
+        const inputs = Array.from({ length: 501 }, (_, i) => ref("uploadthing", `key-${i}`));
+        expect((await deleteUploadThingObjects(inputs)).map(result => result.outcome)).toEqual([
+            ...Array.from({ length: 500 }, () => "retryable"),
+            "deleted",
+        ]);
+        expect(mockUtDeleteFiles.mock.calls.map(call => call[0])).toEqual([
+            inputs.slice(0, 500).map(input => input.key),
+            [inputs[500]!.key],
+        ]);
+    });
+
+    it("classifies client construction failures without sending deletes", async () => {
+        jest.mocked(UTApi).mockImplementationOnce(() => {
+            throw new Error("invalid token");
+        });
+        expect((await deleteUploadThingObjects([ref("uploadthing", "key")]))[0]?.outcome).toBe(
+            "blocked"
+        );
+        expect(mockUtDeleteFiles).not.toHaveBeenCalled();
     });
 
     it("classifies authentication failures as blocked", async () => {
@@ -236,12 +373,25 @@ describe("UploadThing", () => {
         );
     });
 
-    it("does not mistake success:false for a missing object", async () => {
-        mockUtDeleteFiles.mockResolvedValue({ success: false, deletedCount: 0 });
-        expect((await deleteUploadThingObjects([ref("uploadthing", "key")]))[0]?.outcome).toBe(
-            "retryable"
-        );
-    });
+    it.each([
+        [false, 0],
+        [false, 2],
+        [true, 3],
+    ])(
+        "keeps non-partial response success:%s count:%i retryable without fallback",
+        async (success, deletedCount) => {
+            mockUtDeleteFiles.mockResolvedValue({ success, deletedCount });
+            const inputs = [ref("uploadthing", "one"), ref("uploadthing", "two")];
+            expect(await deleteUploadThingObjects(inputs)).toEqual(
+                inputs.map(input => ({
+                    ref: input,
+                    outcome: "retryable",
+                    errorCode: "uploadthing_delete_failed",
+                }))
+            );
+            expect(mockUtDeleteFiles).toHaveBeenCalledTimes(1);
+        }
+    );
 });
 
 describe("Vercel Blob", () => {

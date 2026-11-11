@@ -1,12 +1,17 @@
+import { env } from "~/env";
+
 import { currentStorageLocationId } from "../location";
 import type { DeleteResult, ObjectRef } from "../object-ref";
 import { deleteObjects as deleteS3Objects } from "../s3-client";
 
 const AUTH_ERROR =
-    /AccessDenied|Unauthorized|Forbidden|InvalidAccessKeyId|SignatureDoesNotMatch|InvalidToken|ExpiredToken|NoSuchBucket|Credentials|AuthFailure|^40[13]$/i;
+    /AccessDenied|Unauthorized|Forbidden|InvalidAccessKeyId|SignatureDoesNotMatch|InvalidToken|ExpiredToken|NoSuchBucket|Credentials|AuthFailure/i;
 
 export async function deleteObjects(refs: readonly ObjectRef[]): Promise<DeleteResult[]> {
-    const location = currentStorageLocationId("s3");
+    const location =
+        env.server.S3_ACCESS_KEY && env.server.S3_SECRET_KEY
+            ? currentStorageLocationId("s3")
+            : undefined;
     const results: DeleteResult[] = refs.map(ref => ({
         ref,
         outcome: "blocked",
@@ -20,6 +25,7 @@ export async function deleteObjects(refs: readonly ObjectRef[]): Promise<DeleteR
         try {
             const response = await deleteS3Objects(chunk.map(index => refs[index]!.key));
             const errors = new Map(response.Errors?.map(error => [error.Key, error]));
+            const deleted = new Set(response.Deleted?.map(object => object.Key));
             for (const index of chunk) {
                 const ref = refs[index]!;
                 const error = errors.get(ref.key);
@@ -31,7 +37,9 @@ export async function deleteObjects(refs: readonly ObjectRef[]): Promise<DeleteR
                           errorCode: error.Code,
                           message: error.Message,
                       }
-                    : { ref, outcome: "deleted" };
+                    : deleted.has(ref.key)
+                      ? { ref, outcome: "deleted" }
+                      : { ref, outcome: "retryable", errorCode: "s3_delete_unconfirmed" };
             }
         } catch (error) {
             const details = error as {
@@ -43,6 +51,7 @@ export async function deleteObjects(refs: readonly ObjectRef[]): Promise<DeleteR
             const errorCode = details?.Code ?? details?.code ?? details?.name ?? "s3_delete_failed";
             const message = error instanceof Error ? error.message : String(error);
             const blocked =
+                details?.$metadata?.httpStatusCode === 401 ||
                 details?.$metadata?.httpStatusCode === 403 ||
                 AUTH_ERROR.test(`${errorCode} ${message}`);
             for (const index of chunk) {

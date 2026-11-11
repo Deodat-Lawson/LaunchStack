@@ -1,5 +1,6 @@
 import { and, eq, inArray, or } from "drizzle-orm";
-import { fileUploads } from "@launchstack/store/schema";
+import { eventOutbox, fileUploads } from "@launchstack/store/schema";
+import { eventIds } from "@launchstack/orchestration/pipeline-events";
 
 import { getEngine } from "~/server/engine";
 import {
@@ -16,6 +17,12 @@ import {
     findStorageObjectPointers,
     type StorageReferenceCandidate,
 } from "./references";
+import { recomputeDeletionRequestStatus } from "./status";
+import {
+    refreshStorageDeletionBacklog,
+    storageDeletionItemsProcessed,
+    storageDeletionRequestsFinished,
+} from "~/server/metrics/storage-deletion";
 
 async function saveOutcome(
     tx: Executor,
@@ -198,7 +205,7 @@ export async function processStorageDeletionRequest(requestId: number): Promise<
                         updatedAt: new Date(),
                     })
                     .where(eq(storageDeletionItems.id, id));
-                return null;
+                return { outcome: "blocked" as const };
             }
             const candidate: StorageReferenceCandidate = {
                 id: String(id),
@@ -230,7 +237,7 @@ export async function processStorageDeletionRequest(requestId: number): Promise<
                         updatedAt: new Date(),
                     })
                     .where(eq(storageDeletionItems.id, id));
-                return null;
+                return { outcome: "retained" as const };
             }
             if (ref.adapter === "database") {
                 // postgres.js tracks caught statement failures within a scope.
@@ -248,16 +255,18 @@ export async function processStorageDeletionRequest(requestId: number): Promise<
                 }
                 if (!result) throw new Error("Storage adapter returned no deletion outcome");
                 await saveOutcome(tx, id, item.attempts, result, currentRequest.companyId, urls);
-                return null;
+                return { outcome: result.outcome };
             }
             return { ref, urls };
         });
-        if (networkRef) {
+        if (networkRef && "outcome" in networkRef) {
+            storageDeletionItemsProcessed.inc({ outcome: networkRef.outcome });
+        } else if (networkRef && "ref" in networkRef) {
             // Provider deletes are idempotent; no pooled connection or row lock
             // is held while waiting on S3, Blob, or UploadThing.
             const [result] = await deleteStoredObjects([networkRef.ref]);
             if (!result) throw new Error("Storage adapter returned no deletion outcome");
-            await db.transaction(async tx => {
+            const persisted = await db.transaction(async tx => {
                 const [item] = await tx
                     .select()
                     .from(storageDeletionItems)
@@ -268,7 +277,7 @@ export async function processStorageDeletionRequest(requestId: number): Promise<
                     (item?.state === "blocked" &&
                         item.errorCode === "retry_budget_exhausted" &&
                         (result.outcome === "deleted" || result.outcome === "not_found"))
-                )
+                ) {
                     await saveOutcome(
                         tx,
                         id,
@@ -277,36 +286,19 @@ export async function processStorageDeletionRequest(requestId: number): Promise<
                         request.companyId,
                         networkRef.urls
                     );
+                    return true;
+                }
+                return false;
             });
+            if (persisted) storageDeletionItemsProcessed.inc({ outcome: result.outcome });
         }
     }
-    const states = await db.transaction(async tx => {
-        const [current] = await tx
-            .select()
-            .from(storageDeletionRequests)
-            .where(eq(storageDeletionRequests.id, requestId))
-            .for("update");
-        if (!current) return [];
-        const items = await tx
-            .select({ state: storageDeletionItems.state })
-            .from(storageDeletionItems)
-            .where(eq(storageDeletionItems.requestId, requestId));
-        const states = items.map(item => item.state);
-        const status = states.includes("pending")
-            ? "pending"
-            : states.some(state => state === "blocked" || state === "quarantined")
-              ? "blocked"
-              : "completed";
-        await tx
-            .update(storageDeletionRequests)
-            .set({
-                status,
-                updatedAt: new Date(),
-                completedAt: status === "completed" ? (current.completedAt ?? new Date()) : null,
-            })
-            .where(eq(storageDeletionRequests.id, requestId));
-        return states;
-    });
+    const { states, status, previousStatus } = await db.transaction(tx =>
+        recomputeDeletionRequestStatus(tx, requestId)
+    );
+    if (status !== previousStatus && status !== "pending")
+        storageDeletionRequestsFinished.inc({ status });
+    await refreshStorageDeletionBacklog(db);
     const counts = states.reduce<Record<string, number>>((counts, state) => {
         counts[state] = (counts[state] ?? 0) + 1;
         return counts;
@@ -320,13 +312,21 @@ export async function markStorageDeletionRequestDead(
     requestId: number,
     traceId?: string
 ): Promise<void> {
-    await getEngine().db.transaction(async tx => {
+    const db = getEngine().db;
+    const result = await db.transaction(async tx => {
         const [request] = await tx
             .select()
             .from(storageDeletionRequests)
             .where(eq(storageDeletionRequests.id, requestId))
             .for("update");
         if (!request || request.status === "completed") return;
+        const [delivery] = await tx
+            .select({ status: eventOutbox.status })
+            .from(eventOutbox)
+            .where(eq(eventOutbox.eventId, eventIds.storageDeletionRequested(requestId)))
+            .for("update");
+        // A delayed callback must not undo an operator's committed replay.
+        if (delivery?.status !== "dead") return;
         const items = await tx
             .update(storageDeletionItems)
             .set({
@@ -352,5 +352,12 @@ export async function markStorageDeletionRequestDead(
             requestId,
             counts: { blocked: items.length },
         });
+        return { previousStatus: request.status, blocked: items.length };
     });
+    if (result) {
+        storageDeletionItemsProcessed.inc({ outcome: "blocked" }, result.blocked);
+        if (result.previousStatus !== "blocked")
+            storageDeletionRequestsFinished.inc({ status: "blocked" });
+    }
+    await refreshStorageDeletionBacklog(db);
 }

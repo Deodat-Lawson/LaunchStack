@@ -225,6 +225,23 @@ describe("POST /api/upload/batches/[batchId]/files stored URLs", () => {
         );
     });
 
+    it.each([
+        "/api/files/unused/../7",
+        "/api/./files/7",
+        "\\api\\files\\7",
+        " \t/api/fi\tles/7 \t",
+        "/api/files/9/../../../api/files/7",
+    ])("registers the canonical database URL for %j", async url => {
+        const response = await register([url]);
+        expect(response.status).toBe(200);
+        expect(mockRegisteredFile).toHaveBeenCalledWith(
+            expect.objectContaining({ storageUrl: "/api/files/7" })
+        );
+        expect(mockRegisteredFile).not.toHaveBeenCalledWith(
+            expect.objectContaining({ storageUrl: url })
+        );
+    });
+
     it("rejects a foreign database file", async () => {
         mockDbSelect.mockReturnValue({
             from: () => ({ where: () => Promise.resolve([{ companyId: 99n }]) }),

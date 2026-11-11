@@ -127,8 +127,11 @@ stored URLs through the shared `authorizeStoredObjectUrl` rule. Provider refs at
 the configured current location must be byte-identical to a live owned ledger
 row; aliases, deleted ledger rows and foreign owners are rejected with each
 caller's existing error convention. Provider refs at other locations are external
-links. Database refs must have owned file rows. Ledgered provider reference
-checks can therefore use exact canonical equality.
+links. Database refs must have owned file rows, and ingress persists their
+WHATWG-normalized `/api/files/<id>` path (document processing retains its absolute
+URL convention). Provider refs remain byte-identical to the live ledger URL.
+Authorization inside a transaction uses its executor, never a second pooled connection.
+Ledgered provider reference checks can therefore use exact canonical equality.
 
 Each protected column has a separate SQL UNION arm, rather than combining an
 indexed column and unindexed JSON expression with OR. Documents, versions, active
@@ -136,14 +139,28 @@ job inputs, retryable batch inputs, and JSON preview/audio fields all have
 equality indexes. Media/avatar exact checks have hash indexes.
 
 Only legacy provider refs without ledger rows use a case-insensitive prefilter
-matching every key character literally or percent-encoded, followed by parsed
-adapter/location/key comparison. The worker batches this legacy scan once per
-request. Database refs conservatively protect any origin on every guarded scalar
-column via `(regexp_match(col, '/api/files/0*([0-9]+)([/?#]|$)'))[1]` equality
-and concurrent expression indexes. Only historical database chat attachments need
-JSON-array scans; today's chat upload route is S3-only. Pointer matching has a
-separate indexed `file_uploads.storage_url` equality arm, with legacy prefilters
-only for unledgered provider refs. Checks are global, never tenant-filtered.
+matching the key's last path segment literally or percent-encoded, followed by
+parsed adapter/location/key comparison. Each batch uses one constant alternation
+regex with at most 64 alternatives per statement, not a candidate-by-table regex
+join. Matching URLs are parsed once and mapped back to candidates by identity.
+The worker batches these legacy scans once per request. Database refs use
+`(regexp_match(col, '/api/files/0*([0-9]+)([/?#]|$)'))[1]` equality and concurrent
+expression indexes, plus a bounded historical fallback for dot segments,
+percent escapes, backslashes and whitespace normalized by the same WHATWG parser.
+Canonical relative/internal-origin database URLs protect bytes globally. Other
+spellings count only when the referencing row's company equals the file owner's
+company, preventing arbitrary external `/api/files/<id>` links from pinning a
+different tenant's file. Versions inherit company from their document; message
+attachments/replay payloads inherit company from their session. Every protected
+source has an owner path; none require a tenant-blind alias exception.
+Only historical database chat attachments need JSON-array scans; today's chat
+upload route is S3-only. Pointer matching has a separate indexed
+`file_uploads.storage_url` equality arm, with constant legacy prefilters only for
+unledgered provider refs. The indexed exact/extracted-id arms, including new
+provider pointers' downstream references, are re-read for each item inside its
+locked precheck transaction immediately before deletion. The request-wide
+snapshot accelerates expensive aliases but is not the final canonical-reference
+decision.
 Inventory rows imported by `backfill-file-uploads` retain this legacy matching
 path: their historical owners never passed canonical ingress validation. Their
 company stamp still participates in the normal provenance checks.

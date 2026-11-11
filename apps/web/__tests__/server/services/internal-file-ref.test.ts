@@ -42,10 +42,22 @@ describe("parseInternalFileId", () => {
         expect(parseInternalFileId("https://example.com/api/files/123?t=abc")).toBe(123);
     });
 
+    it.each([
+        "/api/files/unused/../7",
+        "/api/./files/7",
+        "\\api\\files\\7",
+        " \t/api/fi\tles/7 \t",
+        "/api/files/9/../../../api/files/7",
+    ])("recognizes the URL parser's database alias %j", url => {
+        expect(parseInternalFileId(url)).toBe(7);
+    });
+
     it("returns null for anything else", () => {
         expect(parseInternalFileId("https://cdn.example.com/doc.pdf")).toBeNull();
         expect(parseInternalFileId("/api/files/abc")).toBeNull();
         expect(parseInternalFileId("/api/files/123/extra")).toBeNull();
+        expect(parseInternalFileId("/api/fi les/7")).toBeNull();
+        expect(parseInternalFileId("/api/files/7 0")).toBeNull();
     });
 });
 
@@ -67,6 +79,17 @@ describe("authorizeInternalFileRef", () => {
             authorizeInternalFileRef("https://cdn.example.com/doc.pdf", COMPANY)
         ).resolves.toBeNull();
         expect(mockDbSelect).not.toHaveBeenCalled();
+    });
+
+    it.each([
+        "/api/files/unused/../7",
+        "/api/./files/7",
+        "\\api\\files\\7",
+        " \t/api/fi\tles/7 \t",
+        "/api/files/9/../../../api/files/7",
+    ])("keeps the legacy numeric helper result for %j", async url => {
+        setupFileQuery([{ companyId: COMPANY }]);
+        await expect(authorizeInternalFileRef(url, COMPANY)).resolves.toBe(7);
     });
 
     it.each([
@@ -257,7 +280,34 @@ describe("authorizeStoredObjectUrl", () => {
 
     it("authorizes an owned database reference without requiring the OCR secret", async () => {
         setupFileQuery([{ companyId: COMPANY }]);
-        await expect(authorizeStoredObjectUrl("/api/files/123", COMPANY)).resolves.toBe(123);
+        await expect(authorizeStoredObjectUrl("/api/files/123", COMPANY)).resolves.toEqual({
+            fileId: 123,
+            url: "/api/files/123",
+        });
+    });
+
+    it.each([
+        "/api/files/unused/../7",
+        "/api/./files/7",
+        "\\api\\files\\7",
+        " \t/api/fi\tles/7 \t",
+        "/api/files/9/../../../api/files/7",
+    ])("returns the canonical persistence URL for database alias %j", async url => {
+        setupFileQuery([{ companyId: COMPANY }]);
+        await expect(authorizeStoredObjectUrl(url, COMPANY)).resolves.toEqual({
+            fileId: 7,
+            url: "/api/files/7",
+        });
+        expect(mockDbSelect).toHaveBeenCalledTimes(1);
+    });
+
+    it("returns the exact live provider ledger URL alongside a null database id", async () => {
+        const url = "https://s3.example/files/documents/owned.pdf";
+        setupFileQuery([{ companyId: COMPANY, url }]);
+        await expect(authorizeStoredObjectUrl(url, COMPANY)).resolves.toEqual({
+            fileId: null,
+            url,
+        });
     });
 
     it.each([
@@ -265,7 +315,10 @@ describe("authorizeStoredObjectUrl", () => {
         "https://another.public.blob.vercel-storage.com/owned.pdf",
         "https://another.ufs.sh/f/owned",
     ])("keeps parsed non-current provider locations external: %s", async url => {
-        await expect(authorizeStoredObjectUrl(url, COMPANY)).resolves.toBeNull();
+        await expect(authorizeStoredObjectUrl(url, COMPANY)).resolves.toEqual({
+            fileId: null,
+            url,
+        });
         expect(mockDbSelect).not.toHaveBeenCalled();
     });
 

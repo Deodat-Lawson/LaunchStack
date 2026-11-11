@@ -63,7 +63,9 @@ export async function POST(request: Request, { params }: { params: Promise<{ bat
 
         try {
             for (const file of files) {
-                await authorizeStoredObjectUrl(file.storageUrl, ctx.data.companyId);
+                file.storageUrl = (
+                    await authorizeStoredObjectUrl(file.storageUrl, ctx.data.companyId)
+                ).url;
             }
         } catch (error) {
             if (error instanceof UploadAuthorizationError) {

@@ -30,7 +30,8 @@ import { authorizeStoredObjectUrl } from "~/server/storage/authorize-stored-obje
 
 async function authorizeAttachments(
     attachments: readonly unknown[] | undefined,
-    companyId: bigint
+    companyId: bigint,
+    executor: Executor = db
 ) {
     for (const attachment of attachments ?? []) {
         if (
@@ -41,7 +42,7 @@ async function authorizeAttachments(
         ) {
             throw new Error("Invalid attachment URL");
         }
-        await authorizeStoredObjectUrl(attachment.url, companyId);
+        attachment.url = (await authorizeStoredObjectUrl(attachment.url, companyId, executor)).url;
     }
 }
 
@@ -430,9 +431,9 @@ export async function changeQueue(
                 ? change.items
                 : current.items.filter(item => item.id !== change.claimId);
         for (const item of items) {
-            await authorizeAttachments(item.send.attachments, owner.companyId);
+            await authorizeAttachments(item.send.attachments, owner.companyId, tx);
         }
-        if (claimed) await authorizeAttachments(claimed.send.attachments, owner.companyId);
+        if (claimed) await authorizeAttachments(claimed.send.attachments, owner.companyId, tx);
         const now = new Date();
         let claimedMessage: SessionMessage | undefined;
         if (claimed) {

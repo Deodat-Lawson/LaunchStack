@@ -14,7 +14,7 @@ import "server-only";
  * `document.url`, which takes a new shot.
  */
 
-import { createHash } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 
 import { and, eq, sql } from "drizzle-orm";
 import sharp from "sharp";
@@ -23,9 +23,7 @@ import { document } from "@launchstack/store/schema";
 import type { GotenbergClient } from "@launchstack/document-conversion-engine";
 
 import { fetchFile, uploadFile } from "~/lib/storage";
-import { deleteStoredObjects } from "~/server/storage/delete-objects";
-import { refFromStoredUrl } from "~/server/storage/stored-url";
-import { hasStoredUrlReferences } from "~/server/storage/stored-url-references";
+import { planObjectDeletion } from "~/server/storage/deletion/plan";
 import { db } from "~/server/db";
 
 /** The browser window the page is laid out in: an ordinary laptop. */
@@ -118,29 +116,10 @@ export async function shrinkScreenshot(
     return { data, width, height, truncated: fullHeight > height };
 }
 
-/** Removes a picture this module stored earlier. Best effort: an orphan costs only space. */
-async function forgetStoredPicture(url: string): Promise<void> {
-    try {
-        if (await hasStoredUrlReferences(url)) return;
-        const parsed = refFromStoredUrl(url);
-        if (!parsed.ok) throw new Error(`Stored preview URL is ${parsed.reason}`);
-        const [result] = await deleteStoredObjects([parsed.ref]);
-        if (!result || (result.outcome !== "deleted" && result.outcome !== "not_found")) {
-            throw new Error(
-                result?.message ?? result?.errorCode ?? "Storage deletion returned no result"
-            );
-        }
-    } catch (error) {
-        console.warn("[website-preview] could not delete an old preview:", error);
-    }
-}
-
 export interface RenderInput {
     documentId: number;
     /** `document.url`: the saved HTML. */
     source: string;
-    /** The record already on the row, replaced (and its file deleted) once the new one lands. */
-    previous: WebsitePreviewRecord | null;
     gotenberg: GotenbergClient;
     /** Who the stored file is attributed to. */
     userId: string;
@@ -209,22 +188,33 @@ async function renderAndStore(input: RenderInput): Promise<WebsitePreview> {
         renderedAt: new Date().toISOString(),
     };
 
-    // Only while the row still points at the HTML that was shot; merged, so
-    // the website marker and OCR's keys stay as they are.
-    const updated = await db
-        .update(document)
-        .set({
-            ocrMetadata: sql`coalesce(${document.ocrMetadata}, '{}'::jsonb) || jsonb_build_object('websitePreview', ${JSON.stringify(record)}::jsonb)`,
-        })
-        .where(and(eq(document.id, input.documentId), eq(document.url, input.source)))
-        .returning({ id: document.id });
-
-    if (updated.length === 0) {
-        // The document moved on (or went) while the shot was taken.
-        await forgetStoredPicture(stored.url);
-    } else if (input.previous && input.previous.url !== stored.url) {
-        await forgetStoredPicture(input.previous.url);
-    }
+    await db.transaction(async tx => {
+        const [current] = await tx
+            .select({ url: document.url, ocrMetadata: document.ocrMetadata })
+            .from(document)
+            .where(eq(document.id, input.documentId))
+            .for("update");
+        const previous = websitePreviewOf(current?.ocrMetadata);
+        const moved = !current || current.url !== input.source;
+        const obsoleteUrl = moved ? stored.url : previous?.url;
+        if (obsoleteUrl && (moved || obsoleteUrl !== stored.url)) {
+            await planObjectDeletion(tx, {
+                companyId: input.companyId,
+                urls: [obsoleteUrl],
+                requestedBy: input.userId,
+                reason: "replaced_object",
+                traceId: randomUUID(),
+            });
+        }
+        if (moved) return;
+        // Merge rather than replacing the website marker and OCR's keys.
+        await tx
+            .update(document)
+            .set({
+                ocrMetadata: sql`coalesce(${document.ocrMetadata}, '{}'::jsonb) || jsonb_build_object('websitePreview', ${JSON.stringify(record)}::jsonb)`,
+            })
+            .where(and(eq(document.id, input.documentId), eq(document.url, input.source)));
+    });
 
     return { record, image: picture.data };
 }

@@ -1,9 +1,13 @@
 import { inArray } from "drizzle-orm";
+import type { Executor } from "~/server/workspace/db-types";
 
 import { currentStorageLocationId } from "../location";
 import type { DeleteResult, ObjectRef } from "../object-ref";
 
-export async function deleteObjects(refs: readonly ObjectRef[]): Promise<DeleteResult[]> {
+export async function deleteObjects(
+    refs: readonly ObjectRef[],
+    executor?: Executor
+): Promise<DeleteResult[]> {
     const location = currentStorageLocationId("database");
     const results: DeleteResult[] = refs.map(ref => ({
         ref,
@@ -28,8 +32,8 @@ export async function deleteObjects(refs: readonly ObjectRef[]): Promise<DeleteR
         // cycle. The hoisted getEngine function safely supplies the same db.
         const { getEngine } = await import("~/server/engine");
         const { fileUploads } = await import("@launchstack/store/schema");
-        const rows = await getEngine()
-            .db.delete(fileUploads)
+        const rows = await (executor ?? getEngine().db)
+            .delete(fileUploads)
             .where(inArray(fileUploads.id, ids))
             .returning({ id: fileUploads.id });
         const deleted = new Set(rows.map(row => row.id));

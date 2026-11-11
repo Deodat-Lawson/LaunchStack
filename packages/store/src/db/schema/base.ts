@@ -109,6 +109,7 @@ export const document = pgTable(
             table.creationKey
         ),
         currentVersionIdIdx: index("document_current_version_id_idx").on(table.currentVersionId),
+        urlIdx: index("document_url_idx").on(table.url),
     })
 );
 
@@ -142,6 +143,7 @@ export const documentVersions = pgTable(
     },
     table => ({
         documentIdIdx: index("doc_versions_document_id_idx").on(table.documentId),
+        urlIdx: index("doc_versions_url_idx").on(table.url),
         documentCreationKeyUnique: uniqueIndex("doc_versions_document_creation_key_unique").on(
             table.documentId,
             table.creationKey

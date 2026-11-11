@@ -365,6 +365,13 @@
       "when": 1794867000000,
       "tag": "20261116221000_storage_objects",
       "breakpoints": true
+    },
+    {
+      "idx": 52,
+      "version": "7",
+      "when": 1794867060000,
+      "tag": "20261116221100_storage_deletion_lifecycle",
+      "breakpoints": true
     }
   ]
 }

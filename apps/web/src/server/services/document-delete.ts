@@ -30,10 +30,14 @@ import {
 } from "~/server/db/schema";
 import type { db as DbType } from "~/server/db";
 import { rememberDeletedSource } from "~/server/services/connectors/deleted-items";
+import { planDocumentDeletion } from "~/server/storage/deletion/plan";
 
 type Tx = Parameters<Parameters<(typeof DbType)["transaction"]>[0]>[0];
 
 export interface DeleteDocumentOptions {
+    readonly requestedBy: string;
+    readonly reason: string;
+    readonly traceId: string;
     /** Who is deleting it; recorded with a synced file so Settings can name it to them. */
     readonly deletedByUserPk?: number | null;
 }
@@ -92,9 +96,15 @@ async function forgetMicrosoft365Pick(
 export async function deleteDocumentCore(
     tx: Tx,
     docId: number,
-    options: DeleteDocumentOptions = {}
+    options: DeleteDocumentOptions
 ): Promise<void> {
     const docIdBig = BigInt(docId);
+    await planDocumentDeletion(tx, {
+        documentIds: [docId],
+        requestedBy: options.requestedBy,
+        reason: options.reason,
+        traceId: options.traceId,
+    });
 
     const [row] = await tx
         .select({ title: document.title, metadata: document.ocrMetadata })

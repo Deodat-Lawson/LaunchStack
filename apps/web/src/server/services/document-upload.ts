@@ -1,3 +1,4 @@
+import { randomUUID } from "node:crypto";
 import { normalizeFolderPath } from "~/lib/folders/path";
 import {
     shouldTranscribeFile,
@@ -295,7 +296,13 @@ export async function processDocumentUpload({
             // it, is the orphan the reordering above exists to prevent.
             if (audioLifecycle.created) {
                 await db
-                    .transaction(tx => deleteDocumentCore(tx, audioLifecycle.document.id))
+                    .transaction(tx =>
+                        deleteDocumentCore(tx, audioLifecycle.document.id, {
+                            requestedBy: user.userId,
+                            reason: "transcript_rollback",
+                            traceId: randomUUID(),
+                        })
+                    )
                     .catch((cleanupError: unknown) =>
                         console.error(
                             `[DocumentUpload] Could not remove recording ${audioLifecycle.document.id} after its transcript failed:`,

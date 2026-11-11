@@ -1,8 +1,10 @@
-import type { InferSelectModel } from "drizzle-orm";
+import { sql, type InferSelectModel } from "drizzle-orm";
 import {
     bigint,
     bigserial,
+    check,
     index,
+    integer,
     text,
     timestamp,
     uniqueIndex,
@@ -43,3 +45,92 @@ export const storageObjects = pgTable(
 );
 
 export type StoredObject = InferSelectModel<typeof storageObjects>;
+
+export const storageDeletionRequests = pgTable(
+    "storage_deletion_requests",
+    {
+        id: bigserial("id", { mode: "number" }).primaryKey(),
+        // Audit records survive both document and tenant deletion.
+        companyId: bigint("company_id", { mode: "bigint" }).notNull(),
+        scope: varchar("scope", { length: 16, enum: ["document", "version", "object"] }).notNull(),
+        documentId: bigint("document_id", { mode: "number" }),
+        documentVersionId: bigint("document_version_id", { mode: "number" }),
+        requestedBy: varchar("requested_by", { length: 256 }).notNull(),
+        reason: varchar("reason", { length: 64 }).notNull(),
+        status: varchar("status", { length: 16, enum: ["pending", "completed", "blocked"] })
+            .notNull()
+            .default("pending"),
+        traceId: varchar("trace_id", { length: 128 }).notNull(),
+        createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+        completedAt: timestamp("completed_at", { withTimezone: true }),
+    },
+    table => [
+        index("storage_deletion_requests_status_created_idx").on(table.status, table.createdAt),
+        index("storage_deletion_requests_company_created_idx").on(table.companyId, table.createdAt),
+        index("storage_deletion_requests_document_idx").on(table.documentId),
+        check(
+            "storage_deletion_requests_scope_check",
+            sql`${table.scope} IN ('document', 'version', 'object')`
+        ),
+        check(
+            "storage_deletion_requests_status_check",
+            sql`${table.status} IN ('pending', 'completed', 'blocked')`
+        ),
+    ]
+);
+
+export const storageDeletionItems = pgTable(
+    "storage_deletion_items",
+    {
+        id: bigserial("id", { mode: "number" }).primaryKey(),
+        requestId: bigint("request_id", { mode: "number" })
+            .notNull()
+            .references(() => storageDeletionRequests.id, { onDelete: "cascade" }),
+        storedObjectId: bigint("stored_object_id", { mode: "bigint" }).references(
+            () => storageObjects.id,
+            { onDelete: "set null" }
+        ),
+        adapter: varchar("adapter", { length: 32, enum: STORAGE_ADAPTERS }),
+        storageLocationId: varchar("storage_location_id", { length: 256 }),
+        objectKey: text("object_key"),
+        sourceUrl: text("source_url").notNull(),
+        state: varchar("state", {
+            length: 16,
+            enum: [
+                "pending",
+                "deleted",
+                "not_found",
+                "retained",
+                "blocked",
+                "quarantined",
+                "skipped",
+            ],
+        })
+            .notNull()
+            .default("pending"),
+        attempts: integer("attempts").notNull().default(0),
+        errorCode: varchar("error_code", { length: 64 }),
+        lastError: text("last_error"),
+        createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+    },
+    table => [
+        uniqueIndex("storage_deletion_items_request_url_unique").on(
+            table.requestId,
+            table.sourceUrl
+        ),
+        index("storage_deletion_items_state_idx").on(table.state),
+        check(
+            "storage_deletion_items_ref_check",
+            sql`(${table.adapter} IS NOT NULL AND ${table.storageLocationId} IS NOT NULL AND ${table.objectKey} IS NOT NULL) OR (${table.state} IN ('quarantined', 'skipped') AND ${table.adapter} IS NULL AND ${table.storageLocationId} IS NULL AND ${table.objectKey} IS NULL)`
+        ),
+        check(
+            "storage_deletion_items_state_check",
+            sql`${table.state} IN ('pending', 'deleted', 'not_found', 'retained', 'blocked', 'quarantined', 'skipped')`
+        ),
+    ]
+);
+
+export type StorageDeletionRequest = InferSelectModel<typeof storageDeletionRequests>;
+export type StorageDeletionItem = InferSelectModel<typeof storageDeletionItems>;

@@ -9,6 +9,7 @@
 import { getOcrConfig } from "@launchstack/conversion/ocr/config";
 import type { OCRProvider } from "@launchstack/conversion/ocr/types";
 import { authorizeStoredObjectUrl } from "~/server/storage/authorize-stored-object-url";
+import type { Executor } from "~/server/workspace/db-types";
 
 export { parseInternalFileId } from "@launchstack/store/crypto";
 
@@ -33,9 +34,10 @@ export async function authorizeInternalFileRef(
      * requirement no longer varies by provider — every out-of-session reader of
      * `/api/files/{id}` signs — so it does not affect the outcome.
      */
-    _effectiveProvider?: OCRProvider
+    _effectiveProvider?: OCRProvider,
+    executor?: Executor
 ): Promise<number | null> {
-    const fileId = await authorizeStoredObjectUrl(url, companyId);
+    const { fileId } = await authorizeStoredObjectUrl(url, companyId, executor);
     if (fileId === null) return null;
 
     // Re-read after the ownership query: the real `db` proxy may call

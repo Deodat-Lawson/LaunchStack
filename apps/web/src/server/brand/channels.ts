@@ -218,7 +218,9 @@ async function upsertChannels(
     seeds: ChannelSeed[]
 ): Promise<BrandChannelRow[]> {
     for (const seed of seeds) {
-        if (seed.avatarUrl) await authorizeStoredObjectUrl(seed.avatarUrl, companyId);
+        if (seed.avatarUrl) {
+            seed.avatarUrl = (await authorizeStoredObjectUrl(seed.avatarUrl, companyId)).url;
+        }
     }
     const rows: BrandChannelRow[] = [];
     for (const seed of seeds) {

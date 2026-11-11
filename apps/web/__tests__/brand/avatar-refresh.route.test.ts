@@ -79,3 +79,23 @@ it.each([
         expect(mockSet).toHaveBeenCalledWith(expect.objectContaining({ avatarUrl }));
     }
 });
+
+it.each([
+    "/api/files/unused/../7",
+    "/api/./files/7",
+    "\\api\\files\\7",
+    " \t/api/fi\tles/7 \t",
+    "/api/files/9/../../../api/files/7",
+])("brand refresh persists the canonical database avatar for %j", async avatarUrl => {
+    mockProfile.mockResolvedValue({ handle: "test.bsky.social", avatarUrl });
+
+    const response = await POST(
+        new Request("https://app.test/api/brand/connections/1/refresh", {
+            method: "POST",
+        }) as Parameters<typeof POST>[0],
+        { params: Promise.resolve({ id: "1" }) }
+    );
+
+    expect(response.status).toBe(200);
+    expect(mockSet).toHaveBeenCalledWith(expect.objectContaining({ avatarUrl: "/api/files/7" }));
+});

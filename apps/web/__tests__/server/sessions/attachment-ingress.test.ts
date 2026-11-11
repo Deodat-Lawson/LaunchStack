@@ -1,6 +1,7 @@
 import { configureOcr } from "@launchstack/conversion/ocr/config";
 import type { ChatQueueItem, ChatSendPayload, ChatTurnMetadata } from "~/lib/chat-turns";
 import { appendMessages, changeQueue, createSession } from "~/server/sessions/repository";
+import { workspaceSessions } from "~/server/db/schema/workspace-sessions";
 
 const mockSelect = jest.fn();
 const mockTransaction = jest.fn();
@@ -59,8 +60,11 @@ beforeEach(() => {
     mockSession.queuedMessages = [];
     ledger([{ companyId: OWNER.companyId, url: CANONICAL, deletedAt: null }]);
     const tx = {
-        select: () => ({
-            from: () => ({ where: () => ({ for: () => Promise.resolve([mockSession]) }) }),
+        select: (...args: unknown[]) => ({
+            from: (table: unknown) =>
+                table === workspaceSessions
+                    ? { where: () => ({ for: () => Promise.resolve([mockSession]) }) }
+                    : mockSelect(...args).from(table),
         }),
         insert: () => ({
             values: (values: Record<string, unknown> | Record<string, unknown>[]) => {
@@ -129,7 +133,30 @@ const paths = [
     },
 ];
 
+function savedAttachments() {
+    return mockWrites.flatMap(row => [
+        ...((row.attachments as unknown[] | undefined) ?? []),
+        ...((row.metadata as ChatTurnMetadata | undefined)?.send?.attachments ?? []),
+        ...((row.queuedMessages as ChatQueueItem[] | undefined)?.flatMap(
+            item => item.send.attachments
+        ) ?? []),
+    ]);
+}
+
 describe.each(paths)("$name", ({ write }) => {
+    it.each([
+        "/api/files/unused/../7",
+        "/api/./files/7",
+        "\\api\\files\\7",
+        " \t/api/fi\tles/7 \t",
+        "/api/files/9/../../../api/files/7",
+    ])("persists only canonical database attachment URLs for %j", async url => {
+        await write(url);
+        const saved = savedAttachments();
+        expect(saved).not.toHaveLength(0);
+        expect(saved).toEqual(saved.map(() => attachment("/api/files/7")));
+    });
+
     it("rejects an alias of an owned provider object without writing", async () => {
         await expect(write(ALIAS)).rejects.toMatchObject({ status: 404 });
         expect(mockWrites).toEqual([]);
@@ -137,14 +164,7 @@ describe.each(paths)("$name", ({ write }) => {
 
     it("persists the exact owned live URL", async () => {
         await write(CANONICAL);
-        const saved = mockWrites.flatMap(row => [
-            ...((row.attachments as unknown[] | undefined) ?? []),
-            ...((row.metadata as ChatTurnMetadata | undefined)?.send?.attachments ?? []),
-            ...((row.queuedMessages as ChatQueueItem[] | undefined)?.flatMap(
-                item => item.send.attachments
-            ) ?? []),
-        ]);
-        expect(saved).toContainEqual(attachment(CANONICAL));
+        expect(savedAttachments()).toContainEqual(attachment(CANONICAL));
     });
 
     it("rejects a foreign workspace's object", async () => {

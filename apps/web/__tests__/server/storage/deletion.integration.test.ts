@@ -1,4 +1,4 @@
-import { eq, sql } from "drizzle-orm";
+import { eq, sql, type SQL } from "drizzle-orm";
 import { PgDialect } from "drizzle-orm/pg-core";
 import type { DbClient } from "@launchstack/store/client";
 import {
@@ -34,7 +34,11 @@ import {
     processStorageDeletionRequest,
 } from "~/server/storage/deletion/worker";
 import type { ObjectRef } from "~/server/storage/object-ref";
-import { findReferencedStorageObjects } from "~/server/storage/deletion/references";
+import {
+    findReferencedStorageObjects,
+    findStorageObjectPointers,
+    type StorageReferenceCandidate,
+} from "~/server/storage/deletion/references";
 import { storageDeletionOperationalState } from "~/server/storage/deletion/status";
 import * as storedUrl from "~/server/storage/stored-url";
 import {
@@ -696,7 +700,7 @@ describeDb("durable storage deletion (integration)", () => {
             );
         }
     });
-    it("prefilters legacy S3 aliases by full key and verifies parsed identity", async () => {
+    it("prefilters legacy S3 aliases by basename and verifies parsed identity", async () => {
         const key = "documents/93411647-cc8e-48aa-8ffa-a65904d5efe8.pdf";
         const canonical = `http://s3:8333/files/${key}`;
         const alias = `https://objects.example/files/doc%75ments/93411647-cc8e-48aa-8ffa-a65904d5efe8%2Epdf?download=1`;
@@ -1409,25 +1413,54 @@ describeDb("durable storage deletion (integration)", () => {
         `);
         await test.db.execute(sql`ANALYZE pdr_ai_v2_document`);
         await test.db.execute(sql`ANALYZE pdr_ai_v2_file_uploads`);
-        const databasePlan = await test.db.execute<{ "QUERY PLAN": string }>(sql`
-            EXPLAIN (COSTS OFF) SELECT id FROM pdr_ai_v2_document
-            WHERE (regexp_match(url, '/api/files/0*([0-9]+)([/?#]|$)'))[1] = '19999'
-        `);
-        const pointerPlan = await test.db.execute<{ "QUERY PLAN": string }>(sql`
-            EXPLAIN (COSTS OFF) SELECT id FROM pdr_ai_v2_file_uploads WHERE storage_url = 'http://s3:8333/files/object-19999'
-        `);
-        for (const [path, plan] of [
-            ["database", databasePlan],
-            ["pointer", pointerPlan],
-        ] as const) {
-            const output = plan.map(row => row["QUERY PLAN"]).join("\n");
-            console.info(`[storage-deletion EXPLAIN ${path}]\n${output}`);
-            expect(output).toMatch(/Index (Only )?Scan|Bitmap Index Scan/);
-            expect(output).not.toMatch(/Seq Scan/);
-        }
-        const retained = await findReferencedStorageObjects(test.db, [
-            { id: "database", ref: ref(19999), urls: ["/api/files/19999"], ledgered: true },
+        const statements: { query: SQL; text: string }[] = [];
+        // Capture real emitted SQL while retaining the real executor.
+        const execute = jest.spyOn(test.db, "execute");
+        const retained = await findReferencedStorageObjects(
+            test.db,
+            [{ id: "database", ref: ref(19999), urls: ["/api/files/19999"], ledgered: true }],
+            [],
+            true
+        );
+        await findStorageObjectPointers(test.db, [
+            {
+                id: "pointer",
+                ref: {
+                    adapter: "s3",
+                    storageLocationId: "s3:http://s3:8333@files",
+                    key: "object-19999",
+                },
+                urls: ["http://s3:8333/files/object-19999"],
+                ledgered: true,
+            },
         ]);
+        for (const [query] of execute.mock.calls) {
+            if (typeof query !== "string") {
+                statements.push({
+                    query: query.getSQL(),
+                    text: new PgDialect().sqlToQuery(query.getSQL()).sql,
+                });
+            }
+        }
+        execute.mockRestore();
+        const databaseQuery = statements.find(statement => statement.text.includes("regexp_match"));
+        const pointerQuery = statements.find(statement => statement.text.includes("AS pointer_id"));
+        expect(databaseQuery).toBeDefined();
+        expect(pointerQuery).toBeDefined();
+        for (const [path, statement, indexName] of [
+            ["database", databaseQuery!, "document_file_id_idx"],
+            ["pointer", pointerQuery!, "file_uploads_storage_url_idx"],
+        ] as const) {
+            const plan = await test.db.execute<{ "QUERY PLAN": string }>(
+                sql`EXPLAIN (COSTS OFF) ${statement.query}`
+            );
+            const output = plan.map(row => row["QUERY PLAN"]).join("\n");
+            console.info(`[storage-deletion emitted EXPLAIN ${path}]\n${output}`);
+            expect(output).toContain(indexName);
+            expect(output).toMatch(/Index (Only )?Scan|Bitmap Index Scan/);
+            // Empty protected tables may correctly choose sequential scans.
+            expect(output).not.toMatch(/Seq Scan on pdr_ai_v2_(document|file_uploads)\b/);
+        }
         expect(retained.has("database")).toBe(true);
     });
 
@@ -1461,7 +1494,7 @@ describeDb("durable storage deletion (integration)", () => {
                     typeof query === "string"
                         ? query
                         : new PgDialect().sqlToQuery(query.getSQL()).sql;
-                return text.includes("WITH candidates (id, key_pattern)");
+                return text.includes("storage-reference legacy batch");
             });
             expect(scans).toHaveLength(1);
             expect((await items(id)).map(item => item.state)).toEqual(["retained", "retained"]);
@@ -1469,4 +1502,251 @@ describeDb("durable storage deletion (integration)", () => {
             execute.mockRestore();
         }
     });
+
+    it.each(["dot", "encoded", "prefix", "backslash", "whitespace", "first-match"] as const)(
+        "retains a historical normalization-aware database avatar: %s",
+        async form => {
+            const bytes = await file();
+            const url =
+                form === "dot"
+                    ? `/api/files/unused/../${bytes.id}`
+                    : form === "encoded"
+                      ? `/api/files/unused/%2e%2e/${bytes.id}`
+                      : form === "prefix"
+                        ? `/api/./files/${bytes.id}`
+                        : form === "backslash"
+                          ? `\\api\\files\\${bytes.id}`
+                          : form === "whitespace"
+                            ? ` /api/fi\tles/${bytes.id} `
+                            : `/api/files/999/../../../api/files/${bytes.id}`;
+            await test.db.insert(collabAgentPersona).values({
+                id: "alias-persona",
+                companyId,
+                key: "test",
+                displayName: "Alias",
+                role: "Test",
+                systemPrompt: "Test",
+                avatarUrl: url,
+            });
+            const id = (await objectPlan([bytes.url]))!;
+            await processStorageDeletionRequest(id);
+            expect((await items(id))[0]!.state).toBe("retained");
+            expect(deleteStoredObjects).not.toHaveBeenCalled();
+        }
+    );
+
+    it.each(["direct", "pointer"] as const)(
+        "retains a dot-segment legacy provider alias via %s",
+        async kind => {
+            const canonical = "http://s3:8333/files/a/b.pdf";
+            const alias = "https://objects.example/files/a/unused/../b.pdf";
+            if (kind === "direct") await doc(alias);
+            else {
+                const pointer = await file();
+                await test.db
+                    .update(fileUploads)
+                    .set({ storageProvider: "s3", storageUrl: alias, fileData: null })
+                    .where(eq(fileUploads.id, pointer.id));
+                await doc(pointer.url);
+            }
+            const id = (await objectPlan([canonical]))!;
+            await processStorageDeletionRequest(id);
+            expect((await items(id))[0]!.state).toBe("retained");
+            expect(deleteStoredObjects).not.toHaveBeenCalled();
+        }
+    );
+
+    it.each(["avatar", "attachment", "version", "job", "batch"] as const)(
+        "does not let a foreign tenant pin database bytes with an any-origin %s alias",
+        async kind => {
+            const bytes = await file();
+            const [other] = await test.db
+                .insert(company)
+                .values({ name: "Foreign ref", numberOfEmployees: "1" })
+                .returning();
+            const owner = BigInt(other!.id);
+            const url = `https://external.example/api/files/${bytes.id}`;
+            if (kind === "avatar")
+                await test.db.insert(collabAgentPersona).values({
+                    id: "foreign-persona",
+                    companyId: owner,
+                    key: "test",
+                    displayName: "Foreign",
+                    role: "Test",
+                    systemPrompt: "Test",
+                    avatarUrl: url,
+                });
+            if (kind === "attachment") {
+                await test.db.insert(workspaceSessions).values({
+                    id: "foreign-chat",
+                    companyId: owner,
+                    userId: "other",
+                    title: "Foreign",
+                });
+                await test.db.insert(workspaceSessionMessages).values({
+                    sessionId: "foreign-chat",
+                    seq: 0,
+                    role: "user",
+                    text: "Remote",
+                    attachments: [{ url }],
+                });
+            }
+            if (kind === "version" || kind === "job") {
+                const parent = await doc("https://example.org/owner", null, owner);
+                if (kind === "version")
+                    await test.db.insert(documentVersions).values({
+                        documentId: BigInt(parent.id),
+                        versionNumber: 1,
+                        url,
+                        mimeType: "text/plain",
+                    });
+                else
+                    await test.db.insert(ocrJobs).values({
+                        id: "foreign-job",
+                        documentId: BigInt(parent.id),
+                        companyId: owner,
+                        userId: "other",
+                        documentName: "Foreign",
+                        documentUrl: url,
+                        status: "queued",
+                    });
+            }
+            if (kind === "batch") {
+                await test.db
+                    .insert(uploadBatches)
+                    .values({ id: "foreign-batch", companyId: owner, createdByUserId: "other" });
+                await test.db.insert(uploadBatchFiles).values({
+                    batchId: "foreign-batch",
+                    companyId: owner,
+                    userId: "other",
+                    filename: "Remote",
+                    storageUrl: url,
+                });
+            }
+            const id = (await objectPlan([bytes.url]))!;
+            await processStorageDeletionRequest(id);
+            expect((await items(id))[0]!.state).toBe("deleted");
+            expect(await test.db.select().from(fileUploads)).toHaveLength(0);
+        }
+    );
+
+    it("rechecks indexed references created after the request-wide scan", async () => {
+        const urls = ["http://s3:8333/files/first", "http://s3:8333/files/second"];
+        for (const url of urls)
+            await recordStoredObject(test.db, {
+                ref: {
+                    adapter: "s3",
+                    storageLocationId: "s3:http://s3:8333@files",
+                    key: url.split("/").at(-1)!,
+                },
+                url,
+                companyId,
+                source: "upload-file",
+            });
+        const id = (await objectPlan(urls))!;
+        jest.mocked(deleteStoredObjects).mockImplementation(async refs => {
+            if (refs[0]!.key === "first") await doc(urls[1]!);
+            return refs.map(ref => ({ ref, outcome: "deleted" }));
+        });
+        await processStorageDeletionRequest(id);
+        expect((await items(id)).map(item => item.state)).toEqual(["deleted", "retained"]);
+        expect(deleteStoredObjects).toHaveBeenCalledTimes(1);
+    });
+
+    it("rechecks extracted-id references created after the request-wide scan", async () => {
+        const bytes = await file();
+        const first = "http://s3:8333/files/first";
+        await recordStoredObject(test.db, {
+            ref: { adapter: "s3", storageLocationId: "s3:http://s3:8333@files", key: "first" },
+            url: first,
+            companyId,
+            source: "upload-file",
+        });
+        const id = (await objectPlan([first, bytes.url]))!;
+        jest.mocked(deleteStoredObjects).mockImplementation(async refs => {
+            if (refs[0]!.adapter === "s3") await doc(`https://old.example/api/files/00${bytes.id}`);
+            return refs.map(ref => ({ ref, outcome: "deleted" }));
+        });
+        await processStorageDeletionRequest(id);
+        expect((await items(id)).map(item => item.state)).toEqual(["deleted", "retained"]);
+        expect(deleteStoredObjects).toHaveBeenCalledTimes(1);
+    });
+
+    it("maps 100 legacy candidates with constant-regex batches over populated pointers", async () => {
+        await test.db.execute(sql`
+            INSERT INTO pdr_ai_v2_file_uploads(user_id, company_id, filename, mime_type, file_size, storage_provider, storage_url)
+            SELECT 'user:test', ${companyId}, 'legacy', 'text/plain', 5, 's3', 'https://objects.example/files/a/unused/../object-' || n || '.pdf'
+            FROM generate_series(1, 4000) n
+        `);
+        const candidates: StorageReferenceCandidate[] = Array.from({ length: 100 }, (_, index) => ({
+            id: String(index + 1),
+            ref: {
+                adapter: "s3",
+                storageLocationId: "s3:http://s3:8333@files",
+                key: `a/object-${index + 1}.pdf`,
+            },
+            urls: [`http://s3:8333/files/a/object-${index + 1}.pdf`],
+            ledgered: false,
+        }));
+        const execute = jest.spyOn(test.db, "execute");
+        try {
+            const pointers = await findStorageObjectPointers(test.db, candidates);
+            expect(pointers).toHaveLength(100);
+            expect(new Set(pointers.map(pointer => pointer.id))).toEqual(
+                new Set(candidates.map(candidate => candidate.id))
+            );
+            const queries = execute.mock.calls.flatMap(([query]) => {
+                if (typeof query === "string") return [];
+                const compiled = new PgDialect().sqlToQuery(query.getSQL());
+                return compiled.sql.includes("storage-pointer legacy batch")
+                    ? [{ query: query.getSQL(), ...compiled }]
+                    : [];
+            });
+            expect(queries).toHaveLength(2);
+            for (const query of queries) {
+                expect(query.sql).not.toContain("candidate.key_pattern");
+                expect(query.params).toHaveLength(1);
+                const plan = await test.db.execute<{ "QUERY PLAN": string }>(
+                    sql`EXPLAIN (COSTS OFF) ${query.query}`
+                );
+                const output = plan.map(row => row["QUERY PLAN"]).join("\n");
+                console.info(`[storage-deletion emitted EXPLAIN legacy batch]\n${output}`);
+                expect(output).toContain("Seq Scan on pdr_ai_v2_file_uploads");
+                expect(output).not.toMatch(/Nested Loop|Join/);
+            }
+            await test.db.insert(document).values(
+                candidates.map((candidate, index) => ({
+                    companyId,
+                    title: "Legacy",
+                    category: "Test",
+                    url: `https://objects.example/files/a/unused/../object-${index + 1}.pdf`,
+                }))
+            );
+            const retained = await findReferencedStorageObjects(test.db, candidates, []);
+            expect(retained).toEqual(new Set(candidates.map(candidate => candidate.id)));
+            const directQueries = execute.mock.calls.flatMap(([query]) => {
+                if (typeof query === "string") return [];
+                const compiled = new PgDialect().sqlToQuery(query.getSQL());
+                return compiled.sql.includes("storage-reference legacy batch")
+                    ? [{ ...compiled, query: query.getSQL() }]
+                    : [];
+            });
+            expect(directQueries).toHaveLength(2);
+            for (const query of directQueries) {
+                expect(query.sql).not.toContain("candidate.key_pattern");
+                const patterns = [...query.sql.matchAll(/~\* \$(\d+)/g)].map(
+                    match => query.params[Number(match[1]) - 1]
+                );
+                expect(new Set(patterns).size).toBe(1);
+                const plan = await test.db.execute<{ "QUERY PLAN": string }>(
+                    sql`EXPLAIN (COSTS OFF) ${query.query}`
+                );
+                const output = plan.map(row => row["QUERY PLAN"]).join("\n");
+                console.info(`[storage-deletion emitted EXPLAIN legacy references]\n${output}`);
+                expect(output).not.toContain("candidate.key_pattern");
+            }
+        } finally {
+            execute.mockRestore();
+        }
+    }, 15_000);
 });

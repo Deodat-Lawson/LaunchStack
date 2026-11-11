@@ -228,6 +228,32 @@ describe("POST /api/documents/[id]/versions", () => {
         );
     });
 
+    it.each([
+        "/api/files/unused/../7",
+        "/api/./files/7",
+        "\\api\\files\\7",
+        " \t/api/fi\tles/7 \t",
+        "/api/files/9/../../../api/files/7",
+    ])("persists the canonical database version URL for %j", async documentUrl => {
+        (authorizeInternalFileRef as jest.Mock).mockResolvedValue(7);
+        (validateRequestBody as jest.Mock).mockResolvedValue({
+            success: true,
+            data: { documentUrl, mimeType: "application/pdf" },
+        });
+
+        const response = await POST(request(), routeContext());
+
+        expect(response.status).toBe(202);
+        expect(authorizeInternalFileRef).toHaveBeenCalledWith(documentUrl, BigInt(10), "DOCLING");
+        expect(createDocumentVersionLifecycle).toHaveBeenCalledWith(
+            expect.objectContaining({
+                url: "/api/files/7",
+                processingUrl: "https://app.example/api/files/7",
+                creationKey: "version:55:/api/files/7",
+            })
+        );
+    });
+
     it("keeps external storage URLs unchanged", async () => {
         const url = "https://storage.example/contract.pdf";
         (authorizeInternalFileRef as jest.Mock).mockResolvedValue(null);

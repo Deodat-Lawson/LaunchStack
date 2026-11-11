@@ -61,6 +61,17 @@ afterEach(() => configureOcr({}));
 
 const paths = [
     {
+        name: "persona creation",
+        write: (url: string) =>
+            createPersona(COMPANY, {
+                key: "analyst",
+                displayName: "Analyst",
+                role: "Analyze",
+                systemPrompt: "Analyze",
+                avatarUrl: url,
+            }),
+    },
+    {
         name: "persona creation (including a parsed definition)",
         write: (url: string) =>
             createPersona(
@@ -96,7 +107,25 @@ const paths = [
     },
 ];
 
-describe.each(paths)("$name", ({ write }) => {
+describe.each(paths)("$name", ({ name, write }) => {
+    it.each([
+        "/api/files/unused/../7",
+        "/api/./files/7",
+        "\\api\\files\\7",
+        " \t/api/fi\tles/7 \t",
+        "/api/files/9/../../../api/files/7",
+    ])("persists the canonical database avatar for %j", async url => {
+        await write(url);
+        // Definition import deliberately drops non-URL backslash paths before
+        // ingress; it must not persist the alias or manufacture a reference.
+        if (name.includes("parsed definition") && url.startsWith("\\")) {
+            expect(mockWrites).toContainEqual(expect.objectContaining({ avatarUrl: null }));
+            return;
+        }
+        expect(mockWrites).toContainEqual(expect.objectContaining({ avatarUrl: "/api/files/7" }));
+        expect(mockWrites).not.toContainEqual(expect.objectContaining({ avatarUrl: url }));
+    });
+
     it("rejects an alias of an owned object before writing its avatar", async () => {
         await expect(write(ALIAS)).rejects.toMatchObject({ status: 404 });
         expect(mockWrites).toEqual([]);

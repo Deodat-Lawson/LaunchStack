@@ -166,7 +166,9 @@ function temperatureColumn(value: number | null | undefined): number | null {
 }
 
 export async function createPersona(companyId: bigint, input: PersonaInput) {
-    if (input.avatarUrl) await authorizeStoredObjectUrl(input.avatarUrl, companyId);
+    const avatarUrl = input.avatarUrl
+        ? (await authorizeStoredObjectUrl(input.avatarUrl, companyId)).url
+        : input.avatarUrl;
     const [row] = await db
         .insert(collabAgentPersona)
         .values({
@@ -180,7 +182,7 @@ export async function createPersona(companyId: bigint, input: PersonaInput) {
             mode: input.mode ?? null,
             tools: input.tools ?? null,
             style: input.style ?? null,
-            avatarUrl: input.avatarUrl ?? null,
+            avatarUrl: avatarUrl ?? null,
             nodeId: input.nodeId ?? null,
             route: input.route ?? null,
             temperature: temperatureColumn(input.temperature),
@@ -199,7 +201,9 @@ export async function updatePersona(
     personaDbId: string,
     patch: Partial<PersonaInput> & { archived?: boolean }
 ) {
-    if (patch.avatarUrl) await authorizeStoredObjectUrl(patch.avatarUrl, companyId);
+    const avatarUrl = patch.avatarUrl
+        ? (await authorizeStoredObjectUrl(patch.avatarUrl, companyId)).url
+        : patch.avatarUrl;
     const [row] = await db
         .update(collabAgentPersona)
         .set({
@@ -211,7 +215,7 @@ export async function updatePersona(
             ...(patch.mode !== undefined ? { mode: patch.mode } : {}),
             ...(patch.tools !== undefined ? { tools: patch.tools } : {}),
             ...(patch.style !== undefined ? { style: patch.style } : {}),
-            ...(patch.avatarUrl !== undefined ? { avatarUrl: patch.avatarUrl } : {}),
+            ...(avatarUrl !== undefined ? { avatarUrl } : {}),
             ...(patch.nodeId !== undefined ? { nodeId: patch.nodeId } : {}),
             ...(patch.route !== undefined ? { route: patch.route } : {}),
             ...(patch.temperature !== undefined

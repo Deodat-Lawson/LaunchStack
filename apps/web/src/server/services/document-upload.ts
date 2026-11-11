@@ -158,6 +158,8 @@ export async function processDocumentUpload({
         user.companyId,
         effectiveProvider
     );
+    const storedDocumentUrl =
+        internalFileId !== null ? `/api/files/${internalFileId}` : rawDocumentUrl;
     const storageType: StorageType =
         internalFileId !== null
             ? "database"
@@ -246,7 +248,7 @@ export async function processDocumentUpload({
             userId: user.userId,
             title: documentName,
             category: documentCategory,
-            url: rawDocumentUrl,
+            url: storedDocumentUrl,
             creationKey: `${baseCreationKey}:audio-source`,
             mimeType: mimeType ?? null,
             ocrEnabled: false,
@@ -341,7 +343,7 @@ export async function processDocumentUpload({
         userId: user.userId,
         title: documentName,
         category: documentCategory,
-        url: rawDocumentUrl,
+        url: storedDocumentUrl,
         processingUrl: resolvedDocumentUrl,
         creationKey: baseCreationKey,
         mimeType: mimeType ?? null,

@@ -79,6 +79,57 @@ beforeEach(() => {
     mockIsMeteringEnforced.mockReturnValue(false);
 });
 
+describe("processDocumentUpload database URL persistence", () => {
+    it.each([
+        "/api/files/unused/../7",
+        "/api/./files/7",
+        "\\api\\files\\7",
+        " \t/api/fi\tles/7 \t",
+        "/api/files/9/../../../api/files/7",
+    ])("persists a canonical database URL for %j", async rawDocumentUrl => {
+        (shouldTranscribeFile as jest.Mock).mockReturnValue(false);
+        const authorization = jest
+            .spyOn(internalFileRef, "authorizeInternalFileRef")
+            .mockResolvedValueOnce(7);
+        const config = jest.spyOn(ocrConfig, "getOcrConfig").mockReturnValue({
+            ...ocrConfig.getOcrConfig(),
+            appPublicUrl: "https://app.test",
+            defaultProvider: "AZURE",
+        });
+        mockCreateDocumentLifecycle.mockResolvedValueOnce({
+            document: { id: 12, title: "Report", url: "/api/files/7", category: "Unfiled" },
+            jobId: "document-job",
+            eventIds: [],
+        });
+
+        try {
+            const result = await processDocumentUpload({
+                user: { userId: "user-1", companyId: 7n },
+                documentName: "Report",
+                rawDocumentUrl,
+                requestUrl: "https://app.test/upload",
+                mimeType: "application/pdf",
+                originalFilename: "report.pdf",
+                explicitStorageType: "s3",
+            });
+
+            expect(authorization).toHaveBeenCalledWith(rawDocumentUrl, 7n, expect.anything());
+            expect(mockCreateDocumentLifecycle).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    url: "/api/files/7",
+                    processingUrl: "https://app.test/api/files/7",
+                })
+            );
+            expect(result.storageType).toBe("database");
+            expect(result.resolvedDocumentUrl).toBe("https://app.test/api/files/7");
+        } finally {
+            authorization.mockRestore();
+            config.mockRestore();
+            (shouldTranscribeFile as jest.Mock).mockReturnValue(true);
+        }
+    });
+});
+
 describe("processDocumentUpload audio lifecycle", () => {
     it("rejects transcript lifecycle failures instead of returning source-only success", async () => {
         const transcriptError = new Error("transcript lifecycle dispatch failed");
@@ -317,7 +368,7 @@ describe("transcript metadata for the media viewer", () => {
             "video/mp4"
         );
     });
-    it("stores a relative recording reference while transcribing via the localhost processing URL", async () => {
+    it("canonicalizes an aliased recording reference while transcribing via the localhost processing URL", async () => {
         const authorization = jest
             .spyOn(internalFileRef, "authorizeInternalFileRef")
             .mockResolvedValueOnce(4);
@@ -339,7 +390,7 @@ describe("transcript metadata for the media viewer", () => {
             await processDocumentUpload({
                 user: { userId: "user-1", companyId: 7n },
                 documentName: "standup.mp4",
-                rawDocumentUrl: "/api/files/4",
+                rawDocumentUrl: "/api/files/unused/../4",
                 requestUrl: "http://localhost:3000/upload",
                 mimeType: "video/mp4",
                 originalFilename: "standup.mp4",
@@ -349,6 +400,10 @@ describe("transcript metadata for the media viewer", () => {
                 "standup.mp4",
                 7n,
                 "video/mp4"
+            );
+            expect(mockCreateDocumentLifecycle).toHaveBeenNthCalledWith(
+                1,
+                expect.objectContaining({ url: "/api/files/4" })
             );
             expect(mockCreateDocumentLifecycle).toHaveBeenNthCalledWith(
                 2,

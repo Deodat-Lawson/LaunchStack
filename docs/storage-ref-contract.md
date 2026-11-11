@@ -246,8 +246,10 @@ configured location must resolve to a live inventory row stamped with the active
 company, and be byte-identical to its canonical URL. Deleted rows, foreign,
 unstamped, missing, alternate-host and encoded aliases are rejected using the
 caller's existing error convention. Provider refs at other locations remain
-external links. Database URLs require owned `file_uploads` rows. Existing
-server-side re-embedding and version revert do not create fresh client references.
+external links. Database URLs require owned `file_uploads` rows and every ingress
+writer persists the normalized `/api/files/{id}` identity, never the original
+client spelling. Authorization inside an existing transaction uses that executor.
+Existing server-side re-embedding and version revert do not create fresh client references.
 
 The single unrecorded write path is `POST /api/storage/presign`: it returns a
 direct-upload capability but has no completion callback and no repository caller.
@@ -275,11 +277,18 @@ configured avatar URLs across **all** tenants. Persisted chat turn attachments,
 saved send-metadata attachments, and queued-send attachments also retain bytes;
 their JSON containment arms use GIN `jsonb_path_ops` indexes. Every exact protected column has
 its own indexed SQL arm. Ledgered providers use canonical equality only; legacy
-providers use one request-wide, encoding-safe case-insensitive key prefilter plus
-ref comparison. Numeric database URLs protect bytes on any origin with indexed
-extracted-id equality on scalar fields (JSON-array scans only for historical
-database chat attachments; chat uploads are S3-only today). Pointer lookup splits
-indexed exact URL equality from the unledgered-only legacy alias arm.
+providers use request-wide, encoding-safe case-insensitive basename prefilters
+plus parsed ref comparison. Each statement binds one constant alternation regex
+of at most 64 alternatives, never one regex per candidate/table row pair.
+Numeric database URLs use indexed extracted-id equality plus a normalization-aware
+historical fallback. Canonical relative/internal-origin URLs protect globally;
+other spellings protect only when the reference owner and file owner companies
+match. Versions and chat messages inherit ownership from their document/session.
+JSON-array scans remain for historical database chat attachments; chat uploads
+are S3-only today. Pointer lookup splits indexed exact URL equality from the
+unledgered-only legacy alias arm. The worker refreshes the indexed exact and
+extracted-id arms under each item's lock immediately before its attempt, while
+expensive legacy scans stay request-wide.
 Planning recovers historical numeric file URLs in every candidate column while
 preserving source spelling and preferring frozen refs.
 Rows sourced from `backfill-file-uploads` count as legacy for reference matching,

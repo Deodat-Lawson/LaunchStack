@@ -40,7 +40,9 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
         } else if (connection.provider === "bluesky") {
             const profile = await getBlueskyProfile(connection.providerAccountId);
             if (profile.avatarUrl) {
-                await authorizeStoredObjectUrl(profile.avatarUrl, auth.ctx.companyId);
+                profile.avatarUrl = (
+                    await authorizeStoredObjectUrl(profile.avatarUrl, auth.ctx.companyId)
+                ).url;
             }
             for (const channel of await channelsForConnections(auth.ctx.companyId, [
                 connection.id,

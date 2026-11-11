@@ -200,7 +200,27 @@ export async function processStorageDeletionRequest(requestId: number): Promise<
                     .where(eq(storageDeletionItems.id, id));
                 return null;
             }
-            if (referenced.has(String(id))) {
+            const candidate: StorageReferenceCandidate = {
+                id: String(id),
+                ref,
+                ledgered: ledger.length > 0 && ledger[0]!.source !== "backfill-file-uploads",
+                urls: ledger.length ? ledger.map(row => row.url) : [item.sourceUrl],
+            };
+            // Expensive legacy scans stay request-wide. Refresh the indexed
+            // arms under this item's lock, including live uses of new pointers.
+            const currentPointers = await findStorageObjectPointers(tx, [candidate], true);
+            const liveReferences = referenced.has(String(id))
+                ? referenced
+                : await findReferencedStorageObjects(
+                      tx,
+                      [candidate],
+                      [
+                          ...currentPointers,
+                          ...pointers.filter(pointer => pointer.id === String(id)),
+                      ],
+                      true
+                  );
+            if (liveReferences.has(String(id))) {
                 await tx
                     .update(storageDeletionItems)
                     .set({

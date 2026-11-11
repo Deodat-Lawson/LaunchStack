@@ -111,8 +111,14 @@ const aiPersonaOptions = [
 ] as const;
 const AttachmentUrlSchema = z.union([
     z.string().url(V.attachmentUrlInvalid),
-    // A strict end assertion also rejects the trailing newline that `$` permits.
-    z.string().regex(/^\/api\/files\/\d+(?![\s\S])/, V.attachmentUrlInvalid),
+    // A strict end assertion also rejects the trailing newline that `$` permits;
+    // ids beyond safe integers are not file ids anywhere else either.
+    z
+        .string()
+        .regex(/^\/api\/files\/\d+(?![\s\S])/, V.attachmentUrlInvalid)
+        .refine(url => Number.isSafeInteger(Number(url.slice("/api/files/".length))), {
+            message: V.attachmentUrlInvalid,
+        }),
 ]);
 const AttachmentPayloadSchema = z.object({
     url: AttachmentUrlSchema,

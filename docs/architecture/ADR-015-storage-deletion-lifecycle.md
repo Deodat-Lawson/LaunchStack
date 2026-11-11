@@ -145,13 +145,13 @@ matching the key's last path segment literally or percent-encoded, followed by
 parsed adapter/location/key comparison. Each batch uses one constant alternation
 regex with at most 64 alternatives per statement, not a candidate-by-table regex
 join. Matching URLs are parsed once and mapped back to candidates by identity.
-The worker batches these legacy scans once per request. Database refs use
+The worker runs these legacy scans in its request-wide pass, never per item. Database refs use
 `(regexp_match(col, '/api/files/0*([0-9]+)([/?#]|$)'))[1]` equality and concurrent
 expression indexes, plus a bounded historical fallback for path-relative forms
 (`api/files/<id>`, `./api/files/<id>`), dot segments, percent escapes, backslashes
 and whitespace/control characters normalized by the same WHATWG parser. Only historical rows can
 hold those spellings (ingress now persists canonical URLs), so this fallback runs
-once per request alongside the legacy provider alias scans; the per-item refresh
+in the request-wide pass alongside the legacy provider alias scans; the per-item refresh
 re-runs only the indexed arms.
 Canonical relative/internal-origin database URLs protect bytes globally. Other
 spellings count only when the referencing row's company equals the file owner's
@@ -162,7 +162,10 @@ source has an owner path; none require a tenant-blind alias exception.
 Only historical database chat attachments need JSON-array scans, which remain
 request-wide. Per-item extracted-id matching excludes all three JSON-array
 sources; the GIN containment arms still refresh canonical chat URLs, the only
-relative spelling current ingress persists. Chat payload validation accepts
+relative spelling current ingress persists. Every database candidate is matched
+exactly against its canonical `/api/files/<id>` (relative and app-origin) in
+addition to the URL its source row held, so a historical source spelling cannot
+hide a canonical reference. Chat payload validation accepts
 those canonical `/api/files/<digits>` URLs when queued/claimed sends or Ask again
 are echoed back. Today's chat upload route is S3-only. Pointer matching has a separate indexed
 `file_uploads.storage_url` equality arm, with constant legacy prefilters only for

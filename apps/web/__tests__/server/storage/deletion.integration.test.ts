@@ -1629,6 +1629,37 @@ describeDb("durable storage deletion (integration)", () => {
         );
     });
 
+    it("refreshes a canonical chat reference for a candidate stored under a historical spelling", async () => {
+        const bytes = await file();
+        await test.db.insert(workspaceSessions).values({
+            id: "canonical-chat",
+            companyId,
+            userId: "user:test",
+            title: "Canonical chat refresh",
+        });
+        const candidates = [
+            {
+                id: "historical",
+                ref: ref(bytes.id),
+                urls: [`https://old.example/api/files/${bytes.id}`],
+                ledgered: false,
+            },
+        ];
+        expect(await findReferencedStorageObjects(test.db, candidates, [], true)).toEqual(
+            new Set()
+        );
+        await test.db.insert(workspaceSessionMessages).values({
+            sessionId: "canonical-chat",
+            seq: 0,
+            role: "user",
+            text: "Attached after the request-wide scan",
+            attachments: [{ url: bytes.url }],
+        });
+        expect(await findReferencedStorageObjects(test.db, candidates, [], true)).toEqual(
+            new Set(["historical"])
+        );
+    });
+
     it.each(["2147483648", "99999999999", "9007199254740992", "9223372036854775808"])(
         "deletes a document with a nonexistent or unrepresentable external file id %s as skipped",
         async id => {

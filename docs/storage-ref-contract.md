@@ -282,13 +282,14 @@ plus parsed ref comparison. Each statement binds one constant alternation regex
 of at most 64 alternatives, never one regex per candidate/table row pair.
 Numeric database URLs use indexed extracted-id equality plus a normalization-aware
 historical fallback, including path-relative forms such as `api/files/{id}` and
-`./api/files/{id}`, plus whitespace/control-character normalization, run once per
-request (only historical rows hold these spellings). Canonical relative/internal-origin URLs protect globally;
+`./api/files/{id}`, plus whitespace/control-character normalization, run in the
+request-wide pass, never per item (only historical rows hold these spellings). Canonical relative/internal-origin URLs protect globally;
 other spellings protect only when the reference owner and file owner companies
 match. Versions and chat messages inherit ownership from their document/session.
 JSON-array scans for historical database chat attachments run only request-wide;
 per-item refresh excludes those extracted-id arms and retains indexed GIN exact
-containment for canonical chat references. Chat replay/queue/Ask-again validation
+containment for canonical chat references; database candidates always include
+their canonical `/api/files/{id}` spellings in exact matching. Chat replay/queue/Ask-again validation
 accepts canonical `/api/files/<digits>` alongside absolute URLs. Chat uploads
 are S3-only today. Pointer lookup splits indexed exact URL equality from the
 unledgered-only legacy alias arm. The worker refreshes the indexed exact and

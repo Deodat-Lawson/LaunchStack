@@ -71,6 +71,15 @@ export const modifyDocument = inngest.createFunction(
 
         // Step 2: Send to Adeu for modification, store result in blob storage
         const result = await step.run("modify-document", async () => {
+            const [existingDocument] = await db
+                .select({ companyId: document.companyId })
+                .from(document)
+                .where(eq(document.id, documentId))
+                .limit(1);
+            if (!existingDocument) {
+                return { summary: null, blobUrl: null, documentMissing: true };
+            }
+
             const buffer = Buffer.from(docBuffer, "base64");
 
             try {
@@ -87,6 +96,7 @@ export const modifyDocument = inngest.createFunction(
                 const stored = await putFile({
                     filename: `adeu-modified-${documentId}.docx`,
                     data: modifiedBuffer,
+                    companyId: existingDocument.companyId,
                     contentType:
                         "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                 });
@@ -107,6 +117,10 @@ export const modifyDocument = inngest.createFunction(
                 throw err;
             }
         });
+
+        if ("documentMissing" in result && result.documentMissing) {
+            return { success: false, error: "Document not found" };
+        }
 
         // If validation failed, record the failure and stop (no retry)
         if ("validationError" in result && result.validationError) {

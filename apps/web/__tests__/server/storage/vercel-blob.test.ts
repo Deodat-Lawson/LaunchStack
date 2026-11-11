@@ -5,6 +5,11 @@ jest.mock("~/env", () => ({
     env: { server: { BLOB_READ_WRITE_TOKEN: "vercel_blob_rw_Store1_secret" } },
 }));
 jest.mock("@vercel/blob", () => ({ put: (...args: unknown[]) => mockPut(...args) }));
+jest.mock("~/server/engine", () => ({ getEngine: () => ({ db: {} }) }));
+jest.mock("~/server/storage/ledger", () => ({
+    recordStoredObject: jest.fn().mockResolvedValue(undefined),
+}));
+jest.mock("~/server/storage/delete-objects", () => ({ deleteStoredObjects: jest.fn() }));
 
 import { putFile } from "~/server/storage/vercel-blob";
 
@@ -19,6 +24,7 @@ it("mints a ref using the SDK's actual pathname, including the private-store fal
     const result = await putFile({
         filename: "notes.txt",
         data: Buffer.from("notes"),
+        companyId: null,
         contentType: "text/plain",
     });
     expect(result.ref).toEqual({

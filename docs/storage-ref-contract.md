@@ -156,3 +156,57 @@ deletes return 502 and retain the version row; deleted/not-found permits cleanup
 Website-preview replacement uses the same global reference guard before
 best-effort deletion, so a version's copied preview survives replacement.
 Internal signed reads, workspace stamping, and byte-range forwarding are unchanged.
+
+## Ledger
+
+`storage_objects` is the product-owned, durable inventory of newly written
+objects. `ledger.ts` accepts the caller's database or transaction executor
+(rather than importing the shared database and re-entering storage initialization).
+The unique `(adapter, storage_location_id, object_key)` triple is recorded with
+`ON CONFLICT DO NOTHING`; a repeated record never changes the original URL,
+company stamp or metadata. URL lookups are exact and use a HASH index because
+provider URLs can exceed PostgreSQL's btree tuple limit. Ref lookups match all
+three identity fields.
+
+The write primitives record the exact URL they return, content type, byte size
+and available checksum:
+
+| Writer                          | Source                 | Company stamp                                  |
+| ------------------------------- | ---------------------- | ---------------------------------------------- |
+| `uploadFile` (S3 or database)   | `upload-file`          | Input company, or null                         |
+| `putFile` (Vercel Blob)         | `vercel-blob`          | Required explicit company or null              |
+| UploadThing completion callback | `uploadthing`          | Active workspace captured in upload middleware |
+| `POST /api/storage/upload`      | `storage-upload-route` | Authorized workspace                           |
+
+Database uploads insert `file_uploads` and the inventory in the same transaction.
+Provider writes happen first; a failed inventory insert triggers best-effort
+deletion of the new object and fails the write. Unconfirmed compensation is
+logged rather than silently leaving bytes behind. UploadThing records and returns
+`ufsUrl`, including for private ACL uploads (URL identity does not bypass ACL).
+Its company stamp comes from signed callback metadata, not callback cookies.
+
+UploadThing v7.7.4 logs thrown completion errors without sending
+`/callback-result`, potentially leaving `awaitServerData` clients pending (the
+browser SDK sets no timeout). Therefore a compensated ledger failure returns
+typed `{ ok: false, error: "storage_record_failed" }` server data instead.
+Success returns `{ ok: true, fileUrl, ... }`; every client checks this union
+before persisting the URL and uses its existing upload-failed error path.
+
+`company_id` is nullable and intentionally has **no foreign key**. Neither tenant
+nor document deletion may erase the inventory needed to clean up or audit bytes.
+There are no document ownership columns: later deletion planning derives
+references from relational rows. `deleted_at` is reserved for the deletion
+lifecycle. This layer does not backfill old objects.
+
+At document/version upload ingress, recognized S3, Blob and UploadThing URLs
+must resolve to an inventory row stamped with the active company. Foreign,
+unstamped and missing objects return the same `fileNotInWorkspace` 404.
+Database URLs retain their `file_uploads.company_id` check; external links remain
+accepted. Consequently legacy unledgered provider objects cannot be attached
+through client ingress until migrated; existing server-side re-embedding and
+version revert do not create a fresh client reference.
+
+The single unrecorded write path is `POST /api/storage/presign`: it returns a
+direct-upload capability but has no completion callback and no repository caller.
+Objects uploaded with it remain deletable via URL-to-ref recognition, but are
+not in this inventory.

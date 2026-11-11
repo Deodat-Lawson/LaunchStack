@@ -51,7 +51,6 @@ async function insertPlan(
         documentId?: number;
         documentVersionId?: number;
         urls: readonly (string | null)[];
-        audioUrls?: readonly string[];
     }
 ): Promise<number | null> {
     const urls = [
@@ -79,11 +78,11 @@ async function insertPlan(
         );
         return parsedUrls.map<Candidate>(({ sourceUrl, parsed }) => {
             if (parsed.ok) return { sourceUrl, ref: parsed.ref };
-            // Only historical audio metadata may recover a former app origin.
-            // Keep the original source URL and independently check file ownership.
-            const databaseId = input.audioUrls?.includes(sourceUrl)
-                ? /\/api\/files\/(\d+)(?:[/?#]|$)/.exec(sourceUrl)?.[1]
-                : undefined;
+            // Historical absolute file URLs on every candidate column retain
+            // their original spelling; worker provenance authorizes the bytes.
+            const databaseId = /^https?:\/\/[^/]+\/api\/files\/0*([0-9]+)(?:[/?#]|$)/.exec(
+                sourceUrl
+            )?.[1];
             if (
                 parsed.reason === "unrecognized" &&
                 databaseId &&
@@ -216,10 +215,6 @@ export async function planDocumentDeletion(
             companyId: doc.companyId,
             scope: "document",
             documentId: doc.id,
-            audioUrls: [
-                ...metadataAudioUrls(doc.ocrMetadata),
-                ...versions.flatMap(version => metadataAudioUrls(version.metadata)),
-            ],
             urls: [
                 doc.url,
                 ...metadataStorageUrls(doc.ocrMetadata),
@@ -266,7 +261,6 @@ export async function planVersionDeletion(
         companyId: doc.companyId,
         scope: "version",
         documentVersionId: version.id,
-        audioUrls: metadataAudioUrls(version.ocrMetadata),
         urls: [
             version.url,
             ...metadataStorageUrls(version.ocrMetadata),

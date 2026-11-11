@@ -14,6 +14,7 @@ import { db } from "~/server/db";
 import { brandChannels } from "~/server/db/schema/brand";
 import { getConnectionById } from "~/server/services/connectors/connection-store";
 import { eq } from "drizzle-orm";
+import { authorizeStoredObjectUrl } from "~/server/storage/authorize-stored-object-url";
 
 import { brandReason } from "~/server/brand/words";
 
@@ -38,6 +39,9 @@ export async function POST(request: NextRequest, { params }: { params: Promise<{
             }
         } else if (connection.provider === "bluesky") {
             const profile = await getBlueskyProfile(connection.providerAccountId);
+            if (profile.avatarUrl) {
+                await authorizeStoredObjectUrl(profile.avatarUrl, auth.ctx.companyId);
+            }
             for (const channel of await channelsForConnections(auth.ctx.companyId, [
                 connection.id,
             ])) {

@@ -21,6 +21,7 @@ import { AGENT_ROSTER_PERMISSION } from "~/lib/agents/roster-access";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { ImportPersonaSchema, PersonaFieldsSchema } from "~/server/collab/agent-schemas";
 import { createPersona, getPersonaByKey, updatePersona } from "~/server/collab/personas";
+import { UploadAuthorizationError } from "~/server/services/upload-authorization-error";
 
 export const dynamic = "force-dynamic";
 
@@ -96,16 +97,26 @@ export async function POST(request: Request) {
         );
     }
 
-    const persona = existing
-        ? await updatePersona(ctx.data.companyId, existing.dbId, {
-              ...fields.data,
-              archived: false,
-          })
-        : await createPersona(ctx.data.companyId, fields.data);
-    if (!persona) return NextResponse.json({ error: t("saveAgentFailed") }, { status: 500 });
+    try {
+        const persona = existing
+            ? await updatePersona(ctx.data.companyId, existing.dbId, {
+                  ...fields.data,
+                  archived: false,
+              })
+            : await createPersona(ctx.data.companyId, fields.data);
+        if (!persona) return NextResponse.json({ error: t("saveAgentFailed") }, { status: 500 });
 
-    return NextResponse.json(
-        { persona, replaced: Boolean(existing), unknownKeys },
-        { status: existing ? 200 : 201 }
-    );
+        return NextResponse.json(
+            { persona, replaced: Boolean(existing), unknownKeys },
+            { status: existing ? 200 : 201 }
+        );
+    } catch (err) {
+        if (err instanceof UploadAuthorizationError) {
+            return NextResponse.json(
+                { error: translatorFor(locale, "upload.server.errors")("fileNotInWorkspace") },
+                { status: err.status }
+            );
+        }
+        throw err;
+    }
 }

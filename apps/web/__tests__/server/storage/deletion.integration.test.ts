@@ -1,4 +1,5 @@
 import { eq, sql } from "drizzle-orm";
+import { PgDialect } from "drizzle-orm/pg-core";
 import type { DbClient } from "@launchstack/store/client";
 import {
     company,
@@ -33,6 +34,8 @@ import {
     processStorageDeletionRequest,
 } from "~/server/storage/deletion/worker";
 import type { ObjectRef } from "~/server/storage/object-ref";
+import { findReferencedStorageObjects } from "~/server/storage/deletion/references";
+import { storageDeletionOperationalState } from "~/server/storage/deletion/status";
 import * as storedUrl from "~/server/storage/stored-url";
 import {
     createFounderWeeklyReviewTestDatabase,
@@ -696,7 +699,7 @@ describeDb("durable storage deletion (integration)", () => {
     it("prefilters legacy S3 aliases by full key and verifies parsed identity", async () => {
         const key = "documents/93411647-cc8e-48aa-8ffa-a65904d5efe8.pdf";
         const canonical = `http://s3:8333/files/${key}`;
-        const alias = `https://objects.example/files/${key}?download=1`;
+        const alias = `https://objects.example/files/doc%75ments/93411647-cc8e-48aa-8ffa-a65904d5efe8%2Epdf?download=1`;
         await test.db.insert(document).values(
             Array.from({ length: 100 }, (_, id) => ({
                 companyId,
@@ -1234,5 +1237,236 @@ describeDb("durable storage deletion (integration)", () => {
         await processStorageDeletionRequest(row!.id);
         expect((await items(row!.id))[0]!.state).toBe("retained");
         expect(deleteStoredObjects).not.toHaveBeenCalled();
+    });
+
+    it.each(["document", "version", "preview", "version-preview", "job", "batch"] as const)(
+        "recovers any-origin database refs in %s and enforces ownership",
+        async kind => {
+            const [other] = await test.db
+                .insert(company)
+                .values({ name: "Foreign", numberOfEmployees: "1" })
+                .returning();
+            const own = await file();
+            const foreign = await file(BigInt(other!.id));
+            const source = await doc("https://example.org/owner");
+            const ownUrl = `https://historical.example/api/files/00${own.id}`;
+            const foreignUrl = `https://historical.example/api/files/00${foreign.id}?download=1`;
+            if (kind === "document")
+                await test.db
+                    .update(document)
+                    .set({ url: ownUrl, ocrMetadata: { websitePreview: { url: foreignUrl } } })
+                    .where(eq(document.id, source.id));
+            if (kind === "preview")
+                await test.db
+                    .update(document)
+                    .set({ url: foreignUrl, ocrMetadata: { websitePreview: { url: ownUrl } } })
+                    .where(eq(document.id, source.id));
+            if (kind === "version" || kind === "version-preview")
+                await test.db.insert(documentVersions).values({
+                    documentId: BigInt(source.id),
+                    versionNumber: 1,
+                    mimeType: "text/plain",
+                    url: kind === "version" ? ownUrl : foreignUrl,
+                    ocrMetadata: {
+                        websitePreview: { url: kind === "version" ? foreignUrl : ownUrl },
+                    },
+                });
+            if (kind === "job") {
+                for (const [index, url] of [ownUrl, foreignUrl].entries())
+                    await test.db.insert(ocrJobs).values({
+                        id: `historical-${index}`,
+                        companyId,
+                        userId: "user:test",
+                        documentId: BigInt(source.id),
+                        documentName: "Historical",
+                        documentUrl: url,
+                    });
+            }
+            if (kind === "batch") {
+                await test.db
+                    .insert(uploadBatches)
+                    .values({ id: "historical", companyId, createdByUserId: "user:test" });
+                for (const url of [ownUrl, foreignUrl])
+                    await test.db.insert(uploadBatchFiles).values({
+                        batchId: "historical",
+                        companyId,
+                        userId: "user:test",
+                        documentId: BigInt(source.id),
+                        filename: "Historical",
+                        storageUrl: url,
+                        status: "complete",
+                    });
+            }
+            await test.db.transaction(tx => deleteDocumentCore(tx, source.id, context));
+            const [planned] = await test.db.select().from(storageDeletionRequests);
+            expect(
+                (await items(planned!.id)).find(item => item.sourceUrl === ownUrl)
+            ).toMatchObject({ adapter: "database", objectKey: String(own.id) });
+            await processStorageDeletionRequest(planned!.id);
+            expect(
+                (await items(planned!.id)).find(item => item.sourceUrl === ownUrl)
+            ).toMatchObject({ state: "deleted" });
+            expect(
+                (await items(planned!.id)).find(item => item.sourceUrl === foreignUrl)
+            ).toMatchObject({ state: "blocked", errorCode: "foreign_object" });
+        }
+    );
+
+    it.each(["foreign", "unstamped"] as const)(
+        "rechecks %s pointer provenance after forced requeue",
+        async kind => {
+            const [other] = await test.db
+                .insert(company)
+                .values({ name: "Pointer owner", numberOfEmployees: "1" })
+                .returning();
+            const pointer = await externalPointer(kind === "foreign" ? BigInt(other!.id) : null);
+            const id = (await objectPlan([pointer.url]))!;
+            const provider = (await items(id)).find(
+                item => item.sourceUrl === pointer.providerUrl
+            )!;
+            expect(provider).toMatchObject({ state: "blocked", errorCode: "foreign_object" });
+            await test.db
+                .update(storageDeletionItems)
+                .set({ state: "pending", errorCode: null })
+                .where(eq(storageDeletionItems.id, provider.id));
+            await processStorageDeletionRequest(id);
+            expect((await items(id)).find(item => item.id === provider.id)).toMatchObject({
+                state: "blocked",
+                errorCode: "foreign_object",
+                attempts: 0,
+            });
+            expect(deleteStoredObjects).not.toHaveBeenCalled();
+            expect(await test.db.select().from(fileUploads)).toHaveLength(1);
+        }
+    );
+
+    it.each(["deleted", "not_found"] as const)(
+        "removes same-company S3 pointers after confirmed %s",
+        async outcome => {
+            const url = "http://s3:8333/files/dangling-object";
+            const pointer = await file();
+            await test.db
+                .update(fileUploads)
+                .set({ storageProvider: "s3", storageUrl: url, fileData: null })
+                .where(eq(fileUploads.id, pointer.id));
+            const id = (await objectPlan([url]))!;
+            jest.mocked(deleteStoredObjects).mockImplementation(async refs =>
+                refs.map(ref => ({ ref, outcome }))
+            );
+            await processStorageDeletionRequest(id);
+            expect((await items(id))[0]).toMatchObject({ state: outcome });
+            expect(await test.db.select().from(fileUploads)).toHaveLength(0);
+        }
+    );
+
+    it("retains mixed-encoded legacy provider bytes through a database pointer", async () => {
+        const pointer = await file();
+        await test.db
+            .update(fileUploads)
+            .set({
+                storageProvider: "s3",
+                storageUrl: "https://objects.example/files/a%2Fb%2Epdf",
+                fileData: null,
+            })
+            .where(eq(fileUploads.id, pointer.id));
+        await doc(`https://old.example/api/files/00${pointer.id}`);
+        const id = (await objectPlan(["http://s3:8333/files/a/b.pdf"]))!;
+        await processStorageDeletionRequest(id);
+        expect((await items(id))[0]).toMatchObject({ state: "retained" });
+        expect(deleteStoredObjects).not.toHaveBeenCalled();
+    });
+
+    it("surfaces missing and dead delivery as operationally blocked", async () => {
+        const id = (await objectPlan([(await file()).url]))!;
+        expect(await storageDeletionOperationalState(test.db, await request(id))).toEqual({
+            status: "pending",
+            errorCode: null,
+        });
+        await test.db
+            .update(eventOutbox)
+            .set({ status: "dead" })
+            .where(eq(eventOutbox.eventId, `storage.deletion.requested:${id}`));
+        expect(await storageDeletionOperationalState(test.db, await request(id))).toEqual({
+            status: "blocked",
+            errorCode: "event_dead",
+        });
+        await test.db.delete(company).where(eq(company.id, Number(companyId)));
+        expect(await test.db.select().from(eventOutbox)).toHaveLength(0);
+        expect(await storageDeletionOperationalState(test.db, await request(id))).toEqual({
+            status: "blocked",
+            errorCode: "event_missing",
+        });
+    });
+
+    it("uses indexes for extracted file ids and exact provider pointer lookup", async () => {
+        await test.db.execute(sql`
+            INSERT INTO pdr_ai_v2_document(company_id, title, category, url)
+            SELECT ${companyId}, 'explain', 'Test', 'https://old.example/api/files/' || n FROM generate_series(1, 20000) n;
+        `);
+        await test.db.execute(sql`
+            INSERT INTO pdr_ai_v2_file_uploads(user_id, company_id, filename, mime_type, file_size, storage_provider, storage_url)
+            SELECT 'user:test', ${companyId}, 'explain', 'text/plain', 5, 's3', 'http://s3:8333/files/object-' || n FROM generate_series(1, 20000) n;
+        `);
+        await test.db.execute(sql`ANALYZE pdr_ai_v2_document`);
+        await test.db.execute(sql`ANALYZE pdr_ai_v2_file_uploads`);
+        const databasePlan = await test.db.execute<{ "QUERY PLAN": string }>(sql`
+            EXPLAIN (COSTS OFF) SELECT id FROM pdr_ai_v2_document
+            WHERE (regexp_match(url, '/api/files/0*([0-9]+)([/?#]|$)'))[1] = '19999'
+        `);
+        const pointerPlan = await test.db.execute<{ "QUERY PLAN": string }>(sql`
+            EXPLAIN (COSTS OFF) SELECT id FROM pdr_ai_v2_file_uploads WHERE storage_url = 'http://s3:8333/files/object-19999'
+        `);
+        for (const [path, plan] of [
+            ["database", databasePlan],
+            ["pointer", pointerPlan],
+        ] as const) {
+            const output = plan.map(row => row["QUERY PLAN"]).join("\n");
+            console.info(`[storage-deletion EXPLAIN ${path}]\n${output}`);
+            expect(output).toMatch(/Index (Only )?Scan|Bitmap Index Scan/);
+            expect(output).not.toMatch(/Seq Scan/);
+        }
+        const retained = await findReferencedStorageObjects(test.db, [
+            { id: "database", ref: ref(19999), urls: ["/api/files/19999"], ledgered: true },
+        ]);
+        expect(retained.has("database")).toBe(true);
+    });
+
+    it("preserves mixed-encoded historical references to backfilled ledger objects", async () => {
+        const canonical = "http://s3:8333/files/history/object.pdf";
+        await test.db.insert(storageObjects).values({
+            adapter: "s3",
+            storageLocationId: "s3:http://s3:8333@files",
+            objectKey: "history/object.pdf",
+            url: canonical,
+            companyId,
+            source: "backfill-file-uploads",
+        });
+        await doc("https://objects.example/files/hist%6Fry%2Fobject%2epdf");
+        const id = (await objectPlan([canonical]))!;
+        await processStorageDeletionRequest(id);
+        expect((await items(id))[0]).toMatchObject({ state: "retained" });
+        expect(deleteStoredObjects).not.toHaveBeenCalled();
+    });
+
+    it("runs one legacy protected-source scan for all request items", async () => {
+        const urls = ["http://s3:8333/files/one.pdf", "http://s3:8333/files/two.pdf"];
+        await doc("https://objects.example/files/%6Fne.pdf");
+        await doc("https://objects.example/files/tw%6F.pdf");
+        const id = (await objectPlan(urls))!;
+        const execute = jest.spyOn(test.db, "execute");
+        try {
+            await processStorageDeletionRequest(id);
+            const scans = execute.mock.calls.filter(([query]) => {
+                const text =
+                    typeof query === "string"
+                        ? query
+                        : new PgDialect().sqlToQuery(query.getSQL()).sql;
+                return text.includes("WITH candidates (id, key_pattern)");
+            });
+            expect(scans).toHaveLength(1);
+            expect((await items(id)).map(item => item.state)).toEqual(["retained", "retained"]);
+        } finally {
+            execute.mockRestore();
+        }
     });
 });

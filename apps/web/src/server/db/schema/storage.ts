@@ -113,14 +113,16 @@ export const storageDeletionItems = pgTable(
         attempts: integer("attempts").notNull().default(0),
         errorCode: varchar("error_code", { length: 64 }),
         lastError: text("last_error"),
+        createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+        updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+        // Added by a later migration; declared after the timestamps so a schema
+        // built from TypeScript has the same column order as the migrations.
         resolvedBy: varchar("resolved_by", { length: 256 }),
         resolutionNote: text("resolution_note"),
         resolvedAt: timestamp("resolved_at", { withTimezone: true }),
         requeuedBy: varchar("requeued_by", { length: 256 }),
         requeueNote: text("requeue_note"),
         requeuedAt: timestamp("requeued_at", { withTimezone: true }),
-        createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
-        updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
     },
     table => [
         uniqueIndex("storage_deletion_items_request_url_unique").on(

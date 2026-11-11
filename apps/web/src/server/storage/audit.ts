@@ -1,8 +1,8 @@
 import { randomUUID } from "node:crypto";
 import { ListObjectsV2Command } from "@aws-sdk/client-s3";
-import { and, asc, eq, gt, inArray, isNull, lt, notExists } from "drizzle-orm";
+import { and, asc, eq, gt, inArray, isNull, lt, notExists, sql } from "drizzle-orm";
 import type { DbClient } from "@launchstack/store/client";
-import { fileUploads } from "@launchstack/store/schema";
+import { company, fileUploads } from "@launchstack/store/schema";
 
 import { env } from "~/env";
 import {
@@ -50,7 +50,11 @@ export interface OrphanAuditReport {
     cutoff: string;
     ledger: OrphanAuditPopulation & {
         requestIds: number[];
-        notEnqueueable: { count: number; reason: string };
+        notEnqueueable: {
+            count: number;
+            reason: string;
+            reasonCounts: { company_id_null: number; company_missing: number };
+        };
     };
     inventory: OrphanAuditPopulation & {
         enabled: boolean;
@@ -153,7 +157,7 @@ async function unreferencedLedger(tx: Executor, rows: readonly StoredObject[]) {
             id: String(row.id),
             urls: [row.url],
             ref: storedObjectRef(row),
-            ledgered: true,
+            ledgered: row.source !== "backfill-file-uploads",
         }))
     );
     return rows.filter(row => !referenced.has(String(row.id)));
@@ -167,7 +171,7 @@ async function enqueuePage(tx: Tx, ids: bigint[], cutoff: Date, actor: string) {
         .from(storageObjects)
         .where(inArray(storageObjects.id, ids))
         .orderBy(asc(storageObjects.id))
-        .for("update");
+        .for("no key update");
     const current = await tx
         .select()
         .from(storageObjects)
@@ -188,8 +192,26 @@ async function enqueuePage(tx: Tx, ids: bigint[], cutoff: Date, actor: string) {
         urls.push(row.url);
         companies.set(row.companyId, urls);
     }
+    // Outbox rows have a company FK, while ledger provenance intentionally
+    // survives tenant removal. Recheck under a lock held through planner insert
+    // so a concurrent tenant deletion cannot invalidate an eligible company.
+    const companyRows = companies.size
+        ? await tx
+              .select({ id: company.id })
+              .from(company)
+              .where(
+                  inArray(
+                      sql`${company.id}`,
+                      [...companies.keys()].map(id => id.toString())
+                  )
+              )
+              .orderBy(asc(company.id))
+              .for("key share")
+        : [];
+    const existingCompanyIds = new Set(companyRows.map(row => BigInt(row.id)));
     const requestIds: number[] = [];
     for (const [companyId, urls] of companies) {
+        if (!existingCompanyIds.has(companyId)) continue;
         const requestId = await planObjectDeletion(tx, {
             companyId,
             urls,
@@ -199,7 +221,7 @@ async function enqueuePage(tx: Tx, ids: bigint[], cutoff: Date, actor: string) {
         });
         if (requestId !== null) requestIds.push(requestId);
     }
-    return { candidates, requestIds };
+    return { candidates, requestIds, existingCompanyIds };
 }
 
 async function auditInventoryPage(
@@ -251,7 +273,11 @@ export async function auditStorageOrphans(
         ledger: {
             ...population(),
             requestIds: [],
-            notEnqueueable: { count: 0, reason: "company_id is null; no tenant can be inferred" },
+            notEnqueueable: {
+                count: 0,
+                reason: "company_id is null or company no longer exists; no tenant can be inferred",
+                reasonCounts: { company_id_null: 0, company_missing: 0 },
+            },
         },
         inventory: {
             ...population(),
@@ -279,6 +305,7 @@ export async function auditStorageOrphans(
             if (!page.length) break;
             cursor = page[page.length - 1]!.id;
             let candidates: StoredObject[];
+            let existingCompanyIds: Set<bigint>;
             if (options.enqueue) {
                 const result = await db.transaction(tx =>
                     enqueuePage(
@@ -290,8 +317,24 @@ export async function auditStorageOrphans(
                 );
                 candidates = result.candidates;
                 report.ledger.requestIds.push(...result.requestIds);
+                existingCompanyIds = result.existingCompanyIds;
             } else {
                 candidates = await unreferencedLedger(db, page);
+                const companyIds = candidates.flatMap(row =>
+                    row.companyId === null ? [] : [row.companyId]
+                );
+                const companyRows = companyIds.length
+                    ? await db
+                          .select({ id: company.id })
+                          .from(company)
+                          .where(
+                              inArray(
+                                  sql`${company.id}`,
+                                  companyIds.map(id => id.toString())
+                              )
+                          )
+                    : [];
+                existingCompanyIds = new Set(companyRows.map(row => BigInt(row.id)));
             }
             for (const row of candidates) {
                 addCandidate(
@@ -301,7 +344,13 @@ export async function auditStorageOrphans(
                     sampleLimit,
                     row.source
                 );
-                if (row.companyId === null) report.ledger.notEnqueueable.count++;
+                if (row.companyId === null) {
+                    report.ledger.notEnqueueable.count++;
+                    report.ledger.notEnqueueable.reasonCounts.company_id_null++;
+                } else if (!existingCompanyIds.has(row.companyId)) {
+                    report.ledger.notEnqueueable.count++;
+                    report.ledger.notEnqueueable.reasonCounts.company_missing++;
+                }
             }
         }
         if (!options.inventory) return report;

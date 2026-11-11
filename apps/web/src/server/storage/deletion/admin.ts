@@ -1,6 +1,6 @@
-import { and, asc, count, eq, getTableName, inArray, sql } from "drizzle-orm";
+import { and, asc, count, eq, inArray, isNull, ne, or, sql } from "drizzle-orm";
 import type { DbClient } from "@launchstack/store/client";
-import { eventOutbox } from "@launchstack/store/schema";
+import { company, eventOutbox } from "@launchstack/store/schema";
 import { enqueueOutboxEventsWithRevive } from "@launchstack/orchestration";
 import { eventIds, PROTOCOL_VERSION } from "@launchstack/orchestration/pipeline-events";
 
@@ -11,7 +11,7 @@ import {
     type StorageDeletionRequest,
 } from "~/server/db/schema/storage";
 import type { Executor } from "~/server/workspace/db-types";
-import { recomputeDeletionRequestStatus } from "./status";
+import { recomputeDeletionRequestStatus, storageDeletionOperationalState } from "./status";
 
 type ItemCounts = Record<StorageDeletionItem["state"], number>;
 const emptyItemCounts = (): ItemCounts => ({
@@ -25,27 +25,21 @@ const emptyItemCounts = (): ItemCounts => ({
     waived: 0,
 });
 
-// Drizzle unqualifies Column chunks in single-table SELECT projections. Keep
-// the correlated outer fields as identifiers so they cannot bind to outbox.id.
-const requestIdColumn = sql`${sql.identifier(getTableName(storageDeletionRequests))}.${sql.identifier("id")}`;
-const requestStatusColumn = sql`${sql.identifier(getTableName(storageDeletionRequests))}.${sql.identifier("status")}`;
-// A validation-dead event can leave a pending request without a runnable delivery.
-const operationalStatus = sql<StorageDeletionRequest["status"]>`CASE
-    WHEN ${requestStatusColumn} = 'completed' THEN 'completed'
-    WHEN ${requestStatusColumn} = 'blocked' OR EXISTS (
-        SELECT 1 FROM ${eventOutbox}
-        WHERE ${eventOutbox.eventId} = 'storage.deletion.requested:' || ${requestIdColumn}::text
-          AND ${eventOutbox.eventType} = 'storage.deletion.requested'
-          AND ${eventOutbox.status} = 'dead'
-    ) THEN 'blocked' ELSE 'pending' END`;
-const outboxStatus = sql<string | null>`(SELECT ${eventOutbox.status} FROM ${eventOutbox}
-    WHERE ${eventOutbox.eventId} = 'storage.deletion.requested:' || ${requestIdColumn}::text)`;
+const deletionDeliveryJoin = eq(
+    eventOutbox.eventId,
+    sql`'storage.deletion.requested:' || ${storageDeletionRequests.id}::text`
+);
 
 export async function getStorageDeletionSummary(db: Executor) {
     const requestRows = await db
-        .select({ status: operationalStatus, count: count() })
+        .select({
+            status: storageDeletionRequests.status,
+            outboxStatus: eventOutbox.status,
+            count: count(),
+        })
         .from(storageDeletionRequests)
-        .groupBy(operationalStatus);
+        .leftJoin(eventOutbox, deletionDeliveryJoin)
+        .groupBy(storageDeletionRequests.status, eventOutbox.status);
     const itemRows = await db
         .select({ state: storageDeletionItems.state, count: count() })
         .from(storageDeletionItems)
@@ -74,7 +68,14 @@ export async function getStorageDeletionSummary(db: Executor) {
         completed: 0,
         blocked: 0,
     };
-    for (const row of requestRows) requestsByStatus[row.status] = row.count;
+    for (const row of requestRows) {
+        const operational = await storageDeletionOperationalState(
+            db,
+            { id: 0, status: row.status },
+            row.outboxStatus === null ? null : { status: row.outboxStatus }
+        );
+        requestsByStatus[operational.status] += row.count;
+    }
     const itemsByState = emptyItemCounts();
     for (const row of itemRows) itemsByState[row.state] = row.count;
     return {
@@ -100,11 +101,23 @@ export async function listStorageDeletionRequests(
     if (options.status !== "blocked" && options.status !== "pending")
         throw new Error("status must be blocked or pending");
     const requests = await db
-        .select({ request: storageDeletionRequests, operationalStatus, outboxStatus })
+        .select({ request: storageDeletionRequests, delivery: { status: eventOutbox.status } })
         .from(storageDeletionRequests)
+        .leftJoin(eventOutbox, deletionDeliveryJoin)
         .where(
             and(
-                sql`${operationalStatus} = ${options.status}`,
+                options.status === "blocked"
+                    ? or(
+                          eq(storageDeletionRequests.status, "blocked"),
+                          and(
+                              eq(storageDeletionRequests.status, "pending"),
+                              or(isNull(eventOutbox.status), eq(eventOutbox.status, "dead"))
+                          )
+                      )
+                    : and(
+                          eq(storageDeletionRequests.status, "pending"),
+                          ne(eventOutbox.status, "dead")
+                      ),
                 options.companyId === undefined
                     ? undefined
                     : eq(storageDeletionRequests.companyId, options.companyId)
@@ -136,16 +149,29 @@ export async function listStorageDeletionRequests(
         }
         breakdown[row.state] = row.count;
     }
-    return requests.map(row => ({
-        ...row,
-        itemsByState: byRequest.get(row.request.id) ?? emptyItemCounts(),
-    }));
+    return Promise.all(
+        requests.map(async row => {
+            const operational = await storageDeletionOperationalState(
+                db,
+                row.request,
+                row.delivery
+            );
+            return {
+                request: row.request,
+                operationalStatus: operational.status,
+                errorCode: operational.errorCode,
+                outboxStatus: row.delivery?.status ?? null,
+                itemsByState: byRequest.get(row.request.id) ?? emptyItemCounts(),
+            };
+        })
+    );
 }
 
 export async function showStorageDeletionRequest(db: Executor, requestId: number) {
     const [row] = await db
-        .select({ request: storageDeletionRequests, operationalStatus, outboxStatus })
+        .select({ request: storageDeletionRequests, delivery: { status: eventOutbox.status } })
         .from(storageDeletionRequests)
+        .leftJoin(eventOutbox, deletionDeliveryJoin)
         .where(eq(storageDeletionRequests.id, requestId));
     if (!row) throw new Error(`Storage deletion request ${requestId} not found`);
     const items = await db
@@ -153,7 +179,14 @@ export async function showStorageDeletionRequest(db: Executor, requestId: number
         .from(storageDeletionItems)
         .where(eq(storageDeletionItems.requestId, requestId))
         .orderBy(asc(storageDeletionItems.id));
-    return { ...row, items };
+    const operational = await storageDeletionOperationalState(db, row.request, row.delivery);
+    return {
+        request: row.request,
+        operationalStatus: operational.status,
+        errorCode: operational.errorCode,
+        outboxStatus: row.delivery?.status ?? null,
+        items,
+    };
 }
 
 /** Own the transaction so the audit line is emitted only after its commit succeeds. */
@@ -192,9 +225,39 @@ export async function requeueStorageDeletionRequest(
             throw new Error(
                 `Storage deletion request ${requestId}: delivery in flight, retry shortly`
             );
+        const skippedItemIds = items
+            .filter(item => item.errorCode === "foreign_object")
+            .map(item => item.id);
+        if (!event) {
+            // Keep the tenant alive until the event's company FK has been inserted.
+            const [tenant] = await tx
+                .select({ id: company.id })
+                .from(company)
+                .where(eq(company.id, Number(request.companyId)))
+                .for("key share");
+            if (!tenant)
+                throw Object.assign(
+                    new Error(
+                        `Storage deletion request ${requestId}: company no longer exists; use waive to resolve undeleted items. Skipped foreign_object item IDs: ${skippedItemIds.join(", ") || "none"}`
+                    ),
+                    { skippedItemIds }
+                );
+        }
         const dead = event?.status === "dead";
+        const stranded = !event || dead;
         const changedItemIds = items
-            .filter(item => item.state === "blocked" || (dead && item.state === "pending"))
+            .filter(
+                item =>
+                    item.errorCode !== "foreign_object" &&
+                    ((stranded && item.state === "pending") ||
+                        (item.state === "blocked" &&
+                            (item.errorCode === "retry_budget_exhausted" ||
+                                // Other blocked outcomes with a ref and code are provider-classified.
+                                (item.adapter !== null &&
+                                    item.storageLocationId !== null &&
+                                    item.objectKey !== null &&
+                                    item.errorCode !== null))))
+            )
             .map(item => item.id);
         if (changedItemIds.length) {
             const now = new Date();
@@ -212,7 +275,7 @@ export async function requeueStorageDeletionRequest(
                 })
                 .where(inArray(storageDeletionItems.id, changedItemIds));
         }
-        if (changedItemIds.length || dead || request.status === "blocked") {
+        if (changedItemIds.length) {
             await tx
                 .update(storageDeletionRequests)
                 .set({ status: "pending", completedAt: null, updatedAt: new Date() })
@@ -229,7 +292,14 @@ export async function requeueStorageDeletionRequest(
                 payload: { requestId },
             },
         ]);
-        return { requestId, changedItemIds, revivedDeadEvent: dead, traceId: request.traceId };
+        return {
+            requestId,
+            changedItemIds,
+            skippedItemIds,
+            revivedDeadEvent: dead,
+            recreatedMissingEvent: !event,
+            traceId: request.traceId,
+        };
     });
     console.error(
         JSON.stringify({
@@ -286,8 +356,28 @@ export async function waiveStorageDeletionItem(
                 status: request.status,
                 traceId: request.traceId,
             };
-        if (item.state !== "blocked" && item.state !== "quarantined")
+        if (item.state === "pending") {
+            const [delivery] = await tx
+                .select({ status: eventOutbox.status })
+                .from(eventOutbox)
+                .where(eq(eventOutbox.eventId, eventIds.storageDeletionRequested(request.id)))
+                .for("update");
+            const operational = await storageDeletionOperationalState(
+                tx,
+                request,
+                delivery ?? null
+            );
+            if (
+                operational.status !== "blocked" ||
+                (operational.errorCode !== "event_missing" &&
+                    operational.errorCode !== "event_dead")
+            )
+                throw new Error(
+                    `Storage deletion item ${itemId} must be blocked or quarantined; pending items require event_missing or event_dead`
+                );
+        } else if (item.state !== "blocked" && item.state !== "quarantined") {
             throw new Error(`Storage deletion item ${itemId} must be blocked or quarantined`);
+        }
         const now = new Date();
         await tx
             .update(storageDeletionItems)

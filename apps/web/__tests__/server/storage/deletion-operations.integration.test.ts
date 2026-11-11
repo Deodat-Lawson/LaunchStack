@@ -12,7 +12,10 @@ import {
     waiveStorageDeletionItem,
 } from "~/server/storage/deletion/admin";
 import { planObjectDeletion } from "~/server/storage/deletion/plan";
-import { recomputeDeletionRequestStatus } from "~/server/storage/deletion/status";
+import {
+    recomputeDeletionRequestStatus,
+    storageDeletionOperationalState,
+} from "~/server/storage/deletion/status";
 import {
     createFounderWeeklyReviewTestDatabase,
     type FounderWeeklyReviewTestDatabase,
@@ -195,6 +198,240 @@ describeDb("storage deletion operations (integration)", () => {
         expect(await event(id)).toEqual(pendingEvent);
     });
 
+    it.each(["pending", "dead", "missing"] as const)(
+        "skips foreign_object items unchanged while resetting provider blocks under a %s delivery",
+        async delivery => {
+            const id = await plan(4);
+            await block(id);
+            const [foreignBlocked, foreignPending, provider, exhausted] = await items(id);
+            const previousAudit = {
+                requeuedBy: "previous operator",
+                requeueNote: "previous remediation",
+                requeuedAt: new Date("2026-11-01T00:00:00Z"),
+                resolvedBy: "previous resolver",
+                resolutionNote: "previous resolution",
+                resolvedAt: new Date("2026-11-02T00:00:00Z"),
+            };
+            for (const foreign of [foreignBlocked!, foreignPending!]) {
+                await test.db
+                    .update(storageDeletionItems)
+                    .set({
+                        ...previousAudit,
+                        state: foreign.id === foreignPending!.id ? "pending" : "blocked",
+                        errorCode: "foreign_object",
+                        lastError: "Object belongs to another company",
+                        attempts: 9,
+                    })
+                    .where(eq(storageDeletionItems.id, foreign.id));
+            }
+            await test.db
+                .update(storageDeletionItems)
+                .set({
+                    errorCode: "retry_budget_exhausted",
+                })
+                .where(eq(storageDeletionItems.id, exhausted!.id));
+            if (delivery === "missing") {
+                await test.db
+                    .delete(eventOutbox)
+                    .where(eq(eventOutbox.eventId, eventIds.storageDeletionRequested(id)));
+            } else {
+                await test.db
+                    .update(eventOutbox)
+                    .set({ status: delivery })
+                    .where(eq(eventOutbox.eventId, eventIds.storageDeletionRequested(id)));
+            }
+            const before = await items(id);
+            const result = await requeueStorageDeletionRequest(test.db, id, {
+                actor: "operator",
+                note: "credentials repaired",
+            });
+            expect(result).toMatchObject({
+                changedItemIds: [provider!.id, exhausted!.id],
+                skippedItemIds: [foreignBlocked!.id, foreignPending!.id],
+                recreatedMissingEvent: delivery === "missing",
+            });
+            const after = await items(id);
+            expect(after.slice(0, 2)).toEqual(before.slice(0, 2));
+            expect(after.slice(2)).toEqual([
+                expect.objectContaining({
+                    state: "pending",
+                    attempts: 0,
+                    errorCode: null,
+                    lastError: null,
+                    requeuedBy: "operator",
+                    requeueNote: "credentials repaired",
+                }),
+                expect.objectContaining({
+                    state: "pending",
+                    attempts: 0,
+                    errorCode: null,
+                    lastError: null,
+                    requeuedBy: "operator",
+                    requeueNote: "credentials repaired",
+                }),
+            ]);
+            expect(audit).toHaveBeenCalledWith(
+                expect.stringContaining(
+                    `"skippedItemIds":[${foreignBlocked!.id},${foreignPending!.id}]`
+                )
+            );
+            expect(
+                (
+                    await requeueStorageDeletionRequest(test.db, id, {
+                        actor: "repeat",
+                    })
+                ).changedItemIds
+            ).toEqual([]);
+            expect(await items(id)).toEqual(after);
+        }
+    );
+
+    it("recreates a missing delivery for an existing company and resets stranded pending and blocked items", async () => {
+        const id = await plan(3);
+        await block(id);
+        const [pending, blocked, terminal] = await items(id);
+        await test.db
+            .update(storageDeletionItems)
+            .set({
+                state: "pending",
+                attempts: 8,
+                errorCode: "transient",
+                lastError: "retry stranded",
+            })
+            .where(eq(storageDeletionItems.id, pending!.id));
+        await test.db
+            .update(storageDeletionItems)
+            .set({
+                state: "retained",
+                attempts: 2,
+            })
+            .where(eq(storageDeletionItems.id, terminal!.id));
+        const retained = (await items(id))[2];
+        await test.db
+            .delete(eventOutbox)
+            .where(eq(eventOutbox.eventId, eventIds.storageDeletionRequested(id)));
+        expect(
+            await requeueStorageDeletionRequest(test.db, id, {
+                actor: "operator",
+                note: "restore delivery",
+            })
+        ).toMatchObject({
+            changedItemIds: [pending!.id, blocked!.id],
+            skippedItemIds: [],
+            recreatedMissingEvent: true,
+            revivedDeadEvent: false,
+        });
+        const after = await items(id);
+        expect(after.slice(0, 2)).toEqual([
+            expect.objectContaining({
+                state: "pending",
+                attempts: 0,
+                errorCode: null,
+                lastError: null,
+                requeuedBy: "operator",
+                requeueNote: "restore delivery",
+            }),
+            expect.objectContaining({
+                state: "pending",
+                attempts: 0,
+                errorCode: null,
+                lastError: null,
+                requeuedBy: "operator",
+                requeueNote: "restore delivery",
+            }),
+        ]);
+        expect(after[2]).toEqual(retained);
+        expect(await event(id)).toMatchObject({
+            status: "pending",
+            companyId: Number(companyId),
+            payload: { eventType: "storage.deletion.requested", payload: { requestId: id } },
+            attemptCount: 0,
+        });
+        expect(await showStorageDeletionRequest(test.db, id)).toMatchObject({
+            request: { status: "pending" },
+            operationalStatus: "pending",
+            errorCode: null,
+        });
+        expect(audit).toHaveBeenCalledWith(expect.stringContaining('"action":"requeue"'));
+    });
+
+    it("refuses a missing delivery after company deletion without mutation and points to waive", async () => {
+        const id = await plan(2);
+        await block(id);
+        const [foreign] = await items(id);
+        await test.db
+            .update(storageDeletionItems)
+            .set({
+                errorCode: "foreign_object",
+                requeuedBy: "original operator",
+                requeueNote: "original note",
+                requeuedAt: new Date("2026-11-01T00:00:00Z"),
+            })
+            .where(eq(storageDeletionItems.id, foreign!.id));
+        await test.db.delete(company).where(eq(company.id, Number(companyId)));
+        expect(await event(id)).toBeUndefined();
+        const before = await showStorageDeletionRequest(test.db, id);
+        await expect(
+            requeueStorageDeletionRequest(test.db, id, {
+                actor: "operator",
+            })
+        ).rejects.toMatchObject({
+            message: expect.stringMatching(/company no longer exists; use waive/),
+            skippedItemIds: [foreign!.id],
+        });
+        expect(await showStorageDeletionRequest(test.db, id)).toEqual(before);
+        expect(await event(id)).toBeUndefined();
+        expect(audit).not.toHaveBeenCalled();
+    });
+
+    it("uses shared operational state for missing deliveries while preserving completed and raw statuses", async () => {
+        const missingId = await plan();
+        const completedId = await plan();
+        await test.db
+            .update(storageDeletionRequests)
+            .set({
+                status: "completed",
+                completedAt: new Date(),
+            })
+            .where(eq(storageDeletionRequests.id, completedId));
+        await test.db
+            .delete(eventOutbox)
+            .where(eq(eventOutbox.eventType, "storage.deletion.requested"));
+        expect(await getStorageDeletionSummary(test.db)).toMatchObject({
+            requestsByStatus: { blocked: 1, pending: 0, completed: 1 },
+            deadOutboxEvents: 0,
+        });
+        expect(await listStorageDeletionRequests(test.db, { status: "pending" })).toEqual([]);
+        expect(
+            await listStorageDeletionRequests(test.db, {
+                status: "blocked",
+                companyId,
+                limit: 1,
+            })
+        ).toEqual([
+            expect.objectContaining({
+                request: expect.objectContaining({ id: missingId, status: "pending" }),
+                operationalStatus: "blocked",
+                errorCode: "event_missing",
+                outboxStatus: null,
+            }),
+        ]);
+        for (const id of [missingId, completedId]) {
+            const shown = await showStorageDeletionRequest(test.db, id);
+            const expected = await storageDeletionOperationalState(test.db, shown.request);
+            expect(shown).toMatchObject({
+                operationalStatus: expected.status,
+                errorCode: expected.errorCode,
+                outboxStatus: null,
+            });
+        }
+        expect(await showStorageDeletionRequest(test.db, completedId)).toMatchObject({
+            request: { status: "completed" },
+            operationalStatus: "completed",
+            errorCode: null,
+        });
+    });
+
     it.each(["blocked", "pending"] as const)(
         "refuses requeue without mutation when a delivery is in flight and items are %s",
         async state => {
@@ -250,8 +487,14 @@ describeDb("storage deletion operations (integration)", () => {
                 request: expect.objectContaining({ id, status: "pending" }),
                 operationalStatus: "blocked",
                 outboxStatus: "dead",
+                errorCode: "event_dead",
             }),
         ]);
+        expect(await showStorageDeletionRequest(test.db, id)).toMatchObject({
+            request: { status: "pending" },
+            operationalStatus: "blocked",
+            errorCode: "event_dead",
+        });
         expect(
             await requeueStorageDeletionRequest(test.db, id, { actor: "operator" })
         ).toMatchObject({
@@ -408,6 +651,49 @@ describeDb("storage deletion operations (integration)", () => {
         ).rejects.toThrow("blocked or quarantined");
         expect(audit).not.toHaveBeenCalled();
     });
+
+    it.each(["event_missing", "event_dead"] as const)(
+        "waives a pending item only after its request is operationally blocked by %s",
+        async reason => {
+            const id = await plan();
+            const [item] = await items(id);
+            if (reason === "event_missing") {
+                await test.db.delete(company).where(eq(company.id, Number(companyId)));
+            } else {
+                await test.db
+                    .update(eventOutbox)
+                    .set({ status: "dead" })
+                    .where(eq(eventOutbox.eventId, eventIds.storageDeletionRequested(id)));
+            }
+            expect(await showStorageDeletionRequest(test.db, id)).toMatchObject({
+                request: { status: "pending" },
+                operationalStatus: "blocked",
+                errorCode: reason,
+            });
+            await waiveStorageDeletionItem(test.db, item!.id, {
+                actor: "operator:residual",
+                note: "Accepted orphaned bytes after delivery loss",
+            });
+            expect((await items(id))[0]).toMatchObject({
+                state: "waived",
+                resolvedBy: "operator:residual",
+                resolutionNote: "Accepted orphaned bytes after delivery loss",
+                resolvedAt: expect.any(Date),
+            });
+            expect((await showStorageDeletionRequest(test.db, id)).request.status).toBe(
+                "completed"
+            );
+            expect((await getStorageDeletionSummary(test.db)).deadOutboxEvents).toBe(0);
+            if (reason === "event_missing") {
+                expect(await test.db.select().from(eventOutbox)).toHaveLength(0);
+            } else {
+                expect(await event(id)).toMatchObject({
+                    status: "processed",
+                    processedAt: expect.any(Date),
+                });
+            }
+        }
+    );
 
     it("summarizes backlog and lists filtered requests with item breakdown", async () => {
         const blockedId = await plan(2);

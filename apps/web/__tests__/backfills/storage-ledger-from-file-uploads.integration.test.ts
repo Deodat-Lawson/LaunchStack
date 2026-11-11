@@ -1,10 +1,13 @@
 jest.mock("~/server/notes/embed-note", () => ({ embedNote: jest.fn() }));
+const mockServerEnv: Record<string, string | undefined> = {
+    NEXT_PUBLIC_S3_ENDPOINT: "https://s3.internal/objects/",
+    S3_PUBLIC_ENDPOINT: "https://files.example/objects/",
+    S3_BUCKET_NAME: "documents",
+};
 jest.mock("~/env", () => ({
     env: {
-        server: {
-            NEXT_PUBLIC_S3_ENDPOINT: "https://s3.internal/objects/",
-            S3_PUBLIC_ENDPOINT: "https://files.example/objects/",
-            S3_BUCKET_NAME: "documents",
+        get server() {
+            return mockServerEnv;
         },
         client: {},
     },
@@ -220,5 +223,17 @@ describeDb("2026-11-storage-ledger-from-file-uploads backfill (integration)", ()
             await test.db.select().from(storageObjects).orderBy(asc(storageObjects.objectKey))
         ).toEqual(rows);
         expect(await runBackfill(handle, entry, opts)).toEqual({ processed: 0, done: true });
+    });
+
+    it("stops instead of skipping S3 pointers when S3 is not configured", async () => {
+        const endpoint = mockServerEnv.NEXT_PUBLIC_S3_ENDPOINT;
+        mockServerEnv.NEXT_PUBLIC_S3_ENDPOINT = undefined;
+        try {
+            await expect(entry.step({ db: test.db, cursor: null, batchSize: 100 })).rejects.toThrow(
+                /S3 storage is not configured/
+            );
+        } finally {
+            mockServerEnv.NEXT_PUBLIC_S3_ENDPOINT = endpoint;
+        }
     });
 });

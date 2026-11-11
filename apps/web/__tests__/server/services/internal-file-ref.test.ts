@@ -18,6 +18,8 @@ jest.mock("~/env", () => ({
         server: {
             NEXT_PUBLIC_S3_ENDPOINT: "https://s3.example",
             S3_BUCKET_NAME: "files",
+            BLOB_READ_WRITE_TOKEN: "vercel_blob_rw_store_secret",
+            UPLOADTHING_TOKEN: Buffer.from(JSON.stringify({ appId: "app" })).toString("base64"),
         },
     },
 }));
@@ -72,6 +74,27 @@ describe("authorizeInternalFileRef", () => {
         setupFileQuery([{ companyId: COMPANY }]);
         await expect(authorizeInternalFileRef(url, COMPANY)).resolves.toBeNull();
         expect(mockDbSelect).toHaveBeenCalledTimes(1);
+    });
+
+    it.each([
+        "https://s3.example/other-bucket/doc.pdf",
+        "https://other.public.blob.vercel-storage.com/doc.pdf",
+        "https://other.ufs.sh/f/doc",
+    ])("accepts another provider location as an external link: %s", async url => {
+        await expect(authorizeInternalFileRef(url, COMPANY)).resolves.toBeNull();
+        expect(mockDbSelect).not.toHaveBeenCalled();
+    });
+
+    it.each([
+        "https://s3.example/files/documents/deleted.pdf",
+        "https://store.public.blob.vercel-storage.com/deleted.pdf",
+        "https://app.ufs.sh/f/deleted",
+    ])("rejects a deleted ledger object even in this workspace: %s", async url => {
+        setupFileQuery([{ companyId: COMPANY, deletedAt: new Date() }]);
+        await expect(authorizeInternalFileRef(url, COMPANY)).rejects.toMatchObject({
+            status: 404,
+            copy: { key: "upload.server.errors.fileNotInWorkspace" },
+        });
     });
 
     it("rejects a ledgered S3 URL belonging to another company", async () => {

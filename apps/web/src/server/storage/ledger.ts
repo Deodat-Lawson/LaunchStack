@@ -9,7 +9,8 @@ export type StoredObjectSource =
     | "upload-file"
     | "vercel-blob"
     | "uploadthing"
-    | "storage-upload-route";
+    | "storage-upload-route"
+    | "backfill-file-uploads";
 
 export interface RecordStoredObjectInput {
     ref: ObjectRef;

@@ -17,18 +17,19 @@
  *     `document_metadata`, and `document_previews` all have `version_id` FKs
  *     with `ON DELETE CASCADE`, so deleting the `document_versions` row
  *     automatically removes all embeddings tied to it — no manual cleanup.
- *   - The blob file is deleted from storage (Vercel Blob or SeaweedFS)
- *     _before_ the DB row is removed, so a blob deletion failure aborts the
- *     operation and leaves the DB consistent with the retained blob.
+ *   - Unshared, workspace-owned bytes are deleted _before_ the DB row is
+ *     removed, so a storage failure retains the version. Shared URLs and
+ *     database files not owned by this workspace are left intact.
  */
 
 import { NextResponse } from "next/server";
 import { and, eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { document, documentVersions } from "@launchstack/store/schema";
+import { document, documentVersions, fileUploads } from "@launchstack/store/schema";
 import { deleteStoredObjects } from "~/server/storage/delete-objects";
 import { refFromStoredUrl } from "~/server/storage/stored-url";
+import { hasStoredUrlReferences } from "~/server/storage/stored-url-references";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
@@ -136,24 +137,42 @@ export async function DELETE(
                 );
             }
 
-            // Delete the blob first. If storage is unreachable we bail out before
-            // touching the DB, leaving the system in a consistent state that can
-            // be retried. A missing blob (404 from storage) is logged but does not
-            // block DB cleanup — we still want the row and embeddings gone.
+            // Re-embedding and reverting can reuse a URL. Remove this version,
+            // but never delete bytes that another row still needs.
             try {
-                const parsed = refFromStoredUrl(targetVersion.url);
-                if (!parsed.ok) {
-                    throw new Error(
-                        `Stored file URL is ${parsed.reason}; cannot identify the object to delete`
-                    );
-                }
-                const [result] = await deleteStoredObjects([parsed.ref]);
-                if (!result || (result.outcome !== "deleted" && result.outcome !== "not_found")) {
-                    throw new Error(
-                        result?.message ??
-                            result?.errorCode ??
-                            "Storage deletion returned no result"
-                    );
+                if (!(await hasStoredUrlReferences(targetVersion.url, versionId))) {
+                    const parsed = refFromStoredUrl(targetVersion.url);
+                    if (!parsed.ok) {
+                        throw new Error(
+                            `Stored file URL is ${parsed.reason}; cannot identify the object to delete`
+                        );
+                    }
+                    // A client may have attached another workspace's database file.
+                    const ownedFiles =
+                        parsed.ref.adapter === "database"
+                            ? await db
+                                  .select({ id: fileUploads.id })
+                                  .from(fileUploads)
+                                  .where(
+                                      and(
+                                          eq(fileUploads.id, Number(parsed.ref.key)),
+                                          eq(fileUploads.companyId, ctx.data.companyId)
+                                      )
+                                  )
+                            : null;
+                    if (ownedFiles === null || ownedFiles.length > 0) {
+                        const [result] = await deleteStoredObjects([parsed.ref]);
+                        if (
+                            !result ||
+                            (result.outcome !== "deleted" && result.outcome !== "not_found")
+                        ) {
+                            throw new Error(
+                                result?.message ??
+                                    result?.errorCode ??
+                                    "Storage deletion returned no result"
+                            );
+                        }
+                    }
                 }
             } catch (blobError) {
                 console.warn(

@@ -210,7 +210,7 @@ describe("POST /api/documents/[id]/versions", () => {
         );
     });
 
-    it("persists and dispatches the chosen provider with a canonical internal URL", async () => {
+    it("persists a relative canonical URL and only dispatches an absolute processing URL", async () => {
         const response = await POST(request(), routeContext());
 
         expect(response.status).toBe(202);
@@ -220,10 +220,27 @@ describe("POST /api/documents/[id]/versions", () => {
                 documentId: 55,
                 companyId: BigInt(10),
                 userId: "user-1",
-                url: "https://app.example/api/files/123",
-                creationKey: "version:55:https://app.example/api/files/123",
+                url: "/api/files/123",
+                processingUrl: "https://app.example/api/files/123",
+                creationKey: "version:55:/api/files/123",
                 preferredProvider: "DOCLING",
             })
+        );
+    });
+
+    it("keeps external storage URLs unchanged", async () => {
+        const url = "https://storage.example/contract.pdf";
+        (authorizeInternalFileRef as jest.Mock).mockResolvedValue(null);
+        (validateRequestBody as jest.Mock).mockResolvedValue({
+            success: true,
+            data: { documentUrl: url, mimeType: "application/pdf" },
+        });
+
+        const response = await POST(request(), routeContext());
+
+        expect(response.status).toBe(202);
+        expect(createDocumentVersionLifecycle).toHaveBeenCalledWith(
+            expect.objectContaining({ url, processingUrl: url, creationKey: `version:55:${url}` })
         );
     });
 

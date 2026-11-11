@@ -61,7 +61,7 @@ const mockUpdates: unknown[] = [];
 
 function mockThenable(next: () => unknown[]) {
     const builder: Record<string, unknown> = {};
-    for (const method of ["from", "where", "set", "returning"]) {
+    for (const method of ["from", "where", "set", "returning", "limit"]) {
         builder[method] = (value?: unknown) => {
             if (method === "set") mockUpdates.push(value);
             return builder;
@@ -284,6 +284,22 @@ describe("GET /api/documents/:id/website-preview", () => {
                 key: "documents/old-preview.webp",
             },
         ]);
+    });
+
+    it("keeps an old preview copied into a version's OCR metadata", async () => {
+        grantContext();
+        queueDocument({
+            ...marker,
+            websitePreview: storedRecord({ source: "http://localhost:8333/old.html" }),
+        });
+        // No document references it after replacement, but a version still does.
+        mockSelectQueue.push([], [{ id: 19 }]);
+        mockFetchFile.mockResolvedValue(okBody(SAVED_HTML));
+        mockUpdateQueue.push([{ id: 7 }]);
+
+        expect((await call()).status).toBe(200);
+        expect(htmlToScreenshot).toHaveBeenCalledTimes(1);
+        expect(mockDeleteStoredObjects).not.toHaveBeenCalled();
     });
 
     it("takes the picture again when the stored file has gone", async () => {

@@ -76,6 +76,17 @@ Accepted forms:
 Malformed percent encoding is unrecognized. Origin/path matching is bounded;
 lookalike hostnames and endpoint-prefix collisions do not authorize deletion.
 
+Database-backed documents and versions persist the canonical relative
+`/api/files/{id}` URL. An absolute internal URL is only a processing input, not
+stored object identity; an unset `APP_PUBLIC_URL` must not stamp a request's
+arbitrary origin into persistent URLs.
+
+Normalize existing document/version rows with
+`pnpm --filter @launchstack/web db:backfill --only=2026-11-document-file-urls --batch=500`
+(`DATABASE_URL` required; `--dry-run` supported). It only rewrites exact
+`^https?://[^/]+/api/files/(\d+)$` values, is resumable and idempotent, and leaves
+query strings, fragments, suffixes and external object URLs unchanged.
+
 ## Deletion
 
 `deleteStoredObjects(refs: readonly ObjectRef[]): Promise<DeleteResult[]>`
@@ -99,11 +110,16 @@ id` through `getEngine().db`; returned ids are deleted, absent ids not found,
 and database errors retryable.
 
 S3 uses the existing client and `DeleteObjectsCommand`, at most 1000 keys per
-request, with `Quiet: false`. Per-key authorization errors are blocked; other
-per-key errors are retryable. Whole-request authorization errors (including
-HTTP 403, invalid/expired credentials, and `NoSuchBucket`) are blocked; other
-failures are retryable. S3 deletion cannot distinguish a missing object from a
-deleted object: successful requests report **deleted**, never **not_found**.
+request, with `Quiet: false`. Missing `S3_ACCESS_KEY` or `S3_SECRET_KEY` blocks
+deletion with `storage_unconfigured` before calling the SDK, even when the
+endpoint and bucket identify a location. Per-key authorization errors are
+blocked; other per-key errors are retryable. A key must appear in the response's
+`Deleted` list to be acknowledged; keys in neither `Deleted` nor `Errors` are
+retryable with `s3_delete_unconfirmed`. Errors take precedence over deletion
+acknowledgements. Whole-request authorization errors (including HTTP 401/403,
+invalid/expired credentials, and `NoSuchBucket`) are blocked; other failures are
+retryable. S3 cannot distinguish a missing object from a deleted object:
+acknowledged keys report **deleted**, never **not_found**.
 
 Blob uses `del(pathnames, { token })` in batches of at most 1000. The installed
 SDK accepts arrays without imposing its own cap. It returns no per-object
@@ -111,15 +127,29 @@ status, so successful deletes also report **deleted**, never **not_found**.
 Access/token/store-suspended/store-not-found errors are blocked; other errors
 are retryable.
 
-UploadThing uses `UTApi({ token }).deleteFiles(keys)`. A fully acknowledged batch
-is deleted. Partial/unsuccessful batches are retried individually to distinguish
-deleted and missing keys. Authentication failures are blocked; other failures
-are retryable. An individual successful delete with `deletedCount === 0` is
-not found; `success: false` is not evidence of absence.
+UploadThing uses `UTApi({ token }).deleteFiles(keys)` in batches of at most 500
+keys. A fully acknowledged batch is deleted. Only a successful partial batch
+(`success === true` and `deletedCount < batch length`) is retried individually.
+Thrown batches classify the whole chunk without per-key fallback; unsuccessful
+responses are retryable without fallback. Authentication failures, including
+the SDK's `ResponseError.response.status` HTTP 401/403, are blocked; other
+failures are retryable. An individual successful delete with `deletedCount ===
+0` is not found; `success: false` is not evidence of absence. A partial pass is
+ambiguous: both keys already deleted by the batch and keys that never existed
+can return **not_found** on the individual retry.
 
 The runtime `StoragePort` retains upload/download only. URL/key deletion shims
-are removed. The version-delete route keeps its current synchronous behavior:
-unrecognized/ambiguous refs and blocked/retryable deletes return 502 and retain
-the version row; deleted/not-found permits row cleanup. Website-preview cleanup
-uses the same contract but remains best-effort, logging non-successes. Internal
-signed reads, workspace stamping, and byte-range forwarding are unchanged.
+are removed. The version-delete route keeps its current synchronous behavior
+and its current/only-version 409 guards. Before deleting bytes it checks all
+documents and other versions for the URL, including stored website-preview URLs
+in either row's OCR metadata. Shared bytes are retained while the version row
+is removed. Database bytes additionally require `file_uploads.company_id` to
+match the caller's workspace; foreign or unstamped files are retained.
+The reference guard also retains matching absolute/relative internal-file
+aliases while that backfill is in progress; this never expands which origins
+`refFromStoredUrl` trusts for deletion.
+For an unshared, owned object, unrecognized/ambiguous refs and blocked/retryable
+deletes return 502 and retain the version row; deleted/not-found permits cleanup.
+Website-preview replacement uses the same global reference guard before
+best-effort deletion, so a version's copied preview survives replacement.
+Internal signed reads, workspace stamping, and byte-range forwarding are unchanged.

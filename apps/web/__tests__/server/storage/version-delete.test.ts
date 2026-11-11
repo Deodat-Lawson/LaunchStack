@@ -24,20 +24,40 @@ jest.mock("~/lib/rate-limiter", () => ({ RateLimitPresets: { strict: {} } }));
 jest.mock("~/server/storage/delete-objects", () => ({
     deleteStoredObjects: (refs: unknown) => mockDeleteStoredObjects(refs),
 }));
+
+function mockSelection() {
+    const result = {
+        limit: () => result,
+        then: (resolve: (rows: unknown[]) => unknown) =>
+            Promise.resolve(mockSelectQueue.shift() ?? []).then(resolve),
+    };
+    return { from: () => ({ where: () => result }) };
+}
 jest.mock("~/server/db", () => ({
     db: {
-        select: () => ({ from: () => ({ where: async () => mockSelectQueue.shift() ?? [] }) }),
+        select: mockSelection,
         delete: () => ({ where: mockRowDelete }),
     },
 }));
 
 import { DELETE } from "~/app/api/documents/[id]/versions/[versionId]/route";
 
-function call(url = "/api/files/42") {
+function call(
+    url = "/api/files/42",
+    options: {
+        sharedBy?: "document" | "version";
+        owned?: boolean;
+        current?: boolean;
+        only?: boolean;
+    } = {}
+) {
     mockSelectQueue.push(
-        [{ id: 7, category: "document", currentVersionId: 10 }],
+        [{ id: 7, category: "document", currentVersionId: options.current ? 9 : 10 }],
         [{ id: 9, versionNumber: 1, url }],
-        [{ id: 9 }, { id: 10 }]
+        options.only ? [{ id: 9 }] : [{ id: 9 }, { id: 10 }],
+        options.sharedBy === "document" ? [{ id: 12 }] : [],
+        options.sharedBy === "version" ? [{ id: 11 }] : [],
+        options.owned === false ? [] : [{ id: 42 }]
     );
     return DELETE(new Request("http://app.test/api/documents/7/versions/9"), {
         params: Promise.resolve({ id: "7", versionId: "9" }),
@@ -98,6 +118,30 @@ it("retains an ambiguous URL instead of choosing a provider", async () => {
     const response = await call("https://app1.ufs.sh/f/key");
     expect(response.status).toBe(502);
     expect((await response.json()).details).toContain("ambiguous");
+    expect(mockDeleteStoredObjects).not.toHaveBeenCalled();
+    expect(mockRowDelete).not.toHaveBeenCalled();
+});
+
+it("keeps re-embed-shared bytes while deleting the obsolete version row", async () => {
+    expect((await call("/api/files/42", { sharedBy: "version" })).status).toBe(200);
+    expect(mockDeleteStoredObjects).not.toHaveBeenCalled();
+    expect(mockRowDelete).toHaveBeenCalledTimes(1);
+});
+
+it("keeps bytes still referenced by a document after revert", async () => {
+    expect((await call("/api/files/42", { sharedBy: "document" })).status).toBe(200);
+    expect(mockDeleteStoredObjects).not.toHaveBeenCalled();
+    expect(mockRowDelete).toHaveBeenCalledTimes(1);
+});
+
+it("keeps a foreign-company database file while deleting the version row", async () => {
+    expect((await call("/api/files/42", { owned: false })).status).toBe(200);
+    expect(mockDeleteStoredObjects).not.toHaveBeenCalled();
+    expect(mockRowDelete).toHaveBeenCalledTimes(1);
+});
+
+it.each([{ current: true }, { only: true }])("preserves the 409 guard for %j", async options => {
+    expect((await call("/api/files/42", options)).status).toBe(409);
     expect(mockDeleteStoredObjects).not.toHaveBeenCalled();
     expect(mockRowDelete).not.toHaveBeenCalled();
 });

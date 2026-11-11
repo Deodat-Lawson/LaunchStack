@@ -25,6 +25,7 @@ import type { GotenbergClient } from "@launchstack/document-conversion-engine";
 import { fetchFile, uploadFile } from "~/lib/storage";
 import { deleteStoredObjects } from "~/server/storage/delete-objects";
 import { refFromStoredUrl } from "~/server/storage/stored-url";
+import { hasStoredUrlReferences } from "~/server/storage/stored-url-references";
 import { db } from "~/server/db";
 
 /** The browser window the page is laid out in: an ordinary laptop. */
@@ -120,6 +121,7 @@ export async function shrinkScreenshot(
 /** Removes a picture this module stored earlier. Best effort: an orphan costs only space. */
 async function forgetStoredPicture(url: string): Promise<void> {
     try {
+        if (await hasStoredUrlReferences(url)) return;
         const parsed = refFromStoredUrl(url);
         if (!parsed.ok) throw new Error(`Stored preview URL is ${parsed.reason}`);
         const [result] = await deleteStoredObjects([parsed.ref]);

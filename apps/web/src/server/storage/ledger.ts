@@ -49,6 +49,18 @@ export async function recordStoredObject(
         });
 }
 
+export async function removeStoredObject(db: DbOrTx, ref: ObjectRef): Promise<void> {
+    await db
+        .delete(storageObjects)
+        .where(
+            and(
+                eq(storageObjects.adapter, ref.adapter),
+                eq(storageObjects.storageLocationId, ref.storageLocationId),
+                eq(storageObjects.objectKey, ref.key)
+            )
+        );
+}
+
 export async function findStoredObjectsByUrls(
     db: DbOrTx,
     urls: readonly string[]

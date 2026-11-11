@@ -9,8 +9,8 @@ import {
 } from "@launchstack/store/crypto";
 
 import { env } from "~/env";
-import { deleteStoredObjects } from "~/server/storage/delete-objects";
-import { recordStoredObject } from "~/server/storage/ledger";
+import { discardUnrecordedObject } from "~/server/storage/compensate";
+import { recordStoredObject, removeStoredObject } from "~/server/storage/ledger";
 import { currentStorageLocationId } from "~/server/storage/location";
 import type { ObjectRef } from "~/server/storage/object-ref";
 
@@ -124,30 +124,33 @@ async function uploadToS3(input: UploadInput): Promise<UploadResult> {
         const body = toBuffer(input.data);
 
         await ensureBucketExists();
-        await putObject(key, body, input.contentType);
-
         const ref: ObjectRef = { adapter: "s3", storageLocationId, key };
         const url = getObjectUrl(key);
+        // Commit inventory before writing bytes: a crash may leave an empty ledger
+        // entry, never an object invisible to orphan cleanup.
+        // Defer engine loading: its static storage/port import re-enters this module.
+        const { getEngine } = await import("~/server/engine");
+        const db = getEngine().db;
+        await recordStoredObject(db, {
+            ref,
+            url,
+            companyId: input.companyId ?? null,
+            source: "upload-file",
+            contentType: input.contentType,
+            sizeBytes: body.length,
+        });
         try {
-            // Defer engine loading across the storage/port initialization cycle
-            // described in uploadToDatabase below.
-            const { getEngine } = await import("~/server/engine");
-            await recordStoredObject(getEngine().db, {
-                ref,
-                url,
-                companyId: input.companyId ?? null,
-                source: "upload-file",
-                contentType: input.contentType,
-                sizeBytes: body.length,
-            });
+            await putObject(key, body, input.contentType);
         } catch (error) {
-            try {
-                const results = await deleteStoredObjects([ref]);
-                if (results.some(result => !["deleted", "not_found"].includes(result.outcome))) {
-                    console.warn("Failed to compensate unrecorded S3 upload", results);
-                }
-            } catch (cleanupError) {
-                console.warn("Failed to compensate unrecorded S3 upload", cleanupError);
+            // A failed request can still have reached S3. Remove the inventory
+            // only once deletion is confirmed; otherwise retain it for audit.
+            if (await discardUnrecordedObject(ref, "uploadFile S3 put failed")) {
+                await removeStoredObject(db, ref).catch((cleanupError: unknown) => {
+                    console.warn("Failed to remove unused storage ledger row", {
+                        ref,
+                        cleanupError,
+                    });
+                });
             }
             throw error;
         }

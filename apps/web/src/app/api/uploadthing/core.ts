@@ -2,7 +2,7 @@ import { createUploadthing, type FileRouter } from "uploadthing/next";
 import type { UploadedFileData } from "uploadthing/types";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { getEngine } from "~/server/engine";
-import { deleteStoredObjects } from "~/server/storage/delete-objects";
+import { discardUnrecordedObject } from "~/server/storage/compensate";
 import { recordStoredObject } from "~/server/storage/ledger";
 import { currentStorageLocationId } from "~/server/storage/location";
 import type { ObjectRef } from "~/server/storage/object-ref";
@@ -32,27 +32,21 @@ const recordUpload = async ({
     // v7 supplies ufsUrl for both public and private ACLs; access to private files
     // still requires signing. Preserve the provider URL rather than deprecated file.url.
     const parsed = refFromStoredUrl(file.ufsUrl);
-    let ref: ObjectRef;
-    if (parsed.ok && parsed.ref.adapter === "uploadthing") {
-        ref = parsed.ref;
-    } else {
-        let url: URL;
-        try {
-            url = new URL(file.ufsUrl);
-        } catch {
-            return { ok: false, error: "storage_record_failed" };
-        }
+    const ref = parsed.ok && parsed.ref.adapter === "uploadthing" ? parsed.ref : null;
+    if (!ref) {
         const location = currentStorageLocationId("uploadthing");
-        if (
-            parsed.ok ||
-            parsed.reason !== "unrecognized" ||
-            url.protocol !== "https:" ||
-            (url.hostname !== "utfs.io" && url.hostname !== "uploadthing.com") ||
-            !location
-        ) {
-            return { ok: false, error: "storage_record_failed" };
-        }
-        ref = { adapter: "uploadthing", storageLocationId: location, key: file.key };
+        const cleanupRef: ObjectRef | null = location
+            ? { adapter: "uploadthing", storageLocationId: location, key: file.key }
+            : null;
+        // The callback key can identify cleanup, but cannot make an unknown or
+        // ambiguous URL safe to persist and return to callers.
+        console.error(
+            "[UploadThing] Cannot identify uploaded object:",
+            parsed.ok ? "unexpected_adapter" : parsed.reason,
+            cleanupRef ?? { key: file.key }
+        );
+        if (cleanupRef) await discardUnrecordedObject(cleanupRef, "UploadThing");
+        return { ok: false, error: "storage_record_failed" };
     }
     try {
         await recordStoredObject(getEngine().db, {
@@ -64,19 +58,9 @@ const recordUpload = async ({
             sizeBytes: file.size,
             checksum: file.fileHash,
         });
-    } catch {
-        try {
-            const results = await deleteStoredObjects([ref]);
-            if (
-                results.some(
-                    result => result.outcome === "blocked" || result.outcome === "retryable"
-                )
-            ) {
-                console.warn("[UploadThing] Failed to compensate unrecorded upload:", results);
-            }
-        } catch (cleanupError) {
-            console.warn("[UploadThing] Failed to compensate unrecorded upload:", cleanupError);
-        }
+    } catch (error) {
+        console.error("[UploadThing] Failed to record uploaded object:", error, ref);
+        await discardUnrecordedObject(ref, "UploadThing");
         // UploadThing 7.7.4 logs callback throws in a daemon and skips /callback-result.
         // The browser waits on the ingest PUT (awaitServerData defaults true), with
         // no SDK timeout. Return failure serverData so the client can reject the

@@ -9,9 +9,11 @@ import {
     findStoredObjectsByRefs,
     findStoredObjectsByUrls,
     recordStoredObject,
+    removeStoredObject,
     storedObjectRef,
 } from "~/server/storage/ledger";
 import type { ObjectRef } from "~/server/storage/object-ref";
+import { refFromStoredUrl } from "~/server/storage/stored-url";
 import {
     createFounderWeeklyReviewTestDatabase,
     type FounderWeeklyReviewTestDatabase,
@@ -20,7 +22,15 @@ import {
 let mockActiveDb: DbClient;
 jest.mock("~/server/engine", () => ({ getEngine: () => ({ db: mockActiveDb }) }));
 jest.mock("~/env", () => ({
-    env: { server: { NEXT_PUBLIC_STORAGE_PROVIDER: "database" }, client: {} },
+    env: {
+        server: {
+            NEXT_PUBLIC_STORAGE_PROVIDER: "database",
+            NEXT_PUBLIC_S3_ENDPOINT: "https://s3.internal/objects/",
+            S3_PUBLIC_ENDPOINT: "https://files.example/objects/",
+            S3_BUCKET_NAME: "documents",
+        },
+        client: {},
+    },
 }));
 jest.mock("~/server/storage/delete-objects", () => ({ deleteStoredObjects: jest.fn() }));
 
@@ -119,6 +129,11 @@ describeDb("stored object ledger (integration)", () => {
         expect(rows).toHaveLength(2);
         expect(await findStoredObjectsByRefs(test.db, [{ ...ref, key: "missing" }])).toEqual([]);
         expect(await findStoredObjectsByRefs(test.db, [])).toEqual([]);
+        await removeStoredObject(test.db, ref);
+        await removeStoredObject(test.db, ref);
+        const remaining = await test.db.select().from(storageObjects);
+        expect(remaining.map(storedObjectRef)).toEqual(expect.arrayContaining(refs.slice(1)));
+        expect(remaining).toHaveLength(3);
     });
 
     it("keeps the inventory after the tenant is deleted", async () => {
@@ -162,6 +177,7 @@ describeDb("stored object ledger (integration)", () => {
             contentType: "text/plain",
         });
         expect(storedObjectRef(rows[0]!)).toEqual(result.ref);
+        expect(refFromStoredUrl(result.url)).toEqual({ ok: true, ref: storedObjectRef(rows[0]!) });
     });
 
     it("rolls back file_uploads when the real ledger insert fails", async () => {

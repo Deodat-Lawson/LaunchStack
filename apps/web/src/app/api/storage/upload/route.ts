@@ -12,8 +12,8 @@ import {
 import { isS3Storage } from "~/lib/storage";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
 import { getEngine } from "~/server/engine";
-import { deleteStoredObjects } from "~/server/storage/delete-objects";
-import { recordStoredObject } from "~/server/storage/ledger";
+import { discardUnrecordedObject } from "~/server/storage/compensate";
+import { recordStoredObject, removeStoredObject } from "~/server/storage/ledger";
 import { currentStorageLocationId } from "~/server/storage/location";
 import type { ObjectRef } from "~/server/storage/object-ref";
 import { fileUploads } from "@launchstack/store/schema";
@@ -58,48 +58,37 @@ export async function POST(request: Request) {
         await ensureBucketExists();
 
         const buffer = Buffer.from(await file.arrayBuffer());
-        await putObject(objectKey, buffer, file.type || "application/octet-stream");
-
+        const db = getEngine().db;
+        await recordStoredObject(db, {
+            ref,
+            url,
+            companyId: ctx.data.companyId,
+            source: "storage-upload-route",
+            contentType: file.type || "application/octet-stream",
+            sizeBytes: file.size,
+        });
         try {
-            await getEngine().db.transaction(async tx => {
-                // Chat ownership and the durable object identity commit together.
-                await tx.insert(fileUploads).values({
-                    userId: ctx.data.authUserId,
-                    companyId: ctx.data.companyId,
-                    filename: file.name,
-                    mimeType: file.type || "application/octet-stream",
-                    fileSize: file.size,
-                    storageProvider: "s3",
-                    storageUrl: url,
-                    storagePathname: objectKey,
-                });
-                await recordStoredObject(tx, {
-                    ref,
-                    url,
-                    companyId: ctx.data.companyId,
-                    source: "storage-upload-route",
-                    contentType: file.type || "application/octet-stream",
-                    sizeBytes: file.size,
-                });
+            await putObject(objectKey, buffer, file.type || "application/octet-stream");
+            await db.insert(fileUploads).values({
+                userId: ctx.data.authUserId,
+                companyId: ctx.data.companyId,
+                filename: file.name,
+                mimeType: file.type || "application/octet-stream",
+                fileSize: file.size,
+                storageProvider: "s3",
+                storageUrl: url,
+                storagePathname: objectKey,
             });
         } catch (error) {
-            try {
-                const results = await deleteStoredObjects([ref]);
-                if (
-                    results.some(
-                        result => result.outcome === "blocked" || result.outcome === "retryable"
-                    )
-                ) {
-                    console.warn(
-                        "[StorageUpload] Failed to compensate unrecorded upload:",
-                        results
-                    );
-                }
-            } catch (cleanupError) {
-                console.warn(
-                    "[StorageUpload] Failed to compensate unrecorded upload:",
-                    cleanupError
-                );
+            if (
+                await discardUnrecordedObject(ref, "storage upload put or ownership insert failed")
+            ) {
+                await removeStoredObject(db, ref).catch((cleanupError: unknown) => {
+                    console.warn("Failed to remove unused storage ledger row", {
+                        ref,
+                        cleanupError,
+                    });
+                });
             }
             throw error;
         }

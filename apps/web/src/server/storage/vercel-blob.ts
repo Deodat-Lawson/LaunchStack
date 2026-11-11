@@ -1,10 +1,12 @@
 import { put, type PutBlobResult } from "@vercel/blob";
+import { and, eq } from "drizzle-orm";
 import { randomUUID } from "node:crypto";
 
 import { env } from "~/env";
 import { StorageError } from "~/lib/storage";
-import { deleteStoredObjects } from "./delete-objects";
-import { recordStoredObject } from "./ledger";
+import { storageObjects } from "~/server/db/schema/storage";
+import { discardUnrecordedObject } from "./compensate";
+import { recordStoredObject, removeStoredObject } from "./ledger";
 import { currentStorageLocationId } from "./location";
 import type { ObjectRef } from "./object-ref";
 
@@ -54,54 +56,61 @@ export async function putFile({
     const safeName = sanitizeFilename(filename);
     const key = `documents/${randomUUID()}-${safeName.length > 0 ? safeName : "upload"}`;
 
-    const body = Buffer.from(data instanceof ArrayBuffer ? new Uint8Array(data) : data);
+    const body =
+        data instanceof ArrayBuffer
+            ? Buffer.from(data)
+            : Buffer.from(data.buffer, data.byteOffset, data.byteLength);
+    const ref: ObjectRef = { adapter: "vercel-blob", storageLocationId, key };
+    const storeId = storageLocationId.slice("vercel-blob:".length);
+    let access = detectedAccess ?? "public";
+    const attemptedUrl = (mode: "public" | "private") =>
+        `https://${storeId}.${mode}.blob.vercel-storage.com/${key}`;
 
-    const tryPut = (access: "public" | "private") => put(key, body, { access, contentType, token });
-
-    let blob: PutBlobResult;
-    if (detectedAccess) {
-        blob = await tryPut(detectedAccess);
-    } else {
+    // Defer the engine across its storage-port initialization cycle.
+    const { getEngine } = await import("~/server/engine");
+    const db = getEngine().db;
+    const identity = and(
+        eq(storageObjects.adapter, ref.adapter),
+        eq(storageObjects.storageLocationId, ref.storageLocationId),
+        eq(storageObjects.objectKey, ref.key)
+    );
+    const updateLedger = async (metadata: {
+        url: string;
+        contentType?: string;
+        checksum?: string | null;
+    }) => {
         try {
-            blob = await tryPut("public");
-            detectedAccess = "public";
-        } catch (err) {
-            if (err instanceof Error && err.message.includes("private store")) {
-                blob = await tryPut("private");
-                detectedAccess = "private";
-            } else {
-                throw err;
+            await db.update(storageObjects).set(metadata).where(identity);
+        } catch (error) {
+            throw new StorageError(
+                error instanceof Error ? error.message : String(error),
+                "vercel-blob",
+                error instanceof Error ? error : undefined
+            );
+        }
+    };
+    const compensate = async () => {
+        if (await discardUnrecordedObject(ref, "Failed to compensate Vercel Blob upload")) {
+            try {
+                await removeStoredObject(db, ref);
+            } catch (error) {
+                console.warn("Failed to remove compensated Vercel Blob ledger entry", error);
             }
         }
-    }
+    };
 
-    const extended = blob as PutBlobResult & { contentHash?: string | null };
-    const ref: ObjectRef = { adapter: "vercel-blob", storageLocationId, key: blob.pathname };
     try {
-        // Defer the engine across its storage-port initialization cycle.
-        const { getEngine } = await import("~/server/engine");
-        await recordStoredObject(getEngine().db, {
+        // The SDK's suffix is disabled, so this identity exists before any bytes do.
+        await recordStoredObject(db, {
             ref,
-            url: blob.url,
+            url: attemptedUrl(access),
             companyId,
             source: "vercel-blob",
-            contentType: blob.contentType,
+            contentType,
             sizeBytes: body.byteLength,
-            checksum: extended.contentHash ?? null,
+            checksum: null,
         });
     } catch (error) {
-        try {
-            const results = await deleteStoredObjects([ref]);
-            if (
-                results.some(
-                    result => result.outcome === "blocked" || result.outcome === "retryable"
-                )
-            ) {
-                console.warn("Failed to compensate unrecorded Vercel Blob upload", results);
-            }
-        } catch (cleanupError) {
-            console.warn("Failed to compensate unrecorded Vercel Blob upload", cleanupError);
-        }
         throw new StorageError(
             error instanceof Error ? error.message : String(error),
             "vercel-blob",
@@ -109,12 +118,57 @@ export async function putFile({
         );
     }
 
+    let blob: PutBlobResult;
+    try {
+        blob = await put(key, body, { access, addRandomSuffix: false, contentType, token });
+    } catch (error) {
+        if (
+            !detectedAccess &&
+            access === "public" &&
+            error instanceof Error &&
+            error.message.includes("private store")
+        ) {
+            // A private store rejects public access without writing. Keep the same
+            // inventory row, correcting its URL before the private write can start.
+            access = "private";
+            await updateLedger({ url: attemptedUrl(access) });
+            try {
+                blob = await put(key, body, {
+                    access,
+                    addRandomSuffix: false,
+                    contentType,
+                    token,
+                });
+            } catch (privateError) {
+                await compensate();
+                throw privateError;
+            }
+        } else {
+            await compensate();
+            throw error;
+        }
+    }
+    detectedAccess = access;
+
+    const extended = blob as PutBlobResult & { contentHash?: string | null };
+    const checksum = extended.contentHash ?? blob.etag ?? null;
+    try {
+        await updateLedger({
+            url: blob.url,
+            contentType: blob.contentType,
+            ...(checksum !== null ? { checksum } : {}),
+        });
+    } catch (error) {
+        await compensate();
+        throw error;
+    }
+
     return {
         url: blob.url,
-        pathname: blob.pathname,
+        pathname: key,
         ref,
         contentType: blob.contentType,
-        checksum: extended.contentHash ?? null,
+        checksum,
     };
 }
 

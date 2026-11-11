@@ -159,7 +159,7 @@ Internal signed reads, workspace stamping, and byte-range forwarding are unchang
 
 ## Ledger
 
-`storage_objects` is the product-owned, durable inventory of newly written
+`storage_objects` is the product-owned, durable inventory of written
 objects. `ledger.ts` accepts the caller's database or transaction executor
 (rather than importing the shared database and re-entering storage initialization).
 The unique `(adapter, storage_location_id, object_key)` triple is recorded with
@@ -221,15 +221,31 @@ before persisting the URL and uses its existing upload-failed error path.
 nor document deletion may erase the inventory needed to clean up or audit bytes.
 There are no document ownership columns: later deletion planning derives
 references from relational rows. `deleted_at` is reserved for the deletion
-lifecycle. This layer does not backfill old objects.
+lifecycle.
 
-At document/version upload ingress, recognized S3, Blob and UploadThing URLs
-must resolve to an inventory row stamped with the active company. Foreign,
-unstamped and missing objects return the same `fileNotInWorkspace` 404.
-Database URLs retain their `file_uploads.company_id` check; external links remain
-accepted. Consequently legacy unledgered provider objects cannot be attached
-through client ingress until migrated; existing server-side re-embedding and
-version revert do not create a fresh client reference.
+Backfill legacy `file_uploads` pointers with
+`pnpm --filter @launchstack/web db:backfill --only=2026-11-storage-ledger-from-file-uploads --batch=500`.
+It requires `DATABASE_URL` and the current S3 endpoint/bucket configuration to
+recognize S3 pointers (including the configured public endpoint alias). Owned
+database rows become `/api/files/{id}` refs; owned `storage_provider = 's3'`
+rows are recorded only when their URL parses to S3 at the current location.
+Null-company rows, other providers, missing/unrecognized S3 URLs and foreign
+buckets are skipped. Insert-only identity conflicts preserve existing inventory,
+including its original URL, owner and deletion marker. The backfill records URL,
+size, MIME type and checksum with source `backfill-file-uploads`. Batches resume
+by file id, and replay is idempotent. `--dry-run` reports pointer rows remaining
+to inspect without writing; this estimate includes S3 URLs that may be skipped.
+
+At document/version upload ingress, S3, Blob and UploadThing URLs parsed at the
+currently configured provider location must resolve to a live inventory row
+(`deleted_at IS NULL`) stamped with the active company. Foreign-company,
+unstamped, missing and deleted objects return the same `fileNotInWorkspace` 404.
+Parsed refs at other locations are external links and remain accepted without a
+ledger check. Database URLs retain their `file_uploads.company_id` check;
+unrecognized external links remain accepted. Consequently legacy unledgered
+objects at our current provider locations cannot be attached through client
+ingress until migrated; existing server-side re-embedding and version revert
+do not create a fresh client reference.
 
 The single unrecorded write path is `POST /api/storage/presign`: it returns a
 direct-upload capability but has no completion callback and no repository caller.

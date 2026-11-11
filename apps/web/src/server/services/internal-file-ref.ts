@@ -15,6 +15,7 @@ import { getOcrConfig } from "@launchstack/conversion/ocr/config";
 import type { OCRProvider } from "@launchstack/conversion/ocr/types";
 import { findStoredObjectsByRefs } from "~/server/storage/ledger";
 import { refFromStoredUrl } from "~/server/storage/stored-url";
+import { currentStorageLocationId } from "~/server/storage/location";
 
 export { parseInternalFileId } from "@launchstack/store/crypto";
 
@@ -50,9 +51,17 @@ export async function authorizeInternalFileRef(
     // so an unset APP_PUBLIC_URL silently skipped the whole ownership check.
     if (!isInternalFileUrl(url, cfg.appPublicUrl ?? DEFAULT_APP_ORIGIN)) {
         const parsed = refFromStoredUrl(url);
-        if (parsed.ok && parsed.ref.adapter !== "database") {
+        if (
+            parsed.ok &&
+            parsed.ref.adapter !== "database" &&
+            parsed.ref.storageLocationId === currentStorageLocationId(parsed.ref.adapter)
+        ) {
             const [object] = await findStoredObjectsByRefs(db, [parsed.ref]);
-            if (object?.companyId == null || object.companyId !== companyId) {
+            if (
+                object?.companyId == null ||
+                object.companyId !== companyId ||
+                object.deletedAt != null
+            ) {
                 throw new UploadAuthorizationError(
                     { key: "upload.server.errors.fileNotInWorkspace" },
                     404

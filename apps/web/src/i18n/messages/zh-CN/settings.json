@@ -290,7 +290,8 @@
   },
   "account": {
     "providers": {
-      "credential": "邮箱和密码"
+      "credential": "邮箱和密码",
+      "oidc": "单点登录"
     },
     "agent": {
       "unknown": "未知浏览器",

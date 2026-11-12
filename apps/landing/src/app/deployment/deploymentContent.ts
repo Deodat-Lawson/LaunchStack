@@ -376,9 +376,9 @@ export const GUIDES: Guide[] = [
         title: "Accounts & access",
         group: "Configure",
         summary:
-            "Configure the built-in Better Auth accounts, public origins, and optional social sign-in.",
+            "Configure the built-in Better Auth accounts, public origins, and optional sign-in with Google, GitHub, Microsoft or your own identity provider.",
         keywords:
-            "authentication better auth secret login signup google github oauth origins clerk",
+            "authentication better auth secret login signup google github microsoft entra azure ad oauth oidc sso single sign-on okta keycloak authentik authelia zitadel origins clerk",
         blocks: [
             {
                 title: "Required account configuration",
@@ -393,10 +393,48 @@ export const GUIDES: Guide[] = [
             {
                 title: "Optional social sign-in",
                 body: [
-                    "AUTH_GOOGLE_CLIENT_ID / AUTH_GOOGLE_CLIENT_SECRET enable Google sign-in. AUTH_GITHUB_CLIENT_ID / AUTH_GITHUB_CLIENT_SECRET enable GitHub sign-in. Register the callback URLs required by the configured Better Auth provider on your public origin.",
+                    "Each provider gets a button on the sign-in, invitation and join pages once both its client ID and secret are set, and appears under Settings › Account so people can connect it to an existing account. Register its callback on BETTER_AUTH_URL.",
                     "Sign-in OAuth and workspace connections use different configuration names. A working Google login does not configure a Google Drive connection.",
                 ],
+                rows: [
+                    {
+                        name: "Google",
+                        detail: "AUTH_GOOGLE_CLIENT_ID / AUTH_GOOGLE_CLIENT_SECRET. Callback: /api/auth/callback/google",
+                    },
+                    {
+                        name: "GitHub",
+                        detail: "AUTH_GITHUB_CLIENT_ID / AUTH_GITHUB_CLIENT_SECRET. Callback: /api/auth/callback/github",
+                    },
+                    {
+                        name: "Microsoft",
+                        detail: "AUTH_MICROSOFT_CLIENT_ID / AUTH_MICROSOFT_CLIENT_SECRET. Callback: /api/auth/callback/microsoft",
+                    },
+                    {
+                        name: "Your identity provider (OIDC)",
+                        detail: "AUTH_OIDC_ISSUER / AUTH_OIDC_CLIENT_ID / AUTH_OIDC_CLIENT_SECRET. Callback: /api/auth/callback/oidc",
+                    },
+                ],
                 links: [guideLink("Workspace connection setup", "connections")],
+            },
+            {
+                title: "Microsoft work, school and personal accounts",
+                body: [
+                    "Register an app in Microsoft Entra ID with a Web redirect URI of BETTER_AUTH_URL/api/auth/callback/microsoft and create a client secret. Sign-in asks only for openid, profile and email: no Microsoft Graph permissions.",
+                    "AUTH_MICROSOFT_TENANT_ID decides who can sign in: common (the default) takes any Microsoft account, organizations only work and school accounts, consumers only personal accounts, and a tenant ID only that organization. Set AUTH_MICROSOFT_AUTHORITY for a national cloud, such as https://login.chinacloudapi.cn or https://login.microsoftonline.us.",
+                ],
+                code: "AUTH_MICROSOFT_CLIENT_ID=00000000-0000-0000-0000-000000000000\nAUTH_MICROSOFT_CLIENT_SECRET=replace-with-the-client-secret-value\nAUTH_MICROSOFT_TENANT_ID=common",
+                file: ".env",
+                note: "Under Token configuration, add the verified_primary_email and verified_secondary_email optional claims to the ID token. Microsoft only confirms an address through them. An unconfirmed address can't join an account that already uses it; the person is told to sign in another way. The claims cover work and school accounts; a personal account Microsoft doesn't confirm can still sign up and sign in, just not join an existing account.",
+            },
+            {
+                title: "Your own identity provider (OIDC)",
+                body: [
+                    "Point LaunchStack at any OpenID Connect provider: Okta, Microsoft Entra ID, Google Workspace, Keycloak, Authentik, Authelia, Zitadel or Pocket ID. Create a confidential web client with the redirect URI BETTER_AUTH_URL/api/auth/callback/oidc and the scopes openid, email and profile.",
+                    "AUTH_OIDC_ISSUER is the issuer URL, the one /.well-known/openid-configuration lives under. AUTH_OIDC_NAME labels the button (Continue with Acme SSO); it defaults to SSO. Sign-in uses PKCE and checks the ID token against the issuer's published keys.",
+                ],
+                code: "AUTH_OIDC_ISSUER=https://id.example.com/realms/acme\nAUTH_OIDC_CLIENT_ID=launchstack\nAUTH_OIDC_CLIENT_SECRET=replace-with-the-client-secret\nAUTH_OIDC_NAME=Acme SSO",
+                file: ".env",
+                note: "LaunchStack trusts the provider's email_verified claim. A sign-in whose address the provider marks verified takes over an unconfirmed LaunchStack account with that address, so connect only a provider that confirms the addresses people sign in with.",
             },
             {
                 title: "Deployment mode",

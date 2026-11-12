@@ -167,11 +167,20 @@ x-shared-env: &shared-env
   # off until its credentials are present. Deliberately NOT listed because an
   # empty string is not "unset" for it: GOOGLE_DOCS_SETTLE_MINUTES (Number("")
   # is 0, not the default).
-  # Sign in with Google / GitHub (better-auth callbacks under /api/auth).
+  # Sign in with Google / GitHub / Microsoft / your own OIDC identity provider
+  # (better-auth callbacks under /api/auth).
   AUTH_GOOGLE_CLIENT_ID: ${AUTH_GOOGLE_CLIENT_ID:-}
   AUTH_GOOGLE_CLIENT_SECRET: ${AUTH_GOOGLE_CLIENT_SECRET:-}
   AUTH_GITHUB_CLIENT_ID: ${AUTH_GITHUB_CLIENT_ID:-}
   AUTH_GITHUB_CLIENT_SECRET: ${AUTH_GITHUB_CLIENT_SECRET:-}
+  AUTH_MICROSOFT_CLIENT_ID: ${AUTH_MICROSOFT_CLIENT_ID:-}
+  AUTH_MICROSOFT_CLIENT_SECRET: ${AUTH_MICROSOFT_CLIENT_SECRET:-}
+  AUTH_MICROSOFT_TENANT_ID: ${AUTH_MICROSOFT_TENANT_ID:-}
+  AUTH_MICROSOFT_AUTHORITY: ${AUTH_MICROSOFT_AUTHORITY:-}
+  AUTH_OIDC_ISSUER: ${AUTH_OIDC_ISSUER:-}
+  AUTH_OIDC_CLIENT_ID: ${AUTH_OIDC_CLIENT_ID:-}
+  AUTH_OIDC_CLIENT_SECRET: ${AUTH_OIDC_CLIENT_SECRET:-}
+  AUTH_OIDC_NAME: ${AUTH_OIDC_NAME:-}
   # Workspace connectors: Google Drive + Gmail, GitHub, Slack, Notion.
   GOOGLE_OAUTH_CLIENT_ID: ${GOOGLE_OAUTH_CLIENT_ID:-}
   GOOGLE_OAUTH_CLIENT_SECRET: ${GOOGLE_OAUTH_CLIENT_SECRET:-}
